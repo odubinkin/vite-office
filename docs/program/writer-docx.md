@@ -79,9 +79,9 @@ The script invokes unchanged pinned `namespaces.py`, `modelpreprocess.py`,
 `factoryimpl_ns.py` schema collectors. Native temporary outputs stay inside an
 owned, automatically removed repository-local coverage directory.
 
-The current generated data slice contains54 definitions including referenced lists:
-107 attributes,451 element mappings,525 resource mappings,315 list spellings
-and41 action records. This includes CT_Settings; omitted definitions never
+The current generated data slice contains65 definitions including referenced lists:
+120 attributes,520 element mappings,619 resource mappings,319 list spellings
+and47 action records. This includes CT_Settings and its admitted complex settings; omitted definitions never
 renumber admitted IDs. Attribute and consumed stream actions execute through
 the native factory/context owners. Full document dispatch remains incomplete.
 The original generated header/implementation contracts share the existing

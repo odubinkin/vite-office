@@ -78,6 +78,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.borders.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLSettings.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -142,7 +146,8 @@
       "S3HW1E HTML74: Section text-direction property and values are exact pinned resourceids.py output from the original namespace and model preprocessing.",
       "Consumes the original generated paragraph-frame attributes and associated enum IDs.",
       "Admits the original generated section line-number identities.",
-      "Provides source-generated page border tokens consumed by the RTF parser destination."
+      "Provides source-generated page border tokens consumed by the RTF parser destination.",
+      "Complex settings resource admission now includes CT_Zoom, CT_Proof, CT_TwipsMeasure, CT_CharacterSpacing, CT_Compat, CT_CompatSetting, CT_DocRsids, CT_LongHexNumber, CT_Language and CT_ShapeDefaults via unchanged pinned generators. Native hexadecimal default hooks retain the hex variant and existing values. Namespaced XML_TOKEN_COUNT is emitted as its original numeric sentinel and rejected by the original low16 token guard, not treated as a wildcard. Current generated counts:65defines/120attributes/520elements/619resources/319lists/47actions. Actual Strict/Transitional SAX resources retain zoom, proof state, tab measures, compatibility attributes, repeated revision IDs and language values. Byte-exact native fdo73541 settings now parse successfully into actual DomainMapper mirror state; complete native testFdo73541 export/page-layout and full DOCX/XLSX drivers/UI remain pending. No broad semantic/default/parity promotion."
     ],
     "omittedResponsibilities": [
       "DOCX document-model mapping, export and shell/UI integration are still being implemented in the same cohesive task.",

@@ -18,6 +18,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLSettings.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -66,12 +70,15 @@
       "OOXMLFastContextHandlerProperties::lcl_endFastElement",
       "OOXMLFastContextHandlerValue::lcl_endFastElement",
       "OOXMLFastContextHandlerTable::addCurrentChild",
-      "OOXMLFastContextHandlerPropertyTable::lcl_endFastElement"
+      "OOXMLFastContextHandlerPropertyTable::lcl_endFastElement",
+      "OOXMLFastContextHandler::setDefaultHexValue",
+      "OOXMLFastContextHandlerValue::setDefaultHexValue"
     ],
     "preservedResponsibilities": [
       "Native shared parser state, base copy/child constructor distinction, source-ordered actions, grouping/CR/progress, exact inherited xml:space, MCE alternate state/Requires spellings, native property/value handoff and absent-value defaults. Host strings carry immutable UTF16 until actual OOXMLValue/UNO handoff. The native nonvirtual section close clears section state; its repeated negative guard is redundant on defined forwarding paths and omitted without coverage exclusions. Unconsumed math/drawing/table/note/service owners are not implemented.",
       "Task202610251549-V4DQJW ports original OOXMLFastContextHandlerTable and PropertyTable plus required Stream.table delivery, retaining original resource enums, pending-child collection order, table-vector cloning and property-table set cloning. Table forwarding requires forward-events and nonzero ID; PropertyTable callback remains unconditional and precedes endAction. EG_RPrBase is admitted through unchanged pinned generators with original IDs, yielding59 attributes/282 elements/304 resources/82 lists/25 actions. Real committed ZIP bytes, relationship-selected styles streams, actual OOXMLDocument note/target state, shared SAX, Strict/Transitional namespaces and MCE choices produce ordered style/default resource sets. Native status callback declaration and original zero-initialized note/progress owner fields are represented; no full OOXMLDocument.resolve, graphics/DOM/substream orchestration or model-statistics initialization is advertised. DomainMapper resource-table application, stylesheet finalization, section/table/list managers, document import/export dispatch and existing UI admission remain unported or unverified. No module/capability/default/parity or UI readiness promotion.",
-      "Task202610251549-V4DQJW: Original clearProps replaces through the actual virtual setPropertySet hook. Existing base setter remains inert; Properties contexts retain already delivered old references and replace current storage. Native generated TrackChange actions send before clear, including independent forwarding behavior. Native table model redline creation, full TablePropertiesHandler/TblStylePrHandler and stylesheet application, document orchestration, complete DOCX/XLSX file and desktop/mobile UI workflows remain incomplete. Native component/ABI and whole-module parity remain unverified; no capability/default-status promotion."
+      "Task202610251549-V4DQJW: Original clearProps replaces through the actual virtual setPropertySet hook. Existing base setter remains inert; Properties contexts retain already delivered old references and replace current storage. Native generated TrackChange actions send before clear, including independent forwarding behavior. Native table model redline creation, full TablePropertiesHandler/TblStylePrHandler and stylesheet application, document orchestration, complete DOCX/XLSX file and desktop/mobile UI workflows remain incomplete. Native component/ABI and whole-module parity remain unverified; no capability/default-status promotion.",
+      "Complex settings resource admission now includes CT_Zoom, CT_Proof, CT_TwipsMeasure, CT_CharacterSpacing, CT_Compat, CT_CompatSetting, CT_DocRsids, CT_LongHexNumber, CT_Language and CT_ShapeDefaults via unchanged pinned generators. Native hexadecimal default hooks retain the hex variant and existing values. Namespaced XML_TOKEN_COUNT is emitted as its original numeric sentinel and rejected by the original low16 token guard, not treated as a wildcard. Current generated counts:65defines/120attributes/520elements/619resources/319lists/47actions. Actual Strict/Transitional SAX resources retain zoom, proof state, tab measures, compatibility attributes, repeated revision IDs and language values. Byte-exact native fdo73541 settings now parse successfully into actual DomainMapper mirror state; complete native testFdo73541 export/page-layout and full DOCX/XLSX drivers/UI remain pending. No broad semantic/default/parity promotion."
     ],
     "omittedResponsibilities": [
       "Complete DOCX model loading/export, missing native context owners and existing UI integration remain pending.",

@@ -157,7 +157,7 @@ it.each([
   },
 );
 
-it("records the real fdo73541 admission boundary without treating a partial settings mapper as full import", /** The unchanged native fixture currently reaches an unported complex settings definition; native successful import/export/page-layout QA remains pending. @returns Completion. */ async () => {
+it("imports the mirror-margin setting from the unchanged native fdo73541 document", /** Ports the settings-import part of native testFdo73541; its export/page-layout assertions remain pending. @returns Completion. */ async () => {
   const bytes = new Uint8Array(
     readFileSync(resolve("src/sw/qa/extras/ooxmlexport/data/fdo73541.docx")),
   );
@@ -170,18 +170,8 @@ it("records the real fdo73541 admission boundary without treating a partial sett
         ),
       ),
     );
-    try {
-      await s.document.resolveFastSubStream(s.receiver, T.SETTINGS);
-      throw new Error("Expected unported native settings definition");
-    } catch (error) {
-      if (!(error instanceof FastSaxParseError)) throw error;
-      expect(error.WrappedException).toBeInstanceOf(Error);
-      expect((error.WrappedException as Error).message).toMatch(
-        /^OOXML definition is not implemented:/,
-      );
-    }
-    expect(s.document.getTarget()).toBe("word/settings.xml");
-    // Native SAX saves the first callback error and continues dispatching this block.
+    await s.document.resolveFastSubStream(s.receiver, T.SETTINGS);
+    expect(s.document.getTarget()).toBe("word/document.xml");
     expect(s.mapper.impl.GetSettingsTable().GetMirrorMarginSettings()).toBe(true);
   } finally {
     s.dispose();

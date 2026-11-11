@@ -22,6 +22,8 @@ CONSUMED = (
     "CT_DocDefaults CT_PPrDefault CT_RPrDefault CT_Fonts CT_Underline CT_Color "
     "CT_Ind CT_Spacing CT_Jc CT_OnOff CT_HpsMeasure CT_DecimalNumber CT_String "
     "CT_VerticalAlignRun CT_Highlight EG_RPrBase CT_TblWidth CT_Height "
+    "CT_Zoom CT_Proof CT_TwipsMeasure CT_CharacterSpacing CT_Compat CT_CompatSetting "
+    "CT_DocRsids CT_LongHexNumber CT_Language CT_ShapeDefaults "
     "CT_TblCellMar CT_TcMar CT_LatentStyles CT_LsdException CT_TblPrBase CT_TrPrBase CT_TcPrBase CT_Border CT_TblBorders CT_TcBorders CT_TrackChange CT_Markup CT_Shd CT_TblPPr"
 ).split()
 
@@ -52,9 +54,11 @@ def generate():
                        if name != "XML_TOKEN_COUNT"}
         model = minidom.parseString(original(OOXML / "modelpreprocess.py", temp / "namespaces.txt", OOXML / "model.xml"))
         stream_namespaces = {}
+        namespace_ids = {}
         for line in (temp / "namespaces.txt").read_text().splitlines():
             identifier, alias, uri = line.split(" ")
             stream_namespaces[uri] = int(identifier)
+            namespace_ids[alias] = int(identifier)
     model_node = native.getChildByName(model, "model")
     namespaces = {n.getAttribute("name"): n for n in native.getChildrenByName(model_node, "namespace")}
     wml = namespaces["wml"]
@@ -81,6 +85,8 @@ def generate():
         match = re.fullmatch(r"(?:oox::NMSP_(\w+)\|)?oox::(\w+)", expression)
         if match is None:
             raise ValueError(expression)
+        if match[2] == "XML_TOKEN_COUNT":
+            return (namespace_ids[match[1]] if match[1] else 0) | len(token_names)
         return (match[1] or "") + ":" + local_names[match[2]]
 
     attributes, elements, resource_ids, actions, lists = [], [], [], [], []
@@ -109,7 +115,7 @@ def generate():
             resource_ids.append([identifier, qname(token), token_ids[value]])
         if resource is not None:
             for action in native.getChildrenByName(resource, "action"):
-                admitted_actions = {"startSectionGroup", "endCharacterGroup", "endParagraphGroup", "setLastSectionGroup", "endSectionGroup", "handleLastParagraphInSection", "startParagraphGroup", "setHandle", "sendTableDepth", "endOfParagraph", "startCharacterGroup", "sendPropertiesWithId", "text", "setDefaultBooleanValue", "setDefaultIntegerValue", "setDefaultStringValue", "clearProps"}
+                admitted_actions = {"startSectionGroup", "endCharacterGroup", "endParagraphGroup", "setLastSectionGroup", "endSectionGroup", "handleLastParagraphInSection", "startParagraphGroup", "setHandle", "sendTableDepth", "endOfParagraph", "startCharacterGroup", "sendPropertiesWithId", "text", "setDefaultBooleanValue", "setDefaultIntegerValue", "setDefaultHexValue", "setDefaultStringValue", "clearProps"}
                 if action.getAttribute("action") not in admitted_actions or native.getChildrenByName(action, "cond"):
                     raise ValueError("Unconsumed native event action or condition: " + action.toxml())
                 actions.append([identifier, action.getAttribute("name"), action.getAttribute("action"),

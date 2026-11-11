@@ -371,6 +371,7 @@ export class OOXMLFastContextHandler {
   }
   /** Native base default-value hooks are inert. @returns Nothing. */ setDefaultBooleanValue(): void {}
   /** Native base default-value hooks are inert. @returns Nothing. */ setDefaultIntegerValue(): void {}
+  /** Native base hexadecimal default hook is inert. @returns Nothing. */ setDefaultHexValue(): void {}
   /** Native base default-value hooks are inert. @returns Nothing. */ setDefaultStringValue(): void {}
   /** Native property-set wrapper retains the current shared set. @param id - Modifier identity. @returns Nothing. */ sendPropertiesWithId(
     id: Id,
@@ -527,6 +528,9 @@ export class OOXMLFastContextHandlerValue extends OOXMLFastContextHandler {
   }
   /** Original numeric implicit zero only for an absent value. @returns Nothing. */ override setDefaultIntegerValue(): void {
     if (!this.maValue.hasValue()) this.setValue(V.createInteger(0));
+  }
+  /** Original unsigned hexadecimal zero only for an absent value. @returns Nothing. */ override setDefaultHexValue(): void {
+    if (!this.maValue.hasValue()) this.setValue(V.createHex(0));
   }
   /** Original string implicit empty only for an absent value. @returns Nothing. */ override setDefaultStringValue(): void {
     if (!this.maValue.hasValue()) {

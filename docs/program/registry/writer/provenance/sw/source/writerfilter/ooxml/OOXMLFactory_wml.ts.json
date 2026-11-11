@@ -18,6 +18,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts",
           "marker": "regenerates every consumed table through unchanged pinned native generators"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLSettings.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -59,7 +63,8 @@
     "preservedResponsibilities": [
       "Consumed generated wml factory methods retain singleton identity, source schema attribute order, exact list/element/resource switch/default behavior, unchanged failure output cells and original attribute-action calls. Native NMSP/XML constant expressions bind their original complete token/namespace IDs. Root fallback surprise is preserved in WRITER124. Full native schema surface and unconsumed stream/table/drawing/actions are not advertised.",
       "Consumed native start/end/character actions now dispatch in original order with original resource-ID guards. Generation rejects unconsumed action names and conditional handlers before they reach runtime.",
-      "Native factoryCreateElementMap lookup data is emitted as its own generated-data responsibility, preserving exact355 original rows, one OOXMLFactory_wml owner/API and static tables.elements re-export. Attribute/resource/action lookup data remains in the context table module; getListValue lexical data remains separate. The unchanged pinned generators/model additionally admit CT_TblPPr:53defines/107attributes/355elements/428resources/315lists/41actions. Actual Strict/Transitional committed ZIP relationship selection, OOXMLDocument and SAX deliver all ten position attributes through the original nested Properties reference into TablePositionHandler. Actual SequenceAsHashMap/UNO results retain original orientation relations, coordinates and signed limited-twip margins after handler destruction. This is parser resource delivery, not document/frame insertion."
+      "Native factoryCreateElementMap lookup data is emitted as its own generated-data responsibility, preserving exact355 original rows, one OOXMLFactory_wml owner/API and static tables.elements re-export. Attribute/resource/action lookup data remains in the context table module; getListValue lexical data remains separate. The unchanged pinned generators/model additionally admit CT_TblPPr:53defines/107attributes/355elements/428resources/315lists/41actions. Actual Strict/Transitional committed ZIP relationship selection, OOXMLDocument and SAX deliver all ten position attributes through the original nested Properties reference into TablePositionHandler. Actual SequenceAsHashMap/UNO results retain original orientation relations, coordinates and signed limited-twip margins after handler destruction. This is parser resource delivery, not document/frame insertion.",
+      "Complex settings resource admission now includes CT_Zoom, CT_Proof, CT_TwipsMeasure, CT_CharacterSpacing, CT_Compat, CT_CompatSetting, CT_DocRsids, CT_LongHexNumber, CT_Language and CT_ShapeDefaults via unchanged pinned generators. Native hexadecimal default hooks retain the hex variant and existing values. Namespaced XML_TOKEN_COUNT is emitted as its original numeric sentinel and rejected by the original low16 token guard, not treated as a wildcard. Current generated counts:65defines/120attributes/520elements/619resources/319lists/47actions. Actual Strict/Transitional SAX resources retain zoom, proof state, tab measures, compatibility attributes, repeated revision IDs and language values. Byte-exact native fdo73541 settings now parse successfully into actual DomainMapper mirror state; complete native testFdo73541 export/page-layout and full DOCX/XLSX drivers/UI remain pending. No broad semantic/default/parity promotion."
     ],
     "omittedResponsibilities": [
       "Unconsumed native interfaces, component services, C++ ABI and native memory/thread/performance contracts remain outside this consumed binding.",

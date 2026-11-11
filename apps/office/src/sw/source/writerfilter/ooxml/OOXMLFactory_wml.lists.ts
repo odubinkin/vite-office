@@ -318,4 +318,8 @@ export const lists = [
   [1770428, "wavyHeavy", 91624],
   [1770428, "wavyDouble", 91625],
   [1770428, "none", 91626],
+  [1770444, "none", 92014],
+  [1770444, "fullPage", 92015],
+  [1770444, "bestFit", 92016],
+  [1770444, "textFit", 92017],
 ] as const;

@@ -14,7 +14,8 @@
       "Native text/property/value fast contexts and registered SAX token dispatch are implemented for the admitted schema slice; document/section/style/list/table loading and application Open remain pending.",
       "Real document-owned page frames, grid item/UNO properties and lossless browser graph transport are implemented as section-import prerequisites; section application and application DOCX import remain pending.",
       "Consumed Writer identities now resolve to the actual pinned native values; explicit browser graph v16 migration preserves existing data before native restoration. Document default formats and page teardown use actual core owners. DOCX section/document/UI acceptance remains pending.",
-      "Native OOXMLDocument.resolveFastSubStream and getInputStreamForId now use actual relationship-selected ZIP components, owned InputSource/Reference values, original SAX document/token handlers and note identity. Only UNO opening exceptions are swallowed; parse/close failures preserve the original switched stream and subsequent relative lookups (WRITER448). Native CT_Settings generation adds96 elements and97 resources without renumbering:54defines/107attributes/451elements/525resources/315lists/41actions. Strict/Transitional simple settings reach the actual DomainMapper mirror flag. The unchanged fdo73541 native fixture still rejects at unported CT_Zoom while later SAX callbacks can deliver mirror state; full native QA import/export/page-layout is not certified. Full resolve, shape/DOM/services/model statistics, complete settings/application and DOCX/XLSX UI drivers remain incomplete. No broad capability/parity/default promotion."
+      "Native OOXMLDocument.resolveFastSubStream and getInputStreamForId now use actual relationship-selected ZIP components, owned InputSource/Reference values, original SAX document/token handlers and note identity. Only UNO opening exceptions are swallowed; parse/close failures preserve the original switched stream and subsequent relative lookups (WRITER448). Native CT_Settings generation adds96 elements and97 resources without renumbering:54defines/107attributes/451elements/525resources/315lists/41actions. Strict/Transitional simple settings reach the actual DomainMapper mirror flag. The unchanged fdo73541 settings part now parses successfully into actual mirror-margin state; full native QA document import/export/page-layout remains uncertified. Full resolve, shape/DOM/services/model statistics, complete settings/application and DOCX/XLSX UI drivers remain incomplete. No broad capability/parity/default promotion.",
+      "Complex settings resource admission now includes CT_Zoom, CT_Proof, CT_TwipsMeasure, CT_CharacterSpacing, CT_Compat, CT_CompatSetting, CT_DocRsids, CT_LongHexNumber, CT_Language and CT_ShapeDefaults via unchanged pinned generators. Native hexadecimal default hooks retain the hex variant and existing values. Namespaced XML_TOKEN_COUNT is emitted as its original numeric sentinel and rejected by the original low16 token guard, not treated as a wildcard. Current generated counts:65defines/120attributes/520elements/619resources/319lists/47actions. Actual Strict/Transitional SAX resources retain zoom, proof state, tab measures, compatibility attributes, repeated revision IDs and language values. Byte-exact native fdo73541 settings now parse successfully into actual DomainMapper mirror state; complete native testFdo73541 export/page-layout and full DOCX/XLSX drivers/UI remain pending. No broad semantic/default/parity promotion."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -196,6 +197,10 @@
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLSettings.test.ts",
           "marker": "@fileoverview"
         }
       ],

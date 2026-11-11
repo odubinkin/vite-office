@@ -9,8 +9,9 @@ import type { FactoryAttributeHandler } from "./OOXMLFactory";
 import type { OOXMLValue } from "./OOXMLPropertySet";
 import type { OOXMLFastContextHandler } from "./OOXMLFastContextHandler";
 
-/** Binds generated C++ NMSP/XML constant expressions to their original numeric IDs. @param qname - Canonical namespace alias and exact local lexeme. @returns Native token, or DONTKNOW for invalid expressions. */
-export function nativeToken(qname: string): number {
+/** Binds generated C++ NMSP/XML constants, including the exact numeric TOKEN_COUNT sentinel. @param qname - Canonical QName or generated native sentinel. @returns Native token, or DONTKNOW for invalid expressions. */
+export function nativeToken(qname: string | number): number {
+  if (typeof qname === "number") return qname;
   const colon = qname.indexOf(":"),
     prefix = qname.slice(0, colon);
   const namespace = prefix === "" ? 0 : namespaceTokens.get(prefix),
