@@ -93,7 +93,10 @@ function limits(overrides: Partial<ZipFileLimits>): ZipFileLimits {
 
 describe("ZipOutputStream" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
   it("writes deterministic empty and stored archives" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, async () => {
-    expect(new ZipFile(new ZipOutputStream().finish()).getEntryNames()).toEqual([]);
+    expect(
+      /** Source readCEN retains even the zero-length initial free interval. @returns Archive. */
+      () => new ZipFile(new ZipOutputStream().finish()),
+    ).toThrow("Zip file has holes! It will leak!");
     const bytes = storedZip([
       ["a.txt", "alpha"],
       ["folder/b.txt", "beta"],
@@ -185,9 +188,10 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
         view.setUint32(22, 0, true);
       },
     );
-    expect(Array.from(await new ZipFile(descriptor).readEntry("entry.txt"))).toEqual(
-      Array.from(plain),
-    );
+    expect(
+      /** A set bit without any descriptor bytes is rejected by readLOC_Impl. @returns Archive. */
+      () => new ZipFile(descriptor),
+    ).toThrow("The stream seems to be broken!");
   });
 
   it("validates resource ceilings before reading" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
@@ -310,7 +314,7 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
     expect(
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () => new ZipFile(unusedCentral),
-    ).toThrow("size does not match entries");
+    ).toThrow("Zip file has holes! It will leak!");
   });
 
   it("rejects encryption, unsupported methods, broken sizes/offsets, duplicates, and unsafe names" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
@@ -320,7 +324,7 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
       [10, 99, 2, "Unsupported ZIP method"],
       [20, 0xffffffff, 4, "STORED with inconsistent size"],
       [24, 0xffffffff, 4, "STORED with inconsistent size"],
-      [42, 0xffffffff, 4, "local header is invalid"],
+      [42, 0xffffffff, 4, "stream data looks to be broken"],
     ];
     for (const [relative, value, width, message] of centralFieldCases) {
       const bytes = changedZip(
@@ -425,12 +429,12 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
     expect(archive.hasEntry("missing")).toBe(false);
     await expect(archive.readEntry("missing")).rejects.toThrow("Missing ZIP entry");
     const localCases: readonly [number, number, 2 | 4, string][] = [
-      [0, 0, 4, "local header is invalid"],
-      [6, 0x0808, 2, "local and central records differ"],
-      [8, 8, 2, "local and central records differ"],
-      [14, 1, 4, "local entry metadata differs"],
-      [18, 3, 4, "local entry metadata differs"],
-      [22, 3, 4, "local entry metadata differs"],
+      [0, 0, 4, "Invalid LOC header (bad signature)"],
+      [6, 0x0808, 2, "The stream seems to be broken!"],
+      [8, 8, 2, "The stream seems to be broken!"],
+      [14, 1, 4, "The stream seems to be broken!"],
+      [18, 3, 4, "The stream seems to be broken!"],
+      [22, 3, 4, "The stream seems to be broken!"],
     ];
     for (const [offset, value, width, message] of localCases) {
       const bytes = changedZip(
@@ -454,7 +458,7 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
     expect(
       /** Source rejects inconsistent local names at construction. @returns Archive. */ () =>
         new ZipFile(differentName),
-    ).toThrow("name differs");
+    ).toThrow("The stream seems to be broken!");
     const central = findSignature(source, 0x02014b50);
     const badBounds = changedZip(
       source /** Executes the enclosing deterministic test or transformation callback. @param view - Callback input. @returns Callback result. */,
@@ -465,7 +469,7 @@ describe("ZipFile" /** Executes the enclosing deterministic test or transformati
     expect(
       /** Source rejects out-of-region payload bounds at construction. @returns Archive. */ () =>
         new ZipFile(badBounds),
-    ).toThrow("data exceeds bounds");
+    ).toThrow("overlapping entries");
     const badSize = changedZip(
       rawZip(
         encoder.encode("data"),

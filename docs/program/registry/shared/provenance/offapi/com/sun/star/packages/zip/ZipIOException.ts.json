@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/packages/zip/ZipIOException.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/packages/zip/ZipIOException.idl",
+    "localSymbols": [
+      "ZipIOException",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "ZipIOException",
+      "IOException"
+    ],
+    "preservedResponsibilities": [
+      "Original readLOC_Impl uses genuine ByteGrabber/MemoryByteGrabber owners for header, reused zero-initialized name/extra vectors, optional-signature 32/64-bit data descriptors, Excel version45 fallback and nonzero duplicated-field comparisons. Source readCEN partitions occupied extents, rejects overlaps/holes with original diagnostics and skips FAT-compatible empty directory entries after consuming their extents. Actual generated ZipIOException derives from IOException with the correct parent type. A committed unchanged dd-deflated.docx exercises original normal QA rejection. Flat byte/catalog/resource/host-error boundaries remain explicit; native case-insensitive modes, created-entry/recovery/service/package/ZipEntry/output/model/filter/Worker/UI graphs and physical pointer/ABI/allocation/thread guarantees remain unverified or unfinished. Browser open/save/autosave/recovery choices are unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Complete native package/services, physical ABI/allocation/thread/type shutdown and full DOCX/XLSX core/UI acceptance remain unverified or unfinished."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/packages/zip/ZipIOException.ts",
+          "marker": "ZipIOException"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/native-local-records.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/packages/zip/ZipIOException.idl",
+          "marker": "ZipIOException"
+        }
+      ]
+    }
+  }
+}

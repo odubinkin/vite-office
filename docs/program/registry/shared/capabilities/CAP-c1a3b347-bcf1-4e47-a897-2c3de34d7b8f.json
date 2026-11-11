@@ -19,7 +19,8 @@
       "Original complete ByteChucker/ByteGrabber helpers retain actual native integer/byte/reference contracts as package I/O prerequisites.",
       "Original borrowed MemoryByteGrabber now drives bounded ZipFile CEN field parsing with native integer widths and signed length rejection.",
       "ZipFile CEN names use the actual original counted UTF8 OUString constructor independently of the UTF8 flag.",
-      "Original END/Zip64/extra-field mechanisms and genuine ZipException support actual normal ZIP64 package reads with source-backed CEN/LOC consistency checks."
+      "Original END/Zip64/extra-field mechanisms and genuine ZipException support actual normal ZIP64 package reads with source-backed CEN/LOC consistency checks.",
+      "Original LOC descriptors and CEN occupied-extent validation retain native field order, diagnostics and FAT-directory filtering."
     ],
     "capability": "Native standalone readonly package input component and stream SDK",
     "gaps": [
@@ -31,7 +32,8 @@
       "Original ByteChucker and ByteGrabber now own actual native Reference/Sequence values, preserve optional XSeekable queries, cached byte-pointer output, explicit non-UNO ByteReader crosscasts, UNO/raw read distinctions, exact signed16/32 and unsigned16/32/64 widths, short-number zero results and method-time seek failures. Raw array/pointer cells lower only primitive native storage. Constructor exception unwinding and reverse member destruction are explicit. CALC-502/WRITER433 retain partial-number zero/consumption; CALC-503/WRITER434 retain mutation of copied output Sequences through cached raw pointers. Complete helper declarations are present, not fake ZIP/service/component providers. Existing bounded ZipFile/ZipOutputStream transport is not yet replaced with complete native ZIP owners; actual package/output/storage graph and DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Native RTTI/pointer/ABI/allocation/unwind and thread guarantees are not certified; existing browser persistence policies are unchanged.",
       "Original complete MemoryByteGrabber borrows actual Sequence const storage or a raw byte pointer/count, preserves unchecked skip, signed remaining count and no-advance zero on incomplete fields. Primitive pointer storage-plus-offset tuples lower actual pointer addition without a provider or copied Sequence. UInt8 and UInt16 retain original signed8/16 return types (CALC-504/WRITER435);32/64-bit unsigned values remain exact. Bounded ZipFile central-directory parsing now uses this actual helper in original sequential field order and signed negative name/extra/comment length rejection. Existing ZIP32/resource/host-error/EOCD/local-header transport boundaries remain explicit, not full native ZipFile parity. Original final helper declarations are complete; physical pointer/lvalue/rvalue/ABI/allocation/thread guarantees and full ZIP/package/storage/model/filter/Worker/UI acceptance remain unverified or unfinished. Existing browser open/save/autosave/recovery policies remain unchanged.",
       "The same CEN source always decodes counted name bytes as UTF8 through the genuine OUString constructor and its original default SAL conversion flags, regardless of the ZIP UTF8 bit. The old host fatal-decoder/undeclared-UTF8 gate is removed. Matching real local/CEN raw malformed bytes retain source replacement behavior and BMP non-ASCII paths without that bit load normally; no codepage guessing or private decoder is introduced.",
-      "Original findCentralDirectory and static readExtraFields now operate through actual ByteGrabber/MemoryByteGrabber/native byte/reference/ZipException owners. ZIP32/ZIP64 END/locator/signature/disk/count/signed arithmetic/record consistency and ordered Zip64/Unicode/unknown extras retain source conditions, lvalue writes and diagnostics. MemoryInputStream const sal_Int8 pointer binding now also borrows actual signed/unsigned typed byte storage without an archive-sized address provider. CEN checks record count/size, STORE consistency and eagerly applies the consumed LOC name/flag/extra/duplicated-value checks; actual payload CRC/inflate remains on read. Committed unmodified testTdf163341 ZIP64 and normal Unicode ODT/DOCX rejection cases exercise the real catalog; recovery/service factories are not fabricated. The existing flat byte/catalog/host-error/resource boundary remains explicit. Full native descriptor/overlap/hole/FAT/case-insensitive/recovery/ZipEntry/ZipOutputStream/package/storage/model/filter/Worker/UI acceptance and physical pointer/ABI/thread/allocation guarantees are unverified or unfinished. CALC-505..508 and WRITER436..439 retain source surprises and invalid-view limitations. Existing browser recovery/open/save/autosave choices remain unchanged."
+      "Original findCentralDirectory and static readExtraFields now operate through actual ByteGrabber/MemoryByteGrabber/native byte/reference/ZipException owners. ZIP32/ZIP64 END/locator/signature/disk/count/signed arithmetic/record consistency and ordered Zip64/Unicode/unknown extras retain source conditions, lvalue writes and diagnostics. MemoryInputStream const sal_Int8 pointer binding now also borrows actual signed/unsigned typed byte storage without an archive-sized address provider. CEN checks record count/size, STORE consistency and eagerly applies the consumed LOC name/flag/extra/duplicated-value checks; actual payload CRC/inflate remains on read. Committed unmodified testTdf163341 ZIP64 and normal Unicode ODT/DOCX rejection cases exercise the real catalog; recovery/service factories are not fabricated. The existing flat byte/catalog/host-error/resource boundary remains explicit. Full native descriptor/overlap/hole/FAT/case-insensitive/recovery/ZipEntry/ZipOutputStream/package/storage/model/filter/Worker/UI acceptance and physical pointer/ABI/thread/allocation guarantees are unverified or unfinished. CALC-505..508 and WRITER436..439 retain source surprises and invalid-view limitations. Existing browser recovery/open/save/autosave choices remain unchanged.",
+      "Original readLOC_Impl uses genuine ByteGrabber/MemoryByteGrabber owners for header, reused zero-initialized name/extra vectors, optional-signature 32/64-bit data descriptors, Excel version45 fallback and nonzero duplicated-field comparisons. Source readCEN partitions occupied extents, rejects overlaps/holes with original diagnostics and skips FAT-compatible empty directory entries after consuming their extents. Actual generated ZipIOException derives from IOException with the correct parent type. A committed unchanged dd-deflated.docx exercises original normal QA rejection. Flat byte/catalog/resource/host-error boundaries remain explicit; native case-insensitive modes, created-entry/recovery/service/package/ZipEntry/output/model/filter/Worker/UI graphs and physical pointer/ABI/allocation/thread guarantees remain unverified or unfinished. Browser open/save/autosave/recovery choices are unchanged."
     ],
     "scopeLimitations": [
       "Original standalone OInputSeekStream and ImplInheritanceHelper now provide actual seekable readonly components to Writer SEEKABLEREAD. Additional interface/type-provider query precedes qualified base fallback; type lists retain duplicates and per-specialization class data. Seek operations preserve disposed-before-missing-interface exceptions and native underlying bounds. Flat asynchronous ZIP snapshots bind only the consumed readonly hierarchical open signature; full XStorage/XHierarchicalStorageAccess, parent-bound OWriteStream_Impl/OHierarchyHolder graph, mutex/thread/physical ABI guarantees and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Existing browser open/save/autosave/recovery policy is unchanged.",
@@ -149,6 +151,10 @@
         {
           "path": "package/source/zipapi/ZipFile.cxx",
           "marker": "ZipFile::findCentralDirectory"
+        },
+        {
+          "path": "offapi/com/sun/star/packages/zip/ZipIOException.idl",
+          "marker": "ZipIOException"
         }
       ],
       "tests": [
@@ -281,6 +287,10 @@
         {
           "path": "apps/office/src/offapi/com/sun/star/packages/zip/ZipException.ts",
           "marker": "ZipException"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/packages/zip/ZipIOException.ts",
+          "marker": "ZipIOException"
         }
       ],
       "tests": [
@@ -335,6 +345,10 @@
         {
           "path": "apps/office/src/package/qa/cppunit/test_zippackage.test.ts",
           "marker": "testTdf163341"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/native-local-records.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "docs": [
@@ -381,6 +395,10 @@
         {
           "path": "apps/office/src/package/qa/cppunit/data/README.md",
           "marker": "# Pinned package QA data"
+        },
+        {
+          "path": "docs/program/native-local-zip-records.md",
+          "marker": "# Native local ZIP records and descriptor extents"
         }
       ]
     },

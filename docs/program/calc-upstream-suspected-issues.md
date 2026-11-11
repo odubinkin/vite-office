@@ -5362,3 +5362,18 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source: pinned `package/source/zipapi/ZipFile.cxx`, `ZipFile::findCentralDirectory` / `ZipFile::readExtraFields`, commit9bc445578031fecf56086729d8e4940c77e14d65.
 - readExtraFields checks remainingSize against dataSize and checks Version1, then reads CRC and forms the UnicodeName string_view with dataSize-5, without an explicit dataSize>=5 guard. A smaller field cannot satisfy the original valid native view-range contract. Preserve the source branch/operation order; do not claim a deterministic compiled outcome for malformed under-five fields. Tests exercise valid view ranges, wrong versions, insufficient declared remaining data and mismatched names. The typed-storage lowering does not certify physical pointer/size_t behavior for invalid native views.
+
+### CALC-509 — Empty ZIP retains an unclaimed zero-length interval
+
+- Source: pinned `package/source/zipapi/ZipFile.cxx`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- ZipFile::readCEN initializes unallocated to {{0, nCenPos}} even when nTotal and nCenPos are zero. No entry erases that interval, so the final nonempty check throws "Zip file has holes! It will leak!". Preserve this normal-open result for a complete22-byte empty ZIP; do not special-case it as valid. This is source-derived and locally exercised, not a compiled native witness.
+
+### CALC-510 — LOC descriptor placeholder compares UINT64_MAX, not UINT32_MAX
+
+- Source: pinned `package/source/zipapi/ZipFile.cxx`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- ZipFile::readLOC_Impl compares local compressed/uncompressed sizes against sal_uInt64(-1). A32-bit all-ones field widened to64bits does not equal this sentinel, whereas an actual64-bit Zip64 extra-field value can. Preserve both outcomes instead of broadening the placeholder rule. Actual external ZIP fixtures exercise acceptance and rejection.
+
+### CALC-511 — Zero data-descriptor values survive conditional final comparisons
+
+- Source: pinned `package/source/zipapi/ZipFile.cxx`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- ZipFile::readLOC_Impl accepts zero duplicated LOC values and copies descriptor values into them; its final CRC/size comparisons only reject nonzero disagreement. Thus a complete descriptor containing zero CRC/size values can survive construction against nonzero CEN values. Preserve these conditions. The real payload still undergoes size/CRC verification when read by the bounded transport. No stricter descriptor check is introduced.

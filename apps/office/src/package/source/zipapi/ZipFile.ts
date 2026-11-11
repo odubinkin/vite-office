@@ -11,6 +11,8 @@ import { ByteGrabber } from "../../inc/ByteGrabber";
 import { MemoryInputStream } from "../../../comphelper/source/streaming/seqstream";
 import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import type { XInputStream } from "../../../udkapi/com/sun/star/io/XInputStream";
+import { ZipIOException } from "../../../offapi/com/sun/star/packages/zip/ZipIOException";
+import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
 import { ZipException } from "../../../offapi/com/sun/star/packages/zip/ZipException";
 import { IllegalArgumentException } from "../../../cppu/inc/com/sun/star/lang/IllegalArgumentException";
 import { NotConnectedException } from "../../../cppu/inc/com/sun/star/io/NotConnectedException";
@@ -82,13 +84,15 @@ export class ZipFile {
       const endOffset = this.centralOffset + centralSize;
       const centralBuffer = Int8Array.from(this.bytes.subarray(this.centralOffset, endOffset));
       const grabber = new MemoryByteGrabber([centralBuffer, 0], centralBuffer.length);
+      const unallocated: [number, number][] = [[0, this.centralOffset]];
+      const localBuffers: [Map<number, [number]>, Map<number, [number]>] = [new Map(), new Map()];
       let offset = this.centralOffset;
       let totalBytes = 0;
       let index = 0;
       for (; index < totalEntries; index += 1) {
         if (grabber.remainingSize() < 46 || grabber.ReadInt32() !== CENTRAL_DIRECTORY_HEADER)
           throw new Error("ZIP central-directory entry is invalid.");
-        grabber.ReadUInt16(); // Original version-made-by field, unused by this bounded catalog.
+        const versionMadeBy = grabber.ReadUInt16() & 0xffff;
         grabber.ReadInt16(); // Original version-needed field.
         const flags = grabber.ReadInt16() & 0xffff;
         if ((flags & 1) !== 0) throw new Error("Encrypted ZIP entries are unsupported.");
@@ -102,7 +106,7 @@ export class ZipFile {
         const extraLength = grabber.ReadInt16();
         const commentLength = grabber.ReadInt16();
         grabber.skipBytes(4);
-        grabber.ReadUInt32(); // Original external file attributes.
+        const externalFileAttributes = grabber.ReadUInt32();
         let localOffset = BigInt(grabber.ReadUInt32());
         if (nameLength < 0) throw new Error("unexpected name length");
         if (commentLength < 0) throw new Error("unexpected comment length");
@@ -150,20 +154,57 @@ export class ZipFile {
           nameBytes,
           uncompressedSize: Number(uncompressedSize),
         };
-        const dataOffset = this.readLocalOffset(entry);
+        const [dataOffset, extentEnd] = this.readLocalOffset(entry, localBuffers);
+        consumeExtent(unallocated, entry.localOffset, extentEnd);
+        offset = nextOffset;
+        if (
+          uncompressedSize === 0n &&
+          (versionMadeBy & 0xff00) === 0 &&
+          (externalFileAttributes & 16) !== 0
+        )
+          continue;
         if (this.entriesByName.has(name)) throw new Error(`Duplicate ZIP entry: ${name}`);
         this.entriesByName.set(name, { ...entry, dataOffset });
         offset = nextOffset;
       }
       if (index !== totalEntries) throw zipException("Count != Total");
+      if (unallocated.length !== 0) {
+        if (
+          unallocated.every(
+            /** Source predicate recognizes omitted descriptors by gap length. @param interval - Unclaimed range. @returns Whether its length is 12 or 16. */
+            ([start, end]) => end - start === 12 || end - start === 16,
+          )
+        )
+          throw zipException(
+            "Zip file has holes the size of data descriptors; producer forgot to set flag bit 3?",
+          );
+        throw zipException("Zip file has holes! It will leak!");
+      }
       if (offset !== endOffset)
         throw new Error("ZIP central-directory size does not match entries.");
-    } catch (error) {
-      if (error instanceof ZipException) {
+    } catch (caught) {
+      let error = caught;
+      if (caught instanceof IllegalArgumentException) {
+        caught.dispose();
+        error = zipException("stream data looks to be broken");
+      }
+      if (
+        error instanceof ZipException ||
+        error instanceof ZipIOException ||
+        error instanceof RuntimeException
+      ) {
         const message = nativeText(error.Message);
         // A host cause retains primitive diagnostics, never a destroyed native exception/value graph.
         const transport = new Error(message, {
-          cause: { type: "com.sun.star.packages.zip.ZipException", Message: message },
+          cause: {
+            type:
+              error instanceof ZipIOException
+                ? "com.sun.star.packages.zip.ZipIOException"
+                : error instanceof RuntimeException
+                  ? "com.sun.star.uno.RuntimeException"
+                  : "com.sun.star.packages.zip.ZipException",
+            Message: message,
+          },
         });
         error.dispose();
         throw transport;
@@ -327,7 +368,12 @@ export class ZipFile {
           throw zipException("Invalid Info-ZIP Unicode Path Extra Field");
         grabber.ReadUInt32(); // Original intentionally ignores the redundant name CRC.
         const [storage, at] = grabber.getCurrentPos();
-        const unicode = Uint8Array.from((storage as Int8Array).subarray(at, at + dataSize - 5));
+        const unicode = new Uint8Array(dataSize - 5);
+        for (let i = 0; i < unicode.length; ++i)
+          unicode[i] =
+            storage instanceof Int8Array || storage instanceof Uint8Array
+              ? (storage[at + i] as number)
+              : (storage.get(at + i) as [number])[0];
         grabber.skipBytes(dataSize - 5);
         if (!equalBytes(unicode, filename))
           throw zipException("Invalid Info-ZIP Unicode Path Extra Field");
@@ -377,52 +423,96 @@ export class ZipFile {
     return new TextDecoder("utf-8", { fatal: true }).decode(await this.readEntry(name));
   }
 
-  /** Existing bounded LOC adapter applies consumed native name/flag/extra/duplicated-field checks during CEN construction; full descriptor/overlap/recovery owners remain unported. @param entry - Actual central catalog record. @returns Validated data offset. */
-  private readLocalOffset(entry: Omit<ZipEntry, "dataOffset">): number {
-    const view = dataView(this.bytes);
-    const offset = entry.localOffset;
-    if (offset + 30 > this.centralOffset || readUint32(view, offset) !== LOCAL_FILE_HEADER)
-      throw new Error(`ZIP local header is invalid: ${entry.name}`);
-    const flags = readUint16(view, offset + 6);
-    const method = readUint16(view, offset + 8);
-    if ((flags & ~0x806) !== (entry.flags & ~0x806) || method !== entry.method)
-      throw new Error(`ZIP local and central records differ: ${entry.name}`);
-    let nameLength = (readUint16(view, offset + 26) << 16) >> 16;
-    if (nameLength < 0) nameLength = 0;
-    const extraLength = (readUint16(view, offset + 28) << 16) >> 16;
-    if (extraLength < 0) throw new Error(`ZIP local header is invalid: ${entry.name}`);
-    const dataOffset = offset + 30 + nameLength + extraLength;
-    const dataEnd = dataOffset + entry.compressedSize;
-    if (dataEnd > this.centralOffset)
-      throw new Error(`ZIP entry data exceeds bounds: ${entry.name}`);
-    const localName = this.bytes.slice(offset + 30, offset + 30 + nameLength);
-    if (nameLength !== entry.nameBytes.length || decodeZipName(localName) !== entry.name)
-      throw new Error(`ZIP local entry name differs: ${entry.name}`);
-    const size: [bigint] = [BigInt(readUint32(view, offset + 22))],
-      compressed: [bigint] = [BigInt(readUint32(view, offset + 18))],
-      offset64: [bigint | null] = [null];
-    if (extraLength !== 0) {
-      const extra = Int8Array.from(this.bytes.subarray(offset + 30 + nameLength, dataOffset));
-      ZipFile.readExtraFields(
-        new MemoryByteGrabber([extra, 0], extra.length),
-        extraLength,
-        size,
-        compressed,
-        offset64,
-        localName,
-      );
+  /** Original readLOC_Impl parsing and descriptor rules projected onto the existing flat CEN record, without created-entry or recovery owners. @param entry - Actual parsed CEN record. @param buffers - Reused native name/extra vector byte cells. @returns Data offset and occupied extent end. */
+  private readLocalOffset(
+    entry: Omit<ZipEntry, "dataOffset">,
+    buffers: [Map<number, [number]>, Map<number, [number]>],
+  ): [number, number] {
+    const input = new Reference<XInputStream>(new MemoryInputStream(this.bytes, this.bytes.length));
+    const reader = new ByteGrabber(input);
+    try {
+      reader.seek(BigInt(entry.localOffset));
+      const raw = rawBuffer(30);
+      if (reader.readBytes(raw, 30) !== 30) throw new RuntimeException();
+      const header = new MemoryByteGrabber([raw, 0], 30);
+      if (header.ReadInt32() !== LOCAL_FILE_HEADER)
+        throw zipIOException("Invalid LOC header (bad signature)");
+      const version = header.ReadUInt16() & 0xffff,
+        flags = header.ReadUInt16() & 0xffff,
+        method = header.ReadUInt16() & 0xffff;
+      header.ReadInt32();
+      let crc = header.ReadUInt32();
+      const compressed: [bigint] = [BigInt(header.ReadUInt32())],
+        size: [bigint] = [BigInt(header.ReadUInt32())];
+      let nameLength = header.ReadInt16();
+      const extraLength = header.ReadInt16();
+      if (nameLength < 0) nameLength = 0;
+      const dataOffset = reader.getPosition() + BigInt(nameLength + extraLength);
+      let end = 0n,
+        broken = false;
+      try {
+        resizeByteVector(buffers[0], nameLength);
+        const read = reader.readBytes(buffers[0], nameLength);
+        const localName = new Uint8Array(read);
+        for (let i = 0; i < read; ++i) localName[i] = (buffers[0].get(i) as [number])[0];
+        if (nameLength !== entry.nameBytes.length || decodeZipName(localName) !== entry.name)
+          broken = true;
+        let zip64 = false;
+        const offset64: [bigint | null] = [null];
+        if (extraLength !== 0) {
+          resizeByteVector(buffers[1], extraLength);
+          reader.readBytes(buffers[1], extraLength);
+          zip64 = ZipFile.readExtraFields(
+            new MemoryByteGrabber([buffers[1], 0], extraLength),
+            extraLength,
+            size,
+            compressed,
+            offset64,
+            localName,
+          );
+        }
+        if (!zip64 && version >= 45) zip64 = true;
+        if ((entry.flags & ~0x806) !== (flags & ~0x806) || entry.method !== method) broken = true;
+        end = dataOffset + BigInt(entry.compressedSize);
+        if (end < -0x8000000000000000n || end > 0x7fffffffffffffffn)
+          throw zipException("Integer-overflow");
+        if ((entry.flags & DATA_DESCRIPTOR_FLAG) !== 0) {
+          reader.seek(reader.getPosition() + BigInt(entry.compressedSize));
+          const first = reader.ReadUInt32();
+          const ddCrc = first === 0x08074b50 ? reader.ReadUInt32() : first;
+          const ddCompressed = zip64 ? reader.ReadUInt64() : BigInt(reader.ReadUInt32());
+          const ddSize = zip64 ? reader.ReadUInt64() : BigInt(reader.ReadUInt32());
+          if (end < reader.getPosition()) end = reader.getPosition();
+          else broken = true;
+          if (
+            (crc === 0 || crc === ddCrc) &&
+            (compressed[0] === 0n ||
+              compressed[0] === 0xffffffffffffffffn ||
+              compressed[0] === ddCompressed) &&
+            (size[0] === 0n || size[0] === 0xffffffffffffffffn || size[0] === ddSize)
+          ) {
+            crc = ddCrc;
+            compressed[0] = ddCompressed;
+            size[0] = ddSize;
+          } else broken = true;
+        }
+        if (
+          (crc !== 0 && crc !== entry.crc32) ||
+          (compressed[0] !== 0n && compressed[0] !== BigInt(entry.compressedSize)) ||
+          (size[0] !== 0n && size[0] !== BigInt(entry.uncompressedSize)) ||
+          (offset64[0] !== null && offset64[0] !== BigInt(entry.localOffset))
+        )
+          broken = true;
+      } catch (error) {
+        if (error instanceof Exception) error.dispose();
+        broken = true;
+      }
+      if (broken) throw zipIOException("The stream seems to be broken!");
+      return [Number(dataOffset), Number(end)];
+    } finally {
+      reader.dispose();
+      input.dispose();
     }
-    if ((flags & DATA_DESCRIPTOR_FLAG) === 0) {
-      const crc = readUint32(view, offset + 14);
-      if (
-        (crc !== 0 && crc !== entry.crc32) ||
-        (compressed[0] !== 0n && compressed[0] !== BigInt(entry.compressedSize)) ||
-        (size[0] !== 0n && size[0] !== BigInt(entry.uncompressedSize)) ||
-        (offset64[0] !== null && offset64[0] !== BigInt(offset))
-      )
-        throw new Error(`ZIP local entry metadata differs: ${entry.name}`);
-    }
-    return dataOffset;
   }
 }
 
@@ -479,21 +569,6 @@ async function inflateRaw(bytes: Uint8Array, maxBytes: number): Promise<Uint8Arr
   }
 }
 
-/** Creates a DataView over an exact byte slice. @param bytes - Source bytes. @returns Matching view. */
-function dataView(bytes: Uint8Array): DataView {
-  return new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-}
-
-/** Reads little-endian uint16. @param view - Source. @param offset - Byte offset. @returns Value. */
-function readUint16(view: DataView, offset: number): number {
-  return view.getUint16(offset, true);
-}
-
-/** Reads little-endian uint32. @param view - Source. @param offset - Byte offset. @returns Value. */
-function readUint32(view: DataView, offset: number): number {
-  return view.getUint32(offset, true);
-}
-
 /** Compares byte strings exactly. @param left - First bytes. @param right - Second bytes. @returns Equality. */
 function equalBytes(left: Uint8Array, right: Uint8Array): boolean {
   return (
@@ -541,6 +616,48 @@ function zipException(message: string): ZipException {
     context = new Reference();
   try {
     return new ZipException(value, context);
+  } finally {
+    context.dispose();
+    value.dispose();
+  }
+}
+
+/** Primitive std::vector resize preserves old cells and zero-initializes new signed bytes. @param cells - Existing native byte vector. @param size - Requested signed length. @returns Nothing. */
+function resizeByteVector(cells: Map<number, [number]>, size: number): void {
+  if (size < 0) throw new RangeError("vector length");
+  const oldSize = cells.size;
+  for (let i = size; i < oldSize; ++i) cells.delete(i);
+  for (let i = oldSize; i < size; ++i) cells.set(i, [0]);
+}
+/** Original readCEN consumes one LOC extent by erasing or splitting its ordered free intervals. @param unallocated - Original unclaimed intervals. @param start - LOC start. @param end - End including descriptor. @returns Nothing. */
+function consumeExtent(unallocated: [number, number][], start: number, end: number): void {
+  for (let i = 0; ; ++i) {
+    const interval = unallocated[i];
+    if (interval === undefined || start < interval[0]) throw zipException("overlapping entries");
+    if (interval[0] === start) {
+      if (interval[1] === end) unallocated.splice(i, 1);
+      else if (end < interval[1]) interval[0] = end;
+      else throw zipException("overlapping entries");
+      return;
+    } else if (start < interval[1]) {
+      if (end < interval[1]) {
+        const previous = interval[0];
+        interval[0] = end;
+        unallocated.splice(i, 0, [previous, start]);
+      } else if (end === interval[1]) interval[1] = start;
+      else throw zipException("overlapping entries");
+      return;
+    }
+  }
+}
+/** Original readLOC error literal with default native Context and generated IOException parent. @param message - Exact source message. @returns Owned native exception. */
+function zipIOException(message: string): ZipIOException {
+  const units = new Uint16Array(message.length);
+  for (let i = 0; i < message.length; ++i) units[i] = message.charCodeAt(i);
+  const value = new OUString(units, units.length),
+    context = new Reference();
+  try {
+    return new ZipIOException(value, context);
   } finally {
     context.dispose();
     value.dispose();

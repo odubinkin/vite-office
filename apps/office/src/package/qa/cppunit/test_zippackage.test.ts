@@ -5,7 +5,7 @@ import { expect, it } from "vitest";
 import { ZipFile } from "../../source/zipapi/ZipFile";
 /** Loads committed unchanged upstream fixture bytes. @param name - Pinned fixture basename. @returns Actual archive bytes. */
 export function packageFixture(
-  name: "tdf163341.ods" | "unicode-path.odt" | "unicode-path.docx",
+  name: "tdf163341.ods" | "unicode-path.odt" | "unicode-path.docx" | "dd-deflated.docx",
 ): Uint8Array {
   return new Uint8Array(readFileSync(new NodeURL("./data/" + name, import.meta.url)));
 }
@@ -39,3 +39,10 @@ it.each([
     ).toThrow("Invalid Info-ZIP Unicode Path Extra Field");
   },
 );
+
+it("ZipPackageTest::testDataDescriptorDeflatedDOCX rejects the unchanged source fixture", /** Original normal ZIP open fails at LOC consistency, without a fake package service or recovery. @returns Nothing. */ () => {
+  expect(
+    /** Opens committed original bytes. @returns Archive. */ () =>
+      new ZipFile(packageFixture("dd-deflated.docx")),
+  ).toThrow("The stream seems to be broken!");
+});
