@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 136
+revision: 139
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-11T23:15:28.674Z"
+  updated_at: "2026-11-11T23:26:48.789Z"
   updated_by: "CODER"
-  note: "Bounded Writer fast-substream checkpoint verified:56 profile tests,127 related tests, S98.59/B95.68/F100/L98.94 aggregate; native stream-switch failure state WRITER448 preserved; CT_Settings generated unchanged; real fdo73541 complex-settings rejection and partial mirror callback remain explicitly uncertified. Typecheck/static/scoped gates pass except two unchanged JSDoc baseline errors. Full DOCX/XLSX core/export/UI remains incomplete; continue active goal. Evidence: evidence/writer-fast-substreams-checkpoint.json."
-  attempts: 40
+  note: "Complex settings checkpoint verified:123 profile tests,64 related regressions; whole OOXMLFastContextHandler and OOXMLFactory_wml S340/340 B183/183 F95/95 L301/301 under90 thresholds. Native fdo73541 settings now import successfully without altering the fixture. Full DOCX/XLSX document/filter/export/UI and native QA page layout remain incomplete. Scoped gates/typecheck/static pass except unchanged css-style-matchers JSDoc baseline. Continue active goal. Evidence: evidence/writer-complex-settings-checkpoint.json."
+  attempts: 41
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -648,8 +651,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-11T23:26:48.789Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Complex settings checkpoint verified:123 profile tests,64 related regressions; whole OOXMLFastContextHandler and OOXMLFactory_wml S340/340 B183/183 F95/95 L301/301 under90 thresholds. Native fdo73541 settings now import successfully without altering the fixture. Full DOCX/XLSX document/filter/export/UI and native QA page layout remain incomplete. Scoped gates/typecheck/static pass except unchanged css-style-matchers JSDoc baseline. Continue active goal. Evidence: evidence/writer-complex-settings-checkpoint.json."
+  -
+    type: "status"
+    at: "2026-11-11T23:26:52.879Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-11T23:15:33.909Z"
+doc_updated_at: "2026-11-11T23:26:52.879Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -1864,6 +1880,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-11T23:26:48.789Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Complex settings checkpoint verified:123 profile tests,64 related regressions; whole OOXMLFastContextHandler and OOXMLFactory_wml S340/340 B183/183 F95/95 L301/301 under90 thresholds. Native fdo73541 settings now import successfully without altering the fixture. Full DOCX/XLSX document/filter/export/UI and native QA page layout remain incomplete. Scoped gates/typecheck/static pass except unchanged css-style-matchers JSDoc baseline. Continue active goal. Evidence: evidence/writer-complex-settings-checkpoint.json.
+    Attempts: 41
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T23:26:39.859Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2084,6 +2130,10 @@ sections:
     - Observation: Writer fast-substream checkpoint: original OOXMLDocument stream switching, SAX/resource delivery and relationship input ownership are now represented. CT_Settings native generation adds96 elements and97 resources. Real fdo73541 reveals unported CT_Zoom and source saved-error callback continuation; it is not certified as a successful native QA scenario.
       Impact: 56 profile tests and127 related regressions pass; aggregate coverage S98.59/B95.68/F100/L98.94. OOXMLDocument individual branches54.54 reflect unported progress-statistics initialization, without fabricated state. Full DOCX/XLSX resolve/export/UI remains incomplete. Existing JSDoc baseline remains two css-style-matchers errors.
       Resolution: Preserve exceptional current-stream state as WRITER448, actual input references and exactly-once substream cleanup. Typecheck/static/scoped checks pass, aside from unchanged docs baseline. Evidence: evidence/writer-fast-substreams-checkpoint.json. Continue the approved task and active goal without pause.
+
+    - Observation: Complex Writer settings checkpoint:10 additional native complex definitions plus referenced zoom list now pass unchanged source generation. Port actual hexadecimal default hooks and numeric namespaced TOKEN_COUNT sentinel; add21 exact native resource declarations. Unchanged fdo73541 settings now import successfully into actual DomainMapper mirror state, replacing the prior CT_Zoom implementation boundary.
+      Impact: 123 profile tests and64 related regressions pass. Both whole changed runtime modules naturally cover S340/340 B183/183 F95/95 L301/301 under90 thresholds. Full native document export/page-layout QA and complete DOCX/XLSX core/filter/UI remain unfinished.
+      Resolution: Keep native hex variant, existing-value guard, low16 token rejection and nested/duplicate resource order. All scoped gates/typecheck/static pass except the same two JSDoc baseline errors. Evidence: evidence/writer-complex-settings-checkpoint.json. Continue the approved active goal without pause.
 id_source: "generated"
 ---
 ## Summary
@@ -3308,6 +3358,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-11T23:26:48.789Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Complex settings checkpoint verified:123 profile tests,64 related regressions; whole OOXMLFastContextHandler and OOXMLFactory_wml S340/340 B183/183 F95/95 L301/301 under90 thresholds. Native fdo73541 settings now import successfully without altering the fixture. Full DOCX/XLSX document/filter/export/UI and native QA page layout remain incomplete. Scoped gates/typecheck/static pass except unchanged css-style-matchers JSDoc baseline. Continue active goal. Evidence: evidence/writer-complex-settings-checkpoint.json.
+Attempts: 41
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-11T23:26:39.859Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -3532,3 +3612,7 @@ DecisionContextRef:
 - Observation: Writer fast-substream checkpoint: original OOXMLDocument stream switching, SAX/resource delivery and relationship input ownership are now represented. CT_Settings native generation adds96 elements and97 resources. Real fdo73541 reveals unported CT_Zoom and source saved-error callback continuation; it is not certified as a successful native QA scenario.
   Impact: 56 profile tests and127 related regressions pass; aggregate coverage S98.59/B95.68/F100/L98.94. OOXMLDocument individual branches54.54 reflect unported progress-statistics initialization, without fabricated state. Full DOCX/XLSX resolve/export/UI remains incomplete. Existing JSDoc baseline remains two css-style-matchers errors.
   Resolution: Preserve exceptional current-stream state as WRITER448, actual input references and exactly-once substream cleanup. Typecheck/static/scoped checks pass, aside from unchanged docs baseline. Evidence: evidence/writer-fast-substreams-checkpoint.json. Continue the approved task and active goal without pause.
+
+- Observation: Complex Writer settings checkpoint:10 additional native complex definitions plus referenced zoom list now pass unchanged source generation. Port actual hexadecimal default hooks and numeric namespaced TOKEN_COUNT sentinel; add21 exact native resource declarations. Unchanged fdo73541 settings now import successfully into actual DomainMapper mirror state, replacing the prior CT_Zoom implementation boundary.
+  Impact: 123 profile tests and64 related regressions pass. Both whole changed runtime modules naturally cover S340/340 B183/183 F95/95 L301/301 under90 thresholds. Full native document export/page-layout QA and complete DOCX/XLSX core/filter/UI remain unfinished.
+  Resolution: Keep native hex variant, existing-value guard, low16 token rejection and nested/duplicate resource order. All scoped gates/typecheck/static pass except the same two JSDoc baseline errors. Evidence: evidence/writer-complex-settings-checkpoint.json. Continue the approved active goal without pause.

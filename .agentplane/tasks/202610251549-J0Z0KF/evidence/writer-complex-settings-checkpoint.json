@@ -1,0 +1,247 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Complex Writer settings admission and native hexadecimal/TOKEN_COUNT defaults",
+  "checks": [
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-settings-resources-gate-0.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-settings-resources-gate-1.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-settings-resources-gate-2.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-settings-resources-gate-3.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-settings-resources-gate-4.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-settings-resources-gate-5.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-settings-resources-gate-6.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-settings-resources-gate-7.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-settings-resources-gate-8.log"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-settings-resources-gate-9.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-settings-resources-gate-10.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-settings-resources-gate-11.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-settings-resources-typecheck.log"
+    },
+    {
+      "command": "npm run test:static",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-settings-resources-static.log"
+    },
+    {
+      "command": "Scoped ESLint for the changed runtime/test declarations --max-warnings 0",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-settings-resources-lint.log"
+    },
+    {
+      "command": "Scoped Prettier check over all changed TS/JSON/Markdown files",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-settings-resources-format.log"
+    }
+  ],
+  "profile": {
+    "command": "npx vitest run src/sw/source/writerfilter/ooxml src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts --coverage --coverage.include=src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts --coverage.include=src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reporter=text --coverage.reporter=json-summary",
+    "cwd": "apps/office",
+    "exitCode": 0,
+    "tests": 123,
+    "files": 10,
+    "log": "apps/office/coverage/native-settings-resources-profile.log",
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 301,
+          "covered": 301,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 340,
+          "covered": 340,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 95,
+          "covered": 95,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 183,
+          "covered": 183,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.ts": {
+        "lines": {
+          "total": 64,
+          "covered": 64,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 70,
+          "covered": 70,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 46,
+          "covered": 46,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts": {
+        "lines": {
+          "total": 237,
+          "covered": 237,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 83,
+          "covered": 83,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 270,
+          "covered": 270,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 137,
+          "covered": 137,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    }
+  },
+  "related": {
+    "command": "npx vitest run src/sw/source/writerfilter/dmapper/DomainMapper.test.ts src/sw/source/writerfilter/dmapper/StyleSheetTable.test.ts src/oox/source/helper/zipstorage-input.test.ts src/sw/source/filter/xml/odt-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sw/browser/workflows/writer-odt-io.test.ts src/sc/browser/workflows/calc-ods-io.test.ts --coverage.enabled=false",
+    "cwd": "apps/office",
+    "exitCode": 0,
+    "tests": 64,
+    "files": 7,
+    "log": "apps/office/coverage/native-settings-resources-related.log"
+  },
+  "generated": {
+    "definitions": 65,
+    "attributes": 120,
+    "elements": 520,
+    "resources": 619,
+    "lists": 319,
+    "actions": 47,
+    "addedOwnDefinitions": 10,
+    "addedResourceIdDeclarations": 21,
+    "unchangedPinnedGenerators": true,
+    "checkWitness": "OOXMLFactory.test.ts regenerates every consumed table through unchanged pinned native generators"
+  },
+  "limitations": [
+    "Native fdo73541 settings part now parses successfully into the actual DomainMapper mirror state and restores the main stream. Full native testFdo73541 document import/export/page-layout is still pending.",
+    "Complex settings typed resources are parsed, not a claim that complete SettingsTable/ApplySettingsTable/model-layout application is implemented.",
+    "Hex default preserves original variant and nonempty value. Namespaced TOKEN_COUNT retains the exact native numeric constant and low16 guard; no wildcard fallback is invented.",
+    "Initial generator admission correctly rejected missing hex hooks and then exposed the unnamed-any TOKEN_COUNT binding. Both actual source mechanisms were implemented. Initial new tests incorrectly omitted the real document needed for note initialization, then a fixture async keyword; corrected actual fixture owners/async code without weakening production guards. One source enum lookup initially omitted the native doc_ prefix and failed before writing.",
+    "Whole changed runtime coverage is naturally100 under the approved90 threshold, without private-state forcing or artificial providers. Full suite is not rerun inside the same active task.",
+    "All scoped gates pass except the unchanged two css-style-matchers.ts:17/:76 JSDoc baseline errors. doctor has no errors and retains the existing missing project-local pre-push runner warning.",
+    "Complete OOXMLDocument resolve/services/shape/DOM/model statistics, full DOCX/XLSX import/export/filter/Worker/mounted UI acceptance remain unfinished. No broad parity/default/capability promotion. Existing browser Open/Save/autosave/recovery policies unchanged. Goal remains active."
+  ],
+  "baseCommit": "11c213a7bd908f0ca4d796e21205a5385bd36836",
+  "sourceBlobs": {
+    "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.ts": "3b9445bd24fd5ced2b21e5f555b8dc0ea3e761cb",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.test.ts": "642e2c201ff93286ae957154628f596d86422cc7",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts": "48fd423f6472224477dd767db8648215c707afd3",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements.ts": "994cfbd80cb0d4d72f27dfb5761e16eac491a08b",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.lists.ts": "0ea6cbce52504ff99c36d2c9c3a9324d77768cb2",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts": "2aafadf1e08bb15bf3c39a7c593e008f1e5bdd95",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.ts": "4faab19b5e58df84988b62d0d687e0749a97a98e",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts": "885811736da8ee708ed4477cc5956e4daeb036ca",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLSettings.test.ts": "6543031a7d30476094f0c69c30bb0edafa953a2c",
+    "docs/program/registry/writer/capabilities/CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6.json": "1d4ad398a0c3aebe08b4d63f00a26299ad3d7a53",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/inc/ooxml/resourceids.ts.json": "cc6a41729bdbfed99eb6ebf8aa62dce2c023ca1d",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.ts.json": "479408582881675eb54f7790ce1d11051dae012f",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements.ts.json": "ea4011aaa151ab338fcc35b3abdb21bafdf0b828",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.lists.ts.json": "ddae4df19574b994617f6549566fb3517075d102",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts.json": "b1e2066b4003a3283d74c50c70ae480d584e7a55",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.ts.json": "c90a67b9f380f3470d66f53dade28cc2b207593e",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts.json": "b1f7540ce13e913a3bab0f440c0c284c9c3cab40",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/inc/ooxml/resourceids.ts.json": "df8371e70281d42113a0217aedbf1144d9fba8af",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.ts.json": "04f3e3e4c4c10c730993c6337a2b7ad5c3d06d48",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements.ts.json": "c8e5a2cd17ffddcef972e0f1a335caa3bff17b62",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.lists.ts.json": "229f3f0b4a617e8eabaa25adfb6b25bb94d49cff",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts.json": "6c6a2e5e804d219986e25de46aaa1ab74db77c05",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.ts.json": "bbaabdc90ccd2e3b44d340458528d264d9e32b16",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts.json": "1c0fa71cb2921c16f9b5868e3ce5bfe9c6dfa630",
+    "docs/program/writer-docx.md": "6a9024b7afe5282b951cda649c52f3559edc0dd0",
+    "docs/program/writer-fast-substreams.md": "48defb7b7506df220ec7dff0b01fcc934ab02265",
+    "scripts/writer-ooxml/generate-factory.py": "dfe5014fdf7247cf872c9ff260f66afb6dbfafab"
+  },
+  "nativeFixture": {
+    "path": "apps/office/src/sw/qa/extras/ooxmlexport/data/fdo73541.docx",
+    "original": "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/fdo73541.docx",
+    "sourceBlob": "469d025209d8664ac86a3c5028b7a052125b325a",
+    "byteExact": true,
+    "settingsImport": "pass",
+    "fullNativeQa": "pending-document-export-layout"
+  }
+}
