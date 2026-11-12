@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 221
+revision: 224
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T13:04:57.190Z"
+  updated_at: "2026-11-12T13:28:55.915Z"
   updated_by: "CODER"
-  note: "PropertyValueSet prerequisite:224 related tests in33 files,48 boundary and2 resource cases pass. Whole selected90-percent coverage gate FAILS77.84 statements72 branches89.25 functions79.09 lines. Types/build/static and scoped/source/registry checks pass, known old JSDoc baseline only. Positive converter/efficient property-access and full native service QA remain pending; open/resolver/DocumentBuilder/metadata/DOCX/XLSX/UI still incomplete."
-  attempts: 68
+  note: "Native stoc converter prerequisite checkpoint:390 related tests/65 files and whole selected90 coverage pass (93.57 lines,91.86 branches);16 new focused cases. Typecheck/build/static/lint/format/provenance/boundaries48/resource2/registry/size/tree/resources/hintids/doctor/routing/diff pass. Only pre-existing css-style-matchers.ts JSDoc failures remain. Genuine service registration/type manager, Content open/cancel, resolver/DocumentBuilder, metadata and complete XLSX/DOCX existing-UI acceptance remain unfinished; do not mark parent verified or complete."
+  attempts: 69
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1096,8 +1099,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-12T13:28:55.915Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native stoc converter prerequisite checkpoint:390 related tests/65 files and whole selected90 coverage pass (93.57 lines,91.86 branches);16 new focused cases. Typecheck/build/static/lint/format/provenance/boundaries48/resource2/registry/size/tree/resources/hintids/doctor/routing/diff pass. Only pre-existing css-style-matchers.ts JSDoc failures remain. Genuine service registration/type manager, Content open/cancel, resolver/DocumentBuilder, metadata and complete XLSX/DOCX existing-UI acceptance remain unfinished; do not mark parent verified or complete."
+  -
+    type: "status"
+    at: "2026-11-12T13:29:00.700Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-12T13:05:15.840Z"
+doc_updated_at: "2026-11-12T13:29:00.700Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -3152,6 +3168,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-12T13:28:55.915Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native stoc converter prerequisite checkpoint:390 related tests/65 files and whole selected90 coverage pass (93.57 lines,91.86 branches);16 new focused cases. Typecheck/build/static/lint/format/provenance/boundaries48/resource2/registry/size/tree/resources/hintids/doctor/routing/diff pass. Only pre-existing css-style-matchers.ts JSDoc failures remain. Genuine service registration/type manager, Content open/cancel, resolver/DocumentBuilder, metadata and complete XLSX/DOCX existing-UI acceptance remain unfinished; do not mark parent verified or complete.
+    Attempts: 69
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T13:28:31.047Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3488,6 +3534,10 @@ sections:
     - Observation: Implemented actual complete PropertyValueSet XRow/XColumnLocate, original record/flag/cache/template operations and property-set/converter paths. Added complete converter/property-access/column SDK contracts, TypeClass normal getter, FailReason and CannotConvertException.224 related cases pass in33 files;48 boundary and2 resource cases pass. Original five XRow method bodies and XColumnLocate findColumn QA run with populated genuine row relations.
       Impact: Whole selected coverage still fails90:77.84 statements72 branches89.25 functions79.09 lines. PropertyValueSet ordinary getters, streams, actual ServiceManager property fallback and genuine converter-creation failure are witnessed. Efficient XPropertyAccess, positive converter, unsupported-producer switch arms and full native ABI/threading/service QA remain unqualified.
       Resolution: Preserve tested source void-Any wasNull and one-shot converter failure as CALC-538/WRITER472 and CALC-539/WRITER473. All type/build/static/scoped/source/registry/module/resource/tree/size/doctor/routing checks pass; only prior css-style-matchers JSDoc baseline. Continue real Content isDocument/openStream/cancel, resolver/DocumentBuilder, metadata and full DOCX/XLSX/UI; no fake provider or private coverage hook.
+
+    - Observation: Native stoc converter checkpoint: complete TypeConverter_Impl XTypeConverter/XServiceInfo method bodies and acquired component export, actual TypeDescription wrapper, unsigned UTF16 parsing and ASCII equality dependencies. Command: focused Vitest stoc/ucbhelper/typelib/UNO copy-assignment-sequence/SAL suites with whole changed-owner90 coverage. Result: pass,390 cases/65 files; statements92.73,branches91.86,functions92.09,lines93.57. Component itself86.72 lines/81.17 branches remains bounded. Scope: actual component/UNO graph; original Integer123-to-String QA, complete OUString unsigned64 overflow method, selected original UTF16 equality assertion. Real TypeDescriptionManager/XSet QA, named enum completion and default service registration remain pending.
+      Impact: No fake context, service manager, type provider, factory or private state hook is supplied. Original numeric exceptions report source type; decimal-prefix/x handling and sequence danger-reference leak control flow are preserved (CALC-540..542/WRITER474..476). Native undefined float-integral overflow/ABI/threads and full format/UI acceptance remain unqualified. Existing PropertyValueSet90 coverage gap is not reclassified by the passing selected converter-owner gate. Full suites remain at once-per-ten-task cadence.
+      Resolution: Implemented actual pinned source owners and recorded foundation-only registry/provenance. Typecheck,production build/static,scoped ESLint/Prettier,source provenance,module boundaries/48 cases,registry build/check,size/tree,resources/hintids,doctor/routing/diff pass. JSDoc retains only prior css-style-matchers.ts17 and76 failures; no unrelated fix. Next implement genuine component registration/bootstrap and type-manager dependencies, then Content open/cancel and full resolver/DocumentBuilder/metadata/DOCX/XLSX/UI. Keep parent task active; bounded checkpoint does not satisfy full declared acceptance.
 id_source: "generated"
 ---
 ## Summary
@@ -5552,6 +5602,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-12T13:28:55.915Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native stoc converter prerequisite checkpoint:390 related tests/65 files and whole selected90 coverage pass (93.57 lines,91.86 branches);16 new focused cases. Typecheck/build/static/lint/format/provenance/boundaries48/resource2/registry/size/tree/resources/hintids/doctor/routing/diff pass. Only pre-existing css-style-matchers.ts JSDoc failures remain. Genuine service registration/type manager, Content open/cancel, resolver/DocumentBuilder, metadata and complete XLSX/DOCX existing-UI acceptance remain unfinished; do not mark parent verified or complete.
+Attempts: 69
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T13:28:31.047Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -5892,3 +5972,7 @@ DecisionContextRef:
 - Observation: Implemented actual complete PropertyValueSet XRow/XColumnLocate, original record/flag/cache/template operations and property-set/converter paths. Added complete converter/property-access/column SDK contracts, TypeClass normal getter, FailReason and CannotConvertException.224 related cases pass in33 files;48 boundary and2 resource cases pass. Original five XRow method bodies and XColumnLocate findColumn QA run with populated genuine row relations.
   Impact: Whole selected coverage still fails90:77.84 statements72 branches89.25 functions79.09 lines. PropertyValueSet ordinary getters, streams, actual ServiceManager property fallback and genuine converter-creation failure are witnessed. Efficient XPropertyAccess, positive converter, unsupported-producer switch arms and full native ABI/threading/service QA remain unqualified.
   Resolution: Preserve tested source void-Any wasNull and one-shot converter failure as CALC-538/WRITER472 and CALC-539/WRITER473. All type/build/static/scoped/source/registry/module/resource/tree/size/doctor/routing checks pass; only prior css-style-matchers JSDoc baseline. Continue real Content isDocument/openStream/cancel, resolver/DocumentBuilder, metadata and full DOCX/XLSX/UI; no fake provider or private coverage hook.
+
+- Observation: Native stoc converter checkpoint: complete TypeConverter_Impl XTypeConverter/XServiceInfo method bodies and acquired component export, actual TypeDescription wrapper, unsigned UTF16 parsing and ASCII equality dependencies. Command: focused Vitest stoc/ucbhelper/typelib/UNO copy-assignment-sequence/SAL suites with whole changed-owner90 coverage. Result: pass,390 cases/65 files; statements92.73,branches91.86,functions92.09,lines93.57. Component itself86.72 lines/81.17 branches remains bounded. Scope: actual component/UNO graph; original Integer123-to-String QA, complete OUString unsigned64 overflow method, selected original UTF16 equality assertion. Real TypeDescriptionManager/XSet QA, named enum completion and default service registration remain pending.
+  Impact: No fake context, service manager, type provider, factory or private state hook is supplied. Original numeric exceptions report source type; decimal-prefix/x handling and sequence danger-reference leak control flow are preserved (CALC-540..542/WRITER474..476). Native undefined float-integral overflow/ABI/threads and full format/UI acceptance remain unqualified. Existing PropertyValueSet90 coverage gap is not reclassified by the passing selected converter-owner gate. Full suites remain at once-per-ten-task cadence.
+  Resolution: Implemented actual pinned source owners and recorded foundation-only registry/provenance. Typecheck,production build/static,scoped ESLint/Prettier,source provenance,module boundaries/48 cases,registry build/check,size/tree,resources/hintids,doctor/routing/diff pass. JSDoc retains only prior css-style-matchers.ts17 and76 failures; no unrelated fix. Next implement genuine component registration/bootstrap and type-manager dependencies, then Content open/cancel and full resolver/DocumentBuilder/metadata/DOCX/XLSX/UI. Keep parent task active; bounded checkpoint does not satisfy full declared acceptance.

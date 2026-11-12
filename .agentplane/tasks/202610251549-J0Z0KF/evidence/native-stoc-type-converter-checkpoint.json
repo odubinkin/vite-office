@@ -1,0 +1,416 @@
+{
+  "status": "in-progress-prerequisite-checkpoint",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "e8a6965810d473d45b5acc3df3a3e8b5b170c3ff",
+  "capability": "CAP-7907d2df-c92d-4678-aa52-3cbb77b4d4f3",
+  "scope": "Actual complete stoc converter methods/component export, public TypeDescription ownership wrapper and original SAL integer/ASCII dependencies; real component graph, not full service bootstrap or format/UI integration.",
+  "tests": {
+    "newFocusedCases": 16,
+    "relatedCases": 390,
+    "relatedFiles": 65,
+    "boundaryCases": 48,
+    "resourceCases": 2,
+    "result": "pass",
+    "upstreamPorted": [
+      "_XTypeConverter::_convertToSimpleType Integer123-to-String",
+      "Test<OUString>::testToUInt64Overflow all3values",
+      "StringLiterals::checkUtf16 equalsIgnoreAsciiCase assertion only"
+    ],
+    "unqualified": [
+      "Original _convertTo requires actual TypeDescriptionManager/XSet service graph",
+      "Full Java runner and remaining original StringLiterals operations"
+    ]
+  },
+  "coverage": {
+    "result": "pass-selected-owner-aggregate",
+    "threshold": 90,
+    "completeSelectedOwnerFiles": 5,
+    "statements": 92.73,
+    "branches": 91.86,
+    "functions": 92.09,
+    "lines": 93.57,
+    "converter": {
+      "statements": 84.91,
+      "branches": 81.17,
+      "functions": 100,
+      "lines": 86.72
+    },
+    "note": "Passing aggregate does not certify each file at90 or supersede the previous whole UCB owner gate. No enum provider/private state hook or omitted source arm is used to manufacture coverage."
+  },
+  "preservedSource": [
+    "Original numeric/string/hex rules, rounding and inclusive ranges",
+    "Actual read-only interface field access without a root query/acquire",
+    "Actual compound upcast and reverse recursive sequence element conversion",
+    "Source manually-released danger descriptions remain unreleased on an element exception",
+    "Original empty Context/index0 and source-class numeric exception fields",
+    "Actual generated component facets and original export acquisition, no fake context/provider/factory",
+    "All TypeDescription constructors, copy/move/assignment/completion/equality, including null inequality",
+    "Original unsigned terminated parsing and counted ASCII-only view equality"
+  ],
+  "corrections": [
+    "Fixed test sequence scalar access to actual logical lvalue addresses; no kernel value adapter added.",
+    "Corrected the integer-prefix fixture from12suffix to12tail because original getHyperValue searches x anywhere before decimal parsing; both outcomes tested.",
+    "Exception upcast fixture uses the actual transport-capable CannotConvertException and actual base Exception type, not an arbitrary missing get-address view.",
+    "Interface conversion now borrows the actual Any interface field as original tryAccess does, without extra root query or acquisition.",
+    "Runtime UTF16 message construction preserves surrogate pairs.",
+    "Header filename divergence is documented to keep existing C declarations and the original C++ wrapper distinct."
+  ],
+  "suspectedIssues": [
+    "CALC-540/WRITER474",
+    "CALC-541/WRITER475",
+    "CALC-542/WRITER476"
+  ],
+  "knownBaseline": [
+    "Only css-style-matchers.ts17 missing JSDoc and76 incomplete parameter tags; no unrelated changes.",
+    "Doctor succeeds with the existing managed-hook fallback warning."
+  ],
+  "remaining": [
+    "Genuine component factory/registration and process context graph",
+    "TypeDescriptionManager and full enum completion/source QA",
+    "Content open/isDocument/cancel and actual UNO exception bridge",
+    "Real broker/provider/default resolver, DocumentBuilder/metadata initialization",
+    "Complete DOCX/XLSX import/export/reopen, shell routing and existing desktop/mobile UI acceptance"
+  ],
+  "fullSuite": "Not run; approved once-per-ten-agentplane-task cadence, both parent format tasks remain in progress.",
+  "checks": [
+    {
+      "name": "related",
+      "cwd": "apps/office",
+      "command": "../../node_modules/.bin/vitest run --config vite.config.ts src/stoc src/ucbhelper src/cppu/inc/typelib src/cppu/source/typelib src/cppu/source/uno/copy.test.ts src/cppu/source/uno/assign.test.ts src/cppu/source/uno/sequence-engine.test.ts src/sal/rtl src/sal/inc/rtl --coverage --coverage.include=src/stoc/source/typeconv/convert.ts --coverage.include=src/cppu/inc/typelib/typedescription.hxx.ts --coverage.include=src/sal/rtl/strtmpl.ts --coverage.include=src/sal/rtl/ustring.ts --coverage.include=src/sal/inc/rtl/ustring.ts --coverage.reportsDirectory=coverage/typeconv --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.functions=90 --coverage.thresholds.branches=90",
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-related.log",
+      "sha256": "05b111196a7c983eed23943a826fc6066502d15d40f6002d76d8861b7b1649c2"
+    },
+    {
+      "name": "typecheck",
+      "cwd": ".",
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "name": "build",
+      "cwd": ".",
+      "command": "npm run build",
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-build.log",
+      "sha256": "529098f3b81a5e06cbca9ada2120372fad86e7a17a2f6b217e62bd819db15892"
+    },
+    {
+      "name": "static",
+      "cwd": ".",
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-static.log",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    {
+      "name": "provenance",
+      "cwd": ".",
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-provenance.log",
+      "sha256": "187bbafc6768d92b57263e6a8d8f3832c289d89b0b98aa0738aa7f591a90cf41"
+    },
+    {
+      "name": "boundaries",
+      "cwd": ".",
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-boundaries.log",
+      "sha256": "2ceb7c5192415e66691654e5c286e7ae22e71b948e89ada6c61291872d9dae94"
+    },
+    {
+      "name": "registry-build",
+      "cwd": ".",
+      "command": "npm run inventory:registry:build",
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "name": "registry-check",
+      "cwd": ".",
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-registry-check.log",
+      "sha256": "b2ae8c6d460d00e2978c5a5d4f52d8feb3c41ca19e0836b882d86f2ad396a8be"
+    },
+    {
+      "name": "docs",
+      "cwd": ".",
+      "command": "npm run check:docs",
+      "result": "known-baseline-failure",
+      "log": "apps/office/coverage/typeconv-docs.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    },
+    {
+      "name": "size",
+      "cwd": ".",
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-size.log",
+      "sha256": "6b3e2a32db31ccb0a5a3d8dde1ca5a6871659759097303be01fc5b1c6cc20d1b"
+    },
+    {
+      "name": "tree",
+      "cwd": ".",
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-tree.log",
+      "sha256": "4615eccefb9c2ce4b9cd767340293514a9fc81e356b588821e3bd52cc72a30f6"
+    },
+    {
+      "name": "boundary-tests",
+      "cwd": ".",
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-boundary-tests.log",
+      "sha256": "bcdf15f2beded477b919cdcd3add95b1d9816c43e9ae412c9db8bd369ba0b0a1"
+    },
+    {
+      "name": "resource-tests",
+      "cwd": ".",
+      "command": "node_modules/.bin/vitest run scripts/writer-ui-resource-model.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-resource-tests.log",
+      "sha256": "c7d8cdab48e5255e00d8fd69a0266f3604ed7e5453bcfadc388f0dc342472354"
+    },
+    {
+      "name": "writer-resources",
+      "cwd": ".",
+      "command": "npm run check:writer-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-writer-resources.log",
+      "sha256": "9601dd89ed9e88960ac866a8786de7f570a987a7810ee655730d60c429823846"
+    },
+    {
+      "name": "calc-resources",
+      "cwd": ".",
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-calc-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "name": "hintids",
+      "cwd": ".",
+      "command": "npm run check:writer-hintids",
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-hintids.log",
+      "sha256": "513c109068ebf83b3d6fe448c3c44564ec89a64cd9cb64059b5b4b89d11d887a"
+    },
+    {
+      "name": "doctor",
+      "cwd": ".",
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-doctor.log",
+      "sha256": "8d5afc9e7ed21a2d8b53d388dd365e1306c992e9c147c259ca26c820b8e3c5d4"
+    },
+    {
+      "name": "routing",
+      "cwd": ".",
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "name": "diff",
+      "cwd": ".",
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "format",
+      "cwd": ".",
+      "command": [
+        "node_modules/.bin/prettier",
+        "--check",
+        "apps/office/src/cppu/inc/typelib/typedescription.hxx.test.ts",
+        "apps/office/src/cppu/inc/typelib/typedescription.hxx.ts",
+        "apps/office/src/sal/inc/rtl/ustring.h.ts",
+        "apps/office/src/sal/inc/rtl/ustring.ts",
+        "apps/office/src/sal/rtl/native-converter-string-dependencies.test.ts",
+        "apps/office/src/sal/rtl/strtmpl.ts",
+        "apps/office/src/sal/rtl/ustring.ts",
+        "apps/office/src/stoc/source/typeconv/convert.test.ts",
+        "apps/office/src/stoc/source/typeconv/convert.ts",
+        "docs/program/native-stoc-type-converter.md",
+        "docs/program/registry/shared/capabilities/CAP-7907d2df-c92d-4678-aa52-3cbb77b4d4f3.json",
+        "docs/program/registry/shared/provenance/cppu/inc/typelib/typedescription.hxx.ts.json",
+        "docs/program/registry/shared/provenance/sal/inc/rtl/ustring.h.ts.json",
+        "docs/program/registry/shared/provenance/sal/inc/rtl/ustring.ts.json",
+        "docs/program/registry/shared/provenance/sal/rtl/strtmpl.ts.json",
+        "docs/program/registry/shared/provenance/sal/rtl/ustring.ts.json",
+        "docs/program/registry/shared/provenance/stoc/source/typeconv/convert.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/typelib/typedescription.hxx.ts.json",
+        "docs/program/registry/shared/runtime/sal/inc/rtl/ustring.h.ts.json",
+        "docs/program/registry/shared/runtime/sal/inc/rtl/ustring.ts.json",
+        "docs/program/registry/shared/runtime/sal/rtl/strtmpl.ts.json",
+        "docs/program/registry/shared/runtime/sal/rtl/ustring.ts.json",
+        "docs/program/registry/shared/runtime/stoc/source/typeconv/convert.ts.json",
+        "scripts/module-boundaries/allowed-edges.mjs"
+      ],
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "name": "lint",
+      "cwd": ".",
+      "command": "node_modules/.bin/eslint --max-warnings 0 apps/office/src/stoc/source/typeconv apps/office/src/cppu/inc/typelib/typedescription.hxx.ts apps/office/src/cppu/inc/typelib/typedescription.hxx.test.ts apps/office/src/sal/rtl/native-converter-string-dependencies.test.ts apps/office/src/sal/rtl/strtmpl.ts apps/office/src/sal/rtl/ustring.ts apps/office/src/sal/inc/rtl/ustring.ts apps/office/src/sal/inc/rtl/ustring.h.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/typeconv-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/cppu/inc/typelib/typedescription.hxx.test.ts",
+      "gitBlob": "0cc95b64e85fdaf1cc7ec2366811fc095536699d"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/typelib/typedescription.hxx.ts",
+      "gitBlob": "94a1896c7dfa6ba4de2fcc5ac09a3e6d28c12e67"
+    },
+    {
+      "path": "apps/office/src/sal/inc/rtl/ustring.h.ts",
+      "gitBlob": "0a25cded0fb2478698dd4ab79eada2de8cb69333"
+    },
+    {
+      "path": "apps/office/src/sal/inc/rtl/ustring.ts",
+      "gitBlob": "256c683ae65ec63d434dc629d69c07c068eb1b1c"
+    },
+    {
+      "path": "apps/office/src/sal/rtl/native-converter-string-dependencies.test.ts",
+      "gitBlob": "ff0ae63ff5fb1293334f37e90f3a8be6b2f0a5cf"
+    },
+    {
+      "path": "apps/office/src/sal/rtl/strtmpl.ts",
+      "gitBlob": "81e7853c9aa760337b03576f37d710edae78b9f1"
+    },
+    {
+      "path": "apps/office/src/sal/rtl/ustring.ts",
+      "gitBlob": "949a924fa03a82f48df519a96f8c47be17d17bc1"
+    },
+    {
+      "path": "apps/office/src/stoc/source/typeconv/convert.test.ts",
+      "gitBlob": "d30be50af470e179335e01947597d0c552fdf6c1"
+    },
+    {
+      "path": "apps/office/src/stoc/source/typeconv/convert.ts",
+      "gitBlob": "d9b1292ef7103072db327293c176b1a7d82f18ed"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "59edd9c6b7778859ef1a1079ba133e3a6c3ae6c5"
+    },
+    {
+      "path": "docs/program/native-stoc-type-converter.md",
+      "gitBlob": "5fe59803609f2a543cc1d0564468ae1105214900"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-7907d2df-c92d-4678-aa52-3cbb77b4d4f3.json",
+      "gitBlob": "2ab7818e39f9bbeed282745068621832198806f9"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/typelib/typedescription.hxx.ts.json",
+      "gitBlob": "b6449914e39a3289259c0aa931ca71285b6dee32"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sal/inc/rtl/ustring.h.ts.json",
+      "gitBlob": "16ab0e422395d2ad98596b0f3ee8e194be4478c8"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sal/inc/rtl/ustring.ts.json",
+      "gitBlob": "a915e0525a2f6d897a21b0f0647b3a67a08c0efd"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sal/rtl/strtmpl.ts.json",
+      "gitBlob": "ab794a1f992c96078611f66c09f75fe7501e7645"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sal/rtl/ustring.ts.json",
+      "gitBlob": "1708106cd0535cfe91d9f46e660bb0de30e4ef27"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/stoc/source/typeconv/convert.ts.json",
+      "gitBlob": "7326cc61b7ffb09086cd4c3385add6569d9e21e2"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/typelib/typedescription.hxx.ts.json",
+      "gitBlob": "67b5e55d223d03bff788d19be6e909811d61c8a7"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sal/inc/rtl/ustring.h.ts.json",
+      "gitBlob": "660f6b660af31cc20cb6e029bb5cf2725929c295"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sal/inc/rtl/ustring.ts.json",
+      "gitBlob": "01f200976064f24fcacecb8bf334d1b6260b5f46"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sal/rtl/strtmpl.ts.json",
+      "gitBlob": "ba6778bd8e1dbd81b5edad5ad141f82165e7af77"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sal/rtl/ustring.ts.json",
+      "gitBlob": "2823c672472ef86c0d4150e2103b46ef01c9cf8b"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/stoc/source/typeconv/convert.ts.json",
+      "gitBlob": "b5228e689ba7d3fafad544233b2f72fa4a9228c1"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "ef4e5a4a2b55d5f7198a45ae75bfcdbc30e6abd7"
+    },
+    {
+      "path": "scripts/module-boundaries/allowed-edges.mjs",
+      "gitBlob": "1381bb5f98a688d04d38e2b73cc7e90f247b4b73"
+    }
+  ],
+  "upstreamBlobs": [
+    {
+      "path": "stoc/source/typeconv/convert.cxx",
+      "gitBlob": "c38b8d45ab664c1fbd6303614b29bff3bca0853e"
+    },
+    {
+      "path": "include/typelib/typedescription.hxx",
+      "gitBlob": "9d749718ba2ad9bdac82d76eaa6557397674abc4"
+    },
+    {
+      "path": "include/rtl/ustring.hxx",
+      "gitBlob": "e6eb0e19bd26be966e53d463f95ec3ea6ed0e252"
+    },
+    {
+      "path": "sal/rtl/ustring.cxx",
+      "gitBlob": "ad71026a9c2ad59b9a920f2cb3ab622775711f19"
+    },
+    {
+      "path": "sal/rtl/strtmpl.hxx",
+      "gitBlob": "1384c891d41d62c3ad43bf6b5ed0757774da64f8"
+    },
+    {
+      "path": "qadevOOo/tests/java/ifc/script/_XTypeConverter.java",
+      "gitBlob": "3e42a16d9a2e28ed571453869054df023a56ec18"
+    },
+    {
+      "path": "sal/qa/rtl/strings/test_strings_toint.cxx",
+      "gitBlob": "d81525b9440523ce7815c1dc3efed1c3d0cbe3b1"
+    },
+    {
+      "path": "sal/qa/rtl/strings/test_oustring_stringliterals.cxx",
+      "gitBlob": "1937029a1fdf70767fa7078684110592ce77d6f4"
+    },
+    {
+      "path": "stoc/Library_stocservices.mk",
+      "gitBlob": "4d276129d8051008c8fa4b191ed9369e29c5bd0a"
+    }
+  ]
+}
