@@ -1,25 +1,44 @@
-/** @fileoverview Native comphelper AttributeList ordered values,copy and mutation; existing OUString owns value semantics and JS GC replaces WeakImplHelper allocation. */
+/** @fileoverview Native comphelper AttributeList ordered values,copy and mutation; actual WeakImplHelper<XAttributeList,XCloneable> and existing native OUString owners preserve lifetime. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
-import type { XAttributeList } from "../../../udkapi/com/sun/star/xml/sax/XAttributeList";
+import { XAttributeList } from "../../../offapi/com/sun/star/xml/sax/XAttributeList";
+import { WeakImplHelper } from "../../../cppuhelper/inc/implbase";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import { XCloneable } from "../../../offapi/com/sun/star/util/XCloneable";
 /** Native tag value pair. */ interface TagAttribute {
   readonly sName: OUString;
   readonly sValue: OUString;
 }
 /** Native actual SAX attribute list; duplicate names are intentionally allowed by upstream. */
-export class AttributeList implements XAttributeList {
+export class AttributeList
+  extends WeakImplHelper.specialize(XAttributeList, XCloneable)
+  implements XAttributeList, XCloneable
+{
+  /** Original implicit member destruction before its weak base. @returns Nothing. */
+  protected override destroy(): void {
+    this.Clear();
+    super.destroy();
+  }
   private readonly mAttributes: TagAttribute[] = [];
   /** Original empty/copy/interface constructors. @param source - Optional actual attribute list. @returns List. */
-  constructor(source?: XAttributeList) {
-    if (source instanceof AttributeList)
-      for (const attr of source.mAttributes)
-        this.mAttributes.push({
-          sName: new OUString(attr.sName),
-          sValue: new OUString(attr.sValue),
-        });
-    else if (source !== undefined) this.AppendAttributeList(source);
+  constructor(source?: AttributeList | Reference<XAttributeList>) {
+    super(source instanceof AttributeList ? source : undefined);
+    try {
+      const actual = source instanceof Reference ? source.get() : source;
+      if (actual instanceof AttributeList)
+        for (const attr of actual.mAttributes)
+          this.mAttributes.push({
+            sName: new OUString(attr.sName),
+            sValue: new OUString(attr.sValue),
+          });
+      else if (source !== undefined) this.AppendAttributeList(source as Reference<XAttributeList>);
+    } catch (error) {
+      this.Clear();
+      super.destroy();
+      throw error;
+    }
   }
-  /** Original value-copy factory. @returns Clone. */ public createClone(): AttributeList {
-    return new AttributeList(this);
+  /** Original value-copy factory. @returns Clone. */ public createClone(): Reference<XCloneable> {
+    return new Reference<XCloneable>(new AttributeList(this));
   }
   /** Original ordered append with native debug name preconditions. @param name - Name. @param value - Value. @returns Nothing. */
   public AddAttribute(name: OUStringConstReference, value: OUStringConstReference): void {
@@ -50,20 +69,27 @@ export class AttributeList implements XAttributeList {
     );
     if (index !== -1) this.RemoveAttributeByIndex(index);
   }
-  /** Original interface append captures source length before iteration. @param source - Actual source list. @returns Nothing. */ public AppendAttributeList(
-    source: XAttributeList,
+  /** Original interface append captures source length before iteration. @param reference - Actual source list. @returns Nothing. */ public AppendAttributeList(
+    reference: Reference<XAttributeList>,
   ): void {
-    const count = source.getLength();
+    if (!reference.is()) throw new Error("assert(r.is())");
+    const source = reference.operatorStar(),
+      count = source.getLength(),
+      total = ((this.mAttributes.length + count) << 16) >> 16;
     for (let i = 0; i < count; ++i) {
-      const name = source.getNameByIndex(i),
-        value = source.getValueByIndex(i);
+      const name = source.getNameByIndex(i);
       try {
-        this.AddAttribute(name, value);
+        const value = source.getValueByIndex(i);
+        try {
+          this.AddAttribute(name, value);
+        } finally {
+          value.dispose();
+        }
       } finally {
         name.dispose();
-        value.dispose();
       }
     }
+    if (total !== this.getLength()) throw new Error("assert(nTotalSize == getLength())");
   }
   /** Original value assignment. @param index - Valid position. @param value - Replacement. @returns Nothing. */ public SetValueByIndex(
     index: number,

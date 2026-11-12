@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "odf-manifest-export",
     "capabilityIds": [
-      "CAP-af93a29b-240e-479e-a90e-c9692cf5dda4"
+      "CAP-af93a29b-240e-479e-a90e-c9692cf5dda4",
+      "CAP-05210e3d-8cf9-4186-b90d-5269fe3ac5e0"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -16,9 +17,13 @@
       "defaultStatus": "unverified",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/comphelper/source/xml/attributelist.ts#AttributeList"
+        "apps/office/src/comphelper/source/xml/attributelist.ts#AttributeList",
+        "apps/office/src/unoxml/source/dom/document.sax.test.ts",
+        "apps/office/src/comphelper/source/xml/attributelist.test.ts",
+        "apps/office/src/offapi/com/sun/star/xml/sax/sax-types.test.ts",
+        "docs/program/native-dom-sax-serialization.md"
       ],
-      "justification": "Task177 implements actual plain OASIS ManifestExport over reused PropertyValue/Any/OUString and native comphelper AttributeList plus erased SAX method contracts. Preserve root scan early completion,16OASIS MIME choices,lexical version thresholds,source property/attribute/event order,nonempty entry versions,int64 Size,failed Any extraction destinations,duplicates and retained list values. Worker-safe browser SAX composition serializes exact attribute character values without DOM or a fabricated native Writer service. Writer supplies its own stream/font policy to the same exporter;the removed Writer-only shared export helper has no compatibility alias. Existing Writer import validation stays explicitly bounded pending native ManifestImport;full generic import,encrypted/legacy export,UNO ABI/services and complete ODS document/model/UI remain pending. Immutable native MIME literal contents use JS strings at browser/package boundaries;GC owns physical AttributeList objects and existing OUString/Any value semantics are reused without a new lifetime framework. Extracted actual ODS fixture manifest metadata is checked separately from its ZIP64 package and is not a document round trip or claimed native QA suite port. Whole-class/module parity stays unverified.",
+      "justification": "Task177 implements actual plain OASIS ManifestExport over reused PropertyValue/Any/OUString and native comphelper AttributeList plus erased SAX method contracts. Preserve root scan early completion,16OASIS MIME choices,lexical version thresholds,source property/attribute/event order,nonempty entry versions,int64 Size,failed Any extraction destinations,duplicates and retained list values. Worker-safe browser SAX composition serializes exact attribute character values without DOM or a fabricated native Writer service. Writer supplies its own stream/font policy to the same exporter;the removed Writer-only shared export helper has no compatibility alias. Existing Writer import validation stays explicitly bounded pending native ManifestImport;full generic import,encrypted/legacy export,UNO ABI/services and complete ODS document/model/UI remain pending. Immutable native MIME literal contents use JS strings at browser/package boundaries;GC owns physical AttributeList objects and existing OUString/Any value semantics are reused without a new lifetime framework. Extracted actual ODS fixture manifest metadata is checked separately from its ZIP64 package and is not a document round trip or claimed native QA suite port. Whole-class/module parity stays unverified. Classic CDocument XSAXSerializable now adds native root namespaces, runs original nscleanup and dispatches original node saxify methods over actual libxml2 nodes. Element namespace/attribute order and retained actual AttributeList references, text callbacks and source extended-handler gates for CDATA/comments/PI are preserved. AttributeList now owns the real WeakImplHelper<XAttributeList,XCloneable>, acquired clones and native member destruction; manifest callers use actual UNO attribute references. Incomplete duplicate UDK SAX declarations are replaced by their correct offapi IDL owners and original existing XLocator. No browser DOM or serializer/metadata provider is manufactured. Native OSL/physical ABI/std allocator traces and fast SAX/IO facets remain unqualified. Source qadevOOo XCloneable configured criteria and applicable classic serializerTest query are ported; original fast serializerTest remainder is explicitly pending. SfxDocumentMetaData and final DOCX/XLSX core/shell/UI acceptance remain unfinished. AttributeList constructor failure now unwinds partially copied native members and qualified weak-base state. AppendAttributeList releases the already acquired name temporary if an actual foreign value getter throws. An application-owned real UNO forwarding list raises RuntimeException after one entry; the source RTL string refcount returns to its original value without private mutation. This restores original C++ automatic temporary/member destruction rather than changing upstream logic.",
       "knownViolations": [],
       "localSymbols": [
         "AttributeList"
@@ -26,7 +31,9 @@
       "sourceResponsibility": "unverified",
       "upstreamFile": "comphelper/source/xml/attributelist.cxx",
       "upstreamSymbols": [
-        "AttributeList"
+        "AttributeList",
+        "AttributeList::createClone",
+        "AttributeList::AppendAttributeList"
       ]
     }
   }

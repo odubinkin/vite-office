@@ -1,0 +1,177 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-05210e3d-8cf9-4186-b90d-5269fe3ac5e0",
+    "capabilityId": "CAP-05210e3d-8cf9-4186-b90d-5269fe3ac5e0",
+    "suite": "shared",
+    "subsystem": "native-dom-classic-sax",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Classic CDocument XSAXSerializable now adds native root namespaces, runs original nscleanup and dispatches original node saxify methods over actual libxml2 nodes. Element namespace/attribute order and retained actual AttributeList references, text callbacks and source extended-handler gates for CDATA/comments/PI are preserved. AttributeList now owns the real WeakImplHelper<XAttributeList,XCloneable>, acquired clones and native member destruction; manifest callers use actual UNO attribute references. Incomplete duplicate UDK SAX declarations are replaced by their correct offapi IDL owners and original existing XLocator. No browser DOM or serializer/metadata provider is manufactured. Native OSL/physical ABI/std allocator traces and fast SAX/IO facets remain unqualified. Source qadevOOo XCloneable configured criteria and applicable classic serializerTest query are ported; original fast serializerTest remainder is explicitly pending. SfxDocumentMetaData and final DOCX/XLSX core/shell/UI acceptance remain unfinished.",
+      "AttributeList constructor failure now unwinds partially copied native members and qualified weak-base state. AppendAttributeList releases the already acquired name temporary if an actual foreign value getter throws. An application-owned real UNO forwarding list raises RuntimeException after one entry; the source RTL string refcount returns to its original value without private mutation. This restores original C++ automatic temporary/member destruction rather than changing upstream logic."
+    ],
+    "capability": "Native DOM classic SAX serialization and real attribute-list UNO lifetime",
+    "gaps": [
+      "Fast SAX and IO facets are unadvertised until concrete owners exist; full domtest serializerTest fast branch remains pending.",
+      "Native OSL/physical ABI/allocator and full Java proxy harness remain unqualified.",
+      "Whole changed-owner coverage includes pre-existing DOM branch gaps; exact current counters and90 gate result are retained without exclusions.",
+      "SfxDocumentMetaData and final DOCX/XLSX core/shell/UI acceptance remain unfinished."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "unoxml/source/dom/document.cxx",
+          "marker": "CDocument::serialize"
+        },
+        {
+          "path": "unoxml/source/dom/element.cxx",
+          "marker": "CElement::saxify"
+        },
+        {
+          "path": "unoxml/source/dom/cdatasection.cxx",
+          "marker": "CCDATASection::saxify"
+        },
+        {
+          "path": "comphelper/source/xml/attributelist.cxx",
+          "marker": "AttributeList::createClone"
+        }
+      ],
+      "tests": [
+        {
+          "path": "unoxml/qa/unit/domtest.cxx",
+          "marker": "serializerTest"
+        },
+        {
+          "path": "qadevOOo/tests/java/ifc/util/_XCloneable.java",
+          "marker": "_createClone"
+        }
+      ],
+      "docs": [
+        {
+          "path": "unoxml/source/dom/document.hxx",
+          "marker": "XSAXSerializable"
+        },
+        {
+          "path": "include/comphelper/attributelist.hxx",
+          "marker": "XCloneable"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/comphelper/source/xml/attributelist.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/manifest/ManifestExport.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/manifest/ManifestImport.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/manifest/ManifestReader.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sax/source/expatwrap/saxwriter.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/node.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/element.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/document.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/text.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/cdatasection.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/comment.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/processinginstruction.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/util/XCloneable.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/XAttributeList.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/XDocumentHandler.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/XExtendedDocumentHandler.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/XSAXSerializable.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/XLocator.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/unoxml/source/dom/document.sax.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/xml/attributelist.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/sax-types.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-dom-sax-serialization.md",
+          "marker": "Native DOM classic SAX serialization"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Classic CDocument XSAXSerializable now adds native root namespaces, runs original nscleanup and dispatches original node saxify methods over actual libxml2 nodes. Element namespace/attribute order and retained actual AttributeList references, text callbacks and source extended-handler gates for CDATA/comments/PI are preserved. AttributeList now owns the real WeakImplHelper<XAttributeList,XCloneable>, acquired clones and native member destruction; manifest callers use actual UNO attribute references. Incomplete duplicate UDK SAX declarations are replaced by their correct offapi IDL owners and original existing XLocator. No browser DOM or serializer/metadata provider is manufactured. Native OSL/physical ABI/std allocator traces and fast SAX/IO facets remain unqualified. Source qadevOOo XCloneable configured criteria and applicable classic serializerTest query are ported; original fast serializerTest remainder is explicitly pending. SfxDocumentMetaData and final DOCX/XLSX core/shell/UI acceptance remain unfinished."
+    },
+    "scopeLimitations": [
+      "Classic CDocument XSAXSerializable now adds native root namespaces, runs original nscleanup and dispatches original node saxify methods over actual libxml2 nodes. Element namespace/attribute order and retained actual AttributeList references, text callbacks and source extended-handler gates for CDATA/comments/PI are preserved. AttributeList now owns the real WeakImplHelper<XAttributeList,XCloneable>, acquired clones and native member destruction; manifest callers use actual UNO attribute references. Incomplete duplicate UDK SAX declarations are replaced by their correct offapi IDL owners and original existing XLocator. No browser DOM or serializer/metadata provider is manufactured. Native OSL/physical ABI/std allocator traces and fast SAX/IO facets remain unqualified. Source qadevOOo XCloneable configured criteria and applicable classic serializerTest query are ported; original fast serializerTest remainder is explicitly pending. SfxDocumentMetaData and final DOCX/XLSX core/shell/UI acceptance remain unfinished."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-dom-classic-sax-and-attribute-lifetime"
+  }
+}

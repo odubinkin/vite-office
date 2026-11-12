@@ -1,4 +1,5 @@
 /** @fileoverview Source-derived native plain manifest import cases using actual PropertyValue,Any,AttributeList and SAX owners. */
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import { expect, it } from "vitest";
 import { readManifestSequence } from "./ManifestReader";
 import { ManifestImport, ManifestScopeEntry } from "./ManifestImport";
@@ -178,9 +179,9 @@ it("borrows an existing destination vector and retains the original mismatched-e
   attrs.AddAttribute(xmlns, uri);
   attrs.AddAttribute(version, v);
   handler.startDocument();
-  handler.setDocumentLocator(null);
-  handler.startElement(root, attrs);
-  handler.startElement(entry, null);
+  handler.setDocumentLocator(new Reference());
+  handler.startElement(root, new Reference(attrs));
+  handler.startElement(entry, new Reference());
   handler.characters(data);
   handler.ignorableWhitespace(data);
   handler.processingInstruction(data, data);

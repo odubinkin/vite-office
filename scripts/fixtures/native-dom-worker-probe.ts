@@ -1,4 +1,13 @@
 /** @fileoverview Real native UNO document, parser callback, IO and live-list operations without a host DOM; the production registered DocumentBuilder shares the same realm-local native module. */
+import { XDocumentHandler } from "../../apps/office/src/offapi/com/sun/star/xml/sax/XDocumentHandler";
+import { XSAXSerializable } from "../../apps/office/src/offapi/com/sun/star/xml/sax/XSAXSerializable";
+import type { XAttributeList } from "../../apps/office/src/offapi/com/sun/star/xml/sax/XAttributeList";
+import type { XLocator } from "../../apps/office/src/offapi/com/sun/star/xml/sax/XLocator";
+import type { OUStringConstReference } from "../../apps/office/src/sal/inc/rtl/ustring";
+import {
+  StringPair,
+  cppu_detail_getUnoType_StringPair as stringPairType,
+} from "../../apps/office/src/udkapi/com/sun/star/beans/StringPair";
 import { PropertyBag as PropertyBagService } from "../../apps/office/src/udkapi/com/sun/star/beans/PropertyBag";
 import { XModifiable } from "../../apps/office/src/offapi/com/sun/star/util/XModifiable";
 import { XPropertyState } from "../../apps/office/src/udkapi/com/sun/star/beans/XPropertyState";
@@ -19,7 +28,7 @@ import {
 import { parserException } from "../../apps/office/src/unoxml/source/dom/documentbuilder.errors";
 import { domLiteral } from "../../apps/office/src/unoxml/source/dom/node";
 import { warningTestFile } from "../../apps/office/src/test/native-builder-fixtures";
-import type { OUString } from "../../apps/office/src/sal/inc/rtl/ustring";
+import { OUString } from "../../apps/office/src/sal/inc/rtl/ustring";
 import { implementations } from "../../apps/office/src/desktop/browser/app/uno-components";
 import { InitApplicationServiceManager } from "../../apps/office/src/desktop/source/app/appinit";
 import { getProcessComponentContext } from "../../apps/office/src/comphelper/inc/processfactory";
@@ -98,6 +107,80 @@ export async function runNativeDomWorkerProbe() {
   }
   initializeExceptionAbi();
   InitApplicationServiceManager(implementations);
+  /** Actual application-owned SAX observer; only source callbacks mutate observations. */
+  class SaxObserver extends PublicWeak.specialize(XDocumentHandler) implements XDocumentHandler {
+    readonly calls: string[] = [];
+    /** Original begin callback. @returns Nothing. */ startDocument(): void {
+      this.calls.push("begin");
+    }
+    /** Original finish callback. @returns Nothing. */ endDocument(): void {
+      this.calls.push("finish");
+    }
+    /** Original element callback reads real native attributes. @param name - Name. @param attributes - Actual list. @returns Nothing. */ startElement(
+      name: OUStringConstReference,
+      attributes: Reference<XAttributeList>,
+    ): void {
+      this.calls.push(
+        "start:" + take(new OUString(name)) + ":" + attributes.operatorStar().getLength(),
+      );
+    }
+    /** Original end callback. @param name - Name. @returns Nothing. */ endElement(
+      name: OUStringConstReference,
+    ): void {
+      void name;
+      this.calls.push("end");
+    }
+    /** Original text callback. @param value - Text. @returns Nothing. */ characters(
+      value: OUStringConstReference,
+    ): void {
+      this.calls.push(
+        "text:" + String.fromCharCode(...value.getStr().subarray(0, value.getLength())),
+      );
+    }
+    /** Original spacing callback. @param value - Spacing. @returns Nothing. */ ignorableWhitespace(
+      value: OUStringConstReference,
+    ): void {
+      void value;
+      this.calls.push("space");
+    }
+    /** Original PI callback. @param target - Target. @param value - Data. @returns Nothing. */ processingInstruction(
+      target: OUStringConstReference,
+      value: OUStringConstReference,
+    ): void {
+      void target;
+      void value;
+      this.calls.push("pi");
+    }
+    /** Original locator callback. @param locator - Locator. @returns Nothing. */ setDocumentLocator(
+      locator: Reference<XLocator>,
+    ): void {
+      void locator;
+      this.calls.push("locator");
+    }
+  }
+  const saxBuilder = own(
+      DocumentBuilder.create(
+        own(new Reference<XComponentContext>(getProcessComponentContext().get())),
+      ),
+    ),
+    saxDocument = own(saxBuilder.operatorStar().newDocument()),
+    saxRoot = own(saxDocument.operatorStar().createElement(u("root")));
+  own(saxDocument.operatorStar().appendChild(saxRoot));
+  own(
+    saxRoot
+      .operatorStar()
+      .appendChild(own(saxDocument.operatorStar().createTextNode(u("worker SAX字")))),
+  );
+  const saxHandler = own(new Reference(new SaxObserver())),
+    saxFacet = own(
+      new Reference<XSAXSerializable>(saxDocument, UNO_QUERY, XSAXSerializable.static_type),
+    ),
+    saxNamespaces = own(new (Sequence.specialize<StringPair>(stringPairType, 16))());
+  saxFacet.operatorStar().serialize(saxHandler, saxNamespaces);
+  const nativeSax = {
+    calls: saxHandler.operatorStar().calls,
+    sameIdentity: saxFacet.get() === saxDocument.get(),
+  };
   const Public = PublicComponent.specialize(),
     publicComponent = own(new Reference(new Public()));
   let publicNotifications = 0,
@@ -519,6 +602,7 @@ export async function runNativeDomWorkerProbe() {
       nativeAnyFields,
       nativePropertyControl,
       registeredPropertyBag,
+      nativeSax,
       documentBuilder,
       xpath: (
         /** Queries the actual registered native XPath service. @returns Scalar observations only. */ () => {

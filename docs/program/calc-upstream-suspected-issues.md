@@ -5633,3 +5633,9 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source: `comphelper/source/property/opropertybag.cxx`, `OPropertyBag::initialize`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER488.
 - Both initialization forms insert into the existing allowed-type set without clearing it. Empty-name permission is assigned only when true, so a later explicit false does not revoke it. Missing named AutomaticAddition preserves its previous value; the positional form always assigns it after successful extraction. Preserve these source transitions. Actual registered-service tests repeat named, empty and positional initialization, prove long/string type union and sticky empty names, and verify explicit positional false disables automatic addition. This may assume initialization occurs once; no complete metadata/filter defect or compiled native differential is claimed.
+
+
+### CALC-555 — Classic DOM SAX omits CDATA and processing instructions for a basic document handler
+
+- Source: `unoxml/source/dom/cdatasection.cxx`, `CCDATASection::saxify`; `processinginstruction.cxx`, `CProcessingInstruction::saxify`; `offapi/com/sun/star/xml/sax/XDocumentHandler.idl`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER489.
+- Both implementations put every callback behind a successful XExtendedDocumentHandler query. CDATA therefore emits no characters for a basic handler, and PI is omitted even though processingInstruction belongs to the basic interface. Preserve those gates and callback ordering rather than adding a fallback characters/PI call. Actual native document tests compare basic and extended handlers and verify raw CDATA, comments, PI and text ordering. This may be a legacy serialization assumption; full metadata/filter impact and a compiled native differential are unqualified.

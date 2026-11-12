@@ -16,11 +16,13 @@
     ],
     "upstreamSymbols": [
       "Context",
-      "CNode"
+      "CNode",
+      "CNode::saxify"
     ],
     "preservedResponsibilities": [
       "Original CNode behavior and namespace reconciliation over actual pinned libxml2 allocations. Synchronous realm execution inlines native mutex scopes.",
-      "Work in progress: native node/document interfaces and pointer ownership are implemented over pinned libxml2. Focused source QA bodies and real graph integration pass. Builder service, XPath, document SAX/IO facets, full DOM coverage, compiled C++ differential/thread ABI, metadata initialization and complete DOCX/XLSX file/UI paths remain unverified. No substitute node provider or alternate JS tree is installed."
+      "Work in progress: native node/document interfaces and pointer ownership are implemented over pinned libxml2. Focused source QA bodies and real graph integration pass. Builder service, XPath, document SAX/IO facets, full DOM coverage, compiled C++ differential/thread ABI, metadata initialization and complete DOCX/XLSX file/UI paths remain unverified. No substitute node provider or alternate JS tree is installed.",
+      "Classic CDocument XSAXSerializable now adds native root namespaces, runs original nscleanup and dispatches original node saxify methods over actual libxml2 nodes. Element namespace/attribute order and retained actual AttributeList references, text callbacks and source extended-handler gates for CDATA/comments/PI are preserved. AttributeList now owns the real WeakImplHelper<XAttributeList,XCloneable>, acquired clones and native member destruction; manifest callers use actual UNO attribute references. Incomplete duplicate UDK SAX declarations are replaced by their correct offapi IDL owners and original existing XLocator. No browser DOM or serializer/metadata provider is manufactured. Native OSL/physical ABI/std allocator traces and fast SAX/IO facets remain unqualified. Source qadevOOo XCloneable configured criteria and applicable classic serializerTest query are ported; original fast serializerTest remainder is explicitly pending. SfxDocumentMetaData and final DOCX/XLSX core/shell/UI acceptance remain unfinished."
     ],
     "omittedResponsibilities": [
       "Work in progress: native node/document interfaces and pointer ownership are implemented over pinned libxml2. Focused source QA bodies and real graph integration pass. Builder service, XPath, document SAX/IO facets, full DOM coverage, compiled C++ differential/thread ABI, metadata initialization and complete DOCX/XLSX file/UI paths remain unverified. No substitute node provider or alternate JS tree is installed."
@@ -42,6 +44,18 @@
         {
           "path": "apps/office/src/unoxml/source/events/native-tree-dispatch.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/document.sax.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/xml/attributelist.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/sax-types.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -52,6 +66,10 @@
         {
           "path": "vendor/libreoffice-reference/unoxml/source/dom/node.cxx",
           "marker": "CNode"
+        },
+        {
+          "path": "unoxml/source/dom/node.cxx",
+          "marker": "CNode::saxify"
         }
       ]
     }

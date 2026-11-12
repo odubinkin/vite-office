@@ -1,7 +1,8 @@
 /** @fileoverview Platform-neutral JS serialization binding for the five actual SAX callbacks consumed by plain ManifestExport. Native sax Writer/service/stream machinery is not fabricated. */
 import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
-import type { XAttributeList } from "../../../udkapi/com/sun/star/xml/sax/XAttributeList";
-import type { ManifestDocumentHandler } from "../../../udkapi/com/sun/star/xml/sax/XDocumentHandler";
+import type { XAttributeList } from "../../../offapi/com/sun/star/xml/sax/XAttributeList";
+import type { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import type { ManifestDocumentHandler } from "../../../offapi/com/sun/star/xml/sax/XDocumentHandler";
 /** Reads exact UTF16 without argument-count limits. @param value - Native text. @returns Browser text. */
 function text(value: OUStringConstReference): string {
   let result = "";
@@ -40,10 +41,11 @@ export class XmlStringDocumentHandler implements ManifestDocumentHandler {
   /** Ends event delivery; exporter closes every element explicitly. @returns Nothing. */ public endDocument(): void {
     this.xml = this.chunks.join("");
   }
-  /** Serializes actual ordered attributes. @param name - Name. @param attributes - Native list. @returns Nothing. */ public startElement(
+  /** Serializes actual ordered attributes. @param name - Name. @param reference - Native list. @returns Nothing. */ public startElement(
     name: OUStringConstReference,
-    attributes: XAttributeList | null,
+    reference: Reference<XAttributeList>,
   ): void {
+    const attributes = reference.get();
     this.chunks.push("<", text(name));
     if (attributes)
       for (let i = 0; i < attributes.getLength(); ++i) {

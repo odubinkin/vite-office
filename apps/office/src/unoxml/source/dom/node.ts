@@ -22,6 +22,7 @@ import { AttrChangeType } from "../../../offapi/com/sun/star/xml/dom/events/Attr
 import type { XEvent } from "../../../offapi/com/sun/star/xml/dom/events/XEvent";
 import type { XEventListener } from "../../../offapi/com/sun/star/xml/dom/events/XEventListener";
 import { getLibXml2, type XmlNodePtr } from "../../../external/libxml2/libxml2";
+import type { XDocumentHandler } from "../../../offapi/com/sun/star/xml/sax/XDocumentHandler";
 import type { CDocument } from "./document";
 import type { CAttr } from "./attr";
 import { CChildList } from "./childlist";
@@ -153,6 +154,10 @@ export class CNode
 {
   protected m_bUnlinked = false;
   protected readonly m_aNodeType: NodeType;
+  /** Original default SAX method validates the handler and otherwise does nothing, including for entities/fragments. @param handler - Actual handler. @returns Nothing. */
+  saxify(handler: Reference<XDocumentHandler>): void {
+    if (!handler.is()) throw new RuntimeException();
+  }
   protected m_aNodePtr: XmlNodePtr;
   /** Original concrete document pointer, with its compile-time forward declaration erased to the actual implemented XDocument facet; no query or substitute owner is added. */
   private readonly m_xDocument: Reference<XDocument>;

@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/offapi/com/sun/star/xml/sax/XExtendedDocumentHandler.ts",
+    "upstreamPath": "offapi/com/sun/star/xml/sax/XExtendedDocumentHandler.idl",
+    "localSymbols": [
+      "XExtendedDocumentHandler"
+    ],
+    "upstreamSymbols": [
+      "XExtendedDocumentHandler",
+      "startCDATA",
+      "unknown"
+    ],
+    "preservedResponsibilities": [
+      "Classic CDocument XSAXSerializable now adds native root namespaces, runs original nscleanup and dispatches original node saxify methods over actual libxml2 nodes. Element namespace/attribute order and retained actual AttributeList references, text callbacks and source extended-handler gates for CDATA/comments/PI are preserved. AttributeList now owns the real WeakImplHelper<XAttributeList,XCloneable>, acquired clones and native member destruction; manifest callers use actual UNO attribute references. Incomplete duplicate UDK SAX declarations are replaced by their correct offapi IDL owners and original existing XLocator. No browser DOM or serializer/metadata provider is manufactured. Native OSL/physical ABI/std allocator traces and fast SAX/IO facets remain unqualified. Source qadevOOo XCloneable configured criteria and applicable classic serializerTest query are ported; original fast serializerTest remainder is explicitly pending. SfxDocumentMetaData and final DOCX/XLSX core/shell/UI acceptance remain unfinished."
+    ],
+    "omittedResponsibilities": [
+      "Native ABI/OSL/shared-memory concurrency/allocator and full document/metadata/format/UI acceptance remain unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/XExtendedDocumentHandler.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/document.sax.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/xml/attributelist.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/sax-types.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/xml/sax/XExtendedDocumentHandler.idl",
+          "marker": "XExtendedDocumentHandler"
+        },
+        {
+          "path": "offapi/com/sun/star/xml/sax/XExtendedDocumentHandler.idl",
+          "marker": "startCDATA"
+        },
+        {
+          "path": "offapi/com/sun/star/xml/sax/XExtendedDocumentHandler.idl",
+          "marker": "unknown"
+        }
+      ]
+    }
+  }
+}

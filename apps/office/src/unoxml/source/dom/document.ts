@@ -1,4 +1,8 @@
-/** @fileoverview Original CDocument node factory, weak identity cache and complete XDocument/XDocumentEvent operations. SAX/IO service facets are not advertised until their concrete owners are represented. */
+/** @fileoverview Original CDocument node factory, weak identity cache and complete XDocument/XDocumentEvent operations. Original classic SAX serialization uses actual handlers; IO and fast SAX facets remain unadvertised pending their concrete owners. */
+import { XSAXSerializable } from "../../../offapi/com/sun/star/xml/sax/XSAXSerializable";
+import type { XDocumentHandler } from "../../../offapi/com/sun/star/xml/sax/XDocumentHandler";
+import { StringPair } from "../../../udkapi/com/sun/star/beans/StringPair";
+import type { Sequence, SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import { ImplInheritanceHelper } from "../../../cppuhelper/inc/implbase";
 import { WeakReferenceHelper } from "../../../cppuhelper/inc/weakref";
 import {
@@ -37,7 +41,7 @@ import { CEvent } from "../../inc/event";
 import { CMutationEvent } from "../../inc/mutationevent";
 import { CUIEvent } from "../../inc/uievent";
 import { CMouseEvent } from "../../inc/mouseevent";
-import { CNode, domLiteral, withXmlStrings } from "./node";
+import { CNode, domLiteral, withXmlStrings, nscleanup } from "./node";
 import { CElement } from "./element";
 import { CAttr } from "./attr";
 import { CText } from "./text";
@@ -55,12 +59,53 @@ import { importNode } from "./document.import";
 
 /** Original document owner; children keep it alive through the CNode strong member. */
 export class CDocument
-  extends ImplInheritanceHelper.specialize(CNode, XDocument, XDocumentEvent)
-  implements XDocument, XDocumentEvent
+  extends ImplInheritanceHelper.specialize(CNode, XDocument, XDocumentEvent, XSAXSerializable)
+  implements XDocument, XDocumentEvent, XSAXSerializable
 {
   private readonly m_aDocPtr: number;
   private readonly m_NodeMap = new Map<number, { weak: WeakReferenceHelper; identity: CNode }>();
   private readonly m_pEventDispatcher = new CEventDispatcher();
+  /** Original source document callback ordering and native sibling traversal. @param handler - Actual handler. @returns Nothing. */
+  override saxify(handler: Reference<XDocumentHandler>): void {
+    handler.operatorStar().startDocument();
+    const m = getLibXml2();
+    for (
+      let child = m._office_node_children_get(this.m_aNodePtr);
+      child;
+      child = m._office_node_next_get(child)
+    ) {
+      const node = this.GetCNode(child);
+      try {
+        node.operatorStar().saxify(handler);
+      } finally {
+        node.dispose();
+      }
+    }
+    handler.operatorStar().endDocument();
+  }
+  /** Original root namespace insertion followed by source nscleanup and SAX walk. @param handler - Actual handler. @param namespaces - Native prefix/URI values. @returns Nothing. */
+  serialize(handler: Reference<XDocumentHandler>, namespaces: Sequence<StringPair>): void {
+    const m = getLibXml2(),
+      root = this.root();
+    if (root) {
+      for (let i = 0; i < namespaces.getLength(); ++i) {
+        const pair = StringPair.unacquired(
+          namespaces.operatorIndex(i) as unknown as SequenceElements,
+        );
+        withXmlStrings(
+          [pair.First, pair.Second],
+          /** Original xmlNewNs keeps an existing prefix declaration. @param prefix - UTF8 prefix. @param href - UTF8 URI. @returns Nothing. */ (
+            prefix,
+            href,
+          ) => {
+            m._xmlNewNs(root, href, prefix);
+          },
+        );
+      }
+      nscleanup(m._office_node_children_get(root), root);
+    }
+    this.saxify(handler);
+  }
   /** Original private document constructor; only the two source factory sites call it. @param document - Actual native document. @returns Actual native owner. */
   private constructor(document: number) {
     super(null, N.DOCUMENT_NODE, document);

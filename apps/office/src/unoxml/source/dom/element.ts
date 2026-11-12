@@ -16,8 +16,28 @@ import { CNode, domError, withXmlStrings, xmlString } from "./node";
 import { CAttr } from "./attr";
 import { CAttributesMap } from "./attributesmap";
 import { CElementList } from "./elementlist";
+import type { XDocumentHandler } from "../../../offapi/com/sun/star/xml/sax/XDocumentHandler";
+import { AttributeList } from "../../../comphelper/inc/attributelist";
 import type { CDocument } from "./document";
 
+/** Original prefix + colon + local-name expression. @param node - Actual source node. @returns Owned qualified name. */
+function qualifiedName(node: CNode): OUString {
+  const prefix = node.getPrefix();
+  try {
+    if (prefix.isEmpty()) return node.getLocalName();
+    const local = node.getLocalName(),
+      buffer = new OUStringBuffer(prefix);
+    try {
+      buffer.append(new Uint8Array([58, 0])).append(local);
+      return buffer.makeStringAndClear();
+    } finally {
+      buffer.dispose();
+      local.dispose();
+    }
+  } finally {
+    prefix.dispose();
+  }
+}
 /** Original element component. */
 export class CElement
   extends ImplInheritanceHelper.specialize(CNode, XElement)
@@ -26,6 +46,80 @@ export class CElement
   /** Original native constructor. @param document - Actual document. @param node - Native element. @returns Actual native owner. */
   constructor(document: CDocument, node: number) {
     super(document, N.ELEMENT_NODE, node);
+  }
+  /** Original namespace declarations, attributes, element callbacks and recursive child SAX walk. @param handler - Actual handler. @returns Nothing. */
+  override saxify(handler: Reference<XDocumentHandler>): void {
+    if (!handler.is()) throw new RuntimeException();
+    const attributes = new Reference(new AttributeList()),
+      m = getLibXml2();
+    try {
+      for (let ns = m._office_node_nsDef_get(this.m_aNodePtr); ns; ns = m._office_ns_next_get(ns)) {
+        const rawPrefix = m._office_ns_prefix_get(ns),
+          prefix = rawPrefix ? xmlString(rawPrefix) : new OUString(),
+          value = xmlString(m._office_ns_href_get(ns));
+        let name: OUString;
+        try {
+          if (prefix.isEmpty()) name = new OUString(new Uint8Array([120, 109, 108, 110, 115, 0]));
+          else {
+            const buffer = new OUStringBuffer(new Uint8Array([120, 109, 108, 110, 115, 58, 0]));
+            try {
+              buffer.append(prefix);
+              name = buffer.makeStringAndClear();
+            } finally {
+              buffer.dispose();
+            }
+          }
+          try {
+            attributes.operatorStar().AddAttribute(name, value);
+          } finally {
+            name.dispose();
+          }
+        } finally {
+          value.dispose();
+          prefix.dispose();
+        }
+      }
+      for (
+        let attr = m._office_node_properties_get(this.m_aNodePtr);
+        attr;
+        attr = m._office_node_next_get(attr)
+      ) {
+        const node = this.GetOwnerDocument().GetCNode(attr);
+        try {
+          const name = qualifiedName(node.operatorStar()),
+            value = node.operatorStar().getNodeValue();
+          try {
+            attributes.operatorStar().AddAttribute(name, value);
+          } finally {
+            value.dispose();
+            name.dispose();
+          }
+        } finally {
+          node.dispose();
+        }
+      }
+      const name = qualifiedName(this);
+      try {
+        handler.operatorStar().startElement(name, attributes);
+        for (
+          let child = m._office_node_children_get(this.m_aNodePtr);
+          child;
+          child = m._office_node_next_get(child)
+        ) {
+          const node = this.GetOwnerDocument().GetCNode(child);
+          try {
+            node.operatorStar().saxify(handler);
+          } finally {
+            node.dispose();
+          }
+        }
+        handler.operatorStar().endElement(name);
+      } finally {
+        name.dispose();
+      }
+    } finally {
+      attributes.dispose();
+    }
   }
   /** Original admitted children include the legacy special attribute-copy path. @param type - Proposed child. @param replaced - Ignored replaced type. @returns Admission. */
   protected override IsChildTypeAllowed(type: N, replaced: N | null): boolean {

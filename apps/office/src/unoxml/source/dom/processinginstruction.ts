@@ -1,4 +1,7 @@
 /** @fileoverview Original CProcessingInstruction direct data assignment emits no character-data mutation event. */
+import type { XDocumentHandler } from "../../../offapi/com/sun/star/xml/sax/XDocumentHandler";
+import { Reference, UNO_QUERY } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import { XExtendedDocumentHandler } from "../../../offapi/com/sun/star/xml/sax/XExtendedDocumentHandler";
 import { ImplInheritanceHelper } from "../../../cppuhelper/inc/implbase";
 import { RuntimeException } from "../../../cppu/inc/com/sun/star/uno/RuntimeException";
 import { XProcessingInstruction } from "../../../offapi/com/sun/star/xml/dom/XProcessingInstruction";
@@ -13,6 +16,29 @@ export class CProcessingInstruction
   extends ImplInheritanceHelper.specialize(CNode, XProcessingInstruction)
   implements XProcessingInstruction
 {
+  /** Original SAX callback selection, including the source extended-handler gate. @param handler - Actual handler. @returns Nothing. */
+  override saxify(handler: Reference<XDocumentHandler>): void {
+    if (!handler.is()) throw new RuntimeException();
+    const extended = new Reference<XExtendedDocumentHandler>(
+      handler,
+      UNO_QUERY,
+      XExtendedDocumentHandler.static_type,
+    );
+    try {
+      if (extended.is()) {
+        const target = this.getTarget(),
+          data = this.getData();
+        try {
+          extended.operatorStar().processingInstruction(target, data);
+        } finally {
+          data.dispose();
+          target.dispose();
+        }
+      }
+    } finally {
+      extended.dispose();
+    }
+  }
   /** Original native constructor. @param document - Actual document. @param node - Native node. @returns Actual native owner. */
   constructor(document: CDocument, node: number) {
     super(document, NodeType.PROCESSING_INSTRUCTION_NODE, node);

@@ -1,4 +1,5 @@
 /** @fileoverview Native ManifestReader plain parse/result responsibility over a JS XML text carrier and actual ManifestImport;full UNO parser/stream/component services are omitted. */
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import { SaxesParser } from "saxes";
 import { AttributeList } from "../../../comphelper/inc/attributelist";
 import { OUString } from "../../../sal/inc/rtl/ustring";
@@ -13,7 +14,8 @@ function unicode(text: string): OUString {
 /** Reads the actual native property sequence;SAX parse failures discard all partial records. Existing declaration/depth admission and unsupported encryption failures remain explicit. @param xml - Decoded manifest stream. @returns Actual native property sequences or empty parse-failure result. */
 export function readManifestSequence(xml: string): PropertyValue[][] {
   const result: PropertyValue[][] = [],
-    handler = new ManifestImport(result),
+    handlerOwner = new Reference(new ManifestImport(result)),
+    handler = handlerOwner.operatorStar(),
     parser = new SaxesParser();
   let parseFailure = false,
     depth = 0;
@@ -40,7 +42,8 @@ export function readManifestSequence(xml: string): PropertyValue[][] {
       if (depth >= 256) throw new Error("ODF manifest exceeds depth limit.");
       ++depth;
       const name = unicode(tag.name),
-        attributes = new AttributeList();
+        attributesOwner = new Reference(new AttributeList()),
+        attributes = attributesOwner.operatorStar();
       for (const [key, data] of Object.entries(tag.attributes)) {
         const a = unicode(key),
           b = unicode(data as string);
@@ -52,10 +55,10 @@ export function readManifestSequence(xml: string): PropertyValue[][] {
         }
       }
       try {
-        handler.startElement(name, attributes);
+        handler.startElement(name, attributesOwner);
       } finally {
         name.dispose();
-        attributes.Clear();
+        attributesOwner.dispose();
       }
     },
   );
@@ -116,7 +119,10 @@ export function readManifestSequence(xml: string): PropertyValue[][] {
     handler.endDocument();
     return result;
   } catch (error) {
+    for (const sequence of result) for (const property of sequence) property.dispose();
     if (parseFailure) return [];
     throw error;
+  } finally {
+    handlerOwner.dispose();
   }
 }

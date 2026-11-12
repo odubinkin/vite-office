@@ -111,6 +111,10 @@ try {
       failedSecond: 0,
       failedSecondWasNull: true,
     },
+    nativeSax: {
+      calls: ["begin", "start:root:0", "text:worker SAX字", "end", "finish"],
+      sameIdentity: true,
+    },
     registeredPropertyBag: {
       value: 42,
       count: 1,

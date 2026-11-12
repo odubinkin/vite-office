@@ -1,4 +1,5 @@
 /** @fileoverview Ports consumed OFOPXMLHelper content-type and relationship sequence XML contracts; content-type and relationship results use actual nested UNO sequences; relationship output still binds host XML attribute fields, without claiming UNO service identity. */
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import type { InputSource } from "../../../offapi/com/sun/star/xml/sax/InputSource";
 import { parseFastXmlStream } from "../../../sax/source/fastparser/fastparser";
 import { XmlStringDocumentHandler } from "../../../sax/source/expatwrap/saxwriter";
@@ -212,7 +213,8 @@ function writeSequence(
     space = native(" ");
   /** Emits a native SAX start element and releases copied attributes. @param name - Name. @param values - Attributes. @returns Nothing. */
   function start(name: OUString, values: readonly StringPair[]): void {
-    const attributes = new AttributeList();
+    const attributesOwner = new Reference(new AttributeList()),
+      attributes = attributesOwner.operatorStar();
     try {
       for (const pair of values) {
         const key = native(pair.First),
@@ -224,9 +226,9 @@ function writeSequence(
           value.dispose();
         }
       }
-      writer.startElement(name, attributes);
+      writer.startElement(name, attributesOwner);
     } finally {
-      attributes.Clear();
+      attributesOwner.dispose();
     }
   }
   try {
@@ -267,11 +269,12 @@ export function WriteContentSequence(
     contentType = native("ContentType"),
     xmlns = native("xmlns"),
     namespace = native("http://schemas.openxmlformats.org/package/2006/content-types");
-  const rootAttributes = new AttributeList();
+  const rootAttributesOwner = new Reference(new AttributeList()),
+    rootAttributes = rootAttributesOwner.operatorStar();
   try {
     rootAttributes.AddAttribute(xmlns, namespace);
     writer.startDocument();
-    writer.startElement(root, rootAttributes);
+    writer.startElement(root, rootAttributesOwner);
     for (const [row, element, key] of [
       [defaults, defaultName, extension],
       [overrides, overrideName, partName],
@@ -280,15 +283,16 @@ export function WriteContentSequence(
         const pair = NativeStringPair.unacquired(
           (row.getConstArray() as SequenceElements).get(i * 16) as SequenceElements,
         );
-        const attributes = new AttributeList();
+        const attributesOwner = new Reference(new AttributeList()),
+          attributes = attributesOwner.operatorStar();
         try {
           attributes.AddAttribute(key, pair.First);
           attributes.AddAttribute(contentType, pair.Second);
-          writer.startElement(element, attributes);
+          writer.startElement(element, attributesOwner);
           writer.ignorableWhitespace(space);
           writer.endElement(element);
         } finally {
-          attributes.Clear();
+          attributesOwner.dispose();
         }
       }
     }
@@ -297,7 +301,7 @@ export function WriteContentSequence(
     writer.endDocument();
     return writer.getXml();
   } finally {
-    rootAttributes.Clear();
+    rootAttributesOwner.dispose();
     for (const value of [
       namespace,
       xmlns,

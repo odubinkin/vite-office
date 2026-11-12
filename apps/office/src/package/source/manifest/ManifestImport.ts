@@ -1,9 +1,11 @@
 /** @fileoverview Native plain ManifestImport namespace/validity stack and PropertyValue slots;JS strings/Map carry exact UTF16 values while existing Any/OUString preserve public value semantics. Encryption branches remain explicit unsupported-profile boundaries. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
+import { WeakImplHelper } from "../../../cppuhelper/inc/implbase";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
-import type { XAttributeList } from "../../../udkapi/com/sun/star/xml/sax/XAttributeList";
-import type { XDocumentHandler } from "../../../udkapi/com/sun/star/xml/sax/XDocumentHandler";
-import type { XLocator } from "../../../udkapi/com/sun/star/xml/sax/XLocator";
+import type { XAttributeList } from "../../../offapi/com/sun/star/xml/sax/XAttributeList";
+import { XDocumentHandler } from "../../../offapi/com/sun/star/xml/sax/XDocumentHandler";
+import type { XLocator } from "../../../offapi/com/sun/star/xml/sax/XLocator";
 import {
   PKG_MNFST_FULLPATH,
   PKG_MNFST_VERSION,
@@ -53,13 +55,23 @@ export class ManifestScopeEntry {
   ) {}
 }
 /** Actual ordinary manifest import owner. Full encryption/service/UNO behavior is not fabricated. */
-export class ManifestImport implements XDocumentHandler {
+export class ManifestImport
+  extends WeakImplHelper.specialize(XDocumentHandler)
+  implements XDocumentHandler
+{
   private aSequence: PropertyValue[] = [];
   private aCurrentCharacters = "";
   private readonly aStack: ManifestScopeEntry[] = [];
   private m_PackageVersion = "";
   /** Original destination-vector borrowing;existing entries are retained. @param rManVector - Actual caller-owned output vector. @returns Importer. */
-  constructor(private readonly rManVector: PropertyValue[][]) {}
+  constructor(private readonly rManVector: PropertyValue[][]) {
+    super();
+  }
+  /** Original implicit destruction of the current property vector before the weak base. Caller output remains borrowed. @returns Nothing. */
+  protected override destroy(): void {
+    for (const property of this.aSequence) property.dispose();
+    super.destroy();
+  }
   /** Native intentionally leaves existing state unchanged. @returns Nothing. */ public startDocument(): void {
     /* Original no-op. */
   }
@@ -68,6 +80,7 @@ export class ManifestImport implements XDocumentHandler {
   }
   /** Original plain file metadata initializes the full native slot vector before filling fields. @param attributes - Converted native attribute map. @returns Nothing. */
   private doFileEntry(attributes: Map<string, string>): void {
+    for (const property of this.aSequence) property.dispose();
     this.aSequence = Array.from(
       { length: PKG_SIZE_ENCR_MNFST },
       /** Constructs actual native default property values. @returns Property. */ () =>
@@ -97,9 +110,9 @@ export class ManifestImport implements XDocumentHandler {
     }
   }
   /** Original structural-level dispatch for ordinary entries. Recognized encryption branches fail explicitly until implemented. @param name - Raw SAX name. @param attributes - Actual raw SAX attributes. @returns Nothing. */
-  public startElement(name: OUStringConstReference, attributes: XAttributeList | null): void {
+  public startElement(name: OUStringConstReference, attributes: Reference<XAttributeList>): void {
     const convertedAttributes = new Map<string, string>(),
-      converted = this.PushNameAndNamespaces(text(name), attributes, convertedAttributes),
+      converted = this.PushNameAndNamespaces(text(name), attributes.get(), convertedAttributes),
       level = this.aStack.length,
       scope = this.aStack[level - 1] as ManifestScopeEntry;
     if (level === 1) {
@@ -142,7 +155,11 @@ export class ManifestImport implements XDocumentHandler {
         this.aSequence.filter(
           /** Original isEmpty predicate removal. @param property - Slot. @returns Retained name. */ (
             property,
-          ) => !property.Name.isEmpty(),
+          ) => {
+            if (!property.Name.isEmpty()) return true;
+            property.dispose();
+            return false;
+          },
         ),
       );
       this.aSequence = [];
@@ -167,7 +184,7 @@ export class ManifestImport implements XDocumentHandler {
     void data;
   }
   /** Original ignores document origin. @param locator - Unused native locator. @returns Nothing. */ public setDocumentLocator(
-    locator: XLocator | null,
+    locator: Reference<XLocator>,
   ): void {
     void locator;
   }

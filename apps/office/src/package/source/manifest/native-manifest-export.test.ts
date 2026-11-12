@@ -1,4 +1,5 @@
 /** @fileoverview Real native manifest PropertyValue sequences,ordered SAX events and ODT/ODS XML semantics; encrypted/legacy branches remain explicit admission limits. */
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import { expect, it } from "vitest";
 import fixture from "./native-manifest-cases.json";
 import { SaxesParser } from "saxes";
@@ -86,7 +87,7 @@ it("preserves original failed-extraction destination values rather than inventin
 });
 it("delivers exact native whitespace and ordered attributes without clearing retained SAX lists", /** An observer retains actual ref-counted-list equivalents under GC. @returns Nothing. */ () => {
   const handler = new XmlStringDocumentHandler(),
-    lists: AttributeList[] = [],
+    lists: Reference<AttributeList>[] = [],
     events: string[] = [];
   const input = sequence();
   input.splice(1);
@@ -105,7 +106,7 @@ it("delivers exact native whitespace and ordered attributes without clearing ret
           name,
           attrs,
         ) => {
-          lists.push(attrs as AttributeList);
+          lists.push(new Reference(attrs.get() as AttributeList));
           events.push("start");
           handler.startElement(name, attrs);
         },
@@ -136,11 +137,11 @@ it("delivers exact native whitespace and ordered attributes without clearing ret
   expect(
     lists.map(
       /** Counts retained entries. @param list - Native list. @returns Count. */ (list) =>
-        list.getLength(),
+        list.operatorStar().getLength(),
     ),
   ).toEqual([3, 3]);
   expect(parsed(handler.getXml())).toHaveLength(2);
-  for (const list of lists) list.Clear();
+  for (const list of lists) list.dispose();
 });
 it("keeps original root scan early completion while subsequent entry emission retains duplicates", /** Native AttributeList duplicate admission is not normalized. @returns Nothing. */ () => {
   const input = sequence();
@@ -174,7 +175,7 @@ it("serializes the worker-safe null-attribute event branch without requiring a D
   const handler = new XmlStringDocumentHandler(),
     name = unicode("root");
   handler.startDocument();
-  handler.startElement(name, null);
+  handler.startElement(name, new Reference());
   handler.endElement(name);
   handler.endDocument();
   expect(parsed(handler.getXml())).toEqual([{}]);

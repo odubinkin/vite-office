@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "odf-manifest-import",
     "capabilityIds": [
-      "CAP-3678aa65-4d47-43cc-b07f-deb755e87470"
+      "CAP-3678aa65-4d47-43cc-b07f-deb755e87470",
+      "CAP-05210e3d-8cf9-4186-b90d-5269fe3ac5e0"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -16,9 +17,13 @@
       "defaultStatus": "unverified",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/package/source/manifest/ManifestReader.ts#readManifestSequence"
+        "apps/office/src/package/source/manifest/ManifestReader.ts#readManifestSequence",
+        "apps/office/src/unoxml/source/dom/document.sax.test.ts",
+        "apps/office/src/comphelper/source/xml/attributelist.test.ts",
+        "apps/office/src/offapi/com/sun/star/xml/sax/sax-types.test.ts",
+        "docs/program/native-dom-sax-serialization.md"
       ],
-      "justification": "Task178 implements actual plain ManifestImport namespace/validity scopes,fixed native property slots and real PropertyValue/Any output plus ManifestReader SAX-failure empty-result behavior. Existing SAL signed64 parser is reused through missing terminated C and const OUString entry points,including embedded-zero termination and exact overflow behavior. Source-owned plain ZipPackage metadata/MIME fallback/conflict and ZipPackageFolder consistency operate on actual ZipFile catalogs with real stream/folder properties;no storage/service class is fabricated. Preserve duplicate metadata application,first Version fallback,unknown namespace/invalid-parent leniency and recursive folder assignment with first-true early exit;CALC162..163 remain preserved and CALC-164 is withdrawn;native unordered binary bucket order is not simulated. Writer uses the shared reader and native absent-stream early returns with actual SwDoc defaults;remove the noncanonical mandatory Standard-definition guard and adapt font existence checks to actual applied stream metadata. Retire the duplicated Writer-only shared manifest validator without a compatibility alias. Existing ZIP32,depth/declaration/XML-byte admission bounds remain explicit. Encryption,writable storage/full UNO parser/stream/component services,complete Calc document/UI/same-model ODS remain pending;physical memory/refcount/cache machinery is not added and broad parity stays unverified.",
+      "justification": "Task178 implements actual plain ManifestImport namespace/validity scopes,fixed native property slots and real PropertyValue/Any output plus ManifestReader SAX-failure empty-result behavior. Existing SAL signed64 parser is reused through missing terminated C and const OUString entry points,including embedded-zero termination and exact overflow behavior. Source-owned plain ZipPackage metadata/MIME fallback/conflict and ZipPackageFolder consistency operate on actual ZipFile catalogs with real stream/folder properties;no storage/service class is fabricated. Preserve duplicate metadata application,first Version fallback,unknown namespace/invalid-parent leniency and recursive folder assignment with first-true early exit;CALC162..163 remain preserved and CALC-164 is withdrawn;native unordered binary bucket order is not simulated. Writer uses the shared reader and native absent-stream early returns with actual SwDoc defaults;remove the noncanonical mandatory Standard-definition guard and adapt font existence checks to actual applied stream metadata. Retire the duplicated Writer-only shared manifest validator without a compatibility alias. Existing ZIP32,depth/declaration/XML-byte admission bounds remain explicit. Encryption,writable storage/full UNO parser/stream/component services,complete Calc document/UI/same-model ODS remain pending;physical memory/refcount/cache machinery is not added and broad parity stays unverified. Classic CDocument XSAXSerializable now adds native root namespaces, runs original nscleanup and dispatches original node saxify methods over actual libxml2 nodes. Element namespace/attribute order and retained actual AttributeList references, text callbacks and source extended-handler gates for CDATA/comments/PI are preserved. AttributeList now owns the real WeakImplHelper<XAttributeList,XCloneable>, acquired clones and native member destruction; manifest callers use actual UNO attribute references. Incomplete duplicate UDK SAX declarations are replaced by their correct offapi IDL owners and original existing XLocator. No browser DOM or serializer/metadata provider is manufactured. Native OSL/physical ABI/std allocator traces and fast SAX/IO facets remain unqualified. Source qadevOOo XCloneable configured criteria and applicable classic serializerTest query are ported; original fast serializerTest remainder is explicitly pending. SfxDocumentMetaData and final DOCX/XLSX core/shell/UI acceptance remain unfinished.",
       "knownViolations": [],
       "localSymbols": [
         "readManifestSequence"
@@ -26,7 +31,8 @@
       "sourceResponsibility": "unverified",
       "upstreamFile": "package/source/manifest/ManifestReader.cxx",
       "upstreamSymbols": [
-        "ManifestReader::readManifestSequence"
+        "ManifestReader::readManifestSequence",
+        "ManifestReader"
       ]
     }
   }

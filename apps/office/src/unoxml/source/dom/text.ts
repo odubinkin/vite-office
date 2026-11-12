@@ -1,4 +1,6 @@
 /** @fileoverview Original CText, including the source-unimplemented splitText operation returning itself. */
+import type { XDocumentHandler } from "../../../offapi/com/sun/star/xml/sax/XDocumentHandler";
+import { RuntimeException } from "../../../cppu/inc/com/sun/star/uno/RuntimeException";
 import { ImplInheritanceHelper } from "../../../cppuhelper/inc/implbase";
 import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import { XText } from "../../../offapi/com/sun/star/xml/dom/XText";
@@ -11,6 +13,16 @@ export class CText
   extends ImplInheritanceHelper.specialize(CCharacterData, XText)
   implements XText
 {
+  /** Original SAX callback selection, including the source extended-handler gate. @param handler - Actual handler. @returns Nothing. */
+  override saxify(handler: Reference<XDocumentHandler>): void {
+    if (!handler.is()) throw new RuntimeException();
+    const value = this.getData();
+    try {
+      handler.operatorStar().characters(value);
+    } finally {
+      value.dispose();
+    }
+  }
   /** Original native text constructor. @param document - Actual owner. @param node - Native text. @returns Text owner. */
   constructor(document: CDocument, node: number);
   /** Original derived-text constructor. @param document - Actual owner. @param type - Explicit native UNO type. @param node - Native node. @returns Text owner. */

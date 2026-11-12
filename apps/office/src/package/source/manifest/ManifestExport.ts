@@ -1,11 +1,11 @@
 /**
  * @fileoverview Reimplements the bounded ODF package manifest exporter from pinned LibreOffice `package/source/manifest/ManifestExport.cxx`.
  */
-
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import type { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
 import { AttributeList } from "../../../comphelper/inc/attributelist";
-import type { ManifestDocumentHandler } from "../../../udkapi/com/sun/star/xml/sax/XDocumentHandler";
+import type { ManifestDocumentHandler } from "../../../offapi/com/sun/star/xml/sax/XDocumentHandler";
 import {
   MIMETYPE_OASIS_OPENDOCUMENT_TEXT,
   MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB,
@@ -144,79 +144,86 @@ export class ManifestExport {
           }
         }
       }
-    const attributes = new AttributeList();
-    add(attributes, "xmlns:manifest", manifestNamespace);
-    if (docVersion >= "1.2") {
-      add(attributes, "manifest:version", docVersion);
-      add(
-        attributes,
-        "xmlns:loext",
-        "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0",
-      );
-    }
-    handler.startDocument();
-    named(
-      "manifest:manifest",
-      /** Original root begin. @param name - Name. @returns Nothing. */ (name) =>
-        handler.startElement(name, attributes),
-    );
-    for (const sequence of manifest) {
-      const list = new AttributeList(),
-        string = new OUString(),
-        fullPath = new OUString();
-      try {
-        for (const property of sequence) {
-          const name = text(property.Name);
-          if (name === "MediaType") {
-            property.Value.extract(string, "OUString");
-            add(list, "manifest:media-type", text(string));
-          } else if (name === "Version") {
-            property.Value.extract(string, "OUString");
-            if (!string.isEmpty()) add(list, "manifest:version", text(string));
-          } else if (name === "FullPath") {
-            property.Value.extract(fullPath, "OUString");
-            add(list, "manifest:full-path", text(fullPath));
-          } else if (name === "Size") {
-            const size: [bigint] = [0n];
-            property.Value.extract(size, "sal_Int64");
-            add(list, "manifest:size", String(size[0]));
-          }
-        }
-        named(
-          " ",
-          /** Original pre-entry whitespace. @param value - Space. @returns Nothing. */ (value) =>
-            handler.ignorableWhitespace(value),
+    const attributesOwner = new Reference(new AttributeList()),
+      attributes = attributesOwner.operatorStar();
+    try {
+      add(attributes, "xmlns:manifest", manifestNamespace);
+      if (docVersion >= "1.2") {
+        add(attributes, "manifest:version", docVersion);
+        add(
+          attributes,
+          "xmlns:loext",
+          "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0",
         );
-        named(
-          "manifest:file-entry",
-          /** Original entry begin. @param name - Name. @returns Nothing. */ (name) =>
-            handler.startElement(name, list),
-        );
-        named(
-          " ",
-          /** Original pre-end whitespace. @param value - Space. @returns Nothing. */ (value) =>
-            handler.ignorableWhitespace(value),
-        );
-        named(
-          "manifest:file-entry",
-          /** Original entry end. @param name - Name. @returns Nothing. */ (name) =>
-            handler.endElement(name),
-        );
-      } finally {
-        string.dispose();
-        fullPath.dispose();
       }
+      handler.startDocument();
+      named(
+        "manifest:manifest",
+        /** Original root begin. @param name - Name. @returns Nothing. */ (name) =>
+          handler.startElement(name, attributesOwner),
+      );
+      for (const sequence of manifest) {
+        const listOwner = new Reference(new AttributeList()),
+          list = listOwner.operatorStar(),
+          string = new OUString(),
+          fullPath = new OUString();
+        try {
+          for (const property of sequence) {
+            const name = text(property.Name);
+            if (name === "MediaType") {
+              property.Value.extract(string, "OUString");
+              add(list, "manifest:media-type", text(string));
+            } else if (name === "Version") {
+              property.Value.extract(string, "OUString");
+              if (!string.isEmpty()) add(list, "manifest:version", text(string));
+            } else if (name === "FullPath") {
+              property.Value.extract(fullPath, "OUString");
+              add(list, "manifest:full-path", text(fullPath));
+            } else if (name === "Size") {
+              const size: [bigint] = [0n];
+              property.Value.extract(size, "sal_Int64");
+              add(list, "manifest:size", String(size[0]));
+            }
+          }
+          named(
+            " ",
+            /** Original pre-entry whitespace. @param value - Space. @returns Nothing. */ (value) =>
+              handler.ignorableWhitespace(value),
+          );
+          named(
+            "manifest:file-entry",
+            /** Original entry begin. @param name - Name. @returns Nothing. */ (name) =>
+              handler.startElement(name, listOwner),
+          );
+          named(
+            " ",
+            /** Original pre-end whitespace. @param value - Space. @returns Nothing. */ (value) =>
+              handler.ignorableWhitespace(value),
+          );
+          named(
+            "manifest:file-entry",
+            /** Original entry end. @param name - Name. @returns Nothing. */ (name) =>
+              handler.endElement(name),
+          );
+        } finally {
+          string.dispose();
+          fullPath.dispose();
+          listOwner.dispose();
+        }
+      }
+      named(
+        " ",
+        /** Original final whitespace. @param value - Space. @returns Nothing. */ (value) =>
+          handler.ignorableWhitespace(value),
+      );
+      named(
+        "manifest:manifest",
+        /** Original root end. @param name - Name. @returns Nothing. */ (name) =>
+          handler.endElement(name),
+      );
+      handler.endDocument();
+    } finally {
+      attributesOwner.dispose();
     }
-    named(
-      " ",
-      /** Original final whitespace. @param value - Space. @returns Nothing. */ (value) =>
-        handler.ignorableWhitespace(value),
-    );
-    named(
-      "manifest:manifest",
-      /** Original root end. @param name - Name. @returns Nothing. */ (name) =>
-        handler.endElement(name),
-    );
-    handler.endDocument();
   }
 }
