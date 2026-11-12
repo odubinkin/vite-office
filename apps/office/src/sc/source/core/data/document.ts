@@ -1,7 +1,8 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
 import { HardRecalcState, ScDocumentMode } from "./document.modes";
 import { ScSetStringParam } from "../../../inc/stringutil";
-import { EndListeningContext } from "../../../inc/listenercontext";
+import { SetString as setDocumentString } from "./document.cell-input";
+import * as documentNames from "./document.sheet-names";
 
 import type { EditTextObject } from "../../../../editeng/inc/editobj";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
@@ -9,7 +10,6 @@ import { SvxBoxInfoItem, SvxBoxItem } from "../../../../editeng/source/items/frm
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
 import { MsLangId } from "../../../../i18nlangtag/inc/mslangid";
-import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { XBreakIterator } from "../../../../offapi/com/sun/star/i18n/XBreakIterator";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
@@ -891,12 +891,23 @@ export class ScDocument {
   }
   /** Applies native editable sheet-name character constraints without a fabricated length limit. @param name - Native Unicode name. @returns Validity. */
   static ValidTabName(name: OUStringConstReference): boolean {
-    const value = text(name);
-    return !!value && !/[:\\/?*[\]]/.test(value) && !value.startsWith("'") && !value.endsWith("'");
+    return documentNames.ValidTabName(name);
   }
   /** Rejects duplicate names using the existing real uppercase operation. @param name - New name. @returns Availability. */
   ValidNewTabName(name: OUStringConstReference): boolean {
-    return document10.ValidNewTabName.call(this, name);
+    return documentNames.ValidNewTabName.call(this, name);
+  }
+  /** Original cached global-character-class sheet lookup. @param name - Queried name. @param tab - Signed16 output, zero on failure. @returns Found. */
+  GetTable(name: OUStringConstReference, tab: [number]): boolean {
+    return documentNames.GetTable.call(this, name, tab);
+  }
+  /** Original owned name copies preserve sparse sheet positions. @returns Owning name vector. */
+  GetAllTableNames(): OUString[] {
+    return documentNames.GetAllTableNames.call(this);
+  }
+  /** Original load-only rename validates characters without uniqueness or stream edits. @param tab - Native sheet index. @param name - Prepared sheet name. @returns Nothing. */
+  SetTabNameOnLoad(tab: number, name: OUStringConstReference): void {
+    documentNames.SetTabNameOnLoad.call(this, tab, name);
   }
   /** Inserts a normal scalar sheet and updates shifted sheet/column positions. External-document/undo-delete modes remain unsupported APIs. @param position - Position or native append sentinel. @param name - Native sheet name. @returns Inserted. */
   InsertTab(position: number, name: OUStringConstReference): boolean {
@@ -963,25 +974,7 @@ export class ScDocument {
     fourth?: OUStringConstReference,
     fifth: ScSetStringParam | null = null,
   ): boolean {
-    if (typeof first !== "number")
-      return this.SetString(
-        first.Col(),
-        first.Row(),
-        first.Tab(),
-        second as OUStringConstReference,
-        third as ScSetStringParam | null,
-      );
-    const table = this.FetchTable(third as number);
-    if (!table) return false;
-    const row = second as number,
-      current = table.GetFormulaCell(first, row);
-    if (current?.IsShared()) {
-      const context = new EndListeningContext(this),
-        position = new ScAddress(first, row, third as number);
-      this.EndListeningIntersectedGroup(context, position, null);
-      context.purgeEmptyBroadcasters();
-    }
-    return table.SetString(first, row, third as number, fourth as OUStringConstReference, fifth);
+    return setDocumentString.call(this, first, second, third, fourth, fifth);
   }
   /** Original single-cell formula-group listener teardown. @param args - Context, target and optional source positions. @returns Nothing. */
   EndListeningIntersectedGroup(

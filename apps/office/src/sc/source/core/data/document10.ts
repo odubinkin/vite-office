@@ -33,7 +33,6 @@ export function EndListeningIntersectedGroup(
   );
 }
 
-import { uppercase } from "../../../../unotools/inc/charclass";
 import { ScAddress, ScRange } from "../../../inc/address";
 import { CopyFromClipContext, CopyToDocContext } from "../../../inc/clipcontext";
 import type { ScColumn } from "../../../inc/column";
@@ -673,14 +672,6 @@ export function ExtendMergeSel(
       if (currentRow[0] > endRow[0]) endRow[0] = currentRow[0];
     }
   }
-}
-/** Existing native name-validation body moved unchanged from the size-bounded facade. @param this - Actual document. @param name - Candidate. @returns Availability. */
-export function ValidNewTabName(this: ScDocument, name: OUStringConstReference): boolean {
-  if (!ScDocument.ValidTabName(name)) return false;
-  const candidate = uppercase(name, this["locale"]);
-  for (const table of this["maTabs"])
-    if (table && uppercase(table.GetName(), this["locale"]).equals(candidate)) return false;
-  return true;
 }
 
 /** Existing scalar sheet insertion body moved unchanged from the size-bounded facade. @param this - Actual document. @param position - Sheet position. @param name - Native name. @returns Inserted. */

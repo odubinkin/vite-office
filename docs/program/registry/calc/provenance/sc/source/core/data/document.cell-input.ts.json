@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/document.cell-input.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/document.cxx",
+    "localSymbols": [
+      "SetString"
+    ],
+    "upstreamSymbols": [
+      "ScDocument::SetString"
+    ],
+    "preservedResponsibilities": [
+      "Unchanged ScDocument SetString overload dispatch, shared-formula listening teardown and native table input forwarding, extracted only to preserve the authored file-size limit."
+    ],
+    "omittedResponsibilities": [
+      "Complete workbook/filter/UI orchestration and compiled native differential parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/document.cell-input.ts",
+          "marker": "SetString"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::SetString"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/document.cell-input.ts",
+      "rationale": "The original native responsibility is decomposed into a focused implementation fragment to retain the repository file-size limit; source symbols, owner instance and state are preserved.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

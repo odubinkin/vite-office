@@ -41,7 +41,10 @@
       "RefreshAutoFilter",
       "ExtendMerge",
       "ApplyPatternIfNumberformatIncompatible",
-      "HasClipFilteredRows"
+      "HasClipFilteredRows",
+      "GetTable",
+      "GetAllTableNames",
+      "SetTabNameOnLoad"
     ],
     "upstreamSymbols": [
       "ScDocument::SetValue",
@@ -99,7 +102,8 @@
       "AQF9AG restores original address-convention extraction and actual link-formula check flag/accessors/compiled-token dispatch. Existing frame traversal moves unchanged to document.frame; document.cxx remains its source origin.",
       "Restored original document/table/column SetString parse-and-release chain and single-cell shared-group listener teardown using the actual formatter, policies, cell values, stores and listeners. Single-line SetTextCell uses the supplied ScSetStringParam or original setTextInput defaults. Cell-value string commit/release uses SetString instead of promoting newline-bearing string variants through SetTextCell. Edit release transfers the exact object without Clone/destruction; nullable edit arguments and rejected-destination destruction follow source unique_ptr semantics. Column release forwards listening modes and content-only DeleteContent preserves text attributes. Existing unrepresented formula-group compute/stream-cache services are not replaced with fake callbacks; full native module/allocator/thread/cache QA and original multiline EditEngine generation remain unverified/incomplete. No UI save/autosave/recovery policy changes.",
       "Original document facade exposes the edit-engine pool accessor through documen2.",
-      "The document facade exposes its lazy native edit engine for literal text transfer and text-object creation."
+      "The document facade exposes its lazy native edit engine for literal text transfer and text-object creation.",
+      "J0Z0KF sheet-name checkpoint: actual ScTable lazy uppercase owner and SetName invalidation, document global-cache lookup and counted-name validation, positional owned name copies and load-only rename now feed ScDocumentImport getSheetIndex/setSheetName. Editing RenameTab retains transliteration and stream invalidation. Original SetString body is only split for file size; no workbook facade or synthetic service is introduced. Full workbook/filter/UI and whole-module parity remain unverified."
     ],
     "omittedResponsibilities": [
       "The browser document text-object slice only admits the consumed operations."
@@ -281,6 +285,10 @@
         {
           "path": "apps/office/src/sc/source/ui/docshell/impex.admission.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.sheet-names.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -479,6 +487,18 @@
         {
           "path": "sc/source/core/data/documen2.cxx",
           "marker": "ScDocument::GetEditEngine"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::GetTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table1.cxx",
+          "marker": "ScTable::GetUpperName"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/documentimport.cxx",
+          "marker": "ScDocumentImport::getSheetIndex"
         }
       ]
     }

@@ -68,6 +68,15 @@ export class ScDocumentImport {
     for (let tab = this.impl.blockPositions.length; tab < this.getDoc().GetTableCount(); tab++)
       this.impl.blockPositions.push(new TableColumnBlockPositionSet(this.getDoc(), tab));
   }
+  /** Original name lookup distinguishes its minus-one failure result from GetTable's zeroed out-parameter. @param name - Native sheet name. @returns Existing sheet index or minus one. */
+  getSheetIndex(name: OUStringConstReference): number {
+    const tab: [number] = [-1];
+    return this.getDoc().GetTable(name, tab) ? tab[0] : -1;
+  }
+  /** Original load-only sheet rename forwards to document admission. @param tab - Native sheet index. @param name - Prepared sheet name. @returns Nothing. */
+  setSheetName(tab: number, name: OUStringConstReference): void {
+    this.getDoc().SetTabNameOnLoad(tab, name);
+  }
   /** Original import sheet count, without normal editing-side state. @returns Actual sheet-vector size. */
   getSheetCount(): number {
     return this.getDoc()["maTabs"].length;

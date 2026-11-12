@@ -1,0 +1,81 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/document.sheet-names.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/document.cxx",
+    "localSymbols": [
+      "ValidTabName",
+      "ValidNewTabName",
+      "GetTable",
+      "GetAllTableNames",
+      "SetTabNameOnLoad"
+    ],
+    "upstreamSymbols": [
+      "ScDocument::ValidTabName",
+      "ScDocument::ValidNewTabName",
+      "ScDocument::GetTable",
+      "ScDocument::GetAllTableNames",
+      "ScDocument::SetTabNameOnLoad"
+    ],
+    "preservedResponsibilities": [
+      "Original ScDocument responsibilities operate on the actual document, table and string owners. Sheet naming preserves global uppercase caches, counted UTF16 validation, output defaults and load-only rename policy."
+    ],
+    "omittedResponsibilities": [
+      "Complete workbook/filter/UI orchestration and compiled native differential parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/document.sheet-names.ts",
+          "marker": "ValidTabName"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.sheet-names.ts",
+          "marker": "ValidNewTabName"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.sheet-names.ts",
+          "marker": "GetTable"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.sheet-names.ts",
+          "marker": "GetAllTableNames"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.sheet-names.ts",
+          "marker": "SetTabNameOnLoad"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::ValidTabName"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::ValidNewTabName"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::GetTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::GetAllTableNames"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::SetTabNameOnLoad"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/document.sheet-names.ts",
+      "rationale": "The original native responsibility is decomposed into a focused implementation fragment to retain the repository file-size limit; source symbols, owner instance and state are preserved.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

@@ -32,7 +32,6 @@
       "GetName",
       "GetClipStart",
       "ExtendMergeSel",
-      "ValidNewTabName",
       "IsBlockEditable",
       "DeleteTab",
       "ApplyFlagsTab",
@@ -72,7 +71,8 @@
       "Native ApplyFlags/RemoveFlags preserve canonical attribute runs,split/merge ownership,bitwise flags,post-mutation re-search and source changed booleans. Sheet dispatch validates endpoints;addition allocates addressed columns while removal clamps to allocated storage. Native ExtendMerge refresh reconstructs horizontal,vertical and combined overlap flags and re-searches mutated runs. Document refresh retains original validation,sparse-sheet defaults and orphan Auto flag removal for the represented profile without named/anonymous database ranges;positive database reconstruction remains unported without fabricated collection owners. IsBlockEmpty body partitions unchanged to the same-instance document10 definitions for the1000-line facade bound. PasteFromClip/EnterBlock and final74 acceptance remain pending.",
       "Native default-content PasteFromClip/EnterBlock/EnterAutoSum now use one genuine clipboard formula,original context/store cloning,actual marks,CONTENT/ATTRIB/NOCAPTIONS normalization,real Undo documents,merge refresh,row-height and shared Sfx list/paste history. No repeated EnterData fill,formula reparse,alternate workbook or fake provider is used. Current active normal-sheet enabled-Undo profile preserves source defaults;cut,multi-range paste,positive matrix/merged-source unmerge,filtered paste,nondefault arithmetic/link/transpose/insert,rich input,drawings/UNO/OLE and dialog families remain explicit unavailable boundaries. Source single-cell multi-mark fallback is implemented. Native first-used-sheet HasClipFilteredRows uses actual compressed segments,including all-filtered one-cell ranges that dimension differences cannot detect. Numeric compatibility retains actual General formatter and canonical cached run application;native pure IsCompatible includes same-type equality,so the redundant side-effect-free caller equality test is erased without changing results. Pattern formatter/context overloads admit original default-language branch;nondefault language conversion stays unported. Native ErrorMessage uses pinned resolved English resources and the active browser host for real EndPointer/error presentation,including document replacement;no VCL/gettext service is simulated. Existing SetAllFormulasDirty/getCellAttributeHelper bodies partition unchanged for strict source-size gates. Native rectangular references,styles,Undo/Redo,ODS reopen,full-axis empty content and actual Chromium/Worker execution are tested. Task76 final verification and task74 visible availability/UI acceptance remain pending;no complete parity claim.",
       "AQF9AG moves the existing single-sheet pattern-area dispatch body intact from the document facade. Sparse table lookup and existing return behavior are unchanged.",
-      "Restored original document/table/column SetString parse-and-release chain and single-cell shared-group listener teardown using the actual formatter, policies, cell values, stores and listeners. Single-line SetTextCell uses the supplied ScSetStringParam or original setTextInput defaults. Cell-value string commit/release uses SetString instead of promoting newline-bearing string variants through SetTextCell. Edit release transfers the exact object without Clone/destruction; nullable edit arguments and rejected-destination destruction follow source unique_ptr semantics. Column release forwards listening modes and content-only DeleteContent preserves text attributes. Existing unrepresented formula-group compute/stream-cache services are not replaced with fake callbacks; full native module/allocator/thread/cache QA and original multiline EditEngine generation remain unverified/incomplete. No UI save/autosave/recovery policy changes."
+      "Restored original document/table/column SetString parse-and-release chain and single-cell shared-group listener teardown using the actual formatter, policies, cell values, stores and listeners. Single-line SetTextCell uses the supplied ScSetStringParam or original setTextInput defaults. Cell-value string commit/release uses SetString instead of promoting newline-bearing string variants through SetTextCell. Edit release transfers the exact object without Clone/destruction; nullable edit arguments and rejected-destination destruction follow source unique_ptr semantics. Column release forwards listening modes and content-only DeleteContent preserves text attributes. Existing unrepresented formula-group compute/stream-cache services are not replaced with fake callbacks; full native module/allocator/thread/cache QA and original multiline EditEngine generation remain unverified/incomplete. No UI save/autosave/recovery policy changes.",
+      "J0Z0KF sheet-name checkpoint: actual ScTable lazy uppercase owner and SetName invalidation, document global-cache lookup and counted-name validation, positional owned name copies and load-only rename now feed ScDocumentImport getSheetIndex/setSheetName. Editing RenameTab retains transliteration and stream invalidation. Original SetString body is only split for file size; no workbook facade or synthetic service is introduced. Full workbook/filter/UI and whole-module parity remain unverified."
     ],
     "omittedResponsibilities": [
       "PasteFromClip/EnterBlock and task74 UI acceptance remain pending. Public default-content CopyFromClip,document UndoToDocument and content-only paste history are implemented in the admitted slice;general sparse-sheet copy,foreign formatter merge,rich text,notes,sparklines,drawings,3D/matrix,nondefault paste,complete formatter/layout services remain unported."
@@ -145,6 +145,10 @@
         },
         {
           "path": "apps/office/src/sc/source/core/data/document-string-input.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.sheet-names.test.ts",
           "marker": "@fileoverview"
         }
       ],
@@ -256,6 +260,18 @@
         {
           "path": "sc/source/core/data/document10.cxx",
           "marker": "ScDocument::EndListeningIntersectedGroup"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::GetTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table1.cxx",
+          "marker": "ScTable::GetUpperName"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/documentimport.cxx",
+          "marker": "ScDocumentImport::getSheetIndex"
         }
       ]
     }

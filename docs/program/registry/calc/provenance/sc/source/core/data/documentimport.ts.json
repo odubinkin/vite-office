@@ -8,7 +8,9 @@
     "upstreamPath": "sc/source/core/data/documentimport.cxx",
     "localSymbols": [
       "ScDocumentImport",
-      "ScDocumentImportImpl"
+      "ScDocumentImportImpl",
+      "getSheetIndex",
+      "setSheetName"
     ],
     "upstreamSymbols": [
       "ScDocumentImport",
@@ -21,7 +23,8 @@
       "AQF9AG replaces normal-edit numeric, string and formula writes with the source per-sheet block-position cache and direct mdds insertion. setEditCell now accepts and transfers an actual EditTextObject, normalizes its strings and releases it on invalid targets. finalize/initColumn regroup actual formulas, recreate sparse cell-text attributes with the numeric-script default and activate group or individual listeners. The constructor source-formula setter accepts the optional cached double without clearing dirty state. Source auto-input parsing, Latin-format column hints, link-formula checks, absent formula-group compute caches and outline-import services remain unported. Existing plain-text multiline callers still use ScDocument.SetTextCell until the EditEngine construction path is ported; they invalidate import hints after that external write.",
       "AQF9AG restores original setAutoInput sheet/block guards, explicit-policy link-check assertion, actual ParseString result and direct typed-store ownership transfers. Empty input uses the original empty-store branch; final metadata/listening remains in existing finalize.",
       "B8TCAE exercises real setAutoInput admission for absent sheets/invalid columns, the supplied-policy link-check assertion before mutation, numeric parsing, clearing an existing value with empty input, and actual compiled formula transfer/finalization with either null or explicit enabled checking policy. No ParseString/service/allocator return is replaced to manufacture the EDIT or allocation-failure alternatives. Runtime source and verification thresholds remain unchanged.",
-      "J0Z0KF native import-transfer checkpoint adds all4setFormulaCell overload paths over actual typed stores: numeric/string caches, owned token arrays and raw cells. Every non-null formula uses real document link inspection; raw overwrite unshares the actual old formula group, preserving the distinct source/token path. Rejected owned arrays release locally while raw cells remain caller-owned; release precedes the storage call. Numeric/string-only fillDown uses native cached column reads and existing vector/mdds range storage, preserving empty string, signed zero and error NaN bits. Raw append/count and direct origin-date options setup retain source editing/formatter boundaries. Actual formula defaults, clean empty construction and hybrid-string forwarding use existing owners. Initial native UI grammar resolves the real document convention as in SetGrammarAndRefConvention; full symbol maps and later unspecified transitions remain unported, and unsupported conventions still reject. Native const-token copy construction, style/Latin hints, matrix/data-table/visibility/merge import, outline/compute-cache finalization, full workbook/filter/UI and physical native ABI/lifetime parity remain unverified. CALC-521 is source-only; no null graph or fake provider/allocator is used."
+      "J0Z0KF native import-transfer checkpoint adds all4setFormulaCell overload paths over actual typed stores: numeric/string caches, owned token arrays and raw cells. Every non-null formula uses real document link inspection; raw overwrite unshares the actual old formula group, preserving the distinct source/token path. Rejected owned arrays release locally while raw cells remain caller-owned; release precedes the storage call. Numeric/string-only fillDown uses native cached column reads and existing vector/mdds range storage, preserving empty string, signed zero and error NaN bits. Raw append/count and direct origin-date options setup retain source editing/formatter boundaries. Actual formula defaults, clean empty construction and hybrid-string forwarding use existing owners. Initial native UI grammar resolves the real document convention as in SetGrammarAndRefConvention; full symbol maps and later unspecified transitions remain unported, and unsupported conventions still reject. Native const-token copy construction, style/Latin hints, matrix/data-table/visibility/merge import, outline/compute-cache finalization, full workbook/filter/UI and physical native ABI/lifetime parity remain unverified. CALC-521 is source-only; no null graph or fake provider/allocator is used.",
+      "J0Z0KF sheet-name checkpoint: actual ScTable lazy uppercase owner and SetName invalidation, document global-cache lookup and counted-name validation, positional owned name copies and load-only rename now feed ScDocumentImport getSheetIndex/setSheetName. Editing RenameTab retains transliteration and stream invalidation. Original SetString body is only split for file size; no workbook facade or synthetic service is introduced. Full workbook/filter/UI and whole-module parity remain unverified."
     ],
     "omittedResponsibilities": [
       "Supported content only:full style/number-format/layout/font metadata,objects,rich/multiline text,merged/matrix/group/external/legacy formulas,repeated formula services,full cache/version/recalc policies and complete document/shell/import constructors remain unported. Unsupported metadata emits concrete diagnostics;unsupported cell semantics reject. This is not lossless full-ODF or UI parity. Browser ceilings and explicit grammar/byte transport are documented adaptations. No native C++/binary QA execution or physical memory management is claimed."
@@ -47,12 +50,28 @@
         {
           "path": "apps/office/src/sc/source/core/data/documentimport.fill.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.sheet-names.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/documentimport.cxx",
           "marker": "ScDocumentImport"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::GetTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table1.cxx",
+          "marker": "ScTable::GetUpperName"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/documentimport.cxx",
+          "marker": "ScDocumentImport::getSheetIndex"
         }
       ]
     }

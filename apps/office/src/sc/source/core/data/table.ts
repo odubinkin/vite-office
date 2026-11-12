@@ -511,6 +511,7 @@ export class ScTable {
   private readonly aCol: ScColumn[] = [];
   private readonly aDefaultColData: ScColumnData;
   private readonly aName: OUString;
+  private readonly aUpperName = new OUString();
   private readonly mpColWidth: ScCompressedArray | null;
   declare private readonly mpColFlags: ScBitMaskCompressedArray | null;
   private readonly maFilterData: FilterData;
@@ -758,6 +759,8 @@ export class ScTable {
     this.aDefaultColData.DisposeAttributes();
     this.mpCondFormatList?.Dispose();
     for (const column of this.aCol) column.Dispose();
+    this.aUpperName.dispose();
+    this.aName.dispose();
   }
   /** Reads actual native/default column attributes. @param col - Column. @param row - Row. @returns Pattern or null. */
   GetPattern(col: number, row: number): ScPatternAttr | null {
@@ -798,6 +801,19 @@ export class ScTable {
   /** Original ScTable::SetName assigns the real name and invalidates the stream through its document caller. @param name - New sheet name. @returns Nothing. */
   SetName(name: OUStringConstReference): void {
     this.aName.assign(name);
+    this.aUpperName.clear();
+  }
+  /** Original lazy uppercase name returns the same borrowed field, invalidated unconditionally by SetName. @returns Borrowed native cache. */
+  GetUpperName(): OUStringConstReference {
+    if (this.aUpperName.isEmpty() && !this.aName.isEmpty()) {
+      const upper = ScGlobal.getCharClass().uppercase(this.aName);
+      try {
+        this.aUpperName.assign(upper);
+      } finally {
+        upper.dispose();
+      }
+    }
+    return this.aUpperName;
   }
   /** Updates sheet and existing column coordinates after sheet insertion. @param tab - New position. @returns Nothing. */
   SetTabNo(tab: number): void {
