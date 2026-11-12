@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/udkapi/com/sun/star/beans/XPropertyState.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-property-state-contracts",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/udkapi/com/sun/star/beans/XPropertyState.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/XPropertyState.test.ts"
+      ],
+      "justification": "Complete original XPropertyState SDK declarations preserve all4 methods and native Any/OUString/Sequence<PropertyState> contracts, normal cached CPPU type and deprecated/static getters. Actual type identity, genuine weak-owner negative query, enum sequence/Any ownership and COW are checked. No concrete service or positive query provider is fabricated. Concrete default/state owners, original generic behavioral QA, full reflection, mutex/native ABI and DOCX-XLSX/application/UI acceptance remain incomplete; no broad parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XPropertyState",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "udkapi/com/sun/star/beans/XPropertyState.idl",
+      "upstreamSymbols": [
+        "XPropertyState",
+        "getPropertyState",
+        "getPropertyStates",
+        "setPropertyToDefault",
+        "getPropertyDefault"
+      ]
+    }
+  }
+}

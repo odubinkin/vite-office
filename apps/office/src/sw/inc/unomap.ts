@@ -9,3 +9,6 @@ export const PROPERTY_MAP_PAGE_STYLE = 4;
 export const PROPERTY_MAP_NUM_STYLE = 5;
 export const PROPERTY_MAP_TEXT_DOCUMENT = 29;
 export const PROPERTY_MAP_END = 106;
+
+/** Original text-default property-map identity. */
+export const PROPERTY_MAP_TEXT_DEFAULT = 40;

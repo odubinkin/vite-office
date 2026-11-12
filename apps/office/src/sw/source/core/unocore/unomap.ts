@@ -685,6 +685,82 @@ function row(which: number, type: UnoTypeArgument, member = 0, attributes = 0): 
 /** Compiler-erased function-local static tables and sets are shared across actual provider instances, as in the original Get*PropertyMap/GetPropertySet functions. */
 const staticMapEntries: (readonly SfxItemPropertyMapEntry[] | undefined)[] = [];
 const staticPropertySets: (SfxItemPropertySet | undefined)[] = [];
+/** Original COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN and hyperlink rows represented by this core. */
+const textDefaultProperties = new Set([
+  "CharLocale",
+  "CharWeight",
+  "CharPosture",
+  "CharHeight",
+  "CharFontName",
+  "CharLocaleAsian",
+  "CharWeightAsian",
+  "CharPostureAsian",
+  "CharHeightAsian",
+  "CharFontNameAsian",
+  "CharLocaleComplex",
+  "CharWeightComplex",
+  "CharPostureComplex",
+  "CharHeightComplex",
+  "CharFontNameComplex",
+  "HyperLinkURL",
+  "HyperLinkTarget",
+  "HyperLinkName",
+  "CharFontStyleName",
+  "CharFontFamily",
+  "CharFontCharSet",
+  "CharFontPitch",
+  "CharFontStyleNameAsian",
+  "CharFontFamilyAsian",
+  "CharFontCharSetAsian",
+  "CharFontPitchAsian",
+  "CharFontStyleNameComplex",
+  "CharFontFamilyComplex",
+  "CharFontCharSetComplex",
+  "CharFontPitchComplex",
+  "CharUnderlineColor",
+  "CharUnderlineHasColor",
+  "ParaIsAutoFirstLineIndent",
+  "ParaLineNumberCount",
+  "ParaIsConnectBorder",
+  "BorderDistance",
+  "LeftBorder",
+  "LeftBorderDistance",
+  "RightBorder",
+  "RightBorderDistance",
+  "TopBorder",
+  "TopBorderDistance",
+  "BottomBorder",
+  "BottomBorderDistance",
+  "BreakType",
+  "PageDescName",
+  "PageNumberOffset",
+  "NumberingStyleName",
+  "VisitedCharStyleName",
+  "UnvisitedCharStyleName",
+  "CharUnderline",
+  "CharStrikeout",
+  "CharWordMode",
+  "CharAutoKerning",
+  "CharEscapement",
+  "CharEscapementHeight",
+  "CharColor",
+  "CharHighlight",
+  "WritingMode",
+  "ParaAdjust",
+  "ParaLastLineAdjust",
+  "ParaExpandSingleWord",
+  "ParaLeftMargin",
+  "ParaRightMargin",
+  "ParaFirstLineIndent",
+  "ParaTopMargin",
+  "ParaBottomMargin",
+  "ParaContextMargin",
+  "ParaLineSpacing",
+  "ParaKeepTogether",
+  "ParaSplit",
+  "ParaOrphans",
+  "ParaWidows",
+]);
 /** Original provider caches borrowed spans and pointers to static property-set owners. Only map families used by the admitted current model are represented; unsupported families fail explicitly. */
 export class SwUnoPropertyMapProvider {
   private readonly m_aMapEntriesArr: (readonly SfxItemPropertyMapEntry[] | undefined)[] = [];
@@ -723,6 +799,23 @@ export class SwUnoPropertyMapProvider {
           ["NumberingIsNumber", row(Command.FN_UNO_IS_NUMBER, "bool", 0, 1)],
           ["ParaIsNumberingRestart", row(Command.FN_NUMBER_NEWSTART, "bool", 0, 1)],
           ["ListId", row(Command.FN_UNO_LIST_ID, "OUString", 0, 1)],
+        ]);
+        break;
+      case MapId.PROPERTY_MAP_TEXT_DEFAULT:
+        entries = new Map([
+          [
+            "TabStopDistance",
+            row(H.RES_PARATR_TABSTOP, "sal_Int32", M.MID_STD_TAB | CONVERT_TWIPS),
+          ],
+          ...[...SwUnoPropertyMap].filter(
+            /** Original default table membership. @param pair - Represented native row. @returns Source table membership. */ ([
+              name,
+            ]) => textDefaultProperties.has(name),
+          ),
+          ["CharStyleName", row(H.RES_TXTATR_CHARFMT, "OUString", 0, 1)],
+          ["IsSplitAllowed", row(H.RES_ROW_SPLIT, "bool", 0, 1)],
+          ["CollapsingBorders", row(H.RES_COLLAPSING_BORDERS, "bool")],
+          ["StandardPageMode", row(H.RES_TEXTGRID, "bool", Grid.MID_GRID_STANDARD_MODE)],
         ]);
         break;
       case MapId.PROPERTY_MAP_CHAR_STYLE:
@@ -793,6 +886,13 @@ export class SwUnoPropertyMapProvider {
         throw new Error("Unported Writer property-map family: " + propertyId);
     }
     const result = nativeEntries(entries);
+    if (propertyId === MapId.PROPERTY_MAP_TEXT_DEFAULT) {
+      for (const entry of result) {
+        // Original provider clears MAYBEVOID except PageDescName after constructing the mutable static default table.
+        if (entry.nWID !== H.RES_PAGEDESC || entry.nMemberId !== MID_PAGEDESC_PAGEDESCNAME)
+          entry.nFlags &= ~MAYBEVOID;
+      }
+    }
     staticMapEntries[propertyId] = result;
     this.m_aMapEntriesArr[propertyId] = result;
     return result;
@@ -821,3 +921,5 @@ function unicode(value: string): OUString {
 }
 
 import { CONVERT_TWIPS } from "../../../../svl/inc/poolitem";
+
+import { MAYBEVOID } from "../../../../udkapi/com/sun/star/beans/PropertyAttribute";

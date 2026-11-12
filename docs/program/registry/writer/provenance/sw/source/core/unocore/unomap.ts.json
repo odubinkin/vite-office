@@ -32,7 +32,8 @@
       "S3HW1E HTML45: original RTF ltrpar/rtlpar flags reset actual associated run type and publish the native paragraph BiDi SPRM. The source RTF DomainMapper branch inserts actual signed16 WritingMode and bypasses the OOXML/comment justification rewrite, without fabricating comment/layout owners or changing the other format profile. Existing stylesheet control routing admits the same flags and retains actual paragraphSprms, shared state and mapped style owners. Native WritingMode UNO metadata is RES_FRAMEDIR130/member0/short/PROPERTY_NONE; actual SvxFrameDirectionItem.QueryValue writes the returned Any, and existing clone-before-PutValue transport retains source validation and pool-default identity. All currently implemented HTML standard/font/paragraph/heading/text-collection/numbered/definition-list readers now forward their original DIR option to the actual ParseStyleOptions/item/context path with reverse duplicate precedence and ASCII-only/no-trim matching. Existing Markdown HTML delegation and Worker item transport consume this same owner. TXT/Markdown retain source paragraph-direction omission; no substitute HTML wrapper or private direction field is added. No post-import repair, fake parser state, source operation result or guessed physical direction is used. RTF direction export/default/page/physical-frame resolution, full table token orchestration/materialization/automatic layout and final current-model/filter/UI reconciliation remain pending. Broad module/UNO ABI/desktop parity remains unverified; browser file/autosave/recovery deviations are unchanged.",
       "S3HW1E HTML74: Page-style WritingMode exposes the original signed-short member zero at RES_FRAMEDIR, independently of cursor properties.",
       "Exposes the represented source border, distance and connection property names on native paragraphs and styles.",
-      "Native Writer metadata checkpoint removes the ordinary host-array property-info projection and createPropertySetInfo/-1 handles. Genuine SfxItemPropertySetInfo/WeakImplHelper, lazy property-set strong ownership, actual Reference<XPropertySetInfo>/Sequence<Property> suppliers and consumers, original static provider identities and six admitted map families are implemented. Explicit source types and literal source-derived family flags replace name heuristics. Original dispatch/member identities, RubyBelow/ParaIsConnectBorder names and BorderLine metadata are retained; cursor Para*Border aliases and family-inappropriate advertised rows are removed. Actual Writer/UNO/weak/RTF/ODF/Worker regressions accompany critical source-backed metadata tests. Other map families/TEXT_DEFAULT/SwXTextDefaults, full model/state-array/Stream/service ABI, DOCX-XLSX import/export and mounted UI remain incomplete; no broad parity/default/service promotion."
+      "Native Writer metadata checkpoint removes the ordinary host-array property-info projection and createPropertySetInfo/-1 handles. Genuine SfxItemPropertySetInfo/WeakImplHelper, lazy property-set strong ownership, actual Reference<XPropertySetInfo>/Sequence<Property> suppliers and consumers, original static provider identities and six admitted map families are implemented. Explicit source types and literal source-derived family flags replace name heuristics. Original dispatch/member identities, RubyBelow/ParaIsConnectBorder names and BorderLine metadata are retained; cursor Para*Border aliases and family-inappropriate advertised rows are removed. Actual Writer/UNO/weak/RTF/ODF/Worker regressions accompany critical source-backed metadata tests. Other map families/TEXT_DEFAULT/SwXTextDefaults, full model/state-array/Stream/service ABI, DOCX-XLSX import/export and mounted UI remain incomplete; no broad parity/default/service promotion.",
+      "Native default-schema checkpoint adds original TEXT_DEFAULT40 and78 source-named rows from the admitted core subset, real static provider/metadata ownership, exact native fields and original post-construction MAYBEVOID clearing except PageDescName. XPropertyState SDK/type/sequence declarations and original nullable poolitem default predicates use actual native value/flag owners. Real Writer default-schema/tab/SwDoc.SetDefault and pool user-override/reset checks accompany critical SDK/sequence tests. SwXTextDefaults and its native document-shell/style-pool owners, other original rows, broader pool metadata/merged-range binding, default-service application, generic behavioral QA and full DOCX-XLSX/UI acceptance remain incomplete; no broad parity/default promotion."
     ],
     "omittedResponsibilities": [
       "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
@@ -94,6 +95,10 @@
         {
           "path": "apps/office/src/svl/source/items/native-property-info.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-text-default-schema.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -128,6 +133,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/unocore/unomapproperties.hxx",
           "marker": "COMMON_PARA_STYLE_PROPERTIES"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unomap1.cxx",
+          "marker": "GetTextDefaultPropertyMap"
         }
       ]
     }

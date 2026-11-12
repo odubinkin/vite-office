@@ -31,3 +31,17 @@ export enum SfxItemPresentation {
   Nameless,
   Complete,
 }
+
+import type { SfxPoolItem } from "../source/items/poolitem";
+/** Original nullable static-default predicate. @param item - Actual native item pointer. @returns Source classification, false for null. */
+export function IsStaticDefaultItem(item: SfxPoolItem | null): boolean {
+  return item !== null && item.isStaticDefault();
+}
+/** Original nullable pool-dependent default predicate. @param item - Actual native item pointer. @returns Source classification, false for null. */
+export function IsDynamicDefaultItem(item: SfxPoolItem | null): boolean {
+  return item !== null && item.isDynamicDefault();
+}
+/** Original static-or-dynamic classification, distinct from a user-default override. @param item - Actual native item pointer. @returns Source classification, false for null. */
+export function IsDefaultItem(item: SfxPoolItem | null): boolean {
+  return item !== null && (item.isStaticDefault() || item.isDynamicDefault());
+}
