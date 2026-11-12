@@ -1,0 +1,840 @@
+{
+  "status": "functional-native-xpath-prerequisite-coverage-gap-parent-continues",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "b281426884418f22d091343f041ae650c5c91c91",
+  "capability": "CAP-e9d543a6-8de7-45b1-9680-2a22cb7aad9b",
+  "scope": "Full source XPath service/result/node-list, generated SDK contracts, actual native field/varargs C ABI and shared native result lifetime. Parent metadata/format/UI remains incomplete.",
+  "tests": {
+    "newCases": 9,
+    "relatedCases": 123,
+    "relatedFiles": 18,
+    "boundaryCases": 49,
+    "resourceCases": 2,
+    "sourceQA": "Complete domtest testXXPathAPI and testXXPathObject assertion bodies through real registered services, with original graph. No replacement provider/manager/type or XPath value supplied."
+  },
+  "coverage": {
+    "result": "fails-whole5-owner90-gate",
+    "threshold": 90,
+    "selectedOwnerCount": 5,
+    "total": {
+      "lines": {
+        "total": 281,
+        "covered": 230,
+        "skipped": 0,
+        "pct": 81.85
+      },
+      "statements": {
+        "total": 296,
+        "covered": 244,
+        "skipped": 0,
+        "pct": 82.43
+      },
+      "functions": {
+        "total": 64,
+        "covered": 57,
+        "skipped": 0,
+        "pct": 89.06
+      },
+      "branches": {
+        "total": 82,
+        "covered": 62,
+        "skipped": 0,
+        "pct": 75.6
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "owners": {
+      "src/offapi/com/sun/star/xml/xpath/Libxml2ExtensionHandle.ts": {
+        "lines": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 28,
+          "covered": 28,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/unoxml/source/xpath/nodelist.ts": {
+        "lines": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/unoxml/source/xpath/xpathapi.ts": {
+        "lines": {
+          "total": 206,
+          "covered": 159,
+          "skipped": 0,
+          "pct": 77.18
+        },
+        "functions": {
+          "total": 30,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 76.66
+        },
+        "statements": {
+          "total": 217,
+          "covered": 169,
+          "skipped": 0,
+          "pct": 77.88
+        },
+        "branches": {
+          "total": 50,
+          "covered": 34,
+          "skipped": 0,
+          "pct": 68
+        }
+      },
+      "src/unoxml/source/xpath/xpathobject.native.ts": {
+        "lines": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/unoxml/source/xpath/xpathobject.ts": {
+        "lines": {
+          "total": 30,
+          "covered": 26,
+          "skipped": 0,
+          "pct": 86.66
+        },
+        "functions": {
+          "total": 13,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 30,
+          "covered": 26,
+          "skipped": 0,
+          "pct": 86.66
+        },
+        "branches": {
+          "total": 8,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 50
+        }
+      }
+    }
+  },
+  "browserQualification": {
+    "workerResult": {
+      "conversion": {
+        "serviceValue": 42,
+        "rowValue": 42,
+        "rowWasNull": false,
+        "failedFirst": 0,
+        "failedFirstWasNull": false,
+        "failedSecond": 0,
+        "failedSecondWasNull": true
+      },
+      "documentBuilder": {
+        "rootName": "document-content",
+        "streamOpen": true,
+        "namespaceAware": true,
+        "validating": false,
+        "emptyImplementation": true,
+        "capturedType": true,
+        "sameContext": true,
+        "exceptionMessage": "worker exception"
+      },
+      "xpath": {
+        "count": 1,
+        "listLength": 1,
+        "sameRoot": true
+      },
+      "globals": {
+        "window": "undefined",
+        "document": "undefined",
+        "DOMParser": "undefined"
+      },
+      "rootName": "document-content",
+      "attribute": "1.0",
+      "listCounts": [
+        0,
+        1,
+        0
+      ],
+      "sameOwner": true,
+      "unicode": "\ud83d\ude00\u5b57",
+      "utf16Length": 3,
+      "borrowedStreamOpen": true,
+      "warnings": 1,
+      "errors": 0,
+      "warningLine": 1
+    },
+    "mainResult": {
+      "conversion": {
+        "serviceValue": 42,
+        "rowValue": 42,
+        "rowWasNull": false,
+        "failedFirst": 0,
+        "failedFirstWasNull": false,
+        "failedSecond": 0,
+        "failedSecondWasNull": true
+      },
+      "documentBuilder": {
+        "rootName": "document-content",
+        "streamOpen": true,
+        "namespaceAware": true,
+        "validating": false,
+        "emptyImplementation": true,
+        "capturedType": true,
+        "sameContext": true,
+        "exceptionMessage": "worker exception"
+      },
+      "xpath": {
+        "count": 1,
+        "listLength": 1,
+        "sameRoot": true
+      },
+      "globals": {
+        "window": "object",
+        "document": "object",
+        "DOMParser": "function"
+      },
+      "rootName": "document-content",
+      "attribute": "1.0",
+      "listCounts": [
+        0,
+        1,
+        0
+      ],
+      "sameOwner": true,
+      "unicode": "\ud83d\ude00\u5b57",
+      "utf16Length": 3,
+      "borrowedStreamOpen": true,
+      "warnings": 1,
+      "errors": 0,
+      "warningLine": 1
+    }
+  },
+  "nativeBuild": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 144,
+    "enumConstantCount": 108,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "8ec5697784549772261695b3565e558ba871040f8a5a5947923595cca93b5942"
+  },
+  "preservedIssues": [
+    "CALC-544/WRITER478 unchecked missing-prefix lookup",
+    "CALC-545/WRITER479 nonnull namespace strlen precondition",
+    "CALC-546/WRITER480 global generic error reset placement"
+  ],
+  "corrections": [
+    "Pointer-name shadowing, ES2023-only reverse and missing fixture XNode generic corrected.",
+    "One XML boundary case extracted into a cohesive49-case split: earlier checkpoint size measurement preceded its append and was stale. No policy exception.",
+    "Shared result ownership is original core lifetime responsibility with explicit standard-library control-block divergence B, not browser presentation.",
+    "Pinned SfxDocumentMetaData currently walks DOM directly; unused XPathAPI.hpp include is not a runtime dependency claim."
+  ],
+  "remaining": [
+    "Native allocation failure, undefined inputs/float-integral overflow and physical ABI/threads remain unqualified.",
+    "Successful custom extension values not qualified; real native lookup callbacks withNULL results are qualified.",
+    "Actual component/property-bag/DOM metadata dependencies and full DOCX/XLSX shell/UI unfinished."
+  ],
+  "knownBaseline": "Only prior css-style-matchers.ts17/76 JSDoc errors.",
+  "fullSuite": "Not run under once per10 actual agentplane task cadence.",
+  "userStopRule": "Continue without new pause; do not finish incomplete parent.",
+  "checks": [
+    {
+      "name": "final",
+      "cwd": "apps/office",
+      "command": "../../node_modules/.bin/vitest run --config vite.config.ts src/unoxml src/external/libxml2 src/desktop/browser/app src/cppuhelper/browser/exception-abi.test.ts src/cppu/inc/com/sun/star/uno/exception-initialization.test.ts src/cppu/inc/com/sun/star/uno/native-exception-address.test.ts --coverage --coverage.include=src/unoxml/source/xpath/xpathapi.ts --coverage.include=src/unoxml/source/xpath/xpathobject.ts --coverage.include=src/unoxml/source/xpath/nodelist.ts --coverage.include=src/unoxml/source/xpath/xpathobject.native.ts --coverage.include=src/offapi/com/sun/star/xml/xpath/Libxml2ExtensionHandle.ts --coverage.reportsDirectory=coverage/xpath-final --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.functions=90 --coverage.thresholds.branches=90",
+      "result": "tests-pass-coverage-fails",
+      "log": "apps/office/coverage/xpath-final.log",
+      "sha256": "e637e2a0b0ef894bf242b8bf177a53258767d908f491041c6db6cc849061c0df"
+    },
+    {
+      "name": "typecheck",
+      "cwd": ".",
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "name": "build",
+      "cwd": ".",
+      "command": "npm run build",
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-build.log",
+      "sha256": "bf2cb61e0328250889e756cb66fd41de491c44d04d505aa2576ef24c26c2cd56"
+    },
+    {
+      "name": "worker",
+      "cwd": ".",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node --experimental-strip-types scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-worker.log",
+      "sha256": "970e3e5d6e8199774bcacbbb98c04919c6b8f9492a9768a97a1ab0a3bb19aba7"
+    },
+    {
+      "name": "libxml2-build",
+      "cwd": ".",
+      "command": "python3 scripts/build-libxml2-wasm.py",
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-libxml2-build.log",
+      "sha256": "54197ff7ac3010b92d8c66d0d2a3274150a186400bfc3d3a4b58d04f6089edf4"
+    },
+    {
+      "name": "static",
+      "cwd": ".",
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-static.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "name": "provenance",
+      "cwd": ".",
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-provenance.log",
+      "sha256": "3d1631c5d523511a59af1975c0d45df06d6f3a4fdc98e75410aac0f8e0a649cb"
+    },
+    {
+      "name": "boundaries",
+      "cwd": ".",
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-boundaries.log",
+      "sha256": "269b2265ab2ade99815d9c5043563df5fc1a970c4ba2a46777563b4a79003019"
+    },
+    {
+      "name": "registry-build",
+      "cwd": ".",
+      "command": "npm run inventory:registry:build",
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "name": "registry-check",
+      "cwd": ".",
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-registry-check.log",
+      "sha256": "50b3df9309180d6bfab06da272a1f47fda3750375fc7741a8b667927a7df0132"
+    },
+    {
+      "name": "docs",
+      "cwd": ".",
+      "command": "npm run check:docs",
+      "result": "known-baseline-failure",
+      "log": "apps/office/coverage/xpath-docs.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    },
+    {
+      "name": "size",
+      "cwd": ".",
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-size.log",
+      "sha256": "e2078a5ef9924b6bb79f4a9dccb1d2f3e6c15037119153e7b0e2fea271b56cb8"
+    },
+    {
+      "name": "tree",
+      "cwd": ".",
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "name": "boundary-tests",
+      "cwd": ".",
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts scripts/check-module-boundaries-xml.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-boundary-tests.log",
+      "sha256": "f9b8f9f953b35a829117c63382e0565df0d019c120abdb349d0e1114e3e9de55"
+    },
+    {
+      "name": "resource-tests",
+      "cwd": ".",
+      "command": "node_modules/.bin/vitest run scripts/writer-ui-resource-model.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-resource-tests.log",
+      "sha256": "bc0f269a845e41ca1ed7b233f2782555d337d994c9ec5a08200b01d6d4216de6"
+    },
+    {
+      "name": "writer-resources",
+      "cwd": ".",
+      "command": "npm run check:writer-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-writer-resources.log",
+      "sha256": "083b25d317fcb8a4e267ddbb6fd381807b2117588da7a862e7ed28e9b8f326d9"
+    },
+    {
+      "name": "calc-resources",
+      "cwd": ".",
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-calc-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "name": "hintids",
+      "cwd": ".",
+      "command": "npm run check:writer-hintids",
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-hintids.log",
+      "sha256": "513c109068ebf83b3d6fe448c3c44564ec89a64cd9cb64059b5b4b89d11d887a"
+    },
+    {
+      "name": "doctor",
+      "cwd": ".",
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-doctor.log",
+      "sha256": "27f7a853d479078c371937adf5bb339d618318c3705bbb5899f30a00cbfe6771"
+    },
+    {
+      "name": "routing",
+      "cwd": ".",
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "name": "diff",
+      "cwd": ".",
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "lint",
+      "cwd": ".",
+      "command": [
+        "node_modules/.bin/eslint",
+        "--max-warnings",
+        "0",
+        "apps/office/src/desktop/browser/app/uno-components.ts",
+        "apps/office/src/offapi/com/sun/star/xml/xpath/Libxml2ExtensionHandle.ts",
+        "apps/office/src/offapi/com/sun/star/xml/xpath/XPathAPI.ts",
+        "apps/office/src/offapi/com/sun/star/xml/xpath/XPathException.ts",
+        "apps/office/src/offapi/com/sun/star/xml/xpath/XPathObjectType.ts",
+        "apps/office/src/offapi/com/sun/star/xml/xpath/XXPathAPI.ts",
+        "apps/office/src/offapi/com/sun/star/xml/xpath/XXPathExtension.ts",
+        "apps/office/src/offapi/com/sun/star/xml/xpath/XXPathObject.ts",
+        "apps/office/src/unoxml/source/xpath/nodelist.ts",
+        "apps/office/src/unoxml/source/xpath/xpath.test.ts",
+        "apps/office/src/unoxml/source/xpath/xpathapi.ts",
+        "apps/office/src/unoxml/source/xpath/xpathobject.native.ts",
+        "apps/office/src/unoxml/source/xpath/xpathobject.ts",
+        "scripts/check-module-boundaries-xml.test.ts",
+        "scripts/check-module-boundaries.test.ts",
+        "scripts/fixtures/native-dom-worker-probe.ts",
+        "scripts/native-dom-worker-probe.mjs"
+      ],
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "format",
+      "cwd": ".",
+      "command": [
+        "node_modules/.bin/prettier",
+        "--check",
+        "apps/office/src/desktop/browser/app/uno-components.ts",
+        "apps/office/src/offapi/com/sun/star/xml/xpath/Libxml2ExtensionHandle.ts",
+        "apps/office/src/offapi/com/sun/star/xml/xpath/XPathAPI.ts",
+        "apps/office/src/offapi/com/sun/star/xml/xpath/XPathException.ts",
+        "apps/office/src/offapi/com/sun/star/xml/xpath/XPathObjectType.ts",
+        "apps/office/src/offapi/com/sun/star/xml/xpath/XXPathAPI.ts",
+        "apps/office/src/offapi/com/sun/star/xml/xpath/XXPathExtension.ts",
+        "apps/office/src/offapi/com/sun/star/xml/xpath/XXPathObject.ts",
+        "apps/office/src/unoxml/source/xpath/nodelist.ts",
+        "apps/office/src/unoxml/source/xpath/xpath.test.ts",
+        "apps/office/src/unoxml/source/xpath/xpathapi.ts",
+        "apps/office/src/unoxml/source/xpath/xpathobject.native.ts",
+        "apps/office/src/unoxml/source/xpath/xpathobject.ts",
+        "docs/program/calc-upstream-suspected-issues.md",
+        "docs/program/native-xml-xpath.md",
+        "docs/program/registry/shared/capabilities/CAP-e9d543a6-8de7-45b1-9680-2a22cb7aad9b.json",
+        "docs/program/registry/shared/provenance/desktop/browser/app/uno-components.ts.json",
+        "docs/program/registry/shared/provenance/external/libxml2/libxml2.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/xpath/Libxml2ExtensionHandle.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/xpath/XPathAPI.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/xpath/XPathException.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/xpath/XPathObjectType.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/xpath/XXPathAPI.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/xpath/XXPathExtension.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/xpath/XXPathObject.ts.json",
+        "docs/program/registry/shared/provenance/unoxml/source/xpath/nodelist.ts.json",
+        "docs/program/registry/shared/provenance/unoxml/source/xpath/xpathapi.ts.json",
+        "docs/program/registry/shared/provenance/unoxml/source/xpath/xpathobject.native.ts.json",
+        "docs/program/registry/shared/provenance/unoxml/source/xpath/xpathobject.ts.json",
+        "docs/program/registry/shared/runtime/desktop/browser/app/uno-components.ts.json",
+        "docs/program/registry/shared/runtime/external/libxml2/libxml2.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/xpath/Libxml2ExtensionHandle.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/xpath/XPathAPI.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/xpath/XPathException.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/xpath/XPathObjectType.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/xpath/XXPathAPI.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/xpath/XXPathExtension.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/xpath/XXPathObject.ts.json",
+        "docs/program/registry/shared/runtime/unoxml/source/xpath/nodelist.ts.json",
+        "docs/program/registry/shared/runtime/unoxml/source/xpath/xpathapi.ts.json",
+        "docs/program/registry/shared/runtime/unoxml/source/xpath/xpathobject.native.ts.json",
+        "docs/program/registry/shared/runtime/unoxml/source/xpath/xpathobject.ts.json",
+        "docs/program/writer-upstream-suspected-issues.md",
+        "scripts/check-module-boundaries-xml.test.ts",
+        "scripts/check-module-boundaries.test.ts",
+        "scripts/fixtures/native-dom-worker-probe.ts",
+        "scripts/native-dom-worker-probe.mjs"
+      ],
+      "result": "pass",
+      "log": "apps/office/coverage/xpath-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    }
+  ],
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/desktop/browser/app/uno-components.ts",
+      "gitBlob": "448c7cd42dc405ebc30df0ec837bf64de0631879"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/xpath/Libxml2ExtensionHandle.ts",
+      "gitBlob": "3acb58bd3a0e00c9cb512fc12f4b1d83c4e83a67"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/xpath/XPathAPI.ts",
+      "gitBlob": "d488d04d6895fc737779c9e340270164f3c84e96"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/xpath/XPathException.ts",
+      "gitBlob": "f9210a46005d79734fb47db8fc0b0581413974f0"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/xpath/XPathObjectType.ts",
+      "gitBlob": "b6ae99cde2e2cb64d3540570750be812b643f78a"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/xpath/XXPathAPI.ts",
+      "gitBlob": "2d0215f5847e7cbd2faedb4db6afad177712ab33"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/xpath/XXPathExtension.ts",
+      "gitBlob": "4bdd453efc3a7919e38e9cea56fda75a59b1f60d"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/xpath/XXPathObject.ts",
+      "gitBlob": "c1700403d23e4c26ea439db3ea3ac4d50c69e9c7"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/xpath/nodelist.ts",
+      "gitBlob": "e3d81579d2131be0a50b2481f70a24cf3b628468"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/xpath/xpath.test.ts",
+      "gitBlob": "6c2611a2f47d702110115c981fd3cfe968348a7c"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/xpath/xpathapi.ts",
+      "gitBlob": "fea09f64842f266b237ddcea98734176d031978c"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/xpath/xpathobject.native.ts",
+      "gitBlob": "7d1f834cd3698e587e1df19f2bc6568cdc295429"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/xpath/xpathobject.ts",
+      "gitBlob": "fa509f6302c642c5c7af8cfd5478cf2019c77523"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "5a1426c694af712170157279c01b1f276a130983"
+    },
+    {
+      "path": "docs/program/native-xml-xpath.md",
+      "gitBlob": "f991dbbe82effd18f74b8f90eb23e6b0b9905789"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-e9d543a6-8de7-45b1-9680-2a22cb7aad9b.json",
+      "gitBlob": "b47fc865f64efad6e506324bde29f0720ab9c110"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/desktop/browser/app/uno-components.ts.json",
+      "gitBlob": "c08d239c7c0d3fa1c20a39ae0875633898e1c486"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/external/libxml2/libxml2.ts.json",
+      "gitBlob": "ef5084f60956b9a41661ae2010a23cc18cd1302e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/xpath/Libxml2ExtensionHandle.ts.json",
+      "gitBlob": "7d1bab414196a2701c64b496d4c3b8ea198a6c1b"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/xpath/XPathAPI.ts.json",
+      "gitBlob": "7e2d8709d2954aa1f1495535e7cb5ec0090035d3"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/xpath/XPathException.ts.json",
+      "gitBlob": "1065da0071ee99b37cb8e0d18bc978e29a7bdc97"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/xpath/XPathObjectType.ts.json",
+      "gitBlob": "6183b65ff89855cac7d5b14b88b6334eee204c15"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/xpath/XXPathAPI.ts.json",
+      "gitBlob": "40fab44b6824859c1f8fb6f68a584c46245c7300"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/xpath/XXPathExtension.ts.json",
+      "gitBlob": "7bdd9b71d7faf0c1e20e34785cd57d8447f29b42"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/xpath/XXPathObject.ts.json",
+      "gitBlob": "eb1d80cc4e97ee1564a905a84ba4458b49d64211"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/xpath/nodelist.ts.json",
+      "gitBlob": "7ee1bf8611b2751a9bbc62f80b4889c5b7e58ef5"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/xpath/xpathapi.ts.json",
+      "gitBlob": "3f8a33dc89a990b8dde28796dc51dd01aadb171f"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/xpath/xpathobject.native.ts.json",
+      "gitBlob": "d1c3dd242e48dcdc801b5f0e885c225f2f6d7d82"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/xpath/xpathobject.ts.json",
+      "gitBlob": "b20bc36d9c60c43b4e90bd871d8d168f04efaa0a"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/desktop/browser/app/uno-components.ts.json",
+      "gitBlob": "0b6d8af8cb1c411ea98942be5984e90c2ccb1f1c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/external/libxml2/libxml2.ts.json",
+      "gitBlob": "cde2bea581a0042065791006157d3be1dea186a5"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/xpath/Libxml2ExtensionHandle.ts.json",
+      "gitBlob": "1e6f21b0d538a54e19b1e448653f5bdd6715a0d6"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/xpath/XPathAPI.ts.json",
+      "gitBlob": "0884c3e713a86f65b3a14361fd595ec82fd45f56"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/xpath/XPathException.ts.json",
+      "gitBlob": "4b26a1c94a23bdd40fa410d722fd2f028081dfc9"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/xpath/XPathObjectType.ts.json",
+      "gitBlob": "df5d1592bc25205c2851b0a81ef1d1bcf6be7476"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/xpath/XXPathAPI.ts.json",
+      "gitBlob": "4026cac222ff69f097202baf728b8353a5b01225"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/xpath/XXPathExtension.ts.json",
+      "gitBlob": "3cf6db1df6decd8ea01da81bc0d6496027a5e42c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/xpath/XXPathObject.ts.json",
+      "gitBlob": "7d4672453690ea0af17777205b71018907b8fc87"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/xpath/nodelist.ts.json",
+      "gitBlob": "b414bd260bcce75e378f1c35f60be47afe68ca69"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/xpath/xpathapi.ts.json",
+      "gitBlob": "21443da05a85c52ac1ee39a538020d0a8b616a69"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/xpath/xpathobject.native.ts.json",
+      "gitBlob": "cfde413a4f63a8065d2527457205e89a65b900c8"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/xpath/xpathobject.ts.json",
+      "gitBlob": "b28eabfd783e012e452112bbb6c25316c85f5259"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "7eb0fe722826bef007bb760a892ea98275f6f109"
+    },
+    {
+      "path": "scripts/build-libxml2-wasm.py",
+      "gitBlob": "bd50a774bfa81719b552e5c16cc1fa78b1153ba9"
+    },
+    {
+      "path": "scripts/check-module-boundaries-xml.test.ts",
+      "gitBlob": "5fb4dd356c47a51a97f67b03d2ea7359d0d776ca"
+    },
+    {
+      "path": "scripts/check-module-boundaries.test.ts",
+      "gitBlob": "08f8c0dd0e82d2e3c86ae91e63749ade9f9d2f03"
+    },
+    {
+      "path": "scripts/fixtures/native-dom-worker-probe.ts",
+      "gitBlob": "e771352452492d278f1f0f49ce0e9b165985ccd6"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "gitBlob": "d37e3ae689fb1099427b9a4e44214597e54ba2e9"
+    },
+    {
+      "path": "third_party/libxml2-wasm/artifact.json",
+      "gitBlob": "0248fa4255b5bcf16cd32a5cdf760bc8c5361b2d"
+    },
+    {
+      "path": "third_party/libxml2-wasm/binding.c",
+      "gitBlob": "f4ca4c59a1674f43fe4f70a932e548924ed7e618"
+    },
+    {
+      "path": "third_party/libxml2-wasm/generated-api.json",
+      "gitBlob": "12fd00c5ed239990141ecb75d457c6c166752419"
+    },
+    {
+      "path": "third_party/libxml2-wasm/index.d.ts",
+      "gitBlob": "6efa5067fb556e4c623f10a2559bdb539afe96e6"
+    },
+    {
+      "path": "third_party/libxml2-wasm/libxml2.mjs",
+      "gitBlob": "3e78ba412209251aa9398a6a554ab2228ebfaa68"
+    }
+  ],
+  "upstreamBlobs": [
+    {
+      "path": "unoxml/source/xpath/xpathapi.cxx",
+      "gitBlob": "710cd71ee0e199021eb83eff2f7cafc0e3c442ff"
+    },
+    {
+      "path": "unoxml/source/xpath/xpathapi.hxx",
+      "gitBlob": "bb37922c8bb734f82fff73ff67a93793dab4674e"
+    },
+    {
+      "path": "unoxml/source/xpath/xpathobject.cxx",
+      "gitBlob": "c33e6a330f8675f67e3c5c9d3dc10489977dd23b"
+    },
+    {
+      "path": "unoxml/source/xpath/xpathobject.hxx",
+      "gitBlob": "3726161ce105a644f42bd464cedabc18cdc5ed46"
+    },
+    {
+      "path": "unoxml/source/xpath/nodelist.cxx",
+      "gitBlob": "b9e4e70c443a1eac32bde026a9c5dc7b0e943fd4"
+    },
+    {
+      "path": "unoxml/source/xpath/nodelist.hxx",
+      "gitBlob": "a1cf92d20e088b94fbff09153474058a29f36c89"
+    },
+    {
+      "path": "unoxml/source/service/unoxml.component",
+      "gitBlob": "6591bde6a70e0673252f07357236945a19c92f7c"
+    },
+    {
+      "path": "unoxml/qa/unit/domtest.cxx",
+      "gitBlob": "8d872d765f7e0aeb0d1d97079c19f20c640c5b8e"
+    },
+    {
+      "path": "offapi/com/sun/star/xml/xpath/XXPathObject.idl",
+      "gitBlob": "c2792128962fd7e454f574f3d6bda2665937ca5b"
+    },
+    {
+      "path": "offapi/com/sun/star/xml/xpath/XPathException.idl",
+      "gitBlob": "dad992ab4ba8f0357c65cfe2914bc9844493e6b8"
+    },
+    {
+      "path": "offapi/com/sun/star/xml/xpath/XPathExtension.idl",
+      "gitBlob": "742feabd4e1c3a06eb1b4a00252503fad900fa7d"
+    },
+    {
+      "path": "offapi/com/sun/star/xml/xpath/XXPathAPI.idl",
+      "gitBlob": "5174a23e94369a127ef26bb78fa23bb5795a8b1f"
+    },
+    {
+      "path": "offapi/com/sun/star/xml/xpath/XPathAPI.idl",
+      "gitBlob": "a30211f7c5d9d3bcaa34c4afc795d6a338ce4899"
+    },
+    {
+      "path": "offapi/com/sun/star/xml/xpath/XXPathExtension.idl",
+      "gitBlob": "46fd0ab2b1a7600903ae25abd564b520bcd3d8ae"
+    },
+    {
+      "path": "offapi/com/sun/star/xml/xpath/XPathObjectType.idl",
+      "gitBlob": "4144e3dd8e4de18d0037b151a97052a40d33df68"
+    },
+    {
+      "path": "offapi/com/sun/star/xml/xpath/Libxml2ExtensionHandle.idl",
+      "gitBlob": "2755214522aa2dba7970e66fc46b567dd723f75c"
+    }
+  ]
+}

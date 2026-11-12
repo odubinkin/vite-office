@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 234
+revision: 239
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T17:01:23.899Z"
+  updated_at: "2026-11-12T17:18:00.565Z"
   updated_by: "CODER"
-  note: "JavaScript UNO exception ABI/Content cancellation/registered native DocumentBuilder prerequisite: 537 related cases pass across93files; production main/DOM-free Worker probe passes. Full7-owner90 gate remains unmet:75.08statements69.49branches83.60functions76.02lines, with real provider/URI and other field-type paths unqualified. Parent DOCX/XLSX/UI acceptance remains incomplete; continue approved implementation without user pause."
-  attempts: 72
+  note: "Native XPath prerequisite:123 related tests/18files pass, all original testXXPathAPI/testXXPathObject assertions and real native lookup callbacks pass. Main/DOM-free Worker probe passes. Whole5-owner90 coverage fails82.43statements75.60branches89.06functions81.85lines; pending native exceptional/unsupported object kinds and complete DOCX/XLSX/UI are not reclassified."
+  attempts: 73
 commit: null
 comments:
   -
@@ -237,6 +237,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue the approved native XML/metadata prerequisites and full DOCX/XLSX shell/UI integration after recording the honest seven-owner coverage gap; no completion or pause is claimed."
+  -
+    author: "CODER"
+    body: "Start: Continue the approved actual metadata dependencies and DOCX/XLSX shell/UI after recording bounded XPath qualification and the honest five-owner90 gap; no goal pause or parent completion."
 events:
   -
     type: "status"
@@ -1160,8 +1163,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: Continue the approved native XML/metadata prerequisites and full DOCX/XLSX shell/UI integration after recording the honest seven-owner coverage gap; no completion or pause is claimed."
+  -
+    type: "verify"
+    at: "2026-11-12T17:18:00.565Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native XPath prerequisite:123 related tests/18files pass, all original testXXPathAPI/testXXPathObject assertions and real native lookup callbacks pass. Main/DOM-free Worker probe passes. Whole5-owner90 coverage fails82.43statements75.60branches89.06functions81.85lines; pending native exceptional/unsupported object kinds and complete DOCX/XLSX/UI are not reclassified."
+  -
+    type: "status"
+    at: "2026-11-12T17:18:15.545Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: Continue the approved actual metadata dependencies and DOCX/XLSX shell/UI after recording bounded XPath qualification and the honest five-owner90 gap; no goal pause or parent completion."
 doc_version: 3
-doc_updated_at: "2026-11-12T17:02:08.448Z"
+doc_updated_at: "2026-11-12T17:18:16.340Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -3336,6 +3352,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-12T17:18:00.565Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native XPath prerequisite:123 related tests/18files pass, all original testXXPathAPI/testXXPathObject assertions and real native lookup callbacks pass. Main/DOM-free Worker probe passes. Whole5-owner90 coverage fails82.43statements75.60branches89.06functions81.85lines; pending native exceptional/unsupported object kinds and complete DOCX/XLSX/UI are not reclassified.
+    Attempts: 73
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T17:17:33.340Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3692,6 +3738,18 @@ sections:
     - Observation: Final registered native builder/JavaScript exception ABI prerequisite:537 related tests/93files pass; original misc catch/throw and domtest valid/warning/error plus provider-independent builder assertions run on real owners. Two additional Worker transport readiness cases and main font/native readiness pass. Actual Chromium main and DOM-free Worker probe constructs registered DocumentBuilder, parses XML and roundtrips RuntimeException with nonempty builder Context.
       Impact: Full7-owner90 coverage fails75.08statements69.49branches83.60functions76.02lines. Native physical exception ABI/TLS/mappings, positive UCB/SimpleFileAccess providers/URI source QA, metadata and full DOCX/XLSX shell/UI remain unqualified. No artificial positive provider or private state coverage hook; full suites remain once per10 actual agentplane tasks.
       Resolution: Core SDK now links only platform-neutral declaration metadata; public exception helpers receive an injected host ABI initialized by main/Worker composition. Boundaries pass after retaining source unoxml comphelper/ucbhelper links and browser desktop component registration. Final typecheck/build/static/lint/format/provenance/registry/boundaries49/resource2/size/tree/resources/hintids/doctor/routing/diff pass. Only prior css-style-matchers.ts17/76 JSDoc baseline remains. Record bounded evidence, persist checkpoint, then continue native XPath/metadata and full formats without pausing or finishing the parent.
+
+    - Observation: Native XPath prerequisite now supplies complete CXPathAPI/CXPathObject/CNodeList, exact generated SDK values/interfaces and source service registration; initial pointer-name shadowing and ES2023-only reverse call were corrected. Source domtest testXXPathAPI/testXXPathObject assertions run on real registered DocumentBuilder/XPathAPI. Actual native function/variable lookup callbacks preserve table pointers, userdata and NULL lookup failures; no replacement XML value, model, manager or provider.
+      Impact: Shared native result/document lifetime and DOM-free main/Worker qualification pass. Undefined source absent-prefix and NULL namespace strlen inputs, successful custom extension result generation, allocation failures, float-integral overflow, physical ABI/threads and full metadata/DOCX/XLSX/UI remain unqualified. Whole-owner90 coverage remains honestly gated; final metrics pending.
+      Resolution: Preserve source first-insertion namespaces, child-first collection and original global diagnostic reset placement; document suspected source issues as CALC-544..546 and WRITER478..480. Continue targeted validation and approved metadata/format implementation without new pause or parent completion.
+
+    - Observation: Final XPath validation initially caught a registry responsibility mismatch for the standard shared-result lifetime binding and an authored size overflow in the previous newly appended XML boundary test (1014 lines). The earlier size run preceded that test append, so its prior checkpoint size claim was stale.
+      Impact: No source test or runtime invariant is waived. The explicit shared_ptr lowering belongs to the original core lifetime responsibility, with divergence B and native ABI/thread limitations; it has no browser API. The 1000-line source budget remains enforced.
+      Resolution: Mapped the core lifetime binding to the actual shared_ptr/xmlXPathFreeObject expressions with an explicit responsibility split, leaving broad parity unverified. Moved the existing XML boundary case into its own cohesive test file; all49 cases and final size check pass. Final registry/provenance pass after rebuilding generated views. No new feature or policy exception was introduced.
+
+    - Observation: Final native XPath prerequisite:123 cases/18files pass, including complete original testXXPathAPI/testXXPathObject assertions and nine new real-owner cases. Main/DOM-free module Worker runs registered XPathAPI/DocumentBuilder and exact native node identity; real table function/variable lookups retain userdata and native NULL failures. Pinned unchanged libxml2 rebuilt with144 exports and108 header enums.
+      Impact: Whole5-owner90 gate fails82.43statements75.60branches89.06functions81.85lines. Unsupported native result kinds, successful custom extension values, allocation failures, undefined inputs/float-integral overflow and physical ABI/threads remain unqualified. The pinned metadata source includes XPathAPI.hpp but its current implementation walks DOM directly; no runtime XPath dependency is falsely asserted.
+      Resolution: Final typecheck/build/static/scoped lint/format/provenance/registry/boundaries49/resource2/size/tree/resources/hintids/doctor/routing/diff pass; only prior css-style-matchers.ts17/76 JSDoc baseline. Source suspected issues documented in both journals; original behavior kept. Persist this functional prerequisite without finishing the parent, then follow actual comphelper/component/property-bag and DOM dependencies of SfxDocumentMetaData and complete filters/UI. Full suites remain once per10 actual tasks; no pause.
 id_source: "generated"
 ---
 ## Summary
@@ -5876,6 +5934,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-12T17:18:00.565Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native XPath prerequisite:123 related tests/18files pass, all original testXXPathAPI/testXXPathObject assertions and real native lookup callbacks pass. Main/DOM-free Worker probe passes. Whole5-owner90 coverage fails82.43statements75.60branches89.06functions81.85lines; pending native exceptional/unsupported object kinds and complete DOCX/XLSX/UI are not reclassified.
+Attempts: 73
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T17:17:33.340Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -6236,3 +6324,15 @@ DecisionContextRef:
 - Observation: Final registered native builder/JavaScript exception ABI prerequisite:537 related tests/93files pass; original misc catch/throw and domtest valid/warning/error plus provider-independent builder assertions run on real owners. Two additional Worker transport readiness cases and main font/native readiness pass. Actual Chromium main and DOM-free Worker probe constructs registered DocumentBuilder, parses XML and roundtrips RuntimeException with nonempty builder Context.
   Impact: Full7-owner90 coverage fails75.08statements69.49branches83.60functions76.02lines. Native physical exception ABI/TLS/mappings, positive UCB/SimpleFileAccess providers/URI source QA, metadata and full DOCX/XLSX shell/UI remain unqualified. No artificial positive provider or private state coverage hook; full suites remain once per10 actual agentplane tasks.
   Resolution: Core SDK now links only platform-neutral declaration metadata; public exception helpers receive an injected host ABI initialized by main/Worker composition. Boundaries pass after retaining source unoxml comphelper/ucbhelper links and browser desktop component registration. Final typecheck/build/static/lint/format/provenance/registry/boundaries49/resource2/size/tree/resources/hintids/doctor/routing/diff pass. Only prior css-style-matchers.ts17/76 JSDoc baseline remains. Record bounded evidence, persist checkpoint, then continue native XPath/metadata and full formats without pausing or finishing the parent.
+
+- Observation: Native XPath prerequisite now supplies complete CXPathAPI/CXPathObject/CNodeList, exact generated SDK values/interfaces and source service registration; initial pointer-name shadowing and ES2023-only reverse call were corrected. Source domtest testXXPathAPI/testXXPathObject assertions run on real registered DocumentBuilder/XPathAPI. Actual native function/variable lookup callbacks preserve table pointers, userdata and NULL lookup failures; no replacement XML value, model, manager or provider.
+  Impact: Shared native result/document lifetime and DOM-free main/Worker qualification pass. Undefined source absent-prefix and NULL namespace strlen inputs, successful custom extension result generation, allocation failures, float-integral overflow, physical ABI/threads and full metadata/DOCX/XLSX/UI remain unqualified. Whole-owner90 coverage remains honestly gated; final metrics pending.
+  Resolution: Preserve source first-insertion namespaces, child-first collection and original global diagnostic reset placement; document suspected source issues as CALC-544..546 and WRITER478..480. Continue targeted validation and approved metadata/format implementation without new pause or parent completion.
+
+- Observation: Final XPath validation initially caught a registry responsibility mismatch for the standard shared-result lifetime binding and an authored size overflow in the previous newly appended XML boundary test (1014 lines). The earlier size run preceded that test append, so its prior checkpoint size claim was stale.
+  Impact: No source test or runtime invariant is waived. The explicit shared_ptr lowering belongs to the original core lifetime responsibility, with divergence B and native ABI/thread limitations; it has no browser API. The 1000-line source budget remains enforced.
+  Resolution: Mapped the core lifetime binding to the actual shared_ptr/xmlXPathFreeObject expressions with an explicit responsibility split, leaving broad parity unverified. Moved the existing XML boundary case into its own cohesive test file; all49 cases and final size check pass. Final registry/provenance pass after rebuilding generated views. No new feature or policy exception was introduced.
+
+- Observation: Final native XPath prerequisite:123 cases/18files pass, including complete original testXXPathAPI/testXXPathObject assertions and nine new real-owner cases. Main/DOM-free module Worker runs registered XPathAPI/DocumentBuilder and exact native node identity; real table function/variable lookups retain userdata and native NULL failures. Pinned unchanged libxml2 rebuilt with144 exports and108 header enums.
+  Impact: Whole5-owner90 gate fails82.43statements75.60branches89.06functions81.85lines. Unsupported native result kinds, successful custom extension values, allocation failures, undefined inputs/float-integral overflow and physical ABI/threads remain unqualified. The pinned metadata source includes XPathAPI.hpp but its current implementation walks DOM directly; no runtime XPath dependency is falsely asserted.
+  Resolution: Final typecheck/build/static/scoped lint/format/provenance/registry/boundaries49/resource2/size/tree/resources/hintids/doctor/routing/diff pass; only prior css-style-matchers.ts17/76 JSDoc baseline. Source suspected issues documented in both journals; original behavior kept. Persist this functional prerequisite without finishing the parent, then follow actual comphelper/component/property-bag and DOM dependencies of SfxDocumentMetaData and complete filters/UI. Full suites remain once per10 actual tasks; no pause.
