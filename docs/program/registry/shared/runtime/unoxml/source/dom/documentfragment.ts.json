@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/unoxml/source/dom/documentfragment.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-dom-tree",
+    "capabilityIds": [
+      "CAP-91436a81-7f1b-4eef-ae3c-06dc8c83f991"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/unoxml/source/dom/documentfragment.ts",
+        "apps/office/src/unoxml/source/dom/native-upstream-dom.test.ts",
+        "apps/office/src/unoxml/source/dom/native-tree.test.ts",
+        "apps/office/src/unoxml/source/events/native-tree-dispatch.test.ts",
+        "docs/program/native-xml-dom-tree.md"
+      ],
+      "justification": "Original CDocumentFragment admission rules and name. Work in progress: native node/document interfaces and pointer ownership are implemented over pinned libxml2. Focused source QA bodies and real graph integration pass. Builder service, XPath, document SAX/IO facets, full DOM coverage, compiled C++ differential/thread ABI, metadata initialization and complete DOCX/XLSX file/UI paths remain unverified. No substitute node provider or alternate JS tree is installed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CDocumentFragment"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "unoxml/source/dom/documentfragment.cxx",
+      "upstreamSymbols": [
+        "CDocumentFragment"
+      ]
+    }
+  }
+}

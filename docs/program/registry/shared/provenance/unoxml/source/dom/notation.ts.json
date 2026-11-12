@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/unoxml/source/dom/notation.ts",
+    "status": "mapped",
+    "upstreamPath": "unoxml/source/dom/notation.cxx",
+    "localSymbols": [
+      "CNotation"
+    ],
+    "upstreamSymbols": [
+      "CNotation"
+    ],
+    "preservedResponsibilities": [
+      "Original CNotation node contract over the actual native allocation.",
+      "Work in progress: native node/document interfaces and pointer ownership are implemented over pinned libxml2. Focused source QA bodies and real graph integration pass. Builder service, XPath, document SAX/IO facets, full DOM coverage, compiled C++ differential/thread ABI, metadata initialization and complete DOCX/XLSX file/UI paths remain unverified. No substitute node provider or alternate JS tree is installed."
+    ],
+    "omittedResponsibilities": [
+      "Work in progress: native node/document interfaces and pointer ownership are implemented over pinned libxml2. Focused source QA bodies and real graph integration pass. Builder service, XPath, document SAX/IO facets, full DOM coverage, compiled C++ differential/thread ABI, metadata initialization and complete DOCX/XLSX file/UI paths remain unverified. No substitute node provider or alternate JS tree is installed."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/unoxml/source/dom/notation.ts",
+          "marker": "CNotation"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/native-upstream-dom.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/native-tree.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/events/native-tree-dispatch.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/unoxml/source/dom/notation.cxx",
+          "marker": "CNotation"
+        }
+      ]
+    }
+  }
+}

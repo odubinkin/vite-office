@@ -1,0 +1,64 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/unoxml/source/dom/document.ts",
+    "status": "mapped",
+    "upstreamPath": "unoxml/source/dom/document.cxx",
+    "localSymbols": [
+      "CDocument"
+    ],
+    "upstreamSymbols": [
+      "CDocument",
+      "CNode",
+      "CAttr",
+      "CDOMImplementation"
+    ],
+    "preservedResponsibilities": [
+      "Original CDocument node factory, weak identity cache and complete XDocument/XDocumentEvent operations. SAX/IO service facets are not advertised until their concrete owners are represented.",
+      "Work in progress: native node/document interfaces and pointer ownership are implemented over pinned libxml2. Focused source QA bodies and real graph integration pass. Builder service, XPath, document SAX/IO facets, full DOM coverage, compiled C++ differential/thread ABI, metadata initialization and complete DOCX/XLSX file/UI paths remain unverified. No substitute node provider or alternate JS tree is installed."
+    ],
+    "omittedResponsibilities": [
+      "Work in progress: native node/document interfaces and pointer ownership are implemented over pinned libxml2. Focused source QA bodies and real graph integration pass. Builder service, XPath, document SAX/IO facets, full DOM coverage, compiled C++ differential/thread ABI, metadata initialization and complete DOCX/XLSX file/UI paths remain unverified. No substitute node provider or alternate JS tree is installed."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/unoxml/source/dom/document.ts",
+          "marker": "CDocument"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/native-upstream-dom.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/native-tree.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/events/native-tree-dispatch.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/unoxml/source/dom/document.cxx",
+          "marker": "CDocument"
+        },
+        {
+          "path": "vendor/libreoffice-reference/unoxml/source/dom/document.cxx",
+          "marker": "CNode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/unoxml/source/dom/document.cxx",
+          "marker": "CAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/unoxml/source/dom/document.cxx",
+          "marker": "CDOMImplementation"
+        }
+      ]
+    }
+  }
+}

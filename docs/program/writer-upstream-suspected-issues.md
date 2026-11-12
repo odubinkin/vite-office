@@ -3707,4 +3707,24 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 
 - Source: `unoxml/source/dom/node.cxx`, `CNode::cloneNode` and `appendChild`, LibreOffice baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-528. The pinned libxml2 2.15.3 `tree.c` calls `xmlStaticCopyNode(node, NULL, NULL, extended)` from `xmlCopyNode`.
 - The wrapper factory keeps the original CDocument owner, while the copied native node has a null `doc` pointer. `appendChild` compares raw `cur->doc` with the receiving node's raw document before insertion. Consequently its source checks reject such a clone as WRONG_DOCUMENT even though the wrapper reports the original document owner. Do not repair this by assigning a document pointer during clone wrapping.
-- The actual pinned native C build reproduces the null document pointer for a deep element clone in Node and Chromium. Wrapper-level append rejection remains source-derived until the real native UNO document/node graph exists; no fake wrapper or compiled C++ UNO witness is claimed.
+- The actual pinned native C build reproduces the null document pointer for a deep element clone in Node and Chromium. Wrapper-level append rejection is now also covered through the actual CDocument/CNode graph: the clone reports the original wrapper owner, and append rejects it as WRONG_DOCUMENT_ERR. No compiled C++ UNO differential witness is claimed.
+
+
+### WRITER463 — Detached DOM attribute namespace lookup reuses a differing URI
+
+- Source: `unoxml/source/dom/attr.cxx`, `CAttr::GetNamespace`, pinned LibreOffice baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-529.
+- After looking up the requested prefix on the receiving element, the source returns that namespace when its URI differs from the detached attribute's requested URI (`0 != xmlStrcmp`). Preserve this condition. Do not invert it to the expected equality test or replace the receiver declaration.
+- The actual native document/tree test creates `p:root` in `urn:existing` and a detached `p:a` in `urn:requested`. Appending the attribute creates a distinct attached copy in `urn:existing`, while the original stays detached in `urn:requested`. This is a source-backed UNO wrapper witness over the pinned C library, not a compiled C++ UNO differential test.
+
+### WRITER464 — DOM DTD identifiers read name bytes using identifier lengths
+
+- Source: `unoxml/source/dom/documenttype.cxx`, `CDocumentType::getPublicId` and `getSystemId`, same pinned baseline; shared with CALC-530.
+- Both getters pass the DTD name pointer to the UTF-8 string constructor, with the byte length of ExternalID or SystemID respectively. Preserve the pointer and length selection rather than returning the actual identifier strings.
+- A parsed DTD named `rootname` with public identifier `pub` and system identifier `sys` returns `roo` for both getters on the actual native tree. These short identifiers keep the reads within the allocated name bytes. Null identifier pointers and lengths exceeding the name allocation are undefined native cases and are not certified or manufactured for coverage.
+
+
+### WRITER465 — DOM builder resolver IO contexts are not deleted on every close path
+
+- Source: `unoxml/source/dom/documentbuilder.cxx`, `resolve_func` and `xmlIO_close_func`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-531.
+- The resolver allocates a context with freeOnClose=true. The close callback returns zero immediately if its input reference is empty. It also catches a UNO closeInput failure and returns minus one before reaching delete. Preserve both orders; do not move deletion into a finally guard.
+- Actual IO callback tests demonstrate that a close failure retains the context's genuine input reference until explicit caller cleanup. The empty-stream allocation leak is source-derived; no compiled native allocator leak witness or complete resolver-service integration is claimed.

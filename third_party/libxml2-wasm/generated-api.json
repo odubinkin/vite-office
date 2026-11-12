@@ -470,5 +470,69 @@
   {
     "name": "_office_dtd_notations_set",
     "cType": "void (xmlDtd *, void *)"
+  },
+  {
+    "name": "_office_entity_publicId_get",
+    "cType": "const xmlChar *(xmlEntity *)"
+  },
+  {
+    "name": "_office_entity_publicId_set",
+    "cType": "void (xmlEntity *, const xmlChar *)"
+  },
+  {
+    "name": "_office_entity_systemId_get",
+    "cType": "const xmlChar *(xmlEntity *)"
+  },
+  {
+    "name": "_office_entity_systemId_set",
+    "cType": "void (xmlEntity *, const xmlChar *)"
+  },
+  {
+    "name": "_office_parser_private_get",
+    "cType": "void *(xmlParserCtxt *)"
+  },
+  {
+    "name": "_office_parser_private_set",
+    "cType": "void (xmlParserCtxt *, void *)"
+  },
+  {
+    "name": "_office_parser_sax_get",
+    "cType": "xmlSAXHandlerPtr (xmlParserCtxt *)"
+  },
+  {
+    "name": "_office_parser_sax_set",
+    "cType": "void (xmlParserCtxt *, xmlSAXHandlerPtr)"
+  },
+  {
+    "name": "_office_error_message_get",
+    "cType": "char *(xmlError *)"
+  },
+  {
+    "name": "_office_error_message_set",
+    "cType": "void (xmlError *, char *)"
+  },
+  {
+    "name": "_office_error_line_get",
+    "cType": "int (xmlError *)"
+  },
+  {
+    "name": "_office_error_line_set",
+    "cType": "void (xmlError *, int)"
+  },
+  {
+    "name": "_office_error_column_get",
+    "cType": "int (xmlError *)"
+  },
+  {
+    "name": "_office_error_column_set",
+    "cType": "void (xmlError *, int)"
+  },
+  {
+    "name": "_office_error_level_get",
+    "cType": "xmlErrorLevel (xmlError *)"
+  },
+  {
+    "name": "_office_error_level_set",
+    "cType": "void (xmlError *, xmlErrorLevel)"
   }
 ]

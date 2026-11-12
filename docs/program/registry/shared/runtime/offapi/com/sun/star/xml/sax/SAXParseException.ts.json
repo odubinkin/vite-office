@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/xml/sax/SAXParseException.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-dom-tree",
+    "capabilityIds": [
+      "CAP-91436a81-7f1b-4eef-ae3c-06dc8c83f991"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/xml/sax/SAXParseException.ts",
+        "apps/office/src/offapi/com/sun/star/xml/sax/SAXParseException.test.ts",
+        "apps/office/src/unoxml/source/dom/documentbuilder.errors.test.ts",
+        "apps/office/src/unoxml/source/dom/documentbuilder.io.test.ts",
+        "docs/program/native-xml-document-builder.md"
+      ],
+      "justification": "Original SAXParseException value uses actual SAXException inheritance, four declared members, shared CPPU metadata and real Any copy/extraction. Native documentbuilder error formatting preserves ASCII_US, line/int2 and empty identifier/context/wrapped defaults. IO callbacks use actual input streams and byte sequences, preserve close/freeOnClose statement order, and contain only UNO exceptions. Builder orchestration, UCB entity resolver/URI fallback and service registration remain unported; no alternate DocumentBuilder or fake process context is advertised. Native threading/ABI, complete upstream parser QA and DOCX/XLSX file/UI acceptance remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "offapi/com/sun/star/xml/sax/SAXParseException.idl",
+      "upstreamSymbols": [
+        "SAXParseException",
+        "PublicId",
+        "SystemId",
+        "LineNumber",
+        "ColumnNumber"
+      ]
+    }
+  }
+}

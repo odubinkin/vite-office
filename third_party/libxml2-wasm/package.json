@@ -5,5 +5,15 @@
   "type": "module",
   "main": "libxml2.mjs",
   "types": "index.d.ts",
-  "license": "MIT AND MPL-2.0"
+  "license": "MIT AND MPL-2.0",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./libxml2.mjs"
+    },
+    "./constants": {
+      "types": "./constants.d.ts",
+      "default": "./constants.mjs"
+    }
+  }
 }

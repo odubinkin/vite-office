@@ -75,15 +75,37 @@ def main():
          "-I" + str(source / "include"), "-fsyntax-only", "-Xclang", "-ast-dump=json"],
         cwd=build, env=env, text=True))
     declarations = {}
+    constants = {}
 
     def collect(node):
         """Collect genuine C function types, including macro-expanded struct accessors."""
         if node.get("kind") == "FunctionDecl":
             declarations["_" + node["name"]] = node
+        enum_members = [member for member in node.get("inner", [])
+                        if member.get("kind") == "EnumConstantDecl"]
+        if node.get("kind") == "EnumDecl" and any(
+                member["name"] in manifest["headerEnumAnchors"] for member in enum_members):
+            current = 0
+            for member in enum_members:
+                if member.get("kind") != "EnumConstantDecl":
+                    continue
+                explicit = next((child for child in member.get("inner", [])
+                                 if child.get("kind") == "ConstantExpr"), None)
+                if explicit is not None:
+                    current = int(explicit["value"])
+                name = member["name"]
+                if name.startswith(("XML_", "XPATH_")):
+                    constants[name] = current
+                current += 1
         for child in node.get("inner", []):
             collect(child)
 
     collect(ast)
+    banner = "/** @fileoverview Generated native libxml2 header enum values from Clang AST; do not edit. */\n"
+    (PACKAGE / "constants.mjs").write_text(banner + "".join(
+        f"export const {name} = {value};\n" for name, value in sorted(constants.items())))
+    (PACKAGE / "constants.d.ts").write_text(banner + "".join(
+        f"export declare const {name}: number;\n" for name in sorted(constants)))
     signatures = []
     types = ['/** @fileoverview Generated from the pinned C headers and binding AST by scripts/build-libxml2-wasm.py; do not edit. */',
              'export interface LibXml2 {', '  HEAPU8: Uint8Array;', '  HEAP32: Int32Array;']
@@ -114,7 +136,7 @@ def main():
     (PACKAGE / "generated-api.json").write_text(json.dumps(signatures, indent=2) + "\n")
     artifact = PACKAGE / "libxml2.mjs"
     result = {"sourceSha256": manifest["sha256"], "compiler": version.splitlines()[0],
-                      "exportCount": len(exports), "artifact": str(artifact.relative_to(ROOT)),
+                      "exportCount": len(exports), "enumConstantCount": len(constants), "artifact": str(artifact.relative_to(ROOT)),
                       "artifactSha256": hashlib.sha256(artifact.read_bytes()).hexdigest()}
     (PACKAGE / "artifact.json").write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps(result))

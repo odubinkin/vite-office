@@ -19,9 +19,10 @@
         "apps/office/src/unoxml/source/events/eventdispatcher.ts",
         "apps/office/src/unoxml/source/events/eventdispatcher.test.ts",
         "apps/office/src/unoxml/source/dom/domimplementation.test.ts",
-        "docs/program/native-xml-dom-events.md"
+        "docs/program/native-xml-dom-events.md",
+        "apps/office/src/unoxml/source/events/native-tree-dispatch.test.ts"
       ],
-      "justification": "Native event dispatcher translation now uses actual pinned libxml2 C node addresses and native parent fields, including attribute ancestry, instead of a JavaScript DOM node approximation. Real C allocations back registry/key/lifetime cases. Concrete UNO CDocument/CNode propagation, cloning, cancellation, callback mutation, exception paths and whole-dispatcher 90% coverage remain unfinished. The document factory signature is a forward declaration only; no fake positive node query or substitute factory is used.",
+      "justification": "Actual CDocument/CNode wrappers now connect the native pointer factory to capture/target/bubble dispatch. Focused genuine graph cases cover source cancellation, UI/mouse/mutation facets, callback map changes and exception ownership. The six-file run passes 56 tests; dispatcher coverage is 98.70% statements, 95% branches and 100% functions/lines. The original CDOMImplementation remains source-unimplemented. Whole DOM coverage, builder, XPath, SAX/IO, compiled C++ threading/ABI, metadata and complete DOCX/XLSX file/UI acceptance remain unverified.",
       "knownViolations": [],
       "localSymbols": [
         "CEventDispatcher",

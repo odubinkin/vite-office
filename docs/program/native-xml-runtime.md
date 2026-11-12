@@ -48,7 +48,9 @@ The three focused bootstrap/byte-binding tests cover the authored runtime owner.
 They do not certify all exported C functions or native platform ABI. The native
 qualification is not a substitute for `unoxml/qa/unit/domtest.cxx` or Java
 `DOMTest`: those cases still require the actual `CDocument`/`CNode`/builder graph.
-The dispatcher now consumes actual native node pointers and parent fields, but its
-UNO graph is still unconnected and below its 90% coverage gate.
+The dispatcher now consumes actual native node pointers through the concrete
+CDocument/CNode graph. Its focused coverage gate passes; the broader DOM tree
+coverage gate remains unmet. See [native UNO DOM tree](native-xml-dom-tree.md)
+for the actual source QA scope and remaining dependencies.
 Metadata services, DOCX/XLSX orchestration, shell routing and existing UI
 acceptance remain unfinished. Existing SAX/ODF paths continue using `saxes`.

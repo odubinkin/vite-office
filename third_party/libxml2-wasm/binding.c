@@ -7,6 +7,7 @@
 #include <libxml/xpath.h>
 #include <libxml/xpathInternals.h>
 #include <libxml/xmlversion.h>
+#include <libxml/entities.h>
 #include <stdlib.h>
 
 const char *office_xmlVersion(void) { return LIBXML_DOTTED_VERSION; }
@@ -36,6 +37,14 @@ FIELD(xmlDtd, dtd_publicId, xmlChar *, ExternalID)
 FIELD(xmlDtd, dtd_systemId, xmlChar *, SystemID)
 FIELD(xmlDtd, dtd_entities, void *, entities)
 FIELD(xmlDtd, dtd_notations, void *, notations)
+FIELD(xmlEntity, entity_publicId, const xmlChar *, ExternalID)
+FIELD(xmlEntity, entity_systemId, const xmlChar *, SystemID)
+FIELD(xmlParserCtxt, parser_private, void *, _private)
+FIELD(xmlParserCtxt, parser_sax, xmlSAXHandlerPtr, sax)
+FIELD(xmlError, error_message, char *, message)
+FIELD(xmlError, error_line, int, line)
+FIELD(xmlError, error_column, int, int2)
+FIELD(xmlError, error_level, xmlErrorLevel, level)
 
 /* The upstream XPath helpers are macros, not exported C functions. */
 int office_xmlXPathNodeSetGetLength(xmlNodeSetPtr set) {

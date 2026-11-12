@@ -1,0 +1,266 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-91436a81-7f1b-4eef-ae3c-06dc8c83f991",
+    "capabilityId": "CAP-91436a81-7f1b-4eef-ae3c-06dc8c83f991",
+    "suite": "shared",
+    "subsystem": "native-dom-tree",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Work in progress: native node/document interfaces and pointer ownership are implemented over pinned libxml2. Focused source QA bodies and real graph integration pass. Builder service, XPath, document SAX/IO facets, full DOM coverage, compiled C++ differential/thread ABI, metadata initialization and complete DOCX/XLSX file/UI paths remain unverified. No substitute node provider or alternate JS tree is installed.",
+      "Original SAXParseException value uses actual SAXException inheritance, four declared members, shared CPPU metadata and real Any copy/extraction. Native documentbuilder error formatting preserves ASCII_US, line/int2 and empty identifier/context/wrapped defaults. IO callbacks use actual input streams and byte sequences, preserve close/freeOnClose statement order, and contain only UNO exceptions. Builder orchestration, UCB entity resolver/URI fallback and service registration remain unported; no alternate DocumentBuilder or fake process context is advertised. Native threading/ABI, complete upstream parser QA and DOCX/XLSX file/UI acceptance remain unverified."
+    ],
+    "capability": "Native UNO DOM tree and document factory",
+    "gaps": [
+      "Work in progress: native node/document interfaces and pointer ownership are implemented over pinned libxml2. Focused source QA bodies and real graph integration pass. Builder service, XPath, document SAX/IO facets, full DOM coverage, compiled C++ differential/thread ABI, metadata initialization and complete DOCX/XLSX file/UI paths remain unverified. No substitute node provider or alternate JS tree is installed."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "unoxml/source/dom/attr.cxx",
+          "marker": "CAttr"
+        },
+        {
+          "path": "unoxml/source/dom/attributesmap.cxx",
+          "marker": "CAttributesMap"
+        },
+        {
+          "path": "unoxml/source/dom/cdatasection.cxx",
+          "marker": "CCDATASection"
+        },
+        {
+          "path": "unoxml/source/dom/characterdata.cxx",
+          "marker": "CCharacterData"
+        },
+        {
+          "path": "unoxml/source/dom/childlist.cxx",
+          "marker": "CChildList"
+        },
+        {
+          "path": "unoxml/source/dom/comment.cxx",
+          "marker": "CComment"
+        },
+        {
+          "path": "unoxml/source/dom/document.cxx",
+          "marker": "lcl_ImportNode"
+        },
+        {
+          "path": "unoxml/source/dom/document.cxx",
+          "marker": "CDocument"
+        },
+        {
+          "path": "unoxml/source/dom/documentfragment.cxx",
+          "marker": "CDocumentFragment"
+        },
+        {
+          "path": "unoxml/source/dom/documenttype.cxx",
+          "marker": "CDocumentType"
+        },
+        {
+          "path": "unoxml/source/dom/element.cxx",
+          "marker": "CElement"
+        },
+        {
+          "path": "unoxml/source/dom/elementlist.cxx",
+          "marker": "CElementList"
+        },
+        {
+          "path": "unoxml/source/dom/entitiesmap.cxx",
+          "marker": "CEntitiesMap"
+        },
+        {
+          "path": "unoxml/source/dom/entity.cxx",
+          "marker": "CEntity"
+        },
+        {
+          "path": "unoxml/source/dom/entityreference.cxx",
+          "marker": "CEntityReference"
+        },
+        {
+          "path": "unoxml/source/dom/node.cxx",
+          "marker": "Context"
+        },
+        {
+          "path": "unoxml/source/dom/notation.cxx",
+          "marker": "CNotation"
+        },
+        {
+          "path": "unoxml/source/dom/notationsmap.cxx",
+          "marker": "CNotationsMap"
+        },
+        {
+          "path": "unoxml/source/dom/processinginstruction.cxx",
+          "marker": "CProcessingInstruction"
+        },
+        {
+          "path": "unoxml/source/dom/text.cxx",
+          "marker": "CText"
+        }
+      ],
+      "tests": [
+        {
+          "path": "unoxml/qa/unit/domtest.cxx",
+          "marker": "testXText"
+        }
+      ],
+      "docs": [
+        {
+          "path": "offapi/com/sun/star/xml/dom/XDocument.idl",
+          "marker": "interface XDocument"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/unoxml/source/dom/attr.ts",
+          "marker": "CAttr"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/attributesmap.ts",
+          "marker": "CAttributesMap"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/cdatasection.ts",
+          "marker": "CCDATASection"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/characterdata.ts",
+          "marker": "CCharacterData"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/childlist.ts",
+          "marker": "CChildList"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/comment.ts",
+          "marker": "CComment"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/document.import.ts",
+          "marker": "importNode"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/document.ts",
+          "marker": "CDocument"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/documentfragment.ts",
+          "marker": "CDocumentFragment"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/documenttype.ts",
+          "marker": "CDocumentType"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/element.ts",
+          "marker": "CElement"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/elementlist.ts",
+          "marker": "CElementList"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/entitiesmap.ts",
+          "marker": "CEntitiesMap"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/entity.ts",
+          "marker": "CEntity"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/entityreference.ts",
+          "marker": "CEntityReference"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/node.ts",
+          "marker": "withXmlStrings"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/notation.ts",
+          "marker": "CNotation"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/notationsmap.ts",
+          "marker": "CNotationsMap"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/processinginstruction.ts",
+          "marker": "CProcessingInstruction"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/text.ts",
+          "marker": "CText"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/xml/sax/SAXParseException.ts",
+          "marker": "SAXParseException"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/SAXParseException.ts",
+          "marker": "SAXParseException"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/documentbuilder.errors.ts",
+          "marker": "make_error_message"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/documentbuilder.io.ts",
+          "marker": "context_t"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/unoxml/source/dom/native-upstream-dom.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/native-tree.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/events/native-tree-dispatch.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/SAXParseException.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/documentbuilder.errors.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/documentbuilder.io.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-xml-dom-tree.md",
+          "marker": "# Native UNO DOM tree"
+        },
+        {
+          "path": "docs/program/native-xml-document-builder.md",
+          "marker": "# Native document builder dependencies"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Work in progress: native node/document interfaces and pointer ownership are implemented over pinned libxml2. Focused source QA bodies and real graph integration pass. Builder service, XPath, document SAX/IO facets, full DOM coverage, compiled C++ differential/thread ABI, metadata initialization and complete DOCX/XLSX file/UI paths remain unverified. No substitute node provider or alternate JS tree is installed."
+    },
+    "scopeLimitations": [
+      "Work in progress: native node/document interfaces and pointer ownership are implemented over pinned libxml2. Focused source QA bodies and real graph integration pass. Builder service, XPath, document SAX/IO facets, full DOM coverage, compiled C++ differential/thread ABI, metadata initialization and complete DOCX/XLSX file/UI paths remain unverified. No substitute node provider or alternate JS tree is installed."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-dom-tree"
+  }
+}

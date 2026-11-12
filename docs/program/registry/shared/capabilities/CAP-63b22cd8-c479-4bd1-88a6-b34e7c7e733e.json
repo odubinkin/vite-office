@@ -9,13 +9,11 @@
     "type": "model",
     "maturity": "implemented",
     "assertions": [
-      "Original native DOM event components and SDK contracts use actual WeakImplHelper/ImplInheritanceHelper, Reference, OUString, Time, Any and shared type metadata. Source field defaults, base-first initialization, native argument widths, acquired result copies, query order and implicit owned-member destruction are preserved. Native zero timestamps, empty preventDefault, stored/public cancellation differences and ignored mouse related targets remain unchanged (CALC-524/525; WRITER458/459). Concrete event components are tested directly with actual acquired facets and weak references, not fabricated DOM nodes, views, targets, private state or dispatchers. Source C++ mutex/thread/reentrant behavior, actual tree/dispatcher integration, full ABI, metadata/model initialization and complete DOCX/XLSX filter/UI parity remain unverified.",
-      "Native event dispatcher translation uses acquired listener snapshots and source event clones over actual XML backend node identity. Registry lifetime and equal-range callbacks are tested on genuine listener/event components; concrete CDocument/CNode propagation, callback mutation, cancellation, exception paths and whole-dispatcher 90% coverage remain open. The consumed document factory signature is a forward declaration, not an implemented or substituted tree. The actual immortal CDOMImplementation retains all three #i113683# unimplemented source results. Full metadata initialization and DOCX/XLSX file/UI acceptance remain unverified."
+      "Actual CDocument/CNode wrappers now connect the native pointer factory to capture/target/bubble dispatch. Focused genuine graph cases cover source cancellation, UI/mouse/mutation facets, callback map changes and exception ownership. The six-file run passes 56 tests; dispatcher coverage is 98.70% statements, 95% branches and 100% functions/lines. The original CDOMImplementation remains source-unimplemented. Whole DOM coverage, builder, XPath, SAX/IO, compiled C++ threading/ABI, metadata and complete DOCX/XLSX file/UI acceptance remain unverified."
     ],
     "capability": "Native DOM event component state and ownership",
     "gaps": [
-      "Actual DOM node/dispatcher integration, native threading and metadata/filter/UI remain incomplete.",
-      "Concrete CDocument/CNode dispatcher integration and whole-dispatcher coverage remain open; current tests cover the registry and singleton only."
+      "Whole DOM coverage, builder, XPath, SAX/IO, compiled native threading/ABI, metadata and DOCX/XLSX file/UI remain incomplete."
     ],
     "upstream": {
       "implementation": [
@@ -168,6 +166,10 @@
         {
           "path": "apps/office/src/unoxml/source/dom/domimplementation.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/events/native-tree-dispatch.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "docs": [
@@ -184,10 +186,10 @@
     "verified": false,
     "stackDivergence": {
       "kind": "browser-adaptation",
-      "rationale": "Original native DOM event components and SDK contracts use actual WeakImplHelper/ImplInheritanceHelper, Reference, OUString, Time, Any and shared type metadata. Source field defaults, base-first initialization, native argument widths, acquired result copies, query order and implicit owned-member destruction are preserved. Native zero timestamps, empty preventDefault, stored/public cancellation differences and ignored mouse related targets remain unchanged (CALC-524/525; WRITER458/459). Concrete event components are tested directly with actual acquired facets and weak references, not fabricated DOM nodes, views, targets, private state or dispatchers. Source C++ mutex/thread/reentrant behavior, actual tree/dispatcher integration, full ABI, metadata/model initialization and complete DOCX/XLSX filter/UI parity remain unverified."
+      "rationale": "Actual CDocument/CNode wrappers now connect the native pointer factory to capture/target/bubble dispatch. Focused genuine graph cases cover source cancellation, UI/mouse/mutation facets, callback map changes and exception ownership. The six-file run passes 56 tests; dispatcher coverage is 98.70% statements, 95% branches and 100% functions/lines. The original CDOMImplementation remains source-unimplemented. Whole DOM coverage, builder, XPath, SAX/IO, compiled C++ threading/ABI, metadata and complete DOCX/XLSX file/UI acceptance remain unverified."
     },
     "scopeLimitations": [
-      "Original native DOM event components and SDK contracts use actual WeakImplHelper/ImplInheritanceHelper, Reference, OUString, Time, Any and shared type metadata. Source field defaults, base-first initialization, native argument widths, acquired result copies, query order and implicit owned-member destruction are preserved. Native zero timestamps, empty preventDefault, stored/public cancellation differences and ignored mouse related targets remain unchanged (CALC-524/525; WRITER458/459). Concrete event components are tested directly with actual acquired facets and weak references, not fabricated DOM nodes, views, targets, private state or dispatchers. Source C++ mutex/thread/reentrant behavior, actual tree/dispatcher integration, full ABI, metadata/model initialization and complete DOCX/XLSX filter/UI parity remain unverified."
+      "Actual CDocument/CNode wrappers now connect the native pointer factory to capture/target/bubble dispatch. Focused genuine graph cases cover source cancellation, UI/mouse/mutation facets, callback map changes and exception ownership. The six-file run passes 56 tests; dispatcher coverage is 98.70% statements, 95% branches and 100% functions/lines. The original CDOMImplementation remains source-unimplemented. Whole DOM coverage, builder, XPath, SAX/IO, compiled C++ threading/ABI, metadata and complete DOCX/XLSX file/UI acceptance remain unverified."
     ],
     "aspect": "model-operation",
     "atomicOperation": "native-dom-event-components"

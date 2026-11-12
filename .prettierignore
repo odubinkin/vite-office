@@ -18,3 +18,5 @@ third_party/libnumbertext-js
 # Generated Emscripten binary loader and Clang-derived C declarations.
 third_party/libxml2-wasm/libxml2.mjs
 third_party/libxml2-wasm/index.d.ts
+third_party/libxml2-wasm/constants.mjs
+third_party/libxml2-wasm/constants.d.ts

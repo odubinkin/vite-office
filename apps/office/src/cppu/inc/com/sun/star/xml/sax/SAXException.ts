@@ -94,6 +94,14 @@ export class SAXException extends Exception {
     this.wrappedException.moveAssign(source.WrappedException);
     return this;
   }
+  /** Borrows the generated Any member or inherited compound field address. @param offset - Actual logical member offset. @returns Existing field address. */
+  get(offset: number): unknown {
+    return offset === 16
+      ? this.WrappedException
+      : offset === 0
+        ? this.Message.getDataAddress()
+        : this.Context.getAddress();
+  }
   /** Original reverse member/base destruction. @returns Nothing. */
   override dispose(): void {
     this.wrappedException.dispose();

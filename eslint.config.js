@@ -23,6 +23,8 @@ export default tseslint.config(
       // Generated Emscripten binary loader and Clang-derived C declarations are byte-exact build artifacts.
       "third_party/libxml2-wasm/libxml2.mjs",
       "third_party/libxml2-wasm/index.d.ts",
+      "third_party/libxml2-wasm/constants.mjs",
+      "third_party/libxml2-wasm/constants.d.ts",
       "output/playwright/**",
     ],
   },

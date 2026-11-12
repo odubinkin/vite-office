@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/unoxml/source/dom/document.import.ts",
+    "status": "mapped",
+    "upstreamPath": "unoxml/source/dom/document.cxx",
+    "localSymbols": [
+      "importNode"
+    ],
+    "upstreamSymbols": [
+      "lcl_ImportNode"
+    ],
+    "preservedResponsibilities": [
+      "Original document.cxx lcl_ImportNode and lcl_ImportSiblings responsibilities, split to keep the native document factory owner within the authored module budget.",
+      "Work in progress: native node/document interfaces and pointer ownership are implemented over pinned libxml2. Focused source QA bodies and real graph integration pass. Builder service, XPath, document SAX/IO facets, full DOM coverage, compiled C++ differential/thread ABI, metadata initialization and complete DOCX/XLSX file/UI paths remain unverified. No substitute node provider or alternate JS tree is installed."
+    ],
+    "omittedResponsibilities": [
+      "Work in progress: native node/document interfaces and pointer ownership are implemented over pinned libxml2. Focused source QA bodies and real graph integration pass. Builder service, XPath, document SAX/IO facets, full DOM coverage, compiled C++ differential/thread ABI, metadata initialization and complete DOCX/XLSX file/UI paths remain unverified. No substitute node provider or alternate JS tree is installed."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/unoxml/source/dom/document.import.ts",
+          "marker": "importNode"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/native-upstream-dom.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/native-tree.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/events/native-tree-dispatch.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/unoxml/source/dom/document.cxx",
+          "marker": "lcl_ImportNode"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/unoxml/source/dom/document.import.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original document.cxx import helpers use actual source facets and target document factory; separating this cohesive responsibility keeps authored modules below the repository size budget without changing the node import contract."
+    }
+  }
+}

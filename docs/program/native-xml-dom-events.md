@@ -34,31 +34,19 @@ shared namespace-pointer semantics consumed by LibreOffice. Those gaps and the
 published libxml2-wasm export gaps led to the pinned native runtime described in
 [native XML runtime](native-xml-runtime.md). Existing SAX imports still use `saxes`.
 
-## Dispatcher integration in progress
+## Dispatcher integration
 
-`CEventDispatcher` now represents the native listener maps, acquired snapshots,
-event cloning and capture/target/bubble traversal. Raw node identity now uses actual
-pinned libxml2 WASM addresses and native parent fields, including attributes.
-No JavaScript `ownerElement` approximation remains in the dispatcher. `CDocument` is still only a consumed forward
-declaration (`GetCNode`) in the dispatch signature. No alternate factory or
-positive node-interface substitute is installed. Actual document/node owners
-must connect this path before propagation, cancellation, callback mutation,
-exception cleanup and whole-dispatcher coverage can be verified.
+The dispatcher now traverses actual CDocument/CNode wrappers over native libxml2
+pointers. Capture includes the target; target dispatch and optional bubbling retain
+the source ordering and cancellation rules. Listener snapshots hold acquired
+references across callback removal and additions. Exception tests check actual
+weak owner lifetimes after callback failure.
 
-Focused tests cover actual listener component lifetime, duplicate removal,
-retained empty type entries and the public equal-range callback helper. They
-do not prove whole dispatcher parity or its required 90% coverage. These remain
-open integration work, rather than a relaxed coverage gate.
+The focused six-file run passes 56 cases. The dispatcher has 95% branch coverage,
+98.70% statements and 100% functions/lines. This meets its 90% gate; the whole DOM
+tree does not yet meet that gate. No private cancellation hooks or substitute
+node factory is used. See [native UNO DOM tree](native-xml-dom-tree.md).
 
-The original `CDOMImplementation` singleton is also represented with its no-op
-`acquire`/`release`. Source issue #i113683# leaves `createDocument` and
-`createDocumentType` empty and `hasFeature` false. These native bodies are
-preserved; document creation must use the real document builder. The Java
-`DOMTest` checks `XDocument.getImplementation` through a concrete document;
-that upstream case remains pending with the actual document graph. The native
-QA sources contain no direct dispatcher or feature-method cases to port for
-this checkpoint.
-
-The dispatcher registry tests now use actual C document/node allocations. Full
-propagation is still unverified until CDocument/CNode wrapper construction exists;
-no alternate UNO node factory is installed to manufacture coverage.
+CDOMImplementation remains the original immortal singleton with empty creation
+results and false hasFeature. Builder, XPath, document SAX/IO facets, metadata
+services and complete DOCX/XLSX file/UI acceptance remain unfinished.

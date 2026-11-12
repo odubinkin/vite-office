@@ -1,0 +1,70 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/xml/sax/SAXParseException.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/xml/sax/SAXParseException.idl",
+    "localSymbols": [
+      "SAXParseException",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "SAXParseException",
+      "PublicId",
+      "SystemId",
+      "LineNumber",
+      "ColumnNumber"
+    ],
+    "preservedResponsibilities": [
+      "Original SAXParseException value uses actual SAXException inheritance, four declared members, shared CPPU metadata and real Any copy/extraction. Native documentbuilder error formatting preserves ASCII_US, line/int2 and empty identifier/context/wrapped defaults. IO callbacks use actual input streams and byte sequences, preserve close/freeOnClose statement order, and contain only UNO exceptions. Builder orchestration, UCB entity resolver/URI fallback and service registration remain unported; no alternate DocumentBuilder or fake process context is advertised. Native threading/ABI, complete upstream parser QA and DOCX/XLSX file/UI acceptance remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Builder service, UCB default resolver/URI fallback, complete source parser QA, full native ABI and file/UI acceptance remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/SAXParseException.ts",
+          "marker": "SAXParseException"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/SAXParseException.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/documentbuilder.errors.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/documentbuilder.io.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/xml/sax/SAXParseException.idl",
+          "marker": "SAXParseException"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/xml/sax/SAXParseException.idl",
+          "marker": "PublicId"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/xml/sax/SAXParseException.idl",
+          "marker": "SystemId"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/xml/sax/SAXParseException.idl",
+          "marker": "LineNumber"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/xml/sax/SAXParseException.idl",
+          "marker": "ColumnNumber"
+        }
+      ]
+    }
+  }
+}

@@ -93,5 +93,14 @@
     "xmlXPathRegisterFuncLookup",
     "xmlXPathRegisterNs",
     "xmlXPathRegisterVariableLookup"
+  ],
+  "headerEnumAnchors": [
+    "XML_ELEMENT_NODE",
+    "XML_ATTRIBUTE_ID",
+    "XML_PARSE_RECOVER",
+    "XPATH_UNDEFINED",
+    "XML_ERR_NONE",
+    "XML_INTERNAL_GENERAL_ENTITY",
+    "XML_PARSER_SEVERITY_VALIDITY_WARNING"
   ]
 }
