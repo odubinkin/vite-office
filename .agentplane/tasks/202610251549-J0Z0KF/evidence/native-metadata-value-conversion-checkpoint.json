@@ -1,0 +1,995 @@
+{
+  "status": "implemented-metadata-value-conversion-bounded-checkpoint-parent-continues",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "26efa3ac7bd15d9e9a7aff59f1e091a76e66409c",
+  "capability": "CAP-9c11f53a-8c08-4fd6-a3d1-7d69bae86c76",
+  "scope": "Actual Duration/DateWithTimezone/DateTimeWithTimezone SDK storage, original UTF16 scalar/date/time/duration conversion and SAL buffer integration, original Sfx propsToStrings over registered PropertyBag; source-backed guard migration for split date responsibility and actual Sfx->SAX dependency. Full metadata service and DOCX/XLSX core/shell/UI acceptance remain incomplete.",
+  "tests": {
+    "relatedCases": 110,
+    "relatedFiles": 16,
+    "command": {
+      "cwd": "apps/office",
+      "argv": [
+        "../../node_modules/.bin/vitest",
+        "run",
+        "--config",
+        "vite.config.ts",
+        "src/sax/source/tools/converter-date.test.ts",
+        "src/sax/source/tools/converter-temporal.test.ts",
+        "src/sax/source/tools/converter-double.test.ts",
+        "src/sax/source/tools/converter-number.test.ts",
+        "src/sax/source/tools/converter-bool.test.ts",
+        "src/sax/source/tools/converter.test.ts",
+        "src/offapi/com/sun/star/util/metadata-values.test.ts",
+        "src/sfx2/source/doc/SfxDocumentMetaData.values.test.ts",
+        "src/sal/rtl/oustringbuffer.test.ts",
+        "src/sal/rtl/approx.test.ts",
+        "src/sal/rtl/math.test.ts",
+        "src/sal/rtl/rounding.test.ts",
+        "src/sal/rtl/double-format.test.ts",
+        "src/sc/source/ui/docshell/impex.date.test.ts",
+        "src/sc/source/ui/docshell/impex.recognition.test.ts",
+        "src/comphelper/source/property/opropertybag.test.ts",
+        "--coverage",
+        "--coverage.provider=istanbul",
+        "--coverage.include=src/sal/inc/rtl/math.ts",
+        "--coverage.include=src/sal/inc/rtl/ustrbuf.ts",
+        "--coverage.include=src/sax/source/tools/converter.ts",
+        "--coverage.include=src/offapi/com/sun/star/util/DateTimeWithTimezone.ts",
+        "--coverage.include=src/offapi/com/sun/star/util/DateWithTimezone.ts",
+        "--coverage.include=src/offapi/com/sun/star/util/Duration.ts",
+        "--coverage.include=src/sax/source/tools/converter.datetime.ts",
+        "--coverage.include=src/sax/source/tools/converter.duration.ts",
+        "--coverage.include=src/sax/source/tools/converter.number.ts",
+        "--coverage.include=src/sfx2/source/doc/SfxDocumentMetaData.values.ts",
+        "--coverage.reportsDirectory=coverage/metadata-values",
+        "--coverage.thresholds.statements=90",
+        "--coverage.thresholds.branches=90",
+        "--coverage.thresholds.functions=90",
+        "--coverage.thresholds.lines=90"
+      ],
+      "wholeProductionOwners": [
+        "src/sal/inc/rtl/math.ts",
+        "src/sal/inc/rtl/ustrbuf.ts",
+        "src/sax/source/tools/converter.ts",
+        "src/offapi/com/sun/star/util/DateTimeWithTimezone.ts",
+        "src/offapi/com/sun/star/util/DateWithTimezone.ts",
+        "src/offapi/com/sun/star/util/Duration.ts",
+        "src/sax/source/tools/converter.datetime.ts",
+        "src/sax/source/tools/converter.duration.ts",
+        "src/sax/source/tools/converter.number.ts",
+        "src/sfx2/source/doc/SfxDocumentMetaData.values.ts"
+      ]
+    },
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 886,
+          "covered": 837,
+          "skipped": 0,
+          "pct": 94.46
+        },
+        "statements": {
+          "total": 990,
+          "covered": 932,
+          "skipped": 0,
+          "pct": 94.14
+        },
+        "functions": {
+          "total": 133,
+          "covered": 128,
+          "skipped": 0,
+          "pct": 96.24
+        },
+        "branches": {
+          "total": 699,
+          "covered": 652,
+          "skipped": 0,
+          "pct": 93.27
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/util/DateTimeWithTimezone.ts": {
+        "lines": {
+          "total": 20,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 21,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/util/DateWithTimezone.ts": {
+        "lines": {
+          "total": 20,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 21,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/util/Duration.ts": {
+        "lines": {
+          "total": 43,
+          "covered": 43,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 44,
+          "covered": 44,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sal/inc/rtl/math.ts": {
+        "lines": {
+          "total": 16,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 93.75
+        },
+        "functions": {
+          "total": 8,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 87.5
+        },
+        "statements": {
+          "total": 18,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 94.44
+        },
+        "branches": {
+          "total": 26,
+          "covered": 26,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sal/inc/rtl/ustrbuf.ts": {
+        "lines": {
+          "total": 141,
+          "covered": 137,
+          "skipped": 0,
+          "pct": 97.16
+        },
+        "functions": {
+          "total": 36,
+          "covered": 35,
+          "skipped": 0,
+          "pct": 97.22
+        },
+        "statements": {
+          "total": 158,
+          "covered": 154,
+          "skipped": 0,
+          "pct": 97.46
+        },
+        "branches": {
+          "total": 104,
+          "covered": 104,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/tools/converter.datetime.ts": {
+        "lines": {
+          "total": 232,
+          "covered": 230,
+          "skipped": 0,
+          "pct": 99.13
+        },
+        "functions": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 267,
+          "covered": 264,
+          "skipped": 0,
+          "pct": 98.87
+        },
+        "branches": {
+          "total": 240,
+          "covered": 237,
+          "skipped": 0,
+          "pct": 98.75
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/tools/converter.duration.ts": {
+        "lines": {
+          "total": 115,
+          "covered": 112,
+          "skipped": 0,
+          "pct": 97.39
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 127,
+          "covered": 124,
+          "skipped": 0,
+          "pct": 97.63
+        },
+        "branches": {
+          "total": 106,
+          "covered": 103,
+          "skipped": 0,
+          "pct": 97.16
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/tools/converter.number.ts": {
+        "lines": {
+          "total": 41,
+          "covered": 41,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 45,
+          "covered": 44,
+          "skipped": 0,
+          "pct": 97.77
+        },
+        "branches": {
+          "total": 26,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 92.3
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/tools/converter.ts": {
+        "lines": {
+          "total": 111,
+          "covered": 76,
+          "skipped": 0,
+          "pct": 68.46
+        },
+        "functions": {
+          "total": 7,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 57.14
+        },
+        "statements": {
+          "total": 133,
+          "covered": 92,
+          "skipped": 0,
+          "pct": 69.17
+        },
+        "branches": {
+          "total": 124,
+          "covered": 87,
+          "skipped": 0,
+          "pct": 70.16
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/source/doc/SfxDocumentMetaData.values.ts": {
+        "lines": {
+          "total": 147,
+          "covered": 143,
+          "skipped": 0,
+          "pct": 97.27
+        },
+        "functions": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 156,
+          "covered": 151,
+          "skipped": 0,
+          "pct": 96.79
+        },
+        "branches": {
+          "total": 39,
+          "covered": 37,
+          "skipped": 0,
+          "pct": 94.87
+        }
+      }
+    },
+    "coverageGate": {
+      "threshold": 90,
+      "status": "pass",
+      "wholeProductionOwners": 10,
+      "exclusions": [],
+      "counterSelection": false
+    },
+    "sourceQA": {
+      "path": "sax/qa/cppunit/test_converter.cxx",
+      "gitBlob": "65eb7f0acfb3c9662f203e1be3f50670370b9fdd",
+      "originalCriteria": "Exact input/expected fields/normalized output/rejection calls, retaining duplicates. Original three UTF16 DateTime/time/structure-Duration entrypoints ported; native C++ binary parity and unrelated byte/floating Duration instantiations not claimed.",
+      "fixtures": {
+        "duration": {
+          "valid": 15,
+          "invalid": 11
+        },
+        "datetime": {
+          "valid": 17,
+          "invalid": 25
+        },
+        "time": {
+          "valid": 28,
+          "invalid": 40
+        }
+      }
+    },
+    "additionalCases": "Actual SDK layout/member widths/Any/Sequence copy, raw timezone/Date-vs-DateTime/untouched failure outputs, source overflow and year-zero rollover, bool/double buffer integration, actual registered PropertyBag transient/unsupported/string-index/temporal conversions, original CSV/double regression tests."
+  },
+  "browserQualification": {
+    "realms": [
+      "Chromium main",
+      "DOM-free module Worker"
+    ],
+    "metadataValues": {
+      "workerResult": {
+        "values": [
+          "2024-02-29+05:30",
+          "2024-02-29T03:04:05.000000009-01:30",
+          "-P1DT2H3M4.000000005S"
+        ],
+        "types": [
+          "date",
+          "date",
+          "time"
+        ]
+      },
+      "mainResult": {
+        "values": [
+          "2024-02-29+05:30",
+          "2024-02-29T03:04:05.000000009-01:30",
+          "-P1DT2H3M4.000000005S"
+        ],
+        "types": [
+          "date",
+          "date",
+          "time"
+        ]
+      }
+    },
+    "completeResults": {
+      "workerResult": {
+        "conversion": {
+          "serviceValue": 42,
+          "rowValue": 42,
+          "rowWasNull": false,
+          "failedFirst": 0,
+          "failedFirstWasNull": false,
+          "failedSecond": 0,
+          "failedSecondWasNull": true
+        },
+        "publicHelpers": {
+          "notifications": 1,
+          "sameEventSource": true,
+          "componentTypeCount": 3
+        },
+        "dynamicProperties": {
+          "changed": true,
+          "value": 42,
+          "initialDefault": 41,
+          "name": "workerValue",
+          "handle": 7,
+          "declaredLong": true,
+          "stableTypeField": true
+        },
+        "propertyArray": {
+          "count": 1,
+          "handle": 7,
+          "missing": -1,
+          "snapshotName": "workerValue",
+          "sameInfoIdentity": true
+        },
+        "legacyListeners": {
+          "remaining": 1,
+          "sameFirst": true,
+          "sameSnapshot": true,
+          "keyCount": 1,
+          "key": -7
+        },
+        "nativeAnyFields": {
+          "value": 43,
+          "initialDefault": 41,
+          "liveType": true,
+          "interfaceIdentity": true
+        },
+        "nativePropertyControl": {
+          "value": 42,
+          "storedLong": true,
+          "notifications": 1,
+          "notifiedTypeLong": false,
+          "notifiedValue": 42,
+          "notifiedOld": 41,
+          "sameSource": true,
+          "state": 0,
+          "initialStates": [
+            1,
+            0
+          ],
+          "typeCount": 7
+        },
+        "registeredPropertyBag": {
+          "value": 42,
+          "count": 1,
+          "modified": true,
+          "directState": 0,
+          "sameIdentity": true
+        },
+        "nativeSax": {
+          "calls": [
+            "begin",
+            "start:root:0",
+            "text:worker SAX\u5b57",
+            "end",
+            "finish"
+          ],
+          "sameIdentity": true
+        },
+        "metadataValues": {
+          "values": [
+            "2024-02-29+05:30",
+            "2024-02-29T03:04:05.000000009-01:30",
+            "-P1DT2H3M4.000000005S"
+          ],
+          "types": [
+            "date",
+            "date",
+            "time"
+          ]
+        },
+        "documentBuilder": {
+          "rootName": "document-content",
+          "streamOpen": true,
+          "namespaceAware": true,
+          "validating": false,
+          "emptyImplementation": true,
+          "capturedType": true,
+          "sameContext": true,
+          "exceptionMessage": "worker exception"
+        },
+        "xpath": {
+          "count": 1,
+          "listLength": 1,
+          "sameRoot": true
+        },
+        "globals": {
+          "window": "undefined",
+          "document": "undefined",
+          "DOMParser": "undefined"
+        },
+        "rootName": "document-content",
+        "attribute": "1.0",
+        "listCounts": [
+          0,
+          1,
+          0
+        ],
+        "sameOwner": true,
+        "unicode": "\ud83d\ude00\u5b57",
+        "utf16Length": 3,
+        "borrowedStreamOpen": true,
+        "warnings": 1,
+        "errors": 0,
+        "warningLine": 1
+      },
+      "mainResult": {
+        "conversion": {
+          "serviceValue": 42,
+          "rowValue": 42,
+          "rowWasNull": false,
+          "failedFirst": 0,
+          "failedFirstWasNull": false,
+          "failedSecond": 0,
+          "failedSecondWasNull": true
+        },
+        "publicHelpers": {
+          "notifications": 1,
+          "sameEventSource": true,
+          "componentTypeCount": 3
+        },
+        "dynamicProperties": {
+          "changed": true,
+          "value": 42,
+          "initialDefault": 41,
+          "name": "workerValue",
+          "handle": 7,
+          "declaredLong": true,
+          "stableTypeField": true
+        },
+        "propertyArray": {
+          "count": 1,
+          "handle": 7,
+          "missing": -1,
+          "snapshotName": "workerValue",
+          "sameInfoIdentity": true
+        },
+        "legacyListeners": {
+          "remaining": 1,
+          "sameFirst": true,
+          "sameSnapshot": true,
+          "keyCount": 1,
+          "key": -7
+        },
+        "nativeAnyFields": {
+          "value": 43,
+          "initialDefault": 41,
+          "liveType": true,
+          "interfaceIdentity": true
+        },
+        "nativePropertyControl": {
+          "value": 42,
+          "storedLong": true,
+          "notifications": 1,
+          "notifiedTypeLong": false,
+          "notifiedValue": 42,
+          "notifiedOld": 41,
+          "sameSource": true,
+          "state": 0,
+          "initialStates": [
+            1,
+            0
+          ],
+          "typeCount": 7
+        },
+        "registeredPropertyBag": {
+          "value": 42,
+          "count": 1,
+          "modified": true,
+          "directState": 0,
+          "sameIdentity": true
+        },
+        "nativeSax": {
+          "calls": [
+            "begin",
+            "start:root:0",
+            "text:worker SAX\u5b57",
+            "end",
+            "finish"
+          ],
+          "sameIdentity": true
+        },
+        "metadataValues": {
+          "values": [
+            "2024-02-29+05:30",
+            "2024-02-29T03:04:05.000000009-01:30",
+            "-P1DT2H3M4.000000005S"
+          ],
+          "types": [
+            "date",
+            "date",
+            "time"
+          ]
+        },
+        "documentBuilder": {
+          "rootName": "document-content",
+          "streamOpen": true,
+          "namespaceAware": true,
+          "validating": false,
+          "emptyImplementation": true,
+          "capturedType": true,
+          "sameContext": true,
+          "exceptionMessage": "worker exception"
+        },
+        "xpath": {
+          "count": 1,
+          "listLength": 1,
+          "sameRoot": true
+        },
+        "globals": {
+          "window": "object",
+          "document": "object",
+          "DOMParser": "function"
+        },
+        "rootName": "document-content",
+        "attribute": "1.0",
+        "listCounts": [
+          0,
+          1,
+          0
+        ],
+        "sameOwner": true,
+        "unicode": "\ud83d\ude00\u5b57",
+        "utf16Length": 3,
+        "borrowedStreamOpen": true,
+        "warnings": 1,
+        "errors": 0,
+        "warningLine": 1
+      }
+    }
+  },
+  "architecture": "Existing exact inline date header rule moves from converter.ts to converter.datetime.ts; old path no longer qualifies, alias/deferred/executable-service restrictions retained. Sfx->SAX follows SfxDocumentMetaData.cxx and Library_sfx.mk; reverse denied. No generic cycle exception.",
+  "preservedIssues": [
+    "CALC556/WRITER490 nanosecond-only time omission",
+    "CALC557/WRITER491 duration sign/fraction omission",
+    "CALC558/WRITER492 descriptor index",
+    "CALC559/WRITER493 unsigned16 wrap/signed64 overflow zero",
+    "CALC297/WRITER494 existing UTC minutes arithmetic",
+    "CALC560/WRITER495 rollover through year zero"
+  ],
+  "remaining": [
+    "Full actual SfxDocumentMetaData service/DOM/storage orchestration and SDK document contracts",
+    "Native SAX Writer service and fast SAX/IO remainder",
+    "Actual DOCX/XLSX core import-export-reopen, Strict/Transitional fixture acceptance, shell and existing desktop/mobile UI",
+    "Previous broad DOM whole-owner branch90 gap remains documented by its own checkpoint, not changed or reclassified here"
+  ],
+  "knownBaseline": "Only css-style-matchers.ts:17/:76 JSDoc failures remain; doctor pre-existing managed-hook warning. Physical native ABI/allocator/iostream/machine-UB/shared-memory and byte/OStringBuffer/floating-duration instantiations remain unqualified.",
+  "recoveries": [
+    "Corrected real test typed-array equality without core layout changes.",
+    "Restored existing cross-realm byte parse path using native ArrayBuffer.isView after unchanged converter-double regression detected instanceof mismatch.",
+    "Recovered one wrong-cwd command without source mutation.",
+    "Updated guard exact responsibility path and source-proven Sfx link after graph gate failure; added reverse/old-path rejection tests.",
+    "Documented test callbacks and retained native separate overloads/dead source initialization with specific lint explanations; all scoped lint findings resolved."
+  ],
+  "fullSuite": "Not due within same actual agentplane task; user cadence is once every ten actual tasks.",
+  "userStopRule": "Latest user requires continuation without pauses. Goal and parent task stay active/incomplete.",
+  "checks": {
+    "related-tests-and-coverage": {
+      "command": "Exact tests.command argv, cwd apps/office",
+      "result": "pass:110cases/16files; whole-owner90gate passes",
+      "log": "apps/office/coverage/metadata-tests.log",
+      "sha256": "7f0bc63e5dd99fc1cf369e49cccb21a50ee8692271f53b07266927b9030f52f0"
+    },
+    "build": {
+      "command": "npm run typecheck && npm run test:static",
+      "result": "pass",
+      "log": "apps/office/coverage/metadata-build.log",
+      "sha256": "298a2842ebef44af000cd8eb9779ee3b0b85cc056b49cdb8c7c5657b28c1323d"
+    },
+    "registry-provenance": {
+      "command": "npm run inventory:registry:build; npm run inventory:registry:check; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity",
+      "result": "pass",
+      "log": "apps/office/coverage/metadata-registry-final.log",
+      "sha256": "da6bba64d8952554895a30085dd00bbd0af8eacf4606f5d650839523cdead8cb"
+    },
+    "static-gates": {
+      "command": "npm run check:dependencies; npm run check:file-size; npm run check:source-tree; npm run check:writer-resources; npm run check:calc-resources; npm run check:writer-hintids; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check",
+      "result": "pass; doctor existing hook readiness warning",
+      "log": "apps/office/coverage/metadata-static-gates.log",
+      "sha256": "9088c1920185dc05e00b7120632d433deca5853f8d2e79aea1970c22943554e2"
+    },
+    "boundary-resources": {
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts scripts/check-module-boundaries-xml.test.ts scripts/inline-date-boundary.test.ts scripts/writer-ui-resource-model.test.ts --maxWorkers=2",
+      "result": "pass:55cases/4files",
+      "log": "apps/office/coverage/metadata-boundary-tests.log",
+      "sha256": "765e8b5eb30173c44bb665cbcca9830bb74e72aa1599c9740902fcbcadb52d05"
+    },
+    "browser": {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node --experimental-strip-types scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/metadata-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    "eslint": {
+      "command": "node_modules/.bin/eslint all changed TypeScript/MJS paths --max-warnings 0",
+      "result": "pass",
+      "log": "apps/office/coverage/metadata-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "format": {
+      "command": "node_modules/.bin/prettier --check all changed source/docs/registry paths",
+      "result": "pass",
+      "log": "apps/office/coverage/metadata-format-check.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    "docs": {
+      "command": "npm run check:docs",
+      "result": "known-baseline-fail:only2css-style-matchersfindings",
+      "log": "apps/office/coverage/metadata-docs.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    }
+  },
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/offapi/com/sun/star/util/DateTimeWithTimezone.ts",
+      "gitBlob": "a6007133d2e454d7c8736ee1a4ab975e37e98794"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/util/DateWithTimezone.ts",
+      "gitBlob": "b092192cada453c6db997e880f18df53166cf34d"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/util/Duration.ts",
+      "gitBlob": "7424828d43c2a7a13fdb1fe85878f7e796f1931f"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/util/metadata-values.test.ts",
+      "gitBlob": "f61307f40bd525b5951df96667106984fbef0a6e"
+    },
+    {
+      "path": "apps/office/src/sal/inc/rtl/math.ts",
+      "gitBlob": "b95f956c122a89678f868b6fd22c9e11ea572feb"
+    },
+    {
+      "path": "apps/office/src/sal/inc/rtl/ustrbuf.ts",
+      "gitBlob": "61db83f54aa8e2d74102b5bd08117e260893a06b"
+    },
+    {
+      "path": "apps/office/src/sal/rtl/oustringbuffer.test.ts",
+      "gitBlob": "b0b72ee119a93bd031213f4e6ca4d599f1a860df"
+    },
+    {
+      "path": "apps/office/src/sax/source/tools/converter-temporal-cases.json",
+      "gitBlob": "e2b7227d740167ab691b5b0e77b8cdb00f6fd5da"
+    },
+    {
+      "path": "apps/office/src/sax/source/tools/converter-temporal.test.ts",
+      "gitBlob": "2dd1fd9114dac60e758faed177943ded954f4691"
+    },
+    {
+      "path": "apps/office/src/sax/source/tools/converter.datetime.ts",
+      "gitBlob": "9a892ccbc4dd627b27b600bbe2159801c2c84e61"
+    },
+    {
+      "path": "apps/office/src/sax/source/tools/converter.duration.ts",
+      "gitBlob": "67112ba5bf0dc5fd7bfc9026b7c0cd75dd8fc175"
+    },
+    {
+      "path": "apps/office/src/sax/source/tools/converter.number.ts",
+      "gitBlob": "54e310331a1a5e9de0e3b29a839d38970d740846"
+    },
+    {
+      "path": "apps/office/src/sax/source/tools/converter.ts",
+      "gitBlob": "2879679501953e69026bbdb141fad1cf3a47cfa2"
+    },
+    {
+      "path": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.values.test.ts",
+      "gitBlob": "7ee4c4f022d62f20b28211daa428a5e99884ef2c"
+    },
+    {
+      "path": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.values.ts",
+      "gitBlob": "e8226b43b7d3a8f7988c8a24b9d8b27dd0cee08a"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "2d3f8743518060b9f54b1bce18c8ab9eff43b722"
+    },
+    {
+      "path": "docs/program/native-metadata-value-conversion.md",
+      "gitBlob": "66f74344bcc2ec9623cc2c4654542468619b52f6"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-9c11f53a-8c08-4fd6-a3d1-7d69bae86c76.json",
+      "gitBlob": "8e58cd265b371dfb97b6ee830dcc73c52ec5af59"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/util/DateTimeWithTimezone.ts.json",
+      "gitBlob": "248031996e0eb3c23dbe47d36a52be4f76863537"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/util/DateWithTimezone.ts.json",
+      "gitBlob": "3878c8f0fcb8406dea23d85d43ed8a2afe674b54"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/util/Duration.ts.json",
+      "gitBlob": "931ea0a26e1bf1c36c9b7dbedfe39a17f9583b24"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sal/inc/rtl/math.ts.json",
+      "gitBlob": "3b7f036fc8bfddc94132bf0253106b2d6c546b7f"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sal/inc/rtl/ustrbuf.ts.json",
+      "gitBlob": "3c6f6932b9e1a8bd4232a1b8360efa34a0c0b4e3"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sax/source/tools/converter.datetime.ts.json",
+      "gitBlob": "e423b10f552ac8e280abcc3bbcf1578ade3e881f"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sax/source/tools/converter.duration.ts.json",
+      "gitBlob": "473f3bc784df8538ad56d3350b1cab73416f3790"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sax/source/tools/converter.number.ts.json",
+      "gitBlob": "94e7e520a1d2ffdd983d8987dbb3d3129622f500"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sax/source/tools/converter.ts.json",
+      "gitBlob": "45d640fd59e8075850a8206a721c50ec3852014f"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sfx2/source/doc/SfxDocumentMetaData.values.ts.json",
+      "gitBlob": "e73877a0ce89a23014664f848d3e695c1c886740"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/util/DateTimeWithTimezone.ts.json",
+      "gitBlob": "3276bb17604bdc098f1fd9d6676fa080b21c15ba"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/util/DateWithTimezone.ts.json",
+      "gitBlob": "17f3e8e1fd873c169b44d1fa0a24ff71eda2da5d"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/util/Duration.ts.json",
+      "gitBlob": "e8eb88ba90cba50d80cfcebd4ed1de7066804a74"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sal/inc/rtl/math.ts.json",
+      "gitBlob": "6101f6fbfb35a7253520148a2e39e4590e19f79d"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sal/inc/rtl/ustrbuf.ts.json",
+      "gitBlob": "ef05fddacaa3fa1dcb3c2143ec7d13f9d86e9127"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sax/source/tools/converter.datetime.ts.json",
+      "gitBlob": "e7719afd4a1e21fb2d27d88202a74d916ea760e6"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sax/source/tools/converter.duration.ts.json",
+      "gitBlob": "62b7daca3147db769e5f44d507a88baa56106ac9"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sax/source/tools/converter.number.ts.json",
+      "gitBlob": "3ccccb48b75f2a2adcac6a258358b050955fdeb3"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sax/source/tools/converter.ts.json",
+      "gitBlob": "abb1f6d03abe4849b9450868a1b00c27ee3603a6"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sfx2/source/doc/SfxDocumentMetaData.values.ts.json",
+      "gitBlob": "c2de3b0ac4585608b28cf04f41a3409ce8599e05"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "660ef649b79272221b8228a5ba6c895094cbf9fe"
+    },
+    {
+      "path": "scripts/check-module-boundaries-xml.test.ts",
+      "gitBlob": "dfda9d07e1734794ac94bbe2881ece3cfcb0ff9d"
+    },
+    {
+      "path": "scripts/check-module-boundaries.mjs",
+      "gitBlob": "b4c6d3e34613d2ca0ee27c6ac19bcc0b551ec29f"
+    },
+    {
+      "path": "scripts/fixtures/native-dom-worker-probe.ts",
+      "gitBlob": "a62e043c2bca2f99c56302063558ba57006a2e67"
+    },
+    {
+      "path": "scripts/inline-date-boundary.test.ts",
+      "gitBlob": "e35b7cf6ffa2754e074289d464decc82d928165c"
+    },
+    {
+      "path": "scripts/module-boundaries/allowed-edges.mjs",
+      "gitBlob": "84e32a08e9af56dc1501a1a45f09cdc53d0be03a"
+    },
+    {
+      "path": "scripts/module-boundaries/inline-date-imports.mjs",
+      "gitBlob": "f49742e535a23d9684f1de9d34324169c509e487"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "gitBlob": "68fbed12b8c4f0a6a339b047925db0ff731afb15"
+    }
+  ],
+  "upstreamBlobs": [
+    {
+      "path": "codemaker/source/cppumaker/cpputype.cxx",
+      "gitBlob": "152dbf476955dd95b1d7623ca7342cc69c24fb0a"
+    },
+    {
+      "path": "include/comphelper/date.hxx",
+      "gitBlob": "22247f71fe5dd7327469a9bec7e9ba3a563490e5"
+    },
+    {
+      "path": "include/rtl/math.hxx",
+      "gitBlob": "b64e44fad907fb2a9cc088f35d13348589377d42"
+    },
+    {
+      "path": "include/rtl/ustrbuf.hxx",
+      "gitBlob": "8a162ee664a4003568d23d8b99446354d7e10589"
+    },
+    {
+      "path": "include/sax/tools/converter.hxx",
+      "gitBlob": "b3b971e795c4f53f889a94a92505fd86e2a8f93b"
+    },
+    {
+      "path": "offapi/com/sun/star/util/DateTimeWithTimezone.idl",
+      "gitBlob": "713bdc4e081a8c34153d00af0c72b33b702bb403"
+    },
+    {
+      "path": "offapi/com/sun/star/util/DateWithTimezone.idl",
+      "gitBlob": "a22e7858c7e708e2b5f89937cfe190cf6ed2ccc2"
+    },
+    {
+      "path": "offapi/com/sun/star/util/Duration.idl",
+      "gitBlob": "d1f5d2d2f2aea41d1b7c584f531c478b2f058cd0"
+    },
+    {
+      "path": "sal/rtl/math.cxx",
+      "gitBlob": "9198cfe46921a75c63864a11d44f559d4be9b4bb"
+    },
+    {
+      "path": "sal/rtl/strtmpl.hxx",
+      "gitBlob": "1384c891d41d62c3ad43bf6b5ed0757774da64f8"
+    },
+    {
+      "path": "sal/rtl/ustring.cxx",
+      "gitBlob": "ad71026a9c2ad59b9a920f2cb3ab622775711f19"
+    },
+    {
+      "path": "sax/qa/cppunit/test_converter.cxx",
+      "gitBlob": "65eb7f0acfb3c9662f203e1be3f50670370b9fdd"
+    },
+    {
+      "path": "sax/source/tools/converter.cxx",
+      "gitBlob": "e6863ada9d31e8ccbfb9477e3562093af5812c28"
+    },
+    {
+      "path": "sfx2/Library_sfx.mk",
+      "gitBlob": "b0fb8d00fe9c761820214db07ce52c2aff244c36"
+    },
+    {
+      "path": "sfx2/source/doc/SfxDocumentMetaData.cxx",
+      "gitBlob": "973f441ceb59a95d034a52def104d4d186e77bf8"
+    }
+  ]
+}

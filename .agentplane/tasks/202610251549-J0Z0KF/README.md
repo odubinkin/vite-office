@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 277
+revision: 280
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T21:02:45.361Z"
+  updated_at: "2026-11-12T21:47:19.371Z"
   updated_by: "CODER"
-  note: "Native classic DOM SAX/real AttributeList ownership implemented;151 related cases/17 files pass, actual Chromium main and DOM-free Worker plus build/source gates pass. Whole18-owner branch coverage82.6 still fails approved90 gate; prior2 docs findings and fast SAX/source QA/metadata/final DOCX-XLSX UI acceptance remain. Evidence native-dom-classic-sax-checkpoint.json; continue parent, not complete."
-  attempts: 81
+  note: "Metadata value-conversion checkpoint passes 110 related tests, scoped90 whole10 owners, 55 boundary/resource tests and main/DOM-free Worker proof. Original136 converter QA fixtures ported. Full Sfx metadata service and DOCX/XLSX core/shell/UI acceptance remain incomplete; prior DOM branch gap remains. Evidence: native-metadata-value-conversion-checkpoint.json. Continue approved parent; no pause."
+  attempts: 82
 commit: null
 comments:
   -
@@ -264,6 +264,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved document metadata and DOCX/XLSX core/UI work after the bounded classic SAX ownership checkpoint; preserve the explicit branch90/source-QA gaps and keep the goal active without new pauses."
+  -
+    author: "CODER"
+    body: "Start: continue approved metadata document service and DOCX/XLSX core/UI work after verified value-conversion checkpoint; no pause."
 events:
   -
     type: "status"
@@ -1304,8 +1307,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue approved document metadata and DOCX/XLSX core/UI work after the bounded classic SAX ownership checkpoint; preserve the explicit branch90/source-QA gaps and keep the goal active without new pauses."
+  -
+    type: "verify"
+    at: "2026-11-12T21:47:19.371Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Metadata value-conversion checkpoint passes 110 related tests, scoped90 whole10 owners, 55 boundary/resource tests and main/DOM-free Worker proof. Original136 converter QA fixtures ported. Full Sfx metadata service and DOCX/XLSX core/shell/UI acceptance remain incomplete; prior DOM branch gap remains. Evidence: native-metadata-value-conversion-checkpoint.json. Continue approved parent; no pause."
+  -
+    type: "status"
+    at: "2026-11-12T21:47:24.367Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue approved metadata document service and DOCX/XLSX core/UI work after verified value-conversion checkpoint; no pause."
 doc_version: 3
-doc_updated_at: "2026-11-12T21:02:58.967Z"
+doc_updated_at: "2026-11-12T21:47:24.367Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -3750,6 +3766,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T21:47:19.371Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Metadata value-conversion checkpoint passes 110 related tests, scoped90 whole10 owners, 55 boundary/resource tests and main/DOM-free Worker proof. Original136 converter QA fixtures ported. Full Sfx metadata service and DOCX/XLSX core/shell/UI acceptance remain incomplete; prior DOM branch gap remains. Evidence: native-metadata-value-conversion-checkpoint.json. Continue approved parent; no pause.
+    Attempts: 82
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T21:47:18.799Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4189,6 +4235,10 @@ sections:
     - Recovery: initial branch90 failure retained without lowering the approved gate; generated XCloneable namespace corrected to exact util IDL and SDK QName/base tests pass. The node header evidence path was corrected after an explicit pinned-tree lookup to unoxml/inc/node.hxx. No unrelated source/policy/approval change. Verify Steps now reflect the user's already approved90 threshold instead of stale100 wording.
     - Evidence: native-dom-classic-sax-checkpoint.json records76 intentional source/artifact paths including9 deletions,25 pinned upstream blobs, raw whole-owner coverage, exact focused argv, hashed command logs and complete main/Worker results. CALC-555/WRITER489 preserve source basic-handler omission of CDATA/PI. Full suite not due under the user's ten-actual-task cadence.
     - Remaining: SfxDocumentMetaData and real metadata SDK/converter/storage/SAX Writer paths, fast SAX/IO/source QA, coverage90 and complete DOCX/XLSX Strict/Transitional core/shell/existing UI acceptance. Latest user continuation supersedes prior pauses; goal and parent remain active.
+
+    - Observation: Command: exact argv in evidence/native-metadata-value-conversion-checkpoint.json (cwd apps/office). Result: pass, 110 related cases/16 files; 136 exact original ConverterTest Duration/DateTime/time fixtures retain duplicates and original parse/field/format/reject criteria. Ten complete changed production owners retain scoped90 gates: statements94.14%, branches93.27%, functions96.24%, lines94.46%, with no excluded lines/functions or fabricated type/value/default/provider state. Scope: actual temporal SDK compound storage, original SAX UTF16 conversion, native SAL buffer formatting and SfxDocumentMetaData scalar/property conversions over the production registered PropertyBag.
+      Impact: Chromium main and DOM-free Worker both produce the same real Date/DateTime timezone and Duration metadata strings/type attributes. Native bool/double buffer operations and CSV/double/property-bag regressions pass. CALC556..560 and WRITER490..495 preserve source quirks (including existing CALC297 minute arithmetic); journals distinguish source analysis and JS tests from unperformed compiled-native differential qualification. Full metadata service/storage and DOCX/XLSX core/shell/UI acceptance remain incomplete. Prior broad DOM branch90 shortfall stays explicitly open in its own evidence.
+      Resolution: Command: scoped ESLint/Prettier, typecheck/build/static, dependencies/resources/size/source-tree, source-provenance/registry/invariants/parity, doctor/routing/diff and 55 boundary/resource cases/4 files. Result: pass except known baseline docs errors only css-style-matchers.ts:17/:76; doctor retains existing hook readiness warning. Scope: all46 intentional paths and15 source blobs are recorded in the checkpoint. Recovered wrong-cwd command and typed-array test expectation without core changes; unchanged byte-parser regression exposed realm-specific instanceof and was fixed with actual ArrayBuffer.isView. The inline date rule now follows converter.datetime.ts only, with old-path/binding/deferred-service rejection retained; Sfx->SAX follows original Library_sfx and source include, reverse edge stays forbidden. No generic cycle exception. New test JSDoc and scoped lint findings are resolved. Full suite not due under ten-actual-task cadence; no publication or whole-format verification claim. Latest user requires continued work without pauses; retain DOING/needs_rework and continue actual metadata DOM/service/storage, then format core/shell/UI.
 id_source: "generated"
 ---
 ## Summary
@@ -6643,6 +6693,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T21:47:19.371Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Metadata value-conversion checkpoint passes 110 related tests, scoped90 whole10 owners, 55 boundary/resource tests and main/DOM-free Worker proof. Original136 converter QA fixtures ported. Full Sfx metadata service and DOCX/XLSX core/shell/UI acceptance remain incomplete; prior DOM branch gap remains. Evidence: native-metadata-value-conversion-checkpoint.json. Continue approved parent; no pause.
+Attempts: 82
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T21:47:18.799Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7086,3 +7166,7 @@ Native DOM classic SAX and attribute ownership checkpoint (2026-11-13):
 - Recovery: initial branch90 failure retained without lowering the approved gate; generated XCloneable namespace corrected to exact util IDL and SDK QName/base tests pass. The node header evidence path was corrected after an explicit pinned-tree lookup to unoxml/inc/node.hxx. No unrelated source/policy/approval change. Verify Steps now reflect the user's already approved90 threshold instead of stale100 wording.
 - Evidence: native-dom-classic-sax-checkpoint.json records76 intentional source/artifact paths including9 deletions,25 pinned upstream blobs, raw whole-owner coverage, exact focused argv, hashed command logs and complete main/Worker results. CALC-555/WRITER489 preserve source basic-handler omission of CDATA/PI. Full suite not due under the user's ten-actual-task cadence.
 - Remaining: SfxDocumentMetaData and real metadata SDK/converter/storage/SAX Writer paths, fast SAX/IO/source QA, coverage90 and complete DOCX/XLSX Strict/Transitional core/shell/existing UI acceptance. Latest user continuation supersedes prior pauses; goal and parent remain active.
+
+- Observation: Command: exact argv in evidence/native-metadata-value-conversion-checkpoint.json (cwd apps/office). Result: pass, 110 related cases/16 files; 136 exact original ConverterTest Duration/DateTime/time fixtures retain duplicates and original parse/field/format/reject criteria. Ten complete changed production owners retain scoped90 gates: statements94.14%, branches93.27%, functions96.24%, lines94.46%, with no excluded lines/functions or fabricated type/value/default/provider state. Scope: actual temporal SDK compound storage, original SAX UTF16 conversion, native SAL buffer formatting and SfxDocumentMetaData scalar/property conversions over the production registered PropertyBag.
+  Impact: Chromium main and DOM-free Worker both produce the same real Date/DateTime timezone and Duration metadata strings/type attributes. Native bool/double buffer operations and CSV/double/property-bag regressions pass. CALC556..560 and WRITER490..495 preserve source quirks (including existing CALC297 minute arithmetic); journals distinguish source analysis and JS tests from unperformed compiled-native differential qualification. Full metadata service/storage and DOCX/XLSX core/shell/UI acceptance remain incomplete. Prior broad DOM branch90 shortfall stays explicitly open in its own evidence.
+  Resolution: Command: scoped ESLint/Prettier, typecheck/build/static, dependencies/resources/size/source-tree, source-provenance/registry/invariants/parity, doctor/routing/diff and 55 boundary/resource cases/4 files. Result: pass except known baseline docs errors only css-style-matchers.ts:17/:76; doctor retains existing hook readiness warning. Scope: all46 intentional paths and15 source blobs are recorded in the checkpoint. Recovered wrong-cwd command and typed-array test expectation without core changes; unchanged byte-parser regression exposed realm-specific instanceof and was fixed with actual ArrayBuffer.isView. The inline date rule now follows converter.datetime.ts only, with old-path/binding/deferred-service rejection retained; Sfx->SAX follows original Library_sfx and source include, reverse edge stays forbidden. No generic cycle exception. New test JSDoc and scoped lint findings are resolved. Full suite not due under ten-actual-task cadence; no publication or whole-format verification claim. Latest user requires continued work without pauses; retain DOING/needs_rework and continue actual metadata DOM/service/storage, then format core/shell/UI.
