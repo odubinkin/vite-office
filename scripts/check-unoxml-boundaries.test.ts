@@ -6,7 +6,7 @@ import {
   getRuntimeOwnershipViolation,
 } from "./check-module-boundaries.mjs";
 it("admits source-backed unoxml event dependencies without application or presentation edges", /** Library_unoxml links CPPU/cppuhelper/SAL and consumes SDK API; event headers/source do not own application models or browser adapters. @returns Nothing. */ () => {
-  for (const dependency of ["cppu", "cppuhelper", "offapi", "sal"])
+  for (const dependency of ["cppu", "cppuhelper", "external", "offapi", "sal"])
     expect(isForbiddenModuleEdge("unoxml", dependency)).toBe(false);
   for (const dependency of ["sw", "sc", "vcl", "sfx2", "framework"])
     expect(isForbiddenModuleEdge("unoxml", dependency)).toBe(true);

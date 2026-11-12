@@ -20,6 +20,9 @@ export default tseslint.config(
       "**/test-results/**",
       "vendor/**",
       "third_party/libnumbertext-js/**",
+      // Generated Emscripten binary loader and Clang-derived C declarations are byte-exact build artifacts.
+      "third_party/libxml2-wasm/libxml2.mjs",
+      "third_party/libxml2-wasm/index.d.ts",
       "output/playwright/**",
     ],
   },

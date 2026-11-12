@@ -5461,3 +5461,9 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source: `unoxml/source/dom/domimplementation.cxx`, all three XDOMImplementation methods, same pinned baseline; shared with WRITER461.
 - The process-lifetime singleton implements `createDocument` and `createDocumentType` as empty reference returns and `hasFeature` as false, with source diagnostics citing #i113683#. Preserve these bodies rather than delegating to the JavaScript backend's functioning factories. Actual document construction belongs to CDocumentBuilder. Direct singleton/query/default tests pass; document-mediated upstream QA remains pending.
+
+### CALC-528 — DOM clone ownership differs between the wrapper and the copied C node
+
+- Source: `unoxml/source/dom/node.cxx`, `CNode::cloneNode` and `appendChild`, LibreOffice baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER462. The pinned libxml2 2.15.3 `tree.c` calls `xmlStaticCopyNode(node, NULL, NULL, extended)` from `xmlCopyNode`.
+- The wrapper factory keeps the original CDocument owner, while the copied native node has a null `doc` pointer. `appendChild` compares raw `cur->doc` with the receiving node's raw document before insertion. Consequently its source checks reject such a clone as WRONG_DOCUMENT even though the wrapper reports the original document owner. Do not repair this by assigning a document pointer during clone wrapping.
+- The actual pinned native C build reproduces the null document pointer for a deep element clone in Node and Chromium. Wrapper-level append rejection remains source-derived until the real native UNO document/node graph exists; no fake wrapper or compiled C++ UNO witness is claimed.

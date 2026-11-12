@@ -1,0 +1,77 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-50103a1f-6aa6-4b77-b0c4-bd8cf3c650f0",
+    "capabilityId": "CAP-50103a1f-6aa6-4b77-b0c4-bd8cf3c650f0",
+    "suite": "shared",
+    "subsystem": "native-xml-runtime",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Browser delivery binding loads the actual pinned libxml2 2.15.3 C implementation compiled to WASM. Source checksum matches LibreOffice download.lst; the generated loader exports consumed native APIs and C struct accessors, and Clang generates actual C function signatures. Realm-local initialization and byte buffers do not introduce a JavaScript DOM or alternate native allocator. Focused owner tests and native Node/Chromium Worker/main-realm probes cover dependency initialization, actual attribute child trees, shared namespaces, text coalescing, clone document ownership and XML IO. Concrete UNO DOM owners, dispatcher coverage, metadata and complete DOCX/XLSX file/UI parity remain unverified."
+    ],
+    "capability": "Pinned native XML runtime delivery",
+    "gaps": [
+      "Actual native UNO DOM graph, dispatcher propagation/coverage, metadata services and complete DOCX/XLSX import/export/UI remain unfinished."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "external/libxml2/ExternalProject_libxml2.mk",
+          "marker": "gb_ExternalProject_run"
+        },
+        {
+          "path": "unoxml/source/dom/node.cxx",
+          "marker": "xmlCopyNode"
+        }
+      ],
+      "tests": [
+        {
+          "path": "unoxml/qa/unit/domtest.cxx",
+          "marker": "testXDocumentBuilder"
+        }
+      ],
+      "docs": [
+        {
+          "path": "external/libxml2/README",
+          "marker": "Gnome xml parser"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/external/libxml2/libxml2.ts",
+          "marker": "initializeLibXml2"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/external/libxml2/libxml2.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-xml-runtime.md",
+          "marker": "# Native libxml2 runtime binding"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser delivery binding loads the actual pinned libxml2 2.15.3 C implementation compiled to WASM. Source checksum matches LibreOffice download.lst; the generated loader exports consumed native APIs and C struct accessors, and Clang generates actual C function signatures. Realm-local initialization and byte buffers do not introduce a JavaScript DOM or alternate native allocator. Focused owner tests and native Node/Chromium Worker/main-realm probes cover dependency initialization, actual attribute child trees, shared namespaces, text coalescing, clone document ownership and XML IO. Concrete UNO DOM owners, dispatcher coverage, metadata and complete DOCX/XLSX file/UI parity remain unverified."
+    },
+    "scopeLimitations": [
+      "Browser delivery binding loads the actual pinned libxml2 2.15.3 C implementation compiled to WASM. Source checksum matches LibreOffice download.lst; the generated loader exports consumed native APIs and C struct accessors, and Clang generates actual C function signatures. Realm-local initialization and byte buffers do not introduce a JavaScript DOM or alternate native allocator. Focused owner tests and native Node/Chromium Worker/main-realm probes cover dependency initialization, actual attribute child trees, shared namespaces, text coalescing, clone document ownership and XML IO. Concrete UNO DOM owners, dispatcher coverage, metadata and complete DOCX/XLSX file/UI parity remain unverified."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-xml-runtime-binding"
+  }
+}

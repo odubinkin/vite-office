@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/external/libxml2/libxml2.ts",
+    "rationale": "Browser delivery binding loads the actual pinned libxml2 2.15.3 C implementation compiled to WASM. Source checksum matches LibreOffice download.lst; the generated loader exports consumed native APIs and C struct accessors, and Clang generates actual C function signatures. Realm-local initialization and byte buffers do not introduce a JavaScript DOM or alternate native allocator. Focused owner tests and native Node/Chromium Worker/main-realm probes cover dependency initialization, actual attribute child trees, shared namespaces, text coalescing, clone document ownership and XML IO. Concrete UNO DOM owners, dispatcher coverage, metadata and complete DOCX/XLSX file/UI parity remain unverified.",
+    "responsibilities": [
+      "Browser delivery binding loads the actual pinned libxml2 2.15.3 C implementation compiled to WASM. Source checksum matches LibreOffice download.lst; the generated loader exports consumed native APIs and C struct accessors, and Clang generates actual C function signatures. Realm-local initialization and byte buffers do not introduce a JavaScript DOM or alternate native allocator. Focused owner tests and native Node/Chromium Worker/main-realm probes cover dependency initialization, actual attribute child trees, shared namespaces, text coalescing, clone document ownership and XML IO. Concrete UNO DOM owners, dispatcher coverage, metadata and complete DOCX/XLSX file/UI parity remain unverified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native source algorithms execute unchanged in WASM; module initialization, pointer marshalling and delivery are browser-owned. Native threads/dynamic modules are disabled for the realm-local browser target."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/libxml2/libxml2.ts",
+          "marker": "initializeLibXml2"
+        },
+        {
+          "path": "apps/office/src/external/libxml2/libxml2.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "third_party/libxml2-wasm/source.json",
+          "marker": "libxml2"
+        }
+      ]
+    },
+    "localSymbols": [
+      "LibXml2",
+      "XmlNodePtr",
+      "XmlDocPtr",
+      "XmlNsPtr",
+      "initializeLibXml2",
+      "getLibXml2",
+      "withXmlBytes"
+    ]
+  }
+}

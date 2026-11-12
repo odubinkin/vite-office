@@ -1,5 +1,5 @@
 /** @fileoverview Original native event dispatch, listener snapshots and propagation over actual XML nodes. CDocument's forward declaration is represented by its consumed GetCNode signature until the concrete tree owner is ported. */
-import type { Attr, Node } from "@xmldom/xmldom";
+import { getLibXml2, type XmlNodePtr } from "../../../external/libxml2/libxml2";
 import { Reference, UNO_QUERY_THROW } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import type { XNode } from "../../../offapi/com/sun/star/xml/dom/XNode";
@@ -16,7 +16,7 @@ import { CUIEvent } from "../../inc/uievent";
 import { CMouseEvent } from "../../inc/mouseevent";
 
 /** Native multimap entries retain insertion order within each equal node key. */
-export type ListenerMap = Map<Node | null, Reference<XEventListener>[]>;
+export type ListenerMap = Map<XmlNodePtr, Reference<XEventListener>[]>;
 /** Native OUString keys are compared by counted UTF16 value. */
 export type TypeListenerMap = Map<string, ListenerMap>;
 
@@ -54,7 +54,7 @@ export class CEventDispatcher {
   private readonly m_TargetListeners: TypeListenerMap = new Map();
   /** Native multimap insertion allows duplicate and empty references. @param pNode - Actual raw node. @param aType - Counted event type. @param aListener - Borrowed listener. @param bCapture - Map selector. @returns Nothing. */
   addListener(
-    pNode: Node | null,
+    pNode: XmlNodePtr,
     aType: OUStringConstReference,
     aListener: Reference<XEventListener>,
     bCapture: boolean,
@@ -69,7 +69,7 @@ export class CEventDispatcher {
   }
   /** Native erase removes all matching nonempty references and retains the type entry. @param pNode - Actual raw node. @param aType - Counted type. @param aListener - Listener identity. @param bCapture - Map selector. @returns Nothing. */
   removeListener(
-    pNode: Node | null,
+    pNode: XmlNodePtr,
     aType: OUStringConstReference,
     aListener: Reference<XEventListener>,
     bCapture: boolean,
@@ -97,7 +97,7 @@ export class CEventDispatcher {
   /** Original equal-range callback iteration skips empty references. @param rTMap - Borrowed snapshot. @param pNode - Raw target key. @param aType - Counted type. @param xEvent - Private event clone. @returns Nothing. */
   static callListeners(
     rTMap: TypeListenerMap,
-    pNode: Node | null,
+    pNode: XmlNodePtr,
     aType: OUStringConstReference,
     xEvent: Reference<XEvent>,
   ): void {
@@ -106,14 +106,14 @@ export class CEventDispatcher {
   }
   /** Original dispatch with source friend access to the actual CEvent owner. Native locks are inlined by this synchronous binding. No alternate node factory is installed here. @param rDocument - Consumed declaration of the actual document wrapper factory. @param pNode - Actual backend node. @param xNode - Actual native node facet. @param i_xEvent - Borrowed source event. @returns Nothing. */
   dispatchEvent(
-    rDocument: { GetCNode(node: Node): Reference<XNode> },
-    pNode: Node | null,
+    rDocument: { GetCNode(node: XmlNodePtr): Reference<XNode> },
+    pNode: XmlNodePtr,
     xNode: Reference<XNode>,
     i_xEvent: Reference<XEvent>,
   ): void {
     const capture = copyMap(this.m_CaptureListeners),
       target = copyMap(this.m_TargetListeners),
-      path: [Reference<XEventTarget>, Node][] = [];
+      path: [Reference<XEventTarget>, XmlNodePtr][] = [];
     let privateOwner: Reference<CEvent> | undefined;
     let type: ReturnType<XEvent["getType"]> | undefined;
     try {
@@ -252,8 +252,8 @@ export class CEventDispatcher {
       try {
         for (
           let cursor = pNode;
-          cursor !== null;
-          cursor = cursor.nodeType === 2 ? (cursor as Attr).ownerElement : cursor.parentNode
+          cursor !== 0;
+          cursor = getLibXml2()._office_node_parent_get(cursor)
         ) {
           const wrapper = rDocument.GetCNode(cursor);
           try {
@@ -268,16 +268,16 @@ export class CEventDispatcher {
         if (path.length === 0) return;
         event["m_phase"] = PhaseType.CAPTURING_PHASE;
         for (let i = path.length - 1; i >= 0; --i) {
-          const entry = path[i] as [Reference<XEventTarget>, Node];
+          const entry = path[i] as [Reference<XEventTarget>, XmlNodePtr];
           event["m_currentTarget"].assign(entry[0]);
           CEventDispatcher.callListeners(capture, entry[1], type, dispatched);
           if (event["m_canceled"]) return;
         }
         event["m_phase"] = PhaseType.AT_TARGET;
-        event["m_currentTarget"].assign((path[0] as [Reference<XEventTarget>, Node])[0]);
+        event["m_currentTarget"].assign((path[0] as [Reference<XEventTarget>, XmlNodePtr])[0]);
         CEventDispatcher.callListeners(
           target,
-          (path[0] as [Reference<XEventTarget>, Node])[1],
+          (path[0] as [Reference<XEventTarget>, XmlNodePtr])[1],
           type,
           dispatched,
         );
@@ -285,7 +285,7 @@ export class CEventDispatcher {
         if (input.getBubbles()) {
           event["m_phase"] = PhaseType.BUBBLING_PHASE;
           for (let i = 1; i < path.length; ++i) {
-            const entry = path[i] as [Reference<XEventTarget>, Node];
+            const entry = path[i] as [Reference<XEventTarget>, XmlNodePtr];
             event["m_currentTarget"].assign(entry[0]);
             CEventDispatcher.callListeners(target, entry[1], type, dispatched);
             if (event["m_canceled"]) return;

@@ -1,6 +1,6 @@
 /** @fileoverview Actual dispatcher registry and native listener ownership over genuine XML backend nodes. Full propagation waits for the real CDocument/CNode graph, with no fake node factory. */
 import { expect, it } from "vitest";
-import { DOMImplementation } from "@xmldom/xmldom";
+import { initializeLibXml2, withXmlBytes } from "../../../external/libxml2/libxml2";
 import { CEventDispatcher, type TypeListenerMap } from "./eventdispatcher";
 import { CEvent } from "./event";
 import { WeakImplHelper } from "../../../cppuhelper/inc/implbase";
@@ -19,15 +19,36 @@ class Listener extends WeakImplHelper.specialize(XEventListener) implements XEve
   }
 }
 
+/** Creates genuine native C nodes for raw-pointer listener keys, without a UNO node or document factory substitute. @returns Native allocation owner and nodes. */
+async function rawNodes() {
+  const module = await initializeLibXml2();
+  const doc = withXmlBytes(
+    new Uint8Array([49, 46, 48]),
+    /** Creates an actual native document. @param version - Native C string. @returns Document pointer. */
+    (version) => module._xmlNewDoc(version),
+  );
+  const node = withXmlBytes(
+    new Uint8Array([109, 101, 116, 97]),
+    /** Creates the actual root node. @param name - Native C string. @returns Element pointer. */
+    (name) => module._xmlNewDocNode(doc, 0, name, 0),
+  );
+  module._xmlDocSetRootElement(doc, node);
+  const other = withXmlBytes(
+    new Uint8Array([111, 116, 104, 101, 114]),
+    /** Creates another actual element. @param name - Native C string. @returns Element pointer. */
+    (name) => module._xmlNewDocNode(doc, 0, name, 0),
+  );
+  module._xmlAddChild(node, other);
+  return { module, doc, node, other };
+}
+
 it.each([false, true])(
   "retains duplicate listeners, removes all matches and keeps type entries (capture=%s)",
-  /** Exercises real listener lifetime without supplying a fake document factory. @param capture - Native listener map selection. @returns Nothing. */ (
+  /** Exercises real listener lifetime without supplying a fake document factory. @param capture - Native listener map selection. @returns Nothing. */ async (
     capture,
   ) => {
+    const { module, doc, node, other } = await rawNodes();
     const dispatcher = new CEventDispatcher(),
-      doc = new DOMImplementation().createDocument(null, "", null),
-      node = doc.createElement("meta"),
-      other = doc.createElement("other"),
       type = unicode("DOMSubtreeModified"),
       missing = unicode("missing"),
       listener = new Listener(),
@@ -69,6 +90,7 @@ it.each([false, true])(
       empty.dispose();
       missing.dispose();
       type.dispose();
+      module._xmlFreeDoc(doc);
     }
     expect(dispatcher.hasListeners()).toBe(false);
   },
@@ -81,8 +103,8 @@ it("releases both listener maps on document-owned dispatcher destruction", /** B
     owner = new Reference<XEventListener>(listener),
     weak = new WeakReferenceHelper(owner);
   try {
-    dispatcher.addListener(null, type, owner, false);
-    dispatcher.addListener(null, type, owner, true);
+    dispatcher.addListener(0, type, owner, false);
+    dispatcher.addListener(0, type, owner, true);
     owner.clear();
     dispatcher.dispose();
     const expired = weak.get();
@@ -99,11 +121,9 @@ it("releases both listener maps on document-owned dispatcher destruction", /** B
   }
 });
 
-it("calls only the equal node/type range, preserving duplicates and skipping null listeners", /** Actual native event is passed unchanged to actual listener callbacks. @returns Nothing. */ () => {
-  const doc = new DOMImplementation().createDocument(null, "", null),
-    node = doc.createElement("meta"),
-    other = doc.createElement("other"),
-    type = unicode("x\0字"),
+it("calls only the equal node/type range, preserving duplicates and skipping null listeners", /** Actual native event is passed unchanged to actual listener callbacks. @returns Nothing. */ async () => {
+  const { module, doc, node, other } = await rawNodes();
+  const type = unicode("x\0字"),
     missing = unicode("x"),
     listener = new Listener(),
     owner = new Reference<XEventListener>(listener),
@@ -123,5 +143,6 @@ it("calls only the equal node/type range, preserving duplicates and skipping nul
     owner.dispose();
     missing.dispose();
     type.dispose();
+    module._xmlFreeDoc(doc);
   }
 });

@@ -1,0 +1,474 @@
+[
+  {
+    "name": "_malloc",
+    "cType": "void *(__size_t)"
+  },
+  {
+    "name": "_free",
+    "cType": "void (void *)"
+  },
+  {
+    "name": "_xmlAddChild",
+    "cType": "xmlNode *(xmlNode *, xmlNode *)"
+  },
+  {
+    "name": "_xmlCopyDoc",
+    "cType": "xmlDoc *(xmlDoc *, int)"
+  },
+  {
+    "name": "_xmlCopyNode",
+    "cType": "xmlNode *(xmlNode *, int)"
+  },
+  {
+    "name": "_xmlCtxtGetLastError",
+    "cType": "const xmlError *(void *)"
+  },
+  {
+    "name": "_xmlCtxtReadFile",
+    "cType": "xmlDoc *(xmlParserCtxt *, const char *, const char *, int)"
+  },
+  {
+    "name": "_xmlCtxtReadIO",
+    "cType": "xmlDoc *(xmlParserCtxt *, xmlInputReadCallback, xmlInputCloseCallback, void *, const char *, const char *, int)"
+  },
+  {
+    "name": "_xmlDocCopyNode",
+    "cType": "xmlNode *(xmlNode *, xmlDoc *, int)"
+  },
+  {
+    "name": "_xmlDocGetRootElement",
+    "cType": "xmlNode *(const xmlDoc *)"
+  },
+  {
+    "name": "_xmlDocSetRootElement",
+    "cType": "xmlNode *(xmlDoc *, xmlNode *)"
+  },
+  {
+    "name": "_xmlEncodeEntitiesReentrant",
+    "cType": "xmlChar *(xmlDoc *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlFreeDoc",
+    "cType": "void (xmlDoc *)"
+  },
+  {
+    "name": "_xmlFreeNode",
+    "cType": "void (xmlNode *)"
+  },
+  {
+    "name": "_xmlFreeNodeList",
+    "cType": "void (xmlNode *)"
+  },
+  {
+    "name": "_xmlFreeNs",
+    "cType": "void (xmlNs *)"
+  },
+  {
+    "name": "_xmlFreeParserCtxt",
+    "cType": "void (xmlParserCtxt *)"
+  },
+  {
+    "name": "_xmlGetLastChild",
+    "cType": "xmlNode *(const xmlNode *)"
+  },
+  {
+    "name": "_xmlGetNsProp",
+    "cType": "xmlChar *(const xmlNode *, const xmlChar *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlGetProp",
+    "cType": "xmlChar *(const xmlNode *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlHasNsProp",
+    "cType": "xmlAttr *(const xmlNode *, const xmlChar *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlHasProp",
+    "cType": "xmlAttr *(const xmlNode *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlInitParser",
+    "cType": "void (void)"
+  },
+  {
+    "name": "_xmlNewCDataBlock",
+    "cType": "xmlNode *(xmlDoc *, const xmlChar *, int)"
+  },
+  {
+    "name": "_xmlNewDoc",
+    "cType": "xmlDoc *(const xmlChar *)"
+  },
+  {
+    "name": "_xmlNewDocComment",
+    "cType": "xmlNode *(xmlDoc *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlNewDocFragment",
+    "cType": "xmlNode *(xmlDoc *)"
+  },
+  {
+    "name": "_xmlNewDocNode",
+    "cType": "xmlNode *(xmlDoc *, xmlNs *, const xmlChar *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlNewDocPI",
+    "cType": "xmlNode *(xmlDoc *, const xmlChar *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlNewDocProp",
+    "cType": "xmlAttr *(xmlDoc *, const xmlChar *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlNewDocRawNode",
+    "cType": "xmlNode *(xmlDoc *, xmlNs *, const xmlChar *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlNewDocText",
+    "cType": "xmlNode *(const xmlDoc *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlNewIOInputStream",
+    "cType": "xmlParserInput *(xmlParserCtxt *, xmlParserInputBuffer *, xmlCharEncoding)"
+  },
+  {
+    "name": "_xmlNewNs",
+    "cType": "xmlNs *(xmlNode *, const xmlChar *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlNewNsProp",
+    "cType": "xmlAttr *(xmlNode *, xmlNs *, const xmlChar *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlNewParserCtxt",
+    "cType": "xmlParserCtxt *(void)"
+  },
+  {
+    "name": "_xmlNewProp",
+    "cType": "xmlAttr *(xmlNode *, const xmlChar *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlNewReference",
+    "cType": "xmlNode *(const xmlDoc *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlNewText",
+    "cType": "xmlNode *(const xmlChar *)"
+  },
+  {
+    "name": "_xmlNodeAddContent",
+    "cType": "int (xmlNode *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlNodeGetContent",
+    "cType": "xmlChar *(const xmlNode *)"
+  },
+  {
+    "name": "_xmlNodeSetContent",
+    "cType": "int (xmlNode *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlNodeSetName",
+    "cType": "void (xmlNode *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlOutputBufferCreateIO",
+    "cType": "xmlOutputBuffer *(xmlOutputWriteCallback, xmlOutputCloseCallback, void *, xmlCharEncodingHandler *)"
+  },
+  {
+    "name": "_xmlParserInputBufferCreateIO",
+    "cType": "xmlParserInputBuffer *(xmlInputReadCallback, xmlInputCloseCallback, void *, xmlCharEncoding)"
+  },
+  {
+    "name": "_xmlReadMemory",
+    "cType": "xmlDoc *(const char *, int, const char *, const char *, int)"
+  },
+  {
+    "name": "_xmlReconciliateNs",
+    "cType": "int (xmlDoc *, xmlNode *)"
+  },
+  {
+    "name": "_xmlRemoveProp",
+    "cType": "int (xmlAttr *)"
+  },
+  {
+    "name": "_xmlSaveFileTo",
+    "cType": "int (xmlOutputBuffer *, xmlDoc *, const char *)"
+  },
+  {
+    "name": "_xmlSearchNs",
+    "cType": "xmlNs *(xmlDoc *, xmlNode *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlSearchNsByHref",
+    "cType": "xmlNs *(xmlDoc *, xmlNode *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlSetExternalEntityLoader",
+    "cType": "void (xmlExternalEntityLoader)"
+  },
+  {
+    "name": "_xmlSetGenericErrorFunc",
+    "cType": "void (void *, xmlGenericErrorFunc)"
+  },
+  {
+    "name": "_xmlSetNs",
+    "cType": "void (xmlNode *, xmlNs *)"
+  },
+  {
+    "name": "_xmlSetNsProp",
+    "cType": "xmlAttr *(xmlNode *, xmlNs *, const xmlChar *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlSetProp",
+    "cType": "xmlAttr *(xmlNode *, const xmlChar *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlSetTreeDoc",
+    "cType": "int (xmlNode *, xmlDoc *)"
+  },
+  {
+    "name": "_xmlStrcmp",
+    "cType": "int (const xmlChar *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlStrdup",
+    "cType": "xmlChar *(const xmlChar *)"
+  },
+  {
+    "name": "_xmlStringGetNodeList",
+    "cType": "xmlNode *(const xmlDoc *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlStrlen",
+    "cType": "int (const xmlChar *)"
+  },
+  {
+    "name": "_xmlUnlinkNode",
+    "cType": "void (xmlNode *)"
+  },
+  {
+    "name": "_xmlUnsetNsProp",
+    "cType": "int (xmlNode *, xmlNs *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlUnsetProp",
+    "cType": "int (xmlNode *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlXPathCastToBoolean",
+    "cType": "int (xmlXPathObject *)"
+  },
+  {
+    "name": "_xmlXPathCastToNumber",
+    "cType": "double (xmlXPathObject *)"
+  },
+  {
+    "name": "_xmlXPathCastToString",
+    "cType": "xmlChar *(xmlXPathObject *)"
+  },
+  {
+    "name": "_xmlXPathEval",
+    "cType": "xmlXPathObject *(const xmlChar *, xmlXPathContext *)"
+  },
+  {
+    "name": "_xmlXPathFreeContext",
+    "cType": "void (xmlXPathContext *)"
+  },
+  {
+    "name": "_xmlXPathFreeObject",
+    "cType": "void (xmlXPathObject *)"
+  },
+  {
+    "name": "_xmlXPathNewContext",
+    "cType": "xmlXPathContext *(xmlDoc *)"
+  },
+  {
+    "name": "_xmlXPathRegisterFuncLookup",
+    "cType": "void (xmlXPathContext *, xmlXPathFuncLookupFunc, void *)"
+  },
+  {
+    "name": "_xmlXPathRegisterNs",
+    "cType": "int (xmlXPathContext *, const xmlChar *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlXPathRegisterVariableLookup",
+    "cType": "void (xmlXPathContext *, xmlXPathVariableLookupFunc, void *)"
+  },
+  {
+    "name": "_office_xmlVersion",
+    "cType": "const char *(void)"
+  },
+  {
+    "name": "_office_xmlFree",
+    "cType": "void (void *)"
+  },
+  {
+    "name": "_office_xmlXPathNodeSetGetLength",
+    "cType": "int (xmlNodeSetPtr)"
+  },
+  {
+    "name": "_office_xmlXPathNodeSetItem",
+    "cType": "xmlNodePtr (xmlNodeSetPtr, int)"
+  },
+  {
+    "name": "_office_node_type_get",
+    "cType": "xmlElementType (xmlNode *)"
+  },
+  {
+    "name": "_office_node_type_set",
+    "cType": "void (xmlNode *, xmlElementType)"
+  },
+  {
+    "name": "_office_node_name_get",
+    "cType": "const xmlChar *(xmlNode *)"
+  },
+  {
+    "name": "_office_node_name_set",
+    "cType": "void (xmlNode *, const xmlChar *)"
+  },
+  {
+    "name": "_office_node_children_get",
+    "cType": "xmlNodePtr (xmlNode *)"
+  },
+  {
+    "name": "_office_node_children_set",
+    "cType": "void (xmlNode *, xmlNodePtr)"
+  },
+  {
+    "name": "_office_node_last_get",
+    "cType": "xmlNodePtr (xmlNode *)"
+  },
+  {
+    "name": "_office_node_last_set",
+    "cType": "void (xmlNode *, xmlNodePtr)"
+  },
+  {
+    "name": "_office_node_parent_get",
+    "cType": "xmlNodePtr (xmlNode *)"
+  },
+  {
+    "name": "_office_node_parent_set",
+    "cType": "void (xmlNode *, xmlNodePtr)"
+  },
+  {
+    "name": "_office_node_next_get",
+    "cType": "xmlNodePtr (xmlNode *)"
+  },
+  {
+    "name": "_office_node_next_set",
+    "cType": "void (xmlNode *, xmlNodePtr)"
+  },
+  {
+    "name": "_office_node_prev_get",
+    "cType": "xmlNodePtr (xmlNode *)"
+  },
+  {
+    "name": "_office_node_prev_set",
+    "cType": "void (xmlNode *, xmlNodePtr)"
+  },
+  {
+    "name": "_office_node_doc_get",
+    "cType": "xmlDocPtr (xmlNode *)"
+  },
+  {
+    "name": "_office_node_doc_set",
+    "cType": "void (xmlNode *, xmlDocPtr)"
+  },
+  {
+    "name": "_office_node_ns_get",
+    "cType": "xmlNsPtr (xmlNode *)"
+  },
+  {
+    "name": "_office_node_ns_set",
+    "cType": "void (xmlNode *, xmlNsPtr)"
+  },
+  {
+    "name": "_office_node_content_get",
+    "cType": "xmlChar *(xmlNode *)"
+  },
+  {
+    "name": "_office_node_content_set",
+    "cType": "void (xmlNode *, xmlChar *)"
+  },
+  {
+    "name": "_office_node_properties_get",
+    "cType": "xmlAttrPtr (xmlNode *)"
+  },
+  {
+    "name": "_office_node_properties_set",
+    "cType": "void (xmlNode *, xmlAttrPtr)"
+  },
+  {
+    "name": "_office_node_nsDef_get",
+    "cType": "xmlNsPtr (xmlNode *)"
+  },
+  {
+    "name": "_office_node_nsDef_set",
+    "cType": "void (xmlNode *, xmlNsPtr)"
+  },
+  {
+    "name": "_office_ns_next_get",
+    "cType": "xmlNsPtr (xmlNs *)"
+  },
+  {
+    "name": "_office_ns_next_set",
+    "cType": "void (xmlNs *, xmlNsPtr)"
+  },
+  {
+    "name": "_office_ns_href_get",
+    "cType": "const xmlChar *(xmlNs *)"
+  },
+  {
+    "name": "_office_ns_href_set",
+    "cType": "void (xmlNs *, const xmlChar *)"
+  },
+  {
+    "name": "_office_ns_prefix_get",
+    "cType": "const xmlChar *(xmlNs *)"
+  },
+  {
+    "name": "_office_ns_prefix_set",
+    "cType": "void (xmlNs *, const xmlChar *)"
+  },
+  {
+    "name": "_office_attr_atype_get",
+    "cType": "xmlAttributeType (xmlAttr *)"
+  },
+  {
+    "name": "_office_attr_atype_set",
+    "cType": "void (xmlAttr *, xmlAttributeType)"
+  },
+  {
+    "name": "_office_dtd_publicId_get",
+    "cType": "xmlChar *(xmlDtd *)"
+  },
+  {
+    "name": "_office_dtd_publicId_set",
+    "cType": "void (xmlDtd *, xmlChar *)"
+  },
+  {
+    "name": "_office_dtd_systemId_get",
+    "cType": "xmlChar *(xmlDtd *)"
+  },
+  {
+    "name": "_office_dtd_systemId_set",
+    "cType": "void (xmlDtd *, xmlChar *)"
+  },
+  {
+    "name": "_office_dtd_entities_get",
+    "cType": "void *(xmlDtd *)"
+  },
+  {
+    "name": "_office_dtd_entities_set",
+    "cType": "void (xmlDtd *, void *)"
+  },
+  {
+    "name": "_office_dtd_notations_get",
+    "cType": "void *(xmlDtd *)"
+  },
+  {
+    "name": "_office_dtd_notations_set",
+    "cType": "void (xmlDtd *, void *)"
+  }
+]

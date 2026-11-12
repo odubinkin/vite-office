@@ -33,13 +33,12 @@ suite. `unoxml/qa/unit/domtest.cxx` exercises concrete document/builder/node
 services and remains required when those owners exist; its runtime behavior has
 not been replaced with contract-only tests.
 
-The repository contains the LibreOffice unoxml wrappers but not the pinned
-libxml2 implementation sources. `download.lst` pins `libxml2-2.15.3.tar.xz` and
-SHA-256 `78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07`.
-The user has since approved retrieval and requested use of an existing JavaScript
-DOM library instead of porting libxml2 when suitable. `@xmldom/xmldom` 0.9.12 has
-been selected, installed and verified in a real Chromium module Worker; no
-libxml2 archive has been retrieved. Concrete UNO DOM
-owners, metadata service initialization and complete DOCX/XLSX file/UI acceptance
-remain pending. See [native DOM events](native-xml-dom-events.md) for the next
-verified owner slice.
+The user approved retrieving the pinned libxml2 source and preferred an existing
+JavaScript library when suitable. The generic xmldom Worker qualification passed,
+but closer native contract inspection exposed attribute-tree and namespace
+identity gaps. The published libxml2-wasm binary also lacks consumed native APIs.
+The source archive is now retrieved and its SHA-256 verified against
+`download.lst`; a pinned native WASM runtime supplies those APIs without a
+JavaScript port of the algorithms. See [native XML runtime](native-xml-runtime.md).
+Concrete UNO DOM owners, metadata service initialization and complete DOCX/XLSX
+file/UI acceptance remain pending.

@@ -27,25 +27,19 @@ inspect private cancellation state or substitute a dispatcher. The pinned
 `unoxml/qa/unit/domtest.cxx` and Java `DOMTest` contain no direct event-component
 cases; their document/tree tests remain outstanding with those owners.
 
-The user has approved network access for the missing dependency and explicitly
-prefers an existing JavaScript library to porting libxml2. `@xmldom/xmldom` is the
-selected JavaScript DOM backend (package metadata version 0.9.12, MIT, Node >=14.6).
-Its pure JavaScript DOMParser/DOMImplementation/XMLSerializer surface is documented
-in the [official project](https://github.com/xmldom/xmldom). The exact dependency is
-installed and verified in a real Chromium module Worker without `window`,
-`document`, or a native `DOMParser`. The committed probe checks empty document
-construction, namespace attributes, replacement/imported nodes, Unicode edits,
-unknown metadata, CDATA/comments/PI, XML roundtrip and malformed rejection. Actual
-UNO document/builder integration remains next work, not a claim of this event
-checkpoint. Existing SAX imports continue to use `saxes`. No libxml2 archive has
-been downloaded.
+The user approved the missing dependency download and preferred an existing
+JavaScript library when suitable. The initial xmldom probe proved generic
+DOM operations in a real Chromium Worker, but not the attribute child-tree and
+shared namespace-pointer semantics consumed by LibreOffice. Those gaps and the
+published libxml2-wasm export gaps led to the pinned native runtime described in
+[native XML runtime](native-xml-runtime.md). Existing SAX imports still use `saxes`.
 
 ## Dispatcher integration in progress
 
 `CEventDispatcher` now represents the native listener maps, acquired snapshots,
-event cloning and capture/target/bubble traversal. Raw node identity uses the
-selected JavaScript XML backend; attribute ancestry binds libxml's parent link
-to the backend's `ownerElement`. `CDocument` is still only a consumed forward
+event cloning and capture/target/bubble traversal. Raw node identity now uses actual
+pinned libxml2 WASM addresses and native parent fields, including attributes.
+No JavaScript `ownerElement` approximation remains in the dispatcher. `CDocument` is still only a consumed forward
 declaration (`GetCNode`) in the dispatch signature. No alternate factory or
 positive node-interface substitute is installed. Actual document/node owners
 must connect this path before propagation, cancellation, callback mutation,
@@ -64,3 +58,7 @@ preserved; document creation must use the real document builder. The Java
 that upstream case remains pending with the actual document graph. The native
 QA sources contain no direct dispatcher or feature-method cases to port for
 this checkpoint.
+
+The dispatcher registry tests now use actual C document/node allocations. Full
+propagation is still unverified until CDocument/CNode wrapper construction exists;
+no alternate UNO node factory is installed to manufacture coverage.

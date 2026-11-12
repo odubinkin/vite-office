@@ -21,7 +21,7 @@
         "apps/office/src/unoxml/source/dom/domimplementation.test.ts",
         "docs/program/native-xml-dom-events.md"
       ],
-      "justification": "Native event dispatcher translation uses acquired listener snapshots and source event clones over actual XML backend node identity. Registry lifetime and equal-range callbacks are tested on genuine listener/event components; concrete CDocument/CNode propagation, callback mutation, cancellation, exception paths and whole-dispatcher 90% coverage remain open. The consumed document factory signature is a forward declaration, not an implemented or substituted tree. The actual immortal CDOMImplementation retains all three #i113683# unimplemented source results. Full metadata initialization and DOCX/XLSX file/UI acceptance remain unverified.",
+      "justification": "Native event dispatcher translation now uses actual pinned libxml2 C node addresses and native parent fields, including attribute ancestry, instead of a JavaScript DOM node approximation. Real C allocations back registry/key/lifetime cases. Concrete UNO CDocument/CNode propagation, cloning, cancellation, callback mutation, exception paths and whole-dispatcher 90% coverage remain unfinished. The document factory signature is a forward declaration only; no fake positive node query or substitute factory is used.",
       "knownViolations": [],
       "localSymbols": [
         "CEventDispatcher",

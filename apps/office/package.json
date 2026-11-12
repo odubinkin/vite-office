@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@vite-office/libnumbertext": "file:../../third_party/libnumbertext-js",
-    "@xmldom/xmldom": "0.9.12",
+    "@vite-office/libxml2-wasm": "file:../../third_party/libxml2-wasm",
     "entities": "9.0.0",
     "lucide-react": "1.72.0",
     "react": "19.3.1",
