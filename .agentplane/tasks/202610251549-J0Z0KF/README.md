@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 259
+revision: 265
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T18:46:07.209Z"
+  updated_at: "2026-11-12T19:03:26.329Z"
   updated_by: "CODER"
-  note: "Published listener-owner prerequisite passes45 related cases,90 whole-owner coverage and actual main/Worker proof. Full property service/metadata/DOCX/XLSX/UI parent remains incomplete. Evidence: published-container-checkpoint.json."
-  attempts: 77
+  note: "Native Any/property-field prerequisite passes35 related cases,90 whole8-owner coverage and actual main/Worker proof; property service/metadata/DOCX/XLSX/UI parent remains incomplete. See native-property-set-values-checkpoint.json."
+  attempts: 78
 commit: null
 comments:
   -
@@ -252,6 +252,9 @@ comments:
   -
     author: "CODER"
     body: "Start: published listener-owner checkpoint verified; continue original cppu property-set/state helpers and real UNO PropertyBag/metadata toward full DOCX/XLSX/UI acceptance without pause."
+  -
+    author: "CODER"
+    body: "Start: native Any/property-set SDK prerequisite verified; continue original cppu property-set/state helpers and real UNO PropertyBag/metadata toward complete DOCX/XLSX/UI acceptance without pause."
 events:
   -
     type: "status"
@@ -1240,8 +1243,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: published listener-owner checkpoint verified; continue original cppu property-set/state helpers and real UNO PropertyBag/metadata toward full DOCX/XLSX/UI acceptance without pause."
+  -
+    type: "verify"
+    at: "2026-11-12T19:03:26.329Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native Any/property-field prerequisite passes35 related cases,90 whole8-owner coverage and actual main/Worker proof; property service/metadata/DOCX/XLSX/UI parent remains incomplete. See native-property-set-values-checkpoint.json."
+  -
+    type: "status"
+    at: "2026-11-12T19:03:47.183Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: native Any/property-set SDK prerequisite verified; continue original cppu property-set/state helpers and real UNO PropertyBag/metadata toward complete DOCX/XLSX/UI acceptance without pause."
 doc_version: 3
-doc_updated_at: "2026-11-12T18:46:20.123Z"
+doc_updated_at: "2026-11-12T19:03:47.183Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -3566,6 +3582,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T19:03:26.329Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native Any/property-field prerequisite passes35 related cases,90 whole8-owner coverage and actual main/Worker proof; property service/metadata/DOCX/XLSX/UI parent remains incomplete. See native-property-set-values-checkpoint.json.
+    Attempts: 78
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T19:03:25.818Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3968,6 +4014,14 @@ sections:
     Draft typecheck exposed one nullable static pointer qualification; corrected to the original nonnull source dereference. First real focused run passed45/6, whole two-owner coverage98.45 statements/93.70 branches/100 functions/99.11 lines. Scoped lint rejected nonnull assertion syntax and two empty constructors. Use original explicit native pointer casts where source guarantees lifetime, and initialize original map members in actual constructors; no extra runtime guards, exclusions or threshold changes. Rerun affected checks after these source changes.
 
     Published-container checkpoint: complete original singleton/vector container, reverse iterator, copied-Type and lazy signed32 multi-container owners and Type-key OBroadcastHelper. Four original IfTest entry points replay all original assertions;6 new critical cases,45 related cases/6files,49 boundary+2resource cases pass. Final whole executable owner coverage98.45stmt/93.70branch/100func/99.11lines passes approved90. Exact commands/log SHA256/current source+upstream git blobs are in evidence/published-container-checkpoint.json. Native OSL lock fields/parameters/scopes erased without fake mutex objects; actual Reference/Sequence/Type owners and callback order retained. Generic Var QA/template remains unconsumed/unported; no full QA suite/compiled ABI/thread/allocator claim. Actual Chromium main and DOM-free Worker observe remaining1, same old reverse snapshot pointers and native signed32 key-7. All type/build/static/lint/format/registry/provenance/boundaries/resources/size/tree/hintids/doctor/routing/diff pass; only prior css-style-matchers.ts17/76 JSDoc errors remain. CALC-549/WRITER483 records preserved null count and undefined collapse preconditions. Parent rework remains: original cppu OPropertySetHelper/2 (not the separate newer comphelper copy), comphelper OPropertyStateHelper, actual UNO PropertyBag, SfxDocumentMetaData and full DOCX/XLSX/UI acceptance. Same active task; full suite not yet due; continue without pause.
+
+    Property-set native-value draft: test creation repeated a root-relative path while the tool cwd was apps/office, so no SDK test file was created. Corrected with an explicit root-only mutation call. Focused executed7 existing files/31 cases all passed, but the gate failed87.28 functions because the4 declared SDK owners had no executed metadata test. Preserve all8 full owners and90 thresholds; add the intended real CPPU metadata test and rerun. Earlier two rg reads named a nonexistent storage.ts; actual allocation/address source is cppu/source/uno/copy.ts and route was recomputed. No external access, replacement records or type/provider inference.
+
+    Final focused8-file/35-case run passes with full8-owner97.43 statements/95.83 branches/97.45 functions/97.98 lines, threshold90 unchanged. Typecheck caught a test-only native interface description reinterpret-cast (base record and containing C aggregate are different TypeScript shapes); qualify the actual known interface pointer via unknown, as in existing native metadata owners. No executable implementation changed after the passing run.
+
+    Registry check rejected a local docs path inside provenance.local evidence: its source-only resolver prefixes non-app paths with the pinned upstream root. Keep the doc in capability local.docs and semantic evidence, and reference only actual app source/tests in provenance.local. No resolver/schema change or enforcement waiver; route recomputed and evidence corrected. A subsequent diagnostic rg command used an unmatched optional filename glob and was corrected to bounded rg in the existing inventory directory.
+
+    Native property-set value prerequisite: original Any nonvirtual dispatch now operates at actual sequence/compound C records; getValueType borrows one live pType field address without Any/type/ref owners. Reference.fromAny binds the original static constructor overload without JS shape/type inference. PropertyBag/container-helper methods accept actual native input/output Any addresses. Four complete SDK declarations preserve methods/bases/metadata and unique sorted setter names. Four new raw-address cases plus4 SDK cases,35 related cases/8 files pass; whole8 executable-owner S97.43/B95.83/F97.45/L97.98 passes90. Native main+DOM-free Worker confirms value43/default41/liveType/interface identity. Typecheck, production build/static, scoped lint/format, registry/provenance,49 boundary+2resource cases, dependencies/size/tree/resources/hintids/doctor/routing/diff pass; only prior css-style-matchers.ts17/76 JSDoc errors remain. Exact commands/log SHA256/source+upstream blobs and structured real-realm observations: evidence/native-property-set-values-checkpoint.json. No source test replay after test-only erased reinterpret-cast/evidence corrections; production source/maps unchanged. Original C++ witness streams replay unchanged; complete custom-type cppu/qa/test_any suite still not fully ported, and new cases are source-backed independent checks. Parent remains incomplete: original cppu OPropertySetHelper/2 (not newer comphelper copy), comphelper state/broadcast helper, actual UNO PropertyBag/SfxDocumentMetaData, DOCX/XLSX core/shell/UI. Physical ABI/allocator/threads and native const/access enforcement unqualified. No full suite due: same active parent, continue without pause.
 id_source: "generated"
 ---
 ## Summary
@@ -6302,6 +6356,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T19:03:26.329Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native Any/property-field prerequisite passes35 related cases,90 whole8-owner coverage and actual main/Worker proof; property service/metadata/DOCX/XLSX/UI parent remains incomplete. See native-property-set-values-checkpoint.json.
+Attempts: 78
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T19:03:25.818Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -6708,3 +6792,11 @@ Interface-container draft: attempted test heredoc from apps/office with a root-r
 Draft typecheck exposed one nullable static pointer qualification; corrected to the original nonnull source dereference. First real focused run passed45/6, whole two-owner coverage98.45 statements/93.70 branches/100 functions/99.11 lines. Scoped lint rejected nonnull assertion syntax and two empty constructors. Use original explicit native pointer casts where source guarantees lifetime, and initialize original map members in actual constructors; no extra runtime guards, exclusions or threshold changes. Rerun affected checks after these source changes.
 
 Published-container checkpoint: complete original singleton/vector container, reverse iterator, copied-Type and lazy signed32 multi-container owners and Type-key OBroadcastHelper. Four original IfTest entry points replay all original assertions;6 new critical cases,45 related cases/6files,49 boundary+2resource cases pass. Final whole executable owner coverage98.45stmt/93.70branch/100func/99.11lines passes approved90. Exact commands/log SHA256/current source+upstream git blobs are in evidence/published-container-checkpoint.json. Native OSL lock fields/parameters/scopes erased without fake mutex objects; actual Reference/Sequence/Type owners and callback order retained. Generic Var QA/template remains unconsumed/unported; no full QA suite/compiled ABI/thread/allocator claim. Actual Chromium main and DOM-free Worker observe remaining1, same old reverse snapshot pointers and native signed32 key-7. All type/build/static/lint/format/registry/provenance/boundaries/resources/size/tree/hintids/doctor/routing/diff pass; only prior css-style-matchers.ts17/76 JSDoc errors remain. CALC-549/WRITER483 records preserved null count and undefined collapse preconditions. Parent rework remains: original cppu OPropertySetHelper/2 (not the separate newer comphelper copy), comphelper OPropertyStateHelper, actual UNO PropertyBag, SfxDocumentMetaData and full DOCX/XLSX/UI acceptance. Same active task; full suite not yet due; continue without pause.
+
+Property-set native-value draft: test creation repeated a root-relative path while the tool cwd was apps/office, so no SDK test file was created. Corrected with an explicit root-only mutation call. Focused executed7 existing files/31 cases all passed, but the gate failed87.28 functions because the4 declared SDK owners had no executed metadata test. Preserve all8 full owners and90 thresholds; add the intended real CPPU metadata test and rerun. Earlier two rg reads named a nonexistent storage.ts; actual allocation/address source is cppu/source/uno/copy.ts and route was recomputed. No external access, replacement records or type/provider inference.
+
+Final focused8-file/35-case run passes with full8-owner97.43 statements/95.83 branches/97.45 functions/97.98 lines, threshold90 unchanged. Typecheck caught a test-only native interface description reinterpret-cast (base record and containing C aggregate are different TypeScript shapes); qualify the actual known interface pointer via unknown, as in existing native metadata owners. No executable implementation changed after the passing run.
+
+Registry check rejected a local docs path inside provenance.local evidence: its source-only resolver prefixes non-app paths with the pinned upstream root. Keep the doc in capability local.docs and semantic evidence, and reference only actual app source/tests in provenance.local. No resolver/schema change or enforcement waiver; route recomputed and evidence corrected. A subsequent diagnostic rg command used an unmatched optional filename glob and was corrected to bounded rg in the existing inventory directory.
+
+Native property-set value prerequisite: original Any nonvirtual dispatch now operates at actual sequence/compound C records; getValueType borrows one live pType field address without Any/type/ref owners. Reference.fromAny binds the original static constructor overload without JS shape/type inference. PropertyBag/container-helper methods accept actual native input/output Any addresses. Four complete SDK declarations preserve methods/bases/metadata and unique sorted setter names. Four new raw-address cases plus4 SDK cases,35 related cases/8 files pass; whole8 executable-owner S97.43/B95.83/F97.45/L97.98 passes90. Native main+DOM-free Worker confirms value43/default41/liveType/interface identity. Typecheck, production build/static, scoped lint/format, registry/provenance,49 boundary+2resource cases, dependencies/size/tree/resources/hintids/doctor/routing/diff pass; only prior css-style-matchers.ts17/76 JSDoc errors remain. Exact commands/log SHA256/source+upstream blobs and structured real-realm observations: evidence/native-property-set-values-checkpoint.json. No source test replay after test-only erased reinterpret-cast/evidence corrections; production source/maps unchanged. Original C++ witness streams replay unchanged; complete custom-type cppu/qa/test_any suite still not fully ported, and new cases are source-backed independent checks. Parent remains incomplete: original cppu OPropertySetHelper/2 (not newer comphelper copy), comphelper state/broadcast helper, actual UNO PropertyBag/SfxDocumentMetaData, DOCX/XLSX core/shell/UI. Physical ABI/allocator/threads and native const/access enforcement unqualified. No full suite due: same active parent, continue without pause.

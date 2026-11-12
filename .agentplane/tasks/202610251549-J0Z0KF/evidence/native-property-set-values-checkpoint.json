@@ -1,0 +1,734 @@
+{
+  "status": "verified-native-any-property-values-prerequisite-parent-continues",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "545a105a1f09c8df564306f2ec272be8cf08aeee",
+  "capability": "CAP-2f70d74c-e2af-41ae-a661-f64f8064781d",
+  "scope": "Original nonvirtual Any calls at native sequence/compound addresses, live pType field view, explicit original Reference Any overload binding, actual property-bag/member calls and4 generated SDK contracts. No property-set/service/metadata implementation is claimed.",
+  "tests": {
+    "newCriticalCases": 8,
+    "relatedCases": 35,
+    "relatedFiles": 8,
+    "wholeProductionOwners": [
+      "src/cppu/inc/com/sun/star/uno/Any.ts",
+      "src/cppu/inc/com/sun/star/uno/Reference.ts",
+      "src/comphelper/source/property/propertybag.ts",
+      "src/comphelper/source/property/propertycontainerhelper.ts",
+      "src/udkapi/com/sun/star/beans/XFastPropertySet.ts",
+      "src/udkapi/com/sun/star/beans/XMultiPropertySet.ts",
+      "src/udkapi/com/sun/star/beans/XPropertySetOption.ts",
+      "src/udkapi/com/sun/star/beans/XPropertiesChangeListener.ts"
+    ],
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 546,
+          "covered": 535,
+          "skipped": 0,
+          "pct": 97.98
+        },
+        "statements": {
+          "total": 584,
+          "covered": 569,
+          "skipped": 0,
+          "pct": 97.43
+        },
+        "functions": {
+          "total": 118,
+          "covered": 115,
+          "skipped": 0,
+          "pct": 97.45
+        },
+        "branches": {
+          "total": 240,
+          "covered": 230,
+          "skipped": 0,
+          "pct": 95.83
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/comphelper/source/property/propertybag.ts": {
+        "lines": {
+          "total": 84,
+          "covered": 81,
+          "skipped": 0,
+          "pct": 96.42
+        },
+        "functions": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 91,
+          "covered": 88,
+          "skipped": 0,
+          "pct": 96.7
+        },
+        "branches": {
+          "total": 30,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 90
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/comphelper/source/property/propertycontainerhelper.ts": {
+        "lines": {
+          "total": 194,
+          "covered": 188,
+          "skipped": 0,
+          "pct": 96.9
+        },
+        "functions": {
+          "total": 26,
+          "covered": 25,
+          "skipped": 0,
+          "pct": 96.15
+        },
+        "statements": {
+          "total": 206,
+          "covered": 196,
+          "skipped": 0,
+          "pct": 95.14
+        },
+        "branches": {
+          "total": 60,
+          "covered": 55,
+          "skipped": 0,
+          "pct": 91.66
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/cppu/inc/com/sun/star/uno/Any.ts": {
+        "lines": {
+          "total": 106,
+          "covered": 105,
+          "skipped": 0,
+          "pct": 99.05
+        },
+        "functions": {
+          "total": 32,
+          "covered": 31,
+          "skipped": 0,
+          "pct": 96.87
+        },
+        "statements": {
+          "total": 115,
+          "covered": 114,
+          "skipped": 0,
+          "pct": 99.13
+        },
+        "branches": {
+          "total": 67,
+          "covered": 67,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/cppu/inc/com/sun/star/uno/Reference.ts": {
+        "lines": {
+          "total": 126,
+          "covered": 125,
+          "skipped": 0,
+          "pct": 99.2
+        },
+        "functions": {
+          "total": 30,
+          "covered": 29,
+          "skipped": 0,
+          "pct": 96.66
+        },
+        "statements": {
+          "total": 136,
+          "covered": 135,
+          "skipped": 0,
+          "pct": 99.26
+        },
+        "branches": {
+          "total": 75,
+          "covered": 73,
+          "skipped": 0,
+          "pct": 97.33
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/udkapi/com/sun/star/beans/XFastPropertySet.ts": {
+        "lines": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/udkapi/com/sun/star/beans/XMultiPropertySet.ts": {
+        "lines": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/udkapi/com/sun/star/beans/XPropertiesChangeListener.ts": {
+        "lines": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/udkapi/com/sun/star/beans/XPropertySetOption.ts": {
+        "lines": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "threshold": 90,
+    "boundaryCases": 49,
+    "resourceCases": 2,
+    "sourceQA": "Existing full source C++ Any/Reference witness streams replayed unchanged through actual owners. New raw-address/SDK cases independent source-backed tests. Full cppu/qa/test_any custom-type suite remains incompletely ported; the capability source QA link is contextual, not a claim of full original QA execution."
+  },
+  "browserQualification": {
+    "workerResult": {
+      "conversion": {
+        "serviceValue": 42,
+        "rowValue": 42,
+        "rowWasNull": false,
+        "failedFirst": 0,
+        "failedFirstWasNull": false,
+        "failedSecond": 0,
+        "failedSecondWasNull": true
+      },
+      "publicHelpers": {
+        "notifications": 1,
+        "sameEventSource": true,
+        "componentTypeCount": 3
+      },
+      "dynamicProperties": {
+        "changed": true,
+        "value": 42,
+        "initialDefault": 41,
+        "name": "workerValue",
+        "handle": 7,
+        "declaredLong": true,
+        "stableTypeField": true
+      },
+      "propertyArray": {
+        "count": 1,
+        "handle": 7,
+        "missing": -1,
+        "snapshotName": "workerValue",
+        "sameInfoIdentity": true
+      },
+      "legacyListeners": {
+        "remaining": 1,
+        "sameFirst": true,
+        "sameSnapshot": true,
+        "keyCount": 1,
+        "key": -7
+      },
+      "nativeAnyFields": {
+        "value": 43,
+        "initialDefault": 41,
+        "liveType": true,
+        "interfaceIdentity": true
+      },
+      "documentBuilder": {
+        "rootName": "document-content",
+        "streamOpen": true,
+        "namespaceAware": true,
+        "validating": false,
+        "emptyImplementation": true,
+        "capturedType": true,
+        "sameContext": true,
+        "exceptionMessage": "worker exception"
+      },
+      "xpath": {
+        "count": 1,
+        "listLength": 1,
+        "sameRoot": true
+      },
+      "globals": {
+        "window": "undefined",
+        "document": "undefined",
+        "DOMParser": "undefined"
+      },
+      "rootName": "document-content",
+      "attribute": "1.0",
+      "listCounts": [
+        0,
+        1,
+        0
+      ],
+      "sameOwner": true,
+      "unicode": "\ud83d\ude00\u5b57",
+      "utf16Length": 3,
+      "borrowedStreamOpen": true,
+      "warnings": 1,
+      "errors": 0,
+      "warningLine": 1
+    },
+    "mainResult": {
+      "conversion": {
+        "serviceValue": 42,
+        "rowValue": 42,
+        "rowWasNull": false,
+        "failedFirst": 0,
+        "failedFirstWasNull": false,
+        "failedSecond": 0,
+        "failedSecondWasNull": true
+      },
+      "publicHelpers": {
+        "notifications": 1,
+        "sameEventSource": true,
+        "componentTypeCount": 3
+      },
+      "dynamicProperties": {
+        "changed": true,
+        "value": 42,
+        "initialDefault": 41,
+        "name": "workerValue",
+        "handle": 7,
+        "declaredLong": true,
+        "stableTypeField": true
+      },
+      "propertyArray": {
+        "count": 1,
+        "handle": 7,
+        "missing": -1,
+        "snapshotName": "workerValue",
+        "sameInfoIdentity": true
+      },
+      "legacyListeners": {
+        "remaining": 1,
+        "sameFirst": true,
+        "sameSnapshot": true,
+        "keyCount": 1,
+        "key": -7
+      },
+      "nativeAnyFields": {
+        "value": 43,
+        "initialDefault": 41,
+        "liveType": true,
+        "interfaceIdentity": true
+      },
+      "documentBuilder": {
+        "rootName": "document-content",
+        "streamOpen": true,
+        "namespaceAware": true,
+        "validating": false,
+        "emptyImplementation": true,
+        "capturedType": true,
+        "sameContext": true,
+        "exceptionMessage": "worker exception"
+      },
+      "xpath": {
+        "count": 1,
+        "listLength": 1,
+        "sameRoot": true
+      },
+      "globals": {
+        "window": "object",
+        "document": "object",
+        "DOMParser": "function"
+      },
+      "rootName": "document-content",
+      "attribute": "1.0",
+      "listCounts": [
+        0,
+        1,
+        0
+      ],
+      "sameOwner": true,
+      "unicode": "\ud83d\ude00\u5b57",
+      "utf16Length": 3,
+      "borrowedStreamOpen": true,
+      "warnings": 1,
+      "errors": 0,
+      "warningLine": 1
+    }
+  },
+  "preservedIssues": [
+    "CALC-548/WRITER482 clarified: XMultiPropertySet setter explicitly requires unique sorted names; low-level repeated-name behavior is preserved without asserting a valid setter defect."
+  ],
+  "remaining": [
+    "Original cppu OPropertySetHelper/2 and comphelper OPropertyStateHelper/OMutexAndBroadcastHelper, real UNO PropertyBag and SfxDocumentMetaData remain unfinished.",
+    "Full DOCX/XLSX core/shell/desktop/mobile UI acceptance remains incomplete.",
+    "Remaining original custom-type Any QA, physical ABI/allocator/thread/const/access enforcement are unqualified."
+  ],
+  "knownBaseline": "Only css-style-matchers.ts17/76 JSDoc errors; doctor passes with existing managed-hook readiness warning.",
+  "fullSuite": "Not due: approved once per10 actual agentplane tasks; same format parent remains active.",
+  "userStopRule": "Continue without pause; do not complete incomplete parent/goal.",
+  "checks": [
+    {
+      "name": "tests",
+      "cwd": "apps/office",
+      "command": "../../node_modules/.bin/vitest run --config vite.config.ts src/cppu/inc/com/sun/star/uno/Any-address.test.ts src/cppu/inc/com/sun/star/uno/Any-data.test.ts src/cppu/inc/com/sun/star/uno/Any-ownership.test.ts src/cppu/inc/com/sun/star/uno/Reference.test.ts src/cppu/inc/com/sun/star/uno/Reference-query.test.ts src/comphelper/source/property/propertybag.test.ts src/udkapi/com/sun/star/beans/PropertyChangeEvent.test.ts src/udkapi/com/sun/star/beans/property-set-types.test.ts --coverage --coverage.provider=istanbul --coverage.include=src/cppu/inc/com/sun/star/uno/Any.ts --coverage.include=src/cppu/inc/com/sun/star/uno/Reference.ts --coverage.include=src/comphelper/source/property/propertybag.ts --coverage.include=src/comphelper/source/property/propertycontainerhelper.ts --coverage.include=src/udkapi/com/sun/star/beans/XFastPropertySet.ts --coverage.include=src/udkapi/com/sun/star/beans/XMultiPropertySet.ts --coverage.include=src/udkapi/com/sun/star/beans/XPropertySetOption.ts --coverage.include=src/udkapi/com/sun/star/beans/XPropertiesChangeListener.ts --coverage.reportsDirectory=coverage/propertyset-native-values --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "log": "apps/office/coverage/propertyset-tests.log",
+      "sha256": "8e0add4f98727d6a1336fe0311f115e02e01996f77367ba5136455375a4d48ed"
+    },
+    {
+      "name": "typecheck",
+      "cwd": ".",
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/propertyset-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "name": "lint",
+      "cwd": ".",
+      "command": "./node_modules/.bin/eslint apps/office/src/cppu/inc/com/sun/star/uno/Any.ts apps/office/src/cppu/inc/com/sun/star/uno/Reference.ts apps/office/src/cppu/inc/com/sun/star/uno/Any-address.test.ts apps/office/src/comphelper/source/property/propertybag.ts apps/office/src/comphelper/source/property/propertycontainerhelper.ts apps/office/src/udkapi/com/sun/star/beans/XFastPropertySet.ts apps/office/src/udkapi/com/sun/star/beans/XMultiPropertySet.ts apps/office/src/udkapi/com/sun/star/beans/XPropertySetOption.ts apps/office/src/udkapi/com/sun/star/beans/XPropertiesChangeListener.ts apps/office/src/udkapi/com/sun/star/beans/property-set-types.test.ts scripts/fixtures/native-dom-worker-probe.ts scripts/native-dom-worker-probe.mjs --max-warnings 0",
+      "result": "pass",
+      "log": "apps/office/coverage/propertyset-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "browser",
+      "cwd": ".",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node --experimental-strip-types scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/propertyset-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "name": "build",
+      "cwd": ".",
+      "command": "npm run test:static",
+      "result": "pass",
+      "log": "apps/office/coverage/propertyset-build.log",
+      "sha256": "4dcc0c696db3500cd32c9abbdbcc4b2f775f86fb1a4460884ed599158cb99717"
+    },
+    {
+      "name": "jsdoc",
+      "cwd": ".",
+      "command": "npm run check:docs",
+      "result": "known-baseline-fail",
+      "log": "apps/office/coverage/propertyset-jsdoc.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    },
+    {
+      "name": "registry-build",
+      "cwd": ".",
+      "command": "npm run inventory:registry:build",
+      "result": "pass",
+      "log": "apps/office/coverage/propertyset-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "name": "registry-check",
+      "cwd": ".",
+      "command": "npm run inventory:registry:check && npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/propertyset-registry-check.log",
+      "sha256": "0de11f9adca5894c5468eb09e3a87c826e35fe942dc4368a503890c07af3f11c"
+    },
+    {
+      "name": "structural",
+      "cwd": ".",
+      "command": "npm run check:dependencies && npm run check:file-size && npm run check:source-tree && npm run check:writer-resources && npm run check:calc-resources && npm run check:writer-hintids && ap doctor && node .agentplane/policy/check-routing.mjs && git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/propertyset-structural.log",
+      "sha256": "83f138ffe11411ebb0bf40e082179f8c9f224565fbee772612fc988331587142"
+    },
+    {
+      "name": "boundary-tests",
+      "cwd": ".",
+      "command": "./node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts scripts/check-module-boundaries-xml.test.ts scripts/writer-ui-resource-model.test.ts --maxWorkers 2",
+      "result": "pass",
+      "log": "apps/office/coverage/propertyset-boundary-tests.log",
+      "sha256": "9c545295e777589c5d31642d9e12addf2020f943558ba930a757d616276d4cdc"
+    },
+    {
+      "name": "format",
+      "cwd": ".",
+      "argv": [
+        "./node_modules/.bin/prettier",
+        "--check",
+        "apps/office/src/cppu/inc/com/sun/star/uno/Any-address.test.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/XFastPropertySet.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/XMultiPropertySet.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/XPropertiesChangeListener.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/XPropertySetOption.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/property-set-types.test.ts",
+        "docs/program/native-property-set-values.md",
+        "docs/program/registry/shared/capabilities/CAP-2f70d74c-e2af-41ae-a661-f64f8064781d.json",
+        "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/XFastPropertySet.ts.json",
+        "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/XMultiPropertySet.ts.json",
+        "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/XPropertiesChangeListener.ts.json",
+        "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/XPropertySetOption.ts.json",
+        "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/XFastPropertySet.ts.json",
+        "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/XMultiPropertySet.ts.json",
+        "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/XPropertiesChangeListener.ts.json",
+        "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/XPropertySetOption.ts.json",
+        "apps/office/src/comphelper/source/property/propertybag.ts",
+        "apps/office/src/comphelper/source/property/propertycontainerhelper.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/Any.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/Reference.ts",
+        "docs/program/registry/shared/provenance/comphelper/source/property/propertybag.ts.json",
+        "docs/program/registry/shared/provenance/comphelper/source/property/propertycontainerhelper.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/Any.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/Reference.ts.json",
+        "docs/program/registry/shared/runtime/comphelper/source/property/propertybag.ts.json",
+        "docs/program/registry/shared/runtime/comphelper/source/property/propertycontainerhelper.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/Any.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/Reference.ts.json",
+        "scripts/fixtures/native-dom-worker-probe.ts",
+        "scripts/native-dom-worker-probe.mjs"
+      ],
+      "result": "pass",
+      "log": "apps/office/coverage/propertyset-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    }
+  ],
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/uno/Any-address.test.ts",
+      "gitBlob": "aecae995d878ddfdf4d44bae431ec5e987df7736"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/beans/XFastPropertySet.ts",
+      "gitBlob": "2fdc0b11147ec66f890f758e8b72cf305817a572"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/beans/XMultiPropertySet.ts",
+      "gitBlob": "ddff27ae9cf587752fa2ec4ce2fce87acc0b28df"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/beans/XPropertiesChangeListener.ts",
+      "gitBlob": "1fe2d2affce558808fddb56ba07fa55ac6b016e4"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/beans/XPropertySetOption.ts",
+      "gitBlob": "4c26768922293bb4ac0ece7d551e23da9281bf2d"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/beans/property-set-types.test.ts",
+      "gitBlob": "b1b42179734d1c007b3085246e88fbada9c9d189"
+    },
+    {
+      "path": "docs/program/native-property-set-values.md",
+      "gitBlob": "ec997b6b1747364d44495cb7e25569cd4ed3a008"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-2f70d74c-e2af-41ae-a661-f64f8064781d.json",
+      "gitBlob": "bcbbf13d3f916ab46d3261d3b5683e7f285b4511"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/XFastPropertySet.ts.json",
+      "gitBlob": "cae1d46054d73ef6302e80329b41f64d421690bd"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/XMultiPropertySet.ts.json",
+      "gitBlob": "5fe701338fc8cccbc37426fe8ddf908a513f3720"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/XPropertiesChangeListener.ts.json",
+      "gitBlob": "2d292c5501a401663757743a0779ed1fe3fedb19"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/XPropertySetOption.ts.json",
+      "gitBlob": "21efe5f97f6dc7f71627fe73ec10ab3162f94cea"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/XFastPropertySet.ts.json",
+      "gitBlob": "e4aea83e9ee8b3c31a7e7eb572583afb6a8d7bda"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/XMultiPropertySet.ts.json",
+      "gitBlob": "1672c9a21fa10372797ad21498aa0ee3bff81d1b"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/XPropertiesChangeListener.ts.json",
+      "gitBlob": "c47858b51c1113c68fa28f7b9b44d0bfa0e555f0"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/XPropertySetOption.ts.json",
+      "gitBlob": "41d0717972fe8b4abd9e5782e86d59cc63ebfcc0"
+    },
+    {
+      "path": "apps/office/src/comphelper/source/property/propertybag.ts",
+      "gitBlob": "69817e2f486ae560b8ec5e2a02d7e2411a939e8e"
+    },
+    {
+      "path": "apps/office/src/comphelper/source/property/propertycontainerhelper.ts",
+      "gitBlob": "8bcf35c8872ab7527bfd40cfb59340035f56c9db"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/uno/Any.ts",
+      "gitBlob": "07e3a0f89a76d5c200abfe4b010fd64a70b45278"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/uno/Reference.ts",
+      "gitBlob": "fc8b49f85194f1e5ba8cce1c47c1ee97efa78cdc"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "4adb872aa56708154c6ee5704800756e7ff3fab4"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/comphelper/source/property/propertybag.ts.json",
+      "gitBlob": "6bc07107086f9a28c10a55f01d0a56d2a160939b"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/comphelper/source/property/propertycontainerhelper.ts.json",
+      "gitBlob": "bd5d7626432ec575991f17768ea0d93463eaf69e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/Any.ts.json",
+      "gitBlob": "a47a9ed10bef412dc4979a98c112b3647fdb693a"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/Reference.ts.json",
+      "gitBlob": "4f4ccc98f1a5aa4cfa9484cf4de16930c587d635"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/comphelper/source/property/propertybag.ts.json",
+      "gitBlob": "a881c9a8cd9d6e01451d9f9b74257c8c4d5e42fd"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/comphelper/source/property/propertycontainerhelper.ts.json",
+      "gitBlob": "02c2f8925b85d843ed6868ccb427f5215dd0087e"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/Any.ts.json",
+      "gitBlob": "1fa4a6c786dab88d626366a6bc5ae77a044f118e"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/Reference.ts.json",
+      "gitBlob": "365bbb1390ac7e9e78b426f071e134c58e8e7cbd"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "74cfcada116e1fa7edb10df1cea15824c23cfeb7"
+    },
+    {
+      "path": "scripts/fixtures/native-dom-worker-probe.ts",
+      "gitBlob": "9a284b16351d1d8fb79a3d95ae9eeaab65c36506"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "gitBlob": "7173ae8d400630adf77a2fcc6de5100f472add28"
+    }
+  ],
+  "upstreamBlobs": [
+    {
+      "path": "include/com/sun/star/uno/Any.h",
+      "gitBlob": "580b524be2e9ee7be3a9b48df5b14c5a2dfe07c6"
+    },
+    {
+      "path": "include/com/sun/star/uno/Any.hxx",
+      "gitBlob": "e5bb5b9268f22d79295c8b8489a0d548e7c3561e"
+    },
+    {
+      "path": "include/com/sun/star/uno/Reference.hxx",
+      "gitBlob": "900170cf802d2e6eb75d6789bd8a34a20904e6ab"
+    },
+    {
+      "path": "cppu/qa/test_any.cxx",
+      "gitBlob": "64ea4b9218bfc441cad331d67e97fec9cf0339b5"
+    },
+    {
+      "path": "comphelper/source/property/propertybag.cxx",
+      "gitBlob": "b85786705cf009e5a110a8cfe3070ce517455407"
+    },
+    {
+      "path": "comphelper/source/property/propertycontainerhelper.cxx",
+      "gitBlob": "aac936b0727020745420ef0dd36852827fb52a7e"
+    },
+    {
+      "path": "udkapi/com/sun/star/beans/XFastPropertySet.idl",
+      "gitBlob": "2e3aa7c0416b2ad140084f837a155b82fbaf366d"
+    },
+    {
+      "path": "udkapi/com/sun/star/beans/XMultiPropertySet.idl",
+      "gitBlob": "407a6e449b2c7a8c6d0441c1d252aabab847b5a9"
+    },
+    {
+      "path": "udkapi/com/sun/star/beans/XPropertySetOption.idl",
+      "gitBlob": "d397396c032fd022ef993b097c345f3044675b4f"
+    },
+    {
+      "path": "udkapi/com/sun/star/beans/XPropertiesChangeListener.idl",
+      "gitBlob": "02d1932a8c535e30c9d03d2d843c717dd4651b50"
+    }
+  ]
+}
