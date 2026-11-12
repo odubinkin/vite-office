@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "task_id": "202611121427-8RHTFM",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-12T14:47:39.298Z",
+  "verdict": "pass",
+  "summary": "ZIP transport fully delegated to zip.js; retired codec and tests removed; scoped verification passes with independently reproduced unrelated baseline failures documented.",
+  "evaluated_sha": "9174de55bf09259dbd0958b34e833294b6118c4b",
+  "blueprint_digest": "aa8b72c5c0e288639b1b4d0158bc178043c2cad1a8a558be7571dcc86af69d6f",
+  "findings": [
+    "One existing desktop menu test fails identically on unmodified HEAD; global JSDoc gate reports only unchanged css-style-matchers.ts. Neither is a ZIP migration regression."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611121427-8RHTFM/README.md",
+    ".agentplane/tmp/zip-migration/e2e.log",
+    ".agentplane/tmp/zip-migration/typecheck-final.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

@@ -4,7 +4,7 @@ title: "Replace custom ZIP implementation with zip.js"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 8
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,27 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-12T14:46:28.339Z"
+  updated_at: "2026-11-12T14:47:46.264Z"
   updated_by: "CODER"
-  note: "Task-scope ZIP migration checks pass: types/build/static, affected acceptance tests plus corrected failed-only rerun, 17 ODT inventory tests and 5 production browser cases. One desktop Quotations test is independently reproduced on unmodified HEAD; additional global JSDoc errors are in unchanged css-style-matchers.ts. Full evidence and residuals recorded in README."
+  note: "verified-202611121427-8RHTFM"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-12T14:47:39.298Z"
+  updated_by: "EVALUATOR"
+  note: "ZIP transport fully delegated to zip.js; retired codec and tests removed; scoped verification passes with independently reproduced unrelated baseline failures documented."
+  evaluated_sha: "9174de55bf09259dbd0958b34e833294b6118c4b"
+  blueprint_digest: "aa8b72c5c0e288639b1b4d0158bc178043c2cad1a8a558be7571dcc86af69d6f"
+  evidence_refs:
+    - ".agentplane/tasks/202611121427-8RHTFM/README.md"
+    - ".agentplane/tasks/202611121427-8RHTFM/quality/20261112-144739298-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611121427-8RHTFM/quality/20261112-144739298-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611121427-8RHTFM/quality/20261112-144739298-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611121427-8RHTFM/blueprint/resolved-snapshot.json"
+    - ".agentplane/tmp/zip-migration/e2e.log"
+    - ".agentplane/tmp/zip-migration/typecheck-final.log"
+  findings:
+    - "One existing desktop menu test fails identically on unmodified HEAD; global JSDoc gate reports only unchanged css-style-matchers.ts. Neither is a ZIP migration regression."
 commit: null
 comments:
   -
@@ -41,8 +58,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Task-scope ZIP migration checks pass: types/build/static, affected acceptance tests plus corrected failed-only rerun, 17 ODT inventory tests and 5 production browser cases. One desktop Quotations test is independently reproduced on unmodified HEAD; additional global JSDoc errors are in unchanged css-style-matchers.ts. Full evidence and residuals recorded in README."
+  -
+    type: "verify"
+    at: "2026-11-12T14:47:46.264Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202611121427-8RHTFM"
 doc_version: 3
-doc_updated_at: "2026-11-12T14:46:28.390Z"
+doc_updated_at: "2026-11-12T14:47:46.315Z"
 doc_updated_by: "CODER"
 description: "Use @zip.js/zip.js for all document archive reads and writes, migrate asynchronous callers, remove custom ZIP implementation and implementation-specific tests, and retain document integration coverage. User approved plan and network access."
 sections:
@@ -118,6 +141,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-12T14:47:46.264Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202611121427-8RHTFM
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T14:46:28.390Z, excerpt_hash=sha256:0fe09bcaaabf322cfa94a37ca4481b062793d30f3b110eea91b7e774b5a74cb9
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611121427-8RHTFM/blueprint/resolved-snapshot.json
+    - old_digest: aa8b72c5c0e288639b1b4d0158bc178043c2cad1a8a558be7571dcc86af69d6f
+    - current_digest: aa8b72c5c0e288639b1b4d0158bc178043c2cad1a8a558be7571dcc86af69d6f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611121427-8RHTFM
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611121427-8RHTFM --result verified-202611121427-8RHTFM --commit 9174de55bf09259dbd0958b34e833294b6118c4b
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -218,6 +271,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-12T14:47:46.264Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202611121427-8RHTFM
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T14:46:28.390Z, excerpt_hash=sha256:0fe09bcaaabf322cfa94a37ca4481b062793d30f3b110eea91b7e774b5a74cb9
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611121427-8RHTFM/blueprint/resolved-snapshot.json
+- old_digest: aa8b72c5c0e288639b1b4d0158bc178043c2cad1a8a558be7571dcc86af69d6f
+- current_digest: aa8b72c5c0e288639b1b4d0158bc178043c2cad1a8a558be7571dcc86af69d6f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611121427-8RHTFM
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611121427-8RHTFM --result verified-202611121427-8RHTFM --commit 9174de55bf09259dbd0958b34e833294b6118c4b
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
