@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 151
+revision: 154
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T00:35:22.045Z"
+  updated_at: "2026-11-12T01:06:46.330Z"
   updated_by: "CODER"
-  note: "Verified bounded extended property-info prerequisite:52 profile cases at90 thresholds S98.72 B97.14 F100 L100;25 helper regressions;52 boundary tests. Typecheck/static/lint/format and final scoped gates pass except unchanged JSDoc baseline. Evidence:native-extended-property-info-checkpoint.json12 source hashes. Ordinary metadata/static schemas/SwXTextDefaults/full DOCX-XLSX and UI remain incomplete; task and goal continue."
-  attempts: 45
+  note: "Verified bounded native Writer metadata checkpoint:103 profile cases at90 thresholds (S98.71 B95 F100 L99.46),18 corrected ODF/browser cases,8 Worker and52 boundary cases. Actual Reference/Sequence suppliers and consumers; source flags/names216 rows. Final scoped gates pass except unchanged JSDoc baseline; size/dependency recovered by unchanged edge-table extraction. Evidence:native-writer-property-info-checkpoint.json51 hashes. Full DOCX-XLSX/default-service/UI acceptance incomplete; continue task and goal."
+  attempts: 46
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -728,8 +731,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-12T01:06:46.330Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified bounded native Writer metadata checkpoint:103 profile cases at90 thresholds (S98.71 B95 F100 L99.46),18 corrected ODF/browser cases,8 Worker and52 boundary cases. Actual Reference/Sequence suppliers and consumers; source flags/names216 rows. Final scoped gates pass except unchanged JSDoc baseline; size/dependency recovered by unchanged edge-table extraction. Evidence:native-writer-property-info-checkpoint.json51 hashes. Full DOCX-XLSX/default-service/UI acceptance incomplete; continue task and goal."
+  -
+    type: "status"
+    at: "2026-11-12T01:07:10.272Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-12T00:35:26.100Z"
+doc_updated_at: "2026-11-12T01:07:10.272Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -2094,6 +2110,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T01:06:46.330Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified bounded native Writer metadata checkpoint:103 profile cases at90 thresholds (S98.71 B95 F100 L99.46),18 corrected ODF/browser cases,8 Worker and52 boundary cases. Actual Reference/Sequence suppliers and consumers; source flags/names216 rows. Final scoped gates pass except unchanged JSDoc baseline; size/dependency recovered by unchanged edge-table extraction. Evidence:native-writer-property-info-checkpoint.json51 hashes. Full DOCX-XLSX/default-service/UI acceptance incomplete; continue task and goal.
+    Attempts: 46
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T01:06:03.125Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2334,6 +2380,10 @@ sections:
     - Observation: Native extended metadata checkpoint:52 profile cases5files pass at90 thresholds (S98.72/B97.14/F100/L100);25 genuine helper regressions4files and52 boundary-verifier cases2files pass. Complete XPropertySetInfo weak component, owned copied entry values, native sequence COW and actual UNO/weak lifetime.
       Impact: Ordinary property-info/static Writer schema and application/SwXTextDefaults/full DOCX-XLSX/UI remain unfinished; this prerequisite does not certify them. Original negative-handle conversion preserved in WRITER452/CALC-519. No whole-task completion. Only old JSDoc baseline persists; doctor zero errors.
       Resolution: Persist evidence/native-extended-property-info-checkpoint.json with actual source hashes. Corrected registry reference shape, header-only symbol provenance and test JSDoc; registered only source-backed svl->cppuhelper edge. Continue with ordinary component and static Writer maps; no fake successful provider or broad parity promotion.
+
+    - Observation: Ordinary native metadata/static Writer schema checkpoint:103 current profile cases13files pass (S98.71/B95/F100/L99.46 at90 thresholds). Real XPropertySetInfo weak owner, actual Reference/Sequence suppliers/consumers, original static identities and216 source-matched names/flags across4 admitted families. Explicit types/handles replace heuristic metadata.
+      Impact: Six admitted map families only; TEXT_DEFAULT/SwXTextDefaults, other full tables, model/state-array/Stream/service ABI, complete DOCX-XLSX filters/export and mounted UI remain unfinished. Initial broad-edit row deletion and an old ODF border alias producer caused real regressions; fixed without weakening tests. No whole-task/goal completion.
+      Resolution: Evidence:native-writer-property-info-checkpoint.json. Current103 profile,18 affected ODF/browser,8 Worker and52 boundary-verifier cases pass; final gates pass except unchanged JSDoc baseline. Source-backed flags/names, original ODF border/connection names and unchanged module-edge extraction are verified. File-size/dependency gate recovered by coherent graph-table extraction. Continue approved goal with native default/application owners.
 id_source: "generated"
 ---
 ## Summary
@@ -3708,6 +3758,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T01:06:46.330Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified bounded native Writer metadata checkpoint:103 profile cases at90 thresholds (S98.71 B95 F100 L99.46),18 corrected ODF/browser cases,8 Worker and52 boundary cases. Actual Reference/Sequence suppliers and consumers; source flags/names216 rows. Final scoped gates pass except unchanged JSDoc baseline; size/dependency recovered by unchanged edge-table extraction. Evidence:native-writer-property-info-checkpoint.json51 hashes. Full DOCX-XLSX/default-service/UI acceptance incomplete; continue task and goal.
+Attempts: 46
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T01:06:03.125Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -3952,3 +4032,7 @@ DecisionContextRef:
 - Observation: Native extended metadata checkpoint:52 profile cases5files pass at90 thresholds (S98.72/B97.14/F100/L100);25 genuine helper regressions4files and52 boundary-verifier cases2files pass. Complete XPropertySetInfo weak component, owned copied entry values, native sequence COW and actual UNO/weak lifetime.
   Impact: Ordinary property-info/static Writer schema and application/SwXTextDefaults/full DOCX-XLSX/UI remain unfinished; this prerequisite does not certify them. Original negative-handle conversion preserved in WRITER452/CALC-519. No whole-task completion. Only old JSDoc baseline persists; doctor zero errors.
   Resolution: Persist evidence/native-extended-property-info-checkpoint.json with actual source hashes. Corrected registry reference shape, header-only symbol provenance and test JSDoc; registered only source-backed svl->cppuhelper edge. Continue with ordinary component and static Writer maps; no fake successful provider or broad parity promotion.
+
+- Observation: Ordinary native metadata/static Writer schema checkpoint:103 current profile cases13files pass (S98.71/B95/F100/L99.46 at90 thresholds). Real XPropertySetInfo weak owner, actual Reference/Sequence suppliers/consumers, original static identities and216 source-matched names/flags across4 admitted families. Explicit types/handles replace heuristic metadata.
+  Impact: Six admitted map families only; TEXT_DEFAULT/SwXTextDefaults, other full tables, model/state-array/Stream/service ABI, complete DOCX-XLSX filters/export and mounted UI remain unfinished. Initial broad-edit row deletion and an old ODF border alias producer caused real regressions; fixed without weakening tests. No whole-task/goal completion.
+  Resolution: Evidence:native-writer-property-info-checkpoint.json. Current103 profile,18 affected ODF/browser,8 Worker and52 boundary-verifier cases pass; final gates pass except unchanged JSDoc baseline. Source-backed flags/names, original ODF border/connection names and unchanged module-edge extraction are verified. File-size/dependency gate recovered by coherent graph-table extraction. Continue approved goal with native default/application owners.

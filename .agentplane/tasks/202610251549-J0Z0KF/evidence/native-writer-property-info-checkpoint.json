@@ -1,0 +1,429 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Native ordinary metadata and static Writer schemas with actual existing model/consumer Reference-Sequence routing",
+  "baseCommit": "8e780cf4fd770819225a983ad2547a434d07f249",
+  "checks": [
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-writer-property-info-gate-0.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-writer-property-info-gate-1.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-writer-property-info-gate-2.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-writer-property-info-gate-3.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-writer-property-info-gate-4.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-writer-property-info-gate-5.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-writer-property-info-gate-6.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-writer-property-info-gate-7.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-writer-property-info-gate-8.log"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-writer-property-info-gate-9.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-writer-property-info-gate-10.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-writer-property-info-gate-11.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-writer-property-info-gate-12.log"
+    },
+    {
+      "command": "npm run test:static",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-writer-property-info-gate-13.log"
+    },
+    {
+      "command": "Scoped ESLint over changed application/test TS paths",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-writer-property-info-lint-final.log"
+    },
+    {
+      "command": "npx eslint scripts/check-module-boundaries.mjs scripts/module-boundaries/allowed-edges.mjs --max-warnings 0",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-writer-property-info-script-lint.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-writer-property-info-size-final.log"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-writer-property-info-dependencies-final.log"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-writer-property-info-tools-final.log"
+    },
+    {
+      "command": "Scoped Prettier --check over changed TS/MJS/JSON/Markdown paths; final doc also checked separately",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-writer-property-info-format-final.log"
+    },
+    {
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts scripts/check-writer-module-boundaries.test.ts --coverage.enabled=false",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-writer-property-info-boundary-tests.log"
+    }
+  ],
+  "profile": {
+    "command": "npx vitest run src/svl/source/items/native-property-info.test.ts src/sw/source/core/unocore/native-property-info.test.ts src/svl/source/items/itemprop.test.ts src/svl/source/items/native-property-map.test.ts src/svl/source/items/native-property-set.test.ts src/svl/source/items/native-extended-property-info.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/core/unocore/native-text-import-api.test.ts src/sw/source/core/unocore/native-import-style-contracts.test.ts src/sw/source/core/unocore/native-writing-mode.test.ts src/sw/source/core/unocore/native-page-grid-properties.test.ts src/sw/source/core/doc/native-default-page-mode.test.ts src/sw/source/core/unocore/unocrsrhelper.border.test.ts --coverage --coverage.include=src/svl/source/items/itemprop.ts --coverage.include=src/sw/source/core/unocore/unomap.ts --coverage.include=src/sw/inc/unomap.ts --coverage.include=src/sw/inc/cmdid.ts --coverage.include=src/svx/inc/svxids.ts --coverage.include=src/editeng/inc/memberids.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reporter=text --coverage.reporter=json-summary",
+    "cwd": "apps/office",
+    "exitCode": 0,
+    "tests": 103,
+    "files": 13,
+    "log": "apps/office/coverage/native-writer-property-info-profile-final.log",
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 372,
+          "covered": 370,
+          "skipped": 0,
+          "pct": 99.46
+        },
+        "statements": {
+          "total": 390,
+          "covered": 385,
+          "skipped": 0,
+          "pct": 98.71
+        },
+        "functions": {
+          "total": 50,
+          "covered": 50,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 120,
+          "covered": 114,
+          "skipped": 0,
+          "pct": 95
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/editeng/inc/memberids.ts": {
+        "lines": {
+          "total": 86,
+          "covered": 86,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 86,
+          "covered": 86,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/items/itemprop.ts": {
+        "lines": {
+          "total": 171,
+          "covered": 171,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 32,
+          "covered": 32,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 186,
+          "covered": 183,
+          "skipped": 0,
+          "pct": 98.38
+        },
+        "branches": {
+          "total": 86,
+          "covered": 83,
+          "skipped": 0,
+          "pct": 96.51
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/svx/inc/svxids.ts": {
+        "lines": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/inc/cmdid.ts": {
+        "lines": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/inc/unomap.ts": {
+        "lines": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/unocore/unomap.ts": {
+        "lines": {
+          "total": 74,
+          "covered": 72,
+          "skipped": 0,
+          "pct": 97.29
+        },
+        "functions": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 77,
+          "covered": 75,
+          "skipped": 0,
+          "pct": 97.4
+        },
+        "branches": {
+          "total": 34,
+          "covered": 31,
+          "skipped": 0,
+          "pct": 91.17
+        }
+      }
+    }
+  },
+  "related": {
+    "command": "npx vitest run src/sw/source/writerfilter/dmapper/SectionPropertyMap.test.ts src/sw/source/writerfilter/dmapper/StyleSheetTable.test.ts src/sw/source/writerfilter/dmapper/native-style-entry-merge.test.ts src/sw/source/writerfilter/rtftok/rtf-character-styles.test.ts src/sw/source/filter/xml/odt-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sw/source/filter/xml/odt-style-family-roundtrip.test.ts src/sw/source/filter/xml/odt-font-style-roundtrip.test.ts src/xmloff/source/text/txtprmap.test.ts src/sw/browser/filter/xml/writer-color-item.test.ts --coverage.enabled=false",
+    "cwd": "apps/office",
+    "exitCode": 1,
+    "passed": 95,
+    "failed": 1,
+    "files": 10,
+    "log": "apps/office/coverage/native-writer-property-info-related-final.log",
+    "resolvedBy": "ODF producer correction and subsequent affected-file/Worker checks"
+  },
+  "correction": {
+    "command": "npx vitest run src/sw/source/filter/xml/odt-font-style-roundtrip.test.ts src/sw/source/filter/xml/odt-style-family-roundtrip.test.ts src/xmloff/source/text/txtprmap.test.ts src/sw/browser/filter/xml/writer-color-item.test.ts --coverage.enabled=false",
+    "cwd": "apps/office",
+    "exitCode": 0,
+    "tests": 18,
+    "files": 4,
+    "log": "apps/office/coverage/native-writer-property-info-odf-correction.log"
+  },
+  "workers": {
+    "command": "npx vitest run src/sw/source/filter/xml/odt-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts --coverage.enabled=false",
+    "cwd": "apps/office",
+    "exitCode": 0,
+    "tests": 8,
+    "files": 2,
+    "log": "apps/office/coverage/native-writer-property-info-workers-current.log"
+  },
+  "sourceFlagAudit": [
+    {
+      "map": 0,
+      "entries": 84,
+      "unmatchedNames": [],
+      "flagDifferences": []
+    },
+    {
+      "map": 1,
+      "entries": 37,
+      "unmatchedNames": [],
+      "flagDifferences": []
+    },
+    {
+      "map": 2,
+      "entries": 74,
+      "unmatchedNames": [],
+      "flagDifferences": []
+    },
+    {
+      "map": 4,
+      "entries": 21,
+      "unmatchedNames": [],
+      "flagDifferences": []
+    }
+  ],
+  "edgeExtraction": {
+    "allowedEdgeInitializerMatchesBase": true
+  },
+  "notes": [
+    "Actual ordinary SfxItemPropertySetInfo is a complete WeakImplHelper/XPropertySetInfo component with real map-copy, Sequence<Property>, reference/query/weak lifetime. No fake query provider or schema is registered. Old host-array projection and createPropertySetInfo are removed.",
+    "Existing document/cursor/style suppliers return owning actual References; style-reset and even/odd-page-copy consumers read real native sequences. Current property-state host arrays and whole model/service/Stream UNO integration remain separate incomplete bindings.",
+    "Original function-static tables/sets are shared across actual providers for six admitted map families. Explicit native types and source literal family flags replace name/type and name-pattern guesses; real native dispatch/member handles replace -1 placeholders. Other families, TEXT_DEFAULT40/SwXTextDefaults and full property tables remain unfinished.",
+    "Local source mismatches corrected: RubyBelow/ParaIsConnectBorder spellings; cursor Para*Border aliases removed; source BorderLine metadata; family-inappropriate advertised rows excluded. ODF producers now use original border and connection names; restored border width40 round-trips unchanged. Source-expanded names/flags match all216 admitted entries across four audited families, not a compiled native differential certificate.",
+    "Initial90-case regression and101-case profile passed before explicit schema corrections. A broad alias-removal text edit accidentally deleted adjacent border/page rows, causing three real regression failures; exact original rows restored. Current103-case profile passes. Initial typecheck caught obsolete imports and a short-item fixture missing its explicit type; fixed. Initial migration-script errors corrected without committing partial output.",
+    "Related96-case run had95 passes and one actual ODF border-width failure caused by an old Para*Border producer. Corrected only that producer, then actual18 affected ODF/browser cases and8 Worker cases passed. Earlier six-file78-case related run included a nonexistent seventh filter; only actual executed files count. No phantom results or weakened assertions.",
+    "File-size gate found prior dependency checker at1000 lines after the earlier source-backed edge addition. Extracted unchanged allowed-edge initializer to module-boundaries/allowed-edges.mjs; AST equality against base is true, full size/dependency checks and52 existing verifier cases pass. No rules bypassed or broadened.",
+    "All final scoped checks pass except unchanged css-style-matchers.ts:17/:76 JSDoc baseline. Doctor zero errors with existing managed-shim readiness warning. No dedicated matching class/provider QA found after exact and broader pinned svl/qa and sw/qa/core/unocore searches; critical public contract tests and actual import regressions cover this checkpoint.",
+    "Only related tests under approved ten-task full-suite cadence. Existing browser file/autosave/recovery policies unchanged. Complete DOCX/XLSX filter/import/export, application/default services, mounted Open/download/reopen and whole-goal acceptance remain unfinished; task stays DOING and goal active. No broad ABI/default/service/parity promotion."
+  ],
+  "sourceBlobs": {
+    "apps/office/src/svl/source/items/native-property-info.test.ts": "6d8510195187f35294f33a25e84100ef6f548616",
+    "apps/office/src/sw/source/core/unocore/native-property-info.test.ts": "83fc9f603cc21be585e58a50c9c3ba9a152fd544",
+    "apps/office/src/test/uno-property-metadata.ts": "3d2979cc77103575d9acefb1b6e5bb500d505ee4",
+    "docs/program/native-writer-property-info.md": "aa5e863d39eee2fcac905754cc17be5cacf204b5",
+    "scripts/module-boundaries/allowed-edges.mjs": "0661d7b3ecd7231892f809eda4e8d89f69cc8ed3",
+    "apps/office/src/editeng/inc/memberids.ts": "89a299eac1f4400e335d9ae99a14dcff75545174",
+    "apps/office/src/svl/source/items/itemprop.test.ts": "c7108a4fe69615a27d72c4ac6382a3baab749412",
+    "apps/office/src/svl/source/items/itemprop.ts": "cf070efea113d4dfb02b58e6ad2d72145ad4e2b3",
+    "apps/office/src/svx/inc/svxids.ts": "cd62741a3175da4c12101730fcf056d8d51b1f6b",
+    "apps/office/src/sw/inc/cmdid.ts": "071fe8caa581bedd2f8af73297dd1cf398a93d7c",
+    "apps/office/src/sw/inc/unomap.ts": "0f5e0538ff5daed809e209bab5a8a8ef52be040f",
+    "apps/office/src/sw/source/core/doc/native-default-page-mode.test.ts": "48d8487d3be55b66c6292f2f103150357fc82994",
+    "apps/office/src/sw/source/core/unocore/native-import-core-lifetimes.test.ts": "b295b206f31d61ace16c8e2bb9b7ec8b7f82d2a2",
+    "apps/office/src/sw/source/core/unocore/native-import-style-contracts.test.ts": "1a8b9d1f88db67eb370da35fbc971041bf20c1da",
+    "apps/office/src/sw/source/core/unocore/native-page-grid-properties.test.ts": "5a9c594139ec8b875da82b453535cd5d8cb81e1e",
+    "apps/office/src/sw/source/core/unocore/native-text-import-api.test.ts": "80000002adaedd084af916b11cdbd870f9793393",
+    "apps/office/src/sw/source/core/unocore/native-writing-mode.test.ts": "a974a394d94c0d55de729fb8d4862a4414d67874",
+    "apps/office/src/sw/source/core/unocore/unocrsrhelper.border.test.ts": "6fb2348e44075798052797378ec3bf1c04cadb08",
+    "apps/office/src/sw/source/core/unocore/unomap.ts": "ca4798b8a2b87e7d5044c8ce5a0bc6b4de7f25dd",
+    "apps/office/src/sw/source/core/unocore/unoobj2.ts": "f4c4cf0e1ca7e5c9b90425676e0d7784a2a7176a",
+    "apps/office/src/sw/source/core/unocore/unostyle.ts": "de3427bce90e6cc45d1efd0755ddec7ba66abc3a",
+    "apps/office/src/sw/source/uibase/uno/unotxdoc.ts": "5973d2c843c877afd48814bca096c1eec559a038",
+    "apps/office/src/sw/source/writerfilter/dmapper/PropertyMap.section.ts": "0eeed011554b687828fd397195f0eed3fbb78c99",
+    "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.ts": "9aa9cbc807202529a1bab4c4c25d83c49d807a0b",
+    "apps/office/src/xmloff/source/text/txtprmap.ts": "3e9f439c52c038157ed59204afde7a790311cf47",
+    "docs/program/registry/shared/provenance/editeng/inc/memberids.ts.json": "937bf0422454232844b57b0d82149bda6638f403",
+    "docs/program/registry/shared/provenance/svl/source/items/itemprop.ts.json": "8310f278600ea435a06fac8c53f9a96756fdd62f",
+    "docs/program/registry/shared/provenance/svx/inc/svxids.ts.json": "25f8de2bb93265a0fd38c9a6890aa227a1dbb387",
+    "docs/program/registry/shared/provenance/xmloff/source/text/txtprmap.ts.json": "3626c523d146938102ddec0d77ddd6add01b50fb",
+    "docs/program/registry/shared/runtime/editeng/inc/memberids.ts.json": "fecd265adc845fb6ca8c9f9ca23249af6c24d79a",
+    "docs/program/registry/shared/runtime/svl/source/items/itemprop.ts.json": "adec99f57b1301a2baa0064481397101758a56cf",
+    "docs/program/registry/shared/runtime/svx/inc/svxids.ts.json": "0873033f3028a605cbe3b8b74514f65db70c68db",
+    "docs/program/registry/shared/runtime/xmloff/source/text/txtprmap.ts.json": "ff654ff0345322fc1d5ee5c51ac7b826209fdc0e",
+    "docs/program/registry/writer/capabilities/CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6.json": "453bdc90b4cf7ac1f13628ed827ccfee23648f9e",
+    "docs/program/registry/writer/provenance/sw/inc/cmdid.ts.json": "ba87b6f4628f96a2b6f5c847c9910b2bd6aca9bf",
+    "docs/program/registry/writer/provenance/sw/inc/unomap.ts.json": "235a3b50052c5d718efaf5ed07ac4aea15921358",
+    "docs/program/registry/writer/provenance/sw/source/core/unocore/unomap.ts.json": "e43b128b35122c064c958daffe0ff0ce896defff",
+    "docs/program/registry/writer/provenance/sw/source/core/unocore/unoobj2.ts.json": "6768f856ac01fcbb9efb540c34c34380a90f498f",
+    "docs/program/registry/writer/provenance/sw/source/core/unocore/unostyle.ts.json": "c289a43d1b536476ac462bef44d6c1eae00b3bbd",
+    "docs/program/registry/writer/provenance/sw/source/uibase/uno/unotxdoc.ts.json": "b71f7613d43e49ab7bfe925af30e1c5c39901b82",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/PropertyMap.section.ts.json": "20f4756f7ddd3d1686d8bdeb6a42c33fc048042d",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/StyleSheetTable.ts.json": "5e729049acd224e24cf0b43bd2a6d765efa2e17f",
+    "docs/program/registry/writer/runtime/sw/inc/cmdid.ts.json": "cffe5c1177086c06f6bae0efd594f50439a9f209",
+    "docs/program/registry/writer/runtime/sw/inc/unomap.ts.json": "ba550050435b3f42a9b76464946b8f00874f64e8",
+    "docs/program/registry/writer/runtime/sw/source/core/unocore/unomap.ts.json": "cf7cf7b12cb228b6445702d94e188773bb91122f",
+    "docs/program/registry/writer/runtime/sw/source/core/unocore/unoobj2.ts.json": "fb05782459cdd6fa9a8e0098e58999ad947c53c5",
+    "docs/program/registry/writer/runtime/sw/source/core/unocore/unostyle.ts.json": "de1d508fc86bf36fc1ba0516a58e7b54bcf2e8f7",
+    "docs/program/registry/writer/runtime/sw/source/uibase/uno/unotxdoc.ts.json": "ac821914c27a7b2648ec08b1905558dca73746af",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/PropertyMap.section.ts.json": "dd5bc1b5cf0c95b8d620f562c7634c7aa51c3eeb",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/StyleSheetTable.ts.json": "25c9e779e5200d2b29e838b6aaaa819d3f3c2373",
+    "scripts/check-module-boundaries.mjs": "4f188f6d5613ef31bb05c77191082e4ce1d2b446"
+  }
+}
