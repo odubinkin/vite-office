@@ -23,6 +23,9 @@ import {
   WeakComponentImplHelper as PublicComponent,
   WeakImplHelper as PublicWeak,
 } from "../../apps/office/src/comphelper/inc/compbase";
+import { XPropertyChangeListener } from "../../apps/office/src/udkapi/com/sun/star/beans/XPropertyChangeListener";
+import type { XPropertySetInfo } from "../../apps/office/src/udkapi/com/sun/star/beans/XPropertySetInfo";
+import type { PropertyChangeEventConstReference } from "../../apps/office/src/udkapi/com/sun/star/beans/PropertyChangeEvent";
 import { XEventListener } from "../../apps/office/src/udkapi/com/sun/star/lang/XEventListener";
 import type { EventObject } from "../../apps/office/src/udkapi/com/sun/star/lang/EventObject";
 import {
@@ -34,7 +37,11 @@ import {
   PropertyChangeEvent,
   cppu_detail_getUnoType_PropertyChangeEvent as eventType,
 } from "../../apps/office/src/udkapi/com/sun/star/beans/PropertyChangeEvent";
-import { OPropertyArrayHelper } from "../../apps/office/src/cppuhelper/inc/propshlp";
+import { OStatefulPropertySet } from "../../apps/office/src/comphelper/inc/propstate";
+import {
+  OPropertyArrayHelper,
+  type IPropertyArrayHelper,
+} from "../../apps/office/src/cppuhelper/inc/propshlp";
 import { OPropertySetHelperInfo_Impl } from "../../apps/office/src/cppuhelper/source/propshlp";
 import { XPropertySetInfo } from "../../apps/office/src/udkapi/com/sun/star/beans/XPropertySetInfo";
 import { PropertyBag } from "../../apps/office/src/comphelper/inc/propertybag";
@@ -42,7 +49,10 @@ import {
   Property,
   cppu_detail_getUnoType_Property as propertyType,
 } from "../../apps/office/src/udkapi/com/sun/star/beans/Property";
-import { REMOVABLE } from "../../apps/office/src/udkapi/com/sun/star/beans/PropertyAttribute";
+import {
+  REMOVABLE,
+  BOUND,
+} from "../../apps/office/src/udkapi/com/sun/star/beans/PropertyAttribute";
 import { XPathAPI } from "../../apps/office/src/offapi/com/sun/star/xml/xpath/XPathAPI";
 import { Converter } from "../../apps/office/src/udkapi/com/sun/star/script/Converter";
 import type { XComponentContext } from "../../apps/office/src/udkapi/com/sun/star/uno/XComponentContext";
@@ -209,6 +219,131 @@ export async function runNativeDomWorkerProbe() {
       liveRawType.equals(UnoType.get("sal_Int32")),
     interfaceIdentity: rawQuery.get() === publicListener.get(),
   };
+  /** Concrete native helper caller owns actual source dynamic properties, without registering a substitute metadata service. */
+  class StatefulOwner extends OStatefulPropertySet {
+    private readonly bag = new PropertyBag();
+    private readonly info: OPropertyArrayHelper;
+    /** Original property registration and real description snapshot. @returns Owner. */ constructor() {
+      super();
+      const initial = new Any([41], "sal_Int32"),
+        descriptions = new PropertyValues();
+      try {
+        this.bag.addProperty(u("A"), 7, BOUND, initial);
+        this.bag.describeProperties(descriptions);
+        this.info = new OPropertyArrayHelper(descriptions);
+      } finally {
+        descriptions.dispose();
+        initial.dispose();
+      }
+    }
+    /** Actual derived fields precede the original base destructor chain. @returns Nothing. */ protected override destroy(): void {
+      this.info.dispose();
+      this.bag.dispose();
+      super.destroy();
+    }
+    /** Original metadata callback. @returns Actual helper. */ protected override getInfoHelper(): IPropertyArrayHelper {
+      return this.info;
+    }
+    /** Original info factory. @returns Acquired actual snapshot. */ getPropertySetInfo(): Reference<XPropertySetInfo> {
+      return OStatefulPropertySet.createPropertySetInfo(this.info);
+    }
+    /** Original bag conversion. @param converted - Output. @param old - Output. @param handle - Handle. @param value - Input. @returns Changed. */ protected override convertFastPropertyValue(
+      converted: Any,
+      old: Any,
+      handle: number,
+      value: Any,
+    ): boolean {
+      return this.bag.convertFastPropertyValue(handle, value, converted, old);
+    }
+    /** Original no-broadcast write. @param handle - Handle. @param value - Value. @returns Nothing. */ protected override setFastPropertyValue_NoBroadcast(
+      handle: number,
+      value: Any,
+    ): void {
+      this.bag.setFastPropertyValue(handle, value);
+    }
+    /** Original native output overload. @param value - Output. @param handle - Handle. @returns Nothing. */ protected override readFastPropertyValue(
+      value: Any,
+      handle: number,
+    ): void {
+      this.bag.getFastPropertyValue(handle, value);
+    }
+    /** Original actual default map. @param handle - Handle. @returns Owned default. */ override getPropertyDefaultByHandle(
+      handle: number,
+    ): Any {
+      const value = new Any();
+      try {
+        this.bag.getPropertyDefaultByHandle(handle, value);
+        return value;
+      } catch (error) {
+        value.dispose();
+        throw error;
+      }
+    }
+  }
+  const stateful = own(new Reference(new StatefulOwner())),
+    statefulApi = stateful.operatorStar(),
+    NativeNames = Sequence.specialize<OUString>("OUString", 8),
+    stateNames = [u("A"), u("missing")],
+    stateInput = own(
+      new NativeNames(
+        {
+          /** Actual name-array pointer. @param offset - Bytes. @returns Existing string field. */ get(
+            offset: number,
+          ): unknown {
+            return (stateNames[offset / 8] as OUString).getDataAddress();
+          },
+        },
+        2,
+      ),
+    ),
+    initialStates = own(statefulApi.getPropertyStates(stateInput)),
+    initialStateArray = initialStates.getConstArray() as SequenceElements;
+  let notifiedTypeLong = true,
+    notifiedValue = 0,
+    notifiedOld = 0,
+    samePropertySource = false,
+    propertyNotifications = 0;
+  /** Actual bound listener reads native event fields. */
+  class PropertyListener
+    extends PublicWeak.specialize(XPropertyChangeListener)
+    implements XPropertyChangeListener
+  {
+    /** Native callback view, without copied event/Any owners. @param event - Source fields. @returns Nothing. */ propertyChange(
+      event: PropertyChangeEventConstReference,
+    ): void {
+      ++propertyNotifications;
+      notifiedTypeLong = Any.prototype.getValueType
+        .call(event.NewValue as Any)
+        .equals(UnoType.get("sal_Int32"));
+      notifiedValue = Any.prototype.get.call(event.NewValue as Any, "sal_Int32");
+      notifiedOld = Any.prototype.get.call(event.OldValue as Any, "sal_Int32");
+      samePropertySource = event.Source.get() === statefulApi;
+    }
+    /** Original required listener callback. @param event - Event. @returns Nothing. */ disposing(
+      event: Readonly<EventObject>,
+    ): void {
+      void event;
+    }
+  }
+  const propertyListener = own(new Reference(new PropertyListener()));
+  statefulApi.addPropertyChangeListener(u("A"), propertyListener);
+  statefulApi.setPropertyValue(u("A"), own(new Any([42], "sal_Int16")));
+  const storedProperty = own(statefulApi.getPropertyValue(u("A"))),
+    nativePropertyControl = {
+      value: storedProperty.get("sal_Int32"),
+      storedLong: storedProperty.getValueType().equals(UnoType.get("sal_Int32")),
+      notifications: propertyNotifications,
+      notifiedTypeLong,
+      notifiedValue,
+      notifiedOld,
+      sameSource: samePropertySource,
+      state: statefulApi.getPropertyState(u("A")),
+      initialStates: [
+        (initialStateArray.get(0) as [number])[0],
+        (initialStateArray.get(4) as [number])[0],
+      ],
+      typeCount: own(statefulApi.getTypes()).getLength(),
+    };
   const processContext = getProcessComponentContext() as Reference<XComponentContext>,
     converter = own(Converter.create(processContext)),
     row = own(new Reference(new PropertyValueSet(processContext))),
@@ -346,6 +481,7 @@ export async function runNativeDomWorkerProbe() {
       propertyArray,
       legacyListeners,
       nativeAnyFields,
+      nativePropertyControl,
       documentBuilder,
       xpath: (
         /** Queries the actual registered native XPath service. @returns Scalar observations only. */ () => {

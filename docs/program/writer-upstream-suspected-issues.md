@@ -3844,3 +3844,27 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 
 - Source: `include/cppuhelper/interfacecontainer.h` and `cppuhelper/source/interfacecontainer.cxx`, `addInterface`/`removeInterface`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-549.
 - The published declaration explicitly permits null. Adding null to an empty singleton stores null and returns1, while getLength/getElements report zero. If a vector later shrinks to one remaining null reference, removeInterface unconditionally calls p->acquire before collapsing it into singleton storage, an undefined native dereference. Preserve the union transitions and return values. Ordinary null insertion is tested through actual public calls; the undefined collapse is represented by an explicit host precondition failure, without inventing a native crash result or a successful no-op. Complete property-service/filter impact and compiled native differential are unqualified.
+
+
+### WRITER484 — Single-value property notifications carry the requested type while batch/dependent notifications carry the normalized type
+
+- Source: `cppuhelper/source/propshlp.cxx, setFastPropertyValue/setFastPropertyValues/setDependentFastPropertyValue`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-550.
+- The single setter stores aConvertedVal but fires veto/bound events using rValue. Batch and dependent paths use converted values. A real long property set from short therefore stores long but notifies short; source TODO already questions this difference. Preserve all three paths. Native tests and both real browser realms reproduce the type difference without replacement values; no complete filter defect or compiled differential is claimed.
+
+
+### WRITER485 — Ordinary and dependent property setters wrap unexpected UNO exceptions with different type preservation
+
+- Source: `cppuhelper/source/propshlp.cxx, setFastPropertyValue and setDependentFastPropertyValue`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-551.
+- The ordinary catch serializes the statically typed Exception base into WrappedTargetException.TargetException, while the dependent catch uses getCaughtException and retains dynamic members. Preserve field assignment order, source allowed-exception filters, and this truncation difference. Tests verify the ordinary base type and a dependent actual CommandFailedException with Reason88 and nonempty real Context. It may be legacy design; do not normalize both paths into a common exception policy.
+
+
+### WRITER486 — Disposed-state checks in property setters are diagnostics rather than guards
+
+- Source: `cppuhelper/source/propshlp.cxx, setFastPropertyValue and setFastPropertyValues`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-552.
+- These setters only diagnose bDisposed/bInDispose and continue their value/conversion/event logic. Listener registration/removal returns early for those flags. Preserve the difference; the concrete owner may be responsible for guarding external calls. The source-owned broadcaster flag and actual bag values qualify this helper behavior; no complete disposed service lifecycle or UI acceptance is claimed.
+
+
+### WRITER487 — Bulk property-state lookup stops at a missing name and returns remaining DIRECT defaults instead of the declared exception
+
+- Source: `comphelper/source/property/propstate.cxx, getPropertyStates; udkapi/com/sun/star/beans/XPropertyState.idl`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-553.
+- The forward-only find loop breaks at the first missing property without throwing. Remaining elements keep the native enum default0 DIRECT_VALUE, including later existing properties whose true state may be DEFAULT_VALUE. The IDL declares UnknownPropertyException for a missing property. Preserve the source loop, output cursor and zero initialization: actual A/B/C requests with A/C default-valued return1/0/0; both real browser realms also return1/0 for A/missing. No fallback state repair or new exception is added; native shared-memory scheduling and compiled differential remain unqualified.

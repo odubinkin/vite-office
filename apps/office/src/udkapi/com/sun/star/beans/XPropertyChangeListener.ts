@@ -10,11 +10,11 @@ import {
   cppu_detail_getUnoType as eventListenerType,
   type XEventListener,
 } from "../lang/XEventListener";
-import type { PropertyChangeEvent } from "./PropertyChangeEvent";
+import type { PropertyChangeEventConstReference } from "./PropertyChangeEvent";
 /** Original declared methods and direct base. */
 export interface XPropertyChangeListener extends XEventListener {
   /** Original bound-property notification. @param event - Original const event. @returns Nothing. */
-  propertyChange(event: Readonly<PropertyChangeEvent>): void;
+  propertyChange(event: PropertyChangeEventConstReference): void;
 }
 const the_type: [R | null] = [null];
 /** Original normal generated getter retains its implicit root or explicit direct base through the existing CPPU factory. @returns Borrowed cached type. */

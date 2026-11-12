@@ -1,5 +1,8 @@
 /** @fileoverview Original EventObject IDL value and cppumaker-normal struct binding over the actual Reference pointer member and shared CPPU compound owner. */
-import { Reference } from "../../../../../cppu/inc/com/sun/star/uno/Reference";
+import {
+  Reference,
+  type ReferenceConstReference,
+} from "../../../../../cppu/inc/com/sun/star/uno/Reference";
 import type { XInterface } from "../../../../../cppu/inc/com/sun/star/uno/XInterface";
 import type { Type } from "../../../../../cppu/inc/com/sun/star/uno/Type";
 import { UnoType, getTypeFromTypeDescriptionReference } from "../../../../../cppu/inc/unotype";
@@ -21,35 +24,37 @@ export function cppu_detail_getUnoType_EventObject(): Type {
     );
   return getTypeFromTypeDescriptionReference(the_type);
 }
+/** Compiler const-reference projection of the actual declared Source field, without a copied event/ref owner. */
+export interface EventObjectConstReference {
+  readonly Source: ReferenceConstReference<XInterface>;
+}
 /** Original generated value owns the actual single Source Reference, without an alternate interface/value provider. */
 export class EventObject {
   private readonly source = new Reference<XInterface>();
   /** Original default/copy/all-member constructors. @param args - Selected original overload. @returns Event value. */
-  constructor(...args: [] | [source: Readonly<EventObject>] | [source: Reference<XInterface>]) {
+  constructor(...args: [] | [source: EventObjectConstReference] | [source: Reference<XInterface>]) {
     if (args.length === 1)
-      this.source.assign(
-        args[0] instanceof EventObject ? args[0].Source : (args[0] as Reference<XInterface>),
-      );
+      this.source.assign(args[0] instanceof Reference ? args[0].get() : args[0].Source.get());
   }
   /** Original stable mutable Reference member. @returns Member owner. */
   get Source(): Reference<XInterface> {
     return this.source;
   }
   /** Original member assignment retains its field identity. @param value - Borrowed source. @returns Nothing. */
-  set Source(value: Reference<XInterface>) {
-    this.source.assign(value);
+  set Source(value: ReferenceConstReference<XInterface>) {
+    this.source.assign(value.get());
   }
   /** Original implicit copy assignment. @param value - Source event. @returns This event. */
-  assign(value: Readonly<EventObject>): this {
+  assign(value: EventObjectConstReference): this {
     this.Source = value.Source;
     return this;
   }
   /** Original generated field equality uses actual interface root identity. @param value - Other event. @returns Equality. */
-  equals(value: Readonly<EventObject>): boolean {
+  equals(value: EventObjectConstReference): boolean {
     return this.Source.operatorEquals(value.Source);
   }
   /** Original generated inequality. @param value - Other event. @returns Inequality. */
-  notEquals(value: Readonly<EventObject>): boolean {
+  notEquals(value: EventObjectConstReference): boolean {
     return !this.equals(value);
   }
   /** Original sole Source member address at byte zero. @param offset - Declared zero offset. @returns Actual interface pointer cell. */

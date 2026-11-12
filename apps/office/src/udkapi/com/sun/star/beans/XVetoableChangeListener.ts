@@ -10,11 +10,11 @@ import {
   cppu_detail_getUnoType as eventListenerType,
   type XEventListener,
 } from "../lang/XEventListener";
-import type { PropertyChangeEvent } from "./PropertyChangeEvent";
+import type { PropertyChangeEventConstReference } from "./PropertyChangeEvent";
 /** Original declared methods and direct base. */
 export interface XVetoableChangeListener extends XEventListener {
   /** Original constrained-property notification, retaining declared source exceptions. @param event - Original const event. @returns Nothing. */
-  vetoableChange(event: Readonly<PropertyChangeEvent>): void;
+  vetoableChange(event: PropertyChangeEventConstReference): void;
 }
 const the_type: [R | null] = [null];
 /** Original normal generated getter retains its implicit root or explicit direct base through the existing CPPU factory. @returns Borrowed cached type. */

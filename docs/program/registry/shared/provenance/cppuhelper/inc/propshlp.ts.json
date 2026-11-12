@@ -9,17 +9,22 @@
     "localSymbols": [
       "OPropertyArrayHelper",
       "IEventNotificationHook",
-      "OMultiTypeInterfaceContainerHelperInt32"
+      "OMultiTypeInterfaceContainerHelperInt32",
+      "OPropertySetHelper",
+      "OPropertySetHelper2"
     ],
     "upstreamSymbols": [
       "IPropertyArrayHelper",
       "OPropertyArrayHelper",
       "IEventNotificationHook",
-      "OMultiTypeInterfaceContainerHelperInt32"
+      "OMultiTypeInterfaceContainerHelperInt32",
+      "OPropertySetHelper",
+      "OPropertySetHelper2"
     ],
     "preservedResponsibilities": [
       "Original complete IPropertyArrayHelper/OPropertyArrayHelper and OPropertySetHelperInfo_Impl preserve native Property/Sequence ownership, nonconst subscript COW, diagnostic-only sorted hints, indexed or linear handle lookup, name-sorted binary lookup, immutable info snapshots and original hybrid batch cursor including CALC-548/WRITER482 repeated-name behavior. IEventNotificationHook is only its original declaration. Host sorting uses actual generated Property copies; exact qsort allocation/refcount/move and duplicate-key selection traces, physical ABI and native thread scheduling remain unqualified. OPropertySetHelper and notification containers, separate UNO OPropertyBag, SfxDocumentMetaData and final DOCX/XLSX/UI acceptance are still unfinished.",
-      "Original signed32 multi-container declaration reexports the actual source implementation, without the unported property-set helpers."
+      "Original signed32 multi-container declaration reexports the actual source implementation, without the unported property-set helpers.",
+      "Consumed original published property-set/state algorithms now use actual Any/Property/Sequence, original singleton/vector listener containers, actual weak roots and actual non-interface broadcast base ownership. They preserve source name/handle/readonly checks, conversion/storage/veto/bound ordering, dependent-before-primary events, source exception filters and static-versus-dynamic wrapping, hook-before-empty-count and notification flags, copied snapshots, native default/current equality, state reset and original early-break bulk state behavior. Native event const-field projections acquire/copy nothing; generated SDK copy/equality accepts the same actual fields. Compiler MI flattening uses one supplied zero-argument OWeakObject-based root, a distinct propertySet_m_pReserved to preserve the native weak base field, an explicit self-cast token and qualified destructor bindings; non-interface composition represents the original broadcast base subobject. readFastPropertyValue names only the original protected output overload. Mutex member/GetMutex/scopes, physical C++ ABI/allocator/MI casts and nonweak/argument-bearing root bindings remain unqualified, with no fake locks, value stores, service/type providers or registered metadata substitutes. Authored critical tests and adapted qadevOOo XPropertyState4/XMultiPropertySet6 entry points cover the configured sal_Int32 caller; Java proxy/event harness and other ValueChanger configurations remain unqualified. Actual Chromium main/DOM-free Worker confirms long storage versus short notification, old/current/default states, real Source identity and seven original type entries. UNO OPropertyBag, SfxDocumentMetaData and final DOCX/XLSX core/shell/UI acceptance remain unfinished."
     ],
     "omittedResponsibilities": [
       "Other property-set/notification classes in propshlp.hxx/cxx remain unadvertised.",
@@ -33,6 +38,10 @@
         },
         {
           "path": "apps/office/src/cppuhelper/source/propshlp.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/source/propshlp.propertyset.test.ts",
           "marker": "@fileoverview"
         }
       ],
@@ -52,6 +61,10 @@
         {
           "path": "include/cppuhelper/propshlp.hxx",
           "marker": "OMultiTypeInterfaceContainerHelperInt32"
+        },
+        {
+          "path": "include/cppuhelper/propshlp.hxx",
+          "marker": "OPropertySetHelper2"
         }
       ]
     }

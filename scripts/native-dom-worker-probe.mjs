@@ -111,6 +111,18 @@ try {
       failedSecond: 0,
       failedSecondWasNull: true,
     },
+    nativePropertyControl: {
+      value: 42,
+      storedLong: true,
+      notifications: 1,
+      notifiedTypeLong: false,
+      notifiedValue: 42,
+      notifiedOld: 41,
+      sameSource: true,
+      state: 0,
+      initialStates: [1, 0],
+      typeCount: 7,
+    },
     nativeAnyFields: { value: 43, initialDefault: 41, liveType: true, interfaceIdentity: true },
     legacyListeners: { remaining: 1, sameFirst: true, sameSnapshot: true, keyCount: 1, key: -7 },
     propertyArray: {

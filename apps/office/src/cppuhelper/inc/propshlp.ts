@@ -1,7 +1,12 @@
-/** @fileoverview Original property-array and event-hook declarations; complete PropertySetInfo component lives with its source owner. Other propshlp.hxx property-set/notification classes remain unadvertised. */
+/** @fileoverview Original published property-array/set helper and signed32 listener-container declarations. Actual source owners retain value and callback behavior; native mutex/ABI lowering remains explicit. */
 export {
   IPropertyArrayHelper,
   OPropertyArrayHelper,
   type IEventNotificationHook,
 } from "../source/propshlp";
 export { OMultiTypeInterfaceContainerHelperInt32 } from "../source/interfacecontainer";
+export {
+  OPropertySetHelper,
+  OPropertySetHelper2,
+  PROPERTYSET_SELF_EVENT_HOOK,
+} from "../source/propshlp.propertyset";

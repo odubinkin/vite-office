@@ -16,7 +16,8 @@
       "propertyChange"
     ],
     "preservedResponsibilities": [
-      "Complete original XPropertyChangeListener IDL method declarations and cppumaker-normal cached static type identity use actual Reference/Any/Sequence/value owners. XPropertySet retains all7 methods, XPropertySetInfo all3, and property/veto listeners retain the actual XEventListener direct base and exact PropertyChangeEvent input. No concrete property/listener behavior, subscription defaults or service provider is manufactured. Source query/base identity is exercised through actual WeakImplHelper."
+      "Complete original XPropertyChangeListener IDL method declarations and cppumaker-normal cached static type identity use actual Reference/Any/Sequence/value owners. XPropertySet retains all7 methods, XPropertySetInfo all3, and property/veto listeners retain the actual XEventListener direct base and exact PropertyChangeEvent input. No concrete property/listener behavior, subscription defaults or service provider is manufactured. Source query/base identity is exercised through actual WeakImplHelper.",
+      "Consumed original published property-set/state algorithms now use actual Any/Property/Sequence, original singleton/vector listener containers, actual weak roots and actual non-interface broadcast base ownership. They preserve source name/handle/readonly checks, conversion/storage/veto/bound ordering, dependent-before-primary events, source exception filters and static-versus-dynamic wrapping, hook-before-empty-count and notification flags, copied snapshots, native default/current equality, state reset and original early-break bulk state behavior. Native event const-field projections acquire/copy nothing; generated SDK copy/equality accepts the same actual fields. Compiler MI flattening uses one supplied zero-argument OWeakObject-based root, a distinct propertySet_m_pReserved to preserve the native weak base field, an explicit self-cast token and qualified destructor bindings; non-interface composition represents the original broadcast base subobject. readFastPropertyValue names only the original protected output overload. Mutex member/GetMutex/scopes, physical C++ ABI/allocator/MI casts and nonweak/argument-bearing root bindings remain unqualified, with no fake locks, value stores, service/type providers or registered metadata substitutes. Authored critical tests and adapted qadevOOo XPropertyState4/XMultiPropertySet6 entry points cover the configured sal_Int32 caller; Java proxy/event harness and other ValueChanger configurations remain unqualified. Actual Chromium main/DOM-free Worker confirms long storage versus short notification, old/current/default states, real Source identity and seven original type entries. UNO OPropertyBag, SfxDocumentMetaData and final DOCX/XLSX core/shell/UI acceptance remain unfinished."
     ],
     "omittedResponsibilities": [
       "Production ComponentContext/ServiceManager and application process-factory installation, full EditEngine construction/VCL/Sfx resources, BreakIterator/CharacterClassification service admission, NatNum12 supplier/casing/formatter and final CSV integration remain incomplete. No synthetic context/manager is supplied. Native mutex/thread/reentrant-static initialization/destructor behavior, ABI/pointer UB and allocator exhaustion are not certified. Full reflection and unconsumed services remain unverified."
@@ -34,6 +35,10 @@
         {
           "path": "apps/office/src/udkapi/com/sun/star/beans/PropertyChangeEvent.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/cppuhelper/source/propshlp.propertyset.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
