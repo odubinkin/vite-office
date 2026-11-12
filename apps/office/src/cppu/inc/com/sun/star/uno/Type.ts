@@ -26,6 +26,8 @@ export enum UnoType_NoAcquire {
 /** Original unscoped namespace enum constant. */
 export const UNO_TYPE_NO_ACQUIRE = UnoType_NoAcquire.UNO_TYPE_NO_ACQUIRE;
 
+/** Compiler lvalue views alias the actual private Type pointer, with no acquisition or independent pointer owner. */
+const addresses = new WeakMap<Type, [R | null]>();
 /** Original IDL meta-type value with its one private C reference pointer. Constructor/member definitions split across original Type.h/Type.hxx are bound into this single Type class. Physical allocation operators, native const/rvalue enforcement, Array templates and legacy/UnoType helper families remain separate language/consumer responsibilities. */
 export class Type {
   private _pType: R | null;
@@ -96,6 +98,22 @@ export class Type {
   /** Original borrowed C pointer; no acquire occurs. @returns The same stored pointer, including an intentionally retained null-data value. */
   getTypeLibType(): R | null {
     return this._pType;
+  }
+  /** Compiler address-of binding for the original sole private field. Shared value transport writes this actual field through the existing typelib C functions. @returns Stable native pointer lvalue. */
+  getAddress(): [R | null] {
+    let address = addresses.get(this);
+    if (address === undefined) {
+      address = Object.defineProperty([null], 0, {
+        /** Reads the same actual field. @returns Borrowed reference. */ get: () => this._pType,
+        /** Assigns raw field storage; ownership belongs to the original caller's data operation. @param value - Native pointer. @returns Nothing. */ set: (
+          value: R | null,
+        ) => {
+          this._pType = value;
+        },
+      }) as [R | null];
+      addresses.set(this, address);
+    }
+    return address;
   }
   /** Original reference compatibility predicate, with no replacement numeric/value logic. @param value - Original source type. @returns Source-defined compatibility. */
   isAssignableFrom(value: Type): boolean {

@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/comphelper/source/property/propertybag.ts",
+    "upstreamPath": "comphelper/source/property/propertybag.cxx",
+    "localSymbols": [
+      "PropertyBag"
+    ],
+    "upstreamSymbols": [
+      "PropertyBag::addProperty",
+      "PropertyBag::removeProperty",
+      "getPropertyDefaultByHandle"
+    ],
+    "preservedResponsibilities": [
+      "Complete original low-level PropertyBag and OPropertyContainerHelper retain separate default/holder/descriptor ownership, declared real/Any/held locations, lossless UNO normalization, untouched unchanged outputs, original diagnostics, default empty-name rejection, forced MAYBEVOID, removal/default semantics and name-sorted left-first descriptor merge. PropertyDescription retains signed handles, original nested location enum and logical64 size_t maximum. Type now exposes its actual private pointer through one stable compiler lvalue; generated Property no longer writes that private field reflectively. Property.unacquired projects only existing declared fields, with no new UNO value/refcount/type provider; sorting temporaries use actual generated Property values. Newly consumed generated exceptions retain real Type/Any/copy/move/Context behavior through the injected host ABI. Source removed-holder retention is preserved as CALC-547/WRITER481. The separate OPropertyBag UNO service, PropertyArray/notification helpers, SfxDocumentMetaData and complete DOCX/XLSX shell/UI remain unfinished; STL allocation/move traces, physical ABI, native threading and final/access/const enforcement remain unqualified."
+    ],
+    "omittedResponsibilities": [
+      "Separate UNO OPropertyBag service and complete metadata/format/UI are not claimed.",
+      "Physical STL allocator/sort move traces, ABI/threads and native access/const/final enforcement are unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/comphelper/source/property/propertybag.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/property/propertybag.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "comphelper/source/property/propertybag.cxx",
+          "marker": "PropertyBag::addProperty"
+        },
+        {
+          "path": "comphelper/source/property/propertybag.cxx",
+          "marker": "PropertyBag::removeProperty"
+        },
+        {
+          "path": "comphelper/source/property/propertybag.cxx",
+          "marker": "getPropertyDefaultByHandle"
+        }
+      ]
+    }
+  }
+}

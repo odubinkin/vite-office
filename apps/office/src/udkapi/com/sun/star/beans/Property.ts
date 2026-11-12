@@ -25,25 +25,46 @@ export function cppu_detail_getUnoType_Property(): Type {
     );
   return getTypeFromTypeDescriptionReference(theType);
 }
+/** Native const struct reference: each field is borrowed from its declared actual storage. */
+export interface PropertyConstReference {
+  readonly Name: OUStringConstReference;
+  readonly Handle: number;
+  readonly Type: Type;
+  readonly Attributes: number;
+}
+/** Compiler pointer-to-Property field protocol, used by the existing UNO sequence storage. */
+interface PropertyAddress {
+  get(offset: number): unknown;
+}
 /** The actual generated property value owns copies of its string and Type. */
 export class Property {
   private readonly name = new OUString();
   private readonly handle: [number] = [0];
   private readonly type = new Type();
-  private readonly typeSlot: [R | null] = Object.defineProperty([null], 0, {
-    /** Processes one ordered native value at this boundary. @returns The represented native operation result. */
-    get: () => this.type.getTypeLibType(),
-    /** Processes one ordered native value at this boundary. @param value - Declared native value. @returns The represented native operation result. */
-    set: (value: R | null) => {
-      this.type["_pType"] = value;
-    },
-  }) as [R | null];
+  private readonly typeSlot = this.type.getAddress();
   private readonly attributes: [number] = [0];
+  /** Compiler const lvalue projection of an existing initialized Property. It allocates no UNO value or reference owner and never changes the storage lifetime. @param address - Actual native field addresses. @returns Borrowed declared fields. */
+  static unacquired(address: PropertyAddress): PropertyConstReference {
+    return {
+      /** Original borrowed Name field. @returns Native string view. */ get Name() {
+        return OUString.unacquired(address.get(0) as Parameters<typeof OUString.unacquired>[0]);
+      },
+      /** Original signed32 field. @returns Native scalar. */ get Handle() {
+        return (address.get(8) as [number])[0];
+      },
+      /** Original borrowed Type field. @returns Native const type view. */ get Type() {
+        return getTypeFromTypeDescriptionReference(address.get(16) as [R | null]);
+      },
+      /** Original signed16 field. @returns Native scalar. */ get Attributes() {
+        return (address.get(24) as [number])[0];
+      },
+    };
+  }
   /** Binds the represented native owner and its declared inputs. @param args - Original args input. @returns Nothing. */
   constructor(
     ...args:
       | []
-      | [source: Readonly<Property>]
+      | [source: PropertyConstReference]
       | [name: OUStringConstReference, handle: number, type: Type, attributes: number]
   ) {
     if (args.length === 1) this.assign(args[0]);
@@ -87,7 +108,7 @@ export class Property {
     this.attributes[0] = (value << 16) >> 16;
   }
   /** Implements the represented native assign operation. @param source - Original source input. @returns The represented native operation result. */
-  assign(source: Readonly<Property>): this {
+  assign(source: PropertyConstReference): this {
     this.Name = source.Name;
     this.Handle = source.Handle;
     this.Type = source.Type;

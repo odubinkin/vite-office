@@ -5585,3 +5585,9 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source: `unoxml/source/xpath/xpathapi.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER480.
 - CXPathAPI::eval installs xmlSetGenericErrorFunc globally and resets it to NULL after xmlXPathEval, while structured errors are context-local. A previously installed generic callback is not restored; a thrown extension callback before evaluation can also bypass the reset. Preserve the source reset placement and global side effect. This is source-derived; native concurrent callback scheduling and cross-thread interference are unqualified.
+
+
+### CALC-547 — Removing a dynamic property retains its old backing value until helper destruction
+
+- Source: `comphelper/source/property/propertycontainerhelper.cxx` (`revokeProperty`) and `comphelper/source/property/propertybag.cxx` (`removeProperty`), pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER481.
+- Revocation erases the description but does not erase or clear its slot in m_aHoldProperties. PropertyBag then erases the default, while the old held Any remains owned until helper destruction. A genuine ActiveDataSink interface value and weak reference reproduce that retained lifetime through the public bag methods. This may preserve stable vector indices intentionally, but repeated removals can retain otherwise unused values. Preserve the original retention and index layout; do not compact or clear the old slot. No compiled native leak/allocator or complete metadata/service defect is claimed.

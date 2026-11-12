@@ -25,6 +25,12 @@ import {
 } from "../../apps/office/src/comphelper/inc/compbase";
 import { XEventListener } from "../../apps/office/src/udkapi/com/sun/star/lang/XEventListener";
 import type { EventObject } from "../../apps/office/src/udkapi/com/sun/star/lang/EventObject";
+import { PropertyBag } from "../../apps/office/src/comphelper/inc/propertybag";
+import {
+  Property,
+  cppu_detail_getUnoType_Property as propertyType,
+} from "../../apps/office/src/udkapi/com/sun/star/beans/Property";
+import { REMOVABLE } from "../../apps/office/src/udkapi/com/sun/star/beans/PropertyAttribute";
 import { XPathAPI } from "../../apps/office/src/offapi/com/sun/star/xml/xpath/XPathAPI";
 import { Converter } from "../../apps/office/src/udkapi/com/sun/star/script/Converter";
 import type { XComponentContext } from "../../apps/office/src/udkapi/com/sun/star/uno/XComponentContext";
@@ -89,6 +95,46 @@ export async function runNativeDomWorkerProbe() {
     notifications: publicNotifications,
     sameEventSource: publicEventIdentity,
     componentTypeCount: publicTypes.getLength(),
+  };
+  const propertyBag = own(new PropertyBag()),
+    initialProperty = own(new Any([41], "sal_Int32")),
+    newProperty = own(new Any([42], "sal_Int16")),
+    convertedProperty = own(new Any()),
+    oldProperty = own(new Any()),
+    defaultProperty = own(new Any());
+  propertyBag.addProperty(u("workerValue"), 7, REMOVABLE, initialProperty);
+  const propertyChanged = propertyBag.convertFastPropertyValue(
+    7,
+    newProperty,
+    convertedProperty,
+    oldProperty,
+  );
+  propertyBag.setFastPropertyValue(7, convertedProperty);
+  propertyBag.getPropertyDefaultByHandle(7, defaultProperty);
+  const PropertyValues = Sequence.specialize<Property>(propertyType, 32),
+    descriptions = own(new PropertyValues());
+  propertyBag.describeProperties(descriptions);
+  const descriptor = own(
+      new Property(
+        Property.unacquired(
+          (descriptions.getConstArray() as SequenceElements).get(0) as {
+            get(offset: number): unknown;
+          },
+        ),
+      ),
+    ),
+    currentProperty: [number] = [0],
+    initialDefault: [number] = [0];
+  convertedProperty.extract(currentProperty, "sal_Int32");
+  defaultProperty.extract(initialDefault, "sal_Int32");
+  const dynamicProperties = {
+    changed: propertyChanged,
+    value: currentProperty[0],
+    initialDefault: initialDefault[0],
+    name: take(descriptor.Name.copy(0)),
+    handle: descriptor.Handle,
+    declaredLong: descriptor.Type.equals(UnoType.get("sal_Int32")),
+    stableTypeField: descriptor.get(16) === descriptor.Type.getAddress(),
   };
   const processContext = getProcessComponentContext() as Reference<XComponentContext>,
     converter = own(Converter.create(processContext)),
@@ -223,6 +269,7 @@ export async function runNativeDomWorkerProbe() {
     return {
       conversion,
       publicHelpers,
+      dynamicProperties,
       documentBuilder,
       xpath: (
         /** Queries the actual registered native XPath service. @returns Scalar observations only. */ () => {
