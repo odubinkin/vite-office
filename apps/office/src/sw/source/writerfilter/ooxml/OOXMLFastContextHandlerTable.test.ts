@@ -37,7 +37,7 @@ import type { Stream, Table, Reference, Properties, Value } from "../inc/dmapper
 import { StreamType_t } from "../inc/ooxml/OOXMLDocument";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { ZipStorage } from "../../../../oox/source/helper/zipstorage";
-import { WriteRelationsInfoSequence } from "../../../../comphelper/source/xml/ofopxmlhelper";
+import { writeRelationsInfoSequenceXml } from "../../../../comphelper/source/xml/ofopxmlhelper.string";
 import { text, unicode } from "../../core/unocore/unocrsrhelper";
 
 /** Test-only callback receiver rejects accidental non-table delivery. @returns Actual Stream callback contract and retained table references. */
@@ -163,7 +163,7 @@ it.each([
     put(
       storage,
       "_rels/.rels",
-      WriteRelationsInfoSequence([
+      writeRelationsInfoSequenceXml([
         [
           { First: "Id", Second: "root" },
           { First: "Type", Second: relationNamespace + "officeDocument" },
@@ -175,7 +175,7 @@ it.each([
     put(
       storage,
       "word/_rels/main.xml.rels",
-      WriteRelationsInfoSequence([
+      writeRelationsInfoSequenceXml([
         [
           { First: "Id", Second: "styles" },
           { First: "Type", Second: relationNamespace + "styles" },

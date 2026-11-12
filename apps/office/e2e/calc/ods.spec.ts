@@ -10,6 +10,9 @@ test("loads native ODS data and edits/saves the same real document in page and W
   );
   await page.goto("/");
   await installKernelFixture(page, "CalcODSFixture", [
+    { module: "src/cppuhelper/browser/exception-abi.ts", names: ["initializeExceptionAbi"] },
+    { module: "src/desktop/browser/app/uno-components.ts", names: ["implementations"] },
+    { module: "src/desktop/source/app/appinit.ts", names: ["InitApplicationServiceManager"] },
     { module: "src/sc/inc/document.ts", names: ["ScDocument"] },
     { module: "src/sc/inc/address.ts", names: ["ScAddress"] },
     { module: "src/sc/inc/patattr.ts", names: ["ScPatternAttr"] },
@@ -32,7 +35,10 @@ test("loads native ODS data and edits/saves the same real document in page and W
       async function read(data: number[]) {
         const n = (
           globalThis as unknown as {
-            CalcODSFixture: typeof import("../../src/sc/inc/document") &
+            CalcODSFixture: typeof import("../../src/cppuhelper/browser/exception-abi") &
+              typeof import("../../src/desktop/browser/app/uno-components") &
+              typeof import("../../src/desktop/source/app/appinit") &
+              typeof import("../../src/sc/inc/document") &
               typeof import("../../src/sc/inc/address") &
               typeof import("../../src/sc/inc/patattr") &
               typeof import("../../src/editeng/inc/colritem") &
@@ -44,6 +50,8 @@ test("loads native ODS data and edits/saves the same real document in page and W
               typeof import("../../src/i18nlangtag/source/isolang/isolang.tables");
           }
         ).CalcODSFixture;
+        n.initializeExceptionAbi();
+        n.InitApplicationServiceManager(n.implementations);
         const diagnostics: unknown[] = [],
           native = await n.readOdsDocument(new Uint8Array(data), {
             onDiagnostic:

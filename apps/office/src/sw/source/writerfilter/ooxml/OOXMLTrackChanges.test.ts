@@ -13,7 +13,7 @@ import {
   cppu_detail_getUnoType_DateTime,
 } from "../../../../offapi/com/sun/star/util/DateTime";
 import { ZipStorage } from "../../../../oox/source/helper/zipstorage";
-import { WriteRelationsInfoSequence } from "../../../../comphelper/source/xml/ofopxmlhelper";
+import { writeRelationsInfoSequenceXml } from "../../../../comphelper/source/xml/ofopxmlhelper.string";
 import { readNumberingProperty } from "../../core/unocore/unosett-properties";
 import { unicode, text } from "../../core/unocore/unocrsrhelper";
 import type { Stream, Reference, Properties } from "../inc/dmapper/resourcemodel";
@@ -52,7 +52,7 @@ it.each([
     );
     put(
       "_rels/.rels",
-      WriteRelationsInfoSequence([
+      writeRelationsInfoSequenceXml([
         [
           { First: "Id", Second: "root" },
           { First: "Type", Second: relation + "officeDocument" },

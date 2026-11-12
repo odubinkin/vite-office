@@ -127,6 +127,12 @@ try {
       xml: '<?xml version="1.0" encoding="UTF-8"?>\n<root>worker SAX字</root>',
       sameIdentity: true,
     },
+    packageSaxWriters: {
+      manifest:
+        '<?xml version="1.0" encoding="UTF-8"?>\n<manifest:manifest xmlns:manifest="urn:oasis:names:tc:opendocument:xmlns:manifest:1.0" manifest:version="1.3" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0">\n <manifest:file-entry manifest:full-path="/" manifest:media-type="application/vnd.oasis.opendocument.text" manifest:version="1.3"/>\n <manifest:file-entry manifest:full-path="content.xml" manifest:media-type="text/xml"/>\n</manifest:manifest>',
+      relationships:
+        '<?xml version="1.0" encoding="UTF-8"?>\n<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="worker字" Target="word/document.xml?a=1&amp;b=2"/>\n</Relationships>',
+    },
     nativeSax: {
       calls: ["begin", "start:root:0", "text:worker SAX字", "end", "finish"],
       sameIdentity: true,

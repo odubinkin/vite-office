@@ -1,0 +1,17 @@
+# Native package SAX writers
+
+The pinned baseline is LibreOffice 26.8.0.2, commit `9bc445578031fecf56086729d8e4940c77e14d65`.
+
+OFOPXMLHelper's complete `WriteContentSequence` and `WriteRelationsInfoSequence` methods now receive actual native output-stream/context references and initialized StringPair sequences. The registered source SAX Writer owns encoding, buffering, validation, stream closure and failures. Relation attribute validation remains inside the source loop after root callbacks; an unsupported attribute raises the original empty IllegalArgumentException. Missing required values are not repaired during writing.
+
+The actual ManifestWriter component implements XManifestWriter and XServiceInfo, owns its acquired context and is registered with the exact package2 implementation, service and factory names. Its generated SDK constructor uses the actual component context. Writer construction/output assignment precede the original catch scope; SAX failures from ManifestExport become WrappedTargetRuntimeException with empty outer Message/Context and the original dynamic exception in TargetException. Other failures propagate unchanged.
+
+ManifestExport receives a real acquired XDocumentHandler reference and native nested PropertyValue sequences. It retains the existing bounded plain OASIS admission, source event/attribute order and the extended-handler query after startDocument. Legacy and encrypted branches remain unfinished. The historical XmlStringDocumentHandler encoder and five-callback alias are removed.
+
+Existing package APIs still return JavaScript strings. `ofopxmlhelper.string.ts` constructs actual native StringPair values; `SaxStringOutput` only decodes bytes from the actual OSequenceOutputStream. Neither implements XML serialization nor supplies a default service provider. Main, Calc Worker and the new Writer Worker composition root install the real realm-local services. Core modules never bootstrap a fallback context. Test setup and isolated browser kernel fixtures now perform the same actual service initialization.
+
+The eight whole executable mechanism owners pass the approved aggregate scoped90 gate: statements 95.96%, branches 92.15%, functions 98.38%, lines 96.57%; 106 tests in 14 files pass. The SDK constructor's exceptional deployment alternatives remain partly uncovered; individual-file coverage is recorded in the checkpoint rather than claimed to meet90. A separate package/filter selection passes120 scenarios in12 files. Actual Chromium main and DOM-free module Worker produce exact source XML for manifest and relationships. Production Writer download/reopen and Calc ODS main/Worker regressions are recorded separately in the checkpoint.
+
+These are shared package prerequisites. Full Sfx metadata/storage services and final DOCX/XLSX core, shell, Strict/Transitional roundtrip and desktop/mobile UI acceptance remain unfinished. Previous coverage gaps remain open. Physical C++ ABI, allocator/debug assertions, independent compiled differential and native timing are unqualified. Existing browser file, autosave and recovery policy is preserved.
+
+The package string transport is an explicit language binding in the corresponding comphelper source responsibility split: it has no browser globals and no source-to-browser import. Its registry records mark source responsibility as divergent and do not claim native signature parity. The original stream methods remain separate and preserve their native signatures.

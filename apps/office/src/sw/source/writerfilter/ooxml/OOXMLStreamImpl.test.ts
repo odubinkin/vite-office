@@ -1,4 +1,6 @@
 /** @fileoverview Source-backed Writer stream relationship traversal against real ZIP storage, with native duplicate ordering, strict types, external caching and URI behavior. */
+import { writeRelationsInfoSequenceXml } from "../../../../comphelper/source/xml/ofopxmlhelper.string";
+
 import { writeOutput } from "../../../../test/oox-output";
 import { readOwnedInput, readOwnedXml } from "../../../../test/oox-input";
 import { Reference } from "../../../../cppu/inc/com/sun/star/uno/Reference";
@@ -9,10 +11,7 @@ import { OOXMLStreamImpl as Stream, streamTargets } from "./OOXMLStreamImpl";
 import { StreamType_t as T } from "../inc/ooxml/OOXMLDocument";
 import { ZipStorage } from "../../../../oox/source/helper/zipstorage";
 import { UriReferenceFactory } from "../../../../stoc/source/uriproc/UriReferenceFactory";
-import {
-  WriteRelationsInfoSequence,
-  type StringPair,
-} from "../../../../comphelper/source/xml/ofopxmlhelper";
+import { type StringPair } from "../../../../comphelper/source/xml/ofopxmlhelper.string";
 import { IOException } from "../../../../cppu/inc/com/sun/star/io/IOException";
 import { XSeekable } from "../../../../udkapi/com/sun/star/io/XSeekable";
 /** Asserts the native hierarchical open failure and releases its exception. @param operation - Async open. @returns Completion. */
@@ -61,12 +60,12 @@ function packageOf(entries: StringPair[][]): ZipStorage {
   put(
     storage,
     "_rels/.rels",
-    WriteRelationsInfoSequence([
+    writeRelationsInfoSequenceXml([
       relation("root", transitional + "officeDocument", "word/document.xml"),
     ]),
   );
   put(storage, "word/document.xml", "<document/>");
-  put(storage, "word/_rels/document.xml.rels", WriteRelationsInfoSequence(entries));
+  put(storage, "word/_rels/document.xml.rels", writeRelationsInfoSequenceXml(entries));
   return storage;
 }
 
@@ -169,7 +168,7 @@ it("retains custom target filtering, extension relationship types, OLE package f
   put(
     storage,
     "word/vba/_rels/project.bin.rels",
-    WriteRelationsInfoSequence([
+    writeRelationsInfoSequenceXml([
       relation(
         "data",
         "http://schemas.microsoft.com/office/2006/relationships/wordVbaData",
@@ -216,7 +215,7 @@ it("decodes UTF16 metadata and document parts through the actual input stream", 
     [false, false],
   ] as const) {
     const storage = new ZipStorage();
-    const root = WriteRelationsInfoSequence([
+    const root = writeRelationsInfoSequenceXml([
       relation("r", transitional + "officeDocument", "document.xml"),
     ]);
     for (const [path, text] of [
@@ -265,7 +264,7 @@ it("releases initialized input ownership when a relationship stream fails to par
   put(storage, "word/_rels/document.xml.rels", "<Relationships><broken>");
   await expect(createStream(storage)).rejects.toThrow();
   expect(readOwnedXml(await storage.openInputStream("word/document.xml"))).toBeNull();
-  put(storage, "word/_rels/document.xml.rels", WriteRelationsInfoSequence([]));
+  put(storage, "word/_rels/document.xml.rels", writeRelationsInfoSequenceXml([]));
   expect(readOwnedXml(await storage.openInputStream("word/document.xml"))).toBe("<document/>");
 });
 

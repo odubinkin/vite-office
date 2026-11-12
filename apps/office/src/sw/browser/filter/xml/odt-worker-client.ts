@@ -305,7 +305,7 @@ export class OdtWorkerClient implements OdtFilterService {
 export function createBrowserOdtFilterService(): OdtFilterService {
   return new OdtWorkerClient(
     /** Creates one Vite-emitted module worker. @returns Dedicated Worker transport. */ () =>
-      new Worker(new URL("./odt-worker.ts", import.meta.url), {
+      new Worker(new URL("../../../../writer-odt-worker.ts", import.meta.url), {
         name: "writer-odt-filter",
         type: "module",
       }),

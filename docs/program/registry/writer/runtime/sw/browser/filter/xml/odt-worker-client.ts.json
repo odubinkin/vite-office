@@ -9,7 +9,8 @@
     "subsystem": "odf-filter",
     "capabilityIds": [
       "CAP-0113",
-      "CAP-0130"
+      "CAP-0130",
+      "CAP-4fda99cc-b74d-4196-b579-e6a74a093c98"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -17,9 +18,15 @@
       "defaultStatus": "not-applicable",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/sw/browser/filter/xml/odt-worker-client.ts#ODT_WORKER_TIMEOUT_MS"
+        "apps/office/src/sw/browser/filter/xml/odt-worker-client.ts#ODT_WORKER_TIMEOUT_MS",
+        "apps/office/src/comphelper/source/xml/ofopxmlhelper.write.test.ts",
+        "apps/office/src/package/source/manifest/native-manifest-export.test.ts",
+        "scripts/fixtures/native-dom-worker-probe.ts",
+        "apps/office/e2e/calc/ods.spec.ts",
+        "apps/office/e2e/writer-hyperlinks.spec.ts",
+        "docs/program/native-package-sax-writers.md"
       ],
-      "justification": "Adapts the versioned ODT protocol to a reusable browser Dedicated Worker with transferables, stale-result rejection, cancellation, timeout, and deterministic termination. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner.",
+      "justification": "Adapts the versioned ODT protocol to a reusable browser Dedicated Worker with transferables, stale-result rejection, cancellation, timeout, and deterministic termination. The implementation depends on browser or React execution semantics, so no native LibreOffice source file is claimed as its owner. Current checkpoint supersedes the historical carrier limitations: OFOP WriteRelationsInfoSequence and WriteContentSequence now consume actual XOutputStream/context/native StringPair sequences and registered source Writer. Attribute admission and failure occur in original order after root callbacks. Actual ManifestWriter implements the original XManifestWriter/XServiceInfo component, acquired context, exact package2 registration, native PropertyValue sequences and original SAXException-to-WrappedTargetRuntimeException wrapping with empty outer Message/Context. ManifestExport consumes the actual XDocumentHandler reference/native nested sequences and queries the original extended facet after startDocument. The duplicate XmlStringDocumentHandler encoder and five-callback alias are removed. Existing package string boundaries only bind actual native containers/stream bytes; no replacement XML encoder, fake provider or lazy core bootstrap exists. Dedicated Worker entrypoints own realm-local services; test fixtures initialize the same actual registry. Plain unencrypted OASIS admission remains bounded; legacy/encryption, full Sfx metadata/storage and final DOCX/XLSX core/shell/UI acceptance remain unfinished. Native physical ABI/allocator/debug/binary/timing parity is unqualified; previous coverage gaps stay open.",
       "knownViolations": [],
       "localSymbols": [
         "createBrowserOdtFilterService"

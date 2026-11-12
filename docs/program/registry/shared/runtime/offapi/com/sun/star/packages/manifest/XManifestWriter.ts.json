@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/packages/manifest/XManifestWriter.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-package-sax-writers",
+    "capabilityIds": [
+      "CAP-4fda99cc-b74d-4196-b579-e6a74a093c98"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "offapi/com/sun/star/packages/manifest/XManifestWriter.idl",
+      "upstreamSymbols": [
+        "XManifestWriter",
+        "writeManifestSequence"
+      ],
+      "localSymbols": [
+        "XManifestWriter",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "justification": "OFOP WriteRelationsInfoSequence and WriteContentSequence now consume actual XOutputStream/context/native StringPair sequences and registered source Writer. Attribute admission and failure occur in original order after root callbacks. Actual ManifestWriter implements the original XManifestWriter/XServiceInfo component, acquired context, exact package2 registration, native PropertyValue sequences and original SAXException-to-WrappedTargetRuntimeException wrapping with empty outer Message/Context. ManifestExport consumes the actual XDocumentHandler reference/native nested sequences and queries the original extended facet after startDocument. The duplicate XmlStringDocumentHandler encoder and five-callback alias are removed. Existing package string boundaries only bind actual native containers/stream bytes; no replacement XML encoder, fake provider or lazy core bootstrap exists. Dedicated Worker entrypoints own realm-local services; test fixtures initialize the same actual registry. Plain unencrypted OASIS admission remains bounded; legacy/encryption, full Sfx metadata/storage and final DOCX/XLSX core/shell/UI acceptance remain unfinished. Native physical ABI/allocator/debug/binary/timing parity is unqualified; previous coverage gaps stay open.",
+      "knownViolations": [],
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/packages/manifest/XManifestWriter.ts",
+        "apps/office/src/comphelper/source/xml/ofopxmlhelper.write.test.ts",
+        "apps/office/src/package/source/manifest/native-manifest-export.test.ts",
+        "scripts/fixtures/native-dom-worker-probe.ts",
+        "apps/office/e2e/calc/ods.spec.ts",
+        "apps/office/e2e/writer-hyperlinks.spec.ts",
+        "docs/program/native-package-sax-writers.md"
+      ]
+    }
+  }
+}

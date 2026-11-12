@@ -35,6 +35,8 @@ export const allowedEdges = new Map([
       "cppuhelper",
       "i18npool",
       "lingucomponent",
+      // Library_package2 registers package2 in services; Desktop binds its native ManifestWriter factory.
+      "package",
       // Library_sax registers expwrap in services; Desktop bootstrap binds the same factory in the browser registry.
       "sax",
       "stoc",

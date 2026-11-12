@@ -1,4 +1,9 @@
 /** @fileoverview Real native UNO document, parser callback, IO and live-list operations without a host DOM; the production registered DocumentBuilder shares the same realm-local native module. */
+import {
+  createManifestXml,
+  createManifestProperty,
+} from "../../apps/office/src/package/source/manifest/ManifestWriter";
+import { writeRelationsInfoSequenceXml } from "../../apps/office/src/comphelper/source/xml/ofopxmlhelper.string";
 import { Writer as SaxWriterService } from "../../apps/office/src/offapi/com/sun/star/xml/sax/Writer";
 import { XActiveDataSource } from "../../apps/office/src/udkapi/com/sun/star/io/XActiveDataSource";
 import { AttributeList } from "../../apps/office/src/comphelper/source/xml/attributelist";
@@ -271,6 +276,26 @@ export async function runNativeDomWorkerProbe() {
           XActiveDataSource.static_type,
         ),
       ).get() === registeredWriter.get(),
+  };
+  const packageSaxWriters = {
+    manifest: createManifestXml([
+      [
+        own(createManifestProperty("FullPath", "/")),
+        own(createManifestProperty("MediaType", "application/vnd.oasis.opendocument.text")),
+        own(createManifestProperty("Version", "1.3")),
+      ],
+      [
+        own(createManifestProperty("FullPath", "content.xml")),
+        own(createManifestProperty("MediaType", "text/xml")),
+      ],
+    ]),
+    relationships: writeRelationsInfoSequenceXml([
+      [
+        { First: "Id", Second: "rId1" },
+        { First: "Type", Second: "worker字" },
+        { First: "Target", Second: "word/document.xml?a=1&b=2" },
+      ],
+    ]),
   };
   const nativeSax = {
     calls: saxHandler.operatorStar().calls,
@@ -790,6 +815,7 @@ export async function runNativeDomWorkerProbe() {
       registeredPropertyBag,
       nativeSax,
       registeredSaxWriter,
+      packageSaxWriters,
       nativeSaxWriterBuffer,
       metadataValues,
       metadataIngestion,

@@ -60,9 +60,3 @@ export const XDocumentHandler = Object.freeze({
     return UnoType.get(cppu_detail_getUnoType);
   },
 });
-
-/** Caller borrows exactly the five callbacks used by plain manifest export; no other handler implementation is manufactured. */
-export type ManifestDocumentHandler = Pick<
-  XDocumentHandler,
-  "startDocument" | "endDocument" | "startElement" | "endElement" | "ignorableWhitespace"
->;

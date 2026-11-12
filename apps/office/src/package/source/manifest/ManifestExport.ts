@@ -3,9 +3,15 @@
  */
 import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
-import type { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
+import { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
 import { AttributeList } from "../../../comphelper/inc/attributelist";
-import type { ManifestDocumentHandler } from "../../../offapi/com/sun/star/xml/sax/XDocumentHandler";
+import { XDocumentHandler } from "../../../offapi/com/sun/star/xml/sax/XDocumentHandler";
+import { XExtendedDocumentHandler } from "../../../offapi/com/sun/star/xml/sax/XExtendedDocumentHandler";
+import { UNO_QUERY } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import { Sequence, type SequenceReference } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import type { uno_Sequence } from "../../../cppu/inc/uno/sequence2";
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { cppu_detail_getUnoType_PropertyValue as propertyType } from "../../../udkapi/com/sun/star/beans/PropertyValue";
 import {
   MIMETYPE_OASIS_OPENDOCUMENT_TEXT,
   MIMETYPE_OASIS_OPENDOCUMENT_TEXT_WEB,
@@ -25,6 +31,7 @@ import {
   MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE,
 } from "../../../comphelper/inc/documentconstants";
 
+const Properties = Sequence.specialize<PropertyValue>(propertyType, 48);
 /** ODF manifest namespace owned by the package manifest format. */
 const manifestNamespace = "urn:oasis:names:tc:opendocument:xmlns:manifest:1.0";
 
@@ -83,21 +90,36 @@ function named(name: string, action: (value: OUString) => void): void {
 /** Actual native PropertyValue-sequence exporter for the ordinary unencrypted OASIS branch; browser admission rejects unimplemented legacy/encrypted documents before events. */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class -- Original ManifestExport class performs synchronous SAX export from its constructor.
 export class ManifestExport {
-  /** Original constructor performs export synchronously in source order. @param handler - Actual consumed SAX callbacks. @param manifest - Actual property sequences. @returns Exporter. */
-  constructor(handler: ManifestDocumentHandler, manifest: readonly (readonly PropertyValue[])[]) {
+  /** Original constructor performs export synchronously in source order. @param handlerReference - Actual acquired SAX handler. @param manifest - Actual property sequences. @returns Exporter. */
+  constructor(
+    handlerReference: Reference<XDocumentHandler>,
+    manifest: SequenceReference<Sequence<PropertyValue>>,
+  ) {
     let docMediaType = "",
       docVersion = "",
-      root: readonly PropertyValue[] | undefined;
-    for (const sequence of manifest) {
+      root: SequenceReference<PropertyValue> | undefined;
+    for (let rowIndex = 0; rowIndex < manifest.getLength(); ++rowIndex) {
+      const sequence = Sequence.unacquired(
+        Properties,
+        manifest.operatorIndex(rowIndex) as unknown as [uno_Sequence | null],
+      );
       const media = new OUString(),
         path = new OUString(),
         version = new OUString();
       try {
-        for (const property of sequence) {
+        for (let propertyIndex = 0; propertyIndex < sequence.getLength(); ++propertyIndex) {
+          const property = PropertyValue.unacquired(
+            sequence.operatorIndex(propertyIndex) as unknown as Parameters<
+              typeof PropertyValue.unacquired
+            >[0],
+          );
           const name = text(property.Name);
-          if (name === "MediaType") property.Value.extract(media, "OUString");
-          else if (name === "FullPath") property.Value.extract(path, "OUString");
-          else if (name === "Version") property.Value.extract(version, "OUString");
+          if (name === "MediaType")
+            Any.prototype.extract.call(property.Value as Any, media, "OUString");
+          else if (name === "FullPath")
+            Any.prototype.extract.call(property.Value as Any, path, "OUString");
+          else if (name === "Version")
+            Any.prototype.extract.call(property.Value as Any, version, "OUString");
           if (!path.isEmpty() && !media.isEmpty() && !version.isEmpty()) break;
         }
         if (text(path) === "/") {
@@ -114,8 +136,17 @@ export class ManifestExport {
     }
     if (root === undefined) throw new Error("Missing manifest document root");
     if (!oasisTypes.has(docMediaType)) throw new Error("Legacy manifest export is not implemented");
-    for (const sequence of manifest)
-      for (const property of sequence) {
+    for (let rowIndex = 0; rowIndex < manifest.getLength(); ++rowIndex) {
+      const sequence = Sequence.unacquired(
+        Properties,
+        manifest.operatorIndex(rowIndex) as unknown as [uno_Sequence | null],
+      );
+      for (let propertyIndex = 0; propertyIndex < sequence.getLength(); ++propertyIndex) {
+        const property = PropertyValue.unacquired(
+          sequence.operatorIndex(propertyIndex) as unknown as Parameters<
+            typeof PropertyValue.unacquired
+          >[0],
+        );
         const name = text(property.Name);
         if (
           [
@@ -136,7 +167,7 @@ export class ManifestExport {
         if (name === "FullPath") {
           const value = new OUString();
           try {
-            property.Value.extract(value, "OUString");
+            Any.prototype.extract.call(property.Value as Any, value, "OUString");
             if (text(value) === "encrypted-package")
               throw new Error("Encrypted manifest export is not implemented");
           } finally {
@@ -144,6 +175,7 @@ export class ManifestExport {
           }
         }
       }
+    }
     const attributesOwner = new Reference(new AttributeList()),
       attributes = attributesOwner.operatorStar();
     try {
@@ -156,72 +188,92 @@ export class ManifestExport {
           "urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0",
         );
       }
+      const handler = handlerReference.operatorStar();
       handler.startDocument();
-      named(
-        "manifest:manifest",
-        /** Original root begin. @param name - Name. @returns Nothing. */ (name) =>
-          handler.startElement(name, attributesOwner),
+      const extended = new Reference<XExtendedDocumentHandler>(
+        handlerReference,
+        UNO_QUERY,
+        XExtendedDocumentHandler.static_type,
       );
-      for (const sequence of manifest) {
-        const listOwner = new Reference(new AttributeList()),
-          list = listOwner.operatorStar(),
-          string = new OUString(),
-          fullPath = new OUString();
-        try {
-          for (const property of sequence) {
-            const name = text(property.Name);
-            if (name === "MediaType") {
-              property.Value.extract(string, "OUString");
-              add(list, "manifest:media-type", text(string));
-            } else if (name === "Version") {
-              property.Value.extract(string, "OUString");
-              if (!string.isEmpty()) add(list, "manifest:version", text(string));
-            } else if (name === "FullPath") {
-              property.Value.extract(fullPath, "OUString");
-              add(list, "manifest:full-path", text(fullPath));
-            } else if (name === "Size") {
-              const size: [bigint] = [0n];
-              property.Value.extract(size, "sal_Int64");
-              add(list, "manifest:size", String(size[0]));
+      try {
+        named(
+          "manifest:manifest",
+          /** Original root begin. @param name - Name. @returns Nothing. */ (name) =>
+            handler.startElement(name, attributesOwner),
+        );
+        for (let rowIndex = 0; rowIndex < manifest.getLength(); ++rowIndex) {
+          const sequence = Sequence.unacquired(
+            Properties,
+            manifest.operatorIndex(rowIndex) as unknown as [uno_Sequence | null],
+          );
+          const listOwner = new Reference(new AttributeList()),
+            list = listOwner.operatorStar(),
+            string = new OUString(),
+            fullPath = new OUString();
+          try {
+            for (let propertyIndex = 0; propertyIndex < sequence.getLength(); ++propertyIndex) {
+              const property = PropertyValue.unacquired(
+                sequence.operatorIndex(propertyIndex) as unknown as Parameters<
+                  typeof PropertyValue.unacquired
+                >[0],
+              );
+              const name = text(property.Name);
+              if (name === "MediaType") {
+                Any.prototype.extract.call(property.Value as Any, string, "OUString");
+                add(list, "manifest:media-type", text(string));
+              } else if (name === "Version") {
+                Any.prototype.extract.call(property.Value as Any, string, "OUString");
+                if (!string.isEmpty()) add(list, "manifest:version", text(string));
+              } else if (name === "FullPath") {
+                Any.prototype.extract.call(property.Value as Any, fullPath, "OUString");
+                add(list, "manifest:full-path", text(fullPath));
+              } else if (name === "Size") {
+                const size: [bigint] = [0n];
+                Any.prototype.extract.call(property.Value as Any, size, "sal_Int64");
+                add(list, "manifest:size", String(size[0]));
+              }
             }
+            named(
+              " ",
+              /** Original pre-entry whitespace. @param value - Space. @returns Nothing. */ (
+                value,
+              ) => handler.ignorableWhitespace(value),
+            );
+            named(
+              "manifest:file-entry",
+              /** Original entry begin. @param name - Name. @returns Nothing. */ (name) =>
+                handler.startElement(name, listOwner),
+            );
+            named(
+              " ",
+              /** Original pre-end whitespace. @param value - Space. @returns Nothing. */ (value) =>
+                handler.ignorableWhitespace(value),
+            );
+            named(
+              "manifest:file-entry",
+              /** Original entry end. @param name - Name. @returns Nothing. */ (name) =>
+                handler.endElement(name),
+            );
+          } finally {
+            string.dispose();
+            fullPath.dispose();
+            listOwner.dispose();
           }
-          named(
-            " ",
-            /** Original pre-entry whitespace. @param value - Space. @returns Nothing. */ (value) =>
-              handler.ignorableWhitespace(value),
-          );
-          named(
-            "manifest:file-entry",
-            /** Original entry begin. @param name - Name. @returns Nothing. */ (name) =>
-              handler.startElement(name, listOwner),
-          );
-          named(
-            " ",
-            /** Original pre-end whitespace. @param value - Space. @returns Nothing. */ (value) =>
-              handler.ignorableWhitespace(value),
-          );
-          named(
-            "manifest:file-entry",
-            /** Original entry end. @param name - Name. @returns Nothing. */ (name) =>
-              handler.endElement(name),
-          );
-        } finally {
-          string.dispose();
-          fullPath.dispose();
-          listOwner.dispose();
         }
+        named(
+          " ",
+          /** Original final whitespace. @param value - Space. @returns Nothing. */ (value) =>
+            handler.ignorableWhitespace(value),
+        );
+        named(
+          "manifest:manifest",
+          /** Original root end. @param name - Name. @returns Nothing. */ (name) =>
+            handler.endElement(name),
+        );
+        handler.endDocument();
+      } finally {
+        extended.dispose();
       }
-      named(
-        " ",
-        /** Original final whitespace. @param value - Space. @returns Nothing. */ (value) =>
-          handler.ignorableWhitespace(value),
-      );
-      named(
-        "manifest:manifest",
-        /** Original root end. @param name - Name. @returns Nothing. */ (name) =>
-          handler.endElement(name),
-      );
-      handler.endDocument();
     } finally {
       attributesOwner.dispose();
     }

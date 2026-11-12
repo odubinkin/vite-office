@@ -1,12 +1,97 @@
 /** @fileoverview Real native manifest PropertyValue sequences,ordered SAX events and ODT/ODS XML semantics; encrypted/legacy branches remain explicit admission limits. */
 import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
-import { expect, it } from "vitest";
+import { afterEach, expect, it, assert } from "vitest";
 import fixture from "./native-manifest-cases.json";
 import { SaxesParser } from "saxes";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { ManifestExport } from "./ManifestExport";
-import { createManifestXml } from "./ManifestWriter";
-import { XmlStringDocumentHandler } from "../../../sax/source/expatwrap/saxwriter";
+import { createManifestXml, createManifestSequence } from "./ManifestWriter";
+import { SaxStringOutput } from "../../../comphelper/source/xml/saxstringwriter";
+import { Writer } from "../../../offapi/com/sun/star/xml/sax/Writer";
+import { XDocumentHandler } from "../../../offapi/com/sun/star/xml/sax/XDocumentHandler";
+import type { XWriter } from "../../../offapi/com/sun/star/xml/sax/XWriter";
+import type { XAttributeList } from "../../../offapi/com/sun/star/xml/sax/XAttributeList";
+import type { XLocator } from "../../../offapi/com/sun/star/xml/sax/XLocator";
+import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
+import {
+  SAXInvalidCharacterException,
+  cppu_detail_getUnoType as invalidType,
+} from "../../../offapi/com/sun/star/xml/sax/SAXInvalidCharacterException";
+import { WrappedTargetRuntimeException } from "../../../cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException";
+import { WeakImplHelper } from "../../../cppuhelper/inc/implbase";
+import { getProcessComponentContext } from "../../../comphelper/inc/processfactory";
+import type { XComponentContext } from "../../../udkapi/com/sun/star/uno/XComponentContext";
+import { own, releaseDomScope } from "../../../test/native-dom";
+afterEach(releaseDomScope);
+/** Real registered Writer and native output used by manifest callback observations. @returns Actual owners. */
+function writerOutput() {
+  const output = own(new SaxStringOutput()),
+    handler = own(
+      Writer.create(own(new Reference<XComponentContext>(getProcessComponentContext().get()))),
+    );
+  handler.operatorStar().setOutputStream(output.stream);
+  return { output, handler };
+}
+/** Application-owned actual UNO observer; every declared callback forwards to the real Writer. */
+class Recorder extends WeakImplHelper.specialize(XDocumentHandler) implements XDocumentHandler {
+  private readonly target: Reference<XWriter>;
+  /** Retains actual callback target; observations remain caller-owned. @param target - Real Writer. @param lists - Retained source lists. @param events - Event trace. @returns Observer. */ constructor(
+    target: Reference<XWriter>,
+    private readonly lists: Reference<AttributeList>[],
+    private readonly events: string[],
+  ) {
+    super();
+    this.target = new Reference(target);
+  }
+  /** Source begin. @returns Nothing. */ startDocument(): void {
+    this.events.push("begin");
+    this.target.operatorStar().startDocument();
+  }
+  /** Source finish. @returns Nothing. */ endDocument(): void {
+    this.events.push("finish");
+    this.target.operatorStar().endDocument();
+  }
+  /** Retains actual attribute lists. @param name - Source name. @param attrs - Actual list. @returns Nothing. */ startElement(
+    name: OUStringConstReference,
+    attrs: Reference<XAttributeList>,
+  ): void {
+    this.lists.push(new Reference(attrs.get() as AttributeList));
+    this.events.push("start");
+    this.target.operatorStar().startElement(name, attrs);
+  }
+  /** Source closing element. @param name - Name. @returns Nothing. */ endElement(
+    name: OUStringConstReference,
+  ): void {
+    this.events.push("end");
+    this.target.operatorStar().endElement(name);
+  }
+  /** Original whitespace argument is observed before source Writer interprets it. @param value - Source whitespace. @returns Nothing. */ ignorableWhitespace(
+    value: OUStringConstReference,
+  ): void {
+    this.events.push("space");
+    this.target.operatorStar().ignorableWhitespace(value);
+  }
+  /** Complete published character callback. @param value - Text. @returns Nothing. */ characters(
+    value: OUStringConstReference,
+  ): void {
+    this.target.operatorStar().characters(value);
+  }
+  /** Complete published PI callback. @param target - Target. @param data - Data. @returns Nothing. */ processingInstruction(
+    target: OUStringConstReference,
+    data: OUStringConstReference,
+  ): void {
+    this.target.operatorStar().processingInstruction(target, data);
+  }
+  /** Complete locator callback. @param locator - Source locator. @returns Nothing. */ setDocumentLocator(
+    locator: Reference<XLocator>,
+  ): void {
+    this.target.operatorStar().setDocumentLocator(locator);
+  }
+  /** Releases real callback target then original weak base. @returns Nothing. */ protected override destroy(): void {
+    this.target.dispose();
+    super.destroy();
+  }
+}
 import { AttributeList } from "../../../comphelper/inc/attributelist";
 import * as mime from "../../../comphelper/inc/documentconstants";
 import { sequence, property, unicode } from "../../../test/fixtures/manifest";
@@ -86,43 +171,14 @@ it("preserves original failed-extraction destination values rather than inventin
   });
 });
 it("delivers exact native whitespace and ordered attributes without clearing retained SAX lists", /** An observer retains actual ref-counted-list equivalents under GC. @returns Nothing. */ () => {
-  const handler = new XmlStringDocumentHandler(),
+  const { handler, output } = writerOutput(),
     lists: Reference<AttributeList>[] = [],
     events: string[] = [];
   const input = sequence();
   input.splice(1);
-  new ManifestExport(
-    {
-      startDocument: /** Original begin. @returns Nothing. */ () => {
-        events.push("begin");
-        handler.startDocument();
-      },
-      endDocument: /** Original finish. @returns Nothing. */ () => {
-        events.push("finish");
-        handler.endDocument();
-      },
-      startElement:
-        /** Retains actual lists. @param name - Name. @param attrs - List. @returns Nothing. */ (
-          name,
-          attrs,
-        ) => {
-          lists.push(new Reference(attrs.get() as AttributeList));
-          events.push("start");
-          handler.startElement(name, attrs);
-        },
-      endElement: /** Original end. @param name - Name. @returns Nothing. */ (name) => {
-        events.push("end");
-        handler.endElement(name);
-      },
-      ignorableWhitespace: /** Original space. @param value - Space. @returns Nothing. */ (
-        value,
-      ) => {
-        events.push("space");
-        handler.ignorableWhitespace(value);
-      },
-    },
-    input,
-  );
+  const observer = own(new Reference(new Recorder(handler, lists, events))),
+    native = own(createManifestSequence(input));
+  new ManifestExport(observer, native);
   expect(events).toEqual([
     "begin",
     "start",
@@ -140,7 +196,7 @@ it("delivers exact native whitespace and ordered attributes without clearing ret
         list.operatorStar().getLength(),
     ),
   ).toEqual([3, 3]);
-  expect(parsed(handler.getXml())).toHaveLength(2);
+  expect(parsed(output.getXml())).toHaveLength(2);
   for (const list of lists) list.dispose();
 });
 it("keeps original root scan early completion while subsequent entry emission retains duplicates", /** Native AttributeList duplicate admission is not normalized. @returns Nothing. */ () => {
@@ -163,22 +219,23 @@ it("rejects native missing/duplicate root preconditions and unimplemented legacy
     [...sequence(), [property("KeyInfo", new Any())]],
     [...sequence(), [property("FullPath", "encrypted-package")]],
   ]) {
-    const handler = new XmlStringDocumentHandler();
+    const { handler, output } = writerOutput(),
+      native = own(createManifestSequence(entries));
     expect(
       /** Executes actual admission. @returns Exporter. */ () =>
-        new ManifestExport(handler, entries),
+        new ManifestExport(handler, native),
     ).toThrow();
-    expect(handler.getXml()).toBe("");
+    expect(output.getXml()).toBe("");
   }
 });
-it("serializes the worker-safe null-attribute event branch without requiring a DOM or native Writer service", /** Actual handler callbacks only. @returns Nothing. */ () => {
-  const handler = new XmlStringDocumentHandler(),
+it("serializes the null-attribute event branch through the real registered Writer without a DOM", /** Actual handler callbacks only. @returns Nothing. */ () => {
+  const { handler, output } = writerOutput(),
     name = unicode("root");
-  handler.startDocument();
-  handler.startElement(name, new Reference());
-  handler.endElement(name);
-  handler.endDocument();
-  expect(parsed(handler.getXml())).toEqual([{}]);
+  handler.operatorStar().startDocument();
+  handler.operatorStar().startElement(name, new Reference());
+  handler.operatorStar().endElement(name);
+  handler.operatorStar().endDocument();
+  expect(parsed(output.getXml())).toEqual([{}]);
   name.dispose();
 });
 
@@ -215,7 +272,7 @@ it("re-emits the actual upstream ODS fixture manifest entries without inventing 
   ).toEqual(["/", "styles.xml", "content.xml"]);
 });
 
-it("rejects forbidden XML10 attribute characters and malformed UTF16 as native SAX export does", /** Native isWellFormed replaces only the confirmed surrogate acceptance predicate. @returns Nothing. */ () => {
+it("rejects forbidden XML10 attribute characters and malformed UTF16 as native SAX export does", /** Actual source SAX exceptions are wrapped by ManifestWriter with the original empty outer message and dynamic payload. @returns Nothing. */ () => {
   for (const value of [
     "\u0000",
     "\u0008",
@@ -231,8 +288,22 @@ it("rejects forbidden XML10 attribute characters and malformed UTF16 as native S
   ]) {
     const entries = sequence();
     entries.push([property("FullPath", value)]);
-    expect(
-      /** Runs the actual browser serializer. @returns XML. */ () => createManifestXml(entries),
-    ).toThrow("Invalid character during XML-Export");
+    let caught = false;
+    try {
+      createManifestXml(entries);
+    } catch (error) {
+      if (!(error instanceof WrappedTargetRuntimeException)) throw error;
+      try {
+        caught = true;
+        const detail = own(new SAXInvalidCharacterException());
+        expect(error.TargetException.extract(detail, invalidType)).toBe(true);
+        expect(error.Context.is()).toBe(false);
+        expect(error.Message.isEmpty()).toBe(true);
+        expect(detail.Message.getLength()).toBeGreaterThan(0);
+      } finally {
+        error.dispose();
+      }
+    }
+    assert(caught);
   }
 });

@@ -1,4 +1,9 @@
 /** @fileoverview Source-backed OFOPXMLHelper parsing, lookup precedence and original SAX serialization contracts. */
+import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
+import { SAXInvalidCharacterException } from "../../../offapi/com/sun/star/xml/sax/SAXInvalidCharacterException";
+import { IllegalArgumentException } from "../../../cppu/inc/com/sun/star/lang/IllegalArgumentException";
+import { writeContentSequenceXml, writeRelationsInfoSequenceXml } from "./ofopxmlhelper.string";
+
 import { writeOutput } from "../../../test/oox-output";
 import { expect, it } from "vitest";
 import {
@@ -10,6 +15,22 @@ import {
   nativeText,
   type PairInput,
 } from "../../../test/ofopxml-values";
+/** Checks a genuine UNO failure and releases its actual fields after assertions. @param action - Actual source operation. @param expected - Original exception class. @returns Nothing. */
+function nativeFailure(action: () => void, expected: { prototype: Exception }): void {
+  let caught = false;
+  try {
+    action();
+  } catch (error) {
+    if (!(error instanceof Exception)) throw error;
+    try {
+      expect(error).toBeInstanceOf(expected);
+      caught = true;
+    } finally {
+      error.dispose();
+    }
+  }
+  expect(caught).toBe(true);
+}
 /** Resolves an actual native filename and destroys both owned strings. @param types - Native content types. @param filename - Fixture path. @returns Observed MIME. */
 function contentType(types: Parameters<typeof GetContentTypeByName>[0], filename: string): string {
   const path = nativeString(filename);
@@ -29,7 +50,7 @@ function writeContent(
   const first = createPairs(defaults),
     second = createPairs(overrides);
   try {
-    return WriteContentSequence(first, second);
+    return writeContentSequenceXml(first, second);
   } finally {
     second.dispose();
     first.dispose();
@@ -73,8 +94,6 @@ import {
   GetContentTypeByName,
   ReadContentTypeSequence,
   ReadRelationsInfoSequence,
-  WriteContentSequence,
-  WriteRelationsInfoSequence,
 } from "./ofopxmlhelper";
 import { WriteContentTypes } from "../../../package/source/zippackage/ZipPackage";
 import { createManifestProperty } from "../../../package/source/manifest/ManifestWriter";
@@ -174,7 +193,7 @@ it("serializes exact metadata attributes through the native SAX writer and prese
   expect(xml).toContain('<?xml version="1.0" encoding="UTF-8"?>');
   expect(xml).toContain("&lt;&amp;&quot;&gt;");
   expect(readContentTypes(xml)).toEqual([defaults, overrides]);
-  const rels = WriteRelationsInfoSequence([
+  const rels = writeRelationsInfoSequenceXml([
     [
       { First: "Id", Second: "rId1" },
       { First: "Type", Second: "type" },
@@ -184,15 +203,17 @@ it("serializes exact metadata attributes through the native SAX writer and prese
   ]);
   expect(rels).toContain('Target="https://e.test/?a=1&amp;b=2"');
   expect(rels).toContain('<Relationship Id="rId1"');
-  expect(WriteRelationsInfoSequence([])).toContain("<Relationships");
-  expect(
+  expect(writeRelationsInfoSequenceXml([])).toContain("<Relationships");
+  nativeFailure(
     /** Executes the actual failing operation. @returns Value or throws. */ () =>
-      WriteRelationsInfoSequence([[{ First: "other", Second: "x" }]]),
-  ).toThrow("Invalid OOXML relationship attribute");
-  expect(
+      writeRelationsInfoSequenceXml([[{ First: "other", Second: "x" }]]),
+    IllegalArgumentException,
+  );
+  nativeFailure(
     /** Executes the actual failing operation. @returns Value or throws. */ () =>
       writeContent([{ First: "bad\0", Second: "a" }], []),
-  ).toThrow("Invalid character");
+    SAXInvalidCharacterException,
+  );
 });
 
 it("keeps native package defaults and omits only identical extension/type overrides", /** Exercises actual PropertyValue/Any metadata extraction. @returns Nothing. */ () => {
@@ -347,5 +368,16 @@ it("reads native package manifest slots and ignores later duplicate property nam
       property.Value.dispose();
       property.Name.dispose();
     }
+  }
+});
+
+it("preserves the source asymmetry between relationship output and required reader Id", /** Writer validates attribute names only; the source reader rejects an absent or empty Id. @returns Nothing. */ () => {
+  for (const row of [[], [{ First: "Id", Second: "" }], [{ First: "Type", Second: "t" }]]) {
+    const xml = writeRelationsInfoSequenceXml([row]);
+    expect(xml).toContain("<Relationship");
+    expect(
+      /** Reads the actual emitted source XML. @returns Parsed native rows or source failure. */ () =>
+        readRelations(xml),
+    ).toThrow();
   }
 });

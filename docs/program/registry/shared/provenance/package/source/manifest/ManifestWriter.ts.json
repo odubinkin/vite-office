@@ -7,7 +7,7 @@
     "status": "mapped",
     "stackDivergence": {
       "kind": "browser-adaptation",
-      "rationale": "Worker-compatible browser host serialization replaces native SAX Writer/component-stream composition for the exact consumed callbacks."
+      "rationale": "Actual source component/SDK and native streams are implemented. Existing browser string APIs retain explicit container/UTF8 transport only."
     },
     "evidence": {
       "local": [
@@ -18,6 +18,22 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
           "marker": "opens exported actual document bytes"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.write.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/manifest/native-manifest-export.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/e2e/calc/ods.spec.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/e2e/writer-hyperlinks.spec.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -34,7 +50,9 @@
     "upstreamPath": "package/source/manifest/ManifestWriter.cxx",
     "localSymbols": [
       "createManifestXml",
-      "createManifestProperty"
+      "createManifestProperty",
+      "ManifestWriter",
+      "package_ManifestWriter_get_implementation"
     ],
     "upstreamSymbols": [
       "ManifestWriter::writeManifestSequence",
@@ -43,10 +61,11 @@
     "preservedResponsibilities": [
       "Task177 implements actual plain OASIS ManifestExport over reused PropertyValue/Any/OUString and native comphelper AttributeList plus erased SAX method contracts. Preserve root scan early completion,16OASIS MIME choices,lexical version thresholds,source property/attribute/event order,nonempty entry versions,int64 Size,failed Any extraction destinations,duplicates and retained list values. Worker-safe browser SAX composition serializes exact attribute character values without DOM or a fabricated native Writer service. Writer supplies its own stream/font policy to the same exporter;the removed Writer-only shared export helper has no compatibility alias. Existing Writer import validation stays explicitly bounded pending native ManifestImport;full generic import,encrypted/legacy export,UNO ABI/services and complete ODS document/model/UI remain pending. Immutable native MIME literal contents use JS strings at browser/package boundaries;GC owns physical AttributeList objects and existing OUString/Any value semantics are reused without a new lifetime framework. Extracted actual ODS fixture manifest metadata is checked separately from its ZIP64 package and is not a document round trip or claimed native QA suite port. Whole-class/module parity stays unverified.",
       "Source-owned plain-XML payload callbacks/composition use JS string output instead of native stream/buffer transport.",
-      "Task204 factors the existing Writer string-valued native PropertyValue composition into common ManifestWriter.createManifestProperty. The original factory body is reused;Writer imports it and Calc consumes the same actual UNO property/string/manifest owners. No parallel package schema DTO or new value/lifetime engine is created."
+      "Task204 factors the existing Writer string-valued native PropertyValue composition into common ManifestWriter.createManifestProperty. The original factory body is reused;Writer imports it and Calc consumes the same actual UNO property/string/manifest owners. No parallel package schema DTO or new value/lifetime engine is created.",
+      "OFOP WriteRelationsInfoSequence and WriteContentSequence now consume actual XOutputStream/context/native StringPair sequences and registered source Writer. Attribute admission and failure occur in original order after root callbacks. Actual ManifestWriter implements the original XManifestWriter/XServiceInfo component, acquired context, exact package2 registration, native PropertyValue sequences and original SAXException-to-WrappedTargetRuntimeException wrapping with empty outer Message/Context. ManifestExport consumes the actual XDocumentHandler reference/native nested sequences and queries the original extended facet after startDocument. The duplicate XmlStringDocumentHandler encoder and five-callback alias are removed. Existing package string boundaries only bind actual native containers/stream bytes; no replacement XML encoder, fake provider or lazy core bootstrap exists. Dedicated Worker entrypoints own realm-local services; test fixtures initialize the same actual registry. Plain unencrypted OASIS admission remains bounded; legacy/encryption, full Sfx metadata/storage and final DOCX/XLSX core/shell/UI acceptance remain unfinished. Native physical ABI/allocator/debug/binary/timing parity is unqualified; previous coverage gaps stay open."
     ],
     "omittedResponsibilities": [
-      "Full native SAXWriter/ManifestWriter services,UNO ABI/interfaces,stream lifecycle and byte-buffer management remain omitted;no fake service class is exposed."
+      "Legacy/encrypted manifest export and full Sfx metadata/storage/format/UI integration remain unfinished; the actual source ManifestWriter service/SDK/stream contract is now implemented. Physical binary/ABI/allocator parity unqualified."
     ]
   }
 }

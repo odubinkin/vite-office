@@ -1,13 +1,12 @@
 /** @fileoverview Ports plain ZipPackage::parseManifest/parseContentType metadata/MIME, folder consistency and WriteContentTypes metadata over actual ZIP entries; UNO storage services and encryption remain outside this package slice. */
+import { writeContentSequenceXml } from "../../../comphelper/source/xml/ofopxmlhelper.string";
+
 import { lookForUnexpectedODF12Streams, type Folder } from "./ZipPackageFolder";
 import type { DocumentArchive } from "./document-archive";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import type { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
 import { readManifestSequence } from "../manifest/ManifestReader";
-import {
-  ReadContentTypeSequence,
-  WriteContentSequence,
-} from "../../../comphelper/source/xml/ofopxmlhelper";
+import { ReadContentTypeSequence } from "../../../comphelper/source/xml/ofopxmlhelper";
 import { splitAtLastToken } from "../../../comphelper/source/misc/directoryhelper";
 import { Sequence, type SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import {
@@ -253,7 +252,7 @@ export function WriteContentTypes(manifest: readonly (readonly PropertyValue[])[
       }
     }
     overrides.realloc(length);
-    return WriteContentSequence(defaults, overrides);
+    return writeContentSequenceXml(defaults, overrides);
   } finally {
     overrides.dispose();
     defaults.dispose();

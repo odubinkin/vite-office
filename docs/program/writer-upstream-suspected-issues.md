@@ -3966,3 +3966,8 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 
 - Source: `sax/source/expatwrap/saxwriter.cxx`, `SAXWriter`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC570.
 - unknown returns immediately for startsWith("<?xml"), including <?xml-stylesheet ...?>, and does not consume pending indentation flags. Preserve this prefix check instead of parsing a declaration token or re-emitting the stylesheet PI. Actual registered Writer tests observe both omitted bytes and the retained pending optional-break request; normal processingInstruction remains separately available.
+
+### WRITER506 — OFOP relationships writer can emit an entry rejected by its reader
+
+- Source: `comphelper/source/xml/ofopxmlhelper.cxx`, `WriteRelationsInfoSequence` and `OFOPXMLHelper_Impl::startElement`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC571.
+- The writer validates only attribute names and accepts a missing or empty Id. The reader requires a nonempty Id and throws SAXException otherwise. Preserve this asymmetry, original validation timing after root callbacks and partial-output behavior; do not invent required-field validation in the writer. The output-only null-stream guard and illegal-name exception retain their original native types and fields.

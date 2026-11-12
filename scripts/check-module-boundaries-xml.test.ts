@@ -31,3 +31,9 @@ it("admits desktop service composition of native SAX without reverse application
   expect(isForbiddenModuleEdge("desktop", "sax")).toBe(false);
   expect(isForbiddenModuleEdge("sax", "desktop")).toBe(true);
 });
+
+it("admits registered package services only in the desktop composition direction", /** Library_package2 registers package2.component in services, with the source ManifestWriter factory. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("desktop", "package")).toBe(false);
+  expect(isForbiddenModuleEdge("package", "desktop")).toBe(true);
+  expect(isForbiddenModuleEdge("sw", "desktop")).toBe(true);
+});

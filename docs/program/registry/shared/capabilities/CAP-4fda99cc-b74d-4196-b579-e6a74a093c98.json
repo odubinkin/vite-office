@@ -1,0 +1,163 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-4fda99cc-b74d-4196-b579-e6a74a093c98",
+    "capabilityId": "CAP-4fda99cc-b74d-4196-b579-e6a74a093c98",
+    "suite": "shared",
+    "subsystem": "native-package-sax-writers",
+    "type": "model",
+    "maturity": "implemented",
+    "capability": "Actual native OFOP and ManifestWriter package SAX consumers",
+    "assertions": [
+      "OFOP WriteRelationsInfoSequence and WriteContentSequence now consume actual XOutputStream/context/native StringPair sequences and registered source Writer. Attribute admission and failure occur in original order after root callbacks. Actual ManifestWriter implements the original XManifestWriter/XServiceInfo component, acquired context, exact package2 registration, native PropertyValue sequences and original SAXException-to-WrappedTargetRuntimeException wrapping with empty outer Message/Context. ManifestExport consumes the actual XDocumentHandler reference/native nested sequences and queries the original extended facet after startDocument. The duplicate XmlStringDocumentHandler encoder and five-callback alias are removed. Existing package string boundaries only bind actual native containers/stream bytes; no replacement XML encoder, fake provider or lazy core bootstrap exists. Dedicated Worker entrypoints own realm-local services; test fixtures initialize the same actual registry. Plain unencrypted OASIS admission remains bounded; legacy/encryption, full Sfx metadata/storage and final DOCX/XLSX core/shell/UI acceptance remain unfinished. Native physical ABI/allocator/debug/binary/timing parity is unqualified; previous coverage gaps stay open."
+    ],
+    "gaps": [
+      "Full legacy/encrypted manifest and Sfx metadata/storage/format/UI acceptance remain unfinished.",
+      "Physical native ABI/allocator/debug/binary/timing parity unqualified; previous coverage gaps retained."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "comphelper/source/xml/ofopxmlhelper.cxx",
+          "marker": "WriteRelationsInfoSequence"
+        },
+        {
+          "path": "package/source/manifest/ManifestWriter.cxx",
+          "marker": "ManifestWriter::writeManifestSequence"
+        },
+        {
+          "path": "package/util/package2.component",
+          "marker": "package_ManifestWriter_get_implementation"
+        },
+        {
+          "path": "package/Library_package2.mk",
+          "marker": "services"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sax/test/sax/testwriter.cxx",
+          "marker": "testSimple"
+        }
+      ],
+      "docs": [
+        {
+          "path": "offapi/com/sun/star/packages/manifest/XManifestWriter.idl",
+          "marker": "writeManifestSequence"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/manifest/ManifestWriter.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/manifest/ManifestExport.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sax/source/expatwrap/saxwriter.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/XDocumentHandler.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/xmlfilterbase.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/desktop/browser/app/uno-components.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/odt-worker-client.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.write.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/packages/manifest/XManifestWriter.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/packages/manifest/ManifestWriter.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.string.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/xml/saxstringwriter.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/writer-odt-worker.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.write.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/manifest/native-manifest-export.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "scripts/fixtures/native-dom-worker-probe.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/e2e/calc/ods.spec.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/e2e/writer-hyperlinks.spec.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sax/source/expatwrap/saxwriter.upstream.test.ts",
+          "marker": "testSimple"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-package-sax-writers.md",
+          "marker": "Native package SAX writers"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "OFOP WriteRelationsInfoSequence and WriteContentSequence now consume actual XOutputStream/context/native StringPair sequences and registered source Writer. Attribute admission and failure occur in original order after root callbacks. Actual ManifestWriter implements the original XManifestWriter/XServiceInfo component, acquired context, exact package2 registration, native PropertyValue sequences and original SAXException-to-WrappedTargetRuntimeException wrapping with empty outer Message/Context. ManifestExport consumes the actual XDocumentHandler reference/native nested sequences and queries the original extended facet after startDocument. The duplicate XmlStringDocumentHandler encoder and five-callback alias are removed. Existing package string boundaries only bind actual native containers/stream bytes; no replacement XML encoder, fake provider or lazy core bootstrap exists. Dedicated Worker entrypoints own realm-local services; test fixtures initialize the same actual registry. Plain unencrypted OASIS admission remains bounded; legacy/encryption, full Sfx metadata/storage and final DOCX/XLSX core/shell/UI acceptance remain unfinished. Native physical ABI/allocator/debug/binary/timing parity is unqualified; previous coverage gaps stay open."
+    },
+    "scopeLimitations": [
+      "OFOP WriteRelationsInfoSequence and WriteContentSequence now consume actual XOutputStream/context/native StringPair sequences and registered source Writer. Attribute admission and failure occur in original order after root callbacks. Actual ManifestWriter implements the original XManifestWriter/XServiceInfo component, acquired context, exact package2 registration, native PropertyValue sequences and original SAXException-to-WrappedTargetRuntimeException wrapping with empty outer Message/Context. ManifestExport consumes the actual XDocumentHandler reference/native nested sequences and queries the original extended facet after startDocument. The duplicate XmlStringDocumentHandler encoder and five-callback alias are removed. Existing package string boundaries only bind actual native containers/stream bytes; no replacement XML encoder, fake provider or lazy core bootstrap exists. Dedicated Worker entrypoints own realm-local services; test fixtures initialize the same actual registry. Plain unencrypted OASIS admission remains bounded; legacy/encryption, full Sfx metadata/storage and final DOCX/XLSX core/shell/UI acceptance remain unfinished. Native physical ABI/allocator/debug/binary/timing parity is unqualified; previous coverage gaps stay open.",
+      "Original SAX Writer QA is reused as dependency evidence from the preceding checkpoint. Package consumer tests here are authored tests; no dedicated original ManifestWriter/OFOP QA suite port is claimed."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-package-sax-consumers-and-registered-manifest-service"
+  }
+}

@@ -8,9 +8,9 @@ import {
   type FastXmlParseOptions,
 } from "../../../sax/source/fastparser/fastparser";
 import {
-  WriteRelationsInfoSequence,
+  writeRelationsInfoSequenceXml,
   type StringPair,
-} from "../../../comphelper/source/xml/ofopxmlhelper";
+} from "../../../comphelper/source/xml/ofopxmlhelper.string";
 import { ZipStorage, type ZipFragmentStream } from "../helper/zipstorage";
 import { type FragmentContext, type FragmentHandler } from "./fragmenthandler";
 import { OFFICE_DOCUMENT_RELATION, STRICT_OFFICE_DOCUMENT_RELATION, Relations } from "./relations";
@@ -194,7 +194,7 @@ export class XmlFilterBase {
         getRelationsPath(path),
         "application/vnd.openxmlformats-package.relationships+xml",
       );
-      const encoded = new TextEncoder().encode(WriteRelationsInfoSequence(output.entries)),
+      const encoded = new TextEncoder().encode(writeRelationsInfoSequenceXml(output.entries)),
         bytes = new ByteSequence(encoded, encoded.length),
         data = toUnoSequence(bytes);
       try {

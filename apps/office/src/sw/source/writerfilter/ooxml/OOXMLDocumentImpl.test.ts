@@ -1,4 +1,6 @@
 /** @fileoverview Original document fast-substream and relationship-input paths over real ZIP streams, generated SAX tables and DomainMapper settings. */
+import { writeRelationsInfoSequenceXml } from "../../../../comphelper/source/xml/ofopxmlhelper.string";
+
 import { expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -13,10 +15,7 @@ import { createWriterDocument } from "../../core/doc/doc";
 import { ZipStorage } from "../../../../oox/source/helper/zipstorage";
 import { writeOutput } from "../../../../test/oox-output";
 import { readOwnedInput } from "../../../../test/oox-input";
-import {
-  WriteRelationsInfoSequence,
-  type StringPair,
-} from "../../../../comphelper/source/xml/ofopxmlhelper";
+import { type StringPair } from "../../../../comphelper/source/xml/ofopxmlhelper.string";
 import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";
 import { FastSaxParseError } from "../../../../sax/source/fastparser/fastparser";
 
@@ -40,7 +39,7 @@ async function packageOf(xml: string | null, relationNamespace = rel): Promise<U
   put(
     storage,
     "_rels/.rels",
-    WriteRelationsInfoSequence([
+    writeRelationsInfoSequenceXml([
       relation("main", relationNamespace + "officeDocument", "word/document.xml"),
     ]),
   );
@@ -48,7 +47,7 @@ async function packageOf(xml: string | null, relationNamespace = rel): Promise<U
   put(
     storage,
     "word/_rels/document.xml.rels",
-    WriteRelationsInfoSequence([
+    writeRelationsInfoSequenceXml([
       relation("settings", relationNamespace + "settings", "../settings/settings.xml"),
       relation("payload", relationNamespace + "image", "assets/data.bin"),
     ]),
@@ -58,7 +57,7 @@ async function packageOf(xml: string | null, relationNamespace = rel): Promise<U
   put(
     storage,
     "settings/_rels/settings.xml.rels",
-    WriteRelationsInfoSequence([
+    writeRelationsInfoSequenceXml([
       relation("payload", relationNamespace + "image", "assets/data.bin"),
       relation("again", relationNamespace + "settings", "broken.xml"),
     ]),
