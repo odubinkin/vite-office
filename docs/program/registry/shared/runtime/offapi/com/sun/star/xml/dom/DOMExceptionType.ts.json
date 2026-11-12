@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/xml/dom/DOMExceptionType.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "xml-dom-contracts",
+    "capabilityIds": [
+      "CAP-73256a32-f63e-46d2-a224-eb2af3ef519e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/xml/dom/DOMExceptionType.ts",
+        "apps/office/src/offapi/com/sun/star/xml/dom/native-dom-contracts.test.ts",
+        "apps/office/src/offapi/com/sun/star/xml/dom/native-dom-values.test.ts",
+        "docs/program/native-xml-dom-contracts.md"
+      ],
+      "justification": "Original complete core DOM and parser callback IDL contracts, normal CPPUMaker interface/enum types and comprehensive DOMException value reuse actual shared CPPU factories, Reference, Any and OUString owners. Native direct bases, acquired interface results, borrowed input/owned output strings, zero-based enum ordinals, exception inheritance and copy/move order are retained. Tests use actual type metadata, typed-null interfaces and a genuine OWeakObject context, not a fake DOM implementation or property provider. Concrete libxml2/unoxml tree and builder owners, metadata/model initialization, full reflection, exception Any transport, physical ABI, compiled native differential and complete DOCX/XLSX filter/UI parity remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "offapi/com/sun/star/xml/dom/DOMExceptionType.idl",
+      "upstreamSymbols": [
+        "DOMExceptionType",
+        "DOMSTRING_SIZE_ERR",
+        "HIERARCHY_REQUEST_ERR",
+        "INDEX_SIZE_ERR",
+        "INUSE_ATTRIBUTE_ERR",
+        "INVALID_ACCESS_ERR",
+        "INVALID_CHARACTER_ERR",
+        "INVALID_MODIFICATION_ERR",
+        "INVALID_STATE_ERR",
+        "NAMESPACE_ERR",
+        "NO_DATA_ALLOWED_ERR",
+        "NO_MODIFICATION_ALLOWED_ERR",
+        "NOT_FOUND_ERR",
+        "NOT_SUPPORTED_ERR",
+        "SYNTAX_ERR",
+        "WRONG_DOCUMENT_ERR"
+      ]
+    }
+  }
+}

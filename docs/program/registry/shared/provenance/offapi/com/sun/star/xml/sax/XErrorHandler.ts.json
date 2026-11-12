@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/xml/sax/XErrorHandler.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/xml/sax/XErrorHandler.idl",
+    "localSymbols": [
+      "XErrorHandler",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "XErrorHandler",
+      "error",
+      "fatalError",
+      "warning",
+      "XInterface"
+    ],
+    "preservedResponsibilities": [
+      "Original complete core DOM and parser callback IDL contracts, normal CPPUMaker interface/enum types and comprehensive DOMException value reuse actual shared CPPU factories, Reference, Any and OUString owners. Native direct bases, acquired interface results, borrowed input/owned output strings, zero-based enum ordinals, exception inheritance and copy/move order are retained. Tests use actual type metadata, typed-null interfaces and a genuine OWeakObject context, not a fake DOM implementation or property provider. Concrete libxml2/unoxml tree and builder owners, metadata/model initialization, full reflection, exception Any transport, physical ABI, compiled native differential and complete DOCX/XLSX filter/UI parity remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Concrete native DOM/parser/metadata/filter owners, full reflected method descriptions, exception Any transport and physical ABI remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/XErrorHandler.ts",
+          "marker": "XErrorHandler"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/native-dom-contracts.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/native-dom-values.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/xml/sax/XErrorHandler.idl",
+          "marker": "XErrorHandler"
+        },
+        {
+          "path": "vendor/libreoffice-reference/codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "InterfaceType::dumpNormalGetCppuType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/xml/sax/XErrorHandler.idl",
+          "marker": "XInterface"
+        }
+      ]
+    }
+  }
+}

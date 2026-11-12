@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/xml/dom/XNotation.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "xml-dom-contracts",
+    "capabilityIds": [
+      "CAP-73256a32-f63e-46d2-a224-eb2af3ef519e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/xml/dom/XNotation.ts",
+        "apps/office/src/offapi/com/sun/star/xml/dom/native-dom-contracts.test.ts",
+        "apps/office/src/offapi/com/sun/star/xml/dom/native-dom-values.test.ts",
+        "docs/program/native-xml-dom-contracts.md"
+      ],
+      "justification": "Original complete core DOM and parser callback IDL contracts, normal CPPUMaker interface/enum types and comprehensive DOMException value reuse actual shared CPPU factories, Reference, Any and OUString owners. Native direct bases, acquired interface results, borrowed input/owned output strings, zero-based enum ordinals, exception inheritance and copy/move order are retained. Tests use actual type metadata, typed-null interfaces and a genuine OWeakObject context, not a fake DOM implementation or property provider. Concrete libxml2/unoxml tree and builder owners, metadata/model initialization, full reflection, exception Any transport, physical ABI, compiled native differential and complete DOCX/XLSX filter/UI parity remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XNotation",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "offapi/com/sun/star/xml/dom/XNotation.idl",
+      "upstreamSymbols": [
+        "XNotation",
+        "getPublicId",
+        "getSystemId",
+        "XNode"
+      ]
+    }
+  }
+}

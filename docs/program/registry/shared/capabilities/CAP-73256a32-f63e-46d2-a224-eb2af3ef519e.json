@@ -1,0 +1,185 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-73256a32-f63e-46d2-a224-eb2af3ef519e",
+    "capabilityId": "CAP-73256a32-f63e-46d2-a224-eb2af3ef519e",
+    "suite": "shared",
+    "subsystem": "xml-dom-contracts",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original complete core DOM and parser callback IDL contracts, normal CPPUMaker interface/enum types and comprehensive DOMException value reuse actual shared CPPU factories, Reference, Any and OUString owners. Native direct bases, acquired interface results, borrowed input/owned output strings, zero-based enum ordinals, exception inheritance and copy/move order are retained. Tests use actual type metadata, typed-null interfaces and a genuine OWeakObject context, not a fake DOM implementation or property provider. Concrete libxml2/unoxml tree and builder owners, metadata/model initialization, full reflection, exception Any transport, physical ABI, compiled native differential and complete DOCX/XLSX filter/UI parity remain unverified."
+    ],
+    "capability": "Native UNO DOM declarations and exception values",
+    "gaps": [
+      "Concrete libxml2/unoxml owners and metadata service initialization remain pending; no DOCX/XLSX file/UI acceptance."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "offapi/com/sun/star/xml/dom/XNode.idl",
+          "marker": "interface XNode"
+        },
+        {
+          "path": "offapi/com/sun/star/xml/dom/XDocumentBuilder.idl",
+          "marker": "interface XDocumentBuilder"
+        },
+        {
+          "path": "offapi/com/sun/star/xml/dom/DOMException.idl",
+          "marker": "exception DOMException"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/test_any.cxx",
+          "marker": "void Test::testEnum()"
+        },
+        {
+          "path": "unoxml/qa/unit/domtest.cxx",
+          "marker": "testXDocumentBuilder"
+        }
+      ],
+      "docs": [
+        {
+          "path": "offapi/com/sun/star/xml/dom/XDocument.idl",
+          "marker": "interface XDocument"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/XAttr.ts",
+          "marker": "XAttr"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/XCDATASection.ts",
+          "marker": "XCDATASection"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/XCharacterData.ts",
+          "marker": "XCharacterData"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/XComment.ts",
+          "marker": "XComment"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/XDOMImplementation.ts",
+          "marker": "XDOMImplementation"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/XDocument.ts",
+          "marker": "XDocument"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/XDocumentBuilder.ts",
+          "marker": "XDocumentBuilder"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/XDocumentFragment.ts",
+          "marker": "XDocumentFragment"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/XDocumentType.ts",
+          "marker": "XDocumentType"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/XElement.ts",
+          "marker": "XElement"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/XEntity.ts",
+          "marker": "XEntity"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/XEntityReference.ts",
+          "marker": "XEntityReference"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/XNamedNodeMap.ts",
+          "marker": "XNamedNodeMap"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/XNode.ts",
+          "marker": "XNode"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/XNodeList.ts",
+          "marker": "XNodeList"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/XNotation.ts",
+          "marker": "XNotation"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/XProcessingInstruction.ts",
+          "marker": "XProcessingInstruction"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/XText.ts",
+          "marker": "XText"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/XEntityResolver.ts",
+          "marker": "XEntityResolver"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/XErrorHandler.ts",
+          "marker": "XErrorHandler"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/NodeType.ts",
+          "marker": "NodeType"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/DOMExceptionType.ts",
+          "marker": "DOMExceptionType"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/DOMException.ts",
+          "marker": "DOMException"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/xml/dom/DOMException.ts",
+          "marker": "DOMException"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/xml/dom/DOMExceptionType.ts",
+          "marker": "DOMExceptionType"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/native-dom-contracts.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/native-dom-values.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-xml-dom-contracts.md",
+          "marker": "# Native XML DOM contracts"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original complete core DOM and parser callback IDL contracts, normal CPPUMaker interface/enum types and comprehensive DOMException value reuse actual shared CPPU factories, Reference, Any and OUString owners. Native direct bases, acquired interface results, borrowed input/owned output strings, zero-based enum ordinals, exception inheritance and copy/move order are retained. Tests use actual type metadata, typed-null interfaces and a genuine OWeakObject context, not a fake DOM implementation or property provider. Concrete libxml2/unoxml tree and builder owners, metadata/model initialization, full reflection, exception Any transport, physical ABI, compiled native differential and complete DOCX/XLSX filter/UI parity remain unverified."
+    },
+    "scopeLimitations": [
+      "Original complete core DOM and parser callback IDL contracts, normal CPPUMaker interface/enum types and comprehensive DOMException value reuse actual shared CPPU factories, Reference, Any and OUString owners. Native direct bases, acquired interface results, borrowed input/owned output strings, zero-based enum ordinals, exception inheritance and copy/move order are retained. Tests use actual type metadata, typed-null interfaces and a genuine OWeakObject context, not a fake DOM implementation or property provider. Concrete libxml2/unoxml tree and builder owners, metadata/model initialization, full reflection, exception Any transport, physical ABI, compiled native differential and complete DOCX/XLSX filter/UI parity remain unverified."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-dom-contract-and-value-bindings"
+  }
+}
