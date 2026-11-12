@@ -20,13 +20,15 @@
         "apps/office/src/svl/source/items/itemprop.ts",
         "apps/office/src/sw/source/core/unocore/native-text-import-api.test.ts",
         "apps/office/src/svl/source/items/itemprop.test.ts",
-        "apps/office/src/svl/source/items/native-property-map.test.ts"
+        "apps/office/src/svl/source/items/native-property-map.test.ts",
+        "apps/office/src/svl/source/items/native-property-set.test.ts"
       ],
-      "justification": "Task202610231627-0F8SYR: Writer import API attachment uses canonical document/nodes/registered positions/items rather than a separate document representation. Property descriptors, independent copies and unknown-name failure. Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim. Native SfxItemPropertyMapEntry schema values and PropertyMoreFlags retain actual OUString/Type owners, source widths/checked preconditions, copy/assignment and reverse member destruction. SfxItemPropertyMap now uses actual sorted_vector/OUString comparison, borrowed immutable schema pointers, first duplicate insertion, counted UTF16 lower_bound and real cached Sequence<Property> values. Actual generated Property/UNO data assignment and sequence COW preserve cache sharing, independent returned descriptors and UnknownPropertyException defaults. Older SfxItemPropertySetInfo array projection remains explicitly unregistered/incomplete, not a native XPropertySetInfo provider. Full SfxItemPropertySet/property-info/static-map owner migration, SwXTextDefaults/application and DOCX/XLSX filters/export/UI remain incomplete; no broad default/service/ABI/parity promotion.",
+      "justification": "Task202610231627-0F8SYR: Writer import API attachment uses canonical document/nodes/registered positions/items rather than a separate document representation. Property descriptors, independent copies and unknown-name failure. Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim. Native SfxItemPropertyMapEntry schema values and PropertyMoreFlags retain actual OUString/Type owners, source widths/checked preconditions, copy/assignment and reverse member destruction. SfxItemPropertyMap now uses actual sorted_vector/OUString comparison, borrowed immutable schema pointers, first duplicate insertion, counted UTF16 lower_bound and real cached Sequence<Property> values. Actual generated Property/UNO data assignment and sequence COW preserve cache sharing, independent returned descriptors and UnknownPropertyException defaults. Older SfxItemPropertySetInfo array projection remains explicitly unregistered/incomplete, not a native XPropertySetInfo provider. Full SfxItemPropertySet/property-info/static-map owner migration, SwXTextDefaults/application and DOCX/XLSX filters/export/UI remain incomplete; no broad default/service/ABI/parity promotion. SfxItemPropertySet static/named value and state helpers now use actual property maps, deep item pointers, real pool defaults and Any/QueryValue/PutValue/enum normalization. Failed writes leave destination unchanged; successful clones transfer into existing PutImpl through native unique_ptr overload erasure without an extra clone. GetItemState carries its original optional output pointer through parents and writes it only for SET. Complete PropertyAttribute IDL constants include both REMOVABLE/REMOVEABLE. Real Writer tab/bool/break/default graph tests preserve MAYBEVOID/stale enum output and ignore-known-value rejection (WRITER450-451/CALC-517-518). Actual OOXML720-twip settings distance1270 mm100 is applied through native item/set/SwDoc.SetDefault APIs; generic document default1134 twips/2000 mm100 is unchanged. This is a kernel prerequisite, not full SwXTextDefaults/property-info/static-map/filter/UI wiring; no broad default/service/ABI/parity promotion.",
       "knownViolations": [],
       "localSymbols": [
         "SfxItemPropertySetInfo",
-        "SfxItemPropertyMap"
+        "SfxItemPropertyMap",
+        "SfxItemPropertySet"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "svl/source/items/itemprop.cxx",
@@ -35,7 +37,11 @@
         "SfxItemPropertyMap",
         "getByName",
         "getProperties",
-        "getPropertyByName"
+        "getPropertyByName",
+        "SfxItemPropertySet",
+        "getPropertyValue",
+        "setPropertyValue",
+        "getPropertyState"
       ]
     }
   }

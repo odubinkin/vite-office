@@ -3640,3 +3640,13 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 
 - Source: pinned `sw/source/writerfilter/dmapper/SettingsTable.cxx`, `SettingsTable::lcl_sprm`, commit9bc445578031fecf56086729d8e4940c77e14d65.
 - doNotExpandShiftReturn, balanceSingleByteDoubleByteWidth and ulTrailSpace assign true on the modifier's presence, ignoring the already parsed integer value. Thus an explicit false/zero turns these flags on and a later false cannot reset them, unlike neighboring boolean compatibility settings. Preserve those assignments rather than normalizing them to nIntValue!=0. Tests use actual OOXMLProperty/OOXMLValue resources and the real DomainMapper settings owner. Full native layout/export QA remains separate and unverified here.
+
+### WRITER450 — MAYBEVOID can retain and normalize a previous output value
+
+- Source: pinned `svl/source/items/itemprop.cxx`, `SfxItemPropertySet::getPropertyValue`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- When no readable item is available and MAYBEVOID is set, the out-parameter overload does not clear rAny. Its later enum normalization still runs, so a previous integer output can survive and become the declared enum despite an UNKNOWN/INVALID state. Preserve this sequence. A real Writer pool, a narrowed real SfxItemSet, the original BreakType descriptor and a caller-owned Any reproduce it locally. The by-value overload constructs a fresh Any and yields void in this case. This is source/local-helper evidence, not a complete native document/UI witness.
+
+### WRITER451 — Ignore-unknown also suppresses known-property value rejection
+
+- Source: pinned `svl/source/items/itemprop.cxx`, `SfxItemPropertySet::setPropertyValue`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- bIgnoreUnknownProperty is described as suppressing unknown-property errors, but the static setter also uses it after a known item's PutValue rejects an incompatible Any. Thus a known TabStopDistance assignment of bool silently does nothing when the flag is true, while false throws IllegalArgumentException. Preserve the broader source condition and unchanged destination rather than narrowing suppression to name lookup. Tests use the actual Writer tab item and genuine typed Any values; full filter/UI parity is not certified here.

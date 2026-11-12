@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "uno-property-contracts",
     "capabilityIds": [
-      "CAP-16da4e80-38db-4a86-8b35-1675ddb0692e"
+      "CAP-16da4e80-38db-4a86-8b35-1675ddb0692e",
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -19,18 +20,37 @@
         "apps/office/src/udkapi/com/sun/star/beans/PropertyAttribute.ts#READONLY",
         "apps/office/src/desktop/browser/app/uno-components.test.ts",
         "udkapi/com/sun/star/beans/PropertyAttribute.idl",
-        "cppuhelper/source/servicemanager.cxx"
+        "cppuhelper/source/servicemanager.cxx",
+        "apps/office/src/svl/source/items/native-property-set.test.ts"
       ],
-      "justification": "Original READONLY flag and value consumed by the default-context property descriptor. Unconsumed flags remain outside this slice.",
+      "justification": "Original READONLY flag and value consumed by the default-context property descriptor. Unconsumed flags remain outside this slice. SfxItemPropertySet static/named value and state helpers now use actual property maps, deep item pointers, real pool defaults and Any/QueryValue/PutValue/enum normalization. Failed writes leave destination unchanged; successful clones transfer into existing PutImpl through native unique_ptr overload erasure without an extra clone. GetItemState carries its original optional output pointer through parents and writes it only for SET. Complete PropertyAttribute IDL constants include both REMOVABLE/REMOVEABLE. Real Writer tab/bool/break/default graph tests preserve MAYBEVOID/stale enum output and ignore-known-value rejection (WRITER450-451/CALC-517-518). Actual OOXML720-twip settings distance1270 mm100 is applied through native item/set/SwDoc.SetDefault APIs; generic document default1134 twips/2000 mm100 is unchanged. This is a kernel prerequisite, not full SwXTextDefaults/property-info/static-map/filter/UI wiring; no broad default/service/ABI/parity promotion.",
       "knownViolations": [],
       "localSymbols": [
-        "READONLY"
+        "MAYBEVOID",
+        "BOUND",
+        "CONSTRAINED",
+        "TRANSIENT",
+        "READONLY",
+        "MAYBEAMBIGUOUS",
+        "MAYBEDEFAULT",
+        "REMOVABLE",
+        "REMOVEABLE",
+        "OPTIONAL"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "udkapi/com/sun/star/beans/PropertyAttribute.idl",
       "upstreamSymbols": [
-        "PropertyAttribute",
-        "READONLY"
+        "MAYBEVOID",
+        "BOUND",
+        "CONSTRAINED",
+        "TRANSIENT",
+        "READONLY",
+        "MAYBEAMBIGUOUS",
+        "MAYBEDEFAULT",
+        "REMOVABLE",
+        "REMOVEABLE",
+        "OPTIONAL",
+        "PropertyAttribute"
       ]
     }
   }

@@ -168,3 +168,149 @@ export class SfxItemPropertyMap {
 }
 
 import type { typelib_TypeDescriptionReference as R } from "../../../cppu/inc/typelib/typedescription";
+
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { TypeClass } from "../../../udkapi/com/sun/star/uno/TypeClass";
+import { PropertyState } from "../../../udkapi/com/sun/star/beans/PropertyState";
+import { MAYBEVOID } from "../../../udkapi/com/sun/star/beans/PropertyAttribute";
+import { SfxItemPool } from "./itempool";
+import { SfxItemSet, SfxItemState } from "./itemset";
+import type { SfxPoolItem } from "./poolitem";
+import { RuntimeException } from "../../../cppu/inc/com/sun/star/uno/RuntimeException";
+import { IllegalArgumentException } from "../../../cppu/inc/com/sun/star/lang/IllegalArgumentException";
+import { OUString } from "../../../sal/inc/rtl/ustring";
+/** Original plain property-set owner. Value/state methods are represented; native property-info component/static-schema wiring remains pending and no partial UNO provider is registered. */
+export class SfxItemPropertySet {
+  private readonly m_aMap: SfxItemPropertyMap;
+  /** Original span constructor borrows its caller's static schema through the map. @param entries - Actual native entries. @returns Owner. */
+  constructor(entries: readonly SfxItemPropertyMapEntry[]) {
+    this.m_aMap = new SfxItemPropertyMap(entries);
+  }
+  /** Original static value read retains item-state gating, pool default selection and enum normalization. MAYBEVOID does not clear the caller's existing Any. @param entry - Native descriptor. @param set - Actual item set. @param output - Caller-owned Any. @returns Nothing. */
+  static getPropertyValue(entry: SfxItemPropertyMapEntry, set: SfxItemSet, output: Any): void {
+    const item: [SfxPoolItem | null] = [null];
+    const state = set.GetItemState(entry.nWID, true, item);
+    if (state !== SfxItemState.SET && SfxItemPool.IsWhich(entry.nWID))
+      item[0] = set.GetPool().GetUserOrPoolDefaultItem(entry.nWID);
+    if (state >= SfxItemState.DEFAULT && item[0]) {
+      (item[0] as SfxPoolItem & { QueryValue(value: Any, member: number): boolean }).QueryValue(
+        output,
+        entry.nMemberId,
+      );
+    } else if (!(entry.nFlags & MAYBEVOID)) {
+      const units = Uint16Array.from(
+        "Property not found in ItemSet but not MAYBEVOID?",
+        /** Exact source diagnostic units. @param character - Source unit. @returns Unit. */ (
+          character,
+        ) => character.charCodeAt(0),
+      );
+      const message = new OUString(units, units.length),
+        context = new Reference();
+      try {
+        throw new RuntimeException(message, context);
+      } finally {
+        context.dispose();
+        message.dispose();
+      }
+    }
+    if (
+      entry.aType.getTypeClass() === TypeClass.ENUM &&
+      entry.aType.getTypeClass() !== output.getValueTypeClass()
+    ) {
+      const value: [number] = [0];
+      if (output.extract(value, "sal_Int32")) output.setValue(value, entry.aType);
+    }
+  }
+  /** Original named read overload returns an owned Any. @param name - Native name. @param set - Actual item set. @returns Owned result. */
+  getPropertyValue(name: OUStringConstReference, set: SfxItemSet): Any;
+  /** Original named read overload writes the caller's Any. @param name - Native name. @param set - Actual item set. @param output - Actual output. @returns Nothing. */
+  getPropertyValue(name: OUStringConstReference, set: SfxItemSet, output: Any): void;
+  /** Compiler overload binding; by-value temporary destruction remains exception safe. @param name - Native name. @param set - Actual item set. @param output - Optional original output argument. @returns Original owned value or nothing. */
+  getPropertyValue(name: OUStringConstReference, set: SfxItemSet, output?: Any): Any | void {
+    if (output === undefined) {
+      const value = new Any();
+      try {
+        this.getPropertyValue(name, set, value);
+        return value;
+      } catch (error) {
+        value.dispose();
+        throw error;
+      }
+    }
+    const entry = this.m_aMap.getByName(propertyNameView(name));
+    if (!entry) this.unknown(name);
+    SfxItemPropertySet.getPropertyValue(entry, set, output);
+  }
+  /** Original static write clones the effective source item and transfers that clone only after successful PutValue. Rejected values preserve the actual set. @param entry - Native descriptor. @param value - Borrowed Any. @param set - Actual destination. @param ignore - Original ignore flag. @returns Nothing. */
+  static setPropertyValue(
+    entry: SfxItemPropertyMapEntry,
+    value: Any,
+    set: SfxItemSet,
+    ignore = false,
+  ): void {
+    const item: [SfxPoolItem | null] = [null];
+    const state = set.GetItemState(entry.nWID, true, item);
+    if (state !== SfxItemState.SET && SfxItemPool.IsWhich(entry.nWID))
+      item[0] = set.GetPool().GetUserOrPoolDefaultItem(entry.nWID);
+    if (!item[0]) return;
+    const copy = item[0].Clone();
+    if (!copy) return;
+    let owned = true;
+    try {
+      if (!copy.PutValue(value, entry.nMemberId)) {
+        if (ignore) return;
+        throw new IllegalArgumentException();
+      }
+      owned = false;
+      set.Put(copy, true);
+    } finally {
+      if (owned) copy.Dispose();
+    }
+  }
+  /** Original named setter checks the name before delegating, preserving ignore-unknown behavior. @param name - Native name. @param value - Borrowed Any. @param set - Actual set. @param ignore - Original ignore flag. @returns Nothing. */
+  setPropertyValue(
+    name: OUStringConstReference,
+    value: Any,
+    set: SfxItemSet,
+    ignore = false,
+  ): void {
+    const entry = this.m_aMap.getByName(propertyNameView(name));
+    if (!entry) {
+      if (ignore) return;
+      this.unknown(name);
+    }
+    SfxItemPropertySet.setPropertyValue(entry, value, set, ignore);
+  }
+  /** Original state reflection deliberately uses shallow state and no value query/default normalization. @param entry - Native descriptor. @param set - Actual set. @returns Native state. */
+  static getPropertyState(entry: SfxItemPropertyMapEntry, set: SfxItemSet): PropertyState {
+    const state = set.GetItemState(entry.nWID, false);
+    return state === SfxItemState.DEFAULT
+      ? PropertyState.DEFAULT_VALUE
+      : state < SfxItemState.DEFAULT
+        ? PropertyState.AMBIGUOUS_VALUE
+        : PropertyState.DIRECT_VALUE;
+  }
+  /** Original named state query also rejects a declared zero WhichId. @param name - Native name. @param set - Actual set. @returns Native state. */
+  getPropertyState(name: OUStringConstReference, set: SfxItemSet): PropertyState {
+    const entry = this.m_aMap.getByName(propertyNameView(name));
+    if (!entry || !entry.nWID) this.unknown(name);
+    return SfxItemPropertySet.getPropertyState(entry, set);
+  }
+  /** Original map reference getter. @returns Borrowed map owner. */
+  getPropertyMap(): SfxItemPropertyMap {
+    return this.m_aMap;
+  }
+  /** Original named exception construction with empty generated default context. @param name - Requested native name. @returns Never. */
+  private unknown(name: OUStringConstReference): never {
+    const context = new Reference();
+    try {
+      throw new UnknownPropertyException(name, context);
+    } finally {
+      context.dispose();
+    }
+  }
+  /** Original owned-map destruction; entry-table lifetime belongs to its caller. @returns Nothing. */
+  dispose(): void {
+    this.m_aMap.dispose();
+  }
+}

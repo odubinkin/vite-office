@@ -7,14 +7,33 @@
     "status": "mapped",
     "upstreamPath": "udkapi/com/sun/star/beans/PropertyAttribute.idl",
     "localSymbols": [
-      "READONLY"
+      "MAYBEVOID",
+      "BOUND",
+      "CONSTRAINED",
+      "TRANSIENT",
+      "READONLY",
+      "MAYBEAMBIGUOUS",
+      "MAYBEDEFAULT",
+      "REMOVABLE",
+      "REMOVEABLE",
+      "OPTIONAL"
     ],
     "upstreamSymbols": [
-      "PropertyAttribute",
-      "READONLY"
+      "MAYBEVOID",
+      "BOUND",
+      "CONSTRAINED",
+      "TRANSIENT",
+      "READONLY",
+      "MAYBEAMBIGUOUS",
+      "MAYBEDEFAULT",
+      "REMOVABLE",
+      "REMOVEABLE",
+      "OPTIONAL",
+      "PropertyAttribute"
     ],
     "preservedResponsibilities": [
-      "Original READONLY flag and value consumed by the default-context property descriptor."
+      "Original READONLY flag and value consumed by the default-context property descriptor.",
+      "SfxItemPropertySet static/named value and state helpers now use actual property maps, deep item pointers, real pool defaults and Any/QueryValue/PutValue/enum normalization. Failed writes leave destination unchanged; successful clones transfer into existing PutImpl through native unique_ptr overload erasure without an extra clone. GetItemState carries its original optional output pointer through parents and writes it only for SET. Complete PropertyAttribute IDL constants include both REMOVABLE/REMOVEABLE. Real Writer tab/bool/break/default graph tests preserve MAYBEVOID/stale enum output and ignore-known-value rejection (WRITER450-451/CALC-517-518). Actual OOXML720-twip settings distance1270 mm100 is applied through native item/set/SwDoc.SetDefault APIs; generic document default1134 twips/2000 mm100 is unchanged. This is a kernel prerequisite, not full SwXTextDefaults/property-info/static-map/filter/UI wiring; no broad default/service/ABI/parity promotion."
     ],
     "omittedResponsibilities": [
       "Unconsumed flags remain outside this slice."
@@ -28,6 +47,10 @@
         {
           "path": "apps/office/src/desktop/browser/app/uno-components.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/svl/source/items/native-property-set.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

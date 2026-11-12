@@ -5402,3 +5402,13 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source: pinned `package/source/zipapi/ZipOutputStream.cxx`, `package/source/zippackage/ZipPackageStream.cxx`, `include/osl/time.h`, `sal/osl/unx/time.cxx`, commit9bc445578031fecf56086729d8e4940c77e14d65.
 - getCurrentDosTime ignores boolean results from osl_getSystemTime and osl_getDateTimeFromTimeValue, then reads calendar members. Original non-MACH clock failure returnsfalse before initializing TimeValue, and failed gmtime leaves the output calendar unchanged. This can enter an indeterminate native value domain. Preserve the calls and lack of a retry/status repair; the browser Date backend has no represented OS failure path. That failure/undefined-data behavior remains unverified, without fake failures or invented fallback calendar values.
+
+### CALC-517 — MAYBEVOID can retain and normalize a previous output value
+
+- Source: pinned `svl/source/items/itemprop.cxx`, `SfxItemPropertySet::getPropertyValue`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- When no readable item is available and MAYBEVOID is set, the out-parameter overload does not clear rAny. Its later enum normalization still runs, so a previous integer output can survive and become the declared enum despite an UNKNOWN/INVALID state. Preserve this sequence. Real Writer pool/set/BreakType/Any callers exercise the shared helper locally; the by-value overload instead starts with a fresh Any. This shared source finding is not a compiled native Calc/XLSX document/UI reproduction.
+
+### CALC-518 — Ignore-unknown also suppresses known-property value rejection
+
+- Source: pinned `svl/source/items/itemprop.cxx`, `SfxItemPropertySet::setPropertyValue`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- bIgnoreUnknownProperty is described as suppressing unknown-property errors, but also suppresses a known item's PutValue type rejection. The actual shared-helper test assigns bool to a real Writer TabStopDistance: true leaves the set unchanged, false throws IllegalArgumentException. Preserve the broader source condition. This is source/local shared-helper evidence, not full Calc/XLSX filter or UI parity.

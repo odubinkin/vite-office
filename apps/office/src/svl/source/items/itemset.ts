@@ -184,9 +184,13 @@ export class SfxItemSet {
       );
   }
 
-  /** Returns one item's direct, inherited, or default state. @param which - Queried WhichId. @param searchInParent - Whether inherited sets participate. @returns Item state. */
-  public GetItemState(which: number, searchInParent = true): SfxItemState {
-    return this.GetItemStateWithFallback(SfxItemState.UNKNOWN, which, searchInParent);
+  /** Original state query and optional output pointer. Only a SET result writes the caller's pointer cell. @param which - Queried WhichId. @param searchInParent - Whether inherited sets participate. @param output - Optional original const-item pointer cell. @returns Item state. */
+  public GetItemState(
+    which: number,
+    searchInParent = true,
+    output: [SfxPoolItem | null] | null = null,
+  ): SfxItemState {
+    return this.GetItemStateWithFallback(SfxItemState.UNKNOWN, which, searchInParent, output);
   }
 
   /** Returns an explicitly set item, optionally searching parents. @param which - Queried WhichId. @param searchInParent - Whether parents participate. @returns Set item or undefined. */
@@ -215,9 +219,9 @@ export class SfxItemSet {
     return this.pool.GetUserOrPoolDefaultItem(which);
   }
 
-  /** Stores an independent accepted item delta when its value changes. @param item - Source item. @returns Stored item, or undefined for an equal or out-of-range no-op. */
-  public Put(item: SfxPoolItem): SfxPoolItem | undefined {
-    return this.PutImpl(item, false);
+  /** Original borrowed-item and unique_ptr insertion overloads. The explicit ownership argument erases the native overload selection; true consumes an already owned item through the existing PutImpl. @param item - Original source value. @param passingOwnership - Native unique_ptr release binding; false borrows the item. @returns Stored item or no-op. */
+  public Put(item: SfxPoolItem, passingOwnership = false): SfxPoolItem | undefined {
+    return this.PutImpl(item, passingOwnership);
   }
 
   /** Original const-reference target-Which insertion;the source item is never mutated. Native ownership overloads remain separate. @param item - Borrowed source. @param targetWhich - Target identity or zero for unchanged identity. @returns Stored value or no-op. */
@@ -440,19 +444,23 @@ export class SfxItemSet {
     } else if (this.containsWhich(which)) this.poolItemMap.set(which, sentinel);
   }
 
-  /** Mirrors the recursive eState accumulator used by SfxItemSet::GetItemState_Impl. @param fallback - State accumulated by the child set. @param which - Queried WhichId. @param searchInParent - Whether inherited sets participate. @returns Effective item state. */
+  /** Mirrors the recursive eState accumulator used by SfxItemSet::GetItemState_Impl. @param fallback - State accumulated by the child set. @param which - Queried WhichId. @param searchInParent - Whether inherited sets participate. @param output - Optional caller-owned item pointer cell. @returns Effective item state. */
   private GetItemStateWithFallback(
     fallback: SfxItemState,
     which: number,
     searchInParent: boolean,
+    output: [SfxPoolItem | null] | null = null,
   ): SfxItemState {
     const item = this.poolItemMap.get(which);
     if (IsInvalidItem(item)) return SfxItemState.INVALID;
     if (IsDisabledItem(item)) return SfxItemState.DISABLED;
-    if (item !== undefined) return SfxItemState.SET;
+    if (item !== undefined) {
+      if (output !== null) output[0] = item;
+      return SfxItemState.SET;
+    }
     const localState = this.containsWhich(which) ? SfxItemState.DEFAULT : fallback;
     if (searchInParent && this.parent !== undefined)
-      return this.parent.GetItemStateWithFallback(localState, which, true);
+      return this.parent.GetItemStateWithFallback(localState, which, true, output);
     return localState;
   }
 }
