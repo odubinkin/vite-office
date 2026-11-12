@@ -334,9 +334,12 @@ export class OUString {
   dispose(): void {
     rtl_uString_release(this.pData);
   }
-  /** Original copy assignment. @param source - Live source reference. @returns This owner. */
-  assign(source: OUStringConstReference): this {
-    rtl_uString_assign(this.slot, source.pData as rtl_uString);
+  /** Original copy or const-literal assignment; the literal overload releases before adopting static storage without acquisition. @param source - Live source reference or const literal. @returns This owner. */
+  assign(source: OUStringConstReference | OUStringLiteral): this {
+    if (source instanceof OUStringLiteral) {
+      rtl_uString_release(this.pData);
+      this.pData = source.str;
+    } else rtl_uString_assign(this.slot, source.pData as rtl_uString);
     return this;
   }
   /** Original internal string-view replace-all overload adopts the real C result without acquiring it. @param from - Search view. @param to - Replacement view. @param fromIndex - Initial offset. @returns Owned replacement string. */

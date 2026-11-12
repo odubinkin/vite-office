@@ -1,0 +1,172 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-798eac1f-97f2-4b25-862c-72b087bac395",
+    "capabilityId": "CAP-798eac1f-97f2-4b25-862c-72b087bac395",
+    "suite": "shared",
+    "subsystem": "ucb-property-read",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Complete original XRow, XArray, XRef, XBlob, XClob and XResultSet SDK declarations retain all method signatures, signed64 hyper and signed32 long distinctions, normal CPPU type registration and original roots. Date preserves zero defaults, unsigned day/month, signed year and native compound transport. Actual Content property-read methods preserve singleton name lifetime, default Property members with explicit handle minus one, row extraction, one-based getObject and native Any result sequence ownership. Qualified nonvirtual Any method binding executes the unchanged move body on actual allocated sequence records and preserves reserved-address identity. No positive row/provider/broker or replacement value factory is manufactured. Positive row/command/service execution, property mutation/open/default resolver, complete90 coverage, native ABI and DOCX/XLSX/UI remain unverified."
+    ],
+    "capability": "Native UCB property-read and complete row type contracts",
+    "gaps": [
+      "Actual PropertyValueSet/provider/broker execution and original source service QA remain pending.",
+      "Property mutation/open/default resolver and90-percent whole selected owner coverage remain incomplete.",
+      "Native physical ABI/threading, DocumentBuilder, metadata/model and full DOCX/XLSX/UI remain unverified.",
+      "Only the constructor/assignment portion of the broad source checkOUStringLiteral case is ported here; its other overloads remain unqualified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "offapi/com/sun/star/sdbc/XRow.idl",
+          "marker": "XRow"
+        },
+        {
+          "path": "offapi/com/sun/star/sdbc/XArray.idl",
+          "marker": "XArray"
+        },
+        {
+          "path": "offapi/com/sun/star/sdbc/XRef.idl",
+          "marker": "XRef"
+        },
+        {
+          "path": "offapi/com/sun/star/sdbc/XBlob.idl",
+          "marker": "XBlob"
+        },
+        {
+          "path": "offapi/com/sun/star/sdbc/XClob.idl",
+          "marker": "XClob"
+        },
+        {
+          "path": "offapi/com/sun/star/sdbc/XResultSet.idl",
+          "marker": "XResultSet"
+        },
+        {
+          "path": "offapi/com/sun/star/util/Date.idl",
+          "marker": "Date"
+        },
+        {
+          "path": "ucbhelper/source/client/content.cxx",
+          "marker": "Content::getPropertyValuesInterface"
+        },
+        {
+          "path": "include/ucbhelper/content.hxx",
+          "marker": "getPropertyValuesInterface"
+        },
+        {
+          "path": "include/com/sun/star/uno/Any.hxx",
+          "marker": "Any::operator =(Any && other)"
+        },
+        {
+          "path": "include/rtl/ustring.hxx",
+          "marker": "OUString & operator =(OUStringLiteral"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/test_any.cxx",
+          "marker": "testSequence"
+        },
+        {
+          "path": "qadevOOo/tests/java/ifc/sdbc/_XRow.java",
+          "marker": "_getObject"
+        },
+        {
+          "path": "sal/qa/rtl/strings/test_oustring_stringliterals.cxx",
+          "marker": "checkOUStringLiteral"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/ucbhelper/content.hxx",
+          "marker": "getPropertyValuesInterface"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/sdbc/XRow.ts",
+          "marker": "XRow"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/sdbc/XArray.ts",
+          "marker": "XArray"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/sdbc/XRef.ts",
+          "marker": "XRef"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/sdbc/XBlob.ts",
+          "marker": "XBlob"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/sdbc/XClob.ts",
+          "marker": "XClob"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/sdbc/XResultSet.ts",
+          "marker": "XResultSet"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/util/Date.ts",
+          "marker": "Date"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/client/content.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/inc/content.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Any.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/inc/rtl/ustring.ts",
+          "marker": "assign(source:"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/ucbhelper/source/client/native-row-contracts.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/client/native-property-read.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/inc/rtl/native-ustring-literal-assignment.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-ucb-property-read.md",
+          "marker": "# Native UCB property read"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual UCB CommandEnvironment and ActiveDataSink preserve named bases, acquired Reference field/getter semantics, reverse member destruction and absence of automatic stream close. Actual InteractionRequest and four basic continuations preserve Any/Sequence ownership, source selection/query order, flags and borrowed parent pointers. Complete SDK declarations use normal CPPU metadata and original direct bases. No broker, process context, alternate parser or partial positive provider is manufactured. Authentication continuation owners are not ported or advertised. Protected default-constructor access control, physical C++ ABI/threading, complete source service bootstrap, content/broker paths, DocumentBuilder, metadata and DOCX/XLSX/UI acceptance remain unverified."
+    },
+    "scopeLimitations": [
+      "Actual UCB CommandEnvironment and ActiveDataSink preserve named bases, acquired Reference field/getter semantics, reverse member destruction and absence of automatic stream close. Actual InteractionRequest and four basic continuations preserve Any/Sequence ownership, source selection/query order, flags and borrowed parent pointers. Complete SDK declarations use normal CPPU metadata and original direct bases. No broker, process context, alternate parser or partial positive provider is manufactured. Authentication continuation owners are not ported or advertised. Protected default-constructor access control, physical C++ ABI/threading, complete source service bootstrap, content/broker paths, DocumentBuilder, metadata and DOCX/XLSX/UI acceptance remain unverified."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-ucb-command-context"
+  }
+}

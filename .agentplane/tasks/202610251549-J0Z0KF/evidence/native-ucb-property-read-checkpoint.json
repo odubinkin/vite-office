@@ -1,0 +1,563 @@
+{
+  "status": "in-progress-checkpoint-coverage-unmet",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "302424c079cf9584b4cb3c9e8aec850128078cb3",
+  "capability": "CAP-798eac1f-97f2-4b25-862c-72b087bac395",
+  "scope": "Original Content property-read methods, complete row dependency declarations, Date, allocated Any element method binding and native static-literal assignment. Not a positive row/provider or full open/format/UI implementation.",
+  "tests": {
+    "relatedCases": 206,
+    "relatedFiles": 30,
+    "boundaryCases": 48,
+    "resourceCases": 2,
+    "assertions": "pass",
+    "upstreamPorted": "Constructor/assignment portion of StringLiterals::checkOUStringLiteral; broad unrelated portions remain unqualified. Existing Any ownership/data/copy and earlier source sink/RTL move test ports are retained.",
+    "actualGraph": "Actual default Content and native Sequence/Any/RTL owners. No positive row/provider, private state hook, record/value factory or prototype mutation.",
+    "pending": "Genuine PropertyValueSet/provider/broker and source XRow service QA."
+  },
+  "coverage": {
+    "aggregateStatements": 76.62,
+    "aggregateBranches": 72.82,
+    "aggregateFunctions": 87.32,
+    "aggregateLines": 77.93,
+    "threshold": 90,
+    "selectedOwners": 47,
+    "result": "fail-unmet-prerequisite",
+    "scope": "Complete selected client/SDK/Any/OUString owners; not directly comparable with earlier narrower scopes.",
+    "unqualified": [
+      "Positive row/getObject command/provider/broker paths",
+      "Other full Any and OUString owner branches",
+      "Complete source row/result-set service QA",
+      "Native physical ABI/threading and full format/UI paths"
+    ]
+  },
+  "preservedSource": [
+    "Initializer-list RTL temporary and native name sequence lifetime",
+    "Property Type/Attributes defaults and Name/Handle-only mutation",
+    "Original command name static literal, handle minus one and row extraction",
+    "One-based getObject loop, empty type maps, original move result ownership and both pReserved aliases",
+    "Whole XRow dependency method declarations, original hyper/long distinction (CALC-537/WRITER471)",
+    "Date zero defaults and signed/unsigned field types",
+    "Native literal assignment release-before-static-adopt without acquisition"
+  ],
+  "corrections": [
+    "Any private nonvirtual swap calls bind their actual class body to both public values and allocated sequence elements; no separate record/value owner is added.",
+    "Mutable Property.Name lvalue is bound to its actual initialized native field; source names remain const.",
+    "Full initialized source Date fixtures avoid invalid calendar-domain data.",
+    "Static constexpr command-name storage uses the actual RTL literal overload, replacing an initially introduced dynamic literal temporary.",
+    "Only documentation was updated after the final executable-code validation."
+  ],
+  "knownBaseline": [
+    "Existing css-style-matchers.ts JSDoc failures at17 and76 only.",
+    "Doctor zero errors, existing managed-hook shim warning."
+  ],
+  "remaining": [
+    "Actual PropertyValueSet/provider/broker and positive row/command witness",
+    "Property mutation, isDocument/openStream and cancel-command/exception path",
+    "Default entity resolver/URI and full DocumentBuilder orchestration/registration",
+    "XPath/document SAX/IO and native metadata/model initialization",
+    "Full DOCX/XLSX import/export, shell routing and existing UI acceptance",
+    "Whole selected owner90-percent coverage and remaining source QA"
+  ],
+  "fullSuite": "Not run; approved once-per-ten-agentplane-task cadence, parent epics remain in progress.",
+  "checks": [
+    {
+      "name": "final-tests",
+      "cwd": "apps/office",
+      "command": "../../node_modules/.bin/vitest run --config vite.config.ts src/ucbhelper src/sal/qa/rtl/ref/rtl_ref.test.ts src/unoxml src/external/libxml2/parsercallbacks.test.ts src/offapi/com/sun/star/xml/sax/SAXParseException.test.ts src/offapi/com/sun/star/xml/dom/native-dom-values.test.ts src/sax/source/fastparser/InputSource.test.ts src/cppu/inc/com/sun/star/uno/Any-ownership.test.ts src/cppu/inc/com/sun/star/uno/Any-data.test.ts src/cppu/source/uno/copy.test.ts src/sal/inc/rtl/native-ustring-literal-assignment.test.ts src/sal/inc/rtl/native-ustring-view.test.ts src/sal/rtl/ustring-ownership.test.ts --coverage '--coverage.include=src/ucbhelper/**/*.ts' '--coverage.include=src/offapi/com/sun/star/ucb/*.ts' '--coverage.include=src/offapi/com/sun/star/sdbc/*.ts' --coverage.include=src/offapi/com/sun/star/util/Date.ts --coverage.include=src/cppu/inc/com/sun/star/uno/Any.ts '--coverage.include=src/offapi/com/sun/star/task/XInteraction*.ts' '--coverage.include=src/udkapi/com/sun/star/task/XInteraction*.ts' --coverage.include=src/udkapi/com/sun/star/io/XActiveDataSink.ts --coverage.include=src/sal/inc/rtl/ref.ts --coverage.include=src/sal/inc/rtl/ustring.ts --coverage.reportsDirectory=coverage/ucb-property-read --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.functions=90 --coverage.thresholds.branches=90",
+      "result": "assertions-pass-coverage-fail",
+      "log": "apps/office/coverage/ucb-open-final-tests.log",
+      "sha256": "354a711fe996978737264581bdbaa0a0a8b56b1854d7505d0f6913d51675075b"
+    },
+    {
+      "name": "lint",
+      "cwd": ".",
+      "command": [
+        "node_modules/.bin/eslint",
+        "--max-warnings",
+        "0",
+        "apps/office/src/offapi/com/sun/star/sdbc/XArray.ts",
+        "apps/office/src/offapi/com/sun/star/sdbc/XBlob.ts",
+        "apps/office/src/offapi/com/sun/star/sdbc/XClob.ts",
+        "apps/office/src/offapi/com/sun/star/sdbc/XRef.ts",
+        "apps/office/src/offapi/com/sun/star/sdbc/XResultSet.ts",
+        "apps/office/src/offapi/com/sun/star/sdbc/XRow.ts",
+        "apps/office/src/offapi/com/sun/star/util/Date.ts",
+        "apps/office/src/sal/inc/rtl/native-ustring-literal-assignment.test.ts",
+        "apps/office/src/ucbhelper/source/client/native-property-read.test.ts",
+        "apps/office/src/ucbhelper/source/client/native-row-contracts.test.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/Any.ts",
+        "apps/office/src/sal/inc/rtl/ustring.ts",
+        "apps/office/src/ucbhelper/inc/content.ts",
+        "apps/office/src/ucbhelper/source/client/content.ts"
+      ],
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-open-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "format",
+      "cwd": ".",
+      "command": [
+        "node_modules/.bin/prettier",
+        "--check",
+        "apps/office/src/offapi/com/sun/star/sdbc/XArray.ts",
+        "apps/office/src/offapi/com/sun/star/sdbc/XBlob.ts",
+        "apps/office/src/offapi/com/sun/star/sdbc/XClob.ts",
+        "apps/office/src/offapi/com/sun/star/sdbc/XRef.ts",
+        "apps/office/src/offapi/com/sun/star/sdbc/XResultSet.ts",
+        "apps/office/src/offapi/com/sun/star/sdbc/XRow.ts",
+        "apps/office/src/offapi/com/sun/star/util/Date.ts",
+        "apps/office/src/sal/inc/rtl/native-ustring-literal-assignment.test.ts",
+        "apps/office/src/ucbhelper/source/client/native-property-read.test.ts",
+        "apps/office/src/ucbhelper/source/client/native-row-contracts.test.ts",
+        "docs/program/native-ucb-property-read.md",
+        "docs/program/registry/shared/capabilities/CAP-798eac1f-97f2-4b25-862c-72b087bac395.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/sdbc/XArray.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/sdbc/XBlob.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/sdbc/XClob.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/sdbc/XRef.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/sdbc/XResultSet.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/sdbc/XRow.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/util/Date.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/sdbc/XArray.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/sdbc/XBlob.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/sdbc/XClob.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/sdbc/XRef.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/sdbc/XResultSet.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/sdbc/XRow.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/util/Date.ts.json",
+        "apps/office/src/cppu/inc/com/sun/star/uno/Any.ts",
+        "apps/office/src/sal/inc/rtl/ustring.ts",
+        "apps/office/src/ucbhelper/inc/content.ts",
+        "apps/office/src/ucbhelper/source/client/content.ts",
+        "docs/program/native-ucb-content-client.md",
+        "docs/program/registry/shared/capabilities/CAP-6ebb6661-ebeb-41ed-b8d6-04280a3b80b4.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/Any.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/ContentCreationError.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/ContentCreationException.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/IllegalIdentifierException.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/UniversalContentBroker.ts.json",
+        "docs/program/registry/shared/provenance/sal/inc/rtl/ref.ts.json",
+        "docs/program/registry/shared/provenance/sal/inc/rtl/ustring.ts.json",
+        "docs/program/registry/shared/provenance/ucbhelper/inc/content.ts.json",
+        "docs/program/registry/shared/provenance/ucbhelper/source/client/content.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/Any.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/ContentCreationError.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/ContentCreationException.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/IllegalIdentifierException.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/UniversalContentBroker.ts.json",
+        "docs/program/registry/shared/runtime/sal/inc/rtl/ref.ts.json",
+        "docs/program/registry/shared/runtime/sal/inc/rtl/ustring.ts.json",
+        "docs/program/registry/shared/runtime/ucbhelper/inc/content.ts.json",
+        "docs/program/registry/shared/runtime/ucbhelper/source/client/content.ts.json"
+      ],
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-open-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "name": "typecheck",
+      "cwd": ".",
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-open-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "name": "build",
+      "cwd": ".",
+      "command": "npm run build",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-open-build.log",
+      "sha256": "2636c210035c57c9ccbcff3eb7b91d8a0bb301bdc66db625d3d149496351c0c0"
+    },
+    {
+      "name": "static",
+      "cwd": ".",
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-open-static.log",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    {
+      "name": "provenance",
+      "cwd": ".",
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-open-provenance.log",
+      "sha256": "9eb171354e48e58c4de43410240429c1a08c81bfda4e5c0af80b845f8091f1a8"
+    },
+    {
+      "name": "registry-build",
+      "cwd": ".",
+      "command": "npm run inventory:registry:build",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-open-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "name": "registry-check",
+      "cwd": ".",
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-open-registry-check.log",
+      "sha256": "669fe9470e114e00d4a4939001ca36fd76d5929dc7184ca1902cbbaf45eb2f9f"
+    },
+    {
+      "name": "boundaries",
+      "cwd": ".",
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-open-boundaries.log",
+      "sha256": "2149de5846712b7f080bd13755dd4fa691dfacbdbcfdd0910e06d7907c360aef"
+    },
+    {
+      "name": "boundary-tests",
+      "cwd": ".",
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-open-boundary-tests.log",
+      "sha256": "a0e76acce25e1de2862d81a550696c926a77e83ee6b8d407579800c97e223780"
+    },
+    {
+      "name": "docs",
+      "cwd": ".",
+      "command": "npm run check:docs",
+      "result": "known-baseline-failure",
+      "log": "apps/office/coverage/ucb-open-docs.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    },
+    {
+      "name": "size",
+      "cwd": ".",
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-open-size.log",
+      "sha256": "9ec006199d4d4bf7fe83c72efa6927fa231c826dbfc26e9f047ac4db68d7eca6"
+    },
+    {
+      "name": "tree",
+      "cwd": ".",
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-open-tree.log",
+      "sha256": "4615eccefb9c2ce4b9cd767340293514a9fc81e356b588821e3bd52cc72a30f6"
+    },
+    {
+      "name": "writer-resources",
+      "cwd": ".",
+      "command": "npm run check:writer-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-open-writer-resources.log",
+      "sha256": "3027ba2cdbea9b3336182664323602797e57b33906a941af8975fd46f85ef8f8"
+    },
+    {
+      "name": "calc-resources",
+      "cwd": ".",
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-open-calc-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "name": "hintids",
+      "cwd": ".",
+      "command": "npm run check:writer-hintids",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-open-hintids.log",
+      "sha256": "513c109068ebf83b3d6fe448c3c44564ec89a64cd9cb64059b5b4b89d11d887a"
+    },
+    {
+      "name": "doctor",
+      "cwd": ".",
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-open-doctor.log",
+      "sha256": "95d29b692393c17e347499a0b68a3c5500cdcea71cffba4009850830f7b519d2"
+    },
+    {
+      "name": "routing",
+      "cwd": ".",
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-open-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "name": "diff",
+      "cwd": ".",
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-open-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/offapi/com/sun/star/sdbc/XArray.ts",
+      "gitBlob": "d1b0d0635aeb62b03b516a0dcd50a43068909936"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/sdbc/XBlob.ts",
+      "gitBlob": "63a787b2ee88dcd0c1df5e67563734be6ca11941"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/sdbc/XClob.ts",
+      "gitBlob": "2d75d3ed47dc110323b0d2108c48a9d721cd09e6"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/sdbc/XRef.ts",
+      "gitBlob": "dd126e6d54f51ca206d4cd56c735b85cf3ce6109"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/sdbc/XResultSet.ts",
+      "gitBlob": "d8a34b6325b1168a35dfb48172f0946990ea06ed"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/sdbc/XRow.ts",
+      "gitBlob": "e2291d6039d9fdd30df908b1939e95e8ad54873f"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/util/Date.ts",
+      "gitBlob": "4699ece400fd77642eb2ff5f53c53b504084d9a9"
+    },
+    {
+      "path": "apps/office/src/sal/inc/rtl/native-ustring-literal-assignment.test.ts",
+      "gitBlob": "d66db75f0167460e7193756a1a327860c3e7c382"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/client/native-property-read.test.ts",
+      "gitBlob": "90eda69e2ed44fcca80ca76cbb96349328ee5164"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/client/native-row-contracts.test.ts",
+      "gitBlob": "3de45d64a86a07bef64114dbb7e3cbda1062503d"
+    },
+    {
+      "path": "docs/program/native-ucb-property-read.md",
+      "gitBlob": "3c6810d12bedd76ce62aa8ce41c10372b62ee5d0"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-798eac1f-97f2-4b25-862c-72b087bac395.json",
+      "gitBlob": "547f0b1b8e24399d4341c015da68ba5873a2550e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/sdbc/XArray.ts.json",
+      "gitBlob": "aabbb3acbba81f18816b3eff731e8c2f390cbef4"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/sdbc/XBlob.ts.json",
+      "gitBlob": "c6b764fe7089dbbc1c2c7ad28b70f35ff046cdc6"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/sdbc/XClob.ts.json",
+      "gitBlob": "361b3569526e4fb2780ad8a88ce228fecf17e993"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/sdbc/XRef.ts.json",
+      "gitBlob": "3f466a1133425283af6f520034d80bd4f99fa4c3"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/sdbc/XResultSet.ts.json",
+      "gitBlob": "f0352ca1006433cddbf915e00cc0891d70b1651e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/sdbc/XRow.ts.json",
+      "gitBlob": "b792b805cf4aa60ccabe96aea1cee4d9d4bae9d3"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/util/Date.ts.json",
+      "gitBlob": "b501bfd19fa34a04670b8db5a8f9951911a3d35c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/sdbc/XArray.ts.json",
+      "gitBlob": "3e31bdf69bbdef3058345fc0cf7f877454ef83f9"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/sdbc/XBlob.ts.json",
+      "gitBlob": "338598622540906807868b2ef1c8246366a5e602"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/sdbc/XClob.ts.json",
+      "gitBlob": "d371a9e047c1e95d5680c29d2a2cffd378ac30e2"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/sdbc/XRef.ts.json",
+      "gitBlob": "7456f1b4c6fa94cfcbeb0b5b15b95ee8c8fe7d46"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/sdbc/XResultSet.ts.json",
+      "gitBlob": "572b7b0e3ce8d9cb52fb53344396d1c5d4a0980a"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/sdbc/XRow.ts.json",
+      "gitBlob": "d39a66f150c4d11f55eaa348391e889bae9e379a"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/util/Date.ts.json",
+      "gitBlob": "cb2552f1640633e491bf533fac649ce29044f92b"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/uno/Any.ts",
+      "gitBlob": "cd2c0b7fa8f7e699ce501e9245bdd2ec2feac608"
+    },
+    {
+      "path": "apps/office/src/sal/inc/rtl/ustring.ts",
+      "gitBlob": "4701634f8e3c04fc5db48576871b2c475e50744a"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/inc/content.ts",
+      "gitBlob": "b8d63d85820c4eaeb8c24a0e399389d914f5833b"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/client/content.ts",
+      "gitBlob": "9aec5582ab7929e42d1e8a019e4544f9912f8b96"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "f706a5366bd93126275ff084dbfb7b5c292e37d0"
+    },
+    {
+      "path": "docs/program/native-ucb-content-client.md",
+      "gitBlob": "ab9f25cc261d9de1f99d468c09d717a14e253cf3"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-6ebb6661-ebeb-41ed-b8d6-04280a3b80b4.json",
+      "gitBlob": "212e65797f83508f2bb7029429d5695ca329a708"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/Any.ts.json",
+      "gitBlob": "d2ada75173195cbe41e060a6769767efa0b530b1"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/ContentCreationError.ts.json",
+      "gitBlob": "c5ef2f17da814f8911e395210c22dbb162a1ef98"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/ContentCreationException.ts.json",
+      "gitBlob": "9709c322945b00f03e5e2ec458d7b3d738562d4f"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/IllegalIdentifierException.ts.json",
+      "gitBlob": "d87e6e7cbb1d91dbec648b77570be46be47fa44b"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/UniversalContentBroker.ts.json",
+      "gitBlob": "db9d53d859dfabfe5cb4afd5ae7763b04172ce4b"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sal/inc/rtl/ref.ts.json",
+      "gitBlob": "759b7f70d44783f40613c5d34ba558aad92ebf21"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sal/inc/rtl/ustring.ts.json",
+      "gitBlob": "5ea36b195b61d5e0a7e286737341d3afe59699be"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/inc/content.ts.json",
+      "gitBlob": "ff43ac9fe0af52d92a2fb429d66fdf9ab75256b2"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/source/client/content.ts.json",
+      "gitBlob": "85523900f0a622ac3a2233d6cc9f21214936cd1b"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/Any.ts.json",
+      "gitBlob": "2601cda91962fe304a1266dcf7410cf6447b8bfe"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/ContentCreationError.ts.json",
+      "gitBlob": "9f36508c4abda74a37e8161478bafbabb6406c22"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/ContentCreationException.ts.json",
+      "gitBlob": "bf2a45d0ba3e748c4c39c0ef9429263a7bf1e3ae"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/IllegalIdentifierException.ts.json",
+      "gitBlob": "e102ea77384121128fd8c8c4d074026d3649316c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/UniversalContentBroker.ts.json",
+      "gitBlob": "69ecec36938738f21d2dd332fe9027d5bd9a1a20"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sal/inc/rtl/ref.ts.json",
+      "gitBlob": "cbc48c4f1a727bbcadf1ee832bcbb5cca2cabac5"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sal/inc/rtl/ustring.ts.json",
+      "gitBlob": "d71d378ea5fa2099f08ffe77b5b58073edf61130"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/inc/content.ts.json",
+      "gitBlob": "d4a7a3e0f6f19fbfa518e09a7e26d76b7d83bb63"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/source/client/content.ts.json",
+      "gitBlob": "1c2777e7cf4709f503f7acc20892bb49ab1e3005"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "6a40c4cc5a3c9d5257aa371253665a208dfbe454"
+    }
+  ],
+  "upstreamBlobs": [
+    {
+      "path": "vendor/libreoffice-reference/ucbhelper/source/client/content.cxx",
+      "gitBlob": "fc655353dd98c233c6fcee552ce65c8bc2c330e6"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/ucbhelper/content.hxx",
+      "gitBlob": "a989106ef4617b3d66fbd537f65ed1fcfb103ce3"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/com/sun/star/uno/Any.hxx",
+      "gitBlob": "e5bb5b9268f22d79295c8b8489a0d548e7c3561e"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/rtl/ustring.hxx",
+      "gitBlob": "e6eb0e19bd26be966e53d463f95ec3ea6ed0e252"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sal/qa/rtl/strings/test_oustring_stringliterals.cxx",
+      "gitBlob": "1937029a1fdf70767fa7078684110592ce77d6f4"
+    },
+    {
+      "path": "vendor/libreoffice-reference/cppu/qa/test_any.cxx",
+      "gitBlob": "64ea4b9218bfc441cad331d67e97fec9cf0339b5"
+    },
+    {
+      "path": "vendor/libreoffice-reference/qadevOOo/tests/java/ifc/sdbc/_XRow.java",
+      "gitBlob": "e1babb0760b6403ff223bd828edd909938212889"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/util/Date.idl",
+      "gitBlob": "3a6d76d97e831c186144f69c8eddb3a9e1e9a2a6"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/sdbc/XRow.idl",
+      "gitBlob": "f0f40f9fc268529e975b8cc4eb0163ee5849f2cb"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/sdbc/XArray.idl",
+      "gitBlob": "e1b16800982a21c91dc267a659e6239a06f0db77"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/sdbc/XRef.idl",
+      "gitBlob": "31eba8218a04e0a440b1d02b8956b452382f19b2"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/sdbc/XBlob.idl",
+      "gitBlob": "9ab5720d7f76e100631a050508133c301c23225b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/sdbc/XClob.idl",
+      "gitBlob": "6b38ed280d7a200c8094eb0c48ba2769a09ed384"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/sdbc/XResultSet.idl",
+      "gitBlob": "eb9b2506d88dfe17392b5e6125c8ae59aed548e0"
+    }
+  ]
+}

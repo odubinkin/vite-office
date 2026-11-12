@@ -1,6 +1,10 @@
-/** @fileoverview Original Content handle and Content_Impl identity/lifecycle/command state from content.cxx. Property/open/cursor/transfer methods remain unported and are not advertised; no positive content, broker or context provider is substituted. */
+/** @fileoverview Original Content handle and Content_Impl identity/lifecycle/command state from content.cxx. Open/cursor/transfer and property mutation methods remain unported and are not advertised; no positive content, broker or context provider is substituted. */
 import { Reference as RtlReference } from "../../../sal/inc/rtl/ref";
-import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
+import {
+  OUString,
+  OUStringLiteral,
+  type OUStringConstReference,
+} from "../../../sal/inc/rtl/ustring";
 import { SimpleReferenceObject } from "../../../salhelper/source/simplereferenceobject";
 import {
   Reference,
@@ -28,6 +32,27 @@ import { ContentCreationError as CreationError } from "../../../offapi/com/sun/s
 import type { ContentEvent } from "../../../offapi/com/sun/star/ucb/ContentEvent";
 import { ContentAction } from "../../../offapi/com/sun/star/ucb/ContentAction";
 import { Command } from "../../../offapi/com/sun/star/ucb/Command";
+import { Sequence, type SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import type { rtl_uStringSlot } from "../../../sal/inc/rtl/ustring.h";
+import type { XNameAccess } from "../../../cppu/inc/com/sun/star/container/XNameAccess";
+import {
+  Property,
+  cppu_detail_getUnoType_Property as propertyType,
+} from "../../../udkapi/com/sun/star/beans/Property";
+import { XRow } from "../../../offapi/com/sun/star/sdbc/XRow";
+/** Original compile-time sequence declarations use the existing logical LP64 sizeof bindings. */
+const PropertyNames = Sequence.specialize<rtl_uStringSlot>("OUString", 8),
+  PropertyValues = Sequence.specialize<Any>("Any", 24),
+  Properties = Sequence.specialize<Property>(propertyType, 32);
+/** Original static constexpr command-name literal; storage retains native static flags. */
+const sgetPropertyValues = new OUStringLiteral(
+  Uint16Array.from(
+    "getPropertyValues\0",
+    /** Original known UTF16 literal unit. @param c - Source character. @returns Code unit. */ (
+      c,
+    ) => c.charCodeAt(0),
+  ),
+);
 /** Original borrowed environment owner, without assign/clear/destruction exposure. */
 export type CommandEnvironmentConstReference = Pick<
   Reference<XCommandEnvironment>,
@@ -516,6 +541,109 @@ export class Content {
   /** Original environment replacement shared by copied handles. @param environment - Borrowed new environment. @returns Nothing. */
   setCommandEnvironment(environment: Reference<XCommandEnvironment>): void {
     this.m_xImpl.operatorStar().setEnvironment(environment);
+  }
+  /** Original singleton property-name sequence and copied first result. @param name - Borrowed property name. @returns Owned Any, including a void result. */
+  getPropertyValue(name: OUStringConstReference): Any {
+    const initializer = new OUString(name);
+    let names: Sequence<rtl_uStringSlot>;
+    try {
+      names = new PropertyNames(
+        {
+          /** Compiler lowering of the singleton initializer-list's actual OUString lvalue. @param offset - Declared zero offset. @returns Existing string pointer field. */
+          get(offset: number): rtl_uStringSlot {
+            void offset;
+            return initializer.getDataAddress();
+          },
+        },
+        1,
+      );
+    } finally {
+      initializer.dispose();
+    }
+
+    try {
+      const values = this.getPropertyValues(names);
+      try {
+        return new Any(values.operatorIndex(0));
+      } finally {
+        values.dispose();
+      }
+    } finally {
+      names.dispose();
+    }
+  }
+  /** Original row lookup then native Any sequence initialization and one-based getObject loop. @param names - Actual property-name sequence. @returns Owned result sequence. */
+  getPropertyValues(names: Sequence<rtl_uStringSlot>): Sequence<Any> {
+    const row = this.getPropertyValuesInterface(names);
+    try {
+      const count = names.getLength(),
+        values = new PropertyValues(count);
+      try {
+        if (row.is()) {
+          const data = values.getArray() as SequenceElements;
+          for (let n = 0; n < count; ++n) {
+            const typeMap = new Reference<XNameAccess>();
+            try {
+              const value = row.operatorStar().getObject(n + 1, typeMap);
+              try {
+                // The existing source Any move body runs on the actual allocated element address; no wrapper, copy or new owner is constructed.
+                Any.prototype.moveAssign.call(data.get(n * 24) as Any, value);
+              } finally {
+                value.dispose();
+              }
+            } finally {
+              typeMap.dispose();
+            }
+          }
+        }
+        return values;
+      } catch (error) {
+        values.dispose();
+        throw error;
+      }
+    } finally {
+      row.dispose();
+    }
+  }
+  /** Original Property defaults, explicit Name/Handle writes, command construction and row extraction. @param names - Actual source names. @returns Acquired row or empty reference. */
+  getPropertyValuesInterface(names: Sequence<rtl_uStringSlot>): Reference<XRow> {
+    const count = names.getLength(),
+      properties = new Properties(count);
+    try {
+      const props = properties.getArray() as SequenceElements,
+        source = names.getConstArray() as SequenceElements;
+      for (let n = 0; n < count; ++n) {
+        // Compiler lowering of Property* indexing and its actual Name/Handle member addresses. Type and Attributes keep original default construction.
+        const property = props.get(n * 32) as SequenceElements;
+        (OUString.unacquired(property.get(0) as rtl_uStringSlot) as OUString).assign(
+          OUString.unacquired(source.get(n * 8) as rtl_uStringSlot),
+        );
+        (property.get(8) as [number])[0] = -1;
+      }
+      const command = new Command();
+      try {
+        command.Name.assign(sgetPropertyValues);
+        command.Handle = -1;
+        command.Argument.insert(properties.getAddress(), ["Sequence", propertyType]);
+        const result = this.m_xImpl.operatorStar().executeCommand(command);
+        try {
+          const row = new Reference<XRow>();
+          try {
+            result.extract(row.getAddress(), XRow.static_type);
+            return row;
+          } catch (error) {
+            row.dispose();
+            throw error;
+          }
+        } finally {
+          result.dispose();
+        }
+      } finally {
+        command.dispose();
+      }
+    } finally {
+      properties.dispose();
+    }
   }
   /** Original name/argument command creates handle -1 before delegating. @param name - Original command name. @param argument - Borrowed actual argument. @returns Owned command result. */
   executeCommand(name: OUStringConstReference, argument: Any): Any {

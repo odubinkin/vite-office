@@ -93,13 +93,13 @@ export class Any implements uno_Any {
   /** Original internal move constructor first constructs an empty Any, swaps all fields, repairs only its own reserved address and leaves the source VOID data pointer non-null, potentially dangling to the new object. @param source - Rvalue source. @returns New actual Any. */
   static move(source: Any): Any {
     const result = new Any();
-    result.swapFields(source);
+    Any.prototype.swapFields.call(result, source);
     if (result.pData === reservedDataAddress(source)) result.pData = reservedDataAddress(result);
     return result;
   }
   /** Original internal move assignment swaps ownership rather than destroying/resetting the source, repairing both inline data aliases. @param source - Rvalue source. @returns This same Any. */
   moveAssign(source: Any): this {
-    this.swapFields(source);
+    Any.prototype.swapFields.call(this, source);
     if (this.pData === reservedDataAddress(source)) this.pData = reservedDataAddress(this);
     if (source.pData === reservedDataAddress(this)) source.pData = reservedDataAddress(source);
     return this;

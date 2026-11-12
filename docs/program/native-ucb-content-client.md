@@ -10,7 +10,8 @@ explicit event-listener and weak-base queries, and name/argument command
 execution. The command handle is minus one and processor execution uses ID zero.
 A missing processor returns a genuinely void Any, as in the source.
 
-The property/open/cursor/transfer APIs are not implemented or advertised yet.
+Property reads have since been added; see the property-read continuation below.
+Property mutation and open/cursor/transfer APIs are not implemented or advertised yet.
 In particular there is no Content.openStream placeholder and no claim that this
 checkpoint connects the default entity resolver. Positive content and broker
 services are not replaced with fixtures. Debug-only URL/ENSURE calls remain
@@ -55,10 +56,15 @@ The source retains an already cached URL on EXCHANGED, even though the replaceme
 content can have a new identifier. This source-only suspected issue is recorded
 as CALC-536/WRITER470 and preserved; no positive provider witness is claimed.
 
-The whole selected owner aggregate is 76.33% statements, 75.00% branches, 91.32%
+At checkpoint `302424c079cf`, the selected owner aggregate was 76.33% statements, 75.00% branches, 91.32%
 functions and 77.37% lines, so its 90-percent gate fails. The 180 case assertions,
 48 module-boundary cases and two resource cases pass. Tools/app typecheck,
 production/static build, scoped lint/format, provenance/registry/module/resource
 checks, source tree, size, doctor and routing pass. The final JSDoc check retains
 only the pre-existing css-style-matchers.ts errors at 17 and 76. Full suites were
 not run; the approved once-per-ten-task cadence remains unchanged.
+
+Subsequent property-read work implements getPropertyValue/getPropertyValues and
+getPropertyValuesInterface with complete XRow declarations. Property mutation and
+open/cursor/transfer remain unported. See [property read](native-ucb-property-read.md)
+for the current compiler-bound sequence element and SDK scope.

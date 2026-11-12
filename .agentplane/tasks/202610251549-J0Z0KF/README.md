@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 215
+revision: 218
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T11:50:07.344Z"
+  updated_at: "2026-11-12T12:32:11.180Z"
   updated_by: "CODER"
-  note: "In-progress native Content state checkpoint:180 assertions pass,48 boundary and2 resource tests pass. Aggregate coverage90 gate FAILS:76.33 statements75 branches91.32 functions77.37 lines; positive content/provider/broker paths unqualified. Static/type/build/source/registry checks pass, old JSDoc baseline only. Full Content.openStream/default resolver/DocumentBuilder/metadata/XLSX/DOCX/UI remain unfinished; continue approved task."
-  attempts: 66
+  note: "Property-read prerequisite checkpoint:206 related assertions pass in30 files,48 boundary and2 resource tests pass. Whole47-owner90-percent coverage gate FAILS:76.62 statements72.82 branches87.32 functions77.93 lines. Type/build/static/scoped/source/registry/resource checks pass; old JSDoc baseline only. Positive row/provider/broker and isDocument/openStream/resolver/DocumentBuilder/metadata/full format/UI remain incomplete; continue approved implementation."
+  attempts: 67
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1064,8 +1067,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-12T12:32:11.180Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Property-read prerequisite checkpoint:206 related assertions pass in30 files,48 boundary and2 resource tests pass. Whole47-owner90-percent coverage gate FAILS:76.62 statements72.82 branches87.32 functions77.93 lines. Type/build/static/scoped/source/registry/resource checks pass; old JSDoc baseline only. Positive row/provider/broker and isDocument/openStream/resolver/DocumentBuilder/metadata/full format/UI remain incomplete; continue approved implementation."
+  -
+    type: "status"
+    at: "2026-11-12T12:33:27.178Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-12T11:51:40.077Z"
+doc_updated_at: "2026-11-12T12:33:27.178Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -3060,6 +3076,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-12T12:32:11.180Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Property-read prerequisite checkpoint:206 related assertions pass in30 files,48 boundary and2 resource tests pass. Whole47-owner90-percent coverage gate FAILS:76.62 statements72.82 branches87.32 functions77.93 lines. Type/build/static/scoped/source/registry/resource checks pass; old JSDoc baseline only. Positive row/provider/broker and isDocument/openStream/resolver/DocumentBuilder/metadata/full format/UI remain incomplete; continue approved implementation.
+    Attempts: 67
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T12:32:10.631Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3388,6 +3434,10 @@ sections:
     - Observation: Ported actual Content/Content_Impl intrusive state, listener and command execution bodies, rtl::Reference operations, explicit UniversalContentBroker service constructor and creation enum/exception values. Original rtl_ref::TestReferenceRefCounting::testMove is ported. All180 related tests in22 files pass;48 boundary and2 resource cases pass. Whole selected38-owner coverage is76.33 statements75 branches91.32 functions77.37 lines and fails90 gate.
       Impact: Valid empty Content and genuine ComponentContext/ServiceManager missing-service paths are witnessed. Positive provider/broker/listener/command paths and factory exception translation remain unqualified. Property/open/cursor/transfer APIs are absent, so resolver/DocumentBuilder and full XLSX/DOCX/UI remain incomplete. No fake positive provider or private test hook was added for coverage.
       Resolution: Continue real content/provider and property/open dependencies; preserve URL cache retention on EXCHANGED as source-only CALC-536/WRITER470. Typechecks/build/static and scoped lint/format/provenance/registry/boundaries/resources/tree/size/doctor/routing pass; only old css-style-matchers JSDoc baseline remains. Keep epic in progress and coverage gate unmet until genuine positive graph exists.
+
+    - Observation: Implemented original Content getPropertyValue/getPropertyValues/getPropertyValuesInterface, six complete SDBC row dependency declarations and Date. Qualified nonvirtual Any helper binding preserves actual sequence element move/reserved addresses. Original RTL const-literal assignment and static command-name storage are connected.206 cases pass in30 related files,48 boundary and2 resource cases pass.
+      Impact: Whole47-owner coverage remains below90:76.62 statements72.82 branches87.32 functions77.93 lines. Scope includes complete Any/OUString owners and positive row/provider/broker branches remain unqualified. No fake row, private hook or value factory was added. Types/build/static/source/registry/module/resource/tree/size/doctor/routing pass; old css-style-matchers JSDoc baseline only.
+      Resolution: Preserve original long/hyper distinction as source-only CALC-537/WRITER471. Original checkOUStringLiteral constructor/assignment assertions are ported; full unrelated literal and XRow source service QA remain pending. Continue actual PropertyValueSet/provider and isDocument/openStream/cancel paths; full resolver/DocumentBuilder/metadata/DOCX/XLSX/UI remains unfinished.
 id_source: "generated"
 ---
 ## Summary
@@ -5392,6 +5442,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-12T12:32:11.180Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Property-read prerequisite checkpoint:206 related assertions pass in30 files,48 boundary and2 resource tests pass. Whole47-owner90-percent coverage gate FAILS:76.62 statements72.82 branches87.32 functions77.93 lines. Type/build/static/scoped/source/registry/resource checks pass; old JSDoc baseline only. Positive row/provider/broker and isDocument/openStream/resolver/DocumentBuilder/metadata/full format/UI remain incomplete; continue approved implementation.
+Attempts: 67
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T12:32:10.631Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -5724,3 +5804,7 @@ DecisionContextRef:
 - Observation: Ported actual Content/Content_Impl intrusive state, listener and command execution bodies, rtl::Reference operations, explicit UniversalContentBroker service constructor and creation enum/exception values. Original rtl_ref::TestReferenceRefCounting::testMove is ported. All180 related tests in22 files pass;48 boundary and2 resource cases pass. Whole selected38-owner coverage is76.33 statements75 branches91.32 functions77.37 lines and fails90 gate.
   Impact: Valid empty Content and genuine ComponentContext/ServiceManager missing-service paths are witnessed. Positive provider/broker/listener/command paths and factory exception translation remain unqualified. Property/open/cursor/transfer APIs are absent, so resolver/DocumentBuilder and full XLSX/DOCX/UI remain incomplete. No fake positive provider or private test hook was added for coverage.
   Resolution: Continue real content/provider and property/open dependencies; preserve URL cache retention on EXCHANGED as source-only CALC-536/WRITER470. Typechecks/build/static and scoped lint/format/provenance/registry/boundaries/resources/tree/size/doctor/routing pass; only old css-style-matchers JSDoc baseline remains. Keep epic in progress and coverage gate unmet until genuine positive graph exists.
+
+- Observation: Implemented original Content getPropertyValue/getPropertyValues/getPropertyValuesInterface, six complete SDBC row dependency declarations and Date. Qualified nonvirtual Any helper binding preserves actual sequence element move/reserved addresses. Original RTL const-literal assignment and static command-name storage are connected.206 cases pass in30 related files,48 boundary and2 resource cases pass.
+  Impact: Whole47-owner coverage remains below90:76.62 statements72.82 branches87.32 functions77.93 lines. Scope includes complete Any/OUString owners and positive row/provider/broker branches remain unqualified. No fake row, private hook or value factory was added. Types/build/static/source/registry/module/resource/tree/size/doctor/routing pass; old css-style-matchers JSDoc baseline only.
+  Resolution: Preserve original long/hyper distinction as source-only CALC-537/WRITER471. Original checkOUStringLiteral constructor/assignment assertions are ported; full unrelated literal and XRow source service QA remain pending. Continue actual PropertyValueSet/provider and isDocument/openStream/cancel paths; full resolver/DocumentBuilder/metadata/DOCX/XLSX/UI remains unfinished.

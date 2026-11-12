@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/util/Date.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "ucb-property-read",
+    "capabilityIds": [
+      "CAP-798eac1f-97f2-4b25-862c-72b087bac395"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/util/Date.ts",
+        "apps/office/src/ucbhelper/source/client/native-row-contracts.test.ts",
+        "apps/office/src/ucbhelper/source/client/native-property-read.test.ts",
+        "docs/program/native-ucb-property-read.md"
+      ],
+      "justification": "Complete original XRow, XArray, XRef, XBlob, XClob and XResultSet SDK declarations retain all method signatures, signed64 hyper and signed32 long distinctions, normal CPPU type registration and original roots. Date preserves zero defaults, unsigned day/month, signed year and native compound transport. Actual Content property-read methods preserve singleton name lifetime, default Property members with explicit handle minus one, row extraction, one-based getObject and native Any result sequence ownership. Qualified nonvirtual Any method binding executes the unchanged move body on actual allocated sequence records and preserves reserved-address identity. No positive row/provider/broker or replacement value factory is manufactured. Positive row/command/service execution, property mutation/open/default resolver, complete90 coverage, native ABI and DOCX/XLSX/UI remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Date",
+        "cppu_detail_getUnoType_Date"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "offapi/com/sun/star/util/Date.idl",
+      "upstreamSymbols": [
+        "Date",
+        "Day",
+        "Month",
+        "Year"
+      ]
+    }
+  }
+}

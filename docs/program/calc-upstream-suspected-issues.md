@@ -5522,3 +5522,10 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Sources: `ucbhelper/source/client/content.cxx`, `Content_Impl::reinit`, `getURL_NoLock` and `ContentEventListener_Impl::contentEvent`, plus `offapi/com/sun/star/ucb/ContentEvent.idl`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER470.
 - EXCHANGED delegates to reinit with the event's new Content. The source explicitly retains m_aURL under its issue-92581 comment. A nonempty cached URL therefore prevents getURL_NoLock from reading the replacement content's identifier. For an exchange to a different identifier after URL caching, the old URL can remain visible. Preserve both the cache retention and lazy getter condition rather than resetting on exchange.
 - This is source inspection, not a compiled differential or positive provider/event witness. The source comment indicates deliberate cache preservation and may encode a caller requirement; no confirmed reachable filter defect is claimed. The real broker/provider notification graph is still pending.
+
+
+### CALC-537 — SDBC Clob string-pattern search has a narrower start offset than Clob-pattern search
+
+- Sources: `offapi/com/sun/star/sdbc/XClob.idl` and `XBlob.idl`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER471.
+- XClob.length and its position result are hyper, but position with a string pattern accepts long start. XClob.positionOfClob and XBlob.position accept hyper start instead. The string-pattern Clob signature therefore cannot express starts beyond signed32, even when the object length fits signed64. Preserve the original long/hyper distinction rather than widening the published declaration.
+- This is an interface-contract observation and may be an intentional legacy ABI limitation. Compile-time SDK tests retain number for the original long and bigint for hyper; no large live Clob, database/provider execution or compiled differential witness is claimed.

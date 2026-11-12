@@ -111,7 +111,8 @@
       "AQF9AG adds the actual OUString::fromUtf8 counted byte-view method consumed by NumberText. It calls the existing checked SAL converter with original UTF8 and UNDEFINED_ERROR|MBUNDEFINED_ERROR|INVALID_ERROR flags, returns its actual partial-output value in debug0, and destroys the local target on conversion exceptions. Embedded zeros, BOM, supplementary scalars and invalid-byte stop behavior have focused source-derived tests; no host decoder or replacement policy substitutes the converter.",
       "Original std::u16string_view OUString.replaceAt overload now dispatches to the already implemented rtl_uString_newReplaceStrAtUtf16L with exact view pointer/length and SAL_NO_ACQUIRE ownership. Existing owned-string replacement still uses its original C function. Embedded NUL, lone surrogates, aliased input storage and output ownership are retained without an owned temporary, null-terminated conversion or normalization.",
       "Original ZipFile Checks modes retain exact duplicate rejection, ASCII-only case collisions and the first retained entry decision for TryCheckInsensitive, including empty mimetype AutoCorrect behavior after FAT-directory filtering. OOXML ZipStorage selects CheckInsensitive; Writer/Calc ODF byte entry points select TryCheckInsensitive, matching ZipPackage StorageFormat routing. The actual OUString lowercase path delegates to rtl_uString_newToAsciiLowerCase and original newReplaceChars allocation/assign/release logic with reused native CaseReplace and SAL character helpers. Unchanged strings alias data; conversions preserve UTF16/embedded-zero/non-ASCII units and release old destination after copying. No Unicode locale folding, path normalization or fake model/storage/service owner is introduced. Flat transport/resource/error boundaries and incomplete native package/storage/output/model/filter/Worker/UI acceptance remain explicit; physical pointer/ABI/allocator/thread guarantees remain unverified.",
-      "Existing bounded STORE/ZIP32 package output now emits admitted LOC/CEN/END field order through real ByteChucker, Sequence, UNOMemoryStream, native ZipEntry aggregate and SAL counted Unicode-to-OString ownership. The original aggregate scalar fields stay indeterminate until initialized; copy/move/assignment/destruction retain actual OUString member ownership. Original OString Unicode conversion constructor and internal OUStringToOString view helper delegate to the genuine C converter and preserve counted embedded zero. The old per-field DataView writer is removed; public flat bytes/putNextEntry/finish, deterministic caller timestamp, duplicate/count/size admission, ZIP32-only and no-recovery policies remain explicit. Header-only transport is not full ZipOutputStream constructor/threadpool/deflate/encryption/ZIP64/package/storage/model/filter/UI parity. Primitive allocator/pointer/ABI/thread guarantees remain unverified. Invalid fake private-entry/byte test values were removed; independent golden bytes, actual65535 public entries, value ownership and real package reopen cover this checkpoint."
+      "Existing bounded STORE/ZIP32 package output now emits admitted LOC/CEN/END field order through real ByteChucker, Sequence, UNOMemoryStream, native ZipEntry aggregate and SAL counted Unicode-to-OString ownership. The original aggregate scalar fields stay indeterminate until initialized; copy/move/assignment/destruction retain actual OUString member ownership. Original OString Unicode conversion constructor and internal OUStringToOString view helper delegate to the genuine C converter and preserve counted embedded zero. The old per-field DataView writer is removed; public flat bytes/putNextEntry/finish, deterministic caller timestamp, duplicate/count/size admission, ZIP32-only and no-recovery policies remain explicit. Header-only transport is not full ZipOutputStream constructor/threadpool/deflate/encryption/ZIP64/package/storage/model/filter/UI parity. Primitive allocator/pointer/ABI/thread guarantees remain unverified. Invalid fake private-entry/byte test values were removed; independent golden bytes, actual65535 public entries, value ownership and real package reopen cover this checkpoint.",
+      "The original const OUStringLiteral assignment overload releases the old pointer before adopting exact static literal storage without acquisition. Content uses its original static constexpr command name. The original checkOUStringLiteral constructor/assignment assertions and a live retained-owner refcount case qualify this overload; the rest of that broad source QA remains unqualified."
     ],
     "omittedResponsibilities": [
       "Complete OUString algorithms, original compile-time/const enforcement/native ABI/thread and downstream Calc storage/document/UI remain unverified; no fabricated replacement."
@@ -197,6 +198,10 @@
         {
           "path": "apps/office/src/package/source/zipapi/native-output-owners.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/inc/rtl/native-ustring-literal-assignment.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -235,6 +240,14 @@
         {
           "path": "vendor/libreoffice-reference/sal/rtl/ustring.cxx",
           "marker": "rtl_uString_newReplaceStrAtUtf16L"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/rtl/ustring.hxx",
+          "marker": "OUString & operator =(OUStringLiteral"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/qa/rtl/strings/test_oustring_stringliterals.cxx",
+          "marker": "checkOUStringLiteral"
         }
       ]
     },
