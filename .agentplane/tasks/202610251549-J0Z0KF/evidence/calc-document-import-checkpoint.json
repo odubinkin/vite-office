@@ -1,0 +1,398 @@
+{
+  "taskId": "202610251549-J0Z0KF",
+  "checkpoint": "Native ScDocumentImport formula transfers, repeated scalar cells and workbook setup",
+  "sourceBaseline": {
+    "tag": "libreoffice-26.8.0.2",
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65"
+  },
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/sc/source/core/data/column.ts",
+      "gitBlob": "685396d15f471769be628f6551bfc5569688cfae"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documentimport.fill.test.ts",
+      "gitBlob": "2766e8a4ced4cf2393012b10dc80c54afa6c50f4"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documentimport.formulas.test.ts",
+      "gitBlob": "04a245b19401e2edcce83b43b1690f3ab73ab2eb"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documentimport.ts",
+      "gitBlob": "c5ebe7df3d9a240f96d77a6d0a8fdc25af5d4799"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/formulacell.ts",
+      "gitBlob": "472ccf33dff2d67d7215cc525667ad9146c09095"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/compiler.ts",
+      "gitBlob": "34d9fe1a50b82400953bd790b86b1a0d5929f50a"
+    },
+    {
+      "path": "docs/program/calc-native-document-import.md",
+      "gitBlob": "0b210c0585dcc5a90639142578aae9d3936a4e71"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "a316bf968cdfb34dd2ecd8706919ca8803110cdf"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/column.ts.json",
+      "gitBlob": "af46bc6df65c28c39383bbe7293e14a536c1ae21"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/documentimport.ts.json",
+      "gitBlob": "6b4679f31a560084ce507bc2ca7622c36bc59b90"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/formulacell.ts.json",
+      "gitBlob": "6e3e246ed4aecb8f27e7babc919ab8feb8c7b1d8"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/tool/compiler.ts.json",
+      "gitBlob": "345bbd4a0b29b7bdc5398c9df4d78b599890df06"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/column.ts.json",
+      "gitBlob": "13f3c47018dd138776afbdc226524a02577effae"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/documentimport.ts.json",
+      "gitBlob": "602e3edbec8a8b6b9f5977b4aefe4141531a963a"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/formulacell.ts.json",
+      "gitBlob": "450c22c586f898b3a9b592f5108c28e1389dbf1f"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/tool/compiler.ts.json",
+      "gitBlob": "595922a807f46e77ea4b6c1da09a3d32cdc35808"
+    }
+  ],
+  "checks": [
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "--config",
+        "vite.config.ts",
+        "src/sc/source/core/data/alignmentattr.test.ts",
+        "src/sc/source/core/data/asianattr.test.ts",
+        "src/sc/source/core/data/attarray.test.ts",
+        "src/sc/source/core/data/attrib.values.test.ts",
+        "src/sc/source/core/data/background-brush.test.ts",
+        "src/sc/source/core/data/bigrange.test.ts",
+        "src/sc/source/core/data/block-number-format.test.ts",
+        "src/sc/source/core/data/boolean-cellattr.test.ts",
+        "src/sc/source/core/data/border-boundaries.test.ts",
+        "src/sc/source/core/data/border-frame.test.ts",
+        "src/sc/source/core/data/cell-style-association.test.ts",
+        "src/sc/source/core/data/celltextattr.test.ts",
+        "src/sc/source/core/data/cellvalue-edit.test.ts",
+        "src/sc/source/core/data/cellvalue-owning-formula.test.ts",
+        "src/sc/source/core/data/cellvalue.test.ts",
+        "src/sc/source/core/data/clipboard-attribute-copy.test.ts",
+        "src/sc/source/core/data/clipboard-block.test.ts",
+        "src/sc/source/core/data/clipboard-context.test.ts",
+        "src/sc/source/core/data/clipboard-copy.test.ts",
+        "src/sc/source/core/data/clipboard-deletion.test.ts",
+        "src/sc/source/core/data/clipboard-formula-clone.test.ts",
+        "src/sc/source/core/data/clipboard-reference.test.ts",
+        "src/sc/source/core/data/clipboard-resources.test.ts",
+        "src/sc/source/core/data/clipboard-single-row.test.ts",
+        "src/sc/source/core/data/clipboard-undo-copy.test.ts",
+        "src/sc/source/core/data/clipboard-undo-init.test.ts",
+        "src/sc/source/core/data/clipparam.test.ts",
+        "src/sc/source/core/data/color-defaults.test.ts",
+        "src/sc/source/core/data/color-uno-types.test.ts",
+        "src/sc/source/core/data/column3.input.test.ts",
+        "src/sc/source/core/data/columnset.test.ts",
+        "src/sc/source/core/data/compressedarray.test.ts",
+        "src/sc/source/core/data/conditional-copy.test.ts",
+        "src/sc/source/core/data/connected-area.test.ts",
+        "src/sc/source/core/data/delayed-copy-listening.test.ts",
+        "src/sc/source/core/data/diagonalattr.test.ts",
+        "src/sc/source/core/data/dociter.test.ts",
+        "src/sc/source/core/data/docpool-style-defaults.test.ts",
+        "src/sc/source/core/data/docpool.test.ts",
+        "src/sc/source/core/data/document-copy-listening.test.ts",
+        "src/sc/source/core/data/document-string-input.test.ts",
+        "src/sc/source/core/data/document.formula.test.ts",
+        "src/sc/source/core/data/document.references.test.ts",
+        "src/sc/source/core/data/document.scalar.test.ts",
+        "src/sc/source/core/data/document.ui-edit.test.ts",
+        "src/sc/source/core/data/documentimport.admission.test.ts",
+        "src/sc/source/core/data/documentimport.fill.test.ts",
+        "src/sc/source/core/data/documentimport.formulas.test.ts",
+        "src/sc/source/core/data/documentimport.test.ts",
+        "src/sc/source/core/data/edit-item-transfer.test.ts",
+        "src/sc/source/core/data/font-family-defaults.test.ts",
+        "src/sc/source/core/data/fonteffectsattr.test.ts",
+        "src/sc/source/core/data/formula-block-address.test.ts",
+        "src/sc/source/core/data/formula-compare.test.ts",
+        "src/sc/source/core/data/formula-copy.test.ts",
+        "src/sc/source/core/data/formula-group-owner.test.ts",
+        "src/sc/source/core/data/heightattr.test.ts",
+        "src/sc/source/core/data/indentattr.test.ts",
+        "src/sc/source/core/data/language-item.test.ts",
+        "src/sc/source/core/data/listener-context.test.ts",
+        "src/sc/source/core/data/marginattr.test.ts",
+        "src/sc/source/core/data/markarr.test.ts",
+        "src/sc/source/core/data/markdata.test.ts",
+        "src/sc/source/core/data/markmulti.test.ts",
+        "src/sc/source/core/data/merge-refresh.test.ts",
+        "src/sc/source/core/data/mergeattr.test.ts",
+        "src/sc/source/core/data/mergeflag.test.ts",
+        "src/sc/source/core/data/namespace-map.test.ts",
+        "src/sc/source/core/data/native-boundaries.integration.test.ts",
+        "src/sc/source/core/data/native-column-width.test.ts",
+        "src/sc/source/core/data/native-delete-hardattr.test.ts",
+        "src/sc/source/core/data/native-document-pool-complete.test.ts",
+        "src/sc/source/core/data/native-page-hf.test.ts",
+        "src/sc/source/core/data/native-table-undo.test.ts",
+        "src/sc/source/core/data/numeric-segments.test.ts",
+        "src/sc/source/core/data/pageattr.test.ts",
+        "src/sc/source/core/data/patattr.test.ts",
+        "src/sc/source/core/data/postureattr.test.ts",
+        "src/sc/source/core/data/protectionattr.test.ts",
+        "src/sc/source/core/data/refcellvalue.test.ts",
+        "src/sc/source/core/data/reference-protocol.test.ts",
+        "src/sc/source/core/data/rotateattr.test.ts",
+        "src/sc/source/core/data/rowheight.test.ts",
+        "src/sc/source/core/data/script-type.test.ts",
+        "src/sc/source/core/data/segmenttree.test.ts",
+        "src/sc/source/core/data/selection-pattern.test.ts",
+        "src/sc/source/core/data/shadowattr.test.ts",
+        "src/sc/source/core/data/strikeout-emphasisattr.test.ts",
+        "src/sc/source/core/data/table-edit-boundaries.test.ts",
+        "src/sc/source/core/data/text-line-items.test.ts",
+        "src/sc/source/core/data/text-size-context.test.ts",
+        "src/sc/source/core/data/viewobjectmode.test.ts",
+        "src/sc/source/core/data/weightattr.test.ts",
+        "src/sc/source/core/data/xml-attributes.test.ts",
+        "src/sc/source/core/tool/numeric-formula.test.ts",
+        "src/sc/source/core/tool/aggregate-formula.test.ts",
+        "src/sc/source/core/tool/native-a1-formula.test.ts",
+        "src/sc/source/core/tool/range-formula.test.ts",
+        "src/sc/source/core/tool/formula-output.test.ts",
+        "src/sc/source/core/tool/implicit-intersection.test.ts",
+        "src/sc/source/core/tool/compiler-format-type.test.ts",
+        "src/sc/source/core/tool/shared-formula.test.ts",
+        "--coverage",
+        "--coverage.reportsDirectory=coverage/calc-document-import-profile-broad",
+        "--coverage.include=src/sc/source/core/data/documentimport.ts",
+        "--coverage.include=src/sc/source/core/data/formulacell.ts",
+        "--coverage.include=src/sc/source/core/data/column.ts",
+        "--coverage.include=src/sc/source/core/tool/compiler.ts",
+        "--coverage.thresholds.statements=90",
+        "--coverage.thresholds.branches=90",
+        "--coverage.thresholds.functions=90",
+        "--coverage.thresholds.lines=90"
+      ],
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "510 cases/102 related core-data and compiler/formula files. Whole4owner coverage passes90; current executable code and all coverage maps retain identity after narrow native-overload lint comments.",
+      "log": "apps/office/coverage/calc-document-import-profile-broad.log"
+    },
+    {
+      "command": "npx vitest run --config vite.config.ts src/sc/source/core/data/documentimport.formulas.test.ts src/sc/source/core/data/documentimport.fill.test.ts src/sc/source/core/data/documentimport.test.ts src/sc/source/core/data/documentimport.admission.test.ts --coverage --coverage.include=src/sc/source/core/data/documentimport.ts --coverage.include=src/sc/source/core/data/formulacell.ts --coverage.include=src/sc/source/core/data/column.ts --coverage.include=src/sc/source/core/tool/compiler.ts --coverage.reportsDirectory=coverage/calc-document-import-comment-check --coverage.thresholds.statements=0 --coverage.thresholds.branches=0 --coverage.thresholds.functions=0 --coverage.thresholds.lines=0",
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "30 critical/relevant cases in4files repeated after comment-only lint adjustment. This partial run is not a standalone broad coverage acceptance; its counters merge only after exact4owner maps/emitted-code identity checks.",
+      "log": "apps/office/coverage/calc-document-import-comment-check.log"
+    },
+    {
+      "command": "node --input-type=module: TypeScript transpile(removeComments=true), exact statementMap/fnMap/branchMap equality and @vitest/istanbul-lib-coverage merge/assert four90 thresholds",
+      "result": "pass",
+      "evidence": {
+        "emission": {
+          "documentimport": {
+            "sameEmittedCode": true,
+            "sameLineCount": true,
+            "sha256": "bebef5cc9c40a38eb1516b7919d7f2624ebd2be279949386e1002158381b1bef"
+          },
+          "formulacell": {
+            "sameEmittedCode": true,
+            "sameLineCount": true,
+            "sha256": "33601a7fded019059773fba3a4c95a4d9dbaa90cc491b10e975de51d35702b44"
+          }
+        },
+        "maps": [
+          "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/core/data/column.ts",
+          "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/core/data/documentimport.ts",
+          "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/core/data/formulacell.ts",
+          "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/core/tool/compiler.ts"
+        ],
+        "summary": {
+          "lines": {
+            "total": 1195,
+            "covered": 1180,
+            "skipped": 0,
+            "pct": 98.74
+          },
+          "statements": {
+            "total": 1342,
+            "covered": 1323,
+            "skipped": 0,
+            "pct": 98.58
+          },
+          "functions": {
+            "total": 202,
+            "covered": 196,
+            "skipped": 0,
+            "pct": 97.02
+          },
+          "branches": {
+            "total": 907,
+            "covered": 895,
+            "skipped": 0,
+            "pct": 98.67
+          },
+          "branchesTrue": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": "Unknown"
+          }
+        }
+      },
+      "log": "apps/office/coverage/calc-document-import-coverage-identity-and-merge.json"
+    },
+    {
+      "command": "npx vitest run --config vite.config.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.csv-diagnostic.test.ts src/sc/source/filter/xml/ods.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-client.test.ts src/sc/source/filter/excel/xestream.test.ts src/sc/source/filter/oox/addressconverter.test.ts",
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "165 cases/8files over actual ODS/CSV/shell/worker and XLSX scalar/address paths. No overlap with102core-data/compiler files.",
+      "log": "apps/office/coverage/calc-document-import-file-regression.log"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" npx playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/ods.spec.ts apps/office/e2e/calc/csv.spec.ts",
+      "result": "pass",
+      "evidence": "2 actual Chromium cases: ODS same-kernel page/DOM-freeWorker and production CSV Open/primaryODS/save/export flow. Not XLSX UI acceptance.",
+      "log": "apps/office/coverage/calc-document-import-browser.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-document-import-typecheck-final2.log"
+    },
+    {
+      "command": "npm run test:static",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-document-import-static.log"
+    },
+    {
+      "command": "npx prettier --check <sourceBlobs paths>",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-document-import-format-final.log"
+    },
+    {
+      "command": "npx eslint <changed TypeScript files> --max-warnings 0",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-document-import-eslint-final2.log"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-document-import-dependencies.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-document-import-writer-resources.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-document-import-calc-resources.log"
+    },
+    {
+      "command": "npm run check:writer-hintids",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-document-import-hintids.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-document-import-source-tree.log"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-document-import-doctor.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-document-import-routing.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-document-import-provenance-final.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-document-import-invariants-final.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-document-import-parity-final.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-document-import-size-final.log"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-document-import-diff-final.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "log": "apps/office/coverage/calc-document-import-docs.log",
+      "evidence": "Only unchanged pre-existing css-style-matchers.ts:17 missingJSDoc and:76 documents2/3parameters. No changed-file documentation failure."
+    }
+  ],
+  "coverageRawSha256": {
+    "profile-broad/coverage-final.json": "0c0fd2afe4d383bd3df6bc1f4a4c28e27121d317d67c796d109ad121ff9a158e",
+    "comment-check/coverage-final.json": "c2e370b0b8b2ea688c89ca09ea024b55d582f58c00c27d04b347f855c9873cc7",
+    "coverage-merged.json": "537a78be00e32dcbf194888886de9aa590059d0edafe19936dd8bf04dce95104",
+    "coverage-identity-and-merge.json": "e40b8a625be287a8063acb1d042873bcbeb72978f1aac523b24b6aec2b0ca652"
+  },
+  "scope": "Four native setFormulaCell paths, link checking, cached strings/doubles, token transfer/default grammar, raw group replacement, numeric/string fillDown, actual raw sheet append/count and origin-date setup; cached ScColumn read and ScFormulaCell default/empty/hybrid dependencies.",
+  "failuresAndResolutions": [
+    "Initial cached column read combined const/mutable iterator result types. Corrected to the original mutable position plus actual mdds const-iterator conversion, retaining row-only/end/cached-hint behavior.",
+    "Initial shared-string getter required an explicit non-null const reference cast after the real STRING discriminant; no substitute value was added.",
+    "Native default formula constructors exposed missing initial GRAM_NATIVE_UI resolution. Added original document-convention merge for initial current supported conventions; no global default changed and unsupported grammars still reject.",
+    "First error-payload fixture accidentally used the decode helper for construction and referenced a nonexistent decoder name. Corrected to real CreateDoubleError and GetDoubleErrorValue, then reran; actual error NaN payload is preserved.",
+    "An append command used app cwd with repository-relative paths and wrote no file; corrected after its running prior test process ended.",
+    "The151-case21-file initial whole-owner profile passed cases but was below90 due old column/formula paths. Broadened only to related102core-data and compiler/formula files;510 cases and all four whole-owner gates passed.",
+    "ESLint unified-signatures conflated original empty/compiling constructors and raw-pointer/unique_ptr overloads with different ownership. Narrow line-specific native-contract exceptions retain actual declarations. One directive was initially attached to the wrong parameter and was corrected. TypeScript emitted JS and line counts are identical; all4Istanbul maps match exactly, followed by standard counter merge and90 assertions. No broad successful suite replay was needed for comments alone.",
+    "During review preserved original unique_ptr release before storage rather than post-transfer cleanup; broad510-case profile was run after this implementation correction.",
+    "Global JSDoc baseline remains unchanged."
+  ],
+  "upstreamQA": {
+    "status": "Inspected sc/qa has no direct ScDocumentImport test. New19critical cases use actual document/store/formula/group/cache owners and valid public APIs. Existing related formula/data source tests execute in the510-case profile; no full original filter/native C++ binary suite is claimed newly ported or compiled. Native shared-group and broader filter QA remain separate obligations."
+  },
+  "upstreamIssue": "CALC-521 records raw null-pointer/store/finalizer asymmetry as source-only. No null/invalid formula graph or invented native UB outcome was tested.",
+  "limitations": [
+    "Initial native UI grammar only resolves conventions already represented by the current lexer. Full symbol maps/localization and later unspecified transitions remain unported.",
+    "ScFormulaCell array input remains the existing owning-pointer binding; native const-array constructor/physical lifetime parity is not certified.",
+    "Style/Latin hints, matrix/data-table/merge/visibility import and outline/compute-cache finalization remain unported or incomplete.",
+    "Native optional document-options construction remains outside the profile; setOriginDate borrows the existing actual owned options without the broader formatter-update path.",
+    "Workbook buffers, complete XLSX/DOCX import/export/filter and existing UI acceptance remain required. Whole epic/goal remains active and incomplete."
+  ],
+  "fullSuite": {
+    "executed": false,
+    "reason": "Related module/checkpoint work within the same approved epic. User requested full suite once per10agentplane tasks; no tenth task completed here."
+  },
+  "finalStatusRequired": "After commit, compare every sourceBlob to HEAD:path and require clean tracked/untracked git status."
+}
