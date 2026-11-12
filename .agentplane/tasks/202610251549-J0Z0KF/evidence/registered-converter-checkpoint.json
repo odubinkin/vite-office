@@ -1,0 +1,673 @@
+{
+  "status": "in-progress-checkpoint-expanded-coverage-unmet",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "cd0a066307b3ad95be6804498c17de66ab927f59",
+  "capabilities": [
+    "CAP-7907d2df-c92d-4678-aa52-3cbb77b4d4f3",
+    "CAP-61f3e210-48fe-4469-ac8c-75dd698dd823"
+  ],
+  "scope": "Exact stoc component registration in the existing production desktop registry, genuine process context/manager/Converter.create/row execution, original QA expansion and browser/Worker qualification. Runtime helper algorithms unchanged; Converter change is JSDoc only.",
+  "tests": {
+    "newIntegrationCases": 6,
+    "newUpstreamGetterCases": 8,
+    "relatedCases": 463,
+    "relatedFiles": 72,
+    "boundaryCases": 48,
+    "resourceCases": 2,
+    "result": "all-assertions-pass",
+    "sourceQA": "Thirteen populated original XRow getter method ports plus XColumnLocate, with real typed native carriers and no absent-relation success.",
+    "remainingQA": "Actual XDataInputStream/XTextInputStream and SDBC Ref/Blob/Clob/Array providers, complete _wasNull/Java harness and real TypeDescriptionManager-to-XSet scenario remain pending."
+  },
+  "coverage": {
+    "result": "fail-expanded8-owner90-gate",
+    "threshold": 90,
+    "completeSelectedOwnerFiles": 8,
+    "total": {
+      "lines": {
+        "total": 789,
+        "covered": 657,
+        "skipped": 0,
+        "pct": 83.26
+      },
+      "statements": {
+        "total": 860,
+        "covered": 702,
+        "skipped": 0,
+        "pct": 81.62
+      },
+      "functions": {
+        "total": 102,
+        "covered": 88,
+        "skipped": 0,
+        "pct": 86.27
+      },
+      "branches": {
+        "total": 386,
+        "covered": 289,
+        "skipped": 0,
+        "pct": 74.87
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "owners": {
+      "src/comphelper/source/processfactory/processfactory.ts": {
+        "lines": {
+          "total": 46,
+          "covered": 46,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 49,
+          "covered": 49,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/cppuhelper/source/defaultbootstrap.ts": {
+        "lines": {
+          "total": 19,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 89.47
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 19,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 89.47
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/cppuhelper/source/servicemanager.ts": {
+        "lines": {
+          "total": 91,
+          "covered": 61,
+          "skipped": 0,
+          "pct": 67.03
+        },
+        "functions": {
+          "total": 29,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 55.17
+        },
+        "statements": {
+          "total": 108,
+          "covered": 70,
+          "skipped": 0,
+          "pct": 64.81
+        },
+        "branches": {
+          "total": 30,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 50
+        }
+      },
+      "src/desktop/browser/app/uno-components.ts": {
+        "lines": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/desktop/source/app/appinit.ts": {
+        "lines": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/stoc/source/typeconv/convert.ts": {
+        "lines": {
+          "total": 324,
+          "covered": 282,
+          "skipped": 0,
+          "pct": 87.03
+        },
+        "functions": {
+          "total": 17,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 358,
+          "covered": 306,
+          "skipped": 0,
+          "pct": 85.47
+        },
+        "branches": {
+          "total": 239,
+          "covered": 195,
+          "skipped": 0,
+          "pct": 81.58
+        }
+      },
+      "src/ucbhelper/source/provider/propertyvalueset.ts": {
+        "lines": {
+          "total": 266,
+          "covered": 217,
+          "skipped": 0,
+          "pct": 81.57
+        },
+        "functions": {
+          "total": 41,
+          "covered": 41,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 280,
+          "covered": 226,
+          "skipped": 0,
+          "pct": 80.71
+        },
+        "branches": {
+          "total": 95,
+          "covered": 62,
+          "skipped": 0,
+          "pct": 65.26
+        }
+      },
+      "src/udkapi/com/sun/star/script/Converter.ts": {
+        "lines": {
+          "total": 32,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 71.87
+        },
+        "functions": {
+          "total": 4,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 75
+        },
+        "statements": {
+          "total": 35,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 65.71
+        },
+        "branches": {
+          "total": 8,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 37.5
+        }
+      }
+    },
+    "note": "Distinct expanded service graph profile; prior converter/SAL aggregate pass is not reused as a passing broader gate. No owner is excluded to meet threshold."
+  },
+  "browserQualification": {
+    "result": "pass-main-and-module-worker",
+    "observations": {
+      "workerResult": {
+        "conversion": {
+          "serviceValue": 42,
+          "rowValue": 42,
+          "rowWasNull": false,
+          "failedFirst": 0,
+          "failedFirstWasNull": false,
+          "failedSecond": 0,
+          "failedSecondWasNull": true
+        },
+        "globals": {
+          "window": "undefined",
+          "document": "undefined",
+          "DOMParser": "undefined"
+        },
+        "rootName": "document-content",
+        "attribute": "1.0",
+        "listCounts": [
+          0,
+          1,
+          0
+        ],
+        "sameOwner": true,
+        "unicode": "\ud83d\ude00\u5b57",
+        "utf16Length": 3,
+        "borrowedStreamOpen": true,
+        "warnings": 1,
+        "errors": 0,
+        "warningLine": 1
+      },
+      "mainResult": {
+        "conversion": {
+          "serviceValue": 42,
+          "rowValue": 42,
+          "rowWasNull": false,
+          "failedFirst": 0,
+          "failedFirstWasNull": false,
+          "failedSecond": 0,
+          "failedSecondWasNull": true
+        },
+        "globals": {
+          "window": "object",
+          "document": "object",
+          "DOMParser": "function"
+        },
+        "rootName": "document-content",
+        "attribute": "1.0",
+        "listCounts": [
+          0,
+          1,
+          0
+        ],
+        "sameOwner": true,
+        "unicode": "\ud83d\ude00\u5b57",
+        "utf16Length": 3,
+        "borrowedStreamOpen": true,
+        "warnings": 1,
+        "errors": 0,
+        "warningLine": 1
+      }
+    },
+    "artifact": "apps/office/coverage/native-dom-worker-result.json",
+    "sha256": "ccd21c9615bef01278af439125f32a8c2e19bf0cfee33c7743f8cb82dd9a4dc3",
+    "scope": "Actual production registry/bootstrap/service/row with native DOM parser/IO/list/events in both realms. Worker window/document/DOMParser absent; only structured-clone-safe observations cross realm.",
+    "limitation": "This is not full DOCX/XLSX import/export or mounted UI acceptance. Only Converter JSDoc and QA/docs/registry metadata changed after this browser probe; runtime helper bodies remain unchanged."
+  },
+  "preservedSource": [
+    "Exact implementation/service names and actual acquired constructor export",
+    "Existing main and Calc Worker entrypoint registration/bootstrap path",
+    "Actual default createInstanceWithContext plus implementation-name and argument routes",
+    "Original row cache/native result ownership and converter exception suppression",
+    "First native-string failed conversion sets wasNull=false via getObjectImpl; repeat failure leaves true",
+    "No fake positive context/manager/converter/factory/type provider or private state mutation",
+    "Existing intentional browser save/open/recovery deviations unchanged"
+  ],
+  "corrections": [
+    "Initial integration expectation assumed failed conversion always meant wasNull=true. Actual pinned source/cache order required first=false/repeat=true; kernel was unchanged and both realms reproduce it."
+  ],
+  "suspectedIssues": [
+    "CALC-543/WRITER477"
+  ],
+  "knownBaseline": [
+    "Only pre-existing css-style-matchers.ts17 and76 JSDoc failures remain.",
+    "Doctor passes with existing managed-hook fallback warning."
+  ],
+  "remaining": [
+    "Expanded90-percent coverage gate without synthetic providers/private hooks",
+    "Actual type manager/enum completion and remaining source QA",
+    "Actual UNO exception bridge, Content isDocument/open/cancel and real broker/provider",
+    "Default resolver/DocumentBuilder/metadata and native model initialization",
+    "Complete DOCX/XLSX import/export/reopen, shell routing and existing desktop/mobile Open/download acceptance"
+  ],
+  "fullSuite": "Not run; approved once-per-ten-agentplane-task cadence, both parent format tasks remain in progress.",
+  "checks": [
+    {
+      "name": "related",
+      "cwd": "apps/office",
+      "command": "../../node_modules/.bin/vitest run --config vite.config.ts src/stoc src/ucbhelper src/cppu/inc/typelib src/cppu/source/typelib src/cppu/source/uno/copy.test.ts src/cppu/source/uno/assign.test.ts src/cppu/source/uno/sequence-engine.test.ts src/sal/rtl src/sal/inc/rtl src/desktop/browser/app src/cppuhelper/source/component_context.test.ts src/cppuhelper/source/component_context-callee.test.ts src/comphelper/source/processfactory src/sw/browser/presentation/WriterFileDialog.test.tsx src/sc/browser/presentation/calc-files.test.tsx --coverage --coverage.include=src/desktop/browser/app/uno-components.ts --coverage.include=src/cppuhelper/source/defaultbootstrap.ts --coverage.include=src/cppuhelper/source/servicemanager.ts --coverage.include=src/desktop/source/app/appinit.ts --coverage.include=src/comphelper/source/processfactory/processfactory.ts --coverage.include=src/ucbhelper/source/provider/propertyvalueset.ts --coverage.include=src/udkapi/com/sun/star/script/Converter.ts --coverage.include=src/stoc/source/typeconv/convert.ts --coverage.reportsDirectory=coverage/registered-converter --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.functions=90 --coverage.thresholds.branches=90",
+      "result": "assertions-pass-coverage-fail",
+      "log": "apps/office/coverage/registered-converter-related.log",
+      "sha256": "1fbb9b72239be7c1531579559019d302622ea74ec431bbbcb52f3f01477aeeeb"
+    },
+    {
+      "name": "worker",
+      "cwd": ".",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node --experimental-strip-types scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-worker.log",
+      "sha256": "9694f8fefd85c3555862e0f1cdd208bb2d70f1b3f5bfc4c39eb56ec71797acb4"
+    },
+    {
+      "name": "typecheck",
+      "cwd": ".",
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "name": "build",
+      "cwd": ".",
+      "command": "npm run build",
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-build.log",
+      "sha256": "4d7e300f849192d6a7d15d8d9bdbcd5f30bd1e9c397c343789dfb78778663fe2"
+    },
+    {
+      "name": "static",
+      "cwd": ".",
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-static.log",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    {
+      "name": "provenance",
+      "cwd": ".",
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-provenance.log",
+      "sha256": "187bbafc6768d92b57263e6a8d8f3832c289d89b0b98aa0738aa7f591a90cf41"
+    },
+    {
+      "name": "boundaries",
+      "cwd": ".",
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-boundaries.log",
+      "sha256": "c8db8d2d97cb1e474387e9c900f9c62eacd605119e15b57b04477f5398616d4d"
+    },
+    {
+      "name": "registry-build",
+      "cwd": ".",
+      "command": "npm run inventory:registry:build",
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "name": "registry-check",
+      "cwd": ".",
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-registry-check.log",
+      "sha256": "ff495de75068f57624ddba18697cd40f88d3d722f0a2cd2d0e039e3a6dfbf099"
+    },
+    {
+      "name": "docs",
+      "cwd": ".",
+      "command": "npm run check:docs",
+      "result": "known-baseline-failure",
+      "log": "apps/office/coverage/registered-converter-docs.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    },
+    {
+      "name": "size",
+      "cwd": ".",
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-size.log",
+      "sha256": "8ca4818a94cb5e4fa9e2bf1b6bd7d6608c3389f4b619cfce217abc945f03dd46"
+    },
+    {
+      "name": "tree",
+      "cwd": ".",
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-tree.log",
+      "sha256": "4615eccefb9c2ce4b9cd767340293514a9fc81e356b588821e3bd52cc72a30f6"
+    },
+    {
+      "name": "boundary-tests",
+      "cwd": ".",
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-boundary-tests.log",
+      "sha256": "351bbd49a9c5c969ad6877fee32f234353cbcf64855bbd3c0c327152bceb4bfc"
+    },
+    {
+      "name": "resource-tests",
+      "cwd": ".",
+      "command": "node_modules/.bin/vitest run scripts/writer-ui-resource-model.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-resource-tests.log",
+      "sha256": "8193580b7b5133a758898bf15ff6db08f31372798ce247997d0eee12d0b3c9e2"
+    },
+    {
+      "name": "writer-resources",
+      "cwd": ".",
+      "command": "npm run check:writer-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-writer-resources.log",
+      "sha256": "0292f9fd2322bd184c9fba156d2ec4378ba697d0b6ee8fe4327be60b10773600"
+    },
+    {
+      "name": "calc-resources",
+      "cwd": ".",
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-calc-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "name": "hintids",
+      "cwd": ".",
+      "command": "npm run check:writer-hintids",
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-hintids.log",
+      "sha256": "513c109068ebf83b3d6fe448c3c44564ec89a64cd9cb64059b5b4b89d11d887a"
+    },
+    {
+      "name": "doctor",
+      "cwd": ".",
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-doctor.log",
+      "sha256": "3b97b50a9b9b508f90348cf17040f7e618af2fc3fb2a12bee49ef450a9d15422"
+    },
+    {
+      "name": "routing",
+      "cwd": ".",
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "name": "diff",
+      "cwd": ".",
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "format",
+      "cwd": ".",
+      "command": [
+        "node_modules/.bin/prettier",
+        "--check",
+        "apps/office/src/desktop/browser/app/uno-components.ts",
+        "apps/office/src/desktop/browser/app/uno-converter.test.ts",
+        "apps/office/src/ucbhelper/source/provider/native-propertyvalueset-qa.test.ts",
+        "apps/office/src/udkapi/com/sun/star/script/Converter.ts",
+        "docs/program/registry/shared/capabilities/CAP-61f3e210-48fe-4469-ac8c-75dd698dd823.json",
+        "docs/program/registry/shared/capabilities/CAP-7907d2df-c92d-4678-aa52-3cbb77b4d4f3.json",
+        "docs/program/registry/shared/provenance/desktop/browser/app/uno-components.ts.json",
+        "docs/program/registry/shared/provenance/stoc/source/typeconv/convert.ts.json",
+        "docs/program/registry/shared/provenance/ucbhelper/source/provider/propertyvalueset.ts.json",
+        "docs/program/registry/shared/provenance/udkapi/com/sun/star/script/Converter.ts.json",
+        "docs/program/registry/shared/runtime/desktop/browser/app/uno-components.ts.json",
+        "docs/program/registry/shared/runtime/stoc/source/typeconv/convert.ts.json",
+        "docs/program/registry/shared/runtime/ucbhelper/source/provider/propertyvalueset.ts.json",
+        "docs/program/registry/shared/runtime/udkapi/com/sun/star/script/Converter.ts.json",
+        "scripts/fixtures/native-dom-worker-probe.ts",
+        "scripts/module-boundaries/allowed-edges.mjs",
+        "scripts/native-dom-worker-probe.mjs",
+        "docs/program/native-stoc-type-converter.md",
+        "docs/program/native-ucb-propertyvalueset.md"
+      ],
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "name": "lint",
+      "cwd": ".",
+      "command": "node_modules/.bin/eslint --max-warnings 0 apps/office/src/desktop/browser/app/uno-components.ts apps/office/src/desktop/browser/app/uno-converter.test.ts apps/office/src/ucbhelper/source/provider/native-propertyvalueset-qa.test.ts apps/office/src/udkapi/com/sun/star/script/Converter.ts scripts/fixtures/native-dom-worker-probe.ts scripts/native-dom-worker-probe.mjs scripts/module-boundaries/allowed-edges.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/registered-converter-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/desktop/browser/app/uno-components.ts",
+      "gitBlob": "91114ae8eb78e9a6d543db178e622d6f1df3c1af"
+    },
+    {
+      "path": "apps/office/src/desktop/browser/app/uno-converter.test.ts",
+      "gitBlob": "cdef31009896b0d768339532ff0eca880dac0611"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/provider/native-propertyvalueset-qa.test.ts",
+      "gitBlob": "baf1d481184d3e0944b3e144c188d5c890eb19ea"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/script/Converter.ts",
+      "gitBlob": "42870975d0be6aa0202ce57b772392e2a5425a3f"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "5ba609be6b74ddba15eeab4436d3d91d20b647ec"
+    },
+    {
+      "path": "docs/program/native-stoc-type-converter.md",
+      "gitBlob": "62dc5f4ccc48379a464a9e17915a5da6cb3e0a28"
+    },
+    {
+      "path": "docs/program/native-ucb-propertyvalueset.md",
+      "gitBlob": "25aeff18d13f07c9fb647e075897f55e6c4d1fb6"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-61f3e210-48fe-4469-ac8c-75dd698dd823.json",
+      "gitBlob": "01c00e8deca10bdfd69e84bb0d52310e96c19f09"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-7907d2df-c92d-4678-aa52-3cbb77b4d4f3.json",
+      "gitBlob": "a456d928cf78d1cf12b388359a97dd86a4d86647"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/desktop/browser/app/uno-components.ts.json",
+      "gitBlob": "90eadd7b2f545a22b0fb61f7bbe2171c6675d3ad"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/stoc/source/typeconv/convert.ts.json",
+      "gitBlob": "4798686fc157059e67384fcff10086328a1e4051"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/source/provider/propertyvalueset.ts.json",
+      "gitBlob": "01aa72eecc75bb494c2c20ab1d7b2667bc46fd97"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/script/Converter.ts.json",
+      "gitBlob": "4a2c3a800823b1e979809b1f1e63e1a2e3922d62"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/desktop/browser/app/uno-components.ts.json",
+      "gitBlob": "7f2c095fe08c96253db5fa6889c7c8e33745b1e4"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/stoc/source/typeconv/convert.ts.json",
+      "gitBlob": "2f450dedad8e6eea3c6ca2205dff285e12728ac1"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/source/provider/propertyvalueset.ts.json",
+      "gitBlob": "7bdc30e9c1eed05f92430ff6c250b05cbda2b44e"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/script/Converter.ts.json",
+      "gitBlob": "327146f655bb76b5107b7a111af30a3157d3d863"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "0ebbfb38256257d96a1b76cd38be161260bfcdc2"
+    },
+    {
+      "path": "scripts/fixtures/native-dom-worker-probe.ts",
+      "gitBlob": "3caecdeb74b73563cd62e037a75dcf6f924b874d"
+    },
+    {
+      "path": "scripts/module-boundaries/allowed-edges.mjs",
+      "gitBlob": "d9a616e6a000b34ea906129d7843f58693f7ccc9"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "gitBlob": "5c9d128cc72e7b7ad5a379b3faebb92f9a5c21dc"
+    }
+  ],
+  "upstreamBlobs": [
+    {
+      "path": "stoc/util/stocservices.component",
+      "gitBlob": "bbb113f0d8d36c93cbfd03839a0898b62a519bdd"
+    },
+    {
+      "path": "stoc/source/typeconv/convert.cxx",
+      "gitBlob": "c38b8d45ab664c1fbd6303614b29bff3bca0853e"
+    },
+    {
+      "path": "ucbhelper/source/provider/propertyvalueset.cxx",
+      "gitBlob": "b87bb6fdd471890207d31ec3405363f88f1153bf"
+    },
+    {
+      "path": "cppuhelper/source/servicemanager.cxx",
+      "gitBlob": "09273863097ba162b830f6c46c18030d2b73d300"
+    },
+    {
+      "path": "qadevOOo/tests/java/ifc/sdbc/_XRow.java",
+      "gitBlob": "e1babb0760b6403ff223bd828edd909938212889"
+    }
+  ]
+}
