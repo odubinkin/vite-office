@@ -1,0 +1,767 @@
+{
+  "status": "implemented-native-metadata-dom-ingestion-functional-checkpoint-open-branch90-gate-parent-continues",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "bda5ea99b659011ff7fcb299b2120e62e404f140",
+  "capability": "CAP-56aaae0a-6cf9-4941-b33e-88c5a933af44",
+  "scope": "Complete original DocumentProperties/DocumentProperties2/supplier SDK declarations with actual cached native types; Sfx metadata tables/QName helpers, original immediate-child first/all namespace-local traversal, first direct TEXT_NODE and complete init user-defined ingestion loop over actual DOM/Any/registered PropertyBag. Full actual Sfx service remains pending; no replacement service is registered.",
+  "tests": {
+    "relatedCases": 35,
+    "relatedFiles": 6,
+    "command": {
+      "cwd": "apps/office",
+      "argv": [
+        "../../node_modules/.bin/vitest",
+        "run",
+        "--config",
+        "vite.config.ts",
+        "src/sfx2/source/doc/SfxDocumentMetaData.dom.test.ts",
+        "src/offapi/com/sun/star/document/document-properties-types.test.ts",
+        "src/sfx2/source/doc/SfxDocumentMetaData.values.test.ts",
+        "src/unoxml/source/dom/documentbuilder.test.ts",
+        "src/sax/source/tools/converter-temporal.test.ts",
+        "src/comphelper/source/property/opropertybag.test.ts",
+        "--maxWorkers=2",
+        "--coverage",
+        "--coverage.provider=istanbul",
+        "--coverage.include=src/sfx2/source/doc/SfxDocumentMetaData.dom.ts",
+        "--coverage.include=src/sfx2/source/doc/SfxDocumentMetaData.names.ts",
+        "--coverage.include=src/offapi/com/sun/star/document/XDocumentProperties.ts",
+        "--coverage.include=src/offapi/com/sun/star/document/XDocumentProperties2.ts",
+        "--coverage.include=src/offapi/com/sun/star/document/XDocumentPropertiesSupplier.ts",
+        "--coverage.reportsDirectory=coverage/metadata-dom",
+        "--coverage.thresholds.statements=90",
+        "--coverage.thresholds.branches=90",
+        "--coverage.thresholds.functions=90",
+        "--coverage.thresholds.lines=90"
+      ],
+      "wholeProductionOwners": [
+        "sfx2/source/doc/SfxDocumentMetaData.dom.ts",
+        "sfx2/source/doc/SfxDocumentMetaData.names.ts",
+        "offapi/com/sun/star/document/XDocumentProperties.ts",
+        "offapi/com/sun/star/document/XDocumentProperties2.ts",
+        "offapi/com/sun/star/document/XDocumentPropertiesSupplier.ts"
+      ]
+    },
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 183,
+          "covered": 175,
+          "skipped": 0,
+          "pct": 95.62
+        },
+        "statements": {
+          "total": 203,
+          "covered": 190,
+          "skipped": 0,
+          "pct": 93.59
+        },
+        "functions": {
+          "total": 23,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 77,
+          "covered": 67,
+          "skipped": 0,
+          "pct": 87.01
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/document/XDocumentProperties.ts": {
+        "lines": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/document/XDocumentProperties2.ts": {
+        "lines": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/document/XDocumentPropertiesSupplier.ts": {
+        "lines": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/source/doc/SfxDocumentMetaData.dom.ts": {
+        "lines": {
+          "total": 121,
+          "covered": 115,
+          "skipped": 0,
+          "pct": 95.04
+        },
+        "functions": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 133,
+          "covered": 123,
+          "skipped": 0,
+          "pct": 92.48
+        },
+        "branches": {
+          "total": 51,
+          "covered": 44,
+          "skipped": 0,
+          "pct": 86.27
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/source/doc/SfxDocumentMetaData.names.ts": {
+        "lines": {
+          "total": 35,
+          "covered": 33,
+          "skipped": 0,
+          "pct": 94.28
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 43,
+          "covered": 40,
+          "skipped": 0,
+          "pct": 93.02
+        },
+        "branches": {
+          "total": 20,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 85
+        }
+      }
+    },
+    "coverageGate": {
+      "threshold": 90,
+      "status": "fail",
+      "failingMetric": "branches",
+      "actual": 87.01,
+      "wholeProductionOwners": 5,
+      "detail": "All five whole new production owners included, no source counter/line/function selection or exclusions. Source assertion alternatives, null-list, DOM value/error unwind and property error alternatives remain. No fabricated provider/node/private state used to hit coverage. Preserve gate and unresolved gap."
+    },
+    "sourceQA": "Two exact Hinweis/Warnung user-property checks from test_misc::testDocumentProperties run after ingesting actual untouched TEST.odt meta.xml with native DOM/registered PropertyBag, including Unicode. Complete service/medium/setter/clone/event testDocumentProperties and testODFCustomMetadata are explicitly pending, not passing full ports. TEST/CUSTOM XML bytes and package blobs verified from pinned source. Existing source ConverterTest UTF16 fixture groups execute as regression dependencies.",
+    "criticalCases": "Actual declared SDK inheritance/type identity, first-vs-all immediate matches, prefix-independent namespace selection, CDATA/nested/fragmented text selection, real null RuntimeException, all native temporal kinds including explicit zero timezone vs absence, nonnumeric float-as-zero and overflow rejection, malformed date/time/bool skips, duplicates and empty names, original registered PropertyBag and native builder regressions."
+  },
+  "browserQualification": {
+    "realms": [
+      "Chromium main",
+      "DOM-free module Worker"
+    ],
+    "metadataIngestion": {
+      "workerResult": [
+        "Dies ist ein wichtiger Hinweis",
+        "Kann Spuren von N\u00fcssen enthalten"
+      ],
+      "mainResult": [
+        "Dies ist ein wichtiger Hinweis",
+        "Kann Spuren von N\u00fcssen enthalten"
+      ]
+    },
+    "completeResults": {
+      "workerResult": {
+        "conversion": {
+          "serviceValue": 42,
+          "rowValue": 42,
+          "rowWasNull": false,
+          "failedFirst": 0,
+          "failedFirstWasNull": false,
+          "failedSecond": 0,
+          "failedSecondWasNull": true
+        },
+        "publicHelpers": {
+          "notifications": 1,
+          "sameEventSource": true,
+          "componentTypeCount": 3
+        },
+        "dynamicProperties": {
+          "changed": true,
+          "value": 42,
+          "initialDefault": 41,
+          "name": "workerValue",
+          "handle": 7,
+          "declaredLong": true,
+          "stableTypeField": true
+        },
+        "propertyArray": {
+          "count": 1,
+          "handle": 7,
+          "missing": -1,
+          "snapshotName": "workerValue",
+          "sameInfoIdentity": true
+        },
+        "legacyListeners": {
+          "remaining": 1,
+          "sameFirst": true,
+          "sameSnapshot": true,
+          "keyCount": 1,
+          "key": -7
+        },
+        "nativeAnyFields": {
+          "value": 43,
+          "initialDefault": 41,
+          "liveType": true,
+          "interfaceIdentity": true
+        },
+        "nativePropertyControl": {
+          "value": 42,
+          "storedLong": true,
+          "notifications": 1,
+          "notifiedTypeLong": false,
+          "notifiedValue": 42,
+          "notifiedOld": 41,
+          "sameSource": true,
+          "state": 0,
+          "initialStates": [
+            1,
+            0
+          ],
+          "typeCount": 7
+        },
+        "registeredPropertyBag": {
+          "value": 42,
+          "count": 1,
+          "modified": true,
+          "directState": 0,
+          "sameIdentity": true
+        },
+        "nativeSax": {
+          "calls": [
+            "begin",
+            "start:root:0",
+            "text:worker SAX\u5b57",
+            "end",
+            "finish"
+          ],
+          "sameIdentity": true
+        },
+        "metadataValues": {
+          "values": [
+            "2024-02-29+05:30",
+            "2024-02-29T03:04:05.000000009-01:30",
+            "-P1DT2H3M4.000000005S"
+          ],
+          "types": [
+            "date",
+            "date",
+            "time"
+          ]
+        },
+        "metadataIngestion": [
+          "Dies ist ein wichtiger Hinweis",
+          "Kann Spuren von N\u00fcssen enthalten"
+        ],
+        "documentBuilder": {
+          "rootName": "document-content",
+          "streamOpen": true,
+          "namespaceAware": true,
+          "validating": false,
+          "emptyImplementation": true,
+          "capturedType": true,
+          "sameContext": true,
+          "exceptionMessage": "worker exception"
+        },
+        "xpath": {
+          "count": 1,
+          "listLength": 1,
+          "sameRoot": true
+        },
+        "globals": {
+          "window": "undefined",
+          "document": "undefined",
+          "DOMParser": "undefined"
+        },
+        "rootName": "document-content",
+        "attribute": "1.0",
+        "listCounts": [
+          0,
+          1,
+          0
+        ],
+        "sameOwner": true,
+        "unicode": "\ud83d\ude00\u5b57",
+        "utf16Length": 3,
+        "borrowedStreamOpen": true,
+        "warnings": 1,
+        "errors": 0,
+        "warningLine": 1
+      },
+      "mainResult": {
+        "conversion": {
+          "serviceValue": 42,
+          "rowValue": 42,
+          "rowWasNull": false,
+          "failedFirst": 0,
+          "failedFirstWasNull": false,
+          "failedSecond": 0,
+          "failedSecondWasNull": true
+        },
+        "publicHelpers": {
+          "notifications": 1,
+          "sameEventSource": true,
+          "componentTypeCount": 3
+        },
+        "dynamicProperties": {
+          "changed": true,
+          "value": 42,
+          "initialDefault": 41,
+          "name": "workerValue",
+          "handle": 7,
+          "declaredLong": true,
+          "stableTypeField": true
+        },
+        "propertyArray": {
+          "count": 1,
+          "handle": 7,
+          "missing": -1,
+          "snapshotName": "workerValue",
+          "sameInfoIdentity": true
+        },
+        "legacyListeners": {
+          "remaining": 1,
+          "sameFirst": true,
+          "sameSnapshot": true,
+          "keyCount": 1,
+          "key": -7
+        },
+        "nativeAnyFields": {
+          "value": 43,
+          "initialDefault": 41,
+          "liveType": true,
+          "interfaceIdentity": true
+        },
+        "nativePropertyControl": {
+          "value": 42,
+          "storedLong": true,
+          "notifications": 1,
+          "notifiedTypeLong": false,
+          "notifiedValue": 42,
+          "notifiedOld": 41,
+          "sameSource": true,
+          "state": 0,
+          "initialStates": [
+            1,
+            0
+          ],
+          "typeCount": 7
+        },
+        "registeredPropertyBag": {
+          "value": 42,
+          "count": 1,
+          "modified": true,
+          "directState": 0,
+          "sameIdentity": true
+        },
+        "nativeSax": {
+          "calls": [
+            "begin",
+            "start:root:0",
+            "text:worker SAX\u5b57",
+            "end",
+            "finish"
+          ],
+          "sameIdentity": true
+        },
+        "metadataValues": {
+          "values": [
+            "2024-02-29+05:30",
+            "2024-02-29T03:04:05.000000009-01:30",
+            "-P1DT2H3M4.000000005S"
+          ],
+          "types": [
+            "date",
+            "date",
+            "time"
+          ]
+        },
+        "metadataIngestion": [
+          "Dies ist ein wichtiger Hinweis",
+          "Kann Spuren von N\u00fcssen enthalten"
+        ],
+        "documentBuilder": {
+          "rootName": "document-content",
+          "streamOpen": true,
+          "namespaceAware": true,
+          "validating": false,
+          "emptyImplementation": true,
+          "capturedType": true,
+          "sameContext": true,
+          "exceptionMessage": "worker exception"
+        },
+        "xpath": {
+          "count": 1,
+          "listLength": 1,
+          "sameRoot": true
+        },
+        "globals": {
+          "window": "object",
+          "document": "object",
+          "DOMParser": "function"
+        },
+        "rootName": "document-content",
+        "attribute": "1.0",
+        "listCounts": [
+          0,
+          1,
+          0
+        ],
+        "sameOwner": true,
+        "unicode": "\ud83d\ude00\u5b57",
+        "utf16Length": 3,
+        "borrowedStreamOpen": true,
+        "warnings": 1,
+        "errors": 0,
+        "warningLine": 1
+      }
+    }
+  },
+  "sourceContractProof": {
+    "XDocumentProperties": {
+      "attributes": [
+        "Author",
+        "Generator",
+        "CreationDate",
+        "Title",
+        "Subject",
+        "Description",
+        "Keywords",
+        "Language",
+        "ModifiedBy",
+        "ModificationDate",
+        "PrintedBy",
+        "PrintDate",
+        "TemplateName",
+        "TemplateURL",
+        "TemplateDate",
+        "AutoloadURL",
+        "AutoloadSecs",
+        "DefaultTarget",
+        "DocumentStatistics",
+        "EditingCycles",
+        "EditingDuration"
+      ],
+      "methods": [
+        "resetUserData",
+        "getUserDefinedProperties",
+        "loadFromStorage",
+        "loadFromMedium",
+        "storeToStorage",
+        "storeToMedium"
+      ],
+      "memberCount": 48,
+      "exactContractNames": true
+    },
+    "XDocumentProperties2": {
+      "attributes": [
+        "Contributor",
+        "Coverage",
+        "Identifier",
+        "Publisher",
+        "Relation",
+        "Rights",
+        "Source",
+        "Type"
+      ],
+      "methods": [],
+      "memberCount": 16,
+      "exactContractNames": true
+    },
+    "XDocumentPropertiesSupplier": {
+      "attributes": [],
+      "methods": [
+        "getDocumentProperties"
+      ],
+      "memberCount": 1,
+      "exactContractNames": true
+    },
+    "fixtures": "Both TEST/CUSTOM metadata XML and pinned package blobs verified without XML rewriting."
+  },
+  "preservedIssues": [
+    "CALC561/WRITER496: first direct text only, CDATA/nested/additional text ignored",
+    "CALC562/WRITER497: metadata float caller preserves CALC-170 numeric status success without digits"
+  ],
+  "remaining": [
+    "Actual complete SfxDocumentMetaData member lifecycle/DOM updates/lazy bag/listeners/clone/serialize/storage/medium service and factory",
+    "Full original metadata service QA and branch90 gate",
+    "Final DOCX/XLSX core import-export-reopen, canonical models, Strict/Transitional fixtures, shell and existing desktop/mobile UI acceptance",
+    "Prior broad native DOM branch90 gap remains open in its own checkpoint"
+  ],
+  "recoveries": [
+    "Recovered two wrong-cwd CLI invocations with actual app cwd; no source regression fix invented.",
+    "Terminated confirmed live Vitest parent/worker after authored test used a nonterminated string_view with the C-string constructor; fixed test to explicit length, source unchanged.",
+    "Corrected native sequence element address borrowing in authored test; no core layout/default change.",
+    "Authored malformed-float rejection assumption contradicted existing source-tested RTL status behavior; retained source acceptance as zero and documented metadata caller.",
+    "Corrected expected original UTF16 name sort order; production unchanged.",
+    "Browser probe initially referred to low-level PropertyBag class instead of existing PropertyBagService alias; corrected alias and actual main/Worker proof passes.",
+    "Replaced authored nonnull assertion with genuine assertion; scoped lint passes.",
+    "Registry correctly rejected basename-only SDK source evidence; added actual IDL method/attribute markers and final guards pass.",
+    "Source-contract inspection initially treated IDL raises keyword as a method; corrected inspection, verified all48/16/1 member names."
+  ],
+  "knownBaseline": "check:docs only css-style-matchers.ts:17/:76; doctor existing managed-hook warning. Physical native ABI/allocator/mutex/shared-memory behavior and full source service QA unqualified.",
+  "fullSuite": "Not due within same actual agentplane task; user cadence is once every ten actual tasks.",
+  "userStopRule": "Latest user requires continued work without pauses. Goal and parent remain active/incomplete.",
+  "checks": {
+    "related-tests-and-coverage": {
+      "command": "Exact tests.command argv; cwd apps/office",
+      "result": "35cases/6files pass; whole-owner branch90 gate FAIL87.01",
+      "log": "apps/office/coverage/metadata-dom-tests.log",
+      "sha256": "b137e381a1b0de731bcdd39a413f79f6358ad9f3d18a9e47dc097bf709399f7f"
+    },
+    "typecheck-build": {
+      "command": "npm run typecheck; npm run test:static",
+      "result": "typecheck/build/static pass; subsequent registry basename-only evidence error corrected in final static log",
+      "log": "apps/office/coverage/metadata-dom-gates.log",
+      "sha256": "84653be4e3f88b6e49043b876207fd1a6af9f856460219105215954b3dd6b7a2"
+    },
+    "registry-static-gates": {
+      "command": "npm run inventory:registry:build; npm run inventory:registry:check; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; npm run check:writer-resources; npm run check:calc-resources; npm run check:writer-hintids; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check",
+      "result": "pass; doctor existing hook warning",
+      "log": "apps/office/coverage/metadata-dom-static-gates.log",
+      "sha256": "acb4600802b53cd6ec4815359a597664030f88dc8f5eebf824f045bf9b06689d"
+    },
+    "browser": {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node --experimental-strip-types scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/metadata-dom-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    "eslint": {
+      "command": "node_modules/.bin/eslint all changed TS/MJS paths --max-warnings 0",
+      "result": "pass",
+      "log": "apps/office/coverage/metadata-dom-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "format": {
+      "command": "node_modules/.bin/prettier --check all changed source/docs/registry paths",
+      "result": "pass",
+      "log": "apps/office/coverage/metadata-dom-format-check.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    "docs": {
+      "command": "npm run check:docs",
+      "result": "known-baseline-fail:only2css-style-matchersfindings",
+      "log": "apps/office/coverage/metadata-dom-docs.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    },
+    "source-contract-fixtures": {
+      "command": "python3 apps/office/coverage/verify-metadata-dom-contract.py",
+      "result": "pass:48+16+1 original IDL method names; exact TEST/CUSTOM XML/package blobs",
+      "log": "apps/office/coverage/metadata-dom-contract-proof.json",
+      "sha256": "1a7b86aa3d6b49427a1b56fc58e50f9755fc222f86097c4ca08409d40d6b9389"
+    }
+  },
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/offapi/com/sun/star/document/XDocumentProperties.ts",
+      "gitBlob": "2b0cb645ecd9c39dfef957eae3724f80c91984b2"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/document/XDocumentProperties2.ts",
+      "gitBlob": "17d7005797848237d6527482f2ea76dd0c4c5d8e"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/document/XDocumentPropertiesSupplier.ts",
+      "gitBlob": "d20542b133f62ed2d7180d71360d46b75aa2c0df"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/document/document-properties-types.test.ts",
+      "gitBlob": "e1084cc169516f31d8985c784ed11f8ff6710d91"
+    },
+    {
+      "path": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.dom.test.ts",
+      "gitBlob": "75b7737de0108153b5e8459e68378dca2222b2bc"
+    },
+    {
+      "path": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.dom.ts",
+      "gitBlob": "c324701ab3094169a706fcbe8c76661b8da96802"
+    },
+    {
+      "path": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.fixtures.json",
+      "gitBlob": "02edf67be9c5f78c83dd7277c02dab97f91e571c"
+    },
+    {
+      "path": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.names.ts",
+      "gitBlob": "8f7fa37325f952798899184f9ee6cfecb191f96c"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "8d4d790f411c36e4b667f5204fd96b1daa7d0fab"
+    },
+    {
+      "path": "docs/program/native-metadata-dom-ingestion.md",
+      "gitBlob": "6925da1583640312df1cb6de3a4454a250385652"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-56aaae0a-6cf9-4941-b33e-88c5a933af44.json",
+      "gitBlob": "d882b56329380833d4bd665e8328734e5b1f7550"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/document/XDocumentProperties.ts.json",
+      "gitBlob": "79057385d7665c34759f72435cfdc2ca865d4cc7"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/document/XDocumentProperties2.ts.json",
+      "gitBlob": "3afd718cd07849c3d767a15ee9d13795bcfa68f6"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/document/XDocumentPropertiesSupplier.ts.json",
+      "gitBlob": "3e2d259fe946d59d061c31bfe47b1b0e3f3adc68"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sfx2/source/doc/SfxDocumentMetaData.dom.ts.json",
+      "gitBlob": "4c8e10da42dedcad2e98ef704f9bf62b14deb0de"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sfx2/source/doc/SfxDocumentMetaData.names.ts.json",
+      "gitBlob": "5fda731fbbb865e4b129b169e6a1c9d773d7e393"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/document/XDocumentProperties.ts.json",
+      "gitBlob": "f4759c7561b84b8a6daeac8bbdc2d1393957b00a"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/document/XDocumentProperties2.ts.json",
+      "gitBlob": "fc1ae7689e9fb32f621058ba8685dc9ae05d4969"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/document/XDocumentPropertiesSupplier.ts.json",
+      "gitBlob": "ce365f4fbc39c820e05987025b0a92b012349c71"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sfx2/source/doc/SfxDocumentMetaData.dom.ts.json",
+      "gitBlob": "82de697f5467e4e71c28d49840ad99867f6fa37c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sfx2/source/doc/SfxDocumentMetaData.names.ts.json",
+      "gitBlob": "21024c560e0667530109d23a0653c1fb0580b8a0"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "a81cbb24f780141c426378f2040aa2df1701a69b"
+    },
+    {
+      "path": "scripts/fixtures/native-dom-worker-probe.ts",
+      "gitBlob": "537f7c6a8a1c4cbcbf2f8db21d6cba188d6dfa1d"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "gitBlob": "3c9dc624e60065409dd7f95d4362a3deeb6315bb"
+    }
+  ],
+  "upstreamBlobs": [
+    {
+      "path": "codemaker/source/cppumaker/cpputype.cxx",
+      "gitBlob": "152dbf476955dd95b1d7623ca7342cc69c24fb0a"
+    },
+    {
+      "path": "offapi/com/sun/star/document/XDocumentProperties.idl",
+      "gitBlob": "fe893ccef29354b6ee524326a3d9589f6ae8cd5f"
+    },
+    {
+      "path": "offapi/com/sun/star/document/XDocumentProperties2.idl",
+      "gitBlob": "5b4acbfe2e4798aab0e1cebfcddffd972169e669"
+    },
+    {
+      "path": "offapi/com/sun/star/document/XDocumentPropertiesSupplier.idl",
+      "gitBlob": "0d9fef2b26b9042e1c1aa8cc5b4753849702af3e"
+    },
+    {
+      "path": "sal/qa/rtl/math/test-rtl-math.cxx",
+      "gitBlob": "a537bc00e63d3154133f59f845e8909011682729"
+    },
+    {
+      "path": "sax/source/tools/converter.cxx",
+      "gitBlob": "e6863ada9d31e8ccbfb9477e3562093af5812c28"
+    },
+    {
+      "path": "sfx2/qa/complex/sfx2/testdocuments/CUSTOM.odt",
+      "gitBlob": "831a8f451dfdc05afcce0e20b52ea2e1d2f94d3c"
+    },
+    {
+      "path": "sfx2/qa/complex/sfx2/testdocuments/TEST.odt",
+      "gitBlob": "7c6f0b60f7b026137b22b4abb540e647e6c70418"
+    },
+    {
+      "path": "sfx2/qa/cppunit/test_misc.cxx",
+      "gitBlob": "20a2127108b5c8a3b7ab5e6fa2dadb7c40b66bde"
+    },
+    {
+      "path": "sfx2/source/doc/SfxDocumentMetaData.cxx",
+      "gitBlob": "973f441ceb59a95d034a52def104d4d186e77bf8"
+    }
+  ]
+}
