@@ -1,0 +1,154 @@
+{
+  "taskId": "202610251549-J0Z0KF",
+  "checkpoint": "Work in progress: native DOM dispatcher translation and immortal implementation singleton",
+  "status": "rework-required",
+  "sourceBaseline": {
+    "tag": "libreoffice-26.8.0.2",
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65"
+  },
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/unoxml/inc/eventdispatcher.ts",
+      "gitBlob": "65b5318441c43d23548f91c10b60362305fd499a"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/domimplementation.test.ts",
+      "gitBlob": "4c7e10ddd3c20e9cf396a41cde0cd8e8d207481c"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/domimplementation.ts",
+      "gitBlob": "cd8f277e0c18c76f884d703499b58e02c382a71d"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/events/eventdispatcher.test.ts",
+      "gitBlob": "a8f458ff0e61b8f617577793d7b5590d8766e95f"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/events/eventdispatcher.ts",
+      "gitBlob": "65a6b927a37ae5c38833320caf093c48157917c7"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "8daef2a7a26d840015708dab4eb86a6f3618a3bb"
+    },
+    {
+      "path": "docs/program/native-xml-dom-events.md",
+      "gitBlob": "052b343ab64f0326dd7feaee5d699ff311b37a1a"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-63b22cd8-c479-4bd1-88a6-b34e7c7e733e.json",
+      "gitBlob": "26fad156d028874e1b32ca1116cdf6c8c80875aa"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/inc/eventdispatcher.ts.json",
+      "gitBlob": "8dab0c36495b554fa67605c3ae071f10bbbc88cf"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/domimplementation.ts.json",
+      "gitBlob": "650998b08bfdf1d908b1a2e9cb4a4a04105e0004"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/events/eventdispatcher.ts.json",
+      "gitBlob": "9742096e490242dfc40dbdfeeb846506456ebe9c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/inc/eventdispatcher.ts.json",
+      "gitBlob": "fa3acb3648919f40734aaa93462c7d2e4fb551ab"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/domimplementation.ts.json",
+      "gitBlob": "2beffd6674ace82cf0dc2e9540eb4337e69827bf"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/events/eventdispatcher.ts.json",
+      "gitBlob": "c2c77964cc5dd9977666682683c1714b7ab14d59"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "982c9c80948c3a6c97bae0179aedc631540db67f"
+    }
+  ],
+  "results": {
+    "focusedCases": 17,
+    "relatedDomCases": 56,
+    "relatedDomFiles": 7,
+    "boundaryToolingCases": 49,
+    "boundaryToolingFiles": 2,
+    "resourceCases": 2,
+    "typecheckTools": "pass",
+    "typecheckOffice": "pass",
+    "scopedESLint": "pass",
+    "prettier": "pass",
+    "productionBuildAndStaticSmoke": "pass",
+    "boundaries": "pass: 2283 runtime sources, 255 allowed edges",
+    "fileSize": "pass",
+    "sourceTree": "pass",
+    "provenance": "pass: 2284 runtime modules",
+    "registryBuild": "pass",
+    "registryInvariantsAndParity": "pass",
+    "resourcesAndHintIds": "pass",
+    "doctor": "zero errors, existing hook shim warning",
+    "policyRouting": "pass",
+    "diffCheck": "pass",
+    "jsdoc": "FAIL: only pre-existing css-style-matchers.ts line17 and76 findings"
+  },
+  "coverage": {
+    "gate": 90,
+    "result": "FAIL: integration remains unfinished",
+    "statements": 30.53,
+    "branches": 47.61,
+    "functions": 86.66,
+    "lines": 28.37,
+    "explanation": "Actual CDocument/CNode owner graph is not connected. Registry and singleton cases do not execute event cloning/propagation. No fabricated positive node query, substitute factory, private state manipulation, ignored executable lines, or lower threshold was used."
+  },
+  "sourceQA": "Pinned C++ domtest.cxx and Java DOMTest have no direct dispatcher/feature-method cases. The Java actual-document getImplementation witness remains pending with the real document graph. No tree QA or complete filter/UI pass is claimed.",
+  "scopeRemaining": [
+    "Actual native CDocument/CNode owners and factory cache, DOM builder and document metadata service",
+    "Real tree propagation, capture/target/bubble order, cloning, cancellation, listener mutation, exception cleanup and 90% coverage",
+    "Complete native Writer DOCX and Calc XLSX import/export orchestration, shell routing and existing UI acceptance"
+  ],
+  "failuresAndResolutions": [
+    {
+      "failure": "Initial scoped ESLint rejected non-null assertions.",
+      "resolution": "Replaced with source-precondition and bounds-proven pointer casts; scoped lint passes."
+    },
+    {
+      "failure": "Initial documentation check found undocumented new callbacks.",
+      "resolution": "Added test callback documentation and replaced map-copy callback nesting with explicit ownership loops. Only two pre-existing unrelated findings remain."
+    },
+    {
+      "failure": "Coverage gate fails for the whole dispatcher.",
+      "resolution": "Unresolved integration work; recorded as rework, not a completed block or relaxed gate."
+    },
+    {
+      "failure": "One finding entry mistakenly said 52 related cases.",
+      "resolution": "Corrected via ap task findings; authoritative log reports 56."
+    }
+  ],
+  "logs": [
+    {
+      "path": "apps/office/coverage/dom-dispatch-tests.log",
+      "sha256": "de7cebb37a561b0d3f6e52e4f77b38b27659ec477860d1d324ba58f86a6b8b3e"
+    },
+    {
+      "path": "apps/office/coverage/dom-dispatch-tooling.log",
+      "sha256": "3e632094231a38913ba53cfe3cd271ddfea2b3e444ac57d55911ac8121d35ac9"
+    },
+    {
+      "path": "apps/office/coverage/dom-dispatch-resources.log",
+      "sha256": "3b6e20a722f231e1980e789306393c3cc52a1a113cf0900df6b6bf64e5617ad3"
+    },
+    {
+      "path": "apps/office/coverage/dom-dispatch-registry.log",
+      "sha256": "8d56e6db90eb892da8ca00e7221646ae97ff3f0fdeef4ec586a558e442a81e23"
+    },
+    {
+      "path": "apps/office/coverage/dom-dispatch-doctor.log",
+      "sha256": "b430a0939fa999ec1af70ad9e1b4e14590c5303a1f5ca2786924f21ea224e52e"
+    },
+    {
+      "path": "apps/office/coverage/dom-dispatch-lint-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

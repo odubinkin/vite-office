@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 187
+revision: 191
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T06:29:14.055Z"
+  updated_at: "2026-11-12T07:01:37.814Z"
   updated_by: "CODER"
-  note: "Native DOM event prerequisites and selected JS backend verified in real Chromium module Worker. Concrete UNO DOM/document metadata integration and full DOCX/XLSX import/export/UI remain outstanding. Evidence: evidence/native-dom-events-checkpoint.json. Continue active goal without pause."
-  attempts: 57
+  note: "Native DOM dispatcher and singleton WIP persisted with source provenance. 56 related DOM cases and 49 boundary cases pass; production build, typechecks and structural gates pass. Whole-dispatcher 90% coverage FAILS until actual CDocument/CNode integration. Two unrelated baseline JSDoc findings remain. Full DOCX/XLSX/UI objective is unfinished; continue real tree integration."
+  attempts: 58
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -920,8 +923,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-12T07:01:37.814Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native DOM dispatcher and singleton WIP persisted with source provenance. 56 related DOM cases and 49 boundary cases pass; production build, typechecks and structural gates pass. Whole-dispatcher 90% coverage FAILS until actual CDocument/CNode integration. Two unrelated baseline JSDoc findings remain. Full DOCX/XLSX/UI objective is unfinished; continue real tree integration."
+  -
+    type: "status"
+    at: "2026-11-12T07:01:46.002Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-12T06:29:26.803Z"
+doc_updated_at: "2026-11-12T07:01:46.002Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -2646,6 +2662,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T07:01:37.814Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native DOM dispatcher and singleton WIP persisted with source provenance. 56 related DOM cases and 49 boundary cases pass; production build, typechecks and structural gates pass. Whole-dispatcher 90% coverage FAILS until actual CDocument/CNode integration. Two unrelated baseline JSDoc findings remain. Full DOCX/XLSX/UI objective is unfinished; continue real tree integration.
+    Attempts: 58
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T07:01:02.046Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2934,6 +2980,14 @@ sections:
     - Observation: Command/result/evidence: native-dom-events-checkpoint.json records78 source blob proofs. Four actual native event components, Time and event/view SDK bindings pass21cases/3files with full17owner raw coverage S239/239 B37/37 F84/84 L237/237 at approved90 threshold. Related93cases/7files and49boundary cases/2files pass. Source-backed unoxml root admits only4 consumed CPPU/SDK/SAL edges and retains reverse/browser restrictions.
       Impact: Actual weak event owners and source query/inheritance/destruction contracts are ready for metadata DOM integration. CALC-524/525 and WRITER458/459 preserve native cancellation and ignored related-target behavior. The user approved network retrieval and explicitly prefers an existing JS library: exact @xmldom/xmldom0.9.12 is installed, replacing the need to port/download libxml2. Real Chromium module Worker without window/document/nativeDOMParser passes metadata preservation, namespace/Unicode edits, empty document, replacement/import ownership, serialization/reopen and malformed rejection. No full UNO DOM or DOCX/XLSX file/UI completion claim.
       Resolution: Final typecheck/build/static/scopedlint/format/dependencies/resources/size/tree/provenance/registry/invariants/parity/doctor/routing pass; only two old css-style-matchers JSDoc errors remain. Preserve the committed repeatable Worker probe and lockfile integrity. Initial getTypes count, actual compound-pointer typing, native default-only constructor lint and probe build/origin failures are corrected and documented; no fake targets/private hooks/dispatcher, gate weakening or heap changes. Continue active goal with actual native document/builder/backend integration.
+
+    - Observation: Native CEventDispatcher listener maps, snapshot ownership and propagation translation plus CDOMImplementation singleton are implemented. Seventeen focused cases and 49 boundary-tooling cases pass; related DOM coverage run passes 52 cases but fails the unchanged 90-percent coverage gate because real CDocument/CNode propagation is not connected. Existing global JSDoc baseline remains two css-style-matchers findings.
+      Impact: This is an unfinished integration checkpoint, not a verified dispatcher or complete DOCX/XLSX feature. No fake node factory, private test state or lowered coverage gate is used.
+      Resolution: Continue implementing actual native document/node owners, connect dispatcher and port real tree QA; then exercise propagation, cancellation, listener mutation and exception cleanup to meet the existing coverage gate. Typecheck, production static build, module boundaries, source provenance, registry and resources pass.
+
+    - Observation: Correction to the preceding checkpoint count: the authoritative related DOM run contains 56 passing cases in seven files, not 52. Its exit status is 1 solely because whole-dispatcher coverage remains below 90 percent.
+      Impact: Coverage remains explicitly failing; no integration completion is claimed.
+      Resolution: Use coverage/dom-dispatch-tests.log and the checkpoint evidence for the exact 56-case result and pending tree-propagation coverage.
 id_source: "generated"
 ---
 ## Summary
@@ -4668,6 +4722,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T07:01:37.814Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native DOM dispatcher and singleton WIP persisted with source provenance. 56 related DOM cases and 49 boundary cases pass; production build, typechecks and structural gates pass. Whole-dispatcher 90% coverage FAILS until actual CDocument/CNode integration. Two unrelated baseline JSDoc findings remain. Full DOCX/XLSX/UI objective is unfinished; continue real tree integration.
+Attempts: 58
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T07:01:02.046Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4960,3 +5044,11 @@ DecisionContextRef:
 - Observation: Command/result/evidence: native-dom-events-checkpoint.json records78 source blob proofs. Four actual native event components, Time and event/view SDK bindings pass21cases/3files with full17owner raw coverage S239/239 B37/37 F84/84 L237/237 at approved90 threshold. Related93cases/7files and49boundary cases/2files pass. Source-backed unoxml root admits only4 consumed CPPU/SDK/SAL edges and retains reverse/browser restrictions.
   Impact: Actual weak event owners and source query/inheritance/destruction contracts are ready for metadata DOM integration. CALC-524/525 and WRITER458/459 preserve native cancellation and ignored related-target behavior. The user approved network retrieval and explicitly prefers an existing JS library: exact @xmldom/xmldom0.9.12 is installed, replacing the need to port/download libxml2. Real Chromium module Worker without window/document/nativeDOMParser passes metadata preservation, namespace/Unicode edits, empty document, replacement/import ownership, serialization/reopen and malformed rejection. No full UNO DOM or DOCX/XLSX file/UI completion claim.
   Resolution: Final typecheck/build/static/scopedlint/format/dependencies/resources/size/tree/provenance/registry/invariants/parity/doctor/routing pass; only two old css-style-matchers JSDoc errors remain. Preserve the committed repeatable Worker probe and lockfile integrity. Initial getTypes count, actual compound-pointer typing, native default-only constructor lint and probe build/origin failures are corrected and documented; no fake targets/private hooks/dispatcher, gate weakening or heap changes. Continue active goal with actual native document/builder/backend integration.
+
+- Observation: Native CEventDispatcher listener maps, snapshot ownership and propagation translation plus CDOMImplementation singleton are implemented. Seventeen focused cases and 49 boundary-tooling cases pass; related DOM coverage run passes 52 cases but fails the unchanged 90-percent coverage gate because real CDocument/CNode propagation is not connected. Existing global JSDoc baseline remains two css-style-matchers findings.
+  Impact: This is an unfinished integration checkpoint, not a verified dispatcher or complete DOCX/XLSX feature. No fake node factory, private test state or lowered coverage gate is used.
+  Resolution: Continue implementing actual native document/node owners, connect dispatcher and port real tree QA; then exercise propagation, cancellation, listener mutation and exception cleanup to meet the existing coverage gate. Typecheck, production static build, module boundaries, source provenance, registry and resources pass.
+
+- Observation: Correction to the preceding checkpoint count: the authoritative related DOM run contains 56 passing cases in seven files, not 52. Its exit status is 1 solely because whole-dispatcher coverage remains below 90 percent.
+  Impact: Coverage remains explicitly failing; no integration completion is claimed.
+  Resolution: Use coverage/dom-dispatch-tests.log and the checkpoint evidence for the exact 56-case result and pending tree-propagation coverage.
