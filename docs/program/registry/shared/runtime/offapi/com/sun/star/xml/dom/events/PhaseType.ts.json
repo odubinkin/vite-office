@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/PhaseType.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-dom-events",
+    "capabilityIds": [
+      "CAP-63b22cd8-c479-4bd1-88a6-b34e7c7e733e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/xml/dom/events/PhaseType.ts",
+        "apps/office/src/unoxml/source/events/native-events.test.ts",
+        "apps/office/src/offapi/com/sun/star/util/Time.test.ts",
+        "apps/office/src/offapi/com/sun/star/xml/dom/events/native-event-contracts.test.ts",
+        "docs/program/native-xml-dom-events.md"
+      ],
+      "justification": "Original native DOM event components and SDK contracts use actual WeakImplHelper/ImplInheritanceHelper, Reference, OUString, Time, Any and shared type metadata. Source field defaults, base-first initialization, native argument widths, acquired result copies, query order and implicit owned-member destruction are preserved. Native zero timestamps, empty preventDefault, stored/public cancellation differences and ignored mouse related targets remain unchanged (CALC-524/525; WRITER458/459). Concrete event components are tested directly with actual acquired facets and weak references, not fabricated DOM nodes, views, targets, private state or dispatchers. Source C++ mutex/thread/reentrant behavior, actual tree/dispatcher integration, full ABI, metadata/model initialization and complete DOCX/XLSX filter/UI parity remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "PhaseType",
+        "cppu_detail_getUnoType_PhaseType"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "offapi/com/sun/star/xml/dom/events/PhaseType.idl",
+      "upstreamSymbols": [
+        "PhaseType",
+        "CAPTURING_PHASE",
+        "AT_TARGET",
+        "BUBBLING_PHASE"
+      ]
+    }
+  }
+}

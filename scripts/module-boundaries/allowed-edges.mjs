@@ -1,5 +1,7 @@
 /** @fileoverview Original source-backed runtime module edges, kept separate from the dependency scanner without changing their authority or contents. */
 export const allowedEdges = new Map([
+  // Native unoxml events use WeakImplHelper, UNO Reference, SDK event/Time declarations and SAL strings (Library_unoxml.mk).
+  ["unoxml", new Set(["cppu", "cppuhelper", "offapi", "sal"])],
   // Original comphelper extract.hxx and attributelist.hxx/cxx use UNO Any/TypeClass and OUString.
   // Original OFOPXMLHelper uses SAX; interfacecontainer3.hxx uses o3tl::cow_wrapper.
   // Original seqstream.hxx uses cppuhelper/implbase; Library_comphelper links cppuhelper.

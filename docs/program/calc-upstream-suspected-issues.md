@@ -5439,3 +5439,15 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `sc/source/core/data/global2.cxx`, `ScGlobal::ConvertStringToValue`, same pinned baseline.
 - The trailing-input/date/time/error block runs only when RTL conversion status is `Ok`. For `1e999`, the RTL result is positive infinity and the existing error output remains `NONE`; this function does not assign the requested string error. Formula execution separately applies its existing floating-point result checks.
 - Preserve this output/status gate and the distinct interpreter check. The local public API case exercises the actual RTL conversion and context; full compiled native wrapper parity remains unverified.
+
+### CALC-524 — Shared native DOM event cancellation has inconsistent public and stored flags
+
+- Sources: `unoxml/source/events/event.cxx`, `uievent.cxx`, and `eventdispatcher.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with Writer (WRITER458).
+- `CEvent::stopPropagation` writes cancellation only if the stored cancelable flag is true, while `preventDefault` is empty. `initEvent` changes only type, bubbles and cancelability, leaving the prior cancellation state untouched. `CUIEvent::getCancelable` always returns false even when its initializer stored true in the base; its source comment mentions mutation events although this is the UI-event class.
+- Preserve these separate bodies and the stored/public distinction. Public defaults and UI cancelability are covered on genuine components. Dispatcher-private cancellation and reinitialization effects remain source-only until actual node/tree dispatch is available; no private test hook or fake target is introduced.
+
+### CALC-525 — Shared native mouse events discard their related target
+
+- Source: `unoxml/source/events/mouseevent.cxx`, same pinned baseline; shared with Writer (WRITER459).
+- `initMouseEvent` ignores `relatedTargetArg` and `getRelatedTarget` always constructs an empty reference. Preserve this behavior instead of retaining the input as browser DOM implementations normally would.
+- Actual event tests cover the valid empty-target case. The nonempty target-discard path is source-only until a genuine native DOM target owner exists; no fabricated target is used to claim coverage.

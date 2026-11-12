@@ -3680,3 +3680,15 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 
 - Source: pinned `sw/inc/hintids.hxx`, RES_CHRATR_UNUSED3, and `sw/source/core/bastyp/init.cxx`, ItemInfoPackageSwAttributes, commit9bc445578031fecf56086729d8e4940c77e14d65.
 - The header declares RES_CHRATR_UNUSED3 as TypedWhichId<SfxInt16Item>, while the actual default table constructs SfxVoidItem for that identity. Preserve the table's concrete empty item rather than replacing it with a signed integer to match the declaration. The local complete character-default test checks the actual SfxVoidItem. No native typed retrieval, binary cast outcome or reachable document defect is inferred from this source mismatch.
+
+### WRITER458 — Shared native DOM event cancellation has inconsistent public and stored flags
+
+- Sources: `unoxml/source/events/event.cxx`, `uievent.cxx`, and `eventdispatcher.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with Calc (CALC-524).
+- `stopPropagation` only marks events with the stored cancelable flag, `preventDefault` is empty, and `initEvent` does not reset previous cancellation. The UI-event getter returns false unconditionally despite its initializer accepting and storing true in the base. The source comment refers to mutation events in this UI-event override.
+- Retain the source bodies and stored/public distinction. Genuine component tests cover public defaults and UI cancelability. Private dispatcher/tree effects are source-only until actual DOM nodes are available; do not introduce test-only state access or fake targets.
+
+### WRITER459 — Shared native mouse events discard their related target
+
+- Source: `unoxml/source/events/mouseevent.cxx`, same pinned baseline; shared with Calc (CALC-525).
+- The initializer ignores `relatedTargetArg`; the getter always returns an empty reference. Preserve the original behavior.
+- The valid empty-target case runs through an actual event owner. Nonempty-target discard remains a source-only observation until genuine native DOM targets are available.

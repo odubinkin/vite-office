@@ -48,6 +48,7 @@ const moduleNames = [
   "tools",
   "udkapi",
   "unotools",
+  "unoxml",
   "vcl",
   "xmloff",
   "xmlreader",
@@ -123,6 +124,7 @@ export function getRuntimeOwnershipLayer(relativePath) {
   if (portablePath.startsWith("editeng/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("svx/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("xmlreader/inc/")) return "upstream-mechanism";
+  if (portablePath.startsWith("unoxml/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("tools/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("formula/inc/")) return "upstream-mechanism";
   if (portablePath.startsWith("o3tl/inc/")) return "upstream-mechanism";

@@ -1,0 +1,173 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-63b22cd8-c479-4bd1-88a6-b34e7c7e733e",
+    "capabilityId": "CAP-63b22cd8-c479-4bd1-88a6-b34e7c7e733e",
+    "suite": "shared",
+    "subsystem": "native-dom-events",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original native DOM event components and SDK contracts use actual WeakImplHelper/ImplInheritanceHelper, Reference, OUString, Time, Any and shared type metadata. Source field defaults, base-first initialization, native argument widths, acquired result copies, query order and implicit owned-member destruction are preserved. Native zero timestamps, empty preventDefault, stored/public cancellation differences and ignored mouse related targets remain unchanged (CALC-524/525; WRITER458/459). Concrete event components are tested directly with actual acquired facets and weak references, not fabricated DOM nodes, views, targets, private state or dispatchers. Source C++ mutex/thread/reentrant behavior, actual tree/dispatcher integration, full ABI, metadata/model initialization and complete DOCX/XLSX filter/UI parity remain unverified."
+    ],
+    "capability": "Native DOM event component state and ownership",
+    "gaps": [
+      "Actual DOM node/dispatcher integration, native threading and metadata/filter/UI remain incomplete."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "unoxml/source/events/event.cxx",
+          "marker": "CEvent::initEvent"
+        },
+        {
+          "path": "unoxml/source/events/mutationevent.cxx",
+          "marker": "CMutationEvent::initMutationEvent"
+        },
+        {
+          "path": "unoxml/source/events/mouseevent.cxx",
+          "marker": "CMouseEvent::initMouseEvent"
+        }
+      ],
+      "tests": [
+        {
+          "path": "unoxml/qa/unit/domtest.cxx",
+          "marker": "testXDocumentBuilder"
+        },
+        {
+          "path": "cppu/qa/test_any.cxx",
+          "marker": "void Test::testStruct()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "offapi/com/sun/star/xml/dom/events/XEvent.idl",
+          "marker": "interface XEvent"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/XDocumentEvent.ts",
+          "marker": "XDocumentEvent"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/XEvent.ts",
+          "marker": "XEvent"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/XEventListener.ts",
+          "marker": "XEventListener"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/XEventTarget.ts",
+          "marker": "XEventTarget"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/XMouseEvent.ts",
+          "marker": "XMouseEvent"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/XMutationEvent.ts",
+          "marker": "XMutationEvent"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/XUIEvent.ts",
+          "marker": "XUIEvent"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/views/XAbstractView.ts",
+          "marker": "XAbstractView"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/views/XDocumentView.ts",
+          "marker": "XDocumentView"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/PhaseType.ts",
+          "marker": "PhaseType"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/AttrChangeType.ts",
+          "marker": "AttrChangeType"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/EventType.ts",
+          "marker": "EventType"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/util/Time.ts",
+          "marker": "Time"
+        },
+        {
+          "path": "apps/office/src/unoxml/inc/mutationevent.ts",
+          "marker": "CMutationEvent"
+        },
+        {
+          "path": "apps/office/src/unoxml/inc/mouseevent.ts",
+          "marker": "CMouseEvent"
+        },
+        {
+          "path": "apps/office/src/unoxml/inc/uievent.ts",
+          "marker": "CUIEvent"
+        },
+        {
+          "path": "apps/office/src/unoxml/inc/event.ts",
+          "marker": "CEvent"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/events/mutationevent.ts",
+          "marker": "CMutationEvent"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/events/mouseevent.ts",
+          "marker": "CMouseEvent"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/events/uievent.ts",
+          "marker": "CUIEvent"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/events/event.ts",
+          "marker": "CEvent"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/unoxml/source/events/native-events.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/util/Time.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/native-event-contracts.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-xml-dom-events.md",
+          "marker": "# Native DOM event owners"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original native DOM event components and SDK contracts use actual WeakImplHelper/ImplInheritanceHelper, Reference, OUString, Time, Any and shared type metadata. Source field defaults, base-first initialization, native argument widths, acquired result copies, query order and implicit owned-member destruction are preserved. Native zero timestamps, empty preventDefault, stored/public cancellation differences and ignored mouse related targets remain unchanged (CALC-524/525; WRITER458/459). Concrete event components are tested directly with actual acquired facets and weak references, not fabricated DOM nodes, views, targets, private state or dispatchers. Source C++ mutex/thread/reentrant behavior, actual tree/dispatcher integration, full ABI, metadata/model initialization and complete DOCX/XLSX filter/UI parity remain unverified."
+    },
+    "scopeLimitations": [
+      "Original native DOM event components and SDK contracts use actual WeakImplHelper/ImplInheritanceHelper, Reference, OUString, Time, Any and shared type metadata. Source field defaults, base-first initialization, native argument widths, acquired result copies, query order and implicit owned-member destruction are preserved. Native zero timestamps, empty preventDefault, stored/public cancellation differences and ignored mouse related targets remain unchanged (CALC-524/525; WRITER458/459). Concrete event components are tested directly with actual acquired facets and weak references, not fabricated DOM nodes, views, targets, private state or dispatchers. Source C++ mutex/thread/reentrant behavior, actual tree/dispatcher integration, full ABI, metadata/model initialization and complete DOCX/XLSX filter/UI parity remain unverified."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-dom-event-components"
+  }
+}

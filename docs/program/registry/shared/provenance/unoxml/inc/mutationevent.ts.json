@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/unoxml/inc/mutationevent.ts",
+    "status": "mapped",
+    "upstreamPath": "unoxml/inc/mutationevent.hxx",
+    "localSymbols": [
+      "CMutationEvent"
+    ],
+    "upstreamSymbols": [
+      "CMutationEvent",
+      "initEvent"
+    ],
+    "preservedResponsibilities": [
+      "Original native DOM event components and SDK contracts use actual WeakImplHelper/ImplInheritanceHelper, Reference, OUString, Time, Any and shared type metadata. Source field defaults, base-first initialization, native argument widths, acquired result copies, query order and implicit owned-member destruction are preserved. Native zero timestamps, empty preventDefault, stored/public cancellation differences and ignored mouse related targets remain unchanged (CALC-524/525; WRITER458/459). Concrete event components are tested directly with actual acquired facets and weak references, not fabricated DOM nodes, views, targets, private state or dispatchers. Source C++ mutex/thread/reentrant behavior, actual tree/dispatcher integration, full ABI, metadata/model initialization and complete DOCX/XLSX filter/UI parity remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Native thread locks, actual DOM tree/dispatcher integration and full metadata/model/filter/UI acceptance remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/unoxml/inc/mutationevent.ts",
+          "marker": "mutationevent"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/events/native-events.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/unoxml/inc/mutationevent.hxx",
+          "marker": "CMutationEvent"
+        },
+        {
+          "path": "vendor/libreoffice-reference/unoxml/inc/mutationevent.hxx",
+          "marker": "initEvent"
+        }
+      ]
+    }
+  }
+}
