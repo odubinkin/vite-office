@@ -1,0 +1,224 @@
+{
+  "taskId": "202610251549-J0Z0KF",
+  "checkpoint": "Native workbook sheet-name lookup, table uppercase ownership and load-only import rename",
+  "sourceBaseline": {
+    "tag": "libreoffice-26.8.0.2",
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65"
+  },
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/sc/source/core/data/document.cell-input.ts",
+      "gitBlob": "22147d2465881567b8ca8524e75a68e11931a638"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.sheet-names.test.ts",
+      "gitBlob": "a25c210257534f9f559b92b69afdce7282592972"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.sheet-names.ts",
+      "gitBlob": "f27655e0ad5a91395bd79e43777e56b58dffd4a1"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.ts",
+      "gitBlob": "04c94fe508ae1b11f011213f24e50c13fc323488"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document10.ts",
+      "gitBlob": "830bf2621dc171a6279feeb9886bad37d728cbe5"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documentimport.ts",
+      "gitBlob": "a4a14e5819ef310ea32444b6a2ac5c17c90d49c8"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/table.ts",
+      "gitBlob": "c6ede1ef21c53c99cdc5999edd31b2796ef29d71"
+    },
+    {
+      "path": "docs/program/calc-native-sheet-names.md",
+      "gitBlob": "adbfac6ceef5c5722293f116089b01cd5059f460"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/document.cell-input.ts.json",
+      "gitBlob": "4ffee6db87466381e73bf850967f16d63661188d"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/document.sheet-names.ts.json",
+      "gitBlob": "d262a2f4a6562caded0f8fa4c13672f730fc23b3"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json",
+      "gitBlob": "80210fb575fa547baf87ccd157821221e6689923"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/document10.ts.json",
+      "gitBlob": "9b48f3ea0d6f645ea86a7fa2d09ec7baf8f2ae48"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/documentimport.ts.json",
+      "gitBlob": "5339ca8857842b5436e622afff8b0f0beb8a4ce7"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json",
+      "gitBlob": "9d958154a839fed01893254bada4e05cccb892e0"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/document.cell-input.ts.json",
+      "gitBlob": "e5c8d0c1602ae9cdacb0d383359831f4141fd5db"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/document.sheet-names.ts.json",
+      "gitBlob": "cf7190834e3e27cf82d10066dd6aab760f4a602c"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json",
+      "gitBlob": "b44f61af6c3ebf20aa7d18c663a02fce07ae2791"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/document10.ts.json",
+      "gitBlob": "938457f9005b2225caded2500a0d2cfda897f5dc"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/documentimport.ts.json",
+      "gitBlob": "5722a282fc811f927e5ffe66dddf31659527ab45"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json",
+      "gitBlob": "6defb958bf0f3140d3389e3618ae2fd0dc67de69"
+    }
+  ],
+  "verification": [
+    {
+      "command": "cd apps/office && npx vitest run --config vite.config.ts src/sc/source/core/data --coverage --coverage.include=src/sc/source/core/data/document.sheet-names.ts --coverage.include=src/sc/source/core/data/document.cell-input.ts --coverage.reportsDirectory=coverage/xlsx-workbook --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "446 cases,95 files; aggregate S96.96 B90.90 F100 L98.21; no coverage exclusions or synthetic service providers.",
+      "log": "apps/office/coverage/xlsx-workbook-coverage.log"
+    },
+    {
+      "command": "cd apps/office && npx vitest run --config vite.config.ts src/sc/source/core/data/document.sheet-names.test.ts src/sc/source/filter/xml/ods.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.csv-encoding.test.ts",
+      "result": "pass",
+      "evidence": "111 cases,5 files; includes final scoped naming tests.",
+      "log": "apps/office/coverage/xlsx-workbook-regressions.log"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" npx playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/ods.spec.ts apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/sheet-context-menu.spec.ts",
+      "result": "pass",
+      "evidence": "4 Chromium cases: existing ODS page/worker,CSV file UI,desktop/mobile sheet context menu; no XLSX UI claim.",
+      "log": "apps/office/coverage/xlsx-workbook-browser.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "result": "pass",
+      "evidence": "Tools and office.",
+      "log": "apps/office/coverage/xlsx-workbook-typecheck-final.log"
+    },
+    {
+      "command": "npm run test:static",
+      "result": "pass",
+      "evidence": "Production build and static smoke.",
+      "log": "apps/office/coverage/xlsx-workbook-static.log"
+    },
+    {
+      "command": "npx eslint apps/office/src/sc/source/core/data/{document,document10,documentimport,table,document.sheet-names,document.cell-input,document.sheet-names.test}.ts --max-warnings 0",
+      "result": "pass",
+      "evidence": "All scoped source/test files.",
+      "log": "apps/office/coverage/xlsx-workbook-eslint-final.log"
+    },
+    {
+      "command": "npx prettier --check apps/office/src/sc/source/core/data/document.cell-input.ts apps/office/src/sc/source/core/data/document.sheet-names.test.ts apps/office/src/sc/source/core/data/document.sheet-names.ts apps/office/src/sc/source/core/data/document.ts apps/office/src/sc/source/core/data/document10.ts apps/office/src/sc/source/core/data/documentimport.ts apps/office/src/sc/source/core/data/table.ts docs/program/calc-native-sheet-names.md docs/program/registry/calc/provenance/sc/source/core/data/document.cell-input.ts.json docs/program/registry/calc/provenance/sc/source/core/data/document.sheet-names.ts.json docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json docs/program/registry/calc/provenance/sc/source/core/data/document10.ts.json docs/program/registry/calc/provenance/sc/source/core/data/documentimport.ts.json docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json docs/program/registry/calc/runtime/sc/source/core/data/document.cell-input.ts.json docs/program/registry/calc/runtime/sc/source/core/data/document.sheet-names.ts.json docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json docs/program/registry/calc/runtime/sc/source/core/data/document10.ts.json docs/program/registry/calc/runtime/sc/source/core/data/documentimport.ts.json docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json",
+      "result": "pass",
+      "evidence": "Exact path inventory stored in sourceBlobs.",
+      "log": "apps/office/coverage/xlsx-workbook-prettier.log"
+    },
+    {
+      "command": "npm run check:dependencies && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance",
+      "result": "pass",
+      "evidence": "Boundaries,size,tree,provenance; root document991lines/table959.",
+      "log": "apps/office/coverage/xlsx-workbook-structure.log"
+    },
+    {
+      "command": "npm run check:writer-resources && npm run check:calc-resources && npm run check:writer-hintids",
+      "result": "pass",
+      "evidence": "Resource tests2cases; calc464commands; source hint IDs.",
+      "log": "apps/office/coverage/xlsx-workbook-resources.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail-existing-baseline",
+      "evidence": "Only css-style-matchers.ts17 missingJSDoc and76 parameter count.",
+      "log": "apps/office/coverage/xlsx-workbook-docs.log"
+    },
+    {
+      "command": "npm run inventory:registry:build",
+      "result": "pass",
+      "evidence": "Completed before final registry validation.",
+      "log": "apps/office/coverage/xlsx-workbook-registry-build-final.log"
+    },
+    {
+      "command": "npm run inventory:invariants && npm run inventory:parity",
+      "result": "pass",
+      "evidence": "Zero semantic violations.",
+      "log": "apps/office/coverage/xlsx-workbook-parity-final.log"
+    },
+    {
+      "command": "ap doctor && node .agentplane/policy/check-routing.mjs && git diff --check",
+      "result": "pass",
+      "evidence": "Doctor0errors existing shim warning; routing/diff clean.",
+      "log": "apps/office/coverage/xlsx-workbook-doctor.log"
+    }
+  ],
+  "coverage": {
+    "scope": [
+      "document.sheet-names.ts",
+      "document.cell-input.ts"
+    ],
+    "wholeFiles": true,
+    "summary": {
+      "lines": {
+        "total": 56,
+        "covered": 55,
+        "skipped": 0,
+        "pct": 98.21
+      },
+      "statements": {
+        "total": 66,
+        "covered": 64,
+        "skipped": 0,
+        "pct": 96.96
+      },
+      "functions": {
+        "total": 6,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 44,
+        "covered": 40,
+        "skipped": 0,
+        "pct": 90.9
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "thresholds": 90,
+    "rawMapSha256": "dd8f40c196c6b3972ad4886bf6fd148da684d1f592a9e0ead4d93b6c2cf0ac17"
+  },
+  "nativeQA": "Focused sc/qa C++ search of GetTable(,ValidTabName,GetUpperName,SetTabNameOnLoad returned zero references. New local cases exercise actual owners. No native binary or compiled differential execution claimed.",
+  "limitations": [
+    "Complete XLSX WorkbookGlobals/helper/settings/worksheet graph and model document properties remain outstanding.",
+    "Complete DOCX/XLSX import/export and existing UI acceptance remain incomplete; goal and epic remain active.",
+    "Global JSDoc check retains two pre-existing css-style-matchers.ts errors; no scoped source errors.",
+    "Coverage covers two entire new responsibility fragments; existing owner wrappers are regression-tested, not claimed as new whole-module parity."
+  ],
+  "failuresResolved": [
+    "Initial duplicate ScGlobal import removed, existing native global import reused.",
+    "Test assumed STRASSE uppercase; actual core classification yields STRA\u1e9eE. Test corrected without changing classifier.",
+    "Scoped ESLint test non-null assertion and redundant initialization corrected; final 17 cases rerun within 111-case regressions.",
+    "Registry detected old document10 ValidNewTabName symbol after extraction; canonical local-symbol records updated and registry rebuilt, invariants/parity now pass."
+  ]
+}
