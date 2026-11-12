@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 178
+revision: 181
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T05:14:19.530Z"
+  updated_at: "2026-11-12T05:28:53.813Z"
   updated_by: "CODER"
-  note: "Native sheet-name prerequisite verified with focused kernel/regression/browser evidence; full XLSX workbook import/export and UI acceptance remain outstanding. Evidence: evidence/calc-sheet-names-checkpoint.json. Goal remains active; continue without pause."
-  attempts: 54
+  note: "Native calculation policy prerequisite verified with original QA matrix and final-source focused evidence; full XLSX import/export/UI and DOCX objective remain outstanding. Evidence: evidence/calc-calculation-policy-checkpoint.json. Continue active goal without pause."
+  attempts: 55
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -872,8 +875,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-12T05:28:53.813Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native calculation policy prerequisite verified with original QA matrix and final-source focused evidence; full XLSX import/export/UI and DOCX objective remain outstanding. Evidence: evidence/calc-calculation-policy-checkpoint.json. Continue active goal without pause."
+  -
+    type: "status"
+    at: "2026-11-12T05:29:05.571Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-12T05:14:28.047Z"
+doc_updated_at: "2026-11-12T05:29:05.571Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -2508,6 +2524,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T05:28:53.813Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native calculation policy prerequisite verified with original QA matrix and final-source focused evidence; full XLSX import/export/UI and DOCX objective remain outstanding. Evidence: evidence/calc-calculation-policy-checkpoint.json. Continue active goal without pause.
+    Attempts: 55
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T05:28:53.347Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2784,6 +2830,10 @@ sections:
     - Observation: Command/result/evidence: calc-sheet-names-checkpoint.json records native naming owner changes and 20 exact source blob proofs; 446 core cases/95 files and 111 final regression cases/5 files pass, with 17 overlapping naming cases. Four existing Chromium ODS/CSV and desktop/mobile sheet-menu cases pass. New entire responsibility fragments reach S96.96 B90.90 F100 L98.21 at approved90 threshold.
       Impact: Actual importer now resolves and renames workbook sheets using native document/table owners, uppercase caches and load-only policy. Existing global JSDoc baseline remains two css-style-matchers errors. Full XLSX workbook graph and DOCX/XLSX file/UI acceptance remain incomplete; no epic completion claim.
       Resolution: Retained native counted UTF16, global classification, signed sheet output/defaults, sparse owned names and editing/load distinction. Corrected duplicate import, incorrect Unicode test expectation, scoped test lint and moved-symbol registry evidence. Final typecheck/build/static/lint/format/boundaries/resources/size/tree/provenance/invariants/parity/doctor/routing pass. Continue active approved goal without pausing.
+
+    - Observation: Command/result/evidence: calc-calculation-policy-checkpoint.json records34 exact source blob proofs. 867 related core cases/148 files pass; final-owner recheck75 cases/3 files replaces the superseded global2 coverage map. Standard raw Istanbul merge of4whole actual owners passes90 with S98.37/B99.09/F97.95/L98.97. Actual ODS/CSV/worker regressions98 cases/6files and2 existing Chromium file flows pass.
+      Impact: ScDocument and actual ScInterpreter now own/copy/merge original ScCalcConfig. Native global string coercion uses existing RTL, tools dates and the real formatter context; literals/shared-string references/string formula results now evaluate under source policy. Original ucalc testFuncParam conversion matrix is ported. CALC-522/523 preserve suspicious source fraction/overflow logic. Complete WorkbookGlobals/model metadata, DOCX/XLSX filters and UI acceptance remain incomplete.
+      Resolution: Source implementation and unchanged line-style extraction satisfy typecheck/build/static/scopedlint/format/boundaries/resources/size/tree/provenance/registry/invariants/parity/doctor/routing. Only two old css-style-matchers JSDoc errors remain. Initial test assumptions, TS flow narrowing and partial final coverage-profile omissions are recorded with corrections and raw evidence. Keep epic and goal active and continue without pausing.
 id_source: "generated"
 ---
 ## Summary
@@ -4428,6 +4478,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T05:28:53.813Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native calculation policy prerequisite verified with original QA matrix and final-source focused evidence; full XLSX import/export/UI and DOCX objective remain outstanding. Evidence: evidence/calc-calculation-policy-checkpoint.json. Continue active goal without pause.
+Attempts: 55
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T05:28:53.347Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4708,3 +4788,7 @@ DecisionContextRef:
 - Observation: Command/result/evidence: calc-sheet-names-checkpoint.json records native naming owner changes and 20 exact source blob proofs; 446 core cases/95 files and 111 final regression cases/5 files pass, with 17 overlapping naming cases. Four existing Chromium ODS/CSV and desktop/mobile sheet-menu cases pass. New entire responsibility fragments reach S96.96 B90.90 F100 L98.21 at approved90 threshold.
   Impact: Actual importer now resolves and renames workbook sheets using native document/table owners, uppercase caches and load-only policy. Existing global JSDoc baseline remains two css-style-matchers errors. Full XLSX workbook graph and DOCX/XLSX file/UI acceptance remain incomplete; no epic completion claim.
   Resolution: Retained native counted UTF16, global classification, signed sheet output/defaults, sparse owned names and editing/load distinction. Corrected duplicate import, incorrect Unicode test expectation, scoped test lint and moved-symbol registry evidence. Final typecheck/build/static/lint/format/boundaries/resources/size/tree/provenance/invariants/parity/doctor/routing pass. Continue active approved goal without pausing.
+
+- Observation: Command/result/evidence: calc-calculation-policy-checkpoint.json records34 exact source blob proofs. 867 related core cases/148 files pass; final-owner recheck75 cases/3 files replaces the superseded global2 coverage map. Standard raw Istanbul merge of4whole actual owners passes90 with S98.37/B99.09/F97.95/L98.97. Actual ODS/CSV/worker regressions98 cases/6files and2 existing Chromium file flows pass.
+  Impact: ScDocument and actual ScInterpreter now own/copy/merge original ScCalcConfig. Native global string coercion uses existing RTL, tools dates and the real formatter context; literals/shared-string references/string formula results now evaluate under source policy. Original ucalc testFuncParam conversion matrix is ported. CALC-522/523 preserve suspicious source fraction/overflow logic. Complete WorkbookGlobals/model metadata, DOCX/XLSX filters and UI acceptance remain incomplete.
+  Resolution: Source implementation and unchanged line-style extraction satisfy typecheck/build/static/scopedlint/format/boundaries/resources/size/tree/provenance/registry/invariants/parity/doctor/routing. Only two old css-style-matchers JSDoc errors remain. Initial test assumptions, TS flow narrowing and partial final coverage-profile omissions are recorded with corrections and raw evidence. Keep epic and goal active and continue without pausing.

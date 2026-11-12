@@ -1,0 +1,299 @@
+{
+  "taskId": "202610251549-J0Z0KF",
+  "checkpoint": "Native workbook calculation settings and string coercion on actual document/interpreter owners",
+  "sourceBaseline": {
+    "tag": "libreoffice-26.8.0.2",
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65"
+  },
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/sc/source/core/data/documen2.ts",
+      "gitBlob": "78095e8a98fc334ccab87e7c64e095f0e5f05c5e"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.frame.ts",
+      "gitBlob": "8a3af7d3132efe9990d36ae250d511606ae66aee"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.references.test.ts",
+      "gitBlob": "d59a5b4e0c98669061d804e11fc9abd53540547b"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.ts",
+      "gitBlob": "3f6aecbb647b592238af257a5702fe0ded33f99e"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/formulacell.ts",
+      "gitBlob": "e7682c1d89edb40bbfa5e48fe2551af6159b7a1e"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/global.ts",
+      "gitBlob": "f26c26fca4233e9fac45fb3428e86c6685ac7432"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/global2.test.ts",
+      "gitBlob": "109a0250d1b42049a423c82cfe5d3db3c93e009c"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/global2.ts",
+      "gitBlob": "62d0fbce9f9ea527a1d5f25451e9bd6c9f6fd308"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/reference-protocol.test.ts",
+      "gitBlob": "29c1fc43b3803d36130ffc77d269d18632757020"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/calcconfig-document.test.ts",
+      "gitBlob": "8d82bb20cb1b19caee973e287d4c31cdbf22b66d"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/calcconfig.ts",
+      "gitBlob": "40b6f1da33f5d8941c6237392b04ddcde9fc237d"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/interpr4.ts",
+      "gitBlob": "f450eafe011b438237b7975d57cb690f6f354e2e"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/interpretercontext.ts",
+      "gitBlob": "b48a64e05d87ac69ba87041f3c4993a3c48dfa09"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/numeric-formula.test.ts",
+      "gitBlob": "c0de5f4895e5d5d4b82fd0fc7bc1cde855c1e89d"
+    },
+    {
+      "path": "docs/program/calc-native-calculation-policy.md",
+      "gitBlob": "a45c180ccea5df5b8156a5e0d2687dbfa11ffdf2"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "5e3941077873da839ddb26b7e9e80a1acc4b0c0a"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/documen2.ts.json",
+      "gitBlob": "b333da72f036da8afc96a5074f1fbcd85b1e74f0"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/document.frame.ts.json",
+      "gitBlob": "892a13caa5d73d608115262ae02ddc04721175a2"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json",
+      "gitBlob": "d8e89388d913c50e7a1440a42a5e025254f4b60b"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/formulacell.ts.json",
+      "gitBlob": "9af5d8358811bd58cd8f79081e940ab0c306b56f"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/global.ts.json",
+      "gitBlob": "6dee0ab22062752c2c110c6215f1510c70ddd39f"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/global2.ts.json",
+      "gitBlob": "e5213e535a87793b73f8858bd28564af5abe2af7"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/tool/calcconfig.ts.json",
+      "gitBlob": "e7fffe75be1d1e52863dac0bb92ba72a7ebcb676"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/tool/interpr4.ts.json",
+      "gitBlob": "b090b668b8cc38885a31a63a8a3962ae68e899a4"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/tool/interpretercontext.ts.json",
+      "gitBlob": "6ddeae1f024dacad45d0cb831b4ceb2a2154492a"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/documen2.ts.json",
+      "gitBlob": "f75dc39432aae4e1c8f3132bc85aa79823c8e4ae"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/document.frame.ts.json",
+      "gitBlob": "a43549d257376b7a88c5781cbecfd865ff9d7bee"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json",
+      "gitBlob": "e7b361fbaa6fe3674fa6932074f6b3a6c556f05d"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/formulacell.ts.json",
+      "gitBlob": "33ffd47415cf7385fa06b5c4f5c2898146ee405b"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/global.ts.json",
+      "gitBlob": "fe31bb9d59aee158f6e4d8226eec807e365ff4e2"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/global2.ts.json",
+      "gitBlob": "77c96fd5d7b88918f28ecc27192df5677dae460c"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/tool/calcconfig.ts.json",
+      "gitBlob": "b01af4ab646e17711883aa973926178d4161c3b6"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/tool/interpr4.ts.json",
+      "gitBlob": "71aa4c4d98bb72799d72daa9e7399f29f94752a0"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/tool/interpretercontext.ts.json",
+      "gitBlob": "9e89af1fb26b658d535bcc57ba168d1115998b51"
+    }
+  ],
+  "coverage": {
+    "method": "Standard Istanbul merge; replace superseded global2 file with final-source complete owner run, retain unchanged interpreter/context source maps and merge identical calcconfig maps. No counter/location/map edits or exclusions within files.",
+    "files": [
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/core/tool/calcconfig.ts",
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/core/tool/interpr4.ts",
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/core/tool/interpretercontext.ts",
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/core/data/global2.ts"
+    ],
+    "summary": {
+      "lines": {
+        "total": 392,
+        "covered": 388,
+        "skipped": 0,
+        "pct": 98.97
+      },
+      "statements": {
+        "total": 432,
+        "covered": 425,
+        "skipped": 0,
+        "pct": 98.37
+      },
+      "functions": {
+        "total": 49,
+        "covered": 48,
+        "skipped": 0,
+        "pct": 97.95
+      },
+      "branches": {
+        "total": 331,
+        "covered": 328,
+        "skipped": 0,
+        "pct": 99.09
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "inputs": [
+      {
+        "path": "apps/office/coverage/xlsx-config/coverage-final.json",
+        "sha256": "9a57aaba08469a1833ba8d513299b254b1492e251e5f501a46f6b80dc21c0b8c"
+      },
+      {
+        "path": "apps/office/coverage/xlsx-config-final-owners-complete/coverage-final.json",
+        "sha256": "eecb084c0ee8824e5b9c77fbd1efebb170db5736c0a2c894b2f6b8f8c4089274"
+      }
+    ],
+    "mergedMapSha256": "7e421913b1f9f9daeed936ce8e92312ad6600be3a3f2f40c09af20b93459d1ef"
+  },
+  "nativeQA": {
+    "ported": "sc/qa/unit/ucalc.cxx::testFuncParam original five-string/six-policy conversion matrix, asserted through actual compiled formula cells. Existing aggregate tests cover numeric/missing arguments.",
+    "notClaimed": "No native C++ binary execution, complete ucalc fixture port or compiled wrapper differential is claimed. The existing native-calc-config-cases fixture is exercised unchanged, not regenerated."
+  },
+  "sourceIssues": [
+    "CALC-522 preserves integer-based fractional-second scaling.",
+    "CALC-523 preserves the conversion-status gate and overflow output."
+  ],
+  "limitations": [
+    "ScEditUtil::GetString rich-edit extraction still rejects explicitly; other interpreter opcode and formatter/thread services remain incomplete.",
+    "Global/document getters currently follow existing typed value-owner binding; physical C++ ABI and full const/lifetime parity remain unverified.",
+    "Complete WorkbookGlobals/model metadata/property services, full XLSX/DOCX filter import/export and mounted UI acceptance remain outstanding; goal and epic stay active.",
+    "Global docs gate retains only two existing css-style-matchers.ts JSDoc failures."
+  ],
+  "failuresResolved": [
+    "Initial TS narrowing after resetting nGlobalError rejected the CellNoValue comparison; use the actual public GetError query without changing native error order.",
+    "Initial new direct conversion tests assumed trailing ASCII space accepted after a date and preexisting error retained through incomplete date state. Native state machine rejects the trailing date separator and overwrites the incomplete-unit error; assertions corrected to source.",
+    "Old tests expected unimplemented locale exceptions; actual formatter paths now yield native numeric3 or FormulaError.NoValue.",
+    "Opening fileoverview was displaced by an import during unchanged selection-style extraction; restored to first line.",
+    "Final helper review found existing RTL isAsciiDigit; removed duplicate predicate and revalidated affected whole owners. Initial final-owner profile omitted LOCALE-consuming test file and failed90 S87.91/B88.96; complete profile adds the actual8 consumer cases and passes S97.25/B98.70/F100/L98.75. Raw failing profile retained."
+  ],
+  "verification": [
+    {
+      "command": "cd apps/office && npx vitest run --config vite.config.ts src/sc/source/core/data src/sc/source/core/tool --coverage --coverage.include=src/sc/source/core/data/global2.ts --coverage.include=src/sc/source/core/tool/interpr4.ts --coverage.include=src/sc/source/core/tool/calcconfig.ts --coverage.include=src/sc/source/core/tool/interpretercontext.ts --coverage.reportsDirectory=coverage/xlsx-config --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "867 cases/148 related files before replacing local digit helper with existing RTL; unchanged interpreter/context/config maps retained.",
+      "log": "apps/office/coverage/xlsx-config-coverage.log"
+    },
+    {
+      "command": "cd apps/office && npx vitest run --config vite.config.ts src/sc/source/core/data/global2.test.ts src/sc/source/core/tool/calcconfig.test.ts src/sc/source/core/tool/calcconfig-document.test.ts --coverage --coverage.include=src/sc/source/core/data/global2.ts --coverage.include=src/sc/source/core/tool/calcconfig.ts --coverage.reportsDirectory=coverage/xlsx-config-final-owners-complete --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "75 cases/3 files on final owner source. Final four whole-owner standard Istanbul merge S98.37/B99.09/F97.95/L98.97. No map edits, synthetic providers or private state.",
+      "log": "apps/office/coverage/xlsx-config-final-owners-complete.log"
+    },
+    {
+      "command": "cd apps/office && npx vitest run --config vite.config.ts src/sc/source/filter/xml/ods.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.csv-encoding.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sc/browser/workflows/calc-aggregate-ods.test.ts",
+      "result": "pass",
+      "evidence": "98 cases/6 files; actual ODS/CSV/formula/worker regressions.",
+      "log": "apps/office/coverage/xlsx-config-regressions.log"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" npx playwright test --config apps/office/playwright.config.ts --project=calc apps/office/e2e/calc/ods.spec.ts apps/office/e2e/calc/csv.spec.ts",
+      "result": "pass",
+      "evidence": "2 Chromium existing file flows; ODS same actual page/Worker kernel and CSV Open/primaryODS save/export. Not XLSX UI acceptance.",
+      "log": "apps/office/coverage/xlsx-config-browser.log"
+    },
+    {
+      "command": "npm run typecheck && npm run test:static",
+      "result": "pass",
+      "evidence": "Final-source tools/office typecheck, production build and static smoke.",
+      "log": "apps/office/coverage/xlsx-config-final-build.log"
+    },
+    {
+      "command": "npx eslint apps/office/src/sc/source/core/data/{document,document.frame,documen2,global,global2,global2.test,formulacell,document.references.test,reference-protocol.test}.ts apps/office/src/sc/source/core/tool/{calcconfig,interpr4,interpretercontext,numeric-formula.test,calcconfig-document.test}.ts --max-warnings 0",
+      "result": "pass",
+      "evidence": "All scoped source/test files; final two edited files also rechecked.",
+      "log": "apps/office/coverage/xlsx-config-lint-final.log"
+    },
+    {
+      "command": "npx prettier --check apps/office/src/sc/source/core/data/documen2.ts apps/office/src/sc/source/core/data/document.frame.ts apps/office/src/sc/source/core/data/document.references.test.ts apps/office/src/sc/source/core/data/document.ts apps/office/src/sc/source/core/data/formulacell.ts apps/office/src/sc/source/core/data/global.ts apps/office/src/sc/source/core/data/global2.test.ts apps/office/src/sc/source/core/data/global2.ts apps/office/src/sc/source/core/data/reference-protocol.test.ts apps/office/src/sc/source/core/tool/calcconfig-document.test.ts apps/office/src/sc/source/core/tool/calcconfig.ts apps/office/src/sc/source/core/tool/interpr4.ts apps/office/src/sc/source/core/tool/interpretercontext.ts apps/office/src/sc/source/core/tool/numeric-formula.test.ts docs/program/calc-native-calculation-policy.md docs/program/calc-upstream-suspected-issues.md docs/program/registry/calc/provenance/sc/source/core/data/documen2.ts.json docs/program/registry/calc/provenance/sc/source/core/data/document.frame.ts.json docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json docs/program/registry/calc/provenance/sc/source/core/data/formulacell.ts.json docs/program/registry/calc/provenance/sc/source/core/data/global.ts.json docs/program/registry/calc/provenance/sc/source/core/data/global2.ts.json docs/program/registry/calc/provenance/sc/source/core/tool/calcconfig.ts.json docs/program/registry/calc/provenance/sc/source/core/tool/interpr4.ts.json docs/program/registry/calc/provenance/sc/source/core/tool/interpretercontext.ts.json docs/program/registry/calc/runtime/sc/source/core/data/documen2.ts.json docs/program/registry/calc/runtime/sc/source/core/data/document.frame.ts.json docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json docs/program/registry/calc/runtime/sc/source/core/data/formulacell.ts.json docs/program/registry/calc/runtime/sc/source/core/data/global.ts.json docs/program/registry/calc/runtime/sc/source/core/data/global2.ts.json docs/program/registry/calc/runtime/sc/source/core/tool/calcconfig.ts.json docs/program/registry/calc/runtime/sc/source/core/tool/interpr4.ts.json docs/program/registry/calc/runtime/sc/source/core/tool/interpretercontext.ts.json",
+      "result": "pass",
+      "evidence": "All intentional source/docs/registry changes.",
+      "log": "apps/office/coverage/xlsx-config-prettier.log"
+    },
+    {
+      "command": "npm run check:dependencies && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance",
+      "result": "pass",
+      "evidence": "Boundaries,size<1000,source tree and provenance; dependency/provenance rechecked after final helper reuse.",
+      "log": "apps/office/coverage/xlsx-config-structure-final.log"
+    },
+    {
+      "command": "npm run check:writer-resources && npm run check:calc-resources && npm run check:writer-hintids",
+      "result": "pass",
+      "evidence": "Original resources and hint IDs;2 writer resource cases.",
+      "log": "apps/office/coverage/xlsx-config-resources-final.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail-existing-baseline",
+      "evidence": "Final JSDoc has only css-style-matchers.ts17 missing JSDoc and76 parameter count; all scoped source docs pass.",
+      "log": "apps/office/coverage/xlsx-config-final-docs-lint.log"
+    },
+    {
+      "command": "npm run check:dependencies && npm run check:source-provenance && npm run inventory:registry:build",
+      "result": "pass",
+      "evidence": "Final source registry built before current invariant/parity checks.",
+      "log": "apps/office/coverage/xlsx-config-final-structure.log"
+    },
+    {
+      "command": "npm run inventory:invariants && npm run inventory:parity",
+      "result": "pass",
+      "evidence": "Zero semantic violations on current source; broad confidence remains foundation/unverified.",
+      "log": "apps/office/coverage/xlsx-config-registry-current.log"
+    },
+    {
+      "command": "ap doctor && node .agentplane/policy/check-routing.mjs && git diff --check",
+      "result": "pass",
+      "evidence": "0doctor errors; existing managed shim warning; routing/diff clean.",
+      "log": "apps/office/coverage/xlsx-config-doctor.log"
+    }
+  ]
+}
