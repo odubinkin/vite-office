@@ -1,0 +1,372 @@
+{
+  "status": "in-progress-checkpoint",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "1ae05b7cf4e6151b437bb478076bf3f86590b60f",
+  "capability": "CAP-cc46d2e4-c80e-405b-9979-fe70e9b80fd1",
+  "scope": "Complete UCB identifier component, Command value and four complete SDK bindings; no broker/default resolver/full format or UI claim.",
+  "tests": {
+    "relatedCases": 156,
+    "relatedFiles": 18,
+    "boundaryCases": 48,
+    "resourceCases": 2,
+    "result": "pass",
+    "upstreamQA": "Factory _createContentIdentifier source test located; getter assertions represented on real component, actual factory method/harness pending genuine broker service."
+  },
+  "coverage": {
+    "aggregateStatements": 99.23,
+    "aggregateBranches": 96.42,
+    "aggregateFunctions": 98.87,
+    "aggregateLines": 99.6,
+    "threshold": 90,
+    "runtimeOwners": 20,
+    "result": "pass",
+    "scope": "Complete authored UCB/SDK owner aggregate, not per-file or complete service parity."
+  },
+  "preservedSource": [
+    "Original URL scheme spelling vs lowercase provider scheme (CALC-535/WRITER469)",
+    "No-colon input leaves both identifier fields empty",
+    "First-colon splitting and ASCII-only case conversion",
+    "Default Command handle zero and signed32 field assignment",
+    "Normal generated interface direct bases and real compound Any transport"
+  ],
+  "corrections": [
+    "Test input Any now uses the actual string address; output extraction uses its documented OUString destination.",
+    "An incorrect edit cwd produced no mutation and was corrected before the final test run.",
+    "Public header provenance includes method symbols, not basename alone.",
+    "ucbhelper sal edge follows actual Library_ucbhelper.mk."
+  ],
+  "knownBaseline": [
+    "Only pre-existing css-style-matchers.ts JSDoc errors at17 and76.",
+    "Doctor zero errors with existing managed-hook shim warning."
+  ],
+  "remaining": [
+    "Real UCB Content/broker and default resolver/URI",
+    "Full DocumentBuilder orchestration and registration",
+    "Source factory QA through genuine service",
+    "XPath/document SAX/IO and native metadata initialization",
+    "Full DOCX/XLSX import/export, shell routing and existing UI acceptance"
+  ],
+  "fullSuite": "Not run; approved once per ten agentplane tasks cadence, epics remain in progress.",
+  "checks": [
+    {
+      "name": "final-tests",
+      "cwd": "apps/office",
+      "command": "../../node_modules/.bin/vitest run --config vite.config.ts src/ucbhelper src/unoxml src/external/libxml2/parsercallbacks.test.ts src/offapi/com/sun/star/xml/sax/SAXParseException.test.ts src/offapi/com/sun/star/xml/dom/native-dom-values.test.ts src/sax/source/fastparser/InputSource.test.ts --coverage '--coverage.include=src/ucbhelper/**/*.ts' '--coverage.include=src/offapi/com/sun/star/ucb/*.ts' '--coverage.include=src/offapi/com/sun/star/task/XInteraction*.ts' '--coverage.include=src/udkapi/com/sun/star/task/XInteraction*.ts' --coverage.include=src/udkapi/com/sun/star/io/XActiveDataSink.ts --coverage.reportsDirectory=coverage/ucb-identifier --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.functions=90 --coverage.thresholds.branches=90",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-identifier-final-tests.log",
+      "sha256": "372db9d8fbc34877ce2377887b9a2d9d293721897e6412897b60832e86723077"
+    },
+    {
+      "name": "boundary-tests",
+      "cwd": ".",
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-identifier-boundary-tests.log",
+      "sha256": "efde1af6dbf6a993a2d296c285e7cec949898b91c8bd04bf52a5d1cf62a5ae5c"
+    },
+    {
+      "name": "lint-final",
+      "cwd": ".",
+      "command": "node_modules/.bin/eslint --max-warnings 0 <changed TS/MJS paths>",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-identifier-lint-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "format-final",
+      "cwd": ".",
+      "command": "node_modules/.bin/prettier --check <changed TS/MJS/JSON paths and new documentation>",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-identifier-format-final.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "name": "typecheck",
+      "cwd": ".",
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-identifier-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "name": "build",
+      "cwd": ".",
+      "command": "npm run build",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-identifier-build.log",
+      "sha256": "0ab8cddcfa25e1420a7a462d454b8476198b7db987d4bb9d414a218636f9d26a"
+    },
+    {
+      "name": "static",
+      "cwd": ".",
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-identifier-static.log",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    {
+      "name": "provenance",
+      "cwd": ".",
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-identifier-provenance.log",
+      "sha256": "169ef24f46377fea0c97067bc3d3c09ae79da9635975e7a30d4c25aa21961eed"
+    },
+    {
+      "name": "registry-build",
+      "cwd": ".",
+      "command": "npm run inventory:registry:build",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-identifier-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "name": "registry-check",
+      "cwd": ".",
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-identifier-registry-check.log",
+      "sha256": "a56a5d75f25e1c8e2edd5877cd79bb61199f88a6c4ba3af3bc84bc2a7c3f3e14"
+    },
+    {
+      "name": "boundaries",
+      "cwd": ".",
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-identifier-boundaries.log",
+      "sha256": "16bfb3470c8d844f71a958f91881fb630f93c445ea8a15d313ae84114e48c09c"
+    },
+    {
+      "name": "docs",
+      "cwd": ".",
+      "command": "npm run check:docs",
+      "result": "known-baseline-failure",
+      "log": "apps/office/coverage/ucb-identifier-docs.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    },
+    {
+      "name": "size",
+      "cwd": ".",
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-identifier-size.log",
+      "sha256": "65879ce941be80cb8a2e0d786aea3db25cb3fa3d9ef7835cce40f268bbe947c7"
+    },
+    {
+      "name": "tree",
+      "cwd": ".",
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-identifier-tree.log",
+      "sha256": "4615eccefb9c2ce4b9cd767340293514a9fc81e356b588821e3bd52cc72a30f6"
+    },
+    {
+      "name": "writer-resources",
+      "cwd": ".",
+      "command": "npm run check:writer-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-identifier-writer-resources.log",
+      "sha256": "4eb166e47f5547a77e59b0392f2dd31a23b9951665d64c0dd11772d5b4935ce3"
+    },
+    {
+      "name": "calc-resources",
+      "cwd": ".",
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-identifier-calc-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "name": "hintids",
+      "cwd": ".",
+      "command": "npm run check:writer-hintids",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-identifier-hintids.log",
+      "sha256": "513c109068ebf83b3d6fe448c3c44564ec89a64cd9cb64059b5b4b89d11d887a"
+    },
+    {
+      "name": "doctor",
+      "cwd": ".",
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-identifier-doctor.log",
+      "sha256": "09769b2a266b4a6677adb27fc8a84fc0a32601eee6d7fe15478737a64e8d73b3"
+    },
+    {
+      "name": "routing",
+      "cwd": ".",
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-identifier-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "name": "diff-final",
+      "cwd": ".",
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-identifier-diff-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/Command.ts",
+      "gitBlob": "e8d90e049e79a3117391b999c125d29e54312d0c"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/XCommandProcessor.ts",
+      "gitBlob": "b8b6bccc870bc6184bd403dd57ee4dc52807ba3b"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/XCommandProcessor2.ts",
+      "gitBlob": "68bf3a901b9eb2dd240badb75ccbe1c7f0d1ac8c"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/XContentIdentifier.ts",
+      "gitBlob": "8499f0673e9824d5164e3b502a6120fa1d4a9268"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/XContentIdentifierFactory.ts",
+      "gitBlob": "9d07e8de95fca47478d012c6a0a61574a827e38e"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/inc/contentidentifier.ts",
+      "gitBlob": "0ecab3b0c8aa21cd0b1221afbcb103e0ef601107"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/client/native-command.test.ts",
+      "gitBlob": "32e7321debaab607b109d8399c0f003733bea0bc"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/provider/contentidentifier.ts",
+      "gitBlob": "43525520a5b4a63c88488738234e74b1d89ea3ae"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/provider/native-identifier.test.ts",
+      "gitBlob": "de2c976c9916889da8fd62bbd673e6cb6c9ed1b7"
+    },
+    {
+      "path": "docs/program/native-ucb-content-contracts.md",
+      "gitBlob": "49a0fb31e48373af1ffa41ee584664c4157385fb"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-cc46d2e4-c80e-405b-9979-fe70e9b80fd1.json",
+      "gitBlob": "66a6e9c7cb6cd3ecaca508f0af0c572a8f2ab876"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/Command.ts.json",
+      "gitBlob": "7760c495186f89cf5e45efc71e15249d02c5922f"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/XCommandProcessor.ts.json",
+      "gitBlob": "ac3d4ea6b72be030e20af0bde1dde42fa43d554c"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/XCommandProcessor2.ts.json",
+      "gitBlob": "2b8fb8910a541f4b7e38ea5f3b4c8debeee77887"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/XContentIdentifier.ts.json",
+      "gitBlob": "ff7ae2d998f418428cf9445c15241ce4599f5bd4"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/XContentIdentifierFactory.ts.json",
+      "gitBlob": "a9000690bfe117729a22414531ec294f1c3f9cb8"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/inc/contentidentifier.ts.json",
+      "gitBlob": "77bc2dbf168088e0a408a48fa741607167daed7e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/source/provider/contentidentifier.ts.json",
+      "gitBlob": "646cb30799cb933fdd15c23599b2e6995729b538"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/Command.ts.json",
+      "gitBlob": "49d08ea0921365e2674566a9ef1fa859f553207d"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/XCommandProcessor.ts.json",
+      "gitBlob": "266c708f89ca2928553fc2b473a207017228128c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/XCommandProcessor2.ts.json",
+      "gitBlob": "3d30010fd1372b953f48e520ab826d2ce74ff820"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/XContentIdentifier.ts.json",
+      "gitBlob": "4f007a399744dbfcb63a8644710162da78d42df3"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/XContentIdentifierFactory.ts.json",
+      "gitBlob": "6a509dabfdb0985e4baacf15fe3c068de6201d48"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/inc/contentidentifier.ts.json",
+      "gitBlob": "7a5ccead963260aa1cd2e78a72521f767bc972ce"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/source/provider/contentidentifier.ts.json",
+      "gitBlob": "b1deccabd8db4ab2b64a3680d7f91be61bb7bb04"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/client/native-contracts.test.ts",
+      "gitBlob": "26ae7690ad69562eebcc94171da7f02f5af9eca1"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "26f9d20d635d59e69d9743649ede41f8427a502c"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "1eac43e681feacf4e9d4b99306e616d6873917e8"
+    },
+    {
+      "path": "scripts/module-boundaries/allowed-edges.mjs",
+      "gitBlob": "d46cb5491edef6394a84b99d6bb3f52b241a343e"
+    }
+  ],
+  "upstreamBlobs": [
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/Command.idl",
+      "gitBlob": "840e2cc58471cd555a7ef95a1f7d1a802bd90fd1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/XCommandProcessor.idl",
+      "gitBlob": "b9dd077a7ac5bfc80f19b61ae0695fcf3e21e1eb"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/XCommandProcessor2.idl",
+      "gitBlob": "a552ee0364c65f736856745a08d5b7173e0bab6f"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/XContentIdentifier.idl",
+      "gitBlob": "429b603b7b2cc66e7ae4135a8e83168232a8b972"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/XContentIdentifierFactory.idl",
+      "gitBlob": "9d8998a0f7464fddcd4a6a65ee545aee6c068982"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucbhelper/source/provider/contentidentifier.cxx",
+      "gitBlob": "e545adc84983a21a7b31c76bf49850c68f3a7d5b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/ucbhelper/contentidentifier.hxx",
+      "gitBlob": "9b538829fb03ee4927561ff8840d3bb60c31a5b3"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucbhelper/Library_ucbhelper.mk",
+      "gitBlob": "904a7c31d5c7b27e03f79b6fc5a51d8102b72c6c"
+    },
+    {
+      "path": "vendor/libreoffice-reference/qadevOOo/tests/java/ifc/ucb/_XContentIdentifierFactory.java",
+      "gitBlob": "6a66dae9ee6366ae6b6355067953f1fd74bba897"
+    },
+    {
+      "path": "vendor/libreoffice-reference/codemaker/source/cppumaker/cpputype.cxx",
+      "gitBlob": "152dbf476955dd95b1d7623ca7342cc69c24fb0a"
+    }
+  ]
+}

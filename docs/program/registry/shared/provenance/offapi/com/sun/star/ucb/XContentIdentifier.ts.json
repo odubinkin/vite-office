@@ -1,0 +1,64 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/ucb/XContentIdentifier.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/ucb/XContentIdentifier.idl",
+    "localSymbols": [
+      "XContentIdentifier",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "XContentIdentifier",
+      "getContentIdentifier",
+      "getContentProviderScheme"
+    ],
+    "preservedResponsibilities": [
+      "Complete original ContentIdentifier preserves first-colon splitting, ASCII-only lowercase provider scheme, original URL spelling, no-colon empty defaults and owned string returns. Command preserves zero default handle, signed32 assignments, string/Any ownership and normal compound transport. Four complete SDK interfaces preserve original bases and normal CPPU types. No factory, command processor, broker, process context or document provider is fabricated. Content stream orchestration, source factory QA, native physical ABI/threading, DocumentBuilder, metadata and DOCX/XLSX/UI acceptance remain incomplete."
+    ],
+    "omittedResponsibilities": [
+      "Real content/broker clients, default resolver, source factory QA, DocumentBuilder and full format/UI integration remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/ucb/XContentIdentifier.ts",
+          "marker": "XContentIdentifier"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/client/native-contracts.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/client/native-command.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/provider/native-identifier.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/XContentIdentifier.idl",
+          "marker": "XContentIdentifier"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/XContentIdentifier.idl",
+          "marker": "getContentIdentifier"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/XContentIdentifier.idl",
+          "marker": "getContentProviderScheme"
+        },
+        {
+          "path": "vendor/libreoffice-reference/codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "dumpNormalGetCppuType"
+        }
+      ]
+    }
+  }
+}

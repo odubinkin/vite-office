@@ -3749,3 +3749,10 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 - Sources: `include/ucbhelper/interactionrequest.hxx` and `ucbhelper/source/provider/interactionrequest.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-534.
 - InteractionContinuation keeps a raw InteractionRequest pointer. getContinuations returns an acquired Sequence of continuation references, so those references can remain live after their request is released. recordSelection then dereferences the borrowed parent. Preserve the raw relationship rather than introducing a strong parent reference or expiry fallback.
 - Actual weak-reference tests demonstrate parent destruction while a returned sequence still retains its continuation. No select call is made after parent destruction: that would enter an undefined native lifetime case. This may be an intended caller precondition rather than a reachable filter defect; no compiled C++ failure is claimed.
+
+
+### WRITER469 — UCB identifier keeps URL scheme spelling despite its normalization comment
+
+- Sources: `ucbhelper/source/provider/contentidentifier.cxx`, `ContentIdentifier_Impl::ContentIdentifier_Impl`, and `include/ucbhelper/contentidentifier.hxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-535.
+- The implementation assigns `aScheme.toAsciiLowerCase()` to the provider scheme, then replaces the URL prefix with the original `aScheme`. Thus `FiLe:///tmp/a.xml` remains unchanged as the content identifier, while its provider scheme is `file`. The header promises lowercase URL schemes. Preserve the original replacement argument rather than silently repairing this discrepancy.
+- Without a colon, both stored strings remain empty, even for a nonempty relative input. Actual complete-component tests cover first-colon splitting, ASCII-only conversion, empty prefixes, relative inputs, acquired UNO queries and independent returned-string ownership. No compiled C++ differential or broker/factory integration claim is made.

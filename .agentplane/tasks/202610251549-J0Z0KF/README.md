@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 206
+revision: 209
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T11:05:45.697Z"
+  updated_at: "2026-11-12T11:17:13.296Z"
   updated_by: "CODER"
-  note: "UCB dependency checkpoint:142 related cases plus48 boundary and2 resource cases pass;22 are focused new UCB cases including two source ActiveDataSink checks. New complete UCB/SDK owner aggregate exceeds90 across metrics. Typechecks, build/static, scoped lint/format, dependencies/structure/provenance/registry/resources/hintids/size, doctor/routing/diff pass except the existing JSDoc baseline. Full content/broker/default resolver/DocumentBuilder, DOM coverage, XPath/SAX, metadata and DOCX/XLSX/UI remain incomplete. Evidence: native-ucb-command-context-checkpoint.json."
-  attempts: 63
+  note: "Bounded UCB content-contract checkpoint passes 156 related tests, 48 boundary tests, two resource tests and aggregate coverage above90. Typechecks, build/static, scoped lint/format, provenance/registry/boundaries/resources/tree/size/doctor/routing pass. Existing css-style-matchers JSDoc baseline only. Whole XLSX/DOCX/UI scope remains incomplete; continue implementation."
+  attempts: 64
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1016,8 +1019,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-12T11:17:13.296Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded UCB content-contract checkpoint passes 156 related tests, 48 boundary tests, two resource tests and aggregate coverage above90. Typechecks, build/static, scoped lint/format, provenance/registry/boundaries/resources/tree/size/doctor/routing pass. Existing css-style-matchers JSDoc baseline only. Whole XLSX/DOCX/UI scope remains incomplete; continue implementation."
+  -
+    type: "status"
+    at: "2026-11-12T11:17:23.168Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-12T11:05:54.056Z"
+doc_updated_at: "2026-11-12T11:17:23.168Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -2922,6 +2938,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T11:17:13.296Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded UCB content-contract checkpoint passes 156 related tests, 48 boundary tests, two resource tests and aggregate coverage above90. Typechecks, build/static, scoped lint/format, provenance/registry/boundaries/resources/tree/size/doctor/routing pass. Existing css-style-matchers JSDoc baseline only. Whole XLSX/DOCX/UI scope remains incomplete; continue implementation.
+    Attempts: 64
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T11:17:12.625Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3238,6 +3284,10 @@ sections:
     - Observation: Native UCB command context checkpoint:22 focused cases and142 related DOM/SAX/UCB cases pass, plus48 boundary cases and2 resource cases. Complete new UCB/SDK aggregate coverage passes90 (98.86 statements,94.44 branches,98.30 functions,99.41 lines). Two existing qadevOOo ActiveDataSink method bodies are ported over actual components and streams.
       Impact: CommandEnvironment, ActiveDataSink and actual basic interaction request/continuation owners now retain original Reference/Any/Sequence ownership and source selection behavior. The ten SDK declarations use normal shared CPPU metadata. No fake broker, process context, parser, document or property provider is introduced. Full builder/UCB, metadata and DOCX/XLSX/UI remain incomplete.
       Resolution: Persist this dependency checkpoint and continue actual UCB content/broker and DocumentBuilder wiring. Preserve CALC-534/WRITER468 borrowed-parent lifetime. Protected and diagnostic-only paths are not forced through invalid graphs for100 coverage. Primary source mapping corrected two SDK file locations; source member construction follows copy/move order. Existing JSDoc and hook shim baselines remain. Evidence: native-ucb-command-context-checkpoint.json.
+
+    - Observation: The native UCB content-contract prerequisite now has a complete source ContentIdentifier, Command value and four SDK interfaces. 156 related cases pass; 48 boundary and two resource cases pass. Initial test failures were fixture address misuse, corrected using actual Any constructor/extraction contracts. Source registry and sal boundary declarations were corrected and validated.
+      Impact: The real resolver client has additional source-faithful prerequisites, but Content/broker, DocumentBuilder, native metadata and full XLSX/DOCX/UI paths remain incomplete. Only existing css-style-matchers JSDoc baseline failures remain; no full task verification is claimed.
+      Resolution: Preserve mixed-case URL spelling and no-colon defaults; document CALC-535/WRITER469. Continue real Content/broker service wiring; source factory QA remains pending until its genuine service exists.
 id_source: "generated"
 ---
 ## Summary
@@ -5152,6 +5202,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T11:17:13.296Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded UCB content-contract checkpoint passes 156 related tests, 48 boundary tests, two resource tests and aggregate coverage above90. Typechecks, build/static, scoped lint/format, provenance/registry/boundaries/resources/tree/size/doctor/routing pass. Existing css-style-matchers JSDoc baseline only. Whole XLSX/DOCX/UI scope remains incomplete; continue implementation.
+Attempts: 64
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T11:17:12.625Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -5472,3 +5552,7 @@ DecisionContextRef:
 - Observation: Native UCB command context checkpoint:22 focused cases and142 related DOM/SAX/UCB cases pass, plus48 boundary cases and2 resource cases. Complete new UCB/SDK aggregate coverage passes90 (98.86 statements,94.44 branches,98.30 functions,99.41 lines). Two existing qadevOOo ActiveDataSink method bodies are ported over actual components and streams.
   Impact: CommandEnvironment, ActiveDataSink and actual basic interaction request/continuation owners now retain original Reference/Any/Sequence ownership and source selection behavior. The ten SDK declarations use normal shared CPPU metadata. No fake broker, process context, parser, document or property provider is introduced. Full builder/UCB, metadata and DOCX/XLSX/UI remain incomplete.
   Resolution: Persist this dependency checkpoint and continue actual UCB content/broker and DocumentBuilder wiring. Preserve CALC-534/WRITER468 borrowed-parent lifetime. Protected and diagnostic-only paths are not forced through invalid graphs for100 coverage. Primary source mapping corrected two SDK file locations; source member construction follows copy/move order. Existing JSDoc and hook shim baselines remain. Evidence: native-ucb-command-context-checkpoint.json.
+
+- Observation: The native UCB content-contract prerequisite now has a complete source ContentIdentifier, Command value and four SDK interfaces. 156 related cases pass; 48 boundary and two resource cases pass. Initial test failures were fixture address misuse, corrected using actual Any constructor/extraction contracts. Source registry and sal boundary declarations were corrected and validated.
+  Impact: The real resolver client has additional source-faithful prerequisites, but Content/broker, DocumentBuilder, native metadata and full XLSX/DOCX/UI paths remain incomplete. Only existing css-style-matchers JSDoc baseline failures remain; no full task verification is claimed.
+  Resolution: Preserve mixed-case URL spelling and no-colon defaults; document CALC-535/WRITER469. Continue real Content/broker service wiring; source factory QA remains pending until its genuine service exists.

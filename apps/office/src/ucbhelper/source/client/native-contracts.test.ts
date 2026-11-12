@@ -14,6 +14,10 @@ import * as Disapprove from "../../../offapi/com/sun/star/task/XInteractionDisap
 import * as Environment from "../../../offapi/com/sun/star/ucb/XCommandEnvironment";
 import * as Progress from "../../../offapi/com/sun/star/ucb/XProgressHandler";
 import * as Sink from "../../../udkapi/com/sun/star/io/XActiveDataSink";
+import * as Processor from "../../../offapi/com/sun/star/ucb/XCommandProcessor";
+import * as Processor2 from "../../../offapi/com/sun/star/ucb/XCommandProcessor2";
+import * as Identifier from "../../../offapi/com/sun/star/ucb/XContentIdentifier";
+import * as IdentifierFactory from "../../../offapi/com/sun/star/ucb/XContentIdentifierFactory";
 const root = /** Original implicit root. @returns Actual root type. */ () =>
   UnoType.get("XInterface");
 const continuation = /** Original explicit direct base. @returns Actual base type. */ () =>
@@ -29,6 +33,15 @@ it.each([
   [Environment, Environment.XCommandEnvironment, root],
   [Progress, Progress.XProgressHandler, root],
   [Sink, Sink.XActiveDataSink, root],
+  [Processor, Processor.XCommandProcessor, root],
+  [
+    Processor2,
+    Processor2.XCommandProcessor2,
+    /** Original explicit processor base. @returns Actual base type. */ () =>
+      Processor.XCommandProcessor.static_type(),
+  ],
+  [Identifier, Identifier.XContentIdentifier, root],
+  [IdentifierFactory, IdentifierFactory.XContentIdentifierFactory, root],
 ] as const)(
   "retains original declared bases and real typed-null transport %#",
   /** All metadata is registered through shared CPPU factories. @param binding - Actual generated module. @param api - Actual generated static API. @param parent - Original base. @returns Nothing. */ (
