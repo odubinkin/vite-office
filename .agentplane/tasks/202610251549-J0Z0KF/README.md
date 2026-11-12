@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 169
+revision: 172
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T04:06:18.525Z"
+  updated_at: "2026-11-12T04:24:09.081Z"
   updated_by: "CODER"
-  note: "Bounded native character-default checkpoint verified: all48 source classes/values/slots on actual Writer owners;441 related cases,53 boundary cases,16 ODF worker cases and2 Chromium cases pass; whole4owner90 coverage and scoped gates pass except unchanged global JSDoc baseline. Evidence writer-character-defaults-checkpoint.json. Full XLSX/DOCX filter/UI epic remains incomplete and must continue."
-  attempts: 51
+  note: "Bounded native XLSX static coordinate checkpoint verified: all3static XML/API methods,6inline coordinate conversions and2published UNO structs;194 related plus81 ODS/CSV cases pass; whole4module90 coverage and scoped gates pass except unchanged global JSDoc baseline. Evidence calc-oox-address-checkpoint.json. Complete workbook/filter/UI epic remains incomplete and must continue."
+  attempts: 52
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -824,8 +827,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-12T04:24:09.081Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded native XLSX static coordinate checkpoint verified: all3static XML/API methods,6inline coordinate conversions and2published UNO structs;194 related plus81 ODS/CSV cases pass; whole4module90 coverage and scoped gates pass except unchanged global JSDoc baseline. Evidence calc-oox-address-checkpoint.json. Complete workbook/filter/UI epic remains incomplete and must continue."
+  -
+    type: "status"
+    at: "2026-11-12T04:24:17.358Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-12T04:06:26.143Z"
+doc_updated_at: "2026-11-12T04:24:17.358Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -2370,6 +2386,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T04:24:09.081Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded native XLSX static coordinate checkpoint verified: all3static XML/API methods,6inline coordinate conversions and2published UNO structs;194 related plus81 ODS/CSV cases pass; whole4module90 coverage and scoped gates pass except unchanged global JSDoc baseline. Evidence calc-oox-address-checkpoint.json. Complete workbook/filter/UI epic remains incomplete and must continue.
+    Attempts: 52
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T04:23:45.960Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2634,6 +2680,10 @@ sections:
     - Observation: Native Writer character-default checkpoint: all48 source classes and values now exist in actual global package and document pool; ScriptHint registration omission corrected. WRITER457 table/header mismatch preserved. Evidence: evidence/writer-character-defaults-checkpoint.json.
       Impact: 441 related cases/46files,53 boundary cases,16 ODF worker cases and2 production Chromium style cases pass; four whole owners pass90 coverage. Typecheck/static/scoped lint/format/dependencies/resources/source/registry gates pass. Only unchanged global css-style-matchers JSDoc baseline remains. Whole DOCX/XLSX epic remains incomplete.
       Resolution: Retain active epic and source-backed boundaries; no dense ranges inferred. Continue native stylesheet/default-service and full filter/UI integration. Full native hidden-model-to-view QA remains outstanding, not relabeled as ported.
+
+    - Observation: Static XLSX coordinate checkpoint implements actual AddressConverter XML conversion/API sequence, all6inline ScUnoConversion coordinate methods and published CellAddress/CellRangeAddress value/type owners. CALC-520 recorded; CALC-350 preserved. Evidence: evidence/calc-oox-address-checkpoint.json.
+      Impact: 194 related cases/6files and81 ODS/CSV/shell/worker cases/5files pass. Whole4module coverage exceeds90 with actual Any/Sequence COW and ScDocument/parser owners; typecheck/static/lint/format/dependencies/resources/source/registry gates pass except unchanged global JSDoc baseline. Full XLSX/DOCX epic remains incomplete.
+      Resolution: Continue native workbook/document import owners and complete filter/UI paths. Do not substitute an instantiable workbook or limit provider; instance AddressConverter/WorkbookHelper services and broader original native QA remain outstanding.
 id_source: "generated"
 ---
 ## Summary
@@ -4188,6 +4238,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T04:24:09.081Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded native XLSX static coordinate checkpoint verified: all3static XML/API methods,6inline coordinate conversions and2published UNO structs;194 related plus81 ODS/CSV cases pass; whole4module90 coverage and scoped gates pass except unchanged global JSDoc baseline. Evidence calc-oox-address-checkpoint.json. Complete workbook/filter/UI epic remains incomplete and must continue.
+Attempts: 52
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T04:23:45.960Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4456,3 +4536,7 @@ DecisionContextRef:
 - Observation: Native Writer character-default checkpoint: all48 source classes and values now exist in actual global package and document pool; ScriptHint registration omission corrected. WRITER457 table/header mismatch preserved. Evidence: evidence/writer-character-defaults-checkpoint.json.
   Impact: 441 related cases/46files,53 boundary cases,16 ODF worker cases and2 production Chromium style cases pass; four whole owners pass90 coverage. Typecheck/static/scoped lint/format/dependencies/resources/source/registry gates pass. Only unchanged global css-style-matchers JSDoc baseline remains. Whole DOCX/XLSX epic remains incomplete.
   Resolution: Retain active epic and source-backed boundaries; no dense ranges inferred. Continue native stylesheet/default-service and full filter/UI integration. Full native hidden-model-to-view QA remains outstanding, not relabeled as ported.
+
+- Observation: Static XLSX coordinate checkpoint implements actual AddressConverter XML conversion/API sequence, all6inline ScUnoConversion coordinate methods and published CellAddress/CellRangeAddress value/type owners. CALC-520 recorded; CALC-350 preserved. Evidence: evidence/calc-oox-address-checkpoint.json.
+  Impact: 194 related cases/6files and81 ODS/CSV/shell/worker cases/5files pass. Whole4module coverage exceeds90 with actual Any/Sequence COW and ScDocument/parser owners; typecheck/static/lint/format/dependencies/resources/source/registry gates pass except unchanged global JSDoc baseline. Full XLSX/DOCX epic remains incomplete.
+  Resolution: Continue native workbook/document import owners and complete filter/UI paths. Do not substitute an instantiable workbook or limit provider; instance AddressConverter/WorkbookHelper services and broader original native QA remain outstanding.

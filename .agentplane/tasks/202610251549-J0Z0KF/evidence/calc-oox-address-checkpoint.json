@@ -1,0 +1,365 @@
+{
+  "taskId": "202610251549-J0Z0KF",
+  "checkpoint": "Native static XLSX coordinate conversion, inline ScUnoConversion geometry and published coordinate UNO values",
+  "sourceBaseline": {
+    "tag": "libreoffice-26.8.0.2",
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65"
+  },
+  "scope": "All3static XML/API members of AddressConverter; six inline convuno.hxx methods; actual CellAddress/CellRangeAddress CPPU value/type bindings. Full workbook/filter/UI epic remains incomplete.",
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/offapi/com/sun/star/table/CellAddress.ts",
+      "gitBlob": "91456184959bb24c2e0849c90091872636e1c176"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/table/CellRangeAddress.ts",
+      "gitBlob": "480e9e6c63aee889963a2f391dba48a3ba743c42"
+    },
+    {
+      "path": "apps/office/src/sc/inc/convuno.ts",
+      "gitBlob": "7e63ec99ba89fb189083095432f7d6f9987cb66e"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/inc/addressconverter.ts",
+      "gitBlob": "0bd1baf055fdc9a8a6bc768a505d1fa4594689d4"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/oox/addressconverter.test.ts",
+      "gitBlob": "7db77aba7967a5c9282c8f8a042fed6163ba8112"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/oox/addressconverter.ts",
+      "gitBlob": "217d0e579a090cbc9c3d8dfbdb824d93b514644a"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/unoobj/native-coordinate-conversion.test.ts",
+      "gitBlob": "27978c54dd3f91d9645f2c12ac7df0554c11338b"
+    },
+    {
+      "path": "docs/program/calc-oox-coordinate-conversion.md",
+      "gitBlob": "95449e7ce3f2a7fd83cde6c6b6f42843009ab383"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "4e6e4131fe2dfd1e3229c67f6e4cc362dc930803"
+    },
+    {
+      "path": "docs/program/registry/calc/capabilities/CAP-cbf4ed57-a798-44e0-9bb2-75017bee154a.json",
+      "gitBlob": "15e637bec83467a86f94baca219023cbbce7317c"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/inc/convuno.ts.json",
+      "gitBlob": "8e2b5f62a202fec8f6de22690ba83a470b2d74f2"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/filter/inc/addressconverter.ts.json",
+      "gitBlob": "bccea4ab76c84513864fda3558df1271ab1de816"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/filter/oox/addressconverter.ts.json",
+      "gitBlob": "1dc80eb3b2825f82667a7fe726dcf0d09c4227be"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/inc/convuno.ts.json",
+      "gitBlob": "b39995f2889fe0622599982cb74714cd4b5faae8"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/filter/inc/addressconverter.ts.json",
+      "gitBlob": "3f15a11668434289774a22e43c8f7d2994df18ce"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/filter/oox/addressconverter.ts.json",
+      "gitBlob": "d39bed6e4eef44b8ddb2fd27ceaa2a0919e3294e"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-ff4575d6-0e7a-4714-8a30-9c5a3317128d.json",
+      "gitBlob": "d4e00c044b5b9275400ea34e63fca7bc83e8df88"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/table/CellAddress.ts.json",
+      "gitBlob": "4136bbbc79504e0d75177a29d895c3b470b3e3ae"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/table/CellRangeAddress.ts.json",
+      "gitBlob": "4072dd48aabbd55908346751fe25516c45aa0bed"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/table/CellAddress.ts.json",
+      "gitBlob": "a9117ed8d03d88481671e5f0350cb10ad29b1206"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/table/CellRangeAddress.ts.json",
+      "gitBlob": "86ab159aa3f34efa68e04bb913e9109b0387135a"
+    }
+  ],
+  "checks": [
+    {
+      "command": "npx vitest run --config vite.config.ts src/sc/source/filter/oox/addressconverter.test.ts src/sc/source/ui/unoobj/native-coordinate-conversion.test.ts src/sc/source/core/tool/address.xl-a1.test.ts src/sc/source/core/tool/rangeutl.test.ts src/sc/source/filter/excel/xestream.test.ts src/sc/source/filter/oox/richstring.test.ts --coverage --coverage.include=src/sc/source/filter/oox/addressconverter.ts --coverage.include=src/sc/inc/convuno.ts --coverage.include=src/offapi/com/sun/star/table/CellAddress.ts --coverage.include=src/offapi/com/sun/star/table/CellRangeAddress.ts --coverage.reportsDirectory=coverage/calc-oox-address-profile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "194 cases/6files; whole4module coverage at97.91statements,100branches/functions,97.80lines. No catch-forcing fake range owners or providers.",
+      "log": "apps/office/coverage/calc-oox-address-profile.log"
+    },
+    {
+      "command": "npx vitest run --config vite.config.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.csv-diagnostic.test.ts src/sc/source/filter/xml/xmlwrap.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-client.test.ts",
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "81 cases/5actual files. Guessed xmlwrap.test.ts does not exist and matched none; authoritative docsh.test.ts exercises actual ODS serialization/import, generation and graph replacement. No direct xmlwrap test file or six-file run claimed.",
+      "log": "apps/office/coverage/calc-oox-address-file-regression.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-oox-address-typecheck2.log"
+    },
+    {
+      "command": "npm run test:static",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-oox-address-static.log"
+    },
+    {
+      "command": "npx prettier --check <all sourceBlob paths>",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-oox-address-format-final.log"
+    },
+    {
+      "command": "npx eslint <changed TypeScript paths> --max-warnings 0",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-oox-address-eslint.log"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-oox-address-dependencies.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-oox-address-writer-resources.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-oox-address-calc-resources.log"
+    },
+    {
+      "command": "npm run check:writer-hintids",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-oox-address-hintids.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-oox-address-size.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-oox-address-source-tree.log"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-oox-address-doctor.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-oox-address-routing.log"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-oox-address-diff-final.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-oox-address-provenance-final.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-oox-address-invariants-final.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "result": "pass",
+      "log": "apps/office/coverage/calc-oox-address-parity-final.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "log": "apps/office/coverage/calc-oox-address-docs.log",
+      "evidence": "Only pre-existing css-style-matchers.ts:17 missingJSDoc and:76 documents2/3parameters; no changed-file documentation failure."
+    }
+  ],
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 91,
+        "covered": 89,
+        "skipped": 0,
+        "pct": 97.8
+      },
+      "statements": {
+        "total": 96,
+        "covered": 94,
+        "skipped": 0,
+        "pct": 97.91
+      },
+      "functions": {
+        "total": 38,
+        "covered": 38,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 35,
+        "covered": 35,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/table/CellAddress.ts": {
+      "lines": {
+        "total": 23,
+        "covered": 23,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 12,
+        "covered": 12,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 24,
+        "covered": 24,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/table/CellRangeAddress.ts": {
+      "lines": {
+        "total": 31,
+        "covered": 31,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 16,
+        "covered": 16,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 32,
+        "covered": 32,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 11,
+        "covered": 11,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/inc/convuno.ts": {
+      "lines": {
+        "total": 15,
+        "covered": 15,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 7,
+        "covered": 7,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 15,
+        "covered": 15,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 8,
+        "covered": 8,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/filter/oox/addressconverter.ts": {
+      "lines": {
+        "total": 22,
+        "covered": 20,
+        "skipped": 0,
+        "pct": 90.9
+      },
+      "functions": {
+        "total": 3,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 25,
+        "covered": 23,
+        "skipped": 0,
+        "pct": 92
+      },
+      "branches": {
+        "total": 7,
+        "covered": 7,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "coverageRawSha256": "9b9e2d761b686841bbfbb2fbcb63799107ada994d1b868233eccae4b6c27262b",
+  "failuresAndResolutions": [
+    "Initial typecheck required an explicit existing SequenceElements pointer cast because shared getArray supports both byte and compound templates; the actual struct specialization uses compound storage. Corrected without changing shared Sequence.",
+    "New capability records initially omitted required upstream docs/tests references. Added actual header/IDL docs and related native generic range/struct Any QA references, explicitly not claiming a full original suite port or a focused test that does not exist.",
+    "Source provenance rejected class-only AddressConverter header evidence as basename-only. Added its actual3declared static member symbols; no verifier relaxation.",
+    "Initial global registry checks predated those corrections and failed; final build/provenance/invariants/parity passed withzero semantic violations.",
+    "Global JSDoc baseline remains unchanged."
+  ],
+  "originalQA": {
+    "relatedReferences": [
+      "sc/qa/unit/ucalc_range.cxx::testRangeParsing",
+      "cppu/qa/test_any.cxx::Test::testStruct"
+    ],
+    "status": "These broader native parser/struct tests are related references, not claimed newly ported or compiled. Inspected source sc/qa has no focused AddressConverter static-method or ScUnoConversion inline-method test. The36new critical cases verify actual current owners, parser quirks, published values and genuine Any/Sequence transport. Remaining broader native parser/API/filter QA stays outstanding."
+  },
+  "upstreamIssues": [
+    "CALC-520 documents unchecked/header document-limit mismatch; actual native Parse dispatch retained.",
+    "Existing CALC-350 partially invalid second endpoint acceptance propagates unchanged through the new static wrapper."
+  ],
+  "limitations": [
+    "No substitute WorkbookHelper/WorkbookGlobals/limit/query providers; AddressConverter is only its represented static qualification and cannot be instantiated. Native instance/overflow/limit services remain unported.",
+    "XLSB overloads, ScUnoConversion locale methods, complete sheet/external/R1C1 parsing and physical native ABI parity remain unported or unverified.",
+    "Complete XLSX workbook import/export, styles/formula/worksheet orchestration, shell routing and existing Open/download UI acceptance remain required.",
+    "No browser UI change or complete filter readiness is claimed; no new browser test was necessary for these pure native value/conversion additions."
+  ],
+  "fullSuite": {
+    "executed": false,
+    "reason": "Same approved epic prerequisite checkpoint; user requested related-module tests and full suite once per10agentplane tasks."
+  },
+  "finalStatusRequired": "After commit, compare all sourceBlobs with HEAD:path and require clean tracked/untracked git status."
+}
