@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 270
+revision: 273
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T20:04:37.924Z"
+  updated_at: "2026-11-12T20:33:54.198Z"
   updated_by: "CODER"
-  note: "Published property-set/state prerequisite passes64 related cases,90 whole7-owner gate and actual main/Worker proof. Real property service/metadata/DOCX/XLSX/UI parent remains incomplete. Evidence: published-property-set-state-checkpoint.json."
-  attempts: 79
+  note: "Registered original OPropertyBag prerequisite verified:63 focused tests/8files,13 whole owners exceed approved90 thresholds; build/static/source gates and actual Chromium main/DOM-free Worker pass. Only the two known docs baseline findings persist. SfxDocumentMetaData and final DOCX/XLSX core/shell/UI acceptance remain incomplete; parent continues. Evidence: registered-property-bag-checkpoint.json."
+  attempts: 80
 commit: null
 comments:
   -
@@ -258,6 +258,9 @@ comments:
   -
     author: "CODER"
     body: "Start: published property-set/state block verified; continue real UNO OPropertyBag and SfxDocumentMetaData, then DOCX/XLSX core/shell/UI acceptance without pause."
+  -
+    author: "CODER"
+    body: "Start: continue the approved shared document metadata and DOCX/XLSX core/UI implementation after verified registered PropertyBag prerequisite; goal remains active without new approval pauses."
 events:
   -
     type: "status"
@@ -1272,8 +1275,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: published property-set/state block verified; continue real UNO OPropertyBag and SfxDocumentMetaData, then DOCX/XLSX core/shell/UI acceptance without pause."
+  -
+    type: "verify"
+    at: "2026-11-12T20:33:54.198Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Registered original OPropertyBag prerequisite verified:63 focused tests/8files,13 whole owners exceed approved90 thresholds; build/static/source gates and actual Chromium main/DOM-free Worker pass. Only the two known docs baseline findings persist. SfxDocumentMetaData and final DOCX/XLSX core/shell/UI acceptance remain incomplete; parent continues. Evidence: registered-property-bag-checkpoint.json."
+  -
+    type: "status"
+    at: "2026-11-12T20:33:58.447Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue the approved shared document metadata and DOCX/XLSX core/UI implementation after verified registered PropertyBag prerequisite; goal remains active without new approval pauses."
 doc_version: 3
-doc_updated_at: "2026-11-12T20:04:57.069Z"
+doc_updated_at: "2026-11-12T20:33:58.447Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -3658,6 +3674,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T20:33:54.198Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Registered original OPropertyBag prerequisite verified:63 focused tests/8files,13 whole owners exceed approved90 thresholds; build/static/source gates and actual Chromium main/DOM-free Worker pass. Only the two known docs baseline findings persist. SfxDocumentMetaData and final DOCX/XLSX core/shell/UI acceptance remain incomplete; parent continues. Evidence: registered-property-bag-checkpoint.json.
+    Attempts: 80
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T20:33:53.625Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4074,6 +4120,17 @@ sections:
     Stateful helper added in the same cohesive block: complete OPropertyStateHelper/OStatefulPropertySet plus actual non-interface OMutexAndBroadcastHelper base subobject, with native mutex/GetMutex explicitly erased rather than stubbed. A test-only overnested empty-factory assertion had a parse error and was removed as unrelated to state contracts; equivalent real factory behavior already passes in helper tests. All64 final related cases/9 files pass after14 authored critical cases plus adapted qadevOOo XPropertyState4 and XMultiPropertySet6 entry-point checks for the declared sal_Int32 configuration; original Integer ValueChanger +5 and source QA accumulator/first-property guard weaknesses retained, independently stronger authored assertions included. Source metadata search initially named an absent qadev mod/_comphelper directory; corrected bounded file inventory found generic interface QA and no dedicated helper case. Native generic Var/container full QA and other Java ValueChanger/proxy/event-harness configurations remain unqualified. Source C++ exception catch blocks remain separate, preserving assignment order and static base versus dynamic captured target; actual CommandFailedException Reason88 and Context roundtrip. The before-copy default Enum and native event/Any lifetimes, empty hook pass, dependent-before-primary ordering, readonly/veto and disposed diagnostic behavior remain intact.
 
     Published property-set/state checkpoint: complete consumed helper algorithms, actual broadcast base and native SDK const-field/copy contracts.64 related cases/9files pass;14 authored critical cases plus2 adapted source QA groups covering10 original method entries. Whole7 executable owners S96.31/B93.33/F96.42/L96.15 pass90. Actual Chromium main+DOM-free Worker observes value42 long storage versus short notification, old41, same Source, original initial states1/0 for A/missing, subsequent DIRECT and7 source types. No source metadata/property service substitute registered. Source QA original weak result accumulator, first-descriptor guard and configured catch criteria preserved; full Java/proxy/other ValueChanger inputs unqualified. CALC-550..553/WRITER484..487 record preserved source notification, wrapping, disposed and bulk-state contracts. Typecheck, production build/static, scoped lint/format, registry/provenance,49 boundary+2 resource cases, dependencies/size/tree/resources/hintids/doctor/routing/diff pass. Only prior css-style-matchers.ts17/76 JSDoc errors remain. Source/current evidence, exact commands/log SHA256 and actual scalar realm observations: evidence/published-property-set-state-checkpoint.json. Parent remains incomplete: actual UNO OPropertyBag, SfxDocumentMetaData and full DOCX/XLSX import/export/reopen + existing UI acceptance. Root MI/destructor/self-pointer compiler lowering explicit; original weak m_pReserved remains distinct from helper propertySet_m_pReserved. Native mutex/GetMutex/scopes erased without fake locks; nonweak/argument-root bindings, native ABI/allocator/MI and full compiled differential unqualified. Same active parent; full suite not due; continue without pause.
+
+    Registered native PropertyBag prerequisite checkpoint (2026-11-13):
+    - Command: replay the exact focused Vitest argv and 13 whole-production-owner include paths recorded in evidence/registered-property-bag-checkpoint.json.
+    - Result: pass, 63 cases / 8 files; whole-owner coverage statements92.38, branches90.95, functions98.54, lines92.65 against the user-approved90 thresholds. Includes adapted source XPropertyAccess before/get/set, configured actual String properties and independent stronger value assertions; no full Java harness claim. XPropertyContainer Java null-object/removability assumptions are explicitly unqualified.
+    - Command: npm run typecheck && npm run test:static; scoped ESLint/Prettier; registry/provenance; dependencies/size/source-tree/Writer+Calc resources/hintids; 51 boundary/resource tests; ap doctor; routing; git diff --check; actual Chromium main and DOM-free module Worker probe.
+    - Result: pass. Real production PropertyBag.createWithTypes returns value42/count1/modified true/DIRECT state0 and same UNO identity in both realms. Native OSL/physical ABI/MI/allocator/std move/bucket traces remain unqualified.
+    - Command: npm run check:docs.
+    - Result: existing baseline failure only: css-style-matchers.ts:17 missing JSDoc, :76 documents2/3 parameters. All authored JSDoc issues fixed; no unrelated source change. Doctor retains the pre-existing hook readiness warning.
+    - Recovery evidence: SDK graph tests exposed incorrect new container/util namespace literals; fixed to the exact IDL names. Initial100 coverage configuration was replaced with the already approved90 threshold; genuine missing-service, named-type failure and repeated-type initialization scenarios qualify the public contracts. Registry schema/symbol errors and scoped documentation diagnostics were corrected within the same approved source scope. No checker relaxation, private state patch, fake positive provider or synthetic type/default generator was introduced.
+    - Scope: actual registered OPropertyBag factory/service/constructors and named argument collection, immutable snapshots/defaults/allowed types/XSet workaround/notifications/native fields. CALC-554/WRITER488 preserve repeated-initialization type union and sticky empty-name semantics. SfxDocumentMetaData and final DOCX/XLSX core/shell/UI acceptance remain pending; task remains DOING after this bounded checkpoint, goal remains active under latest user continuation.
+    - Evidence: evidence/registered-property-bag-checkpoint.json pins51 intentional source/artifact blobs,19 upstream blobs, exact focused argv, raw whole-owner coverage, all command logs with SHA256 and both browser results. No full suite was due at this same-task checkpoint under the user's ten-task cadence.
 id_source: "generated"
 ---
 ## Summary
@@ -6468,6 +6525,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T20:33:54.198Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Registered original OPropertyBag prerequisite verified:63 focused tests/8files,13 whole owners exceed approved90 thresholds; build/static/source gates and actual Chromium main/DOM-free Worker pass. Only the two known docs baseline findings persist. SfxDocumentMetaData and final DOCX/XLSX core/shell/UI acceptance remain incomplete; parent continues. Evidence: registered-property-bag-checkpoint.json.
+Attempts: 80
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T20:33:53.625Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -6888,3 +6975,14 @@ Property helper draft gates: initial typecheck caught an unused const-event type
 Stateful helper added in the same cohesive block: complete OPropertyStateHelper/OStatefulPropertySet plus actual non-interface OMutexAndBroadcastHelper base subobject, with native mutex/GetMutex explicitly erased rather than stubbed. A test-only overnested empty-factory assertion had a parse error and was removed as unrelated to state contracts; equivalent real factory behavior already passes in helper tests. All64 final related cases/9 files pass after14 authored critical cases plus adapted qadevOOo XPropertyState4 and XMultiPropertySet6 entry-point checks for the declared sal_Int32 configuration; original Integer ValueChanger +5 and source QA accumulator/first-property guard weaknesses retained, independently stronger authored assertions included. Source metadata search initially named an absent qadev mod/_comphelper directory; corrected bounded file inventory found generic interface QA and no dedicated helper case. Native generic Var/container full QA and other Java ValueChanger/proxy/event-harness configurations remain unqualified. Source C++ exception catch blocks remain separate, preserving assignment order and static base versus dynamic captured target; actual CommandFailedException Reason88 and Context roundtrip. The before-copy default Enum and native event/Any lifetimes, empty hook pass, dependent-before-primary ordering, readonly/veto and disposed diagnostic behavior remain intact.
 
 Published property-set/state checkpoint: complete consumed helper algorithms, actual broadcast base and native SDK const-field/copy contracts.64 related cases/9files pass;14 authored critical cases plus2 adapted source QA groups covering10 original method entries. Whole7 executable owners S96.31/B93.33/F96.42/L96.15 pass90. Actual Chromium main+DOM-free Worker observes value42 long storage versus short notification, old41, same Source, original initial states1/0 for A/missing, subsequent DIRECT and7 source types. No source metadata/property service substitute registered. Source QA original weak result accumulator, first-descriptor guard and configured catch criteria preserved; full Java/proxy/other ValueChanger inputs unqualified. CALC-550..553/WRITER484..487 record preserved source notification, wrapping, disposed and bulk-state contracts. Typecheck, production build/static, scoped lint/format, registry/provenance,49 boundary+2 resource cases, dependencies/size/tree/resources/hintids/doctor/routing/diff pass. Only prior css-style-matchers.ts17/76 JSDoc errors remain. Source/current evidence, exact commands/log SHA256 and actual scalar realm observations: evidence/published-property-set-state-checkpoint.json. Parent remains incomplete: actual UNO OPropertyBag, SfxDocumentMetaData and full DOCX/XLSX import/export/reopen + existing UI acceptance. Root MI/destructor/self-pointer compiler lowering explicit; original weak m_pReserved remains distinct from helper propertySet_m_pReserved. Native mutex/GetMutex/scopes erased without fake locks; nonweak/argument-root bindings, native ABI/allocator/MI and full compiled differential unqualified. Same active parent; full suite not due; continue without pause.
+
+Registered native PropertyBag prerequisite checkpoint (2026-11-13):
+- Command: replay the exact focused Vitest argv and 13 whole-production-owner include paths recorded in evidence/registered-property-bag-checkpoint.json.
+- Result: pass, 63 cases / 8 files; whole-owner coverage statements92.38, branches90.95, functions98.54, lines92.65 against the user-approved90 thresholds. Includes adapted source XPropertyAccess before/get/set, configured actual String properties and independent stronger value assertions; no full Java harness claim. XPropertyContainer Java null-object/removability assumptions are explicitly unqualified.
+- Command: npm run typecheck && npm run test:static; scoped ESLint/Prettier; registry/provenance; dependencies/size/source-tree/Writer+Calc resources/hintids; 51 boundary/resource tests; ap doctor; routing; git diff --check; actual Chromium main and DOM-free module Worker probe.
+- Result: pass. Real production PropertyBag.createWithTypes returns value42/count1/modified true/DIRECT state0 and same UNO identity in both realms. Native OSL/physical ABI/MI/allocator/std move/bucket traces remain unqualified.
+- Command: npm run check:docs.
+- Result: existing baseline failure only: css-style-matchers.ts:17 missing JSDoc, :76 documents2/3 parameters. All authored JSDoc issues fixed; no unrelated source change. Doctor retains the pre-existing hook readiness warning.
+- Recovery evidence: SDK graph tests exposed incorrect new container/util namespace literals; fixed to the exact IDL names. Initial100 coverage configuration was replaced with the already approved90 threshold; genuine missing-service, named-type failure and repeated-type initialization scenarios qualify the public contracts. Registry schema/symbol errors and scoped documentation diagnostics were corrected within the same approved source scope. No checker relaxation, private state patch, fake positive provider or synthetic type/default generator was introduced.
+- Scope: actual registered OPropertyBag factory/service/constructors and named argument collection, immutable snapshots/defaults/allowed types/XSet workaround/notifications/native fields. CALC-554/WRITER488 preserve repeated-initialization type union and sticky empty-name semantics. SfxDocumentMetaData and final DOCX/XLSX core/shell/UI acceptance remain pending; task remains DOING after this bounded checkpoint, goal remains active under latest user continuation.
+- Evidence: evidence/registered-property-bag-checkpoint.json pins51 intentional source/artifact blobs,19 upstream blobs, exact focused argv, raw whole-owner coverage, all command logs with SHA256 and both browser results. No full suite was due at this same-task checkpoint under the user's ten-task cadence.
