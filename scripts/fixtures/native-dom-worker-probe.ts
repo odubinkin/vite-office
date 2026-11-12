@@ -1,7 +1,7 @@
 /** @fileoverview Real native UNO document, parser callback, IO and live-list operations without a host DOM; the production registered DocumentBuilder shares the same realm-local native module. */
 import { initializeLibXml2 } from "../../apps/office/src/external/libxml2/libxml2";
 import { installParserCallbacks } from "../../apps/office/src/external/libxml2/parsercallbacks";
-import { Reference } from "../../apps/office/src/cppu/inc/com/sun/star/uno/Reference";
+import { Reference, UNO_QUERY } from "../../apps/office/src/cppu/inc/com/sun/star/uno/Reference";
 import {
   Sequence,
   type SequenceElements,
@@ -30,6 +30,10 @@ import {
   OInterfaceIteratorHelper,
 } from "../../apps/office/src/cppuhelper/inc/interfacecontainer";
 import { OMultiTypeInterfaceContainerHelperInt32 } from "../../apps/office/src/cppuhelper/inc/propshlp";
+import {
+  PropertyChangeEvent,
+  cppu_detail_getUnoType_PropertyChangeEvent as eventType,
+} from "../../apps/office/src/udkapi/com/sun/star/beans/PropertyChangeEvent";
 import { OPropertyArrayHelper } from "../../apps/office/src/cppuhelper/inc/propshlp";
 import { OPropertySetHelperInfo_Impl } from "../../apps/office/src/cppuhelper/source/propshlp";
 import { XPropertySetInfo } from "../../apps/office/src/udkapi/com/sun/star/beans/XPropertySetInfo";
@@ -179,6 +183,32 @@ export async function runNativeDomWorkerProbe() {
     snapshotName: take(infoDescriptor.Name.copy(0)),
     sameInfoIdentity: queriedInfo.get() === infoApi,
   };
+  const NativeValues = Sequence.specialize<Any>("Any", 24),
+    nativeValues = own(new NativeValues(2)),
+    rawValue = (nativeValues.getArray() as SequenceElements).get(0) as Any,
+    rawInterface = (nativeValues.getArray() as SequenceElements).get(24) as Any,
+    NativeEvents = Sequence.specialize<PropertyChangeEvent>(eventType, 72),
+    nativeEvents = own(new NativeEvents(1)),
+    eventFields = (nativeEvents.getArray() as SequenceElements).get(0) as {
+      get(offset: number): unknown;
+    },
+    rawOld = eventFields.get(24) as Any,
+    rawConverted = eventFields.get(48) as Any,
+    liveRawType = Any.prototype.getValueType.call(rawConverted);
+  Any.prototype.insert.call(rawValue, [43], "sal_Int16");
+  propertyBag.convertFastPropertyValue(7, rawValue, rawConverted, rawOld);
+  propertyBag.setFastPropertyValue(7, rawConverted);
+  propertyBag.getPropertyDefaultByHandle(7, rawOld);
+  Any.prototype.insert.call(rawInterface, publicListener.getAddress(), XEventListener.static_type);
+  const rawQuery = own(Reference.fromAny(rawInterface, UNO_QUERY, XEventListener.static_type));
+  const nativeAnyFields = {
+    value: Any.prototype.get.call(rawConverted, "sal_Int32"),
+    initialDefault: Any.prototype.get.call(rawOld, "sal_Int32"),
+    liveType:
+      liveRawType === Any.prototype.getValueType.call(rawConverted) &&
+      liveRawType.equals(UnoType.get("sal_Int32")),
+    interfaceIdentity: rawQuery.get() === publicListener.get(),
+  };
   const processContext = getProcessComponentContext() as Reference<XComponentContext>,
     converter = own(Converter.create(processContext)),
     row = own(new Reference(new PropertyValueSet(processContext))),
@@ -315,6 +345,7 @@ export async function runNativeDomWorkerProbe() {
       dynamicProperties,
       propertyArray,
       legacyListeners,
+      nativeAnyFields,
       documentBuilder,
       xpath: (
         /** Queries the actual registered native XPath service. @returns Scalar observations only. */ () => {

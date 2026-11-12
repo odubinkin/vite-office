@@ -36,6 +36,8 @@ import {
 import { assignNumeric } from "../../../../../source/uno/assign-numeric";
 import type { rtl_uStringSlot } from "../../../../../../sal/inc/rtl/ustring.h";
 import { reservedDataAddress } from "../../../../../source/uno/copy";
+/** Compiler address-of cache for an initialized C Any record's existing public pType field. It owns no type, value or lifetime. */
+const rawTypeAddresses = new WeakMap<uno_Any, [R | null]>();
 /** Original Any derives from its actual C record. Native C++ overload/type/lvalue syntax is explicit; no type is inferred from an untyped JS value and all construction remains in the existing C owner. */
 export class Any implements uno_Any {
   /** Nonowning native address of this original pType field; contents are written only by the actual constructor, not initialized to an invented type/default. */
@@ -87,7 +89,7 @@ export class Any implements uno_Any {
   }
   /** Original copy assignment skips identical object addresses and returns this value. @param source - Original right side. @returns This same Any. */
   assign(source: Any): this {
-    if (this !== source) this.setValue(source.pData, source.pType);
+    if (this !== source) Any.prototype.setValue.call(this, source.pData, source.pType);
     return this;
   }
   /** Original internal move constructor first constructs an empty Any, swaps all fields, repairs only its own reserved address and leaves the source VOID data pointer non-null, potentially dangling to the new object. @param source - Rvalue source. @returns New actual Any. */
@@ -118,7 +120,26 @@ export class Any implements uno_Any {
   }
   /** Original const Type common-prefix view of this actual pType address, with no acquire/copy/ownership. @returns Stable live borrowed view. */
   getValueType(): Type {
-    return getTypeFromTypeDescriptionReference(this.typeAddress);
+    let address = this.typeAddress;
+    if (address === undefined) {
+      // C++ Any is a layout-compatible view of an already initialized uno_Any,
+      // including actual sequence/compound fields. Do not create a second Any.
+      let cell = rawTypeAddresses.get(this);
+      if (cell === undefined) {
+        cell = [] as unknown as [R | null];
+        Object.defineProperty(cell, 0, {
+          /** Reads the same native pType field. @returns Current type pointer. */
+          get: () => this.pType,
+          /** Writes only the same existing field. @param value - Type pointer. @returns Nothing. */
+          set: (value: R | null) => {
+            this.pType = value;
+          },
+        });
+        rawTypeAddresses.set(this, cell);
+      }
+      address = cell;
+    }
+    return getTypeFromTypeDescriptionReference(address);
   }
   /** Original borrowed reference pointer. @returns Actual pType. */
   getValueTypeRef(): R | null {
@@ -146,7 +167,7 @@ export class Any implements uno_Any {
   }
   /** Original Type/reference/description value assignment delegates to the actual C owner. @param source - Actual source address or null default. @param type - Original selected borrowed type. @returns Nothing. */
   setValue(source: unknown, type: Type | R | D | null): void {
-    if (type instanceof Type) this.setValue(source, type.getTypeLibType());
+    if (type instanceof Type) Any.prototype.setValue.call(this, source, type.getTypeLibType());
     else if (type !== null && "pSelf" in type)
       uno_any_assign(this, source, type, cpp_acquire, cpp_release);
     else uno_type_any_assign(this, source, type, cpp_acquire, cpp_release);
@@ -167,7 +188,7 @@ export class Any implements uno_Any {
   }
   /** Original has<T> erased declared template selector; deleted Any instantiation remains a compile-time restriction. @param argument - Original non-Any type argument. @returns Original extractability predicate. */
   has(argument: Exclude<UnoTypeArgument, "Any">): boolean {
-    return this.isExtractableTo(getTypeFavourUnsigned(argument));
+    return Any.prototype.isExtractableTo.call(this, getTypeFavourUnsigned(argument));
   }
   /** Original Any-to-Any equality uses real shared data equality and C++ callbacks. @param value - Right side. @returns Original comparison. */
   operatorEquals(value: Any): boolean {
@@ -182,12 +203,13 @@ export class Any implements uno_Any {
   }
   /** Original negation of Any equality. @param value - Right side. @returns Original inequality. */
   operatorNotEquals(value: Any): boolean {
-    return !this.operatorEquals(value);
+    return !Any.prototype.operatorEquals.call(this, value);
   }
   /** Original insertion selects the declared C++ template type; bool delegates through a normalized sal_Bool temporary. Deleted Any instantiation is not available. @param source - Original lvalue address. @param argument - Declared non-Any type. @returns Nothing. */
   insert(source: unknown, argument: Exclude<UnoTypeArgument, "Any">): void {
-    if (argument === "bool") this.insert([Number(Boolean((source as [boolean])[0]))], "sal_Bool");
-    else this.setValue(source, getTypeFavourUnsigned(argument));
+    if (argument === "bool")
+      Any.prototype.insert.call(this, [Number(Boolean((source as [boolean])[0]))], "sal_Bool");
+    else Any.prototype.setValue.call(this, source, getTypeFavourUnsigned(argument));
   }
   /** Original extraction specialization guards the direct source class before changing a destination; generic extraction alone delegates to real assignData, including its source Any unwrapping. Numeric conversions reuse the identical original source switches in the existing shared assignment owner. @param destination - Original initialized lvalue storage or actual specialized owned OUString/Type. @param argument - Declared non-Any destination type. @returns Original success; specialized failures leave the destination untouched, while generic assignment preserves any original partial writes. */
   extract(destination: unknown, argument: Exclude<UnoTypeArgument, "Any">): boolean {
@@ -262,7 +284,7 @@ export class Any implements uno_Any {
   /** Original Any::get<T> consumed signed32 specialization uses default initialization, real extraction and the original failure diagnostic. @param argument - Compiler-erased declared type. @returns Extracted native signed32 value. */
   get(argument: "sal_Int32"): number {
     const value: [number] = [0];
-    if (!this.extract(value, argument)) {
+    if (!Any.prototype.extract.call(this, value, argument)) {
       const message = new OUString(
           cppu_Any_extraction_failure_msg(
             this,
@@ -282,11 +304,11 @@ export class Any implements uno_Any {
   }
   /** Original internal Any::query<T> definition in Reference.hxx constructs the actual queried Reference. @param argument - Declared interface type. @returns Original owned reference. */
   query(argument: UnoTypeArgument = "XInterface"): Reference {
-    return new Reference(this, UNO_QUERY, argument);
+    return Reference.fromAny(this, UNO_QUERY, argument);
   }
   /** Original internal Any::queryThrow<T> constructs the actual throwing queried Reference. @param argument - Declared interface type. @returns Original owned reference or RuntimeException. */
   queryThrow(argument: UnoTypeArgument = "XInterface"): Reference {
-    return new Reference(this, UNO_QUERY_THROW, argument);
+    return Reference.fromAny(this, UNO_QUERY_THROW, argument);
   }
 }
 /** Original deprecated global Any type helper forwards to actual UnoType; no static copy or factory. @returns Original borrowed Type. */

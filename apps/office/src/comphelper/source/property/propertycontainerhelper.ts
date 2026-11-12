@@ -77,7 +77,7 @@ function unknownHandle(handle: number): never {
 function illegalValue(property: PropertyDescription, value: Any): never {
   const buffer = new OUStringBuffer(),
     context = new Reference(),
-    actual = value.getValueTypeName(),
+    actual = Any.prototype.getValueTypeName.call(value),
     required = property.aProperty.Type.getTypeName();
   /** Original source ASCII fragment. @param text - Literal. @returns Nothing. */
   function literal(text: string): void {
@@ -256,45 +256,45 @@ export class OPropertyContainerHelper {
     if (p.eLocated === LocationType.HoldMyself || p.eLocated === LocationType.DerivedClassAnyType) {
       const requested = new Any(value);
       try {
-        if (!requested.getValueType().equals(p.aProperty.Type)) {
+        if (!Any.prototype.getValueType.call(requested).equals(p.aProperty.Type)) {
           const typed = new Any(null, type);
           try {
             if (
               uno_type_assignData(
-                typed.getValue(),
+                Any.prototype.getValue.call(typed),
                 type,
-                requested.getValue(),
-                requested.getValueTypeRef(),
+                Any.prototype.getValue.call(requested),
+                Any.prototype.getValueTypeRef.call(requested),
                 cpp_queryInterface,
                 cpp_acquire,
                 cpp_release,
               )
             )
-              requested.moveAssign(typed);
+              Any.prototype.moveAssign.call(requested, typed);
           } finally {
             typed.dispose();
           }
         }
         if (!(
-          ((p.aProperty.Attributes & MAYBEVOID) !== 0 && !requested.hasValue()) ||
-          requested.getValueType().equals(p.aProperty.Type)
+          ((p.aProperty.Attributes & MAYBEVOID) !== 0 && !Any.prototype.hasValue.call(requested)) ||
+          Any.prototype.getValueType.call(requested).equals(p.aProperty.Type)
         ))
           illegalValue(p, value);
         const current = this.anyValue(p),
           modified =
-            !current.hasValue() || !requested.hasValue()
-              ? current.hasValue() !== requested.hasValue()
+            !Any.prototype.hasValue.call(current) || !Any.prototype.hasValue.call(requested)
+              ? Any.prototype.hasValue.call(current) !== Any.prototype.hasValue.call(requested)
               : !uno_type_equalData(
-                  current.getValue(),
+                  Any.prototype.getValue.call(current),
                   type,
-                  requested.getValue(),
+                  Any.prototype.getValue.call(requested),
                   type,
                   cpp_queryInterface,
                   cpp_release,
                 );
         if (modified) {
-          old.assign(current);
-          converted.moveAssign(requested);
+          Any.prototype.assign.call(old, current);
+          Any.prototype.moveAssign.call(converted, requested);
         }
         return modified;
       } finally {
@@ -304,19 +304,19 @@ export class OPropertyContainerHelper {
     const typed = new Any();
     let selected = value;
     try {
-      if (!value.getValueType().equals(p.aProperty.Type)) {
+      if (!Any.prototype.getValueType.call(value).equals(p.aProperty.Type)) {
         const initial = new Any(null, type);
         try {
-          typed.moveAssign(initial);
+          Any.prototype.moveAssign.call(typed, initial);
         } finally {
           initial.dispose();
         }
         if (
           !uno_type_assignData(
-            typed.getValue(),
+            Any.prototype.getValue.call(typed),
             type,
-            value.getValue(),
-            value.getValueTypeRef(),
+            Any.prototype.getValue.call(value),
+            Any.prototype.getValueTypeRef.call(value),
             cpp_queryInterface,
             cpp_acquire,
             cpp_release,
@@ -329,14 +329,14 @@ export class OPropertyContainerHelper {
         modified = !uno_type_equalData(
           pointer,
           type,
-          selected.getValue(),
+          Any.prototype.getValue.call(selected),
           type,
           cpp_queryInterface,
           cpp_release,
         );
       if (modified) {
-        old.setValue(pointer, p.aProperty.Type);
-        converted.assign(selected);
+        Any.prototype.setValue.call(old, pointer, p.aProperty.Type);
+        Any.prototype.assign.call(converted, selected);
       }
       return modified;
     } finally {
@@ -354,13 +354,13 @@ export class OPropertyContainerHelper {
       void uno_type_assignData(
         (p.aLocation as { pDerivedClassMember: unknown }).pDerivedClassMember,
         p.aProperty.Type.getTypeLibType() as R,
-        value.getValue(),
-        value.getValueTypeRef(),
+        Any.prototype.getValue.call(value),
+        Any.prototype.getValueTypeRef.call(value),
         cpp_queryInterface,
         cpp_acquire,
         cpp_release,
       );
-    } else this.anyValue(p).assign(value);
+    } else Any.prototype.assign.call(this.anyValue(p), value);
   }
   /** Original selected value copy; a missing handle violates the source assertion and retains its return branch. @param output - Output Any. @param handle - Handle. @returns Nothing. */ protected getFastPropertyValue(
     output: Any,
@@ -370,11 +370,12 @@ export class OPropertyContainerHelper {
     if (i === this.m_aProperties.length) return;
     const p = this.m_aProperties[i] as PropertyDescription;
     if (p.eLocated === LocationType.DerivedClassRealType)
-      output.setValue(
+      Any.prototype.setValue.call(
+        output,
         (p.aLocation as { pDerivedClassMember: unknown }).pDerivedClassMember,
         p.aProperty.Type,
       );
-    else output.assign(this.anyValue(p));
+    else Any.prototype.assign.call(output, this.anyValue(p));
   }
   /** Original borrowed property lookup. @param name - Name. @returns Existing actual Property field. */ protected getProperty(
     name: OUStringConstReference,

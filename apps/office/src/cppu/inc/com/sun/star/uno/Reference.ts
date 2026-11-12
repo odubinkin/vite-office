@@ -1,6 +1,7 @@
 /** @fileoverview Original Reference.h/hxx pointer ownership, query/throwing and interface identity operations through actual shared owners; physical ordering/hash/ostream and native compile-only casts remain separate responsibilities. */
 import { SAL_NO_ACQUIRE } from "../../../../../../sal/inc/types";
 import { Any } from "./Any";
+import type { uno_Any } from "../../../../uno/any2";
 import { Type } from "./Type";
 import { RuntimeException } from "./RuntimeException";
 import { OUString } from "../../../../../../sal/inc/rtl/ustring";
@@ -150,6 +151,19 @@ export class BaseReference {
 }
 /** Original Reference direct ownership members share the one actual base pointer. Native casts are JS identity for actual logical caller pointers; physical multiple-inheritance pointer adjustment is unverified. */
 export class Reference<T extends InterfacePointer = InterfacePointer> extends BaseReference {
+  /** Compiler binding for the original statically selected Any constructor overload, including an initialized native sequence/compound Any address. No dynamic shape/type inference or alternate value is introduced. @param value - Actual source C Any. @param tag - Original query overload. @param argument - Declared interface type. @returns Acquired reference or original throwing failure. */
+  static fromAny<P extends InterfacePointer = XInterface>(
+    value: uno_Any,
+    tag: UnoReference_Query | UnoReference_QueryThrow,
+    argument: UnoTypeArgument = "XInterface",
+  ): Reference<P> {
+    if (tag === UNO_QUERY && (value.pType as R).eTypeClass !== C.INTERFACE)
+      return new Reference<P>();
+    const pointer =
+      (value.pType as R).eTypeClass === C.INTERFACE ? (value.pReserved as XInterface | null) : null;
+    return new Reference<P>(pointer, tag, argument);
+  }
+
   /** Compiler lvalue binding over an existing Reference field, preserving its exact address without ownership or a query. @param address - Actual initialized pointer field. @returns Borrowed reference view. */
   static unacquired<T extends InterfacePointer>(address: [T | null]): ReferenceConstReference<T> {
     let view = borrowedReferences.get(address);

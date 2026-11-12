@@ -1,0 +1,119 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-2f70d74c-e2af-41ae-a661-f64f8064781d",
+    "capabilityId": "CAP-2f70d74c-e2af-41ae-a661-f64f8064781d",
+    "suite": "shared",
+    "subsystem": "property-set-native-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original Any nonvirtual member calls now operate directly on initialized sequence/compound C Any addresses, preserving the actual reserved-field identity and one native value owner. A stable nonowning compiler address view reads the same existing raw pType field without constructing an Any or another Type/ref owner. Reference.fromAny explicitly binds the original statically selected Any constructor overload, never inferring a type from a JS shape. Low-level PropertyBag/OPropertyContainerHelper qualify nonvirtual calls for real native Any input/output members. Four actual generated property-set SDK declarations retain exact methods, sorted/unique-name contracts, original direct bases and normal CPPU metadata. Real native sequence and PropertyChangeEvent member tests preserve moves, Type view replacement, default/conversion and actual ActiveDataSink query identity. Original cppu/qa/test_any full custom-type QA, property-set/notification/state helpers, UNO PropertyBag/SfxDocumentMetaData and final DOCX/XLSX/UI remain unfinished; physical ABI/allocator/thread and const/access enforcement remain unqualified."
+    ],
+    "capability": "Native Any fields and generated property-set contracts",
+    "gaps": [
+      "Full upstream custom-type Any QA, property-set/state/notification service owners, metadata and final DOCX/XLSX/UI acceptance remain unfinished.",
+      "Physical C++ ABI/allocator/threads and access/const enforcement remain unqualified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/com/sun/star/uno/Any.hxx",
+          "marker": "Any::operator"
+        },
+        {
+          "path": "include/com/sun/star/uno/Reference.hxx",
+          "marker": "const Any & rAny"
+        },
+        {
+          "path": "comphelper/source/property/propertycontainerhelper.cxx",
+          "marker": "convertFastPropertyValue"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/test_any.cxx",
+          "marker": "testBoolean"
+        }
+      ],
+      "docs": [
+        {
+          "path": "udkapi/com/sun/star/beans/XMultiPropertySet.idl",
+          "marker": "All names must be unique."
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Any.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Reference.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/property/propertybag.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/property/propertycontainerhelper.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/XFastPropertySet.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/XMultiPropertySet.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/XPropertySetOption.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/XPropertiesChangeListener.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Any-address.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/property-set-types.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Reference-query.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-property-set-values.md",
+          "marker": "Native property set values"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original Any nonvirtual member calls now operate directly on initialized sequence/compound C Any addresses, preserving the actual reserved-field identity and one native value owner. A stable nonowning compiler address view reads the same existing raw pType field without constructing an Any or another Type/ref owner. Reference.fromAny explicitly binds the original statically selected Any constructor overload, never inferring a type from a JS shape. Low-level PropertyBag/OPropertyContainerHelper qualify nonvirtual calls for real native Any input/output members. Four actual generated property-set SDK declarations retain exact methods, sorted/unique-name contracts, original direct bases and normal CPPU metadata. Real native sequence and PropertyChangeEvent member tests preserve moves, Type view replacement, default/conversion and actual ActiveDataSink query identity. Original cppu/qa/test_any full custom-type QA, property-set/notification/state helpers, UNO PropertyBag/SfxDocumentMetaData and final DOCX/XLSX/UI remain unfinished; physical ABI/allocator/thread and const/access enforcement remain unqualified."
+    },
+    "scopeLimitations": [
+      "Original Any nonvirtual member calls now operate directly on initialized sequence/compound C Any addresses, preserving the actual reserved-field identity and one native value owner. A stable nonowning compiler address view reads the same existing raw pType field without constructing an Any or another Type/ref owner. Reference.fromAny explicitly binds the original statically selected Any constructor overload, never inferring a type from a JS shape. Low-level PropertyBag/OPropertyContainerHelper qualify nonvirtual calls for real native Any input/output members. Four actual generated property-set SDK declarations retain exact methods, sorted/unique-name contracts, original direct bases and normal CPPU metadata. Real native sequence and PropertyChangeEvent member tests preserve moves, Type view replacement, default/conversion and actual ActiveDataSink query identity. Original cppu/qa/test_any full custom-type QA, property-set/notification/state helpers, UNO PropertyBag/SfxDocumentMetaData and final DOCX/XLSX/UI remain unfinished; physical ABI/allocator/thread and const/access enforcement remain unqualified.",
+      "Existing unchanged source C++ witness streams are replayed through the actual shared owners. The cppu/qa/test_any reference is source QA context, not a claim that the complete original custom-type suite was ported/executed. Newly added raw-address and SDK cases are independent source-backed tests."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-any-field-property-contracts"
+  }
+}

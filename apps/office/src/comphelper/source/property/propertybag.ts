@@ -89,7 +89,7 @@ export class PropertyBag extends OPropertyContainerHelper {
     attributes: number,
     initial: Any,
   ): void {
-    const type = initial.getValueType();
+    const type = Any.prototype.getValueType.call(initial);
     if (type.getTypeClass() === TypeClass.VOID) {
       const message = literal("The initial value must be non-NULL to determine the property type."),
         context = new Reference();
@@ -187,8 +187,8 @@ export class PropertyBag extends OPropertyContainerHelper {
   ): void {
     if (!this.hasPropertyByHandle(handle)) unknown(handle);
     const value = this.aDefaults.get(handle);
-    if (value) output.assign(value);
-    else output.clear();
+    if (value) Any.prototype.assign.call(output, value);
+    else Any.prototype.clear.call(output);
   }
   /** Original name-presence forwarding. @param name - Borrowed name. @returns Presence. */ hasPropertyByName(
     name: OUStringConstReference,
