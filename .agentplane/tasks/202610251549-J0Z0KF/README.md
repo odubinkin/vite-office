@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 181
+revision: 184
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T05:28:53.813Z"
+  updated_at: "2026-11-12T05:50:58.348Z"
   updated_by: "CODER"
-  note: "Native calculation policy prerequisite verified with original QA matrix and final-source focused evidence; full XLSX import/export/UI and DOCX objective remain outstanding. Evidence: evidence/calc-calculation-policy-checkpoint.json. Continue active goal without pause."
-  attempts: 55
+  note: "Native DOM contract/value prerequisites verified; concrete DOM, metadata/model services and complete XLSX/DOCX filter/UI acceptance remain outstanding. Evidence: evidence/native-dom-contracts-checkpoint.json. Continue active goal locally; pinned source network approval is still pending."
+  attempts: 56
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -888,8 +891,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-12T05:50:58.348Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native DOM contract/value prerequisites verified; concrete DOM, metadata/model services and complete XLSX/DOCX filter/UI acceptance remain outstanding. Evidence: evidence/native-dom-contracts-checkpoint.json. Continue active goal locally; pinned source network approval is still pending."
+  -
+    type: "status"
+    at: "2026-11-12T05:51:14.728Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-12T05:29:05.571Z"
+doc_updated_at: "2026-11-12T05:51:14.728Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -2554,6 +2570,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T05:50:58.348Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native DOM contract/value prerequisites verified; concrete DOM, metadata/model services and complete XLSX/DOCX filter/UI acceptance remain outstanding. Evidence: evidence/native-dom-contracts-checkpoint.json. Continue active goal locally; pinned source network approval is still pending.
+    Attempts: 56
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T05:50:57.783Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2834,6 +2880,10 @@ sections:
     - Observation: Command/result/evidence: calc-calculation-policy-checkpoint.json records34 exact source blob proofs. 867 related core cases/148 files pass; final-owner recheck75 cases/3 files replaces the superseded global2 coverage map. Standard raw Istanbul merge of4whole actual owners passes90 with S98.37/B99.09/F97.95/L98.97. Actual ODS/CSV/worker regressions98 cases/6files and2 existing Chromium file flows pass.
       Impact: ScDocument and actual ScInterpreter now own/copy/merge original ScCalcConfig. Native global string coercion uses existing RTL, tools dates and the real formatter context; literals/shared-string references/string formula results now evaluate under source policy. Original ucalc testFuncParam conversion matrix is ported. CALC-522/523 preserve suspicious source fraction/overflow logic. Complete WorkbookGlobals/model metadata, DOCX/XLSX filters and UI acceptance remain incomplete.
       Resolution: Source implementation and unchanged line-style extraction satisfy typecheck/build/static/scopedlint/format/boundaries/resources/size/tree/provenance/registry/invariants/parity/doctor/routing. Only two old css-style-matchers JSDoc errors remain. Initial test assumptions, TS flow narrowing and partial final coverage-profile omissions are recorded with corrections and raw evidence. Keep epic and goal active and continue without pausing.
+
+    - Observation: Command/result/evidence: native-dom-contracts-checkpoint.json records79 source blob proofs. Complete direct contracts for18core DOM interfaces and2SAX callbacks, original zero-based enums and actual DOMException ownership/type bindings pass26 cases/2files. Entire23 executable owners naturally reach S260/260 B56/56 F73/73 L255/255 at approved90 threshold. Related real CPPU/InputSource/OOXML parser67 cases/5files pass.
+      Impact: Native metadata property storage now has its real DOM declaration/value graph, without a replacement tree, property provider or fake component query. Concrete unoxml/libxml2 owners, metadata/model initialization and full DOCX/XLSX import/export/UI remain outstanding. An async network approval request is pending for only the baseline-pinned libxml2 source with SHA verification; no network fetch occurred. Goal remains active and independent local work continues.
+      Resolution: Final typecheck/build/static/scopedlint/format/dependencies/resources/size/tree/provenance/registry/invariants/parity/doctor/routing pass; only the two old css-style-matchers JSDoc errors remain. Corrected duplicate imports, native scalar lvalue test input, cross-realm byte array construction, exact module owner boundaries, source-specific registry symbols and narrow empty-IDL lint declarations. Preserved raw failure/diagnostic logs. Concrete native domtest runtime cases remain required, not claimed as ported by contract tests.
 id_source: "generated"
 ---
 ## Summary
@@ -4508,6 +4558,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T05:50:58.348Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native DOM contract/value prerequisites verified; concrete DOM, metadata/model services and complete XLSX/DOCX filter/UI acceptance remain outstanding. Evidence: evidence/native-dom-contracts-checkpoint.json. Continue active goal locally; pinned source network approval is still pending.
+Attempts: 56
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T05:50:57.783Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4792,3 +4872,7 @@ DecisionContextRef:
 - Observation: Command/result/evidence: calc-calculation-policy-checkpoint.json records34 exact source blob proofs. 867 related core cases/148 files pass; final-owner recheck75 cases/3 files replaces the superseded global2 coverage map. Standard raw Istanbul merge of4whole actual owners passes90 with S98.37/B99.09/F97.95/L98.97. Actual ODS/CSV/worker regressions98 cases/6files and2 existing Chromium file flows pass.
   Impact: ScDocument and actual ScInterpreter now own/copy/merge original ScCalcConfig. Native global string coercion uses existing RTL, tools dates and the real formatter context; literals/shared-string references/string formula results now evaluate under source policy. Original ucalc testFuncParam conversion matrix is ported. CALC-522/523 preserve suspicious source fraction/overflow logic. Complete WorkbookGlobals/model metadata, DOCX/XLSX filters and UI acceptance remain incomplete.
   Resolution: Source implementation and unchanged line-style extraction satisfy typecheck/build/static/scopedlint/format/boundaries/resources/size/tree/provenance/registry/invariants/parity/doctor/routing. Only two old css-style-matchers JSDoc errors remain. Initial test assumptions, TS flow narrowing and partial final coverage-profile omissions are recorded with corrections and raw evidence. Keep epic and goal active and continue without pausing.
+
+- Observation: Command/result/evidence: native-dom-contracts-checkpoint.json records79 source blob proofs. Complete direct contracts for18core DOM interfaces and2SAX callbacks, original zero-based enums and actual DOMException ownership/type bindings pass26 cases/2files. Entire23 executable owners naturally reach S260/260 B56/56 F73/73 L255/255 at approved90 threshold. Related real CPPU/InputSource/OOXML parser67 cases/5files pass.
+  Impact: Native metadata property storage now has its real DOM declaration/value graph, without a replacement tree, property provider or fake component query. Concrete unoxml/libxml2 owners, metadata/model initialization and full DOCX/XLSX import/export/UI remain outstanding. An async network approval request is pending for only the baseline-pinned libxml2 source with SHA verification; no network fetch occurred. Goal remains active and independent local work continues.
+  Resolution: Final typecheck/build/static/scopedlint/format/dependencies/resources/size/tree/provenance/registry/invariants/parity/doctor/routing pass; only the two old css-style-matchers JSDoc errors remain. Corrected duplicate imports, native scalar lvalue test input, cross-realm byte array construction, exact module owner boundaries, source-specific registry symbols and narrow empty-IDL lint declarations. Preserved raw failure/diagnostic logs. Concrete native domtest runtime cases remain required, not claimed as ported by contract tests.

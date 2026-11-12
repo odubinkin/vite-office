@@ -1,0 +1,465 @@
+{
+  "taskId": "202610251549-J0Z0KF",
+  "checkpoint": "Complete core UNO DOM contracts, parser callbacks and owned DOM exception values required by native document metadata",
+  "sourceBaseline": {
+    "tag": "libreoffice-26.8.0.2",
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65"
+  },
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/xml/dom/DOMException.ts",
+      "gitBlob": "31a51b7e3420c9be85a566b91dd22ae5ec080eb2"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/xml/dom/DOMExceptionType.ts",
+      "gitBlob": "fd7026afe53f175fad61fdca9db4286da3f9872c"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/DOMException.ts",
+      "gitBlob": "cb1e78fadbc38f1ad6af444f77c032655dfd85bf"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/DOMExceptionType.ts",
+      "gitBlob": "bf881aa42dc038a992ca4905276c3d471330987f"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/NodeType.ts",
+      "gitBlob": "18d0af8680f78a05998be50f7c2b3d705255bcf3"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/XAttr.ts",
+      "gitBlob": "67c931a9eaa85f09ca442d8c57e37528869d91a7"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/XCDATASection.ts",
+      "gitBlob": "b309dca82f62a4f0aa42f68be1ef5de385634a03"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/XCharacterData.ts",
+      "gitBlob": "6435bc753ed7fc73f6195060e1a7a29c06222206"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/XComment.ts",
+      "gitBlob": "82b8a3b28a775f61ea3e06a21701c8c06a94c18e"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/XDOMImplementation.ts",
+      "gitBlob": "0a5896ace3b1bdd96ea339ec4fac7f9425d2d92c"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/XDocument.ts",
+      "gitBlob": "828fe6f63c669f2e0429d9d9a0054153101d9f08"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/XDocumentBuilder.ts",
+      "gitBlob": "6c7692ac36470d2eda95da89d5042092bc6e39c5"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/XDocumentFragment.ts",
+      "gitBlob": "a58f9c2259d5065bd6d7ab996d4ce988d1441a9c"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/XDocumentType.ts",
+      "gitBlob": "2d5f85455e38640bfa45da5bee355b503324bc4e"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/XElement.ts",
+      "gitBlob": "6c1f34466b5c69b35baccf0affde68efa14cd512"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/XEntity.ts",
+      "gitBlob": "c0fde56d458d04386ab588df910ef6e146351c6c"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/XEntityReference.ts",
+      "gitBlob": "74b9b531e82b6dbc6086988a93264645a975b08e"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/XNamedNodeMap.ts",
+      "gitBlob": "e7c6a67b2b44fc7ed24a30027b69738e0d35a087"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/XNode.ts",
+      "gitBlob": "6e9868996574352e9478c5dfcd4abe6556521969"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/XNodeList.ts",
+      "gitBlob": "3477ab95dd0a814d4157288b4fc7537a3093e4d8"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/XNotation.ts",
+      "gitBlob": "d1729e0baaa5747ab017cca80a1aad8d392bf1f0"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/XProcessingInstruction.ts",
+      "gitBlob": "9d4e0eab8958ca6089d95f64baa9421120daf669"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/XText.ts",
+      "gitBlob": "1d08ffa2179601825fd2e9d4de8fdc41e117738c"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/native-dom-contracts.test.ts",
+      "gitBlob": "81f2e86a437ecb4ea1f216fc37725de0931112a7"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/native-dom-values.test.ts",
+      "gitBlob": "4ba0172e28027ce7066af1722e05fb58ca637a77"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/sax/XEntityResolver.ts",
+      "gitBlob": "6ce1b45792ee150f210c4417e414bc8277a5d46e"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/sax/XErrorHandler.ts",
+      "gitBlob": "b9ea5bfee658afb95b61d4e4e46c9f093a154208"
+    },
+    {
+      "path": "docs/program/native-xml-dom-contracts.md",
+      "gitBlob": "09f66d4f1ae85a71e6e28214807f83dec4a6a3e0"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-73256a32-f63e-46d2-a224-eb2af3ef519e.json",
+      "gitBlob": "748c6f5d0910e992c8be9050a7563b96a8e99a65"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/xml/dom/DOMException.ts.json",
+      "gitBlob": "ccfea81cbc07ec5241ed94a37cb3f8c3beff3d84"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/xml/dom/DOMExceptionType.ts.json",
+      "gitBlob": "0433bf1fe910ae5c055e11ac7fdf829f80505061"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/DOMException.ts.json",
+      "gitBlob": "f470cc14a11babc83b15b9856f56fe67e165df8c"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/DOMExceptionType.ts.json",
+      "gitBlob": "e77803961e977d85e40a3df98a2bdc53cb3674df"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/NodeType.ts.json",
+      "gitBlob": "8679ed5ee3bba7ae83ab231e06d6189419774596"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XAttr.ts.json",
+      "gitBlob": "6dd4c1465861655b9a2fe1138edc8b9da6b1ea16"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XCDATASection.ts.json",
+      "gitBlob": "bfca1f56d67f7b4a1ab710413536506a96de8d8c"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XCharacterData.ts.json",
+      "gitBlob": "1018794fea6a2a640e25f52364fb5a283c3b76da"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XComment.ts.json",
+      "gitBlob": "4622aba9fe2bb02e4437615baf71018a848ab0a5"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XDOMImplementation.ts.json",
+      "gitBlob": "fc8437f8dce75330e4c2361572a42f396d1b479d"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XDocument.ts.json",
+      "gitBlob": "f5f06b51b654de0b16770533328bf4425bd46ea5"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XDocumentBuilder.ts.json",
+      "gitBlob": "27a474516b3b764d7e091c3079d12af12ff583a4"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XDocumentFragment.ts.json",
+      "gitBlob": "9d08749ff68c2c6289fa31819572a9b3cedf0afe"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XDocumentType.ts.json",
+      "gitBlob": "131441d3e2817238064c1932e1bcaf9b69b922dc"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XElement.ts.json",
+      "gitBlob": "66afd83559026c79cd211b9a7f8b46e970012705"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XEntity.ts.json",
+      "gitBlob": "f5339644bc0adf6561165be18929b7c00d472cae"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XEntityReference.ts.json",
+      "gitBlob": "ebaa35589d45b7ed66ca20446a9acda0b3eea992"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XNamedNodeMap.ts.json",
+      "gitBlob": "91e6883f3b8ba1076bcc362b4030442429777734"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XNode.ts.json",
+      "gitBlob": "1a1e379ce4b2a5200f4bd9a00eed0628c28759d5"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XNodeList.ts.json",
+      "gitBlob": "11450867aeb8e9fc1b17c0b7d1db164084d6e34d"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XNotation.ts.json",
+      "gitBlob": "c9ac7c4f0f3ed219dc28668e1ef6884023b4303e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XProcessingInstruction.ts.json",
+      "gitBlob": "0d08d4ed969a6a6768377cf8dc27efc7ccdebb11"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XText.ts.json",
+      "gitBlob": "0c1172616904172614ed4a649137c2903a2e5da7"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/sax/XEntityResolver.ts.json",
+      "gitBlob": "69f30e0c1a9ea56dcab767816d9cd020d67c775c"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/sax/XErrorHandler.ts.json",
+      "gitBlob": "b3ecb5f0f903cb937e125664bf260d1b7231d0c3"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/xml/dom/DOMException.ts.json",
+      "gitBlob": "a1a6b57c75c86a278c1a94aeef4f4081f0b75028"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/xml/dom/DOMExceptionType.ts.json",
+      "gitBlob": "e7c01f90429edf385d09752f1a79cf47de024ac4"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/DOMException.ts.json",
+      "gitBlob": "479f296a94e077bd39cfcd9e771e26721bfd2cb2"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/DOMExceptionType.ts.json",
+      "gitBlob": "22f71a2ddc2046d037e51d3c989ddeaa9cb3e466"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/NodeType.ts.json",
+      "gitBlob": "a451a9ed1d7c26f950555fda21538583dd754dc4"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XAttr.ts.json",
+      "gitBlob": "ba855de2d90b7b961df7bfaead3e226cd555c2d7"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XCDATASection.ts.json",
+      "gitBlob": "f3d402ea1c2173ed2f0cdef002b0d36e79b8bed8"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XCharacterData.ts.json",
+      "gitBlob": "433173a82fa09d6938b270cf6e4fbff652c50dd1"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XComment.ts.json",
+      "gitBlob": "976b96a8949eac45d30e79b905ff846630caba30"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XDOMImplementation.ts.json",
+      "gitBlob": "64f7a1d2f8e116efd7e2f218baaae082f0486ee8"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XDocument.ts.json",
+      "gitBlob": "78661bcbb4dc0d873212631eca6a66e7b18ece52"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XDocumentBuilder.ts.json",
+      "gitBlob": "f689442611d0f92ab9fc12061459377e79ad10ef"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XDocumentFragment.ts.json",
+      "gitBlob": "758c236d304e47374eca418e4dd94932285762cc"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XDocumentType.ts.json",
+      "gitBlob": "ff6fe2b1ad0e2a7964387e594b4955b9f2393532"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XElement.ts.json",
+      "gitBlob": "c4e03f6e58bfe3c0535bb3b6c261a43349793983"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XEntity.ts.json",
+      "gitBlob": "b1e0a6d3d09781a81c0cd36a52b87828029491d8"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XEntityReference.ts.json",
+      "gitBlob": "99cbdde799543d0921f9e270bbf359c9100bfbab"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XNamedNodeMap.ts.json",
+      "gitBlob": "6ab65967e9868ac2fab28a61ab8432241293bbfb"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XNode.ts.json",
+      "gitBlob": "4a5053320e8b272d53845146805f3daf19d6472c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XNodeList.ts.json",
+      "gitBlob": "78f4251ac5c69cb311bb742ab88f109bc3486cab"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XNotation.ts.json",
+      "gitBlob": "ce08e900155167ae98b6e3492ebca4519d5c2ab7"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XProcessingInstruction.ts.json",
+      "gitBlob": "02607b65f1dffad9dd42587f91323ed6eb818d29"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XText.ts.json",
+      "gitBlob": "9fdc2acf437cdbdec51184643515e2e56f049a00"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/sax/XEntityResolver.ts.json",
+      "gitBlob": "048fef6c5f7833e2b6638ed19ab60e5161133d33"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/sax/XErrorHandler.ts.json",
+      "gitBlob": "6b85bf37cedcef545c6548db9cf3e4c9a69cdd16"
+    }
+  ],
+  "capabilityId": "CAP-73256a32-f63e-46d2-a224-eb2af3ef519e",
+  "coverage": {
+    "summary": {
+      "lines": {
+        "total": 255,
+        "covered": 255,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 260,
+        "covered": 260,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 73,
+        "covered": 73,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 56,
+        "covered": 56,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "scope": "All23 entire executable declaration/value owner files;2 pure API reexports have no executable counters. No ignores, fake provider or synthesized DOM owner.",
+    "thresholds": 90,
+    "rawMapSha256": "857900d126229dd6659e60d5e3785dfc1a83ad6654fde64e37a55644019c36a9"
+  },
+  "sourceQA": {
+    "adapted": "Relevant cppu/qa/test_any.cxx::Test::testEnum same/cross enum extraction and preserved scalar outputs, using genuine new enum types and existing Any.",
+    "remaining": "unoxml/qa/unit/domtest.cxx requires concrete document/builder/node services; these remain outstanding, not replaced with contract-only tests. No native binary, complete test_any suite port or compiled ABI/differential is claimed."
+  },
+  "network": {
+    "state": "approval-requested-not-received",
+    "downloadPerformed": false,
+    "policy": "AGENTS.md requires network approval; current task plan specifies local work only. Async user question requests only pinned libxml2 source retrieval with baseline SHA verification. Independent local work continues.",
+    "requiredSource": "libxml2-2.15.3.tar.xz",
+    "baselineSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "authority": "vendor/libreoffice-reference/download.lst"
+  },
+  "limitations": [
+    "Concrete native DOM/libxml2/parser/service owners, SfxDocumentMetaData initialization and model properties remain incomplete.",
+    "Normal-mode interface reflection remains source-incomplete rather than fabricated. Exception Any transport, physical ABI and comprehensive native reflection remain unverified.",
+    "No DOCX/XLSX file/UI completion claim; goal/epics remain active.",
+    "Global JSDoc still has only the two pre-existing css-style-matchers.ts failures."
+  ],
+  "failuresResolved": [
+    "Generated XDocument imported XNode both as base value and redundant type; reused the actual base import.",
+    "DOMException initially imported published enum from offapi, violating CPPU module boundary. The actual generated enum owner now shares CPPU with the exception; the published path reexports it.",
+    "Any enum test supplied scalar instead of native logical lvalue pointer. Corrected to [1] source address; no Any implementation change.",
+    "TextEncoder output used directly in OUString byte-array constructor crossed JS realms in jsdom, causing an overload mismatch and worker OOM. Actual typed source ASCII arrays now match established generated exceptions. Standalone and isolated diagnostics retained; no heap enlargement or assertion removal.",
+    "Unused test Type import and direct-base getter JSDoc corrected. Four genuinely empty original IDL interfaces retain named declarations with narrowly justified line-level no-empty-object-type exceptions. No rule weakening or invented members.",
+    "Canonical API facade provenance requires nonempty exported symbols while runtime scanner correctly reports no local declarations; records now preserve that distinction.",
+    "Primary source enum/base/Code symbols were made explicit; generated static_type was removed from primary IDL symbol claims and remains sourced through original cppumaker evidence. Final source provenance passes."
+  ],
+  "verification": [
+    {
+      "command": "cd apps/office && npx vitest run --config vite.config.ts src/offapi/com/sun/star/xml/dom/native-dom-contracts.test.ts src/offapi/com/sun/star/xml/dom/native-dom-values.test.ts --coverage --coverage.include='src/offapi/com/sun/star/xml/dom/*.ts' --coverage.include=src/offapi/com/sun/star/xml/sax/XEntityResolver.ts --coverage.include=src/offapi/com/sun/star/xml/sax/XErrorHandler.ts --coverage.include='src/cppu/inc/com/sun/star/xml/dom/*.ts' --coverage.reportsDirectory=coverage/xlsx-model-current --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "26 cases/2 files; S260/260 B56/56 F73/73 L255/255 across23whole owners.",
+      "log": "apps/office/coverage/xlsx-model-coverage-current.log"
+    },
+    {
+      "command": "cd apps/office && npx vitest run --config vite.config.ts src/cppuhelper/source/native-implbase.test.ts src/cppuhelper/source/native-weak-object.test.ts src/sax/source/fastparser/InputSource.test.ts src/oox/source/core/fastparser.test.ts src/offapi/com/sun/star/util/native-color-interfaces.test.ts",
+      "result": "pass",
+      "evidence": "67 related cases/5files on actual CPPU/interface/InputSource/OOXML parser owners.",
+      "log": "apps/office/coverage/xlsx-model-regressions.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "result": "pass",
+      "evidence": "Tools and office current declaration/value graph.",
+      "log": "apps/office/coverage/xlsx-model-typecheck.log"
+    },
+    {
+      "command": "npm run test:static",
+      "result": "pass",
+      "evidence": "Production build/static smoke; does not claim new DOM service execution.",
+      "log": "apps/office/coverage/xlsx-model-static.log"
+    },
+    {
+      "command": "npx eslint apps/office/src/offapi/com/sun/star/xml/dom/*.ts apps/office/src/offapi/com/sun/star/xml/sax/{XEntityResolver,XErrorHandler}.ts apps/office/src/cppu/inc/com/sun/star/xml/dom/*.ts --max-warnings 0",
+      "result": "pass",
+      "evidence": "All scoped declarations, values and tests.",
+      "log": "apps/office/coverage/xlsx-model-lint-current.log"
+    },
+    {
+      "command": "npx prettier --check apps/office/src/cppu/inc/com/sun/star/xml/dom/DOMException.ts apps/office/src/cppu/inc/com/sun/star/xml/dom/DOMExceptionType.ts apps/office/src/offapi/com/sun/star/xml/dom/DOMException.ts apps/office/src/offapi/com/sun/star/xml/dom/DOMExceptionType.ts apps/office/src/offapi/com/sun/star/xml/dom/NodeType.ts apps/office/src/offapi/com/sun/star/xml/dom/XAttr.ts apps/office/src/offapi/com/sun/star/xml/dom/XCDATASection.ts apps/office/src/offapi/com/sun/star/xml/dom/XCharacterData.ts apps/office/src/offapi/com/sun/star/xml/dom/XComment.ts apps/office/src/offapi/com/sun/star/xml/dom/XDOMImplementation.ts apps/office/src/offapi/com/sun/star/xml/dom/XDocument.ts apps/office/src/offapi/com/sun/star/xml/dom/XDocumentBuilder.ts apps/office/src/offapi/com/sun/star/xml/dom/XDocumentFragment.ts apps/office/src/offapi/com/sun/star/xml/dom/XDocumentType.ts apps/office/src/offapi/com/sun/star/xml/dom/XElement.ts apps/office/src/offapi/com/sun/star/xml/dom/XEntity.ts apps/office/src/offapi/com/sun/star/xml/dom/XEntityReference.ts apps/office/src/offapi/com/sun/star/xml/dom/XNamedNodeMap.ts apps/office/src/offapi/com/sun/star/xml/dom/XNode.ts apps/office/src/offapi/com/sun/star/xml/dom/XNodeList.ts apps/office/src/offapi/com/sun/star/xml/dom/XNotation.ts apps/office/src/offapi/com/sun/star/xml/dom/XProcessingInstruction.ts apps/office/src/offapi/com/sun/star/xml/dom/XText.ts apps/office/src/offapi/com/sun/star/xml/dom/native-dom-contracts.test.ts apps/office/src/offapi/com/sun/star/xml/dom/native-dom-values.test.ts apps/office/src/offapi/com/sun/star/xml/sax/XEntityResolver.ts apps/office/src/offapi/com/sun/star/xml/sax/XErrorHandler.ts docs/program/native-xml-dom-contracts.md docs/program/registry/shared/capabilities/CAP-73256a32-f63e-46d2-a224-eb2af3ef519e.json docs/program/registry/shared/provenance/cppu/inc/com/sun/star/xml/dom/DOMException.ts.json docs/program/registry/shared/provenance/cppu/inc/com/sun/star/xml/dom/DOMExceptionType.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/DOMException.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/DOMExceptionType.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/NodeType.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XAttr.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XCDATASection.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XCharacterData.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XComment.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XDOMImplementation.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XDocument.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XDocumentBuilder.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XDocumentFragment.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XDocumentType.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XElement.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XEntity.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XEntityReference.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XNamedNodeMap.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XNode.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XNodeList.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XNotation.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XProcessingInstruction.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/XText.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/sax/XEntityResolver.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/sax/XErrorHandler.ts.json docs/program/registry/shared/runtime/cppu/inc/com/sun/star/xml/dom/DOMException.ts.json docs/program/registry/shared/runtime/cppu/inc/com/sun/star/xml/dom/DOMExceptionType.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/DOMException.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/DOMExceptionType.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/NodeType.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XAttr.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XCDATASection.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XCharacterData.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XComment.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XDOMImplementation.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XDocument.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XDocumentBuilder.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XDocumentFragment.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XDocumentType.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XElement.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XEntity.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XEntityReference.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XNamedNodeMap.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XNode.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XNodeList.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XNotation.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XProcessingInstruction.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/XText.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/sax/XEntityResolver.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/sax/XErrorHandler.ts.json",
+      "result": "pass",
+      "evidence": "All79 intentional source/docs/registry paths.",
+      "log": "apps/office/coverage/xlsx-model-prettier-verified.log"
+    },
+    {
+      "command": "npm run check:dependencies && npm run check:file-size && npm run check:source-tree",
+      "result": "pass",
+      "evidence": "Module boundaries,authored size and source-tree gate.",
+      "log": "apps/office/coverage/xlsx-model-structural-final.log"
+    },
+    {
+      "command": "npm run check:writer-resources && npm run check:calc-resources && npm run check:writer-hintids",
+      "result": "pass",
+      "evidence": "Existing native resources and hint IDs.",
+      "log": "apps/office/coverage/xlsx-model-resources.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail-existing-baseline",
+      "evidence": "Only css-style-matchers.ts17 missing JSDoc and76 parameter count; scoped source documentation passes.",
+      "log": "apps/office/coverage/xlsx-model-docs-current.log"
+    },
+    {
+      "command": "npm run check:source-provenance && npm run inventory:registry:build",
+      "result": "pass",
+      "evidence": "2260 runtime modules,25 new source pairs; build completed before final registry checks.",
+      "log": "apps/office/coverage/xlsx-model-provenance-current.log"
+    },
+    {
+      "command": "npm run inventory:invariants && npm run inventory:parity",
+      "result": "pass",
+      "evidence": "Current registry source/evidence validated; broad confidence flags remain false.",
+      "log": "apps/office/coverage/xlsx-model-registry-verified.log"
+    },
+    {
+      "command": "ap doctor && node .agentplane/policy/check-routing.mjs && git diff --check",
+      "result": "pass",
+      "evidence": "Doctor0errors with existing managed shim warning; routing/diff clean.",
+      "log": "apps/office/coverage/xlsx-model-doctor.log"
+    }
+  ]
+}
