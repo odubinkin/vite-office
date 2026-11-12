@@ -152,6 +152,35 @@ export class SwAttrPool extends SfxItemPool {
           factory,
         );
       };
+    for (const which of [
+      WriterWhich.RES_CHRATR_CASEMAP,
+      WriterWhich.RES_CHRATR_CHARSETCOLOR,
+      WriterWhich.RES_CHRATR_CONTOUR,
+      WriterWhich.RES_CHRATR_KERNING,
+      WriterWhich.RES_CHRATR_UNUSED1,
+      WriterWhich.RES_CHRATR_SHADOWED,
+      WriterWhich.RES_CHRATR_BLINK,
+      WriterWhich.RES_CHRATR_NOHYPHEN,
+      WriterWhich.RES_CHRATR_UNUSED2,
+      WriterWhich.RES_CHRATR_BACKGROUND,
+      WriterWhich.RES_CHRATR_ROTATE,
+      WriterWhich.RES_CHRATR_EMPHASIS_MARK,
+      WriterWhich.RES_CHRATR_TWO_LINES,
+      WriterWhich.RES_CHRATR_SCALEW,
+      WriterWhich.RES_CHRATR_RELIEF,
+      WriterWhich.RES_CHRATR_HIDDEN,
+      WriterWhich.RES_CHRATR_OVERLINE,
+      WriterWhich.RES_CHRATR_RSID,
+      WriterWhich.RES_CHRATR_BOX,
+      WriterWhich.RES_CHRATR_SHADOW,
+      WriterWhich.RES_CHRATR_GRABBAG,
+      WriterWhich.RES_CHRATR_BIDIRTL,
+      WriterWhich.RES_CHRATR_UNUSED3,
+      WriterWhich.RES_CHRATR_OPTICAL_SIZING,
+      WriterWhich.RES_CHRATR_FONT_VARIATIONS,
+      WriterWhich.RES_CHRATR_SCRIPT_HINT,
+    ])
+      register(which);
     register(RES_OPAQUE);
     register(RES_CNTNT);
     register(RES_ANCHOR);

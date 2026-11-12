@@ -63,3 +63,16 @@ it("admits only source-proven global default package reads across the native mod
     ),
   ).toMatch(/must not depend on uibase/u);
 });
+
+it("admits only the original Writer default-package FontRelief enum dependency", /** Keeps native value declarations separate from browser/device adapters and other core callers. @returns Nothing. */ () => {
+  expect(isForbiddenDomainVclImport("sw/source/core/bastyp/init.ts", "vcl/inc/fntstyle.ts")).toBe(
+    false,
+  );
+  for (const target of [
+    "vcl/source/outdev/font.ts",
+    "vcl/browser/font-metadata-codec.ts",
+    "vcl/source/app/svapp.ts",
+  ])
+    expect(isForbiddenDomainVclImport("sw/source/core/bastyp/init.ts", target)).toBe(true);
+  expect(isForbiddenDomainVclImport("sw/source/core/doc/doc.ts", "vcl/inc/fntstyle.ts")).toBe(true);
+});

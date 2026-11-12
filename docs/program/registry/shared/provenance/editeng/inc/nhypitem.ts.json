@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/inc/nhypitem.ts",
+    "localSymbols": [
+      "SvxNoHyphenItem"
+    ],
+    "upstreamPath": "include/editeng/nhypitem.hxx",
+    "upstreamSymbols": [
+      "SvxNoHyphenItem"
+    ],
+    "preservedResponsibilities": [
+      "Character-default checkpoint: all48 original Writer character identities now carry actual source concrete static default classes and original values/slots on the real module package and SwAttrPool. Adds actual hidden/no-hyphen bool item copy/Clone and unsigned32 SvxRsidItem Any conversion/empty presentation. ScriptHint document-pool registration was missing and is now present. Native unused3 stays SfxVoidItem despite its typed declaration (WRITER457). Actual document defaults feed DOCX attribute output; full filter/package/UI, complete Writer/Sdr packages and stylesheet/default services remain pending. No contiguous ranges or filler items are inferred, and broad semantic status remains unverified."
+    ],
+    "omittedResponsibilities": [
+      "Localized bool presentation and revision diagnostics/native instance caches remain unported. Full filter/UI acceptance remains pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/inc/nhypitem.ts",
+          "marker": "SvxNoHyphenItem"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/native-character-control-items.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/nhypitem.hxx",
+          "marker": "SvxNoHyphenItem"
+        }
+      ]
+    }
+  }
+}

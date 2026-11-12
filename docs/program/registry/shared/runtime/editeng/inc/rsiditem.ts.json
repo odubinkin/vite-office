@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/inc/rsiditem.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "character-control-values",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/editeng/inc/rsiditem.ts",
+        "apps/office/src/editeng/source/items/native-character-control-items.test.ts",
+        "apps/office/src/sw/source/core/bastyp/native-character-defaults.test.ts"
+      ],
+      "justification": "Character-default checkpoint: all48 original Writer character identities now carry actual source concrete static default classes and original values/slots on the real module package and SwAttrPool. Adds actual hidden/no-hyphen bool item copy/Clone and unsigned32 SvxRsidItem Any conversion/empty presentation. ScriptHint document-pool registration was missing and is now present. Native unused3 stays SfxVoidItem despite its typed declaration (WRITER457). Actual document defaults feed DOCX attribute output; full filter/package/UI, complete Writer/Sdr packages and stylesheet/default services remain pending. No contiguous ranges or filler items are inferred, and broad semantic status remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/editeng/rsiditem.hxx",
+      "upstreamSymbols": [
+        "SvxRsidItem"
+      ]
+    }
+  }
+}

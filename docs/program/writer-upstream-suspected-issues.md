@@ -3675,3 +3675,8 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 
 - Source: pinned `sw/source/core/doc/SwStyleNameMapper.cxx`, FillProgName and FillUIName, commit9bc445578031fecf56086729d8e4940c77e14d65.
 - When an unknown UI name already has a recognized ` (user)` suffix, FillProgName removes it for non-table families but appends another suffix for TableStyle; the source marks this branch FIXME. FillUIName also explicitly accepts table-style UI names for old ODF files. Preserve both branches and the existing WRITER207 UTF16 length guard rather than making all families symmetric. For example AB (user) becomes AB for a paragraph family but AB (user) (user) for TableStyle, whose reverse Fill removes one suffix. Tests exercise actual static mapper operations without a synthetic translated UI provider or full table-autoformat document claim.
+
+### WRITER457 — An unused character WhichId declares a different concrete item type
+
+- Source: pinned `sw/inc/hintids.hxx`, RES_CHRATR_UNUSED3, and `sw/source/core/bastyp/init.cxx`, ItemInfoPackageSwAttributes, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- The header declares RES_CHRATR_UNUSED3 as TypedWhichId<SfxInt16Item>, while the actual default table constructs SfxVoidItem for that identity. Preserve the table's concrete empty item rather than replacing it with a signed integer to match the declaration. The local complete character-default test checks the actual SfxVoidItem. No native typed retrieval, binary cast outcome or reachable document defect is inferred from this source mismatch.

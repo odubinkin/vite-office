@@ -232,6 +232,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-paragraph-shading.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/bastyp/native-character-defaults.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -386,7 +390,8 @@
       "S3HW1E HTML73: Typed direction reads the actual Which item through the native effective-item owner.",
       "Projects actual native Color at the existing Writer primitive output boundary, retaining the original packed alpha and auto sentinel.",
       "Registers concrete fly split, containment and wrap-influence items with native pool ownership.",
-      "Projects the original drawing fill and accepts an existing brush through the current paint boundary."
+      "Projects the original drawing fill and accepts an existing brush through the current paint boundary.",
+      "Character-default checkpoint: all48 original Writer character identities now carry actual source concrete static default classes and original values/slots on the real module package and SwAttrPool. Adds actual hidden/no-hyphen bool item copy/Clone and unsigned32 SvxRsidItem Any conversion/empty presentation. ScriptHint document-pool registration was missing and is now present. Native unused3 stays SfxVoidItem despite its typed declaration (WRITER457). Actual document defaults feed DOCX attribute output; full filter/package/UI, complete Writer/Sdr packages and stylesheet/default services remain pending. No contiguous ranges or filler items are inferred, and broad semantic status remains unverified."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/attr/swatrset.cxx",

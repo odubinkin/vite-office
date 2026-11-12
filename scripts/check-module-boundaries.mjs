@@ -73,6 +73,8 @@ export function isForbiddenDomainVclImport(relativeSource, relativeTarget) {
     ["vcl/inc/idle", "vcl/inc/task", "vcl/inc/scheduler"].includes(target)
   )
     return false;
+  // Writer init.cxx constructs SvxCharReliefItem(FontRelief::NONE); fntstyle.hxx is a pure enum header.
+  if (source === "sw/source/core/bastyp/init.ts" && target === "vcl/inc/fntstyle") return false;
   // docpool.cxx consumes FontRelief and GetDefaultFont; these represented modules contain no browser/device adapter.
   return (
     source !== "sc/source/core/data/docpool.ts" ||

@@ -2,6 +2,7 @@
 import { expect, it } from "vitest";
 import { DocxExport } from "./docxexport";
 import type { DocxAttributeOutput } from "./docxattributeoutput";
+import * as W from "../../../inc/hintids";
 import { SwDoc } from "../../core/doc/doc";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { XmlFilterBase } from "../../../../oox/source/core/xmlfilterbase";
@@ -23,7 +24,7 @@ import { FontRelief } from "../../../../vcl/inc/fntstyle";
 import { FontEmphasisMark as M } from "../../../../tools/inc/fontenum";
 
 /** Emits through real DOCX and shared XML owners without replacing native services. @param write - Actual output calls. @returns Serialized fragment. */
-function emit(write: (output: DocxAttributeOutput) => void): string {
+function emit(write: (output: DocxAttributeOutput, document: SwDoc) => void): string {
   const doc = new SwDoc(),
     position = new SwPosition(doc.nodes.GetEndOfContent()),
     range = new SwPaM(position),
@@ -33,7 +34,7 @@ function emit(write: (output: DocxAttributeOutput) => void): string {
     output = exporter.DocxAttrOutput();
   try {
     output.SetSerializer(serializer);
-    write(output);
+    write(output, doc);
     serializer.endDocument();
     return new TextDecoder().decode(stream.getBytes());
   } finally {
@@ -245,4 +246,41 @@ it("merges rotation and two-line flags, retains disabled-call state, sorts run p
   ).toBe(
     '<w:r><w:rPr><w:caps/><w:shadow/><w:eastAsianLayout w:combine="true" w:combineBrackets="curly" w:vert="true" w:vertCompress="true"/></w:rPr></w:r><w:r><w:rPr></w:rPr></w:r>',
   );
+});
+
+it("emits source reset effects from actual registered Writer defaults and current document overlays", /** Exercises the real document pool through the actual DOCX attribute exporter, not a literal item fixture. @returns Nothing. */ () => {
+  expect(
+    emit(
+      /** Reads source defaults rather than constructing expected substitutes. @param output - Native DOCX output. @param document - Actual exporting document. @returns Nothing. */ (
+        output,
+        document,
+      ) => {
+        output.CharCaseMap(document.GetDefault(W.RES_CHRATR_CASEMAP) as SvxCaseMapItem);
+        output.CharContour(document.GetDefault(W.RES_CHRATR_CONTOUR) as SvxContourItem);
+        output.CharShadow(document.GetDefault(W.RES_CHRATR_SHADOWED) as SvxShadowedItem);
+        output.CharAnimatedText(document.GetDefault(W.RES_CHRATR_BLINK) as SvxBlinkItem);
+        output.CharRelief(document.GetDefault(W.RES_CHRATR_RELIEF) as SvxCharReliefItem);
+      },
+    ),
+  ).toBe(
+    '<w:smallCaps w:val="false"/><w:caps w:val="false"/><w:outline w:val="false"/><w:shadow w:val="false"/><w:effect w:val="none"/><w:emboss w:val="false"/><w:imprint w:val="false"/>',
+  );
+  expect(
+    emit(
+      /** Applies a genuine user default before reading it through the exporter. @param output - Native DOCX output. @param document - Actual exporting document. @returns Nothing. */ (
+        output,
+        document,
+      ) => {
+        const contour = new SvxContourItem(true, W.RES_CHRATR_CONTOUR);
+        try {
+          document.SetDefault(contour);
+        } finally {
+          contour.Dispose();
+        }
+        output.CharContour(document.GetDefault(W.RES_CHRATR_CONTOUR) as SvxContourItem);
+        document.GetAttrPool().ResetUserDefaultItem(W.RES_CHRATR_CONTOUR);
+        output.CharContour(document.GetDefault(W.RES_CHRATR_CONTOUR) as SvxContourItem);
+      },
+    ),
+  ).toBe('<w:outline/><w:outline w:val="false"/>');
 });

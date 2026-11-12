@@ -1,4 +1,35 @@
 /** @fileoverview Native module-global static Writer defaults from pinned bastyp/init.cxx, limited to represented item classes. */
+import * as CharacterWhich from "../../../inc/hintids";
+import {
+  SvxCaseMapItem,
+  SvxOpticalSizingItem,
+} from "../../../../editeng/source/items/textitem.modes";
+import {
+  SvxNoHyphenItem,
+  SvxRsidItem,
+  SvxContourItem,
+  SvxShadowedItem,
+  SvxOverlineItem,
+  SvxCharReliefItem,
+} from "../../../../editeng/source/items/textitem";
+import { SvxCharHiddenItem } from "../../../../editeng/inc/charhiddenitem";
+import {
+  SvxKerningItem,
+  SvxCharScaleWidthItem,
+} from "../../../../editeng/source/items/textitem.spacing";
+import {
+  SvxCharRotateItem,
+  SvxTwoLinesItem,
+  SvxBlinkItem,
+} from "../../../../editeng/source/items/textitem.layout";
+import { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
+import { SvxFontVariationsItem } from "../../../../editeng/inc/fontvariationsitem";
+import { SvxShadowItem } from "../../../../editeng/source/items/frmitems.shadow";
+import { SfxVoidItem } from "../../../../svl/source/items/voiditem";
+import { SfxGrabBagItem } from "../../../../svl/source/items/grabbagitem";
+import { SvxCaseMap } from "../../../../editeng/inc/svxenum";
+import { FontEmphasisMark } from "../../../../tools/inc/fontenum";
+import { FontRelief } from "../../../../vcl/inc/fntstyle";
 import { SwFormatFlySplit } from "../../../inc/formatflysplit";
 import { SwFormatFollowTextFlow } from "../../../inc/fmtfollowtextflow";
 import { SwFormatWrapInfluenceOnObjPos } from "../../../inc/fmtwrapinfluenceonobjpos";
@@ -157,6 +188,32 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
         this.getItemInfoStatic(item.Which() - RES_CHRATR_BEGIN),
       );
     };
+    const W = CharacterWhich;
+    add(new SvxCaseMapItem(SvxCaseMap.NotMapped, W.RES_CHRATR_CASEMAP));
+    add(new SvxColorItem(W.RES_CHRATR_CHARSETCOLOR));
+    add(new SvxContourItem(false, W.RES_CHRATR_CONTOUR));
+    add(new SvxKerningItem(0, W.RES_CHRATR_KERNING));
+    add(new SfxVoidItem(W.RES_CHRATR_UNUSED1));
+    add(new SvxShadowedItem(false, W.RES_CHRATR_SHADOWED));
+    add(new SvxBlinkItem(false, W.RES_CHRATR_BLINK));
+    add(new SvxNoHyphenItem(false, W.RES_CHRATR_NOHYPHEN));
+    add(new SfxVoidItem(W.RES_CHRATR_UNUSED2));
+    add(new SvxBrushItem(W.RES_CHRATR_BACKGROUND));
+    add(new SvxCharRotateItem(0, false, W.RES_CHRATR_ROTATE));
+    add(new SvxEmphasisMarkItem(FontEmphasisMark.NONE, W.RES_CHRATR_EMPHASIS_MARK));
+    add(new SvxTwoLinesItem(false, 0, 0, W.RES_CHRATR_TWO_LINES));
+    add(new SvxCharScaleWidthItem(100, W.RES_CHRATR_SCALEW));
+    add(new SvxCharReliefItem(FontRelief.NONE, W.RES_CHRATR_RELIEF));
+    add(new SvxCharHiddenItem(false, W.RES_CHRATR_HIDDEN));
+    add(new SvxOverlineItem(FontLineStyle.LINESTYLE_NONE, W.RES_CHRATR_OVERLINE));
+    add(new SvxRsidItem(0, W.RES_CHRATR_RSID));
+    add(new SvxBoxItem(W.RES_CHRATR_BOX));
+    add(new SvxShadowItem(W.RES_CHRATR_SHADOW));
+    add(new SfxGrabBagItem(W.RES_CHRATR_GRABBAG));
+    add(new SfxInt16Item(W.RES_CHRATR_BIDIRTL, -1));
+    add(new SfxVoidItem(W.RES_CHRATR_UNUSED3));
+    add(new SvxOpticalSizingItem(false, W.RES_CHRATR_OPTICAL_SIZING));
+    add(new SvxFontVariationsItem(W.RES_CHRATR_FONT_VARIATIONS));
     add(new SwTextGridItem());
     add(new SvxEscapementItem(RES_CHRATR_ESCAPEMENT));
     add(new SvxProtectItem(RES_PROTECT));

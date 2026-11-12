@@ -1,6 +1,10 @@
 /**
  * @fileoverview Reimplements bounded EditEngine character items from pinned `editeng/source/items/textitem.cxx`.
  */
+import { OUString } from "../../../sal/inc/rtl/ustring";
+import type { SfxItemPresentation } from "../../../svl/inc/poolitem";
+import type { MapUnit } from "../../../tools/inc/mapunit";
+import { SfxUInt32Item } from "../../../svl/inc/intitem";
 import { SfxBoolItem, SfxEnumItem } from "../../../svl/inc/eitem";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
@@ -447,5 +451,66 @@ export class SvxOverlineItem extends SvxTextLineItem {
   public override Clone(pool?: SfxItemPool): SvxOverlineItem {
     void pool;
     return new SvxOverlineItem(this);
+  }
+}
+
+/** Original per-character hyphenation suppression; localized presentation remains unported. */
+export class SvxNoHyphenItem extends SfxBoolItem {
+  /** Original bool/Which and implicit-copy forms. @param args - Native constructor selection. @returns Item. */
+  constructor(...args: [value: boolean, which: number] | [source: Readonly<SvxNoHyphenItem>]) {
+    if (args.length === 1) super(args[0]);
+    else super(args[1], args[0]);
+  }
+  /** Original independent concrete copy. @param pool - Unused pool. @returns Item. */
+  override Clone(pool?: SfxItemPool): SvxNoHyphenItem {
+    void pool;
+    return new SvxNoHyphenItem(this);
+  }
+}
+/** Original revision-session identifier; native instance caches and diagnostics remain unported. */
+export class SvxRsidItem extends SfxUInt32Item {
+  /** Original value/Which and implicit-copy forms. @param args - Native constructor selection. @returns Item. */
+  constructor(...args: [value: number, which: number] | [source: Readonly<SvxRsidItem>]) {
+    if (args.length === 1) super(args[0]);
+    else super(args[1], args[0] >>> 0);
+  }
+  /** Original independent concrete copy. @param pool - Unused pool. @returns Item. */
+  override Clone(pool?: SfxItemPool): SvxRsidItem {
+    void pool;
+    return new SvxRsidItem(this);
+  }
+  /** Existing scalar read boundary. @returns Unsigned identifier. */
+  override QueryValue(): number;
+  /** Original unsigned32 Any query, selector ignored. @param output - Actual Any. @param member - Ignored selector. @returns True. */
+  override QueryValue(output: Any, member?: number): boolean;
+  /** Original unsigned query with the existing scalar binding. @param output - Optional Any. @param member - Ignored selector. @returns Value or success. */
+  override QueryValue(output?: Any, member = 0): number | boolean {
+    void member;
+    if (output === undefined) return this.GetValue();
+    output.insert([this.GetValue()], "sal_uInt32");
+    return true;
+  }
+  /** Original unsigned32 extraction, preserving the item on rejection. @param input - Actual Any. @param member - Ignored selector. @returns Success. */
+  override PutValue(input: unknown, member = 0): boolean {
+    void member;
+    const value: [number] = [0];
+    if (!(input instanceof Any) || !input.extract(value, "sal_uInt32")) return false;
+    this.SetValue(value[0]);
+    return true;
+  }
+  /** Original empty presentation, independent of locale. @param presentation - Ignored degree. @param coreMetric - Ignored unit. @param presentationMetric - Ignored unit. @param text - Actual output. @param intl - Unused provider. @returns False. */
+  GetPresentation(
+    presentation: SfxItemPresentation,
+    coreMetric: MapUnit,
+    presentationMetric: MapUnit,
+    text: OUString,
+    intl: unknown,
+  ): boolean {
+    void presentation;
+    void coreMetric;
+    void presentationMetric;
+    void intl;
+    text.clear();
+    return false;
   }
 }

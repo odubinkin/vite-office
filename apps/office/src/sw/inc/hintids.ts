@@ -48,7 +48,7 @@ export const RES_CHRATR_WORDLINEMODE = 16 as const;
 /** Original automatic pair kerning, RES_CHRATR_BEGIN +16. */
 export const RES_CHRATR_AUTOKERN = 17 as const;
 
-/** Original no-hyphen character WhichId; its item producer remains unregistered. */
+/** Original no-hyphen character WhichId. */
 export const RES_CHRATR_NOHYPHEN = 19 as const;
 
 /** CJK font posture, `RES_CHRATR_BEGIN + 24`. */
@@ -79,6 +79,55 @@ export const RES_CHRATR_CTL_WEIGHT = 31 as const;
 export const RES_CHRATR_HIGHLIGHT = 42 as const;
 /** Script classification hint, `RES_CHRATR_BEGIN + 45`. */
 export const RES_CHRATR_SCRIPT_HINT = 46 as const;
+
+/** Original character identity, RES_CHRATR_BEGIN +0. */
+export const RES_CHRATR_CASEMAP = 1 as const;
+/** Original character identity, RES_CHRATR_BEGIN +1. */
+export const RES_CHRATR_CHARSETCOLOR = 2 as const;
+/** Original character identity, RES_CHRATR_BEGIN +3. */
+export const RES_CHRATR_CONTOUR = 4 as const;
+/** Original character identity, RES_CHRATR_BEGIN +8. */
+export const RES_CHRATR_KERNING = 9 as const;
+/** Original character identity, RES_CHRATR_BEGIN +11. */
+export const RES_CHRATR_UNUSED1 = 12 as const;
+/** Original character identity, RES_CHRATR_BEGIN +12. */
+export const RES_CHRATR_SHADOWED = 13 as const;
+/** Original character identity, RES_CHRATR_BEGIN +17. */
+export const RES_CHRATR_BLINK = 18 as const;
+/** Original character identity, RES_CHRATR_BEGIN +19. */
+export const RES_CHRATR_UNUSED2 = 20 as const;
+/** Original character identity, RES_CHRATR_BEGIN +20. */
+export const RES_CHRATR_BACKGROUND = 21 as const;
+/** Original character identity, RES_CHRATR_BEGIN +31. */
+export const RES_CHRATR_ROTATE = 32 as const;
+/** Original character identity, RES_CHRATR_BEGIN +32. */
+export const RES_CHRATR_EMPHASIS_MARK = 33 as const;
+/** Original character identity, RES_CHRATR_BEGIN +33. */
+export const RES_CHRATR_TWO_LINES = 34 as const;
+/** Original character identity, RES_CHRATR_BEGIN +34. */
+export const RES_CHRATR_SCALEW = 35 as const;
+/** Original character identity, RES_CHRATR_BEGIN +35. */
+export const RES_CHRATR_RELIEF = 36 as const;
+/** Original character identity, RES_CHRATR_BEGIN +36. */
+export const RES_CHRATR_HIDDEN = 37 as const;
+/** Original character identity, RES_CHRATR_BEGIN +37. */
+export const RES_CHRATR_OVERLINE = 38 as const;
+/** Original character identity, RES_CHRATR_BEGIN +38. */
+export const RES_CHRATR_RSID = 39 as const;
+/** Original character identity, RES_CHRATR_BEGIN +39. */
+export const RES_CHRATR_BOX = 40 as const;
+/** Original character identity, RES_CHRATR_BEGIN +40. */
+export const RES_CHRATR_SHADOW = 41 as const;
+/** Original character identity, RES_CHRATR_BEGIN +42. */
+export const RES_CHRATR_GRABBAG = 43 as const;
+/** Original character identity, RES_CHRATR_BEGIN +43. */
+export const RES_CHRATR_BIDIRTL = 44 as const;
+/** Original character identity, RES_CHRATR_BEGIN +44. */
+export const RES_CHRATR_UNUSED3 = 45 as const;
+/** Original character identity, RES_CHRATR_BEGIN +46. */
+export const RES_CHRATR_OPTICAL_SIZING = 47 as const;
+/** Original character identity, RES_CHRATR_BEGIN +47. */
+export const RES_CHRATR_FONT_VARIATIONS = 48 as const;
 
 /** First WhichId after Writer character-format items. */
 export const RES_CHRATR_END = 49 as const;
