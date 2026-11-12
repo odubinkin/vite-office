@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/document/XDocumentPropertiesSupplier.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-metadata-dom-ingestion",
+    "capabilityIds": [
+      "CAP-56aaae0a-6cf9-4941-b33e-88c5a933af44"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/document/XDocumentPropertiesSupplier.ts",
+        "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.dom.test.ts",
+        "apps/office/src/offapi/com/sun/star/document/document-properties-types.test.ts",
+        "docs/program/native-metadata-dom-ingestion.md"
+      ],
+      "justification": "Complete original DocumentProperties/DocumentProperties2/supplier SDK declarations use normal shared CPPUMaker cached types and exact bases. Native Sfx metadata namespace/QName/statistics tables, immediate-child first/all match traversal and first-TEXT_NODE selection retain source spelling, order and actual RTL/UNO reference ownership. The complete original init user-defined ingestion loop uses actual Any temporal/scalar values, source converters and registered PropertyBag, retaining REMOVABLE attributes, invalid value/duplicate/type/argument catch behavior and original numeric-status acceptance. Actual TEST.odt meta.xml from the pinned package executes the original Hinweis/Warnung value assertions with Unicode in native DOM tests and Chromium main/DOM-free Worker. Full original test_misc service/medium/setter/event/clone QA is pending, not a passing full source port. Sfx member lifecycle/DOM updates/lazy bag/listener/storage and final DOCX/XLSX core/shell/UI acceptance remain incomplete. No alternate metadata model, fake service/provider/type/default/value generator or private-state patch is added; physical native ABI/allocator/mutex/shared-memory behavior remains unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XDocumentPropertiesSupplier",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "offapi/com/sun/star/document/XDocumentPropertiesSupplier.idl",
+      "upstreamSymbols": [
+        "XDocumentPropertiesSupplier",
+        "getDocumentProperties"
+      ]
+    }
+  }
+}

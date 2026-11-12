@@ -3916,3 +3916,13 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 
 - Source: `sax/source/tools/converter.cxx`, `lcl_ConvertToUTC/lcl_parseDate`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-560.
 - UTC adjustment increments/decrements the signed year directly without skipping zero. Parsing -0001-12-31T23:00:00-02:00 yields year0/month1/day1/hour1. Forced DateTime formatting produces 0000-01-01T01:00:00Z, which the strict parser rejects. Preserve the source arithmetic and parser guard rather than using a host calendar to repair them. Actual generated values and public converter tests record this boundary; XMLSchema version assumptions, full document/UI impact and compiled native differential remain unqualified.
+
+### WRITER496 — Metadata text access reads only the first direct text node
+
+- Source: `sfx2/source/doc/SfxDocumentMetaData.cxx`, `getNodeText`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC561.
+- The function walks immediate children and returns the first TEXT_NODE. It ignores CDATA and text inside elements, and does not concatenate text separated by comments or other nodes. Consequently a metadata element containing CDATA followed by two separate text nodes yields only the first ordinary text fragment. Preserve this source selection rather than using DOM textContent. Native DOM tests exercise alternate prefixes, nested elements, CDATA and separated text; no compiled native differential or full format-impact claim is made.
+
+### WRITER497 — Metadata float ingestion accepts nonnumeric text as zero
+
+- Source: `sfx2/source/doc/SfxDocumentMetaData.cxx`, `init` float branch; `sax/source/tools/converter.cxx`, `Converter::convertDouble`; shared with CALC562 and existing CALC-170, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
+- The float branch checks only the SAX converter's status result. The source-tested RTL no-digit result is zero with status Ok, so `bad` is accepted as a double property with value zero; overflow such as `1e9999` is skipped. The metadata caller does not inspect the unconsumed suffix. Preserve the original caller check. Actual native DOM-to-PropertyBag tests retain this behavior alongside invalid boolean/date/duration rejection; compiled C++ differential and full document-service acceptance remain pending.

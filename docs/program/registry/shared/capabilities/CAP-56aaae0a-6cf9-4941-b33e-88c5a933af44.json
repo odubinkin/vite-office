@@ -1,0 +1,104 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-56aaae0a-6cf9-4941-b33e-88c5a933af44",
+    "capabilityId": "CAP-56aaae0a-6cf9-4941-b33e-88c5a933af44",
+    "suite": "shared",
+    "subsystem": "native-metadata-dom-ingestion",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Complete original DocumentProperties/DocumentProperties2/supplier SDK declarations use normal shared CPPUMaker cached types and exact bases. Native Sfx metadata namespace/QName/statistics tables, immediate-child first/all match traversal and first-TEXT_NODE selection retain source spelling, order and actual RTL/UNO reference ownership. The complete original init user-defined ingestion loop uses actual Any temporal/scalar values, source converters and registered PropertyBag, retaining REMOVABLE attributes, invalid value/duplicate/type/argument catch behavior and original numeric-status acceptance. Actual TEST.odt meta.xml from the pinned package executes the original Hinweis/Warnung value assertions with Unicode in native DOM tests and Chromium main/DOM-free Worker. Full original test_misc service/medium/setter/event/clone QA is pending, not a passing full source port. Sfx member lifecycle/DOM updates/lazy bag/listener/storage and final DOCX/XLSX core/shell/UI acceptance remain incomplete. No alternate metadata model, fake service/provider/type/default/value generator or private-state patch is added; physical native ABI/allocator/mutex/shared-memory behavior remains unqualified."
+    ],
+    "capability": "Native metadata DOM traversal and user-defined property ingestion",
+    "gaps": [
+      "Full Sfx member/service/storage/DOM-update orchestration and final DOCX/XLSX core/shell/UI acceptance remain unfinished.",
+      "Original test_misc service/medium/setter/event/clone assertions not claimed as a passing full port.",
+      "Physical native ABI/allocator/mutex/shared-memory behavior remains unqualified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sfx2/source/doc/SfxDocumentMetaData.cxx",
+          "marker": "getNodeText"
+        },
+        {
+          "path": "sfx2/source/doc/SfxDocumentMetaData.cxx",
+          "marker": "getChildNodeByName"
+        },
+        {
+          "path": "sfx2/source/doc/SfxDocumentMetaData.cxx",
+          "marker": "SfxDocumentMetaData::init"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sfx2/qa/cppunit/test_misc.cxx",
+          "marker": "testDocumentProperties"
+        }
+      ],
+      "docs": [
+        {
+          "path": "offapi/com/sun/star/document/XDocumentProperties.idl",
+          "marker": "getUserDefinedProperties"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.dom.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.names.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/document/XDocumentProperties.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/document/XDocumentProperties2.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/document/XDocumentPropertiesSupplier.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.dom.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/document/document-properties-types.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-metadata-dom-ingestion.md",
+          "marker": "Native metadata DOM ingestion"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Complete original DocumentProperties/DocumentProperties2/supplier SDK declarations use normal shared CPPUMaker cached types and exact bases. Native Sfx metadata namespace/QName/statistics tables, immediate-child first/all match traversal and first-TEXT_NODE selection retain source spelling, order and actual RTL/UNO reference ownership. The complete original init user-defined ingestion loop uses actual Any temporal/scalar values, source converters and registered PropertyBag, retaining REMOVABLE attributes, invalid value/duplicate/type/argument catch behavior and original numeric-status acceptance. Actual TEST.odt meta.xml from the pinned package executes the original Hinweis/Warnung value assertions with Unicode in native DOM tests and Chromium main/DOM-free Worker. Full original test_misc service/medium/setter/event/clone QA is pending, not a passing full source port. Sfx member lifecycle/DOM updates/lazy bag/listener/storage and final DOCX/XLSX core/shell/UI acceptance remain incomplete. No alternate metadata model, fake service/provider/type/default/value generator or private-state patch is added; physical native ABI/allocator/mutex/shared-memory behavior remains unqualified."
+    },
+    "scopeLimitations": [
+      "Complete original DocumentProperties/DocumentProperties2/supplier SDK declarations use normal shared CPPUMaker cached types and exact bases. Native Sfx metadata namespace/QName/statistics tables, immediate-child first/all match traversal and first-TEXT_NODE selection retain source spelling, order and actual RTL/UNO reference ownership. The complete original init user-defined ingestion loop uses actual Any temporal/scalar values, source converters and registered PropertyBag, retaining REMOVABLE attributes, invalid value/duplicate/type/argument catch behavior and original numeric-status acceptance. Actual TEST.odt meta.xml from the pinned package executes the original Hinweis/Warnung value assertions with Unicode in native DOM tests and Chromium main/DOM-free Worker. Full original test_misc service/medium/setter/event/clone QA is pending, not a passing full source port. Sfx member lifecycle/DOM updates/lazy bag/listener/storage and final DOCX/XLSX core/shell/UI acceptance remain incomplete. No alternate metadata model, fake service/provider/type/default/value generator or private-state patch is added; physical native ABI/allocator/mutex/shared-memory behavior remains unqualified.",
+      "The large original SfxDocumentMetaData.cxx is split by complete source responsibility to retain authored file-size limits. Original tables and namespace/DOM helper contracts remain intact. readUserDefinedProperties binds the complete original init user-defined ingestion loop to its actual input container/node vector; original service lifecycle and caller orchestration remain with the pending SfxDocumentMetaData owner."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "metadata-dom-user-property-ingestion"
+  }
+}

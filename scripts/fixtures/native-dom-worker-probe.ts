@@ -1,5 +1,12 @@
 /** @fileoverview Real native UNO document, parser callback, IO and live-list operations without a host DOM; the production registered DocumentBuilder shares the same realm-local native module. */
 import {
+  getChildNodeByName,
+  getChildNodeListByName,
+  readUserDefinedProperties,
+} from "../../apps/office/src/sfx2/source/doc/SfxDocumentMetaData.dom";
+import metadataFixtures from "../../apps/office/src/sfx2/source/doc/SfxDocumentMetaData.fixtures.json";
+import { XPropertyContainer } from "../../apps/office/src/udkapi/com/sun/star/beans/XPropertyContainer";
+import {
   propsToStrings,
   disposeAttrVector,
 } from "../../apps/office/src/sfx2/source/doc/SfxDocumentMetaData.values";
@@ -574,6 +581,42 @@ export async function runNativeDomWorkerProbe() {
     builderRoot = own(builderDocument.operatorStar().getDocumentElement()),
     exception = own(new RuntimeException(u("worker exception"), builder)),
     payload = own(new Any(exception, runtimeType));
+  const metadataBytes = new TextEncoder().encode(metadataFixtures.TEST.xml),
+    metadataData = own(new Bytes(metadataBytes.length)),
+    metadataCells = metadataData.getArray() as SequenceElements;
+  for (let i = 0; i < metadataBytes.length; ++i)
+    (metadataCells.get(i) as [number])[0] = ((metadataBytes[i] as number) << 24) >> 24;
+  const metadataInput = own(new Reference(new SequenceInputStream(metadataData))),
+    metadataDoc = own(builder.operatorStar().parse(metadataInput));
+  /** Binds the original compiler-known string_view extent. @param name - QName. @returns Borrowed UTF16 view. */
+  function metadataName(name: string): Uint16Array {
+    const value = u(name);
+    return value.getStr().subarray(0, value.getLength());
+  }
+  const metadataRoot = own(getChildNodeByName(metadataDoc, metadataName("office:document-meta"))),
+    metadataParent = own(getChildNodeByName(metadataRoot, metadataName("office:meta"))),
+    metadataNodes = getChildNodeListByName(metadataParent, metadataName("meta:user-defined")),
+    metadataImportedBag = own(PropertyBagService.createDefault(processContext)),
+    metadataImportedContainer = own(
+      new Reference<XPropertyContainer>(
+        metadataImportedBag,
+        UNO_QUERY,
+        XPropertyContainer.static_type,
+      ),
+    ),
+    metadataImportedSet = own(
+      new Reference<XPropertySet>(metadataImportedBag, UNO_QUERY, XPropertySet.static_type),
+    );
+  for (const node of metadataNodes) own(node);
+  readUserDefinedProperties(metadataImportedContainer, metadataNodes);
+  const metadataIngestion: string[] = [];
+  for (const name of ["Hinweis", "Warnung"]) {
+    const any = own(metadataImportedSet.operatorStar().getPropertyValue(u(name))),
+      value = own(new OUString());
+    if (!any.extract(value, "OUString"))
+      throw new Error("original TEST.odt property type mismatch");
+    metadataIngestion.push(take(new OUString(value)));
+  }
   let capturedType = false,
     sameContext = false,
     exceptionMessage = "";
@@ -678,6 +721,7 @@ export async function runNativeDomWorkerProbe() {
       registeredPropertyBag,
       nativeSax,
       metadataValues,
+      metadataIngestion,
       documentBuilder,
       xpath: (
         /** Queries the actual registered native XPath service. @returns Scalar observations only. */ () => {
