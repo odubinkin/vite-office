@@ -21,3 +21,8 @@ it("retains native DocumentBuilder dependencies while rejecting reverse browser 
     ),
   ).toMatch(/injected contract/u);
 });
+
+it("retains the source metadata converter dependency without reverse Sfx coupling", /** SfxDocumentMetaData.cxx calls sax::Converter and Library_sfx links sax. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("sfx2", "sax")).toBe(false);
+  expect(isForbiddenModuleEdge("sax", "sfx2")).toBe(true);
+});

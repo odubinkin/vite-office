@@ -14,7 +14,8 @@
       "approxCeil",
       "approxValue",
       "stringToDouble",
-      "pow10Exp"
+      "pow10Exp",
+      "doubleToUStringBuffer"
     ],
     "upstreamSymbols": [
       "approxAdd",
@@ -25,13 +26,15 @@
       "approxCeil",
       "approxValue",
       "stringToDouble",
-      "pow10Exp"
+      "pow10Exp",
+      "doubleToUStringBuffer"
     ],
     "preservedResponsibilities": [
       "Task200 adds consumed native RTL approxEqual/approxAdd/approxSub to the existing common math owner. Sign/zero/nonfinite thresholds, decimal-power constants and the representable-integer exception follow sal/rtl/math.cxx and include/rtl/math.hxx; existing C numeric parser is reused unchanged. Native binary64 JavaScript arithmetic and decimal conversion replace native allocation/ABI details. Pinned SAL QA values and boundary tests provide bounded evidence; full RTL math and universal libm last-bit equivalence are not claimed.",
       "Task76 native General-format dependency:ports original RTL round across all8selectors and approxValue with actual binary64 exponent/significand inspection,original decimal-literal powers,corrected approximation,signed zero,precision clamps and overflow restoration. JS lacks fenv,so HalfEven uses the original native fallback;release unknown-selector behavior remains unchanged. Guards proven unreachable in the defined consumed binary64 domain are erased:nonpositive precision count after the below2^52 guard,underflow of a nonnegative decimal power,precision-clamped scale overflow,and approxValue negative scaling/final overflow after its integer/fraction-bit guards. There is no coverage ignore or threshold change. Pinned SAL test_round regressions and independent direction/tie/subnormal/magnitude vectors provide bounded evidence,not universal host-libm or native ABI equivalence.",
       "AQF9AG restores the original logical UTF16 view/OUString stringToDouble wrapper over the actual existing bounded C parser, preserving status and parsed-end forwarding. CSV uses it for fractional seconds, with no JavaScript numeric parser or decimal heuristic.",
-      "Original pow10Exp inline forwards to the real shared C arithmetic owner; no Math.pow-only approximation is substituted for the pinned decimal-power table."
+      "Original pow10Exp inline forwards to the real shared C arithmetic owner; no Math.pow-only approximation is substituted for the pinned decimal-power table.",
+      "Original metadata scalar/property conversion now uses actual generated DateWithTimezone/DateTimeWithTimezone/Duration lvalues and shared Any/Sequence layouts. Complete consumed UTF16 SAX date/time and structure-duration parsing/formatting preserves source defaults, untouched failures, optional Date/DateTime/raw timezone results, legacy time mode, nanosecond precision, unsigned/signed field widths and original UTC arithmetic. The shared RTL unsigned reader is reused rather than replaced. Native bool append and grouped/nongrouped rtl::math::doubleToUStringBuffer use the actual buffer cells; source scalar Converter overloads use those owners and preserve realm-independent native byte views. SfxDocumentMetaData scalar wrappers/propsToStrings run over the actual registered PropertyBag, preserving transient/unsupported skips, descriptor-index string compatibility, legacy Time conversion, original type attributes and owned vector/sequence cleanup. All136 exact fixtures and criteria from source ConverterTest testDuration/testDateTime/testTime execute; actual SDK/native layout and main/DOM-free Worker property conversion also execute. The actual metadata DOM/service/storage and complete DOCX/XLSX core/shell/UI remain unfinished; native ABI/allocator/iostream/machine-UB/shared-memory and byte/OStringBuffer/floating-duration instantiations are unqualified. No fake metadata provider/type/default/value generator or private-state patch is supplied."
     ],
     "omittedResponsibilities": [
       "All services outside the explicitly represented numeric formula/arithmetic subset remain unsupported; no broad parity claim."
@@ -49,6 +52,22 @@
         {
           "path": "apps/office/src/sal/inc/rtl/math.ts",
           "marker": "pow10Exp"
+        },
+        {
+          "path": "apps/office/src/sax/source/tools/converter-temporal.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/util/metadata-values.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.values.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/oustringbuffer.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -59,6 +78,10 @@
         {
           "path": "vendor/libreoffice-reference/include/rtl/math.hxx",
           "marker": "pow10Exp"
+        },
+        {
+          "path": "include/rtl/math.hxx",
+          "marker": "doubleToUStringBuffer"
         }
       ]
     }

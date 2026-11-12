@@ -5639,3 +5639,33 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source: `unoxml/source/dom/cdatasection.cxx`, `CCDATASection::saxify`; `processinginstruction.cxx`, `CProcessingInstruction::saxify`; `offapi/com/sun/star/xml/sax/XDocumentHandler.idl`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER489.
 - Both implementations put every callback behind a successful XExtendedDocumentHandler query. CDATA therefore emits no characters for a basic handler, and PI is omitted even though processingInstruction belongs to the basic interface. Preserve those gates and callback ordering rather than adding a fallback characters/PI call. Actual native document tests compare basic and extended handlers and verify raw CDATA, comments, PI and text ordering. This may be a legacy serialization assumption; full metadata/filter impact and a compiled native differential are unqualified.
+
+
+### CALC-556 — DateTime formatting ignores nanoseconds when deciding whether to emit time
+
+- Source: `sax/source/tools/converter.cxx, lcl_convertDateTime`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER490.
+- The time-suffix predicate checks Hours, Minutes, Seconds and the explicit force flag, but omits NanoSeconds. A real DateTime with date2024-01-02, zero H/M/S, NanoSeconds9 and IsUTC true formats as2024-01-02Z with the default flag; forcing time emits2024-01-02T00:00:00.000000009Z. Preserve this predicate. Sfx dateTimeToText forces time and therefore avoids this particular omission. Native-value tests record both formatter choices; full format/UI impact and compiled native differential are unqualified.
+
+
+### CALC-557 — Editing-duration conversion ignores a parsed negative sign and fractions
+
+- Source: `sfx2/source/doc/SfxDocumentMetaData.cxx, textToDuration(OUString const&)`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER491.
+- The scalar overload approximates years365/months30 and sums Days/Hours/Minutes/Seconds without reading Duration.Negative or NanoSeconds. A real typed parse retains Negative=true for -P1D, while the editing-duration helper returns positive86400. Preserve the sign/fraction omission and zero-on-invalid result; do not normalize or reject negative XML in this helper. Signed32 arithmetic overflow is not certified. The XML contract may constrain callers; no complete document/UI defect or compiled native differential is claimed.
+
+
+### CALC-558 — String property compatibility uses descriptor index before transient and unsupported entries are skipped
+
+- Source: `sfx2/source/doc/SfxDocumentMetaData.cxx, propsToStrings`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER492.
+- The legacy string value-type omission checks4<=i where i indexes all descriptors. Transient entries and unsupported values advance that index despite producing no output row. A real registered PropertyBag with a transient descriptor, unsupported sequence and three strings emits the third string with meta:value-type=string while the first two omit it. Preserve descriptor ordering, skipped entries and this exact predicate; do not replace i with an emitted-string/property count. This may reflect a legacy slot assumption rather than a defect; no full old-OOo interoperability claim is made.
+
+
+### CALC-559 — Duration parsing can wrap unsigned16 fields and accept signed64 reader overflow as zero
+
+- Source: `sax/source/tools/converter.cxx, readUnsignedNumber/convertDurationHelper; sal/rtl/strtmpl.hxx, toInt`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER493.
+- The reader rejects parsed signed64 values >=INT32_MAX, but the shared RTL signed64 parser itself returns zero on overflow. P9223372036854775808Y therefore passes the local source algorithm as zero years. The duration helper also accepts P65536Y and explicitly casts its component to unsigned16, producing zero. Preserve the original shared reader, bounds and casts instead of adding a clamp or a new numeric parser. Actual generated Duration/RTL tests reproduce both witnesses; native allocation/undefined excessive helper instantiations and a compiled binary differential remain unqualified.
+
+
+### CALC-560 — UTC calendar rollover can produce year zero that strict parsing rejects
+
+- Source: `sax/source/tools/converter.cxx`, `lcl_ConvertToUTC/lcl_parseDate`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER495.
+- UTC adjustment increments/decrements the signed year directly without skipping zero. Parsing -0001-12-31T23:00:00-02:00 yields year0/month1/day1/hour1. Forced DateTime formatting produces 0000-01-01T01:00:00Z, which the strict parser rejects. Preserve the source arithmetic and parser guard rather than using a host calendar to repair them. Actual generated values and public converter tests record this boundary; XMLSchema version assumptions, full document/UI impact and compiled native differential remain unqualified.

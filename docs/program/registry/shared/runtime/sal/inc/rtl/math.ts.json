@@ -9,7 +9,8 @@
     "subsystem": "rtl-approx-arithmetic",
     "capabilityIds": [
       "CAP-a4a3caad-6757-4cc5-a8f1-997a7ccd4a2f",
-      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d",
+      "CAP-9c11f53a-8c08-4fd6-a3d1-7d69bae86c76"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -18,9 +19,14 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sal/inc/rtl/math.ts",
-        "apps/office/src/sal/rtl/approx.test.ts"
+        "apps/office/src/sal/rtl/approx.test.ts",
+        "apps/office/src/sax/source/tools/converter-temporal.test.ts",
+        "apps/office/src/offapi/com/sun/star/util/metadata-values.test.ts",
+        "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.values.test.ts",
+        "apps/office/src/sal/rtl/oustringbuffer.test.ts",
+        "docs/program/native-metadata-value-conversion.md"
       ],
-      "justification": "Task200 adds consumed native RTL approxEqual/approxAdd/approxSub to the existing common math owner. Sign/zero/nonfinite thresholds, decimal-power constants and the representable-integer exception follow sal/rtl/math.cxx and include/rtl/math.hxx; existing C numeric parser is reused unchanged. Native binary64 JavaScript arithmetic and decimal conversion replace native allocation/ABI details. Pinned SAL QA values and boundary tests provide bounded evidence; full RTL math and universal libm last-bit equivalence are not claimed. Task76 native General-format dependency:ports original RTL round across all8selectors and approxValue with actual binary64 exponent/significand inspection,original decimal-literal powers,corrected approximation,signed zero,precision clamps and overflow restoration. JS lacks fenv,so HalfEven uses the original native fallback;release unknown-selector behavior remains unchanged. Guards proven unreachable in the defined consumed binary64 domain are erased:nonpositive precision count after the below2^52 guard,underflow of a nonnegative decimal power,precision-clamped scale overflow,and approxValue negative scaling/final overflow after its integer/fraction-bit guards. There is no coverage ignore or threshold change. Pinned SAL test_round regressions and independent direction/tie/subnormal/magnitude vectors provide bounded evidence,not universal host-libm or native ABI equivalence. Final76 registry audit:the header explicitly re-exports approxValue from its real source owner rather than declaring those symbols locally. localSymbols lists only declarations physically owned here;the original upstream symbols,source-owner evidence,status and responsibility remain unchanged. The semantic analyzer and its failure criteria are unchanged. AQF9AG restores the original logical UTF16 view/OUString stringToDouble wrapper over the actual existing bounded C parser, preserving status and parsed-end forwarding. CSV uses it for fractional seconds, with no JavaScript numeric parser or decimal heuristic. Original pow10Exp inline forwards to the real shared C arithmetic owner; no Math.pow-only approximation is substituted for the pinned decimal-power table.",
+      "justification": "Task200 adds consumed native RTL approxEqual/approxAdd/approxSub to the existing common math owner. Sign/zero/nonfinite thresholds, decimal-power constants and the representable-integer exception follow sal/rtl/math.cxx and include/rtl/math.hxx; existing C numeric parser is reused unchanged. Native binary64 JavaScript arithmetic and decimal conversion replace native allocation/ABI details. Pinned SAL QA values and boundary tests provide bounded evidence; full RTL math and universal libm last-bit equivalence are not claimed. Task76 native General-format dependency:ports original RTL round across all8selectors and approxValue with actual binary64 exponent/significand inspection,original decimal-literal powers,corrected approximation,signed zero,precision clamps and overflow restoration. JS lacks fenv,so HalfEven uses the original native fallback;release unknown-selector behavior remains unchanged. Guards proven unreachable in the defined consumed binary64 domain are erased:nonpositive precision count after the below2^52 guard,underflow of a nonnegative decimal power,precision-clamped scale overflow,and approxValue negative scaling/final overflow after its integer/fraction-bit guards. There is no coverage ignore or threshold change. Pinned SAL test_round regressions and independent direction/tie/subnormal/magnitude vectors provide bounded evidence,not universal host-libm or native ABI equivalence. Final76 registry audit:the header explicitly re-exports approxValue from its real source owner rather than declaring those symbols locally. localSymbols lists only declarations physically owned here;the original upstream symbols,source-owner evidence,status and responsibility remain unchanged. The semantic analyzer and its failure criteria are unchanged. AQF9AG restores the original logical UTF16 view/OUString stringToDouble wrapper over the actual existing bounded C parser, preserving status and parsed-end forwarding. CSV uses it for fractional seconds, with no JavaScript numeric parser or decimal heuristic. Original pow10Exp inline forwards to the real shared C arithmetic owner; no Math.pow-only approximation is substituted for the pinned decimal-power table. Original metadata scalar/property conversion now uses actual generated DateWithTimezone/DateTimeWithTimezone/Duration lvalues and shared Any/Sequence layouts. Complete consumed UTF16 SAX date/time and structure-duration parsing/formatting preserves source defaults, untouched failures, optional Date/DateTime/raw timezone results, legacy time mode, nanosecond precision, unsigned/signed field widths and original UTC arithmetic. The shared RTL unsigned reader is reused rather than replaced. Native bool append and grouped/nongrouped rtl::math::doubleToUStringBuffer use the actual buffer cells; source scalar Converter overloads use those owners and preserve realm-independent native byte views. SfxDocumentMetaData scalar wrappers/propsToStrings run over the actual registered PropertyBag, preserving transient/unsupported skips, descriptor-index string compatibility, legacy Time conversion, original type attributes and owned vector/sequence cleanup. All136 exact fixtures and criteria from source ConverterTest testDuration/testDateTime/testTime execute; actual SDK/native layout and main/DOM-free Worker property conversion also execute. The actual metadata DOM/service/storage and complete DOCX/XLSX core/shell/UI remain unfinished; native ABI/allocator/iostream/machine-UB/shared-memory and byte/OStringBuffer/floating-duration instantiations are unqualified. No fake metadata provider/type/default/value generator or private-state patch is supplied.",
       "knownViolations": [],
       "localSymbols": [
         "approxAdd",
@@ -29,7 +35,8 @@
         "approxFloor",
         "approxCeil",
         "stringToDouble",
-        "pow10Exp"
+        "pow10Exp",
+        "doubleToUStringBuffer"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "include/rtl/math.hxx",
@@ -42,7 +49,8 @@
         "approxCeil",
         "approxValue",
         "stringToDouble",
-        "pow10Exp"
+        "pow10Exp",
+        "doubleToUStringBuffer"
       ]
     }
   }

@@ -596,7 +596,7 @@ for (const sourceFile of runtimeSources) {
       relativeSource.split(path.sep).join("/"),
       relativeTarget.split(path.sep).join("/"),
       sourceText,
-      relativeSource.split(path.sep).join("/") === "sax/source/tools/converter.ts" &&
+      relativeSource.split(path.sep).join("/") === "sax/source/tools/converter.datetime.ts" &&
         relativeTarget.split(path.sep).join("/").replace(/\.ts$/u, "") ===
           "comphelper/source/misc/date"
         ? fs.readFileSync(path.resolve(sourceRoot, "comphelper/source/misc/date.ts"), "utf8")

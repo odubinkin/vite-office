@@ -1,184 +1,26 @@
 /** @fileoverview Implements the existing measure targets from pinned sax/source/tools/converter.cxx. */
 
-import { getDaysInMonth } from "../../../comphelper/source/misc/date";
+import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
+import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
+import { doubleToUStringBuffer } from "../../../sal/inc/rtl/math";
+import { rtl_math_StringFormat, rtl_math_DecimalPlaces } from "../../../sal/inc/rtl/math.h";
+import { sourceView, isByteStringView, type StringSource } from "./converter.number";
 import { convertToHex } from "../../../o3tl/inc/numeric";
-import type { DateTime } from "../../../offapi/com/sun/star/util/DateTime";
+import {
+  parseDateTime,
+  parseDateOrDateTime,
+  parseTimeOrDateTime,
+  convertDate,
+  convertDateTime,
+  convertTimeOrDateTime,
+} from "./converter.datetime";
+import { convertDuration } from "./converter.duration";
 import {
   rtl_math_ConversionStatus,
   rtl_math_stringToDouble,
   rtl_math_uStringToDouble,
 } from "../../../sal/inc/rtl/math.h";
 import { rtl_ustr_toInt64_WithLength } from "../../../sal/inc/rtl/ustring.h";
-
-/** Source o3tl::trim whitespace predicate for UTF-16 string views.  @param code - Code. @returns The boolean result. */
-function dateWhitespace(code: number): boolean {
-  return (
-    (code > 0 && code <= 32) ||
-    (code >= 0x2000 && (code <= 0x200b || code >= 0x2028) && code <= 0x2029)
-  );
-}
-
-/** Source readUnsignedNumber and readDateTimeComponent, retaining the consumed cursor.  @param input - Input. @param cursor - Cursor. @param width - Width. @param exact - Exact. @returns The number | null result. */
-function dateComponent(
-  input: string,
-  cursor: [number],
-  width: number,
-  exact: boolean,
-): number | null {
-  const start = cursor[0];
-  let value = 0;
-  while (cursor[0] < input.length) {
-    const digit = input.charCodeAt(cursor[0]) - 48;
-    if (digit < 0 || digit > 9) break;
-    value = value * 10 + digit;
-    cursor[0]++;
-  }
-  const count = cursor[0] - start;
-  if (!count || value >= 2147483647 || count < width || (exact && count > width)) return null;
-  return value;
-}
-
-/** Original lcl_ConvertToUTC arithmetic, including its minute adjustment order.  @param value - Value. @param offset - Offset. @returns Nothing. */
-function convertDateTimeToUTC(value: DateTime, offset: number): void {
-  let offsetHours = Math.trunc(Math.abs(offset) / 60);
-  const offsetMinutes = Math.abs(offset) % 60;
-  value.Minutes += offsetMinutes;
-  if (offset < 0) {
-    value.Minutes += offsetMinutes;
-    if (value.Minutes >= 60) {
-      value.Minutes -= 60;
-      offsetHours++;
-    }
-    value.Hours += offsetHours;
-    if (value.Hours < 24) return;
-    let days = 0;
-    while (value.Hours >= 24) {
-      value.Hours -= 24;
-      days++;
-    }
-    if (!value.Day) return;
-    value.Day += days;
-    const last = getDaysInMonth(value.Month, value.Year);
-    if (value.Day <= last) return;
-    value.Day -= last;
-    value.Month++;
-    if (value.Month <= 12) return;
-    value.Month = 1;
-    value.Year++;
-  } else if (offset > 0) {
-    if (value.Minutes < offsetMinutes) {
-      value.Minutes += 60;
-      offsetHours++;
-    }
-    value.Minutes -= offsetMinutes;
-    let days = 0;
-    while (value.Hours < offsetHours) {
-      value.Hours += 24;
-      days++;
-    }
-    value.Hours -= offsetHours;
-    if (!value.Day) return;
-    if (days < value.Day) {
-      value.Day -= days;
-      return;
-    }
-    const previousMonth = value.Month === 1 ? 12 : value.Month - 1;
-    const daysInPreviousMonth = getDaysInMonth(previousMonth, value.Year);
-    value.Day += daysInPreviousMonth;
-    value.Month--;
-    if (!value.Month) {
-      value.Month = 12;
-      value.Year--;
-    }
-    value.Day -= days;
-  }
-}
-
-/** Original strict sax::Converter date/date-time overload used as a CSV ISO precheck.  @param output - Output. @param source - Source. @returns The boolean result. */
-function parseDateTime(output: DateTime, source: string): boolean {
-  let first = 0,
-    last = source.length;
-  while (first < last && dateWhitespace(source.charCodeAt(first))) first++;
-  while (last > first && dateWhitespace(source.charCodeAt(last - 1))) last--;
-  const input = source.slice(first, last),
-    cursor: [number] = [0];
-  const negative = input[0] === "-";
-  if (negative) cursor[0]++;
-  const year = dateComponent(input, cursor, 1, false);
-  if (year === null || year <= 0 || year > (negative ? 32768 : 32767) || input[cursor[0]] !== "-")
-    return false;
-  cursor[0]++;
-  const month = dateComponent(input, cursor, 2, true);
-  if (month === null || month <= 0 || month > 12 || input[cursor[0]] !== "-") return false;
-  cursor[0]++;
-  const day = dateComponent(input, cursor, 2, true);
-  if (day === null || day <= 0 || day > getDaysInMonth(month, negative ? -year : year))
-    return false;
-  const hasTime = input[cursor[0]] === "T" || input[cursor[0]] === "t";
-  if (hasTime) cursor[0]++;
-  let hours = 0,
-    minutes = 0,
-    seconds = 0,
-    nanoseconds = 0;
-  if (hasTime) {
-    const hour = dateComponent(input, cursor, 2, true);
-    if (hour === null || hour > 24 || input[cursor[0]] !== ":") return false;
-    cursor[0]++;
-    const minute = dateComponent(input, cursor, 2, true);
-    if (minute === null || minute >= 60 || input[cursor[0]] !== ":") return false;
-    cursor[0]++;
-    const second = dateComponent(input, cursor, 2, true);
-    if (second === null || second >= 60) return false;
-    hours = hour;
-    minutes = minute;
-    seconds = second;
-    if (input[cursor[0]] === "." || input[cursor[0]] === ",") {
-      cursor[0]++;
-      const start = cursor[0];
-      while (cursor[0] < input.length) {
-        const digit = input.charCodeAt(cursor[0]) - 48;
-        if (digit < 0 || digit > 9) break;
-        if (cursor[0] - start < 9) nanoseconds = nanoseconds * 10 + digit;
-        cursor[0]++;
-      }
-      if (cursor[0] === start) return false;
-      for (let digits = Math.min(cursor[0] - start, 9); digits < 9; digits++) nanoseconds *= 10;
-    }
-    if (hours === 24 && (minutes !== 0 || seconds !== 0 || nanoseconds !== 0)) return false;
-  }
-  let timezone = false,
-    negativeOffset = false,
-    offsetHours = 0,
-    offsetMinutes = 0;
-  if (cursor[0] < input.length) {
-    const marker = input[cursor[0]];
-    if (marker !== "+" && marker !== "-" && marker !== "Z" && marker !== "z") return false;
-    timezone = true;
-    negativeOffset = marker === "-";
-    cursor[0]++;
-    if (marker === "+" || marker === "-") {
-      const hour = dateComponent(input, cursor, 2, true);
-      if (hour === null || hour > 14 || input[cursor[0]] !== ":") return false;
-      cursor[0]++;
-      const minute = dateComponent(input, cursor, 2, true);
-      if (minute === null || minute >= 60 || (hour === 14 && minute !== 0)) return false;
-      offsetHours = hour;
-      offsetMinutes = minute;
-    }
-  }
-  if (cursor[0] !== input.length) return false;
-  output.Year = negative ? -year : year;
-  output.Month = month;
-  output.Day = day;
-  output.Hours = hours;
-  output.Minutes = minutes;
-  output.Seconds = seconds;
-  output.NanoSeconds = nanoseconds;
-  output.IsUTC = timezone;
-  if (timezone)
-    convertDateTimeToUTC(output, (negativeOffset ? -1 : 1) * (offsetHours * 60 + offsetMinutes));
-  return true;
-}
 
 /** Native core length targets implemented by Writer XML import. */
 export type CoreMeasureUnit = "twip" | "mm100";
@@ -194,6 +36,12 @@ export const Converter = {
   convertBool,
   convertPercent,
   parseDateTime,
+  parseDateOrDateTime,
+  parseTimeOrDateTime,
+  convertDate,
+  convertDateTime,
+  convertTimeOrDateTime,
+  convertDuration,
   /** Native UTF16 signed32 number conversion through the original length-bounded signed64 parser,clamp and complete-consumption test. Byte-string overloads remain unported. @param output - Always initialized scalar output. @param input - UTF16 view. @param min - Signed32 lower bound. @param max - Signed32 upper bound. @returns Native success. */
   convertNumber(output: [number], input: string, min = -2147483648, max = 2147483647): boolean {
     output[0] = 0;
@@ -219,27 +67,7 @@ export const Converter = {
     if (valid) output[0] = Number(value) | 0;
     return valid;
   },
-  /** Reads the native UTF16/byte string-view overload; success depends on status, not complete consumption. @param output - Value slot, always written. @param input - Borrowed string view. @param rest - Optional unconsumed suffix slot. @returns Whether RTL reports Ok. */
-  convertDouble(
-    output: [number],
-    input: string | Uint8Array,
-    rest?: [string | Uint8Array],
-  ): boolean {
-    const status: [rtl_math_ConversionStatus] = [
-      rtl_math_ConversionStatus.rtl_math_ConversionStatus_Ok,
-    ];
-    const end: [number] = [0];
-    if (typeof input === "string") {
-      const units = new Uint16Array(input.length);
-      for (let i = 0; i < input.length; i++) units[i] = input.charCodeAt(i);
-      output[0] = rtl_math_uStringToDouble(units, units.length, 46, 44, status, end);
-      if (rest) rest[0] = input.slice(end[0]);
-    } else {
-      output[0] = rtl_math_stringToDouble(input, input.length, 46, 44, status, end);
-      if (rest) rest[0] = input.subarray(end[0]);
-    }
-    return status[0] === rtl_math_ConversionStatus.rtl_math_ConversionStatus_Ok;
-  },
+  convertDouble,
   /** Serializes a core integer to centimetres with the pinned SAX precision. @param value - Core measure. @param source - Native core unit. @returns XML centimetre measure. */
   convertMeasureToXML(value: number, source: CoreMeasureUnit): string {
     const absolute = Math.abs(value);
@@ -309,17 +137,38 @@ export const Converter = {
 };
 
 /** Original boolean string-view parsing and buffer-append overloads. JS strings erase native byte/UTF16 view distinctions. @param output - Bool output or string buffer. @param input - Native selected input. @returns Success for parsing,or nothing for append. */
-function convertBool(output: [boolean], input: string): boolean;
+function convertBool(output: [boolean], input: StringSource): boolean;
 /** Original boolean buffer append overload. @param output - Existing buffer. @param input - Native bool. @returns Nothing. */
 function convertBool(output: [string], input: boolean): void;
+/** Original native boolean buffer append. @param output - Buffer. @param input - Boolean. @returns Nothing. */
+// eslint-disable-next-line @typescript-eslint/unified-signatures -- Preserve the native buffer overload beside the existing string-tuple caller.
+function convertBool(output: OUStringBuffer, input: boolean): void;
+
 /** Implements the selected native lexical overload. @param output - Typed scalar or buffer. @param input - Selected native input. @returns Parsing success or nothing. */
-function convertBool(output: [boolean] | [string], input: string | boolean): boolean | void {
+function convertBool(
+  output: [boolean] | [string] | OUStringBuffer,
+  input: StringSource | boolean,
+): boolean | void {
+  if (output instanceof OUStringBuffer) {
+    output.append(input as boolean);
+    return;
+  }
   if (typeof input === "boolean") {
     (output as [string])[0] += input ? "true" : "false";
     return;
   }
-  (output as [boolean])[0] = input === "true";
-  return (output as [boolean])[0] || input === "false";
+  const view = sourceView(input);
+  (output as [boolean])[0] =
+    view.length === 4 && view[0] === 116 && view[1] === 114 && view[2] === 117 && view[3] === 101;
+  return (
+    (output as [boolean])[0] ||
+    (view.length === 5 &&
+      view[0] === 102 &&
+      view[1] === 97 &&
+      view[2] === 108 &&
+      view[3] === 115 &&
+      view[4] === 101)
+  );
 }
 
 /** Original UTF16 color import overload. @param output - Destination retained on invalid shape. @param input - XML color. @returns Source success. */
@@ -370,4 +219,56 @@ function convertPercent(output: [number] | [string], input: string | number): bo
   if (negative) amount = -amount;
   (output as [number])[0] = Math.max(-2147483648, Math.min(2147483647, Math.trunc(amount))) || 0;
   return true;
+}
+
+/** Original UTF16/byte parse overload with legacy language view output. @param output - Binary64 destination. @param input - View. @param rest - Optional unconsumed suffix. @returns Native status. */
+function convertDouble(
+  output: [number],
+  input: string | Uint8Array,
+  rest?: [string | Uint8Array],
+): boolean;
+/** Original UTF16 borrowed view parse overload. @param output - Binary64 destination. @param input - Native UTF16 view. @param rest - Optional suffix view. @returns Native status. */
+function convertDouble(
+  output: [number],
+  input: Uint16Array | OUStringConstReference,
+  rest?: [Uint16Array],
+): boolean;
+/** Original native output-buffer overload. @param output - Actual buffer. @param input - Binary64. @returns Nothing. */
+function convertDouble(output: OUStringBuffer, input: number): void;
+/** Original declared overload dispatch; the native buffer path invokes the shared RTL formatter. @param output - Actual output. @param input - Selected input. @param rest - Optional suffix. @returns Native success or nothing. */
+function convertDouble(
+  output: [number] | OUStringBuffer,
+  input: StringSource | Uint8Array | number,
+  rest?: [string | Uint8Array | Uint16Array],
+): boolean | void {
+  if (output instanceof OUStringBuffer) {
+    doubleToUStringBuffer(
+      output,
+      input as number,
+      rtl_math_StringFormat.rtl_math_StringFormat_Automatic,
+      rtl_math_DecimalPlaces.rtl_math_DecimalPlaces_Max,
+      46,
+      true,
+    );
+    return;
+  }
+  const status: [rtl_math_ConversionStatus] = [
+    rtl_math_ConversionStatus.rtl_math_ConversionStatus_Ok,
+  ];
+  const end: [number] = [0];
+  if (typeof input === "string") {
+    const units = new Uint16Array(input.length);
+    for (let i = 0; i < input.length; i++) units[i] = input.charCodeAt(i);
+    output[0] = rtl_math_uStringToDouble(units, units.length, 46, 44, status, end);
+    if (rest) rest[0] = input.slice(end[0]);
+  } else if (isByteStringView(input)) {
+    output[0] = rtl_math_stringToDouble(input, input.length, 46, 44, status, end);
+    if (rest) rest[0] = input.subarray(end[0]);
+  }
+  if (typeof input !== "string" && !isByteStringView(input)) {
+    const units = sourceView(input as StringSource);
+    output[0] = rtl_math_uStringToDouble(units, units.length, 46, 44, status, end);
+    if (rest) rest[0] = units.subarray(end[0]);
+  }
+  return status[0] === rtl_math_ConversionStatus.rtl_math_ConversionStatus_Ok;
 }

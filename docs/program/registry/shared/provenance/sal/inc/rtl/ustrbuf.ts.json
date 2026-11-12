@@ -19,7 +19,8 @@
       "AQF9AG: Original stripStart removes the full leading run of the requested UTF16 unit and returns the removed count without changing capacity. Native RTL probe covers the added bounded comparison; broad module parity remains unverified.",
       "AQF9AG restores original bounded character indexOf and exact replace loop, including CALC-380 unchanged-match nontermination.",
       "B8TCAE adds genuine public default indexOf/stripStart calls, counted embedded-NUL checks, end-position misses and rejected search bounds that preserve the owner. No private data or allocator is replaced.",
-      "Original stripEnd default-space/trailing-character truncation and removed-count return are connected to the actual owned buffer; consumed by fractional input-line time output."
+      "Original stripEnd default-space/trailing-character truncation and removed-count return are connected to the actual owned buffer; consumed by fractional input-line time output.",
+      "Original metadata scalar/property conversion now uses actual generated DateWithTimezone/DateTimeWithTimezone/Duration lvalues and shared Any/Sequence layouts. Complete consumed UTF16 SAX date/time and structure-duration parsing/formatting preserves source defaults, untouched failures, optional Date/DateTime/raw timezone results, legacy time mode, nanosecond precision, unsigned/signed field widths and original UTC arithmetic. The shared RTL unsigned reader is reused rather than replaced. Native bool append and grouped/nongrouped rtl::math::doubleToUStringBuffer use the actual buffer cells; source scalar Converter overloads use those owners and preserve realm-independent native byte views. SfxDocumentMetaData scalar wrappers/propsToStrings run over the actual registered PropertyBag, preserving transient/unsupported skips, descriptor-index string compatibility, legacy Time conversion, original type attributes and owned vector/sequence cleanup. All136 exact fixtures and criteria from source ConverterTest testDuration/testDateTime/testTime execute; actual SDK/native layout and main/DOM-free Worker property conversion also execute. The actual metadata DOM/service/storage and complete DOCX/XLSX core/shell/UI remain unfinished; native ABI/allocator/iostream/machine-UB/shared-memory and byte/OStringBuffer/floating-duration instantiations are unqualified. No fake metadata provider/type/default/value generator or private-state patch is supplied."
     ],
     "omittedResponsibilities": [
       "Unported members/template/compiler/ABI responsibilities and complete downstream item,pool,model and UI behavior remain unverified."
@@ -37,6 +38,22 @@
         {
           "path": "apps/office/src/sal/inc/rtl/ustrbuf.ts",
           "marker": "stripEnd"
+        },
+        {
+          "path": "apps/office/src/sax/source/tools/converter-temporal.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/util/metadata-values.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.values.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/oustringbuffer.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -47,6 +64,10 @@
         {
           "path": "vendor/libreoffice-reference/include/rtl/ustrbuf.hxx",
           "marker": "stripEnd"
+        },
+        {
+          "path": "include/rtl/ustrbuf.hxx",
+          "marker": "append(bool b)"
         }
       ]
     }

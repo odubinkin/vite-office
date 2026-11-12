@@ -174,9 +174,10 @@ export const allowedEdges = new Map([
   // Library_sfx links tl for objembed map units and SAL for objstor text encoding.
   // SfxBaseModel uses WeakImplHelper, UNO references, XChild and comphelper listener containers.
   // Native sfxhtml uses lang.h and o3tl/string_view.hxx.
+  // SfxDocumentMetaData.cxx includes sax/tools/converter.hxx; Library_sfx links sax.
   [
     "sfx2",
-    new Set(["comphelper", "cppu", "cppuhelper", "offapi", "sal", "svl", "tools", "udkapi"])
+    new Set(["comphelper", "cppu", "cppuhelper", "offapi", "sal", "sax", "svl", "tools", "udkapi"])
       .add("i18nlangtag")
       .add("o3tl"),
   ],

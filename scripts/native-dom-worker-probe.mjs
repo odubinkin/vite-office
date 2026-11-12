@@ -111,6 +111,10 @@ try {
       failedSecond: 0,
       failedSecondWasNull: true,
     },
+    metadataValues: {
+      values: ["2024-02-29+05:30", "2024-02-29T03:04:05.000000009-01:30", "-P1DT2H3M4.000000005S"],
+      types: ["date", "date", "time"],
+    },
     nativeSax: {
       calls: ["begin", "start:root:0", "text:worker SAX字", "end", "finish"],
       sameIdentity: true,

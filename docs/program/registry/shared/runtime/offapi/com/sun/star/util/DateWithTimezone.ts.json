@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/util/DateWithTimezone.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-metadata-value-conversion",
+    "capabilityIds": [
+      "CAP-9c11f53a-8c08-4fd6-a3d1-7d69bae86c76"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/util/DateWithTimezone.ts",
+        "apps/office/src/sax/source/tools/converter-temporal.test.ts",
+        "apps/office/src/offapi/com/sun/star/util/metadata-values.test.ts",
+        "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.values.test.ts",
+        "apps/office/src/sal/rtl/oustringbuffer.test.ts",
+        "docs/program/native-metadata-value-conversion.md"
+      ],
+      "justification": "Original metadata scalar/property conversion now uses actual generated DateWithTimezone/DateTimeWithTimezone/Duration lvalues and shared Any/Sequence layouts. Complete consumed UTF16 SAX date/time and structure-duration parsing/formatting preserves source defaults, untouched failures, optional Date/DateTime/raw timezone results, legacy time mode, nanosecond precision, unsigned/signed field widths and original UTC arithmetic. The shared RTL unsigned reader is reused rather than replaced. Native bool append and grouped/nongrouped rtl::math::doubleToUStringBuffer use the actual buffer cells; source scalar Converter overloads use those owners and preserve realm-independent native byte views. SfxDocumentMetaData scalar wrappers/propsToStrings run over the actual registered PropertyBag, preserving transient/unsupported skips, descriptor-index string compatibility, legacy Time conversion, original type attributes and owned vector/sequence cleanup. All136 exact fixtures and criteria from source ConverterTest testDuration/testDateTime/testTime execute; actual SDK/native layout and main/DOM-free Worker property conversion also execute. The actual metadata DOM/service/storage and complete DOCX/XLSX core/shell/UI remain unfinished; native ABI/allocator/iostream/machine-UB/shared-memory and byte/OStringBuffer/floating-duration instantiations are unqualified. No fake metadata provider/type/default/value generator or private-state patch is supplied.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DateWithTimezone",
+        "cppu_detail_getUnoType_DateWithTimezone"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "offapi/com/sun/star/util/DateWithTimezone.idl",
+      "upstreamSymbols": [
+        "DateWithTimezone",
+        "DateInTZ",
+        "Timezone"
+      ]
+    }
+  }
+}

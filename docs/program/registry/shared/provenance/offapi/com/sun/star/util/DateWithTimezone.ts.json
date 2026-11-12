@@ -1,0 +1,64 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/offapi/com/sun/star/util/DateWithTimezone.ts",
+    "upstreamPath": "offapi/com/sun/star/util/DateWithTimezone.idl",
+    "localSymbols": [
+      "DateWithTimezone",
+      "cppu_detail_getUnoType_DateWithTimezone"
+    ],
+    "upstreamSymbols": [
+      "DateWithTimezone",
+      "DateInTZ",
+      "Timezone"
+    ],
+    "preservedResponsibilities": [
+      "Original metadata scalar/property conversion now uses actual generated DateWithTimezone/DateTimeWithTimezone/Duration lvalues and shared Any/Sequence layouts. Complete consumed UTF16 SAX date/time and structure-duration parsing/formatting preserves source defaults, untouched failures, optional Date/DateTime/raw timezone results, legacy time mode, nanosecond precision, unsigned/signed field widths and original UTC arithmetic. The shared RTL unsigned reader is reused rather than replaced. Native bool append and grouped/nongrouped rtl::math::doubleToUStringBuffer use the actual buffer cells; source scalar Converter overloads use those owners and preserve realm-independent native byte views. SfxDocumentMetaData scalar wrappers/propsToStrings run over the actual registered PropertyBag, preserving transient/unsupported skips, descriptor-index string compatibility, legacy Time conversion, original type attributes and owned vector/sequence cleanup. All136 exact fixtures and criteria from source ConverterTest testDuration/testDateTime/testTime execute; actual SDK/native layout and main/DOM-free Worker property conversion also execute. The actual metadata DOM/service/storage and complete DOCX/XLSX core/shell/UI remain unfinished; native ABI/allocator/iostream/machine-UB/shared-memory and byte/OStringBuffer/floating-duration instantiations are unqualified. No fake metadata provider/type/default/value generator or private-state patch is supplied."
+    ],
+    "omittedResponsibilities": [
+      "Native physical ABI/allocator/iostream/machine-UB/shared-memory and unconsumed byte/OStringBuffer/floating-duration instantiations are unqualified.",
+      "Full metadata service/storage/DOM orchestration and final DOCX/XLSX/UI acceptance remain unfinished."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/util/DateWithTimezone.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sax/source/tools/converter-temporal.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/util/metadata-values.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.values.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/oustringbuffer.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/util/DateWithTimezone.idl",
+          "marker": "DateWithTimezone"
+        },
+        {
+          "path": "offapi/com/sun/star/util/DateWithTimezone.idl",
+          "marker": "DateInTZ"
+        },
+        {
+          "path": "offapi/com/sun/star/util/DateWithTimezone.idl",
+          "marker": "Timezone"
+        }
+      ]
+    }
+  }
+}

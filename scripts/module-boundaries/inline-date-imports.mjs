@@ -4,7 +4,7 @@ import ts from "typescript";
 /** Admits the one native inline date call only when its local owner contains declarations and no runtime dependencies or initialization. @param source - Importer path. @param target - Resolved target path. @param importer - Actual importer source. @param contents - Actual date owner source. @returns Whether this is the independent inline value dependency. */
 export function isOriginalInlineDateImport(source, target, importer, contents) {
   if (
-    source !== "sax/source/tools/converter.ts" ||
+    source !== "sax/source/tools/converter.datetime.ts" ||
     target.replace(/\.ts$/u, "") !== "comphelper/source/misc/date"
   )
     return false;

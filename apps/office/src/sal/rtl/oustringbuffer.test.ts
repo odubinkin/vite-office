@@ -326,3 +326,52 @@ it("borrows the original buffer pointer field without acquire and follows replac
     owner.dispose();
   }
 });
+
+import { doubleToUStringBuffer } from "../inc/rtl/math";
+import { rtl_math_StringFormat } from "../inc/rtl/math-values";
+it("appends original bool and grouped/nongrouped math output through the actual buffer fields", /** Source inline wrappers share the real capacity/data cells. @returns Nothing. */ () => {
+  const buffer = new OUStringBuffer(),
+    pointer: [rtl_uStringSlot | null] = [null],
+    capacity: [[number] | null] = [null];
+  buffer.accessInternals(pointer, capacity);
+  const cell = pointer[0];
+  try {
+    buffer.append(true).append(false);
+    const first = buffer.makeStringAndClear();
+    try {
+      expect(String.fromCharCode(...first.getStr().subarray(0, first.getLength()))).toBe(
+        "truefalse",
+      );
+    } finally {
+      first.dispose();
+    }
+    doubleToUStringBuffer(
+      buffer,
+      1234.5,
+      rtl_math_StringFormat.rtl_math_StringFormat_F,
+      2,
+      46,
+      [3, 0],
+      44,
+    );
+    const grouped = buffer.makeStringAndClear();
+    try {
+      expect(String.fromCharCode(...grouped.getStr().subarray(0, grouped.getLength()))).toBe(
+        "1,234.50",
+      );
+    } finally {
+      grouped.dispose();
+    }
+    doubleToUStringBuffer(buffer, 1.5, rtl_math_StringFormat.rtl_math_StringFormat_F, 2, 46);
+    const plain = buffer.makeStringAndClear();
+    try {
+      expect(String.fromCharCode(...plain.getStr().subarray(0, plain.getLength()))).toBe("1.50");
+    } finally {
+      plain.dispose();
+    }
+    buffer.accessInternals(pointer, capacity);
+    expect(pointer[0]).toBe(cell);
+  } finally {
+    buffer.dispose();
+  }
+});

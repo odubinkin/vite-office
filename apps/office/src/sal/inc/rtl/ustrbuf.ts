@@ -187,11 +187,17 @@ export class OUStringBuffer {
     capacity[0] = this.capacity;
   }
   /** Original view/literal/concat/number and double append overloads. @param value - Original input. @returns This owner. */
-  append(value: BufferText | number | bigint): this;
+  append(value: BufferText | number | bigint | boolean): this;
   /** Original pointer/count append overload. @param value - Borrowed units. @param length - Explicit count. @returns This owner. */
   append(value: Uint16Array | null, length: number): this;
   /** Dispatches erased append overloads through original insertion. @param value - Actual input. @param length - Optional pointer count. @returns This owner. */
-  append(value: BufferText | number | bigint | null, length?: number): this {
+  append(value: BufferText | number | bigint | boolean | null, length?: number): this {
+    if (typeof value === "boolean")
+      return this.append(
+        value
+          ? new Uint8Array([116, 114, 117, 101, 0])
+          : new Uint8Array([102, 97, 108, 115, 101, 0]),
+      );
     return length === undefined
       ? this.insert(this.getLength(), value as BufferText | number | bigint)
       : this.insert(this.getLength(), value as Uint16Array | null, length);

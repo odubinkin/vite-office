@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { expect, it } from "vitest";
 import { isOriginalInlineDateImport } from "./module-boundaries/inline-date-imports.mjs";
 
-const source = "sax/source/tools/converter.ts";
+const source = "sax/source/tools/converter.datetime.ts";
 const target = "comphelper/source/misc/date";
 const importer = 'import { getDaysInMonth } from "../../../comphelper/source/misc/date";';
 const contents = readFileSync("apps/office/src/comphelper/source/misc/date.ts", "utf8");
@@ -11,6 +11,9 @@ const contents = readFileSync("apps/office/src/comphelper/source/misc/date.ts", 
 it("admits only the actual independent inline date owner and original call binding", /** Mirrors converter.cxx's comphelper/date.hxx call without admitting service initialization. @returns Nothing. */ () => {
   expect(isOriginalInlineDateImport(source, target, importer, contents)).toBe(true);
   expect(isOriginalInlineDateImport(source, target + ".ts", importer, contents)).toBe(true);
+  expect(
+    isOriginalInlineDateImport("sax/source/tools/converter.ts", target, importer, contents),
+  ).toBe(false);
   expect(
     isOriginalInlineDateImport("sax/source/fastparser/fastparser.ts", target, importer, contents),
   ).toBe(false);

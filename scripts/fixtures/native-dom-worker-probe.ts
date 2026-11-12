@@ -1,4 +1,23 @@
 /** @fileoverview Real native UNO document, parser callback, IO and live-list operations without a host DOM; the production registered DocumentBuilder shares the same realm-local native module. */
+import {
+  propsToStrings,
+  disposeAttrVector,
+} from "../../apps/office/src/sfx2/source/doc/SfxDocumentMetaData.values";
+import { Date as UnoDate } from "../../apps/office/src/offapi/com/sun/star/util/Date";
+import { DateTime } from "../../apps/office/src/offapi/com/sun/star/util/DateTime";
+import {
+  DateWithTimezone,
+  cppu_detail_getUnoType_DateWithTimezone as dateTZType,
+} from "../../apps/office/src/offapi/com/sun/star/util/DateWithTimezone";
+import {
+  DateTimeWithTimezone,
+  cppu_detail_getUnoType_DateTimeWithTimezone as datetimeTZType,
+} from "../../apps/office/src/offapi/com/sun/star/util/DateTimeWithTimezone";
+import {
+  Duration,
+  cppu_detail_getUnoType_Duration as durationType,
+} from "../../apps/office/src/offapi/com/sun/star/util/Duration";
+import { XPropertySet } from "../../apps/office/src/udkapi/com/sun/star/beans/XPropertySet";
 import { XDocumentHandler } from "../../apps/office/src/offapi/com/sun/star/xml/sax/XDocumentHandler";
 import { XSAXSerializable } from "../../apps/office/src/offapi/com/sun/star/xml/sax/XSAXSerializable";
 import type { XAttributeList } from "../../apps/office/src/offapi/com/sun/star/xml/sax/XAttributeList";
@@ -463,6 +482,61 @@ export async function runNativeDomWorkerProbe() {
       ],
       typeCount: own(statefulApi.getTypes()).getLength(),
     };
+  const metadataBag = own(
+    PropertyBagService.createDefault(
+      own(new Reference<XComponentContext>(getProcessComponentContext().get())),
+    ),
+  );
+  metadataBag
+    .operatorStar()
+    .addProperty(
+      u("A_Date"),
+      0,
+      own(new Any(new DateWithTimezone(new UnoDate(29, 2, 2024), 330), dateTZType)),
+    );
+  metadataBag
+    .operatorStar()
+    .addProperty(
+      u("B_DateTime"),
+      0,
+      own(
+        new Any(
+          new DateTimeWithTimezone(new DateTime(9, 5, 4, 3, 29, 2, 2024, false), -90),
+          datetimeTZType,
+        ),
+      ),
+    );
+  metadataBag
+    .operatorStar()
+    .addProperty(
+      u("C_Duration"),
+      0,
+      own(new Any(new Duration(true, 0, 0, 1, 2, 3, 4, 5), durationType)),
+    );
+  const metadataPropertySet = own(
+      new Reference<XPropertySet>(metadataBag, UNO_QUERY, XPropertySet.static_type),
+    ),
+    [metadataStrings, metadataAttributes] = propsToStrings(metadataPropertySet),
+    metadataValues = { values: [] as string[], types: [] as string[] };
+  try {
+    for (let i = 0; i < metadataStrings.getLength(); ++i)
+      metadataValues.values.push(
+        take(
+          new OUString(
+            OUString.unacquired(
+              metadataStrings.operatorIndex(i) as unknown as Parameters<
+                typeof OUString.unacquired
+              >[0],
+            ),
+          ),
+        ),
+      );
+    for (const row of metadataAttributes)
+      metadataValues.types.push(take(new OUString((row[1] as [OUString, OUString])[1])));
+  } finally {
+    metadataStrings.dispose();
+    disposeAttrVector(metadataAttributes);
+  }
   const processContext = getProcessComponentContext() as Reference<XComponentContext>,
     converter = own(Converter.create(processContext)),
     row = own(new Reference(new PropertyValueSet(processContext))),
@@ -603,6 +677,7 @@ export async function runNativeDomWorkerProbe() {
       nativePropertyControl,
       registeredPropertyBag,
       nativeSax,
+      metadataValues,
       documentBuilder,
       xpath: (
         /** Queries the actual registered native XPath service. @returns Scalar observations only. */ () => {

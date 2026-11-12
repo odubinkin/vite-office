@@ -50,3 +50,47 @@ export function stringToDouble(
 export function pow10Exp(value: number, exponent: number): number {
   return rtl_math_pow10Exp(value, exponent);
 }
+
+import type { OUStringBuffer } from "./ustrbuf";
+import type { rtl_uStringSlot } from "./ustring.h";
+import { rtl_math_doubleToUString } from "./math.h";
+import type { rtl_math_StringFormat } from "./math-values";
+/** Original grouped/nongrouped inline append overloads borrow the actual buffer pointer/capacity cells. @param buffer - Existing buffer. @param value - Binary64. @param format - Native format. @param places - Decimal places. @param decimal - Separator. @param args - Original bool or group-pointer/group-char/bool overload. @returns Nothing. */
+export function doubleToUStringBuffer(
+  buffer: OUStringBuffer,
+  value: number,
+  format: rtl_math_StringFormat,
+  places: number,
+  decimal: number,
+  ...args: [erase?: boolean] | [groups: readonly number[] | null, group: number, erase?: boolean]
+): void {
+  const data: [rtl_uStringSlot | null] = [null],
+    capacity: [[number] | null] = [null];
+  buffer.accessInternals(data, capacity);
+  if (args.length <= 1)
+    rtl_math_doubleToUString(
+      data[0],
+      capacity[0],
+      buffer.getLength(),
+      value,
+      format,
+      places,
+      decimal,
+      null,
+      0,
+      (args[0] as boolean | undefined) ?? false,
+    );
+  else
+    rtl_math_doubleToUString(
+      data[0],
+      capacity[0],
+      buffer.getLength(),
+      value,
+      format,
+      places,
+      decimal,
+      args[0] as readonly number[] | null,
+      args[1] as number,
+      args[2] ?? false,
+    );
+}
