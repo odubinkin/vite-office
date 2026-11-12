@@ -3808,3 +3808,21 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 
 - Source: `ucbhelper/source/provider/propertyvalueset.cxx`, `getValue` and `getObjectImpl`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-543.
 - getValue first sets m_bWasNull=true, but calls getObjectImpl when a natively appended string has no Object cache yet. getObjectImpl sets the flag to false. If the genuine converter then throws CannotConvertException, getValue swallows it without restoring the flag. Thus appendString followed by an invalid numeric read returns zero/false on the first call and zero/true on the second call. Tests and both real Chromium realms reproduce this through the production context/manager/converter, with no private mutation. Preserve the source cache and flag order; no compiled C++ differential or full filter defect is claimed.
+
+
+### WRITER478 — XPath unregisterNS dereferences an unchecked map lookup
+
+- Source: `unoxml/source/xpath/xpathapi.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-544.
+- CXPathAPI::unregisterNS dereferences m_nsmap.find(prefix) before comparing the URI. An absent prefix therefore has no defined C++ result. Preserve the lookup-before-comparison contract; do not add a silently successful no-op. The local binding qualifies only existing-prefix calls; no native undefined-behavior outcome is claimed.
+
+
+### WRITER479 — XPath namespace collection passes nullable namespace prefixes to strlen
+
+- Source: `unoxml/source/xpath/xpathapi.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-545.
+- lcl_collectNamespaces calls strlen on both href and prefix without checking for NULL. A default namespace can have a NULL prefix. Preserve the declared nonnull source precondition rather than substituting an empty prefix or URI. The browser boundary reports an explicit host precondition failure for those undefined native inputs; it does not claim native crash parity. Original named-prefix QA remains unchanged.
+
+
+### WRITER480 — XPath evaluation resets a global libxml error callback instead of restoring its previous value
+
+- Source: `unoxml/source/xpath/xpathapi.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-546.
+- CXPathAPI::eval installs xmlSetGenericErrorFunc globally and resets it to NULL after xmlXPathEval, while structured errors are context-local. A previously installed generic callback is not restored; a thrown extension callback before evaluation can also bypass the reset. Preserve the source reset placement and global side effect. This is source-derived; native concurrent callback scheduling and cross-thread interference are unqualified.

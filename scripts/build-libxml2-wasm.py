@@ -61,7 +61,7 @@ def main():
     fields = re.findall(r"^FIELD\([^,]+,\s*(\w+),", binding, re.MULTILINE)
     exports = ["_malloc", "_free", *["_" + f for f in manifest["nativeFunctions"]],
                "_office_xmlVersion", "_office_xmlFree", "_office_xmlXPathNodeSetGetLength",
-               "_office_xmlXPathNodeSetItem", "_office_xmlParserInstallCallbacks"]
+               "_office_xmlXPathNodeSetItem", "_office_xmlParserInstallCallbacks", "_office_xmlXPathSetGenericError"]
     exports.extend("_office_" + field + "_" + op for field in fields for op in ["get", "set"])
     run([emcc, PACKAGE / "binding.c", "-I" + str(build / "include"),
          "-I" + str(source / "include"), build / ".libs/libxml2.a", "--no-entry", "-O2", "-flto", "-Werror",

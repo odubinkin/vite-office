@@ -81,6 +81,7 @@ export interface LibXml2 {
   _office_xmlXPathNodeSetGetLength(set: number): number;
   _office_xmlXPathNodeSetItem(set: number, index: number): number;
   _office_xmlParserInstallCallbacks(context: number, error: number, warning: number, resolver: number): void;
+  _office_xmlXPathSetGenericError(sink: number): void;
   _office_node_type_get(p: number): number;
   _office_node_type_set(p: number, value: number): void;
   _office_node_name_get(p: number): number;
@@ -125,6 +126,14 @@ export interface LibXml2 {
   _office_entity_publicId_set(p: number, value: number): void;
   _office_entity_systemId_get(p: number): number;
   _office_entity_systemId_set(p: number, value: number): void;
+  _office_xpath_context_node_get(p: number): number;
+  _office_xpath_context_node_set(p: number, value: number): void;
+  _office_xpath_context_error_get(p: number): number;
+  _office_xpath_context_error_set(p: number, value: number): void;
+  _office_xpath_object_type_get(p: number): number;
+  _office_xpath_object_type_set(p: number, value: number): void;
+  _office_xpath_object_nodeset_get(p: number): number;
+  _office_xpath_object_nodeset_set(p: number, value: number): void;
   _office_parser_private_get(p: number): number;
   _office_parser_private_set(p: number, value: number): void;
   _office_parser_sax_get(p: number): number;

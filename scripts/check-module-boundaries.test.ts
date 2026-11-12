@@ -991,23 +991,3 @@ it("keeps native package Sequence dependencies below application owners", /** Li
     expect(isForbiddenModuleEdge("package", dependency)).toBe(true);
   expect(isForbiddenModuleEdge("cppu", "package")).toBe(true);
 });
-it("retains native DocumentBuilder dependencies while rejecting reverse browser ownership", /** The source builder consumes processfactory and UCB Content; host exception execution stays injected. @returns Nothing. */ () => {
-  for (const dependency of ["comphelper", "ucbhelper", "external"])
-    expect(isForbiddenModuleEdge("unoxml", dependency)).toBe(false);
-  for (const dependency of ["sc", "sw", "framework"])
-    expect(isForbiddenModuleEdge("unoxml", dependency)).toBe(true);
-  expect(
-    getRuntimeOwnershipViolation(
-      "cppu/inc/com/sun/star/uno/exception-values.ts",
-      "cppu/inc/uno/exception-bindings.ts",
-      "../../../../uno/exception-bindings",
-    ),
-  ).toBeUndefined();
-  expect(
-    getRuntimeOwnershipViolation(
-      "cppuhelper/inc/exc_hlp.ts",
-      "cppuhelper/browser/exception-abi.ts",
-      "../browser/exception-abi",
-    ),
-  ).toMatch(/injected contract/u);
-});

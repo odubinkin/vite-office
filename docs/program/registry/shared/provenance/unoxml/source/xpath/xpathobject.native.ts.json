@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/unoxml/source/xpath/xpathobject.native.ts",
+    "localSymbols": [
+      "XPathObjectReference"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/unoxml/source/xpath/xpathobject.native.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/xpath/xpath.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "unoxml/source/xpath/xpathapi.cxx",
+          "marker": "std::shared_ptr<xmlXPathObject>"
+        },
+        {
+          "path": "unoxml/source/xpath/xpathapi.cxx",
+          "marker": "xmlXPathFreeObject"
+        }
+      ]
+    },
+    "upstreamPath": "unoxml/source/xpath/xpathapi.cxx",
+    "upstreamSymbols": [
+      "std::shared_ptr<xmlXPathObject>",
+      "xmlXPathFreeObject"
+    ],
+    "preservedResponsibilities": [
+      "Original complete CXPathAPI/CXPathObject/CNodeList owners use the pinned native libxml2 XPath engine, generated SDK contracts, actual document identity and shared native result lifetime. Namespace insertion is first-wins, evaluation copies namespace/extension references and global generic-error reset remains at its original source location. Source domtest testXXPathAPI/testXXPathObject assertions run through the production context/service manager; actual Chromium main and DOM-free Worker evaluate/count/select with identical native root identity. Compiler-generated C accessors and bounded varargs formatting expose actual native fields, not guessed layouts or an alternate XPath evaluator. Shared-pointer control-block and synchronous mutex execution are explicit language lowering. Native allocation-failure/undefined inputs/float-to-integer overflow, successful custom extension results, native shared-memory concurrency, real URI providers, metadata and full DOCX/XLSX shell/UI remain unqualified.",
+      "Original native shared-result last-owner xmlXPathFreeObject responsibility is lowered explicitly; no browser API, node/value evaluator or allocator is substituted."
+    ],
+    "omittedResponsibilities": [
+      "Physical C++ std::shared_ptr ABI, allocator exceptions and native thread-safe control block implementation remain unqualified."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/unoxml/source/xpath/xpathobject.native.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The original shared_ptr<xmlXPathObject> ownership spans xpathapi, xpathobject and nodelist. Its host-language control block is a cohesive core lifetime binding shared by those original owners; separate placement avoids an eager module initialization cycle and retains one actual native result/deleter."
+    }
+  }
+}

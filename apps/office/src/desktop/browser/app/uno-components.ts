@@ -1,4 +1,5 @@
 /** @fileoverview Static browser bindings for the consumed i18npool, NumberText and stoc component registrations. */
+import { unoxml_CXPathAPI_get_implementation } from "../../../unoxml/source/xpath/xpathapi";
 import { unoxml_CDocumentBuilder_get_implementation } from "../../../unoxml/source/dom/documentbuilder";
 import { com_sun_star_comp_stoc_TypeConverter_get_implementation } from "../../../stoc/source/typeconv/convert";
 import type { Implementation } from "../../../cppuhelper/source/servicemanager";
@@ -70,5 +71,10 @@ export const implementations: readonly Implementation[] = [
     name: "com.sun.star.comp.xml.dom.DocumentBuilder",
     services: ["com.sun.star.xml.dom.DocumentBuilder"],
     constructorFn: unoxml_CDocumentBuilder_get_implementation,
+  },
+  {
+    name: "com.sun.star.comp.xml.xpath.XPathAPI",
+    services: ["com.sun.star.xml.xpath.XPathAPI"],
+    constructorFn: unoxml_CXPathAPI_get_implementation,
   },
 ];

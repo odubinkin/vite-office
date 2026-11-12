@@ -316,6 +316,10 @@
     "cType": "void (xmlParserCtxtPtr, void (*)(void *), void (*)(void *), resolveEntitySAXFunc)"
   },
   {
+    "name": "_office_xmlXPathSetGenericError",
+    "cType": "void (void (*)(const char *))"
+  },
+  {
     "name": "_office_node_type_get",
     "cType": "xmlElementType (xmlNode *)"
   },
@@ -490,6 +494,38 @@
   {
     "name": "_office_entity_systemId_set",
     "cType": "void (xmlEntity *, const xmlChar *)"
+  },
+  {
+    "name": "_office_xpath_context_node_get",
+    "cType": "xmlNodePtr (xmlXPathContext *)"
+  },
+  {
+    "name": "_office_xpath_context_node_set",
+    "cType": "void (xmlXPathContext *, xmlNodePtr)"
+  },
+  {
+    "name": "_office_xpath_context_error_get",
+    "cType": "xmlStructuredErrorFunc (xmlXPathContext *)"
+  },
+  {
+    "name": "_office_xpath_context_error_set",
+    "cType": "void (xmlXPathContext *, xmlStructuredErrorFunc)"
+  },
+  {
+    "name": "_office_xpath_object_type_get",
+    "cType": "xmlXPathObjectType (xmlXPathObject *)"
+  },
+  {
+    "name": "_office_xpath_object_type_set",
+    "cType": "void (xmlXPathObject *, xmlXPathObjectType)"
+  },
+  {
+    "name": "_office_xpath_object_nodeset_get",
+    "cType": "xmlNodeSetPtr (xmlXPathObject *)"
+  },
+  {
+    "name": "_office_xpath_object_nodeset_set",
+    "cType": "void (xmlXPathObject *, xmlNodeSetPtr)"
   },
   {
     "name": "_office_parser_private_get",

@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "native-xml-runtime",
     "capabilityIds": [
-      "CAP-50103a1f-6aa6-4b77-b0c4-bd8cf3c650f0"
+      "CAP-50103a1f-6aa6-4b77-b0c4-bd8cf3c650f0",
+      "CAP-e9d543a6-8de7-45b1-9680-2a22cb7aad9b"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -18,9 +19,11 @@
       "evidence": [
         "apps/office/src/external/libxml2/libxml2.ts",
         "apps/office/src/external/libxml2/libxml2.test.ts",
-        "docs/program/native-xml-runtime.md"
+        "docs/program/native-xml-runtime.md",
+        "apps/office/src/unoxml/source/xpath/xpath.test.ts",
+        "docs/program/native-xml-xpath.md"
       ],
-      "justification": "Browser delivery binding loads the actual pinned libxml2 2.15.3 C implementation compiled to WASM. Source checksum matches LibreOffice download.lst; the generated loader exports consumed native APIs and C struct accessors, and Clang generates actual C function signatures. Realm-local initialization and byte buffers do not introduce a JavaScript DOM or alternate native allocator. Focused owner tests and native Node/Chromium Worker/main-realm probes cover dependency initialization, actual attribute child trees, shared namespaces, text coalescing, clone document ownership and XML IO. Concrete UNO DOM owners, dispatcher coverage, metadata and complete DOCX/XLSX file/UI parity remain unverified.",
+      "justification": "Browser delivery binding loads the actual pinned libxml2 2.15.3 C implementation compiled to WASM. Source checksum matches LibreOffice download.lst; the generated loader exports consumed native APIs and C struct accessors, and Clang generates actual C function signatures. Realm-local initialization and byte buffers do not introduce a JavaScript DOM or alternate native allocator. Focused owner tests and native Node/Chromium Worker/main-realm probes cover dependency initialization, actual attribute child trees, shared namespaces, text coalescing, clone document ownership and XML IO. Concrete UNO DOM owners, dispatcher coverage, metadata and complete DOCX/XLSX file/UI parity remain unverified. Original complete CXPathAPI/CXPathObject/CNodeList owners use the pinned native libxml2 XPath engine, generated SDK contracts, actual document identity and shared native result lifetime. Namespace insertion is first-wins, evaluation copies namespace/extension references and global generic-error reset remains at its original source location. Source domtest testXXPathAPI/testXXPathObject assertions run through the production context/service manager; actual Chromium main and DOM-free Worker evaluate/count/select with identical native root identity. Compiler-generated C accessors and bounded varargs formatting expose actual native fields, not guessed layouts or an alternate XPath evaluator. Shared-pointer control-block and synchronous mutex execution are explicit language lowering. Native allocation-failure/undefined inputs/float-to-integer overflow, successful custom extension results, native shared-memory concurrency, real URI providers, metadata and full DOCX/XLSX shell/UI remain unqualified.",
       "knownViolations": [],
       "localSymbols": [
         "XmlNodePtr",

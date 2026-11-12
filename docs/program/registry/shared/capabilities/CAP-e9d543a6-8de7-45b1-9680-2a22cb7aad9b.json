@@ -1,0 +1,127 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-e9d543a6-8de7-45b1-9680-2a22cb7aad9b",
+    "capabilityId": "CAP-e9d543a6-8de7-45b1-9680-2a22cb7aad9b",
+    "suite": "shared",
+    "subsystem": "native-xml-xpath",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original complete CXPathAPI/CXPathObject/CNodeList owners use the pinned native libxml2 XPath engine, generated SDK contracts, actual document identity and shared native result lifetime. Namespace insertion is first-wins, evaluation copies namespace/extension references and global generic-error reset remains at its original source location. Source domtest testXXPathAPI/testXXPathObject assertions run through the production context/service manager; actual Chromium main and DOM-free Worker evaluate/count/select with identical native root identity. Compiler-generated C accessors and bounded varargs formatting expose actual native fields, not guessed layouts or an alternate XPath evaluator. Shared-pointer control-block and synchronous mutex execution are explicit language lowering. Native allocation-failure/undefined inputs/float-to-integer overflow, successful custom extension results, native shared-memory concurrency, real URI providers, metadata and full DOCX/XLSX shell/UI remain unqualified."
+    ],
+    "capability": "Registered native XML XPath service and shared result ownership",
+    "gaps": [
+      "Successful custom native extension results and physical ABI/threads remain unqualified.",
+      "Undefined source inputs and native allocation-failure/float-integral overflow outcomes remain unqualified.",
+      "Real UCB/URI providers, document metadata and full DOCX/XLSX shell/UI remain unfinished."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "unoxml/source/xpath/xpathapi.cxx",
+          "marker": "CXPathAPI::eval"
+        },
+        {
+          "path": "unoxml/source/xpath/xpathobject.cxx",
+          "marker": "CXPathObject::getNodeList"
+        },
+        {
+          "path": "unoxml/source/xpath/nodelist.cxx",
+          "marker": "CNodeList::item"
+        }
+      ],
+      "tests": [
+        {
+          "path": "unoxml/qa/unit/domtest.cxx",
+          "marker": "testXXPathAPI"
+        },
+        {
+          "path": "unoxml/qa/unit/domtest.cxx",
+          "marker": "testXXPathObject"
+        }
+      ],
+      "docs": [
+        {
+          "path": "offapi/com/sun/star/xml/xpath/XXPathAPI.idl",
+          "marker": "registerNS"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/xpath/Libxml2ExtensionHandle.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/xpath/XPathAPI.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/xpath/XPathException.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/xpath/XPathObjectType.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/xpath/XXPathAPI.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/xpath/XXPathExtension.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/xpath/XXPathObject.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/xpath/nodelist.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/xpath/xpathapi.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/xpath/xpathobject.native.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/xpath/xpathobject.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/unoxml/source/xpath/xpath.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-xml-xpath.md",
+          "marker": "Native XML XPath"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original complete CXPathAPI/CXPathObject/CNodeList owners use the pinned native libxml2 XPath engine, generated SDK contracts, actual document identity and shared native result lifetime. Namespace insertion is first-wins, evaluation copies namespace/extension references and global generic-error reset remains at its original source location. Source domtest testXXPathAPI/testXXPathObject assertions run through the production context/service manager; actual Chromium main and DOM-free Worker evaluate/count/select with identical native root identity. Compiler-generated C accessors and bounded varargs formatting expose actual native fields, not guessed layouts or an alternate XPath evaluator. Shared-pointer control-block and synchronous mutex execution are explicit language lowering. Native allocation-failure/undefined inputs/float-to-integer overflow, successful custom extension results, native shared-memory concurrency, real URI providers, metadata and full DOCX/XLSX shell/UI remain unqualified."
+    },
+    "scopeLimitations": [
+      "Original complete CXPathAPI/CXPathObject/CNodeList owners use the pinned native libxml2 XPath engine, generated SDK contracts, actual document identity and shared native result lifetime. Namespace insertion is first-wins, evaluation copies namespace/extension references and global generic-error reset remains at its original source location. Source domtest testXXPathAPI/testXXPathObject assertions run through the production context/service manager; actual Chromium main and DOM-free Worker evaluate/count/select with identical native root identity. Compiler-generated C accessors and bounded varargs formatting expose actual native fields, not guessed layouts or an alternate XPath evaluator. Shared-pointer control-block and synchronous mutex execution are explicit language lowering. Native allocation-failure/undefined inputs/float-to-integer overflow, successful custom extension results, native shared-memory concurrency, real URI providers, metadata and full DOCX/XLSX shell/UI remain unqualified."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-xml-xpath-evaluation"
+  }
+}

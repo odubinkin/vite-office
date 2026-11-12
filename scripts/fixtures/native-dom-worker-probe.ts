@@ -19,6 +19,7 @@ import type { OUString } from "../../apps/office/src/sal/inc/rtl/ustring";
 import { implementations } from "../../apps/office/src/desktop/browser/app/uno-components";
 import { InitApplicationServiceManager } from "../../apps/office/src/desktop/source/app/appinit";
 import { getProcessComponentContext } from "../../apps/office/src/comphelper/inc/processfactory";
+import { XPathAPI } from "../../apps/office/src/offapi/com/sun/star/xml/xpath/XPathAPI";
 import { Converter } from "../../apps/office/src/udkapi/com/sun/star/script/Converter";
 import type { XComponentContext } from "../../apps/office/src/udkapi/com/sun/star/uno/XComponentContext";
 import { PropertyValueSet } from "../../apps/office/src/ucbhelper/inc/propertyvalueset";
@@ -192,6 +193,19 @@ export async function runNativeDomWorkerProbe() {
     return {
       conversion,
       documentBuilder,
+      xpath: (
+        /** Queries the actual registered native XPath service. @returns Scalar observations only. */ () => {
+          const service = own(XPathAPI.create(processContext)),
+            result = own(service.operatorStar().eval(builderRoot, u("count(/*)"))),
+            nodes = own(service.operatorStar().selectNodeList(builderRoot, u("/*"))),
+            first = own(nodes.operatorStar().item(0));
+          return {
+            count: result.operatorStar().getLong(),
+            listLength: nodes.operatorStar().getLength(),
+            sameRoot: first.get() === builderRoot.get(),
+          };
+        }
+      )(),
       globals: {
         window: typeof window,
         document: typeof globalThis.document,

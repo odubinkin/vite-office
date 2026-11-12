@@ -39,6 +39,11 @@ FIELD(xmlDtd, dtd_entities, void *, entities)
 FIELD(xmlDtd, dtd_notations, void *, notations)
 FIELD(xmlEntity, entity_publicId, const xmlChar *, ExternalID)
 FIELD(xmlEntity, entity_systemId, const xmlChar *, SystemID)
+FIELD(xmlXPathContext, xpath_context_node, xmlNodePtr, node)
+FIELD(xmlXPathContext, xpath_context_error, xmlStructuredErrorFunc, error)
+FIELD(xmlXPathObject, xpath_object_type, xmlXPathObjectType, type)
+FIELD(xmlXPathObject, xpath_object_nodeset, xmlNodeSetPtr, nodesetval)
+
 FIELD(xmlParserCtxt, parser_private, void *, _private)
 FIELD(xmlParserCtxt, parser_sax, xmlSAXHandlerPtr, sax)
 FIELD(xmlError, error_message, char *, message)
@@ -81,4 +86,23 @@ int office_xmlXPathNodeSetGetLength(xmlNodeSetPtr set) {
 }
 xmlNodePtr office_xmlXPathNodeSetItem(xmlNodeSetPtr set, int index) {
     return xmlXPathNodeSetItem(set, index);
+}
+
+/* Preserve xpathapi.cxx generic_error_func's bounded native printf formatting;
+ * only its SAL logging sink crosses the host ABI. */
+#include <stdarg.h>
+#include <stdio.h>
+static void (*office_xpath_generic_sink)(const char *);
+static void office_xpath_generic_trampoline(void *context, const char *format, ...) {
+    (void)context;
+    char str[1000];
+    va_list args;
+    va_start(args, format);
+    vsnprintf(str, sizeof(str), format, args);
+    va_end(args);
+    office_xpath_generic_sink(str);
+}
+void office_xmlXPathSetGenericError(void (*sink)(const char *)) {
+    office_xpath_generic_sink = sink;
+    xmlSetGenericErrorFunc(NULL, sink ? office_xpath_generic_trampoline : NULL);
 }

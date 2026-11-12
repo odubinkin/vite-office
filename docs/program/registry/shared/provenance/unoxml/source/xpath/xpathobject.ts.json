@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/unoxml/source/xpath/xpathobject.ts",
+    "localSymbols": [
+      "CXPathObject"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/unoxml/source/xpath/xpathobject.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/xpath/xpath.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "unoxml/source/xpath/xpathobject.cxx",
+          "marker": "CXPathObject::getObjectType"
+        },
+        {
+          "path": "unoxml/source/xpath/xpathobject.cxx",
+          "marker": "CXPathObject::getString"
+        }
+      ]
+    },
+    "upstreamPath": "unoxml/source/xpath/xpathobject.cxx",
+    "upstreamSymbols": [
+      "CXPathObject::getObjectType",
+      "CXPathObject::getString"
+    ],
+    "preservedResponsibilities": [
+      "Original complete CXPathAPI/CXPathObject/CNodeList owners use the pinned native libxml2 XPath engine, generated SDK contracts, actual document identity and shared native result lifetime. Namespace insertion is first-wins, evaluation copies namespace/extension references and global generic-error reset remains at its original source location. Source domtest testXXPathAPI/testXXPathObject assertions run through the production context/service manager; actual Chromium main and DOM-free Worker evaluate/count/select with identical native root identity. Compiler-generated C accessors and bounded varargs formatting expose actual native fields, not guessed layouts or an alternate XPath evaluator. Shared-pointer control-block and synchronous mutex execution are explicit language lowering. Native allocation-failure/undefined inputs/float-to-integer overflow, successful custom extension results, native shared-memory concurrency, real URI providers, metadata and full DOCX/XLSX shell/UI remain unqualified."
+    ],
+    "omittedResponsibilities": [
+      "Native undefined behavior, physical C++ ABI/thread scheduling and unsupported allocation-failure paths remain unqualified."
+    ]
+  }
+}
