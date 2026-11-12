@@ -29,6 +29,10 @@ import {
   type ColumnBlockPosition,
 } from "../../../inc/mtvelements";
 import { SharedFormulaUtil } from "../../../inc/sharedformula";
+import { ScTokenArray } from "../../../inc/tokenarray";
+import { ScTable } from "../../../inc/table";
+import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
+import { delayed_delete_vector_iterator } from "../../../../external/mdds/include/mdds/multi_type_vector/delayed_delete_vector";
 
 /** Original represented ScDocumentImportImpl cache and listening state. */
 class ScDocumentImportImpl {
@@ -63,6 +67,22 @@ export class ScDocumentImport {
   initForSheets(): void {
     for (let tab = this.impl.blockPositions.length; tab < this.getDoc().GetTableCount(); tab++)
       this.impl.blockPositions.push(new TableColumnBlockPositionSet(this.getDoc(), tab));
+  }
+  /** Original import sheet count, without normal editing-side state. @returns Actual sheet-vector size. */
+  getSheetCount(): number {
+    return this.getDoc()["maTabs"].length;
+  }
+  /** Original raw sheet append, without editing validation/reference updates or broadcasting. @param name - Prepared native sheet name. @returns Whether the native sheet limit admits append. */
+  appendSheet(name: OUStringConstReference): boolean {
+    const document = this.getDoc(),
+      tab = document["maTabs"].length;
+    if (!ValidTab(tab)) return false;
+    document["maTabs"].push(new ScTable(document, tab, name));
+    return true;
+  }
+  /** Original document-options null-date assignment, without the broader SetDocOptions formatter update. @param year - Native unsigned16 year. @param month - Native unsigned16 month. @param day - Native unsigned16 day. @returns Nothing. */
+  setOriginDate(year: number, month: number, day: number): void {
+    this.getDoc()["pDocOptions"].SetDate(day & 0xffff, month & 0xffff, year & 0xffff);
   }
   /** Sets the source default script for numeric blocks. @param script - Script flags. @returns Nothing. */
   setDefaultNumericScript(script: SvtScriptType): void {
@@ -203,29 +223,121 @@ export class ScDocumentImport {
         edittext_element_callbacks,
       );
   }
-  /** Uses the native source-string formula overload,with explicit grammar and existing real token compilation. @param pos - Position. @param value - Formula. @param grammar - Grammar. @param result - Optional cached double. @returns Nothing. */
+  /** Original source formula with an optional numeric cache or mandatory string cache. @param pos - Destination. @param value - Formula source. @param grammar - Explicit grammar. @param result - Optional cached double or actual Unicode result. @returns Nothing. */
   setFormulaCell(
     pos: ScAddress,
     value: OUStringConstReference,
     grammar: Grammar,
-    result?: number,
+    result?: number | OUStringConstReference,
+  ): void;
+  /** Original by-value unique token array transfer, including destruction on rejected destinations. @param pos - Destination. @param tokens - Transferred actual token array. @returns Nothing. */
+  setFormulaCell(pos: ScAddress, tokens: ScTokenArray): void;
+  /** Original raw formula pointer transfer on successful write; rejection leaves it caller-owned. @param pos - Destination. @param cell - Actual formula or native null pointer. @returns Nothing. */
+  setFormulaCell(pos: ScAddress, cell: ScFormulaCell | null): void; // eslint-disable-line @typescript-eslint/unified-signatures -- Native raw-pointer and unique_ptr ownership differ.
+  /** Dispatches the original overloads without a replacement formula/result model. @param pos - Destination. @param value - Source, owned tokens or raw cell. @param grammar - Source-string grammar. @param result - Cached source-string result. @returns Nothing. */
+  setFormulaCell(
+    pos: ScAddress,
+    value: OUStringConstReference | ScTokenArray | ScFormulaCell | null,
+    grammar?: Grammar,
+    result?: number | OUStringConstReference,
   ): void {
     const document = this.getDoc(),
       table = document.FetchTable(pos.Tab());
-    if (!table) return;
+    if (!table) {
+      if (value instanceof ScTokenArray) value.Clear();
+      return;
+    }
     const block = this.impl.getBlockPosition(pos.Tab(), pos.Col());
-    if (!block) return;
-    const cell = new ScFormulaCell(document, pos, value, grammar);
-    if (result !== undefined) cell.SetResultDouble(result);
-    block.miCellPos = table
-      .CreateColumnIfNotExists(pos.Col())
-      .GetCellStore()
-      .set(
+    if (!block) {
+      if (value instanceof ScTokenArray) value.Clear();
+      return;
+    }
+    const raw = value === null || value instanceof ScFormulaCell;
+    const cell = raw
+      ? value
+      : value instanceof ScTokenArray
+        ? new ScFormulaCell(document, pos, value)
+        : new ScFormulaCell(document, pos, value, grammar as Grammar);
+    let transferred = false;
+    try {
+      if (cell !== null) document.CheckLinkFormulaNeedingCheck(cell.GetCode());
+      if (!raw && !(value instanceof ScTokenArray) && result !== undefined) {
+        if (typeof result === "number") (cell as ScFormulaCell).SetResultDouble(result);
+        else {
+          const shared = document.GetSharedStringPool().intern(result);
+          try {
+            (cell as ScFormulaCell).SetHybridString(shared);
+          } finally {
+            shared.dispose();
+          }
+        }
+      }
+      const cells = table.CreateColumnIfNotExists(pos.Col()).GetCellStore();
+      if (raw) {
+        const position = cells.position(pos.Row());
+        if (
+          !position.first.equals(cells.end()) &&
+          position.first.get().type === element_type_formula
+        ) {
+          const old = formula_block.at(
+            position.first.get().data as base_element_block,
+            position.second,
+          ) as ScFormulaCell;
+          SharedFormulaUtil.unshareFormulaCell(position, old);
+        }
+      }
+      transferred = true; // Native unique_ptr::release occurs before the storage call.
+      block.miCellPos = cells.set(
         block.miCellPos as NonNullable<ColumnBlockPosition["miCellPos"]>,
         pos.Row(),
         cell,
         formula_element_callbacks,
       );
+    } finally {
+      // The native source/token overload owns a local unique_ptr until rCells.set takes it.
+      if (!transferred && !raw) cell?.Dispose();
+    }
+  }
+  /** Original numeric/string-only fill-down; formulas, rich text and empty sources deliberately do nothing. @param pos - Source cell. @param fillSize - Number of following rows. @returns Nothing. */
+  fillDownCells(pos: ScAddress, fillSize: number): void {
+    const table = this.getDoc().FetchTable(pos.Tab());
+    if (!table) return;
+    const block = this.impl.getBlockPosition(pos.Tab(), pos.Col());
+    if (!block) return;
+    const column = table.CreateColumnIfNotExists(pos.Col()),
+      cells = column.GetCellStore(),
+      source = column.GetCellValue(block, pos.Row()),
+      count = fillSize | 0;
+    if (source.getType() === CellType.CELLTYPE_VALUE) {
+      const value = source.getDouble(),
+        values = Array<number | undefined>(count).fill(undefined);
+      for (let index = 0; index < count; ++index) values[index] = value;
+      const storage = { values, size: count };
+      block.miCellPos = cells.set(
+        block.miCellPos as NonNullable<ColumnBlockPosition["miCellPos"]>,
+        pos.Row() + 1,
+        new delayed_delete_vector_iterator(storage, 0),
+        new delayed_delete_vector_iterator(storage, count),
+        double_element_callbacks,
+      );
+    } else if (source.getType() === CellType.CELLTYPE_STRING) {
+      const shared = source.getSharedString() as SharedStringConstReference,
+        values: SharedString[] = [];
+      try {
+        for (let index = 0; index < count; ++index) values.push(new SharedString(shared));
+        const storage = { values, size: count };
+        block.miCellPos = cells.set(
+          block.miCellPos as NonNullable<ColumnBlockPosition["miCellPos"]>,
+          pos.Row() + 1,
+          new delayed_delete_vector_iterator(storage, 0),
+          new delayed_delete_vector_iterator(storage, count),
+          string_element_callbacks,
+        );
+      } finally {
+        for (let index = values.length - 1; index >= 0; --index)
+          (values[index] as SharedString).dispose();
+      }
+    }
   }
   /** Original initColumn regroups formulas, recreates text metadata and starts native group/individual listeners. Format-specific Latin hints, outline finalization and absent compute caches remain outside this slice. @param column - Stored column. @returns Nothing. */
   initColumn(column: ScColumn): void {

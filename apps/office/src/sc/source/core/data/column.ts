@@ -44,6 +44,7 @@ import { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import type { SvtListener } from "../../../../svl/source/notify/listener";
 import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
 import { ScHint } from "../../../inc/brdcst";
+import { const_iterator_base } from "../../../../external/mdds/include/mdds/multi_type_vector/soa/iterator";
 import {
   BroadcasterStoreType,
   broadcaster_element_callbacks,
@@ -810,10 +811,22 @@ export class ScColumn extends ScColumnData {
   ): void {
     column4.EndListeningIntersectedGroup.apply(this, args);
   }
-  /** Borrows actual numeric/string/formula cell content without a second model. @param row - Valid row. @returns Cell view. */
-  GetCellValue(row: number): ScRefCellValue {
-    const position = this.maCells.cposition(row);
-    return toRefCell(position.first, position.second);
+  /** Original row-only borrowed cell query. @param row - Valid row. @returns Cell view. */
+  GetCellValue(row: number): ScRefCellValue;
+  /** Original mutable cached-position query. @param block - Native block cache. @param row - Valid row. @returns Cell view. */
+  GetCellValue(block: ColumnBlockPosition, row: number): ScRefCellValue;
+  /** Retains source end guard and updates the caller's hint only for a stored block. @param first - Row or cache. @param row - Cached query row. @returns Borrowed cell value. */
+  GetCellValue(first: number | ColumnBlockPosition, row?: number): ScRefCellValue {
+    const position =
+      typeof first === "number"
+        ? this.maCells.position(first)
+        : this.maCells.position(
+            first.miCellPos as NonNullable<ColumnBlockPosition["miCellPos"]>,
+            row as number,
+          );
+    if (position.first.equals(this.maCells.end())) return new ScRefCellValue();
+    if (typeof first !== "number") first.miCellPos = position.first;
+    return toRefCell(const_iterator_base.from_mutable(position.first), position.second);
   }
   /** Borrows an existing source broadcaster without allocating. @param row - Valid row. @returns Broadcaster or null. */
   GetBroadcaster(row: number): SvtBroadcaster<SfxHint> | null {

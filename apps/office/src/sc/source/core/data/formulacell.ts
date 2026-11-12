@@ -20,7 +20,7 @@ import {
 import { approxEqual } from "../../../../sal/inc/rtl/math";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
-import type { Grammar } from "../../../../formula/inc/grammar";
+import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ScCompiler } from "../../../inc/compiler";
 import { ScInterpreter } from "../inc/interpre";
@@ -107,6 +107,10 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   /** Original cached numeric result assignment without changing dirty state. @param value - Cached result. @returns Nothing. */
   SetResultDouble(value: number): void {
     this.aResult.SetDouble(value);
+  }
+  /** Original cached hybrid-string assignment without changing dirty/listening state. @param value - Actual shared string. @returns Nothing. */
+  SetHybridString(value: SharedStringConstReference): void {
+    this.aResult.SetHybridString(value);
   }
   /** Original normal source recompilation over the same actual formula owner. Shared/named/formatter services retain their existing explicit boundaries. @param formula - Source formula. @param noListening - Native listener suppression. @param grammar - Original input grammar. @returns Nothing. */
   Compile(formula: OUStringConstReference, noListening: boolean, grammar: Grammar): void {
@@ -242,12 +246,14 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       throw new Error("Native shift/move reference updates are not implemented");
     return false;
   }
+  /** Original empty formula owner; no source compilation or dirty flag. @param rDocument - Actual document. @param position - Cell position. @returns Cell. */
+  constructor(rDocument: ScDocument, position: ScAddress);
   /** Compiles numeric/local-reference source. @param rDocument - Document. @param position - Cell. @param formula - Source or owned tokens. @param grammar - Source grammar. @returns Cell. */
   constructor(
     rDocument: ScDocument,
     position: ScAddress,
     formula: OUStringConstReference | ScTokenArray | ScFormulaCellGroup,
-    grammar: Grammar,
+    grammar?: Grammar, // eslint-disable-line @typescript-eslint/unified-signatures -- Native empty and compiling constructors differ.
   );
   /** Original explicit matrix-mode value for source/precompiled token constructors;matrix evaluation/compilation services remain unported. @param rDocument - Document. @param position - Position. @param formula - Source or owned code. @param grammar - Source grammar. @param matrixMode - Native mode. @returns Cell. */
   constructor(
@@ -263,8 +269,8 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   constructor(
     documentOrCell: ScDocument | ScFormulaCell,
     positionOrDocument: ScAddress | ScDocument,
-    formulaOrPosition: OUStringConstReference | ScTokenArray | ScFormulaCellGroup | ScAddress,
-    grammar?: Grammar,
+    formulaOrPosition?: OUStringConstReference | ScTokenArray | ScFormulaCellGroup | ScAddress,
+    grammar: Grammar = FormulaGrammar.Grammar.GRAM_DEFAULT,
     matrixMode: ScMatrixMode = ScMatrixMode.NONE,
   ) {
     super();
@@ -308,8 +314,13 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
     } else {
       this.rDocument = documentOrCell;
       this.aPos = new ScAddress(positionOrDocument as ScAddress);
-      this.eTempGrammar = grammar as Grammar;
+      this.eTempGrammar = grammar;
       this.aResult = new ScFormulaResult();
+      if (formulaOrPosition === undefined) {
+        this.bDirty = false;
+        this.pCode = new ScTokenArray(this.rDocument);
+        return;
+      }
       if (formulaOrPosition instanceof ScFormulaCellGroup) {
         if (formulaOrPosition.mbSubTotal)
           throw new Error("Subtotal-cell document registration is not implemented");

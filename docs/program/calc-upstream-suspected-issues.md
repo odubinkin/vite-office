@@ -5422,3 +5422,8 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source: pinned `sc/source/filter/inc/addressconverter.hxx`, `AddressConverter::convertToCellAddressUnchecked`, its body in `sc/source/filter/oox/addressconverter.cxx`, and the local Excel A1 scanner in `sc/source/core/tool/address.cxx`, commit9bc445578031fecf56086729d8e4940c77e14d65.
 - The header promises conversion without checking any sheet limits, but the implementation calls ScAddress::Parse with the real document. The parser can reject columns/rows outside that document's dimensions before the converter's separate overflow checks ever run. Preserve that call and its partial output, rather than replacing it with an unbounded A1 parser to match the comment. Actual local ScDocument tests retain false for XFE1 and A1048577 with ordinary dimensions. This is source/local-core evidence, not an independently compiled complete workbook or UI reproduction.
+
+### CALC-521 — The raw import formula overload guards null for policy checks but stores it as a formula
+
+- Source: pinned `sc/source/core/data/documentimport.cxx`, `ScDocumentImport::setFormulaCell(const ScAddress&, ScFormulaCell*)` and `CellStoreInitializer::operator()`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- The raw-pointer overload skips CheckLinkFormulaNeedingCheck when pCell is null, then still passes pCell to the formula-typed store. The finalizer later dereferences formula-block pointers without a matching null guard. Preserve the conditional check and original typed insertion rather than silently translating null into an empty cell. This may reflect an undocumented non-null caller precondition; no defined native failure, reachable filter defect or invalid/null formula graph test is claimed.

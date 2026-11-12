@@ -217,6 +217,13 @@ export class ScCompiler extends FormulaCompiler {
   }
   /** Selects the implemented native Calc grammar and reference convention. @param grammar - Grammar. @returns Nothing. */
   SetGrammar(grammar: Grammar): void {
+    // Original SetGrammarAndRefConvention uses the document convention for initial UI grammar.
+    // Full symbol-map selection and later unspecified-convention transitions remain unported.
+    if (
+      grammar === FormulaGrammar.Grammar.GRAM_NATIVE_UI &&
+      this.meGrammar === FormulaGrammar.Grammar.GRAM_UNSPECIFIED
+    )
+      grammar = FormulaGrammar.mergeToGrammar(grammar, this.rDoc.GetAddressConvention());
     if (
       grammar !== FormulaGrammar.Grammar.GRAM_ODFF &&
       grammar !== FormulaGrammar.Grammar.GRAM_ODFF_A1 &&
