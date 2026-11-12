@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 184
+revision: 187
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T05:50:58.348Z"
+  updated_at: "2026-11-12T06:29:14.055Z"
   updated_by: "CODER"
-  note: "Native DOM contract/value prerequisites verified; concrete DOM, metadata/model services and complete XLSX/DOCX filter/UI acceptance remain outstanding. Evidence: evidence/native-dom-contracts-checkpoint.json. Continue active goal locally; pinned source network approval is still pending."
-  attempts: 56
+  note: "Native DOM event prerequisites and selected JS backend verified in real Chromium module Worker. Concrete UNO DOM/document metadata integration and full DOCX/XLSX import/export/UI remain outstanding. Evidence: evidence/native-dom-events-checkpoint.json. Continue active goal without pause."
+  attempts: 57
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -904,8 +907,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-12T06:29:14.055Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native DOM event prerequisites and selected JS backend verified in real Chromium module Worker. Concrete UNO DOM/document metadata integration and full DOCX/XLSX import/export/UI remain outstanding. Evidence: evidence/native-dom-events-checkpoint.json. Continue active goal without pause."
+  -
+    type: "status"
+    at: "2026-11-12T06:29:26.803Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-12T05:51:14.728Z"
+doc_updated_at: "2026-11-12T06:29:26.803Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -2600,6 +2616,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T06:29:14.055Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native DOM event prerequisites and selected JS backend verified in real Chromium module Worker. Concrete UNO DOM/document metadata integration and full DOCX/XLSX import/export/UI remain outstanding. Evidence: evidence/native-dom-events-checkpoint.json. Continue active goal without pause.
+    Attempts: 57
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T06:29:13.457Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2884,6 +2930,10 @@ sections:
     - Observation: Command/result/evidence: native-dom-contracts-checkpoint.json records79 source blob proofs. Complete direct contracts for18core DOM interfaces and2SAX callbacks, original zero-based enums and actual DOMException ownership/type bindings pass26 cases/2files. Entire23 executable owners naturally reach S260/260 B56/56 F73/73 L255/255 at approved90 threshold. Related real CPPU/InputSource/OOXML parser67 cases/5files pass.
       Impact: Native metadata property storage now has its real DOM declaration/value graph, without a replacement tree, property provider or fake component query. Concrete unoxml/libxml2 owners, metadata/model initialization and full DOCX/XLSX import/export/UI remain outstanding. An async network approval request is pending for only the baseline-pinned libxml2 source with SHA verification; no network fetch occurred. Goal remains active and independent local work continues.
       Resolution: Final typecheck/build/static/scopedlint/format/dependencies/resources/size/tree/provenance/registry/invariants/parity/doctor/routing pass; only the two old css-style-matchers JSDoc errors remain. Corrected duplicate imports, native scalar lvalue test input, cross-realm byte array construction, exact module owner boundaries, source-specific registry symbols and narrow empty-IDL lint declarations. Preserved raw failure/diagnostic logs. Concrete native domtest runtime cases remain required, not claimed as ported by contract tests.
+
+    - Observation: Command/result/evidence: native-dom-events-checkpoint.json records78 source blob proofs. Four actual native event components, Time and event/view SDK bindings pass21cases/3files with full17owner raw coverage S239/239 B37/37 F84/84 L237/237 at approved90 threshold. Related93cases/7files and49boundary cases/2files pass. Source-backed unoxml root admits only4 consumed CPPU/SDK/SAL edges and retains reverse/browser restrictions.
+      Impact: Actual weak event owners and source query/inheritance/destruction contracts are ready for metadata DOM integration. CALC-524/525 and WRITER458/459 preserve native cancellation and ignored related-target behavior. The user approved network retrieval and explicitly prefers an existing JS library: exact @xmldom/xmldom0.9.12 is installed, replacing the need to port/download libxml2. Real Chromium module Worker without window/document/nativeDOMParser passes metadata preservation, namespace/Unicode edits, empty document, replacement/import ownership, serialization/reopen and malformed rejection. No full UNO DOM or DOCX/XLSX file/UI completion claim.
+      Resolution: Final typecheck/build/static/scopedlint/format/dependencies/resources/size/tree/provenance/registry/invariants/parity/doctor/routing pass; only two old css-style-matchers JSDoc errors remain. Preserve the committed repeatable Worker probe and lockfile integrity. Initial getTypes count, actual compound-pointer typing, native default-only constructor lint and probe build/origin failures are corrected and documented; no fake targets/private hooks/dispatcher, gate weakening or heap changes. Continue active goal with actual native document/builder/backend integration.
 id_source: "generated"
 ---
 ## Summary
@@ -4588,6 +4638,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T06:29:14.055Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native DOM event prerequisites and selected JS backend verified in real Chromium module Worker. Concrete UNO DOM/document metadata integration and full DOCX/XLSX import/export/UI remain outstanding. Evidence: evidence/native-dom-events-checkpoint.json. Continue active goal without pause.
+Attempts: 57
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T06:29:13.457Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4876,3 +4956,7 @@ DecisionContextRef:
 - Observation: Command/result/evidence: native-dom-contracts-checkpoint.json records79 source blob proofs. Complete direct contracts for18core DOM interfaces and2SAX callbacks, original zero-based enums and actual DOMException ownership/type bindings pass26 cases/2files. Entire23 executable owners naturally reach S260/260 B56/56 F73/73 L255/255 at approved90 threshold. Related real CPPU/InputSource/OOXML parser67 cases/5files pass.
   Impact: Native metadata property storage now has its real DOM declaration/value graph, without a replacement tree, property provider or fake component query. Concrete unoxml/libxml2 owners, metadata/model initialization and full DOCX/XLSX import/export/UI remain outstanding. An async network approval request is pending for only the baseline-pinned libxml2 source with SHA verification; no network fetch occurred. Goal remains active and independent local work continues.
   Resolution: Final typecheck/build/static/scopedlint/format/dependencies/resources/size/tree/provenance/registry/invariants/parity/doctor/routing pass; only the two old css-style-matchers JSDoc errors remain. Corrected duplicate imports, native scalar lvalue test input, cross-realm byte array construction, exact module owner boundaries, source-specific registry symbols and narrow empty-IDL lint declarations. Preserved raw failure/diagnostic logs. Concrete native domtest runtime cases remain required, not claimed as ported by contract tests.
+
+- Observation: Command/result/evidence: native-dom-events-checkpoint.json records78 source blob proofs. Four actual native event components, Time and event/view SDK bindings pass21cases/3files with full17owner raw coverage S239/239 B37/37 F84/84 L237/237 at approved90 threshold. Related93cases/7files and49boundary cases/2files pass. Source-backed unoxml root admits only4 consumed CPPU/SDK/SAL edges and retains reverse/browser restrictions.
+  Impact: Actual weak event owners and source query/inheritance/destruction contracts are ready for metadata DOM integration. CALC-524/525 and WRITER458/459 preserve native cancellation and ignored related-target behavior. The user approved network retrieval and explicitly prefers an existing JS library: exact @xmldom/xmldom0.9.12 is installed, replacing the need to port/download libxml2. Real Chromium module Worker without window/document/nativeDOMParser passes metadata preservation, namespace/Unicode edits, empty document, replacement/import ownership, serialization/reopen and malformed rejection. No full UNO DOM or DOCX/XLSX file/UI completion claim.
+  Resolution: Final typecheck/build/static/scopedlint/format/dependencies/resources/size/tree/provenance/registry/invariants/parity/doctor/routing pass; only two old css-style-matchers JSDoc errors remain. Preserve the committed repeatable Worker probe and lockfile integrity. Initial getTypes count, actual compound-pointer typing, native default-only constructor lint and probe build/origin failures are corrected and documented; no fake targets/private hooks/dispatcher, gate weakening or heap changes. Continue active goal with actual native document/builder/backend integration.

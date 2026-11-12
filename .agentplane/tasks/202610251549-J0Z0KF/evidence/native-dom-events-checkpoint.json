@@ -1,0 +1,499 @@
+{
+  "taskId": "202610251549-J0Z0KF",
+  "checkpoint": "Native DOM event components and confirmed JavaScript DOM backend for metadata integration",
+  "sourceBaseline": {
+    "tag": "libreoffice-26.8.0.2",
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65"
+  },
+  "sourceBlobs": [
+    {
+      "path": "apps/office/package.json",
+      "gitBlob": "b45b504b8b6dc801f0bd39e8b17c3c94026c9fa7"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/util/Time.test.ts",
+      "gitBlob": "62461bcd388c219ddfe01da16c0c28ad8261cdc8"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/util/Time.ts",
+      "gitBlob": "6d3391d5847a946457281144dbaba1b81b32bfbd"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/AttrChangeType.ts",
+      "gitBlob": "3546dd5fbc6f8f3dd0223ced06436b18b3486500"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/EventType.ts",
+      "gitBlob": "749a194706ce99015252b2ee17671392fdd169d7"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/PhaseType.ts",
+      "gitBlob": "0e4398fbbefb145acf12ac74458fbab9e4c2b706"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/XDocumentEvent.ts",
+      "gitBlob": "8d637f8534662009da88f62b5f83ad431172a163"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/XEvent.ts",
+      "gitBlob": "43ee8de9637e383c9f0226ace17522a8619aa2b5"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/XEventListener.ts",
+      "gitBlob": "e2c9a995dba31abbeaec08d8a450d63c82adb2ed"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/XEventTarget.ts",
+      "gitBlob": "0d88b602256cda708a20f3049d4dcf7eaaabfd2e"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/XMouseEvent.ts",
+      "gitBlob": "139a4d57a81fc1c9b70b564befa9939611a5ef56"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/XMutationEvent.ts",
+      "gitBlob": "0511bc03e65bf66a8f7735aa85c3e8f50a7f6e1f"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/XUIEvent.ts",
+      "gitBlob": "2bd33e80a9d4b54ac752ec722929fac0bbd6c0c0"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/native-event-contracts.test.ts",
+      "gitBlob": "5bf3a5912de1f15730d5c37f26526af8bcf1905b"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/views/XAbstractView.ts",
+      "gitBlob": "a27c1cff3867eb590b018cc60db1775534ffff94"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/views/XDocumentView.ts",
+      "gitBlob": "421e06b26f5d00272c215178a0a7ede7d4987cfa"
+    },
+    {
+      "path": "apps/office/src/unoxml/inc/event.ts",
+      "gitBlob": "8c52944690fc1c7217b14294f80a72e1276e8bc7"
+    },
+    {
+      "path": "apps/office/src/unoxml/inc/mouseevent.ts",
+      "gitBlob": "a72de673bf773d05592604fda0dada19209825ea"
+    },
+    {
+      "path": "apps/office/src/unoxml/inc/mutationevent.ts",
+      "gitBlob": "7205a072052e24e319146c3b031b0659230050fa"
+    },
+    {
+      "path": "apps/office/src/unoxml/inc/uievent.ts",
+      "gitBlob": "15725d350d67dd59362e8d797f2a041a58b6d59f"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/events/event.ts",
+      "gitBlob": "247a2e2c040a2f26e3f7c7412f4d15303a919985"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/events/mouseevent.ts",
+      "gitBlob": "850fdbf1734f4d931ee51f220c6a2b9186b030fa"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/events/mutationevent.ts",
+      "gitBlob": "6200dd19e4b55078d7a7acef6915cd0ad0317a89"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/events/native-events.test.ts",
+      "gitBlob": "ea2219b2da7107264c2cc032032bab34b239e525"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/events/uievent.ts",
+      "gitBlob": "ff57fd79e65132456e0e99fa6f27bba857f0e051"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "273a81213e8ab642d8cf905d133b743d49e4a3fd"
+    },
+    {
+      "path": "docs/program/native-xml-dom-contracts.md",
+      "gitBlob": "3cb5f903456365aab6a473b38ed55e66203a731f"
+    },
+    {
+      "path": "docs/program/native-xml-dom-events.md",
+      "gitBlob": "8df95fbd51a97b5315e58f47145d45935f83a791"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-63b22cd8-c479-4bd1-88a6-b34e7c7e733e.json",
+      "gitBlob": "ce9f51af132ef1c3172bd862938beeffe872e6fa"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/util/Time.ts.json",
+      "gitBlob": "8d07d5edd75e907b136c575ca4d8b409d7506f64"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/AttrChangeType.ts.json",
+      "gitBlob": "d382be4483389694c2ddbeb7633e5706159250f8"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/EventType.ts.json",
+      "gitBlob": "804d01aaf98664dadfb909b0d7266d15d8808c66"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/PhaseType.ts.json",
+      "gitBlob": "6e8cd2972deb1c56eb2098b6a103677ff7446239"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/XDocumentEvent.ts.json",
+      "gitBlob": "181c2d671281720b0acaa143d979571dd5b7702f"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/XEvent.ts.json",
+      "gitBlob": "ce7f9b9fd5e08ebdead2461bf5ae912afd5c0395"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/XEventListener.ts.json",
+      "gitBlob": "2bb2d7349630ad627a8ea28a277a39a822a657fc"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/XEventTarget.ts.json",
+      "gitBlob": "92414e789f6b55ee8c29f653b6fa8efce6b9c099"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/XMouseEvent.ts.json",
+      "gitBlob": "2d7a25955cd06169c41159dd8087e1e5b6774175"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/XMutationEvent.ts.json",
+      "gitBlob": "83d4b4d24eac10161329028ecac0cd1870f54123"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/XUIEvent.ts.json",
+      "gitBlob": "44631c8ed49278704225289af92b4068a2104b8f"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/views/XAbstractView.ts.json",
+      "gitBlob": "672e344037a42463159d7e9cc38f1ef13124cc75"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/views/XDocumentView.ts.json",
+      "gitBlob": "e6d0ad2dabf22fefacf2841824e2dba3c261a402"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/inc/event.ts.json",
+      "gitBlob": "49b20b994d50b53d869cf9aa223774fb0070f936"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/inc/mouseevent.ts.json",
+      "gitBlob": "29fbbb96043929b52539e11af75fec2375731b1b"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/inc/mutationevent.ts.json",
+      "gitBlob": "2fd0c8aed2aac32953e499bc1cc027e7e071510f"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/inc/uievent.ts.json",
+      "gitBlob": "d2db116d3f08a0966a3bd53db02f3e1614a4a965"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/events/event.ts.json",
+      "gitBlob": "0c3a4c7e6cf62a1843e369ba970bdaa739098d1e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/events/mouseevent.ts.json",
+      "gitBlob": "3d8377d7a63fa85e4d32f981add05fe98b0b31c5"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/events/mutationevent.ts.json",
+      "gitBlob": "695bbbd6f0cae7692f8a3c7fb12753805679a5ce"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/events/uievent.ts.json",
+      "gitBlob": "3304f207d5492b30bfbc92d298a3bb4e40d89e29"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/util/Time.ts.json",
+      "gitBlob": "caf9128b730299d0597722581c0faa2852a19008"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/AttrChangeType.ts.json",
+      "gitBlob": "111b66dc8adfed2dafc1d0c6c78a7e7761f6acf4"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/EventType.ts.json",
+      "gitBlob": "f0d1d40118d0c3c21127f914a8948b1d6e41c3db"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/PhaseType.ts.json",
+      "gitBlob": "3355bdadf119fa6034896895eef8ed63c5bb3658"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/XDocumentEvent.ts.json",
+      "gitBlob": "2745ecb90601895fad09c50f50974504b49c2b48"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/XEvent.ts.json",
+      "gitBlob": "e7ffffff54210bed93883976d037456499819d55"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/XEventListener.ts.json",
+      "gitBlob": "b7298b88ec06390564804718f551a27607bec0f3"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/XEventTarget.ts.json",
+      "gitBlob": "86ced148f630344cbd58b585137a5644ef3180c7"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/XMouseEvent.ts.json",
+      "gitBlob": "9808d8cc6eb0f58e1a452886c5ed5d7a6085f5e5"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/XMutationEvent.ts.json",
+      "gitBlob": "36905d3c3f1e4ccf202ad620fd1b9560365fa1da"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/XUIEvent.ts.json",
+      "gitBlob": "bf56ae7e90079709fb7a6890b154bb0530e099a5"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/views/XAbstractView.ts.json",
+      "gitBlob": "f90a209bdbd4e69d1087735b1af117c090f8b130"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/views/XDocumentView.ts.json",
+      "gitBlob": "83e02d31f73d43e84aa62ea6d8c5361487918b4c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/inc/event.ts.json",
+      "gitBlob": "c14802ba33f1749f9367155e03abe2657e1c15fb"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/inc/mouseevent.ts.json",
+      "gitBlob": "eaa400cbb59df7398ba8a7801a55080983cc4fa6"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/inc/mutationevent.ts.json",
+      "gitBlob": "54b10c5a2ba05fe06fb0566577c678aee3db870d"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/inc/uievent.ts.json",
+      "gitBlob": "4ef9e88c7534acd2937c2d4bc4c68480ca98e7ec"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/events/event.ts.json",
+      "gitBlob": "e432929f8a1db2311078d49d1a496e971621f645"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/events/mouseevent.ts.json",
+      "gitBlob": "963343fb438756414bbb8aee3a9e9ab522e39567"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/events/mutationevent.ts.json",
+      "gitBlob": "f18133fa4e89b105c926bcb090cd63d932e63719"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/events/uievent.ts.json",
+      "gitBlob": "360f99c7faed3a5f78d63dbd776c46254928dc7e"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "256722d362e0839a38252b59f42064f98b8d4a5a"
+    },
+    {
+      "path": "package-lock.json",
+      "gitBlob": "76ac843b57d30163f6add14f38ef7ae08437b818"
+    },
+    {
+      "path": "scripts/check-module-boundaries.mjs",
+      "gitBlob": "b8bd2256bf5e94b57713c91c2983c74ff47adf75"
+    },
+    {
+      "path": "scripts/check-unoxml-boundaries.test.ts",
+      "gitBlob": "e18734e7795196e431b8b8c8a6a1e7b275f9fe87"
+    },
+    {
+      "path": "scripts/fixtures/xmldom-worker-probe.mjs",
+      "gitBlob": "cdf9de59e2ddf87476384b4920084bfd00d74895"
+    },
+    {
+      "path": "scripts/module-boundaries/allowed-edges.mjs",
+      "gitBlob": "aa91c50127e32be832d3fe6532ad744e2b92b703"
+    },
+    {
+      "path": "scripts/xmldom-worker-probe.mjs",
+      "gitBlob": "b9a7628de19e1d2882bce67bc1b088b25783d467"
+    }
+  ],
+  "capabilityId": "CAP-63b22cd8-c479-4bd1-88a6-b34e7c7e733e",
+  "coverage": {
+    "summary": {
+      "lines": {
+        "total": 237,
+        "covered": 237,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 239,
+        "covered": 239,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 84,
+        "covered": 84,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 37,
+        "covered": 37,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "scope": "All17 entire executable owners:4actual native components, Time and12 interface/enum bindings;4 pure header reexports have no executable counters.",
+    "thresholds": 90,
+    "rawMapSha256": "3d1545a2f6052c2637b929db87e7526684ea2e789168deaad6531bd338132050"
+  },
+  "backend": {
+    "userApproval": "User explicitly approved dependency retrieval and instructed using an existing analogous JS library instead of porting libxml2.",
+    "selection": "@xmldom/xmldom",
+    "version": "0.9.12",
+    "resolved": "https://registry.npmjs.org/@xmldom/xmldom/-/xmldom-0.9.12.tgz",
+    "integrity": "sha512-5AXjrcMClTryPe9LgZrygpB1lj7s0S9E0+W+AHaVKAVyHanafK86iPSvG5xHVSp/jC+VH1UXu0TAEmY279xH7A==",
+    "libxml2ArchiveDownloaded": false,
+    "workerProof": {
+      "package": "@xmldom/xmldom@0.9.12",
+      "result": {
+        "initiallyEmpty": true,
+        "replaced": true,
+        "namespaceAttribute": "changed & \u5b57",
+        "errors": [],
+        "globals": {
+          "window": "undefined",
+          "document": "undefined",
+          "DOMParser": "undefined"
+        },
+        "generator": "Changed \u5b57 & < >",
+        "unknown": 1,
+        "flag": "a&b",
+        "cdata": 4,
+        "comment": 8,
+        "pi": true,
+        "imported": true,
+        "rejected": true
+      }
+    },
+    "integrationStatus": "Dependency installed and real Chromium module Worker verified. Actual UNO document/builder/model/filter integration remains outstanding. Existing SAX path continues to use saxes."
+  },
+  "sourceQA": {
+    "search": "Focused createEvent/MutationEvent/UIEvent/MouseEvent/getTimeStamp searches in native unoxml C++ and Java DOM QA found no direct event-component cases. Broader DOM/tree tests remain required when their owners exist.",
+    "adaptation": "Time Any/Sequence checks reuse genuine shared compound storage and relevant generic cppu::testStruct behavior; no fake components, nodes, views, targets, private cancellation state or dispatcher is supplied.",
+    "notClaimed": "No native binary, compiled C++ ABI/thread/reentry parity, complete DOM tree or full file/UI acceptance."
+  },
+  "issues": [
+    "CALC-524 / WRITER458: source cancellation, empty preventDefault and unconditional UI getter retained.",
+    "CALC-525 / WRITER459: source ignored mouse related target retained; nonempty-target path remains source-only until actual node owners exist."
+  ],
+  "limitations": [
+    "Complete native DOM node/document/builder/dispatcher and metadata/model initialization remain pending.",
+    "Source C++ mutex/thread and reentrant lock behavior remains unverified in synchronous JS bindings.",
+    "No DOCX/XLSX full import/export or mounted UI acceptance claim; goal/epics stay active.",
+    "Global JSDoc has only the two old css-style-matchers.ts failures."
+  ],
+  "failuresResolved": [
+    "Initial event getTypes test mistakenly counted XInterface; source helper appends XWeak and retains duplicate XTypeProvider, yielding3/5/7 actual entries. Assertions corrected to source.",
+    "Time sequence test supplied a host array where the native compound constructor requires contiguous logical addresses. Use the actual allocated SequenceElements and existing Any assignment; explicit erased pointer casts resolve SDK union typing. No storage/helper behavior changed.",
+    "Mutation facet query result requires an explicit source interface cast after actual successful query; no fake query/type provider added.",
+    "CEvent explicit zero-argument constructor is required to prevent inheriting the weak-base copy parameter, matching the native mutex-owning noncopyable class. Narrow constructor-lint exception retains this contract, with a compile-time parameter witness.",
+    "Probe initially assumed a single Vite output; handled the actual library output array. Classic Worker passed; module Worker on opaque about:blank origin failed. A loopback-only fixture origin now verifies actual module Worker execution, with full resource cleanup. No library fallback, heap change or assertion weakening."
+  ],
+  "verification": [
+    {
+      "command": "cd apps/office && npx vitest run --config vite.config.ts src/unoxml/source/events/native-events.test.ts src/offapi/com/sun/star/util/Time.test.ts src/offapi/com/sun/star/xml/dom/events/native-event-contracts.test.ts --coverage --coverage.include='src/unoxml/source/events/{event,mutationevent,uievent,mouseevent}.ts' --coverage.include=src/offapi/com/sun/star/util/Time.ts --coverage.include='src/offapi/com/sun/star/xml/dom/events/*.ts' --coverage.include='src/offapi/com/sun/star/xml/dom/views/*.ts' --coverage.reportsDirectory=coverage/dom-events-final --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "21cases/3files; entire17 owners S239/239 B37/37 F84/84 L237/237; no ignores or fake state.",
+      "log": "apps/office/coverage/dom-events-coverage-final.log"
+    },
+    {
+      "command": "npx vitest run scripts/check-unoxml-boundaries.test.ts scripts/check-module-boundaries.test.ts",
+      "result": "pass",
+      "evidence": "49cases/2files; native module edges, reverse/presentation restrictions and header/source ownership.",
+      "log": "apps/office/coverage/dom-events-boundaries-tests.log"
+    },
+    {
+      "command": "cd apps/office && npx vitest run --config vite.config.ts src/cppuhelper/source/native-implbase.test.ts src/cppuhelper/source/native-weak-object.test.ts src/sax/source/fastparser/InputSource.test.ts src/oox/source/core/fastparser.test.ts src/offapi/com/sun/star/util/native-color-interfaces.test.ts src/offapi/com/sun/star/xml/dom/native-dom-contracts.test.ts src/offapi/com/sun/star/xml/dom/native-dom-values.test.ts",
+      "result": "pass",
+      "evidence": "93relatedcases/7files on actual CPPU, SAX, OOXML parser and existing DOM SDK bindings.",
+      "log": "apps/office/coverage/dom-events-regressions.log"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/xmldom-worker-probe.mjs",
+      "result": "pass",
+      "evidence": "Real Chromium module Worker without window/document/nativeDOMParser: namespaces, Unicode, unknown metadata, CDATA/comment/PI, empty document, namespace attributes, replacement/imported node ownership, serialize/reopen and malformed XML rejection. Not full document filter/UI acceptance.",
+      "log": "apps/office/coverage/dom-events-backend-module-worker2.log"
+    },
+    {
+      "command": "npm install --workspace @vite-office/office --save-exact @xmldom/xmldom@0.9.12 --ignore-scripts --no-audit --no-fund --cache node_modules/.cache/npm",
+      "result": "pass",
+      "evidence": "User-approved exact dependency;1packageadded.",
+      "log": "apps/office/coverage/dom-events-xmldom-install.log"
+    },
+    {
+      "command": "npm run typecheck && npm run test:static",
+      "result": "pass",
+      "evidence": "Final tools/office typecheck, production build and static smoke.",
+      "log": "apps/office/coverage/dom-events-final-build.log"
+    },
+    {
+      "command": "npx eslint apps/office/src/unoxml/**/*.ts apps/office/src/offapi/com/sun/star/util/Time{,.test}.ts apps/office/src/offapi/com/sun/star/xml/dom/{events,views}/*.ts scripts/{check-unoxml-boundaries.test.ts,check-module-boundaries.mjs,module-boundaries/allowed-edges.mjs,xmldom-worker-probe.mjs,fixtures/xmldom-worker-probe.mjs} --max-warnings 0",
+      "result": "pass",
+      "evidence": "Scoped runtime,SDK,tests,source-boundary code and committed Worker probe.",
+      "log": "apps/office/coverage/dom-events-eslint-final.log"
+    },
+    {
+      "command": "npx prettier --check apps/office/package.json apps/office/src/offapi/com/sun/star/util/Time.test.ts apps/office/src/offapi/com/sun/star/util/Time.ts apps/office/src/offapi/com/sun/star/xml/dom/events/AttrChangeType.ts apps/office/src/offapi/com/sun/star/xml/dom/events/EventType.ts apps/office/src/offapi/com/sun/star/xml/dom/events/PhaseType.ts apps/office/src/offapi/com/sun/star/xml/dom/events/XDocumentEvent.ts apps/office/src/offapi/com/sun/star/xml/dom/events/XEvent.ts apps/office/src/offapi/com/sun/star/xml/dom/events/XEventListener.ts apps/office/src/offapi/com/sun/star/xml/dom/events/XEventTarget.ts apps/office/src/offapi/com/sun/star/xml/dom/events/XMouseEvent.ts apps/office/src/offapi/com/sun/star/xml/dom/events/XMutationEvent.ts apps/office/src/offapi/com/sun/star/xml/dom/events/XUIEvent.ts apps/office/src/offapi/com/sun/star/xml/dom/events/native-event-contracts.test.ts apps/office/src/offapi/com/sun/star/xml/dom/views/XAbstractView.ts apps/office/src/offapi/com/sun/star/xml/dom/views/XDocumentView.ts apps/office/src/unoxml/inc/event.ts apps/office/src/unoxml/inc/mouseevent.ts apps/office/src/unoxml/inc/mutationevent.ts apps/office/src/unoxml/inc/uievent.ts apps/office/src/unoxml/source/events/event.ts apps/office/src/unoxml/source/events/mouseevent.ts apps/office/src/unoxml/source/events/mutationevent.ts apps/office/src/unoxml/source/events/native-events.test.ts apps/office/src/unoxml/source/events/uievent.ts docs/program/calc-upstream-suspected-issues.md docs/program/native-xml-dom-contracts.md docs/program/native-xml-dom-events.md docs/program/registry/shared/capabilities/CAP-63b22cd8-c479-4bd1-88a6-b34e7c7e733e.json docs/program/registry/shared/provenance/offapi/com/sun/star/util/Time.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/AttrChangeType.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/EventType.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/PhaseType.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/XDocumentEvent.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/XEvent.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/XEventListener.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/XEventTarget.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/XMouseEvent.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/XMutationEvent.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/events/XUIEvent.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/views/XAbstractView.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/views/XDocumentView.ts.json docs/program/registry/shared/provenance/unoxml/inc/event.ts.json docs/program/registry/shared/provenance/unoxml/inc/mouseevent.ts.json docs/program/registry/shared/provenance/unoxml/inc/mutationevent.ts.json docs/program/registry/shared/provenance/unoxml/inc/uievent.ts.json docs/program/registry/shared/provenance/unoxml/source/events/event.ts.json docs/program/registry/shared/provenance/unoxml/source/events/mouseevent.ts.json docs/program/registry/shared/provenance/unoxml/source/events/mutationevent.ts.json docs/program/registry/shared/provenance/unoxml/source/events/uievent.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/util/Time.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/AttrChangeType.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/EventType.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/PhaseType.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/XDocumentEvent.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/XEvent.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/XEventListener.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/XEventTarget.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/XMouseEvent.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/XMutationEvent.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/events/XUIEvent.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/views/XAbstractView.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/views/XDocumentView.ts.json docs/program/registry/shared/runtime/unoxml/inc/event.ts.json docs/program/registry/shared/runtime/unoxml/inc/mouseevent.ts.json docs/program/registry/shared/runtime/unoxml/inc/mutationevent.ts.json docs/program/registry/shared/runtime/unoxml/inc/uievent.ts.json docs/program/registry/shared/runtime/unoxml/source/events/event.ts.json docs/program/registry/shared/runtime/unoxml/source/events/mouseevent.ts.json docs/program/registry/shared/runtime/unoxml/source/events/mutationevent.ts.json docs/program/registry/shared/runtime/unoxml/source/events/uievent.ts.json docs/program/writer-upstream-suspected-issues.md package-lock.json scripts/check-module-boundaries.mjs scripts/check-unoxml-boundaries.test.ts scripts/fixtures/xmldom-worker-probe.mjs scripts/module-boundaries/allowed-edges.mjs scripts/xmldom-worker-probe.mjs",
+      "result": "pass",
+      "evidence": "All intentional source/docs/package/registry changes.",
+      "log": "apps/office/coverage/dom-events-prettier-final.log"
+    },
+    {
+      "command": "npm run check:dependencies && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance",
+      "result": "pass",
+      "evidence": "Native unoxml root and exact4 consumed dependency edges; size/tree/provenance pass.",
+      "log": "apps/office/coverage/dom-events-structure.log"
+    },
+    {
+      "command": "npm run check:writer-resources && npm run check:calc-resources && npm run check:writer-hintids",
+      "result": "pass",
+      "evidence": "Existing resources and hint IDs.",
+      "log": "apps/office/coverage/dom-events-resources.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail-existing-baseline",
+      "evidence": "Only css-style-matchers.ts17 missingJSDoc and76 parameter count; all scoped source and scripts pass.",
+      "log": "apps/office/coverage/dom-events-docs-final.log"
+    },
+    {
+      "command": "npm run inventory:registry:build",
+      "result": "pass",
+      "evidence": "Completed before final registry validation.",
+      "log": "apps/office/coverage/dom-events-registry-build.log"
+    },
+    {
+      "command": "npm run inventory:invariants && npm run inventory:parity",
+      "result": "pass",
+      "evidence": "Zero semantic violations; broad foundation/parity flags remain unverified/false.",
+      "log": "apps/office/coverage/dom-events-registry-final.log"
+    },
+    {
+      "command": "ap doctor && node .agentplane/policy/check-routing.mjs && git diff --check",
+      "result": "pass",
+      "evidence": "Doctor0errors,existing managed shim warning;routing/diff clean.",
+      "log": "apps/office/coverage/dom-events-doctor.log"
+    }
+  ]
+}
