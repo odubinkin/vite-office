@@ -1,0 +1,21 @@
+# Native metadata service composition
+
+Baseline: LibreOffice 26.8.0.2, `9bc445578031fecf56086729d8e4940c77e14d65`.
+
+`SfxDocumentMetaData.services.ts` implements the complete original `createDOM`, `getURLProperties` and `createUserDefined` responsibilities. Their source member inputs are explicit native references/container parameters in this responsibility split. No replacement SfxDocumentMetaData class, hidden owner, provider or document-properties service is registered. These functions are prerequisites for the remaining original owner.
+
+`createDOM` calls the actual registered DocumentBuilder and returns its native document. Its original null-result guard acquires the supplied raw actual receiver only when constructing exception Context. Normal creation never acquires a constructor receiver prematurely. Root normalization belongs to the still-unimplemented owner init, so a freshly created document has no root.
+
+`getURLProperties` creates a genuine default PropertyBag. The first URL is the fallback; DocumentBaseURL assignments replace it, including a void assignment which permits a later URL fallback. Empty strings remain present Any values. Arbitrary native Any types are preserved. HierarchicalDocumentName is inserted immediately as StreamRelPath. The original catch surrounds the entire loop and subsequent BaseURI/StreamName additions, so a repeated hierarchical name returns a partial bag without those later fields. No duplicate repair, URI normalization or mandatory-field synthesis is added.
+
+`createUserDefined` creates the actual source PropertyBag with exactly thirteen types, in source order: boolean, string, DateTime, Date, DateTimeWithTimezone, DateWithTimezone, Duration, float, double, signed16, signed32, signed64 and legacy Time. Empty property names are allowed and automatic addition is disabled. An existing member reference returns immediately; retained actual modify listeners are forwarded through the original container to the real broadcaster after construction. The existing metadata ingestion tests now call this production responsibility instead of reconstructing its allowed-type list in a fixture.
+
+The complete original DocumentProperties SDK constructor and six-accessor XCompatWriterDocProperties declaration/type binding are present. The latter keeps its implicit XInterface root: the document-properties base is commented out in IDL. The full source SfxDocumentMetaData/CompatWriterDocPropsImpl implementations remain unfinished and unregistered. A genuine empty source registry exercises the SDK missing-service failure; no positive implementation is fabricated to satisfy a constructor test.
+
+The original TEST.odt metadata assertions continue through the actual registered builder, configured PropertyBag and existing ingestion code. These are the previously ported applicable property assertions, not a claim that the entire original document-service/storage QA suite is ported. Source createDOM, URL properties and configured ingestion also run in actual Chromium main and DOM-free module Worker.
+
+All three new whole executable owners are measured together with the unchanged scoped90 gate. The checkpoint records the raw coverage and any failure honestly. The source builder null-result branch and incompatible-broadcaster alternative cannot be exercised through their actual normal registered implementations; the new DocumentProperties SDK positive path requires the still-missing real source component. No fake provider, private-state patch, exclusion, selected counter or reduced threshold fills those gaps. Earlier metadata/DOM coverage gaps remain separate and open.
+
+Remaining work includes the complete native metadata state, init/normalization, accessors, notifications, clone, serialization, storage services and applicable original service QA, followed by DOCX/XLSX model/filter/shell/UI acceptance. Existing browser I/O, autosave and recovery choices are preserved. Physical native ABI/allocator/thread/debug/independent binary parity is unqualified.
+
+Current evidence:38 cases in6 related files pass; all3 whole new owners measure statements80.73%, branches67.85%, functions92.30%, lines83%. The unchanged scoped90 gate fails statements, branches and lines. This prerequisite checkpoint is not verified as a complete metadata service or full task.

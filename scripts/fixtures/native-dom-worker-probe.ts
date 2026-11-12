@@ -1,5 +1,16 @@
 /** @fileoverview Real native UNO document, parser callback, IO and live-list operations without a host DOM; the production registered DocumentBuilder shares the same realm-local native module. */
 import {
+  createDOM,
+  createUserDefined,
+  getURLProperties,
+} from "../../apps/office/src/sfx2/source/doc/SfxDocumentMetaData.services";
+import { OInterfaceContainerHelper4 } from "../../apps/office/src/comphelper/inc/interfacecontainer4";
+import { XModifyListener } from "../../apps/office/src/offapi/com/sun/star/util/XModifyListener";
+import {
+  PropertyValue,
+  cppu_detail_getUnoType_PropertyValue as metadataPropertyType,
+} from "../../apps/office/src/udkapi/com/sun/star/beans/PropertyValue";
+import {
   createManifestXml,
   createManifestProperty,
 } from "../../apps/office/src/package/source/manifest/ManifestWriter";
@@ -690,17 +701,46 @@ export async function runNativeDomWorkerProbe() {
   const metadataRoot = own(getChildNodeByName(metadataDoc, metadataName("office:document-meta"))),
     metadataParent = own(getChildNodeByName(metadataRoot, metadataName("office:meta"))),
     metadataNodes = getChildNodeListByName(metadataParent, metadataName("meta:user-defined")),
-    metadataImportedBag = own(PropertyBagService.createDefault(processContext)),
-    metadataImportedContainer = own(
-      new Reference<XPropertyContainer>(
-        metadataImportedBag,
-        UNO_QUERY,
-        XPropertyContainer.static_type,
+    metadataImportedContainer = own(new Reference<XPropertyContainer>()),
+    metadataNotify = own(
+      new (OInterfaceContainerHelper4.specialize<XModifyListener>(XModifyListener))(),
+    );
+  createUserDefined(processContext, metadataImportedContainer, metadataNotify);
+  const metadataImportedSet = own(
+    new Reference<XPropertySet>(metadataImportedContainer, UNO_QUERY, XPropertySet.static_type),
+  );
+  const emptyMetadataDoc = own(createDOM(processContext, processContext.operatorStar())),
+    emptyMetadataRoot = own(emptyMetadataDoc.operatorStar().getDocumentElement()),
+    metadataMediumRows = [
+      own(createManifestProperty("URL", "file:///ignored")),
+      own(createManifestProperty("DocumentBaseURL", "file:///metadata-base")),
+      own(createManifestProperty("HierarchicalDocumentName", "nested/document")),
+    ],
+    metadataMedium = own(
+      new (Sequence.specialize<PropertyValue>(metadataPropertyType, 48))(
+        {
+          /** Borrows initialized descriptor fields. @param offset - Byte offset. @returns Actual native address. */
+          get(offset: number) {
+            return metadataMediumRows[offset / 48] as PropertyValue;
+          },
+        },
+        metadataMediumRows.length,
       ),
     ),
-    metadataImportedSet = own(
-      new Reference<XPropertySet>(metadataImportedBag, UNO_QUERY, XPropertySet.static_type),
-    );
+    metadataURLProps = own(getURLProperties(processContext, metadataMedium));
+  /** Reads actual native string-valued bag properties. @param name - Source property name. @returns Text. */
+  function metadataURLValue(name: string): string {
+    const value = own(metadataURLProps.operatorStar().getPropertyValue(u(name))),
+      text = own(new OUString());
+    if (!value.extract(text, "OUString")) throw new Error("Native metadata URL type mismatch");
+    return take(new OUString(text));
+  }
+  const metadataServices = {
+    emptyDocument: !emptyMetadataRoot.is(),
+    baseURI: metadataURLValue("BaseURI"),
+    relativePath: metadataURLValue("StreamRelPath"),
+    streamName: metadataURLValue("StreamName"),
+  };
   for (const node of metadataNodes) own(node);
   readUserDefinedProperties(metadataImportedContainer, metadataNodes);
   const metadataIngestion: string[] = [];
@@ -819,6 +859,7 @@ export async function runNativeDomWorkerProbe() {
       nativeSaxWriterBuffer,
       metadataValues,
       metadataIngestion,
+      metadataServices,
       documentBuilder,
       xpath: (
         /** Queries the actual registered native XPath service. @returns Scalar observations only. */ () => {

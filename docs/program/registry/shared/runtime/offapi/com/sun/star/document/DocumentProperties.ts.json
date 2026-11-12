@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/document/DocumentProperties.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-metadata-service-composition",
+    "capabilityIds": [
+      "CAP-eb933b6e-63f8-4de0-bb85-d10e56082b9f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "offapi/com/sun/star/document/DocumentProperties.idl",
+      "upstreamSymbols": [
+        "DocumentProperties",
+        "XDocumentProperties",
+        "create()"
+      ],
+      "localSymbols": [
+        "DocumentProperties"
+      ],
+      "justification": "Complete original SfxDocumentMetaData createDOM/getURLProperties/createUserDefined responsibilities invoke actual registered DocumentBuilder/PropertyBag, initialized native PropertyValue/Any/Type sequences and genuine listener containers. Explicit member arguments lower only the source responsibility split, with no fake receiver/state owner or positive document-properties provider. Preserve raw descriptor Any values, first URL fallback, DocumentBaseURL replacement/void-reset, immediate hierarchical insertion and catch-wide partial bags; exact13-type list/allow-empty/no-auto-add and once-only existing-listener forwarding. Existing TEST.odt ingestion assertions now use actual production bag setup instead of duplicating its source type list. Chromium main/DOM-free Worker run actual empty native DOM, URL properties and configured TEST.odt ingestion. Complete original DocumentProperties SDK and implicit-root six-accessor XCompatWriterDocProperties declarations retain source contracts/type identity. Full source SfxDocumentMetaData/CompatWriterDocPropsImpl component/state/init/properties/clone/serialize/storage/QA and final DOCX/XLSX core/shell/UI acceptance remain unfinished and unregistered. Whole new owners retain scoped90 coverage honestly, including real gaps; no fake provider/private mutation/exclusion/selected counter/reduced gate. Physical ABI/allocator/thread/debug/native binary parity unqualified; earlier coverage gaps remain open.",
+      "knownViolations": [],
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/document/DocumentProperties.ts",
+        "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.services.test.ts",
+        "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.dom.test.ts",
+        "docs/program/native-metadata-service-composition.md"
+      ]
+    }
+  }
+}

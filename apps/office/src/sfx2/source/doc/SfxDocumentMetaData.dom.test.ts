@@ -1,13 +1,12 @@
 /** @fileoverview Actual native metadata traversal/ingestion and original test_misc TEST.odt property assertions. Full document service/storage QA remains pending; no replacement service is registered. */
 import { afterEach, beforeAll, expect, it } from "vitest";
+import { createUserDefined } from "./SfxDocumentMetaData.services";
+import { OInterfaceContainerHelper4 } from "../../../comphelper/inc/interfacecontainer4";
+import { XModifyListener } from "../../../offapi/com/sun/star/util/XModifyListener";
 import { Reference, UNO_QUERY_THROW } from "../../../cppu/inc/com/sun/star/uno/Reference";
-import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
-import { Type } from "../../../cppu/inc/com/sun/star/uno/Type";
-import { UnoType } from "../../../cppu/inc/unotype";
 import { XNode } from "../../../offapi/com/sun/star/xml/dom/XNode";
 import { XPropertyContainer } from "../../../udkapi/com/sun/star/beans/XPropertyContainer";
 import { XPropertySet } from "../../../udkapi/com/sun/star/beans/XPropertySet";
-import { PropertyBag } from "../../../udkapi/com/sun/star/beans/PropertyBag";
 import type { XComponentContext } from "../../../udkapi/com/sun/star/uno/XComponentContext";
 import { InitApplicationServiceManager } from "../../../desktop/source/app/appinit";
 import { implementations } from "../../../desktop/browser/app/uno-components";
@@ -42,8 +41,6 @@ import {
 } from "../../../offapi/com/sun/star/util/DateTime";
 import { cppu_detail_getUnoType_DateWithTimezone as dateTZType } from "../../../offapi/com/sun/star/util/DateWithTimezone";
 import { cppu_detail_getUnoType_DateTimeWithTimezone as datetimeTZType } from "../../../offapi/com/sun/star/util/DateTimeWithTimezone";
-import { cppu_detail_getUnoType_Duration as durationType } from "../../../offapi/com/sun/star/util/Duration";
-import { cppu_detail_getUnoType_Time as timeType } from "../../../offapi/com/sun/star/util/Time";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import {
   own,
@@ -67,41 +64,16 @@ function view(text: string): Uint16Array {
 }
 /** Original configured metadata bag, with exact thirteen declared allowed types and original options. @returns Actual bag. */
 function bag() {
-  const types = [
-    UnoType.get("bool"),
-    UnoType.get("OUString"),
-    datetimeType(),
-    dateType(),
-    datetimeTZType(),
-    dateTZType(),
-    durationType(),
-    UnoType.get("float"),
-    UnoType.get("double"),
-    UnoType.get("sal_Int16"),
-    UnoType.get("sal_Int32"),
-    UnoType.get("sal_Int64"),
-    timeType(),
-  ];
-  const allowed = own(
-    new (Sequence.specialize<Type>("Type", 8))(
-      {
-        /** Borrows actual original Type storage. @param offset - Byte offset. @returns Native Type field address. */ get(
-          offset: number,
-        ) {
-          return (types[offset / 8] as Type).getAddress();
-        },
-      },
-      types.length,
-    ),
+  const properties = own(new Reference<XPropertyContainer>()),
+    listeners = own(
+      new (OInterfaceContainerHelper4.specialize<XModifyListener>(XModifyListener))(),
+    );
+  createUserDefined(
+    own(new Reference<XComponentContext>(getProcessComponentContext().get())),
+    properties,
+    listeners,
   );
-  return own(
-    PropertyBag.createWithTypes(
-      own(new Reference<XComponentContext>(getProcessComponentContext().get())),
-      allowed,
-      true,
-      false,
-    ),
-  );
+  return properties;
 }
 /** Owns each acquired vector member as a normal scope temporary. @param node - Actual parent. @param name - QName. @returns Actual vector. */
 function children(node: Reference<XNode>, name: string) {

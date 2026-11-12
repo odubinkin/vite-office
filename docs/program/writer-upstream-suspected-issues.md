@@ -3971,3 +3971,8 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 
 - Source: `comphelper/source/xml/ofopxmlhelper.cxx`, `WriteRelationsInfoSequence` and `OFOPXMLHelper_Impl::startElement`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC571.
 - The writer validates only attribute names and accepts a missing or empty Id. The reader requires a nonempty Id and throws SAXException otherwise. Preserve this asymmetry, original validation timing after root callbacks and partial-output behavior; do not invent required-field validation in the writer. The output-only null-stream guard and illegal-name exception retain their original native types and fields.
+
+### WRITER507 — Duplicate hierarchical URL descriptors return a partial metadata bag
+
+- Source: `sfx2/source/doc/SfxDocumentMetaData.cxx`, `SfxDocumentMetaData::getURLProperties`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC572.
+- Each HierarchicalDocumentName immediately adds StreamRelPath to the real PropertyBag. A duplicate raises PropertyExistException inside the catch covering the full descriptor loop and later BaseURI/StreamName additions. The exception is ignored and the partially populated property set is returned; even StreamName can be absent. Preserve source catch scope, first inserted value and failure timing. Genuine native-sequence/property-bag tests observe this without a replacement provider or synthetic exception.
