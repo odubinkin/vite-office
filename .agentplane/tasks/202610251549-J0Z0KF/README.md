@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 273
+revision: 277
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T20:33:54.198Z"
+  updated_at: "2026-11-12T21:02:45.361Z"
   updated_by: "CODER"
-  note: "Registered original OPropertyBag prerequisite verified:63 focused tests/8files,13 whole owners exceed approved90 thresholds; build/static/source gates and actual Chromium main/DOM-free Worker pass. Only the two known docs baseline findings persist. SfxDocumentMetaData and final DOCX/XLSX core/shell/UI acceptance remain incomplete; parent continues. Evidence: registered-property-bag-checkpoint.json."
-  attempts: 80
+  note: "Native classic DOM SAX/real AttributeList ownership implemented;151 related cases/17 files pass, actual Chromium main and DOM-free Worker plus build/source gates pass. Whole18-owner branch coverage82.6 still fails approved90 gate; prior2 docs findings and fast SAX/source QA/metadata/final DOCX-XLSX UI acceptance remain. Evidence native-dom-classic-sax-checkpoint.json; continue parent, not complete."
+  attempts: 81
 commit: null
 comments:
   -
@@ -261,6 +261,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue the approved shared document metadata and DOCX/XLSX core/UI implementation after verified registered PropertyBag prerequisite; goal remains active without new approval pauses."
+  -
+    author: "CODER"
+    body: "Start: continue approved document metadata and DOCX/XLSX core/UI work after the bounded classic SAX ownership checkpoint; preserve the explicit branch90/source-QA gaps and keep the goal active without new pauses."
 events:
   -
     type: "status"
@@ -1288,8 +1291,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue the approved shared document metadata and DOCX/XLSX core/UI implementation after verified registered PropertyBag prerequisite; goal remains active without new approval pauses."
+  -
+    type: "verify"
+    at: "2026-11-12T21:02:45.361Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native classic DOM SAX/real AttributeList ownership implemented;151 related cases/17 files pass, actual Chromium main and DOM-free Worker plus build/source gates pass. Whole18-owner branch coverage82.6 still fails approved90 gate; prior2 docs findings and fast SAX/source QA/metadata/final DOCX-XLSX UI acceptance remain. Evidence native-dom-classic-sax-checkpoint.json; continue parent, not complete."
+  -
+    type: "status"
+    at: "2026-11-12T21:02:58.967Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue approved document metadata and DOCX/XLSX core/UI work after the bounded classic SAX ownership checkpoint; preserve the explicit branch90/source-QA gaps and keep the goal active without new pauses."
 doc_version: 3
-doc_updated_at: "2026-11-12T20:33:58.447Z"
+doc_updated_at: "2026-11-12T21:02:58.967Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -1301,7 +1317,7 @@ sections:
     - In scope: User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only.
     - Out of scope: unrelated refactors not required for "Implement Calc XLSX import export and existing file UI integration".
   Plan: "Continue the already user-approved XLSX work: (1) implement native address/range, workbook/worksheet, shared-string, style and formula owners against the pinned source with original contracts and limits, replacing touched shortcuts; (2) route actual ScDocument import/export through ExcelFilter and the existing shell/file UI while preserving browser storage, recovery and autosave decisions; (3) verify supported-model upstream-fixture roundtrips, failure/stale-result behavior, browser download/reopen and targeted quality gates; (4) record suspected native issues without changing their semantics and finish only after complete acceptance. Work locally in the direct checkout; no publication or merge. Cohesive prerequisite checkpoints may be committed with explicit remaining gaps."
-  Verify Steps: "Run focused Calc and shared tests for the implemented XLSX owners, including source-backed address/parser boundaries, then actual workbook import and export/reopen over committed Strict and Transitional upstream fixtures covering supported cells, types, formulas, formatting, dimensions and multiple sheets. Assert canonical ScDocument values and package XML; malformed input must preserve the active graph. Verify shell filter routing, cancellation and stale results, primary ODS state, mounted Open/download flows and actual desktop/mobile Chromium download/reopen. Require unchanged scoped100 coverage for newly implemented executable mechanisms and related ODS/CSV regressions. Run typecheck, production build/static checks, scoped ESLint/Prettier, dependencies/resources/docs/size/source-tree/provenance/registry/invariants/parity, doctor/routing/diff. Record bounded prerequisite checkpoints honestly without marking the whole task verified or complete. Full suites only at the approved ten-task cadence."
+  Verify Steps: "Run focused Calc and shared tests for the implemented XLSX owners, including source-backed address/parser boundaries, then actual workbook import and export/reopen over committed Strict and Transitional upstream fixtures covering supported cells, types, formulas, formatting, dimensions and multiple sheets. Assert canonical ScDocument values and package XML; malformed input must preserve the active graph. Verify shell filter routing, cancellation and stale results, primary ODS state, mounted Open/download flows and actual desktop/mobile Chromium download/reopen. Require unchanged scoped90 coverage for newly implemented executable mechanisms and related ODS/CSV regressions. Run typecheck, production build/static checks, scoped ESLint/Prettier, dependencies/resources/docs/size/source-tree/provenance/registry/invariants/parity, doctor/routing/diff. Record bounded prerequisite checkpoints honestly without marking the whole task verified or complete. Full suites only at the approved ten-task cadence."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
     ### 2026-10-28T07:48:55.121Z — VERIFY — needs_rework
@@ -3704,6 +3720,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T21:02:45.361Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native classic DOM SAX/real AttributeList ownership implemented;151 related cases/17 files pass, actual Chromium main and DOM-free Worker plus build/source gates pass. Whole18-owner branch coverage82.6 still fails approved90 gate; prior2 docs findings and fast SAX/source QA/metadata/final DOCX-XLSX UI acceptance remain. Evidence native-dom-classic-sax-checkpoint.json; continue parent, not complete.
+    Attempts: 81
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T21:02:44.783Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4131,6 +4177,18 @@ sections:
     - Recovery evidence: SDK graph tests exposed incorrect new container/util namespace literals; fixed to the exact IDL names. Initial100 coverage configuration was replaced with the already approved90 threshold; genuine missing-service, named-type failure and repeated-type initialization scenarios qualify the public contracts. Registry schema/symbol errors and scoped documentation diagnostics were corrected within the same approved source scope. No checker relaxation, private state patch, fake positive provider or synthetic type/default generator was introduced.
     - Scope: actual registered OPropertyBag factory/service/constructors and named argument collection, immutable snapshots/defaults/allowed types/XSet workaround/notifications/native fields. CALC-554/WRITER488 preserve repeated-initialization type union and sticky empty-name semantics. SfxDocumentMetaData and final DOCX/XLSX core/shell/UI acceptance remain pending; task remains DOING after this bounded checkpoint, goal remains active under latest user continuation.
     - Evidence: evidence/registered-property-bag-checkpoint.json pins51 intentional source/artifact blobs,19 upstream blobs, exact focused argv, raw whole-owner coverage, all command logs with SHA256 and both browser results. No full suite was due at this same-task checkpoint under the user's ten-task cadence.
+
+    Native DOM classic SAX and attribute ownership checkpoint (2026-11-13):
+    - Command: exact focused Vitest argv and18 whole changed production owners in evidence/native-dom-classic-sax-checkpoint.json, tests.command.
+    - Result: all151 cases/17 files pass; the command correctly exits1 because whole-owner branch coverage82.6 remains below approved90. Other metrics S91.83/F94.42/L94. No exclusions, selected-function metrics, fake positive providers, private-state patches or inferred type/default generators. Broad DOM branch gaps remain part of the parent rework; this is not an all-green verification or completed task.
+    - Scope: native CDocument XSAXSerializable, classic node SAX traversal, exact namespace/attribute order, real weak AttributeList/XCloneable identity and retained reference lifetime. Existing manifest/OFOPXML callbacks use actual acquired attribute references. Correct offapi declarations replace incomplete duplicate UDK SAX declarations and reuse the original real XLocator.
+    - Critical correction: actual foreign value-getter RuntimeException previously leaked an already acquired name temporary and partial constructor state. Original C++ implicit temporary/member destruction is now bound explicitly. A genuine application-owned forwarding UNO list exercises the failure and public native RTL refcounts return to the prior value; no private mutation or fabricated core/provider is used.
+    - Source QA: qadevOOo XCloneable optional service-name/type-provider/implementation-ID/component queries and empty fallback criteria are retained for actual AttributeList. Original domtest serializerTest parse/classic-facet query runs through registered DocumentBuilder; the original subsequent fastSerialize branch remains explicitly pending and unadvertised. Its second support assertion checks the classic variable again; that weak criterion is not used to claim the absent fast implementation passes. Native OSL/ABI/MI/allocator/shared-memory traces and full Java proxy harness remain unqualified.
+    - Command: typecheck + production/static build, scoped ESLint/Prettier, registry/provenance, dependencies/size/source-tree/Writer+Calc resources/hintids, doctor/routing/diff and51 boundary/resource cases. Result: pass. Actual Chromium main and DOM-free Worker callbacks are begin/start:root:0/text:worker SAX字/end/finish with same document UNO identity.
+    - Command: npm run check:docs. Result: only the two prior css-style-matchers.ts:17/:76 findings remain; all authored documentation diagnostics corrected. Doctor retains the pre-existing managed-hook readiness warning.
+    - Recovery: initial branch90 failure retained without lowering the approved gate; generated XCloneable namespace corrected to exact util IDL and SDK QName/base tests pass. The node header evidence path was corrected after an explicit pinned-tree lookup to unoxml/inc/node.hxx. No unrelated source/policy/approval change. Verify Steps now reflect the user's already approved90 threshold instead of stale100 wording.
+    - Evidence: native-dom-classic-sax-checkpoint.json records76 intentional source/artifact paths including9 deletions,25 pinned upstream blobs, raw whole-owner coverage, exact focused argv, hashed command logs and complete main/Worker results. CALC-555/WRITER489 preserve source basic-handler omission of CDATA/PI. Full suite not due under the user's ten-actual-task cadence.
+    - Remaining: SfxDocumentMetaData and real metadata SDK/converter/storage/SAX Writer paths, fast SAX/IO/source QA, coverage90 and complete DOCX/XLSX Strict/Transitional core/shell/existing UI acceptance. Latest user continuation supersedes prior pauses; goal and parent remain active.
 id_source: "generated"
 ---
 ## Summary
@@ -4150,7 +4208,7 @@ Continue the already user-approved XLSX work: (1) implement native address/range
 
 ## Verify Steps
 
-Run focused Calc and shared tests for the implemented XLSX owners, including source-backed address/parser boundaries, then actual workbook import and export/reopen over committed Strict and Transitional upstream fixtures covering supported cells, types, formulas, formatting, dimensions and multiple sheets. Assert canonical ScDocument values and package XML; malformed input must preserve the active graph. Verify shell filter routing, cancellation and stale results, primary ODS state, mounted Open/download flows and actual desktop/mobile Chromium download/reopen. Require unchanged scoped100 coverage for newly implemented executable mechanisms and related ODS/CSV regressions. Run typecheck, production build/static checks, scoped ESLint/Prettier, dependencies/resources/docs/size/source-tree/provenance/registry/invariants/parity, doctor/routing/diff. Record bounded prerequisite checkpoints honestly without marking the whole task verified or complete. Full suites only at the approved ten-task cadence.
+Run focused Calc and shared tests for the implemented XLSX owners, including source-backed address/parser boundaries, then actual workbook import and export/reopen over committed Strict and Transitional upstream fixtures covering supported cells, types, formulas, formatting, dimensions and multiple sheets. Assert canonical ScDocument values and package XML; malformed input must preserve the active graph. Verify shell filter routing, cancellation and stale results, primary ODS state, mounted Open/download flows and actual desktop/mobile Chromium download/reopen. Require unchanged scoped90 coverage for newly implemented executable mechanisms and related ODS/CSV regressions. Run typecheck, production build/static checks, scoped ESLint/Prettier, dependencies/resources/docs/size/source-tree/provenance/registry/invariants/parity, doctor/routing/diff. Record bounded prerequisite checkpoints honestly without marking the whole task verified or complete. Full suites only at the approved ten-task cadence.
 
 ## Verification
 
@@ -6555,6 +6613,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T21:02:45.361Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native classic DOM SAX/real AttributeList ownership implemented;151 related cases/17 files pass, actual Chromium main and DOM-free Worker plus build/source gates pass. Whole18-owner branch coverage82.6 still fails approved90 gate; prior2 docs findings and fast SAX/source QA/metadata/final DOCX-XLSX UI acceptance remain. Evidence native-dom-classic-sax-checkpoint.json; continue parent, not complete.
+Attempts: 81
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T21:02:44.783Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -6986,3 +7074,15 @@ Registered native PropertyBag prerequisite checkpoint (2026-11-13):
 - Recovery evidence: SDK graph tests exposed incorrect new container/util namespace literals; fixed to the exact IDL names. Initial100 coverage configuration was replaced with the already approved90 threshold; genuine missing-service, named-type failure and repeated-type initialization scenarios qualify the public contracts. Registry schema/symbol errors and scoped documentation diagnostics were corrected within the same approved source scope. No checker relaxation, private state patch, fake positive provider or synthetic type/default generator was introduced.
 - Scope: actual registered OPropertyBag factory/service/constructors and named argument collection, immutable snapshots/defaults/allowed types/XSet workaround/notifications/native fields. CALC-554/WRITER488 preserve repeated-initialization type union and sticky empty-name semantics. SfxDocumentMetaData and final DOCX/XLSX core/shell/UI acceptance remain pending; task remains DOING after this bounded checkpoint, goal remains active under latest user continuation.
 - Evidence: evidence/registered-property-bag-checkpoint.json pins51 intentional source/artifact blobs,19 upstream blobs, exact focused argv, raw whole-owner coverage, all command logs with SHA256 and both browser results. No full suite was due at this same-task checkpoint under the user's ten-task cadence.
+
+Native DOM classic SAX and attribute ownership checkpoint (2026-11-13):
+- Command: exact focused Vitest argv and18 whole changed production owners in evidence/native-dom-classic-sax-checkpoint.json, tests.command.
+- Result: all151 cases/17 files pass; the command correctly exits1 because whole-owner branch coverage82.6 remains below approved90. Other metrics S91.83/F94.42/L94. No exclusions, selected-function metrics, fake positive providers, private-state patches or inferred type/default generators. Broad DOM branch gaps remain part of the parent rework; this is not an all-green verification or completed task.
+- Scope: native CDocument XSAXSerializable, classic node SAX traversal, exact namespace/attribute order, real weak AttributeList/XCloneable identity and retained reference lifetime. Existing manifest/OFOPXML callbacks use actual acquired attribute references. Correct offapi declarations replace incomplete duplicate UDK SAX declarations and reuse the original real XLocator.
+- Critical correction: actual foreign value-getter RuntimeException previously leaked an already acquired name temporary and partial constructor state. Original C++ implicit temporary/member destruction is now bound explicitly. A genuine application-owned forwarding UNO list exercises the failure and public native RTL refcounts return to the prior value; no private mutation or fabricated core/provider is used.
+- Source QA: qadevOOo XCloneable optional service-name/type-provider/implementation-ID/component queries and empty fallback criteria are retained for actual AttributeList. Original domtest serializerTest parse/classic-facet query runs through registered DocumentBuilder; the original subsequent fastSerialize branch remains explicitly pending and unadvertised. Its second support assertion checks the classic variable again; that weak criterion is not used to claim the absent fast implementation passes. Native OSL/ABI/MI/allocator/shared-memory traces and full Java proxy harness remain unqualified.
+- Command: typecheck + production/static build, scoped ESLint/Prettier, registry/provenance, dependencies/size/source-tree/Writer+Calc resources/hintids, doctor/routing/diff and51 boundary/resource cases. Result: pass. Actual Chromium main and DOM-free Worker callbacks are begin/start:root:0/text:worker SAX字/end/finish with same document UNO identity.
+- Command: npm run check:docs. Result: only the two prior css-style-matchers.ts:17/:76 findings remain; all authored documentation diagnostics corrected. Doctor retains the pre-existing managed-hook readiness warning.
+- Recovery: initial branch90 failure retained without lowering the approved gate; generated XCloneable namespace corrected to exact util IDL and SDK QName/base tests pass. The node header evidence path was corrected after an explicit pinned-tree lookup to unoxml/inc/node.hxx. No unrelated source/policy/approval change. Verify Steps now reflect the user's already approved90 threshold instead of stale100 wording.
+- Evidence: native-dom-classic-sax-checkpoint.json records76 intentional source/artifact paths including9 deletions,25 pinned upstream blobs, raw whole-owner coverage, exact focused argv, hashed command logs and complete main/Worker results. CALC-555/WRITER489 preserve source basic-handler omission of CDATA/PI. Full suite not due under the user's ten-actual-task cadence.
+- Remaining: SfxDocumentMetaData and real metadata SDK/converter/storage/SAX Writer paths, fast SAX/IO/source QA, coverage90 and complete DOCX/XLSX Strict/Transitional core/shell/existing UI acceptance. Latest user continuation supersedes prior pauses; goal and parent remain active.

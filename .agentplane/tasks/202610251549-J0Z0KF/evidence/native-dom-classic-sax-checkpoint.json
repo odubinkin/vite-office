@@ -1,0 +1,1345 @@
+{
+  "status": "implemented-native-dom-classic-sax-bounded-functional-qualification-parent-continues",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "213ba8436a8c516fa0ef4a773e1fb808ad127645",
+  "capability": "CAP-05210e3d-8cf9-4186-b90d-5269fe3ac5e0",
+  "scope": "Native CDocument classic SAX facet and classic node saxify overrides, real AttributeList weak/clone ownership and source exception unwind, correct offapi declarations replacing incomplete UDK duplicates, actual manifest attribute references. Full metadata/format/UI acceptance remains incomplete.",
+  "tests": {
+    "relatedCases": 151,
+    "relatedFiles": 17,
+    "command": {
+      "cwd": "apps/office",
+      "argv": [
+        "../../node_modules/.bin/vitest",
+        "run",
+        "--config",
+        "vite.config.ts",
+        "src/unoxml/source/xpath/xpath.test.ts",
+        "src/unoxml/source/dom/native-tree.test.ts",
+        "src/unoxml/source/dom/documentbuilder.errors.test.ts",
+        "src/unoxml/source/dom/documentbuilder.test.ts",
+        "src/unoxml/source/dom/native-parser-callbacks.test.ts",
+        "src/unoxml/source/dom/native-upstream-dom.test.ts",
+        "src/unoxml/source/dom/documentbuilder.io.test.ts",
+        "src/unoxml/source/dom/domimplementation.test.ts",
+        "src/unoxml/source/dom/document.sax.test.ts",
+        "src/unoxml/source/events/native-tree-dispatch.test.ts",
+        "src/unoxml/source/events/eventdispatcher.test.ts",
+        "src/unoxml/source/events/native-events.test.ts",
+        "src/comphelper/source/xml/attributelist.test.ts",
+        "src/comphelper/source/xml/ofopxmlhelper.test.ts",
+        "src/package/source/manifest/native-manifest-export.test.ts",
+        "src/package/source/manifest/native-manifest-import.test.ts",
+        "src/offapi/com/sun/star/xml/sax/sax-types.test.ts",
+        "--coverage",
+        "--coverage.provider=istanbul",
+        "--coverage.include=src/comphelper/source/xml/attributelist.ts",
+        "--coverage.include=src/comphelper/source/xml/ofopxmlhelper.ts",
+        "--coverage.include=src/package/source/manifest/ManifestExport.ts",
+        "--coverage.include=src/package/source/manifest/ManifestImport.ts",
+        "--coverage.include=src/package/source/manifest/ManifestReader.ts",
+        "--coverage.include=src/sax/source/expatwrap/saxwriter.ts",
+        "--coverage.include=src/unoxml/source/dom/cdatasection.ts",
+        "--coverage.include=src/unoxml/source/dom/comment.ts",
+        "--coverage.include=src/unoxml/source/dom/document.ts",
+        "--coverage.include=src/unoxml/source/dom/element.ts",
+        "--coverage.include=src/unoxml/source/dom/node.ts",
+        "--coverage.include=src/unoxml/source/dom/processinginstruction.ts",
+        "--coverage.include=src/unoxml/source/dom/text.ts",
+        "--coverage.include=src/offapi/com/sun/star/util/XCloneable.ts",
+        "--coverage.include=src/offapi/com/sun/star/xml/sax/XAttributeList.ts",
+        "--coverage.include=src/offapi/com/sun/star/xml/sax/XDocumentHandler.ts",
+        "--coverage.include=src/offapi/com/sun/star/xml/sax/XExtendedDocumentHandler.ts",
+        "--coverage.include=src/offapi/com/sun/star/xml/sax/XSAXSerializable.ts",
+        "--coverage.reportsDirectory=coverage/dom-sax",
+        "--coverage.thresholds.statements=90",
+        "--coverage.thresholds.branches=90",
+        "--coverage.thresholds.functions=90",
+        "--coverage.thresholds.lines=90"
+      ],
+      "wholeProductionOwners": [
+        "src/comphelper/source/xml/attributelist.ts",
+        "src/comphelper/source/xml/ofopxmlhelper.ts",
+        "src/package/source/manifest/ManifestExport.ts",
+        "src/package/source/manifest/ManifestImport.ts",
+        "src/package/source/manifest/ManifestReader.ts",
+        "src/sax/source/expatwrap/saxwriter.ts",
+        "src/unoxml/source/dom/cdatasection.ts",
+        "src/unoxml/source/dom/comment.ts",
+        "src/unoxml/source/dom/document.ts",
+        "src/unoxml/source/dom/element.ts",
+        "src/unoxml/source/dom/node.ts",
+        "src/unoxml/source/dom/processinginstruction.ts",
+        "src/unoxml/source/dom/text.ts",
+        "src/offapi/com/sun/star/util/XCloneable.ts",
+        "src/offapi/com/sun/star/xml/sax/XAttributeList.ts",
+        "src/offapi/com/sun/star/xml/sax/XDocumentHandler.ts",
+        "src/offapi/com/sun/star/xml/sax/XExtendedDocumentHandler.ts",
+        "src/offapi/com/sun/star/xml/sax/XSAXSerializable.ts"
+      ]
+    },
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 1335,
+          "covered": 1255,
+          "skipped": 0,
+          "pct": 94
+        },
+        "statements": {
+          "total": 1469,
+          "covered": 1349,
+          "skipped": 0,
+          "pct": 91.83
+        },
+        "functions": {
+          "total": 251,
+          "covered": 237,
+          "skipped": 0,
+          "pct": 94.42
+        },
+        "branches": {
+          "total": 575,
+          "covered": 475,
+          "skipped": 0,
+          "pct": 82.6
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/comphelper/source/xml/attributelist.ts": {
+        "lines": {
+          "total": 62,
+          "covered": 62,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 19,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 73,
+          "covered": 72,
+          "skipped": 0,
+          "pct": 98.63
+        },
+        "branches": {
+          "total": 28,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 96.42
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/comphelper/source/xml/ofopxmlhelper.ts": {
+        "lines": {
+          "total": 159,
+          "covered": 159,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 19,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 167,
+          "covered": 167,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 47,
+          "covered": 46,
+          "skipped": 0,
+          "pct": 97.87
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/util/XCloneable.ts": {
+        "lines": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/xml/sax/XAttributeList.ts": {
+        "lines": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/xml/sax/XDocumentHandler.ts": {
+        "lines": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/xml/sax/XExtendedDocumentHandler.ts": {
+        "lines": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/xml/sax/XSAXSerializable.ts": {
+        "lines": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/package/source/manifest/ManifestExport.ts": {
+        "lines": {
+          "total": 102,
+          "covered": 102,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 113,
+          "covered": 113,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 37,
+          "covered": 37,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/package/source/manifest/ManifestImport.ts": {
+        "lines": {
+          "total": 105,
+          "covered": 105,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 20,
+          "covered": 20,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 120,
+          "covered": 119,
+          "skipped": 0,
+          "pct": 99.16
+        },
+        "branches": {
+          "total": 74,
+          "covered": 74,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/package/source/manifest/ManifestReader.ts": {
+        "lines": {
+          "total": 63,
+          "covered": 63,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 69,
+          "covered": 69,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/expatwrap/saxwriter.ts": {
+        "lines": {
+          "total": 28,
+          "covered": 28,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 30,
+          "covered": 30,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/unoxml/source/dom/cdatasection.ts": {
+        "lines": {
+          "total": 13,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/unoxml/source/dom/comment.ts": {
+        "lines": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/unoxml/source/dom/document.ts": {
+        "lines": {
+          "total": 194,
+          "covered": 175,
+          "skipped": 0,
+          "pct": 90.2
+        },
+        "functions": {
+          "total": 46,
+          "covered": 43,
+          "skipped": 0,
+          "pct": 93.47
+        },
+        "statements": {
+          "total": 208,
+          "covered": 184,
+          "skipped": 0,
+          "pct": 88.46
+        },
+        "branches": {
+          "total": 84,
+          "covered": 61,
+          "skipped": 0,
+          "pct": 72.61
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/unoxml/source/dom/element.ts": {
+        "lines": {
+          "total": 231,
+          "covered": 196,
+          "skipped": 0,
+          "pct": 84.84
+        },
+        "functions": {
+          "total": 35,
+          "covered": 29,
+          "skipped": 0,
+          "pct": 82.85
+        },
+        "statements": {
+          "total": 255,
+          "covered": 202,
+          "skipped": 0,
+          "pct": 79.21
+        },
+        "branches": {
+          "total": 88,
+          "covered": 50,
+          "skipped": 0,
+          "pct": 56.81
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/unoxml/source/dom/node.ts": {
+        "lines": {
+          "total": 290,
+          "covered": 264,
+          "skipped": 0,
+          "pct": 91.03
+        },
+        "functions": {
+          "total": 49,
+          "covered": 44,
+          "skipped": 0,
+          "pct": 89.79
+        },
+        "statements": {
+          "total": 328,
+          "covered": 288,
+          "skipped": 0,
+          "pct": 87.8
+        },
+        "branches": {
+          "total": 171,
+          "covered": 138,
+          "skipped": 0,
+          "pct": 80.7
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/unoxml/source/dom/processinginstruction.ts": {
+        "lines": {
+          "total": 23,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 25,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 96
+        },
+        "branches": {
+          "total": 12,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 66.66
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/unoxml/source/dom/text.ts": {
+        "lines": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "coverageGate": {
+      "threshold": 90,
+      "status": "fail",
+      "failingMetric": "branches",
+      "actual": 82.6,
+      "detail": "All18 changed whole production owners included without selection/exclusion. S91.83/B82.6/F94.42/L94. Broad DOM branch gaps remain. Do not claim all verification passed, reduce the gate or invent private states/type/value/default providers."
+    },
+    "sourceQA": "Adapted qadevOOo XCloneable createClone/name/implementation-ID with original optional queries and empty defaults for actual AttributeList. Applicable domtest serializerTest parse/classic-facet query executes through production builder; its fastSerialize remainder is explicitly pending, not a passing full port. Original second support assertion checks classic again; it does not qualify the missing fast implementation. Existing original DOM/parser/XPath dependency QA also executes.",
+    "ownershipRegression": "A real application-owned UNO forwarding list delegates to actual native AttributeList and raises RuntimeException on value read after one source entry. Partial constructor members and acquired name temporaries unwind; public RTL key refCount returns to its prior value without private mutation. No registry/provider/engine substitute is supplied."
+  },
+  "browserQualification": {
+    "realms": [
+      "Chromium main",
+      "DOM-free module Worker"
+    ],
+    "nativeSax": {
+      "workerResult": {
+        "calls": [
+          "begin",
+          "start:root:0",
+          "text:worker SAX\u5b57",
+          "end",
+          "finish"
+        ],
+        "sameIdentity": true
+      },
+      "mainResult": {
+        "calls": [
+          "begin",
+          "start:root:0",
+          "text:worker SAX\u5b57",
+          "end",
+          "finish"
+        ],
+        "sameIdentity": true
+      }
+    },
+    "completeResults": {
+      "workerResult": {
+        "conversion": {
+          "serviceValue": 42,
+          "rowValue": 42,
+          "rowWasNull": false,
+          "failedFirst": 0,
+          "failedFirstWasNull": false,
+          "failedSecond": 0,
+          "failedSecondWasNull": true
+        },
+        "publicHelpers": {
+          "notifications": 1,
+          "sameEventSource": true,
+          "componentTypeCount": 3
+        },
+        "dynamicProperties": {
+          "changed": true,
+          "value": 42,
+          "initialDefault": 41,
+          "name": "workerValue",
+          "handle": 7,
+          "declaredLong": true,
+          "stableTypeField": true
+        },
+        "propertyArray": {
+          "count": 1,
+          "handle": 7,
+          "missing": -1,
+          "snapshotName": "workerValue",
+          "sameInfoIdentity": true
+        },
+        "legacyListeners": {
+          "remaining": 1,
+          "sameFirst": true,
+          "sameSnapshot": true,
+          "keyCount": 1,
+          "key": -7
+        },
+        "nativeAnyFields": {
+          "value": 43,
+          "initialDefault": 41,
+          "liveType": true,
+          "interfaceIdentity": true
+        },
+        "nativePropertyControl": {
+          "value": 42,
+          "storedLong": true,
+          "notifications": 1,
+          "notifiedTypeLong": false,
+          "notifiedValue": 42,
+          "notifiedOld": 41,
+          "sameSource": true,
+          "state": 0,
+          "initialStates": [
+            1,
+            0
+          ],
+          "typeCount": 7
+        },
+        "registeredPropertyBag": {
+          "value": 42,
+          "count": 1,
+          "modified": true,
+          "directState": 0,
+          "sameIdentity": true
+        },
+        "nativeSax": {
+          "calls": [
+            "begin",
+            "start:root:0",
+            "text:worker SAX\u5b57",
+            "end",
+            "finish"
+          ],
+          "sameIdentity": true
+        },
+        "documentBuilder": {
+          "rootName": "document-content",
+          "streamOpen": true,
+          "namespaceAware": true,
+          "validating": false,
+          "emptyImplementation": true,
+          "capturedType": true,
+          "sameContext": true,
+          "exceptionMessage": "worker exception"
+        },
+        "xpath": {
+          "count": 1,
+          "listLength": 1,
+          "sameRoot": true
+        },
+        "globals": {
+          "window": "undefined",
+          "document": "undefined",
+          "DOMParser": "undefined"
+        },
+        "rootName": "document-content",
+        "attribute": "1.0",
+        "listCounts": [
+          0,
+          1,
+          0
+        ],
+        "sameOwner": true,
+        "unicode": "\ud83d\ude00\u5b57",
+        "utf16Length": 3,
+        "borrowedStreamOpen": true,
+        "warnings": 1,
+        "errors": 0,
+        "warningLine": 1
+      },
+      "mainResult": {
+        "conversion": {
+          "serviceValue": 42,
+          "rowValue": 42,
+          "rowWasNull": false,
+          "failedFirst": 0,
+          "failedFirstWasNull": false,
+          "failedSecond": 0,
+          "failedSecondWasNull": true
+        },
+        "publicHelpers": {
+          "notifications": 1,
+          "sameEventSource": true,
+          "componentTypeCount": 3
+        },
+        "dynamicProperties": {
+          "changed": true,
+          "value": 42,
+          "initialDefault": 41,
+          "name": "workerValue",
+          "handle": 7,
+          "declaredLong": true,
+          "stableTypeField": true
+        },
+        "propertyArray": {
+          "count": 1,
+          "handle": 7,
+          "missing": -1,
+          "snapshotName": "workerValue",
+          "sameInfoIdentity": true
+        },
+        "legacyListeners": {
+          "remaining": 1,
+          "sameFirst": true,
+          "sameSnapshot": true,
+          "keyCount": 1,
+          "key": -7
+        },
+        "nativeAnyFields": {
+          "value": 43,
+          "initialDefault": 41,
+          "liveType": true,
+          "interfaceIdentity": true
+        },
+        "nativePropertyControl": {
+          "value": 42,
+          "storedLong": true,
+          "notifications": 1,
+          "notifiedTypeLong": false,
+          "notifiedValue": 42,
+          "notifiedOld": 41,
+          "sameSource": true,
+          "state": 0,
+          "initialStates": [
+            1,
+            0
+          ],
+          "typeCount": 7
+        },
+        "registeredPropertyBag": {
+          "value": 42,
+          "count": 1,
+          "modified": true,
+          "directState": 0,
+          "sameIdentity": true
+        },
+        "nativeSax": {
+          "calls": [
+            "begin",
+            "start:root:0",
+            "text:worker SAX\u5b57",
+            "end",
+            "finish"
+          ],
+          "sameIdentity": true
+        },
+        "documentBuilder": {
+          "rootName": "document-content",
+          "streamOpen": true,
+          "namespaceAware": true,
+          "validating": false,
+          "emptyImplementation": true,
+          "capturedType": true,
+          "sameContext": true,
+          "exceptionMessage": "worker exception"
+        },
+        "xpath": {
+          "count": 1,
+          "listLength": 1,
+          "sameRoot": true
+        },
+        "globals": {
+          "window": "object",
+          "document": "object",
+          "DOMParser": "function"
+        },
+        "rootName": "document-content",
+        "attribute": "1.0",
+        "listCounts": [
+          0,
+          1,
+          0
+        ],
+        "sameOwner": true,
+        "unicode": "\ud83d\ude00\u5b57",
+        "utf16Length": 3,
+        "borrowedStreamOpen": true,
+        "warnings": 1,
+        "errors": 0,
+        "warningLine": 1
+      }
+    }
+  },
+  "preservedIssues": [
+    "CALC-555/WRITER489: basic handlers omit CDATA and PI behind source extended-handler gate"
+  ],
+  "remaining": [
+    "SfxDocumentMetaData and required actual metadata SDK/converter/storage/SAX Writer paths",
+    "Native fast SAX/IO facets and original serializerTest fast path pending/unadvertised",
+    "Whole changed-owner branch coverage90 gate unsatisfied",
+    "Final DOCX/XLSX Strict/Transitional import-export-reopen, canonical core/shell and existing UI acceptance"
+  ],
+  "knownBaseline": "check:docs reports only existing css-style-matchers.ts:17 and:76. Doctor retains existing managed-hook readiness warning. Native OSL/physical ABI/allocator/MI/shared-memory scheduling and Java proxy harness are unqualified.",
+  "fullSuite": "Not due at this same-parent checkpoint; full suite only every ten actual agentplane tasks per user.",
+  "userStopRule": "Latest user requires continued work without pauses. Parent task/goal active and incomplete. Approved90 threshold replaces stale scoped100 in task Verify Steps.",
+  "checks": {
+    "related-tests-and-coverage": {
+      "command": "Exact tests.command argv, cwd apps/office",
+      "result": "151-cases-pass; whole-owner-branch90-gate-fails",
+      "log": "apps/office/coverage/dom-sax-tests.log",
+      "sha256": "1db7bec72a0662416829a78aa21e829201bb8a19fdcf850438a71b040f13068d"
+    },
+    "build": {
+      "command": "npm run typecheck && npm run test:static",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-sax-build.log",
+      "sha256": "dad4173758bde1b131668f70dd613dec89babeeb0071b6380a96bbfa249ae84a"
+    },
+    "registry-provenance": {
+      "command": "npm run inventory:registry:check && npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-sax-provenance.log",
+      "sha256": "7c36570f81a3c01872c9cb46b87f5dc76782edd2835b2feec80f2f955ec2f39b"
+    },
+    "static-gates": {
+      "command": "npm run check:dependencies && npm run check:file-size && npm run check:source-tree && npm run check:writer-resources && npm run check:calc-resources && npm run check:writer-hintids && ap doctor && node .agentplane/policy/check-routing.mjs && git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-sax-static-gates.log",
+      "sha256": "5c8ffc1b396c3e8a624c8deb2c1031e7f89bdb19e9244ac136475f202fa3407a"
+    },
+    "boundary-resources": {
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts scripts/check-module-boundaries-xml.test.ts scripts/writer-ui-resource-model.test.ts --maxWorkers=2",
+      "result": "pass:51cases/3files",
+      "log": "apps/office/coverage/dom-sax-boundaries.log",
+      "sha256": "4844ee9a31392e344d0fab7cb69aab5864a4714ca1b4e2150d541aa344a77a33"
+    },
+    "browser": {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node --experimental-strip-types scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-sax-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    "eslint": {
+      "command": "npx eslint <all changed/new TypeScript and MJS paths>",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-sax-eslint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "format": {
+      "command": "npx prettier --check <all changed/new source/docs/registry paths>",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-sax-format-check.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    "docs": {
+      "command": "npm run check:docs",
+      "result": "known-baseline-fail:only2css-style-matchersfindings",
+      "log": "apps/office/coverage/dom-sax-docs.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    },
+    "final-size-diff": {
+      "command": "npm run check:file-size && git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-sax-final-size.log",
+      "sha256": "a1a717e9acfaecc508b4e17daea476e1bb05821adf48d52aa907c50626eb3fff"
+    }
+  },
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/comphelper/source/xml/attributelist.test.ts",
+      "gitBlob": "3cfa8f46341e9088998e8a952d2aa9cc73d55da9"
+    },
+    {
+      "path": "apps/office/src/comphelper/source/xml/attributelist.ts",
+      "gitBlob": "01f5e79279bbcc50bc0df714c9e1133e26d14031"
+    },
+    {
+      "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts",
+      "gitBlob": "897570d26cd844d0eefbd3eb8051e5b29a082981"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/util/XCloneable.ts",
+      "gitBlob": "ae9f46b062cb927a3cdc90d5c9566dd0a7ddf62d"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/sax/XAttributeList.ts",
+      "gitBlob": "55870634b7201fee304694b350cb2b8f7e45ce34"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/sax/XDocumentHandler.ts",
+      "gitBlob": "000ab716822935a6c98f696e8b04e19915baab27"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/sax/XExtendedDocumentHandler.ts",
+      "gitBlob": "25c76b356c832473e25e886314896f4671589dfb"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/sax/XSAXSerializable.ts",
+      "gitBlob": "b596297e3ef15ce78008853dd338c390df15e473"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/sax/sax-types.test.ts",
+      "gitBlob": "82fc740e4c07ea111daad65c6d5b76b852036827"
+    },
+    {
+      "path": "apps/office/src/package/source/manifest/ManifestExport.ts",
+      "gitBlob": "c132cdfc0a195b762974647fee2cc56e7cce4532"
+    },
+    {
+      "path": "apps/office/src/package/source/manifest/ManifestImport.ts",
+      "gitBlob": "80005a80e8632574562992913ff117b4c26889a1"
+    },
+    {
+      "path": "apps/office/src/package/source/manifest/ManifestReader.ts",
+      "gitBlob": "7f9c20a756c603fdd702c4612b12ba76d4022b1c"
+    },
+    {
+      "path": "apps/office/src/package/source/manifest/native-manifest-export.test.ts",
+      "gitBlob": "cb2176fa8e9c008f252f2f913d04288a8c88d654"
+    },
+    {
+      "path": "apps/office/src/package/source/manifest/native-manifest-import.test.ts",
+      "gitBlob": "b137d4b2b3596a3ab53aa72b16294685a4849ed5"
+    },
+    {
+      "path": "apps/office/src/sax/source/expatwrap/saxwriter.ts",
+      "gitBlob": "0869e3b1d0be7ecaf784ead81ec678f4a25aec79"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/xml/sax/XAttributeList.ts",
+      "deleted": true,
+      "gitBlob": null,
+      "baselineGitBlob": "27b0940b785334af0ffdb3752c68af898847dced"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/xml/sax/XDocumentHandler.ts",
+      "deleted": true,
+      "gitBlob": null,
+      "baselineGitBlob": "fa4202055acaed08dacffef2ad37dab963951ac9"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/xml/sax/XLocator.ts",
+      "deleted": true,
+      "gitBlob": null,
+      "baselineGitBlob": "ff549b8502a172c157e63855c31f579a6fc54eb1"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/cdatasection.ts",
+      "gitBlob": "a5fb49ac81483115bf688c7abe22fd76f8e93484"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/comment.ts",
+      "gitBlob": "98dd90f8bbeee2c92560eff1f46aac963a3e738b"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/document.sax.test.ts",
+      "gitBlob": "4a0381aa1ee3f81e43017d98455e1b358560e3ab"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/document.ts",
+      "gitBlob": "64f6a3222654e22410a38b7bc9466d9e2fbd3c27"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/element.ts",
+      "gitBlob": "530e0f2230747a25c668bd9886f612ec84d82e13"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/node.ts",
+      "gitBlob": "cc1a66b8fb16fa6ce3df685aed97e5dc5f689e99"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/processinginstruction.ts",
+      "gitBlob": "d9f7e77908508dd0fec9a413d0b60baf53a92155"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/text.ts",
+      "gitBlob": "5b6e52bc5de5e01fcfc91adbb9e2fb083dfb615b"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "d9111e71771c2e411b8b93cd84e4f77e461f651b"
+    },
+    {
+      "path": "docs/program/native-dom-sax-serialization.md",
+      "gitBlob": "6eb2de2a31dadb92e038e51dbd89c7fe1310c06c"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-05210e3d-8cf9-4186-b90d-5269fe3ac5e0.json",
+      "gitBlob": "b84bb34ef9c4be3d423428af5691b0cccacf5a12"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/comphelper/source/xml/attributelist.ts.json",
+      "gitBlob": "6b88bd01efa8bc8b5cb3b0ef81e547ec83390067"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/comphelper/source/xml/ofopxmlhelper.ts.json",
+      "gitBlob": "623d42653812a3ab55216db33a3e0f3be0a2e150"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/util/XCloneable.ts.json",
+      "gitBlob": "35f1ea5d111047bdb8fea722506ac4ec092ba1ce"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/sax/XAttributeList.ts.json",
+      "gitBlob": "ee0b35b7b60ca9b20f0aec218675026fbca3976a"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/sax/XDocumentHandler.ts.json",
+      "gitBlob": "c5190beee929939a0dd8c620fed643cfa0a5940d"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/sax/XExtendedDocumentHandler.ts.json",
+      "gitBlob": "39a2b548ae4816bfd4d70954f42e1bb6d7282c1c"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/sax/XLocator.ts.json",
+      "gitBlob": "cba3618421ba8a4cc236fa0cc2527205a8ce637b"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/sax/XSAXSerializable.ts.json",
+      "gitBlob": "66861971b40d71ec5acf22a839857d96cce6393d"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/package/source/manifest/ManifestExport.ts.json",
+      "gitBlob": "d10bb98a35ae091a92ee8cdf41eebb1b2b310b55"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/package/source/manifest/ManifestImport.ts.json",
+      "gitBlob": "4d83b7349e53854a54e8b2b0593c8afc7f38bb58"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/package/source/manifest/ManifestReader.ts.json",
+      "gitBlob": "1a27d2137420a5a648b1cfdbd8012ff6fd315403"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sax/source/expatwrap/saxwriter.ts.json",
+      "gitBlob": "aed4a29da5aa5a0b3ca57ee6076028f8fec40485"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/xml/sax/XAttributeList.ts.json",
+      "deleted": true,
+      "gitBlob": null,
+      "baselineGitBlob": "c880d2405916f5d5177c19f60afd1feda5b61abc"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/xml/sax/XDocumentHandler.ts.json",
+      "deleted": true,
+      "gitBlob": null,
+      "baselineGitBlob": "eb1ea2f1f9706d7e220d0270350a40dbaa12fe1c"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/xml/sax/XLocator.ts.json",
+      "deleted": true,
+      "gitBlob": null,
+      "baselineGitBlob": "fc84cad21577cf46ef794ebe0c016a4b5d2e6416"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/cdatasection.ts.json",
+      "gitBlob": "aeb7201b427bc901591995ac110e63f59f970648"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/comment.ts.json",
+      "gitBlob": "690ceaa497886ed45e2d1037aa9580ea02f6463e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/document.ts.json",
+      "gitBlob": "76cd128e28d17d7b33117c0345f30a54c5f17016"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/element.ts.json",
+      "gitBlob": "83bdcb9c4c7472a37600e8de26e97f67c60ea251"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/node.ts.json",
+      "gitBlob": "06aa21c62635f34b2c43bde6368ff7410be5e101"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/processinginstruction.ts.json",
+      "gitBlob": "38273649f6e7996dcf5639844bcaeb75a789c6e7"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/text.ts.json",
+      "gitBlob": "34bac028b22360f928e65ed4f7da898207fee826"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/comphelper/source/xml/attributelist.ts.json",
+      "gitBlob": "7f1d2c09964033fd95ce42fc6923d3c092dc34b2"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/comphelper/source/xml/ofopxmlhelper.ts.json",
+      "gitBlob": "bb78401cf244c3edf65e65f34f44e2ba8e1d12fb"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/util/XCloneable.ts.json",
+      "gitBlob": "ee9d4eaf6933a1c2e5267bab1cf6694b1d58de90"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/sax/XAttributeList.ts.json",
+      "gitBlob": "6766fbc3fbff312eebde434bbde83ba65bbabeb8"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/sax/XDocumentHandler.ts.json",
+      "gitBlob": "da4b50594b7f9873cf9cd497f670b1aa0574179e"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/sax/XExtendedDocumentHandler.ts.json",
+      "gitBlob": "f07a9d48eedd0610abdb7292e7649943e73c9ad2"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/sax/XLocator.ts.json",
+      "gitBlob": "029a90e0b70bdfa2eb458b323e0e563caa252b4d"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/sax/XSAXSerializable.ts.json",
+      "gitBlob": "65ec89c311b2d7315ee9e6ea00b6389ba61eafc7"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/package/source/manifest/ManifestExport.ts.json",
+      "gitBlob": "d9c5b4b51e2af390c67ffe37679937e15639967b"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/package/source/manifest/ManifestImport.ts.json",
+      "gitBlob": "7ad66ef113b0b625a627b4625b62cf7d1fa9cb63"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/package/source/manifest/ManifestReader.ts.json",
+      "gitBlob": "99871ac21f0ea0db5effb27f5fa75b8fc4b0e951"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sax/source/expatwrap/saxwriter.ts.json",
+      "gitBlob": "787eafc23e67d50f509413101e87a0253ab63e85"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/xml/sax/XAttributeList.ts.json",
+      "deleted": true,
+      "gitBlob": null,
+      "baselineGitBlob": "957e06cf0f7500306c45e5ad27d4bed84a66f7ec"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/xml/sax/XDocumentHandler.ts.json",
+      "deleted": true,
+      "gitBlob": null,
+      "baselineGitBlob": "551d589ad5b218be5614a4f38c067d8ae9756144"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/xml/sax/XLocator.ts.json",
+      "deleted": true,
+      "gitBlob": null,
+      "baselineGitBlob": "ed1647b1f3da13f088ee7eaf31e340ef893cdec5"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/cdatasection.ts.json",
+      "gitBlob": "054fb8d8cc17cac0c62760778d05e47c40077f8e"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/comment.ts.json",
+      "gitBlob": "37065cb20655c7cf896df3ba30bd4078acd3cb46"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/document.ts.json",
+      "gitBlob": "a4edc1cead6e6d05316d0077eaed601cec874813"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/element.ts.json",
+      "gitBlob": "6064d3461c2b961d0485dc5537841c3bc002cfc4"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/node.ts.json",
+      "gitBlob": "173d4a3dc53ce3d23dc953c99124300f927a2cc7"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/processinginstruction.ts.json",
+      "gitBlob": "d98a1af50959bd17006fe5007ca447207b774cbc"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/text.ts.json",
+      "gitBlob": "50809f64daa4a35252599cddb1cecc5755138d9f"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "ccf5af43c4b1fd36cdc06fa70587107251d09865"
+    },
+    {
+      "path": "scripts/fixtures/native-dom-worker-probe.ts",
+      "gitBlob": "803539f240999eb0036c4122b22d68f0981c61fd"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "gitBlob": "6028c65556b3db6381fd346f87e87a1f399f51da"
+    }
+  ],
+  "upstreamBlobs": [
+    {
+      "path": "codemaker/source/cppumaker/cpputype.cxx",
+      "gitBlob": "152dbf476955dd95b1d7623ca7342cc69c24fb0a"
+    },
+    {
+      "path": "comphelper/source/xml/attributelist.cxx",
+      "gitBlob": "0b087095aa5343bd6b32d2442179f85d39546291"
+    },
+    {
+      "path": "comphelper/source/xml/ofopxmlhelper.cxx",
+      "gitBlob": "fd2976ecd460f399e14bc259b45f13625c89a139"
+    },
+    {
+      "path": "include/comphelper/attributelist.hxx",
+      "gitBlob": "e49beeb5fd60ad7344ae696fa826b223b34f6949"
+    },
+    {
+      "path": "offapi/com/sun/star/util/XCloneable.idl",
+      "gitBlob": "aeb26244d330b623a3df2733b6d7da9df4e35c06"
+    },
+    {
+      "path": "offapi/com/sun/star/xml/sax/XAttributeList.idl",
+      "gitBlob": "2be0b03135cd6b6aaec5acc41d860baa96774e95"
+    },
+    {
+      "path": "offapi/com/sun/star/xml/sax/XDocumentHandler.idl",
+      "gitBlob": "eb347bc896f47355f135bc6378ecbe2e1f0413c9"
+    },
+    {
+      "path": "offapi/com/sun/star/xml/sax/XExtendedDocumentHandler.idl",
+      "gitBlob": "c4fe608d17df431b722cbde0b5a25eac362c6366"
+    },
+    {
+      "path": "offapi/com/sun/star/xml/sax/XLocator.idl",
+      "gitBlob": "c8380dff7632ef3b76b67f94c3c9f5f331a50c7e"
+    },
+    {
+      "path": "offapi/com/sun/star/xml/sax/XSAXSerializable.idl",
+      "gitBlob": "2e59df87159dcb8f5ad345fbd3d43513993e556d"
+    },
+    {
+      "path": "package/source/manifest/ManifestExport.cxx",
+      "gitBlob": "965c4cd257482429751c6696e9b630e854b4b87e"
+    },
+    {
+      "path": "package/source/manifest/ManifestImport.cxx",
+      "gitBlob": "4e22aec41df2e81dbacef5ba9e3f4306da2dc3c8"
+    },
+    {
+      "path": "package/source/manifest/ManifestReader.cxx",
+      "gitBlob": "1e6a6ed848c739ce4923c448c278b3919f94dfed"
+    },
+    {
+      "path": "qadevOOo/tests/java/ifc/util/_XCloneable.java",
+      "gitBlob": "1f446d801aeef5ae8847fe07c86253f17f2c5b1d"
+    },
+    {
+      "path": "sax/source/expatwrap/saxwriter.cxx",
+      "gitBlob": "861a4ce76f2b623bba2748bee61f246137972f17"
+    },
+    {
+      "path": "unoxml/inc/node.hxx",
+      "gitBlob": "17e474bf9683ddafcf8f7cdaf7641b397e75b98e"
+    },
+    {
+      "path": "unoxml/qa/unit/domtest.cxx",
+      "gitBlob": "8d872d765f7e0aeb0d1d97079c19f20c640c5b8e"
+    },
+    {
+      "path": "unoxml/source/dom/cdatasection.cxx",
+      "gitBlob": "6cf1af90f478772ae187b78daf4d98f004c5120d"
+    },
+    {
+      "path": "unoxml/source/dom/comment.cxx",
+      "gitBlob": "5485947e5c35d91c9bef5714e94da0eee566c6fa"
+    },
+    {
+      "path": "unoxml/source/dom/document.cxx",
+      "gitBlob": "f7058a3fa3d65e2d3eace1701cc4a2028edcb617"
+    },
+    {
+      "path": "unoxml/source/dom/document.hxx",
+      "gitBlob": "6ebf711924118df46d4bd8cbacb7a594e59287e6"
+    },
+    {
+      "path": "unoxml/source/dom/element.cxx",
+      "gitBlob": "c131557bbc1117f57ba1e274cc0333f16e7f6e93"
+    },
+    {
+      "path": "unoxml/source/dom/node.cxx",
+      "gitBlob": "d36f107f20fd04d439a00f4d6cb086b305521885"
+    },
+    {
+      "path": "unoxml/source/dom/processinginstruction.cxx",
+      "gitBlob": "9eda0b90461dd69980936e78be3fab3e206cc86a"
+    },
+    {
+      "path": "unoxml/source/dom/text.cxx",
+      "gitBlob": "0eee36725af82af0eae1f96cd5c950071914258a"
+    }
+  ]
+}
