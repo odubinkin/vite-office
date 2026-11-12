@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 239
+revision: 244
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T17:18:00.565Z"
+  updated_at: "2026-11-12T17:34:38.101Z"
   updated_by: "CODER"
-  note: "Native XPath prerequisite:123 related tests/18files pass, all original testXXPathAPI/testXXPathObject assertions and real native lookup callbacks pass. Main/DOM-free Worker probe passes. Whole5-owner90 coverage fails82.43statements75.60branches89.06functions81.85lines; pending native exceptional/unsupported object kinds and complete DOCX/XLSX/UI are not reclassified."
-  attempts: 73
+  note: "Public comphelper prerequisite:145 related cases/17files pass; complete4-owner90 gate has96.14statements88.75branches94.80functions96.82lines and fails branches. Original query/owner/container source contracts are retained; metadata/property-bag and complete DOCX/XLSX/UI remain unfinished. No synthetic interface/type graph or reduced coverage profile."
+  attempts: 74
 commit: null
 comments:
   -
@@ -240,6 +240,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue the approved actual metadata dependencies and DOCX/XLSX shell/UI after recording bounded XPath qualification and the honest five-owner90 gap; no goal pause or parent completion."
+  -
+    author: "CODER"
+    body: "Start: Continue approved native property-bag/metadata and full DOCX/XLSX shell/UI implementation after the bounded public component prerequisite; branch coverage gap remains recorded, no finish or pause."
 events:
   -
     type: "status"
@@ -1176,8 +1179,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: Continue the approved actual metadata dependencies and DOCX/XLSX shell/UI after recording bounded XPath qualification and the honest five-owner90 gap; no goal pause or parent completion."
+  -
+    type: "verify"
+    at: "2026-11-12T17:34:38.101Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Public comphelper prerequisite:145 related cases/17files pass; complete4-owner90 gate has96.14statements88.75branches94.80functions96.82lines and fails branches. Original query/owner/container source contracts are retained; metadata/property-bag and complete DOCX/XLSX/UI remain unfinished. No synthetic interface/type graph or reduced coverage profile."
+  -
+    type: "status"
+    at: "2026-11-12T17:34:48.552Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: Continue approved native property-bag/metadata and full DOCX/XLSX shell/UI implementation after the bounded public component prerequisite; branch coverage gap remains recorded, no finish or pause."
 doc_version: 3
-doc_updated_at: "2026-11-12T17:18:16.340Z"
+doc_updated_at: "2026-11-12T17:35:52.947Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -3382,6 +3398,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-12T17:34:38.101Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Public comphelper prerequisite:145 related cases/17files pass; complete4-owner90 gate has96.14statements88.75branches94.80functions96.82lines and fails branches. Original query/owner/container source contracts are retained; metadata/property-bag and complete DOCX/XLSX/UI remain unfinished. No synthetic interface/type graph or reduced coverage profile.
+    Attempts: 74
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T17:33:59.695Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3750,6 +3796,18 @@ sections:
     - Observation: Final native XPath prerequisite:123 cases/18files pass, including complete original testXXPathAPI/testXXPathObject assertions and nine new real-owner cases. Main/DOM-free module Worker runs registered XPathAPI/DocumentBuilder and exact native node identity; real table function/variable lookups retain userdata and native NULL failures. Pinned unchanged libxml2 rebuilt with144 exports and108 header enums.
       Impact: Whole5-owner90 gate fails82.43statements75.60branches89.06functions81.85lines. Unsupported native result kinds, successful custom extension values, allocation failures, undefined inputs/float-integral overflow and physical ABI/threads remain unqualified. The pinned metadata source includes XPathAPI.hpp but its current implementation walks DOM directly; no runtime XPath dependency is falsely asserted.
       Resolution: Final typecheck/build/static/scoped lint/format/provenance/registry/boundaries49/resource2/size/tree/resources/hintids/doctor/routing/diff pass; only prior css-style-matchers.ts17/76 JSDoc baseline. Source suspected issues documented in both journals; original behavior kept. Persist this functional prerequisite without finishing the parent, then follow actual comphelper/component/property-bag and DOM dependencies of SfxDocumentMetaData and complete filters/UI. Full suites remain once per10 actual tasks; no pause.
+
+    - Observation: Public comphelper component/listener prerequisite: native public component and plain templates, distinct query owner and public container4 with complete moves/exception callbacks are implemented. Internal URE copies remain separate. The single compiler catch-context owner moved to platform-neutral CPPU; browser exception ABI reexports the same scope and reads that state. Real thrown derived Any survives public source catch-by-value handling, nested scopes restore, and destructor-only cleanup retains source guard/refcount/no-notification behavior.
+      Impact: Initial related run passes145 cases/17files; whole4-owner90 gate has96.14statements88.75branches94.80functions96.82lines, so branch qualification remains incomplete. Native allocation/undefined type-description graphs are not fabricated. Actual metadata/property-bag and full DOCX/XLSX core/shell/UI remain unfinished.
+      Resolution: Keep public first-use DEFAULT lazy, original interface order/cache/deep query and source optional exception handler behavior. Original complete helper2 test1 caller is replayed against the version4 public template with only lock/template syntax adapted, alongside the unchanged helper2 source port. Type-only fixture imports and source-compatible optional overload erasure corrected compile/lint issues; explicit default constructor remains to exclude inherited OWeakObject copying as the native mutex base requires. Final focused run and static checks continue without goal pause.
+
+    - Observation: Final public component prerequisite:145 related cases/17files pass; whole4-owner90 profile96.14statements88.75branches94.80functions96.82lines retains a branch gap. Original complete helper2 test1 client replay and actual public generic/plain/destructor/container/catch-context contracts run alongside unchanged internal helpers, real ComponentContext/ServiceManager and registered native DocumentBuilder/XPath.
+      Impact: No whole-parent acceptance or native ABI/thread/noexcept termination claim. Internal URE copies remain unchanged; class-data/null-description/physical multiple-inheritance failure paths are not manufactured to fill coverage. The source virtual UnoImplBase flag remains on the same actual receiver, with no extra mutex/state object.
+      Resolution: Final typecheck/build/static/scoped lint/format/provenance/registry/boundaries49/resource2/size/tree/resources/hintids/doctor/routing/diff pass. Only prior css-style-matchers.ts17/76 JSDoc errors remain. Actual Chromium main and DOM-free Worker probe passes after moving the current-exception state into the platform-neutral compiler contract. Persist source/evidence then continue actual PropertyBag/SfxDocumentMetaData and formats/UI; no pause, full suites only every10 actual tasks.
+
+    - Observation: Public helpers now additionally execute in the real Chromium main and DOM-free Worker probe: one real event with the original Source, silent late listener/repeated disposal and exact3 default component Types. Same actual production registry/UNO/XML graph remains in the probe.
+      Impact: This adds browser-realm qualification for the public base without inventing a service/provider, sharing native pointers or asserting physical threading parity.
+      Resolution: Keep the already recorded whole-owner branch gap and continue actual PropertyBag/metadata and full DOCX/XLSX UI work after persisting this block.
 id_source: "generated"
 ---
 ## Summary
@@ -5964,6 +6022,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-12T17:34:38.101Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Public comphelper prerequisite:145 related cases/17files pass; complete4-owner90 gate has96.14statements88.75branches94.80functions96.82lines and fails branches. Original query/owner/container source contracts are retained; metadata/property-bag and complete DOCX/XLSX/UI remain unfinished. No synthetic interface/type graph or reduced coverage profile.
+Attempts: 74
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T17:33:59.695Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -6336,3 +6424,15 @@ DecisionContextRef:
 - Observation: Final native XPath prerequisite:123 cases/18files pass, including complete original testXXPathAPI/testXXPathObject assertions and nine new real-owner cases. Main/DOM-free module Worker runs registered XPathAPI/DocumentBuilder and exact native node identity; real table function/variable lookups retain userdata and native NULL failures. Pinned unchanged libxml2 rebuilt with144 exports and108 header enums.
   Impact: Whole5-owner90 gate fails82.43statements75.60branches89.06functions81.85lines. Unsupported native result kinds, successful custom extension values, allocation failures, undefined inputs/float-integral overflow and physical ABI/threads remain unqualified. The pinned metadata source includes XPathAPI.hpp but its current implementation walks DOM directly; no runtime XPath dependency is falsely asserted.
   Resolution: Final typecheck/build/static/scoped lint/format/provenance/registry/boundaries49/resource2/size/tree/resources/hintids/doctor/routing/diff pass; only prior css-style-matchers.ts17/76 JSDoc baseline. Source suspected issues documented in both journals; original behavior kept. Persist this functional prerequisite without finishing the parent, then follow actual comphelper/component/property-bag and DOM dependencies of SfxDocumentMetaData and complete filters/UI. Full suites remain once per10 actual tasks; no pause.
+
+- Observation: Public comphelper component/listener prerequisite: native public component and plain templates, distinct query owner and public container4 with complete moves/exception callbacks are implemented. Internal URE copies remain separate. The single compiler catch-context owner moved to platform-neutral CPPU; browser exception ABI reexports the same scope and reads that state. Real thrown derived Any survives public source catch-by-value handling, nested scopes restore, and destructor-only cleanup retains source guard/refcount/no-notification behavior.
+  Impact: Initial related run passes145 cases/17files; whole4-owner90 gate has96.14statements88.75branches94.80functions96.82lines, so branch qualification remains incomplete. Native allocation/undefined type-description graphs are not fabricated. Actual metadata/property-bag and full DOCX/XLSX core/shell/UI remain unfinished.
+  Resolution: Keep public first-use DEFAULT lazy, original interface order/cache/deep query and source optional exception handler behavior. Original complete helper2 test1 caller is replayed against the version4 public template with only lock/template syntax adapted, alongside the unchanged helper2 source port. Type-only fixture imports and source-compatible optional overload erasure corrected compile/lint issues; explicit default constructor remains to exclude inherited OWeakObject copying as the native mutex base requires. Final focused run and static checks continue without goal pause.
+
+- Observation: Final public component prerequisite:145 related cases/17files pass; whole4-owner90 profile96.14statements88.75branches94.80functions96.82lines retains a branch gap. Original complete helper2 test1 client replay and actual public generic/plain/destructor/container/catch-context contracts run alongside unchanged internal helpers, real ComponentContext/ServiceManager and registered native DocumentBuilder/XPath.
+  Impact: No whole-parent acceptance or native ABI/thread/noexcept termination claim. Internal URE copies remain unchanged; class-data/null-description/physical multiple-inheritance failure paths are not manufactured to fill coverage. The source virtual UnoImplBase flag remains on the same actual receiver, with no extra mutex/state object.
+  Resolution: Final typecheck/build/static/scoped lint/format/provenance/registry/boundaries49/resource2/size/tree/resources/hintids/doctor/routing/diff pass. Only prior css-style-matchers.ts17/76 JSDoc errors remain. Actual Chromium main and DOM-free Worker probe passes after moving the current-exception state into the platform-neutral compiler contract. Persist source/evidence then continue actual PropertyBag/SfxDocumentMetaData and formats/UI; no pause, full suites only every10 actual tasks.
+
+- Observation: Public helpers now additionally execute in the real Chromium main and DOM-free Worker probe: one real event with the original Source, silent late listener/repeated disposal and exact3 default component Types. Same actual production registry/UNO/XML graph remains in the probe.
+  Impact: This adds browser-realm qualification for the public base without inventing a service/provider, sharing native pointers or asserting physical threading parity.
+  Resolution: Keep the already recorded whole-owner branch gap and continue actual PropertyBag/metadata and full DOCX/XLSX UI work after persisting this block.

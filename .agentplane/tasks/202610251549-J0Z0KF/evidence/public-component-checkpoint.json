@@ -1,0 +1,607 @@
+{
+  "status": "functional-public-component-prerequisite-branch-coverage-gap-parent-continues",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "8c935953b9bf8fc5934feeb3546c253662594de3",
+  "capability": "CAP-a40e29d1-4d53-439a-bfdf-a74c050081b1",
+  "scope": "Actual distinct public comphelper component/plain/listener/query owners; a single platform-neutral current UNO catch scope consumed by injected browser ABI. Metadata/property-bag/format UI remains incomplete.",
+  "tests": {
+    "publicCases": 18,
+    "relatedCases": 145,
+    "relatedFiles": 17,
+    "boundaryCases": 49,
+    "resourceCases": 2,
+    "sourceQA": "Complete original helper2 test1 caller replayed against version4 public template with explicit lock/template syntax adaptation; unchanged helper2 QA included. Critical public base/query/COW/catch tests use actual owners, no alternative provider/type/default model."
+  },
+  "coverage": {
+    "result": "fails-whole4-owner90-branch-gate",
+    "threshold": 90,
+    "selectedOwnerCount": 4,
+    "total": {
+      "lines": {
+        "total": 252,
+        "covered": 244,
+        "skipped": 0,
+        "pct": 96.82
+      },
+      "statements": {
+        "total": 285,
+        "covered": 274,
+        "skipped": 0,
+        "pct": 96.14
+      },
+      "functions": {
+        "total": 77,
+        "covered": 73,
+        "skipped": 0,
+        "pct": 94.8
+      },
+      "branches": {
+        "total": 80,
+        "covered": 71,
+        "skipped": 0,
+        "pct": 88.75
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "owners": {
+      "src/comphelper/inc/compbase.ts": {
+        "lines": {
+          "total": 97,
+          "covered": 92,
+          "skipped": 0,
+          "pct": 94.84
+        },
+        "functions": {
+          "total": 35,
+          "covered": 31,
+          "skipped": 0,
+          "pct": 88.57
+        },
+        "statements": {
+          "total": 108,
+          "covered": 102,
+          "skipped": 0,
+          "pct": 94.44
+        },
+        "branches": {
+          "total": 24,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 91.66
+        }
+      },
+      "src/comphelper/inc/interfacecontainer4.ts": {
+        "lines": {
+          "total": 88,
+          "covered": 88,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 28,
+          "covered": 28,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 98,
+          "covered": 98,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 24,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/comphelper/source/misc/compbase.ts": {
+        "lines": {
+          "total": 61,
+          "covered": 58,
+          "skipped": 0,
+          "pct": 95.08
+        },
+        "functions": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 73,
+          "covered": 68,
+          "skipped": 0,
+          "pct": 93.15
+        },
+        "branches": {
+          "total": 32,
+          "covered": 25,
+          "skipped": 0,
+          "pct": 78.12
+        }
+      },
+      "src/cppu/inc/uno/exception-context.ts": {
+        "lines": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    }
+  },
+  "browserQualification": {
+    "workerResult": {
+      "conversion": {
+        "serviceValue": 42,
+        "rowValue": 42,
+        "rowWasNull": false,
+        "failedFirst": 0,
+        "failedFirstWasNull": false,
+        "failedSecond": 0,
+        "failedSecondWasNull": true
+      },
+      "publicHelpers": {
+        "notifications": 1,
+        "sameEventSource": true,
+        "componentTypeCount": 3
+      },
+      "documentBuilder": {
+        "rootName": "document-content",
+        "streamOpen": true,
+        "namespaceAware": true,
+        "validating": false,
+        "emptyImplementation": true,
+        "capturedType": true,
+        "sameContext": true,
+        "exceptionMessage": "worker exception"
+      },
+      "xpath": {
+        "count": 1,
+        "listLength": 1,
+        "sameRoot": true
+      },
+      "globals": {
+        "window": "undefined",
+        "document": "undefined",
+        "DOMParser": "undefined"
+      },
+      "rootName": "document-content",
+      "attribute": "1.0",
+      "listCounts": [
+        0,
+        1,
+        0
+      ],
+      "sameOwner": true,
+      "unicode": "\ud83d\ude00\u5b57",
+      "utf16Length": 3,
+      "borrowedStreamOpen": true,
+      "warnings": 1,
+      "errors": 0,
+      "warningLine": 1
+    },
+    "mainResult": {
+      "conversion": {
+        "serviceValue": 42,
+        "rowValue": 42,
+        "rowWasNull": false,
+        "failedFirst": 0,
+        "failedFirstWasNull": false,
+        "failedSecond": 0,
+        "failedSecondWasNull": true
+      },
+      "publicHelpers": {
+        "notifications": 1,
+        "sameEventSource": true,
+        "componentTypeCount": 3
+      },
+      "documentBuilder": {
+        "rootName": "document-content",
+        "streamOpen": true,
+        "namespaceAware": true,
+        "validating": false,
+        "emptyImplementation": true,
+        "capturedType": true,
+        "sameContext": true,
+        "exceptionMessage": "worker exception"
+      },
+      "xpath": {
+        "count": 1,
+        "listLength": 1,
+        "sameRoot": true
+      },
+      "globals": {
+        "window": "object",
+        "document": "object",
+        "DOMParser": "function"
+      },
+      "rootName": "document-content",
+      "attribute": "1.0",
+      "listCounts": [
+        0,
+        1,
+        0
+      ],
+      "sameOwner": true,
+      "unicode": "\ud83d\ude00\u5b57",
+      "utf16Length": 3,
+      "borrowedStreamOpen": true,
+      "warnings": 1,
+      "errors": 0,
+      "warningLine": 1
+    }
+  },
+  "remaining": [
+    "Physical virtual inheritance and multiple-inheritance pointer layout, native threads/locks, allocator/shutdown and noexcept process termination remain unqualified.",
+    "Native unsupported/failing class-data paths not constructed to fill coverage.",
+    "Actual PropertyBag/SfxDocumentMetaData and full DOCX/XLSX core/shell/UI unfinished."
+  ],
+  "fullSuite": "Not run: once per10 actual task cadence, same parent epics still active.",
+  "knownBaseline": "Only prior css-style-matchers.ts17/76 JSDoc errors.",
+  "userStopRule": "Continue without pause; do not complete incomplete parents.",
+  "checks": [
+    {
+      "name": "final",
+      "cwd": "apps/office",
+      "command": "../../node_modules/.bin/vitest run --config vite.config.ts src/comphelper/inc/compbase.test.ts src/comphelper/inc/interfacecontainer4.test.ts src/comphelper/inc/interfacecontainer3.test.ts src/comphelper/source/container/interfacecontainer2.test.ts src/cppuhelper/inc/compbase2.test.ts src/cppuhelper/inc/interfacecontainer4.test.ts src/cppuhelper/browser/exception-abi.test.ts src/cppuhelper/source src/unoxml/source/dom/documentbuilder.test.ts src/unoxml/source/xpath/xpath.test.ts --coverage --coverage.include=src/comphelper/inc/compbase.ts --coverage.include=src/comphelper/inc/interfacecontainer4.ts --coverage.include=src/comphelper/source/misc/compbase.ts --coverage.include=src/cppu/inc/uno/exception-context.ts --coverage.reportsDirectory=coverage/component-final --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.functions=90 --coverage.thresholds.branches=90",
+      "result": "tests-pass-branch-coverage-fails",
+      "log": "apps/office/coverage/component-final.log",
+      "sha256": "01ab801d2fce11fd92bd1e8973ce40cd9a5c64f4d37d10e4a39ee90d218c6db7"
+    },
+    {
+      "name": "typecheck",
+      "cwd": ".",
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/component-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "name": "tool-types",
+      "cwd": ".",
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/component-tool-types.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "name": "build",
+      "cwd": ".",
+      "command": "npm run build",
+      "result": "pass",
+      "log": "apps/office/coverage/component-build.log",
+      "sha256": "93174db12462398edbe0f95bd5642157e2a311fc97a97db3d0e5dfd8b74b235b"
+    },
+    {
+      "name": "worker",
+      "cwd": ".",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node --experimental-strip-types scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/component-worker.log",
+      "sha256": "c5c74ae8bee9d8d9a314f316e3adbbc59b0d0d1a4378d4445ec95316862ac7d4"
+    },
+    {
+      "name": "static",
+      "cwd": ".",
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/component-static.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "name": "provenance",
+      "cwd": ".",
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/component-provenance.log",
+      "sha256": "cb5c3a909cb16a6473765aed3a93b1f57cc2e4b31490d66b18359fce93d7a089"
+    },
+    {
+      "name": "boundaries",
+      "cwd": ".",
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/component-boundaries.log",
+      "sha256": "d85b5e87e898da6865ae8af7067b5a83f5c8a751fe126410f165a7954a51f1c7"
+    },
+    {
+      "name": "registry-build",
+      "cwd": ".",
+      "command": "npm run inventory:registry:build",
+      "result": "pass",
+      "log": "apps/office/coverage/component-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "name": "registry-check",
+      "cwd": ".",
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/component-registry-check.log",
+      "sha256": "7233c094becd9ed778b2fd43f871b73adea715e90e2487e93ef777bcf20d7f7c"
+    },
+    {
+      "name": "docs",
+      "cwd": ".",
+      "command": "npm run check:docs",
+      "result": "known-baseline-failure",
+      "log": "apps/office/coverage/component-docs.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    },
+    {
+      "name": "size",
+      "cwd": ".",
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/component-size.log",
+      "sha256": "9b5dafa8cf4bacc44b62bf5f121d494370d3b3d24e40fb3a3330096256f67c16"
+    },
+    {
+      "name": "tree",
+      "cwd": ".",
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/component-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "name": "boundary-tests",
+      "cwd": ".",
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts scripts/check-module-boundaries-xml.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/component-boundary-tests.log",
+      "sha256": "f22cedef8680269da0915f7ada62367237736ac786c774535f2b46032b829a94"
+    },
+    {
+      "name": "resource-tests",
+      "cwd": ".",
+      "command": "node_modules/.bin/vitest run scripts/writer-ui-resource-model.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/component-resource-tests.log",
+      "sha256": "4adf9e401e5eca88e208feb98493c4ea857552e0b5e28f79990144a4d3ac1261"
+    },
+    {
+      "name": "writer-resources",
+      "cwd": ".",
+      "command": "npm run check:writer-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/component-writer-resources.log",
+      "sha256": "c90d396c1a6933e49ba40c5cb01126cd67df54fab9c6d9e41e9ac9270ee5bf6c"
+    },
+    {
+      "name": "calc-resources",
+      "cwd": ".",
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/component-calc-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "name": "hintids",
+      "cwd": ".",
+      "command": "npm run check:writer-hintids",
+      "result": "pass",
+      "log": "apps/office/coverage/component-hintids.log",
+      "sha256": "513c109068ebf83b3d6fe448c3c44564ec89a64cd9cb64059b5b4b89d11d887a"
+    },
+    {
+      "name": "doctor",
+      "cwd": ".",
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/component-doctor.log",
+      "sha256": "058460849af5322734937be25d89e383b8beb51bd3e02b6f223ebc0bce1627da"
+    },
+    {
+      "name": "routing",
+      "cwd": ".",
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/component-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "name": "diff",
+      "cwd": ".",
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/component-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "lint",
+      "cwd": ".",
+      "command": [
+        "node_modules/.bin/eslint",
+        "--max-warnings",
+        "0",
+        "apps/office/src/comphelper/inc/compbase.test.ts",
+        "apps/office/src/comphelper/inc/compbase.ts",
+        "apps/office/src/comphelper/inc/interfacecontainer4.test.ts",
+        "apps/office/src/comphelper/inc/interfacecontainer4.ts",
+        "apps/office/src/comphelper/source/misc/compbase.ts",
+        "apps/office/src/cppu/inc/uno/exception-context.ts",
+        "apps/office/src/cppuhelper/browser/exception-abi.ts",
+        "scripts/fixtures/native-dom-worker-probe.ts",
+        "scripts/native-dom-worker-probe.mjs"
+      ],
+      "result": "pass",
+      "log": "apps/office/coverage/component-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "format",
+      "cwd": ".",
+      "command": [
+        "node_modules/.bin/prettier",
+        "--check",
+        "apps/office/src/comphelper/inc/compbase.test.ts",
+        "apps/office/src/comphelper/inc/compbase.ts",
+        "apps/office/src/comphelper/inc/interfacecontainer4.test.ts",
+        "apps/office/src/comphelper/inc/interfacecontainer4.ts",
+        "apps/office/src/comphelper/source/misc/compbase.ts",
+        "apps/office/src/cppu/inc/uno/exception-context.ts",
+        "apps/office/src/cppuhelper/browser/exception-abi.ts",
+        "docs/program/native-comphelper-component-base.md",
+        "docs/program/registry/shared/capabilities/CAP-a40e29d1-4d53-439a-bfdf-a74c050081b1.json",
+        "docs/program/registry/shared/provenance/comphelper/inc/compbase.ts.json",
+        "docs/program/registry/shared/provenance/comphelper/inc/interfacecontainer4.ts.json",
+        "docs/program/registry/shared/provenance/comphelper/source/misc/compbase.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/uno/exception-context.ts.json",
+        "docs/program/registry/shared/provenance/cppuhelper/browser/exception-abi.ts.json",
+        "docs/program/registry/shared/runtime/comphelper/inc/compbase.ts.json",
+        "docs/program/registry/shared/runtime/comphelper/inc/interfacecontainer4.ts.json",
+        "docs/program/registry/shared/runtime/comphelper/source/misc/compbase.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/uno/exception-context.ts.json",
+        "docs/program/registry/shared/runtime/cppuhelper/browser/exception-abi.ts.json",
+        "scripts/fixtures/native-dom-worker-probe.ts",
+        "scripts/native-dom-worker-probe.mjs"
+      ],
+      "result": "pass",
+      "log": "apps/office/coverage/component-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    }
+  ],
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/comphelper/inc/compbase.test.ts",
+      "gitBlob": "d9d46f3ed0af72f9a5cf8cc2ec259aacb2e7726a"
+    },
+    {
+      "path": "apps/office/src/comphelper/inc/compbase.ts",
+      "gitBlob": "95bde5682e9d500750579d5ae9209ee390e92200"
+    },
+    {
+      "path": "apps/office/src/comphelper/inc/interfacecontainer4.test.ts",
+      "gitBlob": "42331130cec6908724db3d7afa67c4f3bea49eb0"
+    },
+    {
+      "path": "apps/office/src/comphelper/inc/interfacecontainer4.ts",
+      "gitBlob": "eccdb240c90b6a65e1417909c0be1bcdd94484cc"
+    },
+    {
+      "path": "apps/office/src/comphelper/source/misc/compbase.ts",
+      "gitBlob": "069176a2e2a1cf2204b72eb256f91d1a2f7b4a1a"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/uno/exception-context.ts",
+      "gitBlob": "daf63c5193fd8fd2bf758a80c0df45527fa41e1f"
+    },
+    {
+      "path": "apps/office/src/cppuhelper/browser/exception-abi.ts",
+      "gitBlob": "b2388950e5009bce036a2081679e6c797d93a7c3"
+    },
+    {
+      "path": "docs/program/native-comphelper-component-base.md",
+      "gitBlob": "b6baac4eb111551bda9103aea468e0225ece0d34"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-a40e29d1-4d53-439a-bfdf-a74c050081b1.json",
+      "gitBlob": "9730808dc01e741250ab6f14595293c648e41f6c"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/comphelper/inc/compbase.ts.json",
+      "gitBlob": "0856bd80f96a960bb7a6fdaf9854e3881a44203d"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/comphelper/inc/interfacecontainer4.ts.json",
+      "gitBlob": "57016780a0ee93abc2ec1aa41c41a0807f398853"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/comphelper/source/misc/compbase.ts.json",
+      "gitBlob": "ad9a1e06d5e51a0ce172640e6c643fdcc1281bf0"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/uno/exception-context.ts.json",
+      "gitBlob": "4a94ea0d44bc155cfd843b93303ed5b3586ccd7f"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppuhelper/browser/exception-abi.ts.json",
+      "gitBlob": "930063f1e091eaa1b18d03b4c4c5675a803c3d36"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/comphelper/inc/compbase.ts.json",
+      "gitBlob": "23726fbf2b8dd20a18eed492dde72fab165e9873"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/comphelper/inc/interfacecontainer4.ts.json",
+      "gitBlob": "c865f367c8b240b6aff8194d7c55197cea0fcce3"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/comphelper/source/misc/compbase.ts.json",
+      "gitBlob": "8e224ba7a7a30bcc5ec18f17debf25b62587ec69"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/uno/exception-context.ts.json",
+      "gitBlob": "21a483d07fed44a2427dae7503edd3d20ddec0dd"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppuhelper/browser/exception-abi.ts.json",
+      "gitBlob": "104fcf5e72214fc1767d06ed6d2bbda829d11bbd"
+    },
+    {
+      "path": "scripts/fixtures/native-dom-worker-probe.ts",
+      "gitBlob": "69f422333884f5a7db5e454be9dfd2ca1c3a80ab"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "gitBlob": "9248146108ec8b493575e71a48a78d1c9be9c85c"
+    }
+  ],
+  "upstreamBlobs": [
+    {
+      "path": "include/comphelper/compbase.hxx",
+      "gitBlob": "2cd758d4316508f2d55915e07296ce3b008df1d8"
+    },
+    {
+      "path": "include/comphelper/unoimplbase.hxx",
+      "gitBlob": "a2d6803a09b5c6fdef83c78888471ce3b232b518"
+    },
+    {
+      "path": "include/comphelper/interfacecontainer4.hxx",
+      "gitBlob": "4a09144e173513596383a379ad11f6d3f9aa2f00"
+    },
+    {
+      "path": "comphelper/source/misc/compbase.cxx",
+      "gitBlob": "7758a640451caca275093873d84af359c0f2a5c5"
+    },
+    {
+      "path": "comphelper/qa/container/testifcontainer.cxx",
+      "gitBlob": "d096b8fd874a3b5f13491deaab03c00a5c9cee2d"
+    },
+    {
+      "path": "include/cppuhelper/exc_hlp.hxx",
+      "gitBlob": "fa3c3d05b331c89ced76584e95196800d9b9c0a2"
+    },
+    {
+      "path": "cppuhelper/qa/misc/test_misc.cxx",
+      "gitBlob": "d4e45ab0da667f981ccaa8ae5f762106b1e02ffc"
+    }
+  ]
+}
