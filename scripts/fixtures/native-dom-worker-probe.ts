@@ -1,4 +1,10 @@
 /** @fileoverview Real native UNO document, parser callback, IO and live-list operations without a host DOM; the production registered DocumentBuilder shares the same realm-local native module. */
+import { AttributeList } from "../../apps/office/src/comphelper/source/xml/attributelist";
+import { SaxWriterHelper } from "../../apps/office/src/sax/source/expatwrap/saxwriter.helper";
+import {
+  PairStringString,
+  cppu_detail_getUnoType_PairStringString as entityPairType,
+} from "../../apps/office/src/udkapi/com/sun/star/beans/Pair";
 import {
   getChildNodeByName,
   getChildNodeListByName,
@@ -45,7 +51,10 @@ import {
   Sequence,
   type SequenceElements,
 } from "../../apps/office/src/cppu/inc/com/sun/star/uno/Sequence";
-import { SequenceInputStream } from "../../apps/office/src/comphelper/source/streaming/seqstream";
+import {
+  SequenceInputStream,
+  OSequenceOutputStream,
+} from "../../apps/office/src/comphelper/source/streaming/seqstream";
 import { CDocument } from "../../apps/office/src/unoxml/source/dom/document";
 import {
   context_t,
@@ -203,6 +212,40 @@ export async function runNativeDomWorkerProbe() {
     ),
     saxNamespaces = own(new (Sequence.specialize<StringPair>(stringPairType, 16))());
   saxFacet.operatorStar().serialize(saxHandler, saxNamespaces);
+  const saxWriterBytes = own(new Bytes()),
+    saxWriterStream = own(new Reference(new OSequenceOutputStream(saxWriterBytes))),
+    saxWriterHelper = own(new SaxWriterHelper(saxWriterStream)),
+    saxEntity = own(new PairStringString(u("&beta;"), u("β"))),
+    saxEntities = own(
+      new (Sequence.specialize<PairStringString>(entityPairType, 16))(
+        {
+          /** Original initialized generated Pair address. @param offset - Byte offset. @returns Actual compound storage. */ get(
+            offset: number,
+          ) {
+            void offset;
+            return saxEntity;
+          },
+        },
+        1,
+      ),
+    ),
+    saxWriterAttributes = own(new Reference(new AttributeList()));
+  saxWriterAttributes.operatorStar().AddAttribute(u("a"), u("&\n"));
+  saxWriterHelper.setCustomEntityNames(saxEntities);
+  saxWriterHelper.startDocument();
+  saxWriterHelper.startElement(u("r"), saxWriterAttributes);
+  const saxWriterValid = saxWriterHelper.writeString(u("x".repeat(1020) + "字😀β"), true, false);
+  saxWriterHelper.endElement(u("r"));
+  saxWriterHelper.endDocument();
+  saxWriterStream.operatorStar().closeOutput();
+  const saxWriterCells = saxWriterBytes.getConstArray() as SequenceElements,
+    saxWriterView = new Uint8Array(saxWriterBytes.getLength());
+  for (let i = 0; i < saxWriterView.length; ++i)
+    saxWriterView[i] = (saxWriterCells.get(i) as [number])[0];
+  const nativeSaxWriterBuffer = {
+    valid: saxWriterValid,
+    xml: new TextDecoder().decode(saxWriterView),
+  };
   const nativeSax = {
     calls: saxHandler.operatorStar().calls,
     sameIdentity: saxFacet.get() === saxDocument.get(),
@@ -720,6 +763,7 @@ export async function runNativeDomWorkerProbe() {
       nativePropertyControl,
       registeredPropertyBag,
       nativeSax,
+      nativeSaxWriterBuffer,
       metadataValues,
       metadataIngestion,
       documentBuilder,

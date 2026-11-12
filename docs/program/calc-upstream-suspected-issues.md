@@ -5679,3 +5679,23 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source: `sfx2/source/doc/SfxDocumentMetaData.cxx`, `init` float branch; `sax/source/tools/converter.cxx`, `Converter::convertDouble`; shared with WRITER497 and existing CALC-170, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
 - The float branch checks only the SAX converter's status result. The source-tested RTL no-digit result is zero with status Ok, so `bad` is accepted as a double property with value zero; overflow such as `1e9999` is skipped. The metadata caller does not inspect the unconsumed suffix. Preserve the original caller check. Actual native DOM-to-PropertyBag tests retain this behavior alongside invalid boolean/date/duration rejection; compiled C++ differential and full document-service acceptance remain pending.
+
+### CALC563 — Empty custom entity replacement can prevent conversion progress
+
+- Source: `sax/source/expatwrap/saxwriter.cxx`, `SaxWriterHelper`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER498.
+- setCustomEntityNames accepts empty replacement strings. findXMLReplacement then returns the zero-length prefix, and convertToXML adds replacement.length-1 to the loop index before continuing; the loop increment leaves the cursor unchanged. Keep this source algorithm without an invented nonempty-value policy. The nontermination is documented by source analysis only; no hanging/OOM workload is run.
+
+### CALC564 — Exact-full custom entity output skips the common cache flush
+
+- Source: `sax/source/expatwrap/saxwriter.cxx`, `SaxWriterHelper`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER499.
+- The custom-entity branch executes continue after copying the replacement name. It bypasses the common rPos==1024 writeSequence and surrogate reset. A replacement ending exactly at the cache boundary can leave rPos==1024 for a subsequent pointer write, unlike ordinary characters and escapes. Preserve the branch and deferred position; native out-of-bounds/allocator behavior is unqualified and is not repaired or positively certified by JS logical storage.
+
+### CALC565 — XML byte estimation counts characters that conversion rejects
+
+- Source: `sax/source/expatwrap/saxwriter.cxx`, `SaxWriterHelper`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER500.
+- calcXMLByteLength routes invalid XML control characters and U+FFFE/U+FFFF through the non-ASCII sizing branch and counts two or three bytes, whereas convertToXML drops them and returns false. Surrogate failure statuses also differ from size estimates. Preserve the separate original algorithms rather than unifying them under one host encoder; actual helper tests retain five estimated bytes for NUL+U+FFFE and no emitted bytes.
+
+### CALC566 — Raw comment and CDATA content delimiters are not validated
+
+- Source: `sax/source/expatwrap/saxwriter.cxx`, `SaxWriterHelper`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER501.
+- The helper writes comment and CDATA marker/content strings directly, applying only UTF16/XML-character validation. It does not reject -- or a trailing minus in comments, nor split ]]> inside CDATA; processingInstruction similarly does not reject ?> in its data. Preserve these source emission routines rather than adding a different XML well-formedness policy. Normal safe marker ordering is executed in tests; full Writer service/DOM serialization QA and compiled native differential are still pending.

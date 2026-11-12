@@ -1,0 +1,93 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-89fa7108-9dd2-4d99-be47-ad2ed1d9afab",
+    "capabilityId": "CAP-89fa7108-9dd2-4d99-be47-ad2ed1d9afab",
+    "suite": "shared",
+    "subsystem": "native-sax-writer-buffer",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Complete original SaxWriterHelper actual stream/1024-byte native Sequence cache, pointer/linefeed/delayed-tag/replacement state, original UTF16-to-UTF8 normalization and separate byte estimation, recursive byte overflow/flush, original tag/attribute/PI/CDATA/comment formatting, custom entity copy/sort/first-prefix matching, final shrink and same-stream pointer refresh are ported under normal NDEBUG/non-DBG_UTIL profile. Split functions bind the same original helper receiver and actual source members. Stream acquisition precedes sequence construction with source member unwind; real IOException is captured through the actual exception ABI into native SAXException. Consumed Pair<OUString,OUString> has the exact original instantiated UNO name, parameter flags, real stable RTL fields, Any/Sequence transport, move/copy/destruction and shared type registration. Tests use real registered platform exception execution, OSequenceOutputStream and AttributeList; actual helper output executes in Chromium main and DOM-free Worker. Source nontermination/exact-full replacement pointer quirks and estimation/marker behavior are retained, not repaired. Native ABI/allocator/physical pointer/debug assertions/equal-key std::sort/shared-memory and other Pair instantiations remain unqualified. Full SAXWriter component/SDK/service/legacy carrier replacement and original service-level testwriter functional/performance QA are pending, not advertised as a passing full port. Sfx metadata service and final DOCX/XLSX core/shell/UI acceptance remain incomplete; no fake Writer/provider/type/default/value generator or private-state patch is supplied."
+    ],
+    "capability": "Native SAX writer buffer and UTF16 byte emission",
+    "gaps": [
+      "SAXWriter SDK/state-machine/registration and legacy manifest carrier replacement pending.",
+      "Original full OSaxWriterTest simple/exceptions/DTD/performance service QA pending.",
+      "Physical native ABI/allocator/pointers/debug/equal-key sorting/shared-memory and other Pair instantiations unqualified.",
+      "Sfx metadata service and final DOCX/XLSX core/shell/UI acceptance unfinished."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sax/source/expatwrap/saxwriter.cxx",
+          "marker": "SaxWriterHelper"
+        },
+        {
+          "path": "sax/source/expatwrap/saxwriter.cxx",
+          "marker": "convertToXML"
+        },
+        {
+          "path": "sax/source/expatwrap/saxwriter.cxx",
+          "marker": "calcXMLByteLength"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sax/test/sax/testwriter.cxx",
+          "marker": "testExceptions"
+        }
+      ],
+      "docs": [
+        {
+          "path": "udkapi/com/sun/star/beans/Pair.idl",
+          "marker": "First"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sax/source/expatwrap/saxwriter.helper.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sax/source/expatwrap/saxwriter.convert.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/Pair.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sax/source/expatwrap/saxwriter.helper.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-sax-writer-buffer.md",
+          "marker": "Native SAX Writer buffer"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Complete original SaxWriterHelper actual stream/1024-byte native Sequence cache, pointer/linefeed/delayed-tag/replacement state, original UTF16-to-UTF8 normalization and separate byte estimation, recursive byte overflow/flush, original tag/attribute/PI/CDATA/comment formatting, custom entity copy/sort/first-prefix matching, final shrink and same-stream pointer refresh are ported under normal NDEBUG/non-DBG_UTIL profile. Split functions bind the same original helper receiver and actual source members. Stream acquisition precedes sequence construction with source member unwind; real IOException is captured through the actual exception ABI into native SAXException. Consumed Pair<OUString,OUString> has the exact original instantiated UNO name, parameter flags, real stable RTL fields, Any/Sequence transport, move/copy/destruction and shared type registration. Tests use real registered platform exception execution, OSequenceOutputStream and AttributeList; actual helper output executes in Chromium main and DOM-free Worker. Source nontermination/exact-full replacement pointer quirks and estimation/marker behavior are retained, not repaired. Native ABI/allocator/physical pointer/debug assertions/equal-key std::sort/shared-memory and other Pair instantiations remain unqualified. Full SAXWriter component/SDK/service/legacy carrier replacement and original service-level testwriter functional/performance QA are pending, not advertised as a passing full port. Sfx metadata service and final DOCX/XLSX core/shell/UI acceptance remain incomplete; no fake Writer/provider/type/default/value generator or private-state patch is supplied."
+    },
+    "scopeLimitations": [
+      "Complete original SaxWriterHelper actual stream/1024-byte native Sequence cache, pointer/linefeed/delayed-tag/replacement state, original UTF16-to-UTF8 normalization and separate byte estimation, recursive byte overflow/flush, original tag/attribute/PI/CDATA/comment formatting, custom entity copy/sort/first-prefix matching, final shrink and same-stream pointer refresh are ported under normal NDEBUG/non-DBG_UTIL profile. Split functions bind the same original helper receiver and actual source members. Stream acquisition precedes sequence construction with source member unwind; real IOException is captured through the actual exception ABI into native SAXException. Consumed Pair<OUString,OUString> has the exact original instantiated UNO name, parameter flags, real stable RTL fields, Any/Sequence transport, move/copy/destruction and shared type registration. Tests use real registered platform exception execution, OSequenceOutputStream and AttributeList; actual helper output executes in Chromium main and DOM-free Worker. Source nontermination/exact-full replacement pointer quirks and estimation/marker behavior are retained, not repaired. Native ABI/allocator/physical pointer/debug assertions/equal-key std::sort/shared-memory and other Pair instantiations remain unqualified. Full SAXWriter component/SDK/service/legacy carrier replacement and original service-level testwriter functional/performance QA are pending, not advertised as a passing full port. Sfx metadata service and final DOCX/XLSX core/shell/UI acceptance remain incomplete; no fake Writer/provider/type/default/value generator or private-state patch is supplied.",
+      "Complete original helper buffer/formatting and UTF16 conversion/estimation responsibilities are split from large saxwriter.cxx to retain authored size budget. The functions bind one actual SaxWriterHelper receiver; no alternate state/model/service is created. Native private visibility is lowered to module-internal source field bindings for those extracted functions."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "sax-writer-native-buffer-and-utf16-emission"
+  }
+}

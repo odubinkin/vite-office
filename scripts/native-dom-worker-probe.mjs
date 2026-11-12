@@ -116,6 +116,13 @@ try {
       values: ["2024-02-29+05:30", "2024-02-29T03:04:05.000000009-01:30", "-P1DT2H3M4.000000005S"],
       types: ["date", "date", "time"],
     },
+    nativeSaxWriterBuffer: {
+      valid: true,
+      xml:
+        '<?xml version="1.0" encoding="UTF-8"?>\n<r a="&amp;&#x0a;">' +
+        "x".repeat(1020) +
+        "字😀&beta;</r>",
+    },
     nativeSax: {
       calls: ["begin", "start:root:0", "text:worker SAX字", "end", "finish"],
       sameIdentity: true,
