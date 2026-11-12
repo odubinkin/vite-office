@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/ucb/ContentProviderInfo.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/ucb/ContentProviderInfo.idl",
+    "localSymbols": [
+      "ContentProviderInfo",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "ContentProviderInfo",
+      "ContentProvider",
+      "Scheme"
+    ],
+    "preservedResponsibilities": [
+      "Complete original UCB content, listener, provider, manager and five-base broker interface declarations use normal CPPU factories. ContentEvent, ContentProviderInfo, NumberedSortingInfo and both open argument values retain IDL defaults, base/member order, owned Reference/Sequence/RTL fields, copies, comparisons and actual Any transport. OpenMode and ContentAction retain original constants. Tests use actual identifiers, active sinks, streams and nested native sequences; no content/provider/broker/context implementation is fabricated. Real Content client, service factory, default resolver, DocumentBuilder, native metadata and DOCX/XLSX/UI orchestration remain incomplete. Physical C++ ABI/threading and implicit move operations are unqualified."
+    ],
+    "omittedResponsibilities": [
+      "Concrete Content/broker service, process context, default resolver and complete source QA remain pending.",
+      "Physical C++ ABI/threading, implicit move operations, native metadata and DOCX/XLSX/UI acceptance remain unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/ucb/ContentProviderInfo.ts",
+          "marker": "ContentProviderInfo"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/client/native-contracts.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/client/native-content-values.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/ContentProviderInfo.idl",
+          "marker": "ContentProviderInfo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/ContentProviderInfo.idl",
+          "marker": "ContentProvider"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/ContentProviderInfo.idl",
+          "marker": "Scheme"
+        }
+      ]
+    }
+  }
+}

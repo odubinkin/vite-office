@@ -18,6 +18,13 @@ import * as Processor from "../../../offapi/com/sun/star/ucb/XCommandProcessor";
 import * as Processor2 from "../../../offapi/com/sun/star/ucb/XCommandProcessor2";
 import * as Identifier from "../../../offapi/com/sun/star/ucb/XContentIdentifier";
 import * as IdentifierFactory from "../../../offapi/com/sun/star/ucb/XContentIdentifierFactory";
+import * as Content from "../../../offapi/com/sun/star/ucb/XContent";
+import * as ContentListener from "../../../offapi/com/sun/star/ucb/XContentEventListener";
+import * as Provider from "../../../offapi/com/sun/star/ucb/XContentProvider";
+import * as Manager from "../../../offapi/com/sun/star/ucb/XContentProviderManager";
+import * as Broker from "../../../offapi/com/sun/star/ucb/XUniversalContentBroker";
+import { XComponent } from "../../../udkapi/com/sun/star/lang/XComponent";
+import { XEventListener } from "../../../udkapi/com/sun/star/lang/XEventListener";
 const root = /** Original implicit root. @returns Actual root type. */ () =>
   UnoType.get("XInterface");
 const continuation = /** Original explicit direct base. @returns Actual base type. */ () =>
@@ -42,6 +49,15 @@ it.each([
   ],
   [Identifier, Identifier.XContentIdentifier, root],
   [IdentifierFactory, IdentifierFactory.XContentIdentifierFactory, root],
+  [Content, Content.XContent, root],
+  [
+    ContentListener,
+    ContentListener.XContentEventListener,
+    /** Original event-listener base. @returns Actual base type. */ () =>
+      XEventListener.static_type(),
+  ],
+  [Provider, Provider.XContentProvider, root],
+  [Manager, Manager.XContentProviderManager, root],
 ] as const)(
   "retains original declared bases and real typed-null transport %#",
   /** All metadata is registered through shared CPPU factories. @param binding - Actual generated module. @param api - Actual generated static API. @param parent - Original base. @returns Nothing. */ (
@@ -71,3 +87,36 @@ it.each([
     }
   },
 );
+
+it("preserves the broker's five original direct bases in declaration order", /** A composed IDL interface must not collapse to one selected facet. @returns Nothing. */ () => {
+  const type = Broker.cppu_detail_getUnoType(),
+    description = type.getTypeLibType()?.pType as unknown as I;
+  expect(Broker.getCppuType()).toBe(type);
+  expect(Broker.getCppuType(null)).toBe(type);
+  expect(Broker.XUniversalContentBroker.static_type()).toBe(type);
+  expect(Broker.XUniversalContentBroker.static_type(null)).toBe(type);
+  const bases = [
+    XComponent,
+    Provider.XContentProvider,
+    Manager.XContentProviderManager,
+    IdentifierFactory.XContentIdentifierFactory,
+    Processor2.XCommandProcessor2,
+  ];
+  expect(description.nBaseTypes).toBe(5);
+  for (const [index, base] of bases.entries()) {
+    expect(description.ppBaseTypes?.[index]?.aBase.pWeakRef).toBe(
+      base.static_type().getTypeLibType(),
+    );
+    expect(base.static_type().isAssignableFrom(type)).toBe(true);
+  }
+  const value = new Any([null], ["Reference", Broker.cppu_detail_getUnoType]),
+    copy = new Any(value),
+    output: [XInterface | null] = [null];
+  try {
+    expect(copy.extract(output, ["Reference", Broker.cppu_detail_getUnoType])).toBe(true);
+    expect(output[0]).toBe(null);
+  } finally {
+    copy.dispose();
+    value.dispose();
+  }
+});
