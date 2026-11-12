@@ -1,0 +1,437 @@
+{
+  "status": "verified-published-container-prerequisite-parent-continues",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "9763134867547631fae85a423b0433e5cdce93e2",
+  "capability": "CAP-c06dd1cf-e1aa-4d10-8066-b24e955faecc",
+  "scope": "Complete published singleton/vector listener container and reverse iterator, Type/signed32 multi-container and actual Type-key broadcaster. Native OSL locking erased, not substituted.",
+  "tests": {
+    "newCriticalCases": 6,
+    "upstreamReplayEntryPoints": [
+      "IfTest::testCreateDispose",
+      "IfTest::testEnumerate",
+      "IfTest::testOMultiTypeInterfaceContainerHelper",
+      "IfTest::testOMultiTypeInterfaceContainerHelperInt32"
+    ],
+    "sourceQA": "All original assertions for these4 entry points, including both doContainerTest removal phases, use actual value/reference/component owners. Native mutex syntax erased. Generic Var entry point remains unported with that unconsumed template; no whole-suite/native differential claim.",
+    "relatedCases": 45,
+    "relatedFiles": 6,
+    "boundaryCases": 49,
+    "resourceCases": 2,
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 226,
+          "covered": 224,
+          "skipped": 0,
+          "pct": 99.11
+        },
+        "statements": {
+          "total": 259,
+          "covered": 255,
+          "skipped": 0,
+          "pct": 98.45
+        },
+        "functions": {
+          "total": 52,
+          "covered": 52,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 127,
+          "covered": 119,
+          "skipped": 0,
+          "pct": 93.7
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/cppuhelper/source/interfacecontainer.ts": {
+        "lines": {
+          "total": 226,
+          "covered": 224,
+          "skipped": 0,
+          "pct": 99.11
+        },
+        "functions": {
+          "total": 52,
+          "covered": 52,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 259,
+          "covered": 255,
+          "skipped": 0,
+          "pct": 98.45
+        },
+        "branches": {
+          "total": 127,
+          "covered": 119,
+          "skipped": 0,
+          "pct": 93.7
+        }
+      }
+    },
+    "threshold": 90
+  },
+  "browserQualification": {
+    "workerResult": {
+      "conversion": {
+        "serviceValue": 42,
+        "rowValue": 42,
+        "rowWasNull": false,
+        "failedFirst": 0,
+        "failedFirstWasNull": false,
+        "failedSecond": 0,
+        "failedSecondWasNull": true
+      },
+      "publicHelpers": {
+        "notifications": 1,
+        "sameEventSource": true,
+        "componentTypeCount": 3
+      },
+      "dynamicProperties": {
+        "changed": true,
+        "value": 42,
+        "initialDefault": 41,
+        "name": "workerValue",
+        "handle": 7,
+        "declaredLong": true,
+        "stableTypeField": true
+      },
+      "propertyArray": {
+        "count": 1,
+        "handle": 7,
+        "missing": -1,
+        "snapshotName": "workerValue",
+        "sameInfoIdentity": true
+      },
+      "legacyListeners": {
+        "remaining": 1,
+        "sameFirst": true,
+        "sameSnapshot": true,
+        "keyCount": 1,
+        "key": -7
+      },
+      "documentBuilder": {
+        "rootName": "document-content",
+        "streamOpen": true,
+        "namespaceAware": true,
+        "validating": false,
+        "emptyImplementation": true,
+        "capturedType": true,
+        "sameContext": true,
+        "exceptionMessage": "worker exception"
+      },
+      "xpath": {
+        "count": 1,
+        "listLength": 1,
+        "sameRoot": true
+      },
+      "globals": {
+        "window": "undefined",
+        "document": "undefined",
+        "DOMParser": "undefined"
+      },
+      "rootName": "document-content",
+      "attribute": "1.0",
+      "listCounts": [
+        0,
+        1,
+        0
+      ],
+      "sameOwner": true,
+      "unicode": "\ud83d\ude00\u5b57",
+      "utf16Length": 3,
+      "borrowedStreamOpen": true,
+      "warnings": 1,
+      "errors": 0,
+      "warningLine": 1
+    },
+    "mainResult": {
+      "conversion": {
+        "serviceValue": 42,
+        "rowValue": 42,
+        "rowWasNull": false,
+        "failedFirst": 0,
+        "failedFirstWasNull": false,
+        "failedSecond": 0,
+        "failedSecondWasNull": true
+      },
+      "publicHelpers": {
+        "notifications": 1,
+        "sameEventSource": true,
+        "componentTypeCount": 3
+      },
+      "dynamicProperties": {
+        "changed": true,
+        "value": 42,
+        "initialDefault": 41,
+        "name": "workerValue",
+        "handle": 7,
+        "declaredLong": true,
+        "stableTypeField": true
+      },
+      "propertyArray": {
+        "count": 1,
+        "handle": 7,
+        "missing": -1,
+        "snapshotName": "workerValue",
+        "sameInfoIdentity": true
+      },
+      "legacyListeners": {
+        "remaining": 1,
+        "sameFirst": true,
+        "sameSnapshot": true,
+        "keyCount": 1,
+        "key": -7
+      },
+      "documentBuilder": {
+        "rootName": "document-content",
+        "streamOpen": true,
+        "namespaceAware": true,
+        "validating": false,
+        "emptyImplementation": true,
+        "capturedType": true,
+        "sameContext": true,
+        "exceptionMessage": "worker exception"
+      },
+      "xpath": {
+        "count": 1,
+        "listLength": 1,
+        "sameRoot": true
+      },
+      "globals": {
+        "window": "object",
+        "document": "object",
+        "DOMParser": "function"
+      },
+      "rootName": "document-content",
+      "attribute": "1.0",
+      "listCounts": [
+        0,
+        1,
+        0
+      ],
+      "sameOwner": true,
+      "unicode": "\ud83d\ude00\u5b57",
+      "utf16Length": 3,
+      "borrowedStreamOpen": true,
+      "warnings": 1,
+      "errors": 0,
+      "warningLine": 1
+    }
+  },
+  "preservedIssues": [
+    "CALC-549/WRITER483 allowed null insertion returns1 but length0; native null singleton collapse is undefined and host reports explicit precondition failure."
+  ],
+  "remaining": [
+    "Generic Var template is unconsumed/unported.",
+    "Original cppu OPropertySetHelper/2, comphelper OPropertyStateHelper/OMutexAndBroadcastHelper, UNO OPropertyBag and SfxDocumentMetaData remain unfinished.",
+    "Full DOCX/XLSX core/shell/desktop/mobile UI acceptance remains incomplete.",
+    "Native OSL mutex fields/arguments/scopes are erased for synchronous realm-local callers. Shared-memory threads, physical ABI/STL allocator traces are unqualified."
+  ],
+  "knownBaseline": "Only css-style-matchers.ts17/76 JSDoc errors; doctor passes with existing managed-hook readiness warning.",
+  "fullSuite": "Not due: approved once per10 actual agentplane tasks, same format parent remains active.",
+  "userStopRule": "Continue without pause; do not finish incomplete parents.",
+  "checks": [
+    {
+      "name": "tests",
+      "cwd": "apps/office",
+      "command": "../../node_modules/.bin/vitest run --config vite.config.ts src/cppuhelper/source/interfacecontainer.test.ts src/cppuhelper/source/propshlp.test.ts src/cppuhelper/source/native-weak-object.test.ts src/cppuhelper/source/weakref.test.ts src/cppuhelper/source/native-implbase.test.ts src/cppu/inc/com/sun/star/uno/Sequence.test.ts --coverage --coverage.provider=istanbul --coverage.include=src/cppuhelper/source/interfacecontainer.ts --coverage.reportsDirectory=coverage/interfacecontainer --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "log": "apps/office/coverage/interfacecontainer-tests.log",
+      "sha256": "2e95212ecdae2d37cb766072f7c4a498af98565be6fab8ae66b72d2d12ea8f6d"
+    },
+    {
+      "name": "typecheck",
+      "cwd": ".",
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/interfacecontainer-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "name": "build",
+      "cwd": ".",
+      "command": "npm run test:static",
+      "result": "pass",
+      "log": "apps/office/coverage/interfacecontainer-build.log",
+      "sha256": "838df9df87511eeea4342b08440a3dd7a957dd1a4372c5665e5b54739acf50ce"
+    },
+    {
+      "name": "lint",
+      "cwd": ".",
+      "command": "./node_modules/.bin/eslint apps/office/src/cppuhelper/inc/interfacecontainer.ts apps/office/src/cppuhelper/inc/propshlp.ts apps/office/src/cppuhelper/source/interfacecontainer.ts apps/office/src/cppuhelper/source/interfacecontainer.test.ts scripts/fixtures/native-dom-worker-probe.ts scripts/native-dom-worker-probe.mjs --max-warnings 0",
+      "result": "pass",
+      "log": "apps/office/coverage/interfacecontainer-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "browser",
+      "cwd": ".",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node --experimental-strip-types scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/interfacecontainer-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "name": "structural",
+      "cwd": ".",
+      "command": "npm run check:dependencies && npm run check:file-size && npm run check:source-tree && npm run check:writer-resources && npm run check:calc-resources && npm run check:writer-hintids && ap doctor && node .agentplane/policy/check-routing.mjs && git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/interfacecontainer-structural.log",
+      "sha256": "6976c5065060763361a75bcc89b21bdbdf9a19a75e6bcbb3afe7d0065354e2b9"
+    },
+    {
+      "name": "boundary-tests",
+      "cwd": ".",
+      "command": "./node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts scripts/check-module-boundaries-xml.test.ts scripts/writer-ui-resource-model.test.ts --maxWorkers 2",
+      "result": "pass",
+      "log": "apps/office/coverage/interfacecontainer-boundary-tests.log",
+      "sha256": "a4eb65e638889e2382933e603443fef4f9694a2e476989a0ed2b5875109ca2c3"
+    },
+    {
+      "name": "jsdoc",
+      "cwd": ".",
+      "command": "npm run check:docs",
+      "result": "known-baseline-fail",
+      "log": "apps/office/coverage/interfacecontainer-jsdoc.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    },
+    {
+      "name": "registry-build",
+      "cwd": ".",
+      "command": "npm run inventory:registry:build",
+      "result": "pass",
+      "log": "apps/office/coverage/interfacecontainer-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "name": "registry-check",
+      "cwd": ".",
+      "command": "npm run inventory:registry:check && npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/interfacecontainer-registry-check.log",
+      "sha256": "a51bdbb1f85449a7bebf56e49006f1175078c407368830a54b0371157df59478"
+    },
+    {
+      "name": "format",
+      "command": "prettier --check over every changed/untracked intentional source/docs/registry path excluding task artifacts and append-only journals",
+      "result": "pass",
+      "log": "apps/office/coverage/interfacecontainer-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "argv": [
+        "./node_modules/.bin/prettier",
+        "--check",
+        "apps/office/src/cppuhelper/inc/interfacecontainer.ts",
+        "apps/office/src/cppuhelper/source/interfacecontainer.test.ts",
+        "apps/office/src/cppuhelper/source/interfacecontainer.ts",
+        "docs/program/published-interface-container.md",
+        "docs/program/registry/shared/capabilities/CAP-c06dd1cf-e1aa-4d10-8066-b24e955faecc.json",
+        "docs/program/registry/shared/provenance/cppuhelper/inc/interfacecontainer.ts.json",
+        "docs/program/registry/shared/provenance/cppuhelper/source/interfacecontainer.ts.json",
+        "docs/program/registry/shared/runtime/cppuhelper/inc/interfacecontainer.ts.json",
+        "docs/program/registry/shared/runtime/cppuhelper/source/interfacecontainer.ts.json",
+        "apps/office/src/cppuhelper/inc/propshlp.ts",
+        "docs/program/registry/shared/provenance/cppuhelper/inc/propshlp.ts.json",
+        "docs/program/registry/shared/runtime/cppuhelper/inc/propshlp.ts.json",
+        "scripts/fixtures/native-dom-worker-probe.ts",
+        "scripts/native-dom-worker-probe.mjs"
+      ]
+    }
+  ],
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/cppuhelper/inc/interfacecontainer.ts",
+      "gitBlob": "a6a114812ce66fd14a35c3369b8a88d66fd33050"
+    },
+    {
+      "path": "apps/office/src/cppuhelper/source/interfacecontainer.test.ts",
+      "gitBlob": "3332042b630cf02eaade53369f5b6c15ee4606dc"
+    },
+    {
+      "path": "apps/office/src/cppuhelper/source/interfacecontainer.ts",
+      "gitBlob": "194839d75db5736a3d93668e65e45deb95401815"
+    },
+    {
+      "path": "docs/program/published-interface-container.md",
+      "gitBlob": "1a5a733f138f5676b284a4a703a1c03cae1e2351"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-c06dd1cf-e1aa-4d10-8066-b24e955faecc.json",
+      "gitBlob": "effc778bac81ffe9d6440f119c7bdbd7450221d7"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppuhelper/inc/interfacecontainer.ts.json",
+      "gitBlob": "46c0f04e7c173f1bdd6e09b87e5bea13a9958509"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppuhelper/source/interfacecontainer.ts.json",
+      "gitBlob": "b327e1ed026c2981a3ac35998fd31dca96be3a9a"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppuhelper/inc/interfacecontainer.ts.json",
+      "gitBlob": "219fb42979b0f32497557ba308c9e04d899fae36"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppuhelper/source/interfacecontainer.ts.json",
+      "gitBlob": "339b0388e28e0d20a98108e459adf2d97ae04862"
+    },
+    {
+      "path": "apps/office/src/cppuhelper/inc/propshlp.ts",
+      "gitBlob": "48f27e1c1ba5742c6cfa7402d663f88d23b46c9f"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "f8b0bb418fc9aea5e7006d9e837d21e58a3e0198"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppuhelper/inc/propshlp.ts.json",
+      "gitBlob": "8ae1484bf91c1a68c85b10a59367c18cca7fc02c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppuhelper/inc/propshlp.ts.json",
+      "gitBlob": "58631beb68c1a55f4d03750688c11fd990d9b5f9"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "09d9f423b804d964ac4cfe693cf1847072abe84a"
+    },
+    {
+      "path": "scripts/fixtures/native-dom-worker-probe.ts",
+      "gitBlob": "1bdec34e800d7907c86ab3a7a0d0bf90d5035f36"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "gitBlob": "5c5ca390f88822b57d612527b4cdc8e365a31fcb"
+    }
+  ],
+  "upstreamBlobs": [
+    {
+      "path": "cppuhelper/source/interfacecontainer.cxx",
+      "gitBlob": "c97a8ba9908c8d8a1a2bb9fd521c1475aebcb474"
+    },
+    {
+      "path": "include/cppuhelper/interfacecontainer.h",
+      "gitBlob": "d901b2db3cccfe8e82b883fe84204373571b518e"
+    },
+    {
+      "path": "include/cppuhelper/interfacecontainer.hxx",
+      "gitBlob": "a3bb65e4d0ccb4da919c0b4846c2be229fc10f49"
+    },
+    {
+      "path": "include/cppuhelper/propshlp.hxx",
+      "gitBlob": "48e68c77349b01de989bfed2d75d521a8525e363"
+    },
+    {
+      "path": "cppuhelper/qa/ifcontainer/cppu_ifcontainer.cxx",
+      "gitBlob": "0dcebbbac16ac5e5047568b8de90e105d3231253"
+    }
+  ]
+}

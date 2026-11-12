@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 254
+revision: 259
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T18:33:47.743Z"
+  updated_at: "2026-11-12T18:46:07.209Z"
   updated_by: "CODER"
-  note: "Property-array prerequisite passes45 related cases,90 owner coverage gate and real main/Worker proof; full metadata/DOCX/XLSX/UI parent acceptance remains incomplete. See evidence/property-array-checkpoint.json."
-  attempts: 76
+  note: "Published listener-owner prerequisite passes45 related cases,90 whole-owner coverage and actual main/Worker proof. Full property service/metadata/DOCX/XLSX/UI parent remains incomplete. Evidence: published-container-checkpoint.json."
+  attempts: 77
 commit: null
 comments:
   -
@@ -249,6 +249,9 @@ comments:
   -
     author: "CODER"
     body: "Start: property-array prerequisite verified; continue actual property notification/state helpers, UNO PropertyBag and metadata toward DOCX/XLSX and UI acceptance without pause."
+  -
+    author: "CODER"
+    body: "Start: published listener-owner checkpoint verified; continue original cppu property-set/state helpers and real UNO PropertyBag/metadata toward full DOCX/XLSX/UI acceptance without pause."
 events:
   -
     type: "status"
@@ -1224,8 +1227,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: property-array prerequisite verified; continue actual property notification/state helpers, UNO PropertyBag and metadata toward DOCX/XLSX and UI acceptance without pause."
+  -
+    type: "verify"
+    at: "2026-11-12T18:46:07.209Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Published listener-owner prerequisite passes45 related cases,90 whole-owner coverage and actual main/Worker proof. Full property service/metadata/DOCX/XLSX/UI parent remains incomplete. Evidence: published-container-checkpoint.json."
+  -
+    type: "status"
+    at: "2026-11-12T18:46:20.123Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: published listener-owner checkpoint verified; continue original cppu property-set/state helpers and real UNO PropertyBag/metadata toward full DOCX/XLSX/UI acceptance without pause."
 doc_version: 3
-doc_updated_at: "2026-11-12T18:33:53.481Z"
+doc_updated_at: "2026-11-12T18:46:20.123Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -3520,6 +3536,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T18:46:07.209Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Published listener-owner prerequisite passes45 related cases,90 whole-owner coverage and actual main/Worker proof. Full property service/metadata/DOCX/XLSX/UI parent remains incomplete. Evidence: published-container-checkpoint.json.
+    Attempts: 77
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T18:46:06.656Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3916,6 +3962,12 @@ sections:
     Registry build rejected an empty upstream.tests array. Preserve enforcement: reference the actual unchanged weak-owner testReferenceDispose replay included in the focused run, with an explicit scope limitation that it is dependency QA rather than dedicated array/info QA. No fabricated test reference, parity attestation or schema waiver.
 
     Property-array prerequisite checkpoint: complete IPropertyArrayHelper/OPropertyArrayHelper, original OPropertySetHelperInfo_Impl snapshot and IEventNotificationHook declaration. Command/result/evidence/scope are captured with exact commands, log SHA256, full owner coverage and source/upstream git blobs in evidence/property-array-checkpoint.json. Nine new critical cases,45 related cases/6 files and49 boundary+2 resource cases pass. Whole new executable owner coverage100 for all metrics passes the approved90 threshold without narrowing/exclusion/synthetic graphs. Actual Chromium main and DOM-free Worker confirm count1/handle7/missing-1/snapshot workerValue/same UNO info identity. Typecheck, production build/static, scoped lint/format, registry/provenance, boundaries/resources/size/tree/hintids, doctor/routing/diff pass; only prior css-style-matchers.ts17/76 JSDoc errors remain. CALC-548/WRITER482 documents preserved branch-dependent repeated-name cursor behavior. Full suite not due: same ongoing parent, not10 tasks. Parent remains incomplete: property-set/state/notification helpers, UNO OPropertyBag, SfxDocumentMetaData and final DOCX/XLSX core/shell/UI remain. No compiled ABI/qsort allocator/refcount/equal-key or multithread claims. Continue without pause.
+
+    Interface-container draft: attempted test heredoc from apps/office with a root-relative path, so no file was created; formatter also could not find its root entrypoint. Recompute route and recreate only the intended test under the actual repository root. No source file was overwritten or external path accessed.
+
+    Draft typecheck exposed one nullable static pointer qualification; corrected to the original nonnull source dereference. First real focused run passed45/6, whole two-owner coverage98.45 statements/93.70 branches/100 functions/99.11 lines. Scoped lint rejected nonnull assertion syntax and two empty constructors. Use original explicit native pointer casts where source guarantees lifetime, and initialize original map members in actual constructors; no extra runtime guards, exclusions or threshold changes. Rerun affected checks after these source changes.
+
+    Published-container checkpoint: complete original singleton/vector container, reverse iterator, copied-Type and lazy signed32 multi-container owners and Type-key OBroadcastHelper. Four original IfTest entry points replay all original assertions;6 new critical cases,45 related cases/6files,49 boundary+2resource cases pass. Final whole executable owner coverage98.45stmt/93.70branch/100func/99.11lines passes approved90. Exact commands/log SHA256/current source+upstream git blobs are in evidence/published-container-checkpoint.json. Native OSL lock fields/parameters/scopes erased without fake mutex objects; actual Reference/Sequence/Type owners and callback order retained. Generic Var QA/template remains unconsumed/unported; no full QA suite/compiled ABI/thread/allocator claim. Actual Chromium main and DOM-free Worker observe remaining1, same old reverse snapshot pointers and native signed32 key-7. All type/build/static/lint/format/registry/provenance/boundaries/resources/size/tree/hintids/doctor/routing/diff pass; only prior css-style-matchers.ts17/76 JSDoc errors remain. CALC-549/WRITER483 records preserved null count and undefined collapse preconditions. Parent rework remains: original cppu OPropertySetHelper/2 (not the separate newer comphelper copy), comphelper OPropertyStateHelper, actual UNO PropertyBag, SfxDocumentMetaData and full DOCX/XLSX/UI acceptance. Same active task; full suite not yet due; continue without pause.
 id_source: "generated"
 ---
 ## Summary
@@ -6220,6 +6272,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T18:46:07.209Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Published listener-owner prerequisite passes45 related cases,90 whole-owner coverage and actual main/Worker proof. Full property service/metadata/DOCX/XLSX/UI parent remains incomplete. Evidence: published-container-checkpoint.json.
+Attempts: 77
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T18:46:06.656Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -6620,3 +6702,9 @@ Second property-array draft run: 43/45 cases passed; production owner reached al
 Registry build rejected an empty upstream.tests array. Preserve enforcement: reference the actual unchanged weak-owner testReferenceDispose replay included in the focused run, with an explicit scope limitation that it is dependency QA rather than dedicated array/info QA. No fabricated test reference, parity attestation or schema waiver.
 
 Property-array prerequisite checkpoint: complete IPropertyArrayHelper/OPropertyArrayHelper, original OPropertySetHelperInfo_Impl snapshot and IEventNotificationHook declaration. Command/result/evidence/scope are captured with exact commands, log SHA256, full owner coverage and source/upstream git blobs in evidence/property-array-checkpoint.json. Nine new critical cases,45 related cases/6 files and49 boundary+2 resource cases pass. Whole new executable owner coverage100 for all metrics passes the approved90 threshold without narrowing/exclusion/synthetic graphs. Actual Chromium main and DOM-free Worker confirm count1/handle7/missing-1/snapshot workerValue/same UNO info identity. Typecheck, production build/static, scoped lint/format, registry/provenance, boundaries/resources/size/tree/hintids, doctor/routing/diff pass; only prior css-style-matchers.ts17/76 JSDoc errors remain. CALC-548/WRITER482 documents preserved branch-dependent repeated-name cursor behavior. Full suite not due: same ongoing parent, not10 tasks. Parent remains incomplete: property-set/state/notification helpers, UNO OPropertyBag, SfxDocumentMetaData and final DOCX/XLSX core/shell/UI remain. No compiled ABI/qsort allocator/refcount/equal-key or multithread claims. Continue without pause.
+
+Interface-container draft: attempted test heredoc from apps/office with a root-relative path, so no file was created; formatter also could not find its root entrypoint. Recompute route and recreate only the intended test under the actual repository root. No source file was overwritten or external path accessed.
+
+Draft typecheck exposed one nullable static pointer qualification; corrected to the original nonnull source dereference. First real focused run passed45/6, whole two-owner coverage98.45 statements/93.70 branches/100 functions/99.11 lines. Scoped lint rejected nonnull assertion syntax and two empty constructors. Use original explicit native pointer casts where source guarantees lifetime, and initialize original map members in actual constructors; no extra runtime guards, exclusions or threshold changes. Rerun affected checks after these source changes.
+
+Published-container checkpoint: complete original singleton/vector container, reverse iterator, copied-Type and lazy signed32 multi-container owners and Type-key OBroadcastHelper. Four original IfTest entry points replay all original assertions;6 new critical cases,45 related cases/6files,49 boundary+2resource cases pass. Final whole executable owner coverage98.45stmt/93.70branch/100func/99.11lines passes approved90. Exact commands/log SHA256/current source+upstream git blobs are in evidence/published-container-checkpoint.json. Native OSL lock fields/parameters/scopes erased without fake mutex objects; actual Reference/Sequence/Type owners and callback order retained. Generic Var QA/template remains unconsumed/unported; no full QA suite/compiled ABI/thread/allocator claim. Actual Chromium main and DOM-free Worker observe remaining1, same old reverse snapshot pointers and native signed32 key-7. All type/build/static/lint/format/registry/provenance/boundaries/resources/size/tree/hintids/doctor/routing/diff pass; only prior css-style-matchers.ts17/76 JSDoc errors remain. CALC-549/WRITER483 records preserved null count and undefined collapse preconditions. Parent rework remains: original cppu OPropertySetHelper/2 (not the separate newer comphelper copy), comphelper OPropertyStateHelper, actual UNO PropertyBag, SfxDocumentMetaData and full DOCX/XLSX/UI acceptance. Same active task; full suite not yet due; continue without pause.
