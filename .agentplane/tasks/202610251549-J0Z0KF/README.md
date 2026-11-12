@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 145
+revision: 148
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-11T23:59:40.655Z"
+  updated_at: "2026-11-12T00:25:52.165Z"
   updated_by: "CODER"
-  note: "Native property-map prerequisite verified:40 profile tests,69 related tests; whole3-file S104/105 B36/37 F24/24 L98/98 under90 thresholds. Real schema/descriptor/COW owners; old array metadata remains explicitly incomplete/unregistered. Typecheck/static/scoped gates pass except unchanged two JSDoc errors. Full native property-set/static provider/SwXTextDefaults/model application and DOCX/XLSX UI remain incomplete; continue active goal. Evidence: evidence/native-property-map-checkpoint.json."
-  attempts: 43
+  note: "Verified bounded native item-property checkpoint:122 profile/97 related cases; S94.43 B92.3 F96.2 L94.9 under90 thresholds; typecheck/static/lint/format/dependencies/resources/size/tree/provenance/registry/routing pass. Evidence:native-property-set-checkpoint.json14 source hashes. Only unchanged JSDoc baseline remains. Full DOCX/XLSX filter/export/UI incomplete; task and goal continue."
+  attempts: 44
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -696,8 +699,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-12T00:25:52.165Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified bounded native item-property checkpoint:122 profile/97 related cases; S94.43 B92.3 F96.2 L94.9 under90 thresholds; typecheck/static/lint/format/dependencies/resources/size/tree/provenance/registry/routing pass. Evidence:native-property-set-checkpoint.json14 source hashes. Only unchanged JSDoc baseline remains. Full DOCX/XLSX filter/export/UI incomplete; task and goal continue."
+  -
+    type: "status"
+    at: "2026-11-12T00:25:56.060Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-11T23:59:44.958Z"
+doc_updated_at: "2026-11-12T00:25:56.060Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -2002,6 +2018,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T00:25:52.165Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified bounded native item-property checkpoint:122 profile/97 related cases; S94.43 B92.3 F96.2 L94.9 under90 thresholds; typecheck/static/lint/format/dependencies/resources/size/tree/provenance/registry/routing pass. Evidence:native-property-set-checkpoint.json14 source hashes. Only unchanged JSDoc baseline remains. Full DOCX/XLSX filter/export/UI incomplete; task and goal continue.
+    Attempts: 44
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T00:25:46.812Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2234,6 +2280,10 @@ sections:
     - Observation: Native property-map checkpoint: actual SfxItemPropertyMapEntry/PropertyMoreFlags values and SfxItemPropertyMap sorted borrowed-pointer/lower_bound/descriptor-cache mechanisms now use real OUString/Type/sorted_vector/Sequence/Property/UNO data owners. Older array property-info projection remains explicitly unregistered, not a fake native provider.
       Impact: 40 profile cases and69 related core/RTF/ODF/Worker cases pass. Whole3-file profile S104/105 B36/37 F24/24 L98/98 exceeds90 thresholds. Initial two-file profile failed87.5 function coverage for legacy callbacks; actual Writer import-API consumer supplies the missing relevant caller evidence, without private-state forcing.
       Resolution: Preserve counted UTF16/first duplicates/native widths/borrowed schema and cache COW. Correct native data-assignment/exception typing and new test JSDoc. Typecheck/static/scoped gates pass except unchanged JSDoc baseline. Full property-set/static provider/SwXTextDefaults/application and DOCX/XLSX UI remain incomplete. Evidence: evidence/native-property-map-checkpoint.json. Continue active goal.
+
+    - Observation: Native item-property checkpoint:122 profile cases and97 related cases pass; coverage S94.43/B92.3/F96.2/L94.9. Real Writer/Any/item/pool/default paths; source MAYBEVOID and ignore-known-rejection contracts retained and documented.
+      Impact: Kernel prerequisite is verified; full DOCX/XLSX native property-info/static schema, SwXTextDefaults/filter/export and mounted UI acceptance remain incomplete. No whole-task completion or parity claim. JSDoc baseline css-style-matchers.ts:17/:76 remains; doctor reports zero errors and old managed shim readiness warning.
+      Resolution: Persist source-hash/check evidence at evidence/native-property-set-checkpoint.json; continue approved task toward actual native property-info/application owners. Initial default fixture, missing SDK attribute, non-null lint and new output-parameter JSDoc corrected; production defaults unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -3548,6 +3598,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T00:25:52.165Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified bounded native item-property checkpoint:122 profile/97 related cases; S94.43 B92.3 F96.2 L94.9 under90 thresholds; typecheck/static/lint/format/dependencies/resources/size/tree/provenance/registry/routing pass. Evidence:native-property-set-checkpoint.json14 source hashes. Only unchanged JSDoc baseline remains. Full DOCX/XLSX filter/export/UI incomplete; task and goal continue.
+Attempts: 44
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T00:25:46.812Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -3784,3 +3864,7 @@ DecisionContextRef:
 - Observation: Native property-map checkpoint: actual SfxItemPropertyMapEntry/PropertyMoreFlags values and SfxItemPropertyMap sorted borrowed-pointer/lower_bound/descriptor-cache mechanisms now use real OUString/Type/sorted_vector/Sequence/Property/UNO data owners. Older array property-info projection remains explicitly unregistered, not a fake native provider.
   Impact: 40 profile cases and69 related core/RTF/ODF/Worker cases pass. Whole3-file profile S104/105 B36/37 F24/24 L98/98 exceeds90 thresholds. Initial two-file profile failed87.5 function coverage for legacy callbacks; actual Writer import-API consumer supplies the missing relevant caller evidence, without private-state forcing.
   Resolution: Preserve counted UTF16/first duplicates/native widths/borrowed schema and cache COW. Correct native data-assignment/exception typing and new test JSDoc. Typecheck/static/scoped gates pass except unchanged JSDoc baseline. Full property-set/static provider/SwXTextDefaults/application and DOCX/XLSX UI remain incomplete. Evidence: evidence/native-property-map-checkpoint.json. Continue active goal.
+
+- Observation: Native item-property checkpoint:122 profile cases and97 related cases pass; coverage S94.43/B92.3/F96.2/L94.9. Real Writer/Any/item/pool/default paths; source MAYBEVOID and ignore-known-rejection contracts retained and documented.
+  Impact: Kernel prerequisite is verified; full DOCX/XLSX native property-info/static schema, SwXTextDefaults/filter/export and mounted UI acceptance remain incomplete. No whole-task completion or parity claim. JSDoc baseline css-style-matchers.ts:17/:76 remains; doctor reports zero errors and old managed shim readiness warning.
+  Resolution: Persist source-hash/check evidence at evidence/native-property-set-checkpoint.json; continue approved task toward actual native property-info/application owners. Initial default fixture, missing SDK attribute, non-null lint and new output-parameter JSDoc corrected; production defaults unchanged.

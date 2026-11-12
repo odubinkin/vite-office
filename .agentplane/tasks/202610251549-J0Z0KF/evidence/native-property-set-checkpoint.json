@@ -1,0 +1,244 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Native item-property value/state operations, actual item-set output/ownership overloads and original SDK attributes",
+  "checks": [
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-set-gate-0.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-set-gate-1.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-set-gate-2.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-property-set-gate-3.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-set-gate-4.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-set-gate-5.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-set-gate-6.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-set-gate-7.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-set-gate-8.log"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-set-gate-9.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-set-gate-10.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-set-gate-11.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-set-gate-12.log"
+    },
+    {
+      "command": "npm run test:static",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-set-gate-13.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-property-set-docs-final.log"
+    },
+    {
+      "command": "npx eslint apps/office/src/svl/source/items/itemprop.ts apps/office/src/svl/source/items/itemset.ts apps/office/src/svl/source/items/native-property-set.test.ts apps/office/src/udkapi/com/sun/star/beans/PropertyAttribute.ts --max-warnings 0",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-set-lint.log"
+    },
+    {
+      "command": "Scoped Prettier --check over changed TS/JSON/Markdown paths",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-set-format.log"
+    }
+  ],
+  "profile": {
+    "command": "npx vitest run src/svl/source/items/native-property-set.test.ts src/svl/source/items/native-property-map.test.ts src/svl/source/items/itemprop.test.ts src/svl/source/items/itemset.test.ts src/svl/source/items/itemset-equality.test.ts src/svl/source/items/native-itemset-get-item.test.ts src/svl/source/items/native-itemset-merge.test.ts src/svl/source/items/native-itemset-set-holder.test.ts src/sw/source/core/unocore/native-text-import-api.test.ts --coverage --coverage.include=src/svl/source/items/itemprop.ts --coverage.include=src/svl/source/items/itemset.ts --coverage.include=src/udkapi/com/sun/star/beans/PropertyAttribute.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reporter=text --coverage.reporter=json-summary",
+    "cwd": "apps/office",
+    "exitCode": 0,
+    "tests": 122,
+    "files": 9,
+    "log": "apps/office/coverage/native-property-set-profile.log",
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 353,
+          "covered": 335,
+          "skipped": 0,
+          "pct": 94.9
+        },
+        "statements": {
+          "total": 413,
+          "covered": 390,
+          "skipped": 0,
+          "pct": 94.43
+        },
+        "functions": {
+          "total": 79,
+          "covered": 76,
+          "skipped": 0,
+          "pct": 96.2
+        },
+        "branches": {
+          "total": 299,
+          "covered": 276,
+          "skipped": 0,
+          "pct": 92.3
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/items/itemprop.ts": {
+        "lines": {
+          "total": 115,
+          "covered": 115,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 28,
+          "covered": 28,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 126,
+          "covered": 124,
+          "skipped": 0,
+          "pct": 98.41
+        },
+        "branches": {
+          "total": 66,
+          "covered": 64,
+          "skipped": 0,
+          "pct": 96.96
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/items/itemset.ts": {
+        "lines": {
+          "total": 228,
+          "covered": 210,
+          "skipped": 0,
+          "pct": 92.1
+        },
+        "functions": {
+          "total": 51,
+          "covered": 48,
+          "skipped": 0,
+          "pct": 94.11
+        },
+        "statements": {
+          "total": 277,
+          "covered": 256,
+          "skipped": 0,
+          "pct": 92.41
+        },
+        "branches": {
+          "total": 233,
+          "covered": 212,
+          "skipped": 0,
+          "pct": 90.98
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/udkapi/com/sun/star/beans/PropertyAttribute.ts": {
+        "lines": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    }
+  },
+  "related": {
+    "command": "npx vitest run src/svl/source/items/native-user-defaults.test.ts src/svl/source/items/itempool-default-registration.test.ts src/svl/source/items/poolitem-comparison.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/writerfilter/dmapper/SettingsTable.test.ts src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.test.ts src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts src/sw/source/filter/xml/native-rtf-tab-settings-roundtrip.test.ts src/sw/source/filter/xml/odt-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts --coverage.enabled=false",
+    "cwd": "apps/office",
+    "exitCode": 0,
+    "tests": 97,
+    "files": 10,
+    "log": "apps/office/coverage/native-property-set-related.log"
+  },
+  "notes": [
+    "Actual Writer documents, real pool items and UNO Any/Type owners exercise source value/state/exception behavior; OOXML 720twip default is applied through item-property API and SwDoc.SetDefault. No fake providers, private state or forced null-Clone graph.",
+    "WRITER450/CALC-517 retain MAYBEVOID caller-output and enum-normalization behavior. WRITER451/CALC-518 retain ignore flag suppressing known PutValue rejection.",
+    "Initial fixture assumed OOXML1270 instead of generic2000 default; corrected to original1134twip generic default. Initial missing SDK flag/typecheck and forbidden non-null assertions fixed without weakening contracts. Docs recheck retains only unchanged css-style-matchers.ts:17/:76 baseline errors.",
+    "All other scoped gates pass. Doctor has zero errors and existing managed hook readiness warning plus fallback information; no hooks changed.",
+    "Native property-info/static-schema component, SwXTextDefaults, full DOCX/XLSX model/filter/export/Worker and mounted UI acceptance remain incomplete. No whole-goal or module parity claim; approved task stays DOING and goal active.",
+    "Related checks only under approved ten-task full-suite cadence. Existing browser open/save/autosave/recovery policies unchanged."
+  ],
+  "baseCommit": "27661a67d4d14ea75847dcbb4f2b80d63ee648f6",
+  "sourceBlobs": {
+    "apps/office/src/svl/source/items/native-property-set.test.ts": "5547cbca02802e09266c523d8c6693a7a934500c",
+    "docs/program/native-property-set.md": "1ff90af772cf30b1e1a710727b7f897408c83588",
+    "apps/office/src/svl/source/items/itemprop.ts": "73e80b4df5292b9a425369a7dd70386e35603f32",
+    "apps/office/src/svl/source/items/itemset.ts": "b21f1b3cf1559c62d518e7da07a27b5e7cccd2a0",
+    "apps/office/src/udkapi/com/sun/star/beans/PropertyAttribute.ts": "d8b9fa4be2b4e60f056099c6c79903aae122f543",
+    "docs/program/calc-upstream-suspected-issues.md": "03b9041de54c1bcc9d94fc34d3a48ebd88cb5b0e",
+    "docs/program/registry/shared/provenance/svl/source/items/itemprop.ts.json": "75d264525e10a10fff708e4bce47fddca803b212",
+    "docs/program/registry/shared/provenance/svl/source/items/itemset.ts.json": "511bb2f6865050f0d2bcdfb7d522e1352054be99",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/PropertyAttribute.ts.json": "daf27d4e7d0f04dab72936bd466a1f259944180e",
+    "docs/program/registry/shared/runtime/svl/source/items/itemprop.ts.json": "cc5498a97e1bcc31fb86819c4172ef996fad8cf8",
+    "docs/program/registry/shared/runtime/svl/source/items/itemset.ts.json": "7129b66938a0fbab0dc29bf1ba0fa6516a493ca6",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/PropertyAttribute.ts.json": "437d224b3446b74d8a4ee998e479d3512a120d3a",
+    "docs/program/registry/writer/capabilities/CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6.json": "8451784f3ebd33e54726e979a9ba61d1092b360d",
+    "docs/program/writer-upstream-suspected-issues.md": "4aafeca0d4d9d37cafd13dd7ccb740c61091e653"
+  }
+}
