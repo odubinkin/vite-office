@@ -102,6 +102,11 @@ export class PropertyValue {
   notEquals(other: Readonly<PropertyValue>): boolean {
     return !this.equals(other);
   }
+  /** Generated implicit value destructor destroys nontrivial members in reverse declaration order. @returns Nothing. */
+  dispose(): void {
+    this.value.dispose();
+    this.name.dispose();
+  }
   /** Borrows real member cells for the existing original compound algorithms; valid declared member offset is the producer precondition. @param offset - Original metadata member offset. @returns Original field address. */
   get(offset: number): unknown {
     return offset === 0

@@ -107,12 +107,15 @@ export class SfxGrabBagItem extends SfxPoolItem {
         !input.extract(sequence.getAddress(), ["Sequence", propertyType])
       )
         return false;
+      for (const value of this.m_aMap.values()) value.dispose();
       this.m_aMap.clear();
       for (let i = 0; i < sequence.getLength(); i++) {
         const fields = sequence.operatorIndex(i),
           name = OUString.unacquired(fields.get(0) as rtl_uStringSlot),
           key = stringOf(name);
-        this.m_aMap.set(key, new Any(fields.get(16) as Any));
+        const current = this.m_aMap.get(key);
+        if (current === undefined) this.m_aMap.set(key, new Any(fields.get(16) as Any));
+        else current.assign(fields.get(16) as Any);
       }
       const ordered = sorted(this.m_aMap);
       this.m_aMap.clear();
@@ -121,6 +124,12 @@ export class SfxGrabBagItem extends SfxPoolItem {
     } finally {
       sequence.dispose();
     }
+  }
+  /** Original map-member destructor destroys every owning Any value. @returns Nothing. */
+  override Dispose(): void {
+    for (const value of this.m_aMap.values()) value.dispose();
+    this.m_aMap.clear();
+    super.Dispose();
   }
 }
 /** Native UTF16 key order is JS lexicographic string order, without locale collation or normalization. @param map - Source values. @returns Ordered entries. */

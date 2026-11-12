@@ -9,6 +9,7 @@ export type {
 export {
   SfxStyleSheetBase_Base,
   SfxStyleSheetBase,
+  SfxStyleSheetBasePool_Base,
   SfxStyleSheetBasePool,
   SfxStyleSheetHint,
   SfxStyleSheetModifiedHint,

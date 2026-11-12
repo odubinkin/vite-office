@@ -496,3 +496,58 @@ it("releases actual style-owned item sets at the last strong reference and gives
   p.Dispose();
   expect(item.GetRefCount()).toBe(0);
 });
+
+it("owns the native pool through its weak base and clears styles before broadcaster-base destruction", /** Verifies both native base roles keep one object identity. @returns Nothing. */ () => {
+  const p = pool(),
+    held = new Reference(p),
+    adapter = p.queryAdapter(),
+    style = p.Make(unicode("owned"), Family.Char),
+    styleAdapter = style.queryAdapter(),
+    listener = new Listener(),
+    counts: number[] = [];
+  listener.StartListening(p);
+  listener.action =
+    /** Observes the actual derived/base destruction sequence. @param hint - Native hint. @returns Nothing. */ (
+      hint,
+    ) => {
+      if (hint.GetId() === SfxHintId.Dying)
+        counts.push(p.GetIndexedStyleSheets().GetNumberOfStyleSheets());
+    };
+  const alive = (
+    adapter.get() as import("../../../cppu/inc/com/sun/star/uno/XAdapter").XAdapter
+  ).queryAdapted();
+  expect(alive.get()).toBe(p);
+  alive.dispose();
+  held.clear();
+  expect(counts).toEqual([1, 0]);
+  expect(listener.GetBroadcasterCount()).toBe(0);
+  for (const point of [adapter, styleAdapter]) {
+    const dead = (
+      point.get() as import("../../../cppu/inc/com/sun/star/uno/XAdapter").XAdapter
+    ).queryAdapted();
+    expect(dead.is()).toBe(false);
+    dead.dispose();
+    point.dispose();
+  }
+});
+it("gives a copied pool a fresh weak lifetime while preserving source broadcaster subscriptions", /** Exercises the native independent weak base in the pool copy constructor. @returns Nothing. */ () => {
+  const source = pool(),
+    sourceReference = new Reference(source),
+    listener = new Listener();
+  listener.StartListening(source);
+  const copy = new SfxStyleSheetBasePool(source),
+    copyReference = new Reference(copy),
+    point = copy.queryAdapter();
+  expect(listener.IsListening(copy)).toBe(true);
+  copyReference.clear();
+  expect(listener.IsListening(source)).toBe(true);
+  expect(listener.IsListening(copy)).toBe(false);
+  const dead = (
+    point.get() as import("../../../cppu/inc/com/sun/star/uno/XAdapter").XAdapter
+  ).queryAdapted();
+  expect(dead.is()).toBe(false);
+  dead.dispose();
+  point.dispose();
+  listener.Dispose();
+  sourceReference.dispose();
+});

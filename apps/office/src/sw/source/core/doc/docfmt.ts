@@ -444,6 +444,8 @@ export function CopyCharFormat(doc: SwDoc, source: SwCharFormat): SwCharFormat {
   format.SetAuto(source.IsAuto());
   for (const item of source.GetAttrSet().entries()) format.SetFormatAttr(item);
   format.SetPoolFormatId(source.GetPoolFormatId());
+  format.SetPoolHelpId(source.GetPoolHelpId());
+  format.SetPoolHlpFileId(0xff);
   return format;
 }
 

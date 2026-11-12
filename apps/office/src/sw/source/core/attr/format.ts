@@ -16,6 +16,10 @@ import type { SwFormatContent } from "../../../inc/fmtcntnt";
 import type { SwFormatAnchor } from "../../../inc/fmtanchr";
 import type { SwFormatSurround } from "../../../inc/fmtsrnd";
 import type { SwFormatFillOrder } from "../../../inc/fmtfordr";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { Sequence } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
+import { cppu_detail_getUnoType_PropertyValue as propertyType } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
+import { SfxGrabBagItem } from "../../../../svl/inc/grabbagitem";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { SwModify, BroadcastingModify, ClientNotifyAttrChg } from "../../../inc/calbck";
 import type { SfxItemSet, WhichRangesContainer } from "../../../../svl/source/items/itemset";
@@ -41,7 +45,12 @@ export class SwFormat extends BroadcastingModify {
   private readonly attributeSet: SwAttrSet;
   private autoFormat = true;
   private m_bAutoUpdateOnDirectFormat = false;
-  private poolFormatId = SwPoolFormatId.UNKNOWN;
+  private m_nPoolFormatId = SwPoolFormatId.UNKNOWN;
+  private m_nPoolHelpId = 0xffff;
+  private m_nPoolHlpFileId = 0xff;
+  private m_bHidden = false;
+  private m_bIsFavourite: boolean | undefined;
+  private m_pGrabBagItem: SfxGrabBagItem | undefined;
   private formatInDTOR = false;
 
   /** Creates a Writer format and connects its attribute set to the derived-from parent. @param pool - Owning Writer pool. @param formatName - UI format name. @param ranges - Accepted WhichId ranges. @param derivedFrom - Optional parent format. @param formatWhich - Original required format identity. @returns Nothing. */
@@ -68,11 +77,75 @@ export class SwFormat extends BroadcastingModify {
   }
   /** Reads the native common-format pool identity, initially UNKNOWN. @returns Identity. */
   public GetPoolFormatId(): SwPoolFormatId {
-    return this.poolFormatId;
+    return this.m_nPoolFormatId;
   }
   /** Stores the native unsigned16 pool identity without broadcasting. @param id - Native identity. @returns Nothing. */
   public SetPoolFormatId(id: number): void {
-    this.poolFormatId = (id & 0xffff) as SwPoolFormatId;
+    this.m_nPoolFormatId = (id & 0xffff) as SwPoolFormatId;
+    if (this.m_nPoolFormatId === SwPoolFormatId.UNKNOWN) this.m_bIsFavourite = true;
+  }
+
+  /** Native template help ID, initially USHRT_MAX despite its uint32 storage. @returns ID. */
+  public GetPoolHelpId(): number {
+    return this.m_nPoolHelpId;
+  }
+  /** Original unsigned32 assignment. @param id - Help ID. @returns Nothing. */
+  public SetPoolHelpId(id: number): void {
+    this.m_nPoolHelpId = id >>> 0;
+  }
+  /** Native document help-file index, initially UCHAR_MAX. @returns Index. */
+  public GetPoolHlpFileId(): number {
+    return this.m_nPoolHlpFileId;
+  }
+  /** Original unsigned8 assignment. @param id - File index. @returns Nothing. */
+  public SetPoolHlpFileId(id: number): void {
+    this.m_nPoolHlpFileId = id & 0xff;
+  }
+  /** Native absent optional means DOCX favourite status is unknown. @returns Original optional. */
+  public IsFavourite(): boolean | undefined {
+    return this.m_bIsFavourite;
+  }
+  /** Original optional assignment without notifications. @param value - Flag or nullopt. @returns Nothing. */
+  public SetFavourite(value: boolean | undefined): void {
+    this.m_bIsFavourite = value;
+  }
+  /** Native hidden flag, initially false. @returns Flag. */
+  public IsHidden(): boolean {
+    return this.m_bHidden;
+  }
+  /** Original silent flag assignment. @param value - Visibility flag. @returns Nothing. */
+  public SetHidden(value: boolean): void {
+    this.m_bHidden = value;
+  }
+  /** Original default-format test depends solely on its parent pointer. @returns Whether parentless. */
+  public IsDefault(): boolean {
+    return this.DerivedFrom() === undefined;
+  }
+  /** Original query creates an owning empty PropertyValue sequence when no bag exists. @param output - Actual output Any. @returns Nothing. */
+  public GetGrabBagItem(output: Any): void {
+    if (this.m_pGrabBagItem !== undefined) this.m_pGrabBagItem.QueryValue(output);
+    else {
+      const values = new (Sequence.specialize(propertyType, 48))();
+      try {
+        output.insert(values.getAddress(), ["Sequence", propertyType]);
+      } finally {
+        values.dispose();
+      }
+    }
+  }
+  /** Native setter ignores PutValue's Boolean result and always parses favourites. @param value - Actual input Any. @returns Nothing. */
+  public SetGrabBagItem(value: Any): void {
+    this.m_pGrabBagItem ??= new SfxGrabBagItem();
+    this.m_pGrabBagItem.PutValue(value, 0);
+    this.ParseFavourites();
+  }
+  /** Original qFormat extraction accepts long-compatible numeric values, leaves invalid existing keys unchanged and treats absent keys as false. @returns Nothing. */
+  private ParseFavourites(): void {
+    const value = (this.m_pGrabBagItem as SfxGrabBagItem).GetGrabBag().get("qFormat");
+    if (value !== undefined) {
+      const number: [number] = [0];
+      if (value.extract(number, "sal_Int32")) this.SetFavourite(number[0] !== 0);
+    } else this.SetFavourite(false);
   }
 
   /** Original document lookup belongs to every native format, through its actual attribute pool. @returns Document. */
@@ -316,6 +389,7 @@ export class SwFormat extends BroadcastingModify {
   /** Runs native format destruction before inherited notifier and modify teardown. @returns Nothing. */
   public override DisposeModify(): void {
     this.Destr();
+    this.m_pGrabBagItem?.Dispose();
     this.attributeSet.Dispose();
     super.DisposeModify();
   }

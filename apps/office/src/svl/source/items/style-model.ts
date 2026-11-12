@@ -7,7 +7,7 @@ import type { XInterface } from "../../../cppu/inc/com/sun/star/uno/XInterface";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { SfxStyleFamily, SfxStyleSearchBits } from "../../inc/style-values";
 import { SfxHint, SfxHintId } from "../../inc/hint";
-import { SfxBroadcaster } from "../notify/SfxBroadcaster";
+import { withSfxBroadcaster } from "../notify/SfxBroadcaster";
 import { IndexedStyleSheets } from "./IndexedStyleSheets";
 import { SfxStyleSheetIterator } from "./style";
 import { SfxItemSet } from "./itemset";
@@ -290,13 +290,16 @@ class StyleSheetDisposerFunctor {
     }
   }
 }
-/** Actual native core indexed pool; full UNO, presentation/XML and derived SfxStyleSheet factories remain absent. */
-export class SfxStyleSheetBasePool extends SfxBroadcaster {
+/** Original independently named weak specialization from style.hxx. */
+export class SfxStyleSheetBasePool_Base extends WeakImplHelper.specialize() {}
+/** Native broadcaster/weak-object pool on one identity; presentation/XML and application-specific pools remain incomplete. */
+export class SfxStyleSheetBasePool extends withSfxBroadcaster(SfxStyleSheetBasePool_Base) {
   private readonly pImpl = new SfxStyleSheetBasePool_Impl();
   protected rPool: SfxItemPool;
   /** Original item-pool and pool-copy forms. @param source - Actual pool or copied style pool. @returns Pool. */
   public constructor(source: SfxItemPool | SfxStyleSheetBasePool) {
-    super(source instanceof SfxStyleSheetBasePool ? source : undefined);
+    super();
+    this.CopyBroadcasterFrom(source instanceof SfxStyleSheetBasePool ? source : undefined);
     this.rPool = source instanceof SfxStyleSheetBasePool ? source.rPool : source;
     if (source instanceof SfxStyleSheetBasePool) this.addPool(source);
   }
@@ -407,7 +410,7 @@ export class SfxStyleSheetBasePool extends SfxBroadcaster {
   /** Original per-slot erase notifications then index clear. @returns Nothing. */ public Clear(): void {
     this.GetIndexedStyleSheets().Clear(new StyleSheetDisposerFunctor(this));
   }
-  /** Original native copy assignment. @param source - Source. @returns This pool. */ public assign(
+  /** Original native copy assignment. @param source - Source. @returns This pool. */ public override assign(
     source: SfxStyleSheetBasePool,
   ): this {
     if (source !== this) {
@@ -469,5 +472,10 @@ export class SfxStyleSheetBasePool extends SfxBroadcaster {
     this.Broadcast(new SfxHint(SfxHintId.Dying));
     this.GetIndexedStyleSheets().Clear(new StyleSheetDisposerFunctor(this, false));
     super.Dispose();
+  }
+  /** Final strong release invokes the actual virtual pool destructor. @returns Nothing. */
+  protected override destroy(): void {
+    this.Dispose();
+    super.destroy();
   }
 }

@@ -1,4 +1,7 @@
 /** @fileoverview Original grab-bag values, UDK property structs and real Any/Sequence/ContentInfo transport. */
+import { OWeakObject } from "../../../cppuhelper/inc/weak";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import type { XAdapter } from "../../../cppu/inc/com/sun/star/uno/XAdapter";
 import { expect, it } from "vitest";
 import { SfxGrabBagItem } from "../../inc/grabbagitem";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
@@ -242,4 +245,49 @@ it("retains nested typed metadata and genuine item-set/paragraph target-pool cop
   );
   a.PutValue(properties([]));
   expect(copied.GetParaAttribs().Get(EE_CHAR_GRABBAG).equals(b)).toBe(true);
+});
+
+it("destroys duplicate, replaced and final map Any owners through actual weak-object references", /** Checks std::map assignment, clear and destructor ownership using real native components. @returns Nothing. */ () => {
+  const first = new OWeakObject(),
+    second = new OWeakObject(),
+    firstReference = new Reference(first),
+    secondReference = new Reference(second),
+    firstPoint = first.queryAdapter(),
+    secondPoint = second.queryAdapter(),
+    firstAny = new Any(firstReference.getAddress(), "XInterface"),
+    secondAny = new Any(secondReference.getAddress(), "XInterface"),
+    name = unicode("owner"),
+    one = new PropertyValue(name, 0, firstAny, PropertyState.DIRECT_VALUE),
+    two = new PropertyValue(name, 0, secondAny, PropertyState.DIRECT_VALUE),
+    input = properties([one, two]),
+    bag = new SfxGrabBagItem();
+  expect(bag.PutValue(input)).toBe(true);
+  input.dispose();
+  one.dispose();
+  two.dispose();
+  firstAny.dispose();
+  secondAny.dispose();
+  firstReference.clear();
+  secondReference.clear();
+  name.dispose();
+  const removed = (firstPoint.get() as XAdapter).queryAdapted();
+  expect(removed.is()).toBe(false);
+  removed.dispose();
+  const alive = (secondPoint.get() as XAdapter).queryAdapted();
+  expect(alive.get()).toBe(second);
+  alive.dispose();
+  const clone = bag.Clone(),
+    empty = properties([]);
+  expect(bag.PutValue(empty)).toBe(true);
+  empty.dispose();
+  bag.Dispose();
+  const retained = (secondPoint.get() as XAdapter).queryAdapted();
+  expect(retained.get()).toBe(second);
+  retained.dispose();
+  clone.Dispose();
+  const dead = (secondPoint.get() as XAdapter).queryAdapted();
+  expect(dead.is()).toBe(false);
+  dead.dispose();
+  firstPoint.dispose();
+  secondPoint.dispose();
 });
