@@ -1,0 +1,499 @@
+{
+  "status": "in-progress-checkpoint",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "9cb8333661c1de3fb538053a6b34dc8add45e1a1",
+  "scope": "Actual UCB command environment, active data sink, basic request/continuation owners and ten complete SDK declarations; not a broker/default resolver or full DocumentBuilder/DOCX/XLSX/UI implementation",
+  "tests": {
+    "focusedUcbCases": 22,
+    "relatedFiles": 16,
+    "relatedCases": 142,
+    "boundaryCases": 48,
+    "resourceCases": 2,
+    "result": "pass",
+    "upstreamPorted": [
+      "qadevOOo ifc.io._XActiveDataSink::_setInputStream",
+      "qadevOOo ifc.io._XActiveDataSink::_getInputStream"
+    ],
+    "sourceHarness": "Native standalone components and genuine streams; external office service harness remains unverified."
+  },
+  "coverage": {
+    "aggregateStatements": 98.86,
+    "aggregateBranches": 94.44,
+    "aggregateFunctions": 98.3,
+    "aggregateLines": 99.41,
+    "threshold": 90,
+    "result": "pass",
+    "unqualified": [
+      "Protected default-constructor path",
+      "Protected setRequest",
+      "Source unknown-selection/debug diagnostics and physical C++ access control/ABI/threading"
+    ],
+    "scope": "Complete new authored UCB and ten SDK owners; aggregate gate, not per-file or complete format parity."
+  },
+  "preservedSource": [
+    "CommandEnvironment reference copying, acquired getters and progress-before-interaction destruction",
+    "ActiveDataSink replacement/getter ownership with no automatic stream close",
+    "Request by-value Any copy followed by move into the payload in native member initialization order",
+    "Actual sequence/selection copies and original basic continuation query order and flags",
+    "Raw borrowed parent relationship (CALC-534/WRITER468); no callback after parent destruction"
+  ],
+  "corrections": [
+    "Approve/Disapprove SDK source ownership corrected to offapi after the primary-source mapping check; Abort/Retry remain udkapi.",
+    "Empty derived IDL marker interfaces retain distinct native types with narrow existing-style lint rationale.",
+    "Valid interaction fixtures now carry actual typed SAXParseException values; protected/default and diagnostic-only paths are not reached through fake hooks or invalid graphs.",
+    "A test helper name shadowing failure was corrected by renaming the helper; no production behavior changed."
+  ],
+  "knownBaseline": [
+    "Existing css-style-matchers.ts JSDoc errors at17 and76.",
+    "Doctor has zero errors and the prior managed hook shim warning."
+  ],
+  "remaining": [
+    "UCB content/broker client and default entity resolver/URI paths",
+    "Full DocumentBuilder service orchestration and registration",
+    "Whole native DOM coverage gate and remaining upstream service QA",
+    "XPath and document SAX/IO facets",
+    "Native metadata/model initialization",
+    "Full DOCX/XLSX imports/exports, shell routing and existing UI acceptance"
+  ],
+  "fullSuite": "Not run; approved once-per-ten-agentplane-task cadence remains unchanged, and these epics remain open.",
+  "checks": [
+    {
+      "name": "related-tests",
+      "cwd": "apps/office",
+      "command": "npx vitest run --config vite.config.ts src/ucbhelper src/unoxml src/external/libxml2/parsercallbacks.test.ts src/offapi/com/sun/star/xml/sax/SAXParseException.test.ts src/offapi/com/sun/star/xml/dom/native-dom-values.test.ts src/sax/source/fastparser/InputSource.test.ts --coverage --coverage.include=src/ucbhelper/**/*.ts --coverage.include=src/udkapi/com/sun/star/task/XInteraction*.ts --coverage.include=src/udkapi/com/sun/star/io/XActiveDataSink.ts --coverage.include=src/offapi/com/sun/star/ucb/XCommandEnvironment.ts --coverage.include=src/offapi/com/sun/star/ucb/XProgressHandler.ts --coverage.include=src/offapi/com/sun/star/task/XInteraction*.ts --coverage.reportsDirectory=coverage/ucb-environment --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.functions=90 --coverage.thresholds.branches=90",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-final-coverage.log",
+      "sha256": "1ff8399508a213d44f3b3671784f9a404b4c2b00743dad1586db00fb88cbc4fd"
+    },
+    {
+      "name": "tools-and-app-typecheck",
+      "cwd": ".",
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-all-typecheck-final.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "name": "current-app-typecheck",
+      "cwd": "apps/office",
+      "command": "npx tsc --noEmit",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-final-typecheck.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "build",
+      "cwd": ".",
+      "command": "npm run build",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-build-current.log",
+      "sha256": "d856d6b8aacd3e894c460d4e1e7209d19263f812dad46918d2753023ef0240cc"
+    },
+    {
+      "name": "static",
+      "cwd": ".",
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-static-final.log",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    {
+      "name": "scoped-lint",
+      "cwd": ".",
+      "command": "npx eslint <new UCB/SDK owners, tests and module boundary scripts> --max-warnings 0",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-lint-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "current-owner-lint",
+      "cwd": ".",
+      "command": "npx eslint <current interaction owner and tests> --max-warnings 0",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-current-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "current-test-lint",
+      "cwd": ".",
+      "command": "npx eslint apps/office/src/ucbhelper --max-warnings 0",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-lint-verified.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "tree-script-lint",
+      "cwd": ".",
+      "command": "npx eslint scripts/check-lo-source-tree.mjs --max-warnings 0",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-tree-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "scoped-format",
+      "cwd": ".",
+      "command": "npx prettier --check <all intentional changed supported files>",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-format-verified.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "name": "dependencies",
+      "cwd": ".",
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-boundaries.log",
+      "sha256": "61d666094feac26bf3cb63cd1783cc9ce799d1a9792fa0892fad388d2817f015"
+    },
+    {
+      "name": "boundary-tests",
+      "cwd": ".",
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-boundary-tests.log",
+      "sha256": "fe70b8f67c1abfaa5479b05d92d48b887ddbfbb2896ac4f7cdfdfbf6b9a0a515"
+    },
+    {
+      "name": "source-provenance",
+      "cwd": ".",
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-provenance-final.log",
+      "sha256": "f00eb4daf7035fa552eb3d64251d46d8e76b6e848ba5fb606199c728b857fcd3"
+    },
+    {
+      "name": "registry",
+      "cwd": ".",
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-registry-check-final.log",
+      "sha256": "05d29923021d2226ed49c93b277c74fb8d512d38c946a0f5a6d296593874ea6c"
+    },
+    {
+      "name": "source-tree",
+      "cwd": ".",
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-source-tree-final.log",
+      "sha256": "4615eccefb9c2ce4b9cd767340293514a9fc81e356b588821e3bd52cc72a30f6"
+    },
+    {
+      "name": "size",
+      "cwd": ".",
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-size.log",
+      "sha256": "ddae875cdc5f050ef618f6d6509c2cbbe551d387ea778697f3b29d8e5178b869"
+    },
+    {
+      "name": "writer-resources",
+      "cwd": ".",
+      "command": "npm run check:writer-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-writer-resources.log",
+      "sha256": "0f6c5fc81f07af5787c49074109b34f1bc4c01072cafe3f08eb402b8048af8e4"
+    },
+    {
+      "name": "calc-resources",
+      "cwd": ".",
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-calc-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "name": "hintids",
+      "cwd": ".",
+      "command": "npm run check:writer-hintids",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-hintids.log",
+      "sha256": "513c109068ebf83b3d6fe448c3c44564ec89a64cd9cb64059b5b4b89d11d887a"
+    },
+    {
+      "name": "doctor",
+      "cwd": ".",
+      "command": "ap doctor",
+      "result": "pass-existing-warning",
+      "log": "apps/office/coverage/ucb-environment-doctor.log",
+      "sha256": "af247fa56acbf91f056d00ed9c2e4d4677ab345ba9415e0cad406fc2f292ea5a"
+    },
+    {
+      "name": "routing",
+      "cwd": ".",
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-environment-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "name": "jsdoc",
+      "cwd": ".",
+      "command": "npm run check:docs",
+      "result": "baseline-failure",
+      "log": "apps/office/coverage/ucb-environment-jsdoc.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    }
+  ],
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/offapi/com/sun/star/task/XInteractionApprove.ts",
+      "gitBlob": "938a862a1bf4633427cb6ef5daf4b92962c0236e"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/task/XInteractionDisapprove.ts",
+      "gitBlob": "20aec8508cdc4436327092dda32f235d71d973ac"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/XCommandEnvironment.ts",
+      "gitBlob": "9f8144034f332f48a2484206f726dc5423fa557d"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/XProgressHandler.ts",
+      "gitBlob": "160caecf1d0548308282f0383d2f671f71f4412d"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/inc/activedatasink.ts",
+      "gitBlob": "dc09b43e3a670308f644a1264795033e26322737"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/inc/commandenvironment.ts",
+      "gitBlob": "706b340790eaa2114ceaa6e184b0ecce5dd3aab4"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/inc/interactionrequest.ts",
+      "gitBlob": "1d9f39086042e7ebde1b7efd9bd7af877f5c33dd"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/inc/simpleinteractionrequest.ts",
+      "gitBlob": "ebee639a2d832379fa39bf1b6e70ddc5936b72c6"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/client/activedatasink.ts",
+      "gitBlob": "9c011191960b31a1f074cd0b0cabc537f9a3da0b"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/client/commandenvironment.ts",
+      "gitBlob": "c3fac7daa20ede148d65aa17ede70ad2f32f0c7e"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/client/native-contracts.test.ts",
+      "gitBlob": "1d91018380b5b662824a17932c370c800f411205"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/client/native-environment.test.ts",
+      "gitBlob": "4a7f5ec21027c41a7704172f9329a13d59386d77"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/provider/interactionrequest.ts",
+      "gitBlob": "b9c0d49236a970a0f2a0b93066af54f4e70a2b9a"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/provider/native-interaction.test.ts",
+      "gitBlob": "25b655115666212d989e1b6100f2a237763d21ab"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/provider/simpleinteractionrequest.ts",
+      "gitBlob": "9f4e77d19efdc457ade62da97e8b3c978d5ed691"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/io/XActiveDataSink.ts",
+      "gitBlob": "484f77d6267957f974795c2350ba05f861059fde"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/task/XInteractionAbort.ts",
+      "gitBlob": "d31875317815d80ffc3539d8983676dd51290833"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/task/XInteractionContinuation.ts",
+      "gitBlob": "f70a75465d5045fd24f444e38d57664301d1381b"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/task/XInteractionHandler.ts",
+      "gitBlob": "6b7ecb87ab6a8d33f2ae2e122c0d3b13f7e07174"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/task/XInteractionRequest.ts",
+      "gitBlob": "50c8bd4927607c92d78a5da8a70d0313e2aa49c5"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/task/XInteractionRetry.ts",
+      "gitBlob": "8873deef2d22790d42d3eff32b53aeef9b0d5943"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "7cfdd9645e1103e268e7d33efc078a2633bb5f1d"
+    },
+    {
+      "path": "docs/program/native-ucb-command-context.md",
+      "gitBlob": "83559fd217315c44da87089103e8c0042ee47d5e"
+    },
+    {
+      "path": "docs/program/native-xml-document-builder.md",
+      "gitBlob": "fa322a037731fd03fb5626b4ea3129319daaf151"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-2cf81f06-1f62-40e6-a68f-8d2bbefadd80.json",
+      "gitBlob": "689e8ac62e299dcd907b97569130bf3284f221c9"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/task/XInteractionApprove.ts.json",
+      "gitBlob": "bf271c5c4daf13340503a31438b7a069cb29db65"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/task/XInteractionDisapprove.ts.json",
+      "gitBlob": "6e004b817278374a09b98dc2bc2ff0bdf235bbed"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/XCommandEnvironment.ts.json",
+      "gitBlob": "8a068aecf4abc261252221f989eecde62c169dca"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/XProgressHandler.ts.json",
+      "gitBlob": "ae03246dbe865660ceb2f38b9c13d4fbe49d5de1"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/inc/activedatasink.ts.json",
+      "gitBlob": "7a850f0af1f4d71afdab5d4a95f4c2a94d230364"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/inc/commandenvironment.ts.json",
+      "gitBlob": "1947750879c9d6abdc3c54d5c691edb1436b42b0"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/inc/interactionrequest.ts.json",
+      "gitBlob": "455aa57e00c0de8794a57482ef6397106036146e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/inc/simpleinteractionrequest.ts.json",
+      "gitBlob": "8bfb505be064eca5508cd790f6557502489d063e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/source/client/activedatasink.ts.json",
+      "gitBlob": "350911a7feaff6fab3e937f1ee87f89f116c36b2"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/source/client/commandenvironment.ts.json",
+      "gitBlob": "81d5f96dcb7198ebc739f155118ea6e465852b4c"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/source/provider/interactionrequest.ts.json",
+      "gitBlob": "dfad435a8b7518617781222548eebcfa44e78063"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/source/provider/simpleinteractionrequest.ts.json",
+      "gitBlob": "62fdd0972da8821b64a7010ad36b7f2086ea71d9"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/io/XActiveDataSink.ts.json",
+      "gitBlob": "094e3a11200eaa0ef52246d5bf60cee8bdb8f121"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/task/XInteractionAbort.ts.json",
+      "gitBlob": "6b926df6d2f2b2c1dd7368c8a6ad4eff9f1ca489"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/task/XInteractionContinuation.ts.json",
+      "gitBlob": "7bd452fcf39f9fcb114b19bb032ec1b0b14ec676"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/task/XInteractionHandler.ts.json",
+      "gitBlob": "030ff3b75890fbcd535a1a73db460d30e8b86776"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/task/XInteractionRequest.ts.json",
+      "gitBlob": "5327bab47e053a4e523765fa9ffbcb4077da6691"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/task/XInteractionRetry.ts.json",
+      "gitBlob": "6e30b04987264354e53ca3fa6a9092db85734900"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/task/XInteractionApprove.ts.json",
+      "gitBlob": "522082358e3636ada9121d9d49ff5719a1fc338c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/task/XInteractionDisapprove.ts.json",
+      "gitBlob": "c01926fbd0844bba805613cae6e01bfd6da2af9a"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/XCommandEnvironment.ts.json",
+      "gitBlob": "ba26048a973d87926b852e7422c36099d4aafb5f"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/XProgressHandler.ts.json",
+      "gitBlob": "a2d4d4c4b4924b2972ddb5164c9f288878167bdb"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/inc/activedatasink.ts.json",
+      "gitBlob": "d55b51652bce1de96ce175da21ad91d701072edb"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/inc/commandenvironment.ts.json",
+      "gitBlob": "510ed96421895c3edbc398991baff10a6cfb4808"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/inc/interactionrequest.ts.json",
+      "gitBlob": "6d8fda482104ad973193f71f35d3855527b838a2"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/inc/simpleinteractionrequest.ts.json",
+      "gitBlob": "addcd8af3b1ec6a59c6564e4409c8d359ddd53cc"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/source/client/activedatasink.ts.json",
+      "gitBlob": "33aa15487781ffa06e5224529c9121571f2a19b2"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/source/client/commandenvironment.ts.json",
+      "gitBlob": "71b76dc0e6b0bb6e897da8dd5e696fda125b4808"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/source/provider/interactionrequest.ts.json",
+      "gitBlob": "735183cf23fb01d4da8932616e1cd8b92610ebf1"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/source/provider/simpleinteractionrequest.ts.json",
+      "gitBlob": "ecb9a267305145027f25496db610f2ab503b9850"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/io/XActiveDataSink.ts.json",
+      "gitBlob": "b16e2d4eeb2e137c1fd5072ba4c05342c8d66180"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/task/XInteractionAbort.ts.json",
+      "gitBlob": "06011b80c6a05db1ffd4c8e03b0b8836cbe62fc3"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/task/XInteractionContinuation.ts.json",
+      "gitBlob": "2bde054ff174162a741ee2e677f9c65ff0128da7"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/task/XInteractionHandler.ts.json",
+      "gitBlob": "8d5c99a2b31ebd7ce164f5323f0596bfea0e78ac"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/task/XInteractionRequest.ts.json",
+      "gitBlob": "c807f3a7f84372bbcd178b95b189b8eeaf378a71"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/task/XInteractionRetry.ts.json",
+      "gitBlob": "6df8785dee753b2ecf6e3e05b7ba804ca7b8881d"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "a3f8cd0f7194da93bb685a87dbfc26ecfb8310cf"
+    },
+    {
+      "path": "scripts/check-lo-source-tree.mjs",
+      "gitBlob": "d4a7e58790fd7e079bdeeada5dacdbb4ca24d994"
+    },
+    {
+      "path": "scripts/check-module-boundaries.mjs",
+      "gitBlob": "7213c9f537974a60eec657e1021eaa1db4bb0150"
+    },
+    {
+      "path": "scripts/module-boundaries/allowed-edges.mjs",
+      "gitBlob": "440195aca5380a2ef3d8580a7e93d8c35946f440"
+    }
+  ]
+}
