@@ -51,14 +51,14 @@ export function cppu_detail_getUnoType(): Type {
 }
 /** Actual generated DOMException value derives from the existing Exception owner. */
 export class DOMException extends Exception {
-  private code: DOMExceptionType = DOMExceptionType.DOMSTRING_SIZE_ERR;
+  private code: [DOMExceptionType] = [DOMExceptionType.DOMSTRING_SIZE_ERR];
   /** Original signed32 enum member; default construction initializes zero. @returns Declared DOM exception code. */
   get Code(): DOMExceptionType {
-    return this.code;
+    return this.code[0];
   }
   /** Assigns the native enum field with its native width. @param value - Enum value. @returns Nothing. */
   set Code(value: DOMExceptionType) {
-    this.code = (value | 0) as DOMExceptionType;
+    this.code[0] = (value | 0) as DOMExceptionType;
   }
   /** Original explicit constructors initialize base then DOMException type; implicit copy construction copies the base without this call. @param args - Original arguments. @returns Actual exception value. */
   constructor(
@@ -74,10 +74,14 @@ export class DOMException extends Exception {
     else if (args.length === 3) this.Code = args[2];
     if (args.length !== 1) cppu_detail_getUnoType();
   }
+  /** Original generated enum member lvalue and inherited base addresses. @param offset - Logical LP64 field offset. @returns Actual member address. */
+  override get(offset: number): unknown {
+    return offset === 16 ? this.code : super.get(offset);
+  }
   /** Original implicit move construction delegates to base/member moves without registering again. @param source - Actual rvalue. @returns Transferred DOMException. */
   static override move(source: DOMException): DOMException {
     const result = super.move(source) as DOMException;
-    result.Code = source.Code;
+    result.code = [source.Code];
     return result;
   }
   /** Original memberwise copy assignment orders base before scalar. @param source - Source value. @returns This value. */

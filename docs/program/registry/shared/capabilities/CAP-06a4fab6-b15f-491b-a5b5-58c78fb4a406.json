@@ -1,0 +1,138 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-06a4fab6-b15f-491b-a5b5-58c78fb4a406",
+    "capabilityId": "CAP-06a4fab6-b15f-491b-a5b5-58c78fb4a406",
+    "suite": "shared",
+    "subsystem": "uno-exception-value-transport",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual generated exception values expose real stable inherited Message/Context fields to existing UNO compound copy/extraction, removing temporary Context cells and the old test shadow Map. IllegalArgumentException short and DOMException enum storage retain original widths/defaults/moves with actual stable addresses; wrapped exceptions expose their existing Any member. Other affected derived implementations only declare required base overrides. Critical tests use real exceptions, Any, ActiveDataSink and weak references, with native source-captured Any replays and original import-order checks. This is a local logical-layout correction, not a new exception factory, type provider or physical C++ ABI/allocator/thread claim. Full exception bridge/getCaughtException/source misc QA, Content/resolver/DocumentBuilder/metadata and DOCX/XLSX/UI remain unqualified."
+    ],
+    "capability": "Actual generated exception member transport through UNO Any",
+    "gaps": [
+      "Full original cppuhelper misc catch/throw QA requires the actual exception bridge.",
+      "Native physical ABI/allocator/thread behavior and complete format/UI integration remain unqualified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "ExceptionType::dumpHppFile"
+        },
+        {
+          "path": "udkapi/com/sun/star/uno/Exception.idl",
+          "marker": "exception Exception"
+        },
+        {
+          "path": "udkapi/com/sun/star/lang/IllegalArgumentException.idl",
+          "marker": "ArgumentPosition"
+        },
+        {
+          "path": "offapi/com/sun/star/xml/dom/DOMException.idl",
+          "marker": "Code"
+        }
+      ],
+      "tests": [
+        {
+          "path": "include/com/sun/star/uno/Any.hxx",
+          "marker": "operator >>="
+        },
+        {
+          "path": "cppu/qa/test_any.cxx",
+          "marker": "testException"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/com/sun/star/uno/Any.hxx",
+          "marker": "Any::Any"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/beans/PropertyVetoException.ts",
+          "marker": "class PropertyVetoException"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/beans/UnknownPropertyException.ts",
+          "marker": "class UnknownPropertyException"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/lang/IllegalArgumentException.ts",
+          "marker": "class IllegalArgumentException"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/lang/WrappedTargetException.ts",
+          "marker": "class WrappedTargetException"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException.ts",
+          "marker": "class WrappedTargetRuntimeException"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/exception-values.ts",
+          "marker": "class Exception"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/xml/dom/DOMException.ts",
+          "marker": "class DOMException"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/xml/sax/SAXException.ts",
+          "marker": "class SAXException"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/ucb/ContentCreationException.ts",
+          "marker": "class ContentCreationException"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/ucb/IllegalIdentifierException.ts",
+          "marker": "class IllegalIdentifierException"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/script/CannotConvertException.ts",
+          "marker": "class CannotConvertException"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/native-exception-address.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Any-data.test.ts",
+          "marker": "defaultException"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/exception-initialization.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-uno-exception-transport.md",
+          "marker": "# Native UNO exception value transport"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual generated exception values expose real stable inherited Message/Context fields to existing UNO compound copy/extraction, removing temporary Context cells and the old test shadow Map. IllegalArgumentException short and DOMException enum storage retain original widths/defaults/moves with actual stable addresses; wrapped exceptions expose their existing Any member. Other affected derived implementations only declare required base overrides. Critical tests use real exceptions, Any, ActiveDataSink and weak references, with native source-captured Any replays and original import-order checks. This is a local logical-layout correction, not a new exception factory, type provider or physical C++ ABI/allocator/thread claim. Full exception bridge/getCaughtException/source misc QA, Content/resolver/DocumentBuilder/metadata and DOCX/XLSX/UI remain unqualified."
+    },
+    "scopeLimitations": [
+      "Actual generated exception values expose real stable inherited Message/Context fields to existing UNO compound copy/extraction, removing temporary Context cells and the old test shadow Map. IllegalArgumentException short and DOMException enum storage retain original widths/defaults/moves with actual stable addresses; wrapped exceptions expose their existing Any member. Other affected derived implementations only declare required base overrides. Critical tests use real exceptions, Any, ActiveDataSink and weak references, with native source-captured Any replays and original import-order checks. This is a local logical-layout correction, not a new exception factory, type provider or physical C++ ABI/allocator/thread claim. Full exception bridge/getCaughtException/source misc QA, Content/resolver/DocumentBuilder/metadata and DOCX/XLSX/UI remain unqualified."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-exception-member-addresses"
+  }
+}

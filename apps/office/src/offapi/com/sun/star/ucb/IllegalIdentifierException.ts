@@ -58,7 +58,7 @@ export class IllegalIdentifierException extends Exception {
     if (args.length !== 1) cppu_detail_getUnoType();
   }
   /** Existing logical base exception field address lowering. @param offset - Native logical member offset. @returns Existing member address. */
-  get(offset: number): unknown {
+  override get(offset: number): unknown {
     return offset === 0 ? this.Message.getDataAddress() : this.Context.getAddress();
   }
   /** Original implicit move construction delegates to base/member moves without registering again. @param source - Actual rvalue. @returns Transferred IllegalIdentifierException. */

@@ -154,7 +154,7 @@ export class CannotConvertException extends Exception {
     this.ArgumentIndex = source.ArgumentIndex;
     return this;
   }
-  /** Existing logical compound field addresses. @param offset - Logical offset. @returns Existing field. */ get(
+  /** Existing logical compound field addresses. @param offset - Logical offset. @returns Existing field. */ override get(
     offset: number,
   ): unknown {
     return offset === 0

@@ -72,6 +72,10 @@ export class WrappedTargetException extends Exception {
         : new Any(args.length === 1 ? args[0].TargetException : args[2]);
     if (args.length !== 1) cppu_detail_getUnoType();
   }
+  /** Original generated Any member lvalue and inherited base addresses. @param offset - Logical LP64 field offset. @returns Actual member address. */
+  override get(offset: number): unknown {
+    return offset === 16 ? this.targetException : super.get(offset);
+  }
   /** Original implicit move construction delegates to base/member moves without registering again. @param source - Actual rvalue. @returns Transferred WrappedTargetException. */
   static override move(source: WrappedTargetException): WrappedTargetException {
     const result = super.move(source) as WrappedTargetException;

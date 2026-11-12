@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "xml-dom-contracts",
     "capabilityIds": [
-      "CAP-73256a32-f63e-46d2-a224-eb2af3ef519e"
+      "CAP-73256a32-f63e-46d2-a224-eb2af3ef519e",
+      "CAP-06a4fab6-b15f-491b-a5b5-58c78fb4a406"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -19,9 +20,12 @@
         "apps/office/src/cppu/inc/com/sun/star/xml/dom/DOMException.ts",
         "apps/office/src/offapi/com/sun/star/xml/dom/native-dom-contracts.test.ts",
         "apps/office/src/offapi/com/sun/star/xml/dom/native-dom-values.test.ts",
-        "docs/program/native-xml-dom-contracts.md"
+        "docs/program/native-xml-dom-contracts.md",
+        "apps/office/src/cppu/inc/com/sun/star/uno/native-exception-address.test.ts",
+        "docs/program/native-uno-exception-transport.md",
+        "apps/office/src/cppu/inc/com/sun/star/uno/Any-data.test.ts"
       ],
-      "justification": "Original complete core DOM and parser callback IDL contracts, normal CPPUMaker interface/enum types and comprehensive DOMException value reuse actual shared CPPU factories, Reference, Any and OUString owners. Native direct bases, acquired interface results, borrowed input/owned output strings, zero-based enum ordinals, exception inheritance and copy/move order are retained. Tests use actual type metadata, typed-null interfaces and a genuine OWeakObject context, not a fake DOM implementation or property provider. Concrete libxml2/unoxml tree and builder owners, metadata/model initialization, full reflection, exception Any transport, physical ABI, compiled native differential and complete DOCX/XLSX filter/UI parity remain unverified.",
+      "justification": "Original complete core DOM and parser callback IDL contracts, normal CPPUMaker interface/enum types and comprehensive DOMException value reuse actual shared CPPU factories, Reference, Any and OUString owners. Native direct bases, acquired interface results, borrowed input/owned output strings, zero-based enum ordinals, exception inheritance and copy/move order are retained. Tests use actual type metadata, typed-null interfaces and a genuine OWeakObject context, not a fake DOM implementation or property provider. Concrete libxml2/unoxml tree and builder owners, metadata/model initialization, full reflection, exception Any transport, physical ABI, compiled native differential and complete DOCX/XLSX filter/UI parity remain unverified. Actual generated exception values expose real stable inherited Message/Context fields to existing UNO compound copy/extraction, removing temporary Context cells and the old test shadow Map. IllegalArgumentException short and DOMException enum storage retain original widths/defaults/moves with actual stable addresses; wrapped exceptions expose their existing Any member. Other affected derived implementations only declare required base overrides. Critical tests use real exceptions, Any, ActiveDataSink and weak references, with native source-captured Any replays and original import-order checks. This is a local logical-layout correction, not a new exception factory, type provider or physical C++ ABI/allocator/thread claim. Full exception bridge/getCaughtException/source misc QA, Content/resolver/DocumentBuilder/metadata and DOCX/XLSX/UI remain unqualified.",
       "knownViolations": [],
       "localSymbols": [
         "DOMException",

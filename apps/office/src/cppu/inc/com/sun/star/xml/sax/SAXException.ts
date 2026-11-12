@@ -95,7 +95,7 @@ export class SAXException extends Exception {
     return this;
   }
   /** Borrows the generated Any member or inherited compound field address. @param offset - Actual logical member offset. @returns Existing field address. */
-  get(offset: number): unknown {
+  override get(offset: number): unknown {
     return offset === 16
       ? this.WrappedException
       : offset === 0

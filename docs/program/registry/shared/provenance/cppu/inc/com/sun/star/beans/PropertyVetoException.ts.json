@@ -16,7 +16,8 @@
       "PropertyVetoException"
     ],
     "preservedResponsibilities": [
-      "Original generated fieldless derived exception retains checked Exception ownership and real cached UNO type registration."
+      "Original generated fieldless derived exception retains checked Exception ownership and real cached UNO type registration.",
+      "Actual generated exception values expose real stable inherited Message/Context fields to existing UNO compound copy/extraction, removing temporary Context cells and the old test shadow Map. IllegalArgumentException short and DOMException enum storage retain original widths/defaults/moves with actual stable addresses; wrapped exceptions expose their existing Any member. Other affected derived implementations only declare required base overrides. Critical tests use real exceptions, Any, ActiveDataSink and weak references, with native source-captured Any replays and original import-order checks. This is a local logical-layout correction, not a new exception factory, type provider or physical C++ ABI/allocator/thread claim. Full exception bridge/getCaughtException/source misc QA, Content/resolver/DocumentBuilder/metadata and DOCX/XLSX/UI remain unqualified."
     ],
     "omittedResponsibilities": [
       "Full native ABI and exception bridge remain outside this slice."
@@ -30,6 +31,14 @@
         {
           "path": "apps/office/src/desktop/browser/app/uno-components.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/native-exception-address.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Any-data.test.ts",
+          "marker": "defaultException"
         }
       ],
       "upstream": [

@@ -39,6 +39,10 @@ export class Exception implements ExceptionConstReference {
   set Context(value: Reference) {
     this.fields.Context.assign(value);
   }
+  /** Compiler lowering of original base-exception member lvalues for the existing UNO compound data operations. These are the actual stable fields, without a second record or temporary Context cell. @param offset - Logical LP64 member offset. @returns Borrowed member address. */
+  get(offset: number): unknown {
+    return offset === 0 ? this.fields.Message.getDataAddress() : this.fields.Context.getAddress();
+  }
   /** Original implicit memberwise move construction; the class selected by the native allocation retains its actual prototype. @param source - Rvalue. @returns Transferred value. */
   static move(source: Exception): Exception {
     const result = Object.create(this.prototype) as Exception;

@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "ucb-propertyvalueset",
     "capabilityIds": [
-      "CAP-61f3e210-48fe-4469-ac8c-75dd698dd823"
+      "CAP-61f3e210-48fe-4469-ac8c-75dd698dd823",
+      "CAP-06a4fab6-b15f-491b-a5b5-58c78fb4a406"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -20,9 +21,12 @@
         "apps/office/src/ucbhelper/source/provider/native-propertyvalueset.test.ts",
         "apps/office/src/ucbhelper/source/provider/native-propertyvalueset-qa.test.ts",
         "apps/office/src/ucbhelper/source/provider/native-values-contracts.test.ts",
-        "docs/program/native-ucb-propertyvalueset.md"
+        "docs/program/native-ucb-propertyvalueset.md",
+        "apps/office/src/cppu/inc/com/sun/star/uno/native-exception-address.test.ts",
+        "docs/program/native-uno-exception-transport.md",
+        "apps/office/src/cppu/inc/com/sun/star/uno/Any-data.test.ts"
       ],
-      "justification": "Actual PropertyValueSet preserves all XRow/XColumnLocate methods, original private PropertyValue fields/defaults/moves, flags/cache, one-based indexes, exact name lookup, appends and actual property-set access paths. Closed native template instantiations use actual caller T locals and declared UnoType/member bindings, not runtime value/default/type factories. Original Converter default service construction and SDK declarations/exception values use actual shared ownership/type modules. Real rows, streams, ServiceManager properties and genuine missing-service construction qualify ordinary paths and source QA method ports. No fake positive converter/property provider/broker is supplied. Efficient XPropertyAccess and successful converter execution, native mutex/vector ABI, remaining source QA, Content.openStream/resolver/DocumentBuilder/metadata/DOCX/XLSX/UI remain unverified.",
+      "justification": "Actual PropertyValueSet preserves all XRow/XColumnLocate methods, original private PropertyValue fields/defaults/moves, flags/cache, one-based indexes, exact name lookup, appends and actual property-set access paths. Closed native template instantiations use actual caller T locals and declared UnoType/member bindings, not runtime value/default/type factories. Original Converter default service construction and SDK declarations/exception values use actual shared ownership/type modules. Real rows, streams, ServiceManager properties and genuine missing-service construction qualify ordinary paths and source QA method ports. No fake positive converter/property provider/broker is supplied. Efficient XPropertyAccess and successful converter execution, native mutex/vector ABI, remaining source QA, Content.openStream/resolver/DocumentBuilder/metadata/DOCX/XLSX/UI remain unverified. Actual generated exception values expose real stable inherited Message/Context fields to existing UNO compound copy/extraction, removing temporary Context cells and the old test shadow Map. IllegalArgumentException short and DOMException enum storage retain original widths/defaults/moves with actual stable addresses; wrapped exceptions expose their existing Any member. Other affected derived implementations only declare required base overrides. Critical tests use real exceptions, Any, ActiveDataSink and weak references, with native source-captured Any replays and original import-order checks. This is a local logical-layout correction, not a new exception factory, type provider or physical C++ ABI/allocator/thread claim. Full exception bridge/getCaughtException/source misc QA, Content/resolver/DocumentBuilder/metadata and DOCX/XLSX/UI remain unqualified.",
       "knownViolations": [],
       "localSymbols": [
         "CannotConvertException",

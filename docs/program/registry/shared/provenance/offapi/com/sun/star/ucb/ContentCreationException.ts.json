@@ -16,7 +16,8 @@
       "eError"
     ],
     "preservedResponsibilities": [
-      "Actual Content/Content_Impl intrusive state preserves default/copy/move/assignment ownership, real broker constructors, checked/no-throw creation helpers, lazy URL/content/processor state, listener queries/actions, borrowed environment, command ID0 and missing-processor void result. Original explicit UniversalContentBroker.create uses genuine context/manager argument construction and declared exception translation. Actual rtl::Reference operations and creation enum/exception values use existing native ownership/type modules. No positive content/provider/broker/context substitute is manufactured. Tests port original rtl_ref testMove and qualify valid empty Content plus actual unavailable-service construction. Positive content/event/command paths, coverage90 gate, property mutation/open/cursor/transfer APIs, native mutex/ABI, source service QA, DocumentBuilder, metadata and DOCX/XLSX/UI remain incomplete."
+      "Actual Content/Content_Impl intrusive state preserves default/copy/move/assignment ownership, real broker constructors, checked/no-throw creation helpers, lazy URL/content/processor state, listener queries/actions, borrowed environment, command ID0 and missing-processor void result. Original explicit UniversalContentBroker.create uses genuine context/manager argument construction and declared exception translation. Actual rtl::Reference operations and creation enum/exception values use existing native ownership/type modules. No positive content/provider/broker/context substitute is manufactured. Tests port original rtl_ref testMove and qualify valid empty Content plus actual unavailable-service construction. Positive content/event/command paths, coverage90 gate, property mutation/open/cursor/transfer APIs, native mutex/ABI, source service QA, DocumentBuilder, metadata and DOCX/XLSX/UI remain incomplete.",
+      "Actual generated exception values expose real stable inherited Message/Context fields to existing UNO compound copy/extraction, removing temporary Context cells and the old test shadow Map. IllegalArgumentException short and DOMException enum storage retain original widths/defaults/moves with actual stable addresses; wrapped exceptions expose their existing Any member. Other affected derived implementations only declare required base overrides. Critical tests use real exceptions, Any, ActiveDataSink and weak references, with native source-captured Any replays and original import-order checks. This is a local logical-layout correction, not a new exception factory, type provider or physical C++ ABI/allocator/thread claim. Full exception bridge/getCaughtException/source misc QA, Content/resolver/DocumentBuilder/metadata and DOCX/XLSX/UI remain unqualified."
     ],
     "omittedResponsibilities": [
       "Content property mutation/open/cursor/transfer APIs remain absent, not positive placeholders. Real broker/provider implementation and source service QA remain pending.",
@@ -39,6 +40,14 @@
         {
           "path": "apps/office/src/sal/qa/rtl/ref/rtl_ref.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/native-exception-address.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Any-data.test.ts",
+          "marker": "defaultException"
         }
       ],
       "upstream": [

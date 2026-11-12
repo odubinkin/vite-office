@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "uno-property-contracts",
     "capabilityIds": [
-      "CAP-16da4e80-38db-4a86-8b35-1675ddb0692e"
+      "CAP-16da4e80-38db-4a86-8b35-1675ddb0692e",
+      "CAP-06a4fab6-b15f-491b-a5b5-58c78fb4a406"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -18,9 +19,12 @@
       "evidence": [
         "apps/office/src/cppu/inc/com/sun/star/beans/UnknownPropertyException.ts",
         "apps/office/src/sw/source/core/unocore/native-text-import-api.test.ts",
-        "apps/office/src/svl/source/items/itemprop.test.ts"
+        "apps/office/src/svl/source/items/itemprop.test.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/native-exception-address.test.ts",
+        "docs/program/native-uno-exception-transport.md",
+        "apps/office/src/cppu/inc/com/sun/star/uno/Any-data.test.ts"
       ],
-      "justification": "Task202610231627-0F8SYR: Writer import API attachment uses canonical document/nodes/registered positions/items rather than a separate document representation. Generated typed exception, Exception inheritance and shared typelib registration. Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim.",
+      "justification": "Task202610231627-0F8SYR: Writer import API attachment uses canonical document/nodes/registered positions/items rather than a separate document representation. Generated typed exception, Exception inheritance and shared typelib registration. Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim. Actual generated exception values expose real stable inherited Message/Context fields to existing UNO compound copy/extraction, removing temporary Context cells and the old test shadow Map. IllegalArgumentException short and DOMException enum storage retain original widths/defaults/moves with actual stable addresses; wrapped exceptions expose their existing Any member. Other affected derived implementations only declare required base overrides. Critical tests use real exceptions, Any, ActiveDataSink and weak references, with native source-captured Any replays and original import-order checks. This is a local logical-layout correction, not a new exception factory, type provider or physical C++ ABI/allocator/thread claim. Full exception bridge/getCaughtException/source misc QA, Content/resolver/DocumentBuilder/metadata and DOCX/XLSX/UI remain unqualified.",
       "knownViolations": [],
       "localSymbols": [
         "cppu_detail_getUnoType",

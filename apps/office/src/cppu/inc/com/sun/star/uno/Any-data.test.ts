@@ -8,7 +8,6 @@ import { typelib_TypeClass as C } from "../../../../typelib/typeclass";
 import type {
   typelib_TypeDescription as D,
   typelib_TypeDescriptionReference as R,
-  typelib_CompoundTypeDescription as P,
 } from "../../../../typelib/typedescription";
 const argumentsList: Exclude<UnoTypeArgument, "Any">[] = [
   "bool",
@@ -62,38 +61,6 @@ async function caller(mode: "extraction" | "predicates" | "helpers") {
     x.f.typelib_typedescription_release(d[0] as D);
     x.ref(a.pType);
   }
-  /** Source address for actual generated exception fields, using real description offsets; borrowed inputs gain no ownership or substitute type provider. @param e - Actual generated owner. @returns Original logical field storage. */
-  function exceptionAddress(e: InstanceType<typeof x.RuntimeException>): unknown {
-    const d = description(x.runtimeType().getTypeLibType() as R) as unknown as P,
-      base = d.pBaseTypeDescription as P,
-      p = new Map<number, unknown>();
-    p.set((base.pMemberOffsets as Int32Array)[0] as number, []);
-    p.set((base.pMemberOffsets as Int32Array)[1] as number, []);
-    // Original reinterpret addresses point at these actual owner's fields; setters only write raw fields, adding no acquisition/assignment policy.
-    Object.defineProperty(p.get((base.pMemberOffsets as Int32Array)[0] as number), "0", {
-      get: /** Actual original Message pointer lvalue. @returns Current pointer. */ () =>
-        e.Message.pData,
-      set: /** Original raw field write. @param value - Assigned pointer. @returns Nothing. */ (
-        value,
-      ) => {
-        e.Message.pData = value;
-      },
-      configurable: true,
-    });
-    const context = e.Context as unknown as { _pInterface: unknown };
-    Object.defineProperty(p.get((base.pMemberOffsets as Int32Array)[1] as number), "0", {
-      get: /** Actual original Context pointer lvalue. @returns Current pointer. */ () =>
-        context._pInterface,
-      set: /** Original raw field write without reference ownership work. @param value - Assigned pointer. @returns Nothing. */ (
-        value,
-      ) => {
-        context._pInterface = value;
-      },
-      configurable: true,
-    });
-    x.f.typelib_typedescription_release(d.aBase);
-    return p;
-  }
   /** Actual generated default owner and its original field addresses. Direct logical lvalues preserve the source literal empty-string flags and real destructor; no C-default substitution or physical ABI certification. @returns Actual owned destination/address/type. */
   function defaultException(): {
     p: unknown;
@@ -101,7 +68,7 @@ async function caller(mode: "extraction" | "predicates" | "helpers") {
     owner: InstanceType<typeof x.RuntimeException>;
   } {
     const owner = new x.RuntimeException();
-    return { owner, p: exceptionAddress(owner), r: x.runtimeType().getTypeLibType() as R };
+    return { owner, p: owner, r: x.runtimeType().getTypeLibType() as R };
   }
   return {
     ...x,
@@ -109,7 +76,6 @@ async function caller(mode: "extraction" | "predicates" | "helpers") {
     sequenceOwner,
     description,
     observe,
-    exceptionAddress,
     defaultException,
   };
 }
@@ -200,7 +166,7 @@ it("matches complete original Any specialization and generic extraction destinat
     e = new x.RuntimeException(message, context);
   context.dispose();
   message.dispose();
-  const a = new x.Any(x.exceptionAddress(e), x.runtimeType);
+  const a = new x.Any(e, x.runtimeType);
   pick(16, a);
   x.observe(a);
   a.dispose();

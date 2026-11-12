@@ -55,10 +55,6 @@ export class PropertyVetoException extends Exception {
     else super(args[0], args[1]);
     if (args.length !== 1) cppu_detail_getUnoType();
   }
-  /** Exposes original base-member addresses to the existing compound Any copier. @param offset - Native member offset. @returns Borrowed member cell. */
-  get(offset: number): unknown {
-    return offset === 0 ? this.Message.getDataAddress() : [this.Context.get()];
-  }
   /** Original implicit move construction delegates to base/member moves without registering again. @param source - Actual rvalue. @returns Transferred PropertyVetoException. */
   static override move(source: PropertyVetoException): PropertyVetoException {
     return super.move(source) as PropertyVetoException;

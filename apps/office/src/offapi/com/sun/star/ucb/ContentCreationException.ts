@@ -95,7 +95,7 @@ export class ContentCreationException extends Exception {
     return this;
   }
   /** Existing logical exception field address lowering. @param offset - Native logical field offset. @returns Existing field address. */
-  get(offset: number): unknown {
+  override get(offset: number): unknown {
     return offset === 0
       ? this.Message.getDataAddress()
       : offset === 8

@@ -47,14 +47,14 @@ export function cppu_detail_getUnoType(): Type {
 }
 /** Actual generated IllegalArgumentException value derives from the existing RuntimeException owner. */
 export class IllegalArgumentException extends RuntimeException {
-  private argumentPosition = 0;
+  private argumentPosition: [number] = [0];
   /** Original signed16 scalar member; default construction initializes zero. @returns Declared argument position. */
   get ArgumentPosition(): number {
-    return this.argumentPosition;
+    return this.argumentPosition[0];
   }
   /** Assigns a sal_Int16 field with its native width. @param value - Position. @returns Nothing. */
   set ArgumentPosition(value: number) {
-    this.argumentPosition = (value << 16) >> 16;
+    this.argumentPosition[0] = (value << 16) >> 16;
   }
   /** Original explicit constructors initialize base then IllegalArgumentException type; implicit copy construction copies the base without this call. @param args - Original arguments. @returns Actual exception value. */
   constructor(
@@ -70,10 +70,14 @@ export class IllegalArgumentException extends RuntimeException {
     else if (args.length === 3) this.ArgumentPosition = args[2];
     if (args.length !== 1) cppu_detail_getUnoType();
   }
+  /** Original generated scalar member lvalue and inherited base addresses. @param offset - Logical LP64 field offset. @returns Actual member address. */
+  override get(offset: number): unknown {
+    return offset === 16 ? this.argumentPosition : super.get(offset);
+  }
   /** Original implicit move construction delegates to base/member moves without registering again. @param source - Actual rvalue. @returns Transferred IllegalArgumentException. */
   static override move(source: IllegalArgumentException): IllegalArgumentException {
     const result = super.move(source) as IllegalArgumentException;
-    result.ArgumentPosition = source.ArgumentPosition;
+    result.argumentPosition = [source.ArgumentPosition];
     return result;
   }
   /** Original memberwise copy assignment orders base before scalar. @param source - Source value. @returns This value. */
