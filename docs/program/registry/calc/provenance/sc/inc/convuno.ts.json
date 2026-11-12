@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/inc/convuno.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/inc/convuno.hxx",
+    "upstreamSymbols": [
+      "ScUnoConversion::FillScAddress",
+      "ScUnoConversion::FillApiAddress",
+      "ScUnoConversion::FillScRange",
+      "ScUnoConversion::FillApiRange",
+      "ScUnoConversion::Intersects",
+      "ScUnoConversion::Contains"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/convuno.ts",
+          "marker": "ScUnoConversion"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/addressconverter.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/unoobj/native-coordinate-conversion.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/convuno.hxx",
+          "marker": "ScUnoConversion::FillScAddress"
+        }
+      ]
+    },
+    "omittedResponsibilities": [
+      "Full native ABI, workbook-owned AddressConverter instance services, locale conversion and complete XLSX filter/UI acceptance remain unported or unverified."
+    ],
+    "preservedResponsibilities": [
+      "Native XLSX static coordinate checkpoint implements the XML AddressConverter static cell/range conversion and typed toApiSequence responsibilities over actual ScDocument/ScAddress/ScRangeStringConverter/ScRangeList owners. The six original convuno.hxx inline coordinate/geometry methods retain narrowing, source order, inclusive comparisons and start-sheet projection. Real published coordinate structs and actual Sequence/Any transport supply compound lvalues without a substitute workbook, parser, limit or query provider. Native reset/partial mutation, complete-consumption guard, embedded NUL and CALC-350 endpoint acceptance remain. WorkbookHelper-owned instance/overflow/limit services, XLSB overloads, locale conversion, full XLSX workbook/filter/export/UI and independent compiled native acceptance remain unported or unverified. CALC-520 records unchecked/header limit mismatch without repair."
+    ],
+    "localSymbols": [
+      "ScUnoConversion"
+    ]
+  }
+}

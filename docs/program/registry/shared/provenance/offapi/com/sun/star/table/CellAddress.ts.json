@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/table/CellAddress.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/table/CellAddress.idl",
+    "localSymbols": [
+      "CellAddress",
+      "cppu_detail_getUnoType_CellAddress"
+    ],
+    "upstreamSymbols": [
+      "CellAddress",
+      "Sheet",
+      "Column",
+      "Row"
+    ],
+    "preservedResponsibilities": [
+      "Original published CellAddress/CellRangeAddress scalar declarations and normal generated CPPU type/value contracts reuse actual static type registration, compound scalar lvalues, Any and Sequence. Preserve IDL field order, signed16 Sheet, signed32 coordinate fields, zero defaults, memberwise copy, assignment and equality. Actual C++-shape logical sizes12/20 are checked through existing typelib metadata and genuine Any/Sequence owners; physical native ABI and complete spreadsheet component/filter/UI parity remain unverified. No type factory, binary wire representation, lifecycle manager or replacement document is introduced."
+    ],
+    "omittedResponsibilities": [
+      "Full native ABI, workbook-owned AddressConverter instance services, locale conversion and complete XLSX filter/UI acceptance remain unported or unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/table/CellAddress.ts",
+          "marker": "CellAddress"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/addressconverter.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/unoobj/native-coordinate-conversion.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/table/CellAddress.idl",
+          "marker": "CellAddress"
+        }
+      ]
+    }
+  }
+}

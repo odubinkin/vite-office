@@ -1,0 +1,86 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-ff4575d6-0e7a-4714-8a30-9c5a3317128d",
+    "capabilityId": "CAP-ff4575d6-0e7a-4714-8a30-9c5a3317128d",
+    "suite": "shared",
+    "subsystem": "published-coordinate-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original published CellAddress/CellRangeAddress scalar declarations and normal generated CPPU type/value contracts reuse actual static type registration, compound scalar lvalues, Any and Sequence. Preserve IDL field order, signed16 Sheet, signed32 coordinate fields, zero defaults, memberwise copy, assignment and equality. Actual C++-shape logical sizes12/20 are checked through existing typelib metadata and genuine Any/Sequence owners; physical native ABI and complete spreadsheet component/filter/UI parity remain unverified. No type factory, binary wire representation, lifecycle manager or replacement document is introduced."
+    ],
+    "capability": "Published UNO cell and range address values",
+    "gaps": [
+      "Original published CellAddress/CellRangeAddress scalar declarations and normal generated CPPU type/value contracts reuse actual static type registration, compound scalar lvalues, Any and Sequence. Preserve IDL field order, signed16 Sheet, signed32 coordinate fields, zero defaults, memberwise copy, assignment and equality. Actual C++-shape logical sizes12/20 are checked through existing typelib metadata and genuine Any/Sequence owners; physical native ABI and complete spreadsheet component/filter/UI parity remain unverified. No type factory, binary wire representation, lifecycle manager or replacement document is introduced."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "offapi/com/sun/star/table/CellAddress.idl",
+          "marker": "CellAddress"
+        },
+        {
+          "path": "offapi/com/sun/star/table/CellRangeAddress.idl",
+          "marker": "CellRangeAddress"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/test_any.cxx",
+          "marker": "void Test::testStruct()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "offapi/com/sun/star/table/CellRangeAddress.idl",
+          "marker": "CellRangeAddress"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/table/CellAddress.ts",
+          "marker": "CellAddress"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/table/CellRangeAddress.ts",
+          "marker": "CellRangeAddress"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/addressconverter.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/unoobj/native-coordinate-conversion.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-oox-coordinate-conversion.md",
+          "marker": "# XLSX coordinate and UNO range conversion"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original published CellAddress/CellRangeAddress scalar declarations and normal generated CPPU type/value contracts reuse actual static type registration, compound scalar lvalues, Any and Sequence. Preserve IDL field order, signed16 Sheet, signed32 coordinate fields, zero defaults, memberwise copy, assignment and equality. Actual C++-shape logical sizes12/20 are checked through existing typelib metadata and genuine Any/Sequence owners; physical native ABI and complete spreadsheet component/filter/UI parity remain unverified. No type factory, binary wire representation, lifecycle manager or replacement document is introduced."
+    },
+    "scopeLimitations": [
+      "Original published CellAddress/CellRangeAddress scalar declarations and normal generated CPPU type/value contracts reuse actual static type registration, compound scalar lvalues, Any and Sequence. Preserve IDL field order, signed16 Sheet, signed32 coordinate fields, zero defaults, memberwise copy, assignment and equality. Actual C++-shape logical sizes12/20 are checked through existing typelib metadata and genuine Any/Sequence owners; physical native ABI and complete spreadsheet component/filter/UI parity remain unverified. No type factory, binary wire representation, lifecycle manager or replacement document is introduced.",
+      "Upstream test references are related generic range-parsing/struct-Any QA, not a claimed complete port of those broader suites or an independently compiled native differential. There is no focused source test for the introduced static wrapper/inline coordinate methods or these two concrete IDL structs."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "published-cell-coordinate-values"
+  }
+}

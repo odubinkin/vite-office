@@ -5417,3 +5417,8 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source: pinned `svl/source/items/itemprop.cxx`, `SfxExtItemPropertySetInfo` constructor, and `include/svl/itemprop.hxx`, commit9bc445578031fecf56086729d8e4940c77e14d65.
 - Shared metadata extension construction checks Property.Handle against signed16-bit limits, then stores it in unsigned16-bit nWID. Returned descriptors therefore change admitted -1 to65535 and -32768 to32768; positive32768 fails the original check. Preserve both narrowing stages rather than repairing negative handles or widening accepted input. Actual shared-component Sequence<Property>/UNO-query tests cover these results. This is not a compiled Calc/XLSX filter or UI witness.
+
+### CALC-520 — The unchecked OOXML cell conversion inherits document-limit checks
+
+- Source: pinned `sc/source/filter/inc/addressconverter.hxx`, `AddressConverter::convertToCellAddressUnchecked`, its body in `sc/source/filter/oox/addressconverter.cxx`, and the local Excel A1 scanner in `sc/source/core/tool/address.cxx`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- The header promises conversion without checking any sheet limits, but the implementation calls ScAddress::Parse with the real document. The parser can reject columns/rows outside that document's dimensions before the converter's separate overflow checks ever run. Preserve that call and its partial output, rather than replacing it with an unbounded A1 parser to match the comment. Actual local ScDocument tests retain false for XFE1 and A1048577 with ordinary dimensions. This is source/local-core evidence, not an independently compiled complete workbook or UI reproduction.

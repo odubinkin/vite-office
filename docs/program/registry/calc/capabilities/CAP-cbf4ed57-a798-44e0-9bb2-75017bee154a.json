@@ -1,0 +1,94 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-cbf4ed57-a798-44e0-9bb2-75017bee154a",
+    "capabilityId": "CAP-cbf4ed57-a798-44e0-9bb2-75017bee154a",
+    "suite": "calc",
+    "subsystem": "xlsx-coordinate-conversion",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Native XLSX static coordinate checkpoint implements the XML AddressConverter static cell/range conversion and typed toApiSequence responsibilities over actual ScDocument/ScAddress/ScRangeStringConverter/ScRangeList owners. The six original convuno.hxx inline coordinate/geometry methods retain narrowing, source order, inclusive comparisons and start-sheet projection. Real published coordinate structs and actual Sequence/Any transport supply compound lvalues without a substitute workbook, parser, limit or query provider. Native reset/partial mutation, complete-consumption guard, embedded NUL and CALC-350 endpoint acceptance remain. WorkbookHelper-owned instance/overflow/limit services, XLSB overloads, locale conversion, full XLSX workbook/filter/export/UI and independent compiled native acceptance remain unported or unverified. CALC-520 records unchecked/header limit mismatch without repair."
+    ],
+    "capability": "Native XLSX static address and inline UNO coordinate conversion",
+    "gaps": [
+      "Native XLSX static coordinate checkpoint implements the XML AddressConverter static cell/range conversion and typed toApiSequence responsibilities over actual ScDocument/ScAddress/ScRangeStringConverter/ScRangeList owners. The six original convuno.hxx inline coordinate/geometry methods retain narrowing, source order, inclusive comparisons and start-sheet projection. Real published coordinate structs and actual Sequence/Any transport supply compound lvalues without a substitute workbook, parser, limit or query provider. Native reset/partial mutation, complete-consumption guard, embedded NUL and CALC-350 endpoint acceptance remain. WorkbookHelper-owned instance/overflow/limit services, XLSB overloads, locale conversion, full XLSX workbook/filter/export/UI and independent compiled native acceptance remain unported or unverified. CALC-520 records unchecked/header limit mismatch without repair."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/inc/convuno.hxx",
+          "marker": "ScUnoConversion::FillScAddress"
+        },
+        {
+          "path": "sc/source/filter/oox/addressconverter.cxx",
+          "marker": "AddressConverter::convertToCellAddressUnchecked"
+        },
+        {
+          "path": "sc/source/filter/inc/addressconverter.hxx",
+          "marker": "AddressConverter"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_range.cxx",
+          "marker": "testRangeParsing"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/source/filter/inc/addressconverter.hxx",
+          "marker": "convertToCellRangeUnchecked"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/inc/convuno.ts",
+          "marker": "ScUnoConversion"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/addressconverter.ts",
+          "marker": "AddressConverter"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/inc/addressconverter.ts",
+          "marker": "AddressConverter"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/addressconverter.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/unoobj/native-coordinate-conversion.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-oox-coordinate-conversion.md",
+          "marker": "# XLSX coordinate and UNO range conversion"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native XLSX static coordinate checkpoint implements the XML AddressConverter static cell/range conversion and typed toApiSequence responsibilities over actual ScDocument/ScAddress/ScRangeStringConverter/ScRangeList owners. The six original convuno.hxx inline coordinate/geometry methods retain narrowing, source order, inclusive comparisons and start-sheet projection. Real published coordinate structs and actual Sequence/Any transport supply compound lvalues without a substitute workbook, parser, limit or query provider. Native reset/partial mutation, complete-consumption guard, embedded NUL and CALC-350 endpoint acceptance remain. WorkbookHelper-owned instance/overflow/limit services, XLSB overloads, locale conversion, full XLSX workbook/filter/export/UI and independent compiled native acceptance remain unported or unverified. CALC-520 records unchecked/header limit mismatch without repair."
+    },
+    "scopeLimitations": [
+      "Native XLSX static coordinate checkpoint implements the XML AddressConverter static cell/range conversion and typed toApiSequence responsibilities over actual ScDocument/ScAddress/ScRangeStringConverter/ScRangeList owners. The six original convuno.hxx inline coordinate/geometry methods retain narrowing, source order, inclusive comparisons and start-sheet projection. Real published coordinate structs and actual Sequence/Any transport supply compound lvalues without a substitute workbook, parser, limit or query provider. Native reset/partial mutation, complete-consumption guard, embedded NUL and CALC-350 endpoint acceptance remain. WorkbookHelper-owned instance/overflow/limit services, XLSB overloads, locale conversion, full XLSX workbook/filter/export/UI and independent compiled native acceptance remain unported or unverified. CALC-520 records unchecked/header limit mismatch without repair.",
+      "Upstream test references are related generic range-parsing/struct-Any QA, not a claimed complete port of those broader suites or an independently compiled native differential. There is no focused source test for the introduced static wrapper/inline coordinate methods or these two concrete IDL structs."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "xlsx-static-coordinate-conversion"
+  }
+}
