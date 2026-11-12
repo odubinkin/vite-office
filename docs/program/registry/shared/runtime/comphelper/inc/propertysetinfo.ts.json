@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/comphelper/inc/propertysetinfo.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-property-map",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/comphelper/inc/propertysetinfo.ts",
+        "apps/office/src/svl/source/items/native-property-map.test.ts"
+      ],
+      "justification": "Native SfxItemPropertyMapEntry schema values and PropertyMoreFlags retain actual OUString/Type owners, source widths/checked preconditions, copy/assignment and reverse member destruction. SfxItemPropertyMap now uses actual sorted_vector/OUString comparison, borrowed immutable schema pointers, first duplicate insertion, counted UTF16 lower_bound and real cached Sequence<Property> values. Actual generated Property/UNO data assignment and sequence COW preserve cache sharing, independent returned descriptors and UnknownPropertyException defaults. Older SfxItemPropertySetInfo array projection remains explicitly unregistered/incomplete, not a native XPropertySetInfo provider. Full SfxItemPropertySet/property-info/static-map owner migration, SwXTextDefaults/application and DOCX/XLSX filters/export/UI remain incomplete; no broad default/service/ABI/parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "PropertyMoreFlags"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/comphelper/propertysetinfo.hxx",
+      "upstreamSymbols": [
+        "PropertyMoreFlags",
+        "METRIC_ITEM"
+      ]
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svl/inc/itemprop.ts",
+    "localSymbols": [
+      "SfxItemPropertyMapEntry",
+      "SfxItemPropertyMapCompare",
+      "PROPERTY_NONE",
+      "comparePropertyNames",
+      "propertyNameView"
+    ],
+    "upstreamPath": "include/svl/itemprop.hxx",
+    "upstreamSymbols": [
+      "SfxItemPropertyMapEntry",
+      "SfxItemPropertyMapCompare",
+      "PROPERTY_NONE"
+    ],
+    "preservedResponsibilities": [
+      "Native SfxItemPropertyMapEntry schema values and PropertyMoreFlags retain actual OUString/Type owners, source widths/checked preconditions, copy/assignment and reverse member destruction. SfxItemPropertyMap now uses actual sorted_vector/OUString comparison, borrowed immutable schema pointers, first duplicate insertion, counted UTF16 lower_bound and real cached Sequence<Property> values. Actual generated Property/UNO data assignment and sequence COW preserve cache sharing, independent returned descriptors and UnknownPropertyException defaults. Older SfxItemPropertySetInfo array projection remains explicitly unregistered/incomplete, not a native XPropertySetInfo provider. Full SfxItemPropertySet/property-info/static-map owner migration, SwXTextDefaults/application and DOCX/XLSX filters/export/UI remain incomplete; no broad default/service/ABI/parity promotion."
+    ],
+    "omittedResponsibilities": [
+      "Full native component/property-set/static-schema integration and unconsumed implicit moves/physical ABI remain unverified. No query provider is fabricated."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/inc/itemprop.ts",
+          "marker": "SfxItemPropertyMapEntry"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/native-property-map.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svl/itemprop.hxx",
+          "marker": "SfxItemPropertyMapEntry"
+        }
+      ]
+    }
+  }
+}
