@@ -1,0 +1,622 @@
+{
+  "status": "verified-prerequisite-checkpoint-user-pause-pending",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "81bf99f190bb98697fbc5ba59bd6cee2e7809963",
+  "capability": "CAP-06a4fab6-b15f-491b-a5b5-58c78fb4a406",
+  "scope": "Actual generated exception member address transport through shared UNO data/Any operations; local representation corrections and removal of shadow address helper. Full parent format task remains incomplete.",
+  "userStopRule": "User explicitly requested goal pause after completing this current block. Persist verified source/evidence and clean worktree, then call goal paused; no new block.",
+  "tests": {
+    "newCriticalCases": 12,
+    "relatedCases": 500,
+    "relatedFiles": 84,
+    "boundaryCases": 48,
+    "resourceCases": 2,
+    "result": "pass-final-stable-related-run",
+    "sourceScope": "Existing full native source-captured Any/Reference/CPPU callers and import-order tests now use actual RuntimeException addresses. No new complete cppuhelper getCaughtException/throwException or whole test_any::testException port is claimed."
+  },
+  "coverage": {
+    "result": "pass-whole5-selected-owner90-gate",
+    "threshold": 90,
+    "completeSelectedOwnerFiles": 5,
+    "total": {
+      "lines": {
+        "total": 170,
+        "covered": 162,
+        "skipped": 0,
+        "pct": 95.29
+      },
+      "statements": {
+        "total": 190,
+        "covered": 181,
+        "skipped": 0,
+        "pct": 95.26
+      },
+      "functions": {
+        "total": 54,
+        "covered": 50,
+        "skipped": 0,
+        "pct": 92.59
+      },
+      "branches": {
+        "total": 68,
+        "covered": 65,
+        "skipped": 0,
+        "pct": 95.58
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "owners": {
+      "src/cppu/inc/com/sun/star/lang/IllegalArgumentException.ts": {
+        "lines": {
+          "total": 36,
+          "covered": 36,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 41,
+          "covered": 41,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/cppu/inc/com/sun/star/lang/WrappedTargetException.ts": {
+        "lines": {
+          "total": 36,
+          "covered": 36,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 39,
+          "covered": 39,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException.ts": {
+        "lines": {
+          "total": 36,
+          "covered": 28,
+          "skipped": 0,
+          "pct": 77.77
+        },
+        "functions": {
+          "total": 11,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 63.63
+        },
+        "statements": {
+          "total": 39,
+          "covered": 30,
+          "skipped": 0,
+          "pct": 76.92
+        },
+        "branches": {
+          "total": 14,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 78.57
+        }
+      },
+      "src/cppu/inc/com/sun/star/uno/exception-values.ts": {
+        "lines": {
+          "total": 25,
+          "covered": 25,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 29,
+          "covered": 29,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/cppu/inc/com/sun/star/xml/dom/DOMException.ts": {
+        "lines": {
+          "total": 37,
+          "covered": 37,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 42,
+          "covered": 42,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "note": "Final broad run passes directly at90 for all four metrics. Diagnostic capture and unused failed merge attempt are not used for final assertions or coverage."
+  },
+  "preservedSource": [
+    "Original generated defaults/widths/constructor-copy-move assignment and destruction ownership",
+    "Real stable base Message/Context addresses instead of a temporary Context copy",
+    "Actual original owned nested Any address in both wrapped exception families",
+    "Short and enum move construction keeps the original source scalar and creates a separate destination scalar field",
+    "No second exception record/factory/prototype reconstruction/provider/private state hook",
+    "Native physical ABI/allocator/thread behavior remains unqualified"
+  ],
+  "corrections": [
+    "The initial weak-reference test retained its own acquired hardening result; it now clears that public Reference before expecting object destruction.",
+    "A broad test-parameter text edit temporarily broke six new fixture cases; corrected by scoped editing and final stable full related run500/84 passes.",
+    "Tests use declared Exception template extraction directly, without an invalid type-reference argument cast."
+  ],
+  "knownBaseline": [
+    "Only css-style-matchers.ts17 missing JSDoc and76 incomplete parameter documentation remain.",
+    "Doctor passes with existing managed-hook fallback warning."
+  ],
+  "remaining": [
+    "Actual UNO exception bridge/getCaughtException and necessary environment/mapping graph",
+    "Content isDocument/open/cancel and actual broker/provider",
+    "Default resolver/DocumentBuilder/metadata/model initialization",
+    "Complete DOCX/XLSX import/export/reopen, shell routing and existing desktop/mobile Open/download acceptance"
+  ],
+  "fullSuite": "Not run; approved once-per-ten-agentplane-task cadence; parent format tasks remain in progress.",
+  "checks": [
+    {
+      "name": "final",
+      "cwd": "apps/office",
+      "command": "../../node_modules/.bin/vitest run --config vite.config.ts src/cppu/inc/com/sun/star src/cppu/source/uno src/cppu/source/typelib src/cppuhelper src/ucbhelper src/stoc/source/typeconv src/offapi/com/sun/star/xml/dom src/offapi/com/sun/star/xml/sax src/unoxml src/external/libxml2/parsercallbacks.test.ts src/desktop/browser/app/uno-converter.test.ts --coverage --coverage.include=src/cppu/inc/com/sun/star/uno/exception-values.ts --coverage.include=src/cppu/inc/com/sun/star/lang/IllegalArgumentException.ts --coverage.include=src/cppu/inc/com/sun/star/lang/WrappedTargetException.ts --coverage.include=src/cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException.ts --coverage.include=src/cppu/inc/com/sun/star/xml/dom/DOMException.ts --coverage.reportsDirectory=coverage/exception-address-final --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.functions=90 --coverage.thresholds.branches=90",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-final.log",
+      "sha256": "d67b907e925cc442b00feb2240e33a2f1ec2388624c53625984bb04383066c4e"
+    },
+    {
+      "name": "typecheck",
+      "cwd": ".",
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "name": "build",
+      "cwd": ".",
+      "command": "npm run build",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-build.log",
+      "sha256": "01c41a0032c39817e469538ec607eed21da6fcdfd91a5e5eccbe56e27b80e445"
+    },
+    {
+      "name": "static",
+      "cwd": ".",
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-static.log",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    {
+      "name": "lint",
+      "cwd": ".",
+      "command": [
+        "node_modules/.bin/eslint",
+        "--max-warnings",
+        "0",
+        "apps/office/src/cppu/inc/com/sun/star/beans/PropertyVetoException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/beans/UnknownPropertyException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/lang/IllegalArgumentException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/lang/WrappedTargetException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/Any-data.test.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/exception-values.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/native-exception-address.test.ts",
+        "apps/office/src/cppu/inc/com/sun/star/xml/dom/DOMException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/xml/sax/SAXException.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/ContentCreationException.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/IllegalIdentifierException.ts",
+        "apps/office/src/udkapi/com/sun/star/script/CannotConvertException.ts"
+      ],
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "format",
+      "cwd": ".",
+      "command": [
+        "node_modules/.bin/prettier",
+        "--check",
+        "apps/office/src/cppu/inc/com/sun/star/beans/PropertyVetoException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/beans/UnknownPropertyException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/lang/IllegalArgumentException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/lang/WrappedTargetException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/Any-data.test.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/exception-values.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/native-exception-address.test.ts",
+        "apps/office/src/cppu/inc/com/sun/star/xml/dom/DOMException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/xml/sax/SAXException.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/ContentCreationException.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/IllegalIdentifierException.ts",
+        "apps/office/src/udkapi/com/sun/star/script/CannotConvertException.ts",
+        "docs/program/registry/shared/capabilities/CAP-06a4fab6-b15f-491b-a5b5-58c78fb4a406.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/beans/PropertyVetoException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/beans/UnknownPropertyException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/IllegalArgumentException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/WrappedTargetException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/exception-values.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/xml/dom/DOMException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/xml/sax/SAXException.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/ContentCreationException.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/IllegalIdentifierException.ts.json",
+        "docs/program/registry/shared/provenance/udkapi/com/sun/star/script/CannotConvertException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/beans/PropertyVetoException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/beans/UnknownPropertyException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/IllegalArgumentException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/WrappedTargetException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/exception-values.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/xml/dom/DOMException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/xml/sax/SAXException.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/ContentCreationException.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/IllegalIdentifierException.ts.json",
+        "docs/program/registry/shared/runtime/udkapi/com/sun/star/script/CannotConvertException.ts.json",
+        "docs/program/native-uno-exception-transport.md"
+      ],
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "name": "provenance",
+      "cwd": ".",
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-provenance.log",
+      "sha256": "187bbafc6768d92b57263e6a8d8f3832c289d89b0b98aa0738aa7f591a90cf41"
+    },
+    {
+      "name": "boundaries",
+      "cwd": ".",
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-boundaries.log",
+      "sha256": "c8db8d2d97cb1e474387e9c900f9c62eacd605119e15b57b04477f5398616d4d"
+    },
+    {
+      "name": "registry-build",
+      "cwd": ".",
+      "command": "npm run inventory:registry:build",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "name": "registry-check",
+      "cwd": ".",
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-registry-check.log",
+      "sha256": "391b13498866199cea183f80c4909c2c758f3f2912f524e6fd8f1fd450cd36d6"
+    },
+    {
+      "name": "docs",
+      "cwd": ".",
+      "command": "npm run check:docs",
+      "result": "known-baseline-failure",
+      "log": "apps/office/coverage/exception-address-docs.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    },
+    {
+      "name": "size",
+      "cwd": ".",
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-size.log",
+      "sha256": "f17855e369cfc5e27609954eafeddbe54838082a46296fdcdb39b51042b1b124"
+    },
+    {
+      "name": "tree",
+      "cwd": ".",
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-tree.log",
+      "sha256": "4615eccefb9c2ce4b9cd767340293514a9fc81e356b588821e3bd52cc72a30f6"
+    },
+    {
+      "name": "boundary-tests",
+      "cwd": ".",
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-boundary-tests.log",
+      "sha256": "4d1be631cb3c563dee993176007138c8b7b99ce936ff13208388efc20b5fe540"
+    },
+    {
+      "name": "resource-tests",
+      "cwd": ".",
+      "command": "node_modules/.bin/vitest run scripts/writer-ui-resource-model.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-resource-tests.log",
+      "sha256": "bb45dd06e9be6137545d87848b6805818e7d802df5551d0d6141a9a55be543f0"
+    },
+    {
+      "name": "writer-resources",
+      "cwd": ".",
+      "command": "npm run check:writer-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-writer-resources.log",
+      "sha256": "0d80d7d9396a3c3d20b64d27a43b0fd7d07acef08a673a158f7bb0000fba29d9"
+    },
+    {
+      "name": "calc-resources",
+      "cwd": ".",
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-calc-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "name": "hintids",
+      "cwd": ".",
+      "command": "npm run check:writer-hintids",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-hintids.log",
+      "sha256": "513c109068ebf83b3d6fe448c3c44564ec89a64cd9cb64059b5b4b89d11d887a"
+    },
+    {
+      "name": "doctor",
+      "cwd": ".",
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-doctor.log",
+      "sha256": "4e9ec901f8383a27b48cfa74b998cfba74b21708d8ea2468d07b20e3ed3aa101"
+    },
+    {
+      "name": "routing",
+      "cwd": ".",
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "name": "diff",
+      "cwd": ".",
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-address-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/beans/PropertyVetoException.ts",
+      "gitBlob": "a2b1d9913f6c0b881f1149412ee9aaf44b708948"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/beans/UnknownPropertyException.ts",
+      "gitBlob": "16d7c693fc03d7427f2633b19cd7e10f105f6949"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/lang/IllegalArgumentException.ts",
+      "gitBlob": "cd53c8e8c3ea3f008bc0f02179cf2bee654c00dc"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/lang/WrappedTargetException.ts",
+      "gitBlob": "af75d36e64af8e738f5ebbbf5242d54a88071579"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException.ts",
+      "gitBlob": "33cc885c7775f579b21eb4d7fd11e9b72257c69a"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/uno/Any-data.test.ts",
+      "gitBlob": "6bcada744ddd9d00fb7e30d43c09e63c0d417842"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/uno/exception-values.ts",
+      "gitBlob": "6b90e406c35337e2c743e8ce55eaf5c178f94e38"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/uno/native-exception-address.test.ts",
+      "gitBlob": "5380364cfbaa89d6ef2004c5e0f6067e08279131"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/xml/dom/DOMException.ts",
+      "gitBlob": "c5540d2f9a6a52dc7c6a2e0ddf9159da3a68a565"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/xml/sax/SAXException.ts",
+      "gitBlob": "5567cb2928f83919a9cf31400c2d412b6e83ab52"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/ContentCreationException.ts",
+      "gitBlob": "9258ea919713d2d7aab465fe182691c11bc722cc"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/IllegalIdentifierException.ts",
+      "gitBlob": "bc9cd64589ac4964c0e0ad786a10e50963fc4fac"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/script/CannotConvertException.ts",
+      "gitBlob": "5e94bddd4b3b89c31fd5df20fea4b3af4c1ff959"
+    },
+    {
+      "path": "docs/program/native-uno-exception-transport.md",
+      "gitBlob": "6bf0fc43fbf8668656745094a83dbd9087a6fe7b"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-06a4fab6-b15f-491b-a5b5-58c78fb4a406.json",
+      "gitBlob": "f9bef2d659b747a93652e5408d1bea5a99527186"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/beans/PropertyVetoException.ts.json",
+      "gitBlob": "d7b1f35b2259fb230baced0b3070598788870cd1"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/beans/UnknownPropertyException.ts.json",
+      "gitBlob": "f683c89e7e75e9ae23e05f12470e3d4dee9df3e9"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/IllegalArgumentException.ts.json",
+      "gitBlob": "87b038961f1a14d9286257f968126f789e355410"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/WrappedTargetException.ts.json",
+      "gitBlob": "c261955eb52acd915d049d40465a5fa1b2fe35f2"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException.ts.json",
+      "gitBlob": "f0bd6d91bca52c82a49358e186b262d32cd92f21"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/exception-values.ts.json",
+      "gitBlob": "ff4cd64adff51eb49e52692e397a869195c32c0f"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/xml/dom/DOMException.ts.json",
+      "gitBlob": "2a433fe9916614bc8013a812e38dbc2c5df41484"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/xml/sax/SAXException.ts.json",
+      "gitBlob": "7b9de786ccdaf3a7d008405d308f5f35d45c2ede"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/ContentCreationException.ts.json",
+      "gitBlob": "e049b385816431b6d9dcd14074847eb260c2135a"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/IllegalIdentifierException.ts.json",
+      "gitBlob": "5986846fa20040d0b85a91274c10764c9a6f7c2b"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/script/CannotConvertException.ts.json",
+      "gitBlob": "94b964b13ec548508f6f256e5fd12093ccddd7e2"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/beans/PropertyVetoException.ts.json",
+      "gitBlob": "7474a4da8c195aeb9d77614d8eb0e60c4a4ea51b"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/beans/UnknownPropertyException.ts.json",
+      "gitBlob": "0850745db855ba2763e1309753f02ffe11b387de"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/IllegalArgumentException.ts.json",
+      "gitBlob": "fec5809e73ea11523f26a4cfd611a56ab6f30461"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/WrappedTargetException.ts.json",
+      "gitBlob": "51df3286b7041510f315d4d4f61d5f1baab2c5c4"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException.ts.json",
+      "gitBlob": "04d117bd6e126806726f1282604ffd60438f0395"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/exception-values.ts.json",
+      "gitBlob": "c6fa3c989f6681b105214ff4a68ab7326bb8a195"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/xml/dom/DOMException.ts.json",
+      "gitBlob": "3a63098d9b5d253cef392b7edd1119cab6a1dfcf"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/xml/sax/SAXException.ts.json",
+      "gitBlob": "90531f329119b9747bacb13879f269ab3a1499e0"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/ContentCreationException.ts.json",
+      "gitBlob": "636355a4d58e5a9cd1dd4a0f30b64210664f6d9d"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/IllegalIdentifierException.ts.json",
+      "gitBlob": "4d91f8cc73d0e64df4a5c0a7d6a8f7697e44036e"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/script/CannotConvertException.ts.json",
+      "gitBlob": "ec9a1d104ab6980bd07ef39bd7180d23b145e8b1"
+    }
+  ],
+  "upstreamBlobs": [
+    {
+      "path": "udkapi/com/sun/star/uno/Exception.idl",
+      "gitBlob": "29a0f83b6a9e6c1d67219db8b1cddf076ebf3e32"
+    },
+    {
+      "path": "udkapi/com/sun/star/uno/RuntimeException.idl",
+      "gitBlob": "d9b6a979f8914150550a3b732f0378f43b2647da"
+    },
+    {
+      "path": "udkapi/com/sun/star/lang/IllegalArgumentException.idl",
+      "gitBlob": "4aa53fa0e73644c43fd15c910a20d5f82d8a60d6"
+    },
+    {
+      "path": "udkapi/com/sun/star/lang/WrappedTargetException.idl",
+      "gitBlob": "61dd950a4de2b604905b64ec82f0939c781c4055"
+    },
+    {
+      "path": "udkapi/com/sun/star/lang/WrappedTargetRuntimeException.idl",
+      "gitBlob": "3b3c86699230102851a3646a720eea7382da17a1"
+    },
+    {
+      "path": "offapi/com/sun/star/xml/dom/DOMException.idl",
+      "gitBlob": "76593d416ef5e0aa6e4232ac31d07e001e4715cd"
+    },
+    {
+      "path": "codemaker/source/cppumaker/cpputype.cxx",
+      "gitBlob": "152dbf476955dd95b1d7623ca7342cc69c24fb0a"
+    },
+    {
+      "path": "include/com/sun/star/uno/Any.hxx",
+      "gitBlob": "e5bb5b9268f22d79295c8b8489a0d548e7c3561e"
+    }
+  ]
+}
