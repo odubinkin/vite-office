@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 157
+revision: 160
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T01:47:47.673Z"
+  updated_at: "2026-11-12T02:13:17.633Z"
   updated_by: "CODER"
-  note: "Verified default-schema prerequisite:22 profile cases5files at90 thresholds S98.34/B95.23/F100/L98.26,64 related cases8files. Native TEXT_DEFAULT40 has78 source-audited entries; complete XPropertyState SDK/type/sequence contract and original default-item predicates. Final gates pass except unchanged JSDoc baseline. Evidence:writer-default-schema-checkpoint.json18 source hashes. Concrete default service, native shell/style-pool owners, generic4-method QA and full DOCX-XLSX/UI acceptance remain incomplete; continue goal."
-  attempts: 47
+  note: "Verified native stylesheet ownership prerequisite:50 profile scenarios6files above90 thresholds S98.67/B98.01/F100/L98.82,27 related5files,2 Chromium cases. Typecheck/static/scoped gates pass except unchanged JSDoc baseline. Actual WeakImplHelper/strong index and by-value Clear scopes, Remove xP, owned item cleanup, real native QA fixtures. Evidence:native-style-ownership-checkpoint.json. Full Writer shell/style service and DOCX-XLSX/UI remain incomplete; continue active goal."
+  attempts: 48
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -760,8 +763,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-12T02:13:17.633Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified native stylesheet ownership prerequisite:50 profile scenarios6files above90 thresholds S98.67/B98.01/F100/L98.82,27 related5files,2 Chromium cases. Typecheck/static/scoped gates pass except unchanged JSDoc baseline. Actual WeakImplHelper/strong index and by-value Clear scopes, Remove xP, owned item cleanup, real native QA fixtures. Evidence:native-style-ownership-checkpoint.json. Full Writer shell/style service and DOCX-XLSX/UI remain incomplete; continue active goal."
+  -
+    type: "status"
+    at: "2026-11-12T02:13:28.818Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-12T01:47:52.710Z"
+doc_updated_at: "2026-11-12T02:13:28.818Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -2186,6 +2202,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T02:13:17.633Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified native stylesheet ownership prerequisite:50 profile scenarios6files above90 thresholds S98.67/B98.01/F100/L98.82,27 related5files,2 Chromium cases. Typecheck/static/scoped gates pass except unchanged JSDoc baseline. Actual WeakImplHelper/strong index and by-value Clear scopes, Remove xP, owned item cleanup, real native QA fixtures. Evidence:native-style-ownership-checkpoint.json. Full Writer shell/style service and DOCX-XLSX/UI remain incomplete; continue active goal.
+    Attempts: 48
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T02:13:17.016Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2434,6 +2480,10 @@ sections:
     - Observation: Default-schema checkpoint: TEXT_DEFAULT40 now has78 actual core entries, source flag normalization and native metadata identities. Complete XPropertyState SDK declarations and original nullable item-default predicates use real native owners.22 profile cases5files pass at90 thresholds (S98.34/B95.23/F100/L98.26), plus64 related cases8files.
       Impact: Concrete SwXTextDefaults, native shell/style-pool dependencies, remaining original rows and generic qadevOOo XPropertyState4-method behavioral tests remain unfinished. Broader SwAttrPool package/merged-range binding is still incomplete; the initial full-pool set fixture failed without changing guards. Full DOCX-XLSX/UI acceptance is not achieved.
       Resolution: Persist evidence/writer-default-schema-checkpoint.json with source hashes. Real fixed tab range validates1270 through SwDoc.SetDefault;78 rows match independent187-row upstream fixture. Source audit corrected StandardPageMode spelling and tests prevent cross-family flag mutation. Final gates pass except unchanged JSDoc baseline. Continue actual default-service owners; no fake provider or broad parity promotion.
+
+    - Observation: Command: scoped native stylesheet profile, related EditEngine/property tests, Chromium2 cases, typecheck/static build and repository gates. Result: pass except unchanged global JSDoc baseline. Evidence: evidence/native-style-ownership-checkpoint.json;50 profile cases6files S98.67/B98.01/F100/L98.82,27 related cases5files and2 Chromium cases. Scope: actual weak stylesheet base, strong indexed ownership, native Remove/Clear/destructor contracts, all9 original index QA fixtures.
+      Impact: Native Writer style-pool dependency now has real reference ownership and virtual destruction. Full SwDocStyleSheetPool/SwXTextDefaults and DOCX-XLSX import/export/UI acceptance remain unfinished; no whole-goal or parity completion. JSDoc baseline css-style-matchers.ts:17/:76 remains.
+      Resolution: Use existing CPPU WeakImplHelper and Reference owners; preserve raw family views/CALC146 and nullable source QA pool. Migrate source fixtures to actual native base and caller references. Correct initial copy-identity expectation, facade declaration metadata and browser invocation/cache path without source repair, gate weakening or network. Continue active approved goal.
 id_source: "generated"
 ---
 ## Summary
@@ -3868,6 +3918,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T02:13:17.633Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified native stylesheet ownership prerequisite:50 profile scenarios6files above90 thresholds S98.67/B98.01/F100/L98.82,27 related5files,2 Chromium cases. Typecheck/static/scoped gates pass except unchanged JSDoc baseline. Actual WeakImplHelper/strong index and by-value Clear scopes, Remove xP, owned item cleanup, real native QA fixtures. Evidence:native-style-ownership-checkpoint.json. Full Writer shell/style service and DOCX-XLSX/UI remain incomplete; continue active goal.
+Attempts: 48
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T02:13:17.016Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4120,3 +4200,7 @@ DecisionContextRef:
 - Observation: Default-schema checkpoint: TEXT_DEFAULT40 now has78 actual core entries, source flag normalization and native metadata identities. Complete XPropertyState SDK declarations and original nullable item-default predicates use real native owners.22 profile cases5files pass at90 thresholds (S98.34/B95.23/F100/L98.26), plus64 related cases8files.
   Impact: Concrete SwXTextDefaults, native shell/style-pool dependencies, remaining original rows and generic qadevOOo XPropertyState4-method behavioral tests remain unfinished. Broader SwAttrPool package/merged-range binding is still incomplete; the initial full-pool set fixture failed without changing guards. Full DOCX-XLSX/UI acceptance is not achieved.
   Resolution: Persist evidence/writer-default-schema-checkpoint.json with source hashes. Real fixed tab range validates1270 through SwDoc.SetDefault;78 rows match independent187-row upstream fixture. Source audit corrected StandardPageMode spelling and tests prevent cross-family flag mutation. Final gates pass except unchanged JSDoc baseline. Continue actual default-service owners; no fake provider or broad parity promotion.
+
+- Observation: Command: scoped native stylesheet profile, related EditEngine/property tests, Chromium2 cases, typecheck/static build and repository gates. Result: pass except unchanged global JSDoc baseline. Evidence: evidence/native-style-ownership-checkpoint.json;50 profile cases6files S98.67/B98.01/F100/L98.82,27 related cases5files and2 Chromium cases. Scope: actual weak stylesheet base, strong indexed ownership, native Remove/Clear/destructor contracts, all9 original index QA fixtures.
+  Impact: Native Writer style-pool dependency now has real reference ownership and virtual destruction. Full SwDocStyleSheetPool/SwXTextDefaults and DOCX-XLSX import/export/UI acceptance remain unfinished; no whole-goal or parity completion. JSDoc baseline css-style-matchers.ts:17/:76 remains.
+  Resolution: Use existing CPPU WeakImplHelper and Reference owners; preserve raw family views/CALC146 and nullable source QA pool. Migrate source fixtures to actual native base and caller references. Correct initial copy-identity expectation, facade declaration metadata and browser invocation/cache path without source repair, gate weakening or network. Continue active approved goal.

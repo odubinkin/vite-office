@@ -1,0 +1,427 @@
+{
+  "taskId": "202610251549-J0Z0KF",
+  "checkpoint": "Native shared stylesheet strong/weak ownership and original index QA fixtures",
+  "baseCommit": "8f9e63fc3f9d55f1128a0c6c715cc0a469dd2481",
+  "upstream": {
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "tag": "libreoffice-26.8.0.2",
+    "paths": [
+      "include/svl/style.hxx",
+      "include/svl/IndexedStyleSheets.hxx",
+      "svl/source/items/style.cxx",
+      "svl/source/items/IndexedStyleSheets.cxx",
+      "svl/qa/unit/items/test_IndexedStyleSheets.cxx",
+      "editeng/inc/ContentNode.hxx"
+    ]
+  },
+  "implemented": [
+    "Actual zero-interface WeakImplHelper base and fresh weak copy lifetime, preserving nullable native pool pointer.",
+    "Indexed main vector holds genuine shared strong references for rtl::Reference ownership, with raw family/position pointers preserved.",
+    "Implicit pointer conversion scopes and independent by-value cleanup argument; callback-before-indexed-clear insertion order and CALC146 preserved.",
+    "Native Remove xP guard keeps pool-only styles alive through reparenting and erase broadcast.",
+    "Optional genuine XComponent query/UNO-only disposal catch; no fake positive provider or missing-method inference.",
+    "Last strong release dispatches actual virtual derived destructor; base deletes owned item set then reverse-order string members.",
+    "All nine native index QA cases now inherit actual native MockedStyleSheet base; existing style tests use genuine caller references and browser cleanup boundaries."
+  ],
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 339,
+        "covered": 335,
+        "skipped": 0,
+        "pct": 98.82
+      },
+      "statements": {
+        "total": 376,
+        "covered": 371,
+        "skipped": 0,
+        "pct": 98.67
+      },
+      "functions": {
+        "total": 91,
+        "covered": 91,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 151,
+        "covered": 148,
+        "skipped": 0,
+        "pct": 98.01
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/inc/style-values.ts": {
+      "lines": {
+        "total": 27,
+        "covered": 27,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 27,
+        "covered": 27,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/items/IndexedStyleSheets.ts": {
+      "lines": {
+        "total": 117,
+        "covered": 117,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 23,
+        "covered": 23,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 133,
+        "covered": 133,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 49,
+        "covered": 49,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/items/style-model.ts": {
+      "lines": {
+        "total": 166,
+        "covered": 162,
+        "skipped": 0,
+        "pct": 97.59
+      },
+      "functions": {
+        "total": 58,
+        "covered": 58,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 183,
+        "covered": 178,
+        "skipped": 0,
+        "pct": 97.26
+      },
+      "branches": {
+        "total": 86,
+        "covered": 83,
+        "skipped": 0,
+        "pct": 96.51
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/items/style-sheet.ts": {
+      "lines": {
+        "total": 29,
+        "covered": 29,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 8,
+        "covered": 8,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 33,
+        "covered": 33,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 16,
+        "covered": 16,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "verification": [
+    {
+      "command": "npx vitest run src/svl/source/items/native-{indexed-style-sheets,style-iterator,style-model,style-sheet,style-first-import,style-sheet-first-import}.test.ts --coverage --coverage.include='src/svl/source/items/IndexedStyleSheets.ts' --coverage.include='src/svl/source/items/style-model.ts' --coverage.include='src/svl/source/items/style-sheet.ts' --coverage.include='src/svl/inc/style-values.ts' --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "50 cases / 6 files; 4 complete measured modules, all metrics above 90%.",
+      "log": "apps/office/coverage/native-style-owner-profile.log"
+    },
+    {
+      "command": "npx vitest run src/editeng/source/editeng/native-{content-node,edit-document}.test.ts src/svl/source/items/native-{property-set,default-predicates}.test.ts src/sw/source/core/unocore/native-text-default-schema.test.ts",
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "27 cases / 5 files.",
+      "log": "apps/office/coverage/native-style-owner-related.log"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" npx playwright test --config apps/office/playwright.config.ts --project=shared apps/office/e2e/shared/style-model.spec.ts apps/office/e2e/shared/style-sheet.spec.ts",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "2 actual Chromium scenarios.",
+      "log": "apps/office/coverage/native-style-owner-browser.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Tool and office typechecks.",
+      "log": "apps/office/coverage/native-style-owner-typecheck-final.log"
+    },
+    {
+      "command": "npm run test:static",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Production build and static assets smoke.",
+      "log": "apps/office/coverage/native-style-owner-static.log"
+    },
+    {
+      "command": "npx eslint apps/office/src/svl/{inc/IndexedStyleSheets.ts,inc/style-values.ts,inc/style.ts,source/items/IndexedStyleSheets.ts,source/items/style-model.ts,source/items/style-sheet.ts,source/items/native-indexed-style-sheets.test.ts,source/items/native-style-iterator.test.ts,source/items/native-style-model.test.ts,source/items/native-style-sheet.test.ts} apps/office/src/editeng/source/editeng/editdoc.ts apps/office/e2e/shared/style-{model,sheet}.spec.ts --max-warnings 0",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "All changed TS runtime/unit/browser files.",
+      "log": "apps/office/coverage/native-style-owner-lint.log"
+    },
+    {
+      "command": "npx prettier --check $(git diff --name-only -- '*.ts' '*.json') docs/program/native-style-ownership.md",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Changed implementation/metadata and new documentation.",
+      "log": "apps/office/coverage/native-style-owner-format.log"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Passed scoped repository gate.",
+      "log": "apps/office/coverage/native-style-owner-boundaries.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Passed scoped repository gate.",
+      "log": "apps/office/coverage/native-style-owner-size.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Passed scoped repository gate.",
+      "log": "apps/office/coverage/native-style-owner-tree.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Passed scoped repository gate.",
+      "log": "apps/office/coverage/native-style-owner-provenance.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Passed scoped repository gate.",
+      "log": "apps/office/coverage/native-style-owner-invariants.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Passed scoped repository gate.",
+      "log": "apps/office/coverage/native-style-owner-parity.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Passed scoped repository gate.",
+      "log": "apps/office/coverage/native-style-owner-writer-resources.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Passed scoped repository gate.",
+      "log": "apps/office/coverage/native-style-owner-calc-resources.log"
+    },
+    {
+      "command": "npm run check:writer-hintids",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Passed scoped repository gate.",
+      "log": "apps/office/coverage/native-style-owner-hintids.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Passed scoped repository gate.",
+      "log": "apps/office/coverage/native-style-owner-routing.log"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Passed scoped repository gate.",
+      "log": "apps/office/coverage/native-style-owner-diff.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "cwd": ".",
+      "result": "fail",
+      "evidence": "Only unchanged baseline css-style-matchers.ts:17 missing JSDoc and :76 documents 2/3 parameters.",
+      "log": "apps/office/coverage/native-style-owner-jsdoc.log"
+    },
+    {
+      "command": "ap doctor",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Zero errors; unchanged managed shim readiness warning and installed pre-push fallback information.",
+      "log": "apps/office/coverage/native-style-owner-doctor.log"
+    }
+  ],
+  "failedAttemptsAndResolutions": [
+    "Initial typecheck rejected old plain-object fixtures after genuine reference ownership was required. Migrated original QA shape to native base inheritance and caller Reference locals; preserved valid null pool construction instead of inventing a fake owner.",
+    "Initial ownership assertion assumed the boolean item copy shared identity. Actual native item-set copy creates a separate item; test now observes independent real reference release and source survival.",
+    "Initial profile from repository root selected no project files; reran exact declared project from apps/office. No zero-denominator evidence used.",
+    "New non-null assertions and one callback JSDoc failed static gates. Replaced with source-precondition type casts and documented actual callback; scoped lint now passes and JSDoc has only old baseline errors.",
+    "Registry declaration analyzer does not count facade reexports. Header runtime declaration list remains empty as before; actual Base_Base class is recorded under its real implementation declaration and header provenance exports. No violation suppression or readiness promotion.",
+    "Initial Playwright --project argument swallowed positional filenames. Used --project=shared. Default browser cache lacked executable; repository-local node_modules/.cache/ms-playwright already contains it, used PLAYWRIGHT_BROWSERS_PATH without download or outside-repository inspection. Two browser scenarios pass."
+  ],
+  "limitations": [
+    "No positive XComponent case is synthesized: represented concrete stylesheet owners do not implement that interface.",
+    "Original source semantics and QA were ported; this checkpoint does not claim native binary/ABI/concurrency certification or defined post-destruction/dangling-pointer outcomes.",
+    "Native Writer document stylesheet pool/SwXTextDefaults/generic XPropertyState QA, full current-slice DOCX-XLSX import/export and mounted existing UI acceptance remain unfinished.",
+    "Full test suite not run: user requires related tests and one full run per ten agentplane tasks; this is a checkpoint of the same approved task.",
+    "Existing global JSDoc baseline remains; whole epic verification stays rework and goal remains active."
+  ],
+  "sourceBlobs": [
+    {
+      "path": "apps/office/e2e/shared/style-model.spec.ts",
+      "gitBlob": "d62d410f4f04f8358ffdb3ef02534ebeadf84cff"
+    },
+    {
+      "path": "apps/office/e2e/shared/style-sheet.spec.ts",
+      "gitBlob": "8650b38b1f4f04bc48921f935984aea6864f163c"
+    },
+    {
+      "path": "apps/office/src/editeng/source/editeng/editdoc.ts",
+      "gitBlob": "e8c75321d5f5e5a2298ddaa5924164b10dfc659e"
+    },
+    {
+      "path": "apps/office/src/svl/inc/IndexedStyleSheets.ts",
+      "gitBlob": "87fb6d913d21064c48839ec28fab88f6ae88ec76"
+    },
+    {
+      "path": "apps/office/src/svl/inc/style-values.ts",
+      "gitBlob": "f88e863d090a1548ad2732c006dfb025461d768c"
+    },
+    {
+      "path": "apps/office/src/svl/inc/style.ts",
+      "gitBlob": "d6edd682fca47140147e4e129148b9c29b1a8c7b"
+    },
+    {
+      "path": "apps/office/src/svl/source/items/IndexedStyleSheets.ts",
+      "gitBlob": "0209401a235dd79ae9ac277bb166e5c3e96df6db"
+    },
+    {
+      "path": "apps/office/src/svl/source/items/native-indexed-style-sheets.test.ts",
+      "gitBlob": "7b8f64f53e1f78d1dbc616777d823b24f7909c12"
+    },
+    {
+      "path": "apps/office/src/svl/source/items/native-style-iterator.test.ts",
+      "gitBlob": "a5dc1133505d9bc57cde926a1fbfa747d1a72bec"
+    },
+    {
+      "path": "apps/office/src/svl/source/items/native-style-model.test.ts",
+      "gitBlob": "8c3d175731a55b9f5dac4acddf181668cd79be69"
+    },
+    {
+      "path": "apps/office/src/svl/source/items/native-style-sheet.test.ts",
+      "gitBlob": "2ce281118ac6c04b51d8001da28bd1eac19323b8"
+    },
+    {
+      "path": "apps/office/src/svl/source/items/style-model.ts",
+      "gitBlob": "42b4310df5d044e68eeafb0afcabb87223459a12"
+    },
+    {
+      "path": "apps/office/src/svl/source/items/style-sheet.ts",
+      "gitBlob": "9a55a9a3448b6a0f8473b6c8510b4221933f60dd"
+    },
+    {
+      "path": "docs/program/native-style-ownership.md",
+      "gitBlob": "7121e1b18771bf887365e42a2d24ac1c63fbccae"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/svl/inc/IndexedStyleSheets.ts.json",
+      "gitBlob": "7ae34ad8d58b7abb4ffc07f48d6f695417201395"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/svl/inc/style-values.ts.json",
+      "gitBlob": "92e6a2812a365d8374d1f7ef3b485a8064d7f04d"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/svl/inc/style.ts.json",
+      "gitBlob": "354b346996680eeae3c53c9b0879e5fdcbb03f93"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/svl/source/items/IndexedStyleSheets.ts.json",
+      "gitBlob": "cc5dcddc79d4bc4177aa1b01add41a917680529c"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/svl/source/items/style-model.ts.json",
+      "gitBlob": "4f43de0f4638d60e2c3c040bf19b9068a84dd0bb"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/svl/source/items/style-sheet.ts.json",
+      "gitBlob": "e5c41fa7e8131edc5c3753cf305cb16f5822255a"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/svl/inc/IndexedStyleSheets.ts.json",
+      "gitBlob": "505786641c8b4c76275db5ecc1e924d85aa7f5c4"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/svl/inc/style-values.ts.json",
+      "gitBlob": "1e7cfa8442d28b7df9a137ff77f45f7ddf985e5f"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/svl/inc/style.ts.json",
+      "gitBlob": "2401c5170ec41a4fbf45c9736398d6231f0bdf68"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/svl/source/items/IndexedStyleSheets.ts.json",
+      "gitBlob": "a68fb5e6759cb8e9b0a81776c91900245dc1a8ae"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/svl/source/items/style-model.ts.json",
+      "gitBlob": "11247f91c674b6972bddd06641b5d75eaf4c999d"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/svl/source/items/style-sheet.ts.json",
+      "gitBlob": "9557304c9bfa2e5122319fe5d154fb78c2ff63b4"
+    }
+  ]
+}
