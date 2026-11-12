@@ -1,0 +1,844 @@
+{
+  "status": "verified-low-level-property-bag-prerequisite-parent-continues",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "0427e8d31f869600de363467b953d7efc520b419",
+  "capability": "CAP-ef452bba-374b-4d22-8ef6-48660a08d79c",
+  "scope": "Complete native low-level PropertyBag/OPropertyContainerHelper, source name comparator, stable Type field owner/borrowed Property fields and3 actual generated SDK exceptions. Separate UNO property service/metadata/format UI remains incomplete.",
+  "tests": {
+    "newCriticalCases": 10,
+    "relatedCases": 243,
+    "relatedFiles": 52,
+    "boundaryCases": 49,
+    "resourceCases": 2,
+    "sourceQA": "No dedicated low-level bag/container helper QA found in pinned comphelper QA. Existing complete Type/native Any source captures/replays and real registered service callers are in the related run; no broader whole test_any or UNO PropertyBag service claim."
+  },
+  "coverage": {
+    "result": "pass-whole8-owner90-gate",
+    "threshold": 90,
+    "selectedOwnerCount": 8,
+    "total": {
+      "lines": {
+        "total": 415,
+        "covered": 406,
+        "skipped": 0,
+        "pct": 97.83
+      },
+      "statements": {
+        "total": 445,
+        "covered": 432,
+        "skipped": 0,
+        "pct": 97.07
+      },
+      "functions": {
+        "total": 94,
+        "covered": 93,
+        "skipped": 0,
+        "pct": 98.93
+      },
+      "branches": {
+        "total": 138,
+        "covered": 130,
+        "skipped": 0,
+        "pct": 94.2
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "owners": {
+      "src/comphelper/inc/property.ts": {
+        "lines": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/comphelper/source/property/propertybag.ts": {
+        "lines": {
+          "total": 84,
+          "covered": 81,
+          "skipped": 0,
+          "pct": 96.42
+        },
+        "functions": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 91,
+          "covered": 88,
+          "skipped": 0,
+          "pct": 96.7
+        },
+        "branches": {
+          "total": 30,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 90
+        }
+      },
+      "src/comphelper/source/property/propertycontainerhelper.ts": {
+        "lines": {
+          "total": 194,
+          "covered": 188,
+          "skipped": 0,
+          "pct": 96.9
+        },
+        "functions": {
+          "total": 26,
+          "covered": 25,
+          "skipped": 0,
+          "pct": 96.15
+        },
+        "statements": {
+          "total": 206,
+          "covered": 196,
+          "skipped": 0,
+          "pct": 95.14
+        },
+        "branches": {
+          "total": 60,
+          "covered": 55,
+          "skipped": 0,
+          "pct": 91.66
+        }
+      },
+      "src/cppu/inc/com/sun/star/uno/Type.ts": {
+        "lines": {
+          "total": 43,
+          "covered": 43,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 16,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 44,
+          "covered": 44,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/udkapi/com/sun/star/beans/IllegalTypeException.ts": {
+        "lines": {
+          "total": 19,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/udkapi/com/sun/star/beans/NotRemoveableException.ts": {
+        "lines": {
+          "total": 19,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/udkapi/com/sun/star/beans/Property.ts": {
+        "lines": {
+          "total": 36,
+          "covered": 36,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 37,
+          "covered": 37,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/udkapi/com/sun/star/beans/PropertyExistException.ts": {
+        "lines": {
+          "total": 19,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    }
+  },
+  "browserQualification": {
+    "workerResult": {
+      "conversion": {
+        "serviceValue": 42,
+        "rowValue": 42,
+        "rowWasNull": false,
+        "failedFirst": 0,
+        "failedFirstWasNull": false,
+        "failedSecond": 0,
+        "failedSecondWasNull": true
+      },
+      "publicHelpers": {
+        "notifications": 1,
+        "sameEventSource": true,
+        "componentTypeCount": 3
+      },
+      "dynamicProperties": {
+        "changed": true,
+        "value": 42,
+        "initialDefault": 41,
+        "name": "workerValue",
+        "handle": 7,
+        "declaredLong": true,
+        "stableTypeField": true
+      },
+      "documentBuilder": {
+        "rootName": "document-content",
+        "streamOpen": true,
+        "namespaceAware": true,
+        "validating": false,
+        "emptyImplementation": true,
+        "capturedType": true,
+        "sameContext": true,
+        "exceptionMessage": "worker exception"
+      },
+      "xpath": {
+        "count": 1,
+        "listLength": 1,
+        "sameRoot": true
+      },
+      "globals": {
+        "window": "undefined",
+        "document": "undefined",
+        "DOMParser": "undefined"
+      },
+      "rootName": "document-content",
+      "attribute": "1.0",
+      "listCounts": [
+        0,
+        1,
+        0
+      ],
+      "sameOwner": true,
+      "unicode": "\ud83d\ude00\u5b57",
+      "utf16Length": 3,
+      "borrowedStreamOpen": true,
+      "warnings": 1,
+      "errors": 0,
+      "warningLine": 1
+    },
+    "mainResult": {
+      "conversion": {
+        "serviceValue": 42,
+        "rowValue": 42,
+        "rowWasNull": false,
+        "failedFirst": 0,
+        "failedFirstWasNull": false,
+        "failedSecond": 0,
+        "failedSecondWasNull": true
+      },
+      "publicHelpers": {
+        "notifications": 1,
+        "sameEventSource": true,
+        "componentTypeCount": 3
+      },
+      "dynamicProperties": {
+        "changed": true,
+        "value": 42,
+        "initialDefault": 41,
+        "name": "workerValue",
+        "handle": 7,
+        "declaredLong": true,
+        "stableTypeField": true
+      },
+      "documentBuilder": {
+        "rootName": "document-content",
+        "streamOpen": true,
+        "namespaceAware": true,
+        "validating": false,
+        "emptyImplementation": true,
+        "capturedType": true,
+        "sameContext": true,
+        "exceptionMessage": "worker exception"
+      },
+      "xpath": {
+        "count": 1,
+        "listLength": 1,
+        "sameRoot": true
+      },
+      "globals": {
+        "window": "object",
+        "document": "object",
+        "DOMParser": "function"
+      },
+      "rootName": "document-content",
+      "attribute": "1.0",
+      "listCounts": [
+        0,
+        1,
+        0
+      ],
+      "sameOwner": true,
+      "unicode": "\ud83d\ude00\u5b57",
+      "utf16Length": 3,
+      "borrowedStreamOpen": true,
+      "warnings": 1,
+      "errors": 0,
+      "warningLine": 1
+    }
+  },
+  "preservedIssues": [
+    "CALC-547/WRITER481 removed holder Any retained until helper destruction."
+  ],
+  "remaining": [
+    "Separate OPropertyBag UNO service, property array/notification helpers and SfxDocumentMetaData remain unimplemented.",
+    "Full DOCX/XLSX core/shell import/export/reopen and existing UI acceptance remain unfinished.",
+    "Native STL allocator/move/equal-key sort traces, physical ABI/threads and final/access/const enforcement remain unqualified."
+  ],
+  "knownBaseline": "Only prior css-style-matchers.ts17/76 JSDoc errors.",
+  "fullSuite": "Not run: approved once-per10 actual agentplane task cadence; same format parents remain active.",
+  "userStopRule": "Continue without pause; do not complete incomplete parents.",
+  "checks": [
+    {
+      "name": "final",
+      "cwd": "apps/office",
+      "command": "../../node_modules/.bin/vitest run --config vite.config.ts src/comphelper/source/property/propertybag.test.ts src/comphelper/inc/compbase.test.ts src/comphelper/inc/interfacecontainer4.test.ts src/cppu/inc/com/sun/star src/cppu/source/uno src/cppu/source/typelib src/cppuhelper/browser/exception-abi.test.ts src/ucbhelper/source/provider/native-propertyvalueset.test.ts src/desktop/browser/app src/unoxml/source/dom/documentbuilder.test.ts src/unoxml/source/xpath/xpath.test.ts --coverage --coverage.include=src/comphelper/source/property/propertybag.ts --coverage.include=src/comphelper/source/property/propertycontainerhelper.ts --coverage.include=src/comphelper/inc/property.ts --coverage.include=src/cppu/inc/com/sun/star/uno/Type.ts --coverage.include=src/udkapi/com/sun/star/beans/Property.ts --coverage.include=src/udkapi/com/sun/star/beans/IllegalTypeException.ts --coverage.include=src/udkapi/com/sun/star/beans/PropertyExistException.ts --coverage.include=src/udkapi/com/sun/star/beans/NotRemoveableException.ts --coverage.reportsDirectory=coverage/propertybag-final --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.functions=90 --coverage.thresholds.branches=90",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-final.log",
+      "sha256": "5fdac5fe61c302aa127b103718b994d4f8990043e363de3f87c7a1ff82cdbe87"
+    },
+    {
+      "name": "typecheck",
+      "cwd": ".",
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "name": "tool-types",
+      "cwd": ".",
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-tool-types.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "name": "build",
+      "cwd": ".",
+      "command": "npm run build",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-build.log",
+      "sha256": "19d5f57d19c760aaf3c84ecc7a53a83bce1e405527d043e5eb0216482d387910"
+    },
+    {
+      "name": "worker",
+      "cwd": ".",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node --experimental-strip-types scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-worker.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "name": "static",
+      "cwd": ".",
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-static.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "name": "provenance",
+      "cwd": ".",
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-provenance.log",
+      "sha256": "c164689ef33bf7500bfadd13c56465765d61affb4cb5676b90814e3bc3b25bba"
+    },
+    {
+      "name": "boundaries",
+      "cwd": ".",
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-boundaries.log",
+      "sha256": "ea10bc09a83dab004a10d332a12664cba2e036844eb7905c90f317a7f12d65db"
+    },
+    {
+      "name": "registry-build",
+      "cwd": ".",
+      "command": "npm run inventory:registry:build",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "name": "registry-check",
+      "cwd": ".",
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-registry-check.log",
+      "sha256": "2d15f958c065c68f3c933b55338778886323725df311d2c5d4bc45bb23fb6ce8"
+    },
+    {
+      "name": "docs",
+      "cwd": ".",
+      "command": "npm run check:docs",
+      "result": "known-baseline-failure",
+      "log": "apps/office/coverage/propertybag-docs.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    },
+    {
+      "name": "size",
+      "cwd": ".",
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-size.log",
+      "sha256": "982215feee4b8594d80b64c9bdb61b2a25e9202c281ce24ffa834e317485df8d"
+    },
+    {
+      "name": "tree",
+      "cwd": ".",
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "name": "boundary-tests",
+      "cwd": ".",
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts scripts/check-module-boundaries-xml.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-boundary-tests.log",
+      "sha256": "761dea977517216b2ce20c97701371c0239775373763702117dfa8eb9ff1a01a"
+    },
+    {
+      "name": "resource-tests",
+      "cwd": ".",
+      "command": "node_modules/.bin/vitest run scripts/writer-ui-resource-model.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-resource-tests.log",
+      "sha256": "aeb079aa261f94e8e0aee0d1c588706458ad078922430cad436e22bccff9a75d"
+    },
+    {
+      "name": "writer-resources",
+      "cwd": ".",
+      "command": "npm run check:writer-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-writer-resources.log",
+      "sha256": "f54dc33a0df6cd97a1b5164191e927250765b5efb73c2ad8940ade398962a96a"
+    },
+    {
+      "name": "calc-resources",
+      "cwd": ".",
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-calc-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "name": "hintids",
+      "cwd": ".",
+      "command": "npm run check:writer-hintids",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-hintids.log",
+      "sha256": "513c109068ebf83b3d6fe448c3c44564ec89a64cd9cb64059b5b4b89d11d887a"
+    },
+    {
+      "name": "doctor",
+      "cwd": ".",
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-doctor.log",
+      "sha256": "595bd602fb8468e5f8e908709b4c6a169da495679040bcb5642cf4709c124778"
+    },
+    {
+      "name": "routing",
+      "cwd": ".",
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "name": "diff",
+      "cwd": ".",
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "doc-format",
+      "cwd": ".",
+      "command": "node_modules/.bin/prettier --check docs/program/native-property-bag-values.md",
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-doc-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "name": "lint",
+      "cwd": ".",
+      "command": [
+        "node_modules/.bin/eslint",
+        "--max-warnings",
+        "0",
+        "apps/office/src/comphelper/inc/property.ts",
+        "apps/office/src/comphelper/inc/propertybag.ts",
+        "apps/office/src/comphelper/inc/propertycontainerhelper.ts",
+        "apps/office/src/comphelper/source/property/propertybag.test.ts",
+        "apps/office/src/comphelper/source/property/propertybag.ts",
+        "apps/office/src/comphelper/source/property/propertycontainerhelper.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/Type.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/IllegalTypeException.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/NotRemoveableException.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/Property.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/PropertyExistException.ts",
+        "scripts/fixtures/native-dom-worker-probe.ts",
+        "scripts/native-dom-worker-probe.mjs"
+      ],
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "format",
+      "cwd": ".",
+      "command": [
+        "node_modules/.bin/prettier",
+        "--check",
+        "apps/office/src/comphelper/inc/property.ts",
+        "apps/office/src/comphelper/inc/propertybag.ts",
+        "apps/office/src/comphelper/inc/propertycontainerhelper.ts",
+        "apps/office/src/comphelper/source/property/propertybag.test.ts",
+        "apps/office/src/comphelper/source/property/propertybag.ts",
+        "apps/office/src/comphelper/source/property/propertycontainerhelper.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/Type.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/IllegalTypeException.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/NotRemoveableException.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/Property.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/PropertyExistException.ts",
+        "docs/program/calc-upstream-suspected-issues.md",
+        "docs/program/native-property-bag-values.md",
+        "docs/program/registry/shared/capabilities/CAP-ef452bba-374b-4d22-8ef6-48660a08d79c.json",
+        "docs/program/registry/shared/provenance/comphelper/inc/property.ts.json",
+        "docs/program/registry/shared/provenance/comphelper/inc/propertybag.ts.json",
+        "docs/program/registry/shared/provenance/comphelper/inc/propertycontainerhelper.ts.json",
+        "docs/program/registry/shared/provenance/comphelper/source/property/propertybag.ts.json",
+        "docs/program/registry/shared/provenance/comphelper/source/property/propertycontainerhelper.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/Type.ts.json",
+        "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/IllegalTypeException.ts.json",
+        "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/NotRemoveableException.ts.json",
+        "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/Property.ts.json",
+        "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/PropertyExistException.ts.json",
+        "docs/program/registry/shared/runtime/comphelper/inc/property.ts.json",
+        "docs/program/registry/shared/runtime/comphelper/inc/propertybag.ts.json",
+        "docs/program/registry/shared/runtime/comphelper/inc/propertycontainerhelper.ts.json",
+        "docs/program/registry/shared/runtime/comphelper/source/property/propertybag.ts.json",
+        "docs/program/registry/shared/runtime/comphelper/source/property/propertycontainerhelper.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/Type.ts.json",
+        "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/IllegalTypeException.ts.json",
+        "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/NotRemoveableException.ts.json",
+        "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/Property.ts.json",
+        "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/PropertyExistException.ts.json",
+        "docs/program/writer-upstream-suspected-issues.md",
+        "scripts/fixtures/native-dom-worker-probe.ts",
+        "scripts/native-dom-worker-probe.mjs"
+      ],
+      "result": "pass",
+      "log": "apps/office/coverage/propertybag-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    }
+  ],
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/comphelper/inc/property.ts",
+      "gitBlob": "deef5786c98445dc7fd25879493e6226d292ee32"
+    },
+    {
+      "path": "apps/office/src/comphelper/inc/propertybag.ts",
+      "gitBlob": "f8c33c6123e8147d6698f9bdb62a16ec79c0b28f"
+    },
+    {
+      "path": "apps/office/src/comphelper/inc/propertycontainerhelper.ts",
+      "gitBlob": "9fc2c3c2b222f5843af65969602d719d4d5424ac"
+    },
+    {
+      "path": "apps/office/src/comphelper/source/property/propertybag.test.ts",
+      "gitBlob": "79cf21cc203d2cdd61ef557b41a53cc3503104a2"
+    },
+    {
+      "path": "apps/office/src/comphelper/source/property/propertybag.ts",
+      "gitBlob": "f16ee7d8aa2e0f6619eef8979ae7e8a601cecac2"
+    },
+    {
+      "path": "apps/office/src/comphelper/source/property/propertycontainerhelper.ts",
+      "gitBlob": "6dcce1755873b3c75fae843e6172eaebc5903f58"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/uno/Type.ts",
+      "gitBlob": "d3b22d630e3a032111ae742b3978bab56be59a80"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/beans/IllegalTypeException.ts",
+      "gitBlob": "61e76e04a29d793cc10a857f80563c3437108717"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/beans/NotRemoveableException.ts",
+      "gitBlob": "a537006cf5a4e56413aabc65fef6fb42d296cc05"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/beans/Property.ts",
+      "gitBlob": "ecc1f26e8e275656c6a784c87c170ba995d58a5c"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/beans/PropertyExistException.ts",
+      "gitBlob": "3cb045a6335affd28d3ff023d75222d441d92c27"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "23b12853117452eceed91b06fff3f3deafd62abe"
+    },
+    {
+      "path": "docs/program/native-property-bag-values.md",
+      "gitBlob": "9cb4c4aae53af08bf0db54c9417d6f070008bd82"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-ef452bba-374b-4d22-8ef6-48660a08d79c.json",
+      "gitBlob": "a6ed67bfe510e7178aa8a78a8bb78f37214df63f"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/comphelper/inc/property.ts.json",
+      "gitBlob": "bf31c8df413e65f7dcea9b1138d3b007eb42a1fd"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/comphelper/inc/propertybag.ts.json",
+      "gitBlob": "4878294281f98ad8685b44a1088fa56f59cbf719"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/comphelper/inc/propertycontainerhelper.ts.json",
+      "gitBlob": "5f9f45537ef021f887b16a118442e3c412a2bf20"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/comphelper/source/property/propertybag.ts.json",
+      "gitBlob": "0fa24c3f52d7ed93c4c29d596daefcc22c2711a3"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/comphelper/source/property/propertycontainerhelper.ts.json",
+      "gitBlob": "e0f50492af5be883cfcbbcb36bf65a4fb58cbaad"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/Type.ts.json",
+      "gitBlob": "a598c9b0eda26417a2b5e910ced8b1310934b7c4"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/IllegalTypeException.ts.json",
+      "gitBlob": "e925d1aefdaeac44786a21010616df27fbecef3c"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/NotRemoveableException.ts.json",
+      "gitBlob": "9a1d1415631be4fc1cfe997a6fafab739c79f8ef"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/Property.ts.json",
+      "gitBlob": "475632f238253a39aca910add81880d2e456a8a0"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/PropertyExistException.ts.json",
+      "gitBlob": "7ac761e55639a50e052956b359fe5f853ddbc7f3"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/comphelper/inc/property.ts.json",
+      "gitBlob": "624b6aca5f71bf5bfdeae8063d67e0a8140c3837"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/comphelper/inc/propertybag.ts.json",
+      "gitBlob": "e82fb914c6819c6fd30c1cee000cb397a825236a"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/comphelper/inc/propertycontainerhelper.ts.json",
+      "gitBlob": "4bbfe0ab13436fa18a94a1b53d53fdad251b2954"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/comphelper/source/property/propertybag.ts.json",
+      "gitBlob": "43ed49d70d1974b1496cdad51be20b55f6e0c7d9"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/comphelper/source/property/propertycontainerhelper.ts.json",
+      "gitBlob": "596c2dc0224f6412ba873a90737eb9faa132aabc"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/Type.ts.json",
+      "gitBlob": "6d21b57f3278115434bc807abfa5dc36101dbfb3"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/IllegalTypeException.ts.json",
+      "gitBlob": "1ec8ccd4bee59b2a2c0e19d6c151ce39c075c06b"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/NotRemoveableException.ts.json",
+      "gitBlob": "7f5cf25dad0eff5541e1ca39bdc4e38da5ca442b"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/Property.ts.json",
+      "gitBlob": "30b3306dcbf61cd0eda27ca1a1a8d3ff027e7470"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/PropertyExistException.ts.json",
+      "gitBlob": "9762db3306ec8ae75d0310c1641e330389f58db0"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "05673316db2e34c472b5dd82a13921ae241e4241"
+    },
+    {
+      "path": "scripts/fixtures/native-dom-worker-probe.ts",
+      "gitBlob": "eee80f3e5479961e35e21f4930b8f731857bcedd"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "gitBlob": "db866d33e1bd4aa307ae505d23cfb3318f31e77d"
+    }
+  ],
+  "upstreamBlobs": [
+    {
+      "path": "include/comphelper/property.hxx",
+      "gitBlob": "b9787f1308bcd765926afb3aefd6ae735b85b30f"
+    },
+    {
+      "path": "include/comphelper/propertybag.hxx",
+      "gitBlob": "26b8368d769c2f225eba76bf05b9bbe154f559d4"
+    },
+    {
+      "path": "include/comphelper/propertycontainerhelper.hxx",
+      "gitBlob": "73a0ce51328967a9188932424cf9a0b7a5be27b3"
+    },
+    {
+      "path": "comphelper/source/property/propertybag.cxx",
+      "gitBlob": "b85786705cf009e5a110a8cfe3070ce517455407"
+    },
+    {
+      "path": "comphelper/source/property/propertycontainerhelper.cxx",
+      "gitBlob": "aac936b0727020745420ef0dd36852827fb52a7e"
+    },
+    {
+      "path": "include/com/sun/star/uno/Type.h",
+      "gitBlob": "5dc1b41e0bc2d619c1e7a570be0f464c432f2195"
+    },
+    {
+      "path": "include/com/sun/star/uno/Type.hxx",
+      "gitBlob": "f62d0a17b63ad29bb42e208a752df4893970ae88"
+    },
+    {
+      "path": "udkapi/com/sun/star/beans/Property.idl",
+      "gitBlob": "3b619ace1325efed53dffdbc2aafe88157ec5ac7"
+    },
+    {
+      "path": "udkapi/com/sun/star/beans/IllegalTypeException.idl",
+      "gitBlob": "085dd95b7200d56e1ce84d95b7fb2c23ee292208"
+    },
+    {
+      "path": "udkapi/com/sun/star/beans/PropertyExistException.idl",
+      "gitBlob": "55295d5e5783ce39d9c29d61973c74056424e014"
+    },
+    {
+      "path": "udkapi/com/sun/star/beans/NotRemoveableException.idl",
+      "gitBlob": "5636241987c3ecd53cebd7df471116ca6b599b11"
+    },
+    {
+      "path": "cppu/qa/test_any.cxx",
+      "gitBlob": "64ea4b9218bfc441cad331d67e97fec9cf0339b5"
+    }
+  ]
+}

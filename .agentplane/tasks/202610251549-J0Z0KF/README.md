@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 244
+revision: 248
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T17:34:38.101Z"
+  updated_at: "2026-11-12T18:17:19.852Z"
   updated_by: "CODER"
-  note: "Public comphelper prerequisite:145 related cases/17files pass; complete4-owner90 gate has96.14statements88.75branches94.80functions96.82lines and fails branches. Original query/owner/container source contracts are retained; metadata/property-bag and complete DOCX/XLSX/UI remain unfinished. No synthetic interface/type graph or reduced coverage profile."
-  attempts: 74
+  note: "Low-level PropertyBag prerequisite passes243 related cases/52files and complete8-owner90 coverage97.07statements94.20branches98.93functions97.83lines. Chromium main/DOM-free Worker value/default/Type-address proof passes. Full parent still requires separate OPropertyBag service, metadata and DOCX/XLSX shell/UI; prerequisite success is not whole-task verification."
+  attempts: 75
 commit: null
 comments:
   -
@@ -243,6 +243,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Continue approved native property-bag/metadata and full DOCX/XLSX shell/UI implementation after the bounded public component prerequisite; branch coverage gap remains recorded, no finish or pause."
+  -
+    author: "CODER"
+    body: "Start: Continue the approved actual OPropertyBag service/metadata dependencies and full DOCX/XLSX shell/UI after the passing low-level value-owner prerequisite; no parent finish or goal pause."
 events:
   -
     type: "status"
@@ -1192,8 +1195,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: Continue approved native property-bag/metadata and full DOCX/XLSX shell/UI implementation after the bounded public component prerequisite; branch coverage gap remains recorded, no finish or pause."
+  -
+    type: "verify"
+    at: "2026-11-12T18:17:19.852Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Low-level PropertyBag prerequisite passes243 related cases/52files and complete8-owner90 coverage97.07statements94.20branches98.93functions97.83lines. Chromium main/DOM-free Worker value/default/Type-address proof passes. Full parent still requires separate OPropertyBag service, metadata and DOCX/XLSX shell/UI; prerequisite success is not whole-task verification."
+  -
+    type: "status"
+    at: "2026-11-12T18:17:31.651Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: Continue the approved actual OPropertyBag service/metadata dependencies and full DOCX/XLSX shell/UI after the passing low-level value-owner prerequisite; no parent finish or goal pause."
 doc_version: 3
-doc_updated_at: "2026-11-12T17:35:52.947Z"
+doc_updated_at: "2026-11-12T18:17:32.491Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -3428,6 +3444,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-12T18:17:19.852Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Low-level PropertyBag prerequisite passes243 related cases/52files and complete8-owner90 coverage97.07statements94.20branches98.93functions97.83lines. Chromium main/DOM-free Worker value/default/Type-address proof passes. Full parent still requires separate OPropertyBag service, metadata and DOCX/XLSX shell/UI; prerequisite success is not whole-task verification.
+    Attempts: 75
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T18:14:56.481Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3808,6 +3854,14 @@ sections:
     - Observation: Public helpers now additionally execute in the real Chromium main and DOM-free Worker probe: one real event with the original Source, silent late listener/repeated disposal and exact3 default component Types. Same actual production registry/UNO/XML graph remains in the probe.
       Impact: This adds browser-realm qualification for the public base without inventing a service/provider, sharing native pointers or asserting physical threading parity.
       Resolution: Keep the already recorded whole-owner branch gap and continue actual PropertyBag/metadata and full DOCX/XLSX UI work after persisting this block.
+
+    - Observation: Low-level native PropertyBag and complete OPropertyContainerHelper implemented with actual real/Any/held locations, original defaults/validation/normalization and descriptor sort/merge. Generated Property now uses a shared stable Type owner address instead of reflective private-field writes; its borrowed const fields project existing storage. Three genuine SDK exception classes retain source constructors/copy/move/type/Context and generic ABI transport. No replacement type/value/default provider or UNO PropertyBag service is supplied.
+      Impact: Final related run passes243 cases/52files with whole8-owner90 gate:97.07statements94.20branches98.93functions97.83lines. Actual Chromium main and DOM-free Worker use the helper, native descriptors, unchanged defaults and exact Type field identity. Separate OPropertyBag service, notification/property-array helpers, SfxDocumentMetaData and full DOCX/XLSX core/shell/UI remain incomplete.
+      Resolution: Preserve removed-holder retention as CALC-547/WRITER481; weak lifetime is witnessed with real ActiveDataSink. Corrected source constructor initialization placement, typed fixture constructor signature and canonical include-path mapping. No dedicated low-level PropertyBag QA found in pinned comphelper QA; existing original Any/Type replays included. Complete final checks then persist and continue actual service/metadata dependencies without pause; full-suite cadence unchanged.
+
+    - Observation: Final low-level property-value prerequisite passes243 related tests/52files and complete8-owner90 coverage97.07statements94.20branches98.93functions97.83lines. Three new SDK exception declarations are tested through actual default/copy/move/Type/Any/generic-throw ownership. Real-member, Any-member and held-value paths preserve exact native normalization/defaults/diagnostics and descriptor merge. Original Type/Any replays remain included.
+      Impact: Actual Chromium main and DOM-free Worker prove dynamic values/default41 after value42, native descriptors and stable Type pointer-field ownership. Original removed-holder retention remains CALC-547/WRITER481. No dedicated low-level bag QA found in pinned comphelper QA; no full OPropertyBag service/metadata or format/UI claim.
+      Resolution: Final typecheck/tool-types/build/static/scoped lint/format/provenance/registry/boundaries49/resource2/size/tree/resources/hintids/doctor/routing/diff pass; only prior css-style-matchers.ts17/76 JSDoc baseline. Source constructor initializer and canonical include paths corrected before final validation. Persist this block and continue actual property-array/notification/service/metadata owners without pause; full suites remain once per10 actual tasks.
 id_source: "generated"
 ---
 ## Summary
@@ -6052,6 +6106,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-12T18:17:19.852Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Low-level PropertyBag prerequisite passes243 related cases/52files and complete8-owner90 coverage97.07statements94.20branches98.93functions97.83lines. Chromium main/DOM-free Worker value/default/Type-address proof passes. Full parent still requires separate OPropertyBag service, metadata and DOCX/XLSX shell/UI; prerequisite success is not whole-task verification.
+Attempts: 75
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T18:14:56.481Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -6436,3 +6520,11 @@ DecisionContextRef:
 - Observation: Public helpers now additionally execute in the real Chromium main and DOM-free Worker probe: one real event with the original Source, silent late listener/repeated disposal and exact3 default component Types. Same actual production registry/UNO/XML graph remains in the probe.
   Impact: This adds browser-realm qualification for the public base without inventing a service/provider, sharing native pointers or asserting physical threading parity.
   Resolution: Keep the already recorded whole-owner branch gap and continue actual PropertyBag/metadata and full DOCX/XLSX UI work after persisting this block.
+
+- Observation: Low-level native PropertyBag and complete OPropertyContainerHelper implemented with actual real/Any/held locations, original defaults/validation/normalization and descriptor sort/merge. Generated Property now uses a shared stable Type owner address instead of reflective private-field writes; its borrowed const fields project existing storage. Three genuine SDK exception classes retain source constructors/copy/move/type/Context and generic ABI transport. No replacement type/value/default provider or UNO PropertyBag service is supplied.
+  Impact: Final related run passes243 cases/52files with whole8-owner90 gate:97.07statements94.20branches98.93functions97.83lines. Actual Chromium main and DOM-free Worker use the helper, native descriptors, unchanged defaults and exact Type field identity. Separate OPropertyBag service, notification/property-array helpers, SfxDocumentMetaData and full DOCX/XLSX core/shell/UI remain incomplete.
+  Resolution: Preserve removed-holder retention as CALC-547/WRITER481; weak lifetime is witnessed with real ActiveDataSink. Corrected source constructor initialization placement, typed fixture constructor signature and canonical include-path mapping. No dedicated low-level PropertyBag QA found in pinned comphelper QA; existing original Any/Type replays included. Complete final checks then persist and continue actual service/metadata dependencies without pause; full-suite cadence unchanged.
+
+- Observation: Final low-level property-value prerequisite passes243 related tests/52files and complete8-owner90 coverage97.07statements94.20branches98.93functions97.83lines. Three new SDK exception declarations are tested through actual default/copy/move/Type/Any/generic-throw ownership. Real-member, Any-member and held-value paths preserve exact native normalization/defaults/diagnostics and descriptor merge. Original Type/Any replays remain included.
+  Impact: Actual Chromium main and DOM-free Worker prove dynamic values/default41 after value42, native descriptors and stable Type pointer-field ownership. Original removed-holder retention remains CALC-547/WRITER481. No dedicated low-level bag QA found in pinned comphelper QA; no full OPropertyBag service/metadata or format/UI claim.
+  Resolution: Final typecheck/tool-types/build/static/scoped lint/format/provenance/registry/boundaries49/resource2/size/tree/resources/hintids/doctor/routing/diff pass; only prior css-style-matchers.ts17/76 JSDoc baseline. Source constructor initializer and canonical include paths corrected before final validation. Persist this block and continue actual property-array/notification/service/metadata owners without pause; full suites remain once per10 actual tasks.
