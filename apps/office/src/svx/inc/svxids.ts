@@ -20,3 +20,8 @@ export const SID_ATTR_FILL_USE_SLIDE_BACKGROUND = 11135 as const;
 
 /** Original SID_ATTR_FLASH. */
 export const SID_ATTR_FLASH = 10406 as const;
+
+/** Original SID_SVX_START +50 page item slot. */
+export const SID_ATTR_PAGE = 10050;
+/** Original SID_SVX_START +51 page size slot. */
+export const SID_ATTR_PAGE_SIZE = 10051;

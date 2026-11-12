@@ -382,7 +382,8 @@ export function applyTextImportProperties(
     ] as const)
       if (paragraph[key] !== undefined) add(name, paragraph[key], "bool");
     if (paragraph.keepTogether !== undefined) add("ParaSplit", !paragraph.keepTogether, "bool");
-    if (paragraph.joinBorder !== undefined) add("ParaConnectBorder", paragraph.joinBorder, "bool");
+    if (paragraph.joinBorder !== undefined)
+      add("ParaIsConnectBorder", paragraph.joinBorder, "bool");
     for (const side of ["Top", "Bottom", "Left", "Right"] as const) {
       const rawBorder = paragraph[`border${side}`];
       const rawWidth = paragraph[`borderLineWidth${side}`];
@@ -392,7 +393,7 @@ export function applyTextImportProperties(
         throw new Error(`Unsupported ODF paragraph border: ${rawBorder}`);
       if (rawWidth !== undefined && !new XMLBorderWidthHdl().importXML(rawWidth, target))
         throw new Error(`Unsupported ODF paragraph border widths: ${rawWidth}`);
-      add(`Para${side}Border`, target.value, cppu_detail_getUnoType_BorderLine2);
+      add(`${side}Border`, target.value, cppu_detail_getUnoType_BorderLine2);
     }
     for (const [key, name] of [
       ["orphans", "ParaOrphans"],

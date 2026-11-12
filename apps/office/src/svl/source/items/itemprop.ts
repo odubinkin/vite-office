@@ -1,4 +1,4 @@
-/** @fileoverview Native SfxItemPropertyMap sorted borrowed-entry/cached-sequence mechanism and existing property-info projection from svl/source/items/itemprop.cxx. Full property-set/service integration remains unfinished. */
+/** @fileoverview Native SfxItemPropertyMap sorted borrowed schema and genuine ordinary/extended property-info components from svl/source/items/itemprop.cxx. Full property-set/service integration remains unfinished. */
 import {
   Property,
   cppu_detail_getUnoType_Property,
@@ -6,49 +6,36 @@ import {
 import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { UnknownPropertyException } from "../../../cppu/inc/com/sun/star/beans/UnknownPropertyException";
 import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
-/** Existing host-array property-info projection; native XPropertySetInfo/entry-map component migration remains pending. */
-export class SfxItemPropertySetInfo {
-  /** Binds the represented native owner and its declared inputs. @param properties - Ordered native property values. @returns Nothing. */
-  private readonly properties: readonly Property[];
-  /** Copies the native descriptor map at construction. @param properties - Native map entries. @returns Metadata owner. */
-  constructor(properties: readonly Property[]) {
-    this.properties = properties.map(
-      /** Executes this bounded native contract operation. @param property - Native operation input. @returns Native operation result. */ (
-        property,
-      ) => new Property(property),
-    );
+/** Original template-linkage base over the genuine complete XPropertySetInfo interface. */
+export class SfxItemPropertySetInfo_Base extends WeakImplHelper.specialize(XPropertySetInfo) {}
+/** Original ordinary metadata component copies the pointer map while borrowing its caller's immutable schema lifetime. */
+export class SfxItemPropertySetInfo
+  extends SfxItemPropertySetInfo_Base
+  implements XPropertySetInfo
+{
+  private readonly m_aOwnMap: SfxItemPropertyMap;
+  /** Original span and const-map constructors. @param source - Actual native schema or pointer map. @returns Component at native zero strong count. */
+  constructor(source: readonly SfxItemPropertyMapEntry[] | SfxItemPropertyMap) {
+    super();
+    this.m_aOwnMap = new SfxItemPropertyMap(source);
   }
-  /** Implements the represented native getProperties operation. @returns The represented native operation result. */
-  getProperties(): Property[] {
-    return this.properties.map(
-      /** Processes one ordered native value at this boundary. @param property - Original property input. @returns The represented native operation result. */
-      (property) => new Property(property),
-    );
+  /** Original by-value return copies the actual cached sequence handle. @returns Owning UNO sequence. */
+  getProperties(): Sequence<Property> {
+    return new PropertySequence(this.m_aOwnMap.getProperties());
   }
-  /** Implements the represented native getPropertyByName operation. @param name - Native property or element name. @returns The represented native operation result. */
+  /** Original map delegation. @param name - Native counted name. @returns Owned property value. */
   getPropertyByName(name: OUStringConstReference): Property {
-    const property = this.properties.find(
-      /** Processes one ordered native value at this boundary. @param p - Original p input. @returns The represented native operation result. */
-      (p) => text(p.Name) === text(name),
-    );
-    if (!property) throw new UnknownPropertyException(name, new Reference());
-    return new Property(property);
+    return this.m_aOwnMap.getPropertyByName(name);
   }
-  /** Implements the represented native hasPropertyByName operation. @param name - Native property or element name. @returns The represented native operation result. */
+  /** Original exact presence lookup. @param name - Native counted name. @returns Original flag. */
   hasPropertyByName(name: OUStringConstReference): boolean {
-    return this.properties.some(
-      /** Processes one ordered native value at this boundary. @param p - Original p input. @returns The represented native operation result. */
-      (p) => text(p.Name) === text(name),
-    );
+    return this.m_aOwnMap.hasPropertyByName(propertyNameView(name));
   }
-}
-
-/** Reads native property names without locale processing. @param value - Native string. @returns UTF16 name. */
-function text(value: OUStringConstReference): string {
-  let result = "";
-  for (let i = 0; i < value.getLength(); i++)
-    result += String.fromCharCode(value.getStr()[i] as number);
-  return result;
+  /** Original member destruction on the actual last strong release. @returns Nothing. */
+  protected override destroy(): void {
+    this.m_aOwnMap.dispose();
+    super.destroy();
+  }
 }
 
 import {
@@ -179,9 +166,10 @@ import type { SfxPoolItem } from "./poolitem";
 import { RuntimeException } from "../../../cppu/inc/com/sun/star/uno/RuntimeException";
 import { IllegalArgumentException } from "../../../cppu/inc/com/sun/star/lang/IllegalArgumentException";
 import { OUString } from "../../../sal/inc/rtl/ustring";
-/** Original plain property-set owner. Value/state methods are represented; native property-info component/static-schema wiring remains pending and no partial UNO provider is registered. */
+/** Original plain property-set owner with native value/state helpers and lazy genuine metadata component. */
 export class SfxItemPropertySet {
   private readonly m_aMap: SfxItemPropertyMap;
+  private readonly m_xInfo = new Reference<SfxItemPropertySetInfo>();
   /** Original span constructor borrows its caller's static schema through the map. @param entries - Actual native entries. @returns Owner. */
   constructor(entries: readonly SfxItemPropertyMapEntry[]) {
     this.m_aMap = new SfxItemPropertyMap(entries);
@@ -296,6 +284,11 @@ export class SfxItemPropertySet {
     if (!entry || !entry.nWID) this.unknown(name);
     return SfxItemPropertySet.getPropertyState(entry, set);
   }
+  /** Original lazy rtl::Reference member and const-reference return; the existing one-pointer strong Reference binds the same acquire/release ownership without an extra query. @returns Borrowed member reference; callers copy when returning by value. */
+  getPropertySetInfo(): Readonly<Reference<SfxItemPropertySetInfo>> {
+    if (!this.m_xInfo.is()) this.m_xInfo.assign(new SfxItemPropertySetInfo(this.m_aMap));
+    return this.m_xInfo;
+  }
   /** Original map reference getter. @returns Borrowed map owner. */
   getPropertyMap(): SfxItemPropertyMap {
     return this.m_aMap;
@@ -311,6 +304,7 @@ export class SfxItemPropertySet {
   }
   /** Original owned-map destruction; entry-table lifetime belongs to its caller. @returns Nothing. */
   dispose(): void {
+    this.m_xInfo.dispose();
     this.m_aMap.dispose();
   }
 }

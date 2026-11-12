@@ -682,7 +682,27 @@ export class StyleSheetTable {
   private m_pCurrentEntry: StyleSheetEntry | null = null;
   /** Original existing-style reset examines every represented direct property before imported values are applied. @param style - Actual UNO style. @returns Nothing. */
   static SetPropertiesToDefault(style: SwXStyle): void {
-    const properties = style.getPropertySetInfo().getProperties();
+    const info = style.getPropertySetInfo();
+    const sequence = (info.get() as XPropertySetInfo).getProperties();
+    info.dispose();
+    const properties: Property[] = [];
+    try {
+      for (let index = 0; index < sequence.getLength(); ++index) {
+        const property = new Property();
+        uno_type_assignData(
+          property,
+          propertyType().getTypeLibType() as NativeTypeRef,
+          (sequence.getConstArray() as SequenceElements).get(index * 32),
+          propertyType().getTypeLibType(),
+          cpp_queryInterface,
+          cpp_acquire,
+          cpp_release,
+        );
+        properties.push(property);
+      }
+    } finally {
+      sequence.dispose();
+    }
     try {
       const states = style.getPropertyStates(
         properties.map(
@@ -932,7 +952,10 @@ const AnyValues = Sequence.specialize<Any>("Any", 24);
 const StringValues = Sequence.specialize<OUString>("OUString", 8);
 
 import type { SwXStyle } from "../../core/unocore/unostyle";
-import type { Property } from "../../../../udkapi/com/sun/star/beans/Property";
+import {
+  Property,
+  cppu_detail_getUnoType_Property as propertyType,
+} from "../../../../udkapi/com/sun/star/beans/Property";
 import { PropertyState } from "../../../../udkapi/com/sun/star/beans/PropertyState";
 import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";
 
@@ -945,3 +968,13 @@ import {
   ApplyNumberingStyleNameToParaStyles,
   ReApplyInheritedOutlineLevelFromChapterNumbering,
 } from "./StyleSheetTable.numbering";
+
+import type { XPropertySetInfo } from "../../../../udkapi/com/sun/star/beans/XPropertySetInfo";
+import type { SequenceElements } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
+import { uno_type_assignData } from "../../../../cppu/inc/uno/data";
+import {
+  cpp_queryInterface,
+  cpp_acquire,
+  cpp_release,
+} from "../../../../cppu/inc/com/sun/star/uno/genfunc";
+import type { typelib_TypeDescriptionReference as NativeTypeRef } from "../../../../cppu/inc/typelib/typedescription";

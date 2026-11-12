@@ -42,7 +42,27 @@ export function CreateEvenOddPageStyleCopy(
   try {
     mapper.GetPageStyles().insertStyleByName(name, style);
     if (!source) throw new Error("assert(m_aPageStyle)");
-    const properties = source.getPropertySetInfo().getProperties();
+    const info = source.getPropertySetInfo();
+    const sequence = (info.get() as XPropertySetInfo).getProperties();
+    info.dispose();
+    const properties: Property[] = [];
+    try {
+      for (let index = 0; index < sequence.getLength(); ++index) {
+        const property = new Property();
+        uno_type_assignData(
+          property,
+          propertyType().getTypeLibType() as NativeTypeRef,
+          (sequence.getConstArray() as SequenceElements).get(index * 32),
+          propertyType().getTypeLibType(),
+          cpp_queryInterface,
+          cpp_acquire,
+          cpp_release,
+        );
+        properties.push(property);
+      }
+    } finally {
+      sequence.dispose();
+    }
     try {
       for (const property of properties) {
         // beans::PropertyAttribute::READONLY from the original IDL.
@@ -212,3 +232,18 @@ export function CloseSectionGroup(this: SectionPropertyMap, mapper: DomainMapper
     error.dispose();
   }
 }
+
+import {
+  Property,
+  cppu_detail_getUnoType_Property as propertyType,
+} from "../../../../udkapi/com/sun/star/beans/Property";
+
+import type { XPropertySetInfo } from "../../../../udkapi/com/sun/star/beans/XPropertySetInfo";
+import type { SequenceElements } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
+import { uno_type_assignData } from "../../../../cppu/inc/uno/data";
+import {
+  cpp_queryInterface,
+  cpp_acquire,
+  cpp_release,
+} from "../../../../cppu/inc/com/sun/star/uno/genfunc";
+import type { typelib_TypeDescriptionReference as NativeTypeRef } from "../../../../cppu/inc/typelib/typedescription";

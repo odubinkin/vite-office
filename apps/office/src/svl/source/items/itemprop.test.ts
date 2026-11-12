@@ -13,19 +13,21 @@ import { UnoType } from "../../../cppu/inc/unotype";
 import { SfxItemPropertySetInfo } from "./itemprop";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 it("copies native property metadata without sharing mutable descriptors", /** Executes this bounded native contract operation. @returns Native operation result. */ () => {
-  const input = new Property(unicode("Value"), -1, UnoType.get("sal_Int32"), 1),
-    info = new SfxItemPropertySetInfo([input]);
-  input.Handle = 99;
-  input.Name = unicode("Changed");
-  const output = info.getPropertyByName(unicode("Value"));
+  const key = unicode("Value"),
+    input = new SfxItemPropertyMapEntry(key, 7, UnoType.get("sal_Int32"), 1, 0),
+    info = new SfxItemPropertySetInfo([input]),
+    strong = new Reference(info);
+  const output = info.getPropertyByName(key);
   expect([
     text(output.Name),
     output.Handle,
     output.Attributes,
     text(output.Type.getTypeName()),
-  ]).toEqual(["Value", -1, 1, "long"]);
+  ]).toEqual(["Value", 7, 1, "long"]);
   output.Attributes = 0;
-  expect(info.getPropertyByName(unicode("Value")).Attributes).toBe(1);
+  const independent = info.getPropertyByName(key);
+  expect(independent.Attributes).toBe(1);
+  independent.dispose();
   const transported = new Any(output, propertyType),
     restored = new Property();
   expect(transported.extract(restored, propertyType)).toBe(true);
@@ -34,11 +36,17 @@ it("copies native property metadata without sharing mutable descriptors", /** Ex
     restored.Handle,
     restored.Attributes,
     text(restored.Type.getTypeName()),
-  ]).toEqual(["Value", -1, 0, "long"]);
+  ]).toEqual(["Value", 7, 0, "long"]);
   transported.dispose();
+  restored.dispose();
+  output.dispose();
+  strong.dispose();
+  input.dispose();
+  key.dispose();
 });
 it("throws the generated unknown-property exception and transports its original base fields", /** Executes this bounded native contract operation. @returns Native operation result. */ () => {
-  const info = new SfxItemPropertySetInfo([]);
+  const info = new SfxItemPropertySetInfo([]),
+    strong = new Reference(info);
   expect(info.hasPropertyByName(unicode("Missing"))).toBe(false);
   let error: unknown;
   try {
@@ -57,4 +65,8 @@ it("throws the generated unknown-property exception and transports its original 
   value.dispose();
   copy.dispose();
   error.dispose();
+  strong.dispose();
 });
+
+import { SfxItemPropertyMapEntry } from "../../inc/itemprop";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";

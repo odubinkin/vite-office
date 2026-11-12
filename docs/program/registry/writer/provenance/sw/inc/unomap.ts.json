@@ -10,6 +10,14 @@
         {
           "path": "apps/office/src/sw/inc/unomap.ts",
           "marker": "WID_DOC_DEFAULT_PAGE_MODE"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-property-info.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/native-property-info.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -21,13 +29,28 @@
     },
     "upstreamPath": "sw/inc/unomap.hxx",
     "localSymbols": [
-      "WID_DOC_DEFAULT_PAGE_MODE"
+      "WID_DOC_DEFAULT_PAGE_MODE",
+      "PROPERTY_MAP_TEXT_CURSOR",
+      "PROPERTY_MAP_CHAR_STYLE",
+      "PROPERTY_MAP_PARA_STYLE",
+      "PROPERTY_MAP_PAGE_STYLE",
+      "PROPERTY_MAP_NUM_STYLE",
+      "PROPERTY_MAP_TEXT_DOCUMENT",
+      "PROPERTY_MAP_END"
     ],
     "upstreamSymbols": [
-      "WID_DOC_DEFAULT_PAGE_MODE"
+      "WID_DOC_DEFAULT_PAGE_MODE",
+      "PROPERTY_MAP_TEXT_CURSOR",
+      "PROPERTY_MAP_CHAR_STYLE",
+      "PROPERTY_MAP_PARA_STYLE",
+      "PROPERTY_MAP_PAGE_STYLE",
+      "PROPERTY_MAP_NUM_STYLE",
+      "PROPERTY_MAP_TEXT_DOCUMENT",
+      "PROPERTY_MAP_END"
     ],
     "preservedResponsibilities": [
-      "Original WID_DOC_DEFAULT_PAGE_MODE1069 is a document UNO dispatch identity, separate from pooled Writer WhichIds. It selects actual document mode access without a fabricated pool item."
+      "Original WID_DOC_DEFAULT_PAGE_MODE1069 is a document UNO dispatch identity, separate from pooled Writer WhichIds. It selects actual document mode access without a fabricated pool item.",
+      "Native Writer metadata checkpoint removes the ordinary host-array property-info projection and createPropertySetInfo/-1 handles. Genuine SfxItemPropertySetInfo/WeakImplHelper, lazy property-set strong ownership, actual Reference<XPropertySetInfo>/Sequence<Property> suppliers and consumers, original static provider identities and six admitted map families are implemented. Explicit source types and literal source-derived family flags replace name heuristics. Original dispatch/member identities, RubyBelow/ParaIsConnectBorder names and BorderLine metadata are retained; cursor Para*Border aliases and family-inappropriate advertised rows are removed. Actual Writer/UNO/weak/RTF/ODF/Worker regressions accompany critical source-backed metadata tests. Other map families/TEXT_DEFAULT/SwXTextDefaults, full model/state-array/Stream/service ABI, DOCX-XLSX import/export and mounted UI remain incomplete; no broad parity/default/service promotion."
     ],
     "omittedResponsibilities": [
       "Complete native ABI/debug bookkeeping and broader document/filter parity are not claimed."

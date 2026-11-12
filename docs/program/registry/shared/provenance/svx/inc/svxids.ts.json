@@ -20,6 +20,14 @@
         {
           "path": "apps/office/src/sw/source/uibase/uiview/native-row-item-boundary.test.ts",
           "marker": "native row value"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-property-info.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/native-property-info.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -40,7 +48,9 @@
       "SID_RULER_ROWS_VERTICAL",
       "SID_ATTR_FILL_STYLE",
       "SID_ATTR_FILL_COLOR",
-      "SID_ATTR_FILL_TRANSPARENCE"
+      "SID_ATTR_FILL_TRANSPARENCE",
+      "SID_ATTR_PAGE",
+      "SID_ATTR_PAGE_SIZE"
     ],
     "omittedResponsibilities": [
       "Full source-module obligations remain unverified; Iteration206 draft: scalar kernel cell border/padding storage is replaced by owned SvxBoxItem plus the existing vertical item. Represented lines retain native color/style/width/component arithmetic, signed16 distances/default0, cloning, metrics and supported UNO values; SvxBoxInfoItem retains native validity127. SetTabBorders consumes SfxItemSet and distributes flat union outer/inner lines using source validity rules. Insertion defaults55twips/black10twip lines and0/no-border are preserved. Process/storage uses complete primitive native state with legacy scalar ingress only; ODF and browser paint carry four independent sides. Initial static and upstream-absent runtime verification are pending. Complete native color shading/theme/Word/macros/fly/vertical/RTL/follow/shared-format behavior, per-edge/common-state border widgets and full parity remain unverified. All existing statuses/defaults/evidence/registered I/O/recovery exceptions are preserved."
@@ -51,7 +61,8 @@
       "Iteration229 introduces actual production-used SvxColumnItem ownership at the SwView table-column conversion boundary from StateTabWin. Native visibility/end/min/max descriptions replace direct SwTabCols interpretation during document column drag admission, while original SwTabCols remains model/preview/apply data. Native defaults, upper-only65535 description clamp, copied Append/Clone and equality excluding ortho are retained. The svx->svl edge is native Library_svx-owned, with no SW/browser reverse dependency. Full SvxRuler/SfxBindings slots, complete StateTabWin frames/rows, pooled refcount mutability and UNO member queries/PutValue remain partial or unverified. Registered IO deviations and all semantic states/defaults/classes remain unchanged.",
       "Iteration230 adds the actual StateTabWin row value branch and source SID_RULER_ROWS/ROWS_VERTICAL constants. Source row edges use LeftMin and page extent, active0, clamped uint16 frame distances, same-index vertical orientation with zero-clamped limits and the source invisible constrained tail. SwView supplies production horizontal-writing row items; document row capture consumes their separator visibility/end/min/max, internal glMinFrame maximum guard and previous-separator bottom-margin bounds instead of unrestricted RightMax. Native SwTabCols remains original model/preview/apply and follow-flow/last-row guard owner. Full ruler/slot/page-frame state, vertical document dragging, snapping/protection/modifier rows and single-row paragraph-indent margin-range context remain partial; no broad promotion, old statuses/defaults/classes and registered IO deviations remain unchanged.",
       "Added exact original fill-style/color/transparency slots from svxids.hrc and SID_SVX_START=10000.",
-      "S3HW1E adds native SID_ATTR_FLASH identity for original CSS slot mapping; the sparse current Writer pool has no blink item owner and no model extension is made."
+      "S3HW1E adds native SID_ATTR_FLASH identity for original CSS slot mapping; the sparse current Writer pool has no blink item owner and no model extension is made.",
+      "Native Writer metadata checkpoint removes the ordinary host-array property-info projection and createPropertySetInfo/-1 handles. Genuine SfxItemPropertySetInfo/WeakImplHelper, lazy property-set strong ownership, actual Reference<XPropertySetInfo>/Sequence<Property> suppliers and consumers, original static provider identities and six admitted map families are implemented. Explicit source types and literal source-derived family flags replace name heuristics. Original dispatch/member identities, RubyBelow/ParaIsConnectBorder names and BorderLine metadata are retained; cursor Para*Border aliases and family-inappropriate advertised rows are removed. Actual Writer/UNO/weak/RTF/ODF/Worker regressions accompany critical source-backed metadata tests. Other map families/TEXT_DEFAULT/SwXTextDefaults, full model/state-array/Stream/service ABI, DOCX-XLSX import/export and mounted UI remain incomplete; no broad parity/default/service promotion."
     ],
     "status": "mapped",
     "upstreamPath": "include/svx/svxids.hrc",
@@ -59,7 +70,9 @@
       "SID_ATTR_BORDER_INNER",
       "SID_ATTR_FILL_STYLE",
       "SID_ATTR_FILL_COLOR",
-      "SID_ATTR_FILL_TRANSPARENCE"
+      "SID_ATTR_FILL_TRANSPARENCE",
+      "SID_ATTR_PAGE",
+      "SID_ATTR_PAGE_SIZE"
     ]
   },
   "legacyOrder": 71

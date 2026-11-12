@@ -8,8 +8,7 @@ import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/u
 import { text, unicode } from "./unocrsrhelper";
 import { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
 import type { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
-import { createPropertySetInfo } from "./unomap";
-import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
+import { aSwMapProvider } from "./unomap";
 import {
   GetPropertyValue,
   SetPropertyValue,
@@ -129,18 +128,10 @@ export class SwXTextRange {
     this.parent.insertString(this, value, true);
   }
   /** Publishes the supported native property descriptors. @returns The represented native operation result. */
-  getPropertySetInfo(): ReturnType<typeof createPropertySetInfo> {
-    return createPropertySetInfo([
-      ["ParaStyleName", "OUString"],
-      ["PageDescName", "OUString"],
-      ["NumberingStyleName", "OUString"],
-      ["NumberingRules", ["Reference", indexReplaceType]],
-      ["NumberingLevel", "sal_Int16"],
-      ["NumberingStartValue", "sal_Int16"],
-      ["NumberingIsNumber", "bool"],
-      ["ParaIsNumberingRestart", "bool"],
-      ["ListId", "OUString"],
-    ]);
+  getPropertySetInfo(): Reference<XPropertySetInfo> {
+    return new Reference(
+      aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR).getPropertySetInfo().get(),
+    );
   }
   /** Queries the current native property value. @param name - Native property or element name. @returns The represented native operation result. */
   getPropertyValue(name: OUStringConstReference): Any {
@@ -185,3 +176,7 @@ export class SwXTextRange {
     }
   }
 }
+
+import type { XPropertySetInfo } from "../../../../udkapi/com/sun/star/beans/XPropertySetInfo";
+import { PROPERTY_MAP_TEXT_CURSOR } from "../../../inc/unomap";
+import { Reference } from "../../../../cppu/inc/com/sun/star/uno/Reference";

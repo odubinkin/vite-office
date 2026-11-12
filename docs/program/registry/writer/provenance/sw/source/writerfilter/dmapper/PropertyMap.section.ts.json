@@ -17,7 +17,8 @@
     "preservedResponsibilities": [
       "S3HW1E section type/parity checkpoint: raw SBKNONE/SBKCOL/SBKPAGE/SBKEVEN/SBKODD use exact generated resource tokens and original paragraph sectPr wrapper. SectionPropertyMap preserves nextPage default, one-column nextColumn promotion, continuous orientation promotion and inherited page-style identity. Real metadata-driven even/odd style copies retain the native denylist, unrestricted/mirrored regular follow style, even-only mirrored margin swap and actual Converted name allocation. DomainMapper_Impl now retains the last top-level section map with genuine tools::SvRef, leaving nested maps out of that slot and releasing old maps only after replacement. Original page-section grid defaults, document DefaultPageMode and Standard Asian-height precedence are applied after styles are imported. Original first-run SettingsTable emission snapshots actual RTFReferenceTable/RTFReferenceProperties and delivers the consumed mirror-margin flag through native mapper callbacks; late flags do not mutate the emitted table. Actual RTF/UNO tests preserve continuous restart omission and grid defaults/export no-op (WRITER281-283). Remaining PAGE/terminal-SECT state and first/follow/title-page producer/export checks, plus HTML/current-model audits, prevent full goal completion. No whole-module/ABI confidence promotion; intentional browser file UI/autosave/recovery deviations remain unchanged.",
       "S3HW1E HTML74: Section grid calculation follows the original WritingMode test, choosing usable width for non-LR_TB and usable height for LR_TB.",
-      "Finalizes line-number settings for the represented section before continuous page handling."
+      "Finalizes line-number settings for the represented section before continuous page handling.",
+      "Native Writer metadata checkpoint removes the ordinary host-array property-info projection and createPropertySetInfo/-1 handles. Genuine SfxItemPropertySetInfo/WeakImplHelper, lazy property-set strong ownership, actual Reference<XPropertySetInfo>/Sequence<Property> suppliers and consumers, original static provider identities and six admitted map families are implemented. Explicit source types and literal source-derived family flags replace name heuristics. Original dispatch/member identities, RubyBelow/ParaIsConnectBorder names and BorderLine metadata are retained; cursor Para*Border aliases and family-inappropriate advertised rows are removed. Actual Writer/UNO/weak/RTF/ODF/Worker regressions accompany critical source-backed metadata tests. Other map families/TEXT_DEFAULT/SwXTextDefaults, full model/state-array/Stream/service ABI, DOCX-XLSX import/export and mounted UI remain incomplete; no broad parity/default/service promotion."
     ],
     "omittedResponsibilities": [
       "Unrepresented header/footer content, multi-column sections, frames and full SettingsTable/mapper/Writer API or ABI are not certified. PAGE/terminal-SECT state, first/follow/title-page producers and remaining HTML/current-model audits are still required."
@@ -38,6 +39,14 @@
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-line-numbering.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-property-info.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/native-property-info.test.ts",
           "marker": "@fileoverview"
         }
       ],

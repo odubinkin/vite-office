@@ -30,3 +30,20 @@ export const FN_SET_SUB_SCRIPT = 20412 as const;
 
 /** Native ListAutoFormat UNO dispatch, FN_EXTRA2(22200) +11; not a pooled Which. */
 export const FN_UNO_PARA_NUM_AUTO_FORMAT = 22211 as const;
+
+/** Original cursor paragraph-style dispatch, FN_EXTRA2 +9. */
+export const FN_UNO_PARA_STYLE = 22209;
+/** Original numbering start dispatch, FN_EXTRA2 +13. */
+export const FN_UNO_NUM_START_VALUE = 22213;
+/** Original numbering level dispatch, FN_EXTRA2 +14. */
+export const FN_UNO_NUM_LEVEL = 22214;
+/** Original numbering rules dispatch, FN_EXTRA2 +15. */
+export const FN_UNO_NUM_RULES = 22215;
+/** Original follow-style dispatch, FN_EXTRA2 +59. */
+export const FN_UNO_FOLLOW_STYLE = 22259;
+/** Original numbered-paragraph flag dispatch, FN_EXTRA2 +69. */
+export const FN_UNO_IS_NUMBER = 22269;
+/** Original list identity dispatch, FN_EXTRA2 +107. */
+export const FN_UNO_LIST_ID = 22307;
+/** Original numbering restart dispatch, FN_FORMAT2 +138. */
+export const FN_NUMBER_NEWSTART = 21738;

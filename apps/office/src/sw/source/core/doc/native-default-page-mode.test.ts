@@ -168,13 +168,9 @@ it("preserves UNO page-mode false fallback on failed bool extraction and exposes
     wrong = new Any([1], "sal_Int32");
   try {
     expect(
-      model
-        .getPropertySetInfo()
-        .getProperties()
-        .map(
-          /** Reads actual metadata. @param item - Entry. @returns Name. */ (item) =>
-            text(item.Name),
-        ),
+      descriptors(metadata(model.getPropertySetInfo())).map(
+        /** Reads actual metadata. @param item - Entry. @returns Name. */ (item) => text(item.Name),
+      ),
     ).toEqual(["DefaultPageMode"]);
     const current = model.getPropertyValue(key);
     expect(current.hasValue()).toBe(true);
@@ -192,7 +188,7 @@ it("preserves UNO page-mode false fallback on failed bool extraction and exposes
     model.dispose();
     expect(
       /** Ends property lifetime with its actual model. @returns Never. */ () =>
-        model.getPropertySetInfo(),
+        metadata(model.getPropertySetInfo()),
     ).toThrow();
   } finally {
     key.dispose();
@@ -291,3 +287,5 @@ it("retains the original strict drawing upper bound even though XATTR_END names 
     false,
   ]);
 });
+
+import { metadata, descriptors } from "../../../../test/uno-property-metadata";

@@ -152,8 +152,8 @@ it("retains page descriptor units, pending values and native follow/reset behavi
   const standard = stringAny("Standard");
   try {
     const defaultWidth = number(page.getPropertyValue(width));
-    expect(page.getPropertySetInfo().hasPropertyByName(width)).toBe(true);
-    expect(page.getPropertySetInfo().hasPropertyByName(f.key("CharWeight"))).toBe(false);
+    expect(metadata(page.getPropertySetInfo()).hasPropertyByName(width)).toBe(true);
+    expect(metadata(page.getPropertySetInfo()).hasPropertyByName(f.key("CharWeight"))).toBe(false);
     expect(page.getPropertyState(width)).toBe(PropertyState.DEFAULT_VALUE);
     page.setPropertyValues([width, landscape, follow], [wide, yes, standard]);
     expect(page.getPropertyState(width)).toBe(PropertyState.DIRECT_VALUE);
@@ -338,13 +338,19 @@ it("attaches native character descriptors without admitting paragraph properties
     height = new Any([18], "float"),
     bold = new Any([150], "float");
   try {
-    expect(descriptor.getPropertySetInfo().hasPropertyByName(f.key("CharWeightComplex"))).toBe(
-      true,
+    expect(
+      metadata(descriptor.getPropertySetInfo()).hasPropertyByName(f.key("CharWeightComplex")),
+    ).toBe(true);
+    expect(
+      metadata(descriptor.getPropertySetInfo()).hasPropertyByName(f.key("ParaLeftMargin")),
+    ).toBe(false);
+    expect(metadata(descriptor.getPropertySetInfo()).hasPropertyByName(f.key("FollowStyle"))).toBe(
+      false,
     );
-    expect(descriptor.getPropertySetInfo().hasPropertyByName(f.key("ParaLeftMargin"))).toBe(false);
-    expect(descriptor.getPropertySetInfo().hasPropertyByName(f.key("FollowStyle"))).toBe(false);
-    const underline = descriptor.getPropertySetInfo().getPropertyByName(f.key("CharUnderline"));
-    const weight = descriptor.getPropertySetInfo().getPropertyByName(f.key("CharWeight"));
+    const underline = metadata(descriptor.getPropertySetInfo()).getPropertyByName(
+      f.key("CharUnderline"),
+    );
+    const weight = metadata(descriptor.getPropertySetInfo()).getPropertyByName(f.key("CharWeight"));
     try {
       expect(underline.Attributes).toBe(0);
       expect(weight.Attributes).toBe(1);
@@ -479,3 +485,5 @@ it("uses original character programmatic aliases and native short suffix behavio
 });
 import { WrappedTargetException } from "../../../../cppu/inc/com/sun/star/lang/WrappedTargetException";
 import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
+
+import { metadata } from "../../../../test/uno-property-metadata";

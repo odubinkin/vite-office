@@ -27,7 +27,7 @@ it("publishes exact native WritingMode metadata and the Environment default", /*
     cursor = model.getText().createTextCursor(),
     key = unicode("WritingMode");
   try {
-    const property = cursor.getPropertySetInfo().getPropertyByName(key);
+    const property = metadata(cursor.getPropertySetInfo()).getPropertyByName(key);
     try {
       expect(property.Type.getTypeClass()).toBe(TypeClass.SHORT);
       expect(property.Attributes).toBe(0);
@@ -93,3 +93,5 @@ it("rejects invalid typed enum input without mutating the real pooled source ite
     doc.Dispose();
   }
 });
+
+import { metadata } from "../../../../test/uno-property-metadata";

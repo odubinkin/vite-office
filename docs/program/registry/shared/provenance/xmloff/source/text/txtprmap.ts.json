@@ -22,7 +22,8 @@
       "Task 202610231745-0YVMQG routes the represented ODT text, paragraph properties, common styles, numbering, bookmarks and cell text through shared XMLTextImportHelper and real Writer text/cursor/style/service owners. Removes SwXMLParagraphTarget and direct ordinary filter item construction. Native table structure and end-document node adjustment retain Writer-specific core responsibility. Character automatic styles use document-pooled handles and CharAutoStyleName; common versus automatic numbering retain separate ownership and export streams. Font scalar members, paragraph controls, page, line-number and consumed property contracts are exercised by focused API/ODT tests. Soft page break XML is ignored as in pinned XMLParaContext. Opaque automatic rule and style names are document-local identities. Full engine/UNO services, unrepresented style families/properties, layout and DOCX remain outside this slice; prior semantic statuses and registered I/O deviations are unchanged.",
       "Task SWRD7X preserves XMLNumberWithAutoForVoidPropHdl: explicit page-number auto passes a void Any into SwFormatPageDesc, numeric zero stays explicit and signed16 offsets retain unsigned16 core storage. Actual cursor and ODT pagination roundtrips cover the merged XML/API boundary; existing semantic statuses and unsupported scope remain unchanged.",
       "V4DQJW ports original merged CharWordMode associations for underline/overline/strikeout mode and XML_TYPE_BOOL CharAutoKerning. Original named-bool/XMLBool handlers preserve exact tokens, SAX-order last successful mode merge, invalid admission and actual bool Any transport. Primary ODT roundtrips retain the newly consumed native items.",
-      "S3HW1E applies parsed drawing fill properties through real typed Writer UNO values, preserving native enum/int32/int16 map contracts."
+      "S3HW1E applies parsed drawing fill properties through real typed Writer UNO values, preserving native enum/int32/int16 map contracts.",
+      "Native Writer metadata checkpoint removes the ordinary host-array property-info projection and createPropertySetInfo/-1 handles. Genuine SfxItemPropertySetInfo/WeakImplHelper, lazy property-set strong ownership, actual Reference<XPropertySetInfo>/Sequence<Property> suppliers and consumers, original static provider identities and six admitted map families are implemented. Explicit source types and literal source-derived family flags replace name heuristics. Original dispatch/member identities, RubyBelow/ParaIsConnectBorder names and BorderLine metadata are retained; cursor Para*Border aliases and family-inappropriate advertised rows are removed. Actual Writer/UNO/weak/RTF/ODF/Worker regressions accompany critical source-backed metadata tests. Other map families/TEXT_DEFAULT/SwXTextDefaults, full model/state-array/Stream/service ABI, DOCX-XLSX import/export and mounted UI remain incomplete; no broad parity/default/service promotion."
     ],
     "omittedResponsibilities": [
       "Full Calc font-family/style actions,rich-text UI,named cell-style inheritance and other formatting actions remain pending.",
@@ -55,6 +56,14 @@
         {
           "path": "apps/office/src/xmloff/source/text/txtprmap.ts",
           "marker": "exportTextCharacterProperties"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-property-info.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/native-property-info.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

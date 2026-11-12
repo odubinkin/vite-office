@@ -70,7 +70,7 @@ it("publishes original typed page-only grid properties and routes cloned items t
       expect(entry.which).toBe(name === "WritingMode" ? RES_FRAMEDIR : RES_TEXTGRID);
       const key = unicode(name);
       try {
-        expect(style.getPropertySetInfo().hasPropertyByName(key)).toBe(true);
+        expect(metadata(style.getPropertySetInfo()).hasPropertyByName(key)).toBe(true);
         expect(style.getPropertyState(key)).toBe(PropertyState.DEFAULT_VALUE);
       } finally {
         key.dispose();
@@ -128,7 +128,7 @@ it("publishes original typed page-only grid properties and routes cloned items t
       ["GridMode", 2, "sal_Int16"],
       ["GridPrint", false, "bool"],
       ["GridDisplay", false, "bool"],
-      ["GridRubyBelow", true, "bool"],
+      ["RubyBelow", true, "bool"],
       ["GridSnapToChars", false, "bool"],
       ["StandardPageMode", true, "bool"],
     ] as const) {
@@ -272,3 +272,5 @@ it("rejects malformed page-item transport without accepting unknown fields as na
         doc.GetAttrPool().CreateItem({ which: RES_TEXTGRID, value: value as never }),
     ).toThrow();
 });
+
+import { metadata } from "../../../../test/uno-property-metadata";

@@ -28,7 +28,7 @@ import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { Color } from "../../../../tools/inc/color";
 import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { InsertPoolItem } from "../doc/docfmt";
-import { createPropertySetInfo, SwUnoPropertyMap } from "./unomap";
+import { aSwMapProvider, SwUnoPropertyMap } from "./unomap";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { createWriterHighlightItem, writerHighlightColorValue } from "../attr/swatrset";
 import { INVALID_POOL_ITEM } from "../../../../svl/source/items/poolitem";
@@ -253,7 +253,7 @@ it("queries legacy transport items and rejects invalid item members before poole
     const short = new Any([254], "sal_Int16");
     const plain = putItem(
       new SfxInt16Item(999, 3),
-      { which: 999, member: 0, kind: "short" },
+      { which: 999, member: 0, kind: "short", type: "sal_Int16" },
       short,
     ) as SfxInt16Item;
     expect(plain.GetValue()).toBe(254);
@@ -472,7 +472,13 @@ it("applies default item-insertion mode across paragraph boundaries and rejects 
   try {
     document.InsertPoolItem(cursor.GetPaM(), new SfxInt16Item(RES_PARATR_ORPHANS, 3));
     InsertPoolItem(document, cursor.GetPaM(), new SwFormatINetFormat({ url: "" }));
-    expect(createPropertySetInfo().hasPropertyByName(weight)).toBe(true);
+    expect(
+      metadata(
+        new Reference(
+          aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_CURSOR).getPropertySetInfo().get(),
+        ),
+      ).hasPropertyByName(weight),
+    ).toBe(true);
     for (const operation of [
       /** Rejects an item setter on a non-text range. @returns Nothing. */ () =>
         SetPropertyValue(tableRange, "CharWeight", input),
@@ -526,3 +532,6 @@ it("rejects unsupported font compound members and malformed native scalar values
     wrong.dispose();
   }
 });
+
+import { PROPERTY_MAP_TEXT_CURSOR } from "../../../inc/unomap";
+import { metadata } from "../../../../test/uno-property-metadata";

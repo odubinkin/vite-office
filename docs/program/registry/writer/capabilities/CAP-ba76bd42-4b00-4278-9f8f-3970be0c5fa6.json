@@ -19,7 +19,8 @@
       "SettingsTable consumed scalar/nested/format state now preserves original tab/zoom/view/hyphenation widths/defaults,19 boolean source fields, sticky compatibility assignments (WRITER449), first-value optional linked-style precedence and actual owned decimal/list strings. DomainMapper_Impl.GetSettingsTable now follows native lazy construction, so real RTF/OOXML source-format queries occur after mapper initialization; teardown destroys settings-owned strings. Native resolveSprmProps retains optional original resource references and returned-pointer ownership; original SvxZoomType identities/zoom conversion are used. Byte-exact fdo106029 and tdf146171 settings pass actual ZIP/OOXMLDocument/SAX/DomainMapper into source settings state. Full native QA export/layout, complete protection/grab bags, ApplyProperties/ApplySettingsTable/model/view/default owners and DOCX/XLSX UI drivers remain incomplete. No broad semantic/default/parity promotion.",
       "Native SfxItemPropertyMapEntry schema values and PropertyMoreFlags retain actual OUString/Type owners, source widths/checked preconditions, copy/assignment and reverse member destruction. SfxItemPropertyMap now uses actual sorted_vector/OUString comparison, borrowed immutable schema pointers, first duplicate insertion, counted UTF16 lower_bound and real cached Sequence<Property> values. Actual generated Property/UNO data assignment and sequence COW preserve cache sharing, independent returned descriptors and UnknownPropertyException defaults. Older SfxItemPropertySetInfo array projection remains explicitly unregistered/incomplete, not a native XPropertySetInfo provider. Full SfxItemPropertySet/property-info/static-map owner migration, SwXTextDefaults/application and DOCX/XLSX filters/export/UI remain incomplete; no broad default/service/ABI/parity promotion.",
       "SfxItemPropertySet static/named value and state helpers now use actual property maps, deep item pointers, real pool defaults and Any/QueryValue/PutValue/enum normalization. Failed writes leave destination unchanged; successful clones transfer into existing PutImpl through native unique_ptr overload erasure without an extra clone. GetItemState carries its original optional output pointer through parents and writes it only for SET. Complete PropertyAttribute IDL constants include both REMOVABLE/REMOVEABLE. Real Writer tab/bool/break/default graph tests preserve MAYBEVOID/stale enum output and ignore-known-value rejection (WRITER450-451/CALC-517-518). Actual OOXML720-twip settings distance1270 mm100 is applied through native item/set/SwDoc.SetDefault APIs; generic document default1134 twips/2000 mm100 is unchanged. This is a kernel prerequisite, not full SwXTextDefaults/property-info/static-map/filter/UI wiring; no broad default/service/ABI/parity promotion.",
-      "Complete native SfxExtItemPropertySetInfo component uses the genuine WeakImplHelper XPropertySetInfo specialization, owned copied entry values, first-name insertion precedence, original checked signed handle then unsigned Which conversion, counted UTF16 lookup, actual generated descriptor assignment and owning cached-sequence COW returns. Actual UNO/type-provider/weak lifetime tests cover component final release and results surviving component destruction. WRITER452/CALC-519 preserve negative-handle conversion. Older ordinary metadata projection and Writer static-map/application/filter/UI migration remain unfinished; no broad parity promotion."
+      "Complete native SfxExtItemPropertySetInfo component uses the genuine WeakImplHelper XPropertySetInfo specialization, owned copied entry values, first-name insertion precedence, original checked signed handle then unsigned Which conversion, counted UTF16 lookup, actual generated descriptor assignment and owning cached-sequence COW returns. Actual UNO/type-provider/weak lifetime tests cover component final release and results surviving component destruction. WRITER452/CALC-519 preserve negative-handle conversion. Older ordinary metadata projection and Writer static-map/application/filter/UI migration remain unfinished; no broad parity promotion.",
+      "Native Writer metadata checkpoint removes the ordinary host-array property-info projection and createPropertySetInfo/-1 handles. Genuine SfxItemPropertySetInfo/WeakImplHelper, lazy property-set strong ownership, actual Reference<XPropertySetInfo>/Sequence<Property> suppliers and consumers, original static provider identities and six admitted map families are implemented. Explicit source types and literal source-derived family flags replace name heuristics. Original dispatch/member identities, RubyBelow/ParaIsConnectBorder names and BorderLine metadata are retained; cursor Para*Border aliases and family-inappropriate advertised rows are removed. Actual Writer/UNO/weak/RTF/ODF/Worker regressions accompany critical source-backed metadata tests. Other map families/TEXT_DEFAULT/SwXTextDefaults, full model/state-array/Stream/service ABI, DOCX-XLSX import/export and mounted UI remain incomplete; no broad parity/default/service promotion."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -192,6 +193,46 @@
         {
           "path": "apps/office/src/udkapi/com/sun/star/beans/PropertyAttribute.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/editeng/inc/memberids.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svx/inc/svxids.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/inc/cmdid.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/inc/unomap.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unomap.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unoobj2.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unostyle.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/uno/unotxdoc.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/PropertyMap.section.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/txtprmap.ts",
+          "marker": "@fileoverview"
         }
       ],
       "tests": [
@@ -254,6 +295,14 @@
         {
           "path": "apps/office/src/svl/source/items/native-extended-property-info.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-property-info.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/native-property-info.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "docs": [
@@ -296,6 +345,10 @@
         {
           "path": "docs/program/native-extended-property-info.md",
           "marker": "# Native extended property metadata"
+        },
+        {
+          "path": "docs/program/native-writer-property-info.md",
+          "marker": "Native Writer property metadata"
         }
       ]
     },

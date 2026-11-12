@@ -194,3 +194,12 @@ export const MID_COLOR_LUM_MOD = 6;
 export const MID_COLOR_LUM_OFF = 7;
 /** Original drawing-color complex interface member; actual provider is a separate service. */
 export const MID_COMPLEX_COLOR = 8;
+
+/** Original complete LR-space left margin member. */
+export const MID_L_MARGIN = 4;
+/** Original complete LR-space right margin member. */
+export const MID_R_MARGIN = 5;
+/** Original upper UL-space margin member. */
+export const MID_UP_MARGIN = 3;
+/** Original lower UL-space margin member. */
+export const MID_LO_MARGIN = 4;

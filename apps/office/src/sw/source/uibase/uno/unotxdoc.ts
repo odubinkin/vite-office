@@ -2,7 +2,7 @@
 import { SwXDocumentSettings } from "./SwXDocumentSettings";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { WID_DOC_DEFAULT_PAGE_MODE } from "../../../inc/unomap";
-import { SwUnoTextDocumentPropertyMap, createPropertySetInfo } from "../../core/unocore/unomap";
+import { SwUnoTextDocumentPropertyMap, aSwMapProvider } from "../../core/unocore/unomap";
 import { unknown } from "../../core/unocore/unocrsrhelper";
 import { SwXAutoStyles } from "../../core/unocore/unostyle-auto";
 
@@ -33,16 +33,10 @@ export class SwXTextDocument {
     return this.doc;
   }
   /** Publishes admitted native document properties, separately from paragraph/cursor maps. @returns Property metadata. */
-  getPropertySetInfo(): ReturnType<typeof createPropertySetInfo> {
+  getPropertySetInfo(): Reference<XPropertySetInfo> {
     this.GetDoc();
-    return createPropertySetInfo(
-      [...SwUnoTextDocumentPropertyMap].map(
-        /** Publishes original document property metadata. @param entry - Property and entry. @returns Metadata pair. */ ([
-          name,
-          entry,
-        ]) => [name, entry.type] as const,
-      ),
-      false,
+    return new Reference(
+      aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_DOCUMENT).getPropertySetInfo().get(),
     );
   }
   /** Original document page-mode getter. @param name - Native property name. @returns Owned Any. */
@@ -132,3 +126,7 @@ export class SwXTextDocument {
     }
   }
 }
+
+import { Reference } from "../../../../cppu/inc/com/sun/star/uno/Reference";
+import type { XPropertySetInfo } from "../../../../udkapi/com/sun/star/beans/XPropertySetInfo";
+import { PROPERTY_MAP_TEXT_DOCUMENT } from "../../../inc/unomap";

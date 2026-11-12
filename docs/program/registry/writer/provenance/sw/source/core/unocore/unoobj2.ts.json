@@ -15,7 +15,8 @@
     ],
     "preservedResponsibilities": [
       "Internal document UNO mark ownership, canonical text ranges, properties and disposal checks.",
-      "S3HW1E HTML51: SwDoc creates actual ordinary/table UNO cursors, retains only weak control blocks and locks a real strong value across each destruction hint broadcast. UnoCursorPointer uses the existing native SfxListener/SfxBroadcaster identities and source subscription order; the native text cursor API owns this pointer and rejects access after invalidation. Original flags, readonly availability, separate table selection ring and whole-ring destruction are preserved. Concrete cursor-specific shared/weak value carriers reify deterministic C++ ownership; no alternate document/selection model or generic standard-library ABI is claimed. Global PaMCorrAbs edit-shell traversal, section deletion, table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required. Whole-module contracts/defaults/behavior remain unverified."
+      "S3HW1E HTML51: SwDoc creates actual ordinary/table UNO cursors, retains only weak control blocks and locks a real strong value across each destruction hint broadcast. UnoCursorPointer uses the existing native SfxListener/SfxBroadcaster identities and source subscription order; the native text cursor API owns this pointer and rejects access after invalidation. Original flags, readonly availability, separate table selection ring and whole-ring destruction are preserved. Concrete cursor-specific shared/weak value carriers reify deterministic C++ ownership; no alternate document/selection model or generic standard-library ABI is claimed. Global PaMCorrAbs edit-shell traversal, section deletion, table grammar/materialization/layout, RTF direction export and final filter/UI audit remain required. Whole-module contracts/defaults/behavior remain unverified.",
+      "Native Writer metadata checkpoint removes the ordinary host-array property-info projection and createPropertySetInfo/-1 handles. Genuine SfxItemPropertySetInfo/WeakImplHelper, lazy property-set strong ownership, actual Reference<XPropertySetInfo>/Sequence<Property> suppliers and consumers, original static provider identities and six admitted map families are implemented. Explicit source types and literal source-derived family flags replace name heuristics. Original dispatch/member identities, RubyBelow/ParaIsConnectBorder names and BorderLine metadata are retained; cursor Para*Border aliases and family-inappropriate advertised rows are removed. Actual Writer/UNO/weak/RTF/ODF/Worker regressions accompany critical source-backed metadata tests. Other map families/TEXT_DEFAULT/SwXTextDefaults, full model/state-array/Stream/service ABI, DOCX-XLSX import/export and mounted UI remain incomplete; no broad parity/default/service promotion."
     ],
     "omittedResponsibilities": [
       "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
@@ -32,6 +33,14 @@
         },
         {
           "path": "apps/office/src/sw/source/core/unocore/unocrsr.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/unocore/native-property-info.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/native-property-info.test.ts",
           "marker": "@fileoverview"
         }
       ],

@@ -199,9 +199,9 @@ describe("native Writer text import API" /** Processes one ordered native value 
     const body = new SwXTextDocument(createWriterDocument()).getText(),
       cursor = body.createTextCursor(),
       name = unicode("ParaOrphans");
-    expect(text(cursor.getPropertySetInfo().getPropertyByName(name).Type.getTypeName())).toBe(
-      "byte",
-    );
+    expect(
+      text(metadata(cursor.getPropertySetInfo()).getPropertyByName(name).Type.getTypeName()),
+    ).toBe("byte");
     cursor.setPropertyValue(unicode("CharUnderline"), new Any([1], "sal_Int16"));
     expect(number(cursor.getPropertyValue(unicode("CharUnderline")))).toBe(1);
     cursor.setPropertyValue(unicode("ParaKeepTogether"), new Any(true));
@@ -581,14 +581,14 @@ it("exposes native style property descriptors and resets direct values without f
     family = model.getStyleFamilies().getByName(unicode("ParagraphStyles")),
     style = family.getByName(unicode("Standard")),
     name = unicode("CharWeight");
-  const info = style.getPropertySetInfo();
+  const info = metadata(style.getPropertySetInfo());
   expect(info.hasPropertyByName(name)).toBe(true);
   expect(info.hasPropertyByName(unicode("InventedProperty"))).toBe(false);
   const descriptor = info.getPropertyByName(name);
   expect(text(descriptor.Type.getTypeName())).toBe("float");
   expect(descriptor.Attributes).toBe(1);
   expect(
-    info.getProperties().some(
+    descriptors(info).some(
       /** Processes one ordered native value at this boundary. @param p - Original p input. @returns The represented native operation result. */
       (p) => text(p.Name) === "ParaTabStops",
     ),
@@ -599,7 +599,9 @@ it("exposes native style property descriptors and resets direct values without f
   expect(style.getPropertyStates([name])[0]).toBe(PropertyState.DEFAULT_VALUE);
   expect(number(style.getPropertyValue(name))).toBe(100);
   expect(
-    model.getText().getStart().getPropertySetInfo().hasPropertyByName(unicode("NumberingRules")),
+    metadata(model.getText().getStart().getPropertySetInfo()).hasPropertyByName(
+      unicode("NumberingRules"),
+    ),
   ).toBe(true);
 });
 
@@ -665,3 +667,5 @@ it("keeps table import progressing past rejected properties while honoring nativ
     ),
   ).toBe(0);
 });
+
+import { metadata, descriptors } from "../../../../test/uno-property-metadata";

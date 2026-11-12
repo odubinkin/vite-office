@@ -16,7 +16,7 @@ import type { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { Any as UnoAny } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { text, unicode } from "./unocrsrhelper";
-import { SwUnoPropertyMap, createPropertySetInfo, type SwUnoPropertyEntry } from "./unomap";
+import { SwUnoPropertyMap, aSwMapProvider, type SwUnoPropertyEntry } from "./unomap";
 import {
   putItem,
   queryItem,
@@ -37,7 +37,6 @@ import { SwUnoPageStylePropertyMap } from "./unomap";
 import { UseOnPage } from "../layout/pagedesc";
 import { SvxPageItem, SvxPageUsage } from "../../../../svx/inc/pageitem";
 import { MID_PAGE_LAYOUT } from "../../../../svx/inc/unomid";
-import { cppu_detail_getUnoType_PageStyleLayout as pageLayoutType } from "../../../../offapi/com/sun/star/style/PageStyleLayout";
 /** Represented native style families over actual document formats; frame/table/conditional family suppliers remain unported. */
 export type SwStyleFamily =
   "CharacterStyles" | "ParagraphStyles" | "PageStyles" | "NumberingStyles";
@@ -60,38 +59,30 @@ export class SwXStyle {
     this.owner = owner;
   }
   /** Publishes the supported native property descriptors. @returns The represented native operation result. */
-  getPropertySetInfo(): ReturnType<typeof createPropertySetInfo> {
-    if (this.family === "CharacterStyles")
-      return createPropertySetInfo([], true, SwUnoCharStylePropertyMap);
-    if (this.family === "NumberingStyles")
-      return createPropertySetInfo([["NumberingRules", ["Reference", indexReplaceType]]], false);
-    if (this.family === "PageStyles")
-      return createPropertySetInfo(
-        [
-          ["FollowStyle", "OUString"],
-          ["Width", "sal_Int32"],
-          ["Height", "sal_Int32"],
-          ["LeftMargin", "sal_Int32"],
-          ["RightMargin", "sal_Int32"],
-          ["TopMargin", "sal_Int32"],
-          ["BottomMargin", "sal_Int32"],
-          ["IsLandscape", "bool"],
-          ["PageStyleLayout", pageLayoutType],
-          ...[...SwUnoPageStylePropertyMap].map(
-            /** Publishes original page-style item property types. @param entry - Entry. @returns Descriptor. */ ([
-              name,
-              entry,
-            ]) => [name, entry.type] as const,
-          ),
-        ],
-        false,
-      );
-    return createPropertySetInfo([["FollowStyle", "OUString"]]);
+  getPropertySetInfo(): Reference<XPropertySetInfo> {
+    const id =
+      this.family === "CharacterStyles"
+        ? PROPERTY_MAP_CHAR_STYLE
+        : this.family === "NumberingStyles"
+          ? PROPERTY_MAP_NUM_STYLE
+          : this.family === "PageStyles"
+            ? PROPERTY_MAP_PAGE_STYLE
+            : PROPERTY_MAP_PARA_STYLE;
+    return new Reference(aSwMapProvider.GetPropertySet(id).getPropertySetInfo().get());
+  }
+  /** Reads the original declared map while keeping the actual metadata Reference scoped. @param name - Native property name. @returns Presence flag. */
+  private hasProperty(name: OUStringConstReference): boolean {
+    const info = this.getPropertySetInfo();
+    try {
+      return (info.get() as XPropertySetInfo).hasPropertyByName(name);
+    } finally {
+      info.dispose();
+    }
   }
   /** Reads direct versus inherited native property state. @param name - Native property or element name. @returns The represented native operation result. */
   getPropertyState(name: OUStringConstReference): PropertyState {
     const n = text(name);
-    if (!this.getPropertySetInfo().hasPropertyByName(name)) unknown("Unknown property: " + n);
+    if (!this.hasProperty(name)) unknown("Unknown property: " + n);
     if (!this.owner)
       return this.pending.has(n) ? PropertyState.DIRECT_VALUE : PropertyState.DEFAULT_VALUE;
     if (this.family === "PageStyles" && SwUnoPageStylePropertyMap.has(n)) {
@@ -123,7 +114,7 @@ export class SwXStyle {
   /** Removes the supported direct property delta. @param name - Native property or element name. @returns Nothing. */
   setPropertyToDefault(name: OUStringConstReference): void {
     const n = text(name);
-    if (!this.getPropertySetInfo().hasPropertyByName(name)) unknown("Unknown property: " + n);
+    if (!this.hasProperty(name)) unknown("Unknown property: " + n);
     if (!this.owner) {
       this.pending.get(n)?.dispose();
       this.pending.delete(n);
@@ -318,7 +309,7 @@ export class SwXStyle {
   /** Queries the current native property value. @param name - Native property or element name. @returns The represented native operation result. */
   getPropertyValue(name: OUStringConstReference): Any {
     const n = text(name);
-    if (!this.getPropertySetInfo().hasPropertyByName(name)) unknown("Unknown property: " + n);
+    if (!this.hasProperty(name)) unknown("Unknown property: " + n);
     if (!this.owner)
       return this.pending.has(n) ? new UnoAny(this.pending.get(n) as Any) : this.defaultValue(n);
     if (n === "NumberingRules" && this.family === "NumberingStyles")
@@ -342,12 +333,12 @@ export class SwXStyle {
   }
   /** Original import helper ignores unknown names but preserves declared-property validation and exceptions. @param name - Property name. @param value - Native value. @returns Nothing. */
   setPropertyValueIgnoreUnknown(name: OUStringConstReference, value: Any): void {
-    if (this.getPropertySetInfo().hasPropertyByName(name)) this.setPropertyValue(name, value);
+    if (this.hasProperty(name)) this.setPropertyValue(name, value);
   }
   /** Applies a typed native property without duplicating model state. @param name - Native property or element name. @param value - Declared native value. @returns Nothing. */
   setPropertyValue(name: OUStringConstReference, value: Any): void {
     const n = text(name);
-    if (!this.getPropertySetInfo().hasPropertyByName(name)) unknown("Unknown property: " + n);
+    if (!this.hasProperty(name)) unknown("Unknown property: " + n);
     if (!this.owner) {
       const entry =
         this.family === "PageStyles" ? SwUnoPageStylePropertyMap.get(n) : SwUnoPropertyMap.get(n);
@@ -769,3 +760,11 @@ import {
 import { WrappedTargetException } from "../../../../cppu/inc/com/sun/star/lang/WrappedTargetException";
 
 import type { rtl_uStringSlot } from "../../../../sal/inc/rtl/ustring.h";
+
+import type { XPropertySetInfo } from "../../../../udkapi/com/sun/star/beans/XPropertySetInfo";
+import {
+  PROPERTY_MAP_CHAR_STYLE,
+  PROPERTY_MAP_NUM_STYLE,
+  PROPERTY_MAP_PAGE_STYLE,
+  PROPERTY_MAP_PARA_STYLE,
+} from "../../../inc/unomap";

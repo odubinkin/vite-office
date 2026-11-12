@@ -34,7 +34,7 @@ it("round-trips each paragraph border through actual Any and native unit convers
   const line = new BorderLine2(0x112233, 0, 254, 0, BorderLineStyle.SOLID, 254);
   const input = new Any(line, cppu_detail_getUnoType_BorderLine2);
   try {
-    for (const name of ["ParaTopBorder", "ParaBottomBorder", "ParaLeftBorder", "ParaRightBorder"]) {
+    for (const name of ["TopBorder", "BottomBorder", "LeftBorder", "RightBorder"]) {
       const entry = SwUnoPropertyMap.get(name);
       assert(entry);
       const copy = putItem(original, entry, input);
@@ -62,7 +62,7 @@ it("round-trips each paragraph border through actual Any and native unit convers
 });
 
 it("rejects unknown border members, incompatible Any values and wrong pooled item classes", /** Checks native IllegalArgumentException admission rather than browser scalar coercion. @returns Nothing. */ () => {
-  const border = SwUnoPropertyMap.get("ParaTopBorder");
+  const border = SwUnoPropertyMap.get("TopBorder");
   const highlight = SwUnoPropertyMap.get("CharHighlight");
   assert(border);
   assert(highlight);
