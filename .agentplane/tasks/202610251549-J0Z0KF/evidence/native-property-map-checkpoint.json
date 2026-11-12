@@ -1,0 +1,352 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Native SVL property map values, sorted borrowed schema and cached UNO descriptors",
+  "checks": [
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-map-gate-0.log"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-map-gate-1.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-map-gate-2.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-property-map-gate-3.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-map-gate-4.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-map-gate-5.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-map-gate-6.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-map-gate-7.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-map-gate-8.log"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-map-gate-9.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-map-gate-10.log"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-map-gate-11.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-map-typecheck.log"
+    },
+    {
+      "command": "npm run test:static",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-map-static.log"
+    },
+    {
+      "command": "npx eslint apps/office/src/svl/inc/itemprop.ts apps/office/src/svl/source/items/itemprop.ts apps/office/src/svl/source/items/native-property-map.test.ts apps/office/src/comphelper/inc/propertysetinfo.ts --max-warnings 0",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-map-lint.log"
+    },
+    {
+      "command": "Scoped Prettier --check over all changed TS/JSON/Markdown paths",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-property-map-format.log"
+    }
+  ],
+  "profile": {
+    "command": "npx vitest run src/svl/source/items/native-property-map.test.ts src/svl/source/items/itemprop.test.ts src/sw/source/core/unocore/native-text-import-api.test.ts --coverage --coverage.include=src/svl/inc/itemprop.ts --coverage.include=src/svl/source/items/itemprop.ts --coverage.include=src/comphelper/inc/propertysetinfo.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reporter=text --coverage.reporter=json-summary",
+    "cwd": "apps/office",
+    "exitCode": 0,
+    "tests": 40,
+    "files": 3,
+    "log": "apps/office/coverage/native-property-map-profile.log",
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 98,
+          "covered": 98,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 105,
+          "covered": 104,
+          "skipped": 0,
+          "pct": 99.04
+        },
+        "functions": {
+          "total": 24,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 37,
+          "covered": 36,
+          "skipped": 0,
+          "pct": 97.29
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/comphelper/inc/propertysetinfo.ts": {
+        "lines": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/inc/itemprop.ts": {
+        "lines": {
+          "total": 40,
+          "covered": 40,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 44,
+          "covered": 44,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 19,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/items/itemprop.ts": {
+        "lines": {
+          "total": 55,
+          "covered": 55,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 17,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 58,
+          "covered": 57,
+          "skipped": 0,
+          "pct": 98.27
+        },
+        "branches": {
+          "total": 18,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 94.44
+        }
+      }
+    }
+  },
+  "related": {
+    "command": "npx vitest run src/o3tl/inc/sorted_vector.test.ts src/cppu/inc/com/sun/star/uno/Sequence.test.ts src/svl/source/items/native-user-defaults.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts src/sw/source/writerfilter/dmapper/SettingsTable.test.ts src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.test.ts src/sw/source/filter/xml/odt-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts --coverage.enabled=false",
+    "cwd": "apps/office",
+    "exitCode": 0,
+    "tests": 69,
+    "files": 8,
+    "log": "apps/office/coverage/native-property-map-related.log"
+  },
+  "limitations": [
+    "SwXTextDefaults requires actual property map/property-set/metadata owners; this block ports native schema value/index/cache prerequisites rather than installing a partial fake XPropertySet provider.",
+    "SfxItemPropertyMapEntry constructor/copy/assignment/destruction and PropertyMoreFlags use genuine counted OUString/Type values, native widths and checked source preconditions. Unconsumed implicit move families, physical ABI and NDEBUG assertion behavior remain unverified.",
+    "Map pointers borrow a live unchanged caller-owned schema table. Pointer-vector copying reinserts the same already ordered borrowed references; it does not clone entry values or certify mutation that invalidates sorted schema invariants.",
+    "Cached descriptors are real Sequence<Property> with genuine Property/UNO data ownership and COW. Named copies and source UnknownPropertyException defaults are preserved. The only uncovered map assertion rejects an invalid empty-name source table and is not forced for coverage.",
+    "Initial typecheck exposed the exact seven-argument native data-assignment signature, sequence address typing and explicit generated exception context. Corrected to actual owners. Initial two-file profile passed12 cases but failed function coverage87.5; adding the actual related Writer import API consumer file covers legacy property-info callbacks. Earlier failed summary retained separately. New test-arrow JSDoc was added; final docs gate has only existing baseline errors.",
+    "Existing SfxItemPropertySetInfo host-array projection is explicitly still incomplete/unregistered; no native component/service parity is claimed. Full property-set/static provider migration, SwXTextDefaults/application and DOCX/XLSX model/filter/export/Worker/mounted UI acceptance remain unfinished.",
+    "All scoped gates pass except unchanged css-style-matchers.ts:17/:76 JSDoc baseline; doctor retains existing missing project-local pre-push runner warning without errors.",
+    "No dedicated native SfxItemPropertyMap tests found under pinned svl/qa after exact-name and broader PropertyMap/PropertySetInfo/itemprop searches. Critical public constructor/value/lookup/duplicates/descriptor/COW scenarios are implemented locally.",
+    "Only related tests run within the approved ten-task cadence. Existing Open/Save/autosave/recovery policies remain unchanged. Goal remains active; no broad parity/default/capability promotion."
+  ],
+  "baseCommit": "e4d77f40458f1ea50cdc685bac15a5c4f57e3af3",
+  "sourceBlobs": {
+    "apps/office/src/comphelper/inc/propertysetinfo.ts": "7b58e123267cbb8eb7fa445e49161ec889b04cb4",
+    "apps/office/src/svl/inc/itemprop.ts": "2914ec194fe968be079e2feaf6dbef40b164c336",
+    "apps/office/src/svl/source/items/itemprop.ts": "e07b6e7cdec36844a13eefb2f483ae81a8334c20",
+    "apps/office/src/svl/source/items/native-property-map.test.ts": "2dc7784bfed0ec06c785c584a638a27f5d477b4c",
+    "docs/program/native-property-map.md": "9376e409c90cbcc227ea431b8f086408456f89bd",
+    "docs/program/registry/shared/provenance/comphelper/inc/propertysetinfo.ts.json": "f5d9360641471e87032cce4ec79e57218d812557",
+    "docs/program/registry/shared/provenance/svl/inc/itemprop.ts.json": "7d3c18c4d5dc59f1156baeb41d986a2fc0d8d70f",
+    "docs/program/registry/shared/provenance/svl/source/items/itemprop.ts.json": "c487fabaa2d01030d77106c6bb0e00b9c2613b35",
+    "docs/program/registry/shared/runtime/comphelper/inc/propertysetinfo.ts.json": "d7869d6c68f0cc10cadde676b4c158d91e590ab3",
+    "docs/program/registry/shared/runtime/svl/inc/itemprop.ts.json": "c93f1ddbdcf0a28b7ddf83e8f7dc99c0760ba37e",
+    "docs/program/registry/shared/runtime/svl/source/items/itemprop.ts.json": "e7ebab998f8fa1bdd6286f318ca3f318ded8b9d9",
+    "docs/program/registry/writer/capabilities/CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6.json": "740a00af4f50aaa3e0aa64546049bb543e461aca"
+  },
+  "initialProfileCoverage": {
+    "total": {
+      "lines": {
+        "total": 98,
+        "covered": 95,
+        "skipped": 0,
+        "pct": 96.93
+      },
+      "statements": {
+        "total": 105,
+        "covered": 101,
+        "skipped": 0,
+        "pct": 96.19
+      },
+      "functions": {
+        "total": 24,
+        "covered": 21,
+        "skipped": 0,
+        "pct": 87.5
+      },
+      "branches": {
+        "total": 37,
+        "covered": 36,
+        "skipped": 0,
+        "pct": 97.29
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/comphelper/inc/propertysetinfo.ts": {
+      "lines": {
+        "total": 3,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 1,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 3,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/inc/itemprop.ts": {
+      "lines": {
+        "total": 40,
+        "covered": 40,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 6,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 44,
+        "covered": 44,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 19,
+        "covered": 19,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/items/itemprop.ts": {
+      "lines": {
+        "total": 55,
+        "covered": 52,
+        "skipped": 0,
+        "pct": 94.54
+      },
+      "functions": {
+        "total": 17,
+        "covered": 14,
+        "skipped": 0,
+        "pct": 82.35
+      },
+      "statements": {
+        "total": 58,
+        "covered": 54,
+        "skipped": 0,
+        "pct": 93.1
+      },
+      "branches": {
+        "total": 18,
+        "covered": 17,
+        "skipped": 0,
+        "pct": 94.44
+      }
+    }
+  }
+}
