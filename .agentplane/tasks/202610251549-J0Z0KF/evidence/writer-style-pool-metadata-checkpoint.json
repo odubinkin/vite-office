@@ -1,0 +1,471 @@
+{
+  "taskId": "202610251549-J0Z0KF",
+  "checkpoint": "Native weak pool ownership, Writer format help/favourite metadata and real grab-bag value destruction",
+  "baseCommit": "372ec977e05cdf67d6df6654b631bb5dc9c438f9",
+  "upstream": {
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "paths": [
+      "include/svl/style.hxx",
+      "svl/source/items/style.cxx",
+      "svl/source/items/grabbagitem.cxx",
+      "udkapi/com/sun/star/beans/PropertyValue.idl",
+      "sw/inc/format.hxx",
+      "sw/source/core/attr/format.cxx",
+      "sw/source/core/doc/docfmt.cxx",
+      "svl/qa/unit/items/test_IndexedStyleSheets.cxx",
+      "sw/qa/extras/ooxmlexport/ooxmlexport25.cxx"
+    ]
+  },
+  "implemented": [
+    "Native SfxStyleSheetBasePool_Base WeakImplHelper and broadcaster multiple roles share one real identity; copy fresh weak lifetime, original subscriber/empty-copy behavior, actual final-release virtual destruction.",
+    "SwFormat native help IDs/default widths, hidden/favourite optional flags, IsDefault and UNKNOWN-ID favourite side effect.",
+    "Actual SwFormat interop-bag getters/setters/ParseFavourites through genuine Any/PropertyValue sequence; owned bag destruction for represented constructors.",
+    "Real SfxGrabBagItem map Any destruction/duplicate assignment, plus generated PropertyValue implicit nontrivial-member destructor binding.",
+    "Existing native character copy preserves source help ID and resets document-local help-file index to255."
+  ],
+  "sourceIssues": [
+    "WRITER453: rejected grab-bag input still parses retained/new empty map; invalid existing qFormat key leaves optional unchanged.",
+    "WRITER454: original UNKNOWN-ID setter in CopyFormat can turn explicit false source favourite into true destination favourite; do not copy additional fields to repair it."
+  ],
+  "verification": [
+    {
+      "command": "npx vitest run src/svl/source/items/native-{indexed-style-sheets,style-iterator,style-model,style-sheet,style-first-import,style-sheet-first-import,grab-bag}.test.ts src/sw/source/core/attr/native-format-*.test.ts src/sw/source/core/doc/{writer-attributes,native-default-entrypoints,doc-frameformats.native}.test.ts src/sw/source/core/edit/edfcol*.test.ts src/sw/source/core/undo/native-{move-left-margin-history,margin-history-boundaries}.test.ts --coverage --coverage.include='src/svl/source/items/style-model.ts' --coverage.include='src/svl/source/items/grabbagitem.ts' --coverage.include='src/udkapi/com/sun/star/beans/PropertyValue.ts' --coverage.include='src/sw/source/core/attr/format.ts' --coverage.include='src/sw/source/core/doc/docfmt.ts' --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "cwd": "apps/office",
+      "result": "test-pass/initial-coverage-fail",
+      "log": "apps/office/coverage/writer-style-pool-profile.log",
+      "evidence": "255 scenarios22files passed; initial related selection alone did not cover prior docfmt/format paths sufficiently. Raw map retained unchanged."
+    },
+    {
+      "command": "[\"npx\", \"vitest\", \"run\", \"src/sw/inc/frameformats.native.test.ts\", \"src/svl/source/items/native-default-predicates.test.ts\", \"src/svl/source/items/native-property-set.test.ts\", \"src/sw/source/filter/ww8/rtfexport.direction.test.ts\", \"src/sw/source/filter/md/swmd.html-table.test.ts\", \"src/sw/source/uibase/app/docst-by-example.test.ts\", \"src/sw/source/uibase/wrtsh/wrtsh-indent.test.ts\", \"src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts\", \"src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts\", \"src/sw/source/filter/html/htmltab.cell-save.test.ts\", \"src/sw/source/filter/html/htmlgrin.frame-anchor.test.ts\", \"src/sw/source/core/text/itratr.native-minmax.test.ts\", \"src/sw/source/core/doc/native-page-copy.test.ts\", \"src/sw/source/core/doc/docnew.native-lifecycle.test.ts\", \"src/sw/source/core/doc/native-default-page-mode.test.ts\", \"src/sw/source/core/doc/htmltbl.native-widths.test.ts\", \"src/sw/source/core/doc/text-hint-copy.test.ts\", \"src/sw/source/core/undo/native-format-node-index.test.ts\", \"src/sw/source/core/undo/SwUndoFmt.delete.native.test.ts\", \"src/sw/source/core/doc/doclay.native-name.test.ts\", \"src/sw/source/core/undo/SwUndoFmt.native.test.ts\", \"src/sw/source/core/docnode/native-table-construction-formats.test.ts\", \"src/sw/source/core/unocore/native-import-core-lifetimes.test.ts\", \"src/sw/source/core/unocore/native-text-default-schema.test.ts\", \"--coverage\", \"--coverage.reportsDirectory=coverage/writer-style-pool-additional\", \"--coverage.thresholds.statements=0\", \"--coverage.thresholds.branches=0\", \"--coverage.thresholds.functions=0\", \"--coverage.thresholds.lines=0\", \"--coverage.include=src/svl/source/items/style-model.ts\", \"--coverage.include=src/svl/source/items/grabbagitem.ts\", \"--coverage.include=src/udkapi/com/sun/star/beans/PropertyValue.ts\", \"--coverage.include=src/sw/source/core/attr/format.ts\", \"--coverage.include=src/sw/source/core/doc/docfmt.ts\"]",
+      "cwd": "apps/office",
+      "result": "pass/raw-collection-only",
+      "log": "apps/office/coverage/writer-style-pool-additional.log",
+      "evidence": "354 scenarios24files passed, disjoint from first22files. Zero interim thresholds collect raw complementary coverage; final acceptance uses all four90 merged gates."
+    },
+    {
+      "command": "node --input-type=module",
+      "stdin": "import fs from 'node:fs';\nimport * as lib from '@vitest/istanbul-lib-coverage';\nconst map=lib.createCoverageMap(JSON.parse(fs.readFileSync('apps/office/coverage/writer-style-pool-initial-coverage.json')));\nmap.merge(JSON.parse(fs.readFileSync('apps/office/coverage/writer-style-pool-additional/coverage-final.json')));\nconst result={total:map.getCoverageSummary().toJSON()};\nfor(const file of map.files())result[file]=map.fileCoverageFor(file).toSummary().toJSON();\nfor(const metric of ['statements','branches','functions','lines'])if(result.total[metric].total===0||result.total[metric].pct<90)throw Error(metric+' below90');\nconsole.log(JSON.stringify(result));",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Same exact5 whole-module statement/fn/branch maps validated equal before standard installed coverage-map merge. No source/instrumentation/counter edits or missing-file suppression. Global S699/730 B408/444 F153/155 L629/655; all four gates>=90. No100% target or per-file90 claim."
+    },
+    {
+      "command": "npx vitest run src/sw/source/filter/xml/odt-worker-{runtime,client}.test.ts src/sc/browser/filter/xml/ods-worker-{runtime,client}.test.ts",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-pool-worker-regressions.log",
+      "evidence": "16 scenarios4files."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" npx playwright test --config apps/office/playwright.config.ts --project=shared apps/office/e2e/shared/style-model.spec.ts apps/office/e2e/shared/style-sheet.spec.ts",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-pool-browser.log",
+      "evidence": "2 Chromium scenarios."
+    },
+    {
+      "command": "npm run typecheck",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-pool-typecheck.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run test:static",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-pool-static.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run check:dependencies",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-pool-dependencies.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-pool-provenance.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-pool-invariants.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run inventory:parity",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-pool-parity.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run check:file-size",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-pool-size.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run check:source-tree",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-pool-tree.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-pool-writer-resources.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-pool-calc-resources.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run check:writer-hintids",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-pool-hintids.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-pool-routing.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "git diff --check",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-pool-diff.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npx eslint apps/office/src/svl/{inc/style.ts,source/items/{style-model,grabbagitem,native-style-model.test,native-grab-bag.test}.ts} apps/office/src/sw/source/core/{attr/{format,native-format-metadata.test},doc/docfmt}.ts apps/office/src/udkapi/com/sun/star/beans/PropertyValue.ts --max-warnings 0",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-pool-lint.log",
+      "evidence": "All changed TypeScript files."
+    },
+    {
+      "command": "npx prettier --check $(git diff --name-only -- '*.ts' '*.json' '*.md') apps/office/src/sw/source/core/attr/native-format-metadata.test.ts docs/program/writer-style-metadata.md",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-pool-format.log",
+      "evidence": "Changed source and new test/documentation."
+    },
+    {
+      "command": "npm run check:docs",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/writer-style-pool-docs.log",
+      "evidence": "Only pre-existing css-style-matchers.ts:17 missing JSDoc and :76 documents2/3 parameters. No new failure."
+    },
+    {
+      "command": "ap doctor",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-pool-doctor.log",
+      "evidence": "Zero errors, unchanged managed shim readiness warning/pre-push installed fallback information."
+    }
+  ],
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 655,
+        "covered": 629,
+        "skipped": 0,
+        "pct": 96.03
+      },
+      "statements": {
+        "total": 730,
+        "covered": 699,
+        "skipped": 0,
+        "pct": 95.75
+      },
+      "functions": {
+        "total": 155,
+        "covered": 153,
+        "skipped": 0,
+        "pct": 98.7
+      },
+      "branches": {
+        "total": 444,
+        "covered": 408,
+        "skipped": 0,
+        "pct": 91.89
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/items/grabbagitem.ts": {
+      "lines": {
+        "total": 65,
+        "covered": 65,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 14,
+        "covered": 14,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 75,
+        "covered": 75,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 30,
+        "covered": 30,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/svl/source/items/style-model.ts": {
+      "lines": {
+        "total": 169,
+        "covered": 165,
+        "skipped": 0,
+        "pct": 97.63
+      },
+      "functions": {
+        "total": 59,
+        "covered": 59,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 186,
+        "covered": 181,
+        "skipped": 0,
+        "pct": 97.31
+      },
+      "branches": {
+        "total": 86,
+        "covered": 83,
+        "skipped": 0,
+        "pct": 96.51
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/attr/format.ts": {
+      "lines": {
+        "total": 162,
+        "covered": 152,
+        "skipped": 0,
+        "pct": 93.82
+      },
+      "functions": {
+        "total": 48,
+        "covered": 47,
+        "skipped": 0,
+        "pct": 97.91
+      },
+      "statements": {
+        "total": 178,
+        "covered": 167,
+        "skipped": 0,
+        "pct": 93.82
+      },
+      "branches": {
+        "total": 104,
+        "covered": 94,
+        "skipped": 0,
+        "pct": 90.38
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/docfmt.ts": {
+      "lines": {
+        "total": 227,
+        "covered": 215,
+        "skipped": 0,
+        "pct": 94.71
+      },
+      "functions": {
+        "total": 19,
+        "covered": 18,
+        "skipped": 0,
+        "pct": 94.73
+      },
+      "statements": {
+        "total": 258,
+        "covered": 243,
+        "skipped": 0,
+        "pct": 94.18
+      },
+      "branches": {
+        "total": 208,
+        "covered": 185,
+        "skipped": 0,
+        "pct": 88.94
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/udkapi/com/sun/star/beans/PropertyValue.ts": {
+      "lines": {
+        "total": 32,
+        "covered": 32,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 15,
+        "covered": 15,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 33,
+        "covered": 33,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 16,
+        "covered": 16,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "rawCoverage": [
+    {
+      "path": "apps/office/coverage/writer-style-pool-initial-coverage.json",
+      "sha256": "7b8076040ff8c0322f866bea7e2a7ae66cb4396c8679eb53d1de488fe1a48e3c"
+    },
+    {
+      "path": "apps/office/coverage/writer-style-pool-additional/coverage-final.json",
+      "sha256": "1503d93f5479b48047dce7fcaf91c47d92e7ca15da363de1388d8c88ec8df211"
+    },
+    {
+      "path": "apps/office/coverage/writer-style-pool-merged-coverage.json",
+      "sha256": "f3225140541032ec596784700760e9054d06493369d201b364459fdd9b3054cc"
+    }
+  ],
+  "failedAttemptsAndResolutions": [
+    "Initial native weak pool inheritance required an explicit override modifier on the source pool copy-assignment method. Added it without changing assignment behavior.",
+    "Initial tests called missing PropertyValue.dispose and OUString.getAddress. Added the real generated implicit PropertyValue member destructor binding; used the existing OUString.getDataAddress.26 focused cases then pass.",
+    "Initial255-case profile passed tests but old unrelated module branches left the global90 gate unmet. Ran only complementary24 related files (354cases); merged unchanged raw maps with the installed Vitest coverage library and enforced final global90 gates on all5 whole modules.",
+    "Coverage library has moved under @vitest/istanbul-lib-coverage and exposes named ESM exports; obsolete bare/default imports failed. Correct installed module namespace used; no download, counter patch or dependency change."
+  ],
+  "limitations": [
+    "Full SwDocStyleSheet/SwDocStyleSheetPool and SwDocShell ownership link, SwXTextDefaults, complete DOCX-XLSX import/export and existing mounted UI acceptance remain unfinished. Goal remains active.",
+    "SwFormat copy constructor/operator= and their shared_ptr interop-bag copy ownership are not represented. Current public constructors have one owning bag member; no fake copy semantics are introduced.",
+    "The original full DOCX testQFormatPreservation/nospacing_hidden.docx test remains required outstanding work for the actual filter/export path. Core metadata tests are not labeled as that native round-trip QA. All9 already ported native index QA cases were rerun with actual source-shaped owners.",
+    "Only related625 unit scenarios50files plus2 browser cases were run. No whole-suite replay: current work is another checkpoint of the same approved agentplane task, preserving the user ten-task cadence.",
+    "JSDoc baseline remains; whole epic is not verified or completed."
+  ],
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/svl/inc/style.ts",
+      "gitBlob": "fef309f745abb66ddb4a276fe909923702a583d8"
+    },
+    {
+      "path": "apps/office/src/svl/source/items/grabbagitem.ts",
+      "gitBlob": "17441aa09e5ea65e5d5cb5e38a7ee466210f6b6b"
+    },
+    {
+      "path": "apps/office/src/svl/source/items/native-grab-bag.test.ts",
+      "gitBlob": "2a1fa53481bdb5c3dd90fb63248f0fd6446be222"
+    },
+    {
+      "path": "apps/office/src/svl/source/items/native-style-model.test.ts",
+      "gitBlob": "42cb4ac0735643c9255ddeb0d4ab9f28540a85b0"
+    },
+    {
+      "path": "apps/office/src/svl/source/items/style-model.ts",
+      "gitBlob": "296bc29003533f52f21910f7bb0bde91b6ac4833"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/format.ts",
+      "gitBlob": "03007fdabd59516c87dc0d24f1d11a6563860be9"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/native-format-metadata.test.ts",
+      "gitBlob": "f52ec3a450cf2f7817b4a5eb36b55c874a484140"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/docfmt.ts",
+      "gitBlob": "089f1cfff562e195711b31d51cd7347bed2e3b28"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/beans/PropertyValue.ts",
+      "gitBlob": "e29351716b3dc58a1ecc37229ce07f02d96dbf2f"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/svl/inc/style.ts.json",
+      "gitBlob": "f629c3e5806bc0b49978036f3b456c59381d8def"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/svl/source/items/grabbagitem.ts.json",
+      "gitBlob": "7b548ffc7766efacdea51963ebb7b40dcd1eb2a2"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/svl/source/items/style-model.ts.json",
+      "gitBlob": "fbf943f6da90f71b2aea63efcf88977ecf7627f6"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/PropertyValue.ts.json",
+      "gitBlob": "1c115f2f025f00a506e879692c87bd1e42be767d"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/svl/inc/style.ts.json",
+      "gitBlob": "38106ecb99e305d3c177a660d570a31a9dbe69d1"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/svl/source/items/grabbagitem.ts.json",
+      "gitBlob": "72a93a5148a5badaa6f51e31decb279b7b5258d0"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/svl/source/items/style-model.ts.json",
+      "gitBlob": "778dcf48f5e46dbb5877a175c70417f379032d25"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/PropertyValue.ts.json",
+      "gitBlob": "16148baaf2e7cd0e01a9dfcaad87e3036224bbe5"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/attr/format.ts.json",
+      "gitBlob": "757c0c2e24afc7d99de9c65f7801f1594c774067"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/doc/docfmt.ts.json",
+      "gitBlob": "37d6c923399887400b29142993475b4f14e4df85"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/attr/format.ts.json",
+      "gitBlob": "b6a521275c50364f5d6c275c445c8b9142ed093d"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/doc/docfmt.ts.json",
+      "gitBlob": "9ea23867fd3a2bfce8d19b46c834031a12558652"
+    },
+    {
+      "path": "docs/program/writer-style-metadata.md",
+      "gitBlob": "94f162256d7898dd197efc0c8822e425c9deef6e"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "e6d80b6edabf42d73a7c3df0757fbd992be62adb"
+    }
+  ]
+}

@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 160
+revision: 163
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T02:13:17.633Z"
+  updated_at: "2026-11-12T02:31:36.029Z"
   updated_by: "CODER"
-  note: "Verified native stylesheet ownership prerequisite:50 profile scenarios6files above90 thresholds S98.67/B98.01/F100/L98.82,27 related5files,2 Chromium cases. Typecheck/static/scoped gates pass except unchanged JSDoc baseline. Actual WeakImplHelper/strong index and by-value Clear scopes, Remove xP, owned item cleanup, real native QA fixtures. Evidence:native-style-ownership-checkpoint.json. Full Writer shell/style service and DOCX-XLSX/UI remain incomplete; continue active goal."
-  attempts: 48
+  note: "Verified native pool/Writer style metadata prerequisite:609 native/related scenarios46files,16 ODF worker scenarios4files,2 Chromium. Standard unchanged raw coverage merge passes global90 gates over5 whole modules S95.75/B91.89/F98.70/L96.03. Actual weak pool base, help/favourite/interop metadata, Any/PropertyValue lifetimes, native copy help reset. Typecheck/static/scoped gates pass except old JSDoc baseline. Evidence:writer-style-pool-metadata-checkpoint.json. Full native style/default service and DOCX-XLSX/UI remain incomplete; continue goal."
+  attempts: 49
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -776,8 +779,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-12T02:31:36.029Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified native pool/Writer style metadata prerequisite:609 native/related scenarios46files,16 ODF worker scenarios4files,2 Chromium. Standard unchanged raw coverage merge passes global90 gates over5 whole modules S95.75/B91.89/F98.70/L96.03. Actual weak pool base, help/favourite/interop metadata, Any/PropertyValue lifetimes, native copy help reset. Typecheck/static/scoped gates pass except old JSDoc baseline. Evidence:writer-style-pool-metadata-checkpoint.json. Full native style/default service and DOCX-XLSX/UI remain incomplete; continue goal."
+  -
+    type: "status"
+    at: "2026-11-12T02:31:57.369Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-12T02:13:28.818Z"
+doc_updated_at: "2026-11-12T02:31:57.369Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -2232,6 +2248,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T02:31:36.029Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified native pool/Writer style metadata prerequisite:609 native/related scenarios46files,16 ODF worker scenarios4files,2 Chromium. Standard unchanged raw coverage merge passes global90 gates over5 whole modules S95.75/B91.89/F98.70/L96.03. Actual weak pool base, help/favourite/interop metadata, Any/PropertyValue lifetimes, native copy help reset. Typecheck/static/scoped gates pass except old JSDoc baseline. Evidence:writer-style-pool-metadata-checkpoint.json. Full native style/default service and DOCX-XLSX/UI remain incomplete; continue goal.
+    Attempts: 49
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T02:31:35.541Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2484,6 +2530,10 @@ sections:
     - Observation: Command: scoped native stylesheet profile, related EditEngine/property tests, Chromium2 cases, typecheck/static build and repository gates. Result: pass except unchanged global JSDoc baseline. Evidence: evidence/native-style-ownership-checkpoint.json;50 profile cases6files S98.67/B98.01/F100/L98.82,27 related cases5files and2 Chromium cases. Scope: actual weak stylesheet base, strong indexed ownership, native Remove/Clear/destructor contracts, all9 original index QA fixtures.
       Impact: Native Writer style-pool dependency now has real reference ownership and virtual destruction. Full SwDocStyleSheetPool/SwXTextDefaults and DOCX-XLSX import/export/UI acceptance remain unfinished; no whole-goal or parity completion. JSDoc baseline css-style-matchers.ts:17/:76 remains.
       Resolution: Use existing CPPU WeakImplHelper and Reference owners; preserve raw family views/CALC146 and nullable source QA pool. Migrate source fixtures to actual native base and caller references. Correct initial copy-identity expectation, facade declaration metadata and browser invocation/cache path without source repair, gate weakening or network. Continue active approved goal.
+
+    - Observation: Command:255 native pool/format/grab-bag profile scenarios22files plus354 complementary related scenarios24files; standard unchanged-map merge and four90 gates;16 ODF worker scenarios4files and2 Chromium scenarios; typecheck/static/scoped gates. Result: pass except unchanged global JSDoc baseline. Evidence:evidence/writer-style-pool-metadata-checkpoint.json; whole5-module merged S95.75/B91.89/F98.70/L96.03. Scope: genuine weak pool owner, native Writer help/visibility/favourite metadata, actual grab-bag/PropertyValue destruction and character-copy help metadata.
+      Impact: Writer style-pool dependencies advance without fake query providers or alternate owners. Preserve source quirks WRITER453-454. Full native document style pool/default service, actual DOCX-XLSX filters/export and existing UI acceptance remain unfinished. Native full DOCX testQFormatPreservation remains outstanding, not replaced by core metadata tests.
+      Resolution: Use original weak base/multiple broadcaster role, typed Any/PropertyValue sequences and existing native item owners. Correct missing generated member destructor, keep source qFormat optional distinctions and CopyFormat side effects. Initial coverage gate failed due old paths; complementary existing related tests and unchanged raw standard merge pass final90 gates without whole-suite replay. Only old JSDoc baseline remains. Continue active approved goal.
 id_source: "generated"
 ---
 ## Summary
@@ -3948,6 +3998,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T02:31:36.029Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified native pool/Writer style metadata prerequisite:609 native/related scenarios46files,16 ODF worker scenarios4files,2 Chromium. Standard unchanged raw coverage merge passes global90 gates over5 whole modules S95.75/B91.89/F98.70/L96.03. Actual weak pool base, help/favourite/interop metadata, Any/PropertyValue lifetimes, native copy help reset. Typecheck/static/scoped gates pass except old JSDoc baseline. Evidence:writer-style-pool-metadata-checkpoint.json. Full native style/default service and DOCX-XLSX/UI remain incomplete; continue goal.
+Attempts: 49
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T02:31:35.541Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4204,3 +4284,7 @@ DecisionContextRef:
 - Observation: Command: scoped native stylesheet profile, related EditEngine/property tests, Chromium2 cases, typecheck/static build and repository gates. Result: pass except unchanged global JSDoc baseline. Evidence: evidence/native-style-ownership-checkpoint.json;50 profile cases6files S98.67/B98.01/F100/L98.82,27 related cases5files and2 Chromium cases. Scope: actual weak stylesheet base, strong indexed ownership, native Remove/Clear/destructor contracts, all9 original index QA fixtures.
   Impact: Native Writer style-pool dependency now has real reference ownership and virtual destruction. Full SwDocStyleSheetPool/SwXTextDefaults and DOCX-XLSX import/export/UI acceptance remain unfinished; no whole-goal or parity completion. JSDoc baseline css-style-matchers.ts:17/:76 remains.
   Resolution: Use existing CPPU WeakImplHelper and Reference owners; preserve raw family views/CALC146 and nullable source QA pool. Migrate source fixtures to actual native base and caller references. Correct initial copy-identity expectation, facade declaration metadata and browser invocation/cache path without source repair, gate weakening or network. Continue active approved goal.
+
+- Observation: Command:255 native pool/format/grab-bag profile scenarios22files plus354 complementary related scenarios24files; standard unchanged-map merge and four90 gates;16 ODF worker scenarios4files and2 Chromium scenarios; typecheck/static/scoped gates. Result: pass except unchanged global JSDoc baseline. Evidence:evidence/writer-style-pool-metadata-checkpoint.json; whole5-module merged S95.75/B91.89/F98.70/L96.03. Scope: genuine weak pool owner, native Writer help/visibility/favourite metadata, actual grab-bag/PropertyValue destruction and character-copy help metadata.
+  Impact: Writer style-pool dependencies advance without fake query providers or alternate owners. Preserve source quirks WRITER453-454. Full native document style pool/default service, actual DOCX-XLSX filters/export and existing UI acceptance remain unfinished. Native full DOCX testQFormatPreservation remains outstanding, not replaced by core metadata tests.
+  Resolution: Use original weak base/multiple broadcaster role, typed Any/PropertyValue sequences and existing native item owners. Correct missing generated member destructor, keep source qFormat optional distinctions and CopyFormat side effects. Initial coverage gate failed due old paths; complementary existing related tests and unchanged raw standard merge pass final90 gates without whole-suite replay. Only old JSDoc baseline remains. Continue active approved goal.
