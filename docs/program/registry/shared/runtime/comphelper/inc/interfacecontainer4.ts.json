@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/comphelper/inc/interfacecontainer4.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-public-component-base",
+    "capabilityIds": [
+      "CAP-a40e29d1-4d53-439a-bfdf-a74c050081b1"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/comphelper/inc/interfacecontainer4.ts",
+        "apps/office/src/comphelper/inc/compbase.test.ts",
+        "apps/office/src/comphelper/inc/interfacecontainer4.test.ts",
+        "docs/program/native-comphelper-component-base.md"
+      ],
+      "justification": "Public comphelper WeakComponentImplHelper/Base and WeakImplHelper/Base retain distinct native namespaces, complete query/template/type-list contracts, shared actual UnoImplBase disposed field, late-listener/failure behavior and explicit destructor-only cleanup. Public container4 retains its own lazy DEFAULT and reverse COW snapshots, complete moves, matching-Context disposed removal and extra exceptionFunc overloads. The original catch-by-value Exception parameter is an actual base value while a single platform-neutral compiler catch scope preserves the original dynamic thrown value for zero-argument getCaughtException; only the injected host execution ABI remains browser-owned. Existing internal URE copies are unchanged. Physical virtual inheritance, mutex/native shared-memory interleavings, noexcept process termination and allocator/shutdown traces remain unqualified. Real metadata/property-bag, URI providers and complete DOCX/XLSX shell/UI remain unfinished.",
+      "knownViolations": [],
+      "localSymbols": [
+        "InterfaceContainerConstructor",
+        "OInterfaceIteratorHelper4",
+        "OInterfaceContainerHelper4"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "include/comphelper/interfacecontainer4.hxx",
+      "upstreamSymbols": [
+        "OInterfaceContainerHelper4",
+        "OInterfaceIteratorHelper4",
+        "exceptionFunc",
+        "DEFAULT"
+      ]
+    }
+  }
+}

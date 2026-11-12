@@ -2,6 +2,8 @@
 import { bindExceptionAbi } from "../inc/exc_hlp";
 import { Any } from "../../cppu/inc/com/sun/star/uno/Any";
 import { Exception } from "../../cppu/inc/com/sun/star/uno/Exception";
+import { activeException } from "../../cppu/inc/uno/exception-context";
+export { withCaughtException } from "../../cppu/inc/uno/exception-context";
 import { RuntimeException } from "../../cppu/inc/com/sun/star/uno/RuntimeException";
 import { Reference } from "../../cppu/inc/com/sun/star/uno/Reference";
 import type { XInterface } from "../../cppu/inc/com/sun/star/uno/XInterface";
@@ -139,20 +141,9 @@ export function throwException(exception: Any): never {
     description.dispose();
   }
 }
-let caught: Exception | undefined;
-/** Compiler lowering of a synchronous C++ catch scope, supplying the host's current exception value to the unchanged zero-argument helper. @param exception - Actual caught UNO value. @param body - Original catch body. @returns Original body result. */
-export function withCaughtException<T>(exception: Exception, body: () => T): T {
-  const previous = caught;
-  caught = exception;
-  try {
-    return body();
-  } finally {
-    caught = previous;
-  }
-}
 /** JavaScript binding of the original caught-exception-to-Any operation. The source requires an active UNO catch scope. @returns Independent owned Any. */
 export function getCaughtException(): Any {
-  const exception = caught as Exception,
+  const exception = activeException() as Exception,
     binding = exceptionBindingFor(exception);
   if (!binding) fail("cannot get C++ to binary UNO mapping!");
   return new Any(exception, binding.type);

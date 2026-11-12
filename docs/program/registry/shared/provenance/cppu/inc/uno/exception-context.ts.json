@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/cppu/inc/uno/exception-context.ts",
+    "localSymbols": [
+      "withCaughtException",
+      "activeException"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/inc/uno/exception-context.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/inc/compbase.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/inc/interfacecontainer4.test.ts",
+          "marker": "@fileoverview"
+        }
+      ]
+    },
+    "rationale": "Public comphelper WeakComponentImplHelper/Base and WeakImplHelper/Base retain distinct native namespaces, complete query/template/type-list contracts, shared actual UnoImplBase disposed field, late-listener/failure behavior and explicit destructor-only cleanup. Public container4 retains its own lazy DEFAULT and reverse COW snapshots, complete moves, matching-Context disposed removal and extra exceptionFunc overloads. The original catch-by-value Exception parameter is an actual base value while a single platform-neutral compiler catch scope preserves the original dynamic thrown value for zero-argument getCaughtException; only the injected host execution ABI remains browser-owned. Existing internal URE copies are unchanged. Physical virtual inheritance, mutex/native shared-memory interleavings, noexcept process termination and allocator/shutdown traces remain unqualified. Real metadata/property-bag, URI providers and complete DOCX/XLSX shell/UI remain unfinished.",
+    "responsibilities": [
+      "Public comphelper WeakComponentImplHelper/Base and WeakImplHelper/Base retain distinct native namespaces, complete query/template/type-list contracts, shared actual UnoImplBase disposed field, late-listener/failure behavior and explicit destructor-only cleanup. Public container4 retains its own lazy DEFAULT and reverse COW snapshots, complete moves, matching-Context disposed removal and extra exceptionFunc overloads. The original catch-by-value Exception parameter is an actual base value while a single platform-neutral compiler catch scope preserves the original dynamic thrown value for zero-argument getCaughtException; only the injected host execution ABI remains browser-owned. Existing internal URE copies are unchanged. Physical virtual inheritance, mutex/native shared-memory interleavings, noexcept process termination and allocator/shutdown traces remain unqualified. Real metadata/property-bag, URI providers and complete DOCX/XLSX shell/UI remain unfinished."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Synchronous current-exception state and catch-scope lowering are a single platform-neutral compiler runtime responsibility; no browser API or alternate exception value is supplied."
+    }
+  }
+}

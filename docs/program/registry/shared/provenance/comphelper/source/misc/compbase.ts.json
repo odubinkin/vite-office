@@ -1,0 +1,60 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/comphelper/source/misc/compbase.ts",
+    "localSymbols": [
+      "WeakComponentImplHelper_query",
+      "WeakImplHelper_query"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/comphelper/source/misc/compbase.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/inc/compbase.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/inc/interfacecontainer4.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "comphelper/source/misc/compbase.cxx",
+          "marker": "WeakComponentImplHelper_query"
+        },
+        {
+          "path": "comphelper/source/misc/compbase.cxx",
+          "marker": "WeakImplHelper_query"
+        },
+        {
+          "path": "comphelper/source/misc/compbase.cxx",
+          "marker": "queryDeepNoXInterface"
+        },
+        {
+          "path": "comphelper/source/misc/compbase.cxx",
+          "marker": "getTypeEntries"
+        }
+      ]
+    },
+    "upstreamPath": "comphelper/source/misc/compbase.cxx",
+    "upstreamSymbols": [
+      "WeakComponentImplHelper_query",
+      "WeakImplHelper_query",
+      "queryDeepNoXInterface",
+      "getTypeEntries"
+    ],
+    "preservedResponsibilities": [
+      "Public comphelper WeakComponentImplHelper/Base and WeakImplHelper/Base retain distinct native namespaces, complete query/template/type-list contracts, shared actual UnoImplBase disposed field, late-listener/failure behavior and explicit destructor-only cleanup. Public container4 retains its own lazy DEFAULT and reverse COW snapshots, complete moves, matching-Context disposed removal and extra exceptionFunc overloads. The original catch-by-value Exception parameter is an actual base value while a single platform-neutral compiler catch scope preserves the original dynamic thrown value for zero-argument getCaughtException; only the injected host execution ABI remains browser-owned. Existing internal URE copies are unchanged. Physical virtual inheritance, mutex/native shared-memory interleavings, noexcept process termination and allocator/shutdown traces remain unqualified. Real metadata/property-bag, URI providers and complete DOCX/XLSX shell/UI remain unfinished."
+    ],
+    "omittedResponsibilities": [
+      "Physical virtual-base layout, native locks/threads, allocator/shutdown and noexcept process termination are unqualified."
+    ]
+  }
+}

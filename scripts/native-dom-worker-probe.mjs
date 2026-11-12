@@ -111,6 +111,7 @@ try {
       failedSecond: 0,
       failedSecondWasNull: true,
     },
+    publicHelpers: { notifications: 1, sameEventSource: true, componentTypeCount: 3 },
     xpath: { count: 1, listLength: 1, sameRoot: true },
     documentBuilder: {
       rootName: "document-content",
@@ -149,7 +150,7 @@ try {
     JSON.stringify({ workerResult, mainResult }, null, 2) + "\n",
   );
   console.info(
-    "PASS: registered XPathAPI/DocumentBuilder and JavaScript UNO exception ABI, registered Converter/PropertyValueSet, actual UNO DOM, C SAX callbacks, typed parser diagnostics, native stream IO, live mutation lists and Unicode in Chromium main realm and DOM-free module Worker",
+    "PASS: public comphelper lifecycle, registered XPathAPI/DocumentBuilder and JavaScript UNO exception ABI, registered Converter/PropertyValueSet, actual UNO DOM, C SAX callbacks, typed parser diagnostics, native stream IO, live mutation lists and Unicode in Chromium main realm and DOM-free module Worker",
   );
 } finally {
   await browser.close();

@@ -19,6 +19,12 @@ import type { OUString } from "../../apps/office/src/sal/inc/rtl/ustring";
 import { implementations } from "../../apps/office/src/desktop/browser/app/uno-components";
 import { InitApplicationServiceManager } from "../../apps/office/src/desktop/source/app/appinit";
 import { getProcessComponentContext } from "../../apps/office/src/comphelper/inc/processfactory";
+import {
+  WeakComponentImplHelper as PublicComponent,
+  WeakImplHelper as PublicWeak,
+} from "../../apps/office/src/comphelper/inc/compbase";
+import { XEventListener } from "../../apps/office/src/udkapi/com/sun/star/lang/XEventListener";
+import type { EventObject } from "../../apps/office/src/udkapi/com/sun/star/lang/EventObject";
 import { XPathAPI } from "../../apps/office/src/offapi/com/sun/star/xml/xpath/XPathAPI";
 import { Converter } from "../../apps/office/src/udkapi/com/sun/star/script/Converter";
 import type { XComponentContext } from "../../apps/office/src/udkapi/com/sun/star/uno/XComponentContext";
@@ -60,6 +66,30 @@ export async function runNativeDomWorkerProbe() {
   }
   initializeExceptionAbi();
   InitApplicationServiceManager(implementations);
+  const Public = PublicComponent.specialize(),
+    publicComponent = own(new Reference(new Public()));
+  let publicNotifications = 0,
+    publicEventIdentity = false;
+  /** Actual public application listener over the source plain helper. */
+  class PublicListener extends PublicWeak.specialize(XEventListener) implements XEventListener {
+    /** Observes the real component event. @param event - Original event. @returns Nothing. */ disposing(
+      event: Readonly<EventObject>,
+    ): void {
+      ++publicNotifications;
+      publicEventIdentity = event.Source.get() === publicComponent.get();
+    }
+  }
+  const publicListener = own(new Reference(new PublicListener()));
+  publicComponent.operatorStar().addEventListener(publicListener);
+  publicComponent.operatorStar().dispose();
+  publicComponent.operatorStar().addEventListener(publicListener);
+  publicComponent.operatorStar().dispose();
+  const publicTypes = own(publicComponent.operatorStar().getTypes());
+  const publicHelpers = {
+    notifications: publicNotifications,
+    sameEventSource: publicEventIdentity,
+    componentTypeCount: publicTypes.getLength(),
+  };
   const processContext = getProcessComponentContext() as Reference<XComponentContext>,
     converter = own(Converter.create(processContext)),
     row = own(new Reference(new PropertyValueSet(processContext))),
@@ -192,6 +222,7 @@ export async function runNativeDomWorkerProbe() {
     own(element.appendChild(text));
     return {
       conversion,
+      publicHelpers,
       documentBuilder,
       xpath: (
         /** Queries the actual registered native XPath service. @returns Scalar observations only. */ () => {
