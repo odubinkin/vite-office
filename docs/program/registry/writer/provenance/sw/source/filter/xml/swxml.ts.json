@@ -14,10 +14,6 @@
           "marker": "@fileoverview"
         },
         {
-          "path": "apps/office/src/package/source/zipapi/native-case-checks.test.ts",
-          "marker": "@fileoverview"
-        },
-        {
           "path": "apps/office/src/sal/rtl/ascii-lower-ownership.test.ts",
           "marker": "@fileoverview"
         }

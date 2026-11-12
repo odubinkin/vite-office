@@ -116,7 +116,7 @@ it.each(["cursor", "row", "table"])(
     expect(f.node.GetText()).toBe("CeXll");
     expect(f.node.GetListId()).toBe("column-page-list");
     expect(f.node.GetNumRuleName()).toBe("Numbering");
-    const opened = await readOdtDocument(writeOdtDocument(f.doc, { title: "Columns" }), {
+    const opened = await readOdtDocument(await writeOdtDocument(f.doc, { title: "Columns" }), {
       title: "Columns",
     });
     expect(required(opened.document.GetTables()[0]).GetColumnWidths()).toEqual([2500, 1500, 2000]);

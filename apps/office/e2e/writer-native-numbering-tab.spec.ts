@@ -57,7 +57,7 @@ for (const width of [1280, 390])
         node.SetNumRule(profile.name);
         node.AddToList();
       }
-      const bytes = writeOdtDocument(
+      const bytes = await writeOdtDocument(
         doc,
         createDocument({ id: "exhausted-tab", suiteId: "writer", title: "Exhausted tab" }),
       );

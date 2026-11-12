@@ -32,10 +32,6 @@
         {
           "path": "apps/office/src/sal/inc/rtl/native-ostring.test.ts",
           "marker": "@fileoverview"
-        },
-        {
-          "path": "apps/office/src/package/source/zipapi/native-output-owners.test.ts",
-          "marker": "@fileoverview"
         }
       ],
       "upstream": [

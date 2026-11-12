@@ -55,7 +55,7 @@ it.each([
       const xml = exportContentXml(f.doc);
       expect(properties(xml, "cell")).toContain(`style:vertical-align="${token}"`);
       const doc = (
-        await readOdtDocument(writeOdtDocument(f.doc, { title: "Orientation" }), {
+        await readOdtDocument(await writeOdtDocument(f.doc, { title: "Orientation" }), {
           title: "Orientation",
         })
       ).document;
@@ -139,7 +139,9 @@ it.each([SwFrameSize.Variable, SwFrameSize.Fixed, SwFrameSize.Minimum])(
     const row = required(
       required(
         (
-          await readOdtDocument(writeOdtDocument(f.doc, { title: "Height" }), { title: "Height" })
+          await readOdtDocument(await writeOdtDocument(f.doc, { title: "Height" }), {
+            title: "Height",
+          })
         ).document.GetTables()[0],
       ).GetTabLines()[0],
     );
@@ -166,7 +168,9 @@ it("own four-edge box values serialize from the original item without scalar clo
       required(
         required(
           (
-            await readOdtDocument(writeOdtDocument(f.doc, { title: "Edges" }), { title: "Edges" })
+            await readOdtDocument(await writeOdtDocument(f.doc, { title: "Edges" }), {
+              title: "Edges",
+            })
           ).document.GetTables()[0],
         ).GetTabLines()[0],
       ).GetTabBoxes()[0],
@@ -183,7 +187,7 @@ it("native unknown horizontal token exports empty and opens with no authored ori
   expect(exportContentXml(f.doc)).toContain('table:align=""');
   const table = required(
     (
-      await readOdtDocument(writeOdtDocument(f.doc, { title: "Empty" }), { title: "Empty" })
+      await readOdtDocument(await writeOdtDocument(f.doc, { title: "Empty" }), { title: "Empty" })
     ).document.GetTables()[0],
   );
   expect(table.GetHoriOrient()).toBe(H.FULL);

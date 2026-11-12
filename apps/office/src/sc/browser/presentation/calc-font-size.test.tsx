@@ -111,7 +111,7 @@ it("formats selected sheets,full rows and columns efficiently and round-trips st
   c.SetFontSize(20);
   expect(height(doc, 2, doc.MaxRow(), 0)).toBe(400);
   expect(height(doc, 3, doc.MaxRow(), 0)).toBe(200);
-  const loaded = await readOdsDocument(writeOdsDocument(doc));
+  const loaded = await readOdsDocument(await writeOdsDocument(doc));
   expect(height(loaded, 2, doc.MaxRow(), 1)).toBe(400);
   expect(height(loaded, doc.MaxCol(), 7, 0)).toBe(280);
   expect(loaded.GetValue(new ScAddress(4, 7, 1))).toBe(9);

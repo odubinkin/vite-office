@@ -117,7 +117,7 @@ it.each([
         throw new Error("Unexpected resource table");
       },
     };
-    const main = await OOXMLStreamImpl.createStream(new ZipStorage(storage.commit())),
+    const main = await OOXMLStreamImpl.createStream(await ZipStorage.open(await storage.commit())),
       document = new OOXMLDocument(main, null),
       parser = main.getFastParser();
     parser.setFastDocumentHandler(new OOXMLFastDocumentHandler(output, document, 0));

@@ -1,7 +1,7 @@
 /** @fileoverview Verifies pinned common/automatic container ownership and parent lookup through literal real ODT package cycles. */
 import { expect, it } from "vitest";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createWriterDocument } from "../../core/doc/doc";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { readOdtDocument } from "./swxml";
@@ -87,8 +87,8 @@ async function input(
   stylesAutomatic: string,
   contentAutomatic: string | undefined,
 ): Promise<Uint8Array> {
-  const zip = new ZipFile(base);
-  const output = new ZipOutputStream();
+  const zip = await DocumentArchive.open(base);
+  const output = new DocumentArchiveWriter();
   for (const entry of zip.getEntryNames()) {
     if (entry === "styles.xml") {
       const xml = await zip.readTextEntry(entry);
@@ -124,7 +124,7 @@ async function input(
       );
     } else output.putNextEntry(entry, await zip.readEntry(entry));
   }
-  return output.finish();
+  return await output.finish();
 }
 
 /** Checks manual effective model values on import and reopen. @param base - Package baseline. @param body - Input paragraph. @param named - Common definitions. @param stylesAutomatic - Previous automatic context. @param contentAutomatic - Active automatic replacement. @param expected - Manual text/geometry/format values. @returns Completion after both package states. */
@@ -147,7 +147,7 @@ async function assertCycle(
     { title: "Style containers" },
   );
   const reopened = await readOdtDocument(
-    writeOdtDocument(imported.document, { title: "Style containers" }),
+    await writeOdtDocument(imported.document, { title: "Style containers" }),
     { title: "Style containers" },
   );
   for (const document of [imported.document, reopened.document]) {
@@ -165,7 +165,7 @@ async function assertCycle(
 }
 
 it("applies automatic styles directly and resolves every parent only in common styles", /** Verifies legal equal names and named-only parent chains against literal upstream contracts. @returns Completion after all package cycles. */ async () => {
-  const base = writeOdtDocument(createWriterDocument(), { title: "Style containers" });
+  const base = await writeOdtDocument(createWriterDocument(), { title: "Style containers" });
   const cases = [
     ["Shared", "Shared", "center", 720, false, true, true],
     ["Child", "Child", "right", 1440, true, true, false],
@@ -200,7 +200,7 @@ it("applies automatic styles directly and resolves every parent only in common s
 });
 
 it("replaces the active automatic context while retaining independent common styles", /** Verifies styles.xml versus content.xml reference replacement including absent and empty containers. @returns Completion after package cycles. */ async () => {
-  const base = writeOdtDocument(createWriterDocument(), { title: "Replacement" });
+  const base = await writeOdtDocument(createWriterDocument(), { title: "Replacement" });
   const previous =
     style(
       "Stream",
@@ -250,7 +250,7 @@ it("replaces the active automatic context while retaining independent common sty
 });
 
 it("uses the real Writer defaults when a common Standard definition is absent", /** Native styles import does not require an explicit built-in declaration. @returns Completion. */ async () => {
-  const base = writeOdtDocument(createWriterDocument(), { title: "Absent common container" });
+  const base = await writeOdtDocument(createWriterDocument(), { title: "Absent common container" });
   const bytes = await input(base, "<text:p>x</text:p>", undefined, "", "");
   const result = await readOdtDocument(bytes, { title: "Absent common container" });
   expect(result.document.paragraphs[0]?.GetText()).toBe("x");

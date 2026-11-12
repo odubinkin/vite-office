@@ -1,6 +1,6 @@
 /** @fileoverview Ports plain ZipPackage::parseManifest/parseContentType metadata/MIME, folder consistency and WriteContentTypes metadata over actual ZIP entries; UNO storage services and encryption remain outside this package slice. */
 import { lookForUnexpectedODF12Streams, type Folder } from "./ZipPackageFolder";
-import type { ZipFile } from "../zipapi/ZipFile";
+import type { DocumentArchive } from "./document-archive";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import type { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
 import { readManifestSequence } from "../manifest/ManifestReader";
@@ -103,7 +103,7 @@ function hierarchy(paths: readonly string[]): {
 }
 /** Applies actual PropertyValue entries in original order and computes normal non-recovery package metadata. @param archive - Real readonly ZIP. @param manifest - Native parsed property sequences. @param mimetype - Optional decoded native mimetype stream. @returns Represented metadata. */
 export function applyPlainManifestMetadata(
-  archive: Pick<ZipFile, "getEntryNames">,
+  archive: Pick<DocumentArchive, "getEntryNames">,
   manifest: readonly (readonly PropertyValue[])[],
   mimetype?: string,
 ): PlainPackageMetadata {
@@ -176,7 +176,7 @@ export function applyPlainManifestMetadata(
 }
 /** Shared plain reader composition;all applications consume the same actual importer and package metadata responsibilities. @param archive - Real ZIP. @param xml - Decoded manifest stream. @param mimetype - Optional native mimetype stream. @returns Represented package properties. */
 export function readPlainPackageManifest(
-  archive: Pick<ZipFile, "getEntryNames">,
+  archive: Pick<DocumentArchive, "getEntryNames">,
   xml: string,
   mimetype?: string,
 ): PlainPackageMetadata {
@@ -262,7 +262,7 @@ export function WriteContentTypes(manifest: readonly (readonly PropertyValue[])[
 
 /** Original parseContentType application order over the existing flat ZIP catalog binding: defaults first, then explicit overrides; internal content types are excluded from exposed streams. @param archive - Actual catalog. @param source - Actual content-type input. @returns Stream MIME fields at the ZIP boundary. */
 export function readPlainPackageContentTypes(
-  archive: Pick<ZipFile, "getEntryNames">,
+  archive: Pick<DocumentArchive, "getEntryNames">,
   source: InputSource,
 ): ReadonlyMap<string, string> {
   const parsed = ReadContentTypeSequence(source);

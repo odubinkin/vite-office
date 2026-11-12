@@ -16,7 +16,7 @@ for (const width of [1280, 390])
     await page.getByRole("button", { name: "Open", exact: true }).click();
     await page.getByRole("tab", { name: "On computer" }).click();
     await page.getByLabel("Browse").setInputFiles({
-      buffer: Buffer.from(writeOdtDocument(doc, { title: "Inputs" })),
+      buffer: Buffer.from(await writeOdtDocument(doc, { title: "Inputs" })),
       mimeType: "application/vnd.oasis.opendocument.text",
       name: "insert-inputs.odt",
     });

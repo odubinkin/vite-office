@@ -65,7 +65,7 @@ it("uses the actual shared Clear menu and native attribute deletion without chan
     expect(manager.IsAtSavePosition()).toBe(true);
     expect(c.shell.GetDocumentState().isModified).toBe(false);
     expect(doc.GetPattern(new ScAddress())?.GetItemSet().Count()).toBe(0);
-    let bytes = writeOdsDocument(doc);
+    let bytes = await writeOdsDocument(doc);
     for (let i = 0; i < 2; i++) {
       const restored = await readOdsDocument(bytes);
       try {
@@ -73,7 +73,7 @@ it("uses the actual shared Clear menu and native attribute deletion without chan
           SfxItemState.DEFAULT,
         );
         expect(cellText(restored)).toBe("Clear formatting");
-        bytes = writeOdsDocument(restored);
+        bytes = await writeOdsDocument(restored);
       } finally {
         restored.DisposeAttributes();
       }
@@ -173,7 +173,7 @@ it("clears independently authored automatic style XML while retaining text,numer
     expect(doc.GetValue(new ScAddress(1, 0, 0))).toBe(7);
     expect(doc.GetValue(new ScAddress(2, 0, 0))).toBe(9);
     expect(doc.GetPattern(new ScAddress())?.GetItemSet().Count()).toBe(0);
-    let bytes = writeOdsDocument(doc);
+    let bytes = await writeOdsDocument(doc);
     for (let i = 0; i < 2; i++) {
       const next = await readOdsDocument(bytes);
       try {
@@ -181,7 +181,7 @@ it("clears independently authored automatic style XML while retaining text,numer
         expect(next.GetValue(new ScAddress(1, 0, 0))).toBe(7);
         expect(next.GetValue(new ScAddress(2, 0, 0))).toBe(9);
         expect(next.GetPattern(new ScAddress())?.GetItemSet().Count()).toBe(0);
-        bytes = writeOdsDocument(next);
+        bytes = await writeOdsDocument(next);
       } finally {
         next.DisposeAttributes();
       }

@@ -102,7 +102,7 @@ it.each([0, 2])(
         expect(shell.GetCursor()).toBe(cursor);
       }
       const reopened = await readOdtDocument(
-        writeOdtDocument(doc, { title: "AttributeHeadline" }),
+        await writeOdtDocument(doc, { title: "AttributeHeadline" }),
         { title: "AttributeHeadline" },
       );
       expect(required(reopened.document.GetTables()[0]).GetRowsToRepeat()).toBe(count);

@@ -4,7 +4,7 @@
  */
 
 import type { XmlPackage } from "../../../../svl/source/misc/storage";
-import type { ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
+import type { ArchiveLimits } from "../../../../package/source/zippackage/document-archive";
 import { SwDoc } from "../../core/doc/doc";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
 import type { OdfXmlDiagnostic } from "../../../../xmloff/source/core/xmlimp";
@@ -44,7 +44,7 @@ export interface OdtFilterOperationOptions {
   /** Optional progress receiver. */
   readonly onProgress?: (stage: OdtFilterProgressStage) => void;
   /** Optional stricter ZIP input limits used by tests or callers. */
-  readonly zipLimits?: ZipFileLimits;
+  readonly zipLimits?: ArchiveLimits;
   /** Output device retained when constructing an imported graph on this side of the Worker boundary. */
   readonly defaultFontDevice?: DefaultFontDevice;
   readonly isCurrent?: () => boolean;
@@ -127,7 +127,7 @@ export class InlineOdtFilterService implements OdtFilterService {
     this.Begin(options.signal);
     try {
       const restored = restoreOdtFilterDocument(input);
-      return writeOdtDocument(
+      return await writeOdtDocument(
         restored.document,
         { title: restored.title },
         {

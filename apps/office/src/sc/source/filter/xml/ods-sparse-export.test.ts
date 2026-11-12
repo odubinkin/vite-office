@@ -5,7 +5,7 @@ import { ScAddress } from "../../../inc/address";
 import { ScPatternAttr } from "../../../inc/patattr";
 import { ScXMLImport } from "./xmlimprt";
 import { writeOdsDocument, readOdsDocument } from "./xmlwrap";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { ScXMLExport } from "./xmlexprt";
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
 
@@ -19,8 +19,8 @@ function styled(): ScDocument {
 }
 it("merges equal empty styles without crossing content or changed format-row boundaries", /** Checks native effective formats after package reload. @returns Completion. */ async () => {
   const doc = styled(),
-    bytes = writeOdsDocument(doc),
-    content = await new ZipFile(bytes).readTextEntry("content.xml");
+    bytes = await writeOdsDocument(doc),
+    content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
   expect(content).toContain('table:number-columns-repeated="2"');
   expect(content).toContain('table:number-columns-repeated="3"');
   expect(content).toContain('table:number-columns-repeated="10"');

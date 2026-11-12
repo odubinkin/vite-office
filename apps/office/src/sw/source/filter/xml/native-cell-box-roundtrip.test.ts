@@ -117,7 +117,9 @@ function fixture() {
 }
 it("ODT reopens four independently authored lines and distances with original text ownership", /** Checks native data survives actual ZIP/XML boundaries. @returns Completion. */ async () => {
   const f = fixture(),
-    result = await readOdtDocument(writeOdtDocument(f.doc, { title: "Box" }), { title: "Box" });
+    result = await readOdtDocument(await writeOdtDocument(f.doc, { title: "Box" }), {
+      title: "Box",
+    });
   try {
     const box = required(result.document.GetTables()[0]?.GetTabLines()[0]?.GetTabBoxes()[0]);
     expect(box.GetBox()).toEqual(f.item);

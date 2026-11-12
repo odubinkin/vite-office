@@ -270,7 +270,7 @@ it("writes real cached values to a committed worksheet part and reopens XML", /*
     serializer.endElement(data);
     serializer.endElement(w);
     serializer.endDocument();
-    const storage = new ZipStorage(filter.commitStorage()),
+    const storage = await ZipStorage.open(await filter.commitStorage()),
       bytes = await storage.openInputStream(text(name));
     assert(bytes);
     expect(readOwnedXml(bytes)).toContain('<c r="A1" t="n"><f>3.5*2</f><v>7</v></c>');

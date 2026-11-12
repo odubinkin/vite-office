@@ -12,8 +12,8 @@ import {
 } from "../../../../editeng/source/items/frmitems";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createWriterDocument } from "../../core/doc/doc";
 import {
   RES_MARGIN_FIRSTLINE,
@@ -32,14 +32,14 @@ function metadata() {
 
 /** Rewrites one package entry. @param bytes - Source package. @param name - Entry name. @param content - Replacement XML. @returns Rebuilt ODT bytes. */
 async function replaceEntry(bytes: Uint8Array, name: string, content: string): Promise<Uint8Array> {
-  const input = new ZipFile(bytes);
-  const output = new ZipOutputStream();
+  const input = await DocumentArchive.open(bytes);
+  const output = new DocumentArchiveWriter();
   for (const entry of input.getEntryNames())
     output.putNextEntry(
       entry,
       entry === name ? new TextEncoder().encode(content) : await input.readEntry(entry),
     );
-  return output.finish();
+  return await output.finish();
 }
 
 describe("Writer ODT paragraph margins", /** Registers paragraph-margin round-trip tests. @returns Nothing. */ () => {
@@ -48,8 +48,8 @@ describe("Writer ODT paragraph margins", /** Registers paragraph-margin round-tr
     const paragraph = writer.paragraphs[0];
     if (paragraph === undefined) throw new Error("Writer margin paragraph is missing.");
     paragraph.SetParagraphTextLeftMargin(1134);
-    const bytes = writeOdtDocument(writer, metadata());
-    const content = await new ZipFile(bytes).readTextEntry("content.xml");
+    const bytes = await writeOdtDocument(writer, metadata());
+    const content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     expect(content).toContain('fo:margin-left="2.0003cm"');
     expect(
       (
@@ -84,8 +84,8 @@ describe("Writer ODT paragraph margins", /** Registers paragraph-margin round-tr
     if (paragraph === undefined) throw new Error("Writer margin paragraph is missing.");
     paragraph.SetParagraphTextLeftMargin(-720);
     paragraph.SetParagraphRightMargin(-360);
-    const bytes = writeOdtDocument(writer, metadata());
-    const content = await new ZipFile(bytes).readTextEntry("content.xml");
+    const bytes = await writeOdtDocument(writer, metadata());
+    const content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     expect(content).toContain('fo:margin-left="-1.27cm"');
     expect(content).toContain('fo:margin-right="-0.635cm"');
     const restored = (await readOdtDocument(bytes, metadata())).document;
@@ -103,8 +103,8 @@ describe("Writer ODT paragraph margins", /** Registers paragraph-margin round-tr
     paragraph.SetAttr(new SvxULSpaceItem(120, 60, RES_UL_SPACE));
     paragraph.SetAttr(lineSpacingFixture(115, RES_PARATR_LINESPACING));
 
-    const bytes = writeOdtDocument(writer, metadata());
-    const content = await new ZipFile(bytes).readTextEntry("content.xml");
+    const bytes = await writeOdtDocument(writer, metadata());
+    const content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     expect(content).toContain('fo:text-indent="-0.4992cm"');
     expect(content).toContain('fo:margin-right="1.0001cm"');
     expect(content).toContain('fo:margin-top="0.2117cm"');
@@ -153,21 +153,21 @@ describe("Writer ODT paragraph margins", /** Registers paragraph-margin round-tr
     );
   });
 
-  it("rejects an invalid pooled class before serializing paragraph metrics", /** Verifies exporter type guards. @returns Nothing. */ () => {
+  it("rejects an invalid pooled class before serializing paragraph metrics", /** Verifies exporter type guards. @returns Nothing. */ async () => {
     const writer = createWriterDocument();
     writer.paragraphs[0]?.SetAttr(new SfxInt16Item(RES_MARGIN_RIGHT, 12));
-    expect(
-      /** Serializes an invalid right-margin item. @returns Bytes. */ () =>
-        writeOdtDocument(writer, metadata()),
-    ).toThrow("ODT paragraph item is invalid");
+    await expect(
+      /** Serializes an invalid right-margin item. @returns Bytes. */ async () =>
+        await writeOdtDocument(writer, metadata()),
+    ).rejects.toThrow("ODT paragraph item is invalid");
     const styleWriter = createWriterDocument();
     styleWriter
       .GetTextFormatColl("text-body")
       .SetFormatAttr(new SfxInt16Item(RES_MARGIN_TEXTLEFT, 12));
-    expect(
-      /** Serializes an invalid named-style left-margin item. @returns Bytes. */ () =>
-        writeOdtDocument(styleWriter, metadata()),
-    ).toThrow("ODT left-margin item is invalid");
+    await expect(
+      /** Serializes an invalid named-style left-margin item. @returns Bytes. */ async () =>
+        await writeOdtDocument(styleWriter, metadata()),
+    ).rejects.toThrow("ODT left-margin item is invalid");
   });
 });
 

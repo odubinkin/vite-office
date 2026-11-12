@@ -13,7 +13,7 @@ import { ScDocument as Document } from "../../inc/document";
 import { SfxRequest } from "../../../sfx2/source/control/request";
 import { ScXMLImport } from "../../source/filter/xml/xmlimprt";
 import { readOdsDocument, writeOdsDocument } from "../../source/filter/xml/xmlwrap";
-import { ZipFile } from "../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../package/source/zippackage/document-archive";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 afterEach(cleanup);
 /** Reads actual native outline. @param doc - Actual document. @param col - Column. @param tab - Sheet. @returns Contour flag. */
@@ -127,15 +127,15 @@ it("retains explicit false and true ODS contour properties across repeated reope
     c.EnterString("Outline text");
     for (const expected of [true, false]) {
       c.SetOutlineFont(new SvxContourItem(expected, 107));
-      let bytes = writeOdsDocument(c.shell.GetDocument());
-      expect(await new ZipFile(bytes).readTextEntry("content.xml")).toContain(
+      let bytes = await writeOdsDocument(c.shell.GetDocument());
+      expect(await (await DocumentArchive.open(bytes)).readTextEntry("content.xml")).toContain(
         `style:text-outline="${expected}"`,
       );
       for (let i = 0; i < 2; i++) {
         const doc = await readOdsDocument(bytes);
         try {
           expect(style(doc)).toBe(expected);
-          bytes = writeOdsDocument(doc);
+          bytes = await writeOdsDocument(doc);
         } finally {
           doc.DisposeAttributes();
         }

@@ -28,7 +28,7 @@ for (const width of [1280, 390])
     format.SetFirstLineIndent(-360);
     format.SetListtabPos(720);
     rule.Set(0, format);
-    const bytes = writeOdtDocument(
+    const bytes = await writeOdtDocument(
       doc,
       createDocument({ id: "label-drag", suiteId: "writer", title: "Label Drag" }),
     );

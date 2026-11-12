@@ -1,6 +1,6 @@
 /** @fileoverview Privacy-safe structural diagnostics for the existing Writer ODT reader. */
 
-import { ZipFile } from "../../apps/office/src/package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../apps/office/src/package/source/zippackage/document-archive";
 import { parseFastXmlStream } from "../../apps/office/src/sax/source/fastparser/fastparser";
 import { projectWriterTextRuns } from "../../apps/office/src/sw/source/core/txtnode/ndtxt";
 import { projectSwTextPrintBounds } from "../../apps/office/src/sw/source/core/layout/newfrm";
@@ -63,7 +63,7 @@ const elementNamespaces: Readonly<Record<string, string>> = {
 
 /** Runs the real package/XML reader and reports structural deltas without logging content. @param bytes - ODT package bytes. @returns Counted XML, canonical state and diagnostics. */
 export async function diagnoseOdtImport(bytes: Uint8Array): Promise<OdtDiagnosticReport> {
-  const archive = new ZipFile(bytes);
+  const archive = await DocumentArchive.open(bytes);
   const xml: Record<string, number> = Object.fromEntries(
     [...countedElements].map(
       /** Initializes one structural counter. @param element - QName. @returns Counter entry. */

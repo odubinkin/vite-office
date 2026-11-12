@@ -1,6 +1,7 @@
 /**
  * @fileoverview Verifies the source-shaped Writer ODF package and XML filter slice.
  */
+import { compressedMimetypePackage } from "../../../../test/fixtures/zip";
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { getWriterNumFormatBullet } from "../../core/doc/number";
 import { describe, expect, it, vi } from "vitest";
@@ -13,8 +14,11 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { DEFAULT_ZIP_FILE_LIMITS, ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import {
+  DEFAULT_ARCHIVE_LIMITS,
+  DocumentArchive,
+} from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import {
   RES_CHRATR_CJK_POSTURE,
   RES_CHRATR_CJK_FONT,
@@ -68,12 +72,12 @@ function listRuleIdentity(node: import("../../core/txtnode/ndtxt").SwTextNode): 
     : "";
 }
 /** Exports a model with explicit target object-shell metadata. @param document - Writer model. @param documentState - Shell metadata. @param control - Export controls. @returns ODT bytes. */
-function writeTargetOdt(
+async function writeTargetOdt(
   document: SwDoc,
   documentState = metadata(),
   control?: OdtExportControl,
-): Uint8Array {
-  return writeOdtDocument(document, documentState, control);
+): Promise<Uint8Array> {
+  return await writeOdtDocument(document, documentState, control);
 }
 
 /** Rebuilds an ODT after changing or removing named entries. @param bytes - Source ODT. @param replacements - Replacement text or null removals. @param order - Optional output order. @returns Rebuilt package. */
@@ -82,8 +86,8 @@ async function rewritePackage(
   replacements: Readonly<Record<string, string | null>>,
   order?: readonly string[],
 ): Promise<Uint8Array> {
-  const input = new ZipFile(bytes);
-  const output = new ZipOutputStream();
+  const input = await DocumentArchive.open(bytes);
+  const output = new DocumentArchiveWriter();
   for (const name of order ?? input.getEntryNames()) {
     const replacement = replacements[name];
     if (replacement === null) continue;
@@ -94,26 +98,18 @@ async function rewritePackage(
         : new TextEncoder().encode(replacement),
     );
   }
-  return output.finish();
+  return await output.finish();
 }
 
 /** Creates the smallest valid Writer ODT fixture. @returns ODT bytes. */
-function basicOdt(): Uint8Array {
-  return writeTargetOdt(createWriterDocument());
-}
-
-/** Finds a ZIP signature from the end. @param bytes - Archive. @param signature - Little-endian signature. @returns Offset. */
-function findZipSignature(bytes: Uint8Array, signature: number): number {
-  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-  for (let offset = bytes.length - 4; offset >= 0; offset -= 1)
-    if (view.getUint32(offset, true) === signature) return offset;
-  throw new Error("test ZIP signature missing");
+async function basicOdt(): Promise<Uint8Array> {
+  return await writeTargetOdt(createWriterDocument());
 }
 
 describe("Writer ODF XML filters" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {
   it("imports legal comments and processing instructions in ODT XML streams", /** Matches pinned SvXMLImport's inert processing-instruction handler. @returns Imported graph. */ async () => {
-    const original = basicOdt();
-    const archive = new ZipFile(original);
+    const original = await basicOdt();
+    const archive = await DocumentArchive.open(original);
     const content = await archive.readTextEntry("content.xml");
     const styles = await archive.readTextEntry("styles.xml");
     const meta = await archive.readTextEntry("meta.xml");
@@ -140,8 +136,8 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       width: 16_000,
     };
     writer.ChgPageDesc(page);
-    const bytes = writeTargetOdt(writer);
-    const styles = await new ZipFile(bytes).readTextEntry("styles.xml");
+    const bytes = await writeTargetOdt(writer);
+    const styles = await (await DocumentArchive.open(bytes)).readTextEntry("styles.xml");
     expect(styles).toContain('<style:page-layout style:name="pm1">');
     expect(styles).toContain('style:print-orientation="landscape"');
     expect(styles).toContain(
@@ -158,8 +154,8 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     writer.ChgPageDesc({ ...first.GetValue(), topMargin: 720 }, first.GetName());
     first.SetFollow(standard);
     standard.SetFollow(first);
-    const bytes = writeTargetOdt(writer);
-    const styles = await new ZipFile(bytes).readTextEntry("styles.xml");
+    const bytes = await writeTargetOdt(writer);
+    const styles = await (await DocumentArchive.open(bytes)).readTextEntry("styles.xml");
     expect(styles).toContain('style:name="First Page"');
     expect(styles).toContain('style:next-style-name="First Page"');
     expect(styles).toContain('style:next-style-name="Standard"');
@@ -181,7 +177,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
 
       width: 15_840,
     });
-    const imported = await readOdtDocument(writeTargetOdt(writer), metadata());
+    const imported = await readOdtDocument(await writeTargetOdt(writer), metadata());
     expect(imported.document.GetPageDesc().GetValue()).toMatchObject({
       height: 12_240,
       landscape: true,
@@ -190,8 +186,8 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     });
   });
   it("opens LibreOffice ODTs containing a default page layout", /** Verifies the upstream style container accepts the default page-layout subtree even though the bounded Writer model does not consume page properties. @returns Nothing. */ async () => {
-    const bytes = basicOdt();
-    const archive = new ZipFile(bytes);
+    const bytes = await basicOdt();
+    const archive = await DocumentArchive.open(bytes);
     const styles = (await archive.readTextEntry("styles.xml")).replace(
       "<office:styles>",
       "<office:styles><style:default-page-layout><style:page-layout-properties/></style:default-page-layout>",
@@ -206,8 +202,8 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
   });
 
   it("opens ODTs containing unknown extension subtrees", /** Verifies unknown wrappers reuse the styles owner and permit supported descendants. @returns Nothing. */ async () => {
-    const bytes = basicOdt();
-    const archive = new ZipFile(bytes);
+    const bytes = await basicOdt();
+    const archive = await DocumentArchive.open(bytes);
     const styles = (await archive.readTextEntry("styles.xml")).replace(
       "<office:styles>",
       '<office:styles><foreign:extension xmlns:foreign="urn:foreign"><style:style style:name="ExtensionStyle" style:family="paragraph"/></foreign:extension>',
@@ -308,9 +304,9 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     applyWriterParagraphList(third, { kind: "bullet", level: 0 });
 
     const documentState = metadata("Round & Trip");
-    const bytes = writeTargetOdt(writer, documentState);
-    expect(new SwXMLWriter().Write(writer, documentState)).toEqual(bytes);
-    const archive = new ZipFile(bytes);
+    const bytes = await writeTargetOdt(writer, documentState);
+    expect(await new SwXMLWriter().Write(writer, documentState)).toEqual(bytes);
+    const archive = await DocumentArchive.open(bytes);
     expect(archive.getEntryNames()).toEqual([
       "mimetype",
       "META-INF/manifest.xml",
@@ -422,7 +418,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       "◦",
     );
     const roundTripped = await readOdtDocument(
-      writeTargetOdt(imported.document, { ...metadata(), title: imported.title }),
+      await writeTargetOdt(imported.document, { ...metadata(), title: imported.title }),
       metadata(),
     );
     expect(
@@ -597,8 +593,8 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
   });
 
   it("validates package order, media type, required streams, and explicit limits" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, async () => {
-    const bytes = basicOdt();
-    const names = new ZipFile(bytes).getEntryNames();
+    const bytes = await basicOdt();
+    const names = (await DocumentArchive.open(bytes)).getEntryNames();
     const reordered = await rewritePackage(bytes, {}, [
       names[1] as string,
       names[0] as string,
@@ -611,12 +607,9 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     await expect(readOdtDocument(wrongType, metadata())).rejects.toThrow(
       "mimetype entry is invalid",
     );
-    const compressedType = bytes.slice();
-    const compressedView = new DataView(compressedType.buffer);
-    const end = findZipSignature(compressedType, 0x06054b50);
-    const central = compressedView.getUint32(end + 16, true);
-    compressedView.setUint16(8, 8, true);
-    compressedView.setUint16(central + 10, 8, true);
+    const compressedType = await compressedMimetypePackage(
+      await (await DocumentArchive.open(bytes)).readTextEntry("mimetype"),
+    );
     await expect(readOdtDocument(compressedType, metadata())).rejects.toThrow(
       "mimetype must be stored without compression",
     );
@@ -625,21 +618,21 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         readOdtDocument(await rewritePackage(bytes, { [name]: null }), metadata()),
       ).rejects.toThrow(name === "mimetype" ? "mimetype must be the first" : "Missing ZIP entry");
     expect(
-      (await readOdtDocument(bytes, metadata(), DEFAULT_ZIP_FILE_LIMITS)).document.paragraphs,
+      (await readOdtDocument(bytes, metadata(), DEFAULT_ARCHIVE_LIMITS)).document.paragraphs,
     ).toHaveLength(1);
     await expect(
       new SwXMLReader().Read(bytes, metadata(), undefined, { maxXmlStreamBytes: 1 }),
     ).rejects.toThrow("XML stream exceeds size limit");
-    expect(
-      /** Exports with a deliberately strict complete-package limit. @returns ODT bytes. */ () =>
-        new SwXMLWriter().Write(createWriterDocument(), metadata(), { maxOutputBytes: 1 }),
-    ).toThrow("export exceeds size limit");
-    expect(
-      /** Cancels before Writer serialization proceeds. @returns ODT bytes. */ () =>
-        writeTargetOdt(createWriterDocument(), metadata(), {
+    await expect(
+      /** Exports with a deliberately strict complete-package limit. @returns ODT bytes. */ async () =>
+        await new SwXMLWriter().Write(createWriterDocument(), metadata(), { maxOutputBytes: 1 }),
+    ).rejects.toThrow("export exceeds size limit");
+    await expect(
+      /** Cancels before Writer serialization proceeds. @returns ODT bytes. */ async () =>
+        await writeTargetOdt(createWriterDocument(), metadata(), {
           isCancelled: /** Reports deterministic cancellation. @returns True. */ () => true,
         }),
-    ).toThrow("cancelled");
+    ).rejects.toThrow("cancelled");
   });
 
   it("validates XML roots, declarations, required Writer styles, and body structure" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, () => {

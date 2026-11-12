@@ -10,7 +10,7 @@ import {
   encodeWriterDocument,
   decodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { writeOdtDocument } from "./wrtxml";
 import { readOdtDocument } from "./swxml";
 import { exportContentXml, exportStylesXml } from "./xmlexp";
@@ -78,8 +78,8 @@ it("retains custom bullet families through common and automatic ODT rules, body/
   source.MakeTextFormatColl("CommonFontStyle").SetFormatAttr(new SwNumRuleItem("CommonFont"));
   let imported: SwDoc | undefined, reopened: SwDoc | undefined, transferred: SwDoc | undefined;
   try {
-    const bytes = writeOdtDocument(source, { title: "Native font" }),
-      zip = new ZipFile(bytes);
+    const bytes = await writeOdtDocument(source, { title: "Native font" }),
+      zip = await DocumentArchive.open(bytes);
     const content = await zip.readTextEntry("content.xml"),
       styles = await zip.readTextEntry("styles.xml");
     expect(styles + content).toContain(
@@ -88,7 +88,7 @@ it("retains custom bullet families through common and automatic ODT rules, body/
     expect(styles).toContain('<style:text-properties style:font-name="Liberation Serif"/>');
     imported = (await readOdtDocument(bytes, { title: "Native font" })).document;
     reopened = (
-      await readOdtDocument(writeOdtDocument(imported, { title: "Native font" }), {
+      await readOdtDocument(await writeOdtDocument(imported, { title: "Native font" }), {
         title: "Native font",
       })
     ).document;

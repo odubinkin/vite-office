@@ -6,9 +6,9 @@ import { XInputStream } from "../../../udkapi/com/sun/star/io/XInputStream";
 import { readOwnedInput, readOwnedXml, inputFromBytes } from "../../../test/oox-input";
 import { expect, it, vi } from "vitest";
 import type { SaxesTagNS } from "saxes";
-import { ZipFile } from "../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../package/source/zipapi/ZipOutputStream";
-import { DEFAULT_ZIP_FILE_LIMITS } from "../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../package/source/zippackage/document-archive";
+import { DEFAULT_ARCHIVE_LIMITS } from "../../../package/source/zippackage/document-archive";
 import { readContentTypes } from "../../../test/ofopxml-values";
 import { ZipStorage } from "../helper/zipstorage";
 import { FragmentHandler, type FragmentContext } from "./fragmenthandler";
@@ -25,8 +25,8 @@ import {
 } from "./relations";
 
 /** Builds actual ZIP entries. @param entries - Path and data. @returns ZIP. */
-function zip(entries: Readonly<Record<string, string | Uint8Array>>): Uint8Array {
-  const out = new ZipOutputStream();
+async function zip(entries: Readonly<Record<string, string | Uint8Array>>): Promise<Uint8Array> {
+  const out = new DocumentArchiveWriter();
   if (!("[Content_Types].xml" in entries))
     out.putNextEntry(
       "[Content_Types].xml",
@@ -36,7 +36,7 @@ function zip(entries: Readonly<Record<string, string | Uint8Array>>): Uint8Array
     );
   for (const [path, value] of Object.entries(entries))
     out.putNextEntry(path, typeof value === "string" ? new TextEncoder().encode(value) : value);
-  return out.finish();
+  return await out.finish();
 }
 /** Wraps relationship elements in their actual package namespace. @param contents - Child XML. @returns XML. */
 function rels(contents: string): string {
@@ -79,8 +79,8 @@ it("builds original relation stream paths", /** Checks package, root-fragment an
 });
 
 it("imports real relationship XML, caches ownership and preserves first duplicate/incomplete/external semantics", /** Exercises namespaces and native admission. @returns Completion. */ async () => {
-  const storage = new ZipStorage(
-    zip({
+  const storage = await ZipStorage.open(
+    await zip({
       "word/_rels/document.xml.rels": rels(
         '<Relationship Id="rId2" Type="type" Target="second.xml"/><Relationship Id="rId10" Type="type" Target="../first.xml"/><Relationship Id="rId10" Type="type" Target="duplicate.xml"/><Relationship Type="type" Target="missing-id"/><Relationship Id="missing-type" Target="x"/><Relationship Id="missing-target" Type="type"/><Relationship Id="external" Type="hyperlink" Target="https://example.test" TargetMode="External"/><Relationship Id="unknown-mode" Type="hyperlink" Target="file.xml" TargetMode="unknown"/><Relationship Id="empty-mode" Type="hyperlink" Target="file.xml" TargetMode=""/><Relationship xmlns:x="urn:foreign" x:Id="foreign" Type="type" Target="x"/><ignore><Relationship Id="hidden" Type="type" Target="x"/></ignore><x:Relationship xmlns:x="urn:foreign" Id="wrong-ns" Type="type" Target="x"/>',
       ),
@@ -105,8 +105,8 @@ it("imports real relationship XML, caches ownership and preserves first duplicat
 
 it("retains parsed relations after a later malformed entry and uses native root fallback semantics", /** Checks false-return import and cached partial maps. @returns Completion. */ async () => {
   const filter = new XmlFilterBase(
-    new ZipStorage(
-      zip({
+    await ZipStorage.open(
+      await zip({
         "_rels/.rels": rels(
           `<Relationship Id="a" Type="${O}officeDocument" Target="https://e.test" TargetMode="External"/><Relationship Id="b" Type="${S}officeDocument" Target="custom/main.xml"/>`,
         ),
@@ -121,14 +121,14 @@ it("retains parsed relations after a later malformed entry and uses native root 
   expect((await filter.importRelations("a/file.xml")).getFragmentPathFromRelId("ok")).toBe(
     "a/value.xml",
   );
-  const empty = new XmlFilterBase(new ZipStorage(zip({ "_rels/.rels": "<wrong/>" })));
+  const empty = new XmlFilterBase(await ZipStorage.open(await zip({ "_rels/.rels": "<wrong/>" })));
   expect((await empty.importRelations("")).size()).toBe(0);
 });
 
 it("delivers context events, ignores rejected subtrees and retains native optional-fragment errors", /** Uses real SAX callbacks and failure returns. @returns Completion. */ async () => {
   const filter = new XmlFilterBase(
-    new ZipStorage(
-      zip({
+    await ZipStorage.open(
+      await zip({
         "word/document.xml":
           '<root xmlns="urn:test">A<ignore><child>hidden</child></ignore><child>B</child></root>',
         "bad.xml": "<root>unclosed",
@@ -161,11 +161,14 @@ it("delivers context events, ignores rejected subtrees and retains native option
   inert.startFastElement({} as SaxesTagNS, []);
   inert.endFastElement({} as SaxesTagNS);
   inert.characters("text");
-  const cancelled = new XmlFilterBase(new ZipStorage(zip({ "root.xml": "<document/>" })), {
-    isCancelled: /** Simulates actual cooperative cancellation. @returns True. */ () => true,
-  });
+  const cancelled = new XmlFilterBase(
+    await ZipStorage.open(await zip({ "root.xml": "<document/>" })),
+    {
+      isCancelled: /** Simulates actual cooperative cancellation. @returns True. */ () => true,
+    },
+  );
   expect(await cancelled.importFragment(new FragmentHandler(cancelled, "root.xml"))).toBe(false);
-  const rejected = new XmlFilterBase(new ZipStorage(zip({ "root.xml": "<root/>" })), {
+  const rejected = new XmlFilterBase(await ZipStorage.open(await zip({ "root.xml": "<root/>" })), {
     limits: { maxElements: 0 },
   });
   expect(await rejected.importFragment(new FragmentHandler(rejected, "root.xml"))).toBe(false);
@@ -186,7 +189,7 @@ it.each(["utf-8", "utf-16le", "utf-16be"])(
       for (let i = 0; i < xml.length; ++i) view.setUint16(2 + i * 2, xml.charCodeAt(i), le);
     }
     for (const value of encoding === "utf-8" ? [bytes] : [bytes, bytes.slice(2)]) {
-      const filter = new XmlFilterBase(new ZipStorage(zip({ "root.xml": value }))),
+      const filter = new XmlFilterBase(await ZipStorage.open(await zip({ "root.xml": value }))),
         handler = new Recording(filter, "root.xml");
       expect(await filter.importFragment(handler)).toBe(true);
       expect(handler.events).toContain("é😀");
@@ -234,9 +237,9 @@ it("exports a real package, independent native part counters, metadata and escap
     "rId2",
   );
   expect(filter.addRelation(styles, O + "theme", "theme.xml", false)).toBe("rId1");
-  const bytes = filter.commitStorage(),
-    archive = new ZipFile(bytes),
-    reopened = new XmlFilterBase(new ZipStorage(bytes));
+  const bytes = await filter.commitStorage(),
+    archive = await DocumentArchive.open(bytes),
+    reopened = new XmlFilterBase(await ZipStorage.open(bytes));
   expect(archive.getEntryNames()).not.toContain("mimetype");
   expect(archive.getEntryNames()).not.toContain("META-INF/manifest.xml");
   expect(await reopened.getFragmentPathFromFirstTypeFromOfficeDoc("officeDocument")).toBe(
@@ -248,7 +251,7 @@ it("exports a real package, independent native part counters, metadata and escap
   const types = readContentTypes(await archive.readTextEntry("[Content_Types].xml"));
   expect(types[1]).toContainEqual({ First: "/word/document.xml", Second: main.mediaType });
   expect(types[1]).not.toContainEqual({ First: "/word/media/image.png", Second: "image/png" });
-  const input = new ZipStorage(bytes);
+  const input = await ZipStorage.open(bytes);
   expect(input.isReadOnly()).toBe(true);
   expect(input.getElementNames()).toEqual(
     archive
@@ -264,13 +267,14 @@ it("exports a real package, independent native part counters, metadata and escap
     /** Executes the actual failing operation. @returns Value or throws. */ () =>
       input.openOutputStream("a", "b"),
   ).toThrow("read-only");
-  expect(
-    /** Executes the actual failing operation. @returns Value or throws. */ () => input.commit(),
-  ).toThrow("read-only");
-  expect(
-    /** Executes the actual failing operation. @returns Value or throws. */ () =>
-      new ZipStorage(bytes, { ...DEFAULT_ZIP_FILE_LIMITS, maxArchiveBytes: 1 }),
-  ).toThrow("size limit");
+  await expect(
+    /** Executes the actual failing operation. @returns Value or throws. */ async () =>
+      await input.commit(),
+  ).rejects.toThrow("read-only");
+  await expect(
+    /** Executes the actual failing operation. @returns Value or throws. */ async () =>
+      await ZipStorage.open(bytes, { ...DEFAULT_ARCHIVE_LIMITS, maxArchiveBytes: 1 }),
+  ).rejects.toThrow("size limit");
   expect(
     /** Executes the actual failing operation. @returns Value or throws. */ () =>
       filter.openFragmentStream("../invalid", "type"),
@@ -284,14 +288,14 @@ it("replaces an owning output stream without carrying its old relationship colle
   const replacement = f.openFragmentStream("part.xml", "application/xml");
   writeOutput(replacement, new TextEncoder().encode("<root/>"));
   expect(f.addRelation(replacement, "type", "new", false)).toBe("rId1");
-  const input = new XmlFilterBase(new ZipStorage(f.commitStorage()));
+  const input = new XmlFilterBase(await ZipStorage.open(await f.commitStorage()));
   expect((await input.importRelations("part.xml")).getInternalTargetFromRelId("rId1")).toBe("new");
   expect((await input.importRelations("part.xml")).size()).toBe(1);
   expect(new Relations("").size()).toBe(0);
 });
 it("retains the original converter short-prefix EOF behavior for package input", /** This is CALC-363/WRITER200 propagated through actual package streams, not malformed-XML recovery. @returns Completion. */ async () => {
   for (const xml of ["", "<a/>", "<root>"]) {
-    const filter = new XmlFilterBase(new ZipStorage(zip({ "short.xml": xml }))),
+    const filter = new XmlFilterBase(await ZipStorage.open(await zip({ "short.xml": xml }))),
       handler = new Recording(filter, "short.xml");
     expect(await filter.importFragment(handler)).toBe(true);
     expect(handler.events).toEqual(["document", "done"]);
@@ -312,7 +316,7 @@ it("imports legacy and UTF32 package XML through the actual source converter", /
     [Uint8Array.from(legacy), "Ж"],
     [Uint8Array.from(utf32), "Ж😀"],
   ] as const) {
-    const filter = new XmlFilterBase(new ZipStorage(zip({ "root.xml": bytes }))),
+    const filter = new XmlFilterBase(await ZipStorage.open(await zip({ "root.xml": bytes }))),
       handler = new Recording(filter, "root.xml");
     expect(await filter.importFragment(handler)).toBe(true);
     expect(handler.events).toContain(expected);
@@ -346,7 +350,7 @@ it("unwinds actual UNO read exceptions from a specialized fragment stream", /** 
       return input;
     }
   }
-  const filter = new XmlFilterBase(new ZipStorage(zip({ "root.xml": "<document/>" }))),
+  const filter = new XmlFilterBase(await ZipStorage.open(await zip({ "root.xml": "<document/>" }))),
     cleanup = vi.spyOn(DisposedException.prototype, "dispose");
   try {
     expect(await filter.importFragment(new Closed(filter, "root.xml"))).toBe(false);
@@ -363,7 +367,7 @@ it("reads actual content-type input through the same native source path", /** Me
     new TextEncoder().encode("<document/>"),
   );
   const input = inputFromBytes(
-      await new ZipFile(storage.commit()).readEntry("[Content_Types].xml"),
+      await (await DocumentArchive.open(await storage.commit())).readEntry("[Content_Types].xml"),
     ),
     source = new InputSource();
   try {

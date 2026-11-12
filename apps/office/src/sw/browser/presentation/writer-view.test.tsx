@@ -223,7 +223,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     expect(table?.GetTabLines()[1]?.GetTabBoxes()[0]?.GetParagraphs()[0]?.GetText()).toBe(
       "Edited cell",
     );
-    const bytes = writeOdtDocument(session.docShell.GetDoc(), { title: "Inserted table" });
+    const bytes = await writeOdtDocument(session.docShell.GetDoc(), { title: "Inserted table" });
     const reopened = await readOdtDocument(bytes, { title: "Inserted table" });
     expect(
       reopened.document
@@ -294,7 +294,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
       },
     );
     const reopenedFont = await readOdtDocument(
-      writeOdtDocument(doc, { title: "Font selector" }),
+      await writeOdtDocument(doc, { title: "Font selector" }),
       { title: "Font selector" },
       undefined,
       {
@@ -408,7 +408,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
           session.docShell.GetDoc().GetIDocumentMarkAccess().FindMark("Renamed"),
         ).toBeDefined(),
     );
-    const saved = writeOdtDocument(session.docShell.GetDoc(), { title: "Bookmarks" });
+    const saved = await writeOdtDocument(session.docShell.GetDoc(), { title: "Bookmarks" });
     const reopened = await readOdtDocument(saved, { title: "Bookmarks" }, undefined, {
       onDiagnostic:
         /** Captures no expected diagnostics for this generated ODT. @returns Nothing. */

@@ -8,7 +8,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Desktop } from "./desktop";
 import { createOfficeModuleDescriptors } from "./modulemanager";
-import { ZipFile } from "../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../package/source/zippackage/document-archive";
 import { createWriterDocument } from "../../../sw/source/core/doc/doc";
 import { writeOdtDocument } from "../../../sw/source/filter/xml/wrtxml";
 import { createWriterModuleFactory } from "../../../sw/browser/composition/writer-module";
@@ -422,7 +422,7 @@ describe("App" /**
     Object.defineProperty(globalThis, "indexedDB", { configurable: true, value: new IDBFactory() });
     const source = createWriterDocument();
     source.paragraphs[0]?.SetText("Imported package body");
-    const bytes = writeOdtDocument(source, { title: "Imported package" });
+    const bytes = await writeOdtDocument(source, { title: "Imported package" });
     let downloaded: Blob | undefined;
     const createUrl = vi.spyOn(URL, "createObjectURL").mockImplementation(
       /** Captures exported content. @param blob - Download body. @returns Test URL. */ (blob) => {
@@ -473,7 +473,7 @@ describe("App" /**
           expect(downloaded).toBeInstanceOf(Blob),
       );
       if (downloaded === undefined) throw new Error("Expected an ODT download.");
-      const archive = new ZipFile(new Uint8Array(await downloaded.arrayBuffer()));
+      const archive = await DocumentArchive.open(new Uint8Array(await downloaded.arrayBuffer()));
       expect(await archive.readTextEntry("content.xml")).toContain(
         "Imported<text:s/>package<text:s/>body",
       );

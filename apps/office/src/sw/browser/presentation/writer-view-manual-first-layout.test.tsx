@@ -99,7 +99,7 @@ describe("Writer manual signed-short layout", /** Groups literal native boundari
         title: "Manual boundary",
       });
       const imported = await readOdtDocument(
-        writeOdtDocument(owner.session.docShell.GetDoc(), metadata),
+        await writeOdtDocument(owner.session.docShell.GetDoc(), metadata),
         metadata,
       );
       expect(firstValues(imported.document.paragraphs[0]?.GetAttr(RES_MARGIN_FIRSTLINE))).toBe(raw);

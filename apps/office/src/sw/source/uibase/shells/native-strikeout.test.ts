@@ -12,7 +12,7 @@ import {
   createOdtWriterTransfer,
   restoreOdtWriterTransfer,
 } from "../../../browser/filter/xml/odt-transfer";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SwEditWin } from "../docvw/edtwin";
 
@@ -85,8 +85,8 @@ it.each([
     select(f, 0, 3);
     f.view.Execute(".uno:Strikeout", [new SvxCrossedOutItem(strikeout, WHICH)]);
     const transferred = restoreOdtWriterTransfer(structuredClone(createOdtWriterTransfer(f.doc)));
-    let bytes = writeOdtDocument(transferred, f.session.docShell.GetDocumentState());
-    const zip = new ZipFile(bytes);
+    let bytes = await writeOdtDocument(transferred, f.session.docShell.GetDocumentState());
+    const zip = await DocumentArchive.open(bytes);
     const xml = (await zip.readTextEntry("content.xml")) + (await zip.readTextEntry("styles.xml"));
     expect(xml).toContain("style:text-line-through-style=");
     for (let pass = 0; pass < 2; pass++) {
@@ -95,7 +95,7 @@ it.each([
       const node = restored.paragraphs[0] as SwTextNode;
       expect([value(node, 0), value(node, 4)]).toEqual([strikeout, S.STRIKEOUT_DOUBLE]);
       expect(node.GetAttr(WHICH)).toBeInstanceOf(SvxCrossedOutItem);
-      bytes = writeOdtDocument(restored, f.session.docShell.GetDocumentState());
+      bytes = await writeOdtDocument(restored, f.session.docShell.GetDocumentState());
     }
   },
 );

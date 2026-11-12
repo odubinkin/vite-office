@@ -13,7 +13,7 @@ import { ScDocument as Document } from "../../inc/document";
 import { SfxRequest } from "../../../sfx2/source/control/request";
 import { ScXMLImport } from "../../source/filter/xml/xmlimprt";
 import { readOdsDocument, writeOdsDocument } from "../../source/filter/xml/xmlwrap";
-import { ZipFile } from "../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../package/source/zippackage/document-archive";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 afterEach(cleanup);
 /** Reads actual native strikeout. @param doc - Actual document. @param col - Column. @param tab - Sheet. @returns Enum. */
@@ -138,8 +138,8 @@ it("preserves all native ODF strikeout enum styles across actual repeated packag
       [S.STRIKEOUT_X, "single", undefined, "X"],
     ] as const) {
       c.SetStrikeout(new SvxCrossedOutItem(value, 106));
-      let bytes = writeOdsDocument(doc);
-      const xml = await new ZipFile(bytes).readTextEntry("content.xml");
+      let bytes = await writeOdsDocument(doc);
+      const xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
       expect(xml).toContain(`style:text-line-through-type="${type}"`);
       if (width) expect(xml).toContain(`style:text-line-through-width="${width}"`);
       if (text) expect(xml).toContain(`style:text-line-through-text="${text}"`);
@@ -147,7 +147,7 @@ it("preserves all native ODF strikeout enum styles across actual repeated packag
         const reopened = await readOdsDocument(bytes);
         try {
           expect(style(reopened)).toBe(value);
-          bytes = writeOdsDocument(reopened);
+          bytes = await writeOdsDocument(reopened);
         } finally {
           reopened.DisposeAttributes();
         }

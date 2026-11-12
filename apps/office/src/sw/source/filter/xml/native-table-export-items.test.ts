@@ -156,7 +156,9 @@ it.each([false, true])(
       expect(exportContentXml(f.doc)).not.toContain("<table:table-header-rows>");
       const reopened = required(
         (
-          await readOdtDocument(writeOdtDocument(f.doc, { title: "Items" }), { title: "Items" })
+          await readOdtDocument(await writeOdtDocument(f.doc, { title: "Items" }), {
+            title: "Items",
+          })
         ).document.GetTables()[0],
       );
       expect(reopened.GetFrameFormat().GetULSpace()).toEqual(f.format.GetULSpace());

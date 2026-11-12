@@ -212,9 +212,12 @@ for (const field of ["border", "padding"] as const)
             expect(f.boxes[0]?.GetParagraphs()[0]).toBe(f.node);
             expect(f.shell.IsTableMode()).toBe(selected);
           }
-          const reopened = await readOdtDocument(writeOdtDocument(f.doc, { title: "Borders" }), {
-              title: "Borders",
-            }),
+          const reopened = await readOdtDocument(
+              await writeOdtDocument(f.doc, { title: "Borders" }),
+              {
+                title: "Borders",
+              },
+            ),
             restored = required(reopened.document.GetTables()[0])
               .GetTabLines()
               .flatMap(

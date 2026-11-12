@@ -1,7 +1,7 @@
 /** @fileoverview Verifies real ODT body/cell list ownership, continued roots, native restart values and repeated reopen. */
 import { expect, it } from "vitest";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createWriterDocument, type SwDoc } from "../../core/doc/doc";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
 import {
@@ -33,8 +33,10 @@ function item(text: string, start?: number): string {
 }
 /** Creates a local real package with common or automatic two-level declarations. @param body - Literal office:text children. @param common - Common declaration. @param bullet - Marker family. @returns ODT bytes. */
 async function input(body: string, common: boolean, bullet: boolean): Promise<Uint8Array> {
-  const zip = new ZipFile(writeOdtDocument(createWriterDocument(), { title: "Cell lists" })),
-    out = new ZipOutputStream();
+  const zip = await DocumentArchive.open(
+      await writeOdtDocument(createWriterDocument(), { title: "Cell lists" }),
+    ),
+    out = new DocumentArchiveWriter();
   const declaration =
     '<text:list-style style:name="S"><text:list-level-style-' +
     (bullet
@@ -64,7 +66,7 @@ async function input(body: string, common: boolean, bullet: boolean): Promise<Ui
       out.putNextEntry(name, new TextEncoder().encode(xml));
     } else out.putNextEntry(name, await zip.readEntry(name));
   }
-  return out.finish();
+  return await out.finish();
 }
 /** Wraps two cells in an actual header row. @param first - First cell text/list content. @param second - Second cell text/list content. @returns Table XML. */
 function table(first: string, second: string): string {
@@ -239,8 +241,8 @@ for (const common of [false, true])
             expect(node).not.toBe(nodes(doc)[index]);
           let current = doc;
           for (let cycle = 0; cycle < 3; cycle++) {
-            const bytes = writeOdtDocument(current, { title: "Cell lists" }),
-              xml = await new ZipFile(bytes).readTextEntry("content.xml"),
+            const bytes = await writeOdtDocument(current, { title: "Cell lists" }),
+              xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml"),
               ids = [...xml.matchAll(/xml:id="([^"]+)"/gu)].map(
                 /** Reads actual XML identities. @param match - Identity. @returns Value. */ (
                   match,

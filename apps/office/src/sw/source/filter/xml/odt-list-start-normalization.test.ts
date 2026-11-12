@@ -1,7 +1,7 @@
 /** @fileoverview Verifies native list-item integer normalization through genuine ODT, owned copies and Worker16. */
 import { expect, it } from "vitest";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createWriterDocument, type SwDoc } from "../../core/doc/doc";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { SwNumRule } from "../../core/doc/number";
@@ -30,8 +30,8 @@ async function input(
   bullet: boolean,
   value: string | undefined,
 ): Promise<Uint8Array> {
-  const zip = new ZipFile(baseline),
-    output = new ZipOutputStream();
+  const zip = await DocumentArchive.open(baseline),
+    output = new DocumentArchiveWriter();
   const style = `<text:list-style style:name="Starts"><text:list-level-style-${bullet ? "bullet" : "number"} text:level="1" ${bullet ? 'text:bullet-char="●"' : 'style:num-format="1" text:start-value="7"'} style:num-suffix="."/><text:list-level-style-number text:level="2" style:num-format="1" text:start-value="5" text:display-levels="2" style:num-suffix="."/></text:list-style>`;
   const attr = startAttribute(value);
   const nested = bullet
@@ -54,7 +54,7 @@ async function input(
       output.putNextEntry(entry, new TextEncoder().encode(xml));
     } else output.putNextEntry(entry, await zip.readEntry(entry));
   }
-  return output.finish();
+  return await output.finish();
 }
 /** Reads authoritative Writer participation and counter state. @param document - Model. @returns Paragraph states. */
 function state(document: SwDoc) {
@@ -77,7 +77,7 @@ function state(document: SwDoc) {
 }
 
 it("normalizes native ordinary starts and ignores header starts across document boundaries", /** Verifies literal expected state, independent copies, Worker16, XML and reopen in both style containers and marker families. @returns Completion. */ async () => {
-  const baseline = writeOdtDocument(createWriterDocument(), { title: "Starts" });
+  const baseline = await writeOdtDocument(createWriterDocument(), { title: "Starts" });
   for (const [value, start] of [
     [undefined, undefined],
     ["", 0],
@@ -185,8 +185,8 @@ it("normalizes native ordinary starts and ignores header starts across document 
         const record = encodeWriterDocument(document);
         expect(record.swModelVersion).toBe(17);
         expect(state(decodeWriterDocument(record))).toEqual(actual);
-        const output = writeOdtDocument(document, { title: "Starts" });
-        const content = await new ZipFile(output).readTextEntry("content.xml");
+        const output = await writeOdtDocument(document, { title: "Starts" });
+        const content = await (await DocumentArchive.open(output)).readTextEntry("content.xml");
         const body = content.match(/<office:text>([\s\S]*?)<\/office:text>/u)?.[1] as string;
         const starts = [...body.matchAll(/text:start-value="([^"]*)"/gu)].map(
           /** Reads emitted canonical restart values. @param match - XML attribute. @returns Value. */

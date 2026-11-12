@@ -65,7 +65,7 @@ for (const viewport of [1280, 390])
       doc.nodes.MakeTextNode("After");
       const metadata = createDocument({ id: "geometry", suiteId: "writer", title: "Geometry" }),
         shell = new SwDocShell(doc, metadata),
-        bytes = writeOdtDocument(doc, metadata);
+        bytes = await writeOdtDocument(doc, metadata);
       shell.Close();
       await page.setViewportSize({ width: viewport, height: 900 });
       await page.goto("/writer");

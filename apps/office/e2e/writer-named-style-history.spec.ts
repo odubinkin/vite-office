@@ -63,7 +63,7 @@ for (const width of [1280, 390])
     shell.SplitNode();
     shell.SetParagraphStyle("default");
     shell.Insert("UntouchedNamedProof");
-    const bytes = writeOdtDocument(document, metadata);
+    const bytes = await writeOdtDocument(document, metadata);
     docShell.Close();
     await page.setViewportSize({ width, height: 800 });
     await page.goto("/writer");

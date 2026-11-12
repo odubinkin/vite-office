@@ -519,7 +519,7 @@ it("native selected cell deletion serializes surviving table structure and resum
   expect(f.shell.DelRight()).toBe(true);
   f.edit.InsertText("Saved");
   const metadata = { title: "Deleted table" },
-    reopened = await readOdtDocument(writeOdtDocument(f.doc, metadata), metadata),
+    reopened = await readOdtDocument(await writeOdtDocument(f.doc, metadata), metadata),
     table = required(reopened.document.GetTables()[0]),
     boxes = table
       .GetTabLines()

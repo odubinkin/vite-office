@@ -14,7 +14,7 @@ import { ScInputMode } from "../../inc/global";
 import { ScXMLImport } from "../../source/filter/xml/xmlimprt";
 import { readOdsDocument, writeOdsDocument } from "../../source/filter/xml/xmlwrap";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
-import { ZipFile } from "../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../package/source/zippackage/document-archive";
 afterEach(cleanup);
 /** Reads the actual native item. @param doc - Model. @param col - Column. @param tab - Sheet. @returns Borrowed line. */
 function line(doc: ScDocument, col = 0, tab = 0): SvxOverlineItem {
@@ -125,8 +125,8 @@ it("writes and reopens native overline style,type,width and color independently 
   );
   try {
     expect(line(doc).GetLineStyle()).toBe(F.LINESTYLE_DOUBLE);
-    const bytes = writeOdsDocument(doc),
-      xml = await new ZipFile(bytes).readTextEntry("content.xml");
+    const bytes = await writeOdsDocument(doc),
+      xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     expect(xml).toContain('style:text-overline-type="double"');
     expect(xml).toContain('style:text-overline-color="#123456"');
     const reopened = await readOdsDocument(bytes);
@@ -167,7 +167,7 @@ it("applies source overline-only patterns to grouped sheets and restores them th
     expect(line(doc, 0, 1).GetLineStyle()).toBe(F.LINESTYLE_NONE);
     c.Redo();
     expect(line(doc, 0, 1).GetLineStyle()).toBe(F.LINESTYLE_SINGLE);
-    const reopened = await readOdsDocument(writeOdsDocument(doc));
+    const reopened = await readOdsDocument(await writeOdsDocument(doc));
     try {
       expect(line(reopened, 0, 1).GetLineStyle()).toBe(F.LINESTYLE_SINGLE);
     } finally {

@@ -42,7 +42,7 @@ for (const width of [1280, 390])
         node = row.GetTabBoxes()[0]?.GetParagraphs()[0];
       if (node === undefined) throw Error("Missing native paint owner");
       node.SetText("NativePaintProof");
-      const bytes = writeOdtDocument(doc, { title: "Native paint" });
+      const bytes = await writeOdtDocument(doc, { title: "Native paint" });
       doc.Dispose();
       await page.goto("/writer");
       await page.getByRole("button", { name: "Open", exact: true }).click();

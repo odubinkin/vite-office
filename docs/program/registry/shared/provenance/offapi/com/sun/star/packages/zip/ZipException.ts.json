@@ -26,10 +26,6 @@
         {
           "path": "apps/office/src/offapi/com/sun/star/packages/zip/ZipException.ts",
           "marker": "ZipException"
-        },
-        {
-          "path": "apps/office/src/package/source/zipapi/native-zip64.test.ts",
-          "marker": "@fileoverview"
         }
       ],
       "upstream": [

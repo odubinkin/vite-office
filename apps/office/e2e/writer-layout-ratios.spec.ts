@@ -19,7 +19,7 @@ test("Writer keeps measured page breaks across device pixel ratios", /** Opens o
   const document = createWriterDocument();
   const text = "Measured Writer paragraph for physical page comparison. ".repeat(160);
   new SwWrtShell(new SwDocShell(document, metadata)).Insert(text);
-  const bytes = writeOdtDocument(document, metadata);
+  const bytes = await writeOdtDocument(document, metadata);
   const counts: number[] = [];
   for (const deviceScaleFactor of [1, 2]) {
     const context = await browser.newContext({

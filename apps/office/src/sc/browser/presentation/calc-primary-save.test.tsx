@@ -107,7 +107,7 @@ it("persists imported ODS immediately and reopens its bytes from a new browser s
   const db = new IndexedDbDocumentStore(crypto.randomUUID(), new IDBFactory()),
     source = createCalcSession(undefined);
   source.controller.EnterString("Imported document");
-  const bytes = source.controller.shell.SerializeOds();
+  const bytes = await source.controller.shell.SerializeOds();
   source.Close();
   const imported = createCalcSession(db);
   await imported.fileWorkflows.Import(new File([bytes as BlobPart], "External.ods"), bytes, {

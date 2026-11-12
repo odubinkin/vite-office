@@ -125,7 +125,7 @@ it("persists independent script values,explicit defaults and retained underline 
   doc.ApplyPatternAreaTab(0, 0, 0, 0, 0, delta);
   delta.Dispose();
   c.SetCharacterFormat("underline");
-  const loaded = await readOdsDocument(writeOdsDocument(doc)),
+  const loaded = await readOdsDocument(await writeOdsDocument(doc)),
     p = loaded.GetPattern(new ScAddress()) as ScPatternAttr;
   expect((p.GetItem(102) as SvxWeightItem).GetWeight()).toBe(FontWeight.WEIGHT_BOLD);
   expect((p.GetItem(113) as SvxWeightItem).GetWeight()).toBe(FontWeight.WEIGHT_NORMAL);

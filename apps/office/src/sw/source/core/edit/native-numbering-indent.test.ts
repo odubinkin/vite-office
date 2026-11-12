@@ -186,7 +186,7 @@ it("owns independent old and new rule-format history values and preserves ODT an
   expect(f.rule.Get(0).GetIndentAt()).toBe(400);
   expect(f.shell.Redo()).toBe(true);
   expect(f.rule.Get(0).GetIndentAt()).toBe(700);
-  const reopened = (await readOdtDocument(writeOdtDocument(f.doc, f.metadata), f.metadata))
+  const reopened = (await readOdtDocument(await writeOdtDocument(f.doc, f.metadata), f.metadata))
     .document;
   for (const candidate of [reopened, decodeWriterDocument(encodeWriterDocument(f.doc))]) {
     expect(candidate.paragraphs[0]?.GetNumRule()?.Get(0).GetIndentAt()).toBe(700);

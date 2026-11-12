@@ -82,7 +82,7 @@ it("imported header and table spacing retain original owners through mounted Und
       expect(shell.CaptureCursorState()).toEqual(cursor);
     }
     const reopened = (
-      await readOdtDocument(writeOdtDocument(doc, { title: "Mounted" }), { title: "Mounted" })
+      await readOdtDocument(await writeOdtDocument(doc, { title: "Mounted" }), { title: "Mounted" })
     ).document;
     try {
       const t = required(reopened.GetTables()[0]);

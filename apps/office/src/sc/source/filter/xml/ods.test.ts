@@ -1,10 +1,11 @@
 /** @fileoverview Actual ODS bytes/native document edit-save-reload and independent XML input. */
+import { compressedMimetypePackage } from "../../../../test/fixtures/zip";
 import { implementations } from "../../../../desktop/browser/app/uno-components";
 import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
 import { assert, expect, it, vi } from "vitest";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { ScAddress } from "../../../inc/address";
 import { ScDocument } from "../../../inc/document";
 import type { ScPatternAttr } from "../../../inc/patattr";
@@ -25,8 +26,8 @@ it("opens exported actual document bytes,edits and reloads formula results and l
   doc.SetValue(a, 2.5);
   doc.SetFormula(b, unicode("=[.$A$1]*2"), grammar);
   doc.SetTextCell(c, unicode('  x & <"😀>\t end '));
-  const bytes = writeOdsDocument(doc),
-    zip = new ZipFile(bytes);
+  const bytes = await writeOdsDocument(doc),
+    zip = await DocumentArchive.open(bytes);
   expect(zip.getEntryNames()[0]).toBe("mimetype");
   expect(await zip.readTextEntry("content.xml")).toContain("of:=[.$A$1]*2");
   const loaded = await readOdsDocument(bytes);
@@ -34,7 +35,7 @@ it("opens exported actual document bytes,edits and reloads formula results and l
   expect(loaded.GetValue(b)).toBe(5);
   expect(text(loaded.GetSharedString(c).getString())).toBe('  x & <"😀>\t end ');
   loaded.SetValue(a, 4);
-  const again = await readOdsDocument(writeOdsDocument(loaded));
+  const again = await readOdsDocument(await writeOdsDocument(loaded));
   expect(again.GetValue(b)).toBe(8);
   const cell = again.GetFormulaCell(b);
   assert(cell);
@@ -100,7 +101,7 @@ it("round-trips formula error,text and empty results without substituting cached
     [1, 2, "=1/0"],
   ] as const)
     doc.SetFormula(new ScAddress(c, r, 0), unicode(s), grammar);
-  const copy = await readOdsDocument(writeOdsDocument(doc));
+  const copy = await readOdsDocument(await writeOdsDocument(doc));
   const string = copy.GetFormulaCell(new ScAddress(1, 0, 0)),
     empty = copy.GetFormulaCell(new ScAddress(1, 1, 0));
   assert(string);
@@ -227,14 +228,20 @@ it("bounds scalar expansion and reports actual formatting/range omissions", /** 
 });
 
 it("enforces real ZIP/media boundaries and cooperative import/export controls", /** Package metadata is composed through the same shared native property owners. @returns Completion. */ async () => {
-  const { ZipOutputStream } = await import("../../../../package/source/zipapi/ZipOutputStream"),
+  const { DocumentArchiveWriter } =
+      await import("../../../../package/source/zippackage/document-archive"),
     { createManifestXml, createManifestProperty } =
       await import("../../../../package/source/manifest/ManifestWriter"),
     { ODS_MIMETYPE, ScXMLImportWrapper } = await import("./xmlwrap"),
-    { DEFAULT_ZIP_FILE_LIMITS } = await import("../../../../package/source/zipapi/ZipFile");
+    { DEFAULT_ARCHIVE_LIMITS } =
+      await import("../../../../package/source/zippackage/document-archive");
   /** Builds independent wire bytes,not a fake ZIP backend. @param mime - Media content. @param first - Whether media entry is first. @param root - Root media property. @returns Package. */
-  function bytes(mime = ODS_MIMETYPE, first = true, root = ODS_MIMETYPE): Uint8Array {
-    const zip = new ZipOutputStream(),
+  async function bytes(
+    mime = ODS_MIMETYPE,
+    first = true,
+    root = ODS_MIMETYPE,
+  ): Promise<Uint8Array> {
+    const zip = new DocumentArchiveWriter(),
       encoder = new TextEncoder(),
       sequence = [
         [
@@ -258,26 +265,19 @@ it("enforces real ZIP/media boundaries and cooperative import/export controls", 
     );
     if (!first) zip.putNextEntry("mimetype", encoder.encode(mime));
     zip.putNextEntry("META-INF/manifest.xml", encoder.encode(createManifestXml(sequence)));
-    return zip.finish();
+    return await zip.finish();
   }
   for (const input of [
-    bytes("bad"),
-    bytes(ODS_MIMETYPE, false),
-    bytes(ODS_MIMETYPE, true, "application/vnd.oasis.opendocument.text"),
+    await bytes("bad"),
+    await bytes(ODS_MIMETYPE, false),
+    await bytes(ODS_MIMETYPE, true, "application/vnd.oasis.opendocument.text"),
   ])
     await expect(readOdsDocument(input)).rejects.toThrow();
-  const compressed = bytes(),
-    view = new DataView(compressed.buffer, compressed.byteOffset, compressed.byteLength);
-  view.setUint16(8, 8, true);
-  for (let i = 0; i < compressed.length - 16; i++)
-    if (view.getUint32(i, true) === 0x02014b50) {
-      view.setUint16(i + 10, 8, true);
-      break;
-    }
+  const compressed = await compressedMimetypePackage(ODS_MIMETYPE);
   await expect(readOdsDocument(compressed)).rejects.toThrow(/mimetype/);
-  const normal = bytes();
+  const normal = await bytes();
   expect(
-    (await readOdsDocument(normal, { zipLimits: DEFAULT_ZIP_FILE_LIMITS })).GetTableCount(),
+    (await readOdsDocument(normal, { zipLimits: DEFAULT_ARCHIVE_LIMITS })).GetTableCount(),
   ).toBe(1);
   await expect(
     readOdsDocument(normal, {
@@ -291,32 +291,32 @@ it("enforces real ZIP/media boundaries and cooperative import/export controls", 
     }),
   ).rejects.toThrow(/cancelled/);
   const doc = await readOdsDocument(normal);
-  expect(
-    /** Explicit export ceiling applies to actual bytes. @returns Bytes. */ () =>
-      writeOdsDocument(doc, { maxOutputBytes: 0 }),
-  ).toThrow(/size limit/);
-  expect(
-    /** Export can be cancelled before content. @returns Bytes. */ () =>
-      writeOdsDocument(doc, { isCancelled: /** Aborts. @returns True. */ () => true }),
-  ).toThrow(/cancelled/);
+  await expect(
+    /** Explicit export ceiling applies to actual bytes. @returns Bytes. */ async () =>
+      await writeOdsDocument(doc, { maxOutputBytes: 0 }),
+  ).rejects.toThrow(/size limit/);
+  await expect(
+    /** Export can be cancelled before content. @returns Bytes. */ async () =>
+      await writeOdsDocument(doc, { isCancelled: /** Aborts. @returns True. */ () => true }),
+  ).rejects.toThrow(/cancelled/);
   doc.SetValue(new ScAddress(1, 0, 0), 3);
   n = 0;
-  expect(
-    /** Export observes cancellation during live traversal. @returns Bytes. */ () =>
-      writeOdsDocument(doc, {
+  await expect(
+    /** Export observes cancellation during live traversal. @returns Bytes. */ async () =>
+      await writeOdsDocument(doc, {
         isCancelled: /** Aborts during traversal. @returns Whether aborted. */ () => ++n > 2,
       }),
-  ).toThrow(/cancelled/);
+  ).rejects.toThrow(/cancelled/);
   const target = new ScDocument();
   await new ScXMLImportWrapper(target).Import(normal);
   expect(target.GetValue(new ScAddress(0, 0, 0))).toBe(2);
   const table = target.FetchTable(0);
   assert(table);
   table.CreateColumnIfNotExists(0).SetRawString(1, unicode("a\nb"));
-  expect(
-    /** Rich multiline storage needs its actual export owner. @returns Bytes. */ () =>
-      writeOdsDocument(target),
-  ).toThrow(/multiline/);
+  await expect(
+    /** Rich multiline storage needs its actual export owner. @returns Bytes. */ async () =>
+      await writeOdsDocument(target),
+  ).rejects.toThrow(/multiline/);
 });
 
 it("distinguishes empty metadata wrappers from unimplemented semantic descendants", /** Namespace dispatch cannot flatten unsupported content into cells. @returns Nothing. */ () => {
@@ -373,8 +373,8 @@ it("exposes native export component and wrapper entry points on the same documen
   doc.InsertTab(0, unicode("Data"));
   doc.SetValue(new ScAddress(0, 0, 0), 1);
   const xml = new ScXMLExport(doc).exportContent(),
-    bytes = new ScXMLImportWrapper(doc).Export();
-  expect(await new ZipFile(bytes).readTextEntry("content.xml")).toBe(xml);
+    bytes = await new ScXMLImportWrapper(doc).Export();
+  expect(await (await DocumentArchive.open(bytes)).readTextEntry("content.xml")).toBe(xml);
 });
 
 /** Independent ODF automatic style envelope for native font-height import contracts. @param styles - Source styles. @param rows - Source rows. @returns XML. */
@@ -400,8 +400,8 @@ it("imports real script-specific automatic font heights and preserves styled emp
         ).GetHeight(),
     ),
   ).toEqual([1440, 320, 440]);
-  const bytes = writeOdsDocument(doc),
-    xmlOut = await new ZipFile(bytes).readTextEntry("content.xml");
+  const bytes = await writeOdsDocument(doc),
+    xmlOut = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
   expect(xmlOut.length).toBeLessThan(3000);
   expect(xmlOut).toContain('table:number-rows-repeated="1048576"');
   const again = await readOdsDocument(bytes);
@@ -461,16 +461,16 @@ it("diagnoses unsupported style families,inheritance,properties,relative sizes a
   ).toThrow(/cell style name/);
 });
 
-it("observes cancellation while traversing an empty sheet's attribute row runs", /** Empty formatting/content still participates in the cooperative export boundary. @returns Nothing. */ () => {
+it("observes cancellation while traversing an empty sheet's attribute row runs", /** Empty formatting/content still participates in the cooperative export boundary. @returns Nothing. */ async () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Empty"));
   let calls = 0;
-  expect(
-    /** Observes actual export cancellation in an empty row run. @returns Never. */ () =>
-      writeOdsDocument(doc, {
+  await expect(
+    /** Observes actual export cancellation in an empty row run. @returns Never. */ async () =>
+      await writeOdsDocument(doc, {
         isCancelled: /** Cancels after wrapper admission. @returns Cancelled. */ () => ++calls > 1,
       }),
-  ).toThrow(/cancelled/);
+  ).rejects.toThrow(/cancelled/);
 });
 it("preserves manual row geometry and recalculates standard automatic font rows through actual ODS", /** Independent ODF input covers row defaults and large empty repeats. @returns Completion. */ async () => {
   const xml = fontStyles(
@@ -483,8 +483,8 @@ it("preserves manual row geometry and recalculates standard automatic font rows 
   expect(table.GetRowHeight(2)).toBe(600);
   expect(table.GetRowHeight(3)).toBe(256);
   expect(table.GetRowFlagsRange(0).maValue & 8).toBe(8);
-  const bytes = writeOdsDocument(doc),
-    content = await new ZipFile(bytes).readTextEntry("content.xml");
+  const bytes = await writeOdsDocument(doc),
+    content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
   expect(content).toContain('style:row-height="1.058cm"');
   expect(content).toContain('style:use-optimal-row-height="false"');
   const reopened = await readOdsDocument(bytes),
@@ -562,7 +562,9 @@ it("omits an unrepresentable native posture on export without replacing it with 
   delta.ItemSetPut(new SvxPostureItem(FontItalic.ITALIC_DONTKNOW, 103));
   doc.ApplyPatternAreaTab(0, 0, 0, 0, 0, delta);
   delta.Dispose();
-  const xml = await new ZipFile(writeOdsDocument(doc)).readTextEntry("content.xml");
+  const xml = await (
+    await DocumentArchive.open(await writeOdsDocument(doc))
+  ).readTextEntry("content.xml");
   expect(xml).not.toContain("fo:font-style=");
   doc.DisposeAttributes();
 });

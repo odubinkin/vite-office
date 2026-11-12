@@ -111,7 +111,7 @@ it("preserves imported identity,explicit titles,multi-sheet content and storage 
   shell.Rename("Chosen title");
   await autosaveCalc(shell, db);
   expect(shell.GetTitle()).toBe("Chosen title");
-  const bytes = shell.SerializeOds();
+  const bytes = await shell.SerializeOds();
   await shell.Open(bytes, createDocument({ id: "imported", suiteId: "calc", title: "Imported" }));
   expect(shell.GetMedium().kind).toBe("input");
   expect(await autosaveCalc(shell, db, true)).toBe(true);

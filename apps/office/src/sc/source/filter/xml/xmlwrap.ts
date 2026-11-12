@@ -1,5 +1,9 @@
 /** @fileoverview Calc browser-byte composition for native XML import/export wrapper responsibilities over shared ZIP/manifest services. */
-import { ZipFile, Checks, type ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
+import {
+  DocumentArchive,
+  ArchiveChecks,
+  type ArchiveLimits,
+} from "../../../../package/source/zippackage/document-archive";
 import { packXmlPackage } from "../../../../package/source/zippackage/xml-package";
 import type { XmlPackage } from "../../../../svl/source/misc/storage";
 import { readPlainPackageManifest } from "../../../../package/source/zippackage/ZipPackage";
@@ -14,7 +18,7 @@ import { ScXMLExport, type ScXMLExportOptions } from "./xmlexprt";
 export const ODS_MIMETYPE = "application/vnd.oasis.opendocument.spreadsheet";
 /** Browser import controls preserve shared ZIP/XML limits. */
 export interface OdsImportOptions extends ScXMLImportOptions {
-  readonly zipLimits?: ZipFileLimits;
+  readonly zipLimits?: ArchiveLimits;
 }
 /** Byte I/O replaces native medium/storage transport;the actual document and shared package contracts remain the same. */
 export class ScXMLImportWrapper {
@@ -26,8 +30,8 @@ export class ScXMLImportWrapper {
     const zip =
       bytes instanceof Uint8Array
         ? options.zipLimits === undefined
-          ? new ZipFile(bytes, undefined, Checks.TryCheckInsensitive)
-          : new ZipFile(bytes, options.zipLimits, Checks.TryCheckInsensitive)
+          ? await DocumentArchive.open(bytes, undefined, ArchiveChecks.TryCheckInsensitive)
+          : await DocumentArchive.open(bytes, options.zipLimits, ArchiveChecks.TryCheckInsensitive)
         : {
             getEntryNames:
               /** Reads or measures an unpacked Calc XML stream.  @returns Operation result. */ () =>
@@ -57,8 +61,8 @@ export class ScXMLImportWrapper {
     importer.importContent(content);
   }
   /** Writes an external ODS package. @param options - Controls. @returns Package bytes. */
-  Export(options: ScXMLExportOptions = {}): Uint8Array {
-    const bytes = packXmlPackage(this.ExportXml(options).files);
+  async Export(options: ScXMLExportOptions = {}): Promise<Uint8Array> {
+    const bytes = await packXmlPackage(this.ExportXml(options).files);
     if (bytes.length > (options.maxOutputBytes ?? 64 * 1024 * 1024))
       throw new Error("ODS export size limit exceeded");
     return bytes;
@@ -121,11 +125,11 @@ export async function readOdsDocument(
   return doc;
 }
 /** Browser native-document-to-package binding. @param document - Actual document. @param options - Controls. @returns ODS bytes. */
-export function writeOdsDocument(
+export async function writeOdsDocument(
   document: ScDocument,
   options: ScXMLExportOptions = {},
-): Uint8Array {
-  return new ScXMLImportWrapper(document).Export(options);
+): Promise<Uint8Array> {
+  return await new ScXMLImportWrapper(document).Export(options);
 }
 
 /** Writes primary browser XML. @param document - Model. @param options - Controls. @returns XML streams. */

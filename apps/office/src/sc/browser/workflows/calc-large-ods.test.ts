@@ -3,17 +3,17 @@ import { assert, expect, it } from "vitest";
 import { IDBFactory } from "fake-indexeddb";
 import { IndexedDbDocumentStore } from "../../../framework/browser/storage/document-store";
 import { createCalcSession } from "../composition/calc-module";
-import { ZipOutputStream } from "../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchiveWriter } from "../../../package/source/zippackage/document-archive";
 import { ScAddress } from "../../inc/address";
 import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { ODS_MIMETYPE } from "../../source/filter/xml/xmlwrap";
 /** Builds an independent ODF package rather than using the exporter under test. @returns Source package. */
-function largeSource(): Uint8Array {
+async function largeSource(): Promise<Uint8Array> {
   let rows = "";
   for (let row = 0; row < 5000; row++)
     rows += `<table:table-row table:style-name="ro"><table:table-cell office:value-type="float" office:value="${row}"/><table:table-cell table:number-columns-repeated="1022"/><table:table-cell office:value-type="string"><text:p>Last ${row}</text:p></table:table-cell></table:table-row>`;
   const content = `<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"><office:automatic-styles><style:style style:name="co" style:family="table-column"><style:table-column-properties style:column-width="1in"/></style:style><style:style style:name="ro" style:family="table-row"><style:table-row-properties style:row-height="0.2in" style:use-optimal-row-height="false"/></style:style></office:automatic-styles><office:body><office:spreadsheet><table:table table:name="Large"><table:table-column table:style-name="co" table:number-columns-repeated="1024"/>${rows}</table:table></office:spreadsheet></office:body></office:document-content>`;
-  const zip = new ZipOutputStream(),
+  const zip = new DocumentArchiveWriter(),
     encoder = new TextEncoder();
   zip.putNextEntry("mimetype", encoder.encode(ODS_MIMETYPE));
   zip.putNextEntry(
@@ -23,10 +23,10 @@ function largeSource(): Uint8Array {
     ),
   );
   zip.putNextEntry("content.xml", encoder.encode(content));
-  return zip.finish();
+  return await zip.finish();
 }
 it("automatically stores an imported5000-row sparse table and opens every scalar from a fresh session", /** Uses real workflows,filter,model and primary storage with default ceilings. @returns Completion. */ async () => {
-  const bytes = largeSource(),
+  const bytes = await largeSource(),
     db = new IndexedDbDocumentStore(crypto.randomUUID(), new IDBFactory()),
     session = createCalcSession(db);
   await session.fileWorkflows.Import(new File([bytes as BlobPart], "Large.ods"), bytes, {

@@ -35,7 +35,7 @@ it("keeps raw whitespace and duplicate-created names through the actual mark own
   expect(marks.MakeMark(node, 2, " A ").GetName()).toBe(" A  Copy 1");
   expect(marks.MakeMark(node, 3, " ").GetName()).toBe(" ");
   expect(marks.RenameMark(" ", "  ")).toBe(true);
-  const reopened = await readOdtDocument(writeOdtDocument(doc, { title: "Raw names" }), {
+  const reopened = await readOdtDocument(await writeOdtDocument(doc, { title: "Raw names" }), {
     title: "Raw names",
   });
   expect(

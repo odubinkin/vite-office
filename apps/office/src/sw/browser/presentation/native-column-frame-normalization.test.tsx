@@ -137,9 +137,12 @@ it.each([false, true])(
         });
       }
       if (inherited) expect(parent.GetFrameSize()).toEqual(before);
-      const reopened = await readOdtDocument(writeOdtDocument(doc, { title: "ColumnFrameUI" }), {
-        title: "ColumnFrameUI",
-      });
+      const reopened = await readOdtDocument(
+        await writeOdtDocument(doc, { title: "ColumnFrameUI" }),
+        {
+          title: "ColumnFrameUI",
+        },
+      );
       try {
         const restored = required(reopened.document.GetTables()[0]);
         expect(restored.GetColumnWidths()).toEqual([1701, 6939]);

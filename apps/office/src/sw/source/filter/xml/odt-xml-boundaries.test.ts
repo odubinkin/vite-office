@@ -32,10 +32,10 @@ it("rejects nontext stored XML and complete external exports above their byte ce
     ) => n + new TextEncoder().encode(String(s)).length,
     0,
   );
-  expect(
-    /** Checks the browser XML and worker regression boundary.  @returns Regression result or completion. */ () =>
-      writeOdtDocument(doc, metadata, { maxOutputBytes: size }),
-  ).toThrow("size limit");
+  await expect(
+    /** Checks the browser XML and worker regression boundary.  @returns Regression result or completion. */ async () =>
+      await writeOdtDocument(doc, metadata, { maxOutputBytes: size }),
+  ).rejects.toThrow("size limit");
   expect(new SwXMLWriter().WriteXml(doc, metadata).format).toBe("xml");
   const transfer = createOdtWorkerDocument(createOdtFilterDocument(doc, "XML"));
   for (const input of [

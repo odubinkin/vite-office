@@ -152,7 +152,7 @@ test("preserves native Outline item metadata,history and ODS in a DOM-free Worke
           const undo = values();
           shell.GetUndoManager().Redo(shell);
           const redo = values(),
-            reopened = await n.readOdsDocument(n.writeOdsDocument(doc));
+            reopened = await n.readOdsDocument(await n.writeOdsDocument(doc));
           try {
             const saved = reopened.GetPattern(pos)?.GetItem(107) as InstanceType<
               typeof n.SvxContourItem

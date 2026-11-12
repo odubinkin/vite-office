@@ -113,7 +113,7 @@ for (const width of [1280, 390])
       }
       const meta = createDocument({ id: "label-width", suiteId: "writer", title: "Label width" }),
         shell = new SwDocShell(doc, meta),
-        bytes = writeOdtDocument(doc, meta);
+        bytes = await writeOdtDocument(doc, meta);
       shell.Close();
       await page.goto("/writer");
       await page.getByRole("button", { name: "Open", exact: true }).click();

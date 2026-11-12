@@ -15,20 +15,20 @@ import { writeOdtDocument } from "./wrtxml";
 import { exportContentXml, exportStylesXml } from "./xmlexp";
 
 describe("ODT canonical state validation", /** Registers current-schema rejection tests. @returns Nothing. */ () => {
-  it("rejects unsupported canonical Writer state instead of silently dropping it", /** Verifies unsupported item states fail at the filter boundary. @returns Nothing. */ () => {
+  it("rejects unsupported canonical Writer state instead of silently dropping it", /** Verifies unsupported item states fail at the filter boundary. @returns Nothing. */ async () => {
     for (const list of [
       { kind: "none", level: 1 } as const,
       { kind: "none", level: 0, styleId: "List" } as const,
     ]) {
       const writer = createWriterDocument();
       applyWriterParagraphList(writer.paragraphs[0] as SwTextNode, list);
-      expect(
-        /** Exports one invalid list state. @returns ODT bytes when validation unexpectedly succeeds. */ () =>
-          writeOdtDocument(
+      await expect(
+        /** Exports one invalid list state. @returns ODT bytes when validation unexpectedly succeeds. */ async () =>
+          await writeOdtDocument(
             writer,
             createDocument({ id: "invalid-odt", suiteId: "writer", title: "Invalid" }),
           ),
-      ).toThrow("without SwNumRule");
+      ).rejects.toThrow("without SwNumRule");
     }
     const unknownRule = createWriterDocument();
     unknownRule.paragraphs[0]?.SetAttr(new SwNumRuleItem("Missing"));

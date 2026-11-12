@@ -81,7 +81,7 @@ it("preserves Writer ordered type matching, first internal match, last duplicate
     relation("relative", "unknown", "../docProps/core.xml"),
   ]);
   put(storage, "word/styles.xml", "<styles/>");
-  const doc = await createStream(new ZipStorage(storage.commit()));
+  const doc = await createStream(await ZipStorage.open(await storage.commit()));
   expect(doc.getTarget()).toBe("word/document.xml");
   expect(readOwnedXml(doc.getDocumentStream())).toBe("<document/>");
   const reference = doc.getDocumentStream();
@@ -244,7 +244,7 @@ it("opens pinned native strict and transitional DOCX corpus streams", /** Uses a
   for (const name of ["strict.docx", "tdf82065_Ind_start_strict.docx", "hello.docx"]) {
     const path = resolve(root, name);
     if (!existsSync(path)) continue;
-    const doc = await createStream(new ZipStorage(new Uint8Array(readFileSync(path))));
+    const doc = await createStream(await ZipStorage.open(new Uint8Array(readFileSync(path))));
     expect(doc.getTarget()).toBe("word/document.xml");
     expect(readOwnedXml(doc.getDocumentStream())).toContain("document");
     const styles = await createStream(doc, T.STYLES);

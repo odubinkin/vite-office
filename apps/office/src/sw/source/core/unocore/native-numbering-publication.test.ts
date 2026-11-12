@@ -159,10 +159,14 @@ it("preserves source-owned active properties through common automatic body cell 
   let imported: SwDoc | undefined, reopened: SwDoc | undefined, transferred: SwDoc | undefined;
   try {
     imported = (
-      await readOdtDocument(writeOdtDocument(source, { title: "Native" }), { title: "Native" })
+      await readOdtDocument(await writeOdtDocument(source, { title: "Native" }), {
+        title: "Native",
+      })
     ).document;
     reopened = (
-      await readOdtDocument(writeOdtDocument(imported, { title: "Native" }), { title: "Native" })
+      await readOdtDocument(await writeOdtDocument(imported, { title: "Native" }), {
+        title: "Native",
+      })
     ).document;
     transferred = decodeWriterDocument(encodeWriterDocument(imported));
     for (const doc of [imported, reopened, transferred]) {

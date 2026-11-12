@@ -22,7 +22,7 @@ for (const cell of [false, true])
       const target = cell ? first : body;
       target.SetText("BrowserAdmissionProof");
       other.SetText("AdmissionNeighbor");
-      const bytes = writeOdtDocument(
+      const bytes = await writeOdtDocument(
         doc,
         createDocument({ id: "native-admission", suiteId: "writer", title: "NativeAdmission" }),
       );

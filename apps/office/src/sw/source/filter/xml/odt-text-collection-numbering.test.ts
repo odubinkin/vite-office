@@ -6,7 +6,7 @@ import { SwNumRuleItem } from "../../core/para/paratr";
 import { SwDocShell } from "../../uibase/app/docsh";
 import { SwWrtShell } from "../../uibase/wrtsh/wrtsh1";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import {
   encodeWriterDocument,
   decodeWriterDocument,
@@ -139,8 +139,8 @@ it("exports assigned heading levels without numbering and retains the direct sou
     node = firstParagraph(doc);
   node.ChgFormatColl(doc.GetTextFormatColl("heading-4"));
   node.InsertText("Heading", 0);
-  const bytes = writeOdtDocument(doc, { title: "Heading" });
-  expect(await new ZipFile(bytes).readTextEntry("styles.xml")).toContain(
+  const bytes = await writeOdtDocument(doc, { title: "Heading" });
+  expect(await (await DocumentArchive.open(bytes)).readTextEntry("styles.xml")).toContain(
     'style:default-outline-level="4"',
   );
   const reopened = (await readOdtDocument(bytes, { title: "Heading" })).document;
@@ -148,10 +148,10 @@ it("exports assigned heading levels without numbering and retains the direct sou
   expect(firstParagraph(reopened).GetAttrOutlineLevel()).toBe(4);
   expect(firstParagraph(reopened).IsInList()).toBe(false);
   doc.GetTextFormatColl("text-body").SetFormatAttr(new SwNumRuleItem("Unknown"));
-  expect(
-    /** Rejects an unresolved named numbering reference. @returns Package if unexpectedly accepted. */ () =>
-      writeOdtDocument(doc, { title: "Heading" }),
-  ).toThrow("cannot resolve style numbering rule Unknown");
+  await expect(
+    /** Rejects an unresolved named numbering reference. @returns Package if unexpectedly accepted. */ async () =>
+      await writeOdtDocument(doc, { title: "Heading" }),
+  ).rejects.toThrow("cannot resolve style numbering rule Unknown");
 });
 
 it("uses the newly selected rule in genuine ODT and preserves style attributes through Worker transfer", /** Verifies concrete package labels and owned rule binding after the style-switch regression. @returns Completion after package reopen. */ async () => {
@@ -163,7 +163,7 @@ it("uses the newly selected rule in genuine ODT and preserves style attributes t
     suiteId: "writer",
   });
   const imported = await readOdtDocument(
-    writeOdtDocument(base, { title: metadata.title }),
+    await writeOdtDocument(base, { title: metadata.title }),
     metadata,
   );
   const doc = imported.document;
@@ -192,8 +192,8 @@ it("uses the newly selected rule in genuine ODT and preserves style attributes t
     expect(paragraph.GetListId()).not.toBe("Retained");
     expect(paragraph.GetAttrListLevel()).toBe(0);
     expect(paragraph.GetListLabel()).toBe("•");
-    const bytes = writeOdtDocument(current, { title: metadata.title });
-    const xml = await new ZipFile(bytes).readTextEntry("content.xml");
+    const bytes = await writeOdtDocument(current, { title: metadata.title });
+    const xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     expect(xml).toContain('text:style-name="Bullets"');
     expect(xml).not.toContain('text:start-value="7"');
     const reopened = (await readOdtDocument(bytes, metadata)).document;
@@ -268,7 +268,7 @@ it("preserves explicit rule type through Worker16 without inferring the reserved
 });
 
 it("restores native reading state after successful import and malformed content", /** Verifies the same document phase brackets both import exits while preserving existing package semantics. @returns Completion. */ async () => {
-  const zip = new ZipFile(writeOdtDocument(new SwDoc(), { title: "Reading" }));
+  const zip = await DocumentArchive.open(await writeOdtDocument(new SwDoc(), { title: "Reading" }));
   const styles = await zip.readTextEntry("styles.xml"),
     content = await zip.readTextEntry("content.xml");
   const phase = vi.spyOn(SwDoc.prototype, "SetInReading");

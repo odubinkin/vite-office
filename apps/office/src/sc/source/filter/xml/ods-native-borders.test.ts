@@ -7,7 +7,7 @@ import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { SvxLineItem } from "../../../../editeng/inc/lineitem";
 import { ScXMLImport } from "./xmlimprt";
 import { readOdsDocument, writeOdsDocument } from "./xmlwrap";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { createCalcSession } from "../../../browser/composition/calc-module";
 import { DispatchBorderItem } from "../../../../svx/source/tbxctrls/tbcontrl";
 /** Independent content fixture; never calls the production exporter. @param attributes - Literal native ODF properties. @returns XML. */
@@ -34,8 +34,8 @@ it("imports independent outer shorthand with side overrides in either attribute 
       expect(box(doc).GetLeft()?.GetWidth()).toBe(20);
       expect(box(doc).GetRight()?.GetBorderLineStyle()).toBe(2);
       expect(box(doc).GetRight()?.GetColor().toUInt32()).toBe(0xabcdef);
-      let bytes = writeOdsDocument(doc);
-      const content = await new ZipFile(bytes).readTextEntry("content.xml");
+      let bytes = await writeOdsDocument(doc);
+      const content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
       expect(content).toContain('fo:border-top="none"');
       expect(content).toContain('fo:border-right="2.01pt dashed #abcdef"');
       for (let cycle = 0; cycle < 3; cycle++) {
@@ -43,7 +43,7 @@ it("imports independent outer shorthand with side overrides in either attribute 
         try {
           expect(box(reopened).equals(box(doc))).toBe(true);
           expect(reopened.GetValue(new ScAddress())).toBe(42);
-          bytes = writeOdsDocument(reopened);
+          bytes = await writeOdsDocument(reopened);
         } finally {
           reopened.DisposeAttributes();
         }
@@ -107,8 +107,8 @@ it("keeps border presets and diagonal hairlines through actual packages without 
       0,
     );
     const original = c.shell.GetDocument(),
-      bytes = writeOdsDocument(original),
-      content = await new ZipFile(bytes).readTextEntry("content.xml");
+      bytes = await writeOdsDocument(original),
+      content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     expect(content).toContain('fo:border="0.74pt solid #000000"');
     expect(content).toContain('style:diagonal-tl-br="0.06pt solid #000000"');
     const reopened = await readOdsDocument(bytes);
@@ -132,14 +132,16 @@ it("collapses equal compound sides independently and exports only current diagon
         'fo:border="3pt double #123456" style:border-line-width="1pt 1pt 1pt" style:diagonal-bl-tr="3pt double #445566" style:diagonal-bl-tr-width="1pt 1pt 1pt"',
       ),
     );
-    const content = await new ZipFile(writeOdsDocument(doc)).readTextEntry("content.xml");
+    const content = await (
+      await DocumentArchive.open(await writeOdsDocument(doc))
+    ).readTextEntry("content.xml");
     expect(content).toContain('fo:border="');
     expect(content).not.toContain("fo:border-left=");
     expect(content).toContain('style:border-line-width="');
     expect(content).not.toContain("style:border-line-width-left=");
     expect(content).toContain('style:diagonal-bl-tr-widths="');
     expect(content).not.toContain('style:diagonal-bl-tr-width="');
-    const reopened = await readOdsDocument(writeOdsDocument(doc));
+    const reopened = await readOdsDocument(await writeOdsDocument(doc));
     try {
       expect(box(reopened).equals(box(doc))).toBe(true);
     } finally {
@@ -184,12 +186,12 @@ it("keeps unequal compound sides and independently authored current and deprecat
     const doc = new ScDocument();
     try {
       new ScXMLImport(doc).importContent(xml(attributes));
-      const bytes = writeOdsDocument(doc);
-      expect(await new ZipFile(bytes).readTextEntry("content.xml")).toContain(
+      const bytes = await writeOdsDocument(doc);
+      expect(await (await DocumentArchive.open(bytes)).readTextEntry("content.xml")).toContain(
         "office:document-content",
       );
       if (attributes.includes("fo:border="))
-        expect(await new ZipFile(bytes).readTextEntry("content.xml")).toContain(
+        expect(await (await DocumentArchive.open(bytes)).readTextEntry("content.xml")).toContain(
           "style:border-line-width-left=",
         );
     } finally {

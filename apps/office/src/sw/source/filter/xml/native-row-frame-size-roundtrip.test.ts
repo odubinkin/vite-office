@@ -31,7 +31,7 @@ it("Fixed and Minimum export distinct attrs while Variable omits authored height
     xml = exportContentXml(doc);
   expect(xml.match(/style:row-height=/g)).toHaveLength(1);
   expect(xml.match(/style:min-row-height=/g)).toHaveLength(1);
-  const reopened = await readOdtDocument(writeOdtDocument(doc, metadata), metadata),
+  const reopened = await readOdtDocument(await writeOdtDocument(doc, metadata), metadata),
     rows = required(reopened.document.GetTables()[0]).GetTabLines();
   expect(
     rows.map(

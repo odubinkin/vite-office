@@ -11,8 +11,8 @@ import { createTabs, tabStops } from "../../../../../test/tab-item-fixtures";
 import { describe, expect, it } from "vitest";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
 import { SvxFirstLineIndentItem } from "../../../../editeng/source/items/frmitems";
@@ -47,8 +47,8 @@ async function rewriteEntry(
   name: string,
   transform: (xml: string) => string,
 ): Promise<Uint8Array> {
-  const input = new ZipFile(bytes);
-  const output = new ZipOutputStream();
+  const input = await DocumentArchive.open(bytes);
+  const output = new DocumentArchiveWriter();
   for (const entry of input.getEntryNames())
     output.putNextEntry(
       entry,
@@ -56,7 +56,7 @@ async function rewriteEntry(
         ? new TextEncoder().encode(transform(await input.readTextEntry(entry)))
         : await input.readEntry(entry),
     );
-  return output.finish();
+  return await output.finish();
 }
 
 describe("Writer ODT mapped pooled properties", /** Groups symmetric property tests. @returns Nothing. */ () => {
@@ -74,12 +74,12 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
       ]),
     );
     const input = await rewriteEntry(
-      writeOdtDocument(writer, metadata),
+      await writeOdtDocument(writer, metadata),
       "content.xml",
       /** Moves the explicit decimal stop to a negative position in the input package. @param xml - ODF content. @returns Signed input. */
       (xml) => xml.replace('style:position="1.27cm"', 'style:position="-1.27cm"'),
     );
-    expect(await new ZipFile(input).readTextEntry("content.xml")).toContain(
+    expect(await (await DocumentArchive.open(input)).readTextEntry("content.xml")).toContain(
       'style:position="-1.27cm"',
     );
     const imported = await readOdtDocument(input, metadata);
@@ -100,11 +100,11 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     expect(importedStyle.At(0).GetTabPos()).toBe(-360);
     expect(importedStyle.At(0).GetAdjustment()).toBe(SvxTabAdjust.Right);
     expect(importedStyle.At(0).GetFill()).toBe("_");
-    const output = writeOdtDocument(imported.document, metadata);
-    expect(await new ZipFile(output).readTextEntry("content.xml")).toContain(
+    const output = await writeOdtDocument(imported.document, metadata);
+    expect(await (await DocumentArchive.open(output)).readTextEntry("content.xml")).toContain(
       'style:position="-1.27cm"',
     );
-    expect(await new ZipFile(output).readTextEntry("styles.xml")).toContain(
+    expect(await (await DocumentArchive.open(output)).readTextEntry("styles.xml")).toContain(
       'style:position="-0.635cm"',
     );
     const reopened = await readOdtDocument(output, metadata);
@@ -187,9 +187,9 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     automatic.SetAttr(new SfxInt16Item(RES_BREAK, 0));
     automatic.SetAttr(new SfxBoolItem(RES_PARATR_SPLIT, true));
     automatic.SetAttr(new SfxInt16Item(RES_PARATR_ORPHANS, 0));
-    const bytes = writeOdtDocument(writer, metadata);
-    const content = await new ZipFile(bytes).readTextEntry("content.xml");
-    const styles = await new ZipFile(bytes).readTextEntry("styles.xml");
+    const bytes = await writeOdtDocument(writer, metadata);
+    const content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
+    const styles = await (await DocumentArchive.open(bytes)).readTextEntry("styles.xml");
     expect(styles).toContain('fo:keep-together="always"');
     expect(styles).toContain('fo:orphans="3"');
     expect(styles).toContain('style:auto-text-indent="true"');
@@ -276,7 +276,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     const placeholder = createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(360)]);
     writer.GetDfltTextFormatColl().SetFormatAttr(placeholder);
     writer.paragraphs[0]?.SetAttr(placeholder);
-    let input = writeOdtDocument(writer, metadata);
+    let input = await writeOdtDocument(writer, metadata);
     const fixture =
       '<style:tab-stops><style:tab-stop style:position="36pt" style:type="char" style:char=";" style:leader-style="solid" style:leader-text="_">discarded text<style:tab-stops><style:tab-stop style:position="-72pt" style:type="default"/><style:tab-stop style:position="0pt" style:type="right"/></style:tab-stops><probe:container xmlns:probe="urn:tab-leaf-test"><text:p>discarded paragraph<text:span>discarded span</text:span></text:p><style:tab-stop style:position="108pt" style:type="center"/></probe:container></style:tab-stop><style:tab-stop style:position="72pt" style:type="right"/></style:tab-stops>';
     for (const entry of ["content.xml", "styles.xml"])
@@ -287,7 +287,10 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
         (xml) => xml.replace(/<style:tab-stops>[\s\S]*?<\/style:tab-stops>/gu, fixture),
       );
     const imported = await readOdtDocument(input, metadata);
-    const reopened = await readOdtDocument(writeOdtDocument(imported.document, metadata), metadata);
+    const reopened = await readOdtDocument(
+      await writeOdtDocument(imported.document, metadata),
+      metadata,
+    );
     for (const document of [imported.document, reopened.document]) {
       const direct = document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
       const inherited = document
@@ -314,7 +317,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     const placeholder = createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(360)]);
     writer.GetDfltTextFormatColl().SetFormatAttr(placeholder);
     writer.paragraphs[0]?.SetAttr(placeholder);
-    const base = writeOdtDocument(writer, metadata);
+    const base = await writeOdtDocument(writer, metadata);
     const cases = [
       {
         name: "malformed position retains zero and other fields",
@@ -432,7 +435,10 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
         );
       }
       const loaded = await readOdtDocument(input, metadata);
-      const reopened = await readOdtDocument(writeOdtDocument(loaded.document, metadata), metadata);
+      const reopened = await readOdtDocument(
+        await writeOdtDocument(loaded.document, metadata),
+        metadata,
+      );
       for (const document of [loaded.document, reopened.document]) {
         const direct = document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
         const inherited = document
@@ -459,7 +465,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     const placeholder = createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(360)]);
     writer.GetDfltTextFormatColl().SetFormatAttr(placeholder);
     writer.paragraphs[0]?.SetAttr(placeholder);
-    const base = writeOdtDocument(writer, metadata);
+    const base = await writeOdtDocument(writer, metadata);
     const cases = [
       { name: "bare tab", xml: "<style:tab-stop/>", expected: [[0, SvxTabAdjust.Left, ",", " "]] },
       {
@@ -536,7 +542,10 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
         );
       }
       const loaded = await readOdtDocument(input, metadata);
-      const reopened = await readOdtDocument(writeOdtDocument(loaded.document, metadata), metadata);
+      const reopened = await readOdtDocument(
+        await writeOdtDocument(loaded.document, metadata),
+        metadata,
+      );
       for (const document of [loaded.document, reopened.document]) {
         const direct = document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
         const inherited = document
@@ -563,7 +572,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     const placeholder = createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(360)]);
     writer.GetDfltTextFormatColl().SetFormatAttr(placeholder);
     writer.paragraphs[0]?.SetAttr(placeholder);
-    const base = writeOdtDocument(writer, metadata);
+    const base = await writeOdtDocument(writer, metadata);
     const cases = [
       {
         name: "first default keeps only itself despite following lower signed positions",
@@ -610,7 +619,10 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
         );
       }
       const loaded = await readOdtDocument(input, metadata);
-      const reopened = await readOdtDocument(writeOdtDocument(loaded.document, metadata), metadata);
+      const reopened = await readOdtDocument(
+        await writeOdtDocument(loaded.document, metadata),
+        metadata,
+      );
       for (const document of [loaded.document, reopened.document]) {
         const direct = document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
         const inherited = document
@@ -643,7 +655,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
         new SvxTabStop(1800, SvxTabAdjust.Decimal, ";", "."),
       ]),
     );
-    const bytes = writeOdtDocument(writer, metadata);
+    const bytes = await writeOdtDocument(writer, metadata);
     const reopened = await readOdtDocument(bytes, metadata);
     const tabs = reopened.document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
     expect(
@@ -703,8 +715,10 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
   it("keeps an explicit empty tab sequence through ODT", /** Keeps a tab clear distinct from an inherited default. @returns Completion after import. */ async () => {
     const writer = createWriterDocument();
     writer.paragraphs[0]?.SetAttr(createTabs(RES_PARATR_TABSTOP, []));
-    const bytes = writeOdtDocument(writer, metadata);
-    expect(await new ZipFile(bytes).readTextEntry("content.xml")).toContain("<style:tab-stops/>");
+    const bytes = await writeOdtDocument(writer, metadata);
+    expect(await (await DocumentArchive.open(bytes)).readTextEntry("content.xml")).toContain(
+      "<style:tab-stops/>",
+    );
     const reopened = await readOdtDocument(bytes, metadata);
     expect(
       (reopened.document.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem).Count(),
@@ -718,8 +732,8 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
         new SvxTabStop(1440, SvxTabAdjust.Decimal, ".", "."),
       ]),
     );
-    const bytes = writeOdtDocument(writer, metadata);
-    const content = await new ZipFile(bytes).readTextEntry("content.xml");
+    const bytes = await writeOdtDocument(writer, metadata);
+    const content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     expect(content).toContain('<style:tab-stop style:position="1.27cm" style:type="right"/>');
     expect(content).toContain(
       'style:position="2.54cm" style:type="char" style:char="." style:leader-style="dotted" style:leader-text="."',
@@ -760,8 +774,8 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
       ]),
     );
 
-    const bytes = writeOdtDocument(writer, metadata);
-    const content = await new ZipFile(bytes).readTextEntry("content.xml");
+    const bytes = await writeOdtDocument(writer, metadata);
+    const content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     expect(content).toContain('fo:color="#123456"');
     expect(content).toContain('fo:background-color="#fedcba"');
     expect(content).toContain('fo:color="#abcdef"');
@@ -800,8 +814,8 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     defaultStyle.SetFormatAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(360)]));
     defaultStyle.SetFormatAttr(new SfxBoolItem(RES_KEEP, false));
     defaultStyle.SetFormatAttr(new SfxBoolItem(RES_LINENUMBER, true));
-    const bytes = writeOdtDocument(writer, metadata);
-    const styles = await new ZipFile(bytes).readTextEntry("styles.xml");
+    const bytes = await writeOdtDocument(writer, metadata);
+    const styles = await (await DocumentArchive.open(bytes)).readTextEntry("styles.xml");
     expect(styles).toContain('style:use-window-font-color="true"');
     expect(styles).toContain('fo:background-color="transparent"');
     expect(styles).toContain('fo:keep-with-next="auto"');
@@ -870,7 +884,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     tabWriter
       .GetDfltTextFormatColl()
       .SetFormatAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(360)]));
-    const tabBytes = writeOdtDocument(tabWriter, metadata);
+    const tabBytes = await writeOdtDocument(tabWriter, metadata);
     const multiTabOpened = await readOdtDocument(
       await rewriteEntry(
         tabBytes,
@@ -940,10 +954,10 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     );
 
     heading.SetFormatAttr(createWriterTextColorItem(0x80123456));
-    expect(
-      /** Exports an invalid bounded color. @returns Bytes. */ () =>
-        writeOdtDocument(writer, metadata),
-    ).toThrow("Unsupported ODF font color");
+    await expect(
+      /** Exports an invalid bounded color. @returns Bytes. */ async () =>
+        await writeOdtDocument(writer, metadata),
+    ).rejects.toThrow("Unsupported ODF font color");
   });
 });
 
@@ -951,8 +965,8 @@ it("round-trips source page-number offset boundaries without the dialog widget r
   for (const offset of [0, 55535, 65535]) {
     const writer = createWriterDocument();
     writer.paragraphs[0]?.SetAttr(new SwFormatPageDesc("Standard", offset));
-    const bytes = writeOdtDocument(writer, metadata);
-    expect(await new ZipFile(bytes).readTextEntry("content.xml")).toContain(
+    const bytes = await writeOdtDocument(writer, metadata);
+    expect(await (await DocumentArchive.open(bytes)).readTextEntry("content.xml")).toContain(
       `style:page-number="${(offset << 16) >> 16}"`,
     );
     const reopened = await readOdtDocument(bytes, metadata);

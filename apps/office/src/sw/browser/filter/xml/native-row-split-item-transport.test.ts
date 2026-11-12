@@ -94,7 +94,7 @@ it.each([undefined, false, true])(
     const xml = exportContentXml(doc);
     if (value === undefined) expect(xml).not.toContain("fo:keep-together=");
     else expect(xml).toContain('fo:keep-together="' + (value ? "auto" : "always") + '"');
-    const reopened = await readOdtDocument(writeOdtDocument(doc, { title: "ODF" }), {
+    const reopened = await readOdtDocument(await writeOdtDocument(doc, { title: "ODF" }), {
         title: "ODF",
       }),
       row = required(required(reopened.document.GetTables()[0]).GetTabLines()[0]);

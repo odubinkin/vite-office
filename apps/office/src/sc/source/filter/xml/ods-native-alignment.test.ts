@@ -8,7 +8,7 @@ import { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../../editeng/inc/ju
 import { SvxCellHorJustify as H, SvxCellVerJustify as V } from "../../../../editeng/inc/svxenum";
 import { ScXMLImport } from "./xmlimprt";
 import { readOdsDocument, writeOdsDocument } from "./xmlwrap";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { SfxItemState } from "../../../../svl/source/items/itemset";
 /** Reads real pattern alignment. @param doc - Document. @param col - Column. @returns Native pair. */
 function alignment(doc: ScDocument, col = 0): readonly number[] {
@@ -31,8 +31,8 @@ it("writes original paragraph/cell alignment groups and keeps all native values 
       c.SetAlignment("horizontal", col, false);
       c.SetAlignment("vertical", col % 5, false);
     }
-    let bytes = writeOdsDocument(c.shell.GetDocument());
-    const content = await new ZipFile(bytes).readTextEntry("content.xml");
+    let bytes = await writeOdsDocument(c.shell.GetDocument());
+    const content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     expect(content).toContain('style:text-align-source="value-type"');
     expect(content).toContain('style:repeat-content="true"');
     expect(content).toContain('<style:paragraph-properties fo:text-align="center"/>');
@@ -41,7 +41,7 @@ it("writes original paragraph/cell alignment groups and keeps all native values 
       const doc = await readOdsDocument(bytes);
       try {
         for (let col = 0; col < 6; col++) expect(alignment(doc, col)).toEqual([col, col % 5]);
-        bytes = writeOdsDocument(doc);
+        bytes = await writeOdsDocument(doc);
       } finally {
         doc.DisposeAttributes();
       }

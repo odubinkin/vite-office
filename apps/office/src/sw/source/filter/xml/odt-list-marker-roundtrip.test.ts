@@ -1,8 +1,8 @@
 /** @fileoverview Verifies pinned ODF list marker properties across genuine common/automatic packages and standard ODF 1.3 approximation. */
 import type { SwNumRule } from "../../core/doc/number";
 import { expect, it } from "vitest";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createWriterDocument } from "../../core/doc/doc";
 import type { SwNumFormat } from "../../core/doc/number";
 import {
@@ -31,8 +31,8 @@ async function input(
   common: boolean,
   bullet = false,
 ): Promise<Uint8Array> {
-  const zip = new ZipFile(bytes),
-    output = new ZipOutputStream();
+  const zip = await DocumentArchive.open(bytes),
+    output = new DocumentArchiveWriter();
   const tag = bullet ? "bullet" : "number";
   const declaration = `<text:list-style style:name="Markers"><text:list-level-style-number text:level="1" style:num-format="1" style:num-suffix="." text:start-value="2"/><text:list-level-style-${tag} text:level="2" ${bullet ? 'text:bullet-char="●"' : 'style:num-format="1"'} ${attributes}/></text:list-style>`;
   for (const entry of zip.getEntryNames()) {
@@ -59,11 +59,11 @@ async function input(
       output.putNextEntry(entry, new TextEncoder().encode(xml));
     } else output.putNextEntry(entry, await zip.readEntry(entry));
   }
-  return output.finish();
+  return await output.finish();
 }
 
 it("preserves native marker parameters through common and automatic ODT cycles", /** Asserts literal state, labels, copies, Worker and conditional standard XML output. @returns Completion. */ async () => {
-  const bytes = writeOdtDocument(createWriterDocument(), { title: "Markers" });
+  const bytes = await writeOdtDocument(createWriterDocument(), { title: "Markers" });
   const base: MarkerState = {
     prefix: "",
     suffix: "",
@@ -155,10 +155,10 @@ it("preserves native marker parameters through common and automatic ODT cycles",
         test.expected,
       );
       expect(restored.paragraphs[1]?.GetListLabel()).toBe(test.label);
-      const exported = writeOdtDocument(result.document, { title: "Markers" });
+      const exported = await writeOdtDocument(result.document, { title: "Markers" });
       const xml =
-        (await new ZipFile(exported).readTextEntry("styles.xml")) +
-        (await new ZipFile(exported).readTextEntry("content.xml"));
+        (await (await DocumentArchive.open(exported)).readTextEntry("styles.xml")) +
+        (await (await DocumentArchive.open(exported)).readTextEntry("content.xml"));
       const opening = xml.match(
         /<text:list-level-style-(number|bullet) text:level="2"[^>]*>/u,
       )?.[0] as string;
@@ -183,7 +183,7 @@ it("preserves native marker parameters through common and automatic ODT cycles",
 });
 
 it("retains native explicit pattern precedence and standard ODF 1.3 approximation", /** Checks ordered namespace aliases, empty formats and deliberate native pattern loss under the current export version. @returns Completion. */ async () => {
-  const bytes = writeOdtDocument(createWriterDocument(), { title: "Patterns" });
+  const bytes = await writeOdtDocument(createWriterDocument(), { title: "Patterns" });
   const expected: MarkerState = {
     prefix: "[",
     suffix: "]",
@@ -249,10 +249,10 @@ it("retains native explicit pattern precedence and standard ODF 1.3 approximatio
       expect(state(restored.GetNumRuleTable().slice(1)[0]?.Get(1) as SwNumFormat)).toEqual(
         test.expected,
       );
-      const exported = writeOdtDocument(result.document, { title: "Patterns" });
+      const exported = await writeOdtDocument(result.document, { title: "Patterns" });
       const xml =
-        (await new ZipFile(exported).readTextEntry("styles.xml")) +
-        (await new ZipFile(exported).readTextEntry("content.xml"));
+        (await (await DocumentArchive.open(exported)).readTextEntry("styles.xml")) +
+        (await (await DocumentArchive.open(exported)).readTextEntry("content.xml"));
       expect(xml).not.toContain("num-list-format=");
       const reopened = await readOdtDocument(exported, { title: "Markers" });
       expect(state(reopened.document.GetNumRuleTable().slice(1)[0]?.Get(1) as SwNumFormat)).toEqual(
@@ -263,17 +263,17 @@ it("retains native explicit pattern precedence and standard ODF 1.3 approximatio
 });
 
 it("projects native signed UNO StartWith and omitted zero ParentNumbering on export", /** Verifies source narrowing/omission independently of positive XML declaration bounds. @returns Completion. */ async () => {
-  const bytes = writeOdtDocument(createWriterDocument(), { title: "Signed" });
+  const bytes = await writeOdtDocument(createWriterDocument(), { title: "Signed" });
   const result = await readOdtDocument(await input(bytes, "", false), { title: "Markers" });
   const rule = result.document.GetNumRuleTable().slice(1)[0] as SwNumRule;
   const format = rule.Get(1).clone();
   format.SetStart(65535);
   format.SetIncludeUpperLevels(0);
   rule.Set(1, format);
-  const exported = writeOdtDocument(result.document, { title: "Signed" });
+  const exported = await writeOdtDocument(result.document, { title: "Signed" });
   const xml =
-    (await new ZipFile(exported).readTextEntry("styles.xml")) +
-    (await new ZipFile(exported).readTextEntry("content.xml"));
+    (await (await DocumentArchive.open(exported)).readTextEntry("styles.xml")) +
+    (await (await DocumentArchive.open(exported)).readTextEntry("content.xml"));
   expect(xml.match(/<text:list-level-style-number text:level="2"[^>]*>/u)?.[0]).toContain(
     'text:start-value="-1"',
   );

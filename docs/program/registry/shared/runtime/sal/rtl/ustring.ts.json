@@ -53,7 +53,6 @@
         "apps/office/src/sal/rtl/ustring-allocation-failures.native.test.ts",
         "scripts/rtl-allocation-failures-native-probe.mjs",
         "apps/office/src/sal/rtl/native-allocation-failures.json",
-        "apps/office/src/package/source/zipapi/native-case-checks.test.ts",
         "apps/office/src/sal/rtl/ascii-lower-ownership.test.ts",
         "apps/office/src/stoc/source/typeconv/convert.test.ts",
         "apps/office/src/cppu/inc/typelib/typedescription.hxx.test.ts",

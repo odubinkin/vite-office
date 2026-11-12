@@ -109,7 +109,7 @@ for (const mode of ["direct", "selected", "dialog"] as const)
         expect(box.GetParagraphs()[0]).toBe(node);
         expect(shell.IsTableMode()).toBe(mode === "selected");
       }
-      const reopened = await readOdtDocument(writeOdtDocument(doc, { title: "Height" }), {
+      const reopened = await readOdtDocument(await writeOdtDocument(doc, { title: "Height" }), {
         title: "Height",
       });
       expect(

@@ -1,7 +1,7 @@
 /** @fileoverview Verifies pinned modern list alignment defaults, native units and exact ODT export predicates through genuine package cycles. */
 import { expect, it } from "vitest";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createWriterDocument, type SwDoc } from "../../core/doc/doc";
 import { createWriterNumRule } from "../../core/doc/DocumentListsManager";
 import { readOdtDocument } from "./swxml";
@@ -16,8 +16,8 @@ async function input(base: Uint8Array, attributes: string, common: boolean): Pro
       `<text:list-level-style-number text:level="${level + 1}" style:num-format="1" style:num-suffix="."><style:list-level-properties text:list-level-position-and-space-mode="label-alignment"><style:list-level-label-alignment ${attributes}/></style:list-level-properties></text:list-level-style-number>`,
   ).join("");
   const definition = `<text:list-style style:name="Literal">${levels}</text:list-style>`;
-  const zip = new ZipFile(base);
-  const output = new ZipOutputStream();
+  const zip = await DocumentArchive.open(base);
+  const output = new DocumentArchiveWriter();
   for (const entry of zip.getEntryNames()) {
     if (entry === "styles.xml" && common) {
       const xml = await zip.readTextEntry(entry);
@@ -36,7 +36,7 @@ async function input(base: Uint8Array, attributes: string, common: boolean): Pro
       output.putNextEntry(entry, new TextEncoder().encode(xml));
     } else output.putNextEntry(entry, await zip.readEntry(entry));
   }
-  return output.finish();
+  return await output.finish();
 }
 
 /** Projects only the manually specified canonical list fields. @param document - Imported Writer model. @returns First-level core tuple. */
@@ -53,7 +53,7 @@ function geometry(document: SwDoc) {
 }
 
 it("round-trips native MM100 defaults, parsing bounds and conditional list attributes", /** Asserts literal source values, exact exported mode/attributes and native canonical reopen values. @returns Completion after common/automatic package cases. */ async () => {
-  const base = writeOdtDocument(createWriterDocument(), { title: "Alignment" });
+  const base = await writeOdtDocument(createWriterDocument(), { title: "Alignment" });
   const cases = [
     { attributes: "", expected: [0, 0, "listtab", 0], xml: 'text:label-followed-by="listtab"' },
     {
@@ -120,10 +120,10 @@ it("round-trips native MM100 defaults, parsing bounds and conditional list attri
         title: "Alignment",
       });
       expect(geometry(imported.document), testCase.attributes).toEqual(testCase.expected);
-      const exported = writeOdtDocument(imported.document, { title: "Alignment" });
+      const exported = await writeOdtDocument(imported.document, { title: "Alignment" });
       const xml =
-        (await new ZipFile(exported).readTextEntry("styles.xml")) +
-        (await new ZipFile(exported).readTextEntry("content.xml"));
+        (await (await DocumentArchive.open(exported)).readTextEntry("styles.xml")) +
+        (await (await DocumentArchive.open(exported)).readTextEntry("content.xml"));
       const level = xml.match(
         /<text:list-level-style-number text:level="1"[^>]*>([\s\S]*?)<\/text:list-level-style-number>/u,
       )?.[1];
@@ -145,10 +145,10 @@ it("exports the default Writer list geometry at every supported level", /** Ensu
     const paragraph = document.paragraphs[0];
     if (paragraph === undefined) throw new Error("Default list paragraph missing");
     paragraph.SetNumRule("Default");
-    const exported = writeOdtDocument(document, { title: "Default list" });
+    const exported = await writeOdtDocument(document, { title: "Default list" });
     const xml =
-      (await new ZipFile(exported).readTextEntry("styles.xml")) +
-      (await new ZipFile(exported).readTextEntry("content.xml"));
+      (await (await DocumentArchive.open(exported)).readTextEntry("styles.xml")) +
+      (await (await DocumentArchive.open(exported)).readTextEntry("content.xml"));
     expect(xml.match(/text:list-level-position-and-space-mode="label-alignment"/gu)).toHaveLength(
       10,
     );

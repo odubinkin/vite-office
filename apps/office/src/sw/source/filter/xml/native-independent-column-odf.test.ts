@@ -4,7 +4,7 @@ import { SwDoc } from "../../core/doc/doc";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import type { SwTable } from "../../core/table/swtable";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { exportContentXml, exportStylesXml } from "./xmlexp";
 import { importWriterXml } from "./xmlimp";
 import { writeOdtDocument } from "./wrtxml";
@@ -75,8 +75,8 @@ it("keeps vertical Writer spans through ODT, the worker codec and clipped source
     const decoded = decodeWriterDocument(structuredClone(encoded));
     restored.push(decoded);
     expect(signedSpans(required(decoded.GetTables()[0]))).toEqual(spans);
-    const bytes = writeOdtDocument(doc, { title: "Vertical spans" });
-    const content = await new ZipFile(bytes).readTextEntry("content.xml");
+    const bytes = await writeOdtDocument(doc, { title: "Vertical spans" });
+    const content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     expect(content).toContain('table:number-rows-spanned="3"');
     expect(content.match(/<table:covered-table-cell table:style-name="[^"]+"\/>/gu)).toHaveLength(
       2,
@@ -104,8 +104,8 @@ it("keeps vertical Writer spans through ODT, the worker codec and clipped source
 });
 it("ODF union grid emits literal spans and covered slots and reopens original native cells", /** Checks real package roundtrip rather than a synthetic width record. @returns Completion. */ async () => {
   const f = fixture(),
-    bytes = writeOdtDocument(f.doc, { title: "Independent" }),
-    content = await new ZipFile(bytes).readTextEntry("content.xml");
+    bytes = await writeOdtDocument(f.doc, { title: "Independent" }),
+    content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
   expect(content.match(/<table:table-column /gu)).toHaveLength(3);
   expect(content.match(/table:number-columns-spanned="2"/gu)).toHaveLength(2);
   expect(content.match(/<table:covered-table-cell\/>/gu)).toHaveLength(2);
@@ -231,8 +231,8 @@ it("ODF fuzzy20 column equivalence exports the native shared grid without extra 
     size.SetWidth(index === 0 ? 1520 : 2980);
     box.SetFrameSize(size);
   }
-  const bytes = writeOdtDocument(f.doc, { title: "Fuzzy" }),
-    content = await new ZipFile(bytes).readTextEntry("content.xml");
+  const bytes = await writeOdtDocument(f.doc, { title: "Fuzzy" }),
+    content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
   expect(content.match(/<table:table-column /gu)).toHaveLength(2);
   expect(content).not.toContain("table:number-columns-spanned");
   expect(content).not.toContain("table:covered-table-cell");

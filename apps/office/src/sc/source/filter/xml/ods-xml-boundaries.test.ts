@@ -56,10 +56,10 @@ it("rejects malformed browser streams and enforces the complete ZIP size ceiling
     ) => n + new TextEncoder().encode(String(s)).length,
     0,
   );
-  expect(
-    /** Checks the browser XML and worker regression boundary.  @returns Regression result or completion. */ () =>
-      new ScXMLImportWrapper(doc).Export({ maxOutputBytes: size }),
-  ).toThrow("size limit");
+  await expect(
+    /** Checks the browser XML and worker regression boundary.  @returns Regression result or completion. */ async () =>
+      await new ScXMLImportWrapper(doc).Export({ maxOutputBytes: size }),
+  ).rejects.toThrow("size limit");
   new ScXMLImportWrapper(doc).ExportXml();
   doc.DisposeAttributes();
 });

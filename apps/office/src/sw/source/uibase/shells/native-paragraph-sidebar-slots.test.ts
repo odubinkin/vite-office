@@ -174,7 +174,7 @@ it("preserves sidebar slot values in a genuine ODT export/import", /** Checks ac
     view = session.view;
   run(view, ".uno:LeftRightParaMargin", [margins()]);
   run(view, ".uno:ULSpacing", [new SvxULSpaceItem(120, 240, 10042, true)]);
-  const bytes = writeOdtDocument(
+  const bytes = await writeOdtDocument(
       view.GetWrtShell().GetDoc(),
       view.GetDocShell().GetDocumentState(),
     ),

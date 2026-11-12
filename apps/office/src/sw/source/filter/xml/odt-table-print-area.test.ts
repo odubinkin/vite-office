@@ -64,7 +64,7 @@ describe("ODF native table print area", /** Registers native model/filter cases 
         ).toEqual(["A", "B"]);
         if (cycle < 2)
           doc = (
-            await readOdtDocument(writeOdtDocument(doc, { title: "Geometry" }), {
+            await readOdtDocument(await writeOdtDocument(doc, { title: "Geometry" }), {
               title: "Geometry",
             })
           ).document;

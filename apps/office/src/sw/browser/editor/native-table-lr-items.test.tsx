@@ -127,9 +127,12 @@ it.each([false, true])(
       );
       let current = doc;
       for (let i = 0; i < 2; i++) {
-        const reopen = await readOdtDocument(writeOdtDocument(current, { title: "NativeLRUI" }), {
-          title: "NativeLRUI",
-        });
+        const reopen = await readOdtDocument(
+          await writeOdtDocument(current, { title: "NativeLRUI" }),
+          {
+            title: "NativeLRUI",
+          },
+        );
         current = reopen.document;
         expect([
           required(current.GetTables()[0]).GetFrameFormat().GetLRSpace().ResolveLeft(),

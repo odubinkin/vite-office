@@ -150,7 +150,7 @@ it("linear preview derives each move from the original and retains graph through
   expect(f.node.GetNumRule()).toBe(owner);
   expect(f.node.GetListId()).toBe("drag-list");
   expect(f.node.GetText()).toBe("Cell");
-  const reopened = await readOdtDocument(writeOdtDocument(f.doc, { title: "Linear" }), {
+  const reopened = await readOdtDocument(await writeOdtDocument(f.doc, { title: "Linear" }), {
     title: "Linear",
   });
   expect(reopened.document.GetTables()[0]?.GetColumnWidths()).toEqual([1950, 1500, 1050]);

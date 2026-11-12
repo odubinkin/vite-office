@@ -88,7 +88,7 @@ for (const width of [1280, 390])
         new SvxFontHeightItem(240, 100, RES_CHRATR_CJK_FONTSIZE),
         new SvxFontHeightItem(240, 100, RES_CHRATR_CTL_FONTSIZE),
       ]);
-      const bytes = writeOdtDocument(document, metadata);
+      const bytes = await writeOdtDocument(document, metadata);
       if (!disregard) {
         // The current ODT filter omits compatibility settings. Admit the existing
         // graph setting before canonical restore; this case does not test its ODT transport.

@@ -1,8 +1,6 @@
 /** @fileoverview Pinned storagehelper UTF16/name/path boundary tables and actual ZIP transport composition; no service/provider surrogate. */
 import { expect, it } from "vitest";
 import { OStorageHelper } from "../../inc/storagehelper";
-import { ZipFile } from "../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../package/source/zipapi/ZipOutputStream";
 /** Constructs a borrowed UTF16 view, retaining each code unit including unpaired surrogates. @param text - Literal units. @returns View. */
 function view(text: string): Uint16Array {
   const units = new Uint16Array(text.length);
@@ -96,28 +94,3 @@ it.each([
     expect(OStorageHelper.PathHasSegment(view(path), view(segment))).toBe(found);
   },
 );
-it("uses the shared source helper for real ZIP output and central-directory input", /** No name normalization is inserted into the archive catalog. @returns Nothing. */ async () => {
-  const output = new ZipOutputStream();
-  const names = ["", "word//document.xml", "word/.../notes.xml", "文档/表格.xml", "word/"];
-  for (const name of names) output.putNextEntry(name, new Uint8Array([17, 255]));
-  const archive = new ZipFile(output.finish());
-  expect(archive.getEntryNames()).toEqual(names);
-  for (const name of names)
-    expect(await archive.readEntry(name)).toEqual(new Uint8Array([17, 255]));
-  for (const name of ["word/a?b.xml", "word/a:b.xml", "word/😀.xml"])
-    expect(
-      /** Attempts invalid output through the actual shared validator. @returns Nothing. */ () =>
-        new ZipOutputStream().putNextEntry(name, new Uint8Array()),
-    ).toThrow("Unsafe ZIP entry name");
-  // External archive name bytes are changed directly so output validation cannot mask input behavior.
-  const external = new ZipOutputStream();
-  external.putNextEntry("a-b", new Uint8Array());
-  const bytes = external.finish(),
-    central = 33;
-  bytes[31] = 63;
-  bytes[central + 47] = 63;
-  expect(
-    /** Parses independently corrupted central-directory name bytes. @returns Actual archive, unless rejected. */ () =>
-      new ZipFile(bytes),
-  ).toThrow("Unsafe ZIP entry name");
-});

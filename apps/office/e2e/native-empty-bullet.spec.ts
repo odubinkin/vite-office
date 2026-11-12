@@ -33,7 +33,7 @@ for (const width of [1280, 390])
         }),
       );
     }
-    const bytes = writeOdtDocument(doc, { title: "Zero" });
+    const bytes = await writeOdtDocument(doc, { title: "Zero" });
     doc.Dispose();
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/writer");

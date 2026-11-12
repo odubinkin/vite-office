@@ -36,7 +36,7 @@ describe("Writer Page Style dialog", /** Groups Writer Page Style dialog. @retur
     fireEvent.click(screen.getByText("OK"));
     expect(onSubmit).toHaveBeenCalledOnce();
     const reopened = await readOdtDocument(
-      writeOdtDocument(opened.document, metadata),
+      await writeOdtDocument(opened.document, metadata),
       metadata,
       undefined,
       options,

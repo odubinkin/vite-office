@@ -77,9 +77,12 @@ it.each([false, true])(
         );
         expect(screen.getByRole("radio", { name: "Right" })).toBeChecked();
         fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
-        const reopen = await readOdtDocument(writeOdtDocument(doc, { title: "NativeHoriUI" }), {
-          title: "NativeHoriUI",
-        });
+        const reopen = await readOdtDocument(
+          await writeOdtDocument(doc, { title: "NativeHoriUI" }),
+          {
+            title: "NativeHoriUI",
+          },
+        );
         expect(
           required(reopen.document.GetTables()[0]).GetFrameFormat().GetHoriOrient().GetHoriOrient(),
         ).toBe(inherited ? HoriOrientation.FULL : HoriOrientation.RIGHT);
@@ -120,9 +123,12 @@ it.each([false, true])(
         expect(box.GetParagraphs()[0]).toBe(node);
         expect(node.GetText()).toBe("Original horizontal cell");
       }
-      const reopened = await readOdtDocument(writeOdtDocument(doc, { title: "NativeHoriUI" }), {
-        title: "NativeHoriUI",
-      });
+      const reopened = await readOdtDocument(
+        await writeOdtDocument(doc, { title: "NativeHoriUI" }),
+        {
+          title: "NativeHoriUI",
+        },
+      );
       expect(required(reopened.document.GetTables()[0]).GetHoriOrient()).toBe(
         HoriOrientation.CENTER,
       );

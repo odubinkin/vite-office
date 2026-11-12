@@ -122,7 +122,7 @@ it.each(["collapsing", "separating", undefined] as const)(
         expect(box.GetParagraphs()[0]?.GetText()).toBe("Original " + index);
       }
     }
-    const reopened = await readOdtDocument(writeOdtDocument(f.doc, { title: "Collapse" }), {
+    const reopened = await readOdtDocument(await writeOdtDocument(f.doc, { title: "Collapse" }), {
       title: "Collapse",
     });
     expect(reopened.document.GetTables()[0]?.GetFormat().borderModel).toBe(next);

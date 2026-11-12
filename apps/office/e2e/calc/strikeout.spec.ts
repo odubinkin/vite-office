@@ -142,7 +142,7 @@ test("preserves native Strikeout item metadata,history and ODS in a DOM-free Wor
           const undo = values();
           shell.GetUndoManager().Redo(shell);
           const redo = values(),
-            reopened = await n.readOdsDocument(n.writeOdsDocument(doc));
+            reopened = await n.readOdsDocument(await n.writeOdsDocument(doc));
           try {
             const saved = reopened.GetPattern(pos)?.GetItem(106) as InstanceType<
               typeof n.SvxCrossedOutItem

@@ -36,7 +36,7 @@ for (const width of [1280, 390])
         shell = new SwWrtShell(new SwDocShell(doc, metadata));
       shell.FocusNode(first);
       shell.SetParagraphListKind("bullet");
-      const bytes = writeOdtDocument(doc, metadata);
+      const bytes = await writeOdtDocument(doc, metadata);
       shell.Close();
       await page.setViewportSize({ width, height: 900 });
       await page.goto("/writer");

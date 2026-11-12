@@ -20,7 +20,7 @@ async function openOwnedStyleDocument(page: Page, width: number) {
   shell.SplitNode();
   shell.SetParagraphStyle("default");
   shell.Insert("UntouchedStyleFocus");
-  const bytes = writeOdtDocument(document, metadata);
+  const bytes = await writeOdtDocument(document, metadata);
   owner.Close();
   await page.setViewportSize({ width, height: 800 });
   await page.goto("/writer");

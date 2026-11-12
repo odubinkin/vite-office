@@ -52,7 +52,7 @@ it("retains cells, styles, sparse attributes and geometry through worker transfe
 it("imports external ODS and exports browser XML without a ZIP layer", /** Checks native document data across the worker filter boundary.  @returns Operation result. */ async () => {
   const doc = fixture();
   try {
-    const input = writeOdsDocument(doc);
+    const input = await writeOdsDocument(doc);
     const graph = (await processOdsWorkerRequest({
       id: 1,
       operation: "import",

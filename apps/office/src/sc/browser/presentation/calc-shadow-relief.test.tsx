@@ -9,7 +9,7 @@ import { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/item
 import { ScAddress } from "../../inc/address";
 import type { ScPatternAttr } from "../../inc/patattr";
 import { readOdsDocument, writeOdsDocument } from "../../source/filter/xml/xmlwrap";
-import { ZipFile } from "../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../package/source/zippackage/document-archive";
 import { FontRelief } from "../../../vcl/inc/fntstyle";
 /** Reads original actual native item. @param session - Real session. @param col - Column. @returns Item pair. */
 function effects(session: ReturnType<typeof createCalcSession>, col = 0) {
@@ -83,8 +83,8 @@ it("keeps original shadow/relief lexical spellings and values through repeated a
   try {
     d.Execute(".uno:Shadowed");
     d.Execute(".uno:CharacterRelief", [new SvxCharReliefItem(FontRelief.Engraved, 124)]);
-    let bytes = writeOdsDocument(s.controller.shell.GetDocument());
-    const content = await new ZipFile(bytes).readTextEntry("content.xml");
+    let bytes = await writeOdsDocument(s.controller.shell.GetDocument());
+    const content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     expect(content).toContain('fo:text-shadow="1pt 1pt"');
     expect(content).toContain('style:font-relief="engraved"');
     for (let cycle = 0; cycle < 3; cycle++) {
@@ -93,7 +93,7 @@ it("keeps original shadow/relief lexical spellings and values through repeated a
         const p = doc.GetPattern(new ScAddress()) as ScPatternAttr;
         expect((p.GetItem(108) as SvxShadowedItem).GetValue()).toBe(true);
         expect((p.GetItem(124) as SvxCharReliefItem).GetValue()).toBe(2);
-        bytes = writeOdsDocument(doc);
+        bytes = await writeOdsDocument(doc);
       } finally {
         doc.DisposeAttributes();
       }

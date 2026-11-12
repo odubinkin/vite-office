@@ -11,7 +11,7 @@ import { SwEditWin } from "../docvw/edtwin";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { readOdtDocument } from "../../filter/xml/swxml";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
 import { ODF_NAMESPACES, XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import {
@@ -101,8 +101,8 @@ it.each([undefined, true, false])(
     shells.push(shell);
     edit.SetSelection({ point: { nodeIndex: node.GetIndex(), contentIndex: 2 } });
     const frame = new SwTabFrame(table),
-      initialBytes = writeOdtDocument(doc, { title: "Split" }),
-      initialXml = await new ZipFile(initialBytes).readTextEntry("content.xml");
+      initialBytes = await writeOdtDocument(doc, { title: "Split" }),
+      initialXml = await (await DocumentArchive.open(initialBytes)).readTextEntry("content.xml");
     if (original === undefined) expect(initialXml).not.toContain("may-break-between-rows");
     else expect(initialXml).toContain('style:may-break-between-rows="' + String(original) + '"');
     const opened = await readOdtDocument(initialBytes, { title: "Split" });
@@ -135,7 +135,7 @@ it.each([undefined, true, false])(
       "split-list",
       "Numbering",
     ]);
-    const restored = await readOdtDocument(writeOdtDocument(doc, { title: "Split" }), {
+    const restored = await readOdtDocument(await writeOdtDocument(doc, { title: "Split" }), {
       title: "Split",
     });
     expect(restored.document.GetTables()[0]?.GetFormat().layoutSplit).toBe(!(original ?? true));

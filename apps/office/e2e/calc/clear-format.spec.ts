@@ -129,7 +129,7 @@ test("keeps native Clear deletion/history and actual ODS in a DOM-free Worker", 
           const redo = (doc.GetPattern(pos) as NonNullable<ReturnType<typeof doc.GetPattern>>)
               .GetItemSet()
               .Count(),
-            saved = await n.readOdsDocument(n.writeOdsDocument(doc));
+            saved = await n.readOdsDocument(await n.writeOdsDocument(doc));
           try {
             return {
               clear,

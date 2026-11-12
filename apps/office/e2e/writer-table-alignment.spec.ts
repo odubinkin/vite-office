@@ -19,7 +19,7 @@ for (const viewport of [1280, 390])
     await page.getByRole("button", { name: "Open", exact: true }).click();
     await page.getByRole("tab", { name: "On computer" }).click();
     await page.getByLabel("Browse").setInputFiles({
-      buffer: Buffer.from(writeOdtDocument(doc, { title: "Restore" })),
+      buffer: Buffer.from(await writeOdtDocument(doc, { title: "Restore" })),
       mimeType: "application/vnd.oasis.opendocument.text",
       name: "restore.odt",
     });
@@ -70,7 +70,7 @@ for (const viewport of [1280, 390])
         .GetTabBoxes()[0]
         ?.GetParagraphs()[0]
         ?.SetText("Original");
-      const bytes = writeOdtDocument(doc, { title: "Geometry" });
+      const bytes = await writeOdtDocument(doc, { title: "Geometry" });
       await page.setViewportSize({ width: viewport, height: 900 });
       await page.goto("/writer");
       await page.getByRole("button", { name: "Open", exact: true }).click();

@@ -67,10 +67,10 @@ test("loads native ODS data and edits/saves the same real document in page and W
         pattern.ItemSetPut(new n.SvxVerJustifyItem(1, 132));
         doc.ApplyPatternAreaTab(0, 0, 0, 0, 0, pattern);
         pattern.Dispose();
-        const loaded = await n.readOdsDocument(n.writeOdsDocument(doc)),
+        const loaded = await n.readOdsDocument(await n.writeOdsDocument(doc)),
           first = loaded.GetValue(b);
         loaded.SetValue(a, 7);
-        const again = await n.readOdsDocument(n.writeOdsDocument(loaded));
+        const again = await n.readOdsDocument(await n.writeOdsDocument(loaded));
         return {
           first,
           edited: again.GetValue(b),

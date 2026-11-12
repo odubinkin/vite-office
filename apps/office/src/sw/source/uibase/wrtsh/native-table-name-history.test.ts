@@ -163,7 +163,7 @@ it("properties rename and geometry share one native history through ODT and cont
       expect(f.box.GetParagraphs()[0]).toBe(f.node);
       expect(f.shell.CaptureCursorState()).toEqual(cursor);
     }
-    const reopened = await readOdtDocument(writeOdtDocument(f.doc, { title: "Names" }), {
+    const reopened = await readOdtDocument(await writeOdtDocument(f.doc, { title: "Names" }), {
       title: "Names",
     });
     expect(reopened.document.GetTables()[0]?.GetName()).toBe("Accepted");

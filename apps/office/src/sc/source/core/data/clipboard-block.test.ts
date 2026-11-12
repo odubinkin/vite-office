@@ -88,7 +88,7 @@ it("copies consecutive selected sheets and completes native dependency notificat
   spans.executeColumnAction(doc, new BroadcastAction(doc));
   doc.SetAutoCalc(true);
   for (let tab = 0; tab < 3; tab++) expect(doc.GetValue(new ScAddress(2, 5, tab))).toBe(9);
-  const reopened = await readOdsDocument(writeOdsDocument(doc));
+  const reopened = await readOdsDocument(await writeOdsDocument(doc));
   expect(reopened.GetValue(new ScAddress(2, 5, 2))).toBe(9);
   reopened.SetValue(new ScAddress(3, 5, 2), 20);
   expect(reopened.GetValue(new ScAddress(2, 5, 2))).toBe(22);

@@ -28,7 +28,7 @@ for (const width of [1280, 390])
         if (node === undefined) throw Error("Missing original native cell");
         node.SetText(index === 0 ? "Borrowed" : "Neighbor");
       }
-      const bytes = writeOdtDocument(doc, { title: "Borrowed native frames" });
+      const bytes = await writeOdtDocument(doc, { title: "Borrowed native frames" });
       doc.Dispose();
       await page.setViewportSize({ width, height: 900 });
       await page.goto("/writer");

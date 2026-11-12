@@ -25,7 +25,7 @@ import {
   createOdtWriterTransfer,
   restoreOdtWriterTransfer,
 } from "../../../browser/filter/xml/odt-transfer";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
 afterEach(
   /** Releases actual native sessions. @returns Nothing. */ () => {
@@ -148,8 +148,8 @@ it.each([
     expect(restored).toBeInstanceOf(Item);
     expect([restored.GetEsc(), restored.GetProportionalHeight()]).toEqual([offset, height]);
     const transfer = restoreOdtWriterTransfer(structuredClone(createOdtWriterTransfer(f.doc)));
-    let bytes = writeOdtDocument(transfer, f.session.docShell.GetDocumentState());
-    const z = new ZipFile(bytes);
+    let bytes = await writeOdtDocument(transfer, f.session.docShell.GetDocumentState());
+    const z = await DocumentArchive.open(bytes);
     expect(
       (await z.readTextEntry("content.xml")) + (await z.readTextEntry("styles.xml")),
     ).toContain("style:text-position=");
@@ -162,7 +162,7 @@ it.each([
         [offset, height],
         [14000, 58],
       ]);
-      bytes = writeOdtDocument(doc, f.session.docShell.GetDocumentState());
+      bytes = await writeOdtDocument(doc, f.session.docShell.GetDocumentState());
     }
   },
 );

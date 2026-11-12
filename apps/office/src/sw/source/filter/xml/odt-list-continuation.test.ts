@@ -1,7 +1,7 @@
 /** @fileoverview Verifies native processed-root continuation, DefaultListId and restart projection in genuine ODT packages. */
 import { expect, it, vi } from "vitest";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { RES_PARATR_LIST_ID } from "../../../inc/hintids";
 import { createWriterDocument, type SwDoc } from "../../core/doc/doc";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
@@ -60,8 +60,8 @@ async function input(
   common: boolean,
   bullet: boolean,
 ): Promise<Uint8Array> {
-  const zip = new ZipFile(baseline),
-    output = new ZipOutputStream();
+  const zip = await DocumentArchive.open(baseline),
+    output = new DocumentArchiveWriter();
   const declarations = ["Counters", "Other"]
     .map(
       /** Emits independent native rule declarations. @param name - Style name. @returns Declaration. */ (
@@ -97,7 +97,7 @@ async function input(
       output.putNextEntry(entry, new TextEncoder().encode(xml));
     } else output.putNextEntry(entry, await zip.readEntry(entry));
   }
-  return output.finish();
+  return await output.finish();
 }
 /** Normalizes opaque native automatic names while preserving identity and continuation equivalence. @param value - Native identity. @param doc - Document defining its rule owners. @returns Fixture declaration identity. */
 function identity(value: string | undefined, doc: SwDoc): string | undefined {
@@ -146,7 +146,7 @@ it("imports native root continuation and default IDs through common and automati
     },
   );
   try {
-    const baseline = writeOdtDocument(createWriterDocument(), { title: "Continuation" });
+    const baseline = await writeOdtDocument(createWriterDocument(), { title: "Continuation" });
     for (const bullet of [false, true]) {
       const r = bullet ? 1 : 7,
         c = bullet ? 1 : 5;
@@ -486,8 +486,8 @@ it("imports native root continuation and default IDs through common and automati
           const worker = decodeWriterDocument(record);
           expect(worker.GetNumRuleTable().slice(1)[0]).not.toBe(doc.GetNumRuleTable().slice(1)[0]);
           expect(state(worker)).toEqual(expected(test.before));
-          const bytes = writeOdtDocument(doc, { title: "Continuation" });
-          let xml = await new ZipFile(bytes).readTextEntry("content.xml");
+          const bytes = await writeOdtDocument(doc, { title: "Continuation" });
+          let xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
           for (const rule of doc.GetNumRuleTable().slice(1))
             xml = xml
               .replaceAll(

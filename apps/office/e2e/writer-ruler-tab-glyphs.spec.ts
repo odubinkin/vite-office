@@ -76,7 +76,7 @@ for (const width of [1280, 390]) {
         720,
       ),
     );
-    const bytes = writeOdtDocument(document, metadata);
+    const bytes = await writeOdtDocument(document, metadata);
     await page.setViewportSize({ width, height: 800 });
     await page.goto("/writer");
     await page.getByRole("button", { name: "Open" }).click();

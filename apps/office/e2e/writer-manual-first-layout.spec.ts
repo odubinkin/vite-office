@@ -58,7 +58,7 @@ for (const width of [1280, 390])
       shell.SetParagraphItems([
         new SvxFirstLineIndentItem(SvxIndentValue.twips(120), RES_MARGIN_FIRSTLINE),
       ]);
-      const bytes = writeOdtDocument(document, metadata);
+      const bytes = await writeOdtDocument(document, metadata);
       await page.setViewportSize({ width, height: 800 });
       await page.goto("/writer");
       await page.getByRole("button", { name: "Open", exact: true }).click();

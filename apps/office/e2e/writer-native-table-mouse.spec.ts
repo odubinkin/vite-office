@@ -30,7 +30,7 @@ for (const width of [1280, 390])
       for (const [c, box] of row.GetTabBoxes().entries())
         required(box.GetParagraphs()[0]).SetText(`Cell${r}${c}`);
     }
-    const bytes = writeOdtDocument(
+    const bytes = await writeOdtDocument(
       doc,
       createDocument({ id: "mouse", suiteId: "writer", title: "Mouse" }),
     );

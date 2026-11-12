@@ -3,7 +3,7 @@ import { implementations } from "../../../../desktop/browser/app/uno-components"
 import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
 import { afterEach, expect, it, vi } from "vitest";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import { DEFAULT_ZIP_FILE_LIMITS } from "../../../../package/source/zipapi/ZipFile";
+import { DEFAULT_ARCHIVE_LIMITS } from "../../../../package/source/zippackage/document-archive";
 import { DEFAULT_FAST_XML_LIMITS } from "../../../../sax/source/fastparser/fastparser";
 import { ScAddress } from "../../../inc/address";
 import { ScDocument } from "../../../inc/document";
@@ -92,7 +92,7 @@ it("round-trips browser XML and external ODS through default production worker c
   const imported = client.Import(xml, {
     maxExpandedCells: 100,
     limits: DEFAULT_FAST_XML_LIMITS,
-    zipLimits: DEFAULT_ZIP_FILE_LIMITS,
+    zipLimits: DEFAULT_ARCHIVE_LIMITS,
   });
   expect(worker.request?.operation).toBe("import");
   worker.emit(await processOdsWorkerRequest(worker.request as OdsWorkerRequest));

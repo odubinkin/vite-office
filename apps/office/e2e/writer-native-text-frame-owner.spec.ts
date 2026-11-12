@@ -25,7 +25,7 @@ test("native body/cell geometry survives reformat and history before document re
   table.AddColumnWidth(6000);
   for (let i = 0; i < 12; i++)
     doc.nodes.MakeTextNode(("Physical page content " + i + " ").repeat(80));
-  const bytes = writeOdtDocument(doc, { title: "Owner" });
+  const bytes = await writeOdtDocument(doc, { title: "Owner" });
   doc.Dispose();
   await page.goto("/writer");
   await open(page, bytes);
@@ -63,7 +63,7 @@ test("native body/cell geometry survives reformat and history before document re
     target = replacement.paragraphs[0];
   if (target === undefined) throw Error("Missing replacement");
   target.SetText("ReplacementOwner");
-  const replacementBytes = writeOdtDocument(replacement, { title: "Replacement" });
+  const replacementBytes = await writeOdtDocument(replacement, { title: "Replacement" });
   replacement.Dispose();
   await open(page, replacementBytes);
   const editor = page.locator("[data-writer-paragraph-id]").filter({ hasText: "ReplacementOwner" });

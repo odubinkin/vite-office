@@ -70,9 +70,12 @@ it("converts original float toolbox values through PutValue rounding without rej
   ).toMatchObject({ value: false });
   f.shell.Insert("x");
   expect(heights(f.node, 6)).toEqual([274, 274, 274]);
-  const opened = await readOdtDocument(writeOdtDocument(f.doc, { title: "Fractional font" }), {
-    title: "Fractional font",
-  });
+  const opened = await readOdtDocument(
+    await writeOdtDocument(f.doc, { title: "Fractional font" }),
+    {
+      title: "Fractional font",
+    },
+  );
   try {
     const node = opened.document.paragraphs[0] as SwTextNode;
     expect(node.GetText()).toBe("abcdefx");

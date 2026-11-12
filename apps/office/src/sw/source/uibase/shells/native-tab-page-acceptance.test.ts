@@ -85,7 +85,7 @@ it("accepts complete tab-page fields in the same paragraph history action and re
     expect(stops(shell.GetActiveParagraph().GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem)).toEqual(
       stops(item),
     );
-    const loaded = await readOdtDocument(writeOdtDocument(doc, { title: "Native tabs" }), {
+    const loaded = await readOdtDocument(await writeOdtDocument(doc, { title: "Native tabs" }), {
       title: "Reopened",
     });
     try {

@@ -32,10 +32,6 @@
         {
           "path": "apps/office/src/sal/inc/osl/time.ts",
           "marker": "TimeValue"
-        },
-        {
-          "path": "apps/office/src/package/source/zipapi/native-entry-defaults.test.ts",
-          "marker": "@fileoverview"
         }
       ],
       "upstream": [

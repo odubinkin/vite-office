@@ -100,7 +100,7 @@ for (const mode of ["direct", "properties", "selected"] as const)
         expect(f.box.GetParagraphs()[0]).toBe(f.node);
         expect(f.shell.IsTableMode()).toBe(mode === "selected");
       }
-      const reopened = await readOdtDocument(writeOdtDocument(f.doc, { title: "Owner" }), {
+      const reopened = await readOdtDocument(await writeOdtDocument(f.doc, { title: "Owner" }), {
         title: "Owner",
       });
       expect(

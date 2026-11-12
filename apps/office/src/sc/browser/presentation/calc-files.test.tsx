@@ -28,12 +28,12 @@ function store() {
   return new IndexedDbDocumentStore(crypto.randomUUID(), new IDBFactory());
 }
 /** Creates supported actual ODS source bytes. @returns Package. */
-function ods(): Uint8Array {
+async function ods(): Promise<Uint8Array> {
   const c = new CalcViewController();
   c.EnterString("Imported words");
   c.Select(1, 0);
   c.EnterString("=2*3");
-  const bytes = c.shell.SerializeOds();
+  const bytes = await c.shell.SerializeOds();
   c.Close();
   return bytes;
 }
@@ -239,7 +239,7 @@ it("imports computer ODS,offers name collision choices,and preserves real formul
   const mounted = render(<CalcFileDialog workflows={workflows} kind="open" onClose={onClose} />);
   fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
   const input = screen.getByLabelText("Browse"),
-    bytes = ods(),
+    bytes = await ods(),
     file = new File([bytes as BlobPart], "Budget.ods");
   fireEvent.change(input, { target: { files: [new File(["bad"], "bad.txt")] } });
   await screen.findByRole("alert");
@@ -380,7 +380,10 @@ it("rejects failed source input or unavailable storage,and exposes source comman
   c.Cancel();
   await expect(missing.OpenStored("missing")).rejects.toThrow(/unavailable/);
   await expect(workflows.OpenStored("missing")).rejects.toThrow(/no longer exists/);
-  await workflows.Import(new File([], ".ods"), ods(), { id: "import", title: "Imported document" });
+  await workflows.Import(new File([], ".ods"), await ods(), {
+    id: "import",
+    title: "Imported document",
+  });
   await workflows.Flush();
   expect(workflows.Show("open")).toBe(true);
   workflows.dialogs.Close();

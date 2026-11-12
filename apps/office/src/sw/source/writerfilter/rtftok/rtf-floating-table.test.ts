@@ -15,7 +15,7 @@ import { SwTableNode } from "../../core/docnode/node";
 import { RtfExport } from "../../filter/ww8/rtfexport";
 import { readOdtDocument } from "../../filter/xml/swxml";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
 
 /** Reads original RTF through the native tokenizer and mapper. @param source - Actual RTF body. @returns Connected Writer document. */
@@ -77,8 +77,8 @@ it("round trips the original floating row controls through ODT storage and RTF e
   const metadata = { title: "Floating RTF" };
   let odt: SwDoc | undefined, rtf: SwDoc | undefined;
   try {
-    const odtBytes = writeOdtDocument(source, metadata);
-    const xml = await new ZipFile(odtBytes).readTextEntry("content.xml");
+    const odtBytes = await writeOdtDocument(source, metadata);
+    const xml = await (await DocumentArchive.open(odtBytes)).readTextEntry("content.xml");
     expect(xml).toContain('loext:may-break-between-pages="true"');
     expect(xml).toContain('loext:allow-overlap="false"');
     expect(xml).toContain('draw:opacity="0%"');

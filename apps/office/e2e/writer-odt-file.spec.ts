@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 
 import { expect, test } from "@playwright/test";
 
-import { ZipFile } from "../src/package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../src/package/source/zippackage/document-archive";
 import { createDocument } from "../src/sfx2/source/doc/objsh";
 import { createWriterDocument } from "../src/sw/source/core/doc/doc";
 import { SwPosition } from "../src/sw/source/core/crsr/pam";
@@ -34,7 +34,7 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
   );
   shell.SetParagraphListKind("numbered");
   shell.ChangeParagraphListLevel("demote");
-  const sourceBytes = writeOdtDocument(source, docShell.GetDocumentState());
+  const sourceBytes = await writeOdtDocument(source, docShell.GetDocumentState());
 
   await page.goto("/writer");
   await page.getByRole("button", { name: "Open" }).click();
@@ -68,7 +68,7 @@ test("Writer opens and saves a bounded ODT file" /** Verifies the browser platfo
   const downloadPath = await download.path();
   if (downloadPath === null) throw new Error("Chromium did not expose the completed ODT download.");
   const downloadedBytes = new Uint8Array(await readFile(downloadPath));
-  const archive = new ZipFile(downloadedBytes);
+  const archive = await DocumentArchive.open(downloadedBytes);
   expect(await archive.readTextEntry("mimetype")).toBe("application/vnd.oasis.opendocument.text");
   const contentXml = await archive.readTextEntry("content.xml");
   expect(contentXml).toContain("BrowserODTContent");
@@ -92,7 +92,7 @@ test("Writer keeps one ODT text node across visible page fragments after reopen"
   const document = createWriterDocument();
   const shell = new SwWrtShell(new SwDocShell(document, metadata));
   shell.Insert(text);
-  const sourceBytes = writeOdtDocument(document, metadata);
+  const sourceBytes = await writeOdtDocument(document, metadata);
 
   await page.goto("/writer");
   await page.getByRole("button", { name: "Open" }).click();

@@ -314,7 +314,7 @@ it("actual selected native border page applies inner/outer/padding items to orig
       expect(boxes[2]?.GetBox().GetTop()?.GetColor().toUInt32()).toBe(0xabcdef);
       expect(table.GetTabLines()[1]?.GetTabBoxes()[0]).toBe(boxes[2]);
     }
-    const reopened = await readOdtDocument(writeOdtDocument(doc, { title: "Native page" }), {
+    const reopened = await readOdtDocument(await writeOdtDocument(doc, { title: "Native page" }), {
       title: "Native page",
     });
     expect(

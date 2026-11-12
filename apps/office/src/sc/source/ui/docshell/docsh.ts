@@ -692,9 +692,9 @@ export class ScDocShell extends SfxObjectShell {
     return streams;
   }
   /** Serializes committed actual cells through the existing ODS wrapper. @returns ODS package. */
-  SerializeOds(): Uint8Array {
+  async SerializeOds(): Promise<Uint8Array> {
     this.EnsureOpen();
-    return writeOdsDocument(this.document);
+    return await writeOdsDocument(this.document);
   }
   /** Serializes browser XML through the injected asynchronous filter. @returns XML streams. */
   SerializeXml(): Promise<XmlPackage> {

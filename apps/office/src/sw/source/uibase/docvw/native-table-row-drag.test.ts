@@ -121,7 +121,7 @@ it("native row drag shifts following borders and preserves cursor/list/box graph
   expect(f.node.GetText()).toBe("CeXll");
   expect(f.node.GetListId()).toBe("row-list");
   expect(f.node.GetNumRuleName()).toBe("Numbering");
-  const reopened = await readOdtDocument(writeOdtDocument(f.doc, { title: "Rows" }), {
+  const reopened = await readOdtDocument(await writeOdtDocument(f.doc, { title: "Rows" }), {
     title: "Rows",
   });
   expect(

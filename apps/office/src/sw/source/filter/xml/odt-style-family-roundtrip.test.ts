@@ -1,8 +1,8 @@
 /** @fileoverview Verifies pinned paragraph/text family identity through literal ODT definitions and Writer package cycles. */
 
 import { describe, expect, it } from "vitest";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createWriterDocument } from "../../core/doc/doc";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { readOdtDocument } from "./swxml";
@@ -31,8 +31,8 @@ async function withFamilyInput(
   body: string,
   reversed: boolean,
 ): Promise<Uint8Array> {
-  const input = new ZipFile(bytes);
-  const output = new ZipOutputStream();
+  const input = await DocumentArchive.open(bytes);
+  const output = new DocumentArchiveWriter();
   for (const entry of input.getEntryNames()) {
     if (entry === "styles.xml") {
       const xml = await input.readTextEntry(entry);
@@ -70,14 +70,14 @@ async function withFamilyInput(
       );
     } else output.putNextEntry(entry, await input.readEntry(entry));
   }
-  return output.finish();
+  return await output.finish();
 }
 
 describe("Writer ODT style family identity", /** Groups source-derived family-plus-name assertions. @returns Nothing. */ () => {
   it("keeps equal paragraph and character names independent through package cycles", /** Verifies declaration-order-independent direct, inherited and built-in family lookup against manual Writer state. @returns Completion after literal inputs. */ async () => {
     const writer = createWriterDocument();
     writer.GetTextFormatColl("heading-1");
-    const base = writeOdtDocument(writer, { title: "Family identity" });
+    const base = await writeOdtDocument(writer, { title: "Family identity" });
     const cases = [
       {
         name: "named family collision",
@@ -153,7 +153,7 @@ describe("Writer ODT style family identity", /** Groups source-derived family-pl
           { title: testCase.name },
         );
         const reopened = await readOdtDocument(
-          writeOdtDocument(imported.document, { title: testCase.name }),
+          await writeOdtDocument(imported.document, { title: testCase.name }),
           { title: testCase.name },
         );
         for (const document of [imported.document, reopened.document]) {

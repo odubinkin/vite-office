@@ -188,7 +188,7 @@ it.each([
         ),
       ),
     );
-    const stream = await OOXMLStreamImpl.createStream(new ZipStorage(bytes)),
+    const stream = await OOXMLStreamImpl.createStream(await ZipStorage.open(bytes)),
       document = new OOXMLDocument(stream, null),
       s = session();
     /** Refuses body callbacks in a settings part. @returns Never. */ function unexpected(): never {

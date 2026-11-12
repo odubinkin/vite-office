@@ -117,7 +117,7 @@ it.each([false, true])(
         expect(box.GetParagraphs()[0]).toBe(node);
         expect(node.GetText()).toBe("Original native spacing cell");
       }
-      const reopened = await readOdtDocument(writeOdtDocument(doc, { title: "SpacingUI" }), {
+      const reopened = await readOdtDocument(await writeOdtDocument(doc, { title: "SpacingUI" }), {
         title: "SpacingUI",
       });
       expect(

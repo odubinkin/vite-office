@@ -5,7 +5,7 @@ import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { RES_PARATR_TABSTOP } from "../../../inc/hintids";
 import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { createTabs } from "../../../../../test/tab-item-fixtures";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { writeOdtDocument } from "./wrtxml";
 import { readOdtDocument } from "./swxml";
 
@@ -15,8 +15,8 @@ it("round trips a named style containing only an explicit empty tab sequence", /
   try {
     const style = doc.MakeTextFormatColl("TabsOnly");
     style.SetFormatAttr(createTabs(RES_PARATR_TABSTOP, []));
-    const bytes = writeOdtDocument(doc, metadata);
-    const styles = await new ZipFile(bytes).readTextEntry("styles.xml");
+    const bytes = await writeOdtDocument(doc, metadata);
+    const styles = await (await DocumentArchive.open(bytes)).readTextEntry("styles.xml");
     expect(styles).toContain(
       "<style:paragraph-properties><style:tab-stops/></style:paragraph-properties>",
     );

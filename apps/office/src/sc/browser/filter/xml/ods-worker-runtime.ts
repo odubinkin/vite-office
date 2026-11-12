@@ -34,7 +34,7 @@ export async function processOdsWorkerRequest(request: OdsWorkerRequest): Promis
   const document = decodeCalcDocument(request.document);
   try {
     if (request.operation === "export-xml") return writeOdsXml(document);
-    return writeOdsDocument(document).buffer as ArrayBuffer;
+    return (await writeOdsDocument(document)).buffer as ArrayBuffer;
   } finally {
     document.Dispose();
   }

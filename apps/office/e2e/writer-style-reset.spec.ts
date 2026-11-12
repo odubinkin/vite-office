@@ -17,7 +17,7 @@ function required<T>(value: T | undefined): T {
 }
 
 /** Builds real common styles, hard paragraph attributes and whole/partial formatting in an ODT. @returns Complete package bytes. */
-function resetOdt(): Uint8Array {
+async function resetOdt(): Promise<Uint8Array> {
   const doc = new SwDoc(),
     before = required(doc.paragraphs[0]);
   before.SetText("BeforeResetNeighbor");
@@ -41,7 +41,7 @@ function resetOdt(): Uint8Array {
   });
   link.ToggleTextRangeFormat(0, link.Len(), "bold");
   doc.GetNodes().MakeTextNode("AfterResetNeighbor");
-  const bytes = writeOdtDocument(
+  const bytes = await writeOdtDocument(
     doc,
     createDocument({ id: "reset-native", title: "Native style reset", suiteId: "writer" }),
   );
@@ -90,7 +90,7 @@ for (const width of [1280, 390])
     await page.getByLabel("Browse").setInputFiles({
       name: "reset-native.odt",
       mimeType: "application/vnd.oasis.opendocument.text",
-      buffer: Buffer.from(resetOdt()),
+      buffer: Buffer.from(await resetOdt()),
     });
     const editor = page.getByLabel("Writer document body", { exact: true }),
       select = page

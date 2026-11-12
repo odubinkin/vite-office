@@ -54,7 +54,7 @@ it("resizes actual columns and rows through shared tracking,retains marks,and re
     fireEvent.pointerUp(window, { pointerId: 2, clientY: 138 });
     expect(doc.GetRowHeight(0, 0, false)).toBe(600);
     expect(screen.getByRole("gridcell", { name: /^B1(?:\s|$)/ })).toHaveStyle({ height: "40px" });
-    const copy = await readOdsDocument(c.shell.SerializeOds());
+    const copy = await readOdsDocument(await c.shell.SerializeOds());
     expect(copy.GetColWidth(1, 0)).toBe(1590);
     expect(copy.GetRowHeight(0, 0, false)).toBe(600);
     boundary = screen.getByRole("button", { name: "Resize column B" });

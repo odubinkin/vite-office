@@ -236,7 +236,7 @@ it("reopens actual ODS bytes after general compiled formula copying", /** Fresh 
   doc.SetValue(new ScAddress(1, 0, 0), 2);
   doc.SetValue(new ScAddress(3, 2, 0), 7);
   doc.GetFormulaCell(new ScAddress(2, 2, 0))?.SetDirty();
-  const reopened = await readOdsDocument(writeOdsDocument(doc));
+  const reopened = await readOdsDocument(await writeOdsDocument(doc));
   expect(reopened.GetValue(new ScAddress(2, 2, 0))).toBe(9);
   reopened.SetValue(new ScAddress(3, 2, 0), 20);
   expect(reopened.GetValue(new ScAddress(2, 2, 0))).toBe(22);
@@ -357,7 +357,7 @@ it("orchestrates real default-content range paste,subscriptions,recalculation an
   expect(doc.GetValue(new ScAddress(5, 5, 0))).toBe(4);
   doc.SetValue(new ScAddress(4, 5, 0), 20);
   expect(doc.GetValue(new ScAddress(5, 5, 0))).toBe(21);
-  const reopened = await readOdsDocument(writeOdsDocument(doc));
+  const reopened = await readOdsDocument(await writeOdsDocument(doc));
   reopened.SetValue(new ScAddress(4, 5, 0), 40);
   expect(reopened.GetValue(new ScAddress(5, 5, 0))).toBe(41);
   reopened.Dispose();

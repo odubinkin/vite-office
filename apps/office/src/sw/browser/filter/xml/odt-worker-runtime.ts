@@ -11,7 +11,7 @@ import {
   type WorkerRequest,
   type WorkerResult,
 } from "../../../../framework/browser/workers/worker-protocol";
-import type { ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
+import type { ArchiveLimits } from "../../../../package/source/zippackage/document-archive";
 import {
   createInlineOdtFilterService,
   normalizeOdtFilterError,
@@ -31,7 +31,7 @@ export interface OdtWorkerImportRequest {
   readonly bytes: ArrayBuffer | XmlPackage;
   readonly metadata: Readonly<{ title: string; locale?: string }>;
   readonly operation: "import";
-  readonly zipLimits?: ZipFileLimits;
+  readonly zipLimits?: ArchiveLimits;
 }
 
 /** Export request carrying a structured-clone Writer snapshot. */

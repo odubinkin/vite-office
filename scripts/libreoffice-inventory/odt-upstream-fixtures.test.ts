@@ -8,7 +8,7 @@ import path from "node:path";
 
 import { describe, expect, it, vi } from "vitest";
 
-import { ZipFile } from "../../apps/office/src/package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../apps/office/src/package/source/zippackage/document-archive";
 import { SfxRequest } from "../../apps/office/src/sfx2/source/control/request";
 import { createDocument } from "../../apps/office/src/sfx2/source/doc/objsh";
 import { SwPosition } from "../../apps/office/src/sw/source/core/crsr/pam";
@@ -162,7 +162,7 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
       }
       const reopenedDiagnostics: { name: string }[] = [];
       const reopened = await readOdtDocument(
-        writeOdtDocument(imported.document, { title: fixture.file }),
+        await writeOdtDocument(imported.document, { title: fixture.file }),
         { title: fixture.file },
         undefined,
         {
@@ -206,7 +206,7 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
     }
     assertBounds(imported.document);
     const reopened = await readOdtDocument(
-      writeOdtDocument(imported.document, { title: imported.title }),
+      await writeOdtDocument(imported.document, { title: imported.title }),
       { title: file },
     );
     assertBounds(reopened.document);
@@ -253,7 +253,7 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
     expect(shell.Redo()).toBe(true);
     expect(last.GetListLabel()).toBe("3");
     const reopened = await readOdtDocument(
-      writeOdtDocument(imported.document, { title: imported.title }),
+      await writeOdtDocument(imported.document, { title: imported.title }),
       metadata,
     );
     expect(reopened.document.paragraphs[0]?.GetListLabel()).toBe("1");
@@ -282,7 +282,7 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
         },
       ]);
       const roundTripped = await readOdtDocument(
-        writeOdtDocument(imported.document, { title: imported.title }),
+        await writeOdtDocument(imported.document, { title: imported.title }),
         metadata,
       );
       expect(normalizeWriterSemantics(roundTripped.document)).toEqual(
@@ -349,8 +349,8 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
         const bytes = new Uint8Array(fs.readFileSync(path.join("apps/office/src", fixture.file)));
         const imported = await readOdtDocument(bytes, { title: "Pinned Writer fixture" });
         fixture.assert(imported.document);
-        const normalized = writeOdtDocument(imported.document, { title: "Phase 7 parity" });
-        const archive = new ZipFile(normalized);
+        const normalized = await writeOdtDocument(imported.document, { title: "Phase 7 parity" });
+        const archive = await DocumentArchive.open(normalized);
         expect(archive.getEntryNames()).toEqual([
           "mimetype",
           "META-INF/manifest.xml",
@@ -369,7 +369,9 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
         expect(normalizeWriterSemantics(reopened.document)).toEqual(
           normalizeWriterSemantics(imported.document),
         );
-        const second = new ZipFile(writeOdtDocument(reopened.document, { title: reopened.title }));
+        const second = await DocumentArchive.open(
+          await writeOdtDocument(reopened.document, { title: reopened.title }),
+        );
         for (const entry of [
           "META-INF/manifest.xml",
           "styles.xml",

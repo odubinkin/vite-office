@@ -45,7 +45,7 @@ for (const viewport of [1280, 390])
         node.SetText(`Cell${row}-${column}`);
       }
     doc.nodes.MakeTextNode("After");
-    const bytes = writeOdtDocument(
+    const bytes = await writeOdtDocument(
       doc,
       createDocument({ id: "properties", suiteId: "writer", title: "Properties" }),
     );

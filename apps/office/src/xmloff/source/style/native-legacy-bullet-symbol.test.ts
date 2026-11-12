@@ -152,10 +152,14 @@ it("preserves converted native glyph and family through common automatic body ce
   let imported: SwDoc | undefined, reopened: SwDoc | undefined, transferred: SwDoc | undefined;
   try {
     imported = (
-      await readOdtDocument(writeOdtDocument(source, { title: "Legacy" }), { title: "Legacy" })
+      await readOdtDocument(await writeOdtDocument(source, { title: "Legacy" }), {
+        title: "Legacy",
+      })
     ).document;
     reopened = (
-      await readOdtDocument(writeOdtDocument(imported, { title: "Legacy" }), { title: "Legacy" })
+      await readOdtDocument(await writeOdtDocument(imported, { title: "Legacy" }), {
+        title: "Legacy",
+      })
     ).document;
     transferred = decodeWriterDocument(encodeWriterDocument(imported));
     for (const doc of [imported, reopened, transferred]) {

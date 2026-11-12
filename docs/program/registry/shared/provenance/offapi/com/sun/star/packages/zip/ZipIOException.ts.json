@@ -26,10 +26,6 @@
         {
           "path": "apps/office/src/offapi/com/sun/star/packages/zip/ZipIOException.ts",
           "marker": "ZipIOException"
-        },
-        {
-          "path": "apps/office/src/package/source/zipapi/native-local-records.test.ts",
-          "marker": "@fileoverview"
         }
       ],
       "upstream": [

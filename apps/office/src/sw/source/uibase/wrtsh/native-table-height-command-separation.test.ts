@@ -106,7 +106,7 @@ for (const selected of [false, true])
             ),
           ).toBe(true);
         }
-        const reopened = await readOdtDocument(writeOdtDocument(doc, { title: "Height" }), {
+        const reopened = await readOdtDocument(await writeOdtDocument(doc, { title: "Height" }), {
           title: "Height",
         });
         expect(

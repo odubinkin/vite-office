@@ -151,7 +151,7 @@ test("keeps native column width/visibility/history and actual ODS in a DOM-free 
           cell.ShowColumns(false);
           const hidden = doc.ColHidden(0, 0),
             retained = doc.GetColWidth(0, 0, false);
-          const saved = await n.readOdsDocument(n.writeOdsDocument(doc));
+          const saved = await n.readOdsDocument(await n.writeOdsDocument(doc));
           try {
             return {
               width,

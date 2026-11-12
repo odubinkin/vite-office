@@ -26,10 +26,6 @@
         {
           "path": "apps/office/src/sal/osl/unx/time.ts",
           "marker": "osl_getSystemTime"
-        },
-        {
-          "path": "apps/office/src/package/source/zipapi/native-entry-defaults.test.ts",
-          "marker": "@fileoverview"
         }
       ],
       "upstream": [

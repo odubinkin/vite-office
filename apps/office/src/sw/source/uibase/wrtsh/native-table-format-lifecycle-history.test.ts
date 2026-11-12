@@ -128,7 +128,7 @@ it.each(["cursor", "row", "table"])(
       "format-page-list",
       "Numbering",
     ]);
-    const opened = await readOdtDocument(writeOdtDocument(f.doc, { title: "Format" }), {
+    const opened = await readOdtDocument(await writeOdtDocument(f.doc, { title: "Format" }), {
         title: "Format",
       }),
       table = required(opened.document.GetTables()[0]);

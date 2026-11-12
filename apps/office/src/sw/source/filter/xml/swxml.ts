@@ -4,7 +4,11 @@
 
 import { readPlainPackageManifest } from "../../../../package/source/zippackage/ZipPackage";
 import { MIMETYPE_OASIS_OPENDOCUMENT_TEXT as ODT_MIMETYPE } from "../../../../comphelper/inc/documentconstants";
-import { ZipFile, Checks, type ZipFileLimits } from "../../../../package/source/zipapi/ZipFile";
+import {
+  DocumentArchive,
+  ArchiveChecks,
+  type ArchiveLimits,
+} from "../../../../package/source/zippackage/document-archive";
 import type { XmlPackage } from "../../../../svl/source/misc/storage";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
 import type { OdfXmlDiagnostic } from "../../../../xmloff/source/core/xmlimp";
@@ -37,15 +41,15 @@ export class SwXMLReader {
   public async Read(
     bytes: Uint8Array | XmlPackage,
     metadata: Readonly<{ title: string; locale?: string }>,
-    limits?: ZipFileLimits,
+    limits?: ArchiveLimits,
     control: OdtImportControl = {},
   ): Promise<ImportedWriterDocument> {
     checkpoint(control, "package");
     const packageFile =
       bytes instanceof Uint8Array
         ? limits === undefined
-          ? new ZipFile(bytes, undefined, Checks.TryCheckInsensitive)
-          : new ZipFile(bytes, limits, Checks.TryCheckInsensitive)
+          ? await DocumentArchive.open(bytes, undefined, ArchiveChecks.TryCheckInsensitive)
+          : await DocumentArchive.open(bytes, limits, ArchiveChecks.TryCheckInsensitive)
         : {
             getEntryNames:
               /** Reads an unpacked Writer stream under the existing import limits.  @returns Operation result. */ () =>
@@ -157,7 +161,7 @@ function isViewableOpenTypeFont(bytes: Uint8Array): boolean {
 export async function readOdtDocument(
   bytes: Uint8Array | XmlPackage,
   metadata: Readonly<{ title: string; locale?: string }>,
-  limits?: ZipFileLimits,
+  limits?: ArchiveLimits,
   control?: OdtImportControl,
 ): Promise<ImportedWriterDocument> {
   return new SwXMLReader().Read(bytes, metadata, limits, control);
@@ -165,7 +169,7 @@ export async function readOdtDocument(
 
 /** Reads and bounds one UTF-8 package stream. @param packageFile - Validated ZIP. @param name - Entry path. @param control - Cooperative controls. @param stage - Progress stage. @returns Decoded text. */
 async function readXmlEntry(
-  packageFile: Pick<ZipFile, "getEntryNames" | "readEntry" | "getEntryMethod">,
+  packageFile: Pick<DocumentArchive, "getEntryNames" | "readEntry" | "getEntryMethod">,
   name: string,
   control: OdtImportControl,
   stage?: OdtImportProgressStage,

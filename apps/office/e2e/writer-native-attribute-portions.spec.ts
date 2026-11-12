@@ -53,7 +53,7 @@ for (const width of [1280, 390])
         title: "Native portions",
       }),
       shell = new SwDocShell(doc, metadata),
-      bytes = writeOdtDocument(doc, metadata);
+      bytes = await writeOdtDocument(doc, metadata);
     shell.Close();
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/writer");

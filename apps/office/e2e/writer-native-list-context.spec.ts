@@ -52,7 +52,7 @@ for (const width of [1280, 390])
     const cell = doc.nodes.AppendTableRow(table, 1).GetTabBoxes()[0]?.GetParagraphs()[0];
     if (cell === undefined) throw new Error("Missing context neighbor");
     cell.SetText("Neighbor");
-    const bytes = writeOdtDocument(doc, metadata);
+    const bytes = await writeOdtDocument(doc, metadata);
     shell.Close();
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/writer");

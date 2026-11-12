@@ -3,7 +3,7 @@ import { expect, it } from "vitest";
 import { ScXMLImport } from "./xmlimprt";
 import { ScDocument } from "../../../inc/document";
 import { readOdsDocument, writeOdsDocument } from "./xmlwrap";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScXMLExport } from "./xmlexprt";
 import { ScAddress } from "../../../inc/address";
@@ -26,8 +26,8 @@ it("imports native HMM property conversion,repeated widths and non-visible state
   expect(doc.GetColWidth(3, 0)).toBe(1280);
   let current = doc;
   for (let count = 0; count < 2; count++) {
-    const bytes = writeOdsDocument(current),
-      content = await new ZipFile(bytes).readTextEntry("content.xml");
+    const bytes = await writeOdsDocument(current),
+      content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     expect(content).toContain('style:family="table-column"');
     expect(content).toContain('table:visibility="collapse"');
     expect(content).toContain('table:number-columns-repeated="2"');

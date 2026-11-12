@@ -23,7 +23,7 @@ test("one original bullet has native master/follows through reformat, edit, hist
   doc.EnsureNumRule("NativeFollow", "bullet");
   node.SetNumRule("NativeFollow");
   node.AddToList();
-  const bytes = writeOdtDocument(doc, { title: "Native follow" });
+  const bytes = await writeOdtDocument(doc, { title: "Native follow" });
   doc.Dispose();
   await page.goto("/writer");
   await open(page, bytes);

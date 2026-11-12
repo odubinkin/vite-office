@@ -1,8 +1,8 @@
 /** @fileoverview Verifies native optional span-style behavior through literal ODT input and Writer package cycles. */
 
 import { describe, expect, it } from "vitest";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createWriterDocument } from "../../core/doc/doc";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { readOdtDocument } from "./swxml";
@@ -15,8 +15,8 @@ async function withSpanInput(
   automaticStyles = "",
   commonStyles = "",
 ): Promise<Uint8Array> {
-  const input = new ZipFile(bytes);
-  const output = new ZipOutputStream();
+  const input = await DocumentArchive.open(bytes);
+  const output = new DocumentArchiveWriter();
   const styleDefinitions =
     '<style:style style:name="SpanBold" style:family="text"><style:text-properties fo:font-weight="bold"/></style:style><style:style style:name="SpanItalic" style:family="text"><style:text-properties fo:font-style="italic"/></style:style><style:style style:name="ParagraphBold" style:family="paragraph"><style:text-properties fo:font-weight="bold" fo:font-style="italic"/></style:style>';
   for (const entry of input.getEntryNames()) {
@@ -46,12 +46,12 @@ async function withSpanInput(
       );
     } else output.putNextEntry(entry, await input.readEntry(entry));
   }
-  return output.finish();
+  return await output.finish();
 }
 
 describe("Writer optional span style ODT contract", /** Groups source-derived package assertions. @returns Nothing. */ () => {
   it("preserves unstyled spans, inherited formatting, controls and hyperlinks through package cycles", /** Checks literal native span inputs against manual Writer projections after import and reimport. @returns Completion after all packages. */ async () => {
-    const base = writeOdtDocument(createWriterDocument(), { title: "Optional span styles" });
+    const base = await writeOdtDocument(createWriterDocument(), { title: "Optional span styles" });
     const cases = [
       {
         name: "missing style",
@@ -115,7 +115,7 @@ describe("Writer optional span style ODT contract", /** Groups source-derived pa
         title: testCase.name,
       });
       const reopened = await readOdtDocument(
-        writeOdtDocument(imported.document, { title: testCase.name }),
+        await writeOdtDocument(imported.document, { title: testCase.name }),
         { title: testCase.name },
       );
       for (const document of [imported.document, reopened.document]) {
@@ -138,7 +138,9 @@ describe("Writer optional span style ODT contract", /** Groups source-derived pa
   });
 
   it("retains inherited formatting for unresolved and property-less styles through package cycles", /** Verifies family-specific fallback and independent automatic deltas using genuine named parent styles. @returns Completion after literal ODT cases. */ async () => {
-    const base = writeOdtDocument(createWriterDocument(), { title: "Unresolved character styles" });
+    const base = await writeOdtDocument(createWriterDocument(), {
+      title: "Unresolved character styles",
+    });
     const commonStyles =
       '<style:style style:name="CommonBold" style:family="text"><style:text-properties fo:font-weight="bold"/></style:style><style:style style:name="CommonInherited" style:family="text" style:parent-style-name="CommonBold"/>';
     const automaticStyles =
@@ -240,7 +242,7 @@ describe("Writer optional span style ODT contract", /** Groups source-derived pa
         { title: testCase.name },
       );
       const reopened = await readOdtDocument(
-        writeOdtDocument(imported.document, { title: testCase.name }),
+        await writeOdtDocument(imported.document, { title: testCase.name }),
         { title: testCase.name },
       );
       for (const document of [imported.document, reopened.document]) {

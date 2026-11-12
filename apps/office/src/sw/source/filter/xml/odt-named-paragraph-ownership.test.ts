@@ -279,7 +279,7 @@ describe("Writer document-owned named paragraph hierarchy", /** Groups literal n
         expect(encodeWriterDocument(decodeWriterDocument(encodeWriterDocument(doc)))).toEqual(
           encodeWriterDocument(doc),
         );
-        doc = (await readOdtDocument(writeOdtDocument(doc, metadata), metadata)).document;
+        doc = (await readOdtDocument(await writeOdtDocument(doc, metadata), metadata)).document;
       }
     });
 
@@ -319,7 +319,8 @@ describe("Writer document-owned named paragraph hierarchy", /** Groups literal n
     node.SetText("EscapedOwnProof");
     expect(exportContentXml(doc)).toContain('style:parent-style-name="Child_20_display"');
     expect(exportStylesXml(doc)).toContain('style:parent-style-name="Parent_20_display"');
-    const reopened = (await readOdtDocument(writeOdtDocument(doc, metadata), metadata)).document;
+    const reopened = (await readOdtDocument(await writeOdtDocument(doc, metadata), metadata))
+      .document;
     const restored = required(reopened.FindTextFormatCollByName("Child display"));
     expect(restored.DerivedFrom()).toBe(
       required(reopened.FindTextFormatCollByName("Parent display")),

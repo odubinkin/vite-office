@@ -2,7 +2,7 @@
 import { expect, test } from "@playwright/test";
 import { openBrowserMenu, hoverBrowserMenuItem } from "../test-support/menu-pointer-e2e";
 import { readFile } from "node:fs/promises";
-import { ZipFile } from "../src/package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../src/package/source/zippackage/document-archive";
 for (const width of [1280, 390])
   test(`Writer formatting dialog keys width=${width}`, /** Uses actual menus,requests,document and ODT owners. @param fixtures - Fixtures. @param fixtures.page - Actual page. @returns Completion. */ async ({
     page,
@@ -128,7 +128,7 @@ for (const width of [1280, 390])
     await page.getByRole("button", { name: "Download ODT", exact: true }).click();
     const file = await (await pending).path();
     if (file === null) throw Error("Missing ODT");
-    const zip = new ZipFile(new Uint8Array(await readFile(file))),
+    const zip = await DocumentArchive.open(new Uint8Array(await readFile(file))),
       xml = await zip.readTextEntry("content.xml");
     expect(xml).toContain('fo:margin-top="');
     expect(xml).toContain("style:tab-stop");

@@ -2,8 +2,8 @@
 
 import { describe, expect, it } from "vitest";
 
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { LineNumberPosition } from "../../../inc/lineinfo";
 import { FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
@@ -25,8 +25,8 @@ async function rewriteStyles(
   bytes: Uint8Array,
   transform: (xml: string) => string,
 ): Promise<Uint8Array> {
-  const archive = new ZipFile(bytes);
-  const output = new ZipOutputStream();
+  const archive = await DocumentArchive.open(bytes);
+  const output = new DocumentArchiveWriter();
   for (const name of archive.getEntryNames())
     output.putNextEntry(
       name,
@@ -34,14 +34,14 @@ async function rewriteStyles(
         ? new TextEncoder().encode(transform(await archive.readTextEntry(name)))
         : await archive.readEntry(name),
     );
-  return output.finish();
+  return await output.finish();
 }
 
 describe("Writer ODF line numbering", /** Groups global configuration cases. @returns Nothing. */ () => {
   it("preserves pinned defaults and a complete explicit configuration", /** Checks supported settings round trip. @returns Completion after import. */ async () => {
     const writer = createWriterDocument();
-    const bytes = writeOdtDocument(writer, metadata);
-    const styles = await new ZipFile(bytes).readTextEntry("styles.xml");
+    const bytes = await writeOdtDocument(writer, metadata);
+    const styles = await (await DocumentArchive.open(bytes)).readTextEntry("styles.xml");
     expect(styles).toContain('<text:linenumbering-configuration text:number-lines="false"');
     expect(
       (await readOdtDocument(bytes, metadata)).document.GetLineNumberInfo().QueryValue(),
@@ -58,8 +58,10 @@ describe("Writer ODF line numbering", /** Groups global configuration cases. @re
     info.SetPosFromLeft(720);
     info.SetPos(LineNumberPosition.Outside);
     writer.SetLineNumberInfo(info);
-    const explicitBytes = writeOdtDocument(writer, metadata);
-    const explicitStyles = await new ZipFile(explicitBytes).readTextEntry("styles.xml");
+    const explicitBytes = await writeOdtDocument(writer, metadata);
+    const explicitStyles = await (
+      await DocumentArchive.open(explicitBytes)
+    ).readTextEntry("styles.xml");
     expect(explicitStyles).toContain('text:count-empty-lines="false"');
     expect(explicitStyles).toContain('text:count-in-text-boxes="true"');
     expect(explicitStyles).toContain('text:restart-on-page="true"');
@@ -75,7 +77,7 @@ describe("Writer ODF line numbering", /** Groups global configuration cases. @re
   });
 
   it("reads omission defaults and rejects malformed or duplicate settings", /** Checks defaults and malformed input. @returns Completion after import. */ async () => {
-    const bytes = writeOdtDocument(createWriterDocument(), metadata);
+    const bytes = await writeOdtDocument(createWriterDocument(), metadata);
     const defaults = await readOdtDocument(
       await rewriteStyles(
         bytes,
@@ -126,8 +128,8 @@ describe("Writer ODF line numbering", /** Groups global configuration cases. @re
       const info = writer.GetLineNumberInfo();
       info.SetPos(position);
       writer.SetLineNumberInfo(info);
-      const bytes = writeOdtDocument(writer, metadata);
-      expect(await new ZipFile(bytes).readTextEntry("styles.xml")).toContain(
+      const bytes = await writeOdtDocument(writer, metadata);
+      expect(await (await DocumentArchive.open(bytes)).readTextEntry("styles.xml")).toContain(
         `text:number-position="${label}"`,
       );
       expect((await readOdtDocument(bytes, metadata)).document.GetLineNumberInfo().GetPos()).toBe(
@@ -171,7 +173,7 @@ describe("Writer ODF line numbering", /** Groups global configuration cases. @re
 
 it("imports native narrowed intervals and reexports applied values instead of original lexemes", /** Real package/model/filter owners retain defaults and zero separator values. @returns Completion. */ async () => {
   const original = createWriterDocument();
-  const bytes = writeOdtDocument(original, metadata);
+  const bytes = await writeOdtDocument(original, metadata);
   for (const [raw, count, divider] of [
     ["32768", 5, 3],
     ["65537", 1, 1],
@@ -196,9 +198,9 @@ it("imports native narrowed intervals and reexports applied values instead of or
       countBy: count,
       dividerCountBy: divider,
     });
-    const saved = await new ZipFile(writeOdtDocument(reopened.document, metadata)).readTextEntry(
-      "styles.xml",
-    );
+    const saved = await (
+      await DocumentArchive.open(await writeOdtDocument(reopened.document, metadata))
+    ).readTextEntry("styles.xml");
     expect(saved).toContain(`text:increment="${count}"`);
     expect(saved).toContain(
       `<text:linenumbering-separator text:increment="${divider}">*</text:linenumbering-separator>`,
@@ -213,8 +215,8 @@ it("exports the original signed16 interval properties from unsigned native core 
   info.SetDividerCountBy(32768);
   info.SetDivider("*");
   doc.SetLineNumberInfo(info);
-  const bytes = writeOdtDocument(doc, metadata),
-    xml = await new ZipFile(bytes).readTextEntry("styles.xml");
+  const bytes = await writeOdtDocument(doc, metadata),
+    xml = await (await DocumentArchive.open(bytes)).readTextEntry("styles.xml");
   expect(xml).toContain('text:increment="-1"');
   expect(xml).toContain(
     '<text:linenumbering-separator text:increment="-32768">*</text:linenumbering-separator>',

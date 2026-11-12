@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zippackage/document-archive.ts",
+          "marker": "DocumentArchive"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/document-archive.ts",
+          "marker": "DocumentArchiveWriter"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/package/source/zippackage/document-archive.ts",
+    "rationale": "Delegates document ZIP parsing, extraction, CRC validation and archive creation to @zip.js/zip.js; applies document path, case-collision and browser resource policies. This is local integration infrastructure and does not claim native ZIP implementation parity.",
+    "responsibilities": [
+      "Delegates document ZIP parsing, extraction, CRC validation and archive creation to @zip.js/zip.js; applies document path, case-collision and browser resource policies. This is local integration infrastructure and does not claim native ZIP implementation parity."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "A maintained ZIP dependency replaces custom ZIP codec and record mechanisms."
+    },
+    "status": "local-only"
+  }
+}

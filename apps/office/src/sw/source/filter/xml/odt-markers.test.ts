@@ -1,8 +1,8 @@
 /** @fileoverview Checks canonical Writer mark positions, Worker transfer and ODT marker export. */
 
 import { describe, expect, it } from "vitest";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createWriterDocument } from "../../core/doc/doc";
 import { SwPosition } from "../../core/crsr/pam";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
@@ -20,8 +20,8 @@ async function withContent(
   source: Uint8Array,
   transform: (xml: string) => string,
 ): Promise<Uint8Array> {
-  const input = new ZipFile(source);
-  const output = new ZipOutputStream();
+  const input = await DocumentArchive.open(source);
+  const output = new DocumentArchiveWriter();
   for (const name of input.getEntryNames())
     output.putNextEntry(
       name,
@@ -29,7 +29,7 @@ async function withContent(
         ? new TextEncoder().encode(transform(await input.readTextEntry(name)))
         : await input.readEntry(name),
     );
-  return output.finish();
+  return await output.finish();
 }
 
 describe("Writer inline marker positions", /** Groups mark and pagination hint tests. @returns Nothing. */ () => {
@@ -61,8 +61,8 @@ describe("Writer inline marker positions", /** Groups mark and pagination hint t
       transferred.GetIDocumentMarkAccess().FindMark("inside-link")?.GetMarkPos().GetContentIndex(),
     ).toBe(1);
     expect(transferred.GetIDocumentMarkAccess().GetSoftPageBreaks()[0]?.GetContentIndex()).toBe(3);
-    const bytes = writeOdtDocument(transferred, metadata);
-    const xml = await new ZipFile(bytes).readTextEntry("content.xml");
+    const bytes = await writeOdtDocument(transferred, metadata);
+    const xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     expect(xml).toContain('<text:bookmark text:name="inside-link"/>');
     expect(xml).toContain("<text:soft-page-break/>");
     expect(xml).toContain('text:visited-style-name="Visited_20_Internet_20_Link"');
@@ -127,7 +127,7 @@ describe("Writer inline marker positions", /** Groups mark and pagination hint t
     expect(
       /** Rejects a detached node. @returns Nothing. */ () => marks.AddSoftPageBreak(detached, 0),
     ).toThrow("another document");
-    const base = writeOdtDocument(createWriterDocument(), metadata);
+    const base = await writeOdtDocument(createWriterDocument(), metadata);
     const candidate = await withContent(
       base,
       /** Removes a required name. @param xml - ODF content. @returns Modified content. */ (xml) =>

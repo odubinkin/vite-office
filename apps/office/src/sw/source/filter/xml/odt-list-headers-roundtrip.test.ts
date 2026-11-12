@@ -1,7 +1,7 @@
 /** @fileoverview Verifies native list headers, item continuations and counted-state ODT/copy/Worker transport. */
 import { expect, it } from "vitest";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createWriterDocument, type SwDoc } from "../../core/doc/doc";
 import { applyWriterParagraphList } from "../../core/doc/list";
 import type { SwNumRule } from "../../core/doc/number";
@@ -20,8 +20,8 @@ async function input(
   common: boolean,
   bullet = false,
 ): Promise<Uint8Array> {
-  const zip = new ZipFile(baseline),
-    output = new ZipOutputStream();
+  const zip = await DocumentArchive.open(baseline),
+    output = new DocumentArchiveWriter();
   const declaration = `<text:list-style style:name="Headers"><text:list-level-style-${bullet ? "bullet" : "number"} text:level="1" ${bullet ? 'text:bullet-char="●"' : 'style:num-format="1" text:start-value="7"'} style:num-suffix="."/><text:list-level-style-number text:level="2" style:num-format="1" style:num-suffix="." text:start-value="5" text:display-levels="2"/><text:list-level-style-number text:level="3" style:num-format="1" style:num-suffix="." text:start-value="3" text:display-levels="3"/></text:list-style>`;
   for (const entry of zip.getEntryNames()) {
     if (entry === "styles.xml" || entry === "content.xml") {
@@ -42,7 +42,7 @@ async function input(
       output.putNextEntry(entry, new TextEncoder().encode(xml));
     } else output.putNextEntry(entry, await zip.readEntry(entry));
   }
-  return output.finish();
+  return await output.finish();
 }
 /** Reads canonical text, participation, restart, counters and visible labels. @param document - Writer model. @returns State records. */
 function state(document: SwDoc) {
@@ -77,7 +77,7 @@ function events(xml: string): string[] {
 }
 
 it("round-trips native headers and unnumbered item continuations", /** Verifies literal common/automatic state, structure, independent copies, Worker16 and reopen. @returns Completion. */ async () => {
-  const baseline = writeOdtDocument(createWriterDocument(), { title: "Headers" });
+  const baseline = await writeOdtDocument(createWriterDocument(), { title: "Headers" });
   for (const test of [
     {
       body: '<text:list-header text:start-value="ignored"><text:p>header</text:p><text:p>header tail</text:p></text:list-header><text:list-item text:start-value="0"><text:p>zero</text:p><text:p>tail</text:p></text:list-item><text:list-header><text:p>after</text:p></text:list-header><text:list-item><text:p>next</text:p></text:list-item>',
@@ -279,10 +279,10 @@ it("round-trips native headers and unnumbered item continuations", /** Verifies 
       expect(record.swModelVersion).toBe(17);
       const transferred = decodeWriterDocument(record);
       expect(state(transferred)).toEqual(expected);
-      const exported = writeOdtDocument(imported.document, { title: "Headers" });
+      const exported = await writeOdtDocument(imported.document, { title: "Headers" });
       const xml =
-        (await new ZipFile(exported).readTextEntry("styles.xml")) +
-        (await new ZipFile(exported).readTextEntry("content.xml"));
+        (await (await DocumentArchive.open(exported)).readTextEntry("styles.xml")) +
+        (await (await DocumentArchive.open(exported)).readTextEntry("content.xml"));
       expect(xml).toContain('office:version="1.3"');
       expect(events(xml)).toEqual(test.events);
       expect(xml).not.toContain("list-header text:start-value=");
@@ -314,10 +314,10 @@ it("omits restart metadata on uncounted paragraphs as native NumberingIsNumber p
   ).toEqual(expected);
   const worker = decodeWriterDocument(encodeWriterDocument(document));
   expect(worker.paragraphs[1]?.IsListRestart()).toBe(true);
-  const exported = writeOdtDocument(document, { title: "Headers" });
+  const exported = await writeOdtDocument(document, { title: "Headers" });
   const xml =
-    (await new ZipFile(exported).readTextEntry("styles.xml")) +
-    (await new ZipFile(exported).readTextEntry("content.xml"));
+    (await (await DocumentArchive.open(exported)).readTextEntry("styles.xml")) +
+    (await (await DocumentArchive.open(exported)).readTextEntry("content.xml"));
   expect(xml).not.toContain('text:list-item text:start-value="0"');
   expect(xml).not.toContain("text:list-header");
   const reopened = await readOdtDocument(exported, { title: "Headers" });

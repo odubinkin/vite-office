@@ -191,7 +191,7 @@ it("real ODT import calls scalar setters only at native construction boundaries"
     box = required(row.GetTabBoxes()[0]);
   row.GetFrameFormat().SetFormatAttr(new SwFormatFrameSize(SwFrameSize.Minimum, 0, 720));
   required(box.GetParagraphs()[0]).SetText("Imported native cell");
-  const bytes = writeOdtDocument(source, { title: "Native package" });
+  const bytes = await writeOdtDocument(source, { title: "Native package" });
   const tableRead = vi.spyOn(SwTable.prototype, "GetFormat"),
     tableWrite = vi.spyOn(SwTable.prototype, "SetFormat"),
     rowWrite = vi.spyOn(SwTableLine.prototype, "SetFormat"),

@@ -1,7 +1,7 @@
 /** @fileoverview Verifies native repeated-sublist pending restart and bounded ODT/copy/Worker transport. */
 import { expect, it } from "vitest";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createWriterDocument, type SwDoc } from "../../core/doc/doc";
 import type { SwNumRule } from "../../core/doc/number";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
@@ -47,8 +47,8 @@ async function input(
   common: boolean,
   bullet: boolean,
 ): Promise<Uint8Array> {
-  const zip = new ZipFile(baseline),
-    output = new ZipOutputStream();
+  const zip = await DocumentArchive.open(baseline),
+    output = new DocumentArchiveWriter();
   const declaration = `<text:list-style style:name="Sublist">${[7, 5, 3].map(/** Emits the literal declared level. @param start - Number start. @param index - Level. @returns XML. */ (start, index) => `<text:list-level-style-${bullet ? "bullet" : "number"} text:level="${index + 1}" ${bullet ? 'text:bullet-char="●"' : `style:num-format="1" text:start-value="${start}" text:display-levels="${index + 1}"`} style:num-suffix="."/>`).join("")}</text:list-style>`;
   for (const entry of zip.getEntryNames()) {
     if (entry === "styles.xml" || entry === "content.xml") {
@@ -69,7 +69,7 @@ async function input(
       output.putNextEntry(entry, new TextEncoder().encode(xml));
     } else output.putNextEntry(entry, await zip.readEntry(entry));
   }
-  return output.finish();
+  return await output.finish();
 }
 /** Reads direct items, effective starts, counters and visible labels. @param document - Model. @returns Paragraph states. */
 function state(document: SwDoc) {
@@ -92,7 +92,7 @@ function state(document: SwDoc) {
 }
 
 it("imports native repeated-sublist restart and pending return through real packages", /** Verifies literal numbered/bullet common/automatic cases, owned copies, Worker16 and bounded reopen projection. @returns Completion. */ async () => {
-  const baseline = writeOdtDocument(createWriterDocument(), { title: "Sublist" });
+  const baseline = await writeOdtDocument(createWriterDocument(), { title: "Sublist" });
   const cases = [
     {
       gainedStarts: [] as string[],
@@ -239,10 +239,10 @@ it("imports native repeated-sublist restart and pending return through real pack
         const record = encodeWriterDocument(imported);
         expect(record.swModelVersion).toBe(17);
         expect(state(decodeWriterDocument(record))).toEqual(expected);
-        const exported = writeOdtDocument(imported, { title: "Sublist" });
+        const exported = await writeOdtDocument(imported, { title: "Sublist" });
         const xml =
-          (await new ZipFile(exported).readTextEntry("styles.xml")) +
-          (await new ZipFile(exported).readTextEntry("content.xml"));
+          (await (await DocumentArchive.open(exported)).readTextEntry("styles.xml")) +
+          (await (await DocumentArchive.open(exported)).readTextEntry("content.xml"));
         expect(xml).toContain('office:version="1.3"');
         const starts = [...xml.matchAll(/<text:list-item[^>]*text:start-value="([^"]*)"/gu)].map(
           /** Reads actual item attributes rather than style starts. @param match - Item. @returns Start. */

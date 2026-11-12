@@ -151,7 +151,7 @@ it.each([false, true])(
           screen.getByRole("textbox", { name: "Row 1 column 1 paragraph 1" }),
         ).toHaveTextContent("Original combined UI cell");
       }
-      const reopened = await readOdtDocument(writeOdtDocument(doc, { title: "CombinedUI" }), {
+      const reopened = await readOdtDocument(await writeOdtDocument(doc, { title: "CombinedUI" }), {
         title: "CombinedUI",
       });
       try {

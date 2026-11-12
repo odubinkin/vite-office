@@ -35,7 +35,7 @@ for (const width of [1280, 390]) {
       const node = doc.nodes.MakeTextNode(`Native position ${offset}: editable text`);
       node.SetAttr(new Item(offset, height, WHICH));
     }
-    const buffer = Buffer.from(writeOdtDocument(doc, { title: "Native position" }));
+    const buffer = Buffer.from(await writeOdtDocument(doc, { title: "Native position" }));
     doc.Dispose();
     await open(page, buffer);
     const first = page.getByRole("textbox", { name: "Writer document text", exact: true });
@@ -128,7 +128,7 @@ for (const width of [1280, 390]) {
     table.AddColumnWidth(3000);
     table.AddColumnWidth(3000);
     doc.nodes.AppendTableRow(table, 2);
-    const buffer = Buffer.from(writeOdtDocument(doc, { title: "Position cells" }));
+    const buffer = Buffer.from(await writeOdtDocument(doc, { title: "Position cells" }));
     doc.Dispose();
     await open(page, buffer);
     const cell = page.getByRole("textbox", { name: "Row 1 column 1 paragraph 1", exact: true });

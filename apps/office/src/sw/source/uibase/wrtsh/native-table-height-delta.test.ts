@@ -84,7 +84,7 @@ for (const selected of [false, true])
           expect(shell.Redo()).toBe(true);
           original();
         }
-        const reopened = await readOdtDocument(writeOdtDocument(doc, { title: "Delta" }), {
+        const reopened = await readOdtDocument(await writeOdtDocument(doc, { title: "Delta" }), {
           title: "Delta",
         });
         expect(

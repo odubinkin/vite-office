@@ -90,7 +90,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
       expect(imported.document.paragraphs[15]?.AreListLevelIndentsApplicable()).toBe(3);
       assertGeometry(decodeWriterDocument(encodeWriterDocument(imported.document)));
       const reopened = await readOdtDocument(
-        writeOdtDocument(imported.document, { title: imported.title }),
+        await writeOdtDocument(imported.document, { title: imported.title }),
         metadata,
       );
       assertGeometry(reopened.document);

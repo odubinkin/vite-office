@@ -22,7 +22,7 @@ it("reopens a pointer-created formula as an actual native formula cell", /** ODS
   c.inputHandler.PrepareReferenceInput();
   c.ChangeInput(c.Input() + ")");
   expect(c.Commit()).toBe(true);
-  const reopened = new ScDocShell(await readOdsDocument(c.shell.SerializeOds()));
+  const reopened = new ScDocShell(await readOdsDocument(await c.shell.SerializeOds()));
   expect(reopened.GetDocument().GetValue(new ScAddress(3, 4, 0))).toBe(10);
   reopened.GetDocument().SetValue(new ScAddress(), 9);
   expect(reopened.GetDocument().GetValue(new ScAddress(3, 4, 0))).toBe(15);

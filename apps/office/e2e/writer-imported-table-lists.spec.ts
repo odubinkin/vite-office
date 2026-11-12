@@ -57,7 +57,7 @@ test("Writer imported restarted table row Add to List preserves both starts and 
   });
   const metadata = createDocument({ id: "restart-row", suiteId: "writer", title: "Restart row" }),
     shell = new SwDocShell(doc, metadata),
-    bytes = writeOdtDocument(doc, metadata);
+    bytes = await writeOdtDocument(doc, metadata);
   shell.Close();
   await page.goto("/writer");
   await page.getByRole("button", { name: "Open", exact: true }).click();
@@ -127,7 +127,7 @@ test("Writer imported table list Enter edits native cell paragraphs and history"
   });
   const metadata = createDocument({ id: "cell-enter", suiteId: "writer", title: "Cell Enter" }),
     shell = new SwDocShell(doc, metadata),
-    bytes = writeOdtDocument(doc, metadata);
+    bytes = await writeOdtDocument(doc, metadata);
   shell.Close();
   await page.goto("/writer");
   await page.getByRole("button", { name: "Open", exact: true }).click();

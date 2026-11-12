@@ -49,7 +49,7 @@ async function fixture() {
     );
     shell.SetCurNumRule(rule, false, "", true);
   }
-  const bytes = writeOdtDocument(doc, metadata);
+  const bytes = await writeOdtDocument(doc, metadata);
   shell.Close();
   const session = createWriterDocumentSession();
   sessions.push(session);

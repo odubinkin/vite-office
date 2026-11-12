@@ -23,7 +23,7 @@ function fixture() {
 }
 it("ODT maps native NONE/CENTER/BOTTOM and omits absent attributes", /** Checks independent reopened native literals. @returns Completion. */ async () => {
   const doc = fixture(),
-    reopened = await readOdtDocument(writeOdtDocument(doc, { title: "Orientation" }), {
+    reopened = await readOdtDocument(await writeOdtDocument(doc, { title: "Orientation" }), {
       title: "Orientation",
     }),
     boxes = reopened.document.GetTables()[0]?.GetTabLines()[0]?.GetTabBoxes();

@@ -60,7 +60,7 @@ for (const width of [1280, 390]) {
       )(),
       new SvxRightMarginItem(SvxIndentValue.twips(6503), RES_MARGIN_RIGHT),
     ]);
-    const bytes = writeOdtDocument(writerDocument, metadata);
+    const bytes = await writeOdtDocument(writerDocument, metadata);
     await page.setViewportSize({ width, height: 800 });
     await page.goto("/writer");
     await page.getByRole("button", { name: "Open" }).click();

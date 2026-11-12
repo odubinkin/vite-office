@@ -123,7 +123,7 @@ test("retains native wrap request,history and ODS behavior in a DOM-free Worker"
           const undo = format.GetWrapTextState();
           shell.GetUndoManager().Redo(shell);
           const redo = format.GetWrapTextState();
-          const reopened = await n.readOdsDocument(n.writeOdsDocument(doc));
+          const reopened = await n.readOdsDocument(await n.writeOdsDocument(doc));
           try {
             return {
               on,

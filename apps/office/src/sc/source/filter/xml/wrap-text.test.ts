@@ -10,7 +10,7 @@ import { ScAddress } from "../../../inc/address";
 import { ScLineBreakCell } from "../../../inc/attrib";
 import { ScXMLImport } from "./xmlimprt";
 import { readOdsDocument, writeOdsDocument } from "./xmlwrap";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 it("preserves exact wrap/no-wrap conversion and unchanged output Any on invalid lexical input", /** Checks native handler contracts independently. @returns Nothing. */ () => {
   const h = new XmlScPropHdl_IsTextWrapped(),
     u = new SvXMLUnitConverter("twip"),
@@ -52,8 +52,8 @@ it("exports explicit true and false separately from defaults and preserves manua
     c.Select(1, 0);
     c.EnterString("Explicit false");
     d.Execute(".uno:WrapText", false);
-    let bytes = writeOdsDocument(c.shell.GetDocument());
-    const xml = await new ZipFile(bytes).readTextEntry("content.xml");
+    let bytes = await writeOdsDocument(c.shell.GetDocument());
+    const xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     expect(xml).toContain('fo:wrap-option="wrap"');
     expect(xml).toContain('fo:wrap-option="no-wrap"');
     for (let cycle = 0; cycle < 3; cycle++) {
@@ -70,7 +70,7 @@ it("exports explicit true and false separately from defaults and preserves manua
         ).toBe(false);
         expect(doc.GetRowHeight(0, 0, false)).toBe(1440);
         expect(text(doc.GetSharedString(new ScAddress()).getString())).toBe("Two words More words");
-        bytes = writeOdsDocument(doc);
+        bytes = await writeOdsDocument(doc);
       } finally {
         doc.DisposeAttributes();
       }

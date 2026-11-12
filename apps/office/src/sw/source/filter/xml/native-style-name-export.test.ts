@@ -45,7 +45,7 @@ it("reopens canonical default and built-in paragraph names without inventing a u
   const doc = new SwDoc();
   doc.GetTextFormatColl("text-body");
   const metadata = { title: "Native style names" },
-    reopened = (await readOdtDocument(writeOdtDocument(doc, metadata), metadata)).document;
+    reopened = (await readOdtDocument(await writeOdtDocument(doc, metadata), metadata)).document;
   expect(reopened.GetDfltTextFormatColl().GetName()).toBe("Default Paragraph Style");
   expect(
     reopened

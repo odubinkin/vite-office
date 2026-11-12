@@ -501,7 +501,7 @@ it("native ASCII multiline cells serialize and reopen their original table secti
   const f = fixture(false, false);
   expect(new SwTransferable(f.shell).Paste(transfer("A\nB\n"))).toBe(true);
   const metadata = { title: "ASCII table" },
-    reopened = await readOdtDocument(writeOdtDocument(f.doc, metadata), metadata),
+    reopened = await readOdtDocument(await writeOdtDocument(f.doc, metadata), metadata),
     table = required(reopened.document.GetTables()[0]),
     boxes = table
       .GetTabLines()

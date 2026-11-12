@@ -36,7 +36,7 @@ import {
 import { importWriterXml } from "./xmlimp";
 import { writeOdtDocument } from "./wrtxml";
 import { readOdtDocument } from "./swxml";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 /** Actual shell identity used by the original package boundary. */
 const metadata = createDocument({
@@ -79,8 +79,8 @@ it("preserves independent script weights,postures,heights and a native colored d
   line.SetColor(new Color(0x332211));
   node.SetAttr(line);
   const transferred = restoreOdtWriterTransfer(structuredClone(createOdtWriterTransfer(doc)));
-  const bytes = writeOdtDocument(transferred, metadata),
-    xml = await new ZipFile(bytes).readTextEntry("content.xml");
+  const bytes = await writeOdtDocument(transferred, metadata),
+    xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
   for (const attribute of [
     'fo:font-weight="600"',
     'style:font-weight-asian="normal"',
@@ -120,7 +120,7 @@ it("preserves independent script weights,postures,heights and a native colored d
     const restoredLine = itemAt(restored, 0, RES_CHRATR_UNDERLINE) as SvxUnderlineItem;
     expect(restoredLine.GetLineStyle()).toBe(FontLineStyle.LINESTYLE_DOUBLEWAVE);
     expect(restoredLine.GetColor().toUInt32()).toBe(0x332211);
-    current = (await readOdtDocument(writeOdtDocument(current, metadata), metadata)).document;
+    current = (await readOdtDocument(await writeOdtDocument(current, metadata), metadata)).document;
   }
 });
 it("retains adjacent native weights that have the same browser bold state", /** Exposes the previous boolean-run merge loss and native insertion-path loss. @returns Completion. */ async () => {
@@ -135,8 +135,8 @@ it("retains adjacent native weights that have the same browser bold state", /** 
     hints.Insert(new SwTextAttrEnd(new SwFormatAutoFormat(set), index, index + 1));
   }
   node.SetTextHints(hints);
-  const bytes = writeOdtDocument(doc, metadata),
-    xml = await new ZipFile(bytes).readTextEntry("content.xml");
+  const bytes = await writeOdtDocument(doc, metadata),
+    xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
   expect(xml).toContain('fo:font-weight="300"');
   expect(xml).toContain('fo:font-weight="600"');
   const restored = (await readOdtDocument(bytes, metadata)).document.paragraphs[0] as SwTextNode;

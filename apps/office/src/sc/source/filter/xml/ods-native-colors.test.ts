@@ -8,7 +8,7 @@ import { ScAddress } from "../../../inc/address";
 import { ScDocument } from "../../../inc/document";
 import { ScXMLImport } from "./xmlimprt";
 import { readOdsDocument, writeOdsDocument } from "./xmlwrap";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 it("writes original text and table-cell color groups and retains RGB/automatic/transparent across reopens", /** Checks actual package bytes and item state. @returns Completion. */ async () => {
   const session = createCalcSession(),
     c = session.controller;
@@ -16,8 +16,8 @@ it("writes original text and table-cell color groups and retains RGB/automatic/t
     c.EnterString("Color data");
     c.SetColor("font", new SvxColorItem(new Color(0x123456), 10017));
     c.SetColor("background", new SvxColorItem(new Color(0xfedcba), 10186));
-    let bytes = writeOdsDocument(c.shell.GetDocument());
-    const xml = await new ZipFile(bytes).readTextEntry("content.xml");
+    let bytes = await writeOdsDocument(c.shell.GetDocument());
+    const xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     expect(xml).toContain('fo:color="#123456"');
     expect(xml).toContain('<style:table-cell-properties fo:background-color="#fedcba"/>');
     for (let i = 0; i < 3; i++) {
@@ -25,12 +25,12 @@ it("writes original text and table-cell color groups and retains RGB/automatic/t
         pattern = doc.GetPattern(new ScAddress());
       expect((pattern?.GetItem(109) as SvxColorItem).GetValue().toUInt32()).toBe(0x123456);
       expect((pattern?.GetItem(148) as SvxBrushItem).GetColor().toUInt32()).toBe(0xfedcba);
-      bytes = writeOdsDocument(doc);
+      bytes = await writeOdsDocument(doc);
       doc.DisposeAttributes();
     }
     c.SetColor("font", new SvxColorItem(COL_AUTO, 10017));
     c.SetColor("background", new SvxColorItem(COL_TRANSPARENT, 10186));
-    const defaults = await readOdsDocument(writeOdsDocument(c.shell.GetDocument())),
+    const defaults = await readOdsDocument(await writeOdsDocument(c.shell.GetDocument())),
       pattern = defaults.GetPattern(new ScAddress());
     expect((pattern?.GetItem(109) as SvxColorItem).GetValue().equals(COL_AUTO)).toBe(true);
     expect((pattern?.GetItem(148) as SvxBrushItem).GetColor().GetAlpha()).toBe(0);

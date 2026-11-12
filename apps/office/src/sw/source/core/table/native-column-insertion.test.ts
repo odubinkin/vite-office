@@ -249,9 +249,12 @@ it("routes native menu column count and persists actual widths and boxes through
     const widths = [...f.table.GetColumnWidths()],
       decoded = decodeWriterDocument(encodeWriterDocument(f.doc));
     expect(required(decoded.GetTables()[0]).GetColumnWidths()).toEqual(widths);
-    const reopened = await readOdtDocument(writeOdtDocument(decoded, { title: "Native columns" }), {
-      title: "Native columns",
-    });
+    const reopened = await readOdtDocument(
+      await writeOdtDocument(decoded, { title: "Native columns" }),
+      {
+        title: "Native columns",
+      },
+    );
     const table = required(reopened.document.GetTables()[0]);
     expect(table.GetColumnWidths()).toEqual(widths);
     expect(

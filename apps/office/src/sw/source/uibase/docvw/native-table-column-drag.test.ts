@@ -131,7 +131,7 @@ it("native border drag preserves the outside-table cursor, list and original gra
   expect(f.node.GetText()).toBe("CeXll");
   expect(f.node.GetListId()).toBe("drag-list");
   expect(f.node.GetNumRuleName()).toBe("Numbering");
-  const reopened = await readOdtDocument(writeOdtDocument(f.doc, { title: "Drag" }), {
+  const reopened = await readOdtDocument(await writeOdtDocument(f.doc, { title: "Drag" }), {
     title: "Drag",
   });
   expect(required(reopened.document.GetTables()[0]).GetColumnWidths()).toEqual([1950, 1050, 1500]);

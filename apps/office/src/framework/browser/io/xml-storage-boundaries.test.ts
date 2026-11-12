@@ -16,10 +16,10 @@ it("drains a traversal with its default cancellation guard and rejects absent XM
       /** Checks the browser XML and worker regression boundary.  @returns Regression result or completion. */ () =>
         xmlStream(files, "mimetype"),
     ).toThrow("Missing XML stream");
-    expect(
-      /** Checks the browser XML and worker regression boundary.  @returns Regression result or completion. */ () =>
-        packXmlPackage(files),
-    ).toThrow("Missing XML stream");
+    await expect(
+      /** Checks the browser XML and worker regression boundary.  @returns Regression result or completion. */ async () =>
+        await packXmlPackage(files),
+    ).rejects.toThrow("Missing XML stream");
   }
 });
 it("retains existing XML stores during a version upgrade", /** Exercises IndexedDB schema upgrade without replacing saved data. @returns Completion. */ async () => {

@@ -57,7 +57,7 @@ it("reopens populated and empty superscript cells with their native paragraph it
     paragraph.SetText(index === 0 ? "S" : "");
     paragraph.SetAttr(new SvxEscapementItem(14000, 58, RES_CHRATR_ESCAPEMENT));
   }
-  const bytes = writeOdtDocument(document, { title: "Position cells" });
+  const bytes = await writeOdtDocument(document, { title: "Position cells" });
   document.Dispose();
   const reopened = await readOdtDocument(bytes, { title: "Position cells" });
   try {

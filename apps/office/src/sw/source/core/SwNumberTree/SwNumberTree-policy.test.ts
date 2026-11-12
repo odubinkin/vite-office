@@ -372,7 +372,7 @@ it("retains continuous and phantom policy on real Worker document owners and nat
       ) => p.GetListItemNumber(),
     ),
   ).toEqual([1, 1, 2, 2]);
-  const reopened = await readOdtDocument(writeOdtDocument(doc, { title: "Policy" }), {
+  const reopened = await readOdtDocument(await writeOdtDocument(doc, { title: "Policy" }), {
     title: "Policy",
   });
   expect(

@@ -1,7 +1,7 @@
 /** @fileoverview Verifies native implicit/direct restart XML transitions and literal model/copy/Worker/reopen states. */
 import { expect, it } from "vitest";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { RES_PARATR_LIST_RESTARTVALUE } from "../../../inc/hintids";
 import { createWriterDocument, type SwDoc } from "../../core/doc/doc";
@@ -61,8 +61,8 @@ async function input(
   bullet: boolean,
   starts: number[],
 ): Promise<Uint8Array> {
-  const zip = new ZipFile(baseline),
-    output = new ZipOutputStream();
+  const zip = await DocumentArchive.open(baseline),
+    output = new DocumentArchiveWriter();
   const declaration = `<text:list-style style:name="Restart">${starts.map(/** Emits a literal native declared level. @param start - Start. @param index - Level. @returns XML. */ (start, index) => `<text:list-level-style-${bullet ? "bullet" : "number"} text:level="${index + 1}" ${bullet ? 'text:bullet-char="●"' : `style:num-format="1" style:num-suffix="." text:start-value="${start}" text:display-levels="${index + 1}"`}/>`).join("")}</text:list-style>`;
   for (const entry of zip.getEntryNames()) {
     if (entry === "styles.xml" || entry === "content.xml") {
@@ -83,7 +83,7 @@ async function input(
       output.putNextEntry(entry, new TextEncoder().encode(xml));
     } else output.putNextEntry(entry, await zip.readEntry(entry));
   }
-  return output.finish();
+  return await output.finish();
 }
 /** Reads effective/direct starts, actual counters and stable rule/list ownership. @param doc - Model. @returns State. */
 function state(doc: SwDoc) {
@@ -131,7 +131,7 @@ function events(xml: string): string[] {
 }
 
 it("exports native implicit restart positions and direct starts through genuine ODT", /** Verifies literal native omissions/gains/splits,independent owned copies,Worker16 and reopen. @returns Completion. */ async () => {
-  const baseline = writeOdtDocument(createWriterDocument(), { title: "Restart" });
+  const baseline = await writeOdtDocument(createWriterDocument(), { title: "Restart" });
   for (const bullet of [false, true]) {
     const r = bullet ? 1 : 7,
       c = bullet ? 1 : 5,
@@ -383,10 +383,10 @@ it("exports native implicit restart positions and direct starts through genuine 
         const worker = decodeWriterDocument(record);
         expect(worker.GetNumRuleTable().slice(1)[0]).not.toBe(rule);
         expect(state(worker)).toEqual(expected(test.before));
-        const bytes = writeOdtDocument(doc, { title: "Restart" });
+        const bytes = await writeOdtDocument(doc, { title: "Restart" });
         const xml =
-          (await new ZipFile(bytes).readTextEntry("styles.xml")) +
-          (await new ZipFile(bytes).readTextEntry("content.xml"));
+          (await (await DocumentArchive.open(bytes)).readTextEntry("styles.xml")) +
+          (await (await DocumentArchive.open(bytes)).readTextEntry("content.xml"));
         expect(xml).toContain('office:version="1.3"');
         expect(events(xml)).toEqual(test.events.split(" "));
         const reopened = (await readOdtDocument(bytes, { title: "Restart" })).document;

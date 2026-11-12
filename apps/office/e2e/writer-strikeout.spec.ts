@@ -24,7 +24,7 @@ async function open(page: Page) {
     const node = doc.nodes.MakeTextNode(`Native decoration ${mode}: editable text`);
     node.SetAttr(new SvxCrossedOutItem(mode, WHICH));
   }
-  const buffer = Buffer.from(writeOdtDocument(doc, { title: "Native strikeout" }));
+  const buffer = Buffer.from(await writeOdtDocument(doc, { title: "Native strikeout" }));
   doc.Dispose();
   await page.goto("/writer");
   await page.getByRole("button", { name: "Open", exact: true }).click();
@@ -48,7 +48,7 @@ for (const width of [1280, 390]) {
     table.AddColumnWidth(3000);
     table.AddColumnWidth(3000);
     doc.nodes.AppendTableRow(table, 2);
-    const buffer = Buffer.from(writeOdtDocument(doc, { title: "Empty native strikeout" }));
+    const buffer = Buffer.from(await writeOdtDocument(doc, { title: "Empty native strikeout" }));
     doc.Dispose();
     await page.goto("/writer");
     await page.getByRole("button", { name: "Open", exact: true }).click();

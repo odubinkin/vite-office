@@ -53,7 +53,9 @@ it("mounted direct items paint, export and reopen across native Undo and Redo", 
         expect(exportContentXml(doc)).toContain('fo:margin-top="0.2117cm"');
         const reopened = required(
           (
-            await readOdtDocument(writeOdtDocument(doc, { title: "History" }), { title: "History" })
+            await readOdtDocument(await writeOdtDocument(doc, { title: "History" }), {
+              title: "History",
+            })
           ).document.GetTables()[0],
         );
         expect(reopened.GetFrameFormat().GetULSpace().GetUpper()).toBe(120);

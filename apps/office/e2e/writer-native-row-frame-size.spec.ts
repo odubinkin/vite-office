@@ -28,7 +28,7 @@ for (const width of [1280, 390])
         "Several lines of original text in a native row. ".repeat(4),
       );
     }
-    const bytes = writeOdtDocument(
+    const bytes = await writeOdtDocument(
       doc,
       createDocument({ id: "height-modes", suiteId: "writer", title: "Height modes" }),
     );

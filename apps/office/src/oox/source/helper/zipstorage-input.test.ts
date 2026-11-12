@@ -2,7 +2,7 @@
 import { expect, it, vi } from "vitest";
 import { SEEKABLEREAD } from "../../../offapi/com/sun/star/embed/ElementModes";
 import { ZipStorage } from "./zipstorage";
-import { ZipOutputStream } from "../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchiveWriter } from "../../../package/source/zippackage/document-archive";
 import { XStream } from "../../../udkapi/com/sun/star/io/XStream";
 import { XInputStream } from "../../../udkapi/com/sun/star/io/XInputStream";
 import { XPropertySet } from "../../../udkapi/com/sun/star/beans/XPropertySet";
@@ -18,16 +18,16 @@ import { readOwnedXml } from "../../../test/oox-input";
 const types =
   '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="xml" ContentType="default/one"/><Default Extension=".xml" ContentType="default/two"/><Override PartName="/word/document.xml" ContentType="override/one"/><Override PartName="word/document.xml" ContentType="override/two"/><Override PartName="/absent.xml" ContentType="ignored"/></Types>';
 /** Builds a raw actual ZIP, allowing deliberately missing/bad content metadata. @param entries - Entries. @param contentTypes - Internal metadata or explicit absence. @returns Bytes. */
-function archive(
+async function archive(
   entries: Readonly<Record<string, string>>,
   contentTypes: string | null = types,
-): Uint8Array {
-  const zip = new ZipOutputStream();
+): Promise<Uint8Array> {
+  const zip = new DocumentArchiveWriter();
   if (contentTypes !== null)
     zip.putNextEntry("[Content_Types].xml", new TextEncoder().encode(contentTypes));
   for (const [path, data] of Object.entries(entries))
     zip.putNextEntry(path, new TextEncoder().encode(data));
-  return zip.finish();
+  return await zip.finish();
 }
 /** Destroys an original caught exception once. @param operation - Native operation. @param type - Expected constructor. @returns Nothing. */
 function exception(operation: () => unknown, type: unknown): void {
@@ -44,8 +44,8 @@ function exception(operation: () => unknown, type: unknown): void {
   }
 }
 it("exposes the native READ component, exact metadata and original package MIME application order", /** Original package parse applies defaults then explicit overrides, distinct from GetContentTypeByName extension-first lookup. @returns Completion. */ async () => {
-  const storage = new ZipStorage(
-    archive({
+  const storage = await ZipStorage.open(
+    await archive({
       "word/": "",
       "word/document.xml": "<root/>",
       "word/other.xml": "<other/>",
@@ -149,7 +149,7 @@ it("exposes the native READ component, exact metadata and original package MIME 
   }
 });
 it("keeps independent input positions and native close state for retained interface references", /** Closing one READ snapshot cannot close the next independently opened stream. @returns Completion. */ async () => {
-  const storage = new ZipStorage(archive({ "part.xml": "<part/>" }));
+  const storage = await ZipStorage.open(await archive({ "part.xml": "<part/>" }));
   const first = await storage.openInputStream("part.xml"),
     second = await storage.openInputStream("part.xml"),
     stream = first.query(XStream.static_type),
@@ -176,7 +176,7 @@ it.each([null, "<Types><bad/></Types>", " "])(
   /** Source format refusal returns empty input references and never caches an owned exception for reuse. @param contentTypes - Metadata. @returns Completion. */ async (
     contentTypes,
   ) => {
-    const storage = new ZipStorage(archive({ "part.xml": "<part/>" }, contentTypes)),
+    const storage = await ZipStorage.open(await archive({ "part.xml": "<part/>" }, contentTypes)),
       disposal = vi.spyOn(IOException.prototype, "dispose");
     try {
       const copies = await Promise.all([
@@ -201,8 +201,8 @@ it.each([null, "<Types><bad/></Types>", " "])(
   },
 );
 it("refuses malformed own relationships instead of returning a stream with an empty table", /** Native BROKEN/InsertOwnProps refusal is exercised through the real package input API. @returns Completion. */ async () => {
-  const storage = new ZipStorage(
-    archive({
+  const storage = await ZipStorage.open(
+    await archive({
       "part.xml": "<part/>",
       "_rels/part.xml.rels": "<Relationships><broken/></Relationships>",
     }),
@@ -216,7 +216,7 @@ it("refuses malformed own relationships instead of returning a stream with an em
 });
 
 it("keeps READ separate from seekable hierarchical snapshots and propagates native open errors", /** Existing flat transport creates actual readonly components; it does not certify full hierarchy/parent storage behavior. @returns Completion. */ async () => {
-  const storage = new ZipStorage(archive({ "word/document.xml": "<root/>" })),
+  const storage = await ZipStorage.open(await archive({ "word/document.xml": "<root/>" })),
     first = await storage.openStreamElementByHierarchicalName("word/document.xml", SEEKABLEREAD),
     second = await storage.openStreamElementByHierarchicalName("word/document.xml", SEEKABLEREAD),
     seek = first.query(XSeekable.static_type),

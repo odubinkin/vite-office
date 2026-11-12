@@ -1,7 +1,7 @@
 /** @fileoverview Verifies native zero list counters in real common/automatic ODT, owned copies and Worker transfers. */
 import { expect, it } from "vitest";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createWriterDocument, type SwDoc } from "../../core/doc/doc";
 import type { SwNumRule } from "../../core/doc/number";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
@@ -21,8 +21,8 @@ async function input(
   bullet: boolean,
   phantom = false,
 ): Promise<Uint8Array> {
-  const zip = new ZipFile(baseline),
-    output = new ZipOutputStream();
+  const zip = await DocumentArchive.open(baseline),
+    output = new DocumentArchiveWriter();
   const declaration = `<text:list-style style:name="Counters"><text:list-level-style-${bullet ? "bullet" : "number"} text:level="1" ${bullet ? 'text:bullet-char="●"' : 'style:num-format="1"'} style:num-suffix="." text:start-value="${start}"/><text:list-level-style-number text:level="2" style:num-format="1" style:num-suffix="." text:start-value="0" text:display-levels="2"/></text:list-style>`;
   const phantomDeclaration = `<text:list-style style:name="Counters"><text:list-level-style-number text:level="1" style:num-format="1" style:num-suffix="." text:start-value="7"/><text:list-level-style-number text:level="2" style:num-format="1" style:num-suffix="." text:start-value="5" text:display-levels="2"/><text:list-level-style-number text:level="3" style:num-format="1" style:num-suffix="." text:start-value="3" text:display-levels="3"/></text:list-style>`;
   const selectedDeclaration = phantom ? phantomDeclaration : declaration;
@@ -45,7 +45,7 @@ async function input(
       output.putNextEntry(entry, new TextEncoder().encode(xml));
     } else output.putNextEntry(entry, await zip.readEntry(entry));
   }
-  return output.finish();
+  return await output.finish();
 }
 /** Projects canonical counters and labels after actual tree validation. @param document - Writer model. @returns State. */
 function state(document: SwDoc) {
@@ -63,7 +63,7 @@ function state(document: SwDoc) {
 }
 
 it("round-trips zero starts and restarts through native list trees", /** Verifies literal common/automatic package values, labels, copied rules/item sets, Worker v16 and XML/reopen. @returns Completion. */ async () => {
-  const baseline = writeOdtDocument(createWriterDocument(), { title: "Counters" });
+  const baseline = await writeOdtDocument(createWriterDocument(), { title: "Counters" });
   const first = "<text:list-item><text:p>first</text:p></text:list-item>";
   const zero = '<text:list-item text:start-value="0"><text:p>restart</text:p></text:list-item>';
   for (const test of [
@@ -165,10 +165,10 @@ it("round-trips zero starts and restarts through native list trees", /** Verifie
       expect(transferred.GetAttrPool().GetUserOrPoolDefaultItem(89).QueryValue()).toBe(1);
       for (const node of transferred.paragraphs)
         if (!node.HasAttrListRestartValue()) expect(node.GetAttr(89).QueryValue()).toBe(1);
-      const exported = writeOdtDocument(result.document, { title: "Counters" });
+      const exported = await writeOdtDocument(result.document, { title: "Counters" });
       const xml =
-        (await new ZipFile(exported).readTextEntry("styles.xml")) +
-        (await new ZipFile(exported).readTextEntry("content.xml"));
+        (await (await DocumentArchive.open(exported)).readTextEntry("styles.xml")) +
+        (await (await DocumentArchive.open(exported)).readTextEntry("content.xml"));
       expect(xml).toContain('office:version="1.3"');
       const rootDeclaration = xml.match(
         /<text:list-level-style-(?:number|bullet) text:level="1"[^>]*>/u,

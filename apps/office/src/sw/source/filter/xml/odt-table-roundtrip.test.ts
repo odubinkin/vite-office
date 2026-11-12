@@ -10,8 +10,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { assert, describe, expect, it } from "vitest";
 
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import { FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
 import { XMLTableStyleContext } from "../../../../xmloff/source/table/XMLTableImport";
@@ -107,8 +107,8 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
       ),
     );
     const metadata = { title: "Nested table" };
-    const bytes = writeOdtDocument(source, metadata);
-    const xml = await new ZipFile(bytes).readTextEntry("content.xml");
+    const bytes = await writeOdtDocument(source, metadata);
+    const xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     expect(xml.match(/<table:table table:name=/gu)).toHaveLength(2);
     expect(xml).toContain('style:name="T2.C1"');
     const odt = (await readOdtDocument(bytes, metadata)).document;
@@ -151,8 +151,8 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
     setFrameColor(row.GetFrameFormat(), translucent);
     const worker = decodeWriterDocument(encodeWriterDocument(source));
     const metadata = { title: "Native table visuals" };
-    const bytes = writeOdtDocument(worker, metadata);
-    const xml = await new ZipFile(bytes).readTextEntry("content.xml");
+    const bytes = await writeOdtDocument(worker, metadata);
+    const xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     const odt = (await readOdtDocument(bytes, metadata)).document;
     try {
       expect(xml).toContain('fo:background-color="#abcdef" style:writing-mode="rl-tb"');
@@ -192,7 +192,7 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
     table.AddColumnWidth(3000);
     document.nodes.AppendTableRow(table, 1);
     const metadata = { title: "Header table" };
-    const reopened = await readOdtDocument(writeOdtDocument(document, metadata), metadata);
+    const reopened = await readOdtDocument(await writeOdtDocument(document, metadata), metadata);
     expect(reopened.document.GetTables()[0]?.GetFormat()).toMatchObject({
       headerRows: 1,
       repeatHeaderRows: true,
@@ -205,9 +205,9 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
     });
     ordinary.AddColumnWidth(3000);
     noHeader.nodes.AppendTableRow(ordinary, 1);
-    const content = await new ZipFile(writeOdtDocument(noHeader, metadata)).readTextEntry(
-      "content.xml",
-    );
+    const content = await (
+      await DocumentArchive.open(await writeOdtDocument(noHeader, metadata))
+    ).readTextEntry("content.xml");
     expect(content).not.toContain("table:table-header-rows");
   });
   it("imports and structurally reopens upstream tdf132642_keepWithNextTable.odt", /** Verifies the bounded table scenario.  @returns Callback result. */ async () => {
@@ -237,7 +237,10 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
           ) => node.GetNodeType() === "start",
         ),
     ).toBe(true);
-    const reopened = await readOdtDocument(writeOdtDocument(imported.document, metadata), metadata);
+    const reopened = await readOdtDocument(
+      await writeOdtDocument(imported.document, metadata),
+      metadata,
+    );
     expect(tableShape(reopened.document)).toEqual(original);
   });
 
@@ -308,7 +311,7 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
       encoded.GetTables()[0]?.GetTabLines()[1]?.GetTabBoxes()[0]?.GetParagraphs()[0],
     );
     const metadata = { title: "Table roundtrip" };
-    const reopened = await readOdtDocument(writeOdtDocument(encoded, metadata), metadata);
+    const reopened = await readOdtDocument(await writeOdtDocument(encoded, metadata), metadata);
     expect(tableShape(reopened.document)).toEqual(shape);
     expect(
       reopened.document.paragraphs.map(
@@ -336,8 +339,8 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
 
   it("rejects malformed table geometry instead of silently inventing a width", /** Verifies the bounded table scenario.  @returns Callback result. */ async () => {
     const original = upstreamTableOdt();
-    const input = new ZipFile(original);
-    const output = new ZipOutputStream();
+    const input = await DocumentArchive.open(original);
+    const output = new DocumentArchiveWriter();
     for (const name of input.getEntryNames()) {
       const bytes =
         name === "content.xml"
@@ -351,7 +354,7 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
       output.putNextEntry(name, bytes);
     }
     await expect(
-      readOdtDocument(output.finish(), { title: "Invalid table" }, undefined, {
+      readOdtDocument(await output.finish(), { title: "Invalid table" }, undefined, {
         onDiagnostic: /** Verifies the bounded table scenario.  @returns Callback result. */ () =>
           undefined,
       }),
@@ -626,12 +629,12 @@ describe("Writer canonical ODF tables", /** Verifies the bounded table scenario.
     table.AddColumnWidth(0);
     document.nodes.AppendTableRow(table, 1);
     const metadata = { title: "Unspecified table" };
-    const xml = await new ZipFile(writeOdtDocument(document, metadata)).readTextEntry(
-      "content.xml",
-    );
+    const xml = await (
+      await DocumentArchive.open(await writeOdtDocument(document, metadata))
+    ).readTextEntry("content.xml");
     expect(xml).toContain('<style:table-properties table:align="margins"/>');
     expect(xml).toContain("<style:table-column-properties/>");
-    const reopened = await readOdtDocument(writeOdtDocument(document, metadata), metadata);
+    const reopened = await readOdtDocument(await writeOdtDocument(document, metadata), metadata);
     expect(reopened.document.GetTables()[0]?.GetColumnWidths()).toEqual([0]);
   });
 });

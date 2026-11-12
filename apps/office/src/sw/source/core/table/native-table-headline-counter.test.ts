@@ -8,7 +8,7 @@ import {
 } from "../../../browser/filter/xml/writer-document-codec";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { readOdtDocument } from "../../filter/xml/swxml";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 /** Requires an original native owner. @param value - Optional owner. @returns Original owner. */
 function required<T>(value: T | undefined): T {
   if (value === undefined) throw Error("Missing native headline counter owner");
@@ -126,8 +126,8 @@ it.each([0, 1, 9])(
     expect(copied.GetFormat().headerRows).toBe(count);
     expect(copied.GetRowsToRepeat()).toBe(Math.min(count, 3));
     const metadata = { title: "Native headline counter" },
-      bytes = writeOdtDocument(doc, metadata),
-      xml = await new ZipFile(bytes).readTextEntry("content.xml");
+      bytes = await writeOdtDocument(doc, metadata),
+      xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     expect(xml.includes("<table:table-header-rows>")).toBe(count !== 0);
     const opened = await readOdtDocument(bytes, metadata),
       reopened = required(opened.document.GetTables()[0]);

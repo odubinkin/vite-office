@@ -10,7 +10,7 @@ test("native body follow Home retains its original model offset and edit history
   if (node === undefined) throw Error("Missing original body");
   const text = "Native original cursor follows across physical Writer pages. ".repeat(180);
   node.SetText(text);
-  const bytes = writeOdtDocument(doc, { title: "Cursor chain" });
+  const bytes = await writeOdtDocument(doc, { title: "Cursor chain" });
   doc.Dispose();
   await page.goto("/writer");
   await page.getByRole("button", { name: "Open", exact: true }).click();

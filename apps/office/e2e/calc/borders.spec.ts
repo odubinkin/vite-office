@@ -114,7 +114,7 @@ test("runs actual native border history and ODS reopens in a DOM-free Worker", /
           const undone = top(doc);
           shell.GetUndoManager().Redo(shell);
           const redone = top(doc),
-            reopened = await n.readOdsDocument(n.writeOdsDocument(doc));
+            reopened = await n.readOdsDocument(await n.writeOdsDocument(doc));
           try {
             return { applied, undone, redone, saved: top(reopened), value: reopened.GetValue(pos) };
           } finally {

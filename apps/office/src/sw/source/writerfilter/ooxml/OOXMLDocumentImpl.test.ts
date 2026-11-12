@@ -35,7 +35,7 @@ function relation(id: string, type: string, target: string): StringPair[] {
   ];
 }
 /** Actual package fixture with independent main/part relationships. @param xml - Settings XML or null for a broken target. @param relationNamespace - Relationship namespace. @returns Committed ZIP bytes. */
-function packageOf(xml: string | null, relationNamespace = rel): Uint8Array {
+async function packageOf(xml: string | null, relationNamespace = rel): Promise<Uint8Array> {
   const storage = new ZipStorage();
   put(
     storage,
@@ -65,7 +65,7 @@ function packageOf(xml: string | null, relationNamespace = rel): Uint8Array {
   );
   put(storage, "settings/assets/data.bin", "part payload");
   put(storage, "settings/broken.xml", "<broken>");
-  return storage.commit();
+  return await storage.commit();
 }
 /** Stream callback observer forwards genuine resource tables into the actual mapper and refuses unrelated document events. No replacement model or UNO query provider is constructed. @param mapper - Real mapper. @returns Borrowed receiver. */
 function receiver(mapper: DomainMapper): Stream {
@@ -94,7 +94,7 @@ function receiver(mapper: DomainMapper): Stream {
 }
 /** Actual model/mapper/document/stream ownership chain. @param bytes - ZIP bytes. @returns Session. */
 async function session(bytes: Uint8Array) {
-  const stream = await OOXMLStreamImpl.createStream(new ZipStorage(bytes));
+  const stream = await OOXMLStreamImpl.createStream(await ZipStorage.open(bytes));
   const model = new SwXTextDocument(createWriterDocument());
   const mapper = new DomainMapper(model, SourceDocumentType.OOXML);
   const document = new OOXMLDocument(stream, null);
@@ -141,7 +141,7 @@ it.each([
       ["", false],
     ] as const) {
       const s = await session(
-        packageOf(`<w:settings xmlns:w="${namespace}">${markup}</w:settings>`, relationships),
+        await packageOf(`<w:settings xmlns:w="${namespace}">${markup}</w:settings>`, relationships),
       );
       try {
         s.document.setXNoteId(0xffffffff);
@@ -179,7 +179,7 @@ it("imports the mirror-margin setting from the unchanged native fdo73541 documen
 });
 
 it("keeps source missing-part behavior and only swallows genuine UNO opening exceptions", /** A missing relationship has no input; a missing target throws the real storage IOException caught by the document. @returns Completion. */ async () => {
-  const s = await session(packageOf(null));
+  const s = await session(await packageOf(null));
   try {
     await s.document.resolveFastSubStream(s.receiver, T.STYLES);
     await s.document.resolveFastSubStream(s.receiver, T.SETTINGS);
@@ -205,7 +205,7 @@ it("keeps source missing-part behavior and only swallows genuine UNO opening exc
 });
 
 it("keeps the switched stream after SAX failure, including a second real part failure", /** Source restoration follows parse/close, rather than an exception guard; subsequent IDs resolve relative to the failed part. @returns Completion. */ async () => {
-  const s = await session(packageOf(`<w:settings xmlns:w="${wml}"><w:mirrorMargins/>`));
+  const s = await session(await packageOf(`<w:settings xmlns:w="${wml}"><w:mirrorMargins/>`));
   try {
     await saxFailure(s.document.resolveFastSubStream(s.receiver, T.SETTINGS));
     expect(s.document.getTarget()).toBe("settings/settings.xml");
@@ -223,7 +223,7 @@ it("keeps the switched stream after SAX failure, including a second real part fa
 });
 
 it("returns an input owner surviving temporary stream destruction, empty on absent ID and errors on broken targets", /** Native getInputStreamForId does not swallow its factory errors or close the returned input. @returns Completion. */ async () => {
-  const s = await session(packageOf(null));
+  const s = await session(await packageOf(null));
   try {
     const input = await s.document.getInputStreamForId("payload");
     expect(new TextDecoder().decode(readOwnedInput(input) as Uint8Array)).toBe("main payload");

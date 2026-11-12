@@ -129,7 +129,7 @@ test("Writer table row Add to List continues an imported restarted body list", /
   });
   const metadata = createDocument({ id: "restart-row", suiteId: "writer", title: "Restart row" }),
     shell = new SwDocShell(doc, metadata),
-    bytes = writeOdtDocument(doc, metadata);
+    bytes = await writeOdtDocument(doc, metadata);
   shell.Close();
   await page.goto("/writer");
   await page.getByRole("button", { name: "Open", exact: true }).click();

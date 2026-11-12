@@ -87,7 +87,7 @@ describe("Writer Continue Numbering ODT regression", /** Groups real ODT command
       expect(shell.Undo()).toBe(true);
       expect(plain.GetListKind()).toBe("none");
       const reopened = await readOdtDocument(
-        writeOdtDocument(imported.document, { title: imported.title }),
+        await writeOdtDocument(imported.document, { title: imported.title }),
         metadata,
       );
       expect(reopened.document.paragraphs[5]?.GetListLabel()).toBe("3");

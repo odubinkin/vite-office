@@ -6,7 +6,7 @@ import { ScAddress } from "../../../inc/address";
 import { ScPatternAttr } from "../../../inc/patattr";
 import { ScIndentItem } from "../../../inc/attrib";
 import { readOdsDocument, writeOdsDocument } from "./xmlwrap";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 /** Independently authored XML with native ODF namespaces. @param indent - Paragraph margin. @returns XML. */
 function xml(indent: string): string {
   return `<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"><office:automatic-styles><style:style style:name="ce" style:family="table-cell"><style:paragraph-properties fo:margin-left="${indent}" fo:text-align="end"/></style:style><style:style style:name="ro" style:family="table-row"><style:table-row-properties style:row-height="1in" style:use-optimal-row-height="false"/></style:style></office:automatic-styles><office:body><office:spreadsheet><table:table table:name="Rows"><table:table-row table:style-name="ro" table:number-rows-repeated="2" table:visibility="filter"><table:table-cell table:style-name="ce" office:value-type="float" office:value="17"/></table:table-row><table:table-row table:visibility="collapse" table:number-rows-repeated="2"/><table:table-row/></table:table></office:spreadsheet></office:body></office:document-content>`;
@@ -30,8 +30,8 @@ it("imports independent native signed16 HMM indentation and repeated filtered ro
       expect(doc.RowHidden(2, 0)).toBe(true);
       expect(doc.RowFiltered(2, 0)).toBe(false);
       expect(doc.GetValue(new ScAddress(0, 1, 0))).toBe(17);
-      const bytes = writeOdsDocument(doc),
-        content = await new ZipFile(bytes).readTextEntry("content.xml");
+      const bytes = await writeOdsDocument(doc),
+        content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
       expect(content).toContain('fo:margin-left="1.27cm"');
       expect(content).toContain('table:visibility="filter"');
       expect(content).toContain('table:visibility="collapse"');

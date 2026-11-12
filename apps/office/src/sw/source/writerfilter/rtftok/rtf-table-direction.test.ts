@@ -3,7 +3,7 @@ import { SwTabFrame } from "../../core/layout/tabfrm";
 import { readOdtDocument } from "../../filter/xml/swxml";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { existsSync, readFileSync } from "node:fs";
 import { afterEach, assert, expect, it } from "vitest";
@@ -728,8 +728,8 @@ it("retains a resolved percentage and its column references through the browser'
     `\\trowd\\trftsWidth${N.LN_Value_ST_TblWidth_pct}\\trwWidth3000\\cellx800\\cellx2000\\pard\\intbl A\\cell B\\cell\\row`,
   );
   const metadata = { title: "Relative table" };
-  const bytes = writeOdtDocument(document, metadata);
-  const xml = await new ZipFile(bytes).readTextEntry("content.xml");
+  const bytes = await writeOdtDocument(document, metadata);
+  const xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
   expect(xml).toContain('style:rel-width="60%"');
   expect(xml).toContain('style:rel-column-width="800*"');
   const reopened = (await readOdtDocument(bytes, metadata)).document;

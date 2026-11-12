@@ -54,7 +54,7 @@ it("fills relative formulas over a rectangle with one native paste action preser
   expect(doc.GetFormulaCell(new ScAddress(1, 2, 0))).toBeNull();
   expect(shell.Redo()).toBe(true);
   expect(doc.GetValue(new ScAddress(1, 2, 0))).toBe(11);
-  const reopened = await readOdsDocument(writeOdsDocument(doc));
+  const reopened = await readOdsDocument(await writeOdsDocument(doc));
   expect(reopened.GetValue(new ScAddress(1, 2, 0))).toBe(11);
   reopened.Dispose();
   pattern.Dispose();

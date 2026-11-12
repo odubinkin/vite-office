@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/zippackage/document-archive.ts",
+    "classification": "local-infrastructure",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-aa9a7145-62c9-4e3c-9b22-4ba90b6833fa"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/source/zippackage/document-archive.ts#DocumentArchive",
+        "apps/office/src/package/source/zippackage/document-archive.ts#DocumentArchiveWriter"
+      ],
+      "justification": "Delegates document ZIP parsing, extraction, CRC validation and archive creation to @zip.js/zip.js; applies document path, case-collision and browser resource policies. This is local integration infrastructure and does not claim native ZIP implementation parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DocumentArchive",
+        "DocumentArchiveWriter",
+        "ArchiveLimits",
+        "ArchiveChecks",
+        "assertSafeArchivePath"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

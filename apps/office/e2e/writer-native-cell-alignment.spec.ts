@@ -38,7 +38,7 @@ for (const width of [1280, 390])
           node.SetText("Align" + rowIndex + "-" + column);
         }
       }
-      const bytes = writeOdtDocument(doc, { title: "Native align" });
+      const bytes = await writeOdtDocument(doc, { title: "Native align" });
       await page.setViewportSize({ width, height: 900 });
       await page.goto("/writer");
       await page.getByRole("button", { name: "Open", exact: true }).click();
@@ -137,7 +137,7 @@ test("native primitive cell orientation remains numeric across the browser open 
     if (node === undefined) throw Error("Missing native item paragraph");
     node.SetText("Primitive" + index);
   }
-  const bytes = writeOdtDocument(doc, { title: "Primitive alignment" });
+  const bytes = await writeOdtDocument(doc, { title: "Primitive alignment" });
   await page.setViewportSize({ width: 860, height: 900 });
   await page.goto("/writer");
   await page.getByRole("button", { name: "Open", exact: true }).click();

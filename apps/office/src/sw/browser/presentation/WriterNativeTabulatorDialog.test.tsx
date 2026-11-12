@@ -79,9 +79,12 @@ it("accepts pending Decimal/custom fill through the real dialog, retains control
       A.Default,
     );
     f.shell.Redo();
-    const loaded = await readOdtDocument(writeOdtDocument(f.shell.GetDoc(), { title: "Tabs" }), {
-      title: "Reopen",
-    });
+    const loaded = await readOdtDocument(
+      await writeOdtDocument(f.shell.GetDoc(), { title: "Tabs" }),
+      {
+        title: "Reopen",
+      },
+    );
     try {
       const reopened = loaded.document.paragraphs[0]?.GetAttr(T) as SvxTabStopItem;
       expect(reopened.At(0).GetTabPos()).toBe(1440);

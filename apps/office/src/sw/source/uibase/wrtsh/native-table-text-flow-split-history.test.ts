@@ -126,7 +126,7 @@ for (const selected of [false, true])
         expect(rows[0]?.GetTabBoxes()[0]).toBe(box);
         expect(box.GetParagraphs()[0]).toBe(node);
       }
-      const reopened = await readOdtDocument(writeOdtDocument(doc, { title: "Split" }), {
+      const reopened = await readOdtDocument(await writeOdtDocument(doc, { title: "Split" }), {
         title: "Split",
       });
       expect(reopened.document.GetTables()[0]?.GetFormat().layoutSplit).toBe(false);

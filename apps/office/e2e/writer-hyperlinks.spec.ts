@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 
 import { expect, test } from "@playwright/test";
 
-import { ZipFile } from "../src/package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../src/package/source/zippackage/document-archive";
 
 test("Writer creates, edits, and round-trips hyperlinks", /** Verifies upstream-aligned hyperlink surfaces and ODT text:a persistence. @param root0 - Playwright fixtures. @param root0.page - Chromium page. @returns Completion after the saved ODT is reopened. */ async function roundTripsWriterHyperlinks({
   page,
@@ -57,7 +57,7 @@ test("Writer creates, edits, and round-trips hyperlinks", /** Verifies upstream-
   const download = await downloadPromise;
   const downloadPath = await download.path();
   if (downloadPath === null) throw new Error("Chromium did not expose the saved ODT path.");
-  const archive = new ZipFile(new Uint8Array(await readFile(downloadPath)));
+  const archive = await DocumentArchive.open(new Uint8Array(await readFile(downloadPath)));
   const contentXml = await archive.readTextEntry("content.xml");
   expect(contentXml).toContain(
     '<text:a xlink:type="simple" xlink:href="https://example.test/updated" office:target-frame-name="_blank" xlink:show="new">Linked<text:s/>text</text:a>',

@@ -25,7 +25,7 @@ async function open(page: Page, count = 3) {
   await page.getByRole("button", { name: "Open", exact: true }).click();
   await page.getByRole("tab", { name: "On computer" }).click();
   await page.getByLabel("Browse").setInputFiles({
-    buffer: Buffer.from(writeOdtDocument(doc, { title: "Columns" })),
+    buffer: Buffer.from(await writeOdtDocument(doc, { title: "Columns" })),
     mimeType: "application/vnd.oasis.opendocument.text",
     name: "columns.odt",
   });

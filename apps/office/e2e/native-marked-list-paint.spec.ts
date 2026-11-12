@@ -28,7 +28,7 @@ for (const width of [1280, 390])
           ruleName: cell ? "CellRule" : "BodyRule",
         });
       }
-    const bytes = writeOdtDocument(doc, { title: "Marked labels" });
+    const bytes = await writeOdtDocument(doc, { title: "Marked labels" });
     doc.Dispose();
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/writer");

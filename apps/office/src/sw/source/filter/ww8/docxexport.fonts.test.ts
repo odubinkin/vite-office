@@ -1,5 +1,5 @@
 /** @fileoverview Real Writer export context, font metadata fragment routing and committed OOXML ZIP relationships. No text-graph traversal or whole-DOCX readiness is inferred from this part test. */
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { readOwnedXml } from "../../../../test/oox-input";
 import { expect, it } from "vitest";
 import { DocxExport } from "./docxexport";
@@ -29,12 +29,12 @@ function setup(docm = false, template = false) {
   };
 }
 /** Close native document owner and release consumed ranges. @param owners - Actual owners. @returns Committed ZIP bytes. */
-function finish(owners: ReturnType<typeof setup>): Uint8Array {
+async function finish(owners: ReturnType<typeof setup>): Promise<Uint8Array> {
   owners.exporter.dispose();
   owners.range.Dispose();
   owners.point.Dispose();
   owners.doc.Dispose();
-  return owners.filter.commitStorage();
+  return await owners.filter.commitStorage();
 }
 /** Read an actual committed ZIP fragment. @param storage - Reopened storage. @param path - Part. @returns Decoded XML. */
 async function xml(storage: ZipStorage, path: string): Promise<string> {
@@ -78,12 +78,12 @@ it("connects actual exporter, shared font registration, collected rFonts and fon
   o.exporter.WriteFonts();
   expect(a.GetSerializer()).toBe(serializer);
   expect(o.doc.GetNodes().entries()).toEqual(baseline);
-  const committed = finish(o),
-    storage = new ZipStorage(committed),
+  const committed = await finish(o),
+    storage = await ZipStorage.open(committed),
     main = await xml(storage, "word/document.xml"),
     fonts = await xml(storage, "word/fontTable.xml"),
     rels = await xml(storage, "word/_rels/document.xml.rels"),
-    types = await new ZipFile(committed).readTextEntry("[Content_Types].xml");
+    types = await (await DocumentArchive.open(committed)).readTextEntry("[Content_Types].xml");
   const reader = new XmlFilterBase(storage);
   expect(await reader.importFragment(new FragmentHandler(reader, "word/document.xml"))).toBe(true);
   expect(await reader.importFragment(new FragmentHandler(reader, "word/fontTable.xml"))).toBe(true);
@@ -125,7 +125,7 @@ it("emits all native font family/pitch/charset metadata and omits empty register
     o.exporter.GetId(new wwFont("font" + index, P.PITCH_DONTKNOW, family, 34));
   o.exporter.GetId(new wwFont("", P.PITCH_DONTKNOW, F.FAMILY_DONTKNOW, 0));
   o.exporter.WriteFonts();
-  const fonts = await xml(new ZipStorage(finish(o)), "word/fontTable.xml");
+  const fonts = await xml(await ZipStorage.open(await finish(o)), "word/fontTable.xml");
   for (const family of ["auto", "decorative", "modern", "script"])
     expect(fonts).toContain(`<w:family w:val="${family}"/>`);
   expect(fonts).toContain('<w:pitch w:val="default"/>');
@@ -147,7 +147,9 @@ it("retains all four native document media-type branches and missing namespace/r
     [true, true, "application/vnd.ms-word.template.macroEnabledTemplate.main+xml"],
   ] as const) {
     const o = setup(docm, template);
-    expect(await new ZipFile(finish(o)).readTextEntry("[Content_Types].xml")).toContain(type);
+    expect(
+      await (await DocumentArchive.open(await finish(o))).readTextEntry("[Content_Types].xml"),
+    ).toContain(type);
   }
   expect(new XmlFilterBase(new ZipStorage()).getNamespaceURL(-1)).toBe("");
   expect(getRelationship(Relationship.NUM_ENTRIES)).toBe("");

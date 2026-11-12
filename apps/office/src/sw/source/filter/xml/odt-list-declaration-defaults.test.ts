@@ -2,8 +2,8 @@
 import { getWriterNumFormatKind, getWriterNumFormatBullet } from "../../core/doc/number";
 
 import { expect, it } from "vitest";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createWriterDocument } from "../../core/doc/doc";
 import {
   encodeWriterDocument,
@@ -14,8 +14,8 @@ import { writeOdtDocument } from "./wrtxml";
 
 /** Inserts literal declarations and two list depths in a genuine common or automatic package. @param bytes - Baseline. @param levels - Source declarations. @param common - Common styles selection. @returns Package bytes. */
 async function input(bytes: Uint8Array, levels: string, common: boolean) {
-  const zip = new ZipFile(bytes),
-    output = new ZipOutputStream();
+  const zip = await DocumentArchive.open(bytes),
+    output = new DocumentArchiveWriter();
   const definition = `<text:list-style style:name="Defaults">${levels}</text:list-style>`;
   for (const entry of zip.getEntryNames()) {
     if (entry === "styles.xml" && common) {
@@ -35,11 +35,11 @@ async function input(bytes: Uint8Array, levels: string, common: boolean) {
       output.putNextEntry(entry, new TextEncoder().encode(xml));
     } else output.putNextEntry(entry, await zip.readEntry(entry));
   }
-  return output.finish();
+  return await output.finish();
 }
 
 it("retains native declaration defaults and skips invalid indices before reading properties", /** Checks manual common/automatic ODT states, markers, copied/snapshotted fields and reopen. @returns Completion. */ async () => {
-  const original = writeOdtDocument(createWriterDocument(), { title: "Defaults" });
+  const original = await writeOdtDocument(createWriterDocument(), { title: "Defaults" });
   const cases: readonly {
     source: string;
     applied: number;
@@ -173,10 +173,10 @@ it("retains native declaration defaults and skips invalid indices before reading
             level === testCase.applied ? (testCase.bullet ?? "1") : "1.",
         ),
       );
-      const exported = writeOdtDocument(document, { title: "Defaults" });
+      const exported = await writeOdtDocument(document, { title: "Defaults" });
       const xml =
-        (await new ZipFile(exported).readTextEntry("styles.xml")) +
-        (await new ZipFile(exported).readTextEntry("content.xml"));
+        (await (await DocumentArchive.open(exported)).readTextEntry("styles.xml")) +
+        (await (await DocumentArchive.open(exported)).readTextEntry("content.xml"));
       if (testCase.bullet === "") expect(xml).toContain('text:bullet-char=""');
       const reopened = (await readOdtDocument(exported, { title: "Defaults" })).document
         .GetNumRuleTable()

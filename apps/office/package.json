@@ -20,6 +20,7 @@
   "dependencies": {
     "@vite-office/libnumbertext": "file:../../third_party/libnumbertext-js",
     "@vite-office/libxml2-wasm": "file:../../third_party/libxml2-wasm",
+    "@zip.js/zip.js": "2.24.0",
     "entities": "9.0.0",
     "lucide-react": "1.72.0",
     "react": "19.3.1",

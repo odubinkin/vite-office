@@ -1,13 +1,13 @@
 /** @fileoverview Exercises production workers and raw XML storage with a 5000-row ODS while sampling main-thread responsiveness. */
 import { expect, test, type Page } from "@playwright/test";
 import { readFile, writeFile } from "node:fs/promises";
-import { ZipOutputStream } from "../../src/package/source/zipapi/ZipOutputStream";
+import { DocumentArchiveWriter } from "../../src/package/source/zippackage/document-archive";
 import { ODF_NAMESPACES } from "../../src/xmloff/source/core/xmltoken";
 import { installKernelFixture } from "../shared/kernel-fixture";
 /** Uses the explicitly supplied local regression file when requested, otherwise deterministic portable data. @returns ODS input. */
 async function fixture(): Promise<Buffer> {
   if (process.env.OFFICE_LARGE_ODS_FIXTURE) return readFile(process.env.OFFICE_LARGE_ODS_FIXTURE);
-  const output = new ZipOutputStream(),
+  const output = new DocumentArchiveWriter(),
     encoder = new TextEncoder();
   const mime = "application/vnd.oasis.opendocument.spreadsheet";
   const rows = Array.from(
@@ -31,7 +31,7 @@ async function fixture(): Promise<Buffer> {
       `<office:document-content xmlns:office="${ODF_NAMESPACES.office}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" office:version="1.3"><office:body><office:spreadsheet><table:table table:name="Data">${rows}</table:table></office:spreadsheet></office:body></office:document-content>`,
     ),
   );
-  return Buffer.from(output.finish());
+  return Buffer.from(await output.finish());
 }
 /** Starts an event-loop heartbeat after prior UI work has settled. @param page - Browser. @returns Completion. */
 async function startProbe(page: Page): Promise<void> {

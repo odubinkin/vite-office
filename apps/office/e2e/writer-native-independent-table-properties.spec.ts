@@ -34,7 +34,7 @@ async function open(page: Page): Promise<void> {
   await page.getByRole("button", { name: "Open", exact: true }).click();
   await page.getByRole("tab", { name: "On computer" }).click();
   await page.getByLabel("Browse").setInputFiles({
-    buffer: Buffer.from(writeOdtDocument(doc, { title: "IndependentProperties" })),
+    buffer: Buffer.from(await writeOdtDocument(doc, { title: "IndependentProperties" })),
     mimeType: "application/vnd.oasis.opendocument.text",
     name: "independent-properties.odt",
   });

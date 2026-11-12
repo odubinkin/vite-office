@@ -76,7 +76,7 @@ describe("ODT worker runtime" /** Groups worker execution behavior. @returns Not
     const source = new SwDoc({ locale: "ar-SA" });
     new OdtWorkerRuntime(scope).HandleMessage(
       request({
-        bytes: writeOdtDocument(source, metadata()).buffer as ArrayBuffer,
+        bytes: (await writeOdtDocument(source, metadata())).buffer as ArrayBuffer,
         metadata: { title: "Runtime", locale: "en-US" },
         operation: "import",
       }),
@@ -97,7 +97,7 @@ describe("ODT worker runtime" /** Groups worker execution behavior. @returns Not
     new SwWrtShell(shell).Insert("runtime body");
     runtime.HandleMessage(
       request({
-        bytes: writeOdtDocument(document, shell.GetDocumentState()).buffer as ArrayBuffer,
+        bytes: (await writeOdtDocument(document, shell.GetDocumentState())).buffer as ArrayBuffer,
         metadata: metadata(),
         operation: "import",
       }),
@@ -115,7 +115,7 @@ describe("ODT worker runtime" /** Groups worker execution behavior. @returns Not
     const limitedScope = new CapturingScope();
     new OdtWorkerRuntime(limitedScope).HandleMessage(
       request({
-        bytes: writeOdtDocument(document, shell.GetDocumentState()).buffer as ArrayBuffer,
+        bytes: (await writeOdtDocument(document, shell.GetDocumentState())).buffer as ArrayBuffer,
         metadata: metadata(),
         operation: "import",
         zipLimits: {
@@ -199,7 +199,7 @@ describe("ODT worker runtime" /** Groups worker execution behavior. @returns Not
     const document = createWriterDocument();
     cancelRuntime.HandleMessage(
       request({
-        bytes: writeOdtDocument(document, metadata()).buffer as ArrayBuffer,
+        bytes: (await writeOdtDocument(document, metadata())).buffer as ArrayBuffer,
         metadata: metadata(),
         operation: "import",
       }),

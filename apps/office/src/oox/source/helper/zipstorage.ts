@@ -1,11 +1,11 @@
-/** @fileoverview Ports consumed oox::ZipStorage stream and commit responsibilities over the existing ZIP32 binding; output content types remain owned by package/comphelper. */
+/** @fileoverview Ports consumed oox::ZipStorage stream and commit responsibilities over zip.js document archive transport; output content types remain owned by package/comphelper. */
 import {
-  ZipFile,
-  Checks,
-  assertSafeZipEntryName,
-  type ZipFileLimits,
-} from "../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../package/source/zipapi/ZipOutputStream";
+  DocumentArchive,
+  ArchiveChecks,
+  assertSafeArchivePath,
+  type ArchiveLimits,
+} from "../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../package/source/zippackage/document-archive";
 import {
   readPlainPackageContentTypes,
   WriteContentTypes,
@@ -138,14 +138,17 @@ export class ZipFragmentStream {
 
 /** Readonly input ZIP or writable OOXML package; no ODF manifest requirement is introduced. */
 export class ZipStorage {
-  private readonly input: ZipFile | undefined;
   private contentTypes:
     | Promise<{ readonly types: ReadonlyMap<string, string> } | { readonly failure: string }>
     | undefined;
   private readonly streams = new Map<string, ZipFragmentStream>();
-  /** Opens input bytes, or creates writable storage when bytes are absent. @param bytes - Input ZIP. @param limits - Browser resource limits. @returns Storage. */
-  constructor(bytes?: Uint8Array, limits?: ZipFileLimits) {
-    if (bytes !== undefined) this.input = new ZipFile(bytes, limits, Checks.CheckInsensitive);
+  /** Creates writable storage, or binds a validated input catalog. @param input - Validated archive. @returns Storage. */
+  constructor(private readonly input?: DocumentArchive) {}
+  /** Opens read-only OOXML storage asynchronously. @param bytes - Input ZIP. @param limits - Browser resource limits. @returns Storage. */
+  static async open(bytes: Uint8Array, limits?: ArchiveLimits): Promise<ZipStorage> {
+    return new ZipStorage(
+      await DocumentArchive.open(bytes, limits, ArchiveChecks.CheckInsensitive),
+    );
   }
   /** Reports native storage mode. @returns Readonly input. */
   isReadOnly(): boolean {
@@ -200,7 +203,7 @@ export class ZipStorage {
       source = new InputSource();
     try {
       source.aInputStream = input;
-      return readPlainPackageContentTypes(this.input as ZipFile, source);
+      return readPlainPackageContentTypes(this.input as DocumentArchive, source);
     } catch (error) {
       if (error instanceof Exception) throw error;
       if (error instanceof Error) ioError("Wrong format!");
@@ -318,15 +321,15 @@ export class ZipStorage {
   /** Opens/truncates a writable stream, retaining the owning stream's relationship counter. @param path - Safe archive path. @param mediaType - MIME property. @returns Stream. */
   openOutputStream(path: string, mediaType: string): ZipFragmentStream {
     if (this.isReadOnly()) throw new Error("OOXML storage is read-only.");
-    assertSafeZipEntryName(path);
+    assertSafeArchivePath(path);
     const stream = new ZipFragmentStream(path, mediaType);
     this.streams.set(path, stream);
     return stream;
   }
   /** Commits actual stream bytes and native package metadata. @returns ZIP package. */
-  commit(): Uint8Array {
+  async commit(): Promise<Uint8Array> {
     if (this.isReadOnly()) throw new Error("OOXML storage is read-only.");
-    const output = new ZipOutputStream(),
+    const output = new DocumentArchiveWriter(),
       manifest = [];
     try {
       for (const [path, stream] of this.streams) {
@@ -342,7 +345,7 @@ export class ZipStorage {
         "[Content_Types].xml",
         new TextEncoder().encode(WriteContentTypes(manifest)),
       );
-      return output.finish();
+      return await output.finish();
     } finally {
       for (const sequence of manifest)
         for (const property of sequence) {

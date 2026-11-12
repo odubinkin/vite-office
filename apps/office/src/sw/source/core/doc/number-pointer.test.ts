@@ -362,9 +362,12 @@ it("keeps pointer assigned live rule reads and sparse ownership through actual d
   sparse.Dispose();
   input.SetNumberingType(SvxNumType.SVX_NUM_ARABIC);
   rule.SetByPointer(0, input);
-  const reopened = await readOdtDocument(writeOdtDocument(doc, { title: "Pointer assignment" }), {
-    title: "Pointer assignment",
-  });
+  const reopened = await readOdtDocument(
+    await writeOdtDocument(doc, { title: "Pointer assignment" }),
+    {
+      title: "Pointer assignment",
+    },
+  );
   const imported = reopened.document.paragraphs[0]?.GetNum()?.GetNumRule();
   expect(imported?.Get(0).GetNumberingType()).toBe(SvxNumType.SVX_NUM_ARABIC);
   expect(imported?.Get(0).GetSuffix()).toBe(")");

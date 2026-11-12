@@ -14,7 +14,7 @@ import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import { SvxXMLListLevelStyleContext_Impl } from "../../../../xmloff/source/style/xmlnumi";
 import { SvxXMLNumRuleExport } from "../../../../xmloff/source/style/xmlnume";
 import { SwXNumberingRules, NumberingRulePropertyError } from "../../core/unocore/unosett";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 import { importWriterXml } from "./xmlimp";
@@ -214,8 +214,8 @@ it("retains NONE list ownership through fresh ODT export import and Worker graph
     );
     shell.SetCurNumRule(rule, false, "", true);
   }
-  const bytes = writeOdtDocument(doc, metadata),
-    content = await new ZipFile(bytes).readTextEntry("content.xml");
+  const bytes = await writeOdtDocument(doc, metadata),
+    content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
   expect(content).toContain('style:num-format=""');
   expect(content).toContain('style:num-format="1"');
   const imported = (await readOdtDocument(bytes, metadata)).document;
@@ -232,8 +232,8 @@ it("retains NONE list ownership through fresh ODT export import and Worker graph
 });
 
 it("applies the last common alias to the shared named numbering style", /** Preserves the existing duplicate-rule policy while comparing native type. @returns Completion. */ async () => {
-  const bytes = writeOdtDocument(new SwDoc(), { title: "Alias" }),
-    zip = new ZipFile(bytes),
+  const bytes = await writeOdtDocument(new SwDoc(), { title: "Alias" }),
+    zip = await DocumentArchive.open(bytes),
     styles = await zip.readTextEntry("styles.xml"),
     content = await zip.readTextEntry("content.xml");
   const declarations =

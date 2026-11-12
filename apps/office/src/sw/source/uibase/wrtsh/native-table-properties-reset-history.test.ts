@@ -130,7 +130,7 @@ for (const page of ["table", "columns"] as const) {
       "format-page-list",
       "Numbering",
     ]);
-    const opened = await readOdtDocument(writeOdtDocument(f.doc, { title: "Reset" }), {
+    const opened = await readOdtDocument(await writeOdtDocument(f.doc, { title: "Reset" }), {
         title: "Reset",
       }),
       restored = required(opened.document.GetTables()[0]);

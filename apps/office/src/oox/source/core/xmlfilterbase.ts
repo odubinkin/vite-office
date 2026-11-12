@@ -188,7 +188,7 @@ export class XmlFilterBase {
     );
   }
   /** Commits original relationship streams before the storage transaction. @returns OOXML bytes. */
-  commitStorage(): Uint8Array {
+  async commitStorage(): Promise<Uint8Array> {
     for (const [path, output] of this.outputRelations) {
       const stream = this.storage.openOutputStream(
         getRelationsPath(path),
@@ -205,6 +205,6 @@ export class XmlFilterBase {
       }
       stream.closeOutput();
     }
-    return this.storage.commit();
+    return await this.storage.commit();
   }
 }

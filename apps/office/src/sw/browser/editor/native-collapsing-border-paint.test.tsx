@@ -114,9 +114,12 @@ it.each([false, true])(
         expect(paint(0, 0)).toHaveStyle({ borderRightColor: "rgb(255, 0, 0)" });
         expect(boxes[0]?.GetParagraphs()[0]).toBe(node);
       }
-      const reopened = await readOdtDocument(writeOdtDocument(doc, { title: "NativeConflict" }), {
-        title: "NativeConflict",
-      });
+      const reopened = await readOdtDocument(
+        await writeOdtDocument(doc, { title: "NativeConflict" }),
+        {
+          title: "NativeConflict",
+        },
+      );
       expect(
         reopened.document.GetTables()[0]?.GetTabLines()[0]?.GetTabBoxes()[0]?.GetBox().QueryValue(),
       ).toEqual(original[0]);

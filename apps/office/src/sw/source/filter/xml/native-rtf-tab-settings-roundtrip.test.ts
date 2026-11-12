@@ -19,7 +19,7 @@ it("reopens absolute RTF tab positions and list indentation compatibility", /** 
     expect(settings).toContain(
       'config:name="TabAtLeftIndentForParagraphsInList" config:type="boolean">true',
     );
-    for (const bytes of [storage, writeOdtDocument(source, metadata)]) {
+    for (const bytes of [storage, await writeOdtDocument(source, metadata)]) {
       const { document } = await readOdtDocument(bytes, metadata);
       try {
         expect(document.GetDocumentSettingManager().GetValues()).toMatchObject({

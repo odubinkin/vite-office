@@ -8,7 +8,7 @@ import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
 import { readOdtDocument } from "../src/sw/source/filter/xml/swxml";
 
 /** Creates an actual owned mixed-style ODT with untouched neighbors and an empty selected paragraph. @returns Complete package bytes. */
-function mixedRangeOdt(): Uint8Array {
+async function mixedRangeOdt(): Promise<Uint8Array> {
   const doc = new SwDoc(),
     first = doc.paragraphs[0];
   if (first === undefined) throw new Error("Missing native ODT paragraph");
@@ -20,7 +20,7 @@ function mixedRangeOdt(): Uint8Array {
   doc.GetNodes().MakeTextNode("");
   doc.GetNodes().MakeTextNode("LastStyleRange").ChgFormatColl(a);
   doc.GetNodes().MakeTextNode("AfterStyleRange");
-  const result = writeOdtDocument(
+  const result = await writeOdtDocument(
     doc,
     createDocument({ id: "style-range", suiteId: "writer", title: "Style range" }),
   );
@@ -69,7 +69,7 @@ for (const width of [1280, 390]) {
     await page.getByRole("button", { name: "Open", exact: true }).click();
     await page.getByRole("tab", { name: "On computer" }).click();
     await page.getByLabel("Browse").setInputFiles({
-      buffer: Buffer.from(mixedRangeOdt()),
+      buffer: Buffer.from(await mixedRangeOdt()),
       mimeType: "application/vnd.oasis.opendocument.text",
       name: "style-range.odt",
     });

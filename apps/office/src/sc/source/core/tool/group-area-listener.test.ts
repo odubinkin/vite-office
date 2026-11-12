@@ -424,7 +424,7 @@ it("serializes actual shared code at every member position and reopens formulas 
   const { doc, group, cells, listener } = fixture();
   doc.StartListeningArea(listener.getListeningRange(), true, listener);
   doc.SetValue(new ScAddress(0, 3, 0), 40);
-  const reopened = await readOdsDocument(writeOdsDocument(doc));
+  const reopened = await readOdsDocument(await writeOdsDocument(doc));
   expect(
     cells.every(
       /** Original cells still share their actual group code. @param cell - Actual cell. @returns Shared. */ (

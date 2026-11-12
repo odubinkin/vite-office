@@ -42,7 +42,7 @@ test("Writer headline-adjacent text reflow retains a source caret beyond the old
       title: "Header reflow",
     }),
     shell = new SwDocShell(doc, metadata),
-    bytes = writeOdtDocument(doc, metadata);
+    bytes = await writeOdtDocument(doc, metadata);
   shell.Close();
   await page.goto("/writer");
   await page.getByRole("button", { name: "Open", exact: true }).click();
@@ -145,7 +145,7 @@ for (const width of [1280, 390])
     doc.nodes.MakeTextNode("After");
     const metadata = createDocument({ id: "headlines", suiteId: "writer", title: "Headlines" }),
       shell = new SwDocShell(doc, metadata),
-      bytes = writeOdtDocument(doc, metadata);
+      bytes = await writeOdtDocument(doc, metadata);
     shell.Close();
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/writer");

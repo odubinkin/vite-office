@@ -86,9 +86,12 @@ it("actual Table Properties changes physical repeated headers and ODT while pres
       expect(shell.GetCursor()).toBe(cursor);
       expect(rows[0]?.GetTabBoxes()[0]?.GetParagraphs()[0]).toBe(header);
     }
-    const reopened = await readOdtDocument(writeOdtDocument(doc, { title: "NativeCommand" }), {
-      title: "NativeCommand",
-    });
+    const reopened = await readOdtDocument(
+      await writeOdtDocument(doc, { title: "NativeCommand" }),
+      {
+        title: "NativeCommand",
+      },
+    );
     expect(required(reopened.document.GetTables()[0]).GetRowsToRepeat()).toBe(0);
     expect(table.GetTabLines()).toHaveLength(4);
   } finally {

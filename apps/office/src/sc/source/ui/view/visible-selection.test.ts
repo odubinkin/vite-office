@@ -186,7 +186,7 @@ it("formats only actual visible selection runs and restores them through native 
     c.Redo();
     expect(c.viewData.GetMarkData().IsCellMarked(0, 2)).toBe(false);
     expect(c.viewData.GetMarkData().GetMarkedRanges()).toEqual(marks.GetMarkedRanges());
-    const loaded = await readOdsDocument(writeOdsDocument(doc));
+    const loaded = await readOdsDocument(await writeOdsDocument(doc));
     assert(loaded.FetchTable(0));
     for (let row = 0; row <= 5; row++)
       expect(weight(loaded, row)).toBe(

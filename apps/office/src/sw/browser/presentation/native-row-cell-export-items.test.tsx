@@ -51,7 +51,9 @@ it("mounted row height and cell NONE retain original owners across export and na
         expect(xml).toContain('style:vertical-align=""');
         const reopened = required(
           (
-            await readOdtDocument(writeOdtDocument(doc, { title: "Mounted" }), { title: "Mounted" })
+            await readOdtDocument(await writeOdtDocument(doc, { title: "Mounted" }), {
+              title: "Mounted",
+            })
           ).document.GetTables()[0],
         );
         expect(required(reopened.GetTabLines()[0]).GetFrameSize().GetHeight()).toBe(720);

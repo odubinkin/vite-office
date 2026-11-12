@@ -9,7 +9,7 @@ import {
 } from "../../../browser/filter/xml/writer-document-codec";
 import { writeOdtDocument } from "./wrtxml";
 import { readOdtDocument } from "./swxml";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 for (const [orient, left, right, width, token, leftExport, rightExport] of [
   [H.FULL, 0, 0, 8000, "margins", false, false],
   [H.LEFT, 0, 5000, 3000, "left", false, false],
@@ -35,8 +35,8 @@ for (const [orient, left, right, width, token, leftExport, rightExport] of [
       actual = worker.GetTables()[0];
     expect(actual?.GetFormat()).toEqual(table.GetFormat());
     const metadata = { title: "Geometry" },
-      bytes = writeOdtDocument(worker, metadata);
-    const xml = await new ZipFile(bytes).readTextEntry("content.xml");
+      bytes = await writeOdtDocument(worker, metadata);
+    const xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     const attributes = xml.match(/<style:table-properties[^>]*\/>/)?.[0];
     expect(attributes).toContain(`table:align="${token}"`);
     expect(attributes?.includes("fo:margin-left=")).toBe(leftExport);

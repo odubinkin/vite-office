@@ -91,7 +91,7 @@ it.each([false, true])(
     expect(f.node.GetText()).toBe("CeXll");
     expect(f.node.GetListId()).toBe("native-list");
     expect(f.node.GetNumRuleName()).toBe("Numbering");
-    const reopened = await readOdtDocument(writeOdtDocument(f.doc, { title: "Widths" }), {
+    const reopened = await readOdtDocument(await writeOdtDocument(f.doc, { title: "Widths" }), {
         title: "Widths",
       }),
       table = required(reopened.document.GetTables()[0]);

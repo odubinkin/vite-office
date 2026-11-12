@@ -100,7 +100,7 @@ it.each([false, true])(
           expect(box.GetParagraphs()[0]).toBe(node);
           expect(node.GetText()).toBe("Original frame cell");
         }
-        const reopened = await readOdtDocument(writeOdtDocument(doc, { title: "FrameUI" }), {
+        const reopened = await readOdtDocument(await writeOdtDocument(doc, { title: "FrameUI" }), {
           title: "FrameUI",
         });
         expect(

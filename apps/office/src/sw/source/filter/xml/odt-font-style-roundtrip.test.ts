@@ -3,8 +3,8 @@ import { describe, expect, it, vi } from "vitest";
 import { SvxBorderLine, SvxBorderLineStyle } from "../../../../editeng/source/items/borderline";
 import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { Color } from "../../../../tools/inc/color";
@@ -33,8 +33,8 @@ async function rewriteStylesXml(
   bytes: Uint8Array,
   transform: (styles: string) => string,
 ): Promise<Uint8Array> {
-  const input = new ZipFile(bytes);
-  const output = new ZipOutputStream();
+  const input = await DocumentArchive.open(bytes);
+  const output = new DocumentArchiveWriter();
   for (const name of input.getEntryNames())
     output.putNextEntry(
       name,
@@ -42,7 +42,7 @@ async function rewriteStylesXml(
         ? new TextEncoder().encode(transform(await input.readTextEntry(name)))
         : await input.readEntry(name),
     );
-  return output.finish();
+  return await output.finish();
 }
 
 describe("Writer ODT font and style compatibility", /** Groups file compatibility tests. @returns Nothing. */ () => {
@@ -56,8 +56,8 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     );
     style.SetFormatAttr(box);
     style.SetFormatAttr(new SwParaConnectBorderItem(true));
-    const saved = writeOdtDocument(writer, { title: "Thematic line" });
-    const xml = await new ZipFile(saved).readTextEntry("styles.xml");
+    const saved = await writeOdtDocument(writer, { title: "Thematic line" });
+    const xml = await (await DocumentArchive.open(saved)).readTextEntry("styles.xml");
     expect(xml).toContain('style:join-border="true"');
     expect(xml).toContain('fo:border-bottom="2.01pt solid #112233"');
     const reopened = await readOdtDocument(saved, { title: "Thematic line" });
@@ -110,8 +110,8 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
       ),
     );
     const metadata = { title: "Script families" };
-    const saved = writeOdtDocument(writer, metadata);
-    const stylesXml = await new ZipFile(saved).readTextEntry("styles.xml");
+    const saved = await writeOdtDocument(writer, metadata);
+    const stylesXml = await (await DocumentArchive.open(saved)).readTextEntry("styles.xml");
     expect(stylesXml).toContain('style:font-name-asian="Asian Serif"');
     expect(stylesXml).toContain('style:font-name-complex="Complex Serif"');
     const reopened = await readOdtDocument(saved, metadata);
@@ -145,7 +145,7 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     writer.GetTextFormatColl("title");
     writer.GetTextFormatColl("subtitle");
     const state = createDocument({ id: "title-parent", suiteId: "writer", title: "Title parent" });
-    const bytes = writeOdtDocument(writer, state);
+    const bytes = await writeOdtDocument(writer, state);
     const replaceTitleParent =
       /** Replaces Title's declared parent. @param styles - Named-style XML. @param parent - Replacement ODF style name. @returns Updated XML. */ (
         styles: string,
@@ -166,12 +166,14 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     expect(imported.document.GetTextFormatColl("title").DerivedFrom()).toBe(
       imported.document.GetDfltTextFormatColl(),
     );
-    const exported = new ZipFile(writeOdtDocument(imported.document, { title: imported.title }));
+    const exported = await DocumentArchive.open(
+      await writeOdtDocument(imported.document, { title: imported.title }),
+    );
     expect(await exported.readTextEntry("styles.xml")).toMatch(
       /<style:style style:name="Title"[^>]*style:parent-style-name="Standard"/,
     );
     const reopened = await readOdtDocument(
-      writeOdtDocument(imported.document, { title: imported.title }),
+      await writeOdtDocument(imported.document, { title: imported.title }),
       state,
     );
     expect(reopened.document.GetTextFormatColl("title").DerivedFrom()).toBe(
@@ -217,7 +219,7 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     writer.GetTextFormatColl("title");
     writer.GetTextFormatColl("subtitle");
     const state = createDocument({ id: "title-follow", suiteId: "writer", title: "Title follow" });
-    const bytes = writeOdtDocument(writer, state);
+    const bytes = await writeOdtDocument(writer, state);
     const replaceTitleFollow =
       /** Replaces Title's declared follow style. @param styles - Named-style XML. @param follow - Replacement ODF style name. @returns Updated XML. */ (
         styles: string,
@@ -238,12 +240,14 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     expect(imported.document.GetTextFormatColl("title").GetNextTextFormatColl()).toBe(
       imported.document.GetTextFormatColl("subtitle"),
     );
-    const exported = new ZipFile(writeOdtDocument(imported.document, { title: imported.title }));
+    const exported = await DocumentArchive.open(
+      await writeOdtDocument(imported.document, { title: imported.title }),
+    );
     expect(await exported.readTextEntry("styles.xml")).toMatch(
       /<style:style style:name="Title"[^>]*style:next-style-name="Subtitle"/,
     );
     const reopened = await readOdtDocument(
-      writeOdtDocument(imported.document, { title: imported.title }),
+      await writeOdtDocument(imported.document, { title: imported.title }),
       state,
     );
     expect(reopened.document.GetTextFormatColl("title").GetNextTextFormatColl()).toBe(
@@ -316,8 +320,8 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     );
 
     const state = createDocument({ id: "odt-all", suiteId: "writer", title: "All styles" });
-    const firstBytes = writeOdtDocument(writer, state);
-    const firstArchive = new ZipFile(firstBytes);
+    const firstBytes = await writeOdtDocument(writer, state);
+    const firstArchive = await DocumentArchive.open(firstBytes);
     const stylesXml = await firstArchive.readTextEntry("styles.xml");
     const contentXml = await firstArchive.readTextEntry("content.xml");
     expect(stylesXml).toContain(
@@ -400,7 +404,7 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     ).toBe(15 * 20);
 
     const reopened = await readOdtDocument(
-      writeOdtDocument(opened.document, { title: opened.title }),
+      await writeOdtDocument(opened.document, { title: opened.title }),
       state,
     );
     const projectStyles =
@@ -443,8 +447,8 @@ it("retains every supported native font value through ODT declarations for all t
       ),
     );
   const metadata = { title: "Native font fields" },
-    bytes = writeOdtDocument(writer, metadata),
-    styles = await new ZipFile(bytes).readTextEntry("styles.xml");
+    bytes = await writeOdtDocument(writer, metadata),
+    styles = await (await DocumentArchive.open(bytes)).readTextEntry("styles.xml");
   expect(styles).toContain('style:font-adornments="Style0"');
   expect(styles).toContain('style:font-adornments="Style1"');
   expect(styles).toContain('style:font-adornments="Style2"');

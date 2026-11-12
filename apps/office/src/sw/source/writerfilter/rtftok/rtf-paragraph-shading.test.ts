@@ -59,7 +59,7 @@ it("preserves Markdown HTML paragraph shading through Writer storage and RTF", /
   try {
     worker = decodeWriterDocument(structuredClone(encodeWriterDocument(document)));
     const metadata = { title: "Paragraph fill" };
-    odt = (await readOdtDocument(writeOdtDocument(worker, metadata), metadata)).document;
+    odt = (await readOdtDocument(await writeOdtDocument(worker, metadata), metadata)).document;
     rtf = new RtfDocumentImpl().ResolveBytes(RtfExport.WriteDocument(odt));
     for (const doc of [document, worker, odt, rtf]) {
       const index = doc.paragraphs.findIndex(

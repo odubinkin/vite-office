@@ -32,12 +32,12 @@ export interface OdtExportControl {
 /** Writes the currently supported Writer graph as an ODF 1.3 text package. */
 export class SwXMLWriter {
   /** Writes an external ODT package. @param document - Model. @param metadata - Title. @param control - Controls. @returns ODT bytes. */
-  public Write(
+  public async Write(
     document: SwDoc,
     metadata: Readonly<{ title: string }>,
     control: OdtExportControl = {},
-  ): Uint8Array {
-    const bytes = packXmlPackage(this.WriteXml(document, metadata, control).files);
+  ): Promise<Uint8Array> {
+    const bytes = await packXmlPackage(this.WriteXml(document, metadata, control).files);
     if (bytes.length > (control.maxOutputBytes ?? ODT_EXPORT_BYTE_LIMIT))
       throw new Error("ODT export exceeds size limit.");
     return bytes;
@@ -95,12 +95,12 @@ export class SwXMLWriter {
 }
 
 /** Convenience ODT export boundary. @param document - Canonical Writer document. @param metadata - Filter metadata supplied by the shell. @param control - Cooperative progress/cancellation controls. @returns Deterministic ODT bytes. */
-export function writeOdtDocument(
+export async function writeOdtDocument(
   document: SwDoc,
   metadata: Readonly<{ title: string }>,
   control?: OdtExportControl,
-): Uint8Array {
-  return new SwXMLWriter().Write(document, metadata, control);
+): Promise<Uint8Array> {
+  return await new SwXMLWriter().Write(document, metadata, control);
 }
 
 /** Emits progress then rejects cancelled work before another heavy stage. @param control - Cooperative controls. @param stage - Current stage. @returns Nothing. */

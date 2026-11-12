@@ -451,7 +451,7 @@ it("keeps quoted line breaks as native edit cells through CSV and ODS", /** Chec
   expect(converter.ImportStream(new TextEncoder().encode('"first\nsecond",7\n'))).toBe(true);
   const pos = new ScAddress(0, 0, 0);
   expect(doc.GetCellType(pos)).toBe(CellType.CELLTYPE_EDIT);
-  const reload = await readOdsDocument(writeOdsDocument(doc));
+  const reload = await readOdsDocument(await writeOdsDocument(doc));
   expect(reload.GetCellType(pos)).toBe(CellType.CELLTYPE_EDIT);
   const edit = reload.GetRefCellValue(pos).getEditText();
   assert(edit);

@@ -22,7 +22,7 @@ for (const viewport of [1280, 390])
     await page.getByRole("button", { name: "Open", exact: true }).click();
     await page.getByRole("tab", { name: "On computer" }).click();
     await page.getByLabel("Browse").setInputFiles({
-      buffer: Buffer.from(writeOdtDocument(doc, { title: "Drag" })),
+      buffer: Buffer.from(await writeOdtDocument(doc, { title: "Drag" })),
       mimeType: "application/vnd.oasis.opendocument.text",
       name: "drag.odt",
     });
@@ -142,7 +142,7 @@ test("native outer-left tracking accepts Enter and preserves the editing cursor"
   await page.getByRole("button", { name: "Open", exact: true }).click();
   await page.getByRole("tab", { name: "On computer" }).click();
   await page.getByLabel("Browse").setInputFiles({
-    buffer: Buffer.from(writeOdtDocument(doc, { title: "EnterDrag" })),
+    buffer: Buffer.from(await writeOdtDocument(doc, { title: "EnterDrag" })),
     mimeType: "application/vnd.oasis.opendocument.text",
     name: "enter-drag.odt",
   });

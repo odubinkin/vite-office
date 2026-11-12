@@ -58,7 +58,7 @@ it("copies scalar/string/formula blocks and keeps native empty-source and empty-
   expect(target.GetCellTextAttr(0)?.mnTextWidth).toBe(new CellTextAttr().mnTextWidth);
   column(doc, 3).SetValue(3, 33);
   expect(target.GetValue(3)).toBe(34);
-  const reopened = await readOdsDocument(writeOdsDocument(doc));
+  const reopened = await readOdsDocument(await writeOdsDocument(doc));
   expect(reopened.GetValue(new ScAddress(1, 3, 0))).toBe(34);
   reopened.SetValue(new ScAddress(3, 3, 0), 40);
   expect(reopened.GetValue(new ScAddress(1, 3, 0))).toBe(41);
@@ -428,7 +428,7 @@ it("undoes and redoes real pasted formula groups through native documents and sh
   expect(shell.Undo()).toBe(true);
   expect(shell.Redo()).toBe(true);
   expect(doc.GetValue(new ScAddress(1, 4, 1))).toBe(40);
-  const reopened = await readOdsDocument(writeOdsDocument(doc));
+  const reopened = await readOdsDocument(await writeOdsDocument(doc));
   reopened.SetValue(new ScAddress(0, 4, 1), 30);
   expect(reopened.GetValue(new ScAddress(1, 4, 1))).toBe(60);
   reopened.Dispose();

@@ -98,7 +98,7 @@ for (const original of [0, 2]) {
       "headline-list",
       "Numbering",
     ]);
-    const reopened = await readOdtDocument(writeOdtDocument(doc, { title: "Headline" }), {
+    const reopened = await readOdtDocument(await writeOdtDocument(doc, { title: "Headline" }), {
         title: "Headline",
       }),
       restored = required(reopened.document.GetTables()[0]);

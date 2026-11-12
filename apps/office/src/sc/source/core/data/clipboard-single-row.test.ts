@@ -147,7 +147,7 @@ it("copies a formula row as a genuine shared group and preserves recalculation a
   const formula = copied.GetFormula(FormulaGrammar.Grammar.GRAM_NATIVE);
   expect(text(formula)).toBe("=D4+$B$1");
   formula.dispose();
-  const reopened = await readOdsDocument(writeOdsDocument(doc));
+  const reopened = await readOdsDocument(await writeOdsDocument(doc));
   reopened.SetValue(new ScAddress(3, 3, 0), 20);
   expect(reopened.GetValue(new ScAddress(2, 3, 0))).toBe(22);
   reopened.Dispose();
@@ -262,7 +262,7 @@ it("prepares and pastes a real source row through the original document fast pat
   expect(doc.GetValue(new ScAddress(5, 5, 0))).toBe(14);
   doc.SetValue(new ScAddress(4, 5, 0), 27);
   expect(doc.GetValue(new ScAddress(5, 5, 0))).toBe(28);
-  const reopened = await readOdsDocument(writeOdsDocument(doc));
+  const reopened = await readOdsDocument(await writeOdsDocument(doc));
   expect(reopened.GetValue(new ScAddress(5, 5, 0))).toBe(28);
   reopened.SetValue(new ScAddress(4, 5, 0), 40);
   expect(reopened.GetValue(new ScAddress(5, 5, 0))).toBe(41);

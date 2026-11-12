@@ -12,7 +12,7 @@ import { RtfExport } from "../ww8/rtfexport";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
 import { readOdtDocument } from "../xml/swxml";
 import { writeOdtDocument } from "../xml/wrtxml";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatAnchor } from "../../../inc/fmtanchr";
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
@@ -222,8 +222,8 @@ it.each(["paragraph", "char"] as const)(
           point.Dispose();
         }
       }
-      const bytes = writeOdtDocument(doc, metadata);
-      const xml = await new ZipFile(bytes).readTextEntry("content.xml");
+      const bytes = await writeOdtDocument(doc, metadata);
+      const xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
       expect(xml).toContain('<draw:frame draw:style-name="fr1"');
       expect(xml).toContain('<draw:text-box fo:min-height="0cm">');
       expect(xml).toContain('style:horizontal-pos="left"');

@@ -40,7 +40,7 @@ for (const width of [1280, 390])
       await page.getByRole("button", { name: "Open", exact: true }).click();
       await page.getByRole("tab", { name: "On computer" }).click();
       await page.getByLabel("Browse").setInputFiles({
-        buffer: Buffer.from(writeOdtDocument(doc, { title: "Common" })),
+        buffer: Buffer.from(await writeOdtDocument(doc, { title: "Common" })),
         mimeType: "application/vnd.oasis.opendocument.text",
         name: "common.odt",
       });

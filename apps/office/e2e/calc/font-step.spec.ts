@@ -74,7 +74,7 @@ test("executes real script-height items,font stepping,history and ODS in page an
           const undo = values();
           shell.GetUndoManager().Redo(shell);
           const redo = values();
-          const reopened = await n.readOdsDocument(n.writeOdsDocument(doc));
+          const reopened = await n.readOdsDocument(await n.writeOdsDocument(doc));
           try {
             return {
               before,

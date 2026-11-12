@@ -68,7 +68,7 @@ for (const cell of [false, true])
     }
     node.SetAttr(new SvxTextLeftMarginItem(SvxIndentValue.twips(1680), RES_MARGIN_TEXTLEFT));
     const shell = new SwDocShell(doc, meta),
-      bytes = writeOdtDocument(doc, meta);
+      bytes = await writeOdtDocument(doc, meta);
     shell.Close();
     await page.goto("/writer");
     await page.getByRole("button", { name: "Open", exact: true }).click();

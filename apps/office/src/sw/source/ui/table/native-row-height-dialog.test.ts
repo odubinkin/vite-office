@@ -64,7 +64,7 @@ for (const type of [SwFrameSize.Fixed, SwFrameSize.Minimum, SwFrameSize.Variable
             expect(sizes()).toEqual(accepted);
           }
           const opened = await readOdtDocument(
-            writeOdtDocument(
+            await writeOdtDocument(
               doc,
               createDocument({ id: "height-roundtrip", suiteId: "writer", title: "Height" }),
             ),

@@ -152,7 +152,7 @@ it("native proportional shares remain captured through repeated previews, origin
   expect(f.node.GetNumRule()).toBe(rule);
   expect(f.node.GetListId()).toBe("drag-list");
   expect(f.node.GetText()).toBe("Cell");
-  const reopened = await readOdtDocument(writeOdtDocument(f.doc, { title: "Proportional" }), {
+  const reopened = await readOdtDocument(await writeOdtDocument(f.doc, { title: "Proportional" }), {
     title: "Proportional",
   });
   expect(reopened.document.GetTables()[0]?.GetColumnWidths()).toEqual([1950, 660, 2025, 1365]);

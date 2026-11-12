@@ -1,8 +1,8 @@
 /** @fileoverview Checks pinned Writer embedded-font fixtures through package, model, Worker and export paths. */
 import fs from "node:fs";
 import { describe, expect, it } from "vitest";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import {
   decodeWriterDocument,
   encodeWriterDocument,
@@ -32,14 +32,14 @@ async function replaceEntry(
   name: string,
   transform: (bytes: Uint8Array) => Uint8Array,
 ): Promise<Uint8Array> {
-  const zip = new ZipFile(source);
-  const output = new ZipOutputStream();
+  const zip = await DocumentArchive.open(source);
+  const output = new DocumentArchiveWriter();
   for (const entry of zip.getEntryNames())
     output.putNextEntry(
       entry,
       entry === name ? transform(await zip.readEntry(entry)) : await zip.readEntry(entry),
     );
-  return output.finish();
+  return await output.finish();
 }
 
 describe("pinned Writer embedded font resources", /** Mirrors source-backed import and export assertions. @returns Nothing. */ () => {
@@ -55,11 +55,13 @@ describe("pinned Writer embedded font resources", /** Mirrors source-backed impo
         ),
     );
     await expect(readFontFixture(malformedPath)).rejects.toThrow("font path is invalid");
-    const archive = new ZipFile(fixture);
-    const output = new ZipOutputStream();
+    const archive = await DocumentArchive.open(fixture);
+    const output = new DocumentArchiveWriter();
     for (const name of archive.getEntryNames())
       if (name !== fontPath) output.putNextEntry(name, await archive.readEntry(name));
-    await expect(readFontFixture(output.finish())).rejects.toThrow("font package entry is missing");
+    await expect(readFontFixture(await output.finish())).rejects.toThrow(
+      "font package entry is missing",
+    );
     const oversized = await replaceEntry(
       fixture,
       fontPath,
@@ -161,7 +163,7 @@ describe("pinned Writer embedded font resources", /** Mirrors source-backed impo
     }
   });
 
-  it("rejects conflicting document registrations and export without package bytes", /** Prevents divergent source declarations and invalid output packages. @returns Nothing. */ () => {
+  it("rejects conflicting document registrations and export without package bytes", /** Prevents divergent source declarations and invalid output packages. @returns Nothing. */ async () => {
     const document = createWriterDocument();
     const reference = {
       faceName: "Face",
@@ -183,10 +185,10 @@ describe("pinned Writer embedded font resources", /** Mirrors source-backed impo
       /** Attaches bytes to an undeclared path. @returns Nothing. */ () =>
         document.SetEmbeddedFontBytes("Fonts/unknown.ttf", new Uint8Array(1), true),
     ).toThrow("Unknown ODF embedded font");
-    expect(
-      /** Attempts an incomplete package export. @returns ODT bytes. */ () =>
-        writeOdtDocument(document, metadata),
-    ).toThrow("font bytes are missing");
+    await expect(
+      /** Attempts an incomplete package export. @returns ODT bytes. */ async () =>
+        await writeOdtDocument(document, metadata),
+    ).rejects.toThrow("font bytes are missing");
   });
 
   it("deduplicates exported face URIs and rejects malformed transfer records", /** Preserves one canonical package reference across source streams. @returns Nothing. */ () => {
@@ -337,8 +339,8 @@ describe("pinned Writer embedded font resources", /** Mirrors source-backed impo
     );
     const transferred = decodeWriterDocument(encodeWriterDocument(opened.document));
     expect(transferred.GetEmbeddedFonts()[0]?.bytes).toEqual(fonts[0]?.bytes);
-    const saved = writeOdtDocument(transferred, metadata);
-    const archive = new ZipFile(saved);
+    const saved = await writeOdtDocument(transferred, metadata);
+    const archive = await DocumentArchive.open(saved);
     expect(archive.getEntryNames()).toContain(fonts[0]?.path);
     expect(await archive.readTextEntry("styles.xml")).toContain("<svg:font-face-src>");
     const reopened = await readOdtDocument(saved, metadata, undefined, {
@@ -375,7 +377,7 @@ describe("pinned Writer embedded font resources", /** Mirrors source-backed impo
     expect(opened.document.GetEmbeddedFonts()).toHaveLength(0);
     const page = opened.document.GetPageDesc().GetValue();
     const reopened = await readOdtDocument(
-      writeOdtDocument(opened.document, metadata),
+      await writeOdtDocument(opened.document, metadata),
       metadata,
       undefined,
       {
@@ -400,7 +402,7 @@ describe("pinned Writer embedded font resources", /** Mirrors source-backed impo
         ),
     );
     await expect(readOdtDocument(changed, metadata)).rejects.toThrow(
-      "font manifest entry is invalid",
+      "there are streams not referred in manifest.xml",
     );
   });
 });

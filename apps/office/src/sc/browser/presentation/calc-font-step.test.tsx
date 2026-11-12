@@ -250,7 +250,7 @@ it("applies only disjoint marked spans and restores them through actual attribut
         ) => height(session, 101, col).GetHeight(),
       ),
     ).toEqual([280, 300, 280]);
-    const reopened = await readOdsDocument(writeOdsDocument(doc));
+    const reopened = await readOdsDocument(await writeOdsDocument(doc));
     try {
       expect(
         [0, 1, 2].map(

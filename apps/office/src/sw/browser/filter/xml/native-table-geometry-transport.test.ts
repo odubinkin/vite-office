@@ -90,7 +90,9 @@ it.each([SwFrameSize.Variable, SwFrameSize.Fixed, SwFrameSize.Minimum])(
         }
       }
       const reopened = (
-        await readOdtDocument(writeOdtDocument(doc, { title: "Geometry" }), { title: "Geometry" })
+        await readOdtDocument(await writeOdtDocument(doc, { title: "Geometry" }), {
+          title: "Geometry",
+        })
       ).document;
       try {
         expect(required(reopened.GetTables()[0]).GetFrameFormat().GetFrameSize().GetWidth()).toBe(

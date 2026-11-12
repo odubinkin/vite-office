@@ -53,7 +53,7 @@ it("dispatches the actual shared family selector through Calc and real attribute
     );
     expect(c.GetFontFamily()).toBe("Liberation Mono");
     expect(c.SetFontFamily(new SvxFontItem(0, "Liberation Mono", "", 0, 0, 10007))).toBe(true);
-    const loaded = await readOdsDocument(writeOdsDocument(doc));
+    const loaded = await readOdsDocument(await writeOdsDocument(doc));
     expect(
       (loaded.GetPattern(new ScAddress(0, 0, 0))?.GetItem(100) as SvxFontItem).GetFamilyName(),
     ).toBe("Liberation Mono");
@@ -212,7 +212,7 @@ it("updates only source-selected scripts and retains every field through ODS and
           (id === which ? font : (old[[100, 111, 116].indexOf(id)] as SvxFontItem)).QueryValue(),
         );
       }
-      const loaded = await readOdsDocument(writeOdsDocument(doc));
+      const loaded = await readOdsDocument(await writeOdsDocument(doc));
       expect(
         (loaded.GetPattern(new ScAddress(0, 0, 0))?.GetItem(which) as SvxFontItem).QueryValue(),
       ).toEqual(font.QueryValue());

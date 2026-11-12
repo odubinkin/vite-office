@@ -55,7 +55,7 @@ it("keeps page and numbering physical lengths through explicit inch/mm input and
     fireEvent.change(screen.getByLabelText("Spacing (in)"), { target: { value: "36 pt" } });
     fireEvent.click(screen.getByRole("button", { name: "OK" }));
     expect(doc.GetLineNumberInfo().QueryValue().posFromLeft).toBe(720);
-    const reopened = await readOdtDocument(writeOdtDocument(doc, metadata), metadata);
+    const reopened = await readOdtDocument(await writeOdtDocument(doc, metadata), metadata);
     try {
       expect(reopened.document.GetPageDesc().GetValue()).toMatchObject({
         width,
@@ -106,7 +106,7 @@ it("applies inch row heights through native shell history and ODT without a disp
     expect(shell.Redo()).toBe(true);
     expect(row.GetFrameSize().GetHeight()).toBe(720);
     const metadata = { title: "Metric row" },
-      reopened = await readOdtDocument(writeOdtDocument(doc, metadata), metadata);
+      reopened = await readOdtDocument(await writeOdtDocument(doc, metadata), metadata);
     try {
       expect(reopened.document.GetTables()[0]?.GetTabLines()[0]?.GetFrameSize().GetHeight()).toBe(
         720,

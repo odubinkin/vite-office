@@ -2,8 +2,8 @@
 
 import fs from "node:fs";
 import { describe, expect, it } from "vitest";
-import { ZipFile } from "../../apps/office/src/package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../apps/office/src/package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../apps/office/src/package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../apps/office/src/package/source/zippackage/document-archive";
 import {
   ODT_XML_STREAM_BYTE_LIMIT,
   readOdtDocument,
@@ -21,11 +21,11 @@ const fixture = new Uint8Array(
 
 /** Repackages the pinned fixture with one synthetic stream replacement. @param name - Entry to replace. @param replacement - New entry bytes. @returns Package bytes. */
 async function replaceFixtureEntry(name: string, replacement: Uint8Array): Promise<Uint8Array> {
-  const archive = new ZipFile(fixture);
-  const output = new ZipOutputStream();
+  const archive = await DocumentArchive.open(fixture);
+  const output = new DocumentArchiveWriter();
   for (const entry of archive.getEntryNames())
     output.putNextEntry(entry, entry === name ? replacement : await archive.readEntry(entry));
-  return output.finish();
+  return await output.finish();
 }
 
 describe("privacy-safe ODT import diagnostics", /** Groups package diagnostic assertions. @returns Nothing. */ () => {
@@ -101,7 +101,7 @@ describe("privacy-safe ODT import diagnostics", /** Groups package diagnostic as
   });
 
   it("retains synthetic bookmarks and ignores soft breaks through the native text import API", /** Checks marker triage and source-owned model behavior. @returns Completion after import. */ async () => {
-    const content = await new ZipFile(fixture).readTextEntry("content.xml");
+    const content = await (await DocumentArchive.open(fixture)).readTextEntry("content.xml");
     const changed = content.replace(
       "</text:p>",
       '<text:bookmark text:name="test-mark"/><text:soft-page-break/></text:p>',
@@ -140,7 +140,7 @@ describe("privacy-safe ODT import diagnostics", /** Groups package diagnostic as
   });
 
   it("classifies a synthetic table cell as potential content loss", /** Checks table triage. @returns Completion after import. */ async () => {
-    const content = await new ZipFile(fixture).readTextEntry("content.xml");
+    const content = await (await DocumentArchive.open(fixture)).readTextEntry("content.xml");
     const changed = content.replace(
       "</office:text>",
       '<table:table xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"><table:table-row><table:table-cell><text:p>Cell</text:p></table:table-cell></table:table-row></table:table></office:text>',
@@ -179,7 +179,7 @@ describe("privacy-safe ODT import diagnostics", /** Groups package diagnostic as
     );
     expect(JSON.stringify(report)).not.toContain("application/vnd.private.invalid-manifest");
 
-    const content = await new ZipFile(fixture).readTextEntry("content.xml");
+    const content = await (await DocumentArchive.open(fixture)).readTextEntry("content.xml");
     const changed = content.replace("</office:text>", "<office:spreadsheet/></office:text>");
     expect(changed).not.toBe(content);
     const ignored = await diagnoseOdtImport(

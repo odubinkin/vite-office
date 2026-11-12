@@ -6,8 +6,8 @@ import {
 } from "../../core/doc/number";
 
 import { expect, it, vi } from "vitest";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createWriterDocument } from "../../core/doc/doc";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
@@ -81,8 +81,8 @@ function state(format: ConstSwNumFormat) {
 
 /** Injects source-ordered declarations in a common or automatic real ODT. @param bytes - Baseline package. @param levels - Literal declarations. @param common - Common styles selection. @returns Package bytes. */
 async function input(bytes: Uint8Array, levels: string, common: boolean) {
-  const zip = new ZipFile(bytes),
-    output = new ZipOutputStream();
+  const zip = await DocumentArchive.open(bytes),
+    output = new DocumentArchiveWriter();
   const definition = `<text:list-style style:name="Ordered">${levels}</text:list-style>`;
   for (const entry of zip.getEntryNames()) {
     if (entry === "styles.xml" && common) {
@@ -102,11 +102,11 @@ async function input(bytes: Uint8Array, levels: string, common: boolean) {
       output.putNextEntry(entry, new TextEncoder().encode(xml));
     } else output.putNextEntry(entry, await zip.readEntry(entry));
   }
-  return output.finish();
+  return await output.finish();
 }
 
 it("applies list declarations in source order and stops at native property rejection", /** Checks complete manual state, markers, snapshots, copies, selected XML and reopen for both containers. @returns Completion. */ async () => {
-  const original = writeOdtDocument(createWriterDocument(), { title: "Ordered" });
+  const original = await writeOdtDocument(createWriterDocument(), { title: "Ordered" });
   for (const modern of [false, true]) {
     const mode = modern ? ' text:list-level-position-and-space-mode="label-alignment"' : "";
     // GetProperties narrows unsigned MM100 distance to sal_Int16 before Writer rejects it.
@@ -189,10 +189,10 @@ it("applies list declarations in source order and stops at native property rejec
             },
           ),
         );
-        const exported = writeOdtDocument(document, { title: "Ordered" });
+        const exported = await writeOdtDocument(document, { title: "Ordered" });
         const xml =
-          (await new ZipFile(exported).readTextEntry("styles.xml")) +
-          (await new ZipFile(exported).readTextEntry("content.xml"));
+          (await (await DocumentArchive.open(exported)).readTextEntry("styles.xml")) +
+          (await (await DocumentArchive.open(exported)).readTextEntry("content.xml"));
         expect(xml).not.toContain("327.68mm");
         const reopened = (await readOdtDocument(exported, { title: "Ordered" })).document
           .GetNumRuleTable()
@@ -211,7 +211,7 @@ it("applies list declarations in source order and stops at native property rejec
 });
 
 it("retains the native accepted distance boundary and its subsequent export rejection", /** Checks sal_Int16 input acceptance and native quantization crossing that boundary on reopen. @returns Completion. */ async () => {
-  const original = writeOdtDocument(createWriterDocument(), { title: "Boundary" });
+  const original = await writeOdtDocument(createWriterDocument(), { title: "Boundary" });
   const levels =
     declaration(1, "●", '<style:list-level-properties text:min-label-distance="327.67mm"/>') +
     declaration(2, "■");
@@ -219,10 +219,10 @@ it("retains the native accepted distance boundary and its subsequent export reje
     await readOdtDocument(await input(original, levels, false), { title: "Boundary" })
   ).document;
   expect(document.GetNumRuleTable().slice(1)[0]?.Get(0).GetCharTextDistance()).toBe(18577);
-  const exported = writeOdtDocument(document, { title: "Boundary" });
+  const exported = await writeOdtDocument(document, { title: "Boundary" });
   const xml =
-    (await new ZipFile(exported).readTextEntry("styles.xml")) +
-    (await new ZipFile(exported).readTextEntry("content.xml"));
+    (await (await DocumentArchive.open(exported)).readTextEntry("styles.xml")) +
+    (await (await DocumentArchive.open(exported)).readTextEntry("content.xml"));
   expect(xml).toContain('text:min-label-distance="32.768cm"');
   const reopened = (await readOdtDocument(exported, { title: "Boundary" })).document
     .GetNumRuleTable()

@@ -1,8 +1,8 @@
 /** @fileoverview Verifies pinned independent numbering position modes through real ODT, Writer copy and browser snapshots. */
 import { expect, it } from "vitest";
 import { SvxNumberFormat } from "../../../../editeng/source/items/numitem";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
-import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/doc";
 import { createWriterNumRule } from "../../core/doc/DocumentListsManager";
@@ -35,8 +35,8 @@ async function input(base: Uint8Array, properties: string, common: boolean): Pro
       `<text:list-level-style-number text:level="${level + 1}" style:num-format="1" style:num-suffix=".">${properties}</text:list-level-style-number>`,
   ).join("");
   const definition = `<text:list-style style:name="Position">${levels}</text:list-style>`;
-  const zip = new ZipFile(base),
-    output = new ZipOutputStream();
+  const zip = await DocumentArchive.open(base),
+    output = new DocumentArchiveWriter();
   for (const entry of zip.getEntryNames()) {
     if (entry === "styles.xml" && common) {
       const xml = (await zip.readTextEntry(entry)).replace(
@@ -55,11 +55,11 @@ async function input(base: Uint8Array, properties: string, common: boolean): Pro
       output.putNextEntry(entry, new TextEncoder().encode(xml));
     } else output.putNextEntry(entry, await zip.readEntry(entry));
   }
-  return output.finish();
+  return await output.finish();
 }
 
 it("selects native mode independently of child geometry through common and automatic ODT cycles", /** Verifies source-derived manual state, exact selected XML, copy/snapshot and effective projections. @returns Completion. */ async () => {
-  const base = writeOdtDocument(createWriterDocument(), metadata);
+  const base = await writeOdtDocument(createWriterDocument(), metadata);
   const cases = [
     ...[
       undefined,
@@ -186,10 +186,10 @@ it("selects native mode independently of child geometry through common and autom
         listTabPositionPt:
           (testCase.alignment ? listTabPosition : absLSpace + charTextDistance) / 20,
       });
-      const exported = writeOdtDocument(document, metadata);
+      const exported = await writeOdtDocument(document, metadata);
       const xml =
-        (await new ZipFile(exported).readTextEntry("styles.xml")) +
-        (await new ZipFile(exported).readTextEntry("content.xml"));
+        (await (await DocumentArchive.open(exported)).readTextEntry("styles.xml")) +
+        (await (await DocumentArchive.open(exported)).readTextEntry("content.xml"));
       const actual = xml.match(
         /<text:list-level-style-number text:level="1"[^>]*>([\s\S]*?)<\/text:list-level-style-number>/u,
       )?.[1];
@@ -253,7 +253,7 @@ it("retains pre-existing browser snapshots with absent inactive legacy fields", 
 });
 
 it("retains source-owned fields across repeated position properties and failed measures", /** Verifies successful-only updates and mode retention in real packages. @returns Completion. */ async () => {
-  const base = writeOdtDocument(createWriterDocument(), metadata);
+  const base = await writeOdtDocument(createWriterDocument(), metadata);
   const properties = `<style:list-level-properties ${legacy} text:list-level-position-and-space-mode="label-alignment">${modern}</style:list-level-properties><style:list-level-properties text:space-before="invalid" text:min-label-distance=".007mm"><style:list-level-label-alignment fo:text-indent="invalid" fo:margin-left=".007mm"/></style:list-level-properties>`;
   for (const common of [false, true]) {
     const document = (await readOdtDocument(await input(base, properties, common), metadata))
@@ -268,10 +268,10 @@ it("retains source-owned fields across repeated position properties and failed m
       labelFollowedBy: "listtab",
       listTabPosition: 1296,
     });
-    const exported = writeOdtDocument(document, metadata);
+    const exported = await writeOdtDocument(document, metadata);
     const xml =
-      (await new ZipFile(exported).readTextEntry("styles.xml")) +
-      (await new ZipFile(exported).readTextEntry("content.xml"));
+      (await (await DocumentArchive.open(exported)).readTextEntry("styles.xml")) +
+      (await (await DocumentArchive.open(exported)).readTextEntry("content.xml"));
     expect(xml).toContain(
       '<style:list-level-properties text:list-level-position-and-space-mode="label-alignment"><style:list-level-label-alignment text:label-followed-by="listtab" text:list-tab-stop-position="2.286cm" fo:text-indent="-0.635cm" fo:margin-left="0.002cm"/></style:list-level-properties>',
     );

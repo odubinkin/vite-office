@@ -1,7 +1,7 @@
 /** @fileoverview Production bookmark raw names,persistent operations,nested rename and ODT at desktop/narrow widths. */
 import { expect, test } from "@playwright/test";
 import { readFile } from "node:fs/promises";
-import { ZipFile } from "../src/package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../src/package/source/zippackage/document-archive";
 for (const width of [1280, 390])
   test(`Writer native bookmark dialog width=${width}`, /** Exercises actual menu,model and filter owners without runtime injection. @param fixtures - Browser fixtures. @param fixtures.page - Actual page. @returns Completion. */ async ({
     page,
@@ -64,7 +64,7 @@ for (const width of [1280, 390])
     await page.getByRole("button", { name: "Download ODT", exact: true }).click();
     const file = await (await pending).path();
     if (file === null) throw Error("Missing ODT download");
-    const zip = new ZipFile(new Uint8Array(await readFile(file)));
+    const zip = await DocumentArchive.open(new Uint8Array(await readFile(file)));
     expect(await zip.readTextEntry("content.xml")).toContain('text:name=" R "');
     await page.getByRole("button", { name: "Open", exact: true }).click();
     await page.getByRole("tab", { name: "On computer", exact: true }).click();

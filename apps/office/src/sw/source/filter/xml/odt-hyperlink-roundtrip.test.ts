@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 
 import { describe, expect, it } from "vitest";
 
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../core/doc/doc";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
@@ -39,7 +39,9 @@ describe("Writer upstream hyperlink ODT fixtures", /** Runs exact LibreOffice pa
     paragraph.SetHyperlink(4, 7, { targetFrame: "_blank", url: "relative-two" });
     paragraph.SetHyperlink(8, 13, { url: "relative-three" });
     const state = createDocument({ id: "link-export", suiteId: "writer", title: "Links" });
-    const xml = await new ZipFile(writeOdtDocument(document, state)).readTextEntry("content.xml");
+    const xml = await (
+      await DocumentArchive.open(await writeOdtDocument(document, state))
+    ).readTextEntry("content.xml");
     expect(xml).toContain(
       '<text:a xlink:type="simple" xlink:href="relative-one" office:name="named" office:target-frame-name="_self" xlink:show="replace" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">',
     );
@@ -76,8 +78,8 @@ describe("Writer upstream hyperlink ODT fixtures", /** Runs exact LibreOffice pa
         url: fixture.href,
         visitedStyleName: "Visited_20_Internet_20_Link",
       });
-      const exported = writeOdtDocument(imported.document, { title: imported.title });
-      expect(await new ZipFile(exported).readTextEntry("content.xml")).toContain(
+      const exported = await writeOdtDocument(imported.document, { title: imported.title });
+      expect(await (await DocumentArchive.open(exported)).readTextEntry("content.xml")).toContain(
         `xlink:href="${fixture.href}"`,
       );
       const restored = await readOdtDocument(exported, metadata);

@@ -50,7 +50,9 @@ it.skipIf(!existsSync(root)).each([
     main,
     element,
   ) => {
-    const filter = new XmlFilterBase(new ZipStorage(new Uint8Array(readFileSync(root + file))));
+    const filter = new XmlFilterBase(
+      await ZipStorage.open(new Uint8Array(readFileSync(root + file))),
+    );
     expect(await filter.getFragmentPathFromFirstTypeFromOfficeDoc("officeDocument")).toBe(main);
     const handler = new MainPart(filter, main);
     expect(await filter.importFragment(handler)).toBe(true);

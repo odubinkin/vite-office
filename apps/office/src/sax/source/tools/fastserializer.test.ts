@@ -1,5 +1,5 @@
 /** @fileoverview Native serializer byte escaping, cache boundaries and mark ordering over actual ZIP fragment streams and native OOXML token IDs. */
-import { ZipFile } from "../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../package/source/zippackage/document-archive";
 import { readOwnedInput } from "../../../test/oox-input";
 import { expect, it, afterEach } from "vitest";
 import { FastSerializerHelper, FSNS, MergeMarks as M } from "../../inc/fshelper";
@@ -285,10 +285,12 @@ it("opens original OOXML XML/VML/no-header serializers through XmlFilterBase and
     expect(bytes.is()).toBe(true);
     expect(decoder.decode(readOwnedInput(bytes) ?? undefined).startsWith("<?xml")).toBe(expected);
   }
-  const committed = filter.commitStorage(),
-    reopened = new ZipStorage(committed),
+  const committed = await filter.commitStorage(),
+    reopened = await ZipStorage.open(committed),
     xml = await reopened.openInputStream("word/document.xml"),
-    contentTypes = await new ZipFile(committed).readTextEntry("[Content_Types].xml");
+    contentTypes = await (
+      await DocumentArchive.open(committed)
+    ).readTextEntry("[Content_Types].xml");
   expect(decoder.decode(readOwnedInput(xml) ?? undefined)).toContain(
     '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"></w:document>',
   );

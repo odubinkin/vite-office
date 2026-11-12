@@ -49,7 +49,7 @@ for (const width of [1280, 390])
       point.Dispose();
     }
     shell.SetParagraphListKind("numbered");
-    const bytes = writeOdtDocument(doc, metadata);
+    const bytes = await writeOdtDocument(doc, metadata);
     shell.Close();
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/writer");

@@ -2,7 +2,7 @@
 import { assert, expect, it } from "vitest";
 import { readOdtDocument } from "../../filter/xml/swxml";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { SwDoc } from "./doc";
 import {
   encodeWriterDocument,
@@ -112,8 +112,8 @@ it("round-trips direct fill values through actual Writer UNO and ODF paragraph s
   node.SetAttr(new XFillStyleItem(FillStyle.SOLID));
   node.SetAttr(new XFillColorItem("", new Color(0x123abc)));
   node.SetAttr(new XFillTransparenceItem(37));
-  const bytes = writeOdtDocument(doc, { title: "Fill" }),
-    zip = new ZipFile(bytes);
+  const bytes = await writeOdtDocument(doc, { title: "Fill" }),
+    zip = await DocumentArchive.open(bytes);
   expect(await zip.readTextEntry("styles.xml")).toContain('draw:fill="none"');
   const content = await zip.readTextEntry("content.xml");
   expect(content).toContain('draw:fill="solid"');

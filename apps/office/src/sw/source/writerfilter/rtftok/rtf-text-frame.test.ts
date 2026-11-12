@@ -53,7 +53,8 @@ it("attaches an ordinary RTF shape to the source character position and round tr
     expect(frame.GetBox().GetLine(SvxBoxItemLine.LEFT)).toBeUndefined();
     worker = decodeWriterDocument(structuredClone(encodeWriterDocument(document)));
     const metadata = { title: "Shape text" };
-    reopened = (await readOdtDocument(writeOdtDocument(document, metadata), metadata)).document;
+    reopened = (await readOdtDocument(await writeOdtDocument(document, metadata), metadata))
+      .document;
     const rtf = RtfExport.WriteDocument(reopened);
     const output = new TextDecoder().decode(rtf);
     expect(output).toContain(String.raw`{\sp{\sn shapeType}{\sv 202}}`);

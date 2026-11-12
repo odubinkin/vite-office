@@ -36,7 +36,7 @@ for (const width of [1280, 390])
     const row = doc.nodes.AppendTableRow(table, 2);
     required(required(row.GetTabBoxes()[0]).GetParagraphs()[0]).SetText("cell");
     required(required(row.GetTabBoxes()[1]).GetParagraphs()[0]).SetText("neighbor");
-    const bytes = writeOdtDocument(doc, metadata);
+    const bytes = await writeOdtDocument(doc, metadata);
     shell.Close();
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/writer");

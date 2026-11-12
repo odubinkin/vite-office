@@ -316,7 +316,7 @@ it("retains actual document clients list and registry across same name assignmen
   expect(workerRule.IsCountPhantoms()).toBe(false);
   expect(workerRule.IsUsedByRedline()).toBe(true);
   transferred.Dispose();
-  const reopened = await readOdtDocument(writeOdtDocument(doc, { title: "Rule lifecycle" }), {
+  const reopened = await readOdtDocument(await writeOdtDocument(doc, { title: "Rule lifecycle" }), {
     title: "Rule lifecycle",
   });
   expect(reopened.document.paragraphs[0]?.GetNum()?.GetNumRule()?.Get(0).GetSuffix()).toBe(")");

@@ -11,7 +11,7 @@ import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
 import { pickWriterStyle } from "./writer-style-box";
 
 /** Builds native styles and real partial hint data without browser model injection. @returns Native ODT bytes. */
-function historyOdt(): Uint8Array {
+async function historyOdt(): Promise<Uint8Array> {
   const doc = new SwDoc(),
     before = doc.paragraphs[0];
   if (before === undefined) throw new Error("Missing initial native paragraph");
@@ -30,7 +30,7 @@ function historyOdt(): Uint8Array {
     name: "Redo link",
   });
   doc.GetNodes().MakeTextNode("AfterHistoryNeighbor");
-  const bytes = writeOdtDocument(
+  const bytes = await writeOdtDocument(
     doc,
     createDocument({ id: "redo-native", title: "Native redo history", suiteId: "writer" }),
   );
@@ -51,7 +51,7 @@ for (const width of [1280, 390])
       await page.getByLabel("Browse").setInputFiles({
         name: "redo-native.odt",
         mimeType: "application/vnd.oasis.opendocument.text",
-        buffer: Buffer.from(historyOdt()),
+        buffer: Buffer.from(await historyOdt()),
       });
       const editor = page.getByLabel("Writer document body", { exact: true }),
         select = page

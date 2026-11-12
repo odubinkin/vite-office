@@ -104,7 +104,7 @@ test("preserves indentation,row history,visibility and ODS in a genuine DOM-free
           shell.GetUndoManager().Redo(shell);
           const redo = doc.GetRowHeight(0, 0, false);
           cell.ShowRows(false);
-          const saved = await n.readOdsDocument(n.writeOdsDocument(doc));
+          const saved = await n.readOdsDocument(await n.writeOdsDocument(doc));
           try {
             return {
               indent,

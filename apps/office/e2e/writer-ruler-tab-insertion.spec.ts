@@ -24,7 +24,7 @@ for (const width of [1280, 390]) {
     shell.SetParagraphItem(
       createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(1200, SvxTabAdjust.Default, ",", "_")], 720),
     );
-    const bytes = writeOdtDocument(document, metadata);
+    const bytes = await writeOdtDocument(document, metadata);
     await page.setViewportSize({ width, height: 800 });
     await page.goto("/writer");
     await page.getByRole("button", { name: "Open" }).click();

@@ -440,7 +440,7 @@ it("loads candidates atomically,discards stale/cancelled imports and resets mode
   const c = new CalcViewController(),
     s = c.shell;
   c.EnterString("=2*3");
-  const bytes = s.SerializeOds(),
+  const bytes = await s.SerializeOds(),
     initial = s.GetDocument();
   await expect(s.Open(new Uint8Array(), state())).rejects.toThrow();
   expect(s.GetDocument()).toBe(initial);

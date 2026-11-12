@@ -1,7 +1,7 @@
 /** @fileoverview Exercises source Internet query preference,editable common fields,actual Writer history/ODT and modal focus in production Chromium. */
 import { readFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
-import { ZipFile } from "../src/package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../src/package/source/zippackage/document-archive";
 for (const width of [1280, 390])
   test(`Writer Internet fields and query preference width=${width}`, /** Uses actual document/menu/controller/filter owners without injection. @param fixtures - Browser fixtures. @param fixtures.page - Actual page. @returns Completion. */ async ({
     page,
@@ -78,7 +78,7 @@ for (const width of [1280, 390])
     const file = await (await pending).path();
     if (file === null) throw Error("Missing ODT download");
     const bytes = await readFile(file),
-      zip = new ZipFile(new Uint8Array(bytes)),
+      zip = await DocumentArchive.open(new Uint8Array(bytes)),
       xml = await zip.readTextEntry("content.xml");
     expect(xml).toContain('office:target-frame-name=" Custom.Frame "');
     expect(xml).toContain('office:name=" Named link "');

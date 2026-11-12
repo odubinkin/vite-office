@@ -20,7 +20,7 @@ import {
 import { NS_ooxml as N } from "../../writerfilter/inc/ooxml/resourceids";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { readOdtDocument } from "../../filter/xml/swxml";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import type { SwXTextCursor } from "./unoobj";
 
 /** Reads actual typed bool properties and releases the returned Any. @param cursor - Actual cursor. @param name - UNO name. @returns Bool. */
@@ -103,8 +103,8 @@ it.each([0, 2, 28])(
       expect(query(cursor, "CharWordMode")).toBe(true);
       expect(query(cursor, "CharAutoKerning")).toBe(threshold !== 0);
       cursor.dispose();
-      const bytes = writeOdtDocument(model.GetDoc(), { title: "DOCX bool properties" }),
-        zip = new ZipFile(bytes);
+      const bytes = await writeOdtDocument(model.GetDoc(), { title: "DOCX bool properties" }),
+        zip = await DocumentArchive.open(bytes);
       const content = await zip.readTextEntry("content.xml");
       expect(content).toContain('style:text-underline-mode="skip-white-space"');
       expect(content).toContain('style:letter-kerning="' + String(threshold !== 0) + '"');

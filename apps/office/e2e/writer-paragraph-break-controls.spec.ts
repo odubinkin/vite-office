@@ -2,7 +2,7 @@
 import { expect, test } from "@playwright/test";
 import { openBrowserMenu } from "../test-support/menu-pointer-e2e";
 import { readFile } from "node:fs/promises";
-import { ZipFile } from "../src/package/source/zipapi/ZipFile";
+import { DocumentArchive } from "../src/package/source/zippackage/document-archive";
 for (const width of [1280, 390])
   test(`Writer paragraph page breaks width=${width}`, /** Exercises real document formatting and persistence. @param fixtures - Browser fixtures. @param fixtures.page - Actual page. @returns Completion. */ async ({
     page,
@@ -65,7 +65,7 @@ for (const width of [1280, 390])
     const file = await (await pending).path();
     if (file === null) throw Error("Missing ODT");
     const bytes = await readFile(file),
-      zip = new ZipFile(new Uint8Array(bytes)),
+      zip = await DocumentArchive.open(new Uint8Array(bytes)),
       xml = await zip.readTextEntry("content.xml");
     expect(xml).toContain('style:page-number="7"');
     expect(xml).toContain('style:master-page-name="Standard"');

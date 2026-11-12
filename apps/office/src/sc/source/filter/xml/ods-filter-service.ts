@@ -22,7 +22,7 @@ class InlineOdsFilterService implements OdsFilterService {
   Export(document: ScDocument, xml?: false): Promise<Uint8Array>;
   /** Executes deterministic native filtering inline. @param document - Model. @param xml - Output kind. @returns XML or bytes. */
   async Export(document: ScDocument, xml = false): Promise<XmlPackage | Uint8Array> {
-    return xml ? writeOdsXml(document) : writeOdsDocument(document);
+    return xml ? writeOdsXml(document) : await writeOdsDocument(document);
   }
   /** Inline work has no pending transport. @returns Nothing. */
   Cancel(): void {}

@@ -11,7 +11,7 @@ test("repeated physical follow Home/End retains text and source edit/history bou
   const text =
     "Original formatted frames serve both page layout and native cursor movement. ".repeat(150);
   node.SetText(text);
-  const bytes = writeOdtDocument(doc, { title: "Formatted clients" });
+  const bytes = await writeOdtDocument(doc, { title: "Formatted clients" });
   doc.Dispose();
   await page.goto("/writer");
   await page.getByRole("button", { name: "Open", exact: true }).click();

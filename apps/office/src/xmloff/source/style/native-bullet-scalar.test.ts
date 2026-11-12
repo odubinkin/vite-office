@@ -113,10 +113,14 @@ it("retains zero native bullet through common automatic body cell ODT and Worker
   let imported: SwDoc | undefined, reopened: SwDoc | undefined, transferred: SwDoc | undefined;
   try {
     imported = (
-      await readOdtDocument(writeOdtDocument(source, { title: "Scalars" }), { title: "Scalars" })
+      await readOdtDocument(await writeOdtDocument(source, { title: "Scalars" }), {
+        title: "Scalars",
+      })
     ).document;
     reopened = (
-      await readOdtDocument(writeOdtDocument(imported, { title: "Scalars" }), { title: "Scalars" })
+      await readOdtDocument(await writeOdtDocument(imported, { title: "Scalars" }), {
+        title: "Scalars",
+      })
     ).document;
     transferred = decodeWriterDocument(encodeWriterDocument(imported));
     for (const doc of [imported, reopened, transferred]) {
