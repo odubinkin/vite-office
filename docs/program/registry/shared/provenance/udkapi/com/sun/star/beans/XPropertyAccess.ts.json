@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/udkapi/com/sun/star/beans/XPropertyAccess.ts",
+    "status": "mapped",
+    "upstreamPath": "udkapi/com/sun/star/beans/XPropertyAccess.idl",
+    "localSymbols": [
+      "XPropertyAccess",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "XPropertyAccess",
+      "getPropertyValues",
+      "setPropertyValues"
+    ],
+    "preservedResponsibilities": [
+      "Actual PropertyValueSet preserves all XRow/XColumnLocate methods, original private PropertyValue fields/defaults/moves, flags/cache, one-based indexes, exact name lookup, appends and actual property-set access paths. Closed native template instantiations use actual caller T locals and declared UnoType/member bindings, not runtime value/default/type factories. Original Converter default service construction and SDK declarations/exception values use actual shared ownership/type modules. Real rows, streams, ServiceManager properties and genuine missing-service construction qualify ordinary paths and source QA method ports. No fake positive converter/property provider/broker is supplied. Efficient XPropertyAccess and successful converter execution, native mutex/vector ABI, remaining source QA, Content.openStream/resolver/DocumentBuilder/metadata/DOCX/XLSX/UI remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Efficient actual XPropertyAccess and positive Converter service graph, complete source QA and90-percent whole selected coverage remain pending.",
+      "Native mutex/vector capacity/address/reallocation/physical ABI, diagnostics, remaining resolver/format/UI integration remain unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/XPropertyAccess.ts",
+          "marker": "XPropertyAccess"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/provider/native-propertyvalueset.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/provider/native-propertyvalueset-qa.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/provider/native-values-contracts.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/udkapi/com/sun/star/beans/XPropertyAccess.idl",
+          "marker": "XPropertyAccess"
+        },
+        {
+          "path": "vendor/libreoffice-reference/udkapi/com/sun/star/beans/XPropertyAccess.idl",
+          "marker": "getPropertyValues"
+        },
+        {
+          "path": "vendor/libreoffice-reference/udkapi/com/sun/star/beans/XPropertyAccess.idl",
+          "marker": "setPropertyValues"
+        }
+      ]
+    }
+  }
+}

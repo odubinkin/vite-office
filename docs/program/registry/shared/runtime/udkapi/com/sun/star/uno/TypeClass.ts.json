@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "uno-type",
     "capabilityIds": [
-      "CAP-cac66cfc-e803-4581-87c1-33f1eea9c4ad"
+      "CAP-cac66cfc-e803-4581-87c1-33f1eea9c4ad",
+      "CAP-61f3e210-48fe-4469-ac8c-75dd698dd823"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -18,12 +19,17 @@
       "evidence": [
         "apps/office/src/udkapi/com/sun/star/uno/TypeClass.ts#TypeClass",
         "apps/office/src/cppu/source/typelib/typelib.test.ts#matches all complete native initialized reference comparisons without ownership mutations",
-        "udkapi/com/sun/star/uno/TypeClass.idl#TypeClass"
+        "udkapi/com/sun/star/uno/TypeClass.idl#TypeClass",
+        "apps/office/src/ucbhelper/source/provider/native-propertyvalueset.test.ts",
+        "apps/office/src/ucbhelper/source/provider/native-propertyvalueset-qa.test.ts",
+        "apps/office/src/ucbhelper/source/provider/native-values-contracts.test.ts",
+        "docs/program/native-ucb-propertyvalueset.md"
       ],
-      "justification": "Original C and genuine generated UNO TypeClass enumerators, complete common C type-reference/description record declarations, original really-weak classifier and const reference equality are shared once. Equality retains pointer identity, exact type class/logical length and original terminated Unicode name comparison, including embedded-zero prefixes. The selected SAL Unicode/CompareNormal/NoShortening instantiation retains original unsigned-unit mismatch and prefix comparison magnitudes and null-pointer assertions. Genuine full native SAL/CPPU headers/bodies and generated TypeClass capture33 enumerators,262144 Unicode witness pairs and123904 initialized class/name record comparisons;347 full pinned source blobs and normal/ASan/UBSan output hashes are retained. Fully initialized public C records are const-predicate caller inputs only, not allocation/registry/refcount owner substitutes. Complete type allocation, common-prefix pointer reinterpretation, registration, acquire/release, default UNO exception/Reference/Type/Any ownership, native ABI/concurrency, service/CharClass/SharedStringPool and Calc document/edit/UI remain unfinished; broad parity is unverified. Preserve CALC-039 without normalizing names.",
+      "justification": "Original C and genuine generated UNO TypeClass enumerators, complete common C type-reference/description record declarations, original really-weak classifier and const reference equality are shared once. Equality retains pointer identity, exact type class/logical length and original terminated Unicode name comparison, including embedded-zero prefixes. The selected SAL Unicode/CompareNormal/NoShortening instantiation retains original unsigned-unit mismatch and prefix comparison magnitudes and null-pointer assertions. Genuine full native SAL/CPPU headers/bodies and generated TypeClass capture33 enumerators,262144 Unicode witness pairs and123904 initialized class/name record comparisons;347 full pinned source blobs and normal/ASan/UBSan output hashes are retained. Fully initialized public C records are const-predicate caller inputs only, not allocation/registry/refcount owner substitutes. Complete type allocation, common-prefix pointer reinterpretation, registration, acquire/release, default UNO exception/Reference/Type/Any ownership, native ABI/concurrency, service/CharClass/SharedStringPool and Calc document/edit/UI remain unfinished; broad parity is unverified. Preserve CALC-039 without normalizing names. Original normal CPPUMaker enum getter now uses the real shared static enum factory; enum values are unchanged.",
       "knownViolations": [],
       "localSymbols": [
-        "TypeClass"
+        "TypeClass",
+        "cppu_detail_getUnoType_TypeClass"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "udkapi/com/sun/star/uno/TypeClass.idl",

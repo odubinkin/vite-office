@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/udkapi/com/sun/star/beans/XPropertyAccess.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "ucb-propertyvalueset",
+    "capabilityIds": [
+      "CAP-61f3e210-48fe-4469-ac8c-75dd698dd823"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/udkapi/com/sun/star/beans/XPropertyAccess.ts",
+        "apps/office/src/ucbhelper/source/provider/native-propertyvalueset.test.ts",
+        "apps/office/src/ucbhelper/source/provider/native-propertyvalueset-qa.test.ts",
+        "apps/office/src/ucbhelper/source/provider/native-values-contracts.test.ts",
+        "docs/program/native-ucb-propertyvalueset.md"
+      ],
+      "justification": "Actual PropertyValueSet preserves all XRow/XColumnLocate methods, original private PropertyValue fields/defaults/moves, flags/cache, one-based indexes, exact name lookup, appends and actual property-set access paths. Closed native template instantiations use actual caller T locals and declared UnoType/member bindings, not runtime value/default/type factories. Original Converter default service construction and SDK declarations/exception values use actual shared ownership/type modules. Real rows, streams, ServiceManager properties and genuine missing-service construction qualify ordinary paths and source QA method ports. No fake positive converter/property provider/broker is supplied. Efficient XPropertyAccess and successful converter execution, native mutex/vector ABI, remaining source QA, Content.openStream/resolver/DocumentBuilder/metadata/DOCX/XLSX/UI remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XPropertyAccess",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "udkapi/com/sun/star/beans/XPropertyAccess.idl",
+      "upstreamSymbols": [
+        "XPropertyAccess",
+        "getPropertyValues",
+        "setPropertyValues"
+      ]
+    }
+  }
+}

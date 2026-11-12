@@ -5529,3 +5529,17 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Sources: `offapi/com/sun/star/sdbc/XClob.idl` and `XBlob.idl`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER471.
 - XClob.length and its position result are hyper, but position with a string pattern accepts long start. XClob.positionOfClob and XBlob.position accept hyper start instead. The string-pattern Clob signature therefore cannot express starts beyond signed32, even when the object length fits signed64. Preserve the original long/hyper distinction rather than widening the published declaration.
 - This is an interface-contract observation and may be an intentional legacy ABI limitation. Compile-time SDK tests retain number for the original long and bigint for hyper; no large live Clob, database/provider execution or compiled differential witness is claimed.
+
+
+### CALC-538 — PropertyValueSet reports different wasNull states for void Any and appendVoid
+
+- Source: `ucbhelper/source/provider/propertyvalueset.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER472.
+- The cached Object path sets m_bWasNull=false without testing aObject.hasValue. appendObject with a void Any therefore makes getObject return void with wasNull=false; appendVoid returns void with wasNull=true. Reading the same void Object through getString instead leaves wasNull=true. Preserve the Object flag and getter-specific behavior. Genuine component tests reproduce all three observations through public APIs.
+- This may encode an intentional helper/caller convention. No compiled C++ differential, live database or full filter/UI defect is claimed. Native wasNull thread scheduling and service reconfiguration remain unqualified.
+
+
+### CALC-539 — PropertyValueSet does not retry converter creation after a thrown first attempt
+
+- Source: `ucbhelper/source/provider/propertyvalueset.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER473.
+- getTypeConverter sets m_bTriedToGetTypeConverter before calling Converter.create. When real service creation throws, the flag remains true and the converter reference remains empty. A later incompatible read returns its default instead of retrying or repeating that creation exception. Preserve this one-shot ordering. A genuine ComponentContext/ServiceManager with an empty registry reproduces first-call DeploymentException followed by getInt returning zero; no injected converter or private flag mutation is used.
+- This may encode an intentional helper/caller convention. No compiled C++ differential, live database or full filter/UI defect is claimed. Native wasNull thread scheduling and service reconfiguration remain unqualified.

@@ -1,0 +1,156 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-61f3e210-48fe-4469-ac8c-75dd698dd823",
+    "capabilityId": "CAP-61f3e210-48fe-4469-ac8c-75dd698dd823",
+    "suite": "shared",
+    "subsystem": "ucb-propertyvalueset",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual PropertyValueSet preserves all XRow/XColumnLocate methods, original private PropertyValue fields/defaults/moves, flags/cache, one-based indexes, exact name lookup, appends and actual property-set access paths. Closed native template instantiations use actual caller T locals and declared UnoType/member bindings, not runtime value/default/type factories. Original Converter default service construction and SDK declarations/exception values use actual shared ownership/type modules. Real rows, streams, ServiceManager properties and genuine missing-service construction qualify ordinary paths and source QA method ports. No fake positive converter/property provider/broker is supplied. Efficient XPropertyAccess and successful converter execution, native mutex/vector ABI, remaining source QA, Content.openStream/resolver/DocumentBuilder/metadata/DOCX/XLSX/UI remain unverified."
+    ],
+    "capability": "Native UCB PropertyValueSet and genuine property-read graph",
+    "gaps": [
+      "Efficient XPropertyAccess and positive Converter service execution remain unqualified.",
+      "No supported source producer exists for several original-type getObject switch arms; those source branches remain unchanged and unforced.",
+      "Remaining XRow/source service QA and whole90-percent coverage remain pending.",
+      "Native mutex/vector/physical ABI, Content open/resolver/DocumentBuilder, metadata and DOCX/XLSX/UI remain incomplete."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "ucbhelper/source/provider/propertyvalueset.cxx",
+          "marker": "PropertyValueSet::getValue"
+        },
+        {
+          "path": "include/ucbhelper/propertyvalueset.hxx",
+          "marker": "PropertyValueSet"
+        },
+        {
+          "path": "udkapi/com/sun/star/script/XTypeConverter.idl",
+          "marker": "XTypeConverter"
+        },
+        {
+          "path": "udkapi/com/sun/star/beans/XPropertyAccess.idl",
+          "marker": "XPropertyAccess"
+        },
+        {
+          "path": "offapi/com/sun/star/sdbc/XColumnLocate.idl",
+          "marker": "XColumnLocate"
+        },
+        {
+          "path": "udkapi/com/sun/star/script/Converter.idl",
+          "marker": "Converter"
+        },
+        {
+          "path": "udkapi/com/sun/star/script/CannotConvertException.idl",
+          "marker": "CannotConvertException"
+        },
+        {
+          "path": "udkapi/com/sun/star/script/FailReason.idl",
+          "marker": "FailReason"
+        },
+        {
+          "path": "udkapi/com/sun/star/uno/TypeClass.idl",
+          "marker": "TypeClass"
+        }
+      ],
+      "tests": [
+        {
+          "path": "qadevOOo/tests/java/ifc/sdbc/_XRow.java",
+          "marker": "_getString"
+        },
+        {
+          "path": "qadevOOo/tests/java/ifc/sdbc/_XRow.java",
+          "marker": "_getObject"
+        },
+        {
+          "path": "qadevOOo/tests/java/ifc/sdbc/_XColumnLocate.java",
+          "marker": "_findColumn"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/ucbhelper/propertyvalueset.hxx",
+          "marker": "appendPropertySet"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/ucbhelper/source/provider/propertyvalueset.ts",
+          "marker": "PropertyValueSet"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/inc/propertyvalueset.ts",
+          "marker": "PropertyValueSet"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/script/XTypeConverter.ts",
+          "marker": "XTypeConverter"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/XPropertyAccess.ts",
+          "marker": "XPropertyAccess"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/sdbc/XColumnLocate.ts",
+          "marker": "XColumnLocate"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/script/Converter.ts",
+          "marker": "Converter"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/script/CannotConvertException.ts",
+          "marker": "CannotConvertException"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/script/FailReason.ts",
+          "marker": "FailReason"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/uno/TypeClass.ts",
+          "marker": "cppu_detail_getUnoType_TypeClass"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/ucbhelper/source/provider/native-propertyvalueset.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/provider/native-propertyvalueset-qa.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/provider/native-values-contracts.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-ucb-propertyvalueset.md",
+          "marker": "# Native UCB PropertyValueSet"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual UCB CommandEnvironment and ActiveDataSink preserve named bases, acquired Reference field/getter semantics, reverse member destruction and absence of automatic stream close. Actual InteractionRequest and four basic continuations preserve Any/Sequence ownership, source selection/query order, flags and borrowed parent pointers. Complete SDK declarations use normal CPPU metadata and original direct bases. No broker, process context, alternate parser or partial positive provider is manufactured. Authentication continuation owners are not ported or advertised. Protected default-constructor access control, physical C++ ABI/threading, complete source service bootstrap, content/broker paths, DocumentBuilder, metadata and DOCX/XLSX/UI acceptance remain unverified."
+    },
+    "scopeLimitations": [
+      "Actual UCB CommandEnvironment and ActiveDataSink preserve named bases, acquired Reference field/getter semantics, reverse member destruction and absence of automatic stream close. Actual InteractionRequest and four basic continuations preserve Any/Sequence ownership, source selection/query order, flags and borrowed parent pointers. Complete SDK declarations use normal CPPU metadata and original direct bases. No broker, process context, alternate parser or partial positive provider is manufactured. Authentication continuation owners are not ported or advertised. Protected default-constructor access control, physical C++ ABI/threading, complete source service bootstrap, content/broker paths, DocumentBuilder, metadata and DOCX/XLSX/UI acceptance remain unverified."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-ucb-command-context"
+  }
+}

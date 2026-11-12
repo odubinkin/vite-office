@@ -36,3 +36,21 @@ export enum TypeClass {
   SINGLETON = 31,
   MAKE_FIXED_SIZE = 0x7fffffff,
 }
+
+import type { Type } from "../../../../../cppu/inc/com/sun/star/uno/Type";
+import { getTypeFromTypeDescriptionReference } from "../../../../../cppu/inc/unotype";
+import {
+  typelib_static_enum_type_init,
+  type typelib_TypeDescriptionReference as R,
+} from "../../../../../cppu/inc/typelib/typedescription";
+const the_type: [R | null] = [null];
+/** Original normal CPPUMaker enum type binding; enum declaration values remain unchanged. @returns Borrowed cached Type. */
+export function cppu_detail_getUnoType_TypeClass(): Type {
+  if (the_type[0] === null)
+    typelib_static_enum_type_init(
+      the_type,
+      new TextEncoder().encode("com.sun.star.uno.TypeClass\0"),
+      0,
+    );
+  return getTypeFromTypeDescriptionReference(the_type);
+}
