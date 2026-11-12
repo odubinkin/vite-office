@@ -109,8 +109,8 @@ export const allowedEdges = new Map([
   // Native Library_sax links cppu/cppuhelper; FastSaxParser owns typed errors and a WeakImplHelper locator.
   // Original sax/fastattribs.hxx includes o3tl/string_view.hxx for zero-allocation typed value queries.
   ["sax", new Set(["comphelper", "cppu", "cppuhelper", "o3tl", "offapi", "sal", "udkapi"])],
-  // Generic URI value/factory algorithms from stoc/source/uriproc have no cross-module runtime imports in this consumed binding.
-  ["stoc", new Set()],
+  // Original stoc/source/typeconv/convert.cxx and Library_stocservices use CPPU values, helpers, SAL, o3tl and SDK script/lang declarations.
+  ["stoc", new Set(["cppu", "cppuhelper", "sal", "o3tl", "udkapi"])],
 
   [
     "sc",

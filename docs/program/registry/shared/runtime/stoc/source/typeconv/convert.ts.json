@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/stoc/source/typeconv/convert.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "stoc-type-converter",
+    "capabilityIds": [
+      "CAP-7907d2df-c92d-4678-aa52-3cbb77b4d4f3"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/stoc/source/typeconv/convert.ts",
+        "apps/office/src/stoc/source/typeconv/convert.test.ts",
+        "apps/office/src/cppu/inc/typelib/typedescription.hxx.test.ts",
+        "apps/office/src/sal/rtl/native-converter-string-dependencies.test.ts",
+        "docs/program/native-stoc-type-converter.md"
+      ],
+      "justification": "Original complete converter method switches, range/parsing helpers, service info and acquired component export use actual UNO values, interfaces, type descriptions and C sequence engine. TypeDescription preserves all declared constructor/value/ownership/completion methods. SAL dependencies preserve terminated unsigned64 parsing and counted ASCII-only equality. Genuine component tests port the available original Integer123-to-String QA and all OUString unsigned64 overflow values. No fake context, service manager, factory or type provider is installed. Actual service registration/default process graph, named enum completion, original TypeDescriptionManager-to-XSet QA, native floating-integral undefined overflow/ABI/thread behavior, full coverage90 and DOCX/XLSX/UI remain unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "com_sun_star_comp_stoc_TypeConverter_get_implementation"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "stoc/source/typeconv/convert.cxx",
+      "upstreamSymbols": [
+        "TypeConverter_Impl::convertTo",
+        "TypeConverter_Impl::convertToSimpleType",
+        "getHyperValue",
+        "getNumericValue"
+      ]
+    }
+  }
+}

@@ -270,6 +270,11 @@ export function rtl_ustr_toInt64(data: Uint16Array | null, radix: number): bigin
   return str.toInt(data, str.getLength(data), radix);
 }
 
+/** Original NUL-terminated unsigned64 C conversion uses the same native integral parser with unsigned bounds and sign handling. @param data - Native terminated UTF16. @param radix - Original radix. @returns Unsigned64 prefix or zero on overflow. */
+export function rtl_ustr_toUInt64(data: Uint16Array | null, radix: number): bigint {
+  return str.toInt(data, str.getLength(data), radix, true);
+}
+
 /** Original known-length signed64 C conversion: with_length checks precede the template radix assertion. @param pStr - Borrowed UTF16 input, nullable for zero length. @param nRadix - Original signed16 radix. @param nStrLength - Original signed32 known length. @returns Exact signed64 value or overflow-to-zero. */
 export function rtl_ustr_toInt64_WithLength(
   pStr: Uint16Array | null,
@@ -534,6 +539,16 @@ export function rtl_uString_newConcatUtf16L(
   length: number,
 ): void {
   str.newConcat_Utf16(destination, left, right, length);
+}
+
+/** Original counted UTF16 ASCII-insensitive comparison, instantiating the source compare loop with NoShortening. @param first - First storage. @param firstLength - First count. @param second - Second storage. @param secondLength - Second count. @returns Original comparison result. */
+export function rtl_ustr_compareIgnoreAsciiCase_WithLength(
+  first: Uint16Array | null,
+  firstLength: number,
+  second: Uint16Array | null,
+  secondLength: number,
+): number {
+  return str.compare_IgnoreAsciiCaseWithLengths(first, firstLength, second, secondLength);
 }
 
 /** Original bounded ASCII-case-insensitive Unicode comparison C wrapper. @param first - First storage. @param firstLength - First length. @param second - Second storage. @param secondLength - Second length. @param shortened - Comparison bound. @returns Native comparison result. */

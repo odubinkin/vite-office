@@ -5543,3 +5543,21 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Source: `ucbhelper/source/provider/propertyvalueset.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER473.
 - getTypeConverter sets m_bTriedToGetTypeConverter before calling Converter.create. When real service creation throws, the flag remains true and the converter reference remains empty. A later incompatible read returns its default instead of retrying or repeating that creation exception. Preserve this one-shot ordering. A genuine ComponentContext/ServiceManager with an empty registry reproduces first-call DeploymentException followed by getInt returning zero; no injected converter or private flag mutation is used.
 - This may encode an intentional helper/caller convention. No compiled C++ differential, live database or full filter/UI defect is claimed. Native wasNull thread scheduling and service reconfiguration remain unqualified.
+
+
+### CALC-540 — Converter numeric failures report the source type as DestinationTypeClass
+
+- Source: `stoc/source/typeconv/convert.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER474.
+- The toHyper and toDouble helpers initialize aDestinationClass from rAny.getValueTypeClass and use it in CannotConvertException. Converting LONG128 to BYTE therefore reports LONG rather than BYTE; genuine converter tests preserve that field and OUT_OF_RANGE reason. This may be an intentional helper convention; no compiled C++ differential or full filter defect is claimed.
+
+
+### CALC-541 — Converter integer strings accept decimal prefixes but inspect x anywhere first
+
+- Source: `stoc/source/typeconv/convert.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER475.
+- getNumericValue accepts a nonzero decimal prefix without checking the parsed end. getHyperValue first searches the entire trimmed string for x/X and rejects a non-hex occurrence before using that decimal path. Genuine converter tests therefore retain 12tail as twelve but reject 12suffix. Empty, whitespace-only, plus-only and empty-hex strings also retain the original zero outcomes. No stricter full-string numeric validation is added; no compiled differential or full filter defect is claimed.
+
+
+### CALC-542 — Converter sequence conversion skips danger-reference releases on an element exception
+
+- Source: `stoc/source/typeconv/convert.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER476.
+- convertTo obtains acquired source/destination element descriptions with TYPELIB_DANGER_GET, recursively converts elements, and releases both only after the loop. A thrown element conversion bypasses both releases. Preserve the source control flow rather than placing these two manual releases in a finally guard. The ordinary TypeDescription and Any/sequence locals still unwind normally. This finding is source-derived; no compiled allocator/leak witness or full service/filter defect is claimed.

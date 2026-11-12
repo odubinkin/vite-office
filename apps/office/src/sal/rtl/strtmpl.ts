@@ -736,6 +736,27 @@ export function newConcat_Utf16(
   else newConcat_WithLengths(destination, left.buffer, left.length, right, length, true);
 }
 
+/** Original compare loop instantiated with CompareIgnoreAsciiCase and NoShortening. @param first - First storage. @param firstLength - First count. @param second - Second storage. @param secondLength - Second count. @returns Exact comparator result. */
+export function compare_IgnoreAsciiCaseWithLengths(
+  first: Uint16Array | null,
+  firstLength: number,
+  second: Uint16Array | null,
+  secondLength: number,
+): number {
+  firstLength |= 0;
+  secondLength |= 0;
+  if (firstLength < 0 || secondLength < 0) throw new Error("assert(len >= 0)");
+  for (let i = 0; ; ++i) {
+    if (i === secondLength) return i === firstLength ? 0 : 1;
+    if (i === firstLength) return -1;
+    const result = compareIgnoreAsciiCase(
+      (first as Uint16Array)[i] as number,
+      (second as Uint16Array)[i] as number,
+    );
+    if (result !== 0) return result;
+  }
+}
+
 /** Original known-length shortened CompareIgnoreAsciiCase specialization followed by generic no-shortening traversal. @param first - First storage. @param firstLength - First length. @param second - Second storage. @param secondLength - Second length. @param shortened - Comparison bound. @returns Original exact comparator result. */
 export function compare_ShortenedIgnoreAsciiCaseWithLengths(
   first: Uint16Array | null,

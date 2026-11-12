@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/inc/typelib/typedescription.hxx.ts",
+    "status": "mapped",
+    "upstreamPath": "include/typelib/typedescription.hxx",
+    "localSymbols": [
+      "TypeDescription"
+    ],
+    "upstreamSymbols": [
+      "TypeDescription::TypeDescription",
+      "TypeDescription::makeComplete",
+      "TypeDescription::equals"
+    ],
+    "preservedResponsibilities": [
+      "Original complete converter method switches, range/parsing helpers, service info and acquired component export use actual UNO values, interfaces, type descriptions and C sequence engine. TypeDescription preserves all declared constructor/value/ownership/completion methods. SAL dependencies preserve terminated unsigned64 parsing and counted ASCII-only equality. Genuine component tests port the available original Integer123-to-String QA and all OUString unsigned64 overflow values. No fake context, service manager, factory or type provider is installed. Actual service registration/default process graph, named enum completion, original TypeDescriptionManager-to-XSet QA, native floating-integral undefined overflow/ABI/thread behavior, full coverage90 and DOCX/XLSX/UI remain unqualified."
+    ],
+    "omittedResponsibilities": [
+      "Native allocation/ABI/threading, complete service/type-provider graph and full format/UI integration remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/inc/typelib/typedescription.hxx.ts",
+          "marker": "TypeDescription"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/typelib/typedescription.hxx.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/typelib/typedescription.hxx",
+          "marker": "TypeDescription::TypeDescription"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/typelib/typedescription.hxx",
+          "marker": "TypeDescription::makeComplete"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/typelib/typedescription.hxx",
+          "marker": "TypeDescription::equals"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/cppu/inc/typelib/typedescription.hxx.ts",
+      "rationale": "The original typedescription.h C declarations and typedescription.hxx public C++ wrapper share a normalized stem. Existing typedescription.ts owns the C declarations; the .hxx discriminator preserves the separate original C++ RAII owner and prevents an ESM filename collision.",
+      "stackNecessity": "module-resolution"
+    }
+  }
+}

@@ -26,6 +26,7 @@ export type rtl_uStringSlot = [rtl_uString | null];
 export {
   rtl_ustr_toInt32,
   rtl_ustr_toInt64,
+  rtl_ustr_toUInt64,
   rtl_ustr_toInt64_WithLength,
   rtl_ustr_indexOfChar_WithLength,
   rtl_ustr_lastIndexOfChar_WithLength,
@@ -43,6 +44,7 @@ export {
   rtl_ustr_compare_WithLength,
   rtl_ustr_shortenedCompare_WithLength,
   rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength,
+  rtl_ustr_compareIgnoreAsciiCase_WithLength,
   rtl_ustr_hashCode_WithLength,
   rtl_uString_acquire,
   rtl_uString_alloc,

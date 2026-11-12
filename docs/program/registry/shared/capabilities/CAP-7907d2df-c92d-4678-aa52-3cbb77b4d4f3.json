@@ -1,0 +1,103 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-7907d2df-c92d-4678-aa52-3cbb77b4d4f3",
+    "capabilityId": "CAP-7907d2df-c92d-4678-aa52-3cbb77b4d4f3",
+    "suite": "shared",
+    "subsystem": "stoc-type-converter",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original complete converter method switches, range/parsing helpers, service info and acquired component export use actual UNO values, interfaces, type descriptions and C sequence engine. TypeDescription preserves all declared constructor/value/ownership/completion methods. SAL dependencies preserve terminated unsigned64 parsing and counted ASCII-only equality. Genuine component tests port the available original Integer123-to-String QA and all OUString unsigned64 overflow values. No fake context, service manager, factory or type provider is installed. Actual service registration/default process graph, named enum completion, original TypeDescriptionManager-to-XSet QA, native floating-integral undefined overflow/ABI/thread behavior, full coverage90 and DOCX/XLSX/UI remain unqualified."
+    ],
+    "capability": "Native stoc converter and type-description ownership",
+    "gaps": [
+      "Genuine service registration and process context remain pending.",
+      "Named enum completion and original TypeDescriptionManager-to-XSet QA require the actual type manager.",
+      "Native undefined floating-integral overflow, ABI, threads, whole90 coverage and full format/UI acceptance remain unqualified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "stoc/source/typeconv/convert.cxx",
+          "marker": "TypeConverter_Impl::convertTo"
+        },
+        {
+          "path": "include/typelib/typedescription.hxx",
+          "marker": "TypeDescription::TypeDescription"
+        },
+        {
+          "path": "include/rtl/ustring.hxx",
+          "marker": "toUInt64"
+        }
+      ],
+      "tests": [
+        {
+          "path": "qadevOOo/tests/java/ifc/script/_XTypeConverter.java",
+          "marker": "_convertToSimpleType"
+        },
+        {
+          "path": "sal/qa/rtl/strings/test_strings_toint.cxx",
+          "marker": "testToUInt64Overflow"
+        },
+        {
+          "path": "sal/qa/rtl/strings/test_oustring_stringliterals.cxx",
+          "marker": "checkUtf16"
+        }
+      ],
+      "docs": [
+        {
+          "path": "udkapi/com/sun/star/script/XTypeConverter.idl",
+          "marker": "convertTo"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/stoc/source/typeconv/convert.ts",
+          "marker": "com_sun_star_comp_stoc_TypeConverter_get_implementation"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/typelib/typedescription.hxx.ts",
+          "marker": "TypeDescription"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/stoc/source/typeconv/convert.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/typelib/typedescription.hxx.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/native-converter-string-dependencies.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-stoc-type-converter.md",
+          "marker": "Native stoc type converter"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original complete converter method switches, range/parsing helpers, service info and acquired component export use actual UNO values, interfaces, type descriptions and C sequence engine. TypeDescription preserves all declared constructor/value/ownership/completion methods. SAL dependencies preserve terminated unsigned64 parsing and counted ASCII-only equality. Genuine component tests port the available original Integer123-to-String QA and all OUString unsigned64 overflow values. No fake context, service manager, factory or type provider is installed. Actual service registration/default process graph, named enum completion, original TypeDescriptionManager-to-XSet QA, native floating-integral undefined overflow/ABI/thread behavior, full coverage90 and DOCX/XLSX/UI remain unqualified."
+    },
+    "scopeLimitations": [
+      "Original complete converter method switches, range/parsing helpers, service info and acquired component export use actual UNO values, interfaces, type descriptions and C sequence engine. TypeDescription preserves all declared constructor/value/ownership/completion methods. SAL dependencies preserve terminated unsigned64 parsing and counted ASCII-only equality. Genuine component tests port the available original Integer123-to-String QA and all OUString unsigned64 overflow values. No fake context, service manager, factory or type provider is installed. Actual service registration/default process graph, named enum completion, original TypeDescriptionManager-to-XSet QA, native floating-integral undefined overflow/ABI/thread behavior, full coverage90 and DOCX/XLSX/UI remain unqualified."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-stoc-type-conversion"
+  }
+}

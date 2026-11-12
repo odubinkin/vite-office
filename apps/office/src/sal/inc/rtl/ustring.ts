@@ -15,6 +15,7 @@ import {
   rtl_ustr_compare_WithLength,
   rtl_ustr_toInt32,
   rtl_ustr_toInt64,
+  rtl_ustr_toUInt64,
   rtl_ustr_reverseCompare_WithLength,
   rtl_ustr_hashCode_WithLength,
   rtl_ustr_asciil_reverseEquals_WithLength,
@@ -23,6 +24,7 @@ import {
   rtl_ustr_indexOfStr_WithLength,
   rtl_ustr_lastIndexOfStr_WithLength,
   rtl_ustr_shortenedCompare_WithLength,
+  rtl_ustr_compareIgnoreAsciiCase_WithLength,
   rtl_ustr_lastIndexOfAscii_WithLength,
   rtl_uString_newFromSubString,
   rtl_uString_newConcat,
@@ -88,10 +90,12 @@ export type OUStringConstReference = Readonly<
     | "iterateCodePoints"
     | "toInt32"
     | "toInt64"
+    | "toUInt64"
     | "getLength"
     | "getStr"
     | "isEmpty"
     | "equals"
+    | "equalsIgnoreAsciiCase"
     | "equalsAsciiL"
     | "notEquals"
     | "compareTo"
@@ -142,6 +146,10 @@ export class OUString {
   /** Original const NUL-terminated integer conversion;embedded zeros end parsing even when logical length continues. @param radix - Original default decimal radix. @returns Exact signed64 or zero on overflow. */
   public toInt64(radix = 10): bigint {
     return rtl_ustr_toInt64((this.pData as rtl_uString).buffer, radix);
+  }
+  /** Original terminated unsigned64 conversion, including native prefix and overflow semantics. @param radix - Original default decimal radix. @returns Exact unsigned64 value. */
+  public toUInt64(radix = 10): bigint {
+    return rtl_ustr_toUInt64((this.pData as rtl_uString).buffer, radix);
   }
   private static readonly empty = new OUStringLiteral(new Uint16Array([0]));
   private static readonly references = new WeakMap<rtl_uStringSlot, OUStringConstReference>();
@@ -503,6 +511,25 @@ export class OUString {
       this.pData.length,
       other.getStr(),
       other.getLength(),
+    );
+  }
+  /** Original internal string-view ASCII-only equality, including counted embedded zeroes and source view identity. @param other - Borrowed original string or UTF16 view. @returns Original equality. */
+  equalsIgnoreAsciiCase(other: OUStringConstReference | Uint16Array): boolean {
+    const view =
+      other instanceof Uint16Array ? other : other.getStr().subarray(0, other.getLength());
+    if (this.pData.length !== view.length) return false;
+    if (
+      this.pData.buffer.buffer === view.buffer &&
+      this.pData.buffer.byteOffset === view.byteOffset
+    )
+      return true;
+    return (
+      rtl_ustr_compareIgnoreAsciiCase_WithLength(
+        this.pData.buffer,
+        this.pData.length,
+        view,
+        view.length,
+      ) === 0
     );
   }
   /** Original equality checks lengths before pointer identity and reverse comparison. @param other - Live source reference. @returns Native equality result. */
