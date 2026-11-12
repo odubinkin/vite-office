@@ -1,4 +1,5 @@
 /** @fileoverview Original UnknownPropertyException.idl comprehensive internal generated value and type owner reuse real Exception inheritance and shared typelib registration. */
+import { linkException } from "../../../../uno/exception-bindings";
 import { Exception } from "../uno/Exception";
 import { UnoType } from "../../../../unotype";
 import { OUString, type OUStringConstReference } from "../../../../../../sal/inc/rtl/ustring";
@@ -67,3 +68,10 @@ export class UnknownPropertyException extends Exception {
 export function getCppuType(): Type {
   return cppu_detail_getUnoType();
 }
+
+// Compiler-emitted JavaScript RTTI linkage for this actual generated declaration.
+linkException({
+  name: "com.sun.star.beans.UnknownPropertyException",
+  Constructor: UnknownPropertyException,
+  type: cppu_detail_getUnoType,
+});

@@ -1,4 +1,5 @@
 /** @fileoverview Original SAXException.idl comprehensive internal generated value and type owner reuse real Exception inheritance and shared typelib registration. */
+import { linkException } from "../../../../../uno/exception-bindings";
 import { Any } from "../../uno/Any";
 import { Exception } from "../../uno/Exception";
 import { getTypeFromTypeClass } from "../../../../../unotype";
@@ -113,3 +114,10 @@ export class SAXException extends Exception {
 export function getCppuType(): Type {
   return cppu_detail_getUnoType();
 }
+
+// Compiler-emitted JavaScript RTTI linkage for this actual generated declaration.
+linkException({
+  name: "com.sun.star.xml.sax.SAXException",
+  Constructor: SAXException,
+  type: cppu_detail_getUnoType,
+});

@@ -1,4 +1,5 @@
 /** @fileoverview Original IllegalArgumentException.idl comprehensive internal generated value and type owner reuse real RuntimeException inheritance and shared typelib registration. */
+import { linkException } from "../../../../uno/exception-bindings";
 import { RuntimeException, cppu_detail_getUnoType as runtimeType } from "../uno/RuntimeException";
 import { OUString, type OUStringConstReference } from "../../../../../../sal/inc/rtl/ustring";
 import { Reference } from "../uno/Reference";
@@ -98,3 +99,10 @@ export class IllegalArgumentException extends RuntimeException {
 export function getCppuType(): Type {
   return cppu_detail_getUnoType();
 }
+
+// Compiler-emitted JavaScript RTTI linkage for this actual generated declaration.
+linkException({
+  name: "com.sun.star.lang.IllegalArgumentException",
+  Constructor: IllegalArgumentException,
+  type: cppu_detail_getUnoType,
+});

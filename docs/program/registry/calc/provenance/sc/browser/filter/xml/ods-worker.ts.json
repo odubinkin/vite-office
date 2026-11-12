@@ -12,10 +12,11 @@
       ]
     },
     "localPath": "apps/office/src/sc/browser/filter/xml/ods-worker.ts",
-    "rationale": "Binds Calc Dedicated Worker messages to the filter runtime and returns terminal results or errors with transferable output buffers. This is local browser integration infrastructure; no native LibreOffice file ownership or semantic parity is claimed.",
+    "rationale": "Binds Calc Dedicated Worker messages to the filter runtime and returns terminal results or errors with transferable output buffers. This is local browser integration infrastructure; no native LibreOffice file ownership or semantic parity is claimed. Calc binds its Worker listener immediately and awaits the realm-local native libxml2 initialization inside every request, preserving early requests and ordinary initialization-error responses. Native pointers and UNO process services remain realm-local.",
     "responsibilities": [
       "Binds Calc Dedicated Worker messages to the filter runtime and returns terminal results or errors with transferable output buffers.",
-      "Installs the message handler when the worker composition root has initialized the process services."
+      "Installs the message handler when the worker composition root has initialized the process services.",
+      "Calc binds its Worker listener immediately and awaits the realm-local native libxml2 initialization inside every request, preserving early requests and ordinary initialization-error responses. Native pointers and UNO process services remain realm-local."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

@@ -9,7 +9,8 @@
     "subsystem": "uno-type",
     "capabilityIds": [
       "CAP-d938b831-56b3-41f5-9d7c-60a8a5a3ec52",
-      "CAP-06a4fab6-b15f-491b-a5b5-58c78fb4a406"
+      "CAP-06a4fab6-b15f-491b-a5b5-58c78fb4a406",
+      "CAP-f843f30e-9437-4267-a3b4-902e76c2893c"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -23,9 +24,13 @@
         "codemaker/source/cppumaker/cpputype.cxx",
         "apps/office/src/cppu/inc/com/sun/star/uno/native-exception-address.test.ts",
         "docs/program/native-uno-exception-transport.md",
-        "apps/office/src/cppu/inc/com/sun/star/uno/Any-data.test.ts"
+        "apps/office/src/cppu/inc/com/sun/star/uno/Any-data.test.ts",
+        "apps/office/src/cppuhelper/browser/exception-abi.test.ts",
+        "apps/office/src/ucbhelper/source/provider/native-cancelcommandexecution.test.ts",
+        "apps/office/src/unoxml/source/dom/documentbuilder.test.ts",
+        "docs/program/javascript-uno-exceptions-and-document-builder.md"
       ],
-      "justification": "Original generated exception extends RuntimeException with the owned target Any and real derived-type registration. General caught-exception bridge and physical native ABI remain outside this slice. Actual generated exception values expose real stable inherited Message/Context fields to existing UNO compound copy/extraction, removing temporary Context cells and the old test shadow Map. IllegalArgumentException short and DOMException enum storage retain original widths/defaults/moves with actual stable addresses; wrapped exceptions expose their existing Any member. Other affected derived implementations only declare required base overrides. Critical tests use real exceptions, Any, ActiveDataSink and weak references, with native source-captured Any replays and original import-order checks. This is a local logical-layout correction, not a new exception factory, type provider or physical C++ ABI/allocator/thread claim. Full exception bridge/getCaughtException/source misc QA, Content/resolver/DocumentBuilder/metadata and DOCX/XLSX/UI remain unqualified.",
+      "justification": "Original generated exception extends RuntimeException with the owned target Any and real derived-type registration. General caught-exception bridge and physical native ABI remain outside this slice. Actual generated exception values expose real stable inherited Message/Context fields to existing UNO compound copy/extraction, removing temporary Context cells and the old test shadow Map. IllegalArgumentException short and DOMException enum storage retain original widths/defaults/moves with actual stable addresses; wrapped exceptions expose their existing Any member. Other affected derived implementations only declare required base overrides. Critical tests use real exceptions, Any, ActiveDataSink and weak references, with native source-captured Any replays and original import-order checks. This is a local logical-layout correction, not a new exception factory, type provider or physical C++ ABI/allocator/thread claim. Full exception bridge/getCaughtException/source misc QA, Content/resolver/DocumentBuilder/metadata and DOCX/XLSX/UI remain unqualified. JavaScript exception ABI explicitly links existing generated constructors and lazy native type getters; borrowed declared storage is copied by the actual generated class. Zero-argument getCaughtException uses synchronous host catch scope, with nesting restored. Original source misc catch/throw assertions pass; physical C++ binary mappings, machine code and native TLS are not certified. Actual UCB Any cancellation, CommandFailedException, Content isDocument/openStream and registered native CDocumentBuilder retain original defaults, callbacks and stream ownership. Original domtest stream QA passes. Real UCB/SimpleFileAccess providers, URI success/fallback service QA, metadata and full DOCX/XLSX shell/UI acceptance remain unfinished.",
       "knownViolations": [],
       "localSymbols": [
         "WrappedTargetRuntimeException",

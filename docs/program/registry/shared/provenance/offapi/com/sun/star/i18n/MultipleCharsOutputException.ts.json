@@ -15,7 +15,8 @@
       "::com::sun::star::uno::Exception"
     ],
     "preservedResponsibilities": [
-      "Original fieldless MultipleCharsOutputException.idl derives from actual Exception value and reuses inherited Message/Context copy/move/destruction. Explicit constructors initialize the actual cppumaker-style cached type using existing typelib factory/register/release and Type owners;copy/move do not reinitialize. No JavaScript Error replacement or fake RTTI provider is introduced. Native generated ABI/thread/lifetime equivalence remains unverified."
+      "Original fieldless MultipleCharsOutputException.idl derives from actual Exception value and reuses inherited Message/Context copy/move/destruction. Explicit constructors initialize the actual cppumaker-style cached type using existing typelib factory/register/release and Type owners;copy/move do not reinitialize. No JavaScript Error replacement or fake RTTI provider is introduced. Native generated ABI/thread/lifetime equivalence remains unverified.",
+      "JavaScript exception ABI explicitly links existing generated constructors and lazy native type getters; borrowed declared storage is copied by the actual generated class. Zero-argument getCaughtException uses synchronous host catch scope, with nesting restored. Original source misc catch/throw assertions pass; physical C++ binary mappings, machine code and native TLS are not certified. Actual UCB Any cancellation, CommandFailedException, Content isDocument/openStream and registered native CDocumentBuilder retain original defaults, callbacks and stream ownership. Original domtest stream QA passes. Real UCB/SimpleFileAccess providers, URI success/fallback service QA, metadata and full DOCX/XLSX shell/UI acceptance remain unfinished."
     ],
     "omittedResponsibilities": [
       "Complete native generated ABI/process integration and full transliteration service remain unverified."
@@ -25,6 +26,14 @@
         {
           "path": "apps/office/src/offapi/com/sun/star/i18n/MultipleCharsOutputException.ts",
           "marker": "MultipleCharsOutputException"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/browser/exception-abi.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/documentbuilder.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

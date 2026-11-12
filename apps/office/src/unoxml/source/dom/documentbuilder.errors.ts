@@ -1,4 +1,4 @@
-/** @fileoverview Original documentbuilder.cxx make_error_message/throwEx and error/warning value preparation, split from parser orchestration while the actual builder service remains unported. */
+/** @fileoverview Original documentbuilder.cxx make_error_message/throwEx and error/warning value preparation, split from the actual builder orchestration owner. */
 import { getLibXml2 } from "../../../external/libxml2/libxml2";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";

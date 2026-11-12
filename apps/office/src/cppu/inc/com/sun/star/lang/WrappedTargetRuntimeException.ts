@@ -1,4 +1,5 @@
 /** @fileoverview Original WrappedTargetRuntimeException.idl comprehensive internal generated value and type owner reuse real Exception inheritance and shared typelib registration. */
+import { linkException } from "../../../../uno/exception-bindings";
 import { Any } from "../uno/Any";
 import { RuntimeException } from "../uno/RuntimeException";
 import { cppu_detail_getUnoType as getRuntimeExceptionType } from "../uno/RuntimeException";
@@ -105,3 +106,10 @@ export class WrappedTargetRuntimeException extends RuntimeException {
 export function getCppuType(): Type {
   return cppu_detail_getUnoType();
 }
+
+// Compiler-emitted JavaScript RTTI linkage for this actual generated declaration.
+linkException({
+  name: "com.sun.star.lang.WrappedTargetRuntimeException",
+  Constructor: WrappedTargetRuntimeException,
+  type: cppu_detail_getUnoType,
+});

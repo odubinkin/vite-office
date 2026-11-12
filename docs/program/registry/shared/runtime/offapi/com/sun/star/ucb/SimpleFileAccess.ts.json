@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/ucb/SimpleFileAccess.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-document-parser",
+    "capabilityIds": [
+      "CAP-f843f30e-9437-4267-a3b4-902e76c2893c"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/ucb/SimpleFileAccess.ts",
+        "apps/office/src/cppuhelper/browser/exception-abi.test.ts",
+        "apps/office/src/ucbhelper/source/provider/native-cancelcommandexecution.test.ts",
+        "apps/office/src/unoxml/source/dom/documentbuilder.test.ts",
+        "docs/program/javascript-uno-exceptions-and-document-builder.md"
+      ],
+      "justification": "JavaScript exception ABI explicitly links existing generated constructors and lazy native type getters; borrowed declared storage is copied by the actual generated class. Zero-argument getCaughtException uses synchronous host catch scope, with nesting restored. Original source misc catch/throw assertions pass; physical C++ binary mappings, machine code and native TLS are not certified. Actual UCB Any cancellation, CommandFailedException, Content isDocument/openStream and registered native CDocumentBuilder retain original defaults, callbacks and stream ownership. Original domtest stream QA passes. Real UCB/SimpleFileAccess providers, URI success/fallback service QA, metadata and full DOCX/XLSX shell/UI acceptance remain unfinished.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SimpleFileAccess"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "offapi/com/sun/star/ucb/SimpleFileAccess.idl",
+      "upstreamSymbols": [
+        "service SimpleFileAccess"
+      ]
+    }
+  }
+}

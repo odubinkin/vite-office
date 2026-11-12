@@ -1,4 +1,5 @@
 /** @fileoverview Original DOMException.idl comprehensive internal generated value and type owner reuse real Exception inheritance and shared typelib registration. */
+import { linkException } from "../../../../../uno/exception-bindings";
 import { Exception } from "../../uno/Exception";
 import { UnoType } from "../../../../../unotype";
 import { DOMExceptionType, cppu_detail_getUnoType_DOMExceptionType } from "./DOMExceptionType";
@@ -102,3 +103,10 @@ export class DOMException extends Exception {
 export function getCppuType(): Type {
   return cppu_detail_getUnoType();
 }
+
+// Compiler-emitted JavaScript RTTI linkage for this actual generated declaration.
+linkException({
+  name: "com.sun.star.xml.dom.DOMException",
+  Constructor: DOMException,
+  type: cppu_detail_getUnoType,
+});

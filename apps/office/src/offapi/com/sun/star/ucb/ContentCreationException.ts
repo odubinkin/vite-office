@@ -1,4 +1,5 @@
 /** @fileoverview Original ContentCreationException.idl comprehensive internal generated value and type owner reuse real Exception inheritance and shared typelib registration. */
+import { linkException } from "../../../../../cppu/inc/uno/exception-bindings";
 import { Exception } from "../../../../../cppu/inc/com/sun/star/uno/Exception";
 import { getTypeFromTypeClass } from "../../../../../cppu/inc/unotype";
 import { OUString, type OUStringConstReference } from "../../../../../sal/inc/rtl/ustring";
@@ -108,3 +109,10 @@ export class ContentCreationException extends Exception {
 export function getCppuType(): Type {
   return cppu_detail_getUnoType();
 }
+
+// Compiler-emitted JavaScript RTTI linkage for this actual generated declaration.
+linkException({
+  name: "com.sun.star.ucb.ContentCreationException",
+  Constructor: ContentCreationException,
+  type: cppu_detail_getUnoType,
+});

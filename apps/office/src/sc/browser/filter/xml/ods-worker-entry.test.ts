@@ -37,3 +37,44 @@ it("posts XML, transferable bytes and normalized failures with the original requ
     });
   }
 });
+it("retains an early request until platform initialization completes", /** Tests the real transport gate independently of filter execution. @returns Async completion. */ async () => {
+  const { bindOdsWorker } = await import("./ods-worker"),
+    post = vi.fn();
+  vi.stubGlobal("postMessage", post);
+  vi.stubGlobal("onmessage", null);
+  vi.mocked(processOdsWorkerRequest).mockClear();
+  let finish: (() => void) | undefined;
+  const ready = new Promise<void>(
+    /** Controlled platform completion. @param resolve - Completion. @returns Nothing. */ (
+      resolve,
+    ) => {
+      finish = resolve;
+    },
+  );
+  bindOdsWorker(ready);
+  const handler = globalThis.onmessage as (event: MessageEvent) => Promise<void>;
+  vi.mocked(processOdsWorkerRequest).mockResolvedValueOnce({ format: "xml", files: {} });
+  const pending = handler(new MessageEvent("message", { data: { id: 9 } }));
+  await Promise.resolve();
+  expect(processOdsWorkerRequest).not.toHaveBeenCalled();
+  expect(post).not.toHaveBeenCalled();
+  finish?.();
+  await pending;
+  expect(processOdsWorkerRequest).toHaveBeenCalledOnce();
+  expect(post).toHaveBeenCalledWith({ id: 9, result: { format: "xml", files: {} } }, []);
+});
+it("returns a terminal request error if native platform initialization fails", /** No filter executes before a failed prerequisite. @returns Async completion. */ async () => {
+  const { bindOdsWorker } = await import("./ods-worker"),
+    post = vi.fn();
+  vi.stubGlobal("postMessage", post);
+  vi.stubGlobal("onmessage", null);
+  vi.mocked(processOdsWorkerRequest).mockClear();
+  const ready = Promise.reject(new Error("native initialization failed"));
+  bindOdsWorker(ready);
+  await Promise.resolve();
+  await (globalThis.onmessage as (event: MessageEvent) => Promise<void>)(
+    new MessageEvent("message", { data: { id: 10 } }),
+  );
+  expect(processOdsWorkerRequest).not.toHaveBeenCalled();
+  expect(post).toHaveBeenCalledWith({ id: 10, error: "native initialization failed" });
+});

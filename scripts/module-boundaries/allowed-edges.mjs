@@ -2,8 +2,20 @@
 export const allowedEdges = new Map([
   // Original Library_ucbhelper uses SDK interfaces and CPPU/cppuhelper; command, sink, request and identifier owners consume these exact modules.
   ["ucbhelper", new Set(["cppu", "cppuhelper", "offapi", "udkapi", "sal", "salhelper"])],
-  // Native unoxml uses CPPU/SAL/SDK contracts and links the libxml2 external (Library_unoxml.mk).
-  ["unoxml", new Set(["cppu", "cppuhelper", "external", "offapi", "sal", "udkapi"])],
+  // Native documentbuilder.cxx includes processfactory and Content; Library_unoxml.mk links comphelper/ucbhelper and libxml2.
+  [
+    "unoxml",
+    new Set([
+      "comphelper",
+      "cppu",
+      "cppuhelper",
+      "external",
+      "offapi",
+      "sal",
+      "ucbhelper",
+      "udkapi",
+    ]),
+  ],
   // Original comphelper extract.hxx and attributelist.hxx/cxx use UNO Any/TypeClass and OUString.
   // Original OFOPXMLHelper uses SAX; interfacecontainer3.hxx uses o3tl::cow_wrapper.
   // Original seqstream.hxx uses cppuhelper/implbase; Library_comphelper links cppuhelper.
@@ -17,7 +29,16 @@ export const allowedEdges = new Map([
   // Desktop appinit.cxx uses the process factory and CPPU bootstrap; the browser binds linked constructors, including stocservices.component TypeConverter.
   [
     "desktop",
-    new Set(["comphelper", "cppu", "cppuhelper", "i18npool", "lingucomponent", "stoc", "udkapi"]),
+    new Set([
+      "comphelper",
+      "cppu",
+      "cppuhelper",
+      "i18npool",
+      "lingucomponent",
+      "stoc",
+      "udkapi",
+      "unoxml",
+    ]),
   ],
   // Original justifyitem/frmitems use UNO values, table/style enums and Tools/o3tl units.
   // Original UnoComplexColor uses implbase and XComplexColor; Library_docmodel links CPPU/cppuhelper.

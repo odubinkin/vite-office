@@ -16,9 +16,11 @@
       "divergenceClass": "A",
       "evidence": [
         "apps/office/src/calc-ods-worker.ts#InitApplicationServiceManager",
-        "apps/office/src/sc/browser/filter/xml/ods-worker-entry.test.ts"
+        "apps/office/src/sc/browser/filter/xml/ods-worker-entry.test.ts",
+        "apps/office/src/main.test.ts",
+        "docs/program/javascript-uno-exceptions-and-document-builder.md"
       ],
-      "justification": "Initializes the bundled UNO process services in the Dedicated Worker realm before installing the Calc filter transport.",
+      "justification": "Initializes the bundled UNO process services in the Dedicated Worker realm before installing the Calc filter transport. The browser main entrypoint waits for realm-local native libxml2 initialization together with font preparation before document factories mount. The Calc Worker binds transport immediately and waits on that realm initialization inside every request, preserving early requests and normal error responses. Native library instances and UNO process services are never shared across realms. This enables the registered source DocumentBuilder without browser DOM dependencies.",
       "knownViolations": [],
       "localSymbols": [],
       "sourceResponsibility": "browser-owned",

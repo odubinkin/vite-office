@@ -16,7 +16,8 @@
       "WrappedTargetException"
     ],
     "preservedResponsibilities": [
-      "Original XStorage/XStorage2 and XHierarchicalStorageAccess/XHierarchicalStorageAccess2 IDL contracts now declare all20 own methods with native Reference, counted Unicode and NamedValue Sequence types. XStorage retains its two required NameAccess/Component bases; version2 interfaces retain their actual single parent and hierarchical access retains implicit XInterface. Optional property/transaction interfaces are not invented as required bases. Normal cppumaker-style static type getters use the genuine CPPU MI factory and type owners; this is not a complete external type-library/member-reflection or physical ABI certificate. Original InvalidStorageException derives from IOException and StorageWrappedTargetException derives from WrappedTargetException, with actual inherited Any value/copy/move/assignment/destruction and correct parent typelib registration. No storage service, partial query provider, fake parent/context/factory or encryption implementation is synthesized. Native OStorage/OWriteStream/package/factory graph, serializer output Reference wiring and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished."
+      "Original XStorage/XStorage2 and XHierarchicalStorageAccess/XHierarchicalStorageAccess2 IDL contracts now declare all20 own methods with native Reference, counted Unicode and NamedValue Sequence types. XStorage retains its two required NameAccess/Component bases; version2 interfaces retain their actual single parent and hierarchical access retains implicit XInterface. Optional property/transaction interfaces are not invented as required bases. Normal cppumaker-style static type getters use the genuine CPPU MI factory and type owners; this is not a complete external type-library/member-reflection or physical ABI certificate. Original InvalidStorageException derives from IOException and StorageWrappedTargetException derives from WrappedTargetException, with actual inherited Any value/copy/move/assignment/destruction and correct parent typelib registration. No storage service, partial query provider, fake parent/context/factory or encryption implementation is synthesized. Native OStorage/OWriteStream/package/factory graph, serializer output Reference wiring and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished.",
+      "JavaScript exception ABI explicitly links existing generated constructors and lazy native type getters; borrowed declared storage is copied by the actual generated class. Zero-argument getCaughtException uses synchronous host catch scope, with nesting restored. Original source misc catch/throw assertions pass; physical C++ binary mappings, machine code and native TLS are not certified. Actual UCB Any cancellation, CommandFailedException, Content isDocument/openStream and registered native CDocumentBuilder retain original defaults, callbacks and stream ownership. Original domtest stream QA passes. Real UCB/SimpleFileAccess providers, URI success/fallback service QA, metadata and full DOCX/XLSX shell/UI acceptance remain unfinished."
     ],
     "omittedResponsibilities": [
       "Physical native type/ABI/allocation/thread behavior, full external library-driven method reflection and concrete storage/package/model/filter/UI services remain unverified or unfinished."
@@ -29,6 +30,14 @@
         },
         {
           "path": "apps/office/src/package/source/xstor/native-storage-sdk.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/browser/exception-abi.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/documentbuilder.test.ts",
           "marker": "@fileoverview"
         }
       ],

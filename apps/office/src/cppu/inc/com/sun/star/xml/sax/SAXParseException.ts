@@ -1,4 +1,5 @@
 /** @fileoverview Original SAXParseException.idl generated value, inherited ownership and normal CPPU exception metadata; no JavaScript Error envelope is substituted. */
+import { linkException } from "../../../../../uno/exception-bindings";
 import { SAXException, cppu_detail_getUnoType as saxType } from "./SAXException";
 import { Any } from "../../uno/Any";
 import { Reference } from "../../uno/Reference";
@@ -181,3 +182,10 @@ export class SAXParseException extends SAXException {
 export function getCppuType(): Type {
   return cppu_detail_getUnoType();
 }
+
+// Compiler-emitted JavaScript RTTI linkage for this actual generated declaration.
+linkException({
+  name: "com.sun.star.xml.sax.SAXParseException",
+  Constructor: SAXParseException,
+  type: cppu_detail_getUnoType,
+});

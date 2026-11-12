@@ -1,4 +1,5 @@
 /** @fileoverview Static browser bindings for the consumed i18npool, NumberText and stoc component registrations. */
+import { unoxml_CDocumentBuilder_get_implementation } from "../../../unoxml/source/dom/documentbuilder";
 import { com_sun_star_comp_stoc_TypeConverter_get_implementation } from "../../../stoc/source/typeconv/convert";
 import type { Implementation } from "../../../cppuhelper/source/servicemanager";
 import { com_sun_star_i18n_BreakIterator_get_implementation } from "../../../i18npool/source/breakiterator/breakiteratorImpl";
@@ -64,5 +65,10 @@ export const implementations: readonly Implementation[] = [
     name: "com.sun.star.comp.stoc.TypeConverter",
     services: ["com.sun.star.script.Converter"],
     constructorFn: com_sun_star_comp_stoc_TypeConverter_get_implementation,
+  },
+  {
+    name: "com.sun.star.comp.xml.dom.DocumentBuilder",
+    services: ["com.sun.star.xml.dom.DocumentBuilder"],
+    constructorFn: unoxml_CDocumentBuilder_get_implementation,
   },
 ];

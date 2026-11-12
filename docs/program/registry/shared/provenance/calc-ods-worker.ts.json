@@ -16,9 +16,10 @@
       ]
     },
     "localPath": "apps/office/src/calc-ods-worker.ts",
-    "rationale": "Initializes the bundled UNO process services in the Dedicated Worker realm before installing the Calc filter transport. Browser and worker processes have separate runtime state, so initialization belongs to this composition entry.",
+    "rationale": "Initializes the bundled UNO process services in the Dedicated Worker realm before installing the Calc filter transport. Browser and worker processes have separate runtime state, so initialization belongs to this composition entry. The browser main entrypoint waits for realm-local native libxml2 initialization together with font preparation before document factories mount. The Calc Worker binds transport immediately and waits on that realm initialization inside every request, preserving early requests and normal error responses. Native library instances and UNO process services are never shared across realms. This enables the registered source DocumentBuilder without browser DOM dependencies.",
     "responsibilities": [
-      "Initializes the bundled UNO process services in the Dedicated Worker realm before installing the Calc filter transport."
+      "Initializes the bundled UNO process services in the Dedicated Worker realm before installing the Calc filter transport.",
+      "The browser main entrypoint waits for realm-local native libxml2 initialization together with font preparation before document factories mount. The Calc Worker binds transport immediately and waits on that realm initialization inside every request, preserving early requests and normal error responses. Native library instances and UNO process services are never shared across realms. This enables the registered source DocumentBuilder without browser DOM dependencies."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

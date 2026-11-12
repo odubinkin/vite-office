@@ -17,7 +17,8 @@
       "Exception"
     ],
     "preservedResponsibilities": [
-      "Original comprehensive cppumaker generated exception value/type owner, genuine Exception versus RuntimeException inheritance, original fields/defaults and stable member ownership, copy/move/assignment/reverse lifetime and shared typelib new/register/release with cached Type. IllegalArgumentException retains signed16 ArgumentPosition including native zero default. Native normal-ASan/UBSan differential initialized value/type/catch streams are required. Runtime access-interface metadata, concrete Indexed/NamedPropertyValuesContainer services and real WeakImplHelper/Sfx model/view-data/settings.xml graph remain unported. Exception Any transport, native physical ABI, external/debug/source-location/thread/resource/shutdown and complete consumer QA remain unverified. Broad parity flags stay false."
+      "Original comprehensive cppumaker generated exception value/type owner, genuine Exception versus RuntimeException inheritance, original fields/defaults and stable member ownership, copy/move/assignment/reverse lifetime and shared typelib new/register/release with cached Type. IllegalArgumentException retains signed16 ArgumentPosition including native zero default. Native normal-ASan/UBSan differential initialized value/type/catch streams are required. Runtime access-interface metadata, concrete Indexed/NamedPropertyValuesContainer services and real WeakImplHelper/Sfx model/view-data/settings.xml graph remain unported. Exception Any transport, native physical ABI, external/debug/source-location/thread/resource/shutdown and complete consumer QA remain unverified. Broad parity flags stay false.",
+      "JavaScript exception ABI explicitly links existing generated constructors and lazy native type getters; borrowed declared storage is copied by the actual generated class. Zero-argument getCaughtException uses synchronous host catch scope, with nesting restored. Original source misc catch/throw assertions pass; physical C++ binary mappings, machine code and native TLS are not certified. Actual UCB Any cancellation, CommandFailedException, Content isDocument/openStream and registered native CDocumentBuilder retain original defaults, callbacks and stream ownership. Original domtest stream QA passes. Real UCB/SimpleFileAccess providers, URI success/fallback service QA, metadata and full DOCX/XLSX shell/UI acceptance remain unfinished."
     ],
     "omittedResponsibilities": [
       "Runtime access-interface metadata, concrete Indexed/NamedPropertyValuesContainer services and real WeakImplHelper/Sfx model/view-data/settings.xml graph remain unported. Exception Any transport, native physical ABI, external/debug/source-location/thread/resource/shutdown and complete consumer QA remain unverified. Broad parity flags stay false."
@@ -31,6 +32,14 @@
         {
           "path": "apps/office/src/cppu/inc/com/sun/star/container/ElementExistException.test.ts",
           "marker": "matches complete original"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/browser/exception-abi.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/documentbuilder.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

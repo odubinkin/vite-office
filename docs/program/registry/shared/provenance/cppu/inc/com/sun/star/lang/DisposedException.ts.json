@@ -17,7 +17,8 @@
       "RuntimeException"
     ],
     "preservedResponsibilities": [
-      "Original comprehensive internal cppumaker DisposedException value derives from the existing shared RuntimeException/Exception owner. Default/two-field constructors initialize the base before the derived type; implicit copies/moves and inherited assignments retain actual stable OUString/Reference fields and reverse destruction. Generated derived type initialization uses actual shared typelib factory/register/release with the real RuntimeException base and leaked cached Type. Native JS catch/finally represents typed catch and caught object lifetime over actual generated hierarchy, without a second type/value/default provider. Complete genuine normal-ASan/UBSan native streams and source-absent whole raw100 checks are required. Physical ABI, allocator/resource, native threading/shutdown, source-location/debug/external-only headers and complete consumer QA remain unverified; generic exception bridge and weak object/services/Calc document/edit/view/UI remain subsequent. Broad parity flags stay false."
+      "Original comprehensive internal cppumaker DisposedException value derives from the existing shared RuntimeException/Exception owner. Default/two-field constructors initialize the base before the derived type; implicit copies/moves and inherited assignments retain actual stable OUString/Reference fields and reverse destruction. Generated derived type initialization uses actual shared typelib factory/register/release with the real RuntimeException base and leaked cached Type. Native JS catch/finally represents typed catch and caught object lifetime over actual generated hierarchy, without a second type/value/default provider. Complete genuine normal-ASan/UBSan native streams and source-absent whole raw100 checks are required. Physical ABI, allocator/resource, native threading/shutdown, source-location/debug/external-only headers and complete consumer QA remain unverified; generic exception bridge and weak object/services/Calc document/edit/view/UI remain subsequent. Broad parity flags stay false.",
+      "JavaScript exception ABI explicitly links existing generated constructors and lazy native type getters; borrowed declared storage is copied by the actual generated class. Zero-argument getCaughtException uses synchronous host catch scope, with nesting restored. Original source misc catch/throw assertions pass; physical C++ binary mappings, machine code and native TLS are not certified. Actual UCB Any cancellation, CommandFailedException, Content isDocument/openStream and registered native CDocumentBuilder retain original defaults, callbacks and stream ownership. Original domtest stream QA passes. Real UCB/SimpleFileAccess providers, URI success/fallback service QA, metadata and full DOCX/XLSX shell/UI acceptance remain unfinished."
     ],
     "omittedResponsibilities": [
       "Native physical ABI, source-location/debug/external-only headers, allocator/resource, native threads/shutdown and complete consumer QA remain unverified. Generic exception bridge/weak object family/services/Calc document/edit/view/UI remain subsequent."
@@ -31,6 +32,14 @@
         {
           "path": "apps/office/src/cppu/inc/com/sun/star/lang/DisposedException.test.ts",
           "marker": "matches complete original"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/browser/exception-abi.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/documentbuilder.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

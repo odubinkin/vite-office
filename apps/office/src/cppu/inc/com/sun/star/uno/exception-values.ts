@@ -1,6 +1,9 @@
 /** @fileoverview Generated base and derived UNO exception values share one ESM initialization unit: C++ declarations tolerate the Reference/Any dependency cycle, while JavaScript heritage requires the base value first. Public IDL module paths reexport these same classes. */
 import { OUString, type OUStringConstReference } from "../../../../../../sal/inc/rtl/ustring";
 import { Reference } from "./Reference";
+import { linkException } from "../../../../uno/exception-bindings";
+import { getTypeFromTypeClass } from "../../../../unotype";
+import { typelib_TypeClass } from "../../../../typelib/typeclass";
 import { cppu_detail_getUnoType } from "./RuntimeException";
 /** Original borrowed exception fields. */
 export interface ExceptionConstReference {
@@ -87,3 +90,16 @@ export class RuntimeException extends Exception {
     return super.move(source) as RuntimeException;
   }
 }
+
+// Compiler-emitted JavaScript RTTI links do not evaluate type getters during module initialization.
+linkException({
+  name: "com.sun.star.uno.Exception",
+  Constructor: Exception,
+  type: /** Actual root UNO type. @returns Borrowed Type. */ () =>
+    getTypeFromTypeClass(typelib_TypeClass.EXCEPTION),
+});
+linkException({
+  name: "com.sun.star.uno.RuntimeException",
+  Constructor: RuntimeException,
+  type: cppu_detail_getUnoType,
+});

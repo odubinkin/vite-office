@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "native-zip-catalog",
     "capabilityIds": [
-      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f",
+      "CAP-f843f30e-9437-4267-a3b4-902e76c2893c"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -16,9 +17,13 @@
       "defaultStatus": "unverified",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/offapi/com/sun/star/packages/zip/ZipException.ts"
+        "apps/office/src/offapi/com/sun/star/packages/zip/ZipException.ts",
+        "apps/office/src/cppuhelper/browser/exception-abi.test.ts",
+        "apps/office/src/ucbhelper/source/provider/native-cancelcommandexecution.test.ts",
+        "apps/office/src/unoxml/source/dom/documentbuilder.test.ts",
+        "docs/program/javascript-uno-exceptions-and-document-builder.md"
       ],
-      "justification": "Original findCentralDirectory and static readExtraFields now operate through actual ByteGrabber/MemoryByteGrabber/native byte/reference/ZipException owners. ZIP32/ZIP64 END/locator/signature/disk/count/signed arithmetic/record consistency and ordered Zip64/Unicode/unknown extras retain source conditions, lvalue writes and diagnostics. MemoryInputStream const sal_Int8 pointer binding now also borrows actual signed/unsigned typed byte storage without an archive-sized address provider. CEN checks record count/size, STORE consistency and eagerly applies the consumed LOC name/flag/extra/duplicated-value checks; actual payload CRC/inflate remains on read. Committed unmodified testTdf163341 ZIP64 and normal Unicode ODT/DOCX rejection cases exercise the real catalog; recovery/service factories are not fabricated. The existing flat byte/catalog/host-error/resource boundary remains explicit. Full native descriptor/overlap/hole/FAT/case-insensitive/recovery/ZipEntry/ZipOutputStream/package/storage/model/filter/Worker/UI acceptance and physical pointer/ABI/thread/allocation guarantees are unverified or unfinished. CALC-505..508 and WRITER436..439 retain source surprises and invalid-view limitations. Existing browser recovery/open/save/autosave choices remain unchanged.",
+      "justification": "Original findCentralDirectory and static readExtraFields now operate through actual ByteGrabber/MemoryByteGrabber/native byte/reference/ZipException owners. ZIP32/ZIP64 END/locator/signature/disk/count/signed arithmetic/record consistency and ordered Zip64/Unicode/unknown extras retain source conditions, lvalue writes and diagnostics. MemoryInputStream const sal_Int8 pointer binding now also borrows actual signed/unsigned typed byte storage without an archive-sized address provider. CEN checks record count/size, STORE consistency and eagerly applies the consumed LOC name/flag/extra/duplicated-value checks; actual payload CRC/inflate remains on read. Committed unmodified testTdf163341 ZIP64 and normal Unicode ODT/DOCX rejection cases exercise the real catalog; recovery/service factories are not fabricated. The existing flat byte/catalog/host-error/resource boundary remains explicit. Full native descriptor/overlap/hole/FAT/case-insensitive/recovery/ZipEntry/ZipOutputStream/package/storage/model/filter/Worker/UI acceptance and physical pointer/ABI/thread/allocation guarantees are unverified or unfinished. CALC-505..508 and WRITER436..439 retain source surprises and invalid-view limitations. Existing browser recovery/open/save/autosave choices remain unchanged. JavaScript exception ABI explicitly links existing generated constructors and lazy native type getters; borrowed declared storage is copied by the actual generated class. Zero-argument getCaughtException uses synchronous host catch scope, with nesting restored. Original source misc catch/throw assertions pass; physical C++ binary mappings, machine code and native TLS are not certified. Actual UCB Any cancellation, CommandFailedException, Content isDocument/openStream and registered native CDocumentBuilder retain original defaults, callbacks and stream ownership. Original domtest stream QA passes. Real UCB/SimpleFileAccess providers, URI success/fallback service QA, metadata and full DOCX/XLSX shell/UI acceptance remain unfinished.",
       "knownViolations": [],
       "localSymbols": [
         "ZipException",

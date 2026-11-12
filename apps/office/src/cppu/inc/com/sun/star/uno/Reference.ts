@@ -64,6 +64,14 @@ function querySource(source: BaseReference | Any | InterfacePointer | null): XIn
       : null;
   return source as XInterface | null;
 }
+/** Nonowning compiler views of actual interface pointer fields. */
+const borrowedReferences = new WeakMap<object, Reference>();
+/** Const-reference surface used by the JavaScript language binding, with no independent acquisition/destruction. */
+export type ReferenceConstReference<T extends InterfacePointer = InterfacePointer> = Pick<
+  Reference<T>,
+  "get" | "is" | "getAddress" | "operatorArrow" | "operatorStar"
+> &
+  BaseReference;
 /** Original one-pointer base with its direct borrowed pointer and null predicates. Identity queries use actual returned Any owners; no pointer ordering or identity conversion algorithm is invented. */
 export class BaseReference {
   protected _pInterface!: InterfacePointer | null;
@@ -142,6 +150,25 @@ export class BaseReference {
 }
 /** Original Reference direct ownership members share the one actual base pointer. Native casts are JS identity for actual logical caller pointers; physical multiple-inheritance pointer adjustment is unverified. */
 export class Reference<T extends InterfacePointer = InterfacePointer> extends BaseReference {
+  /** Compiler lvalue binding over an existing Reference field, preserving its exact address without ownership or a query. @param address - Actual initialized pointer field. @returns Borrowed reference view. */
+  static unacquired<T extends InterfacePointer>(address: [T | null]): ReferenceConstReference<T> {
+    let view = borrowedReferences.get(address);
+    if (view === undefined) {
+      view = Object.create(Reference.prototype) as Reference;
+      Object.defineProperty(view, "_pInterface", {
+        get: /** Reads the existing pointer. @returns Borrowed interface. */ () => address[0],
+        set: /** Writes the existing pointer field without ownership work. @param value - Assigned pointer. @returns Nothing. */ (
+          value: T | null,
+        ) => {
+          address[0] = value;
+        },
+      });
+      referenceAddresses.set(view, address);
+      borrowedReferences.set(address, view);
+    }
+    return view as ReferenceConstReference<T>;
+  }
+
   /** Original default/direct/query/throwing overloads. Declared enum tags and optional explicit interface template spelling adapt erased C++ selection without inferring a type from values or storing an extra value/type provider. @param args - Original inputs and declared interface argument, defaulting to the existing root binding. @returns Original owned Reference. */
   constructor(
     ...args:

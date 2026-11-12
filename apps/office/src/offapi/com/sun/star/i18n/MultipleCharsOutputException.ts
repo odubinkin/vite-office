@@ -1,4 +1,5 @@
 /** @fileoverview Actual MultipleCharsOutputException.idl generated class and original cppumaker cached type initializer retain Exception inheritance and real shared typelib registration; normal internal debug0 configuration. */
+import { linkException } from "../../../../../cppu/inc/uno/exception-bindings";
 import { OUString } from "../../../../../sal/inc/rtl/ustring";
 import { Type } from "../../../../../cppu/inc/com/sun/star/uno/Type";
 import { getTypeFromTypeClass } from "../../../../../cppu/inc/unotype";
@@ -64,3 +65,10 @@ export class MultipleCharsOutputException extends Exception {
     return super.move(source) as MultipleCharsOutputException;
   }
 }
+
+// Compiler-emitted JavaScript RTTI linkage for this actual generated declaration.
+linkException({
+  name: "com.sun.star.i18n.MultipleCharsOutputException",
+  Constructor: MultipleCharsOutputException,
+  type: cppu_detail_getUnoType,
+});

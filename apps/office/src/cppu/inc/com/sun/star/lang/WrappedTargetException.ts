@@ -1,4 +1,5 @@
 /** @fileoverview Original WrappedTargetException.idl comprehensive internal generated value and type owner reuse real Exception inheritance and shared typelib registration. */
+import { linkException } from "../../../../uno/exception-bindings";
 import { Any } from "../uno/Any";
 import { Exception } from "../uno/Exception";
 import { UnoType } from "../../../../unotype";
@@ -105,3 +106,10 @@ export class WrappedTargetException extends Exception {
 export function getCppuType(): Type {
   return cppu_detail_getUnoType();
 }
+
+// Compiler-emitted JavaScript RTTI linkage for this actual generated declaration.
+linkException({
+  name: "com.sun.star.lang.WrappedTargetException",
+  Constructor: WrappedTargetException,
+  type: cppu_detail_getUnoType,
+});

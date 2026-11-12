@@ -16,7 +16,8 @@
     ],
     "preservedResponsibilities": [
       "Task166a: the original generated base and derived exception values now share one base-first JavaScript initialization unit. Public Exception/RuntimeException paths reexport the same actual classes; unchanged value/member bodies and the original cached type factory preserve the existing contracts. This resolves the actual Exception -> Reference -> Any/genfunc -> RuntimeException eager heritage cycle, without consumer import-order workarounds, new registry, prototype installer or lifetime mechanism. C++ header/declaration ordering and ESM value evaluation are distinct language responsibilities. No full parity claim follows.",
-      "Actual generated exception values expose real stable inherited Message/Context fields to existing UNO compound copy/extraction, removing temporary Context cells and the old test shadow Map. IllegalArgumentException short and DOMException enum storage retain original widths/defaults/moves with actual stable addresses; wrapped exceptions expose their existing Any member. Other affected derived implementations only declare required base overrides. Critical tests use real exceptions, Any, ActiveDataSink and weak references, with native source-captured Any replays and original import-order checks. This is a local logical-layout correction, not a new exception factory, type provider or physical C++ ABI/allocator/thread claim. Full exception bridge/getCaughtException/source misc QA, Content/resolver/DocumentBuilder/metadata and DOCX/XLSX/UI remain unqualified."
+      "Actual generated exception values expose real stable inherited Message/Context fields to existing UNO compound copy/extraction, removing temporary Context cells and the old test shadow Map. IllegalArgumentException short and DOMException enum storage retain original widths/defaults/moves with actual stable addresses; wrapped exceptions expose their existing Any member. Other affected derived implementations only declare required base overrides. Critical tests use real exceptions, Any, ActiveDataSink and weak references, with native source-captured Any replays and original import-order checks. This is a local logical-layout correction, not a new exception factory, type provider or physical C++ ABI/allocator/thread claim. Full exception bridge/getCaughtException/source misc QA, Content/resolver/DocumentBuilder/metadata and DOCX/XLSX/UI remain unqualified.",
+      "JavaScript exception ABI explicitly links existing generated constructors and lazy native type getters; borrowed declared storage is copied by the actual generated class. Zero-argument getCaughtException uses synchronous host catch scope, with nesting restored. Original source misc catch/throw assertions pass; physical C++ binary mappings, machine code and native TLS are not certified. Actual UCB Any cancellation, CommandFailedException, Content isDocument/openStream and registered native CDocumentBuilder retain original defaults, callbacks and stream ownership. Original domtest stream QA passes. Real UCB/SimpleFileAccess providers, URI success/fallback service QA, metadata and full DOCX/XLSX shell/UI acceptance remain unfinished."
     ],
     "omittedResponsibilities": [
       "Reference query/throwing/Any/identity comparisons and remaining C++ Any consumers; physical multiple-inheritance pointer adjustment/ABI, debug source-location append, native threads/shutdown/full QA; case/service/pool/document/edit/view/UI unfinished."
@@ -42,6 +43,14 @@
         {
           "path": "apps/office/src/cppu/inc/com/sun/star/uno/Any-data.test.ts",
           "marker": "defaultException"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/browser/exception-abi.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/documentbuilder.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

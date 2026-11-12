@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/offapi/com/sun/star/ucb/XSimpleFileAccess2.ts",
+    "localSymbols": [
+      "XSimpleFileAccess2",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/ucb/XSimpleFileAccess2.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/browser/exception-abi.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/provider/native-cancelcommandexecution.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/documentbuilder.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/ucb/XSimpleFileAccess2.idl",
+          "marker": "interface XSimpleFileAccess2"
+        }
+      ]
+    },
+    "upstreamPath": "offapi/com/sun/star/ucb/XSimpleFileAccess2.idl",
+    "upstreamSymbols": [
+      "interface XSimpleFileAccess2"
+    ],
+    "preservedResponsibilities": [
+      "JavaScript exception ABI explicitly links existing generated constructors and lazy native type getters; borrowed declared storage is copied by the actual generated class. Zero-argument getCaughtException uses synchronous host catch scope, with nesting restored. Original source misc catch/throw assertions pass; physical C++ binary mappings, machine code and native TLS are not certified. Actual UCB Any cancellation, CommandFailedException, Content isDocument/openStream and registered native CDocumentBuilder retain original defaults, callbacks and stream ownership. Original domtest stream QA passes. Real UCB/SimpleFileAccess providers, URI success/fallback service QA, metadata and full DOCX/XLSX shell/UI acceptance remain unfinished."
+    ],
+    "omittedResponsibilities": [
+      "Physical ABI, native threading and pending real file/broker providers and complete DOCX/XLSX UI acceptance."
+    ]
+  }
+}

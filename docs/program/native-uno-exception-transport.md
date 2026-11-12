@@ -35,7 +35,7 @@ source replays remain part of focused validation.
 This fixes local representation defects. It does not change upstream exception
 logic, generated metadata/defaults, message content or ownership policy. The
 logical LP64 address binding is not a physical C++ ABI or native allocator/thread
-claim. The complete C++/binary UNO exception bridge and getCaughtException are
-still unimplemented, so the full original cppuhelper misc catch/throw QA is not
-claimed. Content open/cancel, resolver/DocumentBuilder, metadata and complete
-DOCX/XLSX import/export and existing UI acceptance remain unfinished.
+claim. The complete C++/binary UNO exception bridge remains unimplemented. The browser
+now has an explicit [JavaScript exception ABI and registered DocumentBuilder](javascript-uno-exceptions-and-document-builder.md), with the original misc catch/throw
+assertions qualified at that language boundary. Physical native ABI parity and
+complete metadata/DOCX/XLSX/UI acceptance remain unfinished.

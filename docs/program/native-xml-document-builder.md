@@ -1,9 +1,11 @@
 # Native document builder dependencies
 
-The original builder service has not yet been implemented or registered. Its
-remaining dependencies include the UCB default entity resolver/URI fallback,
-builder orchestration/registration and full source service QA. No alternate builder, process context
-or positive interface substitute is installed.
+The original CDocumentBuilder is now implemented and registered. Its stream
+parsing, source error callbacks, current resolver/handler lookup and default
+resolver run over native libxml2 and actual UNO owners. See the current
+[service and ABI qualification](javascript-uno-exceptions-and-document-builder.md).
+Real broker/file providers and complete URI fallback QA remain pending.
+The measurements below describe earlier dependency checkpoints.
 
 The original context_t, xmlIO_read_func and xmlIO_close_func bodies are now
 represented using actual XInputStream References and sal_Int8 Sequences. Native
@@ -18,7 +20,7 @@ throwEx produces an actual generated SAXParseException. Its Context,
 WrappedException, PublicId and SystemId remain empty as in the source.
 Error/warning preparation passes a real typed Any to genuine XErrorHandler
 components and catches only actual UNO exceptions. The original callback bodies are now also reached through real C SAX callbacks.
-The original builder service bootstrap and full builder parser QA remain pending.
+The original stream QA now also runs through the registered builder; full provider/URI QA remains pending.
 
 The generated SAXParseException keeps SAXException inheritance, real OUString
 and Any owners, signed32 location fields, base-first copy/move assignment and
@@ -102,3 +104,9 @@ request/continuation owners are now available as actual components. Their
 handler/stream ownership and source selection behavior are described in
 [native UCB command context](native-ucb-command-context.md). UCB content/broker
 and full DocumentBuilder/default resolver/service wiring remain pending.
+
+The [registered DocumentBuilder](javascript-uno-exceptions-and-document-builder.md)
+now implements source parsing, callbacks, default entity resolver and service
+registration. Original valid/warning/error stream QA runs through the production
+service manager. Real broker/file providers, full URI QA and metadata/format/UI
+acceptance remain pending; earlier checkpoint measurements above are historical.

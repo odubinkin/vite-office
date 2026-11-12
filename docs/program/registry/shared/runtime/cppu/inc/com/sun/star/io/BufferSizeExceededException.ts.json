@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "native-sequence-streams",
     "capabilityIds": [
-      "CAP-14bd1607-f7e0-4f5c-8826-7d361d244ff7"
+      "CAP-14bd1607-f7e0-4f5c-8826-7d361d244ff7",
+      "CAP-f843f30e-9437-4267-a3b4-902e76c2893c"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -19,9 +20,13 @@
         "apps/office/src/cppu/inc/com/sun/star/io/BufferSizeExceededException.ts",
         "apps/office/src/comphelper/source/streaming/seqstream.test.ts",
         "vendor/libreoffice-reference/udkapi/com/sun/star/io/BufferSizeExceededException.idl",
-        "vendor/libreoffice-reference/include/comphelper/seqstream.hxx"
+        "vendor/libreoffice-reference/include/comphelper/seqstream.hxx",
+        "apps/office/src/cppuhelper/browser/exception-abi.test.ts",
+        "apps/office/src/ucbhelper/source/provider/native-cancelcommandexecution.test.ts",
+        "apps/office/src/unoxml/source/dom/documentbuilder.test.ts",
+        "docs/program/javascript-uno-exceptions-and-document-builder.md"
       ],
-      "justification": "Original internal MemoryInputStream, SequenceInputStream and OSequenceOutputStream algorithms use actual CPPU WeakImplHelper/Reference/Sequence owners, complete cached XInputStream/XOutputStream/XSeekable bindings and generated IOException inheritance. ByteReader/ByteWriter retain original pointer method contracts through existing logical storage. Reads, signed bytes, EOF/skip, count validation, Context, closed sentinel, seek reopening, Sequence COW and original output growth/flush/finalize are exercised without fake metadata, query, allocation or service providers. CALC-359 and WRITER234 preserve suspicious native seek reopening. New executable scope passes S208/208 B71/71 F42/42 L187/187. Original mutex scopes are not implemented in synchronous host calls. Native ABI/crosscasts/threads, pointer UB/overflow, allocator failure, complete reflection and service registration remain unverified. Package/SAX transport, full model/controller/factory and DOCX/XLSX core/UI round trips remain pending. Earlier selection fixture double Any destruction is corrected to clear plus one final destruction; previous fixture lifetime evidence is superseded.",
+      "justification": "Original internal MemoryInputStream, SequenceInputStream and OSequenceOutputStream algorithms use actual CPPU WeakImplHelper/Reference/Sequence owners, complete cached XInputStream/XOutputStream/XSeekable bindings and generated IOException inheritance. ByteReader/ByteWriter retain original pointer method contracts through existing logical storage. Reads, signed bytes, EOF/skip, count validation, Context, closed sentinel, seek reopening, Sequence COW and original output growth/flush/finalize are exercised without fake metadata, query, allocation or service providers. CALC-359 and WRITER234 preserve suspicious native seek reopening. New executable scope passes S208/208 B71/71 F42/42 L187/187. Original mutex scopes are not implemented in synchronous host calls. Native ABI/crosscasts/threads, pointer UB/overflow, allocator failure, complete reflection and service registration remain unverified. Package/SAX transport, full model/controller/factory and DOCX/XLSX core/UI round trips remain pending. Earlier selection fixture double Any destruction is corrected to clear plus one final destruction; previous fixture lifetime evidence is superseded. JavaScript exception ABI explicitly links existing generated constructors and lazy native type getters; borrowed declared storage is copied by the actual generated class. Zero-argument getCaughtException uses synchronous host catch scope, with nesting restored. Original source misc catch/throw assertions pass; physical C++ binary mappings, machine code and native TLS are not certified. Actual UCB Any cancellation, CommandFailedException, Content isDocument/openStream and registered native CDocumentBuilder retain original defaults, callbacks and stream ownership. Original domtest stream QA passes. Real UCB/SimpleFileAccess providers, URI success/fallback service QA, metadata and full DOCX/XLSX shell/UI acceptance remain unfinished.",
       "knownViolations": [],
       "localSymbols": [
         "BufferSizeExceededException",

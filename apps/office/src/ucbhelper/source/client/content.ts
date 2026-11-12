@@ -1,4 +1,4 @@
-/** @fileoverview Original Content handle and Content_Impl identity/lifecycle/command state from content.cxx. Open/cursor/transfer and property mutation methods remain unported and are not advertised; no positive content, broker or context provider is substituted. */
+/** @fileoverview Original Content handle and Content_Impl identity/lifecycle/command state from content.cxx. Cursor/transfer and property mutation methods remain unported and are not advertised; no positive content, broker or context provider is substituted. */
 import { Reference as RtlReference } from "../../../sal/inc/rtl/ref";
 import {
   OUString,
@@ -40,6 +40,19 @@ import {
   cppu_detail_getUnoType_Property as propertyType,
 } from "../../../udkapi/com/sun/star/beans/Property";
 import { XRow } from "../../../offapi/com/sun/star/sdbc/XRow";
+import {
+  UnknownPropertyException,
+  cppu_detail_getUnoType as unknownPropertyType,
+} from "../../../cppu/inc/com/sun/star/beans/UnknownPropertyException";
+import { cancelCommandExecution } from "../../inc/cancelcommandexecution";
+import { ActiveDataSink } from "../../inc/activedatasink";
+import { XActiveDataSink } from "../../../udkapi/com/sun/star/io/XActiveDataSink";
+import type { XInputStream } from "../../../udkapi/com/sun/star/io/XInputStream";
+import {
+  OpenCommandArgument2,
+  cppu_detail_getUnoType as openArgumentType,
+} from "../../../offapi/com/sun/star/ucb/OpenCommandArgument2";
+import { OpenMode } from "../../../offapi/com/sun/star/ucb/OpenMode";
 /** Original compile-time sequence declarations use the existing logical LP64 sizeof bindings. */
 const PropertyNames = Sequence.specialize<rtl_uStringSlot>("OUString", 8),
   PropertyValues = Sequence.specialize<Any>("Any", 24),
@@ -643,6 +656,75 @@ export class Content {
       }
     } finally {
       properties.dispose();
+    }
+  }
+  /** Original boolean document-property lookup and generic command cancellation. @returns Original IsDocument value or typed failure. */
+  isDocument(): boolean {
+    const name = literal("IsDocument"),
+      value = this.getPropertyValue(name),
+      output: [boolean] = [false];
+    try {
+      if (value.extract(output, "bool")) return output[0];
+    } finally {
+      value.dispose();
+      name.dispose();
+    }
+    const message = literal("Unable to retrieve value of property 'IsDocument'!"),
+      context = this.get();
+    try {
+      const error = new UnknownPropertyException(message, context);
+      try {
+        const payload = new Any(error, unknownPropertyType);
+        try {
+          return cancelCommandExecution(
+            payload,
+            this.m_xImpl.operatorStar().getEnvironment() as Reference<XCommandEnvironment>,
+          );
+        } finally {
+          payload.dispose();
+        }
+      } finally {
+        error.dispose();
+      }
+    } finally {
+      context.dispose();
+      message.dispose();
+    }
+  }
+  /** Original document stream opening through an actual ActiveDataSink and open command. @returns Acquired input stream or empty reference. */
+  openStream(): Reference<XInputStream> {
+    if (!this.isDocument()) return new Reference<XInputStream>();
+    const sink = new Reference<XActiveDataSink>(new ActiveDataSink()),
+      argument = new OpenCommandArgument2();
+    try {
+      argument.Mode = OpenMode.DOCUMENT;
+      argument.Priority = 0;
+      argument.Sink = sink;
+      const properties = new Properties(0);
+      try {
+        argument.Properties = properties;
+      } finally {
+        properties.dispose();
+      }
+      const command = new Command();
+      try {
+        const name = literal("open");
+        try {
+          command.Name = name;
+        } finally {
+          name.dispose();
+        }
+        command.Handle = -1;
+        command.Argument.insert(argument, openArgumentType);
+        const result = this.m_xImpl.operatorStar().executeCommand(command);
+        result.dispose();
+      } finally {
+        command.dispose();
+      }
+      return sink.operatorStar().getInputStream();
+    } finally {
+      argument.dispose();
+      sink.dispose();
     }
   }
   /** Original name/argument command creates handle -1 before delegating. @param name - Original command name. @param argument - Borrowed actual argument. @returns Owned command result. */

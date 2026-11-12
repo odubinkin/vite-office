@@ -1,4 +1,4 @@
-/** @fileoverview Real native UNO document, parser callback, IO and live-list operations without a host DOM; the pending DocumentBuilder service is not replaced or advertised. */
+/** @fileoverview Real native UNO document, parser callback, IO and live-list operations without a host DOM; the production registered DocumentBuilder shares the same realm-local native module. */
 import { initializeLibXml2 } from "../../apps/office/src/external/libxml2/libxml2";
 import { installParserCallbacks } from "../../apps/office/src/external/libxml2/parsercallbacks";
 import { Reference } from "../../apps/office/src/cppu/inc/com/sun/star/uno/Reference";
@@ -24,6 +24,16 @@ import type { XComponentContext } from "../../apps/office/src/udkapi/com/sun/sta
 import { PropertyValueSet } from "../../apps/office/src/ucbhelper/inc/propertyvalueset";
 import { Any } from "../../apps/office/src/cppu/inc/com/sun/star/uno/Any";
 import { UnoType } from "../../apps/office/src/cppu/inc/unotype";
+import { DocumentBuilder } from "../../apps/office/src/offapi/com/sun/star/xml/dom/DocumentBuilder";
+import {
+  RuntimeException,
+  cppu_detail_getUnoType as runtimeType,
+} from "../../apps/office/src/cppu/inc/com/sun/star/uno/RuntimeException";
+import { throwException, getCaughtException } from "../../apps/office/src/cppuhelper/inc/exc_hlp";
+import {
+  initializeExceptionAbi,
+  withCaughtException,
+} from "../../apps/office/src/cppuhelper/browser/exception-abi";
 const Bytes = Sequence.specialize<number>("sal_Int8", 1);
 
 /** Executes genuine graph operations in whichever browser realm invokes it. @returns Structured-clone-safe observations, with no native pointer crossing a realm boundary. */
@@ -47,6 +57,7 @@ export async function runNativeDomWorkerProbe() {
       value.dispose();
     }
   }
+  initializeExceptionAbi();
   InitApplicationServiceManager(implementations);
   const processContext = getProcessComponentContext() as Reference<XComponentContext>,
     converter = own(Converter.create(processContext)),
@@ -79,6 +90,39 @@ export async function runNativeDomWorkerProbe() {
     cells = data.getArray() as SequenceElements;
   for (let i = 0; i < bytes.length; ++i)
     (cells.get(i) as [number])[0] = ((bytes[i] as number) << 24) >> 24;
+  const builder = own(DocumentBuilder.create(processContext)),
+    builderInput = own(new Reference(new SequenceInputStream(data))),
+    builderDocument = own(builder.operatorStar().parse(builderInput)),
+    builderRoot = own(builderDocument.operatorStar().getDocumentElement()),
+    exception = own(new RuntimeException(u("worker exception"), builder)),
+    payload = own(new Any(exception, runtimeType));
+  let capturedType = false,
+    sameContext = false,
+    exceptionMessage = "";
+  try {
+    throwException(payload);
+  } catch (error) {
+    if (!(error instanceof RuntimeException)) throw error;
+    own(error);
+    sameContext = error.Context.get() === builder.get();
+    exceptionMessage = take(error.Message.copy(0));
+    withCaughtException(
+      error,
+      /** Captures actual host current exception. @returns Nothing. */ () => {
+        capturedType = own(getCaughtException()).getValueType().equals(runtimeType());
+      },
+    );
+  }
+  const documentBuilder = {
+    rootName: take(builderRoot.operatorStar().getNodeName()),
+    streamOpen: builderInput.operatorStar().available() === 0,
+    namespaceAware: builder.operatorStar().isNamespaceAware(),
+    validating: builder.operatorStar().isValidating(),
+    emptyImplementation: !own(builder.operatorStar().getDOMImplementation()).is(),
+    capturedType,
+    sameContext,
+    exceptionMessage,
+  };
   const input = own(new Reference(new SequenceInputStream(data))),
     io = new context_t(),
     context = m._xmlNewParserCtxt();
@@ -147,6 +191,7 @@ export async function runNativeDomWorkerProbe() {
     own(element.appendChild(text));
     return {
       conversion,
+      documentBuilder,
       globals: {
         window: typeof window,
         document: typeof globalThis.document,

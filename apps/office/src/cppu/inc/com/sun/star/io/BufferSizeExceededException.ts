@@ -1,4 +1,5 @@
 /** @fileoverview Original BufferSizeExceededException.idl comprehensive internal generated value and type owner reuse real IOException inheritance and shared typelib registration. */
+import { linkException } from "../../../../uno/exception-bindings";
 import { IOException, cppu_detail_getUnoType as runtimeType } from "./IOException";
 import { OUString, type OUStringConstReference } from "../../../../../../sal/inc/rtl/ustring";
 import { Reference } from "../uno/Reference";
@@ -66,3 +67,10 @@ export class BufferSizeExceededException extends IOException {
 export function getCppuType(): Type {
   return cppu_detail_getUnoType();
 }
+
+// Compiler-emitted JavaScript RTTI linkage for this actual generated declaration.
+linkException({
+  name: "com.sun.star.io.BufferSizeExceededException",
+  Constructor: BufferSizeExceededException,
+  type: cppu_detail_getUnoType,
+});

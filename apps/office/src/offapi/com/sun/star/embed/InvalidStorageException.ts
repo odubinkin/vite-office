@@ -1,4 +1,5 @@
 /** @fileoverview Original embed/InvalidStorageException.idl comprehensive internal generated value and type owner reuse real IOException inheritance and shared typelib registration. */
+import { linkException } from "../../../../../cppu/inc/uno/exception-bindings";
 import {
   IOException,
   getCppuType as getIOExceptionType,
@@ -67,3 +68,10 @@ export class InvalidStorageException extends IOException {
 export function getCppuType(): Type {
   return cppu_detail_getUnoType();
 }
+
+// Compiler-emitted JavaScript RTTI linkage for this actual generated declaration.
+linkException({
+  name: "com.sun.star.embed.InvalidStorageException",
+  Constructor: InvalidStorageException,
+  type: cppu_detail_getUnoType,
+});

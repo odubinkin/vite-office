@@ -1,4 +1,5 @@
 /** @fileoverview Original embed/StorageWrappedTargetException.idl comprehensive internal generated value and type owner reuse real WrappedTargetException inheritance and shared typelib registration. */
+import { linkException } from "../../../../../cppu/inc/uno/exception-bindings";
 import {
   WrappedTargetException,
   getCppuType as getWrappedTargetType,
@@ -70,3 +71,10 @@ export class StorageWrappedTargetException extends WrappedTargetException {
 export function getCppuType(): Type {
   return cppu_detail_getUnoType();
 }
+
+// Compiler-emitted JavaScript RTTI linkage for this actual generated declaration.
+linkException({
+  name: "com.sun.star.embed.StorageWrappedTargetException",
+  Constructor: StorageWrappedTargetException,
+  type: cppu_detail_getUnoType,
+});

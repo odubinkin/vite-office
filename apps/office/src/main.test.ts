@@ -4,11 +4,18 @@ const calls = vi.hoisted(
   /** Creates observable composition boundaries. @returns Mock ports. */ () => ({
     mount: vi.fn(),
     prepare: vi.fn(),
+    xml: vi.fn(),
     calcFactory: vi.fn(
       /** Returns the Calc module boundary. @returns Token. */ () => "calc-factory",
     ),
     factory: vi.fn(/** Returns the module boundary. @returns Token. */ () => "writer-factory"),
     descriptors: vi.fn(/** Returns module descriptors. @returns Token. */ () => "descriptors"),
+  }),
+);
+vi.mock(
+  "./external/libxml2/libxml2",
+  /** Controls the native platform prerequisite at the composition boundary. @returns Module. */ () => ({
+    initializeLibXml2: calls.xml,
   }),
 );
 vi.mock(
@@ -47,6 +54,16 @@ it.each(["fr-FR", undefined])(
     language,
   ) => {
     vi.stubGlobal("navigator", language === undefined ? undefined : { language });
+    let xmlReady: (() => void) | undefined;
+    calls.xml.mockReturnValue(
+      new Promise<void>(
+        /** Holds native initialization pending independently of fonts. @param resolve - Completion. @returns Nothing. */ (
+          resolve,
+        ) => {
+          xmlReady = resolve;
+        },
+      ),
+    );
     let finish: (() => void) | undefined;
     calls.prepare.mockReturnValue(
       new Promise<void>(
@@ -63,6 +80,10 @@ it.each(["fr-FR", undefined])(
     expect(calls.factory).not.toHaveBeenCalled();
     expect(calls.calcFactory).not.toHaveBeenCalled();
     finish?.();
+    await Promise.resolve();
+    expect(calls.mount).not.toHaveBeenCalled();
+    xmlReady?.();
+    await Promise.resolve();
     await Promise.resolve();
     expect(calls.factory).toHaveBeenCalledOnce();
     expect(calls.calcFactory).toHaveBeenCalledOnce();
