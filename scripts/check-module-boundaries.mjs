@@ -218,6 +218,8 @@ const allowedEdges = new Map([
   [
     "svl",
     new Set([
+      // Original include/svl/itemprop.hxx uses cppuhelper/implbase.hxx; Library_svl links cppuhelper.
+      "cppuhelper",
       "comphelper",
       "cppu",
       "i18nlangtag",

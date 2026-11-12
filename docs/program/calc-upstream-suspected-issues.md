@@ -5412,3 +5412,8 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source: pinned `svl/source/items/itemprop.cxx`, `SfxItemPropertySet::setPropertyValue`, commit9bc445578031fecf56086729d8e4940c77e14d65.
 - bIgnoreUnknownProperty is described as suppressing unknown-property errors, but also suppresses a known item's PutValue type rejection. The actual shared-helper test assigns bool to a real Writer TabStopDistance: true leaves the set unchanged, false throws IllegalArgumentException. Preserve the broader source condition. This is source/local shared-helper evidence, not full Calc/XLSX filter or UI parity.
+
+### CALC-519 — Extended property metadata changes negative handles to unsigned WhichIds
+
+- Source: pinned `svl/source/items/itemprop.cxx`, `SfxExtItemPropertySetInfo` constructor, and `include/svl/itemprop.hxx`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- Shared metadata extension construction checks Property.Handle against signed16-bit limits, then stores it in unsigned16-bit nWID. Returned descriptors therefore change admitted -1 to65535 and -32768 to32768; positive32768 fails the original check. Preserve both narrowing stages rather than repairing negative handles or widening accepted input. Actual shared-component Sequence<Property>/UNO-query tests cover these results. This is not a compiled Calc/XLSX filter or UI witness.

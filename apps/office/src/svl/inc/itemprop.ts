@@ -97,3 +97,10 @@ export class SfxItemPropertyMapCompare {
     return left.aName.lessThan(right.aName);
   }
 }
+/** Original value-vector comparator for the extended property-info owner. */
+export class SfxItemPropertyMapCompare2 {
+  /** Original operator() compares entry names only. @param left - First value. @param right - Second value. @returns Strict order. */
+  operatorCall(left: SfxItemPropertyMapEntry, right: SfxItemPropertyMapEntry): boolean {
+    return left.aName.lessThan(right.aName);
+  }
+}

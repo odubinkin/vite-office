@@ -10,16 +10,19 @@
       "SfxItemPropertyMapCompare",
       "PROPERTY_NONE",
       "comparePropertyNames",
-      "propertyNameView"
+      "propertyNameView",
+      "SfxItemPropertyMapCompare2"
     ],
     "upstreamPath": "include/svl/itemprop.hxx",
     "upstreamSymbols": [
       "SfxItemPropertyMapEntry",
       "SfxItemPropertyMapCompare",
-      "PROPERTY_NONE"
+      "PROPERTY_NONE",
+      "SfxItemPropertyMapCompare2"
     ],
     "preservedResponsibilities": [
-      "Native SfxItemPropertyMapEntry schema values and PropertyMoreFlags retain actual OUString/Type owners, source widths/checked preconditions, copy/assignment and reverse member destruction. SfxItemPropertyMap now uses actual sorted_vector/OUString comparison, borrowed immutable schema pointers, first duplicate insertion, counted UTF16 lower_bound and real cached Sequence<Property> values. Actual generated Property/UNO data assignment and sequence COW preserve cache sharing, independent returned descriptors and UnknownPropertyException defaults. Older SfxItemPropertySetInfo array projection remains explicitly unregistered/incomplete, not a native XPropertySetInfo provider. Full SfxItemPropertySet/property-info/static-map owner migration, SwXTextDefaults/application and DOCX/XLSX filters/export/UI remain incomplete; no broad default/service/ABI/parity promotion."
+      "Native SfxItemPropertyMapEntry schema values and PropertyMoreFlags retain actual OUString/Type owners, source widths/checked preconditions, copy/assignment and reverse member destruction. SfxItemPropertyMap now uses actual sorted_vector/OUString comparison, borrowed immutable schema pointers, first duplicate insertion, counted UTF16 lower_bound and real cached Sequence<Property> values. Actual generated Property/UNO data assignment and sequence COW preserve cache sharing, independent returned descriptors and UnknownPropertyException defaults. Older SfxItemPropertySetInfo array projection remains explicitly unregistered/incomplete, not a native XPropertySetInfo provider. Full SfxItemPropertySet/property-info/static-map owner migration, SwXTextDefaults/application and DOCX/XLSX filters/export/UI remain incomplete; no broad default/service/ABI/parity promotion.",
+      "Complete native SfxExtItemPropertySetInfo component uses the genuine WeakImplHelper XPropertySetInfo specialization, owned copied entry values, first-name insertion precedence, original checked signed handle then unsigned Which conversion, counted UTF16 lookup, actual generated descriptor assignment and owning cached-sequence COW returns. Actual UNO/type-provider/weak lifetime tests cover component final release and results surviving component destruction. WRITER452/CALC-519 preserve negative-handle conversion. Older ordinary metadata projection and Writer static-map/application/filter/UI migration remain unfinished; no broad parity promotion."
     ],
     "omittedResponsibilities": [
       "Full native component/property-set/static-schema integration and unconsumed implicit moves/physical ABI remain unverified. No query provider is fabricated."
@@ -33,12 +36,20 @@
         {
           "path": "apps/office/src/svl/source/items/native-property-map.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/native-extended-property-info.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/include/svl/itemprop.hxx",
           "marker": "SfxItemPropertyMapEntry"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/svl/itemprop.hxx",
+          "marker": "SfxItemPropertyMapCompare2"
         }
       ]
     }

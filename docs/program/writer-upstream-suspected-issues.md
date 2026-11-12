@@ -3650,3 +3650,8 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 
 - Source: pinned `svl/source/items/itemprop.cxx`, `SfxItemPropertySet::setPropertyValue`, commit9bc445578031fecf56086729d8e4940c77e14d65.
 - bIgnoreUnknownProperty is described as suppressing unknown-property errors, but the static setter also uses it after a known item's PutValue rejects an incompatible Any. Thus a known TabStopDistance assignment of bool silently does nothing when the flag is true, while false throws IllegalArgumentException. Preserve the broader source condition and unchanged destination rather than narrowing suppression to name lookup. Tests use the actual Writer tab item and genuine typed Any values; full filter/UI parity is not certified here.
+
+### WRITER452 — Extended property metadata changes negative handles to unsigned WhichIds
+
+- Source: pinned `svl/source/items/itemprop.cxx`, `SfxExtItemPropertySetInfo` constructor, and `include/svl/itemprop.hxx`, commit9bc445578031fecf56086729d8e4940c77e14d65.
+- Extension descriptors carry signed32-bit Property.Handle, but construction first uses checked sal_Int16 conversion and then stores the result in unsigned16-bit nWID. Enumeration and named lookup subsequently expose nWID as the handle. An admitted Handle=-1 therefore becomes65535, and -32768 becomes32768; handles above32767 fail the original checked conversion even though nWID is unsigned. Preserve the conversions rather than retaining the original external handle or extending its accepted range. Tests use genuine Sequence<Property>, the real metadata component and actual UNO queries; no whole Writer filter or UI reproduction is claimed.

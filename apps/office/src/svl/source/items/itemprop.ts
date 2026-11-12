@@ -314,3 +314,141 @@ export class SfxItemPropertySet {
     this.m_aMap.dispose();
   }
 }
+
+import { WeakImplHelper } from "../../../cppuhelper/inc/implbase";
+import { XPropertySetInfo } from "../../../udkapi/com/sun/star/beans/XPropertySetInfo";
+import { SfxItemPropertyMapCompare2 } from "../../inc/itemprop";
+/** Original MSVC template-linkage base; its complete declared interface uses the genuine weak/type-provider implementation. */
+export class SfxExtItemPropertySetInfo_Base extends WeakImplHelper.specialize(XPropertySetInfo) {}
+/** Original extended metadata component owns its copied entry values, unlike SfxItemPropertyMap's borrowed pointer table. */
+export class SfxExtItemPropertySetInfo
+  extends SfxExtItemPropertySetInfo_Base
+  implements XPropertySetInfo
+{
+  private readonly maMap: SortedVector<SfxItemPropertyMapEntry>;
+  private readonly m_aPropSeq = new PropertySequence();
+  /** Original entry-span plus external sequence constructor; first same-name insertion wins, including original schema over extension descriptors. @param entries - Borrowed native schema. @param properties - Borrowed actual UNO sequence. @returns Component at native zero reference count. */
+  constructor(
+    entries: readonly SfxItemPropertyMapEntry[],
+    properties: SequenceReference<Property>,
+  ) {
+    super();
+    const compare = new SfxItemPropertyMapCompare2();
+    this.maMap = new SortedVector(
+      /** Compiler-bound value comparator. @param left - First value. @param right - Second value. @returns Strict order. */ (
+        left,
+        right,
+      ) => compare.operatorCall(left, right),
+    );
+    try {
+      for (const entry of entries) {
+        if (!entry.aName.getLength()) throw new Error("assert(!rEntry.aName.isEmpty())");
+        // Erased vector<const Value&> insertion copies only an accepted value.
+        if (this.maMap.find(entry) < 0) this.maMap.insert(new SfxItemPropertyMapEntry(entry));
+      }
+      const array = properties.getConstArray() as SequenceElements;
+      for (let index = 0; index < properties.getLength(); ++index) {
+        const property = new Property();
+        try {
+          uno_type_assignData(
+            property,
+            cppu_detail_getUnoType_Property().getTypeLibType() as R,
+            array.get(index * 32),
+            cppu_detail_getUnoType_Property().getTypeLibType(),
+            cpp_queryInterface,
+            cpp_acquire,
+            cpp_release,
+          );
+          // sal::static_int_cast<sal_Int16> checks the signed source range before nWID's unsigned conversion.
+          if (property.Handle < -32768 || property.Handle > 32767)
+            throw new Error("assert(sal::static_int_cast<sal_Int16>(rProp.Handle))");
+          const entry = new SfxItemPropertyMapEntry(
+            property.Name,
+            property.Handle,
+            property.Type,
+            property.Attributes,
+            0,
+          );
+          try {
+            if (this.maMap.find(entry) < 0) this.maMap.insert(new SfxItemPropertyMapEntry(entry));
+          } finally {
+            entry.dispose();
+          }
+        } finally {
+          property.dispose();
+        }
+      }
+    } catch (error) {
+      // C++ unwinds already constructed vector/sequence members if this constructor throws.
+      this.destroy();
+      throw error;
+    }
+  }
+  /** Original lazy cache returns an owning sequence copy; callers cannot mutate the cache through COW. @returns Owned descriptor sequence. */
+  getProperties(): Sequence<Property> {
+    if (!this.m_aPropSeq.getLength()) {
+      this.m_aPropSeq.realloc(this.maMap.size());
+      const array = this.m_aPropSeq.getArray() as SequenceElements;
+      let index = 0;
+      for (const entry of this.maMap) {
+        const property = new Property(entry.aName, entry.nWID, entry.aType, entry.nFlags);
+        try {
+          uno_type_assignData(
+            array.get(index * 32),
+            cppu_detail_getUnoType_Property().getTypeLibType() as R,
+            property,
+            cppu_detail_getUnoType_Property().getTypeLibType(),
+            cpp_queryInterface,
+            cpp_acquire,
+            cpp_release,
+          );
+        } finally {
+          property.dispose();
+        }
+        ++index;
+      }
+    }
+    return new PropertySequence(this.m_aPropSeq);
+  }
+  /** Original lookup copies the requested name and declared fields or throws UnknownPropertyException. @param name - Exact counted native name. @returns Owned descriptor. */
+  getPropertyByName(name: OUStringConstReference): Property {
+    const entry = this.getByName(propertyNameView(name));
+    if (!entry) {
+      const context = new Reference();
+      try {
+        throw new UnknownPropertyException(name, context);
+      } finally {
+        context.dispose();
+      }
+    }
+    return new Property(name, entry.nWID, entry.aType, entry.nFlags);
+  }
+  /** Original named presence query. @param name - Exact counted native name. @returns Whether present. */
+  hasPropertyByName(name: OUStringConstReference): boolean {
+    return this.getByName(propertyNameView(name)) !== null;
+  }
+  /** Original heterogeneous lower_bound over value entries, without string conversion or locale sorting. @param name - Native UTF16 view. @returns Borrowed value or null. */
+  private getByName(name: Uint16Array): SfxItemPropertyMapEntry | null {
+    let first = 0,
+      count = this.maMap.size();
+    while (count > 0) {
+      const step = count >> 1,
+        middle = first + step;
+      const entry = this.maMap.at(middle) as SfxItemPropertyMapEntry;
+      if (comparePropertyNames(propertyNameView(entry.aName), name) < 0) {
+        first = middle + 1;
+        count -= step + 1;
+      } else count = step;
+    }
+    const entry = this.maMap.at(first);
+    return entry && comparePropertyNames(name, propertyNameView(entry.aName)) === 0 ? entry : null;
+  }
+  /** Original derived destructor releases cached descriptors and value-vector members at the actual final strong release. @returns Nothing. */
+  protected override destroy(): void {
+    this.m_aPropSeq.dispose();
+    for (let index = this.maMap.size(); index > 0; --index)
+      (this.maMap.at(index - 1) as SfxItemPropertyMapEntry).dispose();
+    this.maMap.clear();
+    super.destroy();
+  }
+}
