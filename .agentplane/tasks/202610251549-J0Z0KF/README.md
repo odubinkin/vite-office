@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 194
+revision: 197
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T07:50:32.510Z"
+  updated_at: "2026-11-12T09:26:27.912Z"
   updated_by: "CODER"
-  note: "Pinned native libxml2 runtime verified in Node, Chromium main realm and Worker; 118 exports, Clang-derived types, byte-identical rebuild, 59 passing related cases, 49 boundary cases, typechecks/build/static/structure/provenance/registry/resources pass. Runtime owner exceeds 90%; dispatcher graph/coverage, concrete UNO DOM, metadata and DOCX/XLSX/UI remain incomplete. Existing global JSDoc baseline persists. Continue actual native document/node integration."
-  attempts: 59
+  note: "Native DOM tree progress: 56 focused cases pass; genuine dispatcher exceeds 90% across metrics, but whole DOM remains 75% branches/88.93% lines. Typechecks, scoped lint, native Chromium Worker probe, byte-identical native rebuild, production build and provenance checks pass. Existing css-style-matchers JSDoc baseline remains. Builder/XPath/SAX/IO, metadata and DOCX/XLSX file/UI acceptance are incomplete. Evidence: native-dom-tree-progress.json."
+  attempts: 60
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -952,8 +955,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-12T09:26:27.912Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native DOM tree progress: 56 focused cases pass; genuine dispatcher exceeds 90% across metrics, but whole DOM remains 75% branches/88.93% lines. Typechecks, scoped lint, native Chromium Worker probe, byte-identical native rebuild, production build and provenance checks pass. Existing css-style-matchers JSDoc baseline remains. Builder/XPath/SAX/IO, metadata and DOCX/XLSX file/UI acceptance are incomplete. Evidence: native-dom-tree-progress.json."
+  -
+    type: "status"
+    at: "2026-11-12T09:27:01.349Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-12T07:50:49.635Z"
+doc_updated_at: "2026-11-12T09:27:01.349Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -2738,6 +2754,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T09:26:27.912Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native DOM tree progress: 56 focused cases pass; genuine dispatcher exceeds 90% across metrics, but whole DOM remains 75% branches/88.93% lines. Typechecks, scoped lint, native Chromium Worker probe, byte-identical native rebuild, production build and provenance checks pass. Existing css-style-matchers JSDoc baseline remains. Builder/XPath/SAX/IO, metadata and DOCX/XLSX file/UI acceptance are incomplete. Evidence: native-dom-tree-progress.json.
+    Attempts: 60
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T09:26:02.070Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3038,6 +3084,10 @@ sections:
     - Observation: Native contract qualification disproved using xmldom for the complete unoxml tree: attributes lack child text nodes and namespaces lack shared pointer identity. The actual libxml2-wasm 0.7.2 runtime also lacks xmlCopyNode, xmlNewDocProp, xmlNewDocPI and xmlNewDocFragment. The user-authorized libxml2 2.15.3 archive matches LibreOffice SHA-256. A repository-local Emscripten build now exports 118 native functions/accessors, with C declarations generated from Clang AST. Dispatcher keys and parent traversal now use actual C addresses, not JS DOM nodes.
       Impact: The native dependency now preserves the consumed low-level tree semantics without a JavaScript port or shadow XML graph. Real Node/Chromium main/Worker probes pass attribute tree mutation, namespace sharing, text coalescing, cloning, IO, UTF16 and heap growth. 59 related cases and 49 boundary cases pass. Native runtime owner coverage exceeds the user-approved 90-percent threshold; dispatcher propagation remains unconnected and its unchanged 90-percent gate still fails.
       Resolution: Proceed directly with actual CDocument/CNode/builder owners, then metadata and DOCX/XLSX filter/UI integration. Source checksum, SDK/compiler/output pins, byte-for-byte rebuild evidence, raw probe results and full residual gaps are recorded in native-libxml2-runtime-checkpoint.json. Core file/recovery/autosave UI policies remain unchanged; no complete format acceptance or whole-task verification is claimed.
+
+    - Observation: Native DOM tree checkpoint: 56 related cases in six files pass, including four upstream domtest bodies and genuine graph dispatch. Dispatcher reaches 95% branches and 100% functions/lines. Whole collected DOM coverage remains 86.72% statements, 75% branches, 85.71% functions, 88.93% lines, below the approved 90% gate.
+      Impact: The document/node factory and imports are implemented but this dependency checkpoint and the XLSX/DOCX epic are incomplete. Builder-service upstream setup, XPath, SAX/IO, metadata and real file/UI acceptance remain open.
+      Resolution: Continue source-backed graph and metadata implementation without claiming full verification. Preserve CALC-529/530 and WRITER463/464. Browser raw-native probe and six-artifact byte-identical rebuild pass. Only existing css-style-matchers.ts JSDoc baseline fails; no authored source exclusions or fake node providers were added.
 id_source: "generated"
 ---
 ## Summary
@@ -4832,6 +4882,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T09:26:27.912Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native DOM tree progress: 56 focused cases pass; genuine dispatcher exceeds 90% across metrics, but whole DOM remains 75% branches/88.93% lines. Typechecks, scoped lint, native Chromium Worker probe, byte-identical native rebuild, production build and provenance checks pass. Existing css-style-matchers JSDoc baseline remains. Builder/XPath/SAX/IO, metadata and DOCX/XLSX file/UI acceptance are incomplete. Evidence: native-dom-tree-progress.json.
+Attempts: 60
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T09:26:02.070Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -5136,3 +5216,7 @@ DecisionContextRef:
 - Observation: Native contract qualification disproved using xmldom for the complete unoxml tree: attributes lack child text nodes and namespaces lack shared pointer identity. The actual libxml2-wasm 0.7.2 runtime also lacks xmlCopyNode, xmlNewDocProp, xmlNewDocPI and xmlNewDocFragment. The user-authorized libxml2 2.15.3 archive matches LibreOffice SHA-256. A repository-local Emscripten build now exports 118 native functions/accessors, with C declarations generated from Clang AST. Dispatcher keys and parent traversal now use actual C addresses, not JS DOM nodes.
   Impact: The native dependency now preserves the consumed low-level tree semantics without a JavaScript port or shadow XML graph. Real Node/Chromium main/Worker probes pass attribute tree mutation, namespace sharing, text coalescing, cloning, IO, UTF16 and heap growth. 59 related cases and 49 boundary cases pass. Native runtime owner coverage exceeds the user-approved 90-percent threshold; dispatcher propagation remains unconnected and its unchanged 90-percent gate still fails.
   Resolution: Proceed directly with actual CDocument/CNode/builder owners, then metadata and DOCX/XLSX filter/UI integration. Source checksum, SDK/compiler/output pins, byte-for-byte rebuild evidence, raw probe results and full residual gaps are recorded in native-libxml2-runtime-checkpoint.json. Core file/recovery/autosave UI policies remain unchanged; no complete format acceptance or whole-task verification is claimed.
+
+- Observation: Native DOM tree checkpoint: 56 related cases in six files pass, including four upstream domtest bodies and genuine graph dispatch. Dispatcher reaches 95% branches and 100% functions/lines. Whole collected DOM coverage remains 86.72% statements, 75% branches, 85.71% functions, 88.93% lines, below the approved 90% gate.
+  Impact: The document/node factory and imports are implemented but this dependency checkpoint and the XLSX/DOCX epic are incomplete. Builder-service upstream setup, XPath, SAX/IO, metadata and real file/UI acceptance remain open.
+  Resolution: Continue source-backed graph and metadata implementation without claiming full verification. Preserve CALC-529/530 and WRITER463/464. Browser raw-native probe and six-artifact byte-identical rebuild pass. Only existing css-style-matchers.ts JSDoc baseline fails; no authored source exclusions or fake node providers were added.

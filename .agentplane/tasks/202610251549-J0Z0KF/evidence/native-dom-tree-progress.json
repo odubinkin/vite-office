@@ -1,0 +1,459 @@
+{
+  "status": "in-progress",
+  "task": "202610251549-J0Z0KF",
+  "head": "d05e0f1fd778389d68aa3a0cf8dc18c6a2195423",
+  "scope": "Native UNO DOM tree and genuine dispatcher integration; not complete DOCX/XLSX acceptance",
+  "tests": {
+    "files": 6,
+    "cases": 56,
+    "result": "pass",
+    "upstreamBodies": [
+      "testXText",
+      "testXProcessingInstruction",
+      "testXNamedNodeMap_AttributesMap",
+      "testXNodeList_ChildList"
+    ],
+    "builderFixtureSetup": "not yet ported"
+  },
+  "coverage": {
+    "gate": 90,
+    "result": "rework",
+    "statements": 86.72,
+    "branches": 75,
+    "functions": 85.71,
+    "lines": 88.93,
+    "dispatcher": {
+      "statements": 98.7,
+      "branches": 95,
+      "functions": 100,
+      "lines": 100
+    }
+  },
+  "nativeRebuild": {
+    "byteIdentical": true,
+    "sha256": {
+      "libxml2.mjs": "223f7f352b9acf6447b07403064f85f6e0c3408b01bdf4dab14a5fa8a4d01eb9",
+      "index.d.ts": "3e8d1df7f81b59778ebf8488ebf7468f6b9061b2be2ac2e58b14d9bffa6f9d86",
+      "constants.mjs": "0b28eda895c436f7785bc9be36d889bbfe82390f05defd40e85d20746ec32731",
+      "constants.d.ts": "3e679bc954e6d2e47a8a181d7b6f2093dc9b26430e7af26d135cc14571f6c226",
+      "generated-api.json": "6eb5cdfc2ddb84971e0f70c2bf1dfa7f675331831b7ca8ca8d6df5b48e31ab20",
+      "artifact.json": "f2cc6f4e27edcf48cb621ab4e5647b02af57842e1d3b4f578ad76cb2df4ae8ff"
+    }
+  },
+  "remaining": [
+    "Whole DOM coverage gate",
+    "CDocumentBuilder service and source fixture setup",
+    "XPath service",
+    "Document SAX/IO facets",
+    "Metadata services",
+    "Full DOCX/XLSX filter and existing UI acceptance"
+  ],
+  "checks": {
+    "dom-native-coverage.log": {
+      "path": "apps/office/coverage/dom-native-coverage.log",
+      "sha256": "d8a6e4c6e8ce3498b6ddf9213041a62706b430ad21516671b09d12ee684b5d77"
+    },
+    "dom-native-all-typecheck.log": {
+      "path": "apps/office/coverage/dom-native-all-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    "dom-native-lint.log": {
+      "path": "apps/office/coverage/dom-native-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "dom-native-browser-probe.log": {
+      "path": "apps/office/coverage/dom-native-browser-probe.log",
+      "sha256": "50119acb665e9c9c2fd3150210d63fcee0c516db4819798e721808c863f0c3c9"
+    },
+    "dom-native-provenance.log": {
+      "path": "apps/office/coverage/dom-native-provenance.log",
+      "sha256": "9445df05c12956c04cd4cb17c684310a716b3fc8283d0b7475343a8d0ec7567b"
+    },
+    "dom-native-registry-check.log": {
+      "path": "apps/office/coverage/dom-native-registry-check.log",
+      "sha256": "ff55f5386b62a3663664a5ba96dab6a309fc72e87fbf7935cf7cbfc1c89c600f"
+    },
+    "dom-native-build.log": {
+      "path": "apps/office/coverage/dom-native-build.log",
+      "sha256": "a2e01993fa3f2cf84a733e0c85b28e6888df63461176f6d768a2cd656c4e094b"
+    },
+    "dom-native-jsdoc.log": {
+      "path": "apps/office/coverage/dom-native-jsdoc.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    },
+    "dom-native-boundaries.log": {
+      "path": "apps/office/coverage/dom-native-boundaries.log",
+      "sha256": "7e1d393e2aa0bb43ad50b8c4f610f60e7b2e22a8c30c057bf4574104d948631d"
+    },
+    "dom-native-size.log": {
+      "path": "apps/office/coverage/dom-native-size.log",
+      "sha256": "a9e902e86203b7e0cb99c8b505f82d330ac79281a51a6a927e67d5c5b62c5405"
+    },
+    "dom-native-source-tree.log": {
+      "path": "apps/office/coverage/dom-native-source-tree.log",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    "dom-native-rebuild-result.json": {
+      "path": "apps/office/coverage/dom-native-rebuild-result.json",
+      "sha256": "40026c427ce61f7c58b2df975f9d70caa2ec0503d6734d92ee8cdf64afc4cfa5"
+    }
+  },
+  "changes": [
+    {
+      "path": ".prettierignore",
+      "gitBlob": "ac607af5017ab60db23dd94c61a5b167dbdfe4f4"
+    },
+    {
+      "path": "apps/office/src/test/native-dom.ts",
+      "gitBlob": "ebd7f66ae0f8b9338052819e68cae1af661aafea"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/attr.ts",
+      "gitBlob": "2ea7407f1581203cc0e46ca898bbbe06d88d07c1"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/attributesmap.ts",
+      "gitBlob": "bd9f7080e1fe1fc336f32dee0f75843cacebe1a4"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/cdatasection.ts",
+      "gitBlob": "9322e4fbca9e88e4bfc0641d3a5ea123a6994fd1"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/characterdata.ts",
+      "gitBlob": "e102d3d418d41e867f4878f4a2660dc62331f4bc"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/childlist.ts",
+      "gitBlob": "ad781041a03f5f24fe24e1c7af464a57b5ee8cbd"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/comment.ts",
+      "gitBlob": "a2a6ae4352d7353d40189bea281190505fba2df1"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/document.import.ts",
+      "gitBlob": "44df884e508894de6acd5b3aabcfd0274ccb3edf"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/document.ts",
+      "gitBlob": "adcbb887189f88c38b4070e8001f198081aada20"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/documentfragment.ts",
+      "gitBlob": "d564fb98384241a7389437552c85fbd54a2c6719"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/documenttype.ts",
+      "gitBlob": "6d60d43dc1ea025052fc1b231ebaf9bc33307720"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/element.ts",
+      "gitBlob": "d6fe6c20266668ba236cd68782bf1eb460eb8450"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/elementlist.ts",
+      "gitBlob": "ac3993028c8010caadb93d572694a873d8da3226"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/entitiesmap.ts",
+      "gitBlob": "481dbd9dcbc696b6e21f1166d89cebde646b28f7"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/entity.ts",
+      "gitBlob": "8b3c50c2ebf74f2f8b5924c634cd26310c297569"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/entityreference.ts",
+      "gitBlob": "3ad0d506e319f88ec97ad29f55281bae9ce7f537"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/native-tree.test.ts",
+      "gitBlob": "aca1d71b618cd60fd6c4ab477b13b41bc629234d"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/native-upstream-dom.test.ts",
+      "gitBlob": "15cf62bd0e1c61d4b3668154fab5586832f3c887"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/node.ts",
+      "gitBlob": "c420a05e8007f07fd1064a62141bfe9ef4178a37"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/notation.ts",
+      "gitBlob": "528d0b0543254d5d679791e13f6c6ddac6a85882"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/notationsmap.ts",
+      "gitBlob": "f94ff31e991dec894862e8d3f2af4f3544c84d26"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/processinginstruction.ts",
+      "gitBlob": "fe06d57581d35e46f1fcf27526c0dae36ffdba9a"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/text.ts",
+      "gitBlob": "38e1fe74ed583fde00719506fa5e739ae95e6564"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/events/native-tree-dispatch.test.ts",
+      "gitBlob": "1d82eb8c6c2238eb72ed7bbaf8225260acd74431"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "b5d8863e5b3dd8d1b2582d2b2c76a3f281ecc0fa"
+    },
+    {
+      "path": "docs/program/native-xml-dom-events.md",
+      "gitBlob": "7bc295d4f951ad18c073b0897765490b9d84f00a"
+    },
+    {
+      "path": "docs/program/native-xml-dom-tree.md",
+      "gitBlob": "a860f22e0e93aa2701380b448a67ab74425275fb"
+    },
+    {
+      "path": "docs/program/native-xml-runtime.md",
+      "gitBlob": "91cf4f20855acaaed091b14838264ce5f9925b62"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-63b22cd8-c479-4bd1-88a6-b34e7c7e733e.json",
+      "gitBlob": "41cbb0d7d2f19307d51ecd040f0be10b8b9ba2fd"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-91436a81-7f1b-4eef-ae3c-06dc8c83f991.json",
+      "gitBlob": "5e9769d531bbdcf85b1e8a3234b6f60826076850"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/inc/eventdispatcher.ts.json",
+      "gitBlob": "e9073a72fdfd2374fe56a1d027825aa493fce1c2"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/attr.ts.json",
+      "gitBlob": "071ec4600c339c3b164d6674ee84b821d4141c1a"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/attributesmap.ts.json",
+      "gitBlob": "7b733ea755fbaa1cb592eb746022b558d1c67a0b"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/cdatasection.ts.json",
+      "gitBlob": "3f52a65ccf2f89fb696ca77254d0e8187b3bc846"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/characterdata.ts.json",
+      "gitBlob": "52115cb92ff5e03c53ffd7a00c3eb83cfa975752"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/childlist.ts.json",
+      "gitBlob": "d8f3e22f9b1d6c8622f86e9d0765f7a2c4c2d116"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/comment.ts.json",
+      "gitBlob": "072bf54e8b764db4e10da6e98289430ce4113981"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/document.import.ts.json",
+      "gitBlob": "6040fe1050968b7830604411232ad7cf919dc9a4"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/document.ts.json",
+      "gitBlob": "b854448abe949038e3937965207349620acea5c3"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/documentfragment.ts.json",
+      "gitBlob": "489fb1c4537aa78cc1218852054acd6bf2961269"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/documenttype.ts.json",
+      "gitBlob": "ae1ea65a30987f5955a84c283b981de69e7f285e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/domimplementation.ts.json",
+      "gitBlob": "24b7c3834de67c5f11d65b4a54a9e6539bacde01"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/element.ts.json",
+      "gitBlob": "70e8bf38cc966a0148b286eb4e11b98fc56a54f1"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/elementlist.ts.json",
+      "gitBlob": "275372e9dc3712a91b5edddb56cf2adc3a21341e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/entitiesmap.ts.json",
+      "gitBlob": "21b744c5a819cc50316a80bd939b0f19567a8809"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/entity.ts.json",
+      "gitBlob": "fb4cee3a388c419ad225d6df42cf3135baebc88c"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/entityreference.ts.json",
+      "gitBlob": "89580140909a678fc76a1e2bdf9cb56d3a9223db"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/node.ts.json",
+      "gitBlob": "c7926ce45708174c8a497c7080661cd50c7d2d8b"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/notation.ts.json",
+      "gitBlob": "8c88431c1cacafbfc014d1aa725ab2e5deac40b4"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/notationsmap.ts.json",
+      "gitBlob": "50fadbc72022ff1f33f7e84fcb50fd32c7adde62"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/processinginstruction.ts.json",
+      "gitBlob": "2c0b91375a82cf69951365bab54df0aa3d11027a"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/text.ts.json",
+      "gitBlob": "161ad83fc8da0ceccefbf290d8c2886bb9e94dd2"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/events/eventdispatcher.ts.json",
+      "gitBlob": "e2ff9cd9a1e6ae65b00e3a91775b8532303ad9e9"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/inc/eventdispatcher.ts.json",
+      "gitBlob": "5201d56a0fe50da11e40e847b8935f69446bf6ab"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/attr.ts.json",
+      "gitBlob": "efd42c46857b89e7896a9cf2b782de5d14767dc5"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/attributesmap.ts.json",
+      "gitBlob": "7ec605d5670b515e5cd5202b4c2c16073a882512"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/cdatasection.ts.json",
+      "gitBlob": "5a540a0b886b2e9a247bd6d81eb55e745a61ca77"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/characterdata.ts.json",
+      "gitBlob": "67333195ac3297dbc390a39aa9dbde5d953a8c1d"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/childlist.ts.json",
+      "gitBlob": "3ab90c06fcd30cdab1a6ce62f60de76741c35105"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/comment.ts.json",
+      "gitBlob": "5eb19aaa7b9eb65c3a302d414135065ea2d7c308"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/document.import.ts.json",
+      "gitBlob": "35d036750350730480c9c81de46d1cf38ca9ee6a"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/document.ts.json",
+      "gitBlob": "5aee65f9bc8fe3e0a72d716c06a01286844c356c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/documentfragment.ts.json",
+      "gitBlob": "ec461e3380937c689b3d4f9075fb563a019a987c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/documenttype.ts.json",
+      "gitBlob": "4a335de39cf3bcb698e2912530664a8eabcf8405"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/domimplementation.ts.json",
+      "gitBlob": "4df7c4695666e3902369cfa8a68d535f7567e71e"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/element.ts.json",
+      "gitBlob": "328cbe4331735241d2a86fd4332629ead9b98888"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/elementlist.ts.json",
+      "gitBlob": "38c5c2a390f7850aee3815e9fa446c3fdfd91519"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/entitiesmap.ts.json",
+      "gitBlob": "19d6fd818ffd8493d5c140d52d81558f0fdd42ef"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/entity.ts.json",
+      "gitBlob": "d95f8d95b28fe3f62d90ed45c2dab9b0aea59cfe"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/entityreference.ts.json",
+      "gitBlob": "4ccc0a7b1d1d3078a36bd3986b7d611647a6da7b"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/node.ts.json",
+      "gitBlob": "4f5140c1a33209edc97e760181c40a87d30540df"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/notation.ts.json",
+      "gitBlob": "97310a0587b9c5c1f2a73608cfc22b14b7aa71ce"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/notationsmap.ts.json",
+      "gitBlob": "b6537401ef274d5e7a29a978dfaa8b2cabcbc206"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/processinginstruction.ts.json",
+      "gitBlob": "34bf799ca325b29b79cf468d264755e70807b82f"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/text.ts.json",
+      "gitBlob": "351c1b538c7da0be54a567f8ccb0059fbd6b61f0"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/events/eventdispatcher.ts.json",
+      "gitBlob": "264a67e448261cefbfbe53c0464499b0f6443eee"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "e5d8e64fa9e5ba38a665a77687f9e77195bac369"
+    },
+    {
+      "path": "eslint.config.js",
+      "gitBlob": "649fd3b71b509577bf80035e00e518a7b7d2e4c5"
+    },
+    {
+      "path": "scripts/build-libxml2-wasm.py",
+      "gitBlob": "af0e461d375b98cc9b0f38d6f748595ade2db1dc"
+    },
+    {
+      "path": "third_party/libxml2-wasm/artifact.json",
+      "gitBlob": "bcaaa586415f37cc63b11e50bceae38150091c7d"
+    },
+    {
+      "path": "third_party/libxml2-wasm/binding.c",
+      "gitBlob": "de72015d216ca2a909763fa3ed18548df739cdb1"
+    },
+    {
+      "path": "third_party/libxml2-wasm/constants.d.ts",
+      "gitBlob": "8e5e19c94a10313531a42c8eff462731cf93d6a3"
+    },
+    {
+      "path": "third_party/libxml2-wasm/constants.mjs",
+      "gitBlob": "7e370c06b2ac1933646610b7a84187fed79ccb3d"
+    },
+    {
+      "path": "third_party/libxml2-wasm/generated-api.json",
+      "gitBlob": "8ed24aef420320d9b4271538ce9ce453b9a42f8d"
+    },
+    {
+      "path": "third_party/libxml2-wasm/index.d.ts",
+      "gitBlob": "b97e2dc2127562e3d230bc109c17be54b3ac4bed"
+    },
+    {
+      "path": "third_party/libxml2-wasm/libxml2.mjs",
+      "gitBlob": "e7b8a43793fdecf17762881ca5a53011b6ca7868"
+    },
+    {
+      "path": "third_party/libxml2-wasm/package.json",
+      "gitBlob": "2f9c48b24bf965dafa692e4e3080baa4fef76a3a"
+    },
+    {
+      "path": "third_party/libxml2-wasm/source.json",
+      "gitBlob": "e5b51247b5557bc6c3f83016ef84b11ac43cd093"
+    }
+  ]
+}
