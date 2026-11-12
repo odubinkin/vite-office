@@ -3728,3 +3728,17 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 - Source: `unoxml/source/dom/documentbuilder.cxx`, `resolve_func` and `xmlIO_close_func`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-531.
 - The resolver allocates a context with freeOnClose=true. The close callback returns zero immediately if its input reference is empty. It also catches a UNO closeInput failure and returns minus one before reaching delete. Preserve both orders; do not move deletion into a finally guard.
 - Actual IO callback tests demonstrate that a close failure retains the context's genuine input reference until explicit caller cleanup. The empty-stream allocation leak is source-derived; no compiled native allocator leak witness or complete resolver-service integration is claimed.
+
+
+### WRITER466 — DOM entity resolution discards returned encoding and identifier metadata
+
+- Sources: `unoxml/source/dom/documentbuilder.cxx`, `resolve_func`, and `offapi/com/sun/star/xml/sax/InputSource.idl`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-532.
+- InputSource documents sEncoding as the parser's conversion encoding. The DOM resolver uses only aInputStream and passes XML_CHAR_ENCODING_NONE to both xmlParserInputBufferCreateIO and xmlNewIOInputStream. It does not transfer the returned sEncoding, sPublicId or sSystemId into the native parser input. Preserve these calls and omission rather than applying the metadata as a new override.
+- A genuine user XEntityResolver returns UTF-8 DTD bytes but sEncoding=UTF-16. The actual helper/native pipeline reads the UTF-8 entity correctly and closes/releases its stream once. Raw DTDLOAD is explicitly selected to qualify this callback; the source builder default remains options zero. Full default-resolver/UCB and compiled C++ UNO differential behavior remain unverified.
+
+
+### WRITER467 — DOM insertBefore returns the reference child and omits mutation notifications
+
+- Sources: `unoxml/source/dom/node.cxx`, `CNode::insertBefore`, and `unoxml/source/dom/elementlist.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-533.
+- The non-attribute insertion path splices native sibling pointers, then returns refChild rather than newChild. It does not emit DOMNodeInserted or DOMSubtreeModified. Preserve this return and absence of notifications rather than adopting host DOM behavior.
+- A genuine cached getElementsByTagName list remains at one result after a second matching element is inserted, while getChildNodes immediately reports two. A later ordinary setAttribute emits the source subtree event and rebuilds the list to two. This is covered on actual CDocument/CNode wrappers over pinned C memory, without private cache access or an alternate node provider. No compiled C++ UNO differential claim is made.

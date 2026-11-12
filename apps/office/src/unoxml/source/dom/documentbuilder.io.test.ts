@@ -6,7 +6,12 @@ import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import { RuntimeException } from "../../../cppu/inc/com/sun/star/uno/RuntimeException";
 import { WeakReferenceHelper } from "../../../cppuhelper/inc/weakref";
 import { own, releaseDomScope } from "../../../test/native-dom";
-import { context_t, xmlIO_read_func, xmlIO_close_func } from "./documentbuilder.io";
+import {
+  context_t,
+  nativeIoContext,
+  xmlIO_read_func,
+  xmlIO_close_func,
+} from "./documentbuilder.io";
 afterEach(releaseDomScope);
 
 it("copies actual readBytes output into C memory and preserves EOF, absence and UNO read failures", /** Exercises signed bytes without a substitute stream service. @returns Async completion. */ async () => {
@@ -16,6 +21,8 @@ it("copies actual readBytes output into C memory and preserves EOF, absence and 
   context.close = false;
   context.freeOnClose = false;
   try {
+    const native = nativeIoContext(context);
+    expect(nativeIoContext(context)).toEqual(native);
     expect(xmlIO_read_func(context, buffer, 8)).toBe(-1);
     const input = own(new Reference(new MemoryInputStream(new Uint8Array([0, 127, 128, 255]), 4)));
     context.rInputStream.assign(input);

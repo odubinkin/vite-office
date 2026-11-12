@@ -9,11 +9,11 @@
     "type": "model",
     "maturity": "implemented",
     "assertions": [
-      "Browser delivery binding loads the actual pinned libxml2 2.15.3 C implementation compiled to WASM. Source checksum matches LibreOffice download.lst; the generated loader exports consumed native APIs and C struct accessors, and Clang generates actual C function signatures. Realm-local initialization and byte buffers do not introduce a JavaScript DOM or alternate native allocator. Focused owner tests and native Node/Chromium Worker/main-realm probes cover dependency initialization, actual attribute child trees, shared namespaces, text coalescing, clone document ownership and XML IO. Concrete UNO DOM owners, dispatcher coverage, metadata and complete DOCX/XLSX file/UI parity remain unverified."
+      "Realm-local C SAX callback ABI binding installs original error/warning/resolver signatures on actual parser contexts. Compiled C trampolines erase only unused printf/varargs arguments. Static native table entries live for the module lifetime; unique registration identities prevent an older scope from removing a replacement even with the same callback object. Native _private and XML policy are unchanged. Actual C callbacks, nested parsing and original XML fixtures pass; actual UNO graph, stream IO, typed diagnostics, live mutation lists and Unicode also pass in Chromium main realm and a module Worker without DOM globals. Full DocumentBuilder/UCB service, source bootstrap QA, physical C++ ABI and complete DOCX/XLSX/UI acceptance remain unverified."
     ],
     "capability": "Pinned native XML runtime delivery",
     "gaps": [
-      "Actual native UNO DOM graph, dispatcher propagation/coverage, metadata services and complete DOCX/XLSX import/export/UI remain unfinished."
+      "Full builder/UCB orchestration, complete source bootstrap QA, full DOM coverage, XPath/SAX facets, metadata and DOCX/XLSX file/UI acceptance remain open."
     ],
     "upstream": {
       "implementation": [
@@ -44,11 +44,27 @@
         {
           "path": "apps/office/src/external/libxml2/libxml2.ts",
           "marker": "initializeLibXml2"
+        },
+        {
+          "path": "apps/office/src/external/libxml2/parsercallbacks.ts",
+          "marker": "installParserCallbacks"
         }
       ],
       "tests": [
         {
           "path": "apps/office/src/external/libxml2/libxml2.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/external/libxml2/parsercallbacks.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/native-parser-callbacks.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "scripts/native-dom-worker-probe.mjs",
           "marker": "@fileoverview"
         }
       ],
@@ -66,10 +82,10 @@
     "verified": false,
     "stackDivergence": {
       "kind": "browser-adaptation",
-      "rationale": "Browser delivery binding loads the actual pinned libxml2 2.15.3 C implementation compiled to WASM. Source checksum matches LibreOffice download.lst; the generated loader exports consumed native APIs and C struct accessors, and Clang generates actual C function signatures. Realm-local initialization and byte buffers do not introduce a JavaScript DOM or alternate native allocator. Focused owner tests and native Node/Chromium Worker/main-realm probes cover dependency initialization, actual attribute child trees, shared namespaces, text coalescing, clone document ownership and XML IO. Concrete UNO DOM owners, dispatcher coverage, metadata and complete DOCX/XLSX file/UI parity remain unverified."
+      "rationale": "Realm-local C SAX callback ABI binding installs original error/warning/resolver signatures on actual parser contexts. Compiled C trampolines erase only unused printf/varargs arguments. Static native table entries live for the module lifetime; unique registration identities prevent an older scope from removing a replacement even with the same callback object. Native _private and XML policy are unchanged. Actual C callbacks, nested parsing and original XML fixtures pass; actual UNO graph, stream IO, typed diagnostics, live mutation lists and Unicode also pass in Chromium main realm and a module Worker without DOM globals. Full DocumentBuilder/UCB service, source bootstrap QA, physical C++ ABI and complete DOCX/XLSX/UI acceptance remain unverified."
     },
     "scopeLimitations": [
-      "Browser delivery binding loads the actual pinned libxml2 2.15.3 C implementation compiled to WASM. Source checksum matches LibreOffice download.lst; the generated loader exports consumed native APIs and C struct accessors, and Clang generates actual C function signatures. Realm-local initialization and byte buffers do not introduce a JavaScript DOM or alternate native allocator. Focused owner tests and native Node/Chromium Worker/main-realm probes cover dependency initialization, actual attribute child trees, shared namespaces, text coalescing, clone document ownership and XML IO. Concrete UNO DOM owners, dispatcher coverage, metadata and complete DOCX/XLSX file/UI parity remain unverified."
+      "Realm-local C SAX callback ABI binding installs original error/warning/resolver signatures on actual parser contexts. Compiled C trampolines erase only unused printf/varargs arguments. Static native table entries live for the module lifetime; unique registration identities prevent an older scope from removing a replacement even with the same callback object. Native _private and XML policy are unchanged. Actual C callbacks, nested parsing and original XML fixtures pass; actual UNO graph, stream IO, typed diagnostics, live mutation lists and Unicode also pass in Chromium main realm and a module Worker without DOM globals. Full DocumentBuilder/UCB service, source bootstrap QA, physical C++ ABI and complete DOCX/XLSX/UI acceptance remain unverified."
     ],
     "aspect": "model-operation",
     "atomicOperation": "native-xml-runtime-binding"

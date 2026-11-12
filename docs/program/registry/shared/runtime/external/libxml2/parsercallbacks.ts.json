@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/libxml2/parsercallbacks.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-xml-runtime",
+    "capabilityIds": [
+      "CAP-50103a1f-6aa6-4b77-b0c4-bd8cf3c650f0"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/libxml2/parsercallbacks.ts",
+        "apps/office/src/external/libxml2/parsercallbacks.test.ts",
+        "apps/office/src/unoxml/source/dom/native-parser-callbacks.test.ts",
+        "docs/program/native-xml-document-builder.md"
+      ],
+      "justification": "Realm-local C SAX callback ABI binding installs original error/warning/resolver signatures on actual parser contexts. Compiled C trampolines erase only unused printf/varargs arguments. Static native table entries live for the module lifetime; unique registration identities prevent an older scope from removing a replacement even with the same callback object. Native _private and XML policy are unchanged. Actual C callbacks, nested parsing and original XML fixtures pass; actual UNO graph, stream IO, typed diagnostics, live mutation lists and Unicode also pass in Chromium main realm and a module Worker without DOM globals. Full DocumentBuilder/UCB service, source bootstrap QA, physical C++ ABI and complete DOCX/XLSX/UI acceptance remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ParserCallbacks",
+        "installParserCallbacks"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

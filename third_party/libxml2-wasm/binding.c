@@ -46,6 +46,35 @@ FIELD(xmlError, error_line, int, line)
 FIELD(xmlError, error_column, int, int2)
 FIELD(xmlError, error_level, xmlErrorLevel, level)
 
+/* C variadic SAX callbacks cannot be installed as fixed-signature JS table
+ * functions. These trampolines erase only the unused format/varargs parameters.
+ * The realm-local JS entry points dispatch by the original parser-context
+ * pointer. Parser state, error policy and _private remain with unoxml/libxml2.
+ */
+static void (*office_builder_error)(void *);
+static void (*office_builder_warning)(void *);
+
+static void office_builder_error_trampoline(void *context, const char *message, ...) {
+    (void)message;
+    office_builder_error(context);
+}
+
+static void office_builder_warning_trampoline(void *context, const char *message, ...) {
+    (void)message;
+    office_builder_warning(context);
+}
+
+void office_xmlParserInstallCallbacks(xmlParserCtxtPtr context,
+                                     void (*error)(void *),
+                                     void (*warning)(void *),
+                                     resolveEntitySAXFunc resolver) {
+    office_builder_error = error;
+    office_builder_warning = warning;
+    context->sax->error = office_builder_error_trampoline;
+    context->sax->warning = office_builder_warning_trampoline;
+    context->sax->resolveEntity = resolver;
+}
+
 /* The upstream XPath helpers are macros, not exported C functions. */
 int office_xmlXPathNodeSetGetLength(xmlNodeSetPtr set) {
     return xmlXPathNodeSetGetLength(set);

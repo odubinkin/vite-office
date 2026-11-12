@@ -18,6 +18,24 @@ import type { XNode } from "../../../offapi/com/sun/star/xml/dom/XNode";
 
 afterEach(releaseDomScope);
 
+it("preserves insertBefore's original return value and missing cache-invalidation event", /** Native sibling pointers change immediately, while the element-list cache waits for a later source mutation event. @returns Async completion. */ async () => {
+  const doc = api(await document()),
+    rootRef = own(doc.createElement(u("root"))),
+    root = api(rootRef),
+    first = own(doc.createElement(u("x")));
+  append(doc, rootRef);
+  append(root, first);
+  const cached = api(own(root.getElementsByTagName(u("x"))));
+  expect(cached.getLength()).toBe(1);
+  const inserted = own(doc.createElement(u("x")));
+  expect(api(own(root.insertBefore(inserted, first)))).toBe(api(first));
+  expect(api(own(root.getChildNodes())).getLength()).toBe(2);
+  expect(cached.getLength()).toBe(1);
+  root.setAttribute(u("refresh"), u("yes"));
+  expect(cached.getLength()).toBe(2);
+  expect(api(own(cached.item(0)))).toBe(api(inserted));
+});
+
 it("keeps factory identity and source insert/replace/remove results over real sibling pointers", /** Exercises head, middle and tail splices without substituting nodes. @returns Async completion. */ async () => {
   const doc = api(await document()),
     rootRef = own(doc.createElement(u("root"))),

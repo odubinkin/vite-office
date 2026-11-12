@@ -5,6 +5,10 @@ import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
 import type { XInputStream } from "../../../udkapi/com/sun/star/io/XInputStream";
 import { getLibXml2 } from "../../../external/libxml2/libxml2";
 const Bytes = Sequence.specialize<number>("sal_Int8", 1);
+/** Opaque C userdata addresses lower the actual JS-side UNO context, not an alternate stream owner or native struct layout. */
+const nativeContexts = new Map<number, context_t>();
+const nativeAddresses = new WeakMap<context_t, number>();
+let nativeFunctions: readonly [read: number, close: number] | undefined;
 
 /** Original context struct; flag initialization belongs to the parse/resolver call site. */
 export class context_t {
@@ -14,7 +18,43 @@ export class context_t {
   /** Original implicit member destruction, also used by source delete on successful close. @returns Nothing. */
   dispose(): void {
     this.rInputStream.dispose();
+    const pointer = nativeAddresses.get(this);
+    if (pointer !== undefined) {
+      nativeAddresses.delete(this);
+      nativeContexts.delete(pointer);
+      getLibXml2()._free(pointer);
+    }
   }
+}
+
+/** Lowers the source void* context address and static IO function addresses to this realm's real C callback ABI. Disposal belongs to context_t's source destructor, including source close/freeOnClose failure behavior. @param context - Actual UNO-owning IO context. @returns Native callback arguments. */
+export function nativeIoContext(context: context_t): {
+  readonly address: number;
+  readonly read: number;
+  readonly close: number;
+} {
+  const m = getLibXml2();
+  if (!nativeFunctions)
+    nativeFunctions = [
+      m.addFunction(
+        /** Original IO read function address. @param pointer - Opaque context address. @param buffer - Native destination. @param length - Requested count. @returns Read result. */
+        (pointer: number, buffer: number, length: number) =>
+          xmlIO_read_func(nativeContexts.get(pointer) as context_t, buffer, length),
+        "iiii",
+      ),
+      m.addFunction(
+        /** Original IO close function address, including source deletion on success. @param pointer - Opaque context address. @returns Close result. */
+        (pointer: number) => xmlIO_close_func(nativeContexts.get(pointer) as context_t),
+        "ii",
+      ),
+    ];
+  let address = nativeAddresses.get(context);
+  if (address === undefined) {
+    address = m._malloc(1);
+    nativeContexts.set(address, context);
+    nativeAddresses.set(context, address);
+  }
+  return { address, read: nativeFunctions[0], close: nativeFunctions[1] };
 }
 
 /** Original xmlIO_read_func consumes readBytes, not readSomeBytes, and catches only UNO exceptions. @param context - Actual source context. @param buffer - Actual native destination. @param length - Original requested signed32 count. @returns Read count or minus one on a UNO failure. */

@@ -1,8 +1,8 @@
 {
   "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
   "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
-  "exportCount": 134,
-  "enumConstantCount": 75,
+  "exportCount": 135,
+  "enumConstantCount": 108,
   "artifact": "third_party/libxml2-wasm/libxml2.mjs",
-  "artifactSha256": "6b8e52c646d508080ee60bfb5f24a4611221551803d24f682ef9ad5e576f8507"
+  "artifactSha256": "b827c5638e3a9362d94abfc4e7341073ea91eaac0cd05e3080cfa3f106af9fdd"
 }

@@ -80,6 +80,7 @@ export interface LibXml2 {
   _office_xmlFree(value: number): void;
   _office_xmlXPathNodeSetGetLength(set: number): number;
   _office_xmlXPathNodeSetItem(set: number, index: number): number;
+  _office_xmlParserInstallCallbacks(context: number, error: number, warning: number, resolver: number): void;
   _office_node_type_get(p: number): number;
   _office_node_type_set(p: number, value: number): void;
   _office_node_name_get(p: number): number;

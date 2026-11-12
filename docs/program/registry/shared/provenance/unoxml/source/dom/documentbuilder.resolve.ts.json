@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/unoxml/source/dom/documentbuilder.resolve.ts",
+    "status": "mapped",
+    "upstreamPath": "unoxml/source/dom/documentbuilder.cxx",
+    "localSymbols": [
+      "resolve_func"
+    ],
+    "upstreamSymbols": [
+      "resolve_func",
+      "xmlParserInputBufferCreateIO",
+      "xmlNewIOInputStream"
+    ],
+    "preservedResponsibilities": [
+      "Original resolve_func converts nullable public/system IDs through actual RTL values, calls the genuine XEntityResolver and transfers actual InputSource stream ownership to a heap context and native libxml2 input buffer. XML_CHAR_ENCODING_NONE remains the original argument for both native calls; returned encoding/identifier metadata is not substituted (CALC-532/WRITER466). Native source context close/freeOnClose ordering and its recorded failure behavior remain unchanged. Actual public and system-only external DTDs exercise the resolver ABI with explicit raw-library DTDLOAD qualification; builder default options remain zero. Builder/UCB orchestration, full source service QA, physical ABI and DOCX/XLSX/UI acceptance remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Actual builder lookup/acquisition and UCB default resolver/URI service orchestration remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/unoxml/source/dom/documentbuilder.resolve.ts",
+          "marker": "resolve_func"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/native-parser-callbacks.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/unoxml/source/dom/documentbuilder.cxx",
+          "marker": "resolve_func"
+        },
+        {
+          "path": "vendor/libreoffice-reference/unoxml/source/dom/documentbuilder.cxx",
+          "marker": "xmlParserInputBufferCreateIO"
+        },
+        {
+          "path": "vendor/libreoffice-reference/unoxml/source/dom/documentbuilder.cxx",
+          "marker": "xmlNewIOInputStream"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/unoxml/source/dom/documentbuilder.resolve.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original documentbuilder.cxx resolve_func is separated as a cohesive native input responsibility to respect the authored module size budget. Builder acquisition remains at its future actual call site, not a substitute provider."
+    }
+  }
+}

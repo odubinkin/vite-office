@@ -54,3 +54,10 @@ coverage gate remains unmet. See [native UNO DOM tree](native-xml-dom-tree.md)
 for the actual source QA scope and remaining dependencies.
 Metadata services, DOCX/XLSX orchestration, shell routing and existing UI
 acceptance remain unfinished. Existing SAX/ODF paths continue using `saxes`.
+
+
+Native parser SAX callbacks now have a compiled C varargs trampoline and scoped
+realm-local callback entries. The actual UNO graph also passes the separate
+`native-dom-worker-probe.mjs` qualification in Chromium main realm and a module
+Worker without host DOM globals. See [builder dependencies](native-xml-document-builder.md)
+for scope, original XML inputs, resolver ownership and pending service wiring.

@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/external/libxml2/parsercallbacks.ts",
+    "rationale": "Realm-local C SAX callback ABI binding installs original error/warning/resolver signatures on actual parser contexts. Compiled C trampolines erase only unused printf/varargs arguments. Static native table entries live for the module lifetime; unique registration identities prevent an older scope from removing a replacement even with the same callback object. Native _private and XML policy are unchanged. Actual C callbacks, nested parsing and original XML fixtures pass; actual UNO graph, stream IO, typed diagnostics, live mutation lists and Unicode also pass in Chromium main realm and a module Worker without DOM globals. Full DocumentBuilder/UCB service, source bootstrap QA, physical C++ ABI and complete DOCX/XLSX/UI acceptance remain unverified.",
+    "responsibilities": [
+      "Realm-local C SAX callback ABI binding installs original error/warning/resolver signatures on actual parser contexts. Compiled C trampolines erase only unused printf/varargs arguments. Static native table entries live for the module lifetime; unique registration identities prevent an older scope from removing a replacement even with the same callback object. Native _private and XML policy are unchanged. Actual C callbacks, nested parsing and original XML fixtures pass; actual UNO graph, stream IO, typed diagnostics, live mutation lists and Unicode also pass in Chromium main realm and a module Worker without DOM globals. Full DocumentBuilder/UCB service, source bootstrap QA, physical C++ ABI and complete DOCX/XLSX/UI acceptance remain unverified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Fixed-signature WASM function tables require C varargs trampolines and parser-address scoped JS callback bindings; no alternate XML algorithm or UNO service is introduced."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/libxml2/parsercallbacks.ts",
+          "marker": "installParserCallbacks"
+        },
+        {
+          "path": "apps/office/src/external/libxml2/parsercallbacks.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/native-parser-callbacks.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "third_party/libxml2-wasm/binding.c",
+          "marker": "office_xmlParserInstallCallbacks"
+        }
+      ]
+    },
+    "localSymbols": [
+      "ParserCallbacks",
+      "installParserCallbacks"
+    ]
+  }
+}

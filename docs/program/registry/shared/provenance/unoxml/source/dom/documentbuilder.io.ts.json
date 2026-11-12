@@ -9,7 +9,8 @@
     "localSymbols": [
       "context_t",
       "xmlIO_read_func",
-      "xmlIO_close_func"
+      "xmlIO_close_func",
+      "nativeIoContext"
     ],
     "upstreamSymbols": [
       "context_t",
@@ -17,7 +18,8 @@
       "xmlIO_close_func"
     ],
     "preservedResponsibilities": [
-      "Original SAXParseException value uses actual SAXException inheritance, four declared members, shared CPPU metadata and real Any copy/extraction. Native documentbuilder error formatting preserves ASCII_US, line/int2 and empty identifier/context/wrapped defaults. IO callbacks use actual input streams and byte sequences, preserve close/freeOnClose statement order, and contain only UNO exceptions. Builder orchestration, UCB entity resolver/URI fallback and service registration remain unported; no alternate DocumentBuilder or fake process context is advertised. Native threading/ABI, complete upstream parser QA and DOCX/XLSX file/UI acceptance remain unverified."
+      "Original SAXParseException value uses actual SAXException inheritance, four declared members, shared CPPU metadata and real Any copy/extraction. Native documentbuilder error formatting preserves ASCII_US, line/int2 and empty identifier/context/wrapped defaults. IO callbacks use actual input streams and byte sequences, preserve close/freeOnClose statement order, and contain only UNO exceptions. Builder orchestration, UCB entity resolver/URI fallback and service registration remain unported; no alternate DocumentBuilder or fake process context is advertised. Native threading/ABI, complete upstream parser QA and DOCX/XLSX file/UI acceptance remain unverified.",
+      "Native IO function addresses and void* userdata now lower to shared module-lifetime callback entries and an opaque native address for each actual UNO-owning context. The address is not a copied C++ Reference layout or an alternate stream owner. Only the source context destructor unregisters and frees it; source empty/failed close branches are not repaired."
     ],
     "omittedResponsibilities": [
       "Builder service, UCB default resolver/URI fallback, complete source parser QA, full native ABI and file/UI acceptance remain unverified."
@@ -38,6 +40,10 @@
         },
         {
           "path": "apps/office/src/unoxml/source/dom/documentbuilder.io.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/native-parser-callbacks.test.ts",
           "marker": "@fileoverview"
         }
       ],

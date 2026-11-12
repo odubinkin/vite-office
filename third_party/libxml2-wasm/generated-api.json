@@ -312,6 +312,10 @@
     "cType": "xmlNodePtr (xmlNodeSetPtr, int)"
   },
   {
+    "name": "_office_xmlParserInstallCallbacks",
+    "cType": "void (xmlParserCtxtPtr, void (*)(void *), void (*)(void *), resolveEntitySAXFunc)"
+  },
+  {
     "name": "_office_node_type_get",
     "cType": "xmlElementType (xmlNode *)"
   },
