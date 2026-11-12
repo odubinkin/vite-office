@@ -1,0 +1,453 @@
+{
+  "taskId": "202610251549-J0Z0KF",
+  "checkpoint": "Pinned native libxml2 runtime and dispatcher C-pointer binding",
+  "status": "bounded-prerequisite-verified; full native UNO graph and goal remain unfinished",
+  "sourceBaseline": {
+    "tag": "libreoffice-26.8.0.2",
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65"
+  },
+  "nativeInputs": {
+    "name": "libxml2",
+    "version": "2.15.3",
+    "url": "https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.3.tar.xz",
+    "sha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "libreofficeBaseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "emscriptenVersion": "4.0.19",
+    "emsdkCommit": "1693ce7359fc9694f198694f902a2cc061239b86",
+    "emscriptenReleaseHash": "8b01e2ec3f33e6b94842096d7312ce4ef5f33f6c",
+    "evaluatedLibrary": {
+      "name": "libxml2-wasm",
+      "version": "0.7.2",
+      "url": "https://github.com/jameslan/libxml2-wasm",
+      "reason": "Its published WASM binary omits native APIs consumed by LibreOffice unoxml, including xmlCopyNode and xmlNewDocProp. Reuse its Emscripten module build approach with pinned upstream C instead of emulating libxml2 DOM behavior in JavaScript.",
+      "archiveSha256": "64f668e9afd507692c441dc3e9607feb30a954409aaa087ce822cf53f3d708b8",
+      "verifiedMissingRuntimeExports": [
+        "_xmlCopyNode",
+        "_xmlNewDocProp",
+        "_xmlNewDocPI",
+        "_xmlNewDocFragment"
+      ]
+    },
+    "nativeFunctions": [
+      "xmlAddChild",
+      "xmlCopyDoc",
+      "xmlCopyNode",
+      "xmlCtxtGetLastError",
+      "xmlCtxtReadFile",
+      "xmlCtxtReadIO",
+      "xmlDocCopyNode",
+      "xmlDocGetRootElement",
+      "xmlDocSetRootElement",
+      "xmlEncodeEntitiesReentrant",
+      "xmlFreeDoc",
+      "xmlFreeNode",
+      "xmlFreeNodeList",
+      "xmlFreeNs",
+      "xmlFreeParserCtxt",
+      "xmlGetLastChild",
+      "xmlGetNsProp",
+      "xmlGetProp",
+      "xmlHasNsProp",
+      "xmlHasProp",
+      "xmlInitParser",
+      "xmlNewCDataBlock",
+      "xmlNewDoc",
+      "xmlNewDocComment",
+      "xmlNewDocFragment",
+      "xmlNewDocNode",
+      "xmlNewDocPI",
+      "xmlNewDocProp",
+      "xmlNewDocRawNode",
+      "xmlNewDocText",
+      "xmlNewIOInputStream",
+      "xmlNewNs",
+      "xmlNewNsProp",
+      "xmlNewParserCtxt",
+      "xmlNewProp",
+      "xmlNewReference",
+      "xmlNewText",
+      "xmlNodeAddContent",
+      "xmlNodeGetContent",
+      "xmlNodeSetContent",
+      "xmlNodeSetName",
+      "xmlOutputBufferCreateIO",
+      "xmlParserInputBufferCreateIO",
+      "xmlReadMemory",
+      "xmlReconciliateNs",
+      "xmlRemoveProp",
+      "xmlSaveFileTo",
+      "xmlSearchNs",
+      "xmlSearchNsByHref",
+      "xmlSetExternalEntityLoader",
+      "xmlSetGenericErrorFunc",
+      "xmlSetNs",
+      "xmlSetNsProp",
+      "xmlSetProp",
+      "xmlSetTreeDoc",
+      "xmlStrcmp",
+      "xmlStrdup",
+      "xmlStringGetNodeList",
+      "xmlStrlen",
+      "xmlUnlinkNode",
+      "xmlUnsetNsProp",
+      "xmlUnsetProp",
+      "xmlXPathCastToBoolean",
+      "xmlXPathCastToNumber",
+      "xmlXPathCastToString",
+      "xmlXPathEval",
+      "xmlXPathFreeContext",
+      "xmlXPathFreeObject",
+      "xmlXPathNewContext",
+      "xmlXPathRegisterFuncLookup",
+      "xmlXPathRegisterNs",
+      "xmlXPathRegisterVariableLookup"
+    ]
+  },
+  "nativeArtifact": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 118,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "472f63d4910601847d4a224bb3bbe0fc7432d1de227ef714221b6e8cc77f5a07"
+  },
+  "sourceBlobs": [
+    {
+      "path": ".prettierignore",
+      "gitBlob": "9c65ad807f2983c931541d1a07d1c2495180c60a"
+    },
+    {
+      "path": "apps/office/package.json",
+      "gitBlob": "b095ea1a7868dfff260cc193e34246d879d497ba"
+    },
+    {
+      "path": "apps/office/src/external/libxml2/libxml2.test.ts",
+      "gitBlob": "05f4d9934a0aea8ce5682f6b9f5d8313b6297975"
+    },
+    {
+      "path": "apps/office/src/external/libxml2/libxml2.ts",
+      "gitBlob": "a3c1dcc94429ab117bbd19fa9fa3ea9d499623a0"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/events/eventdispatcher.test.ts",
+      "gitBlob": "7c7450cc355ebf2b3502e6d3a669ca6dfd3bf4a7"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/events/eventdispatcher.ts",
+      "gitBlob": "2d28c06cac8c3f275df091119e39cc155c46aa42"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "cf50c9ea4f67ac50506c825eeded2b8f81091d1b"
+    },
+    {
+      "path": "docs/program/native-xml-dom-contracts.md",
+      "gitBlob": "36e292611950a2f384ea5ba422d5275beebbcdd0"
+    },
+    {
+      "path": "docs/program/native-xml-dom-events.md",
+      "gitBlob": "edf73fddf6a3338ace59c9528e831dd4868c6892"
+    },
+    {
+      "path": "docs/program/native-xml-runtime.md",
+      "gitBlob": "fe209c30795b762a045c374741f46b642197f720"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-50103a1f-6aa6-4b77-b0c4-bd8cf3c650f0.json",
+      "gitBlob": "e64c60c97eb7cccfc44b37b26fe61b2165c8c837"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/external/libxml2/libxml2.ts.json",
+      "gitBlob": "9479cce81faac67bbe817413b3006b349624b6c6"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/events/eventdispatcher.ts.json",
+      "gitBlob": "cbd674aae2a2b9a1bba49a96189afbbb0204ead3"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/external/libxml2/libxml2.ts.json",
+      "gitBlob": "b05d7aa48437800018f13f5701d32daee02e3b00"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/events/eventdispatcher.ts.json",
+      "gitBlob": "88e9fabd237d48b9b036c10ee11424a5962fbf87"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "0d4ea5bee791d82edc402f2e1416592bef7ed10e"
+    },
+    {
+      "path": "eslint.config.js",
+      "gitBlob": "f6f7e967d1a2a9d8b08301ff0b9feed2cb35e688"
+    },
+    {
+      "path": "package-lock.json",
+      "gitBlob": "b982d45de42ddc0d095da4f8a17fba59ca21c707"
+    },
+    {
+      "path": "package.json",
+      "gitBlob": "766e94455a9ac56333caecc955491074bb795fbb"
+    },
+    {
+      "path": "scripts/build-libxml2-wasm.py",
+      "gitBlob": "b95b0f560010fa4e2879c0628dc690862f6b7112"
+    },
+    {
+      "path": "scripts/check-unoxml-boundaries.test.ts",
+      "gitBlob": "8450bc2df583c26fffc5da8904e7762c4dd576e5"
+    },
+    {
+      "path": "scripts/fixtures/libxml2-worker-probe.mjs",
+      "gitBlob": "3e1d069349dcbdd06ab7d8d5689cb0c7e9a739f1"
+    },
+    {
+      "path": "scripts/libxml2-worker-probe.mjs",
+      "gitBlob": "d283ea7d6af7beb1f9a9cb58d3e81efe1d10dbe9"
+    },
+    {
+      "path": "scripts/module-boundaries/allowed-edges.mjs",
+      "gitBlob": "3ed9a3fd98878cc7aeb30d923cf531bd93e87dc1"
+    },
+    {
+      "path": "third_party/libxml2-wasm/COPYING",
+      "gitBlob": "8c0b7c15dd9b66501511f5971ec9cae971997a0d"
+    },
+    {
+      "path": "third_party/libxml2-wasm/LICENSE.emscripten",
+      "gitBlob": "70cabe388d27da221bd769c50b427a35354f4f1d"
+    },
+    {
+      "path": "third_party/libxml2-wasm/README.md",
+      "gitBlob": "d9f839cb4ed85347bfbb63069790ef6ac6a828a6"
+    },
+    {
+      "path": "third_party/libxml2-wasm/artifact.json",
+      "gitBlob": "1dd6206f34f68e7efff83aac0a13fac0155a7f61"
+    },
+    {
+      "path": "third_party/libxml2-wasm/binding.c",
+      "gitBlob": "ba5c8ffafad0e321f804147636ee4f44976d1755"
+    },
+    {
+      "path": "third_party/libxml2-wasm/generated-api.json",
+      "gitBlob": "b73795772e57022e7d862f36832524bb7c608198"
+    },
+    {
+      "path": "third_party/libxml2-wasm/index.d.ts",
+      "gitBlob": "0ec29c34ce0193b727776fa56fe10baccbd2f3d2"
+    },
+    {
+      "path": "third_party/libxml2-wasm/libxml2.mjs",
+      "gitBlob": "b1222ac3ddfeba86974fb95804e3e95d2377167d"
+    },
+    {
+      "path": "third_party/libxml2-wasm/package.json",
+      "gitBlob": "ae235c22d1623afb3520af5ba8bff075f887a3a1"
+    },
+    {
+      "path": "third_party/libxml2-wasm/source.json",
+      "gitBlob": "0d35e86cc7da95ed4d02ad36072508eabfded33b"
+    }
+  ],
+  "results": {
+    "relatedCases": 59,
+    "relatedFiles": 8,
+    "boundaryToolingCases": 49,
+    "boundaryToolingFiles": 2,
+    "resourceCases": 2,
+    "nativeProbe": "PASS: identical native observations in Node, actual Chromium module Worker and main browser realm; actual attribute children, namespace pointers, text coalescing, clone doc=NULL, PI/comment/CDATA, output IO, reopen, malformed rejection, counted UTF16 and heap growth",
+    "reproducibility": "PASS: loader, C-derived declarations, API metadata and artifact record reproduce byte-for-byte",
+    "typecheckTools": "pass",
+    "typecheckOffice": "pass",
+    "scopedESLint": "pass",
+    "scopedPrettier": "pass",
+    "productionBuildAndStaticSmoke": "pass",
+    "boundaries": "pass: 2284 runtime sources, 256 allowed cross-module edges",
+    "fileSize": "pass",
+    "sourceTree": "pass",
+    "sourceProvenance": "pass: 2285 runtime modules",
+    "registryBuild": "pass",
+    "registryInvariantsAndParity": "pass",
+    "resourcesAndHintIds": "pass",
+    "doctor": "zero errors; existing managed hook shim warning remains",
+    "policyRouting": "pass",
+    "diffCheck": "pass",
+    "globalJSDoc": "FAIL: only existing css-style-matchers.ts line17/76 baseline findings"
+  },
+  "effectiveCoverageThreshold": 90,
+  "coverage": {
+    "apps/office/src/external/libxml2/libxml2.ts": {
+      "statements": {
+        "covered": 14,
+        "total": 14
+      },
+      "functions": {
+        "covered": 4,
+        "total": 4
+      },
+      "branches": {
+        "covered": 2,
+        "total": 2
+      }
+    },
+    "apps/office/src/unoxml/source/events/eventdispatcher.ts": {
+      "statements": {
+        "covered": 39,
+        "total": 155
+      },
+      "functions": {
+        "covered": 7,
+        "total": 9
+      },
+      "branches": {
+        "covered": 20,
+        "total": 40
+      }
+    }
+  },
+  "coverageGate": "The native runtime owner passes 90% naturally. The full modified-owner run exits 1 because CEventDispatcher remains below 90% until concrete CDocument/CNode propagation exists. This gate was not lowered or bypassed and no fake UNO factory/positive node facet/private test state was added.",
+  "commands": [
+    {
+      "command": "python3 scripts/build-libxml2-wasm.py",
+      "result": "pass; also rerun through a checked before/after SHA-256 comparison of all four generated artifacts",
+      "log": "apps/office/coverage/libxml2-native-rebuild.log"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node --experimental-strip-types scripts/libxml2-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/libxml2-browser-probe-final.log"
+    },
+    {
+      "command": "npx vitest run --config vite.config.ts src/external/libxml2/libxml2.test.ts src/unoxml/source/events/eventdispatcher.test.ts src/unoxml/source/dom/domimplementation.test.ts src/unoxml/source/events/native-events.test.ts src/offapi/com/sun/star/xml/dom/native-dom-contracts.test.ts src/offapi/com/sun/star/xml/dom/native-dom-values.test.ts src/offapi/com/sun/star/xml/dom/events/native-event-contracts.test.ts src/offapi/com/sun/star/util/Time.test.ts --coverage --coverage.include='src/external/libxml2/libxml2.ts' --coverage.include='src/unoxml/source/events/eventdispatcher.ts' --coverage.reporter=json --coverage.reporter=text --coverage.reportsDirectory=coverage/libxml2-native-current --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "cwd": "apps/office",
+      "result": "59 cases pass; coverage gate FAILS for the unconnected dispatcher",
+      "log": "apps/office/coverage/libxml2-native-current.log"
+    },
+    {
+      "command": "npx vitest run scripts/check-unoxml-boundaries.test.ts scripts/check-module-boundaries.test.ts",
+      "result": "49 cases pass"
+    },
+    {
+      "command": "npm run typecheck:tools; npm run typecheck --workspace @vite-office/office; npm run test:static",
+      "result": "pass; independent logged command groups"
+    },
+    {
+      "command": "npm run check:dependencies; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance",
+      "result": "pass; sequential structure group"
+    },
+    {
+      "command": "npm run inventory:registry:build; npm run inventory:invariants; npm run inventory:parity",
+      "result": "pass; registry build completed before checks"
+    },
+    {
+      "command": "npm run check:writer-resources; npm run check:calc-resources; npm run check:writer-hintids",
+      "result": "pass"
+    },
+    {
+      "command": "ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check",
+      "result": "pass with existing doctor warning"
+    },
+    {
+      "command": "node scripts/check-jsdoc.mjs",
+      "result": "fails only the unrelated two-entry existing baseline"
+    }
+  ],
+  "failuresAndResolutions": [
+    {
+      "failure": "Generic xmldom probe did not cover native attribute-tree and shared namespace identity contracts. Published libxml2-wasm lacks four consumed runtime exports (verified on the actual published module).",
+      "resolution": "Compile unchanged pinned libxml2 C to WASM and expose the consumed C APIs/actual struct fields. Move xmldom to development-only dependency for its historical generic probe."
+    },
+    {
+      "failure": "The initial emsdk latest-release HTTP endpoint returned 404.",
+      "resolution": "Use the official documented git SDK, pin its commit and explicitly install compiler 4.0.19 inside repository cache. No global SDK configuration is changed."
+    },
+    {
+      "failure": "Initial C accessor declarations discarded const qualifiers for DTD identifier fields; initial runtime did not export heap views.",
+      "resolution": "Use the exact current C field types, compile the binding with -Werror, export live heap views and verify actual memory growth in all three environments."
+    },
+    {
+      "failure": "Initial native probe needed two additional root APIs and used a namespace URI fixture with an invalid non-ASCII URI.",
+      "resolution": "Export actual xmlDocGetRootElement/xmlDocSetRootElement; retain Unicode data while using a valid ASCII namespace URI."
+    },
+    {
+      "failure": "Initial JSDoc callback placement and WorkerGlobalScope ESLint binding were rejected. A focused command initially used the wrong project cwd.",
+      "resolution": "Use documented function declarations/globalThis worker detection, correct project cwd, and rerun relevant checks. Only unrelated global JSDoc baseline remains."
+    },
+    {
+      "failure": "Initial canonical record used unsupported UUID version/upstream evidence shape, an unsupported local document evidence path, and listed a reexport as a local runtime symbol.",
+      "resolution": "Use UUIDv4, actual upstream implementation/tests/docs references, supported local source evidence and correct local-symbol ownership; provenance and registry checks now pass."
+    },
+    {
+      "failure": "Whole-dispatcher coverage remains below 90%.",
+      "resolution": "Unresolved native UNO tree integration, recorded honestly as rework. Proceed with actual CDocument/CNode owners and upstream tree QA."
+    }
+  ],
+  "upstreamQA": "Actual libxml2 algorithms are executed, not ported to JS. This qualification is not unoxml/qa/unit/domtest.cxx or Java DOMTest completion: their document/builder/tree cases remain required with the actual UNO graph. No full XLSX/DOCX filter or UI witness is claimed.",
+  "suspectedIssues": [
+    "CALC-528 / WRITER462: xmlCopyNode native document is NULL while wrapper owner remains the original document; preserve raw source checks and do not silently repair clone ownership."
+  ],
+  "remaining": [
+    "Implement concrete native CDocument/CNode and child owners, document builder and upstream DOM QA",
+    "Connect/verify dispatcher propagation, cancellation, listener mutation and exception paths to pass its existing 90% coverage gate",
+    "Initialize genuine document metadata services",
+    "Complete DOCX/XLSX import/export orchestration and existing shell/file UI routing and acceptance"
+  ],
+  "networkAndScope": "User authorized downloading exact pinned libxml2 and preferred an existing JS library when suitable. Candidates were evaluated before native binding expansion. Source/SDK/cache/config/temporary build state remain repository-local. No external publication, merge or UI/autosave/recovery policy change. Same large approved agentplane task remains active.",
+  "logs": [
+    {
+      "path": "apps/office/coverage/libxml2-native-rebuild.log",
+      "sha256": "c44f67b1fd5431aa37de5a2c3e668bcd4c5808dd478364db8bc670b60f778c6f"
+    },
+    {
+      "path": "apps/office/coverage/libxml2-browser-probe-final.log",
+      "sha256": "50119acb665e9c9c2fd3150210d63fcee0c516db4819798e721808c863f0c3c9"
+    },
+    {
+      "path": "apps/office/coverage/libxml2-browser-probe-result.json",
+      "sha256": "2e097170841e7d68153549fa6675c54f076b0ee6b1d589e105be2cf022f33d31"
+    },
+    {
+      "path": "apps/office/coverage/libxml2-native-current.log",
+      "sha256": "4403ae80aecb8162287054ec6a964eaa8b2db257f884112ed28312fb9f17faa0"
+    },
+    {
+      "path": "apps/office/coverage/libxml2-native-quality-final.log",
+      "sha256": "d1dada41a2ed9b630346bd0a730062173fced9a5192fe5621a9b6533fbe63f9b"
+    },
+    {
+      "path": "apps/office/coverage/libxml2-native-structure-final.log",
+      "sha256": "9392d1cab120aaa7424d26cb6a7b05900078e890156fa1d420a9cba81234212d"
+    },
+    {
+      "path": "apps/office/coverage/libxml2-native-build-final.log",
+      "sha256": "f565bfeaa9d7cd08846bcc1fd8be556a28ae85332d1e273485ee47ec10d38a80"
+    },
+    {
+      "path": "apps/office/coverage/libxml2-native-registry-build-final.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "path": "apps/office/coverage/libxml2-native-registry-final.log",
+      "sha256": "e35090a247c6c365a6cea9f2ddc955f29ee4eff10493a07df1b1ccfbbc4dec11"
+    },
+    {
+      "path": "apps/office/coverage/libxml2-native-tooling-final.log",
+      "sha256": "4e7ce0e51b082a66e69595c783dbd46aeb2c47d84fbf356a735d0dfd14b2d24e"
+    },
+    {
+      "path": "apps/office/coverage/libxml2-native-format-final.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "path": "apps/office/coverage/libxml2-native-resources.log",
+      "sha256": "832cb6bcceeb7c69740ae845938e0a0162422fda128b1026ef2f85345868e93f"
+    },
+    {
+      "path": "apps/office/coverage/libxml2-native-doctor.log",
+      "sha256": "aa0a0fc324ce63c2615bee4a4995ea3adad450615c6068e282f2183d2e66883f"
+    },
+    {
+      "path": "apps/office/coverage/libxml2-native-docs-final.log",
+      "sha256": "ead8eecfcaab7d047ac89ca9ba4226556666e738e85e4ea1a6e35f2418f310b5"
+    }
+  ]
+}
