@@ -1,0 +1,159 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-b8021c01-3a31-4a98-80a8-55299344ca19",
+    "capabilityId": "CAP-b8021c01-3a31-4a98-80a8-55299344ca19",
+    "suite": "shared",
+    "subsystem": "registered-property-bag",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original OPropertyBag service is registered under the pinned comphelp.component constructor/name and created through real UNO service-manager helpers. Actual low-level PropertyBag, state/property helpers, weak identity, native Any/Sequence/Type and modify containers preserve initialization union/sticky flags, prime handle cycle, allowed types, default-void XSet insertion, immutable info snapshots, sorted property-access updates, inherited multi-property overloads, modification hooks and exception filters. NamedValueCollection owns actual copied keys/Any values, preserves duplicate precedence, performs shared UNO assignment and emits generated structs with Handle0/StateDIRECT. Const SDK field projections borrow actual initialized storage. Authored tests and adapted qadevOOo XPropertyAccess two entry points use real configured String properties. Chromium main/DOM-free Worker use the registered service. Native OSL locking/physical MI ABI/allocator/std unordered order, generic unconsumed template instantiations and full Java harness are unqualified. SfxDocumentMetaData, final DOCX/XLSX core/shell/UI acceptance remain unfinished."
+    ],
+    "capability": "Registered UNO property bag and native named arguments",
+    "gaps": [
+      "SfxDocumentMetaData and complete DOCX/XLSX/UI acceptance remain unfinished.",
+      "Native OSL/physical ABI/MI/std allocator/unordered iteration, generic unconsumed wrappers and full Java proxy harness remain unqualified.",
+      "XPropertyContainer QA null-object/removability assumptions are not claimed as a passing full port."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "udkapi/com/sun/star/beans/PropertyBag.idl",
+          "marker": "PropertyBag"
+        },
+        {
+          "path": "udkapi/com/sun/star/beans/XPropertyBag.idl",
+          "marker": "XPropertyBag"
+        },
+        {
+          "path": "include/comphelper/namedvaluecollection.hxx",
+          "marker": "NamedValueCollection"
+        },
+        {
+          "path": "comphelper/source/misc/namedvaluecollection.cxx",
+          "marker": "NamedValueCollection::get_ensureType"
+        },
+        {
+          "path": "comphelper/source/property/opropertybag.cxx",
+          "marker": "OPropertyBag::initialize"
+        }
+      ],
+      "tests": [
+        {
+          "path": "qadevOOo/tests/java/ifc/beans/_XPropertyAccess.java",
+          "marker": "_setPropertyValues"
+        },
+        {
+          "path": "qadevOOo/tests/java/ifc/beans/_XPropertyContainer.java",
+          "marker": "_addProperty"
+        }
+      ],
+      "docs": [
+        {
+          "path": "comphelper/source/property/opropertybag.hxx",
+          "marker": "OPropertyBag"
+        },
+        {
+          "path": "comphelper/util/comphelp.component",
+          "marker": "com_sun_star_comp_comphelper_OPropertyBag"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/util/XModifyBroadcaster.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/util/XModifiable.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/container/XSet.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/container/XEnumeration.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/container/XEnumerationAccess.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/PropertyBag.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/NamedValue.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/XPropertyBag.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/XPropertyContainer.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/PropertyValue.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/desktop/browser/app/uno-components.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/inc/namedvaluecollection.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/misc/namedvaluecollection.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/property/opropertybag.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/comphelper/source/property/opropertybag.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/misc/namedvaluecollection.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/property-set-types.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-property-bag-service.md",
+          "marker": "Native property bag service"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original OPropertyBag service is registered under the pinned comphelp.component constructor/name and created through real UNO service-manager helpers. Actual low-level PropertyBag, state/property helpers, weak identity, native Any/Sequence/Type and modify containers preserve initialization union/sticky flags, prime handle cycle, allowed types, default-void XSet insertion, immutable info snapshots, sorted property-access updates, inherited multi-property overloads, modification hooks and exception filters. NamedValueCollection owns actual copied keys/Any values, preserves duplicate precedence, performs shared UNO assignment and emits generated structs with Handle0/StateDIRECT. Const SDK field projections borrow actual initialized storage. Authored tests and adapted qadevOOo XPropertyAccess two entry points use real configured String properties. Chromium main/DOM-free Worker use the registered service. Native OSL locking/physical MI ABI/allocator/std unordered order, generic unconsumed template instantiations and full Java harness are unqualified. SfxDocumentMetaData, final DOCX/XLSX core/shell/UI acceptance remain unfinished."
+    },
+    "scopeLimitations": [
+      "Original OPropertyBag service is registered under the pinned comphelp.component constructor/name and created through real UNO service-manager helpers. Actual low-level PropertyBag, state/property helpers, weak identity, native Any/Sequence/Type and modify containers preserve initialization union/sticky flags, prime handle cycle, allowed types, default-void XSet insertion, immutable info snapshots, sorted property-access updates, inherited multi-property overloads, modification hooks and exception filters. NamedValueCollection owns actual copied keys/Any values, preserves duplicate precedence, performs shared UNO assignment and emits generated structs with Handle0/StateDIRECT. Const SDK field projections borrow actual initialized storage. Authored tests and adapted qadevOOo XPropertyAccess two entry points use real configured String properties. Chromium main/DOM-free Worker use the registered service. Native OSL locking/physical MI ABI/allocator/std unordered order, generic unconsumed template instantiations and full Java harness are unqualified. SfxDocumentMetaData, final DOCX/XLSX core/shell/UI acceptance remain unfinished."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "registered-property-bag-values-and-initialization"
+  }
+}

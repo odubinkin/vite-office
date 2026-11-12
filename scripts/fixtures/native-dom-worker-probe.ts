@@ -1,4 +1,8 @@
 /** @fileoverview Real native UNO document, parser callback, IO and live-list operations without a host DOM; the production registered DocumentBuilder shares the same realm-local native module. */
+import { PropertyBag as PropertyBagService } from "../../apps/office/src/udkapi/com/sun/star/beans/PropertyBag";
+import { XModifiable } from "../../apps/office/src/offapi/com/sun/star/util/XModifiable";
+import { XPropertyState } from "../../apps/office/src/udkapi/com/sun/star/beans/XPropertyState";
+import { Type } from "../../apps/office/src/cppu/inc/com/sun/star/uno/Type";
 import { initializeLibXml2 } from "../../apps/office/src/external/libxml2/libxml2";
 import { installParserCallbacks } from "../../apps/office/src/external/libxml2/parsercallbacks";
 import { Reference, UNO_QUERY } from "../../apps/office/src/cppu/inc/com/sun/star/uno/Reference";
@@ -325,6 +329,38 @@ export async function runNativeDomWorkerProbe() {
       void event;
     }
   }
+  const bagTypes = own(
+      new (Sequence.specialize<Type>("Type", 8))(
+        {
+          get: /** Projects the actual native fixture address. @returns Original operation result. */ () =>
+            UnoType.get("sal_Int32").getAddress(),
+        },
+        1,
+      ),
+    ),
+    bagService = own(
+      PropertyBagService.createWithTypes(
+        own(new Reference<XComponentContext>(getProcessComponentContext().get())),
+        bagTypes,
+        true,
+        false,
+      ),
+    ),
+    bagApi = bagService.operatorStar(),
+    bagState = own(
+      new Reference<XPropertyState>(bagService, UNO_QUERY, XPropertyState.static_type),
+    ),
+    bagModified = own(new Reference<XModifiable>(bagService, UNO_QUERY, XModifiable.static_type));
+  bagApi.addProperty(u("WorkerValue"), BOUND | REMOVABLE, own(new Any([41], "sal_Int32")));
+  bagApi.setPropertyValue(u("WorkerValue"), own(new Any([42], "sal_Int16")));
+  const bagValues = own(bagApi.getPropertyValues()),
+    registeredPropertyBag = {
+      value: own(bagApi.getPropertyValue(u("WorkerValue"))).get("sal_Int32"),
+      count: bagValues.getLength(),
+      modified: bagModified.operatorStar().isModified(),
+      directState: bagState.operatorStar().getPropertyState(u("WorkerValue")),
+      sameIdentity: bagState.get() === bagApi,
+    };
   const propertyListener = own(new Reference(new PropertyListener()));
   statefulApi.addPropertyChangeListener(u("A"), propertyListener);
   statefulApi.setPropertyValue(u("A"), own(new Any([42], "sal_Int16")));
@@ -482,6 +518,7 @@ export async function runNativeDomWorkerProbe() {
       legacyListeners,
       nativeAnyFields,
       nativePropertyControl,
+      registeredPropertyBag,
       documentBuilder,
       xpath: (
         /** Queries the actual registered native XPath service. @returns Scalar observations only. */ () => {

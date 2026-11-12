@@ -111,6 +111,13 @@ try {
       failedSecond: 0,
       failedSecondWasNull: true,
     },
+    registeredPropertyBag: {
+      value: 42,
+      count: 1,
+      modified: true,
+      directState: 0,
+      sameIdentity: true,
+    },
     nativePropertyControl: {
       value: 42,
       storedLong: true,

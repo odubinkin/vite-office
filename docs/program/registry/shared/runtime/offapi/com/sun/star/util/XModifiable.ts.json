@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/util/XModifiable.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "registered-property-bag",
+    "capabilityIds": [
+      "CAP-b8021c01-3a31-4a98-80a8-55299344ca19"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/util/XModifiable.ts",
+        "apps/office/src/comphelper/source/property/opropertybag.test.ts",
+        "apps/office/src/comphelper/source/misc/namedvaluecollection.test.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/property-set-types.test.ts",
+        "docs/program/native-property-bag-service.md"
+      ],
+      "justification": "Original OPropertyBag service is registered under the pinned comphelp.component constructor/name and created through real UNO service-manager helpers. Actual low-level PropertyBag, state/property helpers, weak identity, native Any/Sequence/Type and modify containers preserve initialization union/sticky flags, prime handle cycle, allowed types, default-void XSet insertion, immutable info snapshots, sorted property-access updates, inherited multi-property overloads, modification hooks and exception filters. NamedValueCollection owns actual copied keys/Any values, preserves duplicate precedence, performs shared UNO assignment and emits generated structs with Handle0/StateDIRECT. Const SDK field projections borrow actual initialized storage. Authored tests and adapted qadevOOo XPropertyAccess two entry points use real configured String properties. Chromium main/DOM-free Worker use the registered service. Native OSL locking/physical MI ABI/allocator/std unordered order, generic unconsumed template instantiations and full Java harness are unqualified. SfxDocumentMetaData, final DOCX/XLSX core/shell/UI acceptance remain unfinished.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XModifiable"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "offapi/com/sun/star/util/XModifiable.idl",
+      "upstreamSymbols": [
+        "XModifiable",
+        "isModified",
+        "setModified"
+      ]
+    }
+  }
+}

@@ -7,6 +7,16 @@ import {
   typelib_static_struct_type_init,
   type typelib_TypeDescriptionReference as R,
 } from "../../../../../cppu/inc/typelib/typedescription";
+import type { uno_Any } from "../../../../../cppu/inc/uno/any2";
+/** Existing initialized native compound address. */
+interface Address {
+  get(offset: number): unknown;
+}
+/** Original const declared field projection; source Any methods remain nonvirtual at the same C record. */
+export interface NamedValueConstReference {
+  readonly Name: OUStringConstReference;
+  readonly Value: uno_Any;
+}
 const the_type: [R | null] = [null];
 /** Original normal generated two-member struct type. @returns Borrowed static type. */
 export function cppu_detail_getUnoType_NamedValue(): Type {
@@ -23,11 +33,23 @@ export function cppu_detail_getUnoType_NamedValue(): Type {
 }
 /** Original generated default/copy/member value semantics. */
 export class NamedValue {
+  /** Compiler projection of the existing declared fields; no construction/acquire/destruction. @param address - Native initialized record. @returns Borrowed fields. */
+  static unacquired(address: Address): NamedValueConstReference {
+    return {
+      /** Original name field. @returns Borrowed string. */ get Name() {
+        return OUString.unacquired(address.get(0) as Parameters<typeof OUString.unacquired>[0]);
+      },
+      /** Original Any field. @returns Actual C record. */ get Value() {
+        return address.get(8) as uno_Any;
+      },
+    };
+  }
+
   private readonly name = new OUString();
   private readonly value = new Any();
   /** Original constructor overloads. @param args - Declared overload arguments. @returns Value. */
   constructor(
-    ...args: [] | [source: Readonly<NamedValue>] | [name: OUStringConstReference, value: Any]
+    ...args: [] | [source: NamedValueConstReference] | [name: OUStringConstReference, value: Any]
   ) {
     if (args.length === 1) this.assign(args[0]);
     else if (args.length === 2) {
@@ -48,21 +70,24 @@ export class NamedValue {
     return this.value;
   }
   /** Original Any assignment. @param value - Borrowed source. @returns Nothing. */
-  set Value(value: Any) {
-    this.value.assign(value);
+  set Value(value: uno_Any) {
+    Any.prototype.assign.call(this.value, value as Any);
   }
   /** Original memberwise copy assignment. @param source - Borrowed source. @returns This value. */
-  assign(source: Readonly<NamedValue>): this {
+  assign(source: NamedValueConstReference): this {
     this.Name = source.Name;
     this.Value = source.Value;
     return this;
   }
   /** Original generated field equality. @param other - Compared value. @returns Equality. */
-  equals(other: Readonly<NamedValue>): boolean {
-    return this.Name.equals(other.Name) && this.Value.operatorEquals(other.Value);
+  equals(other: NamedValueConstReference): boolean {
+    return (
+      this.Name.equals(other.Name) &&
+      Any.prototype.operatorEquals.call(this.Value, other.Value as Any)
+    );
   }
   /** Original generated inequality. @param other - Compared value. @returns Inequality. */
-  notEquals(other: Readonly<NamedValue>): boolean {
+  notEquals(other: NamedValueConstReference): boolean {
     return !this.equals(other);
   }
   /** Existing compound owner addresses; valid declared offset is the producer precondition. @param offset - Original member offset. @returns Actual member address. */

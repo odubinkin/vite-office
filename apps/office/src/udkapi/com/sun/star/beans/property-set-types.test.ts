@@ -66,3 +66,64 @@ it.each([
     }
   },
 );
+
+import * as XPropertyBagBinding from "./XPropertyBag";
+import * as XPropertyContainerBinding from "./XPropertyContainer";
+import * as XEnumerationBinding from "../container/XEnumeration";
+import * as XEnumerationAccessBinding from "../container/XEnumerationAccess";
+import * as XSetBinding from "../container/XSet";
+import * as XModifiableBinding from "../../../../../offapi/com/sun/star/util/XModifiable";
+import * as XModifyBroadcasterBinding from "../../../../../offapi/com/sun/star/util/XModifyBroadcaster";
+
+it.each([
+  [
+    XPropertyBagBinding,
+    [
+      "com.sun.star.beans.XPropertySet",
+      "com.sun.star.beans.XPropertyContainer",
+      "com.sun.star.beans.XPropertyAccess",
+    ],
+  ],
+  [XPropertyContainerBinding, ["com.sun.star.uno.XInterface"]],
+  [XEnumerationBinding, ["com.sun.star.uno.XInterface"]],
+  [XEnumerationAccessBinding, ["com.sun.star.container.XElementAccess"]],
+  [XSetBinding, ["com.sun.star.container.XEnumerationAccess"]],
+  [XModifiableBinding, ["com.sun.star.util.XModifyBroadcaster"]],
+  [XModifyBroadcasterBinding, ["com.sun.star.uno.XInterface"]],
+] as const)(
+  "preserves property service SDK direct base graph and cached legacy type getters",
+  /** Executes the actual native-value test operation. @param binding - Declared source operand. @param bases - Declared source operand. @returns Original operation result. */ (
+    binding,
+    bases,
+  ) => {
+    const type = binding.cppu_detail_getUnoType();
+    expect(binding.getCppuType().equals(type)).toBe(true);
+    const declaration = Object.entries(binding).find(
+      /** Executes the actual native-value test operation. @param value0 - Declared source operand. @returns Original operation result. */ ([
+        name,
+      ]) => name.startsWith("X"),
+    )?.[1] as {
+      static_type(): typeof type;
+    };
+    expect(declaration.static_type().equals(type)).toBe(true);
+    expect(binding.cppu_detail_getUnoType()).toBe(type);
+    const description = new TypeDescription(type.getTypeLibType());
+    try {
+      const actual = description.get() as unknown as typelib_InterfaceTypeDescription;
+      expect(actual.nBaseTypes).toBe(bases.length);
+      expect(
+        actual.ppBaseTypes?.map(
+          /** Executes the actual native-value test operation. @param base - Declared source operand. @returns Original operation result. */ (
+            base,
+          ) => {
+            assert(base);
+            return text(OUString.unacquired([base.aBase.pTypeName]));
+          },
+        ),
+      ).toEqual(bases);
+    } finally {
+      description.dispose();
+    }
+  },
+);
+import { OUString } from "../../../../../sal/inc/rtl/ustring";

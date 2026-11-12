@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/comphelper/source/misc/namedvaluecollection.ts",
+    "upstreamPath": "comphelper/source/misc/namedvaluecollection.cxx",
+    "localSymbols": [
+      "NamedValueCollection"
+    ],
+    "upstreamSymbols": [
+      "NamedValueCollection::get_ensureType"
+    ],
+    "preservedResponsibilities": [
+      "Original OPropertyBag service is registered under the pinned comphelp.component constructor/name and created through real UNO service-manager helpers. Actual low-level PropertyBag, state/property helpers, weak identity, native Any/Sequence/Type and modify containers preserve initialization union/sticky flags, prime handle cycle, allowed types, default-void XSet insertion, immutable info snapshots, sorted property-access updates, inherited multi-property overloads, modification hooks and exception filters. NamedValueCollection owns actual copied keys/Any values, preserves duplicate precedence, performs shared UNO assignment and emits generated structs with Handle0/StateDIRECT. Const SDK field projections borrow actual initialized storage. Authored tests and adapted qadevOOo XPropertyAccess two entry points use real configured String properties. Chromium main/DOM-free Worker use the registered service. Native OSL locking/physical MI ABI/allocator/std unordered order, generic unconsumed template instantiations and full Java harness are unqualified. SfxDocumentMetaData, final DOCX/XLSX core/shell/UI acceptance remain unfinished."
+    ],
+    "omittedResponsibilities": [
+      "Native OSL locks, physical C++ ABI/MI/allocator/unordered iteration and unconsumed generic template wrappers remain unqualified.",
+      "Complete metadata/format/shell/UI acceptance remains unfinished."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/comphelper/source/misc/namedvaluecollection.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/property/opropertybag.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/misc/namedvaluecollection.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/property-set-types.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "comphelper/source/misc/namedvaluecollection.cxx",
+          "marker": "NamedValueCollection::get_ensureType"
+        }
+      ]
+    }
+  }
+}

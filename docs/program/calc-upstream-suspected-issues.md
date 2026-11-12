@@ -5627,3 +5627,9 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source: `comphelper/source/property/propstate.cxx, getPropertyStates; udkapi/com/sun/star/beans/XPropertyState.idl`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER487.
 - The forward-only find loop breaks at the first missing property without throwing. Remaining elements keep the native enum default0 DIRECT_VALUE, including later existing properties whose true state may be DEFAULT_VALUE. The IDL declares UnknownPropertyException for a missing property. Preserve the source loop, output cursor and zero initialization: actual A/B/C requests with A/C default-valued return1/0/0; both real browser realms also return1/0 for A/missing. No fallback state repair or new exception is added; native shared-memory scheduling and compiled differential remain unqualified.
+
+
+### CALC-554 — Repeated PropertyBag initialization unions types and cannot revoke empty-name permission
+
+- Source: `comphelper/source/property/opropertybag.cxx`, `OPropertyBag::initialize`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER488.
+- Both initialization forms insert into the existing allowed-type set without clearing it. Empty-name permission is assigned only when true, so a later explicit false does not revoke it. Missing named AutomaticAddition preserves its previous value; the positional form always assigns it after successful extraction. Preserve these source transitions. Actual registered-service tests repeat named, empty and positional initialization, prove long/string type union and sticky empty names, and verify explicit positional false disables automatic addition. This may assume initialization occurs once; no complete metadata/filter defect or compiled native differential is claimed.

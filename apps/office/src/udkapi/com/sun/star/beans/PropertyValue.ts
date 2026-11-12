@@ -9,6 +9,18 @@ import {
 } from "../../../../../cppu/inc/typelib/typedescription";
 import { PropertyState, cppu_detail_getUnoType_PropertyState as stateType } from "./PropertyState";
 /** Original normal static type cell. */
+import type { uno_Any } from "../../../../../cppu/inc/uno/any2";
+/** Existing initialized native compound address. */
+interface Address {
+  get(offset: number): unknown;
+}
+/** Original const declared field projection; source Any methods remain nonvirtual at the same C record. */
+export interface PropertyValueConstReference {
+  readonly Name: OUStringConstReference;
+  readonly Value: uno_Any;
+  readonly Handle: number;
+  readonly State: PropertyState;
+}
 const the_type: [R | null] = [null];
 /** Normal generated member types in IDL order, not a provider/type factory. @returns Borrowed original type. */
 export function cppu_detail_getUnoType_PropertyValue(): Type {
@@ -30,6 +42,24 @@ export function cppu_detail_getUnoType_PropertyValue(): Type {
 }
 /** Actual IDL fields and generated value semantics. Offsets only dispatch existing logical compound member addresses; no document binary representation or new lifetime engine is supplied. */
 export class PropertyValue {
+  /** Compiler projection of the existing declared fields; no construction/acquire/destruction. @param address - Native initialized record. @returns Borrowed fields. */
+  static unacquired(address: Address): PropertyValueConstReference {
+    return {
+      /** Original name field. @returns Borrowed string. */ get Name() {
+        return OUString.unacquired(address.get(0) as Parameters<typeof OUString.unacquired>[0]);
+      },
+      /** Original Any field. @returns Actual C record. */ get Value() {
+        return address.get(16) as uno_Any;
+      },
+      /** Original signed32 handle. @returns Handle. */ get Handle() {
+        return (address.get(8) as [number])[0];
+      },
+      /** Original enum state. @returns State. */ get State() {
+        return (address.get(40) as [PropertyState])[0];
+      },
+    };
+  }
+
   private readonly name = new OUString();
   private readonly handle: [number] = [0];
   private readonly value = new Any();
@@ -38,7 +68,7 @@ export class PropertyValue {
   constructor(
     ...args:
       | []
-      | [source: Readonly<PropertyValue>]
+      | [source: PropertyValueConstReference]
       | [name: OUStringConstReference, handle: number, value: Any, state: PropertyState]
   ) {
     if (args.length === 1) this.assign(args[0]);
@@ -70,8 +100,8 @@ export class PropertyValue {
     return this.value;
   }
   /** Original Any assignment retains field identity and actual transport semantics. @param value - Source Any. @returns Nothing. */
-  set Value(value: Any) {
-    this.value.assign(value);
+  set Value(value: uno_Any) {
+    Any.prototype.assign.call(this.value, value as Any);
   }
   /** Original enum field. @returns State. */
   get State(): PropertyState {
@@ -82,7 +112,7 @@ export class PropertyValue {
     this.state[0] = (value | 0) as PropertyState;
   }
   /** Original implicit fieldwise copy assignment. @param source - Native source value. @returns This value. */
-  assign(source: Readonly<PropertyValue>): this {
+  assign(source: PropertyValueConstReference): this {
     this.Name = source.Name;
     this.Handle = source.Handle;
     this.Value = source.Value;
@@ -90,16 +120,16 @@ export class PropertyValue {
     return this;
   }
   /** Original generated equality in declaration order. @param other - Compared value. @returns Equality. */
-  equals(other: Readonly<PropertyValue>): boolean {
+  equals(other: PropertyValueConstReference): boolean {
     return (
       this.Name.equals(other.Name) &&
       this.Handle === other.Handle &&
-      this.Value.operatorEquals(other.Value) &&
+      Any.prototype.operatorEquals.call(this.Value, other.Value as Any) &&
       this.State === other.State
     );
   }
   /** Original generated inequality. @param other - Compared value. @returns Inequality. */
-  notEquals(other: Readonly<PropertyValue>): boolean {
+  notEquals(other: PropertyValueConstReference): boolean {
     return !this.equals(other);
   }
   /** Generated implicit value destructor destroys nontrivial members in reverse declaration order. @returns Nothing. */
