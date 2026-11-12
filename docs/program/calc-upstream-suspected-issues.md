@@ -5591,3 +5591,9 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source: `comphelper/source/property/propertycontainerhelper.cxx` (`revokeProperty`) and `comphelper/source/property/propertybag.cxx` (`removeProperty`), pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER481.
 - Revocation erases the description but does not erase or clear its slot in m_aHoldProperties. PropertyBag then erases the default, while the old held Any remains owned until helper destruction. A genuine ActiveDataSink interface value and weak reference reproduce that retained lifetime through the public bag methods. This may preserve stable vector indices intentionally, but repeated removals can retain otherwise unused values. Preserve the original retention and index layout; do not compact or clear the old slot. No compiled native leak/allocator or complete metadata/service defect is claimed.
+
+
+### CALC-548 — Hybrid property lookup handles repeated names differently as its heuristic changes
+
+- Source: `cppuhelper/source/propshlp.cxx`, `OPropertyArrayHelper::fillHandles`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER482.
+- The linear branch leaves pCur at a match, whereas the binary branch advances it to pMid+1. A second equal name can therefore match again in the linear branch but miss in the binary branch. With 64 unique sorted descriptors, two requests for p016 give one hit; 64 repeated requests give 58 hits before the changing request-count heuristic advances past the match. Preserve both cursor updates and the original heuristic. This is a source-backed low-level observation; duplicate-name legality at higher-level UNO callers, a compiled native differential and a complete filter defect remain unqualified.

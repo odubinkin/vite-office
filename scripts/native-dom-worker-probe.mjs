@@ -111,6 +111,13 @@ try {
       failedSecond: 0,
       failedSecondWasNull: true,
     },
+    propertyArray: {
+      count: 1,
+      handle: 7,
+      missing: -1,
+      snapshotName: "workerValue",
+      sameInfoIdentity: true,
+    },
     dynamicProperties: {
       changed: true,
       value: 42,

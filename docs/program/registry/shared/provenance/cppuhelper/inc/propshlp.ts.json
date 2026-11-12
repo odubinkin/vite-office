@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/cppuhelper/inc/propshlp.ts",
+    "upstreamPath": "include/cppuhelper/propshlp.hxx",
+    "localSymbols": [
+      "OPropertyArrayHelper",
+      "IEventNotificationHook"
+    ],
+    "upstreamSymbols": [
+      "IPropertyArrayHelper",
+      "OPropertyArrayHelper",
+      "IEventNotificationHook"
+    ],
+    "preservedResponsibilities": [
+      "Original complete IPropertyArrayHelper/OPropertyArrayHelper and OPropertySetHelperInfo_Impl preserve native Property/Sequence ownership, nonconst subscript COW, diagnostic-only sorted hints, indexed or linear handle lookup, name-sorted binary lookup, immutable info snapshots and original hybrid batch cursor including CALC-548/WRITER482 repeated-name behavior. IEventNotificationHook is only its original declaration. Host sorting uses actual generated Property copies; exact qsort allocation/refcount/move and duplicate-key selection traces, physical ABI and native thread scheduling remain unqualified. OPropertySetHelper and notification containers, separate UNO OPropertyBag, SfxDocumentMetaData and final DOCX/XLSX/UI acceptance are still unfinished."
+    ],
+    "omittedResponsibilities": [
+      "Other property-set/notification classes in propshlp.hxx/cxx remain unadvertised.",
+      "Physical C++ ABI, qsort bitwise move/refcount traces and equal-key selection are unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppuhelper/inc/propshlp.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/source/propshlp.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/cppuhelper/propshlp.hxx",
+          "marker": "IPropertyArrayHelper"
+        },
+        {
+          "path": "include/cppuhelper/propshlp.hxx",
+          "marker": "OPropertyArrayHelper"
+        },
+        {
+          "path": "include/cppuhelper/propshlp.hxx",
+          "marker": "IEventNotificationHook"
+        }
+      ]
+    }
+  }
+}

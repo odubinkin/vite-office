@@ -25,6 +25,9 @@ import {
 } from "../../apps/office/src/comphelper/inc/compbase";
 import { XEventListener } from "../../apps/office/src/udkapi/com/sun/star/lang/XEventListener";
 import type { EventObject } from "../../apps/office/src/udkapi/com/sun/star/lang/EventObject";
+import { OPropertyArrayHelper } from "../../apps/office/src/cppuhelper/inc/propshlp";
+import { OPropertySetHelperInfo_Impl } from "../../apps/office/src/cppuhelper/source/propshlp";
+import { XPropertySetInfo } from "../../apps/office/src/udkapi/com/sun/star/beans/XPropertySetInfo";
 import { PropertyBag } from "../../apps/office/src/comphelper/inc/propertybag";
 import {
   Property,
@@ -135,6 +138,20 @@ export async function runNativeDomWorkerProbe() {
     handle: descriptor.Handle,
     declaredLong: descriptor.Type.equals(UnoType.get("sal_Int32")),
     stableTypeField: descriptor.get(16) === descriptor.Type.getAddress(),
+  };
+  const arrayHelper = own(new OPropertyArrayHelper(descriptions)),
+    propertyInfo = own(new Reference(new OPropertySetHelperInfo_Impl(arrayHelper))),
+    infoApi = propertyInfo.operatorStar(),
+    infoDescriptor = own(infoApi.getPropertyByName(u("workerValue"))),
+    infoQuery = own(infoApi.queryInterface(XPropertySetInfo.static_type())),
+    queriedInfo = own(new Reference());
+  infoQuery.extract(queriedInfo.getAddress(), XPropertySetInfo.static_type);
+  const propertyArray = {
+    count: arrayHelper.getCount(),
+    handle: arrayHelper.getHandleByName(u("workerValue")),
+    missing: arrayHelper.getHandleByName(u("missing")),
+    snapshotName: take(infoDescriptor.Name.copy(0)),
+    sameInfoIdentity: queriedInfo.get() === infoApi,
   };
   const processContext = getProcessComponentContext() as Reference<XComponentContext>,
     converter = own(Converter.create(processContext)),
@@ -270,6 +287,7 @@ export async function runNativeDomWorkerProbe() {
       conversion,
       publicHelpers,
       dynamicProperties,
+      propertyArray,
       documentBuilder,
       xpath: (
         /** Queries the actual registered native XPath service. @returns Scalar observations only. */ () => {
