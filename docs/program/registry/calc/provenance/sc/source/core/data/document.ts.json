@@ -44,7 +44,9 @@
       "HasClipFilteredRows",
       "GetTable",
       "GetAllTableNames",
-      "SetTabNameOnLoad"
+      "SetTabNameOnLoad",
+      "GetCalcConfig",
+      "SetCalcConfig"
     ],
     "upstreamSymbols": [
       "ScDocument::SetValue",
@@ -103,7 +105,8 @@
       "Restored original document/table/column SetString parse-and-release chain and single-cell shared-group listener teardown using the actual formatter, policies, cell values, stores and listeners. Single-line SetTextCell uses the supplied ScSetStringParam or original setTextInput defaults. Cell-value string commit/release uses SetString instead of promoting newline-bearing string variants through SetTextCell. Edit release transfers the exact object without Clone/destruction; nullable edit arguments and rejected-destination destruction follow source unique_ptr semantics. Column release forwards listening modes and content-only DeleteContent preserves text attributes. Existing unrepresented formula-group compute/stream-cache services are not replaced with fake callbacks; full native module/allocator/thread/cache QA and original multiline EditEngine generation remain unverified/incomplete. No UI save/autosave/recovery policy changes.",
       "Original document facade exposes the edit-engine pool accessor through documen2.",
       "The document facade exposes its lazy native edit engine for literal text transfer and text-object creation.",
-      "J0Z0KF sheet-name checkpoint: actual ScTable lazy uppercase owner and SetName invalidation, document global-cache lookup and counted-name validation, positional owned name copies and load-only rename now feed ScDocumentImport getSheetIndex/setSheetName. Editing RenameTab retains transliteration and stream invalidation. Original SetString body is only split for file size; no workbook facade or synthetic service is introduced. Full workbook/filter/UI and whole-module parity remain unverified."
+      "J0Z0KF sheet-name checkpoint: actual ScTable lazy uppercase owner and SetName invalidation, document global-cache lookup and counted-name validation, positional owned name copies and load-only rename now feed ScDocumentImport getSheetIndex/setSheetName. Editing RenameTab retains transliteration and stream invalidation. Original SetString body is only split for file size; no workbook facade or synthetic service is introduced. Full workbook/filter/UI and whole-module parity remain unverified.",
+      "J0Z0KF calculation-policy checkpoint: actual interpreter global ScCalcConfig lazy owner, document value construction/assignment and interpreter global-then-document merge feed original ScGlobal::ConvertStringToValue. Actual context forwards formatter recognition and null date. Literal operands and shared-string/string-formula references now convert with native policies. Production interpretation releases actual config string ownership even on exceptions. Normal-build mutation guards have no upstream release behavior; no fake debug/thread service is installed. The existing selected-line-style body moves unchanged into document.frame for file-size compliance. The original ucalc testFuncParam six-policy/five-string matrix is asserted through real compiled formula cells. Rich-edit ScEditUtil extraction, complete formatter/interpreter services, full WorkbookGlobals/model properties/filter/UI and compiled native differential parity remain unverified; historical broad confidence flags are not promoted."
     ],
     "omittedResponsibilities": [
       "The browser document text-object slice only admits the consumed operations."
@@ -288,6 +291,10 @@
         },
         {
           "path": "apps/office/src/sc/source/core/data/document.sheet-names.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/calcconfig-document.test.ts",
           "marker": "@fileoverview"
         }
       ],
@@ -499,6 +506,30 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/documentimport.cxx",
           "marker": "ScDocumentImport::getSheetIndex"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr4.cxx",
+          "marker": "ScInterpreter::MergeCalcConfig"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document10.cxx",
+          "marker": "ScDocument::SetCalcConfig"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/documen2.cxx",
+          "marker": "maCalcConfig"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpretercontext.cxx",
+          "marker": "ScInterpreterContext::NFIsNumberFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/global2.cxx",
+          "marker": "ScGlobal::ConvertStringToValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc.cxx",
+          "marker": "testFuncParam"
         }
       ]
     }

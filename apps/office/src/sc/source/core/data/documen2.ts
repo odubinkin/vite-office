@@ -33,6 +33,7 @@ export function Dispose(this: ScDocument): void {
   this["mxPoolHelper"]?.release();
   this["mxPoolHelper"] = null;
   this["aDocName"].dispose();
+  this["maCalcConfig"].dispose();
   this["mpShell"] = null;
 }
 

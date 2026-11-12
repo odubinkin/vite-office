@@ -79,6 +79,10 @@ export class ScCalcConfig {
       result.insert(opcode);
     return result;
   }
+  /** Releases the original implicit string member owner; shared opcode storage retains ordinary shared ownership. @returns Nothing. */
+  dispose(): void {
+    this.maOpenCLDevice.dispose();
+  }
   /** Original implicit copy assignment copies string values and shares the opcode-set owner. @param source - Source. @returns This owner. */
   copy_assign(source: ScCalcConfig): this {
     this.MergeDocumentSpecific(source);

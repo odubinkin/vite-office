@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/global2.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "document-calculation-config",
+    "capabilityIds": [
+      "CAP-6edf8b17-739a-4a36-8429-4560dc10f34c"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/global2.ts",
+        "apps/office/src/sc/source/core/data/global2.test.ts",
+        "apps/office/src/sc/source/core/tool/calcconfig-document.test.ts",
+        "docs/program/calc-native-calculation-policy.md"
+      ],
+      "justification": "Original string conversion policy and literal unambiguous date/time state machine use actual RTL numeric parsing, tools Date values and nonthreaded formatter context. Native fractional-second scaling and conversion-status gate are retained (CALC-522/523). No host date parser, alternate evaluator or synthetic formatter is supplied. Full native and compiled differential parity remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ConvertStringToValue",
+        "isEmptyString"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/data/global2.cxx",
+      "upstreamSymbols": [
+        "ScGlobal::ConvertStringToValue",
+        "isEmptyString"
+      ]
+    }
+  }
+}

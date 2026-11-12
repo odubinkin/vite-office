@@ -17,17 +17,21 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sc/source/core/data/document.frame.ts",
-        "apps/office/src/sc/source/core/data/column3.input.test.ts"
+        "apps/office/src/sc/source/core/data/column3.input.test.ts",
+        "apps/office/src/sc/source/core/tool/calcconfig-document.test.ts",
+        "apps/office/src/sc/source/core/data/global2.test.ts"
       ],
-      "justification": "Existing selection-frame/envelope body moves intact from the document facade to retain original document.cxx ownership and the hard source-file budget; no frame behavior is altered. Full native differential, ABI and broader CSV output acceptance remain pending.",
+      "justification": "Existing selection-frame/envelope body moves intact from the document facade to retain original document.cxx ownership and the hard source-file budget; no frame behavior is altered. Full native differential, ABI and broader CSV output acceptance remain pending. J0Z0KF calculation-policy checkpoint: actual interpreter global ScCalcConfig lazy owner, document value construction/assignment and interpreter global-then-document merge feed original ScGlobal::ConvertStringToValue. Actual context forwards formatter recognition and null date. Literal operands and shared-string/string-formula references now convert with native policies. Production interpretation releases actual config string ownership even on exceptions. Normal-build mutation guards have no upstream release behavior; no fake debug/thread service is installed. The existing selected-line-style body moves unchanged into document.frame for file-size compliance. The original ucalc testFuncParam six-policy/five-string matrix is asserted through real compiled formula cells. Rich-edit ScEditUtil extraction, complete formatter/interpreter services, full WorkbookGlobals/model properties/filter/UI and compiled native differential parity remain unverified; historical broad confidence flags are not promoted.",
       "knownViolations": [],
       "localSymbols": [
-        "ApplySelectionFrame"
+        "ApplySelectionFrame",
+        "ApplySelectionLineStyle"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/core/data/document.cxx",
       "upstreamSymbols": [
-        "ScDocument::ApplySelectionFrame"
+        "ScDocument::ApplySelectionFrame",
+        "ScDocument::ApplySelectionLineStyle"
       ]
     }
   }

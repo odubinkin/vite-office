@@ -97,8 +97,6 @@ it("preserves source error/cycle handling and detaches stale formulas", /** A so
   expect(doc.GetErrCode(a)).toBe(FormulaError.CircularReference);
   doc.SetTextCell(a, unicode("2"));
   doc.SetFormula(b, unicode("=[.A1]+1"), grammar);
-  expect(
-    /** Refuses a fake replacement for the missing native LOCALE formatter. @returns Number. */ () =>
-      doc.GetValue(b),
-  ).toThrow(/Locale/);
+  expect(doc.GetValue(b)).toBe(3);
+  expect(doc.GetErrCode(b)).toBe(FormulaError.NONE);
 });

@@ -20,6 +20,19 @@ export class ScInterpreterContext {
     this.mpFormatter ??= this.mpDoc.GetFormatTable();
     return this.mpFormatter;
   }
+  /** Original nonthreaded recognition forwards actual mutable outputs and scanner flags. @param value - Input string. @param key - Format key output. @param output - Numeric output. @param options - Native input flags. @returns Recognized. */
+  NFIsNumberFormat(
+    value: OUStringConstReference,
+    key: [number],
+    output: [number],
+    options = 0,
+  ): boolean {
+    return this.GetFormatTable().IsNumberFormat(value, key, output, options);
+  }
+  /** Original nonthreaded null-date getter borrows the actual formatter date. @returns Borrowed null date. */
+  NFGetNullDate(): ReturnType<SvNumberFormatter["GetNullDate"]> {
+    return this.GetFormatTable().GetNullDate();
+  }
   /** Original numeric/string NFGetOutputString forwards through the actual native formatter on the nonthreaded path. @param value - Native scalar/string overload. @param key - Native format key. @param output - Owned mutable output. @param color - Native color output pointer. @param useStarFormat - Original defaultfalse flag. @returns Nothing. */
   NFGetOutputString(
     value: number | OUStringConstReference,

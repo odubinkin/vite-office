@@ -7,13 +7,16 @@
     "status": "mapped",
     "upstreamPath": "sc/source/core/data/document.cxx",
     "localSymbols": [
-      "ApplySelectionFrame"
+      "ApplySelectionFrame",
+      "ApplySelectionLineStyle"
     ],
     "upstreamSymbols": [
-      "ScDocument::ApplySelectionFrame"
+      "ScDocument::ApplySelectionFrame",
+      "ScDocument::ApplySelectionLineStyle"
     ],
     "preservedResponsibilities": [
-      "Existing selection-frame/envelope body moves intact from the document facade to retain original document.cxx ownership and the hard source-file budget; no frame behavior is altered."
+      "Existing selection-frame/envelope body moves intact from the document facade to retain original document.cxx ownership and the hard source-file budget; no frame behavior is altered.",
+      "J0Z0KF calculation-policy checkpoint: actual interpreter global ScCalcConfig lazy owner, document value construction/assignment and interpreter global-then-document merge feed original ScGlobal::ConvertStringToValue. Actual context forwards formatter recognition and null date. Literal operands and shared-string/string-formula references now convert with native policies. Production interpretation releases actual config string ownership even on exceptions. Normal-build mutation guards have no upstream release behavior; no fake debug/thread service is installed. The existing selected-line-style body moves unchanged into document.frame for file-size compliance. The original ucalc testFuncParam six-policy/five-string matrix is asserted through real compiled formula cells. Rich-edit ScEditUtil extraction, complete formatter/interpreter services, full WorkbookGlobals/model properties/filter/UI and compiled native differential parity remain unverified; historical broad confidence flags are not promoted."
     ],
     "omittedResponsibilities": [
       "Full native differential closure and complete CSV import/export/UI acceptance remain pending."
@@ -23,12 +26,40 @@
         {
           "path": "apps/office/src/sc/source/core/data/document.frame.ts",
           "marker": "ApplySelectionFrame"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/calcconfig-document.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
           "marker": "ScDocument::ApplySelectionFrame"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr4.cxx",
+          "marker": "ScInterpreter::MergeCalcConfig"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document10.cxx",
+          "marker": "ScDocument::SetCalcConfig"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/documen2.cxx",
+          "marker": "maCalcConfig"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpretercontext.cxx",
+          "marker": "ScInterpreterContext::NFIsNumberFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/global2.cxx",
+          "marker": "ScGlobal::ConvertStringToValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc.cxx",
+          "marker": "testFuncParam"
         }
       ]
     },

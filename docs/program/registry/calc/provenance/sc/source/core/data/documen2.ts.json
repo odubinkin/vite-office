@@ -30,7 +30,8 @@
       "J0Z0KF restores consumed real SfxBaseModel shell data/listener ownership and GetObjectShell/IsInitialized, ScModelObj nullable shell/document access and actual shell/document registrations, Calc Dying pointer invalidation and ordered destructor unregistration. Actual ScDocument lazily owns its original pUnoBroadcaster; original serial/no-active-BroadcastUno Add/Remove behavior remains in documen3 on the actual typed ScDocument instance, and documen2 destroys that broadcaster after area destruction and before cell clearing. This retains actual owners instead of a fake getDocument/getModel provider or transplanted test service. Private field declarations remain on the real class and original null initialization/destruction belongs to documen2. Script-service method bodies are relocated unchanged into original documen6; its earlier standalone service-loop test now calls the actual ScDocument. Existing ApplyPatternAreaTab parameter declarations move to sc/inc/document as a type-only tuple; the pre-existing local boolean return is unchanged and not certified as upstream parity. A typed-attribute boundary test is extracted into its own focused tooling test, restoring the existing size limit without changing checks. Full SfxBaseModel/ScModelObj UNO/WeakImplHelper/SfxBaseModel guards, model factories and shell installation, property/controller/event/render/calculate/aggregation services, native intrusive shell reference counts and thread/finalizer synchronization remain unported or unverified. Service-dependent Notify paths explicitly reject unsupported local admission; their throws are not original behavior/parity claims. BroadcastUno, deferred calls and its active cross-thread Remove branch are outside the represented caller domain; no fake SolarMutex is supplied. No current Open/save/recovery/autosave/UI flow is changed or full XLSX/DOCX model/filter/UI acceptance claimed.",
       "Original document edit-engine-pool access borrows the actual shared ScPoolHelper member.",
       "Original ScDocument lazily owns the edit engine, selects its borrowed item pool, disables layout and undo, and destroys the engine before releasing the pool helper.",
-      "The document's original borrowed shell link supplies the title used by edit fields. The host adoption bridge sets it on model replacement."
+      "The document's original borrowed shell link supplies the title used by edit fields. The host adoption bridge sets it on model replacement.",
+      "J0Z0KF calculation-policy checkpoint: actual interpreter global ScCalcConfig lazy owner, document value construction/assignment and interpreter global-then-document merge feed original ScGlobal::ConvertStringToValue. Actual context forwards formatter recognition and null date. Literal operands and shared-string/string-formula references now convert with native policies. Production interpretation releases actual config string ownership even on exceptions. Normal-build mutation guards have no upstream release behavior; no fake debug/thread service is installed. The existing selected-line-style body moves unchanged into document.frame for file-size compliance. The original ucalc testFuncParam six-policy/five-string matrix is asserted through real compiled formula cells. Rich-edit ScEditUtil extraction, complete formatter/interpreter services, full WorkbookGlobals/model properties/filter/UI and compiled native differential parity remain unverified; historical broad confidence flags are not promoted."
     ],
     "omittedResponsibilities": [
       "Reference devices and Asian layout settings remain outside the no-layout editor slice."
@@ -92,6 +93,10 @@
         {
           "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/calcconfig-document.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -130,6 +135,30 @@
         {
           "path": "sc/source/core/tool/editutil.cxx",
           "marker": "GetDocumentShell"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr4.cxx",
+          "marker": "ScInterpreter::MergeCalcConfig"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document10.cxx",
+          "marker": "ScDocument::SetCalcConfig"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/documen2.cxx",
+          "marker": "maCalcConfig"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpretercontext.cxx",
+          "marker": "ScInterpreterContext::NFIsNumberFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/global2.cxx",
+          "marker": "ScGlobal::ConvertStringToValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc.cxx",
+          "marker": "testFuncParam"
         }
       ]
     }

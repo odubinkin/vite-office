@@ -5427,3 +5427,15 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source: pinned `sc/source/core/data/documentimport.cxx`, `ScDocumentImport::setFormulaCell(const ScAddress&, ScFormulaCell*)` and `CellStoreInitializer::operator()`, commit9bc445578031fecf56086729d8e4940c77e14d65.
 - The raw-pointer overload skips CheckLinkFormulaNeedingCheck when pCell is null, then still passes pCell to the formula-typed store. The finalizer later dereferences formula-block pointers without a matching null guard. Preserve the conditional check and original typed insertion rather than silently translating null into an empty cell. This may reflect an undocumented non-null caller precondition; no defined native failure, reachable filter defect or invalid/null formula graph test is claimed.
+
+### CALC-522 — Unambiguous fractional seconds derive scale from the parsed integer
+
+- Source: `sc/source/core/data/global2.cxx`, `ScGlobal::ConvertStringToValue`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
+- The fraction substring is converted to `sal_Int32`, then scaled by `pow10Exp(value, -ceil(log10(value)))`. Its original digit count is not retained. Consequently `.01`, `.10`, and `.100` each contribute one full second; `.05` contributes half a second. This is source-derived behavior, covered through the actual context and public conversion entry point; no compiled C++ differential claim is made.
+- Preserve the native integer conversion and scaling. Do not normalize this into ordinary decimal-fraction parsing in our core.
+
+### CALC-523 — Unambiguous RTL overflow bypasses conversion error assignment
+
+- Source: `sc/source/core/data/global2.cxx`, `ScGlobal::ConvertStringToValue`, same pinned baseline.
+- The trailing-input/date/time/error block runs only when RTL conversion status is `Ok`. For `1e999`, the RTL result is positive infinity and the existing error output remains `NONE`; this function does not assign the requested string error. Formula execution separately applies its existing floating-point result checks.
+- Preserve this output/status gate and the distinct interpreter check. The local public API case exercises the actual RTL conversion and context; full compiled native wrapper parity remains unverified.

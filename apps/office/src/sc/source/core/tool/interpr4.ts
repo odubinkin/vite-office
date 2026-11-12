@@ -7,6 +7,10 @@ import {
   FormulaByteToken,
   StackVar,
 } from "../../../../formula/inc/token";
+import { ScCalcConfig } from "../../../inc/calcconfig";
+import { ScGlobal } from "../../../inc/global";
+import { SvNumFormatType } from "../../../../svl/inc/zforlist";
+import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import { ScSingleRefToken, ScDoubleRefToken, ScEmptyCellToken } from "../../../inc/token";
 import type { ScSingleRefData } from "../../../inc/refdata";
@@ -29,6 +33,47 @@ import type { ScInterpreterContext } from "../../../inc/interpretercontext";
 import { KahanSum } from "../../../inc/kahan";
 /** Actual initialized numeric interpreter state, with token references owned by JS GC. */
 export class ScInterpreter {
+  private static mpGlobalConfig: ScCalcConfig | null = null;
+  /** Original lazy process configuration owner. @returns Actual shared global value. */
+  private static GetOrCreateGlobalConfig(): ScCalcConfig {
+    return (this.mpGlobalConfig ??= new ScCalcConfig());
+  }
+  /** Original assignment preserves the existing global value owner. @param config - Source value. @returns Nothing. */
+  static SetGlobalConfig(config: ScCalcConfig): void {
+    this.GetOrCreateGlobalConfig().copy_assign(config);
+  }
+  /** Original borrowed global settings. @returns Actual configuration. */
+  static GetGlobalConfig(): ScCalcConfig {
+    return this.GetOrCreateGlobalConfig();
+  }
+  private readonly maCalcConfig = new ScCalcConfig();
+  private nCurFmtType: number = SvNumFormatType.ALL;
+  private mnStringNoValueError: FormulaError = FormulaError.NoValue;
+  /** Original implicit calculation-value teardown. @returns Nothing. */
+  Dispose(): void {
+    this.maCalcConfig.dispose();
+  }
+  /** Original global settings followed by the document-specific merge. @returns Nothing. */
+  private MergeCalcConfig(): void {
+    this.maCalcConfig.copy_assign(ScInterpreter.GetGlobalConfig());
+    this.maCalcConfig.MergeDocumentSpecific(this.mrDoc.GetCalcConfig());
+  }
+  /** Original conversion updates the current format type and first-error state. @param value - Native string. @returns Numeric conversion. */
+  private ConvertStringToValue(value: OUStringConstReference): number {
+    const error: [FormulaError] = [FormulaError.NONE],
+      type: [number] = [this.nCurFmtType];
+    const result = ScGlobal.ConvertStringToValue(
+      value,
+      this.maCalcConfig,
+      error,
+      this.mnStringNoValueError,
+      this.mrContext,
+      type,
+    );
+    this.nCurFmtType = type[0];
+    if (error[0] !== FormulaError.NONE) this.SetError(error[0]);
+    return result;
+  }
   readonly aPos: ScAddress;
   private pStack: FormulaToken[] = [];
   private nGlobalError = FormulaError.NONE;
@@ -42,6 +87,7 @@ export class ScInterpreter {
     private readonly pArr: ScTokenArray,
   ) {
     this.aPos = new ScAddress(position);
+    this.MergeCalcConfig();
   }
   /** Preserves the first nonzero error. @param error - Error. @returns Nothing. */
   SetError(error: FormulaError): void {
@@ -90,7 +136,7 @@ export class ScInterpreter {
     if (token.GetType() === StackVar.svMissing || token.GetType() === StackVar.svEmptyCell)
       return 0;
     if (token.GetType() === StackVar.svString)
-      throw new Error("Locale string-to-number conversion is not implemented");
+      return this.ConvertStringToValue((token as FormulaStringToken).GetString().getString());
     return (token as FormulaDoubleToken).GetDouble();
   }
   /** Drops the actual top token,assigning its error exactly as native PopError. @returns Nothing. */
@@ -225,12 +271,13 @@ export class ScInterpreter {
     if (!result) this.SetError(FormulaError.NoValue);
     return result;
   }
-  /** Preserves a previous error while reading the actual referenced numeric cell. Locale string coercion remains unsupported. @param address - Position. @param cell - Actual view. @returns Double. */
+  /** Preserves a previous error while reading the actual referenced numeric cell. String coercion uses the actual calculation policy. @param address - Position. @param cell - Actual view. @returns Double. */
   private GetCellValue(address: ScAddress, cell: ScRefCellValue): number {
     const previous = this.nGlobalError;
     this.nGlobalError = FormulaError.NONE;
     const result = this.GetCellValueOrZero(address, cell);
-    if (previous !== FormulaError.NONE) this.nGlobalError = previous;
+    if (previous !== FormulaError.NONE || this.GetError() === FormulaError.CellNoValue)
+      this.nGlobalError = previous;
     return result;
   }
   /** Reads represented values with native empty/error semantics and no formatter substitute. @param address - Position. @param cell - Actual view. @returns Value. */
@@ -244,11 +291,15 @@ export class ScInterpreter {
         return 0;
       }
       if (formula.IsValue()) return formula.GetValue();
-      throw new Error("Locale string-to-number conversion is not implemented");
+      return this.ConvertStringToValue(formula.GetString().getString());
     }
     if (cell.getType() === CellType.CELLTYPE_VALUE) return cell.getDouble();
     if (cell.getType() === CellType.CELLTYPE_STRING)
-      throw new Error("Locale string-to-number conversion is not implemented");
+      return this.ConvertStringToValue(
+        (cell.getSharedString() as SharedStringConstReference).getString(),
+      );
+    if (cell.getType() === CellType.CELLTYPE_EDIT)
+      throw new Error("ScEditUtil::GetString is not implemented");
     return 0;
   }
   /** Creates native final numeric/empty/text results from a real referenced cell. @param address - Absolute reference. @returns Nothing. */

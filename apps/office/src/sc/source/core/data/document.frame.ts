@@ -1,4 +1,5 @@
 /** @fileoverview Existing original selection-frame traversal moved intact from the document facade. */
+import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import type { ScDocument } from "../../../inc/document";
 import type { ScMarkData } from "../../../inc/markdata";
 import { ScRangeList } from "../../../inc/rangelst";
@@ -98,5 +99,19 @@ export function ApplySelectionFrame(
           range.aEnd.Row(),
         );
     }
+  }
+}
+
+/** Original selected-sheet line-style traversal moved without behavior changes. @param this - Actual document. @param marks - Selection. @param line - Original optional line. @param colorOnly - Color-only flag. @returns Nothing. */
+export function ApplySelectionLineStyle(
+  this: ScDocument,
+  marks: ScMarkData,
+  line: SvxBorderLine | undefined,
+  colorOnly: boolean,
+): void {
+  if (colorOnly && !line) return;
+  for (const tab of marks.GetSelectedTabs()) {
+    if (tab >= this.GetTableCount()) break;
+    this.FetchTable(tab)?.ApplySelectionLineStyle(marks, line, colorOnly);
   }
 }

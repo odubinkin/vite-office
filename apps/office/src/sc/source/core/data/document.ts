@@ -1,4 +1,6 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
+import { ScCalcConfig } from "../../../inc/calcconfig";
+import { ScInterpreter } from "../inc/interpre";
 import { HardRecalcState, ScDocumentMode } from "./document.modes";
 import { ScSetStringParam } from "../../../inc/stringutil";
 import { SetString as setDocumentString } from "./document.cell-input";
@@ -371,11 +373,7 @@ export class ScDocument {
     line: SvxBorderLine | undefined,
     colorOnly: boolean,
   ): void {
-    if (colorOnly && !line) return;
-    for (const tab of marks.GetSelectedTabs()) {
-      if (tab >= this.GetTableCount()) break;
-      this.FetchTable(tab)?.ApplySelectionLineStyle(marks, line, colorOnly);
-    }
+    documentFrame.ApplySelectionLineStyle.call(this, marks, line, colorOnly);
   }
   /** Original selection-frame query preserves traversal order and six independent mixed states. @param marks - Actual marks. @param outer - Outer result. @param inner - Inner result. @returns Nothing. */
   GetSelectionFrame(marks: ScMarkData, outer: SvxBoxItem, inner: SvxBoxInfoItem): void {
@@ -573,6 +571,15 @@ export class ScDocument {
   /** Original document teardown query. @returns Clearing. */
   IsInDtorClear(): boolean {
     return this.bInDtorClear;
+  }
+  private readonly maCalcConfig = new ScCalcConfig(ScInterpreter.GetGlobalConfig());
+  /** Original borrowed per-document calculation value. @returns Borrowed configuration. */
+  GetCalcConfig(): ScCalcConfig {
+    return this.maCalcConfig;
+  }
+  /** Original normal-build document10 assignment; the debug-only mutation guard has no release behavior. @param config - Copied settings. @returns Nothing. */
+  SetCalcConfig(config: ScCalcConfig): void {
+    this.maCalcConfig.copy_assign(config);
   }
   private bAutoCalc: boolean;
   private readonly maTabs: (ScTable | null)[] = [];

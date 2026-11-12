@@ -115,10 +115,19 @@ it("executes actual RPN result/error/stack boundaries", /** No private-field acc
     [new FormulaStringToken(new SharedString()), new FormulaByteToken(OpCode.ocNegSub)],
     2,
   );
-  expect(
-    /** Rejects absent string conversion. @returns Type. */ () =>
-      new ScInterpreter(null, doc, doc.GetNonThreadedContext(), pos, stringArray).Interpret(),
-  ).toThrow(/Locale/);
+  const emptyStringInterpreter = new ScInterpreter(
+    null,
+    doc,
+    doc.GetNonThreadedContext(),
+    pos,
+    stringArray,
+  );
+  try {
+    emptyStringInterpreter.Interpret();
+    expect(emptyStringInterpreter.GetError()).toBe(FormulaError.NoValue);
+  } finally {
+    emptyStringInterpreter.Dispose();
+  }
   ok.SetError(FormulaError.NONE);
   expect(ok.GetError()).toBe(FormulaError.NONE);
 });

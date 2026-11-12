@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/global2.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/global2.cxx",
+    "localSymbols": [
+      "ConvertStringToValue",
+      "isEmptyString"
+    ],
+    "upstreamSymbols": [
+      "ScGlobal::ConvertStringToValue",
+      "isEmptyString"
+    ],
+    "preservedResponsibilities": [
+      "Original string conversion policy and literal unambiguous date/time state machine use actual RTL numeric parsing, tools Date values and nonthreaded formatter context. Native fractional-second scaling and conversion-status gate are retained (CALC-522/523). No host date parser, alternate evaluator or synthetic formatter is supplied. Full native and compiled differential parity remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Other global2 responsibilities, rich-edit extraction and full workbook/filter/UI orchestration remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/global2.ts",
+          "marker": "ConvertStringToValue"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/global2.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/global2.cxx",
+          "marker": "ScGlobal::ConvertStringToValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc.cxx",
+          "marker": "testFuncParam"
+        }
+      ]
+    }
+  }
+}

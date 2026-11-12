@@ -630,8 +630,12 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
           this.aPos,
           this.pCode,
         );
-        interpreter.Interpret();
-        this.aResult.SetToken(interpreter.GetResultToken());
+        try {
+          interpreter.Interpret();
+          this.aResult.SetToken(interpreter.GetResultToken());
+        } finally {
+          interpreter.Dispose();
+        }
       }
       this.bDirty = false;
       if (!this.pCode.IsRecalcModeAlways()) this.rDocument.RemoveFromFormulaTree(this);

@@ -256,12 +256,10 @@ it("uses actual reference tokens for deletion, error precedence and direct text 
   );
   stringInterpreter.Interpret();
   expect(text(stringInterpreter.GetStringResult().getString())).toBe("hi");
+  stringInterpreter.Dispose();
   doc.SetFormula(b, unicode("=[.A1]"), grammar);
   doc.SetFormula(pos, unicode("=[.B1]+1"), grammar);
-  expect(
-    /** Refuses a formatter substitute for formula text. @returns Number. */ () =>
-      doc.GetValue(pos),
-  ).toThrow(/Locale/);
+  expect(doc.GetErrCode(pos)).toBe(FormulaError.NoValue);
   doc.SetEmptyCell(pos);
   doc.SetFormula(a, unicode("=2+3"), grammar);
   doc.SetFormula(b, unicode("=[.A1]+1"), grammar);

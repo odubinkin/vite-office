@@ -9,13 +9,15 @@
     "localSymbols": [
       "ScCalcConfig",
       "ScRecalcOptions",
-      "ForceCalculationType"
+      "ForceCalculationType",
+      "dispose"
     ],
     "upstreamSymbols": [
       "ScCalcConfig"
     ],
     "preservedResponsibilities": [
-      "Task92 ports actual ScCalcConfig document value fields/defaults, implicit memberwise copy/copy_assign, reset, partial OpenCL defaults, four-field document merge, explicit syntax and value equality. Reuses genuine Writer/shared SortedVector and OUString, with shared mutable static default opcode set and value-copied device string. Complete unchanged original instance methods/full headers over real dependencies compare3328-byte normal stream. Process/environment/configuration listener methods and symbolic opcode conversions remain pending, no fake static service or OpenCL engine; initialized enum/boolean/signed32 domain only, no native layout/refcount/lifetime or whole original QA claim. Actual document/UI/ODS remain pending prioritized owners, next full101."
+      "Task92 ports actual ScCalcConfig document value fields/defaults, implicit memberwise copy/copy_assign, reset, partial OpenCL defaults, four-field document merge, explicit syntax and value equality. Reuses genuine Writer/shared SortedVector and OUString, with shared mutable static default opcode set and value-copied device string. Complete unchanged original instance methods/full headers over real dependencies compare3328-byte normal stream. Process/environment/configuration listener methods and symbolic opcode conversions remain pending, no fake static service or OpenCL engine; initialized enum/boolean/signed32 domain only, no native layout/refcount/lifetime or whole original QA claim. Actual document/UI/ODS remain pending prioritized owners, next full101.",
+      "J0Z0KF calculation-policy checkpoint: actual interpreter global ScCalcConfig lazy owner, document value construction/assignment and interpreter global-then-document merge feed original ScGlobal::ConvertStringToValue. Actual context forwards formatter recognition and null date. Literal operands and shared-string/string-formula references now convert with native policies. Production interpretation releases actual config string ownership even on exceptions. Normal-build mutation guards have no upstream release behavior; no fake debug/thread service is installed. The existing selected-line-style body moves unchanged into document.frame for file-size compliance. The original ucalc testFuncParam six-policy/five-string matrix is asserted through real compiled formula cells. Rich-edit ScEditUtil extraction, complete formatter/interpreter services, full WorkbookGlobals/model properties/filter/UI and compiled native differential parity remain unverified; historical broad confidence flags are not promoted."
     ],
     "omittedResponsibilities": [
       "Task92 ports actual ScCalcConfig document value fields/defaults, implicit memberwise copy/copy_assign, reset, partial OpenCL defaults, four-field document merge, explicit syntax and value equality. Reuses genuine Writer/shared SortedVector and OUString, with shared mutable static default opcode set and value-copied device string. Complete unchanged original instance methods/full headers over real dependencies compare3328-byte normal stream. Process/environment/configuration listener methods and symbolic opcode conversions remain pending, no fake static service or OpenCL engine; initialized enum/boolean/signed32 domain only, no native layout/refcount/lifetime or whole original QA claim. Actual document/UI/ODS remain pending prioritized owners, next full101."
@@ -29,12 +31,40 @@
         {
           "path": "apps/office/src/sc/source/core/tool/calcconfig.test.ts",
           "marker": "matches complete original document calculation configuration stream"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/calcconfig-document.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/tool/calcconfig.cxx",
           "marker": "ScCalcConfig"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr4.cxx",
+          "marker": "ScInterpreter::MergeCalcConfig"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document10.cxx",
+          "marker": "ScDocument::SetCalcConfig"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/documen2.cxx",
+          "marker": "maCalcConfig"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpretercontext.cxx",
+          "marker": "ScInterpreterContext::NFIsNumberFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/global2.cxx",
+          "marker": "ScGlobal::ConvertStringToValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc.cxx",
+          "marker": "testFuncParam"
         }
       ]
     }
