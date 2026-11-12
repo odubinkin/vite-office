@@ -1,10 +1,11 @@
 ---
 id: "202611121427-8RHTFM"
 title: "Replace custom ZIP implementation with zip.js"
-status: "DOING"
+result_summary: "verified-202611121427-8RHTFM"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 10
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-12T14:47:46.264Z"
+  updated_at: "2026-11-12T14:48:08.172Z"
   updated_by: "CODER"
   note: "verified-202611121427-8RHTFM"
   attempts: 0
@@ -39,11 +40,16 @@ quality_review:
     - ".agentplane/tmp/zip-migration/typecheck-final.log"
   findings:
     - "One existing desktop menu test fails identically on unmodified HEAD; global JSDoc gate reports only unchanged css-style-matchers.ts. Neither is a ZIP migration regression."
-commit: null
+commit:
+  hash: "6b3a3847354968a0e94c0553585bbd5869e3621b"
+  message: "🧩 8RHTFM task: record ZIP migration verification"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202611121427-8RHTFM. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -64,8 +70,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202611121427-8RHTFM"
+  -
+    type: "verify"
+    at: "2026-11-12T14:48:08.172Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202611121427-8RHTFM"
+  -
+    type: "status"
+    at: "2026-11-12T14:48:08.298Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202611121427-8RHTFM. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-12T14:47:46.315Z"
+doc_updated_at: "2026-11-12T14:49:05.746Z"
 doc_updated_by: "CODER"
 description: "Use @zip.js/zip.js for all document archive reads and writes, migrate asynchronous callers, remove custom ZIP implementation and implementation-specific tests, and retain document integration coverage. User approved plan and network access."
 sections:
@@ -173,6 +192,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T14:48:08.172Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202611121427-8RHTFM
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T14:47:46.315Z, excerpt_hash=sha256:0fe09bcaaabf322cfa94a37ca4481b062793d30f3b110eea91b7e774b5a74cb9
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611121427-8RHTFM/blueprint/resolved-snapshot.json
+    - old_digest: aa8b72c5c0e288639b1b4d0158bc178043c2cad1a8a558be7571dcc86af69d6f
+    - current_digest: aa8b72c5c0e288639b1b4d0158bc178043c2cad1a8a558be7571dcc86af69d6f
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611121427-8RHTFM
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611121427-8RHTFM --result verified-202611121427-8RHTFM --commit 6b3a3847354968a0e94c0553585bbd5869e3621b
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's implementation and dependency changes together."
   Findings: |-
@@ -185,6 +234,14 @@ sections:
     - Additional global JSDoc check reports only two errors in unchanged test/css-style-matchers.ts. No unrelated fixes were made.
     - Initial Chromium was absent; installed a task-local browser and completed all 5 production e2e cases. Initial ad-hoc migration tooling exceeded Node's default 4GB heap; reran with a larger heap, with no production runtime changes for this tooling issue.
     - Exact local check logs are retained under .agentplane/tmp/zip-migration (ignored tooling artifacts). No required acceptance check was skipped; no scope drift or external publication.
+
+    - Observation: The route-oracle task complete command marked DONE but its deterministic close subject was rejected as too generic. The --close retry reproduced the same subject validation error.
+      Impact: Implementation and verification are committed; only the closure README artifact remained dirty.
+      Resolution: Persist the closure artifact with the supported ap commit command and an explicit descriptive close subject. No source changes, force operation or hook bypass is required.
+extensions:
+  implementation_commit:
+    hash: "9174de55bf09259dbd0958b34e833294b6118c4b"
+    message: "♻️ 8RHTFM code: replace document ZIP transport with zip.js"
 id_source: "generated"
 ---
 ## Summary
@@ -303,6 +360,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T14:48:08.172Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202611121427-8RHTFM
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T14:47:46.315Z, excerpt_hash=sha256:0fe09bcaaabf322cfa94a37ca4481b062793d30f3b110eea91b7e774b5a74cb9
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611121427-8RHTFM/blueprint/resolved-snapshot.json
+- old_digest: aa8b72c5c0e288639b1b4d0158bc178043c2cad1a8a558be7571dcc86af69d6f
+- current_digest: aa8b72c5c0e288639b1b4d0158bc178043c2cad1a8a558be7571dcc86af69d6f
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611121427-8RHTFM
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611121427-8RHTFM --result verified-202611121427-8RHTFM --commit 6b3a3847354968a0e94c0553585bbd5869e3621b
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -320,3 +407,7 @@ Revert only this task's implementation and dependency changes together.
 - Additional global JSDoc check reports only two errors in unchanged test/css-style-matchers.ts. No unrelated fixes were made.
 - Initial Chromium was absent; installed a task-local browser and completed all 5 production e2e cases. Initial ad-hoc migration tooling exceeded Node's default 4GB heap; reran with a larger heap, with no production runtime changes for this tooling issue.
 - Exact local check logs are retained under .agentplane/tmp/zip-migration (ignored tooling artifacts). No required acceptance check was skipped; no scope drift or external publication.
+
+- Observation: The route-oracle task complete command marked DONE but its deterministic close subject was rejected as too generic. The --close retry reproduced the same subject validation error.
+  Impact: Implementation and verification are committed; only the closure README artifact remained dirty.
+  Resolution: Persist the closure artifact with the supported ap commit command and an explicit descriptive close subject. No source changes, force operation or hook bypass is required.
