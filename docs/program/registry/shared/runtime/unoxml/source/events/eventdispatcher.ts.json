@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/unoxml/source/events/eventdispatcher.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-dom-events",
+    "capabilityIds": [
+      "CAP-63b22cd8-c479-4bd1-88a6-b34e7c7e733e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/unoxml/source/events/eventdispatcher.ts",
+        "apps/office/src/unoxml/source/events/eventdispatcher.test.ts",
+        "apps/office/src/unoxml/source/dom/domimplementation.test.ts",
+        "docs/program/native-xml-dom-events.md"
+      ],
+      "justification": "Native event dispatcher translation uses acquired listener snapshots and source event clones over actual XML backend node identity. Registry lifetime and equal-range callbacks are tested on genuine listener/event components; concrete CDocument/CNode propagation, callback mutation, cancellation, exception paths and whole-dispatcher 90% coverage remain open. The consumed document factory signature is a forward declaration, not an implemented or substituted tree. The actual immortal CDOMImplementation retains all three #i113683# unimplemented source results. Full metadata initialization and DOCX/XLSX file/UI acceptance remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CEventDispatcher",
+        "ListenerMap",
+        "TypeListenerMap"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "unoxml/source/events/eventdispatcher.cxx",
+      "upstreamSymbols": [
+        "CEventDispatcher::addListener",
+        "CEventDispatcher::removeListener",
+        "CEventDispatcher::hasListeners",
+        "CEventDispatcher::callListeners",
+        "CEventDispatcher::dispatchEvent"
+      ]
+    }
+  }
+}

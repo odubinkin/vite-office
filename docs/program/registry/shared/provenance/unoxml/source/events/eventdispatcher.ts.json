@@ -1,0 +1,66 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/unoxml/source/events/eventdispatcher.ts",
+    "status": "mapped",
+    "upstreamPath": "unoxml/source/events/eventdispatcher.cxx",
+    "localSymbols": [
+      "CEventDispatcher",
+      "ListenerMap",
+      "TypeListenerMap"
+    ],
+    "upstreamSymbols": [
+      "CEventDispatcher::addListener",
+      "CEventDispatcher::removeListener",
+      "CEventDispatcher::hasListeners",
+      "CEventDispatcher::callListeners",
+      "CEventDispatcher::dispatchEvent"
+    ],
+    "preservedResponsibilities": [
+      "Native event dispatcher translation uses acquired listener snapshots and source event clones over actual XML backend node identity. Registry lifetime and equal-range callbacks are tested on genuine listener/event components; concrete CDocument/CNode propagation, callback mutation, cancellation, exception paths and whole-dispatcher 90% coverage remain open. The consumed document factory signature is a forward declaration, not an implemented or substituted tree. The actual immortal CDOMImplementation retains all three #i113683# unimplemented source results. Full metadata initialization and DOCX/XLSX file/UI acceptance remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Actual tree propagation, full dispatcher coverage and metadata/filter/UI integration remain open; this is work in progress."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/unoxml/source/events/eventdispatcher.ts",
+          "marker": "CEventDispatcher"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/events/eventdispatcher.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/domimplementation.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/unoxml/source/events/eventdispatcher.cxx",
+          "marker": "CEventDispatcher::addListener"
+        },
+        {
+          "path": "vendor/libreoffice-reference/unoxml/source/events/eventdispatcher.cxx",
+          "marker": "CEventDispatcher::removeListener"
+        },
+        {
+          "path": "vendor/libreoffice-reference/unoxml/source/events/eventdispatcher.cxx",
+          "marker": "CEventDispatcher::hasListeners"
+        },
+        {
+          "path": "vendor/libreoffice-reference/unoxml/source/events/eventdispatcher.cxx",
+          "marker": "CEventDispatcher::callListeners"
+        },
+        {
+          "path": "vendor/libreoffice-reference/unoxml/source/events/eventdispatcher.cxx",
+          "marker": "CEventDispatcher::dispatchEvent"
+        }
+      ]
+    }
+  }
+}

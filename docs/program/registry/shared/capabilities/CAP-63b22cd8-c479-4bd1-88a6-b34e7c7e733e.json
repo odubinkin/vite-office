@@ -9,11 +9,13 @@
     "type": "model",
     "maturity": "implemented",
     "assertions": [
-      "Original native DOM event components and SDK contracts use actual WeakImplHelper/ImplInheritanceHelper, Reference, OUString, Time, Any and shared type metadata. Source field defaults, base-first initialization, native argument widths, acquired result copies, query order and implicit owned-member destruction are preserved. Native zero timestamps, empty preventDefault, stored/public cancellation differences and ignored mouse related targets remain unchanged (CALC-524/525; WRITER458/459). Concrete event components are tested directly with actual acquired facets and weak references, not fabricated DOM nodes, views, targets, private state or dispatchers. Source C++ mutex/thread/reentrant behavior, actual tree/dispatcher integration, full ABI, metadata/model initialization and complete DOCX/XLSX filter/UI parity remain unverified."
+      "Original native DOM event components and SDK contracts use actual WeakImplHelper/ImplInheritanceHelper, Reference, OUString, Time, Any and shared type metadata. Source field defaults, base-first initialization, native argument widths, acquired result copies, query order and implicit owned-member destruction are preserved. Native zero timestamps, empty preventDefault, stored/public cancellation differences and ignored mouse related targets remain unchanged (CALC-524/525; WRITER458/459). Concrete event components are tested directly with actual acquired facets and weak references, not fabricated DOM nodes, views, targets, private state or dispatchers. Source C++ mutex/thread/reentrant behavior, actual tree/dispatcher integration, full ABI, metadata/model initialization and complete DOCX/XLSX filter/UI parity remain unverified.",
+      "Native event dispatcher translation uses acquired listener snapshots and source event clones over actual XML backend node identity. Registry lifetime and equal-range callbacks are tested on genuine listener/event components; concrete CDocument/CNode propagation, callback mutation, cancellation, exception paths and whole-dispatcher 90% coverage remain open. The consumed document factory signature is a forward declaration, not an implemented or substituted tree. The actual immortal CDOMImplementation retains all three #i113683# unimplemented source results. Full metadata initialization and DOCX/XLSX file/UI acceptance remain unverified."
     ],
     "capability": "Native DOM event component state and ownership",
     "gaps": [
-      "Actual DOM node/dispatcher integration, native threading and metadata/filter/UI remain incomplete."
+      "Actual DOM node/dispatcher integration, native threading and metadata/filter/UI remain incomplete.",
+      "Concrete CDocument/CNode dispatcher integration and whole-dispatcher coverage remain open; current tests cover the registry and singleton only."
     ],
     "upstream": {
       "implementation": [
@@ -132,6 +134,18 @@
         {
           "path": "apps/office/src/unoxml/source/events/event.ts",
           "marker": "CEvent"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/events/eventdispatcher.ts",
+          "marker": "CEventDispatcher"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/domimplementation.ts",
+          "marker": "CDOMImplementation"
+        },
+        {
+          "path": "apps/office/src/unoxml/inc/eventdispatcher.ts",
+          "marker": "CEventDispatcher"
         }
       ],
       "tests": [
@@ -145,6 +159,14 @@
         },
         {
           "path": "apps/office/src/offapi/com/sun/star/xml/dom/events/native-event-contracts.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/events/eventdispatcher.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unoxml/source/dom/domimplementation.test.ts",
           "marker": "@fileoverview"
         }
       ],

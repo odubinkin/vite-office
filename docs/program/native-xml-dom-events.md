@@ -39,3 +39,28 @@ unknown metadata, CDATA/comments/PI, XML roundtrip and malformed rejection. Actu
 UNO document/builder integration remains next work, not a claim of this event
 checkpoint. Existing SAX imports continue to use `saxes`. No libxml2 archive has
 been downloaded.
+
+## Dispatcher integration in progress
+
+`CEventDispatcher` now represents the native listener maps, acquired snapshots,
+event cloning and capture/target/bubble traversal. Raw node identity uses the
+selected JavaScript XML backend; attribute ancestry binds libxml's parent link
+to the backend's `ownerElement`. `CDocument` is still only a consumed forward
+declaration (`GetCNode`) in the dispatch signature. No alternate factory or
+positive node-interface substitute is installed. Actual document/node owners
+must connect this path before propagation, cancellation, callback mutation,
+exception cleanup and whole-dispatcher coverage can be verified.
+
+Focused tests cover actual listener component lifetime, duplicate removal,
+retained empty type entries and the public equal-range callback helper. They
+do not prove whole dispatcher parity or its required 90% coverage. These remain
+open integration work, rather than a relaxed coverage gate.
+
+The original `CDOMImplementation` singleton is also represented with its no-op
+`acquire`/`release`. Source issue #i113683# leaves `createDocument` and
+`createDocumentType` empty and `hasFeature` false. These native bodies are
+preserved; document creation must use the real document builder. The Java
+`DOMTest` checks `XDocument.getImplementation` through a concrete document;
+that upstream case remains pending with the actual document graph. The native
+QA sources contain no direct dispatcher or feature-method cases to port for
+this checkpoint.

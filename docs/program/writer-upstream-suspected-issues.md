@@ -3692,3 +3692,13 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 - Source: `unoxml/source/events/mouseevent.cxx`, same pinned baseline; shared with Calc (CALC-525).
 - The initializer ignores `relatedTargetArg`; the getter always returns an empty reference. Preserve the original behavior.
 - The valid empty-target case runs through an actual event owner. Nonempty-target discard remains a source-only observation until genuine native DOM targets are available.
+
+### WRITER460 — DOM listener removal retains a positive listener-presence result
+
+- Source: `unoxml/source/events/eventdispatcher.cxx`, `CEventDispatcher::removeListener` and `hasListeners`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-526.
+- Removal erases matching nonempty references from the inner multimap but never removes the outer event-type entry. `hasListeners` checks only outer map emptiness, so removing every callback still returns true and keeps mutation-event construction enabled. Empty callback references cannot be removed by this method either. Preserve these conditions. Focused tests use actual native listener components and raw XML nodes; full tree dispatch remains unverified.
+
+### WRITER461 — DOM implementation factory methods remain source-unimplemented
+
+- Source: `unoxml/source/dom/domimplementation.cxx`, all three XDOMImplementation methods, same pinned baseline; shared with CALC-527.
+- The process-lifetime singleton implements `createDocument` and `createDocumentType` as empty reference returns and `hasFeature` as false, with source diagnostics citing #i113683#. Preserve these bodies rather than delegating to the JavaScript backend's functioning factories. Actual document construction belongs to CDocumentBuilder. Direct singleton/query/default tests pass; document-mediated upstream QA remains pending.
