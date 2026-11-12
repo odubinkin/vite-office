@@ -79,14 +79,14 @@ for (const width of [1280, 390])
       .locator("[data-writer-paragraph-id]")
       .filter({ hasText: "UntouchedNamedProof" });
     await expect(paragraph).toHaveText("NamedHistoryProof");
-    await expect(paragraph).toHaveAttribute("data-style", "OwnedChild");
+    await expect(paragraph).toHaveAttribute("data-style", "Owned_20_child");
     await expect(untouched).toHaveAttribute("data-style", "default");
     const untouchedStyle = await untouched.getAttribute("style");
     const checkLayout =
       /** Checks raw manual rendering and exact style ownership. @param points - First-line offset. @returns Completion. */ async (
         points: number,
       ) => {
-        await expect(paragraph).toHaveAttribute("data-style", "OwnedChild");
+        await expect(paragraph).toHaveAttribute("data-style", "Owned_20_child");
         await expect(paragraph).toHaveCSS("margin-left", "40px");
         await expect(paragraph).toHaveCSS("text-indent", `${(points * 4) / 3}px`);
         const offset = await paragraph.evaluate(
@@ -120,14 +120,14 @@ for (const width of [1280, 390])
       popup.getByRole("option").locator("[data-office-style-preview] > span"),
     ).toHaveText([
       "Default Paragraph Style",
-      "Text body",
+      "Body Text",
       "Title",
       "Subtitle",
       "Heading 1",
       "Heading 2",
       "Heading 3",
       "Heading 4",
-      "Quotations",
+      "Block Quotation",
       "Preformatted Text",
       "Owned parent",
       "Owned child",
@@ -135,7 +135,7 @@ for (const width of [1280, 390])
     ]);
     await popup.getByRole("option", { name: "Unused: & 字", exact: true }).click();
     await expect(select).toHaveValue("Unused: & 字");
-    await expect(paragraph).toHaveAttribute("data-style", "UnusedCustom");
+    await expect(paragraph).toHaveAttribute("data-style", "Unused_3a__20__26__20_字");
     await editor.press("Control+z");
     await expect(select).toHaveValue("Owned child");
     await editor.press("Control+Shift+z");

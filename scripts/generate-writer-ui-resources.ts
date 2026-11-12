@@ -140,8 +140,7 @@ const commandAliases = {
   charBackColor: ".uno:CharBackColor",
   copy: ".uno:Copy",
   cut: ".uno:Cut",
-  defaultParagraphStyle:
-    ".uno:StyleApply?Style:string=Default%20Paragraph%20Style&FamilyName:string=ParagraphStyles",
+  defaultParagraphStyle: ".uno:StyleApply?Style:string=Standard&FamilyName:string=ParagraphStyles",
   decreaseIndent: ".uno:DecrementIndent",
   demote: ".uno:DecrementLevel",
   editHyperlink: ".uno:EditHyperlink",
@@ -298,8 +297,7 @@ const commandCapabilities: Readonly<Record<string, `CAP-${string}`>> = {
   ".uno:DistributeRows": "CAP-0137",
 
   ".uno:Undo": "CAP-0102",
-  ".uno:StyleApply?Style:string=Default%20Paragraph%20Style&FamilyName:string=ParagraphStyles":
-    "CAP-0112",
+  ".uno:StyleApply?Style:string=Standard&FamilyName:string=ParagraphStyles": "CAP-0112",
   ".uno:StyleApply?Style:string=Heading%201&FamilyName:string=ParagraphStyles": "CAP-0112",
 };
 

@@ -1,4 +1,6 @@
 /** @fileoverview Ports the supported paragraph StyleApply request boundary from pinned sw/source/uibase/app/docst.cxx. */
+import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
+import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
 
 import { SfxInterface } from "../../../../sfx2/source/control/objface";
 import { SfxRequest } from "../../../../sfx2/source/control/request";
@@ -35,8 +37,7 @@ export function findParagraphStyle(doc: SwDoc, name: string): string | undefined
   if (owned !== undefined) return owned.id;
   const pool = WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.find(
     /** Matches the bounded native pool name or the existing default display alias. @param entry - Pool entry. @returns Match. */
-    (entry) =>
-      entry.name === name || (entry.name === "Standard" && name === "Default Paragraph Style"),
+    (entry) => SwStyleNameMapper.GetUIName(entry.poolId, entry.name) === name,
   );
   if (pool === undefined || doc.FindTextFormatColl(pool.id) !== undefined) return undefined;
   return pool.id;
@@ -89,12 +90,13 @@ export function execStyleSheet(
       /** Finds an available programmatic pool name. @param entry - Pool entry. @returns Match. */
       (entry) => entry.name === style,
     );
+    const uiName = SwStyleNameMapper.FillUIName(style, SwGetPoolIdFromName.TxtColl);
     const owned =
-      doc.FindTextFormatColl(style) ??
-      doc.FindTextFormatCollByName(style) ??
-      (pool === undefined ? undefined : doc.FindTextFormatColl(pool.id));
+      doc.FindTextFormatCollByName(uiName) ??
+      (pool === undefined ? doc.FindTextFormatColl(style) : doc.FindTextFormatColl(pool.id));
     const display = owned?.GetName();
     if (display !== undefined && display.length > 0) name = display;
+    else if (pool !== undefined) name = SwStyleNameMapper.GetUIName(pool.poolId, pool.name);
     else if (findParagraphStyle(doc, style) !== undefined) name = style;
   }
   if (name.length === 0) return undefined;
@@ -178,7 +180,7 @@ function execByExample(owner: SwDocShell, request: SfxRequest): undefined | Prom
           (entry) => document.FindTextFormatColl(entry.id) === undefined,
         ).map(
           /** Uses unused pool names; the default is already represented among owned styles. @param entry - Factory metadata. @returns Name. */
-          (entry) => entry.name,
+          (entry) => SwStyleNameMapper.GetUIName(entry.poolId, entry.name),
         ),
       ])
       .then(

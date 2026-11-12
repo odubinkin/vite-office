@@ -126,7 +126,7 @@ import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SwFormatAutoFormat } from "../../core/txtnode/txatbase";
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import { GetTextAttrMode } from "../../../inc/swtypes";
-import { getWriterOdfStyleName } from "../../../inc/poolfmt";
+import { getParagraphOdfStyleName, exportParagraphStyleNameAttributes } from "./xmlexp-style-names";
 import { createWriterFontAutoStylePool, registerWriterFontFace } from "./xmlfonte";
 import { LineNumberPosition } from "../../../inc/lineinfo";
 import { exportLineNumberingConfiguration } from "../../../../xmloff/source/text/XMLLineNumberingExport";
@@ -201,11 +201,11 @@ export function exportStylesXml(document: SwDoc): string {
       const alignment = getDirectAlignment(
         collection.GetAttrSet().GetItemIfSet(RES_PARATR_ADJUST, false),
       );
-      const name = getWriterOdfStyleName(collection.id);
+      const name = getParagraphOdfStyleName(document, collection.id);
       const parentCollection = collection.DerivedFrom();
       const parent =
         parentCollection instanceof Object && "id" in parentCollection
-          ? ` style:parent-style-name="${escapeXml(getWriterOdfStyleName(String(parentCollection.id)))}"`
+          ? ` style:parent-style-name="${escapeXml(getParagraphOdfStyleName(document, String(parentCollection.id)))}"`
           : "";
       const leftMargin = getDirectLeftMargin(collection.GetAttrSet());
       const directParagraphProperties = getParagraphProperties(collection.GetAttrSet());
@@ -237,9 +237,9 @@ export function exportStylesXml(document: SwDoc): string {
                 charSet,
               ) => registerWriterFontFace(fonts, family, generic, styleName, pitch, charSet),
             )}/>`;
-      const nextName = getWriterOdfStyleName(collection.GetNextTextFormatColl().id);
+      const nextName = getParagraphOdfStyleName(document, collection.GetNextTextFormatColl().id);
       const next = nextName === name ? "" : ` style:next-style-name="${escapeXml(nextName)}"`;
-      return `<style:style style:name="${escapeXml(name)}" style:display-name="${escapeXml(collection.GetName())}" style:family="paragraph"${next}${parent}${masterPage}${numberingAttributes}>${paragraphProperties}${textProperties}</style:style>`;
+      return `<style:style${exportParagraphStyleNameAttributes(collection)} style:family="paragraph"${next}${parent}${masterPage}${numberingAttributes}>${paragraphProperties}${textProperties}</style:style>`;
     },
   );
   const pageLayouts: string[] = [];
@@ -563,7 +563,7 @@ function projectParagraph(node: SwTextNode, anchored?: BoundTextFrames): XMLText
     ...(directCharacterProperties === undefined ? {} : { properties: directCharacterProperties }),
     runs: projectXmlTextRuns(node),
     style: node.GetParagraphStyle(),
-    styleName: getWriterOdfStyleName(node.GetParagraphStyle()),
+    styleName: getParagraphOdfStyleName(node.GetDoc(), node.GetParagraphStyle()),
   };
 }
 

@@ -231,7 +231,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
 
   it("writes deterministic ODF 1.3 packages and restores canonical formatting" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, async () => {
     const writer = createWriterDocument();
-    writer.GetDfltTextFormatColl().SetFormatName("Body < text");
+    const bodyStyle = writer.MakeTextFormatColl("Body < text", writer.GetDfltTextFormatColl());
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
       writer
         .GetDfltTextFormatColl()
@@ -269,13 +269,14 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     writer
       .GetDfltTextFormatColl()
       .SetFormatAttr(new SvxUnderlineItem(FontLineStyle.LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE));
-    writer.GetTextFormatColl("heading-1").SetFormatName("Heading & one");
+    const headingStyle = writer.MakeTextFormatColl(
+      "Heading & one",
+      writer.GetTextFormatColl("heading-1"),
+    );
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
-      writer
-        .GetTextFormatColl("heading-1")
-        .SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_NORMAL, which));
+      headingStyle.SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_NORMAL, which));
     const first = writer.paragraphs[0];
-    first?.ChgFormatColl(writer.GetTextFormatColl("heading-1"));
+    first?.ChgFormatColl(headingStyle);
     first?.SetParagraphAlignment("right");
     first?.ReplaceRange(
       0,
@@ -292,6 +293,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       ]),
     );
     const second = writer.nodes.MakeTextNode();
+    second.ChgFormatColl(bodyStyle);
     second.SetParagraphAlignment("justify");
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
       second.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_NORMAL, which));
@@ -299,6 +301,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       second.SetAttr(new SvxPostureItem(FontItalic.ITALIC_NONE, which));
     second.SetAttr(new SvxUnderlineItem(FontLineStyle.LINESTYLE_NONE, RES_CHRATR_UNDERLINE));
     const third = writer.nodes.MakeTextNode();
+    third.ChgFormatColl(bodyStyle);
     third.SetAttr(new SvxUnderlineItem(FontLineStyle.LINESTYLE_NONE, RES_CHRATR_UNDERLINE));
     if (first !== undefined) applyWriterParagraphList(first, { kind: "numbered", level: 0 });
     applyWriterParagraphList(second, { kind: "numbered", level: 1 });
@@ -338,7 +341,10 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       normalizedSnapshot(restored.document),
     );
     expect(restored.title).toBe("Round & Trip");
-    expect(restored.document.GetDfltTextFormatColl().GetName()).toBe("Body < text");
+    expect(restored.document.GetDfltTextFormatColl().GetName()).toBe("Default Paragraph Style");
+    expect(restored.document.FindTextFormatCollByName("Body < text")?.GetName()).toBe(
+      "Body < text",
+    );
     expect(restored.document.GetDfltTextFormatColl().GetAttrSet().GetWeight().GetBoolValue()).toBe(
       true,
     );
@@ -348,14 +354,16 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     expect(
       restored.document.GetDfltTextFormatColl().GetAttrSet().GetUnderline().GetBoolValue(),
     ).toBe(true);
-    expect(restored.document.GetTextFormatColl("heading-1").GetName()).toBe("Heading & one");
+    expect(restored.document.FindTextFormatCollByName("Heading & one")?.GetName()).toBe(
+      "Heading & one",
+    );
     expect(
       restored.document.paragraphs.map(
         /** Executes the enclosing deterministic test or transformation callback. @param node - Callback input. @returns Callback result. */
         (node) => ({
           alignment: node.GetParagraphAlignment(),
           list: projectWriterParagraphList(node),
-          style: node.GetParagraphStyle(),
+          style: node.GetTextFormatColl().GetName(),
           text: node.GetText(),
         }),
       ),
@@ -365,7 +373,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         (node) => ({
           alignment: node.GetParagraphAlignment(),
           list: projectWriterParagraphList(node),
-          style: node.GetParagraphStyle(),
+          style: node.GetTextFormatColl().GetName(),
           text: node.GetText(),
         }),
       ),

@@ -617,7 +617,8 @@
       "Supplies original direct table, row and cell brush and writing-direction items to ODF export.",
       "Collects original text fly formats and automatic styles, then exports paragraphs and text-box tables through the connected native block export.",
       "Shares the native text-fly collection with browser projection and retains anchored section output.",
-      "Projects native percentage table widths and headless relative column references."
+      "Projects native percentage table widths and headless relative column references.",
+      "Native name-boundary checkpoint resolves browser paragraph references through actual SwXStyle::getName, scopes its native OUString/wrapper, and uses existing XML name encoding before XMLStyleExport name/display-name emission. Current names, including custom renames and UI/programmatic collisions, replace stale graph IDs at the external XML boundary; internal current-document graph identities remain unchanged. Header, parent, follow and body references share the same actual owner lookup. This is a cohesive naming responsibility split of SwXMLExport, whose main bridge is994 lines, not a new style owner/catalog or a fake UNO query provider. The actual upstream getName/conditional display-name source chain is retained for this slice; full SwXMLExport/UNO/component/filter ABI remains incomplete."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",

@@ -347,3 +347,15 @@ describe("SwDocShell native paragraph StyleApply", /** Groups source-owned reque
     }
   });
 });
+
+it("dispatches programmatic builtin and colliding custom names to their actual distinct styles", /** Checks StyleApply conversion before browser graph-ID fallback. @returns Nothing. */ () => {
+  const { owner, dispatch, shell } = fixture(),
+    doc = owner.GetDoc(),
+    custom = doc.MakeTextFormatColl("Text body", doc.GetDfltTextFormatColl());
+  dispatch.Execute(".uno:StyleApply", { Style: "Text body", FamilyName: "ParagraphStyles" });
+  expect(shell.GetCurTextFormatColl()).toBe(doc.GetTextFormatColl("text-body"));
+  expect(shell.GetCurTextFormatColl()).not.toBe(custom);
+  expect(shell.GetCurTextFormatColl()?.GetName()).toBe("Body Text");
+  dispatch.Execute(".uno:StyleApply", { Style: "Text body (user)", FamilyName: "ParagraphStyles" });
+  expect(shell.GetCurTextFormatColl()).toBe(custom);
+});

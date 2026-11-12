@@ -1,4 +1,5 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
+import { SwStyleNameMapper } from "../../source/core/doc/SwStyleNameMapper";
 import { IsPoolUserFormat } from "../../inc/poolfmt";
 import {
   writerTextColorValue,
@@ -511,7 +512,7 @@ export class WriterViewProjection {
           (style) => document.FindTextFormatColl(style.id) === undefined,
         ).map(
           /** Retains unused factory names; the default collection is already owned. @param style - Native metadata. @returns Name. */
-          (style) => style.name,
+          (style) => SwStyleNameMapper.GetUIName(style.poolId, style.name),
         ),
       ],
       pageDescriptor: document.GetPageDesc().GetValue(),
@@ -561,7 +562,9 @@ function createParagraphStyleOptions(document: SwDoc): readonly WriterParagraphS
       (style) => style.id === id,
     );
     const builtinName =
-      definition?.name === "Standard" ? "Default Paragraph Style" : definition?.name;
+      definition === undefined
+        ? undefined
+        : SwStyleNameMapper.GetUIName(definition.poolId, definition.name);
     return {
       id,
       name,
@@ -579,8 +582,7 @@ function createParagraphStyleOptions(document: SwDoc): readonly WriterParagraphS
         ).map(
           /** Resolves the existing or factory name. @param definition - Pool metadata. @returns Entry. */
           (definition) => {
-            const factoryName =
-              definition.name === "Standard" ? "Default Paragraph Style" : definition.name;
+            const factoryName = SwStyleNameMapper.GetUIName(definition.poolId, definition.name);
             return entry(id, document.FindTextFormatColl(id)?.GetName() ?? factoryName);
           },
         ),

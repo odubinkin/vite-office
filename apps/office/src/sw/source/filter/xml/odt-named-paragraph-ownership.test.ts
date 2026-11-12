@@ -245,7 +245,13 @@ describe("Writer document-owned named paragraph hierarchy", /** Groups literal n
       let doc = input(profile.name, automatic);
       for (let cycle = 0; cycle < 3; cycle++) {
         const node = required(doc.paragraphs[0]);
-        expect(node.GetParagraphStyle()).toBe(profile.parent);
+        expect(node.GetTextFormatColl().GetName()).toBe(
+          profile.parent === "RuleChild"
+            ? "Owned child"
+            : profile.parent === "Parent"
+              ? "Owned parent"
+              : profile.parent,
+        );
         expect(node.GetParagraphTextLeftMargin()).toBe(profile.rawLeft);
         expect(node.GetParagraphFirstLineIndent()).toBe(profile.rawFirst);
         expect(node.AreListLevelIndentsApplicable()).toBe(profile.mask);
@@ -263,8 +269,8 @@ describe("Writer document-owned named paragraph hierarchy", /** Groups literal n
         expect(node.GetpSwAttrSet()?.GetItemIfSet(RES_CHRATR_WEIGHT, false)).toBeUndefined();
         expect(node.GetpSwAttrSet()?.GetItemIfSet(RES_CHRATR_FONTSIZE, false)).toBeUndefined();
         expect((node.GetAttr(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue()).toBe(true);
-        const parent = doc.GetTextFormatColl("Parent"),
-          child = doc.GetTextFormatColl("RuleChild");
+        const parent = required(doc.FindTextFormatCollByName("Owned parent")),
+          child = required(doc.FindTextFormatCollByName("Owned child"));
         expect(child.DerivedFrom()).toBe(parent);
         expect(child.GetNextTextFormatColl()).toBe(parent);
         expect(parent.GetNextTextFormatColl()).toBe(child);
@@ -311,12 +317,16 @@ describe("Writer document-owned named paragraph hierarchy", /** Groups literal n
     node.ChgFormatColl(child);
     node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(120), RES_MARGIN_FIRSTLINE));
     node.SetText("EscapedOwnProof");
-    expect(exportContentXml(doc)).toContain('style:parent-style-name="Own:Child"');
-    expect(exportStylesXml(doc)).toContain('style:parent-style-name="Own:Parent&amp;&quot;"');
+    expect(exportContentXml(doc)).toContain('style:parent-style-name="Child_20_display"');
+    expect(exportStylesXml(doc)).toContain('style:parent-style-name="Parent_20_display"');
     const reopened = (await readOdtDocument(writeOdtDocument(doc, metadata), metadata)).document;
-    const restored = reopened.GetTextFormatColl("Own:Child");
-    expect(restored.DerivedFrom()).toBe(reopened.GetTextFormatColl('Own:Parent&"'));
-    expect(restored.GetNextTextFormatColl()).toBe(reopened.GetTextFormatColl('Own:Parent&"'));
+    const restored = required(reopened.FindTextFormatCollByName("Child display"));
+    expect(restored.DerivedFrom()).toBe(
+      required(reopened.FindTextFormatCollByName("Parent display")),
+    );
+    expect(restored.GetNextTextFormatColl()).toBe(
+      required(reopened.FindTextFormatCollByName("Parent display")),
+    );
     expect(required(reopened.paragraphs[0]).GetParagraphFirstLineIndent()).toBe(120);
     expect(required(reopened.paragraphs[0]).GetParagraphTextLeftMargin()).toBe(1200);
   });

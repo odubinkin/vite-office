@@ -162,9 +162,12 @@ export class SwXStyle {
     if (this.owner instanceof SwNumRule) illegal("Numbering style rename is unrepresented");
     if (this.family === "ParagraphStyles" || this.family === "CharacterStyles")
       (this.owner as SwTextFormatColl | SwCharFormat).SetFormatName(
-        this.family === "CharacterStyles"
-          ? SwStyleNameMapper.FillUIName(text(name), SwGetPoolIdFromName.ChrFmt)
-          : text(name),
+        SwStyleNameMapper.FillUIName(
+          text(name),
+          this.family === "CharacterStyles"
+            ? SwGetPoolIdFromName.ChrFmt
+            : SwGetPoolIdFromName.TxtColl,
+        ),
       );
     else illegal("Page style rename is unrepresented");
   }
@@ -260,7 +263,10 @@ export class SwXStyle {
         ? findParagraphStyle(this.doc, this.parentName)
         : this.doc.GetDfltTextFormatColl();
       if (!parent) illegal("Unknown parent style");
-      this.owner = this.doc.MakeTextFormatColl(name, parent);
+      this.owner = this.doc.MakeTextFormatColl(
+        SwStyleNameMapper.FillUIName(name, SwGetPoolIdFromName.TxtColl),
+        parent,
+      );
     } else if (this.family === "PageStyles") this.owner = this.doc.MakePageDesc(name);
     else {
       const rule = new SwNumRule(name, "label-alignment");
@@ -555,7 +561,9 @@ const pageFields: Record<
 };
 /** Resolves the consumed programmatic paragraph-style name through the existing pool before materializing its actual format. @param doc - Owning document. @param name - Programmatic or custom name. @returns Canonical format, when supported. */
 function findParagraphStyle(doc: SwDoc, name: string): SwTextFormatColl | undefined {
-  const existing = doc.FindTextFormatCollByName(name) ?? doc.FindTextFormatColl(name);
+  const existing = doc.FindTextFormatCollByName(
+    SwStyleNameMapper.FillUIName(name, SwGetPoolIdFromName.TxtColl),
+  );
   if (existing) return existing;
   const definition =
     getWriterMaterializedParagraphStyleDefinition(name) ??
@@ -565,7 +573,7 @@ function findParagraphStyle(doc: SwDoc, name: string): SwTextFormatColl | undefi
     );
   return definition && getWriterMaterializedParagraphStyleDefinition(definition.id)
     ? doc.GetTextFormatColl(definition.id)
-    : undefined;
+    : doc.FindTextFormatColl(name);
 }
 /** Resolves original character programmatic names on the real document table and lazy pool. @param doc - Actual document. @param name - Programmatic name. @returns Canonical owner. */
 function findCharacterStyle(doc: SwDoc, name: string): SwCharFormat | undefined {
@@ -589,7 +597,7 @@ function programmaticStyleName(
       ? "Standard"
       : SwStyleNameMapper.FillProgName(owner.GetName(), SwGetPoolIdFromName.ChrFmt)
     : owner instanceof SwTextFormatColl
-      ? SwStyleNameMapper.GetProgName(owner.poolId, owner.GetName())
+      ? SwStyleNameMapper.FillProgName(owner.GetName(), SwGetPoolIdFromName.TxtColl)
       : owner.GetName();
 }
 /** Name access resolves canonical formats afresh, retaining no parallel style catalog. */

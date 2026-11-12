@@ -1,4 +1,5 @@
 /** @fileoverview Loads deterministic Writer command resources generated from pinned LibreOffice XML/XCU files. */
+import { SwStyleNameMapper } from "../../source/core/doc/SwStyleNameMapper";
 
 import { WRITER_PARAGRAPH_STYLE_POOL } from "../../inc/poolfmt";
 import generated from "./writer-ui.generated.json" with { type: "json" };
@@ -28,16 +29,15 @@ export function getWriterCommandResource(commandUrl: string): WriterCommandResou
     const label = parameters.get("Style:string");
     const style = WRITER_PARAGRAPH_STYLE_POOL.find(
       /** Matches a style's upstream programmatic name. @param candidate - Supported style. @returns Whether names match. */
-      (candidate) =>
-        (candidate.name === "Standard" ? "Default Paragraph Style" : candidate.name) === label,
+      (candidate) => candidate.name === label,
     );
     if (style !== undefined)
       return {
         browserOwned: false,
         argumentSchema: ["Style:SfxStringItem", "FamilyName:SfxStringItem"],
         capabilityId: "CAP-0112",
-        controlLabel: label as string,
-        label: label as string,
+        controlLabel: SwStyleNameMapper.GetUIName(style.poolId, style.name),
+        label: SwStyleNameMapper.GetUIName(style.poolId, style.name),
         placements: ["sw/uiconfig/swriter/toolbar/textobjectbar.xml"],
         selectionValue: style.id,
         semantics: "radio",

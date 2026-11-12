@@ -14,6 +14,7 @@ import { SwNumRuleItem } from "../para/paratr";
 import type { SwNumRule } from "./number";
 import { SfxItemState, type SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { SwStyleNameMapper } from "./SwStyleNameMapper";
 import { SwFormat } from "../attr/format";
 import type { SwAttrPool } from "../attr/swatrset";
 import {
@@ -170,7 +171,7 @@ export function createWriterTextFormatColl(
   const collection = new SwTextFormatColl(
     pool,
     definition.id,
-    definition.name === "Standard" ? "Default Paragraph Style" : definition.name,
+    SwStyleNameMapper.GetUIName(definition.poolId as SwPoolFormatId, definition.name),
     parent,
     definition.poolId,
     definition.group,

@@ -24,6 +24,14 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/dmapper/numbering-style-postprocess.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/SwStyleNameMapper-data.json",
+          "marker": "specialExtraIndices"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-style-name-mapper.test.ts",
+          "marker": "both directions"
         }
       ],
       "upstream": [
@@ -34,6 +42,18 @@
         {
           "path": "vendor/libreoffice-reference/sw/inc/strings.hrc",
           "marker": "STR_POOLCHR_INET_NORMAL"
+        },
+        {
+          "path": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+          "marker": "SwStyleNameMapper::GetTextUINameArray"
+        },
+        {
+          "path": "sw/inc/poolfmt.hxx",
+          "marker": "enum class SwPoolFormatId"
+        },
+        {
+          "path": "include/svx/strings.hrc",
+          "marker": "RID_SVXSTR_TBLAFMT_3D"
         }
       ]
     },
@@ -42,7 +62,8 @@
       "SwStyleNameMapper"
     ],
     "omittedResponsibilities": [
-      "All other style families,localization,UI/programmatic conversions,custom style disambiguation and full native mapper architecture remain unverified."
+      "Dynamic translated UI-language resource maps, physical UIName/ProgName C++ wrapper/allocator ownership and compiled-out _NEED_TO_DEBUG_MAPPING diagnostic remain outside the represented English normal build.",
+      "Full native Writer document style pool/default service, full ODF table/cell-autoformat regression tests and complete DOCX-XLSX filter/export/connected UI acceptance remain unfinished."
     ],
     "preservedResponsibilities": [
       "Bounded pool-ID GetUIName maps native1030/1031 to two English UI resources and retains fallback for unsupported IDs. Iteration126 restores the styled RES_TXTATR_INETFMT pool default and two native style IDs,distinct from CreateDefault zero item. Copy/equality preserve both IDs;paired setters retain independent style names/IDs. Default registration no longer requires browser restore factory;unregistered snapshot decode still rejects. English two-entry pool-name mapping is bounded;localized/all-family/custom style resolution,active DTO styled-constructor migration,ODF programmatic/UI conversion,UNO/macros/visited-style clients/lifetime and whole core/UI remain unverified. All pre-existing semantic statuses/defaults/exceptions and registered save/open/recovery deviations remain unchanged.",
@@ -50,14 +71,21 @@
       "S3HW1E character prerequisite: common SwFormat pool identity now starts UNKNOWN65535; text collections delegate their existing readonly poolId view. Native character pool IDs/names/defaults and numbering registrations use actual SwCharFormat owners. Browser graph retains character identity, parents, pool IDs, auto flag, items and numbering references without name merging; paragraph pool IDs now restore losslessly too. Native numbering label projection applies represented style items after paragraph resets and before explicit bullet font. Existing InsertTable body moves unchanged to its native ndtbl.cxx owner. Related source-only and Worker roundtrip evidence does not establish compiled Writer parity; ranged style hints, HTML/CSS reader, user ConfigItem subscriptions and unrepresented item families remain open. Existing registered recovery/save/open deviations remain unchanged.",
       "S3HW1E ranged character-style checkpoint: native SwFormatCharFormat/SwTextCharFormat retain actual style identity, fresh backlinks, sort numbers and synchronous range-update notifications; JS weak references/collection bind listener destruction without pointer/refcount emulation. Source FillProgName character disambiguation, native common default internet item, cross-document style name/parent/item copy, three-map style sort order and query expansion are consumed. Native BuildPortions now serves actual character/automatic InsertItem calls and document insertion; complete represented portions merge together. InsertItem has the original nullable surviving-owner result after splitting/merging; existing NOHINTADJUST fixture inputs assert surviving ownership without weakening their prior cases. Actual styles remain in the model and Worker graph; immutable control/run and formatter stack projections resolve them on read. WRITER158/159 preserve source early-return and count-based sort quirks. RSID-only items, native pointer tie-breaking, unrepresented help/link-style services, full HTML/CSS reader and compiled Writer parity remain unverified. Registered save/open/recovery deviations are unchanged.",
       "S3HW1E native character-style application checkpoint: actual SwXStyle/SwXStyleFamily/SwXStyleFamilies and SwXTextDocument now admit CharacterStyles over genuine SwCharFormat and lazy document pool owners. Character property metadata excludes cursor/paragraph/frame items and preserves source MAYBEVOID/NONE flags. Character descriptor values retain native deferred validation and sorted application; attached character item vectors stage into an actual cloned item set and commit once, preserving explicit default item presence and rollback on invalid later values. Public multi-property unknown errors use actual WrappedTargetException/Any owners. Character names use original programmatic/UI aliases, default identity, collision lookup and source suffix length guard (WRITER207). RTF creation uses these real family/descriptor services, resets existing represented direct pool properties via original SetPropertiesToDefault, and keeps source raw references separate from a second owned deduplicateStyleTable result. The original source parent-name lookup and actual RTFSprms normalization precede model application. Admitted style properties pass through a real StyleSheetEntry/StyleSheetPropertyMap, actual mapper stylesheet context, stable native PropValVector and genuine Sequence<OUString>/Sequence<Any> into real UNO style setters. Existing erased sequence-address binding uses borrowed OUString views and actual by-value Any copies at the API boundary; physical layout and whole ABI are unverified. Remaining legacy strike/highlight/escapement and paragraph/table callbacks, complete native style pool/base-sheet orchestration, descriptor edge families, paragraph bulk staging, parser-wide native properties, script metadata, replay/substreams and earlier TXT/RTF/Markdown/HTML obligations remain open. Native desktop differential and whole-filter/module semantic closure are not claimed.",
-      "Original paragraph-family FillProgName/FillUIName resource lookup, Standard UI/programmatic mapping, user-name collision and native suffix-length guard are consumed by HeadingStyleName. S3HW1E chapter checkpoint: targeted contracts are tested; style-only body numbering, direct NumPr edges, malformed/old-style producers and remaining export audit are still required work. No complete current-slice, module or ABI confidence promotion; intentional browser open/save/autosave/recovery deviations are unchanged."
+      "Original paragraph-family FillProgName/FillUIName resource lookup, Standard UI/programmatic mapping, user-name collision and native suffix-length guard are consumed by HeadingStyleName. S3HW1E chapter checkpoint: targeted contracts are tested; style-only body numbering, direct NumPr edges, malformed/old-style producers and remaining export audit are still required work. No complete current-slice, module or ABI confidence promotion; intentional browser open/save/autosave/recovery deviations are unchanged.",
+      "Native style-name mapping checkpoint replaces the old equal-spelling paragraph shortcut with source-derived13 ranges/208 English names across all7 family discriminants, including empty CellStyle. Implements both reverse hashes, all normal Get/Fill overloads, native group/user/range fallback, recursive HashFromRange precedence, source suffix/default-character/TableStyle special cases, all26 stable array getters and5 caption conversions. Tables are extracted by scripts/generate-writer-style-names.py from actual source enum/ranges/arrays and Writer/SVX resources, with --check comparing generated values. Existing primitive counted UTF16 string binding remains; selected UI resources are English only, not a fabricated translated UI provider. Preserve WRITER207/455/456. Full native document style/default service and DOCX-XLSX/UI remain incomplete. See docs/program/writer-style-name-mapping.md."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/SwStyleNameMapper.cxx",
     "upstreamSymbols": [
       "SwStyleNameMapper::GetUIName",
       "SwStyleNameMapper::FillUIName",
-      "SwStyleNameMapper::FillProgName"
+      "SwStyleNameMapper::FillProgName",
+      "GetPoolIdFromUIName",
+      "GetPoolIdFromProgName",
+      "FillUIName",
+      "FillProgName",
+      "GetSpecialExtraProgName",
+      "GetSpecialExtraUIName"
     ]
   },
   "legacyOrder": 162

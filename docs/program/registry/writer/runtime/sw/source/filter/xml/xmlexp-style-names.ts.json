@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/xml/xmlexp-style-names.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "native-style-name-export",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/filter/xml/xmlexp-style-names.ts#programmaticName",
+        "apps/office/src/sw/source/filter/xml/native-style-name-export.test.ts",
+        "xmloff/source/style/styleexp.cxx#XMLStyleExport::exportStyle"
+      ],
+      "justification": "Native name-boundary checkpoint resolves browser paragraph references through actual SwXStyle::getName, scopes its native OUString/wrapper, and uses existing XML name encoding before XMLStyleExport name/display-name emission. Current names, including custom renames and UI/programmatic collisions, replace stale graph IDs at the external XML boundary; internal current-document graph identities remain unchanged. Header, parent, follow and body references share the same actual owner lookup. This is a cohesive naming responsibility split of SwXMLExport, whose main bridge is994 lines, not a new style owner/catalog or a fake UNO query provider. The actual upstream getName/conditional display-name source chain is retained for this slice; full SwXMLExport/UNO/component/filter ABI remains incomplete.",
+      "knownViolations": [],
+      "localSymbols": [
+        "programmaticName",
+        "getParagraphOdfStyleName",
+        "exportParagraphStyleNameAttributes"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/xml/xmlexp.cxx",
+      "upstreamSymbols": [
+        "SwXMLExport"
+      ]
+    }
+  }
+}

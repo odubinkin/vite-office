@@ -396,7 +396,8 @@
     "status": "local-only",
     "preservedResponsibilities": [
       "TaskN700C9 connects original Writer crossed-out Which5/NONE default and complete SvxCrossedOutItem values through native attribute sets, hint inheritance and snapshot transport, represented SwBaseShell/SwEditShell state and item editing, original Sfx enum-bool toggle, source sidebar/menu placements, immutable body/cell/numbering paint and four chained ODF strikeout properties. Native values remain numeric; explicit NONE and mixed SINGLE/DOUBLE states are distinct. Current character-only core profile uses existing fragment history and pending items; full generic GetPaMAttr/GetParaAttr, auto-update, readonly/merged/redline behavior and native history scheduling remain unverified. Browser96dpi canvas font metrics feed original fallback line/repeated-glyph arithmetic; native HarfBuzz/printer/vertical shaping is not claimed. No previous classification/status/default or intentional storage/recovery exception is promoted.",
-      "Displays the native paragraph drawing fill, retaining earlier stored brush items."
+      "Displays the native paragraph drawing fill, retaining earlier stored brush items.",
+      "Native style-name checkpoint resolves builtin selector labels through original SwStyleNameMapper English UI resources while preserving lazy nonmaterializing projection and current graph IDs. Body Text and Block Quotation replace programmatic Text body/Quotations as display values; command identities remain programmatic. Actual mounted/browser cases cover named owners, previews, command dispatch and history; no backend format-readiness promotion."
     ]
   },
   "legacyOrder": 121

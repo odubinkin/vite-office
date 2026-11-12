@@ -16,7 +16,7 @@ export function getWriterParagraphStyleCommandId(styleId: string): string {
     ) => candidate.id === styleId,
   );
   if (style === undefined) throw new Error(`Unknown Writer paragraph style: ${styleId}`);
-  const programmaticName = style.name === "Standard" ? "Default Paragraph Style" : style.name;
+  const programmaticName = style.name;
   return `${WRITER_COMMAND_IDS.styleApply}?Style:string=${encodeURIComponent(programmaticName)}&FamilyName:string=ParagraphStyles`;
 }
 

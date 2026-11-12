@@ -13,7 +13,7 @@
     "charBackColor": ".uno:CharBackColor",
     "copy": ".uno:Copy",
     "cut": ".uno:Cut",
-    "defaultParagraphStyle": ".uno:StyleApply?Style:string=Default%20Paragraph%20Style&FamilyName:string=ParagraphStyles",
+    "defaultParagraphStyle": ".uno:StyleApply?Style:string=Standard&FamilyName:string=ParagraphStyles",
     "decreaseIndent": ".uno:DecrementIndent",
     "demote": ".uno:DecrementLevel",
     "editHyperlink": ".uno:EditHyperlink",
@@ -98,7 +98,7 @@
     { "capabilityId": "CAP-0110", "commandUrl": ".uno:Cut" },
     {
       "capabilityId": "CAP-0112",
-      "commandUrl": ".uno:StyleApply?Style:string=Default%20Paragraph%20Style&FamilyName:string=ParagraphStyles"
+      "commandUrl": ".uno:StyleApply?Style:string=Standard&FamilyName:string=ParagraphStyles"
     },
     { "capabilityId": "CAP-0107", "commandUrl": ".uno:DecrementIndent" },
     { "capabilityId": "CAP-0107", "commandUrl": ".uno:DecrementLevel" },

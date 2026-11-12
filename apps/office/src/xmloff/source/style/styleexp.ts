@@ -13,3 +13,8 @@ export function exportParagraphStyleNumberingAttributes(
     attributes += ` style:list-style-name="${escapeXml(numberingStyleName)}"`;
   return attributes;
 }
+
+/** Original XMLStyleExport::exportStyle name attributes after EncodeStyleName. @param programmaticName - Actual XStyle::getName result. @param encodedName - Actual encoded XML name. @returns Name plus conditional display-name attributes. */
+export function exportStyleNameAttributes(programmaticName: string, encodedName: string): string {
+  return ` style:name="${escapeXml(encodedName)}"${encodedName === programmaticName ? "" : ` style:display-name="${escapeXml(programmaticName)}"`}`;
+}

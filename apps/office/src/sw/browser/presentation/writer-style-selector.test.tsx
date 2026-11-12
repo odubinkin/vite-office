@@ -120,20 +120,23 @@ describe("Writer live style selector", /** Defines actual document contracts. @r
     const owner = attach(document),
       before = document.GetTextFormatColls().slice();
     const snapshot = owner.store.GetSnapshot();
+    expect(snapshot.paragraphStyleNames).toContain("Body Text");
+    expect(snapshot.paragraphStyleNames).toContain("Block Quotation");
+    expect(snapshot.paragraphStyleNames).not.toContain("Text body");
     expect(
       snapshot.paragraphStyleOptions.map(
         /** Reads stable names. @param entry - Entry. @returns Name. */ (entry) => entry.name,
       ),
     ).toEqual([
       "Default Paragraph Style",
-      "Text body",
+      "Body Text",
       "Title",
       "Subtitle",
       "Heading 1",
       "Heading 2",
       "Heading 3",
       "Heading 4",
-      "Quotations",
+      "Block Quotation",
       "Preformatted Text",
       "Used ancestor",
       "Used child",
