@@ -1,0 +1,643 @@
+{
+  "status": "in-progress-checkpoint",
+  "task": "202610251549-J0Z0KF",
+  "scope": "Native DOM tree, generated SAXParseException, documentbuilder IO/error responsibilities; not full builder service or XLSX/DOCX/UI acceptance",
+  "baselineHead": "bc5041db6a37cf1591d041e259e655b36da2e468",
+  "tests": {
+    "files": 11,
+    "cases": 112,
+    "result": "pass",
+    "upstreamDomBodies": [
+      "testXText",
+      "testXProcessingInstruction",
+      "testXNamedNodeMap_AttributesMap",
+      "testXNodeList_ChildList"
+    ],
+    "builderServiceQa": "pending; native callback bodies are tested without a substitute builder"
+  },
+  "changedParserOwnersCoverage": {
+    "statements": 99.44,
+    "branches": 98.5,
+    "functions": 100,
+    "lines": 100,
+    "threshold": 90,
+    "result": "pass"
+  },
+  "wholeDomCoverage": {
+    "statements": 86.72,
+    "branches": 75,
+    "functions": 85.71,
+    "lines": 88.93,
+    "result": "rework",
+    "evidence": "apps/office/coverage/dom-native-coverage.log"
+  },
+  "nativeArtifact": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 134,
+    "enumConstantCount": 75,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "6b8e52c646d508080ee60bfb5f24a4611221551803d24f682ef9ad5e576f8507"
+  },
+  "nativeRebuild": {
+    "byteIdentical": true,
+    "sha256": {
+      "libxml2.mjs": "6b8e52c646d508080ee60bfb5f24a4611221551803d24f682ef9ad5e576f8507",
+      "index.d.ts": "6645b8ef995ca7196f318f3fb1f05fce390362e527f728423f1b6e4e0ffa2d61",
+      "constants.mjs": "0b28eda895c436f7785bc9be36d889bbfe82390f05defd40e85d20746ec32731",
+      "constants.d.ts": "3e679bc954e6d2e47a8a181d7b6f2093dc9b26430e7af26d135cc14571f6c226",
+      "generated-api.json": "6f81ce5cbac34fd1096a0cf68fceac332cae48dc7ba7cbd25e5b54a6130e6a07",
+      "artifact.json": "571a76302d0e4359206466cfcfbd9b57808eaeb3f4d011fffabba7be8638c303"
+    }
+  },
+  "checks": [
+    {
+      "name": "related-tests-and-coverage",
+      "command": "npx vitest run --config vite.config.ts src/unoxml src/offapi/com/sun/star/xml/sax/SAXParseException.test.ts src/offapi/com/sun/star/xml/dom/native-dom-values.test.ts src/sax/source/fastparser/InputSource.test.ts --coverage --coverage.include=src/cppu/inc/com/sun/star/xml/sax/SAXException.ts --coverage.include=src/cppu/inc/com/sun/star/xml/sax/SAXParseException.ts --coverage.include=src/unoxml/source/dom/documentbuilder.errors.ts --coverage.include=src/unoxml/source/dom/documentbuilder.io.ts --coverage.reportsDirectory=coverage/dom-builder --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.functions=90 --coverage.thresholds.branches=90",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-related-coverage.log",
+      "sha256": "ffa8c0569d1de1f4b1ddacdfdbfaeba5caecb5366284f7de5597a90e2ccff0fd"
+    },
+    {
+      "name": "typecheck",
+      "command": "npm run typecheck",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-all-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "name": "build",
+      "command": "npm run build",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-build.log",
+      "sha256": "f245c065a8564c407d0512f56282bfda37fc6720f207e116ba3d230f93e74226"
+    },
+    {
+      "name": "static",
+      "command": "node scripts/check-static-build.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-static.log",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    {
+      "name": "scoped-lint",
+      "command": "npx eslint <all changed authored DOM/SAX TypeScript owners and tests> --max-warnings 0",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "scoped-format",
+      "command": "npx prettier --check <all intentional changed supported files>",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "name": "boundaries",
+      "command": "npm run check:dependencies",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-boundaries.log",
+      "sha256": "fa60d2a292bc8e3c8c69e31b99f8910bbd41dc909e7e3bd5c949d03d6dc9145e"
+    },
+    {
+      "name": "provenance",
+      "command": "npm run check:source-provenance",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-provenance.log",
+      "sha256": "eb105946f2a930b2d108221bbcc4da6ca2bfdfd70a65aca482286eda5caaaf00"
+    },
+    {
+      "name": "registry",
+      "command": "npm run inventory:registry:check",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-registry-check.log",
+      "sha256": "ac53f237f6fdd46a4e3eac8df4e728c608a1dafed1d1689e1b2e8671c3cdd310"
+    },
+    {
+      "name": "size",
+      "command": "npm run check:file-size",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-size.log",
+      "sha256": "6370cb964bb7044d6d93b969912cc541e665c6776ff8fd07342bbf9dc409fd5c"
+    },
+    {
+      "name": "source-tree",
+      "command": "npm run check:source-tree",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-source-tree.log",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    {
+      "name": "writer-resources",
+      "command": "npm run check:writer-resources",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-writer-resources.log",
+      "sha256": "b5a08f98f81ce5a8e52dc7330bbcaf013241e9ef0e9e13b291b0293bc8505409"
+    },
+    {
+      "name": "calc-resources",
+      "command": "npm run check:calc-resources",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-calc-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "name": "hintids",
+      "command": "npm run check:writer-hintids",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-hintids.log",
+      "sha256": "513c109068ebf83b3d6fe448c3c44564ec89a64cd9cb64059b5b4b89d11d887a"
+    },
+    {
+      "name": "native-browser",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=$PWD/node_modules/.cache/ms-playwright node --experimental-strip-types scripts/libxml2-worker-probe.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-browser-probe.log",
+      "sha256": "50119acb665e9c9c2fd3150210d63fcee0c516db4819798e721808c863f0c3c9"
+    },
+    {
+      "name": "native-rebuild",
+      "command": "python3 scripts/build-libxml2-wasm.py; compare all six generated artifact SHA-256 values",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-rebuild.log",
+      "sha256": "7be5290690432221208f86217fcece5fb988b067e0d5d7ed02dc86f3d9fd54de"
+    },
+    {
+      "name": "jsdoc",
+      "command": "npm run check:docs",
+      "cwd": ".",
+      "result": "baseline-failure",
+      "log": "apps/office/coverage/dom-builder-jsdoc.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    }
+  ],
+  "sourceBlobs": [
+    {
+      "path": ".prettierignore",
+      "gitBlob": "ac607af5017ab60db23dd94c61a5b167dbdfe4f4"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/xml/sax/SAXException.ts",
+      "gitBlob": "418a86ca91db6d8eae23882eeea03884ef6b7aa2"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/xml/sax/SAXParseException.ts",
+      "gitBlob": "bf14abd76409723fdbc14cc2fa18fcd493061313"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/sax/SAXParseException.test.ts",
+      "gitBlob": "5e344f4ac8f09c8403393a6f38e72541366b9870"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/sax/SAXParseException.ts",
+      "gitBlob": "5b80f129b87b3797207b0a9e088b3ea1e7f5c3d2"
+    },
+    {
+      "path": "apps/office/src/test/native-dom.ts",
+      "gitBlob": "ebd7f66ae0f8b9338052819e68cae1af661aafea"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/attr.ts",
+      "gitBlob": "2ea7407f1581203cc0e46ca898bbbe06d88d07c1"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/attributesmap.ts",
+      "gitBlob": "bd9f7080e1fe1fc336f32dee0f75843cacebe1a4"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/cdatasection.ts",
+      "gitBlob": "9322e4fbca9e88e4bfc0641d3a5ea123a6994fd1"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/characterdata.ts",
+      "gitBlob": "e102d3d418d41e867f4878f4a2660dc62331f4bc"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/childlist.ts",
+      "gitBlob": "ad781041a03f5f24fe24e1c7af464a57b5ee8cbd"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/comment.ts",
+      "gitBlob": "a2a6ae4352d7353d40189bea281190505fba2df1"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/document.import.ts",
+      "gitBlob": "44df884e508894de6acd5b3aabcfd0274ccb3edf"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/document.ts",
+      "gitBlob": "adcbb887189f88c38b4070e8001f198081aada20"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/documentbuilder.errors.test.ts",
+      "gitBlob": "6d65550db4217267cf0cef66f8169a61183a8fca"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/documentbuilder.errors.ts",
+      "gitBlob": "29ec5cdffd16297b8c4613644411b898d061bb34"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/documentbuilder.io.test.ts",
+      "gitBlob": "6fbde389a61b02b298863d39be227bd293da30c6"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/documentbuilder.io.ts",
+      "gitBlob": "920c24c07e9f9593c1d75c02fb5118f272a96b28"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/documentfragment.ts",
+      "gitBlob": "d564fb98384241a7389437552c85fbd54a2c6719"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/documenttype.ts",
+      "gitBlob": "6d60d43dc1ea025052fc1b231ebaf9bc33307720"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/element.ts",
+      "gitBlob": "d6fe6c20266668ba236cd68782bf1eb460eb8450"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/elementlist.ts",
+      "gitBlob": "ac3993028c8010caadb93d572694a873d8da3226"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/entitiesmap.ts",
+      "gitBlob": "481dbd9dcbc696b6e21f1166d89cebde646b28f7"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/entity.ts",
+      "gitBlob": "8b3c50c2ebf74f2f8b5924c634cd26310c297569"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/entityreference.ts",
+      "gitBlob": "3ad0d506e319f88ec97ad29f55281bae9ce7f537"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/native-tree.test.ts",
+      "gitBlob": "aca1d71b618cd60fd6c4ab477b13b41bc629234d"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/native-upstream-dom.test.ts",
+      "gitBlob": "15cf62bd0e1c61d4b3668154fab5586832f3c887"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/node.ts",
+      "gitBlob": "c420a05e8007f07fd1064a62141bfe9ef4178a37"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/notation.ts",
+      "gitBlob": "528d0b0543254d5d679791e13f6c6ddac6a85882"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/notationsmap.ts",
+      "gitBlob": "f94ff31e991dec894862e8d3f2af4f3544c84d26"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/processinginstruction.ts",
+      "gitBlob": "fe06d57581d35e46f1fcf27526c0dae36ffdba9a"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/text.ts",
+      "gitBlob": "38e1fe74ed583fde00719506fa5e739ae95e6564"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/events/native-tree-dispatch.test.ts",
+      "gitBlob": "1d82eb8c6c2238eb72ed7bbaf8225260acd74431"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "d527266bfa2c6ff9e3cca2082bc941126dc32c0f"
+    },
+    {
+      "path": "docs/program/native-xml-document-builder.md",
+      "gitBlob": "3aa3f70e98858c9b96676d50ebd761b12a4ef041"
+    },
+    {
+      "path": "docs/program/native-xml-dom-events.md",
+      "gitBlob": "7bc295d4f951ad18c073b0897765490b9d84f00a"
+    },
+    {
+      "path": "docs/program/native-xml-dom-tree.md",
+      "gitBlob": "a860f22e0e93aa2701380b448a67ab74425275fb"
+    },
+    {
+      "path": "docs/program/native-xml-runtime.md",
+      "gitBlob": "91cf4f20855acaaed091b14838264ce5f9925b62"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-63b22cd8-c479-4bd1-88a6-b34e7c7e733e.json",
+      "gitBlob": "41cbb0d7d2f19307d51ecd040f0be10b8b9ba2fd"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-91436a81-7f1b-4eef-ae3c-06dc8c83f991.json",
+      "gitBlob": "50099b03fb0ba415c4e26525f28cae7b4dcf5f36"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/xml/sax/SAXException.ts.json",
+      "gitBlob": "14d1a3772ed2423c2721efaf6d2021a05b8f91e7"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/xml/sax/SAXParseException.ts.json",
+      "gitBlob": "eb28c355dba5fd2d70000235b36e6ea9c4dde96a"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/sax/SAXParseException.ts.json",
+      "gitBlob": "cabe9087490270d15721f283c0b87f9ce0e9c8d2"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/inc/eventdispatcher.ts.json",
+      "gitBlob": "e9073a72fdfd2374fe56a1d027825aa493fce1c2"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/attr.ts.json",
+      "gitBlob": "071ec4600c339c3b164d6674ee84b821d4141c1a"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/attributesmap.ts.json",
+      "gitBlob": "7b733ea755fbaa1cb592eb746022b558d1c67a0b"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/cdatasection.ts.json",
+      "gitBlob": "3f52a65ccf2f89fb696ca77254d0e8187b3bc846"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/characterdata.ts.json",
+      "gitBlob": "52115cb92ff5e03c53ffd7a00c3eb83cfa975752"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/childlist.ts.json",
+      "gitBlob": "d8f3e22f9b1d6c8622f86e9d0765f7a2c4c2d116"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/comment.ts.json",
+      "gitBlob": "072bf54e8b764db4e10da6e98289430ce4113981"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/document.import.ts.json",
+      "gitBlob": "6040fe1050968b7830604411232ad7cf919dc9a4"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/document.ts.json",
+      "gitBlob": "b854448abe949038e3937965207349620acea5c3"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/documentbuilder.errors.ts.json",
+      "gitBlob": "774c24943eceb56e541f6208423ea2f920d32e3e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/documentbuilder.io.ts.json",
+      "gitBlob": "c6077edf86653cee1e5c9033e6b85216df29dc71"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/documentfragment.ts.json",
+      "gitBlob": "489fb1c4537aa78cc1218852054acd6bf2961269"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/documenttype.ts.json",
+      "gitBlob": "ae1ea65a30987f5955a84c283b981de69e7f285e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/domimplementation.ts.json",
+      "gitBlob": "24b7c3834de67c5f11d65b4a54a9e6539bacde01"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/element.ts.json",
+      "gitBlob": "70e8bf38cc966a0148b286eb4e11b98fc56a54f1"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/elementlist.ts.json",
+      "gitBlob": "275372e9dc3712a91b5edddb56cf2adc3a21341e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/entitiesmap.ts.json",
+      "gitBlob": "21b744c5a819cc50316a80bd939b0f19567a8809"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/entity.ts.json",
+      "gitBlob": "fb4cee3a388c419ad225d6df42cf3135baebc88c"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/entityreference.ts.json",
+      "gitBlob": "89580140909a678fc76a1e2bdf9cb56d3a9223db"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/node.ts.json",
+      "gitBlob": "c7926ce45708174c8a497c7080661cd50c7d2d8b"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/notation.ts.json",
+      "gitBlob": "8c88431c1cacafbfc014d1aa725ab2e5deac40b4"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/notationsmap.ts.json",
+      "gitBlob": "50fadbc72022ff1f33f7e84fcb50fd32c7adde62"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/processinginstruction.ts.json",
+      "gitBlob": "2c0b91375a82cf69951365bab54df0aa3d11027a"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/text.ts.json",
+      "gitBlob": "161ad83fc8da0ceccefbf290d8c2886bb9e94dd2"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/events/eventdispatcher.ts.json",
+      "gitBlob": "e2ff9cd9a1e6ae65b00e3a91775b8532303ad9e9"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/xml/sax/SAXException.ts.json",
+      "gitBlob": "7a64d403c622c2c5c6c6a5b989cd8ddf72400859"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/xml/sax/SAXParseException.ts.json",
+      "gitBlob": "6c8f754c25af615536b202cb9f7b82e68ccb0821"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/sax/SAXParseException.ts.json",
+      "gitBlob": "9b43dad1c310420a64e65ad20812d0a69b7c9c56"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/inc/eventdispatcher.ts.json",
+      "gitBlob": "5201d56a0fe50da11e40e847b8935f69446bf6ab"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/attr.ts.json",
+      "gitBlob": "efd42c46857b89e7896a9cf2b782de5d14767dc5"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/attributesmap.ts.json",
+      "gitBlob": "7ec605d5670b515e5cd5202b4c2c16073a882512"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/cdatasection.ts.json",
+      "gitBlob": "5a540a0b886b2e9a247bd6d81eb55e745a61ca77"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/characterdata.ts.json",
+      "gitBlob": "67333195ac3297dbc390a39aa9dbde5d953a8c1d"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/childlist.ts.json",
+      "gitBlob": "3ab90c06fcd30cdab1a6ce62f60de76741c35105"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/comment.ts.json",
+      "gitBlob": "5eb19aaa7b9eb65c3a302d414135065ea2d7c308"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/document.import.ts.json",
+      "gitBlob": "35d036750350730480c9c81de46d1cf38ca9ee6a"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/document.ts.json",
+      "gitBlob": "5aee65f9bc8fe3e0a72d716c06a01286844c356c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/documentbuilder.errors.ts.json",
+      "gitBlob": "2836c23f1621a3a10a7f1f5d93fe957945f527de"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/documentbuilder.io.ts.json",
+      "gitBlob": "88d77b33f62d87841b8a5fafd1266a7b9e8142c8"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/documentfragment.ts.json",
+      "gitBlob": "ec461e3380937c689b3d4f9075fb563a019a987c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/documenttype.ts.json",
+      "gitBlob": "4a335de39cf3bcb698e2912530664a8eabcf8405"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/domimplementation.ts.json",
+      "gitBlob": "4df7c4695666e3902369cfa8a68d535f7567e71e"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/element.ts.json",
+      "gitBlob": "328cbe4331735241d2a86fd4332629ead9b98888"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/elementlist.ts.json",
+      "gitBlob": "38c5c2a390f7850aee3815e9fa446c3fdfd91519"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/entitiesmap.ts.json",
+      "gitBlob": "19d6fd818ffd8493d5c140d52d81558f0fdd42ef"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/entity.ts.json",
+      "gitBlob": "d95f8d95b28fe3f62d90ed45c2dab9b0aea59cfe"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/entityreference.ts.json",
+      "gitBlob": "4ccc0a7b1d1d3078a36bd3986b7d611647a6da7b"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/node.ts.json",
+      "gitBlob": "4f5140c1a33209edc97e760181c40a87d30540df"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/notation.ts.json",
+      "gitBlob": "97310a0587b9c5c1f2a73608cfc22b14b7aa71ce"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/notationsmap.ts.json",
+      "gitBlob": "b6537401ef274d5e7a29a978dfaa8b2cabcbc206"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/processinginstruction.ts.json",
+      "gitBlob": "34bf799ca325b29b79cf468d264755e70807b82f"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/text.ts.json",
+      "gitBlob": "351c1b538c7da0be54a567f8ccb0059fbd6b61f0"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/events/eventdispatcher.ts.json",
+      "gitBlob": "264a67e448261cefbfbe53c0464499b0f6443eee"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "70e5d7531345b7aa0e2c5db7a2d0c14db8735e0d"
+    },
+    {
+      "path": "eslint.config.js",
+      "gitBlob": "649fd3b71b509577bf80035e00e518a7b7d2e4c5"
+    },
+    {
+      "path": "scripts/build-libxml2-wasm.py",
+      "gitBlob": "af0e461d375b98cc9b0f38d6f748595ade2db1dc"
+    },
+    {
+      "path": "third_party/libxml2-wasm/artifact.json",
+      "gitBlob": "f08b7973569da055b005aded742460ba0e645987"
+    },
+    {
+      "path": "third_party/libxml2-wasm/binding.c",
+      "gitBlob": "439a490ab829906f4dc9135938d3405f31a5c4e4"
+    },
+    {
+      "path": "third_party/libxml2-wasm/constants.d.ts",
+      "gitBlob": "8e5e19c94a10313531a42c8eff462731cf93d6a3"
+    },
+    {
+      "path": "third_party/libxml2-wasm/constants.mjs",
+      "gitBlob": "7e370c06b2ac1933646610b7a84187fed79ccb3d"
+    },
+    {
+      "path": "third_party/libxml2-wasm/generated-api.json",
+      "gitBlob": "a81ba37fd66a21e94d55ba5939dff4793edc0984"
+    },
+    {
+      "path": "third_party/libxml2-wasm/index.d.ts",
+      "gitBlob": "a567e1374a78a6c1245bc4d3803617f8db88793c"
+    },
+    {
+      "path": "third_party/libxml2-wasm/libxml2.mjs",
+      "gitBlob": "5a813f77a89f3bbd3c57812141b018a62fe74c9a"
+    },
+    {
+      "path": "third_party/libxml2-wasm/package.json",
+      "gitBlob": "2f9c48b24bf965dafa692e4e3080baa4fef76a3a"
+    },
+    {
+      "path": "third_party/libxml2-wasm/source.json",
+      "gitBlob": "e5b51247b5557bc6c3f83016ef84b11ac43cd093"
+    }
+  ],
+  "corrections": [
+    "Counted OUString ASCII construction replaces incorrect one-argument TextEncoder array conversion; initial exception test OOM is retained in dom-builder-exception-tests.log.",
+    "Native MemoryInputStream fixture materializes its byte array in the current test realm; production stream logic unchanged.",
+    "Source provenance records include actual IDL fields and responsibility split explanations."
+  ],
+  "knownBaseline": [
+    "css-style-matchers.ts JSDoc errors at lines 17 and 76; no unrelated change.",
+    "Agentplane doctor reports zero errors and the existing old hook shim warning."
+  ],
+  "remaining": [
+    "Whole DOM coverage gate",
+    "CDocumentBuilder orchestration and real UCB resolver/URI dependencies",
+    "Builder upstream fixture setup and full original parser QA",
+    "XPath and document SAX/IO facets",
+    "Native metadata services",
+    "Full DOCX/XLSX import/export and existing UI acceptance"
+  ],
+  "fullSuite": "Not run; approved cadence is once per ten agentplane tasks, and these epics remain open."
+}
