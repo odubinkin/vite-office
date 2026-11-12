@@ -1,7 +1,7 @@
 /** @fileoverview Original source-backed runtime module edges, kept separate from the dependency scanner without changing their authority or contents. */
 export const allowedEdges = new Map([
   // Original Library_ucbhelper uses SDK interfaces and CPPU/cppuhelper; command, sink, request and identifier owners consume these exact modules.
-  ["ucbhelper", new Set(["cppu", "cppuhelper", "offapi", "udkapi", "sal"])],
+  ["ucbhelper", new Set(["cppu", "cppuhelper", "offapi", "udkapi", "sal", "salhelper"])],
   // Native unoxml uses CPPU/SAL/SDK contracts and links the libxml2 external (Library_unoxml.mk).
   ["unoxml", new Set(["cppu", "cppuhelper", "external", "offapi", "sal", "udkapi"])],
   // Original comphelper extract.hxx and attributelist.hxx/cxx use UNO Any/TypeClass and OUString.

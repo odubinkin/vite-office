@@ -1,0 +1,434 @@
+{
+  "status": "in-progress-checkpoint-coverage-unmet",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "134d4c8b47663bf1fd4bf13a8fa981b4148a7830",
+  "capability": "CAP-6ebb6661-ebeb-41ed-b8d6-04280a3b80b4",
+  "scope": "Actual intrusive Content client state, explicit broker service constructor, RTL reference operations and creation exception values. Property/open/cursor/transfer APIs and genuine positive services remain unported/unqualified.",
+  "tests": {
+    "focusedCases": 60,
+    "relatedCases": 180,
+    "relatedFiles": 22,
+    "boundaryCases": 48,
+    "resourceCases": 2,
+    "assertions": "pass",
+    "upstreamPorted": [
+      "rtl_ref::TestReferenceRefCounting::testMove, complete original acquisition-flag fixture and body"
+    ],
+    "actualGraph": "Existing real ComponentContext and ServiceManager with empty registry qualify missing-service construction. Actual CommandEnvironment and intrusive handles qualify shared empty-client state; no positive provider/context/broker substitute.",
+    "pending": "Genuine content/provider/broker notification and command graph; original service QA."
+  },
+  "coverage": {
+    "aggregateStatements": 76.33,
+    "aggregateBranches": 75.0,
+    "aggregateFunctions": 91.32,
+    "aggregateLines": 77.37,
+    "threshold": 90,
+    "selectedOwners": 38,
+    "result": "fail-unmet-prerequisite",
+    "scope": "Entire unchanged selected client/SDK owner set; no owner exclusion, private hook or positive provider fake to fill the gap.",
+    "unqualified": [
+      "Positive Content/client/listener/command and broker paths",
+      "Service constructor exception translation",
+      "Native mutex/scheduling/ABI and SAL diagnostic output",
+      "RTL pointer ordering/hash/conversion syntax"
+    ]
+  },
+  "preservedSource": [
+    "Native intrusive handle acquisition/release/move/self-move rules",
+    "Content default/copy/move/shared state and borrowed environment",
+    "Actual context/factory lookup, original creation exceptions and enum defaults",
+    "Lazy URL/content/processor and original listener query/action bodies",
+    "Source ID0 command execution and absent-processor void Any",
+    "Cached URL retention on EXCHANGED (source-only CALC-536/WRITER470)"
+  ],
+  "corrections": [
+    "Constructor failure cleanup now explicitly lowers original C++ reverse member/base unwinding.",
+    "Owned enum typename temporary is released without an extra leaked string copy.",
+    "Empty-derived exception supplies the existing logical compound member address view.",
+    "Generated static service class uses a narrow source-justified lint suppression.",
+    "Only final private-constructor JSDoc changed after coverage; no executable node changed. Coverage remains unmet and is not a source-parity certificate."
+  ],
+  "knownBaseline": [
+    "Only existing css-style-matchers.ts JSDoc failures at17 and76 remain.",
+    "Doctor zero errors with existing managed-hook shim warning."
+  ],
+  "remaining": [
+    "Content property/open/cursor/transfer APIs",
+    "Actual broker/provider implementation, notification/command witnesses and90-percent gate",
+    "Default entity resolver/URI and full DocumentBuilder service orchestration/registration",
+    "XPath/document SAX/IO and native metadata/model initialization",
+    "Full DOCX/XLSX import/export, shell routing and existing UI acceptance"
+  ],
+  "fullSuite": "Not run; approved once-per-ten-agentplane-task cadence; parent epics remain in progress.",
+  "checks": [
+    {
+      "name": "final-tests",
+      "cwd": "apps/office",
+      "command": "../../node_modules/.bin/vitest run --config vite.config.ts src/ucbhelper src/sal/qa/rtl/ref/rtl_ref.test.ts src/unoxml src/external/libxml2/parsercallbacks.test.ts src/offapi/com/sun/star/xml/sax/SAXParseException.test.ts src/offapi/com/sun/star/xml/dom/native-dom-values.test.ts src/sax/source/fastparser/InputSource.test.ts --coverage '--coverage.include=src/ucbhelper/**/*.ts' '--coverage.include=src/offapi/com/sun/star/ucb/*.ts' '--coverage.include=src/offapi/com/sun/star/task/XInteraction*.ts' '--coverage.include=src/udkapi/com/sun/star/task/XInteraction*.ts' --coverage.include=src/udkapi/com/sun/star/io/XActiveDataSink.ts --coverage.include=src/sal/inc/rtl/ref.ts --coverage.reportsDirectory=coverage/ucb-content --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.functions=90 --coverage.thresholds.branches=90",
+      "result": "assertions-pass-coverage-fail",
+      "log": "apps/office/coverage/ucb-content-final-tests.log",
+      "sha256": "44fd53787b63d69746e73d03737992f0c52a0b2b01fc5c6293d2a33e741b1d25"
+    },
+    {
+      "name": "lint",
+      "cwd": ".",
+      "command": [
+        "node_modules/.bin/eslint",
+        "--max-warnings",
+        "0",
+        "apps/office/src/offapi/com/sun/star/ucb/ContentCreationError.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/ContentCreationException.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/IllegalIdentifierException.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/UniversalContentBroker.ts",
+        "apps/office/src/sal/inc/rtl/ref.ts",
+        "apps/office/src/sal/qa/rtl/ref/rtl_ref.test.ts",
+        "apps/office/src/ucbhelper/inc/content.ts",
+        "apps/office/src/ucbhelper/source/client/content.ts",
+        "apps/office/src/ucbhelper/source/client/native-content-exceptions.test.ts",
+        "apps/office/src/ucbhelper/source/client/native-content.test.ts",
+        "scripts/module-boundaries/allowed-edges.mjs"
+      ],
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-content-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "format",
+      "cwd": ".",
+      "command": [
+        "node_modules/.bin/prettier",
+        "--check",
+        "apps/office/src/offapi/com/sun/star/ucb/ContentCreationError.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/ContentCreationException.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/IllegalIdentifierException.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/UniversalContentBroker.ts",
+        "apps/office/src/sal/inc/rtl/ref.ts",
+        "apps/office/src/sal/qa/rtl/ref/rtl_ref.test.ts",
+        "apps/office/src/ucbhelper/inc/content.ts",
+        "apps/office/src/ucbhelper/source/client/content.ts",
+        "apps/office/src/ucbhelper/source/client/native-content-exceptions.test.ts",
+        "apps/office/src/ucbhelper/source/client/native-content.test.ts",
+        "docs/program/native-ucb-content-client.md",
+        "docs/program/registry/shared/capabilities/CAP-6ebb6661-ebeb-41ed-b8d6-04280a3b80b4.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/ContentCreationError.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/ContentCreationException.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/IllegalIdentifierException.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/UniversalContentBroker.ts.json",
+        "docs/program/registry/shared/provenance/sal/inc/rtl/ref.ts.json",
+        "docs/program/registry/shared/provenance/ucbhelper/inc/content.ts.json",
+        "docs/program/registry/shared/provenance/ucbhelper/source/client/content.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/ContentCreationError.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/ContentCreationException.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/IllegalIdentifierException.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/UniversalContentBroker.ts.json",
+        "docs/program/registry/shared/runtime/sal/inc/rtl/ref.ts.json",
+        "docs/program/registry/shared/runtime/ucbhelper/inc/content.ts.json",
+        "docs/program/registry/shared/runtime/ucbhelper/source/client/content.ts.json",
+        "scripts/module-boundaries/allowed-edges.mjs"
+      ],
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-content-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "name": "typecheck",
+      "cwd": ".",
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-content-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "name": "build",
+      "cwd": ".",
+      "command": "npm run build",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-content-build.log",
+      "sha256": "b0d1af63d011f0dbfaafde5a28979ac0b9bf77743363f5f45080524cb46578f0"
+    },
+    {
+      "name": "static",
+      "cwd": ".",
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-content-static.log",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    {
+      "name": "provenance",
+      "cwd": ".",
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-content-provenance.log",
+      "sha256": "58e5b296f54728f87b51f684d362929720e9ee66a89fb087228305bb8d4d5a9c"
+    },
+    {
+      "name": "registry-build",
+      "cwd": ".",
+      "command": "npm run inventory:registry:build",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-content-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "name": "registry-check",
+      "cwd": ".",
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-content-registry-check.log",
+      "sha256": "025ea7f008d15fa3375ffe2922ec3fe5956c77be21693b9bc0367fd101c0e310"
+    },
+    {
+      "name": "boundaries",
+      "cwd": ".",
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-content-boundaries.log",
+      "sha256": "a21cae1c16471ac6902f50008280e29f35edc64bc3cd309e8e9a814288e9cf92"
+    },
+    {
+      "name": "boundary-tests",
+      "cwd": ".",
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-content-boundary-tests.log",
+      "sha256": "212cabc33ff9a8e34b3320ed0ea5916c406122b66e0abb5cc3a2713024bb084e"
+    },
+    {
+      "name": "docs",
+      "cwd": ".",
+      "command": "npm run check:docs",
+      "result": "known-baseline-failure",
+      "log": "apps/office/coverage/ucb-content-docs.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    },
+    {
+      "name": "size",
+      "cwd": ".",
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-content-size.log",
+      "sha256": "f3b7fba518d33881754e760890ddb1404f97d15587ba282144edd363670c3e0f"
+    },
+    {
+      "name": "tree",
+      "cwd": ".",
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-content-tree.log",
+      "sha256": "4615eccefb9c2ce4b9cd767340293514a9fc81e356b588821e3bd52cc72a30f6"
+    },
+    {
+      "name": "writer-resources",
+      "cwd": ".",
+      "command": "npm run check:writer-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-content-writer-resources.log",
+      "sha256": "f176196aba1b6437e896c66d9c8588a3dd9b623663b396ec78214571bbc8d72a"
+    },
+    {
+      "name": "calc-resources",
+      "cwd": ".",
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-content-calc-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "name": "hintids",
+      "cwd": ".",
+      "command": "npm run check:writer-hintids",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-content-hintids.log",
+      "sha256": "513c109068ebf83b3d6fe448c3c44564ec89a64cd9cb64059b5b4b89d11d887a"
+    },
+    {
+      "name": "doctor",
+      "cwd": ".",
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-content-doctor.log",
+      "sha256": "a2a2dde1cc8b4e47b233d242e4e7400e2610432211ffefa50489560742c02010"
+    },
+    {
+      "name": "routing",
+      "cwd": ".",
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-content-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "name": "diff",
+      "cwd": ".",
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-content-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/ContentCreationError.ts",
+      "gitBlob": "daf83c15fbef696f9f0e11682c93af3604eca9bb"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/ContentCreationException.ts",
+      "gitBlob": "0c4ed7ad75f94d3adc35db5e0fa34fb121b12396"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/IllegalIdentifierException.ts",
+      "gitBlob": "fc00fddef021588b2c721802cad22e1ab05c21bc"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/UniversalContentBroker.ts",
+      "gitBlob": "a221d84709d0315b82f4b1b7bc0bc64bb9fa80d4"
+    },
+    {
+      "path": "apps/office/src/sal/inc/rtl/ref.ts",
+      "gitBlob": "857d91ea94ee0d22dca7c92f38fa529e714c8f93"
+    },
+    {
+      "path": "apps/office/src/sal/qa/rtl/ref/rtl_ref.test.ts",
+      "gitBlob": "320348fc66dcfd3b87f3fcf11af47d65deaa4f30"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/inc/content.ts",
+      "gitBlob": "4bfa884d707b9dd39a1c80f81635e1d62153da03"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/client/content.ts",
+      "gitBlob": "3112b60f73ee9eee2fb6c738f514e36a8debf7ec"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/client/native-content-exceptions.test.ts",
+      "gitBlob": "fc4d4ef95976b70de996a6c4ba1526c3b98288ff"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/client/native-content.test.ts",
+      "gitBlob": "7775e1ded1b90bf889bd1670148735c21d9aeb88"
+    },
+    {
+      "path": "docs/program/native-ucb-content-client.md",
+      "gitBlob": "eca5714ce90de9f40a7e6754004e4d783fc2c484"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-6ebb6661-ebeb-41ed-b8d6-04280a3b80b4.json",
+      "gitBlob": "0af8a21b5c7d10e65575dd046872bc90bc7aaabd"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/ContentCreationError.ts.json",
+      "gitBlob": "a76155a3f6889efbb161599a550432701c4652f2"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/ContentCreationException.ts.json",
+      "gitBlob": "4e46e13090cc65bb085f3ea5c778e78645d2cd06"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/IllegalIdentifierException.ts.json",
+      "gitBlob": "7cf765cd870f2712933448283b7ce8dad0c6406d"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/UniversalContentBroker.ts.json",
+      "gitBlob": "1819d2c8e641ace59ecc5078d569472c97998421"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sal/inc/rtl/ref.ts.json",
+      "gitBlob": "8f1211b27942bb9454e8dfe3930684f896423702"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/inc/content.ts.json",
+      "gitBlob": "ed3926b7b0b6b4fb346b474fbee858c97c63e6db"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/source/client/content.ts.json",
+      "gitBlob": "68237d673bb0ef2041c81564c915c7ec4d904ca9"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/ContentCreationError.ts.json",
+      "gitBlob": "71fc95773717baa5bd8e9e55305dcd5be8345845"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/ContentCreationException.ts.json",
+      "gitBlob": "28656e9c7098a18f4185e7aa4a032ce4d4bb1a92"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/IllegalIdentifierException.ts.json",
+      "gitBlob": "9d7740bf1a78237db2fc68a9ef14136897b7d4c1"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/UniversalContentBroker.ts.json",
+      "gitBlob": "ad08fd4b155234bb255c47a370024249968cd603"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sal/inc/rtl/ref.ts.json",
+      "gitBlob": "5576e59a69f2e232410d7f738fdd99dce623e393"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/inc/content.ts.json",
+      "gitBlob": "76c9529b6d780f56dd47092c263f18562be58618"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/source/client/content.ts.json",
+      "gitBlob": "c63ce4985365449cf19430c080d1cbd3e3a89859"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "9d3c8a40f1b3050133fada9073d2450410bd44b5"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "95783e29234b6dd790676d428a51592741da46cb"
+    },
+    {
+      "path": "scripts/module-boundaries/allowed-edges.mjs",
+      "gitBlob": "689f718dd18e9cbe1e4a151d53c3a202c74de962"
+    }
+  ],
+  "upstreamBlobs": [
+    {
+      "path": "vendor/libreoffice-reference/include/rtl/ref.hxx",
+      "gitBlob": "88e67824816e3ed490b46e142cc8e9d6b0ffe4af"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sal/qa/rtl/ref/rtl_ref.cxx",
+      "gitBlob": "388aa1e26ed4881e408fa0b10ca511758b5345a4"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucbhelper/source/client/content.cxx",
+      "gitBlob": "fc655353dd98c233c6fcee552ce65c8bc2c330e6"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/ucbhelper/content.hxx",
+      "gitBlob": "a989106ef4617b3d66fbd537f65ed1fcfb103ce3"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucbhelper/Library_ucbhelper.mk",
+      "gitBlob": "904a7c31d5c7b27e03f79b6fc5a51d8102b72c6c"
+    },
+    {
+      "path": "vendor/libreoffice-reference/codemaker/source/cppumaker/cpputype.cxx",
+      "gitBlob": "152dbf476955dd95b1d7623ca7342cc69c24fb0a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/UniversalContentBroker.idl",
+      "gitBlob": "ec1bde0c4ee475121ea6db925f93d838b6b461d7"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/ContentCreationError.idl",
+      "gitBlob": "a327058daa3f7ce9f6c1448e20aaa8e22b1a0513"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/ContentCreationException.idl",
+      "gitBlob": "9ed3ab1fdd30537bed844da08fddcd97acf81a67"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/IllegalIdentifierException.idl",
+      "gitBlob": "fc6f9a3b3bb532cbcdb499efe82cc553feeaea3b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/ContentEvent.idl",
+      "gitBlob": "aec1d8a977e38dbe5d3157e94670d495214c986b"
+    }
+  ]
+}

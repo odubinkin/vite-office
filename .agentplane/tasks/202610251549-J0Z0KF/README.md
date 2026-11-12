@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 212
+revision: 215
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T11:27:40.150Z"
+  updated_at: "2026-11-12T11:50:07.344Z"
   updated_by: "CODER"
-  note: "Bounded UCB broker/content/open value contract checkpoint validated:171 related tests,90-percent aggregate gate passed,typechecks/build/static and source/registry/module/resource checks pass. Only known css-style-matchers JSDoc baseline. Actual Content/broker/default resolver,DocumentBuilder,metadata and full XLSX/DOCX/UI remain unfinished; continue approved implementation."
-  attempts: 65
+  note: "In-progress native Content state checkpoint:180 assertions pass,48 boundary and2 resource tests pass. Aggregate coverage90 gate FAILS:76.33 statements75 branches91.32 functions77.37 lines; positive content/provider/broker paths unqualified. Static/type/build/source/registry checks pass, old JSDoc baseline only. Full Content.openStream/default resolver/DocumentBuilder/metadata/XLSX/DOCX/UI remain unfinished; continue approved task."
+  attempts: 66
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1048,8 +1051,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-12T11:50:07.344Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "In-progress native Content state checkpoint:180 assertions pass,48 boundary and2 resource tests pass. Aggregate coverage90 gate FAILS:76.33 statements75 branches91.32 functions77.37 lines; positive content/provider/broker paths unqualified. Static/type/build/source/registry checks pass, old JSDoc baseline only. Full Content.openStream/default resolver/DocumentBuilder/metadata/XLSX/DOCX/UI remain unfinished; continue approved task."
+  -
+    type: "status"
+    at: "2026-11-12T11:51:40.077Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-12T11:27:51.183Z"
+doc_updated_at: "2026-11-12T11:51:40.077Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -3014,6 +3030,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-12T11:50:07.344Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: In-progress native Content state checkpoint:180 assertions pass,48 boundary and2 resource tests pass. Aggregate coverage90 gate FAILS:76.33 statements75 branches91.32 functions77.37 lines; positive content/provider/broker paths unqualified. Static/type/build/source/registry checks pass, old JSDoc baseline only. Full Content.openStream/default resolver/DocumentBuilder/metadata/XLSX/DOCX/UI remain unfinished; continue approved task.
+    Attempts: 66
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T11:50:06.704Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3338,6 +3384,10 @@ sections:
     - Observation: Added twelve original UCB SDK owners: five complete interfaces including the five-base broker, five managed struct values, and ContentAction/OpenMode constants. 171 related DOM/SAX/UCB tests pass across19 files, with aggregate coverage98.33 statements96.47 branches98.80 functions98.47 lines. Typecheck/build/static, scoped lint/format, provenance/registry/boundaries/resources/tree/size/doctor/routing pass.
       Impact: Actual Any transport now preserves inherited content-event fields, provider descriptors and nested open-command property/sorting sequences with genuine identifier, sink and stream components. This is not Content.openStream or broker execution. Original provider/manager/command QA still requires real service graphs; full format/UI integration remains incomplete.
       Resolution: Continue the actual Content client and broker factory/default resolver path. Keep source defaults and five-base type order; no positive content/provider/context substitute. Initial erased Sequence size declarations and test tuple/reference typing were corrected before final validation. Only prior css-style-matchers JSDoc baseline remains.
+
+    - Observation: Ported actual Content/Content_Impl intrusive state, listener and command execution bodies, rtl::Reference operations, explicit UniversalContentBroker service constructor and creation enum/exception values. Original rtl_ref::TestReferenceRefCounting::testMove is ported. All180 related tests in22 files pass;48 boundary and2 resource cases pass. Whole selected38-owner coverage is76.33 statements75 branches91.32 functions77.37 lines and fails90 gate.
+      Impact: Valid empty Content and genuine ComponentContext/ServiceManager missing-service paths are witnessed. Positive provider/broker/listener/command paths and factory exception translation remain unqualified. Property/open/cursor/transfer APIs are absent, so resolver/DocumentBuilder and full XLSX/DOCX/UI remain incomplete. No fake positive provider or private test hook was added for coverage.
+      Resolution: Continue real content/provider and property/open dependencies; preserve URL cache retention on EXCHANGED as source-only CALC-536/WRITER470. Typechecks/build/static and scoped lint/format/provenance/registry/boundaries/resources/tree/size/doctor/routing pass; only old css-style-matchers JSDoc baseline remains. Keep epic in progress and coverage gate unmet until genuine positive graph exists.
 id_source: "generated"
 ---
 ## Summary
@@ -5312,6 +5362,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-12T11:50:07.344Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: In-progress native Content state checkpoint:180 assertions pass,48 boundary and2 resource tests pass. Aggregate coverage90 gate FAILS:76.33 statements75 branches91.32 functions77.37 lines; positive content/provider/broker paths unqualified. Static/type/build/source/registry checks pass, old JSDoc baseline only. Full Content.openStream/default resolver/DocumentBuilder/metadata/XLSX/DOCX/UI remain unfinished; continue approved task.
+Attempts: 66
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T11:50:06.704Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -5640,3 +5720,7 @@ DecisionContextRef:
 - Observation: Added twelve original UCB SDK owners: five complete interfaces including the five-base broker, five managed struct values, and ContentAction/OpenMode constants. 171 related DOM/SAX/UCB tests pass across19 files, with aggregate coverage98.33 statements96.47 branches98.80 functions98.47 lines. Typecheck/build/static, scoped lint/format, provenance/registry/boundaries/resources/tree/size/doctor/routing pass.
   Impact: Actual Any transport now preserves inherited content-event fields, provider descriptors and nested open-command property/sorting sequences with genuine identifier, sink and stream components. This is not Content.openStream or broker execution. Original provider/manager/command QA still requires real service graphs; full format/UI integration remains incomplete.
   Resolution: Continue the actual Content client and broker factory/default resolver path. Keep source defaults and five-base type order; no positive content/provider/context substitute. Initial erased Sequence size declarations and test tuple/reference typing were corrected before final validation. Only prior css-style-matchers JSDoc baseline remains.
+
+- Observation: Ported actual Content/Content_Impl intrusive state, listener and command execution bodies, rtl::Reference operations, explicit UniversalContentBroker service constructor and creation enum/exception values. Original rtl_ref::TestReferenceRefCounting::testMove is ported. All180 related tests in22 files pass;48 boundary and2 resource cases pass. Whole selected38-owner coverage is76.33 statements75 branches91.32 functions77.37 lines and fails90 gate.
+  Impact: Valid empty Content and genuine ComponentContext/ServiceManager missing-service paths are witnessed. Positive provider/broker/listener/command paths and factory exception translation remain unqualified. Property/open/cursor/transfer APIs are absent, so resolver/DocumentBuilder and full XLSX/DOCX/UI remain incomplete. No fake positive provider or private test hook was added for coverage.
+  Resolution: Continue real content/provider and property/open dependencies; preserve URL cache retention on EXCHANGED as source-only CALC-536/WRITER470. Typechecks/build/static and scoped lint/format/provenance/registry/boundaries/resources/tree/size/doctor/routing pass; only old css-style-matchers JSDoc baseline remains. Keep epic in progress and coverage gate unmet until genuine positive graph exists.

@@ -1,0 +1,136 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-6ebb6661-ebeb-41ed-b8d6-04280a3b80b4",
+    "capabilityId": "CAP-6ebb6661-ebeb-41ed-b8d6-04280a3b80b4",
+    "suite": "shared",
+    "subsystem": "ucb-content-client",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual Content/Content_Impl intrusive state preserves default/copy/move/assignment ownership, real broker constructors, checked/no-throw creation helpers, lazy URL/content/processor state, listener queries/actions, borrowed environment, command ID0 and missing-processor void result. Original explicit UniversalContentBroker.create uses genuine context/manager argument construction and declared exception translation. Actual rtl::Reference operations and creation enum/exception values use existing native ownership/type modules. No positive content/provider/broker/context substitute is manufactured. Tests port original rtl_ref testMove and qualify valid empty Content plus actual unavailable-service construction. Positive content/event/command paths, coverage90 gate, property/open/cursor/transfer APIs, native mutex/ABI, source service QA, DocumentBuilder, metadata and DOCX/XLSX/UI remain incomplete."
+    ],
+    "capability": "Native UCB client state and explicit broker constructor prerequisites",
+    "gaps": [
+      "Positive broker/provider/listener/command execution graph and90-percent coverage remain unqualified.",
+      "Content property/open/cursor/transfer APIs remain unported and unadvertised.",
+      "RTL pointer ordering/hash/C++ conversion syntax, native mutex/ABI and complete source service QA remain unverified.",
+      "DocumentBuilder/default resolver/URI, XPath, metadata/model and full DOCX/XLSX/UI remain incomplete."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/rtl/ref.hxx",
+          "marker": "Reference"
+        },
+        {
+          "path": "ucbhelper/source/client/content.cxx",
+          "marker": "Content_Impl::Content_Impl"
+        },
+        {
+          "path": "include/ucbhelper/content.hxx",
+          "marker": "Content"
+        },
+        {
+          "path": "offapi/com/sun/star/ucb/UniversalContentBroker.idl",
+          "marker": "UniversalContentBroker"
+        },
+        {
+          "path": "offapi/com/sun/star/ucb/ContentCreationError.idl",
+          "marker": "ContentCreationError"
+        },
+        {
+          "path": "offapi/com/sun/star/ucb/ContentCreationException.idl",
+          "marker": "ContentCreationException"
+        },
+        {
+          "path": "offapi/com/sun/star/ucb/IllegalIdentifierException.idl",
+          "marker": "IllegalIdentifierException"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sal/qa/rtl/ref/rtl_ref.cxx",
+          "marker": "testMove"
+        },
+        {
+          "path": "qadevOOo/tests/java/ifc/ucb/_XCommandProcessor.java",
+          "marker": "_execute"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/ucbhelper/content.hxx",
+          "marker": "executeCommand"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sal/inc/rtl/ref.ts",
+          "marker": "Reference"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/client/content.ts",
+          "marker": "Content"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/inc/content.ts",
+          "marker": "Content"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/ucb/UniversalContentBroker.ts",
+          "marker": "UniversalContentBroker"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/ucb/ContentCreationError.ts",
+          "marker": "ContentCreationError"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/ucb/ContentCreationException.ts",
+          "marker": "ContentCreationException"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/ucb/IllegalIdentifierException.ts",
+          "marker": "IllegalIdentifierException"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/ucbhelper/source/client/native-content.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/client/native-content-exceptions.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/qa/rtl/ref/rtl_ref.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-ucb-content-client.md",
+          "marker": "# Native UCB content client"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual UCB CommandEnvironment and ActiveDataSink preserve named bases, acquired Reference field/getter semantics, reverse member destruction and absence of automatic stream close. Actual InteractionRequest and four basic continuations preserve Any/Sequence ownership, source selection/query order, flags and borrowed parent pointers. Complete SDK declarations use normal CPPU metadata and original direct bases. No broker, process context, alternate parser or partial positive provider is manufactured. Authentication continuation owners are not ported or advertised. Protected default-constructor access control, physical C++ ABI/threading, complete source service bootstrap, content/broker paths, DocumentBuilder, metadata and DOCX/XLSX/UI acceptance remain unverified."
+    },
+    "scopeLimitations": [
+      "Actual UCB CommandEnvironment and ActiveDataSink preserve named bases, acquired Reference field/getter semantics, reverse member destruction and absence of automatic stream close. Actual InteractionRequest and four basic continuations preserve Any/Sequence ownership, source selection/query order, flags and borrowed parent pointers. Complete SDK declarations use normal CPPU metadata and original direct bases. No broker, process context, alternate parser or partial positive provider is manufactured. Authentication continuation owners are not ported or advertised. Protected default-constructor access control, physical C++ ABI/threading, complete source service bootstrap, content/broker paths, DocumentBuilder, metadata and DOCX/XLSX/UI acceptance remain unverified."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-ucb-command-context"
+  }
+}

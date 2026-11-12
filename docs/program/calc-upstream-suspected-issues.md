@@ -5515,3 +5515,10 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 - Sources: `ucbhelper/source/provider/contentidentifier.cxx`, `ContentIdentifier_Impl::ContentIdentifier_Impl`, and `include/ucbhelper/contentidentifier.hxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER469.
 - The implementation assigns `aScheme.toAsciiLowerCase()` to the provider scheme, then replaces the URL prefix with the original `aScheme`. Thus `FiLe:///tmp/a.xml` remains unchanged as the content identifier, while its provider scheme is `file`. The header promises lowercase URL schemes. Preserve the original replacement argument rather than silently repairing this discrepancy.
 - Without a colon, both stored strings remain empty, even for a nonempty relative input. Actual complete-component tests cover first-colon splitting, ASCII-only conversion, empty prefixes, relative inputs, acquired UNO queries and independent returned-string ownership. No compiled C++ differential or broker/factory integration claim is made.
+
+
+### CALC-536 — UCB content exchange retains an already cached URL
+
+- Sources: `ucbhelper/source/client/content.cxx`, `Content_Impl::reinit`, `getURL_NoLock` and `ContentEventListener_Impl::contentEvent`, plus `offapi/com/sun/star/ucb/ContentEvent.idl`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER470.
+- EXCHANGED delegates to reinit with the event's new Content. The source explicitly retains m_aURL under its issue-92581 comment. A nonempty cached URL therefore prevents getURL_NoLock from reading the replacement content's identifier. For an exchange to a different identifier after URL caching, the old URL can remain visible. Preserve both the cache retention and lazy getter condition rather than resetting on exchange.
+- This is source inspection, not a compiled differential or positive provider/event witness. The source comment indicates deliberate cache preservation and may encode a caller requirement; no confirmed reachable filter defect is claimed. The real broker/provider notification graph is still pending.

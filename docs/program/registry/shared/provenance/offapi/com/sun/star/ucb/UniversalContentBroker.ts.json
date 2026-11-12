@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/ucb/UniversalContentBroker.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/ucb/UniversalContentBroker.idl",
+    "localSymbols": [
+      "UniversalContentBroker"
+    ],
+    "upstreamSymbols": [
+      "UniversalContentBroker",
+      "create"
+    ],
+    "preservedResponsibilities": [
+      "Actual Content/Content_Impl intrusive state preserves default/copy/move/assignment ownership, real broker constructors, checked/no-throw creation helpers, lazy URL/content/processor state, listener queries/actions, borrowed environment, command ID0 and missing-processor void result. Original explicit UniversalContentBroker.create uses genuine context/manager argument construction and declared exception translation. Actual rtl::Reference operations and creation enum/exception values use existing native ownership/type modules. No positive content/provider/broker/context substitute is manufactured. Tests port original rtl_ref testMove and qualify valid empty Content plus actual unavailable-service construction. Positive content/event/command paths, coverage90 gate, property/open/cursor/transfer APIs, native mutex/ABI, source service QA, DocumentBuilder, metadata and DOCX/XLSX/UI remain incomplete."
+    ],
+    "omittedResponsibilities": [
+      "Content property/open/cursor/transfer APIs remain absent, not positive placeholders. Real broker/provider implementation and source service QA remain pending.",
+      "Coverage90 gate unmet for positive client paths; native mutex/physical ABI, pointer ordering/hash/conversion syntax, metadata/format/UI are unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/ucb/UniversalContentBroker.ts",
+          "marker": "UniversalContentBroker"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/client/native-content.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/client/native-content-exceptions.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/qa/rtl/ref/rtl_ref.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/UniversalContentBroker.idl",
+          "marker": "UniversalContentBroker"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/UniversalContentBroker.idl",
+          "marker": "create"
+        },
+        {
+          "path": "vendor/libreoffice-reference/codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "createInstanceWithArgumentsAndContext"
+        }
+      ]
+    }
+  }
+}
