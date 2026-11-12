@@ -1,0 +1,477 @@
+{
+  "status": "in-progress-checkpoint-coverage-unmet",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "eb345e8d80c8a0b51bf7ade692b19bfd593cf262",
+  "capability": "CAP-61f3e210-48fe-4469-ac8c-75dd698dd823",
+  "scope": "Actual complete PropertyValueSet XRow/XColumnLocate component, original record/cache/template/appends/property-set paths and real converter service/SDK dependencies. Not full open/resolver/format/UI integration.",
+  "tests": {
+    "newFocusedCases": 18,
+    "relatedCases": 224,
+    "relatedFiles": 33,
+    "boundaryCases": 48,
+    "resourceCases": 2,
+    "assertions": "pass",
+    "upstreamPorted": [
+      "qadevOOo _XRow::_getString",
+      "qadevOOo _XRow::_getBoolean",
+      "qadevOOo _XRow::_getLong",
+      "qadevOOo _XRow::_getTimestamp",
+      "qadevOOo _XRow::_getObject",
+      "qadevOOo _XColumnLocate::_findColumn"
+    ],
+    "sourceHarness": "Populated actual native CurrentRowData carriers and genuine PropertyValueSet; original method calls/no-exception criteria. External Java runner/database and remaining source methods unqualified.",
+    "actualGraph": "Real row, MemoryInputStream, ServiceManager property metadata and ComponentContext/empty-registry failure. No positive converter/property provider/broker fake or private state hook."
+  },
+  "coverage": {
+    "aggregateStatements": 77.84,
+    "aggregateBranches": 72.0,
+    "aggregateFunctions": 89.25,
+    "aggregateLines": 79.09,
+    "threshold": 90,
+    "selectedOwners": 55,
+    "result": "fail-unmet-prerequisite",
+    "propertyValueSet": {
+      "statements": 76.07,
+      "branches": 60.0,
+      "functions": 100,
+      "lines": 76.69
+    },
+    "scope": "Complete selected owner files; no unsupported source-producer switch arm is forced or removed for certification.",
+    "unqualified": [
+      "Positive Converter execution and efficient XPropertyAccess provider graph",
+      "Source getObject original-type arms without supported public producers",
+      "Full source service QA, native mutex/vector capacity/address/reallocation/physical ABI and diagnostics"
+    ]
+  },
+  "preservedSource": [
+    "Original field/default/member move and managed destruction ownership",
+    "All XRow/XColumnLocate methods and source cache/flag/getter/null timing",
+    "Actual closed T locals, declared UnoType and member-pointer bindings without default/type callbacks",
+    "Original append overloads, real property metadata/access queries and two exception catches",
+    "Converter tried-before-create flag and original default service constructor",
+    "Actual SDK/exception/enum values and normal shared CPPU metadata",
+    "Source void-Any wasNull and converter failure behaviors (CALC-538/WRITER472, CALC-539/WRITER473)"
+  ],
+  "corrections": [
+    "Generated exception primitive fields were renamed to avoid overriding inherited protected Exception fields.",
+    "Native indexed vector values use proven source-bound typed address casts instead of forbidden non-null assertion syntax.",
+    "Typed-null SDK extraction fixtures now initialize destination pointers to null, not undefined; no kernel normalization was added.",
+    "Template local/type declarations exclude the deleted Any extraction instantiation; original getObject remains separate.",
+    "Native fields/context construction order follows source; original record remains co-located with the component.",
+    "Only documentation was updated after final executable validation."
+  ],
+  "knownBaseline": [
+    "Only pre-existing css-style-matchers.ts JSDoc failures at17 and76.",
+    "Doctor zero errors with existing managed-hook shim warning."
+  ],
+  "remaining": [
+    "Actual positive converter and efficient property-access source graph plus remaining QA",
+    "Content isDocument/openStream/cancel-command and real broker/provider",
+    "Default resolver/URI and full DocumentBuilder orchestration/registration",
+    "XPath/document SAX/IO and native metadata/model initialization",
+    "Full DOCX/XLSX import/export, shell routing and existing UI acceptance",
+    "Whole selected90-percent coverage gate"
+  ],
+  "fullSuite": "Not run; approved once-per-ten-agentplane-task cadence, parent epics remain in progress.",
+  "checks": [
+    {
+      "name": "final-tests",
+      "cwd": "apps/office",
+      "command": "../../node_modules/.bin/vitest run --config vite.config.ts src/ucbhelper src/sal/qa/rtl/ref/rtl_ref.test.ts src/unoxml src/external/libxml2/parsercallbacks.test.ts src/offapi/com/sun/star/xml/sax/SAXParseException.test.ts src/offapi/com/sun/star/xml/dom/native-dom-values.test.ts src/sax/source/fastparser/InputSource.test.ts src/cppu/inc/com/sun/star/uno/Any-ownership.test.ts src/cppu/inc/com/sun/star/uno/Any-data.test.ts src/cppu/source/uno/copy.test.ts src/sal/inc/rtl/native-ustring-literal-assignment.test.ts src/sal/inc/rtl/native-ustring-view.test.ts src/sal/rtl/ustring-ownership.test.ts --coverage '--coverage.include=src/ucbhelper/**/*.ts' '--coverage.include=src/offapi/com/sun/star/ucb/*.ts' '--coverage.include=src/offapi/com/sun/star/sdbc/*.ts' --coverage.include=src/offapi/com/sun/star/util/Date.ts --coverage.include=src/cppu/inc/com/sun/star/uno/Any.ts '--coverage.include=src/offapi/com/sun/star/task/XInteraction*.ts' '--coverage.include=src/udkapi/com/sun/star/task/XInteraction*.ts' --coverage.include=src/udkapi/com/sun/star/io/XActiveDataSink.ts --coverage.include=src/sal/inc/rtl/ref.ts --coverage.include=src/sal/inc/rtl/ustring.ts '--coverage.include=src/udkapi/com/sun/star/script/*.ts' --coverage.include=src/udkapi/com/sun/star/beans/XPropertyAccess.ts --coverage.include=src/udkapi/com/sun/star/uno/TypeClass.ts --coverage.reportsDirectory=coverage/ucb-propertyvalueset --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.functions=90 --coverage.thresholds.branches=90",
+      "result": "assertions-pass-coverage-fail",
+      "log": "apps/office/coverage/ucb-values-final-tests.log",
+      "sha256": "3887a634c5ea087ed45dba5f7ce00dce192afc1af4dfa88ef63298cd24e40e68"
+    },
+    {
+      "name": "lint",
+      "cwd": ".",
+      "command": [
+        "node_modules/.bin/eslint",
+        "--max-warnings",
+        "0",
+        "apps/office/src/offapi/com/sun/star/sdbc/XColumnLocate.ts",
+        "apps/office/src/ucbhelper/inc/propertyvalueset.ts",
+        "apps/office/src/ucbhelper/source/provider/native-propertyvalueset-qa.test.ts",
+        "apps/office/src/ucbhelper/source/provider/native-propertyvalueset.test.ts",
+        "apps/office/src/ucbhelper/source/provider/native-values-contracts.test.ts",
+        "apps/office/src/ucbhelper/source/provider/propertyvalueset.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/XPropertyAccess.ts",
+        "apps/office/src/udkapi/com/sun/star/script/CannotConvertException.ts",
+        "apps/office/src/udkapi/com/sun/star/script/Converter.ts",
+        "apps/office/src/udkapi/com/sun/star/script/FailReason.ts",
+        "apps/office/src/udkapi/com/sun/star/script/XTypeConverter.ts",
+        "apps/office/src/udkapi/com/sun/star/uno/TypeClass.ts"
+      ],
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-values-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "format",
+      "cwd": ".",
+      "command": [
+        "node_modules/.bin/prettier",
+        "--check",
+        "apps/office/src/offapi/com/sun/star/sdbc/XColumnLocate.ts",
+        "apps/office/src/ucbhelper/inc/propertyvalueset.ts",
+        "apps/office/src/ucbhelper/source/provider/native-propertyvalueset-qa.test.ts",
+        "apps/office/src/ucbhelper/source/provider/native-propertyvalueset.test.ts",
+        "apps/office/src/ucbhelper/source/provider/native-values-contracts.test.ts",
+        "apps/office/src/ucbhelper/source/provider/propertyvalueset.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/XPropertyAccess.ts",
+        "apps/office/src/udkapi/com/sun/star/script/CannotConvertException.ts",
+        "apps/office/src/udkapi/com/sun/star/script/Converter.ts",
+        "apps/office/src/udkapi/com/sun/star/script/FailReason.ts",
+        "apps/office/src/udkapi/com/sun/star/script/XTypeConverter.ts",
+        "docs/program/native-ucb-propertyvalueset.md",
+        "docs/program/registry/shared/capabilities/CAP-61f3e210-48fe-4469-ac8c-75dd698dd823.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/sdbc/XColumnLocate.ts.json",
+        "docs/program/registry/shared/provenance/ucbhelper/inc/propertyvalueset.ts.json",
+        "docs/program/registry/shared/provenance/ucbhelper/source/provider/propertyvalueset.ts.json",
+        "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/XPropertyAccess.ts.json",
+        "docs/program/registry/shared/provenance/udkapi/com/sun/star/script/CannotConvertException.ts.json",
+        "docs/program/registry/shared/provenance/udkapi/com/sun/star/script/Converter.ts.json",
+        "docs/program/registry/shared/provenance/udkapi/com/sun/star/script/FailReason.ts.json",
+        "docs/program/registry/shared/provenance/udkapi/com/sun/star/script/XTypeConverter.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/sdbc/XColumnLocate.ts.json",
+        "docs/program/registry/shared/runtime/ucbhelper/inc/propertyvalueset.ts.json",
+        "docs/program/registry/shared/runtime/ucbhelper/source/provider/propertyvalueset.ts.json",
+        "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/XPropertyAccess.ts.json",
+        "docs/program/registry/shared/runtime/udkapi/com/sun/star/script/CannotConvertException.ts.json",
+        "docs/program/registry/shared/runtime/udkapi/com/sun/star/script/Converter.ts.json",
+        "docs/program/registry/shared/runtime/udkapi/com/sun/star/script/FailReason.ts.json",
+        "docs/program/registry/shared/runtime/udkapi/com/sun/star/script/XTypeConverter.ts.json",
+        "apps/office/src/udkapi/com/sun/star/uno/TypeClass.ts",
+        "docs/program/registry/shared/provenance/udkapi/com/sun/star/uno/TypeClass.ts.json",
+        "docs/program/registry/shared/runtime/udkapi/com/sun/star/uno/TypeClass.ts.json"
+      ],
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-values-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "name": "typecheck",
+      "cwd": ".",
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-values-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "name": "build",
+      "cwd": ".",
+      "command": "npm run build",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-values-build.log",
+      "sha256": "b0e891ad08e7863303dfb0e75a90317a3388b3f53daaef0954a5a06e86ea3958"
+    },
+    {
+      "name": "static",
+      "cwd": ".",
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-values-static.log",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    {
+      "name": "provenance",
+      "cwd": ".",
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-values-provenance.log",
+      "sha256": "7e28c9667be83ac56a19f7b655e75c3c47eed134f767770b8f24abb21914a6d0"
+    },
+    {
+      "name": "registry-build",
+      "cwd": ".",
+      "command": "npm run inventory:registry:build",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-values-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "name": "registry-check",
+      "cwd": ".",
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-values-registry-check.log",
+      "sha256": "f83a2d91a27441a943095c22c87729cdcae2345ef27a1620485355adc3780691"
+    },
+    {
+      "name": "boundaries",
+      "cwd": ".",
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-values-boundaries.log",
+      "sha256": "1438b04ffa02588a2a8f70113ad28e49c9d51713163650c4e43cc1d35d6946df"
+    },
+    {
+      "name": "boundary-tests",
+      "cwd": ".",
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-values-boundary-tests.log",
+      "sha256": "f84d2936d05593a87f77f1c447219827bebd35378f5fe13ce7ea59c8a05f7722"
+    },
+    {
+      "name": "docs",
+      "cwd": ".",
+      "command": "npm run check:docs",
+      "result": "known-baseline-failure",
+      "log": "apps/office/coverage/ucb-values-docs.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    },
+    {
+      "name": "size",
+      "cwd": ".",
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-values-size.log",
+      "sha256": "0f8e1f3a67d97b44f99cab5b507eaf63c55d7c71a11d5b337a463df4e7888ef0"
+    },
+    {
+      "name": "tree",
+      "cwd": ".",
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-values-tree.log",
+      "sha256": "4615eccefb9c2ce4b9cd767340293514a9fc81e356b588821e3bd52cc72a30f6"
+    },
+    {
+      "name": "writer-resources",
+      "cwd": ".",
+      "command": "npm run check:writer-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-values-writer-resources.log",
+      "sha256": "ff2ceed677adea17239a61d050ee035b94334fe0f0488651f5dd63a2b6c8c9e6"
+    },
+    {
+      "name": "calc-resources",
+      "cwd": ".",
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-values-calc-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "name": "hintids",
+      "cwd": ".",
+      "command": "npm run check:writer-hintids",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-values-hintids.log",
+      "sha256": "513c109068ebf83b3d6fe448c3c44564ec89a64cd9cb64059b5b4b89d11d887a"
+    },
+    {
+      "name": "doctor",
+      "cwd": ".",
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-values-doctor.log",
+      "sha256": "c471fbf40199364c65081c292bf11d2be0fb0f6b5e8e66e1401ecaa56b4d69ca"
+    },
+    {
+      "name": "routing",
+      "cwd": ".",
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-values-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "name": "diff",
+      "cwd": ".",
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/ucb-values-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/offapi/com/sun/star/sdbc/XColumnLocate.ts",
+      "gitBlob": "a699450a429e1cd01839419dcef0e2f0c5feb67b"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/inc/propertyvalueset.ts",
+      "gitBlob": "7757901f3bad80038d5fe9ac38e12ac84da6e0e4"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/provider/native-propertyvalueset-qa.test.ts",
+      "gitBlob": "b49f98c24b646da64bff30bdb7d0d90aca49d6b6"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/provider/native-propertyvalueset.test.ts",
+      "gitBlob": "f2f2705b78e95686412090497babaf999082098f"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/provider/native-values-contracts.test.ts",
+      "gitBlob": "48cf4f8ded74336ea9e0ec962da903c1f63ebf21"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/provider/propertyvalueset.ts",
+      "gitBlob": "7764df2f8d2c9e3ceacf1fbdf3c0d3fd3f7eb493"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/beans/XPropertyAccess.ts",
+      "gitBlob": "d3ca5749c9d239c9647fcc0bad2b348d85f2fcba"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/script/CannotConvertException.ts",
+      "gitBlob": "ff5503683869ad74da7a3ad6290c94fa7a44f054"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/script/Converter.ts",
+      "gitBlob": "39aa2e3df2c464e480f6586c7b1e73b50912e9c5"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/script/FailReason.ts",
+      "gitBlob": "b621070c4e4bc747b507e37999ed8e16ba4fb3a3"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/script/XTypeConverter.ts",
+      "gitBlob": "2209e568521189c1a986bfa37c0416096dd39dc6"
+    },
+    {
+      "path": "docs/program/native-ucb-propertyvalueset.md",
+      "gitBlob": "78a702f8487c1697182f3d62584ef4200f44df72"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-61f3e210-48fe-4469-ac8c-75dd698dd823.json",
+      "gitBlob": "9b811ab1be2075d7c7171cff5348b3d07bf8053c"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/sdbc/XColumnLocate.ts.json",
+      "gitBlob": "cfb44a59f805f8ddb37e1f00f25bedd2bd7997e3"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/inc/propertyvalueset.ts.json",
+      "gitBlob": "476f986eae7c942d10be4c12a3b7808e11dc1a9c"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/source/provider/propertyvalueset.ts.json",
+      "gitBlob": "7595148f196e5c708308095f49abf8aa83af1864"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/XPropertyAccess.ts.json",
+      "gitBlob": "e1fd6c3da4c4ad30dd48ce3adc0a5c87380fa7db"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/script/CannotConvertException.ts.json",
+      "gitBlob": "4574c32dfe665557ea811fddecdbe307ad26ac81"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/script/Converter.ts.json",
+      "gitBlob": "8ff54607ed0a464f0486dc9a4076d524040d7cb2"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/script/FailReason.ts.json",
+      "gitBlob": "e42ab78c2fc6b9c5798a8dad7a3de66d2767f617"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/script/XTypeConverter.ts.json",
+      "gitBlob": "bcfc8e8d12b444453eed0623534a14dbb98b038e"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/sdbc/XColumnLocate.ts.json",
+      "gitBlob": "d1cbf49c08409ae4c9e6ad4918733db704a83c8c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/inc/propertyvalueset.ts.json",
+      "gitBlob": "ac54c9ffb9a3bd008391bfb367b4935abcb1e54f"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/source/provider/propertyvalueset.ts.json",
+      "gitBlob": "b466e3b339bb1857375891e4274a9c11cebfe431"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/XPropertyAccess.ts.json",
+      "gitBlob": "d2789ff9437951ac4ad0a32aeb2e0455efed6ac0"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/script/CannotConvertException.ts.json",
+      "gitBlob": "403e105c3dd72edf94b5e304ad25b7cdceb6c564"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/script/Converter.ts.json",
+      "gitBlob": "178d91cb287ca4d2349d3699a1d1704c456e2bec"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/script/FailReason.ts.json",
+      "gitBlob": "ba256cc0543d8b3c4830b3eb14920d6f63b1a431"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/script/XTypeConverter.ts.json",
+      "gitBlob": "cd7711899fac72058c71e869c3f96d7100dc73f5"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/uno/TypeClass.ts",
+      "gitBlob": "cc9a10808d6a384ce14c9ef33eaed37f0cf83b2f"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "2fd6375b665e57d1bae0eeaa86b5f9aecd9b72d0"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/uno/TypeClass.ts.json",
+      "gitBlob": "18652dc84d729b24c30f51c966f1c6f98587c92c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/uno/TypeClass.ts.json",
+      "gitBlob": "7f59a39719c2c5155090c22e36875e4fa7794661"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "dbdb2322d4d1bf5a20de85fc2edbc2e48ab4f4c8"
+    }
+  ],
+  "upstreamBlobs": [
+    {
+      "path": "vendor/libreoffice-reference/ucbhelper/source/provider/propertyvalueset.cxx",
+      "gitBlob": "b87bb6fdd471890207d31ec3405363f88f1153bf"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/ucbhelper/propertyvalueset.hxx",
+      "gitBlob": "b750662976c22941d1f7d74ae3656144dc713e16"
+    },
+    {
+      "path": "vendor/libreoffice-reference/codemaker/source/cppumaker/cpputype.cxx",
+      "gitBlob": "152dbf476955dd95b1d7623ca7342cc69c24fb0a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/qadevOOo/tests/java/ifc/sdbc/_XRow.java",
+      "gitBlob": "e1babb0760b6403ff223bd828edd909938212889"
+    },
+    {
+      "path": "vendor/libreoffice-reference/qadevOOo/tests/java/ifc/sdbc/_XColumnLocate.java",
+      "gitBlob": "f1d57c5b7a6b18d13135e58cd03d2d4502798de3"
+    },
+    {
+      "path": "vendor/libreoffice-reference/udkapi/com/sun/star/uno/TypeClass.idl",
+      "gitBlob": "ebb9e629083cd824ffc4710369d5bd94544500ba"
+    },
+    {
+      "path": "vendor/libreoffice-reference/udkapi/com/sun/star/beans/XPropertyAccess.idl",
+      "gitBlob": "8de04a7dffa71d6edf875ed2a3893ab919fd77e0"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/sdbc/XColumnLocate.idl",
+      "gitBlob": "00b8d9887e1157582888e96cc3d57432164d4bcb"
+    },
+    {
+      "path": "vendor/libreoffice-reference/udkapi/com/sun/star/script/Converter.idl",
+      "gitBlob": "3839204d4fbe1d300fbf01557ba83f53f6cbba41"
+    },
+    {
+      "path": "vendor/libreoffice-reference/udkapi/com/sun/star/script/XTypeConverter.idl",
+      "gitBlob": "5124e8835a771985aa0e1943e479c11949b32f17"
+    },
+    {
+      "path": "vendor/libreoffice-reference/udkapi/com/sun/star/script/CannotConvertException.idl",
+      "gitBlob": "3d0ec19558e33f124494cb4eee38d6c39fc904ea"
+    },
+    {
+      "path": "vendor/libreoffice-reference/udkapi/com/sun/star/script/FailReason.idl",
+      "gitBlob": "27d96fa18a58e807344d0df73113fb62208628c3"
+    }
+  ]
+}
