@@ -1,0 +1,1064 @@
+{
+  "status": "implemented-native-package-sax-consumers-bounded-checkpoint-parent-continues",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "fea2e9aaa38d78b70dd5d9a1eb41e569226cb8cb",
+  "capability": "CAP-4fda99cc-b74d-4196-b579-e6a74a093c98",
+  "scope": "Complete original OFOP native stream/context output methods, actual ManifestWriter component/SDK and native ManifestExport handler/sequences; genuine existing package callers, removal of duplicate XML encoder and real Writer Worker service composition. Language string transport retains explicit divergent existing JS signatures.",
+  "tests": {
+    "focusedCases": 106,
+    "focusedFiles": 14,
+    "command": {
+      "cwd": "apps/office",
+      "argv": [
+        "../../node_modules/.bin/vitest",
+        "run",
+        "src/comphelper/source/xml/ofopxmlhelper.write.test.ts",
+        "src/comphelper/source/xml/ofopxmlhelper.test.ts",
+        "src/package/source/manifest/native-manifest-export.test.ts",
+        "src/package/source/manifest/ManifestExport.test.ts",
+        "src/package/source/zippackage/native-plain-manifest.test.ts",
+        "src/package/source/manifest/native-manifest-import.test.ts",
+        "src/oox/source/core/xmlfilterbase.test.ts",
+        "src/desktop/browser/app/uno-components.test.ts",
+        "src/comphelper/source/processfactory/processfactory.test.ts",
+        "src/cppuhelper/source/service-helpers.test.ts",
+        "src/main.test.ts",
+        "src/sw/source/filter/xml/odt-worker-runtime.test.ts",
+        "src/sw/source/filter/xml/odt-worker-client.test.ts",
+        "src/sc/browser/filter/xml/ods-worker-boundaries.test.ts",
+        "--maxWorkers=2",
+        "--coverage",
+        "--coverage.provider=istanbul",
+        "--coverage.include=src/comphelper/source/xml/ofopxmlhelper.ts",
+        "--coverage.include=src/comphelper/source/xml/ofopxmlhelper.write.ts",
+        "--coverage.include=src/comphelper/source/xml/ofopxmlhelper.string.ts",
+        "--coverage.include=src/comphelper/source/xml/saxstringwriter.ts",
+        "--coverage.include=src/package/source/manifest/ManifestExport.ts",
+        "--coverage.include=src/package/source/manifest/ManifestWriter.ts",
+        "--coverage.include=src/offapi/com/sun/star/packages/manifest/XManifestWriter.ts",
+        "--coverage.include=src/offapi/com/sun/star/packages/manifest/ManifestWriter.ts",
+        "--coverage.reportsDirectory=coverage/sax-consumers",
+        "--coverage.thresholds.statements=90",
+        "--coverage.thresholds.branches=90",
+        "--coverage.thresholds.functions=90",
+        "--coverage.thresholds.lines=90"
+      ],
+      "wholeProductionOwners": [
+        "comphelper/source/xml/ofopxmlhelper.ts",
+        "comphelper/source/xml/ofopxmlhelper.write.ts",
+        "comphelper/source/xml/ofopxmlhelper.string.ts",
+        "comphelper/source/xml/saxstringwriter.ts",
+        "package/source/manifest/ManifestExport.ts",
+        "package/source/manifest/ManifestWriter.ts",
+        "offapi/com/sun/star/packages/manifest/XManifestWriter.ts",
+        "offapi/com/sun/star/packages/manifest/ManifestWriter.ts"
+      ]
+    },
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 438,
+          "covered": 423,
+          "skipped": 0,
+          "pct": 96.57
+        },
+        "statements": {
+          "total": 471,
+          "covered": 452,
+          "skipped": 0,
+          "pct": 95.96
+        },
+        "functions": {
+          "total": 62,
+          "covered": 61,
+          "skipped": 0,
+          "pct": 98.38
+        },
+        "branches": {
+          "total": 102,
+          "covered": 94,
+          "skipped": 0,
+          "pct": 92.15
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/comphelper/source/xml/ofopxmlhelper.string.ts": {
+        "lines": {
+          "total": 39,
+          "covered": 39,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 41,
+          "covered": 41,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/comphelper/source/xml/ofopxmlhelper.ts": {
+        "lines": {
+          "total": 87,
+          "covered": 87,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 94,
+          "covered": 94,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 45,
+          "covered": 44,
+          "skipped": 0,
+          "pct": 97.77
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/comphelper/source/xml/ofopxmlhelper.write.ts": {
+        "lines": {
+          "total": 81,
+          "covered": 81,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 84,
+          "covered": 84,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/comphelper/source/xml/saxstringwriter.ts": {
+        "lines": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/packages/manifest/ManifestWriter.ts": {
+        "lines": {
+          "total": 32,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 53.12
+        },
+        "functions": {
+          "total": 4,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 75
+        },
+        "statements": {
+          "total": 35,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 48.57
+        },
+        "branches": {
+          "total": 8,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 25
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/packages/manifest/XManifestWriter.ts": {
+        "lines": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/package/source/manifest/ManifestExport.ts": {
+        "lines": {
+          "total": 116,
+          "covered": 116,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 130,
+          "covered": 130,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 37,
+          "covered": 37,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/package/source/manifest/ManifestWriter.ts": {
+        "lines": {
+          "total": 66,
+          "covered": 66,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 16,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 68,
+          "covered": 67,
+          "skipped": 0,
+          "pct": 98.52
+        },
+        "branches": {
+          "total": 2,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 50
+        }
+      }
+    },
+    "rawCoverageSha256": "731aa4fb0244ff3cdfd875bbb26d0e6b203bfcd68f99c26e7586afcf61e7c46a",
+    "relatedCases": 120,
+    "relatedFiles": 12,
+    "unoRegressionCases": 68,
+    "unoRegressionFiles": 12,
+    "finalOwnershipCases": 32,
+    "finalOwnershipFiles": 2,
+    "boundaryCases": 56,
+    "boundaryFiles": 4,
+    "individualOwnerLimitation": "Aggregate approved scoped90 passes for all eight complete executable owners. SDK deployment alternatives remain partly uncovered; no per-file90 claim, exclusions, fake positive provider or private-state patch."
+  },
+  "browserQualification": {
+    "result": "apps/office/coverage/native-dom-worker-result.json",
+    "sha256": "a15af335701a8f19416cd4116766addd8b91613aa80ef627a8283db41bf118ba",
+    "actual": {
+      "workerResult": {
+        "conversion": {
+          "serviceValue": 42,
+          "rowValue": 42,
+          "rowWasNull": false,
+          "failedFirst": 0,
+          "failedFirstWasNull": false,
+          "failedSecond": 0,
+          "failedSecondWasNull": true
+        },
+        "publicHelpers": {
+          "notifications": 1,
+          "sameEventSource": true,
+          "componentTypeCount": 3
+        },
+        "dynamicProperties": {
+          "changed": true,
+          "value": 42,
+          "initialDefault": 41,
+          "name": "workerValue",
+          "handle": 7,
+          "declaredLong": true,
+          "stableTypeField": true
+        },
+        "propertyArray": {
+          "count": 1,
+          "handle": 7,
+          "missing": -1,
+          "snapshotName": "workerValue",
+          "sameInfoIdentity": true
+        },
+        "legacyListeners": {
+          "remaining": 1,
+          "sameFirst": true,
+          "sameSnapshot": true,
+          "keyCount": 1,
+          "key": -7
+        },
+        "nativeAnyFields": {
+          "value": 43,
+          "initialDefault": 41,
+          "liveType": true,
+          "interfaceIdentity": true
+        },
+        "nativePropertyControl": {
+          "value": 42,
+          "storedLong": true,
+          "notifications": 1,
+          "notifiedTypeLong": false,
+          "notifiedValue": 42,
+          "notifiedOld": 41,
+          "sameSource": true,
+          "state": 0,
+          "initialStates": [
+            1,
+            0
+          ],
+          "typeCount": 7
+        },
+        "registeredPropertyBag": {
+          "value": 42,
+          "count": 1,
+          "modified": true,
+          "directState": 0,
+          "sameIdentity": true
+        },
+        "nativeSax": {
+          "calls": [
+            "begin",
+            "start:root:0",
+            "text:worker SAX\u5b57",
+            "end",
+            "finish"
+          ],
+          "sameIdentity": true
+        },
+        "registeredSaxWriter": {
+          "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>worker SAX\u5b57</root>",
+          "sameIdentity": true
+        },
+        "packageSaxWriters": {
+          "manifest": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\" manifest:version=\"1.3\" xmlns:loext=\"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0\">\n <manifest:file-entry manifest:full-path=\"/\" manifest:media-type=\"application/vnd.oasis.opendocument.text\" manifest:version=\"1.3\"/>\n <manifest:file-entry manifest:full-path=\"content.xml\" manifest:media-type=\"text/xml\"/>\n</manifest:manifest>",
+          "relationships": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\"><Relationship Id=\"rId1\" Type=\"worker\u5b57\" Target=\"word/document.xml?a=1&amp;b=2\"/>\n</Relationships>"
+        },
+        "nativeSaxWriterBuffer": {
+          "valid": true,
+          "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<r a=\"&amp;&#x0a;\">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\u5b57\ud83d\ude00&beta;</r>"
+        },
+        "metadataValues": {
+          "values": [
+            "2024-02-29+05:30",
+            "2024-02-29T03:04:05.000000009-01:30",
+            "-P1DT2H3M4.000000005S"
+          ],
+          "types": [
+            "date",
+            "date",
+            "time"
+          ]
+        },
+        "metadataIngestion": [
+          "Dies ist ein wichtiger Hinweis",
+          "Kann Spuren von N\u00fcssen enthalten"
+        ],
+        "documentBuilder": {
+          "rootName": "document-content",
+          "streamOpen": true,
+          "namespaceAware": true,
+          "validating": false,
+          "emptyImplementation": true,
+          "capturedType": true,
+          "sameContext": true,
+          "exceptionMessage": "worker exception"
+        },
+        "xpath": {
+          "count": 1,
+          "listLength": 1,
+          "sameRoot": true
+        },
+        "globals": {
+          "window": "undefined",
+          "document": "undefined",
+          "DOMParser": "undefined"
+        },
+        "rootName": "document-content",
+        "attribute": "1.0",
+        "listCounts": [
+          0,
+          1,
+          0
+        ],
+        "sameOwner": true,
+        "unicode": "\ud83d\ude00\u5b57",
+        "utf16Length": 3,
+        "borrowedStreamOpen": true,
+        "warnings": 1,
+        "errors": 0,
+        "warningLine": 1
+      },
+      "mainResult": {
+        "conversion": {
+          "serviceValue": 42,
+          "rowValue": 42,
+          "rowWasNull": false,
+          "failedFirst": 0,
+          "failedFirstWasNull": false,
+          "failedSecond": 0,
+          "failedSecondWasNull": true
+        },
+        "publicHelpers": {
+          "notifications": 1,
+          "sameEventSource": true,
+          "componentTypeCount": 3
+        },
+        "dynamicProperties": {
+          "changed": true,
+          "value": 42,
+          "initialDefault": 41,
+          "name": "workerValue",
+          "handle": 7,
+          "declaredLong": true,
+          "stableTypeField": true
+        },
+        "propertyArray": {
+          "count": 1,
+          "handle": 7,
+          "missing": -1,
+          "snapshotName": "workerValue",
+          "sameInfoIdentity": true
+        },
+        "legacyListeners": {
+          "remaining": 1,
+          "sameFirst": true,
+          "sameSnapshot": true,
+          "keyCount": 1,
+          "key": -7
+        },
+        "nativeAnyFields": {
+          "value": 43,
+          "initialDefault": 41,
+          "liveType": true,
+          "interfaceIdentity": true
+        },
+        "nativePropertyControl": {
+          "value": 42,
+          "storedLong": true,
+          "notifications": 1,
+          "notifiedTypeLong": false,
+          "notifiedValue": 42,
+          "notifiedOld": 41,
+          "sameSource": true,
+          "state": 0,
+          "initialStates": [
+            1,
+            0
+          ],
+          "typeCount": 7
+        },
+        "registeredPropertyBag": {
+          "value": 42,
+          "count": 1,
+          "modified": true,
+          "directState": 0,
+          "sameIdentity": true
+        },
+        "nativeSax": {
+          "calls": [
+            "begin",
+            "start:root:0",
+            "text:worker SAX\u5b57",
+            "end",
+            "finish"
+          ],
+          "sameIdentity": true
+        },
+        "registeredSaxWriter": {
+          "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>worker SAX\u5b57</root>",
+          "sameIdentity": true
+        },
+        "packageSaxWriters": {
+          "manifest": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\" manifest:version=\"1.3\" xmlns:loext=\"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0\">\n <manifest:file-entry manifest:full-path=\"/\" manifest:media-type=\"application/vnd.oasis.opendocument.text\" manifest:version=\"1.3\"/>\n <manifest:file-entry manifest:full-path=\"content.xml\" manifest:media-type=\"text/xml\"/>\n</manifest:manifest>",
+          "relationships": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\"><Relationship Id=\"rId1\" Type=\"worker\u5b57\" Target=\"word/document.xml?a=1&amp;b=2\"/>\n</Relationships>"
+        },
+        "nativeSaxWriterBuffer": {
+          "valid": true,
+          "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<r a=\"&amp;&#x0a;\">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\u5b57\ud83d\ude00&beta;</r>"
+        },
+        "metadataValues": {
+          "values": [
+            "2024-02-29+05:30",
+            "2024-02-29T03:04:05.000000009-01:30",
+            "-P1DT2H3M4.000000005S"
+          ],
+          "types": [
+            "date",
+            "date",
+            "time"
+          ]
+        },
+        "metadataIngestion": [
+          "Dies ist ein wichtiger Hinweis",
+          "Kann Spuren von N\u00fcssen enthalten"
+        ],
+        "documentBuilder": {
+          "rootName": "document-content",
+          "streamOpen": true,
+          "namespaceAware": true,
+          "validating": false,
+          "emptyImplementation": true,
+          "capturedType": true,
+          "sameContext": true,
+          "exceptionMessage": "worker exception"
+        },
+        "xpath": {
+          "count": 1,
+          "listLength": 1,
+          "sameRoot": true
+        },
+        "globals": {
+          "window": "object",
+          "document": "object",
+          "DOMParser": "function"
+        },
+        "rootName": "document-content",
+        "attribute": "1.0",
+        "listCounts": [
+          0,
+          1,
+          0
+        ],
+        "sameOwner": true,
+        "unicode": "\ud83d\ude00\u5b57",
+        "utf16Length": 3,
+        "borrowedStreamOpen": true,
+        "warnings": 1,
+        "errors": 0,
+        "warningLine": 1
+      }
+    },
+    "writer": "Actual production ODT hyperlink create/edit/download/reopen passes using the new Writer Worker composition root.",
+    "calc": "Actual ODS native input/import-edit-export-reopen values, formulas, formatting and sheets pass in main and DOM-free Worker after adding actual service bootstrap to the isolated kernel fixture."
+  },
+  "architecture": [
+    "Exact package2 implementation/service/factory and real desktop registry; Desktop->package source services composition edge with reverse still forbidden. No cycle or injected-provider bypass.",
+    "Core source native methods require actual context; no lazy initialization. Writer and Calc Worker roots own realm-local services. Tests initialize the same actual service registry.",
+    "Existing package string language bindings construct native values and decode genuine native stream bytes. Their source responsibility/signatures are explicitly divergent, not claimed original methods. No XML encoder or fake native stream/provider lives there.",
+    "ManifestExport remains bounded to existing unencrypted OASIS admission; full legacy/encryption paths not implemented."
+  ],
+  "preservedIssues": [
+    "CALC571/WRITER506: writer permits absent/empty Id while reader rejects it.",
+    "ManifestWriter original empty outer error message/context and dynamic nested SAX exception are preserved."
+  ],
+  "sourceQa": {
+    "reusedCheckpoint": ".agentplane/tasks/202610251549-J0Z0KF/evidence/native-sax-writer-service-checkpoint.json",
+    "sha256": "9f367ec18e6e35ff4d10b8f31a7432f7d455856f24c96171715fd3958969f5b1",
+    "unchangedComponentAndFactorySuffixSha256": "85198b778d04a6e8f74651f8c6e683e2a45da411e9bdbe5269c7ec65439ad373",
+    "claim": "All original five SAX Writer QA operations passed in the preceding checkpoint. Only the old separate encoder/header/import are removed from SAXWriter; actual component state machine is unchanged. Current consumer/component assertions are authored tests; no dedicated original ManifestWriter/OFOP QA suite port is claimed."
+  },
+  "remaining": [
+    "Full SfxDocumentMetaData service/lifecycle/clone/serialization/storage and real importer/exporter dependencies.",
+    "Native fast SAX/IO remainder and real UCB URI provider acceptance.",
+    "Final Writer/Calc original filter/model/shell orchestration and committed Strict/Transitional DOCX/XLSX canonical roundtrips.",
+    "Actual desktop/mobile existing UI Open/download/reopen and malformed/stale/cancel graph preservation for full DOCX/XLSX acceptance.",
+    "Prior metadata/DOM coverage gaps and physical native ABI/allocator/debug/independent binary/timing claims remain unqualified."
+  ],
+  "knownBaseline": "Only docs check fails for pre-existing css-style-matchers.ts:17/:76. Doctor has existing managed-hook readiness warning.",
+  "recoveries": [
+    "Stale JS error string expectations corrected to actual native exception types.",
+    "Two remaining type-only host StringPair imports corrected.",
+    "Isolated Calc browser fixture now initializes real source services; no core fallback added.",
+    "Canonical localSymbols updated for actual declarations after responsibility split; historical capability records retained.",
+    "Implicit SDK constructor evidence uses base IDL and CPPUMaker source, not an invented create IDL token.",
+    "Pure platform-neutral string transport has explicit divergent source mapping, avoiding forbidden source-to-browser imports and fabricated signature parity."
+  ],
+  "fullSuite": "Not due: current work is a bounded checkpoint within the existing actual task; approved full-suite cadence is once per ten actual tasks.",
+  "userStopRule": "Continue without pauses; task stays DOING/needs_rework until full acceptance.",
+  "checks": {
+    "coverage": {
+      "command": "../../node_modules/.bin/vitest run src/comphelper/source/xml/ofopxmlhelper.write.test.ts src/comphelper/source/xml/ofopxmlhelper.test.ts src/package/source/manifest/native-manifest-export.test.ts src/package/source/manifest/ManifestExport.test.ts src/package/source/zippackage/native-plain-manifest.test.ts src/package/source/manifest/native-manifest-import.test.ts src/oox/source/core/xmlfilterbase.test.ts src/desktop/browser/app/uno-components.test.ts src/comphelper/source/processfactory/processfactory.test.ts src/cppuhelper/source/service-helpers.test.ts src/main.test.ts src/sw/source/filter/xml/odt-worker-runtime.test.ts src/sw/source/filter/xml/odt-worker-client.test.ts src/sc/browser/filter/xml/ods-worker-boundaries.test.ts --maxWorkers=2 --coverage --coverage.provider=istanbul --coverage.include=src/comphelper/source/xml/ofopxmlhelper.ts --coverage.include=src/comphelper/source/xml/ofopxmlhelper.write.ts --coverage.include=src/comphelper/source/xml/ofopxmlhelper.string.ts --coverage.include=src/comphelper/source/xml/saxstringwriter.ts --coverage.include=src/package/source/manifest/ManifestExport.ts --coverage.include=src/package/source/manifest/ManifestWriter.ts --coverage.include=src/offapi/com/sun/star/packages/manifest/XManifestWriter.ts --coverage.include=src/offapi/com/sun/star/packages/manifest/ManifestWriter.ts --coverage.reportsDirectory=coverage/sax-consumers --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 (cwd apps/office)",
+      "log": "apps/office/coverage/sax-consumers-coverage.log",
+      "sha256": "26c0c7f996dea5117146dcc4046d1dcaf3c004e61a572c8e0c8995030f4dc919",
+      "status": "pass"
+    },
+    "related-tests": {
+      "command": "../../node_modules/.bin/vitest run src/comphelper/source/xml/ofopxmlhelper.write.test.ts src/comphelper/source/xml/ofopxmlhelper.test.ts src/package/source/manifest/native-manifest-export.test.ts src/package/source/manifest/ManifestExport.test.ts src/package/source/zippackage/native-plain-manifest.test.ts src/oox/source/core/xmlfilterbase.test.ts src/oox/source/helper/zipstorage-input.test.ts src/oox/source/core/upstream-packages.test.ts src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.test.ts src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts --maxWorkers=2 (cwd apps/office)",
+      "log": "apps/office/coverage/sax-consumers-related-tests.log",
+      "sha256": "bf7d7f4ac81eca9f1708016f81c421539d08e64db096729cfa63aa05c1faa556",
+      "status": "pass"
+    },
+    "uno-regression": {
+      "command": "../../node_modules/.bin/vitest run src/cppu/inc/com/sun/star/uno/Reference.test.ts src/cppu/inc/com/sun/star/uno/Reference-query.test.ts src/cppu/inc/com/sun/star/uno/Sequence.test.ts src/cppu/inc/com/sun/star/uno/Sequence-type-index.test.ts src/cppu/inc/com/sun/star/uno/Type.test.ts src/cppu/inc/com/sun/star/uno/Any-ownership.test.ts src/cppu/inc/com/sun/star/uno/Any-data.test.ts src/cppu/inc/com/sun/star/uno/Any-address.test.ts src/cppuhelper/source/component_context.test.ts src/cppuhelper/source/component_context-callee.test.ts src/cppuhelper/inc/component_context.test.ts src/sax/source/expatwrap/saxwriter.component.test.ts --maxWorkers=2 (cwd apps/office)",
+      "log": "apps/office/coverage/sax-consumers-uno-regression.log",
+      "sha256": "7479fe786b0d78cf925d0f7c4060d6e4a4cfdbf959d50beac5dfacc15e796b6c",
+      "status": "pass"
+    },
+    "ownership-tests": {
+      "command": "../../node_modules/.bin/vitest run src/comphelper/source/xml/ofopxmlhelper.write.test.ts src/comphelper/source/xml/ofopxmlhelper.test.ts --maxWorkers=2 (cwd apps/office)",
+      "log": "apps/office/coverage/sax-consumers-ownership-tests.log",
+      "sha256": "603b3183fa6a9eefab962ae63f2bde808c407a99dd923b58440f14ad270a1a56",
+      "status": "pass"
+    },
+    "typecheck": {
+      "command": "npm run typecheck",
+      "log": "apps/office/coverage/sax-consumers-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+      "status": "pass"
+    },
+    "build": {
+      "command": "npm run build",
+      "log": "apps/office/coverage/sax-consumers-build.log",
+      "sha256": "7a669ea33bcdb9e211658706d1c6e0002b209d8124969f8ec6bcee5d4769b21d",
+      "status": "pass"
+    },
+    "static": {
+      "command": "node scripts/check-static-build.mjs",
+      "log": "apps/office/coverage/sax-consumers-static.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+      "status": "pass"
+    },
+    "boundaries": {
+      "command": "npm run check:dependencies",
+      "log": "apps/office/coverage/sax-consumers-boundaries.log",
+      "sha256": "27dc39e386f0ea5fbaebf06545f908158cfd44660a516199f950d286509b329c",
+      "status": "pass"
+    },
+    "provenance": {
+      "command": "npm run check:source-provenance",
+      "log": "apps/office/coverage/sax-consumers-provenance.log",
+      "sha256": "bcd4b25141b25a3d0fffa4b0484de41f3c617ef73542a3788f87fc24427c3dc0",
+      "status": "pass"
+    },
+    "registry-check": {
+      "command": "npm run inventory:registry:check",
+      "log": "apps/office/coverage/sax-consumers-registry-check.log",
+      "sha256": "fdd43c21ce9bf20f2722669c0354c1c78b7f2fcab5e34f7ac4a972ecd1444a89",
+      "status": "pass"
+    },
+    "registry-build": {
+      "command": "npm run inventory:registry:build",
+      "log": "apps/office/coverage/sax-consumers-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209",
+      "status": "pass"
+    },
+    "docs": {
+      "command": "npm run check:docs",
+      "log": "apps/office/coverage/sax-consumers-docs.log",
+      "sha256": "ead8eecfcaab7d047ac89ca9ba4226556666e738e85e4ea1a6e35f2418f310b5",
+      "status": "known-baseline-fail"
+    },
+    "size": {
+      "command": "npm run check:file-size",
+      "log": "apps/office/coverage/sax-consumers-size.log",
+      "sha256": "7ace0f277d505178ec5cbb1691e0394ff2180d000dd0ce08b33a30cb470e0591",
+      "status": "pass"
+    },
+    "resources": {
+      "command": "npm run check:writer-resources && npm run check:calc-resources",
+      "log": "apps/office/coverage/sax-consumers-resources.log",
+      "sha256": "18363749c8fd951f67a914b5bb7a7f18844091af2990bf3a2a8d45521928247e",
+      "status": "pass"
+    },
+    "doctor": {
+      "command": "ap doctor",
+      "log": "apps/office/coverage/sax-consumers-doctor.log",
+      "sha256": "6806dfef5e62c6aac95dc368185d534297e8b20915c9074bca2f464b4e1455b8",
+      "status": "pass"
+    },
+    "routing": {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "log": "apps/office/coverage/sax-consumers-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+      "status": "pass"
+    },
+    "resource-tests": {
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries-xml.test.ts scripts/check-module-boundaries.test.ts scripts/check-unoxml-boundaries.test.ts scripts/native-sax-input-boundary.test.ts --maxWorkers=2",
+      "log": "apps/office/coverage/sax-consumers-resource-tests.log",
+      "sha256": "d89aeca4f64975b68239ed1d92c9fb5fec8b7e0869f7f7c1f72a0b6312d4122d",
+      "status": "pass"
+    },
+    "lint": {
+      "command": "node_modules/.bin/eslint apps/office/e2e/calc/ods.spec.ts apps/office/src/comphelper/source/xml/ofopxmlhelper.string.ts apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts apps/office/src/comphelper/source/xml/ofopxmlhelper.ts apps/office/src/comphelper/source/xml/ofopxmlhelper.write.test.ts apps/office/src/comphelper/source/xml/ofopxmlhelper.write.ts apps/office/src/comphelper/source/xml/saxstringwriter.ts apps/office/src/desktop/browser/app/uno-components.ts apps/office/src/offapi/com/sun/star/packages/manifest/ManifestWriter.ts apps/office/src/offapi/com/sun/star/packages/manifest/XManifestWriter.ts apps/office/src/offapi/com/sun/star/xml/sax/XDocumentHandler.ts apps/office/src/oox/source/core/xmlfilterbase.ts apps/office/src/package/source/manifest/ManifestExport.ts apps/office/src/package/source/manifest/ManifestWriter.ts apps/office/src/package/source/manifest/native-manifest-export.test.ts apps/office/src/package/source/zippackage/ZipPackage.ts apps/office/src/sax/source/expatwrap/saxwriter.ts apps/office/src/sw/browser/filter/xml/odt-worker-client.ts apps/office/src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.test.ts apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts apps/office/src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts apps/office/src/test/native-office-services.ts apps/office/src/test/setup.ts apps/office/src/writer-odt-worker.ts scripts/check-module-boundaries-xml.test.ts scripts/fixtures/native-dom-worker-probe.ts scripts/module-boundaries/allowed-edges.mjs scripts/native-dom-worker-probe.mjs --max-warnings 0",
+      "log": "apps/office/coverage/sax-consumers-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "status": "pass"
+    },
+    "format-check": {
+      "command": "node_modules/.bin/prettier --check apps/office/e2e/calc/ods.spec.ts apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts apps/office/src/comphelper/source/xml/ofopxmlhelper.ts apps/office/src/desktop/browser/app/uno-components.ts apps/office/src/offapi/com/sun/star/xml/sax/XDocumentHandler.ts apps/office/src/oox/source/core/xmlfilterbase.ts apps/office/src/package/source/manifest/ManifestExport.ts apps/office/src/package/source/manifest/ManifestWriter.ts apps/office/src/package/source/manifest/native-manifest-export.test.ts apps/office/src/package/source/zippackage/ZipPackage.ts apps/office/src/sax/source/expatwrap/saxwriter.ts apps/office/src/sw/browser/filter/xml/odt-worker-client.ts apps/office/src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.test.ts apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts apps/office/src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts apps/office/src/test/setup.ts docs/program/calc-upstream-suspected-issues.md docs/program/registry/shared/provenance/comphelper/source/xml/ofopxmlhelper.ts.json docs/program/registry/shared/provenance/desktop/browser/app/uno-components.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/xml/sax/XDocumentHandler.ts.json docs/program/registry/shared/provenance/oox/source/core/xmlfilterbase.ts.json docs/program/registry/shared/provenance/package/source/manifest/ManifestExport.ts.json docs/program/registry/shared/provenance/package/source/manifest/ManifestWriter.ts.json docs/program/registry/shared/provenance/package/source/zippackage/ZipPackage.ts.json docs/program/registry/shared/provenance/sax/source/expatwrap/saxwriter.ts.json docs/program/registry/shared/runtime/comphelper/source/xml/ofopxmlhelper.ts.json docs/program/registry/shared/runtime/desktop/browser/app/uno-components.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/xml/sax/XDocumentHandler.ts.json docs/program/registry/shared/runtime/oox/source/core/xmlfilterbase.ts.json docs/program/registry/shared/runtime/package/source/manifest/ManifestExport.ts.json docs/program/registry/shared/runtime/package/source/manifest/ManifestWriter.ts.json docs/program/registry/shared/runtime/package/source/zippackage/ZipPackage.ts.json docs/program/registry/shared/runtime/sax/source/expatwrap/saxwriter.ts.json docs/program/registry/writer/provenance/sw/browser/filter/xml/odt-worker-client.ts.json docs/program/registry/writer/runtime/sw/browser/filter/xml/odt-worker-client.ts.json docs/program/writer-upstream-suspected-issues.md scripts/check-module-boundaries-xml.test.ts scripts/fixtures/native-dom-worker-probe.ts scripts/module-boundaries/allowed-edges.mjs scripts/native-dom-worker-probe.mjs apps/office/src/comphelper/source/xml/ofopxmlhelper.string.ts apps/office/src/comphelper/source/xml/ofopxmlhelper.write.test.ts apps/office/src/comphelper/source/xml/ofopxmlhelper.write.ts apps/office/src/comphelper/source/xml/saxstringwriter.ts apps/office/src/offapi/com/sun/star/packages/manifest/ManifestWriter.ts apps/office/src/offapi/com/sun/star/packages/manifest/XManifestWriter.ts apps/office/src/test/native-office-services.ts apps/office/src/writer-odt-worker.ts docs/program/native-package-sax-writers.md docs/program/registry/shared/capabilities/CAP-4fda99cc-b74d-4196-b579-e6a74a093c98.json docs/program/registry/shared/provenance/comphelper/source/xml/ofopxmlhelper.string.ts.json docs/program/registry/shared/provenance/comphelper/source/xml/ofopxmlhelper.write.ts.json docs/program/registry/shared/provenance/comphelper/source/xml/saxstringwriter.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/packages/manifest/ManifestWriter.ts.json docs/program/registry/shared/provenance/offapi/com/sun/star/packages/manifest/XManifestWriter.ts.json docs/program/registry/shared/provenance/writer-odt-worker.ts.json docs/program/registry/shared/runtime/comphelper/source/xml/ofopxmlhelper.string.ts.json docs/program/registry/shared/runtime/comphelper/source/xml/ofopxmlhelper.write.ts.json docs/program/registry/shared/runtime/comphelper/source/xml/saxstringwriter.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/packages/manifest/ManifestWriter.ts.json docs/program/registry/shared/runtime/offapi/com/sun/star/packages/manifest/XManifestWriter.ts.json docs/program/registry/shared/runtime/writer-odt-worker.ts.json",
+      "log": "apps/office/coverage/sax-consumers-format-check.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "status": "pass"
+    },
+    "worker": {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node --experimental-strip-types scripts/native-dom-worker-probe.mjs",
+      "log": "apps/office/coverage/sax-consumers-worker.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee",
+      "status": "pass"
+    },
+    "e2e": {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node_modules/.bin/playwright test --config apps/office/playwright.config.ts apps/office/e2e/writer-hyperlinks.spec.ts apps/office/e2e/calc/ods.spec.ts",
+      "log": "apps/office/coverage/sax-consumers-e2e.log",
+      "sha256": "bf667379d113de0fd86dfaa931e7be2338b2c64edf18339ecdf5a013daea7bba",
+      "status": "writer-pass-initial-calc-fail-see-successful-rerun"
+    },
+    "e2e-calc": {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node_modules/.bin/playwright test --config apps/office/playwright.config.ts apps/office/e2e/calc/ods.spec.ts",
+      "log": "apps/office/coverage/sax-consumers-e2e-calc.log",
+      "sha256": "dea15949e7fc659676c48bb9022b59ea5bad68ad4a18024f59bed6c844649bd7",
+      "status": "pass"
+    }
+  },
+  "sourceBlobs": [
+    {
+      "path": "apps/office/e2e/calc/ods.spec.ts",
+      "gitBlob": "13c081c4a6affc07a647e1ab1fae260fd6a1e348"
+    },
+    {
+      "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.string.ts",
+      "gitBlob": "1475fd4f7ebbea3b9421c87a34ab00220ad50d07"
+    },
+    {
+      "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts",
+      "gitBlob": "12c0190a285b959bee4dadec4c5f5dfdb8b611cd"
+    },
+    {
+      "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts",
+      "gitBlob": "5a42354d05a7c06e11fda1d3efe0900bc6dbae06"
+    },
+    {
+      "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.write.test.ts",
+      "gitBlob": "731f514d930c3d20b906728eae532a7fe06fa97c"
+    },
+    {
+      "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.write.ts",
+      "gitBlob": "d2835d0644598afecda8149e2ca9ea58de5987c3"
+    },
+    {
+      "path": "apps/office/src/comphelper/source/xml/saxstringwriter.ts",
+      "gitBlob": "56bf82e3309675fd9c9528359beeba563087d828"
+    },
+    {
+      "path": "apps/office/src/desktop/browser/app/uno-components.ts",
+      "gitBlob": "e5fb8ef5d76d0a6c9451bafe51f3a76be3ea9a1d"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/packages/manifest/ManifestWriter.ts",
+      "gitBlob": "13ec499d2d825403dc1a82bf6fbe32a698b17cb2"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/packages/manifest/XManifestWriter.ts",
+      "gitBlob": "cda6761b6d6393b054e51eaab352088da2c17168"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/sax/XDocumentHandler.ts",
+      "gitBlob": "0f50d1decc7e901af9d6d13f0b9091ac598a72ef"
+    },
+    {
+      "path": "apps/office/src/oox/source/core/xmlfilterbase.ts",
+      "gitBlob": "53664798eaed15356eaec0a2c16f85b1559fc757"
+    },
+    {
+      "path": "apps/office/src/package/source/manifest/ManifestExport.ts",
+      "gitBlob": "135764fd9faba22e67807b69993d53cb7edad94f"
+    },
+    {
+      "path": "apps/office/src/package/source/manifest/ManifestWriter.ts",
+      "gitBlob": "a256ccbc2e34b305579b2592257821e311806d9e"
+    },
+    {
+      "path": "apps/office/src/package/source/manifest/native-manifest-export.test.ts",
+      "gitBlob": "7e6716e0a87b88207e9cd4799bee7b41466e126e"
+    },
+    {
+      "path": "apps/office/src/package/source/zippackage/ZipPackage.ts",
+      "gitBlob": "56c545f70b9c52044966f74a468c2a3aa1b76ba5"
+    },
+    {
+      "path": "apps/office/src/sax/source/expatwrap/saxwriter.ts",
+      "gitBlob": "285ed132a59d5358530521bac206b776b6f5e9d9"
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/odt-worker-client.ts",
+      "gitBlob": "f7b0f43b3db03b7e373a7d1dc48466e6f2806c2d"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.test.ts",
+      "gitBlob": "655d2834ee89d82e1811a444a4039119365e4c53"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+      "gitBlob": "7d9fff9140db3120bba4106655429d5a754eb832"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+      "gitBlob": "5bacd4d7cf16639964c4500d53c07723cc964992"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts",
+      "gitBlob": "9b40c0ede6471f9612b8f6863543cebfbb9e8b17"
+    },
+    {
+      "path": "apps/office/src/test/native-office-services.ts",
+      "gitBlob": "0d6937ef8788560df653a3fec7d4f4fabb849843"
+    },
+    {
+      "path": "apps/office/src/test/setup.ts",
+      "gitBlob": "02eb7022cf497f9cf42a60acd54309e4cfa6508c"
+    },
+    {
+      "path": "apps/office/src/writer-odt-worker.ts",
+      "gitBlob": "cbc559bfde7c73ce6757738aa01b253d2129df07"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "bdc043a22d1b4658685495cad80cf046d0f536f1"
+    },
+    {
+      "path": "docs/program/native-package-sax-writers.md",
+      "gitBlob": "6294ce4b959285da4b424695a3e9ef394a489697"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-4fda99cc-b74d-4196-b579-e6a74a093c98.json",
+      "gitBlob": "84bf611fca7065cfd2f2c8a595345e279c97ee4e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/comphelper/source/xml/ofopxmlhelper.string.ts.json",
+      "gitBlob": "1f265b99b2adc83e2305b0a74a3ef23044462bdc"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/comphelper/source/xml/ofopxmlhelper.ts.json",
+      "gitBlob": "67f8fd931547e93abd0b3f090a2182f7b1c5be57"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/comphelper/source/xml/ofopxmlhelper.write.ts.json",
+      "gitBlob": "a57f792f4e8d8355917899bcac1bae4d1c23817e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/comphelper/source/xml/saxstringwriter.ts.json",
+      "gitBlob": "f53a300389b0bfe120715b7b439942c6e551b984"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/desktop/browser/app/uno-components.ts.json",
+      "gitBlob": "2b9e545003c54375d671cbe95d362ef67d841f50"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/packages/manifest/ManifestWriter.ts.json",
+      "gitBlob": "3b27bc33e5ccee7132823a15e955ffda1b44d8c8"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/packages/manifest/XManifestWriter.ts.json",
+      "gitBlob": "736eb2f9d537ec5e17b248b5c34a1625b274e1e3"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/sax/XDocumentHandler.ts.json",
+      "gitBlob": "04c09889326c0aa30d4ef6e704a79ec8b25616bd"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/oox/source/core/xmlfilterbase.ts.json",
+      "gitBlob": "d504eaffae6bae58644ee23e6e472e0386f6d821"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/package/source/manifest/ManifestExport.ts.json",
+      "gitBlob": "18553deec2e00345d28e0be54cf335db2361934b"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/package/source/manifest/ManifestWriter.ts.json",
+      "gitBlob": "5dd407aaf15feab868f3f7b2d86937a55e56db77"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/package/source/zippackage/ZipPackage.ts.json",
+      "gitBlob": "7050b2ade9eb043a7b423e121c7a32d19975cee2"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sax/source/expatwrap/saxwriter.ts.json",
+      "gitBlob": "f784f61860b9a87eabdd9d0a20fbec8412da62d4"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/writer-odt-worker.ts.json",
+      "gitBlob": "8391d4c37834d3e9578c86102903e834c1120f0d"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/comphelper/source/xml/ofopxmlhelper.string.ts.json",
+      "gitBlob": "28eebc52f9ad8f0ed9fdd94f4f95e36b10ecf212"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/comphelper/source/xml/ofopxmlhelper.ts.json",
+      "gitBlob": "411bab4e98300132b39b91d1d746d8df98eb45dc"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/comphelper/source/xml/ofopxmlhelper.write.ts.json",
+      "gitBlob": "eb330749a991518400c67d87abd2aabd17692c92"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/comphelper/source/xml/saxstringwriter.ts.json",
+      "gitBlob": "f33718605718757618d6ae7045af208609c301e0"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/desktop/browser/app/uno-components.ts.json",
+      "gitBlob": "e8e36e281b596445f4cc7b88344ca03c88a770cc"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/packages/manifest/ManifestWriter.ts.json",
+      "gitBlob": "accb1c895011b9a7b006ff4281dabadc87014e6c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/packages/manifest/XManifestWriter.ts.json",
+      "gitBlob": "e312bb62da35ae58546849b9e3d65cda717d2bed"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/sax/XDocumentHandler.ts.json",
+      "gitBlob": "a2be60a10e31d7976cc8645dbce16efd3fde9108"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/oox/source/core/xmlfilterbase.ts.json",
+      "gitBlob": "967b0bca1f0faea23e8ea7b1dd242f16c4b59db4"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/package/source/manifest/ManifestExport.ts.json",
+      "gitBlob": "13fdf0ec9bc3617b79095ce8cbd796b4e9f7df50"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/package/source/manifest/ManifestWriter.ts.json",
+      "gitBlob": "533d047f664364cf9e4f7318f64c0a1710342686"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/package/source/zippackage/ZipPackage.ts.json",
+      "gitBlob": "d3373cf60d75255f89a6fd86572f0cde4a99e20c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sax/source/expatwrap/saxwriter.ts.json",
+      "gitBlob": "b5d185567565f3e2f7a3ce7a896f90731c43ece4"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/writer-odt-worker.ts.json",
+      "gitBlob": "4ee6b6bf9424b81dcb37d006283eb01c337375e6"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/browser/filter/xml/odt-worker-client.ts.json",
+      "gitBlob": "f429c1f468627ff59d9a6bb55424cc29db0ff480"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/browser/filter/xml/odt-worker-client.ts.json",
+      "gitBlob": "8caf9a5e95f6e42d14e0444d6b0a2f90acf9b637"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "cda84a6c37218aca4007ac27ff3ce13eae4cb2cc"
+    },
+    {
+      "path": "scripts/check-module-boundaries-xml.test.ts",
+      "gitBlob": "bf5bb1a16be4ea8dd2126e619cff3429245ea2db"
+    },
+    {
+      "path": "scripts/fixtures/native-dom-worker-probe.ts",
+      "gitBlob": "6ef08e82f68d22eb23ef6e57bf114f02a6e57e55"
+    },
+    {
+      "path": "scripts/module-boundaries/allowed-edges.mjs",
+      "gitBlob": "e83d3dfff3414d5883243a14c7db057488a4347c"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "gitBlob": "8c25fbb02307ca5184d18102ac391755f5ab57f8"
+    }
+  ],
+  "upstreamBlobs": [
+    {
+      "path": "comphelper/source/xml/ofopxmlhelper.cxx",
+      "gitBlob": "fd2976ecd460f399e14bc259b45f13625c89a139"
+    },
+    {
+      "path": "comphelper/source/streaming/seqstream.cxx",
+      "gitBlob": "03e0b7269adb6389efa37e416aa98b87b41abc8d"
+    },
+    {
+      "path": "package/source/manifest/ManifestWriter.cxx",
+      "gitBlob": "98e09883cfda1fe130c5fa9ebc622e2284a46cf9"
+    },
+    {
+      "path": "package/source/manifest/ManifestExport.cxx",
+      "gitBlob": "965c4cd257482429751c6696e9b630e854b4b87e"
+    },
+    {
+      "path": "package/Library_package2.mk",
+      "gitBlob": "d57e3027b2a5b090e4942d663333c9bbf4f6775e"
+    },
+    {
+      "path": "package/util/package2.component",
+      "gitBlob": "d436d9a35a818c9ac39b3923be16924e45f3fcff"
+    },
+    {
+      "path": "offapi/com/sun/star/packages/manifest/ManifestWriter.idl",
+      "gitBlob": "c01508b209f08f49917a56b05c4f258588e965ce"
+    },
+    {
+      "path": "offapi/com/sun/star/packages/manifest/XManifestWriter.idl",
+      "gitBlob": "6b615595333df810cb7bbaf0c699899bb317a1da"
+    },
+    {
+      "path": "codemaker/source/cppumaker/cpputype.cxx",
+      "gitBlob": "152dbf476955dd95b1d7623ca7342cc69c24fb0a"
+    },
+    {
+      "path": "sax/source/expatwrap/saxwriter.cxx",
+      "gitBlob": "861a4ce76f2b623bba2748bee61f246137972f17"
+    },
+    {
+      "path": "sax/test/sax/testwriter.cxx",
+      "gitBlob": "2a5d3706d48fc95eb6622f75e64921bc93fbf26e"
+    }
+  ]
+}

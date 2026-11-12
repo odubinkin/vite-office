@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 289
+revision: 292
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T22:55:25.466Z"
+  updated_at: "2026-11-12T23:35:58.648Z"
   updated_by: "CODER"
-  note: "Registered SAX Writer checkpoint passes77 related cases, full source invariant/simple/exceptions/DTD/performance125x450 workload, whole6-owner scoped90, native DOM->Writer main/DOM-free Worker and56 boundary/resource cases. Full Sfx metadata, legacy carrier migration and DOCX/XLSX core/shell/UI remain pending; preserve earlier gaps. Evidence native-sax-writer-service-checkpoint.json; continue without pause."
-  attempts: 85
+  note: "Native package SAX consumers checkpoint passes scoped90,106 focused tests,120 package/filter,68 UNO,32 ownership,56 boundary cases and actual browser/Worker/ODT/ODS regressions; full metadata and DOCX/XLSX core/shell/UI acceptance remain unfinished. Evidence: native-package-sax-consumers-checkpoint.json. Known baseline docs errors unchanged."
+  attempts: 86
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
 events:
   -
     type: "status"
@@ -1368,8 +1371,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    type: "verify"
+    at: "2026-11-12T23:35:58.648Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native package SAX consumers checkpoint passes scoped90,106 focused tests,120 package/filter,68 UNO,32 ownership,56 boundary cases and actual browser/Worker/ODT/ODS regressions; full metadata and DOCX/XLSX core/shell/UI acceptance remain unfinished. Evidence: native-package-sax-consumers-checkpoint.json. Known baseline docs errors unchanged."
+  -
+    type: "status"
+    at: "2026-11-12T23:36:04.263Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-12T22:55:31.927Z"
+doc_updated_at: "2026-11-12T23:36:04.263Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -3934,6 +3950,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T23:35:58.648Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native package SAX consumers checkpoint passes scoped90,106 focused tests,120 package/filter,68 UNO,32 ownership,56 boundary cases and actual browser/Worker/ODT/ODS regressions; full metadata and DOCX/XLSX core/shell/UI acceptance remain unfinished. Evidence: native-package-sax-consumers-checkpoint.json. Known baseline docs errors unchanged.
+    Attempts: 86
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T23:35:54.071Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4389,6 +4435,10 @@ sections:
     - Observation: Command: exact argv/cwd in evidence/native-sax-writer-service-checkpoint.json. Result: pass, 77 related cases/8 files, unchanged scoped90 for all6 whole changed/new production owners: statements90.90%, branches92.61%, functions97.95%, lines92.27%; no exclusions or source counter/line/function selection. Scope: complete original normal NDEBUG/non-DBG_UTIL SAXWriter WeakImplHelper state machine/factory, original XActiveDataSource/two-base XWriter/Writer implicit constructor/SAXInvalidCharacterException SDK declarations and exact production expwrap registration.
       Impact: All original OSaxWriterTest invariant/simple/exceptions/DTD/performance operations execute through actual registered Writer and genuine UNOMemoryStream, including Symbol bytes, paragraph breaks, 125x450 inner event groups and125 nested closes. Only destination filesystem binding changes; native OSL timing/stdio/file/binary performance is unqualified. Authored public-API cases use actual missing-service context, native exception/Any storage, genuine stream identity/replacement and connected/closed output failures. Native CDocument classic serialization into registered Writer/native output succeeds identically in Chromium main and DOM-free Worker. CALC567..570/WRITER502..505 preserve source flag retention, endDocument state and raw XML prefix skip. Full Sfx metadata service/storage, legacy manifest/OFOP carrier migration and complete DOCX/XLSX core/shell/UI remain incomplete; earlier metadata/DOM coverage gaps stay open.
       Resolution: Command: typecheck/build/static, scoped lint/format, registry/provenance/invariants/parity, dependencies/resources/size/source-tree, doctor/routing/diff and56 boundary/resource cases/4 files. Result: pass except known baseline docs errors only css-style-matchers.ts:17/:76; doctor existing managed-hook warning. Scope: all28 intentional paths and10 pinned source blobs recorded. Corrected authored unused import, source initialization lint annotation and callback JSDoc. Registry authoring recovered actual browser-only record keys without discarding history or duplicating capability IDs. Corrected the inline setOutputStream source marker and Writer implicit default-constructor evidence (XWriter IDL plus actual CPPUMaker generator), without inventing an IDL create token. Dependency guard required only the source-backed Desktop->SAX static services-composition edge; reverse remains rejected, no cycle exception/provider bypass. Full workload/coverage passed; no fabricated checked-exception provider or private state to cover unreachable constructor paths. Latest user requires continued work without pauses: retain DOING/needs_rework and continue caller migration, then actual Sfx metadata/format/UI acceptance. No full-suite replay or publication.
+
+    - Observation: Command: exact argv/log hashes and63 intentional source blobs in evidence/native-package-sax-consumers-checkpoint.json. Result:106 focused cases/14 files pass with all eight whole mechanism owners at S95.96 B92.15 F98.38 L96.57; separate120 package/filter cases/12 files,68 UNO regressions/12 files,32 final ownership cases/2 files and56 boundary cases/4 files pass. The same original SAXWriter component/factory suffix is byte-for-byte unchanged from the preceding full original QA checkpoint (SHA25685198b778d04a6e8f74651f8c6e683e2a45da411e9bdbe5269c7ec65439ad373). Scope: complete actual OFOP stream/context writes, registered source ManifestWriter/SDK, native ManifestExport handler/sequences and package callers; remove duplicate XML encoder/five-callback alias. CALC571/WRITER506 preserves writer/reader missing-Id asymmetry. No dedicated original ManifestWriter/OFOP QA port is claimed; original dependency QA remains qualified by the preceding checkpoint.
+      Impact: Actual source components now own XML encoding, streams and failure propagation. Main and DOM-free Worker emit exact native manifest/OOXML relationship XML. Production Writer hyperlink ODT download/reopen and actual Calc ODS main/Worker input/edit/export/reopen pass. Writer has its own realm-local worker composition root, with no lazy core service initialization. All app tests initialize the same genuine services; isolated Calc browser fixture now does so too. Existing JS package string signatures remain an explicit divergent language binding over original native functions, not a browser provider/native ABI claim. Aggregate scoped90 passes; individual SDK exceptional deployment alternatives remain partly uncovered and previous metadata/DOM coverage gaps stay open. Full Sfx metadata/storage, other filter/model/shell prerequisites and final DOCX/XLSX Strict/Transitional/desktop/mobile UI acceptance remain unfinished.
+      Resolution: Command: typecheck/build/static, scoped ESLint/Prettier, registry/provenance/invariants/parity, dependencies/resources/size/source-tree, doctor/routing/diff. Result: pass except pre-existing docs errors only css-style-matchers.ts:17/:76; doctor retains existing managed-hook warning. Recovered stale JS error-string assertions, remaining type-only host StringPair imports, actual-service startup in isolated Calc acceptance and canonical declaration/implicit-constructor metadata. Pure string transport is mapped as an explicit divergent source/language boundary; no forbidden source-to-browser import or fabricated original-signature parity. Only source-backed Desktop->package services composition was added; reverse remains forbidden and no general cycle/provider exception exists. Final exception assertions explicitly release actual native fields. No full-suite run due under approved cadence, publication, parent completion or goal pause; retain DOING/needs_rework and continue complete original Sfx metadata/service/storage then DOCX/XLSX core/shell/UI acceptance.
 id_source: "generated"
 ---
 ## Summary
@@ -6963,6 +7013,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T23:35:58.648Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native package SAX consumers checkpoint passes scoped90,106 focused tests,120 package/filter,68 UNO,32 ownership,56 boundary cases and actual browser/Worker/ODT/ODS regressions; full metadata and DOCX/XLSX core/shell/UI acceptance remain unfinished. Evidence: native-package-sax-consumers-checkpoint.json. Known baseline docs errors unchanged.
+Attempts: 86
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T23:35:54.071Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7422,3 +7502,7 @@ Native DOM classic SAX and attribute ownership checkpoint (2026-11-13):
 - Observation: Command: exact argv/cwd in evidence/native-sax-writer-service-checkpoint.json. Result: pass, 77 related cases/8 files, unchanged scoped90 for all6 whole changed/new production owners: statements90.90%, branches92.61%, functions97.95%, lines92.27%; no exclusions or source counter/line/function selection. Scope: complete original normal NDEBUG/non-DBG_UTIL SAXWriter WeakImplHelper state machine/factory, original XActiveDataSource/two-base XWriter/Writer implicit constructor/SAXInvalidCharacterException SDK declarations and exact production expwrap registration.
   Impact: All original OSaxWriterTest invariant/simple/exceptions/DTD/performance operations execute through actual registered Writer and genuine UNOMemoryStream, including Symbol bytes, paragraph breaks, 125x450 inner event groups and125 nested closes. Only destination filesystem binding changes; native OSL timing/stdio/file/binary performance is unqualified. Authored public-API cases use actual missing-service context, native exception/Any storage, genuine stream identity/replacement and connected/closed output failures. Native CDocument classic serialization into registered Writer/native output succeeds identically in Chromium main and DOM-free Worker. CALC567..570/WRITER502..505 preserve source flag retention, endDocument state and raw XML prefix skip. Full Sfx metadata service/storage, legacy manifest/OFOP carrier migration and complete DOCX/XLSX core/shell/UI remain incomplete; earlier metadata/DOM coverage gaps stay open.
   Resolution: Command: typecheck/build/static, scoped lint/format, registry/provenance/invariants/parity, dependencies/resources/size/source-tree, doctor/routing/diff and56 boundary/resource cases/4 files. Result: pass except known baseline docs errors only css-style-matchers.ts:17/:76; doctor existing managed-hook warning. Scope: all28 intentional paths and10 pinned source blobs recorded. Corrected authored unused import, source initialization lint annotation and callback JSDoc. Registry authoring recovered actual browser-only record keys without discarding history or duplicating capability IDs. Corrected the inline setOutputStream source marker and Writer implicit default-constructor evidence (XWriter IDL plus actual CPPUMaker generator), without inventing an IDL create token. Dependency guard required only the source-backed Desktop->SAX static services-composition edge; reverse remains rejected, no cycle exception/provider bypass. Full workload/coverage passed; no fabricated checked-exception provider or private state to cover unreachable constructor paths. Latest user requires continued work without pauses: retain DOING/needs_rework and continue caller migration, then actual Sfx metadata/format/UI acceptance. No full-suite replay or publication.
+
+- Observation: Command: exact argv/log hashes and63 intentional source blobs in evidence/native-package-sax-consumers-checkpoint.json. Result:106 focused cases/14 files pass with all eight whole mechanism owners at S95.96 B92.15 F98.38 L96.57; separate120 package/filter cases/12 files,68 UNO regressions/12 files,32 final ownership cases/2 files and56 boundary cases/4 files pass. The same original SAXWriter component/factory suffix is byte-for-byte unchanged from the preceding full original QA checkpoint (SHA25685198b778d04a6e8f74651f8c6e683e2a45da411e9bdbe5269c7ec65439ad373). Scope: complete actual OFOP stream/context writes, registered source ManifestWriter/SDK, native ManifestExport handler/sequences and package callers; remove duplicate XML encoder/five-callback alias. CALC571/WRITER506 preserves writer/reader missing-Id asymmetry. No dedicated original ManifestWriter/OFOP QA port is claimed; original dependency QA remains qualified by the preceding checkpoint.
+  Impact: Actual source components now own XML encoding, streams and failure propagation. Main and DOM-free Worker emit exact native manifest/OOXML relationship XML. Production Writer hyperlink ODT download/reopen and actual Calc ODS main/Worker input/edit/export/reopen pass. Writer has its own realm-local worker composition root, with no lazy core service initialization. All app tests initialize the same genuine services; isolated Calc browser fixture now does so too. Existing JS package string signatures remain an explicit divergent language binding over original native functions, not a browser provider/native ABI claim. Aggregate scoped90 passes; individual SDK exceptional deployment alternatives remain partly uncovered and previous metadata/DOM coverage gaps stay open. Full Sfx metadata/storage, other filter/model/shell prerequisites and final DOCX/XLSX Strict/Transitional/desktop/mobile UI acceptance remain unfinished.
+  Resolution: Command: typecheck/build/static, scoped ESLint/Prettier, registry/provenance/invariants/parity, dependencies/resources/size/source-tree, doctor/routing/diff. Result: pass except pre-existing docs errors only css-style-matchers.ts:17/:76; doctor retains existing managed-hook warning. Recovered stale JS error-string assertions, remaining type-only host StringPair imports, actual-service startup in isolated Calc acceptance and canonical declaration/implicit-constructor metadata. Pure string transport is mapped as an explicit divergent source/language boundary; no forbidden source-to-browser import or fabricated original-signature parity. Only source-backed Desktop->package services composition was added; reverse remains forbidden and no general cycle/provider exception exists. Final exception assertions explicitly release actual native fields. No full-suite run due under approved cadence, publication, parent completion or goal pause; retain DOING/needs_rework and continue complete original Sfx metadata/service/storage then DOCX/XLSX core/shell/UI acceptance.
