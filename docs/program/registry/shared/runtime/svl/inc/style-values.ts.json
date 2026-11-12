@@ -23,7 +23,7 @@
         "apps/office/src/svl/inc/style-values.ts#SfxStyleSearchBits",
         "include/svl/style.hxx#SfxStyleSearchBits"
       ],
-      "justification": "Task174 independent core-first initialization exposed an eager public-facade cycle after adding derived classes. Original style.hxx enum/borrowed declarations move unchanged into style-values.ts; style.ts reexports the same public values/types/classes. Core,index,iterator and derived implementations import their declaration owner rather than a class facade. This preserves all enum values and method bodies without lazy imports,globals,initialization registries or caller ordering requirements.",
+      "justification": "Task174 independent core-first initialization exposed an eager public-facade cycle after adding derived classes. Original style.hxx enum/borrowed declarations move unchanged into style-values.ts; style.ts reexports the same public values/types/classes. Core,index,iterator and derived implementations import their declaration owner rather than a class facade. This preserves all enum values and method bodies without lazy imports,globals,initialization registries or caller ordering requirements. Native stylesheet ownership checkpoint requires the actual inherited XInterface operations on borrowed style views so indexed strong references use the genuine weak base. The source enums/search defaults and independent module initialization remain unchanged.",
       "knownViolations": [],
       "localSymbols": [
         "SfxStyleFamily",

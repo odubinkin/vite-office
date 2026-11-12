@@ -1,10 +1,12 @@
-/** @fileoverview Source-derived SfxStyleSheetIterator contracts over the real shared index; caller witnesses implement only borrowed style/pool operations, not replacement production owners. */
+/** @fileoverview Source-derived SfxStyleSheetIterator contracts over the real shared index; actual native styles retain strong caller ownership; the friend pool view borrows the real index. */
 import { afterEach, expect, it, vi } from "vitest";
 import {
   SfxStyleFamily as Family,
   SfxStyleSearchBits as Bits,
   type SfxStyleSheetSearchReference,
 } from "../../inc/style";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import { SfxStyleSheetBase } from "./style-model";
 import { IndexedStyleSheets } from "./IndexedStyleSheets";
 import { SfxStyleSheetIterator } from "./style";
 import { OUString } from "../../../sal/inc/rtl/ustring";
@@ -19,7 +21,27 @@ function unicode(text: string): OUString {
   strings.push(result);
   return result;
 }
-/** Supplies exactly the original methods consumed by search, without claiming a full stylesheet model. @param name - Name. @param family - Family. @param mask - Flags. @param used - Usage. @param hidden - Visibility. @returns Caller identity. */
+/** Real style subclass supplies the source virtual usage query. */
+class TestStyleSheet extends SfxStyleSheetBase {
+  /** Constructs actual source fields. @param name - Name. @param family - Family. @param mask - Mask. @param used - Usage. @param hidden - Visibility. @returns Style. */
+  constructor(
+    name: OUString,
+    family: Family,
+    mask: Bits,
+    private readonly used: boolean,
+    hidden: boolean,
+  ) {
+    super(name, null, family, mask);
+    this.bHidden = hidden;
+  }
+  /** Original virtual caller-supplied model usage. @returns Usage. */
+  override IsUsed(): boolean {
+    return this.used;
+  }
+}
+const references: Reference<TestStyleSheet>[] = [];
+const indexes: IndexedStyleSheets[] = [];
+/** Holds actual native caller ownership. @param name - Name. @param family - Family. @param mask - Mask. @param used - Usage. @param hidden - Visibility. @returns Style. */
 function sheet(
   name: string,
   family = Family.Char,
@@ -27,32 +49,14 @@ function sheet(
   used = false,
   hidden = false,
 ) {
-  return {
-    name: unicode(name),
-    family,
-    mask,
-    used,
-    hidden,
-    /** Borrows native name. @returns Name. */ GetName() {
-      return this.name;
-    },
-    /** Borrows native family. @returns Family. */ GetFamily() {
-      return this.family;
-    },
-    /** Borrows native mask. @returns Mask. */ GetMask() {
-      return this.mask;
-    },
-    /** Queries caller usage. @returns Usage. */ IsUsed() {
-      return this.used;
-    },
-    /** Queries caller visibility. @returns Visibility. */ IsHidden() {
-      return this.hidden;
-    },
-  };
+  const value = new TestStyleSheet(unicode(name), family, mask, used, hidden);
+  references.push(new Reference(value));
+  return value;
 }
 /** Binds the native borrowed pool operation to an actual index, without constructing a substitute pool owner. @param sheets - Caller identities. @returns Index and original pool operation. */
 function indexed(...sheets: SfxStyleSheetSearchReference[]) {
   const index = new IndexedStyleSheets();
+  indexes.push(index);
   for (const s of sheets) index.AddStyleSheet(s);
   return {
     index,
@@ -66,6 +70,10 @@ function indexed(...sheets: SfxStyleSheetSearchReference[]) {
 afterEach(
   /** Releases test-owned string values and method observations. @returns Nothing. */ () => {
     vi.restoreAllMocks();
+    for (const index of indexes) index.Dispose();
+    indexes.length = 0;
+    for (const reference of references) reference.dispose();
+    references.length = 0;
     for (const s of strings) s.dispose();
     strings.length = 0;
   },

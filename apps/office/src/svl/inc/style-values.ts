@@ -12,9 +12,10 @@ export enum SfxStyleFamily {
   All = 0x7fff,
 }
 
+import type { XInterface } from "../../cppu/inc/com/sun/star/uno/XInterface";
 import type { OUStringConstReference } from "../../sal/inc/rtl/ustring";
 /** Erased borrowed SfxStyleSheetBase name/family operations consumed by IndexedStyleSheets. This neither constructs nor substitutes a stylesheet/pool owner. */
-export interface SfxStyleSheetNameReference {
+export interface SfxStyleSheetNameReference extends XInterface {
   /** Original stable const name view. @returns Name. */
   GetName(): OUStringConstReference;
   /** Original style family. @returns Family. */

@@ -108,8 +108,7 @@ test("uses actual native styles for rename, attributes, clear and dying in Chrom
             id === n.SfxHintId.Dying,
         ).length,
         registered = listener.GetBroadcasterCount();
-      a.Dispose();
-      child.Dispose();
+      preview.Dispose();
       for (const s of strings) s.dispose();
       return { creation, rename, cycle, values, cleared, dying, registered };
     },

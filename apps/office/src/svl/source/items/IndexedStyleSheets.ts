@@ -1,4 +1,5 @@
-/** @fileoverview Original IndexedStyleSheets vector/name/family index and callback contracts. JS references own values; exact UTF16 Map keys replace native unordered buckets without a lifetime library. */
+/** @fileoverview Original IndexedStyleSheets vector/name/family index and callback contracts. The main vector owns actual strong references; exact UTF16 Map keys replace native unordered buckets without a lifetime library. */
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import { SfxStyleFamily, type SfxStyleSheetNameReference } from "../../inc/style-values";
 import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import type {
@@ -41,7 +42,7 @@ function nameKey(name: OUStringConstReference): string {
 /** Original shared style collection; this does not construct or replace a SfxStyleSheetBase/Pool implementation. Duplicate-name range order is unordered in the native contract. */
 export class IndexedStyleSheets {
   static readonly SearchBehavior = SearchBehavior;
-  private readonly mStyleSheets: (SfxStyleSheetNameReference | null)[] = [];
+  private readonly mStyleSheets: Reference<SfxStyleSheetNameReference>[] = [];
   private readonly mPositionsByName = new Map<string, number[]>();
   private readonly mStyleSheetsByFamily: SfxStyleSheetNameReference[][] = [[], [], [], [], [], []];
   /** Adapts native unordered_multimap insertion while retaining all equivalent name positions. @param name - Logical key. @param pos - Vector position. @returns Nothing. */
@@ -63,7 +64,12 @@ export class IndexedStyleSheets {
     this.mPositionsByName.clear();
     for (const family of this.mStyleSheetsByFamily) family.length = 0;
     for (let i = 0; i < this.mStyleSheets.length; i++)
-      this.Register(this.mStyleSheets[i] as SfxStyleSheetNameReference, i);
+      this.Register(
+        (
+          this.mStyleSheets[i] as Reference<SfxStyleSheetNameReference>
+        ).get() as SfxStyleSheetNameReference,
+        i,
+      );
   }
   /** Original one matching pointer/name index update; does not mutate the style or rebuild families. @param style - Actual style. @param rOldName - Previous index key. @param rNewName - Replacement key. @returns Nothing. */
   ReindexOnNameChange(
@@ -76,7 +82,7 @@ export class IndexedStyleSheets {
     if (range === undefined) return;
     for (let i = 0; i < range.length; i++) {
       const pos = range[i] as number;
-      if (this.mStyleSheets[pos] === style) {
+      if ((this.mStyleSheets[pos] as Reference<SfxStyleSheetNameReference>).get() === style) {
         range.splice(i, 1);
         if (range.length === 0) this.mPositionsByName.delete(key);
         this.insertName(rNewName, pos);
@@ -84,28 +90,67 @@ export class IndexedStyleSheets {
       }
     }
   }
-  /** Original pointer duplicate guard depends on the current indexed name. @param style - Actual style. @returns Nothing. */
-  AddStyleSheet(style: SfxStyleSheetNameReference): void {
-    if (!this.HasStyleSheet(style)) {
-      this.mStyleSheets.push(style);
+  /** Original pointer duplicate guard depends on the current indexed name. @param value - Actual strong reference or implicit pointer conversion. @returns Nothing. */
+  AddStyleSheet(value: SfxStyleSheetNameReference | Reference<SfxStyleSheetNameReference>): void {
+    // Erased C++ implicit rtl::Reference conversion; an existing const-reference argument is borrowed.
+    if (!(value instanceof Reference)) {
+      const temporary = new Reference(value);
+      try {
+        return this.AddStyleSheet(temporary);
+      } finally {
+        temporary.dispose();
+      }
+    }
+    const style = value.get() as SfxStyleSheetNameReference;
+    if (!this.HasStyleSheet(value)) {
+      this.mStyleSheets.push(new Reference(value));
       this.Register(style, this.mStyleSheets.length - 1);
     }
   }
-  /** Original current-name and pointer removal, rebuilding all subsequent positions. @param style - Actual style. @returns Whether removed. */
-  RemoveStyleSheet(style: SfxStyleSheetNameReference): boolean {
+  /** Original current-name and pointer removal, rebuilding all subsequent positions. @param value - Actual strong reference or implicit pointer conversion. @returns Whether removed. */
+  RemoveStyleSheet(
+    value: SfxStyleSheetNameReference | Reference<SfxStyleSheetNameReference>,
+  ): boolean {
+    // Erased C++ implicit rtl::Reference conversion; an existing const-reference argument is borrowed.
+    if (!(value instanceof Reference)) {
+      const temporary = new Reference(value);
+      try {
+        return this.RemoveStyleSheet(temporary);
+      } finally {
+        temporary.dispose();
+      }
+    }
+    const style = value.get() as SfxStyleSheetNameReference;
     for (const pos of this.FindPositionsByName(style.GetName())) {
-      if (this.mStyleSheets[pos] === style) {
-        this.mStyleSheets.splice(pos, 1);
+      if ((this.mStyleSheets[pos] as Reference<SfxStyleSheetNameReference>).get() === style) {
+        const removed = this.mStyleSheets.splice(
+          pos,
+          1,
+        )[0] as Reference<SfxStyleSheetNameReference>;
+        removed.dispose();
         this.Reindex();
         return true;
       }
     }
     return false;
   }
-  /** Original current-name and pointer membership. @param style - Actual style. @returns Whether indexed. */
-  HasStyleSheet(style: SfxStyleSheetNameReference): boolean {
+  /** Original current-name and pointer membership. @param value - Actual strong reference or implicit pointer conversion. @returns Whether indexed. */
+  HasStyleSheet(
+    value: SfxStyleSheetNameReference | Reference<SfxStyleSheetNameReference>,
+  ): boolean {
+    // Erased C++ implicit rtl::Reference conversion; an existing const-reference argument is borrowed.
+    if (!(value instanceof Reference)) {
+      const temporary = new Reference(value);
+      try {
+        return this.HasStyleSheet(temporary);
+      } finally {
+        temporary.dispose();
+      }
+    }
+    const style = value.get() as SfxStyleSheetNameReference;
     for (const pos of this.FindPositionsByName(style.GetName()))
-      if (this.mStyleSheets[pos] === style) return true;
+      if ((this.mStyleSheets[pos] as Reference<SfxStyleSheetNameReference>).get() === style)
+        return true;
     return false;
   }
   /** Original vector size, including null slots while Clear callbacks execute. @returns Count. */
@@ -116,20 +161,23 @@ export class IndexedStyleSheets {
   GetNumberOfStyleSheetsWithPredicate(predicate: StyleSheetPredicate): number {
     let count = 0;
     for (const style of this.mStyleSheets)
-      if (predicate.Check(style as SfxStyleSheetNameReference)) count++;
+      if (predicate.Check(style.get() as SfxStyleSheetNameReference)) count++;
     return count;
   }
   /** Original signed position test followed by checked vector access; a negative value throws, an index at/above end returns null. @param pos - Signed position. @returns Style or null. */
   GetStyleSheetByPosition(pos: number): SfxStyleSheetNameReference | null {
     if (pos < this.mStyleSheets.length) {
       if (pos < 0) throw new RangeError("IndexedStyleSheets vector position out of range");
-      return this.mStyleSheets[pos] as SfxStyleSheetNameReference | null;
+      return (this.mStyleSheets[pos] as Reference<SfxStyleSheetNameReference>).get();
     }
     return null;
   }
   /** Original identity scan and exact missing-style diagnostic. @param style - Actual style. @returns Vector position. */
   FindStyleSheetPosition(style: SfxStyleSheetNameReference): number {
-    const pos = this.mStyleSheets.indexOf(style);
+    const pos = this.mStyleSheets.findIndex(
+      /** Original stored-pointer identity comparison. @param value - Strong vector entry. @returns Identity match. */
+      (value) => value.get() === style,
+    );
     if (pos === -1)
       throw new Error("IndexedStyleSheets::FindStylePosition Looked for style not in index");
     return pos;
@@ -146,7 +194,13 @@ export class IndexedStyleSheets {
   ): number[] {
     const result: number[] = [];
     for (const pos of this.FindPositionsByName(name)) {
-      if (predicate.Check(this.mStyleSheets[pos] as SfxStyleSheetNameReference)) {
+      if (
+        predicate.Check(
+          (
+            this.mStyleSheets[pos] as Reference<SfxStyleSheetNameReference>
+          ).get() as SfxStyleSheetNameReference,
+        )
+      ) {
         result.push(pos);
         if (behavior === SearchBehavior.ReturnFirst) break;
       }
@@ -157,21 +211,39 @@ export class IndexedStyleSheets {
   FindPositionsByPredicate(predicate: StyleSheetPredicate): number[] {
     const result: number[] = [];
     for (let i = 0; i < this.mStyleSheets.length; i++)
-      if (predicate.Check(this.mStyleSheets[i] as SfxStyleSheetNameReference)) result.push(i);
+      if (
+        predicate.Check(
+          (
+            this.mStyleSheets[i] as Reference<SfxStyleSheetNameReference>
+          ).get() as SfxStyleSheetNameReference,
+        )
+      )
+        result.push(i);
     return result;
   }
   /** Original ordered virtual callbacks. @param callback - Actual callback. @returns Nothing. */
   ApplyToAllStyleSheets(callback: StyleSheetCallback): void {
-    for (const style of this.mStyleSheets) callback.DoIt(style as SfxStyleSheetNameReference);
+    for (const style of this.mStyleSheets) callback.DoIt(style.get() as SfxStyleSheetNameReference);
   }
-  /** Original callback then reference-clear order. Family vectors are deliberately not cleared here (CALC146); JS GC owns physical lifetime. @param cleanup - Observable cleanup/broadcast callback. @returns Nothing. */
+  /** Original callback then reference-clear order. Family vectors deliberately retain raw pointers (CALC146). @param cleanup - Observable cleanup/broadcast callback. @returns Nothing. */
   Clear(cleanup: StyleSheetDisposer): void {
     for (let i = 0; i < this.mStyleSheets.length; i++) {
-      cleanup.Dispose(this.mStyleSheets[i] as SfxStyleSheetNameReference);
-      this.mStyleSheets[i] = null;
+      const argument = new Reference(this.mStyleSheets[i] as Reference<SfxStyleSheetNameReference>);
+      try {
+        cleanup.Dispose(argument);
+      } finally {
+        argument.dispose();
+      }
+      (this.mStyleSheets[i] as Reference<SfxStyleSheetNameReference>).clear();
     }
     this.mStyleSheets.length = 0;
     this.mPositionsByName.clear();
+  }
+  /** Native vector member destructor releases remaining strong references. No container destruction-order guarantee is added. @returns Nothing. */
+  Dispose(): void {
+    for (let i = this.mStyleSheets.length - 1; i >= 0; i--)
+      (this.mStyleSheets[i] as Reference<SfxStyleSheetNameReference>).dispose();
+    this.mStyleSheets.length = 0;
   }
   /** Original nth predicate match from an existing vector position, returning end position on miss. The source caller supplies startAt in [0,size]. @param n - Zero-based matching ordinal. @param predicate - Actual check. @param startAt - Valid starting position. @returns Pointer and absolute position. */
   GetNthStyleSheetThatMatchesPredicate(
@@ -182,7 +254,9 @@ export class IndexedStyleSheets {
     let matching = 0,
       pos = startAt;
     for (; pos < this.mStyleSheets.length; pos++) {
-      const style = this.mStyleSheets[pos] as SfxStyleSheetNameReference;
+      const style = (
+        this.mStyleSheets[pos] as Reference<SfxStyleSheetNameReference>
+      ).get() as SfxStyleSheetNameReference;
       if (predicate.Check(style)) {
         if (matching === n) return [style, pos];
         matching++;

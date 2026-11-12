@@ -1,4 +1,9 @@
-/** @fileoverview Actual native style base/pool core owners and hints from style.cxx. Presentation/XML/UNO and derived SfxStyleSheet remain unimplemented; JS GC replaces physical native ownership, without a weak/refcount framework. */
+/** @fileoverview Actual native style base/pool core owners and hints from style.cxx. Native weak lifetime and indexed strong ownership use the shared CPPU owners; presentation/XML remain incomplete. */
+import { WeakImplHelper } from "../../../cppuhelper/inc/implbase";
+import { UNO_QUERY, Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import { XComponent } from "../../../udkapi/com/sun/star/lang/XComponent";
+import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
+import type { XInterface } from "../../../cppu/inc/com/sun/star/uno/XInterface";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { SfxStyleFamily, SfxStyleSearchBits } from "../../inc/style-values";
 import { SfxHint, SfxHintId } from "../../inc/hint";
@@ -43,9 +48,11 @@ export class SfxStyleSheetPoolHint extends SfxHint {
   }
 }
 
-/** Native core style owner; original WeakImplHelper lifetime/UNO facets are not recreated as a JS memory manager. */
-export class SfxStyleSheetBase {
-  protected m_pPool: SfxStyleSheetBasePool;
+/** Original zero-interface weak specialization from style.hxx. */
+export class SfxStyleSheetBase_Base extends WeakImplHelper.specialize() {}
+/** Native core style with actual weak-object lifetime. */
+export class SfxStyleSheetBase extends SfxStyleSheetBase_Base {
+  protected m_pPool: SfxStyleSheetBasePool | null;
   protected nFamily: SfxStyleFamily;
   protected readonly aName: OUString;
   protected readonly aParent: OUString;
@@ -61,13 +68,14 @@ export class SfxStyleSheetBase {
     ...args:
       | [
           name: OUStringConstReference,
-          pool: SfxStyleSheetBasePool,
+          pool: SfxStyleSheetBasePool | null,
           family: SfxStyleFamily,
           mask: SfxStyleSearchBits,
           parent?: OUStringConstReference | undefined,
         ]
       | [source: SfxStyleSheetBase]
   ) {
+    super();
     const source = args[0];
     if (source instanceof SfxStyleSheetBase) {
       this.m_pPool = source.m_pPool;
@@ -82,7 +90,7 @@ export class SfxStyleSheetBase {
       this.bHidden = source.bHidden;
       this.pSet = source.pSet ? (this.bMySet ? new SfxItemSet(source.pSet) : source.pSet) : null;
     } else {
-      this.m_pPool = args[1] as SfxStyleSheetBasePool;
+      this.m_pPool = args[1] as SfxStyleSheetBasePool | null;
       this.nFamily = args[2] as SfxStyleFamily;
       this.aName = new OUString(source);
       this.aParent = args[4] === undefined ? new OUString() : new OUString(args[4]);
@@ -105,13 +113,14 @@ export class SfxStyleSheetBase {
     if (this.aName.equals(name)) return true;
     const old = new OUString(this.aName);
     try {
-      const other = this.m_pPool.Find(name, this.nFamily);
+      const other = (this.m_pPool as SfxStyleSheetBasePool).Find(name, this.nFamily);
       if (other && other !== this) return false;
-      if (!this.aName.isEmpty()) this.m_pPool.ChangeParent(this.aName, name, this.nFamily, false);
+      if (!this.aName.isEmpty())
+        (this.m_pPool as SfxStyleSheetBasePool).ChangeParent(this.aName, name, this.nFamily, false);
       if (this.aFollow.equals(this.aName)) this.aFollow.assign(name);
       this.aName.assign(name);
-      if (reindex) this.m_pPool.ReindexOnNameChange(this, old, name);
-      this.m_pPool.Broadcast(new SfxStyleSheetModifiedHint(old, this));
+      if (reindex) (this.m_pPool as SfxStyleSheetBasePool).ReindexOnNameChange(this, old, name);
+      (this.m_pPool as SfxStyleSheetBasePool).Broadcast(new SfxStyleSheetModifiedHint(old, this));
       return true;
     } finally {
       old.dispose();
@@ -125,16 +134,18 @@ export class SfxStyleSheetBase {
   public SetParent(name: OUStringConstReference): boolean {
     if (name.equals(this.aName)) return false;
     if (!this.aParent.equals(name)) {
-      let style = this.m_pPool.Find(name, this.nFamily);
+      let style = (this.m_pPool as SfxStyleSheetBasePool).Find(name, this.nFamily);
       if (!name.isEmpty() && !style) return false;
       if (!this.aName.isEmpty())
         while (style) {
           if (style.GetName().equals(this.aName)) return false;
-          style = this.m_pPool.Find(style.GetParent(), this.nFamily);
+          style = (this.m_pPool as SfxStyleSheetBasePool).Find(style.GetParent(), this.nFamily);
         }
       this.aParent.assign(name);
     }
-    this.m_pPool.Broadcast(new SfxStyleSheetHint(SfxHintId.StyleSheetModified, this));
+    (this.m_pPool as SfxStyleSheetBasePool).Broadcast(
+      new SfxStyleSheetHint(SfxHintId.StyleSheetModified, this),
+    );
     return true;
   }
   /** Original stable follow member. @returns Follow. */
@@ -144,13 +155,15 @@ export class SfxStyleSheetBase {
   /** Original follow validation and notification. @param name - Follow name. @returns Whether accepted. */
   public SetFollow(name: OUStringConstReference): boolean {
     if (!this.aFollow.equals(name)) {
-      if (!this.m_pPool.Find(name, this.nFamily)) return false;
+      if (!(this.m_pPool as SfxStyleSheetBasePool).Find(name, this.nFamily)) return false;
       this.aFollow.assign(name);
     }
-    this.m_pPool.Broadcast(new SfxStyleSheetHint(SfxHintId.StyleSheetModified, this));
+    (this.m_pPool as SfxStyleSheetBasePool).Broadcast(
+      new SfxStyleSheetHint(SfxHintId.StyleSheetModified, this),
+    );
     return true;
   }
-  /** Original parent pool. @returns Pool. */ public GetPool(): SfxStyleSheetBasePool {
+  /** Original parent pool. @returns Pool. */ public GetPool(): SfxStyleSheetBasePool | null {
     return this.m_pPool;
   }
   /** Original family. @returns Family. */ public GetFamily(): SfxStyleFamily {
@@ -174,7 +187,9 @@ export class SfxStyleSheetBase {
     value: boolean,
   ): void {
     this.bHidden = value;
-    this.m_pPool.Broadcast(new SfxStyleSheetHint(SfxHintId.StyleSheetModified, this));
+    (this.m_pPool as SfxStyleSheetBasePool).Broadcast(
+      new SfxStyleSheetHint(SfxHintId.StyleSheetModified, this),
+    );
   }
   /** Original default capability. @returns True. */ public HasFollowSupport(): boolean {
     return true;
@@ -213,7 +228,7 @@ export class SfxStyleSheetBase {
   /** Original lazy owned item set from the real pool. @returns Actual set. */
   public GetItemSet(): SfxItemSet {
     if (!this.pSet) {
-      this.pSet = new SfxItemSet(this.m_pPool.GetPool());
+      this.pSet = new SfxItemSet((this.m_pPool as SfxStyleSheetBasePool).GetPool());
       this.bMySet = true;
     }
     return this.pSet;
@@ -221,13 +236,21 @@ export class SfxStyleSheetBase {
   /** Original by-value preview copy. @returns Independent value. */ public GetItemSetForPreview(): SfxItemSet {
     return new SfxItemSet(this.GetItemSet());
   }
-  /** Explicit native base destructor boundary; GC owns physical set lifetime. Call once after the last logical use. @returns Nothing. */
+  /** Original destructor deletes the owned item set before reverse-order string members. @returns Nothing. */
   public Dispose(): void {
-    if (this.bMySet) this.pSet = null;
-    this.aName.dispose();
-    this.aParent.dispose();
-    this.aFollow.dispose();
+    if (this.bMySet) {
+      this.pSet?.Dispose();
+      this.pSet = null;
+    }
     this.aHelpFile.dispose();
+    this.aFollow.dispose();
+    this.aParent.dispose();
+    this.aName.dispose();
+  }
+  /** Last strong release invokes the actual virtual stylesheet destructor. @returns Nothing. */
+  protected override destroy(): void {
+    this.Dispose();
+    super.destroy();
   }
 }
 /** Original private pool state; JS object references replace physical shared_ptr/unique_ptr storage. */
@@ -235,7 +258,7 @@ class SfxStyleSheetBasePool_Impl {
   public pIter: SfxStyleSheetIterator | null = null;
   public readonly mxIndexedStyleSheets = new IndexedStyleSheets();
 }
-/** Original cleanup notification for the core style classes, which do not implement XComponent. UNO component cleanup remains an unimplemented extension. */
+/** Original cleanup notification for the core style classes, including the original optional XComponent query and UNO-only disposal catch. */
 class StyleSheetDisposerFunctor {
   /** Borrows actual pool. @param mPool - Pool. @param broadcast - Original destructor suppression flag. @returns Callback. */
   public constructor(
@@ -243,11 +266,28 @@ class StyleSheetDisposerFunctor {
     private readonly broadcast = true,
   ) {}
   /** Original erase notification before collection slot clearing. @param style - Actual core style. @returns Nothing. */
-  public Dispose(style: import("../../inc/style").SfxStyleSheetNameReference): void {
-    if (this.broadcast)
-      this.mPool.Broadcast(
-        new SfxStyleSheetHint(SfxHintId.StyleSheetErased, style as SfxStyleSheetBase),
-      );
+  public Dispose(style: Reference<import("../../inc/style").SfxStyleSheetNameReference>): void {
+    const xComp = new Reference<XComponent>(
+      style.get() as XInterface,
+      UNO_QUERY,
+      XComponent.static_type,
+    );
+    try {
+      if (xComp.is()) {
+        try {
+          (xComp.get() as XComponent).dispose();
+        } catch (error) {
+          if (!(error instanceof Exception)) throw error;
+          error.dispose();
+        }
+      }
+      if (this.broadcast)
+        this.mPool.Broadcast(
+          new SfxStyleSheetHint(SfxHintId.StyleSheetErased, style.get() as SfxStyleSheetBase),
+        );
+    } finally {
+      xComp.dispose();
+    }
   }
 }
 /** Actual native core indexed pool; full UNO, presentation/XML and derived SfxStyleSheet factories remain absent. */
@@ -354,9 +394,15 @@ export class SfxStyleSheetBasePool extends SfxBroadcaster {
   }
   /** Original erase/reparent/notification order, retaining caller-owned styles. @param style - Actual style or null. @returns Nothing. */
   public Remove(style: SfxStyleSheetBase | null): void {
-    if (!style || !this.GetIndexedStyleSheets().RemoveStyleSheet(style)) return;
-    this.ChangeParent(style.GetName(), style.GetParent(), style.GetFamily());
-    this.Broadcast(new SfxStyleSheetHint(SfxHintId.StyleSheetErased, style));
+    if (!style) return;
+    const xP = new Reference(style);
+    try {
+      if (!this.GetIndexedStyleSheets().RemoveStyleSheet(xP)) return;
+      this.ChangeParent(style.GetName(), style.GetParent(), style.GetFamily());
+      this.Broadcast(new SfxStyleSheetHint(SfxHintId.StyleSheetErased, style));
+    } finally {
+      xP.dispose();
+    }
   }
   /** Original per-slot erase notifications then index clear. @returns Nothing. */ public Clear(): void {
     this.GetIndexedStyleSheets().Clear(new StyleSheetDisposerFunctor(this));

@@ -15,6 +15,19 @@ import {
 import { SfxItemPool, ItemInfoPackage, ItemInfoStatic } from "./itempool";
 import { SfxItemSet } from "./itemset";
 import { SfxBoolItem } from "./cenumitm";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+const references = new Map<SfxStyleSheetBase, Reference<SfxStyleSheetBase>>();
+/** Owns the source caller's rtl::Reference local. @param style - Actual owner. @returns Borrowed pointer. */
+function own<T extends SfxStyleSheetBase | null>(style: T): T {
+  if (style !== null && !references.has(style)) references.set(style, new Reference(style));
+  return style;
+}
+/** Ends a source caller's strong-reference scope. @param style - Actual owner. @returns Nothing. */
+function release(style: SfxStyleSheetBase): void {
+  const reference = references.get(style) as Reference<SfxStyleSheetBase>;
+  references.delete(style);
+  reference.dispose();
+}
 const strings: OUString[] = [];
 /** Creates genuine shared UTF16. @param text - Name. @returns String. */
 function unicode(text: string): OUString {
@@ -80,6 +93,8 @@ class Listener extends SfxListener {
 }
 afterEach(
   /** Ends caller-owned string scopes. @returns Nothing. */ () => {
+    for (const reference of [...references.values()].reverse()) reference.dispose();
+    references.clear();
     for (const s of strings) s.dispose();
     strings.length = 0;
   },
@@ -89,8 +104,8 @@ it("constructs actual native styles with original defaults and silent creation",
   const p = pool(),
     listener = new Listener();
   listener.StartListening(p);
-  const a = p.Make(unicode("a"), Family.Char),
-    b = p.Make(unicode("b"), Family.Para, Bits.UserDefined, unicode("parent"));
+  const a = own(p.Make(unicode("a"), Family.Char)),
+    b = own(p.Make(unicode("b"), Family.Para, Bits.UserDefined, unicode("parent")));
   expect(a).toBeInstanceOf(SfxStyleSheetBase);
   expect(p.GetPool()).toBe(a.GetItemSet().GetPool());
   expect(a.GetPool()).toBe(p);
@@ -124,14 +139,14 @@ it("constructs actual native styles with original defaults and silent creation",
   expect(listener.ids).toEqual([]);
   listener.Dispose();
   p.Dispose();
-  a.Dispose();
-  b.Dispose();
+  release(a);
+  release(b);
 });
 it("preserves parent validation, cycle rejection, unchanged notifications and follow validation", /** Uses actual model graph. @returns Nothing. */ () => {
   const p = pool(),
-    a = p.Make(unicode("a"), Family.Char),
-    b = p.Make(unicode("b"), Family.Char),
-    c = p.Make(unicode("c"), Family.Char),
+    a = own(p.Make(unicode("a"), Family.Char)),
+    b = own(p.Make(unicode("b"), Family.Char)),
+    c = own(p.Make(unicode("c"), Family.Char)),
     listener = new Listener();
   listener.StartListening(p);
   expect(a.SetParent(unicode("a"))).toBe(false);
@@ -160,15 +175,15 @@ it("preserves parent validation, cycle rejection, unchanged notifications and fo
   ).toBe(true);
   listener.Dispose();
   p.Dispose();
-  a.Dispose();
-  b.Dispose();
-  c.Dispose();
+  release(a);
+  release(b);
+  release(c);
 });
 it("renames actual children nonvirtually and preserves deferred-index/self collision behavior", /** Checks exact extended hint and name index state. @returns Nothing. */ () => {
   const p = pool(),
-    a = p.Make(unicode("a"), Family.Char),
-    b = p.Make(unicode("b"), Family.Char),
-    child = p.Make(unicode("child"), Family.Char, Bits.All, unicode("a")),
+    a = own(p.Make(unicode("a"), Family.Char)),
+    b = own(p.Make(unicode("b"), Family.Char)),
+    child = own(p.Make(unicode("child"), Family.Char, Bits.All, unicode("a"))),
     listener = new Listener();
   listener.StartListening(p);
   expect(a.SetName(unicode(""))).toBe(false);
@@ -193,25 +208,25 @@ it("renames actual children nonvirtually and preserves deferred-index/self colli
   expect(p.Find(unicode("final"), Family.Char)).toBe(a);
   listener.Dispose();
   p.Dispose();
-  a.Dispose();
-  b.Dispose();
-  child.Dispose();
+  release(a);
+  release(b);
+  release(child);
 });
 it("supports the original empty-name construction branches without inventing SetName acceptance", /** Checks native constructor versus setter distinction. @returns Nothing. */ () => {
   const p = pool(),
-    empty = p.Make(unicode(""), Family.Char),
-    parent = p.Make(unicode("parent"), Family.Char);
+    empty = own(p.Make(unicode(""), Family.Char)),
+    parent = own(p.Make(unicode("parent"), Family.Char));
   expect(empty.SetParent(unicode("parent"))).toBe(true);
   expect(empty.SetName(unicode("named"))).toBe(true);
   expect(text(empty.GetFollow())).toBe("named");
   p.Dispose();
-  empty.Dispose();
-  parent.Dispose();
+  release(empty);
+  release(parent);
 });
 it("copies owned item sets as native values and borrowed item sets by identity", /** Verifies real lazy, preview, help and copy contracts. @returns Nothing. */ () => {
   const p = pool(),
-    a = p.Make(unicode("a"), Family.Char),
-    lazy = new SfxStyleSheetBase(a),
+    a = own(p.Make(unicode("a"), Family.Char)),
+    lazy = own(new SfxStyleSheetBase(a)),
     output = unicode("output");
   expect(a.GetHelpId(output)).toBe(0);
   expect(output.isEmpty()).toBe(true);
@@ -222,7 +237,7 @@ it("copies owned item sets as native values and borrowed item sets by identity",
   const set = a.GetItemSet();
   expect(a.GetItemSet()).toBe(set);
   set.Put(new SfxBoolItem(1, true));
-  const copy = new SfxStyleSheetBase(a),
+  const copy = own(new SfxStyleSheetBase(a)),
     preview = a.GetItemSetForPreview();
   expect(copy.GetItemSet()).not.toBe(set);
   expect(copy.GetItemSet().Get(1).QueryValue()).toBe(true);
@@ -243,15 +258,15 @@ it("copies owned item sets as native values and borrowed item sets by identity",
       this.bMySet = false;
     }
   }
-  const borrowed = new Borrowed(p, set),
-    shared = new SfxStyleSheetBase(borrowed);
+  const borrowed = own(new Borrowed(p, set)),
+    shared = own(new SfxStyleSheetBase(borrowed));
   expect(shared.GetItemSet()).toBe(set);
   p.Dispose();
-  a.Dispose();
-  copy.Dispose();
-  lazy.Dispose();
-  borrowed.Dispose();
-  shared.Dispose();
+  release(a);
+  release(copy);
+  release(lazy);
+  release(borrowed);
+  release(shared);
 });
 it("preserves native cached traversal and independent Find operations", /** Checks actual iterator ownership and cache replacement. @returns Nothing. */ () => {
   const p = pool();
@@ -259,9 +274,9 @@ it("preserves native cached traversal and independent Find operations", /** Chec
   expect(/** Violates native ordering assertion. @returns Pointer. */ () => p.Next()).toThrow(
     "previous First",
   );
-  const a = p.Make(unicode("a"), Family.Char),
-    b = p.Make(unicode("b"), Family.Char),
-    c = p.Make(unicode("c"), Family.Para);
+  const a = own(p.Make(unicode("a"), Family.Char)),
+    b = own(p.Make(unicode("b"), Family.Char)),
+    c = own(p.Make(unicode("c"), Family.Para));
   expect(p.CreateIterator(Family.All).Count()).toBe(3);
   expect(p.Find(unicode("a"), Family.Char, Bits.UserDefined)).toBe(a);
   expect(p.position(0)).toBe(a);
@@ -279,16 +294,16 @@ it("preserves native cached traversal and independent Find operations", /** Chec
   p.First(Family.Para, Bits.UserDefined);
   expect(p.cached()).not.toBe(changed);
   p.Dispose();
-  a.Dispose();
-  b.Dispose();
-  c.Dispose();
+  release(a);
+  release(b);
+  release(c);
 });
 it("removes and reparents actual styles before erase notifications without disposing retained styles", /** Checks native removal and pointer membership. @returns Nothing. */ () => {
   const p = pool(),
-    parent = p.Make(unicode("parent"), Family.Char),
-    child = p.Make(unicode("child"), Family.Char, Bits.All, unicode("parent")),
+    parent = own(p.Make(unicode("parent"), Family.Char)),
+    child = own(p.Make(unicode("child"), Family.Char, Bits.All, unicode("parent"))),
     foreign = pool(),
-    absent = foreign.Make(unicode("parent"), Family.Char),
+    absent = own(foreign.Make(unicode("parent"), Family.Char)),
     listener = new Listener();
   listener.StartListening(p);
   p.Remove(null);
@@ -302,20 +317,20 @@ it("removes and reparents actual styles before erase notifications without dispo
   listener.Dispose();
   p.Dispose();
   foreign.Dispose();
-  parent.Dispose();
-  child.Dispose();
-  absent.Dispose();
+  release(parent);
+  release(child);
+  release(absent);
 });
 it("retains original copy-pool pointer and replacement/reparent order (CALC152)", /** Preserves source copy ownership rather than rebinding it. @returns Nothing. */ () => {
   const source = pool(),
     target = pool(),
-    original = source.Make(unicode("style"), Family.Char),
-    old = target.Make(unicode("style"), Family.Char),
-    child = target.Make(unicode("child"), Family.Char, Bits.All, unicode("style")),
+    original = own(source.Make(unicode("style"), Family.Char)),
+    old = own(target.Make(unicode("style"), Family.Char)),
+    child = own(target.Make(unicode("child"), Family.Char, Bits.All, unicode("style"))),
     listener = new Listener();
   listener.StartListening(target);
   target.Add(original);
-  const copy = target.Find(unicode("style"), Family.Char) as SfxStyleSheetBase;
+  const copy = own(target.Find(unicode("style"), Family.Char) as SfxStyleSheetBase);
   expect(copy).not.toBe(original);
   expect(copy.GetPool()).toBe(source);
   expect(text(child.GetParent())).toBe("");
@@ -330,15 +345,15 @@ it("retains original copy-pool pointer and replacement/reparent order (CALC152)"
   listener.Dispose();
   source.Dispose();
   target.Dispose();
-  original.Dispose();
-  old.Dispose();
-  child.Dispose();
-  copy.Dispose();
+  release(original);
+  release(old);
+  release(child);
+  release(copy);
 });
 it("preserves per-slot Clear visibility, retained family views and double destructor Dying", /** Checks native cleanup order for core classes without UNO components. @returns Nothing. */ () => {
   const p = pool(),
-    a = p.Make(unicode("a"), Family.Char),
-    b = p.Make(unicode("b"), Family.Char),
+    a = own(p.Make(unicode("a"), Family.Char)),
+    b = own(p.Make(unicode("b"), Family.Char)),
     listener = new Listener(),
     states: (SfxStyleSheetBase | null)[][] = [];
   listener.StartListening(p);
@@ -356,7 +371,7 @@ it("preserves per-slot Clear visibility, retained family views and double destru
   expect(p.GetIndexedStyleSheets().GetStyleSheetsByFamily(Family.Char)).toEqual([a, b]);
   p.Reindex();
   expect(p.GetIndexedStyleSheets().GetStyleSheetsByFamily(Family.Char)).toEqual([]);
-  const c = p.Make(unicode("c"), Family.Char),
+  const c = own(p.Make(unicode("c"), Family.Char)),
     dying: number[] = [];
   listener.action = /** Records derived/base dying order. @param hint - Hint. @returns Nothing. */ (
     hint,
@@ -367,13 +382,13 @@ it("preserves per-slot Clear visibility, retained family views and double destru
   p.Dispose();
   expect(dying).toEqual([1, 0]);
   expect(listener.IsListening(p)).toBe(false);
-  a.Dispose();
-  b.Dispose();
-  c.Dispose();
+  release(a);
+  release(b);
+  release(c);
 });
 it("preserves silent duplicate-pointer Insert and source empty copy/assignment behavior (CALC150)", /** Does not invent a repaired source traversal. @returns Nothing. */ () => {
   const source = pool(),
-    a = source.Make(unicode("a"), Family.Char),
+    a = own(source.Make(unicode("a"), Family.Char)),
     listener = new Listener();
   listener.StartListening(source);
   source.Insert(a);
@@ -387,15 +402,15 @@ it("preserves silent duplicate-pointer Insert and source empty copy/assignment b
   expect(source.addPool(source)).toBe(source);
   expect(source.assign(source)).toBe(source);
   const target = pool(),
-    old = target.Make(unicode("old"), Family.Char);
+    old = own(target.Make(unicode("old"), Family.Char));
   expect(target.assign(source)).toBe(target);
   expect(target.GetIndexedStyleSheets().GetNumberOfStyleSheets()).toBe(0);
   listener.Dispose();
   source.Dispose();
   copy.Dispose();
   target.Dispose();
-  a.Dispose();
-  old.Dispose();
+  release(a);
+  release(old);
 });
 it("propagates copy-factory failure before invalidated native traversal advances", /** A real protected factory exception exits before the source CALC150 iterator can be reused. @returns Nothing. */ () => {
   /** Original factory extension with deterministic copy failure. */
@@ -416,12 +431,68 @@ it("propagates copy-factory failure before invalidated native traversal advances
   }
   const base = pool(),
     p = new FailingPool(base.GetPool()),
-    a = p.Make(unicode("a"), Family.Char);
+    a = own(p.Make(unicode("a"), Family.Char));
   expect(
     /** Executes original callback until factory failure. @returns Pool. */ () => p.addPool(base),
   ).toThrow("copy factory failure");
   expect(p.GetIndexedStyleSheets().GetNumberOfStyleSheets()).toBe(0);
   p.Dispose();
   base.Dispose();
-  a.Dispose();
+  release(a);
+});
+
+it("keeps a pool-only style alive through Remove reparenting and erase broadcast", /** Ports the explicit upstream xP ownership guard using the actual weak adapter. @returns Nothing. */ () => {
+  const p = pool(),
+    style = p.Make(unicode("removed"), Family.Char),
+    adapter = style.queryAdapter(),
+    listener = new Listener(),
+    observations: string[] = [];
+  listener.StartListening(p);
+  listener.action =
+    /** Reads the style while Remove still owns xP. @param hint - Live hint. @returns Nothing. */ (
+      hint,
+    ) => {
+      if (hint.GetId() === SfxHintId.StyleSheetErased) {
+        const live = (
+          adapter.get() as import("../../../cppu/inc/com/sun/star/uno/XAdapter").XAdapter
+        ).queryAdapted();
+        observations.push(text((live.get() as SfxStyleSheetBase).GetName()));
+        live.dispose();
+      }
+    };
+  p.Remove(style);
+  expect(observations).toEqual(["removed"]);
+  const dead = (
+    adapter.get() as import("../../../cppu/inc/com/sun/star/uno/XAdapter").XAdapter
+  ).queryAdapted();
+  expect(dead.is()).toBe(false);
+  dead.dispose();
+  adapter.dispose();
+  listener.Dispose();
+  p.Dispose();
+});
+it("releases actual style-owned item sets at the last strong reference and gives copies independent weak lifetimes", /** Checks real pooled item references and native copy-base default construction. @returns Nothing. */ () => {
+  const p = pool(),
+    source = p.Make(unicode("source"), Family.Char);
+  source.GetItemSet().Put(new SfxBoolItem(1, true));
+  const item = source.GetItemSet().Get(1),
+    copy = new SfxStyleSheetBase(source),
+    copyReference = new Reference(copy),
+    adapter = copy.queryAdapter(),
+    copiedItem = copy.GetItemSet().Get(1);
+  expect(copiedItem).not.toBe(item);
+  expect(item.GetRefCount()).toBe(1);
+  expect(copiedItem.GetRefCount()).toBe(1);
+  copyReference.clear();
+  expect(copiedItem.GetRefCount()).toBe(0);
+  expect(item.GetRefCount()).toBe(1);
+  const dead = (
+    adapter.get() as import("../../../cppu/inc/com/sun/star/uno/XAdapter").XAdapter
+  ).queryAdapted();
+  expect(dead.is()).toBe(false);
+  dead.dispose();
+  adapter.dispose();
+  expect(source.GetItemSet().Get(1)).toBe(item);
+  p.Dispose();
+  expect(item.GetRefCount()).toBe(0);
 });

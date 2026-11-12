@@ -461,7 +461,10 @@ export class EditDoc {
         const follow = style.GetFollow();
         if (!follow.isEmpty() && !follow.equals(style.GetName()))
           node.SetStyleSheet(
-            style.GetPool().Find(follow, style.GetFamily()) as SfxStyleSheet | null,
+            (style.GetPool() as import("../../../svl/inc/style").SfxStyleSheetBasePool).Find(
+              follow,
+              style.GetFamily(),
+            ) as SfxStyleSheet | null,
           );
       }
       node.CopyAndCutAttribs(current, this.mpItemPool, keepEnding);

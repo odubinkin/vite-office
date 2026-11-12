@@ -46,11 +46,17 @@ export class SfxStyleSheet
     try {
       if (super.SetParent(name)) {
         if (!old.isEmpty()) {
-          const parent = this.m_pPool.Find(old, this.nFamily) as SfxStyleSheet | null;
+          const parent = (this.m_pPool as SfxStyleSheetBasePool).Find(
+            old,
+            this.nFamily,
+          ) as SfxStyleSheet | null;
           if (parent) this.EndListening(parent);
         }
         if (!this.aParent.isEmpty()) {
-          const parent = this.m_pPool.Find(this.aParent, this.nFamily) as SfxStyleSheet | null;
+          const parent = (this.m_pPool as SfxStyleSheetBasePool).Find(
+            this.aParent,
+            this.nFamily,
+          ) as SfxStyleSheet | null;
           if (parent) this.StartListening(parent);
         }
         return true;

@@ -7,6 +7,7 @@ export type {
 } from "./style-values";
 
 export {
+  SfxStyleSheetBase_Base,
   SfxStyleSheetBase,
   SfxStyleSheetBasePool,
   SfxStyleSheetHint,

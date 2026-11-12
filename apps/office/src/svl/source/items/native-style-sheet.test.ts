@@ -14,6 +14,19 @@ import { SfxHint, SfxHintId } from "../../inc/hint";
 import type { StyleSheetUser } from "../../inc/stylesheetuser";
 import { ItemInfoPackage, ItemInfoStatic, SfxItemPool } from "./itempool";
 import { SfxBoolItem } from "./cenumitm";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+const references = new Map<SfxStyleSheetBase, Reference<SfxStyleSheetBase>>();
+/** Owns the source caller's rtl::Reference local. @param style - Actual owner. @returns Borrowed pointer. */
+function own<T extends SfxStyleSheetBase | null>(style: T): T {
+  if (style !== null && !references.has(style)) references.set(style, new Reference(style));
+  return style;
+}
+/** Ends a source caller's strong-reference scope. @param style - Actual owner. @returns Nothing. */
+function release(style: SfxStyleSheetBase): void {
+  const reference = references.get(style) as Reference<SfxStyleSheetBase>;
+  references.delete(style);
+  reference.dispose();
+}
 const strings: OUString[] = [];
 /** Creates actual UTF16. @param text - Text. @returns Value. */ function unicode(
   text: string,
@@ -62,17 +75,19 @@ const strings: OUString[] = [];
 }
 afterEach(
   /** Ends original caller string scopes. @returns Nothing. */ () => {
+    for (const reference of [...references.values()].reverse()) reference.dispose();
+    references.clear();
     for (const s of strings) s.dispose();
     strings.length = 0;
   },
 );
 it("constructs the actual shared factory with one style identity in both native roles", /** Checks native public protocol assignments and original flags. @returns Nothing. */ () => {
   const p = pool(),
-    a = make(p, "a"),
-    b = make(p, "b"),
-    asListener: SfxListener = a,
-    asBroadcaster: SfxBroadcaster = a,
-    user: StyleSheetUser = a;
+    a = own(make(p, "a")),
+    b = own(make(p, "b")),
+    asListener: SfxListener = own(a),
+    asBroadcaster: SfxBroadcaster = own(a),
+    user: StyleSheetUser = own(a);
   expect(a).toBeInstanceOf(SfxStyleSheet);
   expect(a.GetPool()).toBe(p);
   expect(asListener).toBe(a);
@@ -97,19 +112,19 @@ it("constructs the actual shared factory with one style identity in both native 
       return false;
     }
   }
-  const unused = new Unused(unicode("unused"), p, Family.Char, Bits.All);
+  const unused = own(new Unused(unicode("unused"), p, Family.Char, Bits.All));
   expect(unused.isUsedByModel()).toBe(false);
   observer.Dispose();
   p.Dispose();
-  a.Dispose();
-  b.Dispose();
-  unused.Dispose();
+  release(a);
+  release(b);
+  release(unused);
 });
 it("forwards original ancestor source and hint identity across actual style levels", /** Checks native Notify calls existing live-bound Forward. @returns Nothing. */ () => {
   const p = pool(),
-    grand = make(p, "grand"),
-    parent = make(p, "parent"),
-    child = make(p, "child"),
+    grand = own(make(p, "grand")),
+    parent = own(make(p, "parent")),
+    child = own(make(p, "child")),
     observer = new Observer();
   parent.SetParent(grand.GetName());
   child.SetParent(parent.GetName());
@@ -125,15 +140,15 @@ it("forwards original ancestor source and hint identity across actual style leve
   expect(child.GetBroadcasterCount()).toBe(0);
   observer.Dispose();
   p.Dispose();
-  grand.Dispose();
-  parent.Dispose();
-  child.Dispose();
+  release(grand);
+  release(parent);
+  release(child);
 });
 it("preserves unchanged early return, validation failure and pool notification before subscription rebind", /** Observes the original base-to-derived order. @returns Nothing. */ () => {
   const p = pool(),
-    a = make(p, "a"),
-    b = make(p, "b"),
-    child = make(p, "child"),
+    a = own(make(p, "a")),
+    b = own(make(p, "b")),
+    child = own(make(p, "child")),
     observer = new Observer(),
     during: boolean[][] = [];
   observer.StartListening(p);
@@ -161,19 +176,19 @@ it("preserves unchanged early return, validation failure and pool notification b
   expect(child.GetBroadcasterCount()).toBe(0);
   observer.Dispose();
   p.Dispose();
-  a.Dispose();
-  b.Dispose();
-  child.Dispose();
+  release(a);
+  release(b);
+  release(child);
 });
 it("copies listener then broadcaster subobjects without proxy source identities", /** Exercises original three-base copy order. @returns Nothing. */ () => {
   const p = pool(),
-    parent = make(p, "parent"),
-    source = make(p, "source"),
+    parent = own(make(p, "parent")),
+    source = own(make(p, "source")),
     observer = new Observer();
   source.SetParent(parent.GetName());
   source.GetItemSet().Put(new SfxBoolItem(1, true));
   observer.StartListening(source);
-  const copy = new SfxStyleSheet(source);
+  const copy = own(new SfxStyleSheet(source));
   expect(copy.GetPool()).toBe(p);
   expect(copy.IsListening(parent)).toBe(true);
   expect(copy.GetBroadcasterJOE(0)).toBe(parent);
@@ -190,14 +205,14 @@ it("copies listener then broadcaster subobjects without proxy source identities"
   ]);
   observer.Dispose();
   p.Dispose();
-  parent.Dispose();
-  source.Dispose();
-  copy.Dispose();
+  release(parent);
+  release(source);
+  release(copy);
 });
 it("preserves derived InDestruction then broadcaster Dying, listener detach and base destruction", /** Observes original destructor order while the parent still exists. @returns Nothing. */ () => {
   const p = pool(),
-    parent = make(p, "parent"),
-    child = make(p, "child"),
+    parent = own(make(p, "parent")),
+    child = own(make(p, "child")),
     observer = new Observer(),
     membership: boolean[] = [];
   child.SetParent(parent.GetName());
@@ -207,7 +222,7 @@ it("preserves derived InDestruction then broadcaster Dying, listener detach and 
       membership.push(child.IsListening(parent));
     };
   p.Remove(child);
-  child.Dispose();
+  release(child);
   expect(
     observer.values.map(
       /** Reads hint ID. @param entry - Record. @returns ID. */ (entry) => entry[1].GetId(),
@@ -223,12 +238,12 @@ it("preserves derived InDestruction then broadcaster Dying, listener detach and 
   expect(parent.GetListenerCount()).toBe(0);
   expect(observer.GetBroadcasterCount()).toBe(0);
   p.Dispose();
-  parent.Dispose();
+  release(parent);
 });
 it("preserves constructor parent storage without a notification subscription (CALC158)", /** Does not repair native constructor behavior. @returns Nothing. */ () => {
   const p = pool(),
-    parent = make(p, "parent"),
-    child = p.Make(unicode("child"), Family.Char, Bits.All, parent.GetName()) as SfxStyleSheet;
+    parent = own(make(p, "parent")),
+    child = own(p.Make(unicode("child"), Family.Char, Bits.All, parent.GetName()) as SfxStyleSheet);
   expect(child.GetParent().equals(parent.GetName())).toBe(true);
   expect(child.IsListening(parent)).toBe(false);
   expect(child.SetParent(parent.GetName())).toBe(true);
@@ -237,13 +252,13 @@ it("preserves constructor parent storage without a notification subscription (CA
   child.SetParent(parent.GetName());
   expect(child.IsListening(parent)).toBe(true);
   p.Dispose();
-  parent.Dispose();
-  child.Dispose();
+  release(parent);
+  release(child);
 });
 it("preserves retained subscriptions when a removed old parent is no longer found (CALC157)", /** Holds both actual styles alive after removal. @returns Nothing. */ () => {
   const p = pool(),
-    parent = make(p, "parent"),
-    child = make(p, "child"),
+    parent = own(make(p, "parent")),
+    child = own(make(p, "child")),
     observer = new Observer();
   child.SetParent(parent.GetName());
   observer.StartListening(child);
@@ -255,14 +270,14 @@ it("preserves retained subscriptions when a removed old parent is no longer foun
   expect(observer.values).toEqual([[parent, hint]]);
   observer.Dispose();
   p.Dispose();
-  parent.Dispose();
-  child.Dispose();
+  release(parent);
+  release(child);
 });
 it("preserves subscription lookup after reentrant pool clearing (CALC159)", /** Base notification can clear the index before the derived lookups. @returns Nothing. */ () => {
   const p = pool(),
-    a = make(p, "a"),
-    b = make(p, "b"),
-    child = make(p, "child"),
+    a = own(make(p, "a")),
+    b = own(make(p, "b")),
+    child = own(make(p, "child")),
     observer = new Observer();
   child.SetParent(a.GetName());
   observer.StartListening(p);
@@ -284,16 +299,16 @@ it("preserves subscription lookup after reentrant pool clearing (CALC159)", /** 
   expect(child.IsListening(b)).toBe(false);
   observer.Dispose();
   p.Dispose();
-  a.Dispose();
-  b.Dispose();
-  child.Dispose();
+  release(a);
+  release(b);
+  release(child);
 });
 it("preserves inherited base-copy factory slicing in the derived pool (CALC156)", /** Distinguishes native field and copy factory overloads. @returns Nothing. */ () => {
   const source = pool(),
     target = pool(),
-    style = make(source, "style");
+    style = own(make(source, "style"));
   target.Add(style);
-  const copy = target.Find(style.GetName(), Family.Char) as SfxStyleSheetBase;
+  const copy = own(target.Find(style.GetName(), Family.Char) as SfxStyleSheetBase);
   expect(copy).toBeInstanceOf(SfxStyleSheetBase);
   expect(copy).not.toBeInstanceOf(SfxStyleSheet);
   expect(copy.GetPool()).toBe(source);
@@ -304,6 +319,6 @@ it("preserves inherited base-copy factory slicing in the derived pool (CALC156)"
   source.Dispose();
   target.Dispose();
   poolCopy.Dispose();
-  style.Dispose();
-  copy.Dispose();
+  release(style);
+  release(copy);
 });

@@ -18,6 +18,7 @@ test("preserves actual style role identity, inherited forwarding, copies and des
     },
     { module: "src/svl/source/items/cenumitm.ts", names: ["SfxBoolItem"] },
     { module: "src/sal/inc/rtl/ustring.ts", names: ["OUString"] },
+    { module: "src/cppu/inc/com/sun/star/uno/Reference.ts", names: ["Reference"] },
   ]);
   const result = await page.evaluate(
     /** Observes actual native pointer/role equivalents without proxies. @returns Results. */ () => {
@@ -76,6 +77,7 @@ test("preserves actual style role identity, inherited forwarding, copies and des
         child.isUsedByModel(),
       ];
       const copy = new n.SfxStyleSheet(child),
+        copyReference = new n.Reference(copy),
         theme = new n.SfxHint(n.SfxHintId.ThemeColorsChanged);
       parent.Broadcast(theme);
       const copied = [
@@ -91,7 +93,7 @@ test("preserves actual style role identity, inherited forwarding, copies and des
       parent.Broadcast(data);
       other.Broadcast(data);
       const rebound = [child.IsListening(parent), child.IsListening(other), values.length];
-      copy.Dispose();
+      copyReference.dispose();
       const destruction = values
           .slice(-2)
           .map(
@@ -103,9 +105,7 @@ test("preserves actual style role identity, inherited forwarding, copies and des
       const remaining = observer.GetBroadcasterCount();
       observer.Dispose();
       pool.Dispose();
-      parent.Dispose();
-      other.Dispose();
-      child.Dispose();
+
       for (const s of strings) s.dispose();
       return {
         first,
