@@ -20,7 +20,7 @@ function literal(value: string): OUString {
 export class Converter {
   /** Original private unimplemented constructor excludes public instantiation. @returns No public service-helper instance. */
   private constructor() {}
-  /** Original default create(), preserving argument constructor, UNO query and exception translation. @param context - Actual nonempty component context. @returns Acquired broker or original DeploymentException. */
+  /** Original default create(), preserving service construction, UNO query and exception translation. @param context - Actual nonempty component context. @returns Acquired converter or original DeploymentException. */
   static create(context: Reference<XComponentContext>): Reference<XTypeConverter> {
     if (!context.is()) throw new Error("assert(the_context.is())");
     const instance = new Reference<XTypeConverter>();

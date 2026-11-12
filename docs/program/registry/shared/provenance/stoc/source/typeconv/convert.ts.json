@@ -16,10 +16,11 @@
       "getNumericValue"
     ],
     "preservedResponsibilities": [
-      "Original complete converter method switches, range/parsing helpers, service info and acquired component export use actual UNO values, interfaces, type descriptions and C sequence engine. TypeDescription preserves all declared constructor/value/ownership/completion methods. SAL dependencies preserve terminated unsigned64 parsing and counted ASCII-only equality. Genuine component tests port the available original Integer123-to-String QA and all OUString unsigned64 overflow values. No fake context, service manager, factory or type provider is installed. Actual service registration/default process graph, named enum completion, original TypeDescriptionManager-to-XSet QA, native floating-integral undefined overflow/ABI/thread behavior, full coverage90 and DOCX/XLSX/UI remain unqualified."
+      "Original complete converter method switches, range/parsing helpers, service info and acquired component export use actual UNO values, interfaces, type descriptions and C sequence engine. TypeDescription preserves all declared constructor/value/ownership/completion methods. SAL dependencies preserve terminated unsigned64 parsing and counted ASCII-only equality. Genuine component tests port the available original Integer123-to-String QA and all OUString unsigned64 overflow values. No fake context, service manager, factory or type provider is installed. Named enum completion, original TypeDescriptionManager-to-XSet QA, native floating-integral undefined overflow/ABI/thread behavior, full coverage90 and DOCX/XLSX/UI remain unqualified.",
+      "Production desktop static registration binds the exact stocservices.component TypeConverter implementation/service names and actual constructor export. Both main.tsx and calc-ods-worker.ts already install this registry through InitApplicationServiceManager. Genuine process context/ServiceManager/Converter.create/PropertyValueSet execution now covers successful conversions, original caches, direct typed failures and first-versus-repeat failed-read wasNull behavior. The real Chromium main and DOM-free module Worker probe runs this same production registry alongside the native DOM graph. No fake positive context, manager, converter, factory or property provider is supplied. Full type-manager/named enum QA, efficient XPropertyAccess, native ABI/threads, resolver/DocumentBuilder/metadata and DOCX/XLSX/UI remain unfinished."
     ],
     "omittedResponsibilities": [
-      "Native allocation/ABI/threading, complete service/type-provider graph and full format/UI integration remain pending."
+      "Native allocation/ABI/threading, complete type-provider graph and full format/UI integration remain pending."
     ],
     "evidence": {
       "local": [
@@ -29,6 +30,10 @@
         },
         {
           "path": "apps/office/src/stoc/source/typeconv/convert.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/desktop/browser/app/uno-converter.test.ts",
           "marker": "@fileoverview"
         }
       ],

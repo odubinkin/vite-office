@@ -1,4 +1,5 @@
-/** @fileoverview Static browser bindings for the consumed i18npool and NumberText component registrations. */
+/** @fileoverview Static browser bindings for the consumed i18npool, NumberText and stoc component registrations. */
+import { com_sun_star_comp_stoc_TypeConverter_get_implementation } from "../../../stoc/source/typeconv/convert";
 import type { Implementation } from "../../../cppuhelper/source/servicemanager";
 import { com_sun_star_i18n_BreakIterator_get_implementation } from "../../../i18npool/source/breakiterator/breakiteratorImpl";
 import { com_sun_star_i18n_BreakIterator_Unicode_get_implementation } from "../../../i18npool/source/breakiterator/breakiterator_unicode";
@@ -12,7 +13,7 @@ import {
 } from "../../../i18npool/source/registerservices/registerservices";
 import { lingucomponent_NumberText_get_implementation } from "../../../lingucomponent/source/numbertext/numbertext";
 
-/** Original i18npool.component entries for the two break iterator families and the classifier, followed by the NumberText component entry. */
+/** Original i18npool.component entries for the two break iterator families and the classifier, followed by the NumberText and stocservices.component converter entries. */
 export const implementations: readonly Implementation[] = [
   {
     name: "com.sun.star.i18n.BreakIterator",
@@ -58,5 +59,10 @@ export const implementations: readonly Implementation[] = [
     name: "com.sun.star.lingu2.NumberText",
     services: ["com.sun.star.linguistic2.NumberText"],
     constructorFn: lingucomponent_NumberText_get_implementation,
+  },
+  {
+    name: "com.sun.star.comp.stoc.TypeConverter",
+    services: ["com.sun.star.script.Converter"],
+    constructorFn: com_sun_star_comp_stoc_TypeConverter_get_implementation,
   },
 ];

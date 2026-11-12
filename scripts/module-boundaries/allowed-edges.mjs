@@ -14,10 +14,10 @@ export const allowedEdges = new Map([
   // Original cppuhelper uses UNO/SAL, o3tl/cow_wrapper and comphelper/sequence.
   ["cppuhelper", new Set(["cppu", "o3tl", "sal", "udkapi"])],
   ["cui", new Set(["editeng", "svl", "svx", "tools"])],
-  // Desktop appinit.cxx uses the process factory and CPPU bootstrap; the browser binds linked constructors.
+  // Desktop appinit.cxx uses the process factory and CPPU bootstrap; the browser binds linked constructors, including stocservices.component TypeConverter.
   [
     "desktop",
-    new Set(["comphelper", "cppu", "cppuhelper", "i18npool", "lingucomponent", "udkapi"]),
+    new Set(["comphelper", "cppu", "cppuhelper", "i18npool", "lingucomponent", "stoc", "udkapi"]),
   ],
   // Original justifyitem/frmitems use UNO values, table/style enums and Tools/o3tl units.
   // Original UnoComplexColor uses implbase and XComplexColor; Library_docmodel links CPPU/cppuhelper.

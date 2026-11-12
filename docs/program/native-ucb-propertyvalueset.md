@@ -32,7 +32,8 @@ property-set fallback. A genuine ComponentContext/ServiceManager with an empty
 registry supplies unavailable-Converter failure. There is no injected positive
 row, property provider, converter or broker.
 
-Original qadevOOo _XRow::_getString, _getBoolean, _getLong, _getTimestamp and
+Original qadevOOo _XRow::_getString, _getBoolean, _getByte, _getShort, _getInt,
+_getLong, _getFloat, _getDouble, _getBytes, _getDate, _getTime, _getTimestamp and
 _getObject method bodies run with populated CurrentRowData relations and actual
 method calls; no absent-relation success is counted. The _XColumnLocate::_findColumn
 body uses its real required first-column relation. Java class selectors are
@@ -44,13 +45,19 @@ values. Source void-Any wasNull and one-shot converter-failure behavior are
 recorded as CALC-538/WRITER472 and CALC-539/WRITER473 and preserved. No compiled
 C++ differential or complete physical ABI/threading claim is made.
 
-Positive Converter service and efficient XPropertyAccess execution remain
-unqualified. Content.isDocument/openStream/cancel-command, default resolver and
+Production Converter registration now enables the genuine
+ComponentContext/ServiceManager/Converter.create/PropertyValueSet path in the
+application main realm and Calc Worker. Successful numeric/boolean/string
+conversions, cached reads and typed failures are covered without a replacement
+provider. First-versus-repeat failed-read wasNull timing is preserved and recorded
+as CALC-543/WRITER477. The extended real Chromium main/DOM-free Worker probe
+verifies the same process graph alongside native DOM operations. Efficient
+XPropertyAccess execution remains unqualified. Content.isDocument/openStream/cancel-command, default resolver and
 URI paths, DocumentBuilder, XPath, native metadata/model initialization and
 full DOCX/XLSX import/export plus existing UI acceptance remain unfinished.
 
-Validation passes 224 related cases in 33 files, 48 module-boundary cases and two
-resource cases. Whole selected-owner coverage remains below 90: 77.84% statements,
+The earlier prerequisite checkpoint passed 224 related cases in 33 files, 48 module-boundary cases and two
+resource cases. Its whole selected-owner coverage was below 90: 77.84% statements,
 72.00% branches, 89.25% functions and 79.09% lines. PropertyValueSet itself has
 76.07% statements, 60.00% branches, 100% functions and 76.69% lines. Those figures
 are observations, not a completed 90-percent gate or permission to force
@@ -58,3 +65,7 @@ unreachable/private branches. Typecheck, build/static, scoped lint/format,
 provenance/registry/module/resource/tree/size checks, doctor/routing and diff
 checks pass. Only the existing css-style-matchers.ts JSDoc baseline at 17 and 76
 remains. Full suites were not run under the approved once-per-ten-task cadence.
+
+Current registration/related test and coverage results are recorded separately
+in the registered-converter task checkpoint. Historical figures above are not
+promoted into a broader current coverage claim.

@@ -5561,3 +5561,9 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source: `stoc/source/typeconv/convert.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER476.
 - convertTo obtains acquired source/destination element descriptions with TYPELIB_DANGER_GET, recursively converts elements, and releases both only after the loop. A thrown element conversion bypasses both releases. Preserve the source control flow rather than placing these two manual releases in a finally guard. The ordinary TypeDescription and Any/sequence locals still unwind normally. This finding is source-derived; no compiled allocator/leak witness or full service/filter defect is claimed.
+
+
+### CALC-543 — First failed numeric row read can report wasNull=false before the Object cache exists
+
+- Source: `ucbhelper/source/provider/propertyvalueset.cxx`, `getValue` and `getObjectImpl`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER477.
+- getValue first sets m_bWasNull=true, but calls getObjectImpl when a natively appended string has no Object cache yet. getObjectImpl sets the flag to false. If the genuine converter then throws CannotConvertException, getValue swallows it without restoring the flag. Thus appendString followed by an invalid numeric read returns zero/false on the first call and zero/true on the second call. Tests and both real Chromium realms reproduce this through the production context/manager/converter, with no private mutation. Preserve the source cache and flag order; no compiled C++ differential or full filter defect is claimed.

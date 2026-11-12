@@ -102,6 +102,15 @@ try {
     code,
   );
   const expected = {
+    conversion: {
+      serviceValue: 42,
+      rowValue: 42,
+      rowWasNull: false,
+      failedFirst: 0,
+      failedFirstWasNull: false,
+      failedSecond: 0,
+      failedSecondWasNull: true,
+    },
     globals: { window: "undefined", document: "undefined", DOMParser: "undefined" },
     rootName: "document-content",
     attribute: "1.0",
@@ -129,7 +138,7 @@ try {
     JSON.stringify({ workerResult, mainResult }, null, 2) + "\n",
   );
   console.info(
-    "PASS: actual UNO DOM, C SAX callbacks, typed parser diagnostics, native stream IO, live mutation lists and Unicode in Chromium main realm and DOM-free module Worker",
+    "PASS: registered Converter/PropertyValueSet, actual UNO DOM, C SAX callbacks, typed parser diagnostics, native stream IO, live mutation lists and Unicode in Chromium main realm and DOM-free module Worker",
   );
 } finally {
   await browser.close();

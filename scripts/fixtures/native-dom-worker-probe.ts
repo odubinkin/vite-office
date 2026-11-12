@@ -16,6 +16,14 @@ import { parserException } from "../../apps/office/src/unoxml/source/dom/documen
 import { domLiteral } from "../../apps/office/src/unoxml/source/dom/node";
 import { warningTestFile } from "../../apps/office/src/test/native-builder-fixtures";
 import type { OUString } from "../../apps/office/src/sal/inc/rtl/ustring";
+import { implementations } from "../../apps/office/src/desktop/browser/app/uno-components";
+import { InitApplicationServiceManager } from "../../apps/office/src/desktop/source/app/appinit";
+import { getProcessComponentContext } from "../../apps/office/src/comphelper/inc/processfactory";
+import { Converter } from "../../apps/office/src/udkapi/com/sun/star/script/Converter";
+import type { XComponentContext } from "../../apps/office/src/udkapi/com/sun/star/uno/XComponentContext";
+import { PropertyValueSet } from "../../apps/office/src/ucbhelper/inc/propertyvalueset";
+import { Any } from "../../apps/office/src/cppu/inc/com/sun/star/uno/Any";
+import { UnoType } from "../../apps/office/src/cppu/inc/unotype";
 const Bytes = Sequence.specialize<number>("sal_Int8", 1);
 
 /** Executes genuine graph operations in whichever browser realm invokes it. @returns Structured-clone-safe observations, with no native pointer crossing a realm boundary. */
@@ -39,6 +47,33 @@ export async function runNativeDomWorkerProbe() {
       value.dispose();
     }
   }
+  InitApplicationServiceManager(implementations);
+  const processContext = getProcessComponentContext() as Reference<XComponentContext>,
+    converter = own(Converter.create(processContext)),
+    row = own(new Reference(new PropertyValueSet(processContext))),
+    rowApi = row.operatorStar(),
+    source = own(new Any(u("42").getDataAddress(), "OUString")),
+    converted = own(converter.operatorStar().convertTo(source, UnoType.get("sal_Int32"))),
+    scalar: [number] = [0];
+  if (!converted.extract(scalar, "sal_Int32"))
+    throw new Error("Registered converter returned wrong type");
+  rowApi.appendString(u("number"), u("42"));
+  rowApi.appendString(u("bad"), u("not-a-number"));
+  const rowValue = rowApi.getInt(1),
+    rowWasNull = rowApi.wasNull();
+  const failedFirst = rowApi.getInt(2),
+    failedFirstWasNull = rowApi.wasNull();
+  const failedSecond = rowApi.getInt(2),
+    failedSecondWasNull = rowApi.wasNull();
+  const conversion = {
+    serviceValue: scalar[0],
+    rowValue,
+    rowWasNull,
+    failedFirst,
+    failedFirstWasNull,
+    failedSecond,
+    failedSecondWasNull,
+  };
   const bytes = new TextEncoder().encode(warningTestFile),
     data = own(new Bytes(bytes.length)),
     cells = data.getArray() as SequenceElements;
@@ -111,6 +146,7 @@ export async function runNativeDomWorkerProbe() {
     if (!element) throw new Error("Native child is missing");
     own(element.appendChild(text));
     return {
+      conversion,
       globals: {
         window: typeof window,
         document: typeof globalThis.document,

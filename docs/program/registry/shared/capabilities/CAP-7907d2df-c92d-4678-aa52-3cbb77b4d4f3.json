@@ -9,11 +9,12 @@
     "type": "model",
     "maturity": "implemented",
     "assertions": [
-      "Original complete converter method switches, range/parsing helpers, service info and acquired component export use actual UNO values, interfaces, type descriptions and C sequence engine. TypeDescription preserves all declared constructor/value/ownership/completion methods. SAL dependencies preserve terminated unsigned64 parsing and counted ASCII-only equality. Genuine component tests port the available original Integer123-to-String QA and all OUString unsigned64 overflow values. No fake context, service manager, factory or type provider is installed. Actual service registration/default process graph, named enum completion, original TypeDescriptionManager-to-XSet QA, native floating-integral undefined overflow/ABI/thread behavior, full coverage90 and DOCX/XLSX/UI remain unqualified."
+      "Original complete converter method switches, range/parsing helpers, service info and acquired component export use actual UNO values, interfaces, type descriptions and C sequence engine. TypeDescription preserves all declared constructor/value/ownership/completion methods. SAL dependencies preserve terminated unsigned64 parsing and counted ASCII-only equality. Genuine component tests port the available original Integer123-to-String QA and all OUString unsigned64 overflow values. No fake context, service manager, factory or type provider is installed. Named enum completion, original TypeDescriptionManager-to-XSet QA, native floating-integral undefined overflow/ABI/thread behavior, full coverage90 and DOCX/XLSX/UI remain unqualified.",
+      "Production desktop static registration binds the exact stocservices.component TypeConverter implementation/service names and actual constructor export. Both main.tsx and calc-ods-worker.ts already install this registry through InitApplicationServiceManager. Genuine process context/ServiceManager/Converter.create/PropertyValueSet execution now covers successful conversions, original caches, direct typed failures and first-versus-repeat failed-read wasNull behavior. The real Chromium main and DOM-free module Worker probe runs this same production registry alongside the native DOM graph. No fake positive context, manager, converter, factory or property provider is supplied. Full type-manager/named enum QA, efficient XPropertyAccess, native ABI/threads, resolver/DocumentBuilder/metadata and DOCX/XLSX/UI remain unfinished."
     ],
     "capability": "Native stoc converter and type-description ownership",
     "gaps": [
-      "Genuine service registration and process context remain pending.",
+      "Full service-manager/bootstrap parity beyond the existing constructor-backed browser binding remains unqualified.",
       "Named enum completion and original TypeDescriptionManager-to-XSet QA require the actual type manager.",
       "Native undefined floating-integral overflow, ABI, threads, whole90 coverage and full format/UI acceptance remain unqualified."
     ],
@@ -30,6 +31,10 @@
         {
           "path": "include/rtl/ustring.hxx",
           "marker": "toUInt64"
+        },
+        {
+          "path": "stoc/util/stocservices.component",
+          "marker": "com.sun.star.comp.stoc.TypeConverter"
         }
       ],
       "tests": [
@@ -62,6 +67,10 @@
         {
           "path": "apps/office/src/cppu/inc/typelib/typedescription.hxx.ts",
           "marker": "TypeDescription"
+        },
+        {
+          "path": "apps/office/src/desktop/browser/app/uno-components.ts",
+          "marker": "com_sun_star_comp_stoc_TypeConverter_get_implementation"
         }
       ],
       "tests": [
@@ -75,6 +84,10 @@
         },
         {
           "path": "apps/office/src/sal/rtl/native-converter-string-dependencies.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/desktop/browser/app/uno-converter.test.ts",
           "marker": "@fileoverview"
         }
       ],
@@ -95,7 +108,7 @@
       "rationale": "Original complete converter method switches, range/parsing helpers, service info and acquired component export use actual UNO values, interfaces, type descriptions and C sequence engine. TypeDescription preserves all declared constructor/value/ownership/completion methods. SAL dependencies preserve terminated unsigned64 parsing and counted ASCII-only equality. Genuine component tests port the available original Integer123-to-String QA and all OUString unsigned64 overflow values. No fake context, service manager, factory or type provider is installed. Actual service registration/default process graph, named enum completion, original TypeDescriptionManager-to-XSet QA, native floating-integral undefined overflow/ABI/thread behavior, full coverage90 and DOCX/XLSX/UI remain unqualified."
     },
     "scopeLimitations": [
-      "Original complete converter method switches, range/parsing helpers, service info and acquired component export use actual UNO values, interfaces, type descriptions and C sequence engine. TypeDescription preserves all declared constructor/value/ownership/completion methods. SAL dependencies preserve terminated unsigned64 parsing and counted ASCII-only equality. Genuine component tests port the available original Integer123-to-String QA and all OUString unsigned64 overflow values. No fake context, service manager, factory or type provider is installed. Actual service registration/default process graph, named enum completion, original TypeDescriptionManager-to-XSet QA, native floating-integral undefined overflow/ABI/thread behavior, full coverage90 and DOCX/XLSX/UI remain unqualified."
+      "Original complete converter method switches, range/parsing helpers, service info and acquired component export use actual UNO values, interfaces, type descriptions and C sequence engine. TypeDescription preserves all declared constructor/value/ownership/completion methods. SAL dependencies preserve terminated unsigned64 parsing and counted ASCII-only equality. Genuine component tests port the available original Integer123-to-String QA and all OUString unsigned64 overflow values. No fake context, service manager, factory or type provider is installed. Named enum completion, original TypeDescriptionManager-to-XSet QA, native floating-integral undefined overflow/ABI/thread behavior, full coverage90 and DOCX/XLSX/UI remain unqualified."
     ],
     "aspect": "model-operation",
     "atomicOperation": "native-stoc-type-conversion"

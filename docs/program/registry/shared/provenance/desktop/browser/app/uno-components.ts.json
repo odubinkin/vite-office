@@ -12,13 +12,18 @@
         {
           "path": "apps/office/src/desktop/browser/app/uno-components.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/desktop/browser/app/uno-converter.test.ts",
+          "marker": "@fileoverview"
         }
       ]
     },
     "localPath": "apps/office/src/desktop/browser/app/uno-components.ts",
-    "rationale": "Browser composition binds the pinned i18npool and NumberText implementation names and services to their actual linked constructors. UNO context and service lookup remain with the original CPPU owners.",
+    "rationale": "Browser composition binds the pinned i18npool and NumberText implementation names and services to their actual linked constructors. UNO context and service lookup remain with the original CPPU owners. Production desktop static registration binds the exact stocservices.component TypeConverter implementation/service names and actual constructor export. Both main.tsx and calc-ods-worker.ts already install this registry through InitApplicationServiceManager. Genuine process context/ServiceManager/Converter.create/PropertyValueSet execution now covers successful conversions, original caches, direct typed failures and first-versus-repeat failed-read wasNull behavior. The real Chromium main and DOM-free module Worker probe runs this same production registry alongside the native DOM graph. No fake positive context, manager, converter, factory or property provider is supplied. Full type-manager/named enum QA, efficient XPropertyAccess, native ABI/threads, resolver/DocumentBuilder/metadata and DOCX/XLSX/UI remain unfinished.",
     "responsibilities": [
-      "Browser composition binds the pinned i18npool and NumberText implementation names and services to their actual linked constructors. UNO context and service lookup remain with the original CPPU owners."
+      "Browser composition binds the pinned i18npool and NumberText implementation names and services to their actual linked constructors. UNO context and service lookup remain with the original CPPU owners.",
+      "Production desktop static registration binds the exact stocservices.component TypeConverter implementation/service names and actual constructor export. Both main.tsx and calc-ods-worker.ts already install this registry through InitApplicationServiceManager. Genuine process context/ServiceManager/Converter.create/PropertyValueSet execution now covers successful conversions, original caches, direct typed failures and first-versus-repeat failed-read wasNull behavior. The real Chromium main and DOM-free module Worker probe runs this same production registry alongside the native DOM graph. No fake positive context, manager, converter, factory or property provider is supplied. Full type-manager/named enum QA, efficient XPropertyAccess, native ABI/threads, resolver/DocumentBuilder/metadata and DOCX/XLSX/UI remain unfinished."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

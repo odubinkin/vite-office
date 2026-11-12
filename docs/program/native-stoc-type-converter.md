@@ -27,16 +27,21 @@ claimed here.
 
 The full Java service harness and `_convertTo` scenario using an actual
 TypeDescriptionManager converted to XSet remain unqualified: that concrete
-manager and the normal component registration/bootstrap graph are not yet
-implemented. Named enum lookup requires genuine full enum completion; tests do
+manager is not yet implemented. The converter is now registered in the existing
+production desktop component registry, used by both the main realm and Calc
+Worker. Named enum lookup requires genuine full enum completion; tests do
 not install a substitute provider. Native floating-to-integral overflow outside
 the C++ defined range, ABI, native allocation failure, mutex/thread scheduling and
 full service/filter/UI acceptance remain unqualified. The original manually
 released element descriptions remain unreleased if recursive conversion throws;
 this source behavior is preserved and documented in both suspected-issue logs.
 
-The existing PropertyValueSet service helper is unchanged. It will reach this
-component once real service registration is connected. Content open/cancel,
+The existing PropertyValueSet service helper is unchanged and now reaches this
+component through the actual process context and ServiceManager. Production
+service/implementation-name and argument construction paths, row conversions,
+caches and typed failures are verified. The extended native DOM browser probe
+also qualifies this graph in Chromium main and a module Worker without host
+DOM globals. Content open/cancel,
 resolver/DocumentBuilder, metadata initialization and complete DOCX/XLSX import,
 export/reopen and existing UI acceptance remain unfinished. Coverage and focused
 validation results are recorded in the task checkpoint evidence; no broad parity

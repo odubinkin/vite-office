@@ -1,7 +1,17 @@
-/** @fileoverview Populated actual PropertyValueSet relation ports the original qadevOOo _XRow string/boolean/long/timestamp/object and _XColumnLocate method bodies; no absent-relation success is counted. */
+/** @fileoverview Populated actual PropertyValueSet relation ports the original qadevOOo _XRow scalar/bytes/date/time/timestamp/object and _XColumnLocate method bodies; no absent-relation success is counted. */
 import { afterEach, expect, it } from "vitest";
 import { PropertyValueSet } from "../../inc/propertyvalueset";
 import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import { UnoType, type UnoTypeArgument } from "../../../cppu/inc/unotype";
+import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import {
+  Date,
+  cppu_detail_getUnoType_Date as dateType,
+} from "../../../offapi/com/sun/star/util/Date";
+import {
+  Time,
+  cppu_detail_getUnoType_Time as timeType,
+} from "../../../offapi/com/sun/star/util/Time";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import { DateTime } from "../../../offapi/com/sun/star/util/DateTime";
@@ -55,3 +65,85 @@ it("ports original _XColumnLocate::_findColumn", /** The original required first
   api(value).appendString(columnName, u("value"));
   expect(api(value).findColumn(columnName)).toBe(1);
 });
+
+it.each(["Byte", "Short", "Int", "Float", "Double", "Bytes", "Date", "Time"] as const)(
+  "ports original _XRow::_get%s with a real typed CurrentRowData carrier",
+  /** Original Java class selector is lowered to the exact native Any type, then calls the original getter with its no-exception criterion. @param method - Original method suffix. @returns Nothing. */ (
+    method,
+  ) => {
+    const value = own(new Reference(new PropertyValueSet(own(new Reference()))));
+    let type: UnoTypeArgument;
+    let carrier: Any;
+    switch (method) {
+      case "Byte":
+        type = "sal_Int8";
+        carrier = own(new Any([7], type));
+        break;
+      case "Short":
+        type = "sal_Int16";
+        carrier = own(new Any([12], type));
+        break;
+      case "Int":
+        type = "sal_Int32";
+        carrier = own(new Any([42], type));
+        break;
+      case "Float":
+        type = "float";
+        carrier = own(new Any([1.25], type));
+        break;
+      case "Double":
+        type = "double";
+        carrier = own(new Any([2.5], type));
+        break;
+      case "Bytes": {
+        type = ["Sequence", "sal_Int8"];
+        const bytes = own(new (Sequence.specialize<number>("sal_Int8", 1))(2));
+        carrier = own(new Any(bytes.getAddress(), type));
+        break;
+      }
+      case "Date":
+        type = dateType;
+        carrier = own(new Any(new Date(12, 11, 2026), type));
+        break;
+      case "Time":
+        type = timeType;
+        carrier = own(new Any(new Time(), type));
+        break;
+    }
+    const data = [carrier],
+      column =
+        data.findIndex(
+          /** Original type relation selector over actual native typed carriers. @param item - Original row value. @returns Native class match. */ (
+            item,
+          ) => item.getValueType().equals(UnoType.get(type)),
+        ) + 1;
+    expect(column).toBeGreaterThan(0);
+    api(value).appendObject(u(method), carrier);
+    switch (method) {
+      case "Byte":
+        api(value).getByte(column);
+        break;
+      case "Short":
+        api(value).getShort(column);
+        break;
+      case "Int":
+        api(value).getInt(column);
+        break;
+      case "Float":
+        api(value).getFloat(column);
+        break;
+      case "Double":
+        api(value).getDouble(column);
+        break;
+      case "Bytes":
+        own(api(value).getBytes(column));
+        break;
+      case "Date":
+        api(value).getDate(column);
+        break;
+      case "Time":
+        api(value).getTime(column);
+        break;
+    }
+  },
+);
