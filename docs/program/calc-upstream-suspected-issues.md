@@ -5597,3 +5597,9 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source: `cppuhelper/source/propshlp.cxx`, `OPropertyArrayHelper::fillHandles`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER482.
 - The linear branch leaves pCur at a match, whereas the binary branch advances it to pMid+1. A second equal name can therefore match again in the linear branch but miss in the binary branch. With 64 unique sorted descriptors, two requests for p016 give one hit; 64 repeated requests give 58 hits before the changing request-count heuristic advances past the match. Preserve both cursor updates and the original heuristic. This is a source-backed low-level observation; duplicate-name legality at higher-level UNO callers, a compiled native differential and a complete filter defect remain unqualified.
+
+
+### CALC-549 — Published listener container accepts null but can report an inconsistent count or dereference it during collapse
+
+- Source: `include/cppuhelper/interfacecontainer.h` and `cppuhelper/source/interfacecontainer.cxx`, `addInterface`/`removeInterface`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with WRITER483.
+- The published declaration explicitly permits null. Adding null to an empty singleton stores null and returns1, while getLength/getElements report zero. If a vector later shrinks to one remaining null reference, removeInterface unconditionally calls p->acquire before collapsing it into singleton storage, an undefined native dereference. Preserve the union transitions and return values. Ordinary null insertion is tested through actual public calls; the undefined collapse is represented by an explicit host precondition failure, without inventing a native crash result or a successful no-op. Complete property-service/filter impact and compiled native differential are unqualified.

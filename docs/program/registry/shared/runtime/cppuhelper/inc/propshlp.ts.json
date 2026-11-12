@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "property-array-description",
     "capabilityIds": [
-      "CAP-e39ce876-8d34-4928-81b0-be584518ad9f"
+      "CAP-e39ce876-8d34-4928-81b0-be584518ad9f",
+      "CAP-c06dd1cf-e1aa-4d10-8066-b24e955faecc"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -20,7 +21,7 @@
         "apps/office/src/cppuhelper/source/propshlp.test.ts",
         "docs/program/native-property-array.md"
       ],
-      "justification": "Original complete IPropertyArrayHelper/OPropertyArrayHelper and OPropertySetHelperInfo_Impl preserve native Property/Sequence ownership, nonconst subscript COW, diagnostic-only sorted hints, indexed or linear handle lookup, name-sorted binary lookup, immutable info snapshots and original hybrid batch cursor including CALC-548/WRITER482 repeated-name behavior. IEventNotificationHook is only its original declaration. Host sorting uses actual generated Property copies; exact qsort allocation/refcount/move and duplicate-key selection traces, physical ABI and native thread scheduling remain unqualified. OPropertySetHelper and notification containers, separate UNO OPropertyBag, SfxDocumentMetaData and final DOCX/XLSX/UI acceptance are still unfinished.",
+      "justification": "Original complete IPropertyArrayHelper/OPropertyArrayHelper and OPropertySetHelperInfo_Impl preserve native Property/Sequence ownership, nonconst subscript COW, diagnostic-only sorted hints, indexed or linear handle lookup, name-sorted binary lookup, immutable info snapshots and original hybrid batch cursor including CALC-548/WRITER482 repeated-name behavior. IEventNotificationHook is only its original declaration. Host sorting uses actual generated Property copies; exact qsort allocation/refcount/move and duplicate-key selection traces, physical ABI and native thread scheduling remain unqualified. OPropertySetHelper and notification containers, separate UNO OPropertyBag, SfxDocumentMetaData and final DOCX/XLSX/UI acceptance are still unfinished. Also reexports the complete original signed32 multi-container specialization from its actual shared source owner.",
       "knownViolations": [],
       "localSymbols": [],
       "sourceResponsibility": "aligned",

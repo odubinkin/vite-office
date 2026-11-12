@@ -25,6 +25,11 @@ import {
 } from "../../apps/office/src/comphelper/inc/compbase";
 import { XEventListener } from "../../apps/office/src/udkapi/com/sun/star/lang/XEventListener";
 import type { EventObject } from "../../apps/office/src/udkapi/com/sun/star/lang/EventObject";
+import {
+  OBroadcastHelper,
+  OInterfaceIteratorHelper,
+} from "../../apps/office/src/cppuhelper/inc/interfacecontainer";
+import { OMultiTypeInterfaceContainerHelperInt32 } from "../../apps/office/src/cppuhelper/inc/propshlp";
 import { OPropertyArrayHelper } from "../../apps/office/src/cppuhelper/inc/propshlp";
 import { OPropertySetHelperInfo_Impl } from "../../apps/office/src/cppuhelper/source/propshlp";
 import { XPropertySetInfo } from "../../apps/office/src/udkapi/com/sun/star/beans/XPropertySetInfo";
@@ -98,6 +103,27 @@ export async function runNativeDomWorkerProbe() {
     notifications: publicNotifications,
     sameEventSource: publicEventIdentity,
     componentTypeCount: publicTypes.getLength(),
+  };
+  const broadcaster = own(new OBroadcastHelper()),
+    listenerType = XEventListener.static_type();
+  broadcaster.addListener(listenerType, publicListener);
+  broadcaster.addListener(listenerType, publicListener);
+  const legacyContainer = broadcaster.getContainer(listenerType);
+  if (legacyContainer === null) throw new Error("Native listener container missing");
+  const legacyIterator = new OInterfaceIteratorHelper(legacyContainer),
+    oldListener = legacyIterator.next();
+  broadcaster.removeListener(listenerType, publicListener);
+  const oldSnapshot = legacyIterator.next();
+  legacyIterator.dispose();
+  const legacyInts = own(new OMultiTypeInterfaceContainerHelperInt32());
+  legacyInts.addInterface(-7, publicListener);
+  const legacyKeys = own(legacyInts.getContainedTypes());
+  const legacyListeners = {
+    remaining: legacyContainer.getLength(),
+    sameFirst: oldListener === publicListener.get(),
+    sameSnapshot: oldSnapshot === publicListener.get(),
+    keyCount: legacyKeys.getLength(),
+    key: ((legacyKeys.getConstArray() as SequenceElements).get(0) as [number])[0],
   };
   const propertyBag = own(new PropertyBag()),
     initialProperty = own(new Any([41], "sal_Int32")),
@@ -288,6 +314,7 @@ export async function runNativeDomWorkerProbe() {
       publicHelpers,
       dynamicProperties,
       propertyArray,
+      legacyListeners,
       documentBuilder,
       xpath: (
         /** Queries the actual registered native XPath service. @returns Scalar observations only. */ () => {

@@ -4,3 +4,4 @@ export {
   OPropertyArrayHelper,
   type IEventNotificationHook,
 } from "../source/propshlp";
+export { OMultiTypeInterfaceContainerHelperInt32 } from "../source/interfacecontainer";

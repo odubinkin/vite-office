@@ -111,6 +111,7 @@ try {
       failedSecond: 0,
       failedSecondWasNull: true,
     },
+    legacyListeners: { remaining: 1, sameFirst: true, sameSnapshot: true, keyCount: 1, key: -7 },
     propertyArray: {
       count: 1,
       handle: 7,

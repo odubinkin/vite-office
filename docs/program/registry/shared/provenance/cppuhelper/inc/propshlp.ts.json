@@ -8,15 +8,18 @@
     "upstreamPath": "include/cppuhelper/propshlp.hxx",
     "localSymbols": [
       "OPropertyArrayHelper",
-      "IEventNotificationHook"
+      "IEventNotificationHook",
+      "OMultiTypeInterfaceContainerHelperInt32"
     ],
     "upstreamSymbols": [
       "IPropertyArrayHelper",
       "OPropertyArrayHelper",
-      "IEventNotificationHook"
+      "IEventNotificationHook",
+      "OMultiTypeInterfaceContainerHelperInt32"
     ],
     "preservedResponsibilities": [
-      "Original complete IPropertyArrayHelper/OPropertyArrayHelper and OPropertySetHelperInfo_Impl preserve native Property/Sequence ownership, nonconst subscript COW, diagnostic-only sorted hints, indexed or linear handle lookup, name-sorted binary lookup, immutable info snapshots and original hybrid batch cursor including CALC-548/WRITER482 repeated-name behavior. IEventNotificationHook is only its original declaration. Host sorting uses actual generated Property copies; exact qsort allocation/refcount/move and duplicate-key selection traces, physical ABI and native thread scheduling remain unqualified. OPropertySetHelper and notification containers, separate UNO OPropertyBag, SfxDocumentMetaData and final DOCX/XLSX/UI acceptance are still unfinished."
+      "Original complete IPropertyArrayHelper/OPropertyArrayHelper and OPropertySetHelperInfo_Impl preserve native Property/Sequence ownership, nonconst subscript COW, diagnostic-only sorted hints, indexed or linear handle lookup, name-sorted binary lookup, immutable info snapshots and original hybrid batch cursor including CALC-548/WRITER482 repeated-name behavior. IEventNotificationHook is only its original declaration. Host sorting uses actual generated Property copies; exact qsort allocation/refcount/move and duplicate-key selection traces, physical ABI and native thread scheduling remain unqualified. OPropertySetHelper and notification containers, separate UNO OPropertyBag, SfxDocumentMetaData and final DOCX/XLSX/UI acceptance are still unfinished.",
+      "Original signed32 multi-container declaration reexports the actual source implementation, without the unported property-set helpers."
     ],
     "omittedResponsibilities": [
       "Other property-set/notification classes in propshlp.hxx/cxx remain unadvertised.",
@@ -45,6 +48,10 @@
         {
           "path": "include/cppuhelper/propshlp.hxx",
           "marker": "IEventNotificationHook"
+        },
+        {
+          "path": "include/cppuhelper/propshlp.hxx",
+          "marker": "OMultiTypeInterfaceContainerHelperInt32"
         }
       ]
     }

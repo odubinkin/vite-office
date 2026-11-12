@@ -1,0 +1,95 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-c06dd1cf-e1aa-4d10-8066-b24e955faecc",
+    "capabilityId": "CAP-c06dd1cf-e1aa-4d10-8066-b24e955faecc",
+    "suite": "shared",
+    "subsystem": "published-interface-container",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original published OInterfaceContainerHelper/OInterfaceIteratorHelper retain raw singleton versus Reference-vector ownership, lazy iterator COW, simultaneous reverse snapshots, duplicate/identity removal, clear-before-dispose reentry, actual UNO facet queries and source exception boundaries. Type and lazy signed32 multi-container specializations retain copied Type keys, insertion order, stable empty children, native active-key sequences and child-pointer dispatch snapshots. Original Type-key OBroadcastHelper retains disposed/in-dispose flag gating. Native OSL mutex parameters/scopes are explicitly erased for synchronous realm-local execution without a fake lock; shared-memory threading/physical ABI/allocator traces are unqualified. Generic Var templates, property notification/set/state helpers, UNO OPropertyBag, SfxDocumentMetaData and complete DOCX/XLSX/UI acceptance remain unfinished. Preserve CALC-549/WRITER483 null insertion/count and null singleton-collapse preconditions."
+    ],
+    "capability": "Published native listener container and broadcaster ownership",
+    "gaps": [
+      "Generic Var templates and full metadata/format/UI acceptance remain unfinished.",
+      "Native OSL synchronization, shared-memory threads, physical ABI/allocator traces remain unqualified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "cppuhelper/source/interfacecontainer.cxx",
+          "marker": "OInterfaceContainerHelper::addInterface"
+        },
+        {
+          "path": "include/cppuhelper/interfacecontainer.h",
+          "marker": "OBroadcastHelperVar"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppuhelper/qa/ifcontainer/cppu_ifcontainer.cxx",
+          "marker": "testCreateDispose"
+        },
+        {
+          "path": "cppuhelper/qa/ifcontainer/cppu_ifcontainer.cxx",
+          "marker": "doContainerTest"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/cppuhelper/interfacecontainer.h",
+          "marker": "OInterfaceIteratorHelper"
+        },
+        {
+          "path": "include/cppuhelper/propshlp.hxx",
+          "marker": "OMultiTypeInterfaceContainerHelperInt32"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/cppuhelper/source/interfacecontainer.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/inc/interfacecontainer.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/inc/propshlp.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/cppuhelper/source/interfacecontainer.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/published-interface-container.md",
+          "marker": "Published interface container"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original published OInterfaceContainerHelper/OInterfaceIteratorHelper retain raw singleton versus Reference-vector ownership, lazy iterator COW, simultaneous reverse snapshots, duplicate/identity removal, clear-before-dispose reentry, actual UNO facet queries and source exception boundaries. Type and lazy signed32 multi-container specializations retain copied Type keys, insertion order, stable empty children, native active-key sequences and child-pointer dispatch snapshots. Original Type-key OBroadcastHelper retains disposed/in-dispose flag gating. Native OSL mutex parameters/scopes are explicitly erased for synchronous realm-local execution without a fake lock; shared-memory threading/physical ABI/allocator traces are unqualified. Generic Var templates, property notification/set/state helpers, UNO OPropertyBag, SfxDocumentMetaData and complete DOCX/XLSX/UI acceptance remain unfinished. Preserve CALC-549/WRITER483 null insertion/count and null singleton-collapse preconditions."
+    },
+    "scopeLimitations": [
+      "Original published OInterfaceContainerHelper/OInterfaceIteratorHelper retain raw singleton versus Reference-vector ownership, lazy iterator COW, simultaneous reverse snapshots, duplicate/identity removal, clear-before-dispose reentry, actual UNO facet queries and source exception boundaries. Type and lazy signed32 multi-container specializations retain copied Type keys, insertion order, stable empty children, native active-key sequences and child-pointer dispatch snapshots. Original Type-key OBroadcastHelper retains disposed/in-dispose flag gating. Native OSL mutex parameters/scopes are explicitly erased for synchronous realm-local execution without a fake lock; shared-memory threading/physical ABI/allocator traces are unqualified. Generic Var templates, property notification/set/state helpers, UNO OPropertyBag, SfxDocumentMetaData and complete DOCX/XLSX/UI acceptance remain unfinished. Preserve CALC-549/WRITER483 null insertion/count and null singleton-collapse preconditions.",
+      "Four original IfTest entry points replay all their original assertions; testOMultiTypeInterfaceContainerHelperVar remains unported with its unconsumed template. No full cppu_ifcontainer suite parity or compiled differential is claimed."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "published-native-listener-container"
+  }
+}

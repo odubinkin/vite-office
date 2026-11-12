@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppuhelper/source/interfacecontainer.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "published-interface-container",
+    "capabilityIds": [
+      "CAP-c06dd1cf-e1aa-4d10-8066-b24e955faecc"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppuhelper/source/interfacecontainer.ts",
+        "apps/office/src/cppuhelper/source/interfacecontainer.test.ts",
+        "docs/program/published-interface-container.md"
+      ],
+      "justification": "Original published OInterfaceContainerHelper/OInterfaceIteratorHelper retain raw singleton versus Reference-vector ownership, lazy iterator COW, simultaneous reverse snapshots, duplicate/identity removal, clear-before-dispose reentry, actual UNO facet queries and source exception boundaries. Type and lazy signed32 multi-container specializations retain copied Type keys, insertion order, stable empty children, native active-key sequences and child-pointer dispatch snapshots. Original Type-key OBroadcastHelper retains disposed/in-dispose flag gating. Native OSL mutex parameters/scopes are explicitly erased for synchronous realm-local execution without a fake lock; shared-memory threading/physical ABI/allocator traces are unqualified. Generic Var templates, property notification/set/state helpers, UNO OPropertyBag, SfxDocumentMetaData and complete DOCX/XLSX/UI acceptance remain unfinished. Preserve CALC-549/WRITER483 null insertion/count and null singleton-collapse preconditions.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OInterfaceContainerHelper",
+        "OInterfaceIteratorHelper",
+        "OMultiTypeInterfaceContainerHelper",
+        "OMultiTypeInterfaceContainerHelperInt32",
+        "OBroadcastHelper"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "cppuhelper/source/interfacecontainer.cxx",
+      "upstreamSymbols": [
+        "OInterfaceContainerHelper::addInterface",
+        "OInterfaceIteratorHelper::OInterfaceIteratorHelper",
+        "OMultiTypeInterfaceContainerHelper::getContainedTypes",
+        "OMultiTypeInterfaceContainerHelperInt32::addInterface"
+      ]
+    }
+  }
+}
