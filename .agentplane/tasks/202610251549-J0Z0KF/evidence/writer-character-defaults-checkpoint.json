@@ -1,0 +1,466 @@
+{
+  "taskId": "202610251549-J0Z0KF",
+  "checkpoint": "Native complete Writer character defaults and real document-pool/DOCX attribute consumers",
+  "scope": "All48 original character metadata values, real SwAttrPool registration, native hidden/no-hyphen/revision item owners, source mismatch journal and exact pure VCL enum dependency. Full epic remains unverified.",
+  "sourceBaseline": {
+    "tag": "libreoffice-26.8.0.2",
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65"
+  },
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/editeng/inc/charhiddenitem.ts",
+      "gitBlob": "11b48083d380cc249fa5f2a8a11f05fe4e486897"
+    },
+    {
+      "path": "apps/office/src/editeng/inc/nhypitem.ts",
+      "gitBlob": "320b6f8b195f7b0252508b5ba5127f6715df2d25"
+    },
+    {
+      "path": "apps/office/src/editeng/inc/rsiditem.ts",
+      "gitBlob": "3cffa2700661405e39a3c545f1c49bb2b573c0c9"
+    },
+    {
+      "path": "apps/office/src/editeng/source/items/charhiddenitem.ts",
+      "gitBlob": "acf7d35c61c0633e9e6c553a7fcb03bd401648cc"
+    },
+    {
+      "path": "apps/office/src/editeng/source/items/native-character-control-items.test.ts",
+      "gitBlob": "6c3a6c7cc17ea86a5d8b127f75ea90a0304841e8"
+    },
+    {
+      "path": "apps/office/src/editeng/source/items/textitem.ts",
+      "gitBlob": "a1f497e6e4dd1b141542b6615d7bb5f39b99d4f0"
+    },
+    {
+      "path": "apps/office/src/sw/inc/hintids.ts",
+      "gitBlob": "98067a1aaddf45ec90ba32b07ed3302df21ebe4f"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+      "gitBlob": "d0a3985471a1095e0d21ab58185d2b0f427ad2f5"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/bastyp/init.ts",
+      "gitBlob": "5a4f95e49fa5ce4f98dc58f07d47c994c121d87d"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/bastyp/native-character-defaults.test.ts",
+      "gitBlob": "fe3430dc43bcb510236ec77fbd4ee9a2481ba0df"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.effects.test.ts",
+      "gitBlob": "0f2345d4af1f1e2e930326693e7d50c6e5ae1071"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/editeng/inc/charhiddenitem.ts.json",
+      "gitBlob": "9d67832104582993e06f2a07a1d890fd44c9b28e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/editeng/inc/nhypitem.ts.json",
+      "gitBlob": "0501f4abbf101e25100259257eea64a3df689273"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/editeng/inc/rsiditem.ts.json",
+      "gitBlob": "ca0dd1bb0d47b0ff93e97033f73e1f5519a455a9"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/editeng/source/items/charhiddenitem.ts.json",
+      "gitBlob": "7c440f5b9680cacf1eabc16d9b87cef063858e2c"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/editeng/source/items/textitem.ts.json",
+      "gitBlob": "7884320f103997978ffe439df96ce2ece7ab5934"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/editeng/inc/charhiddenitem.ts.json",
+      "gitBlob": "b6e255e5271e3ca936659c82e2ed1aea6454e3f0"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/editeng/inc/nhypitem.ts.json",
+      "gitBlob": "fecdd5c666ac3af1cd0c37310d1bb2c085fdf5d5"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/editeng/inc/rsiditem.ts.json",
+      "gitBlob": "c509c44321cad9376a9b88c93b7ac74d6013ae0f"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/editeng/source/items/charhiddenitem.ts.json",
+      "gitBlob": "a410cebf07bf51b47ecd1daf750b54374b3537fd"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/editeng/source/items/textitem.ts.json",
+      "gitBlob": "2d4436f785a8abcced98e78c3007c04936064c2b"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/inc/hintids.ts.json",
+      "gitBlob": "495665c07c7986537bff32bdd815e8a52fb8c87c"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/attr/swatrset.ts.json",
+      "gitBlob": "3ac0725232b266efdf74c53430376fb480add8b7"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/bastyp/init.ts.json",
+      "gitBlob": "17ce24e2331c227e7ca782002c16dc65833b33c1"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/inc/hintids.ts.json",
+      "gitBlob": "1d98cee88fe619a36215b05bbf3617b7de7e15bc"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/attr/swatrset.ts.json",
+      "gitBlob": "4eaaf06070cce927ea89d346f97a65c58d4f8160"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/bastyp/init.ts.json",
+      "gitBlob": "7df0b253fb100491b6aa1f23c9fcd941b61bf1fd"
+    },
+    {
+      "path": "docs/program/writer-character-defaults.md",
+      "gitBlob": "3a83b4dbcc84a5178ddd1dce92030ae88c853aaa"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "0b314d7f416510a51928cef377fc0fa53a1cdf4f"
+    },
+    {
+      "path": "scripts/check-module-boundaries.mjs",
+      "gitBlob": "ccd071265bac81644ba528a039705dac43e4e6cc"
+    },
+    {
+      "path": "scripts/check-writer-module-boundaries.test.ts",
+      "gitBlob": "85bdd3ac6d14f6335a18ff28cc51c558f0a2fa71"
+    }
+  ],
+  "checks": [
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "--config",
+        "vite.config.ts",
+        "src/sw/source/core/bastyp/native-character-defaults.test.ts",
+        "src/sw/source/core/bastyp/native-defaults.test.ts",
+        "src/sw/source/core/attr/",
+        "src/editeng/source/items/native-character-control-items.test.ts",
+        "src/editeng/source/items/font-effects.test.ts",
+        "src/editeng/source/items/native-font-weight.test.ts",
+        "src/editeng/source/items/native-font-posture.test.ts",
+        "src/editeng/source/items/native-text-line.test.ts",
+        "src/editeng/source/items/textitem.test.ts",
+        "src/sw/source/core/doc/writer-attributes.test.ts",
+        "src/sw/source/filter/xml/odt-property-roundtrip.test.ts",
+        "src/sw/source/core/docnode/node-attribute-handle.test.ts",
+        "src/sw/source/core/doc/native-page-copy.test.ts",
+        "src/sw/inc/tgrditem.test.ts",
+        "src/sw/source/core/unocore/native-page-grid-properties.test.ts",
+        "src/sw/source/filter/ww8/docxattributeoutput.effects.test.ts",
+        "src/sw/source/filter/ww8/docxattributeoutput.test.ts",
+        "src/sw/browser/filter/xml/writer-codec.boundaries.test.ts",
+        "src/sw/source/uibase/shells/native-escapement.test.ts",
+        "src/sw/source/core/docnode/native-table-construction-formats.test.ts",
+        "src/sw/inc/native-table-split-items.test.ts",
+        "src/sw/browser/filter/xml/native-ul-space-item-transport.test.ts",
+        "src/sw/source/filter/html/htmltab.cell-save.test.ts",
+        "src/sw/source/filter/html/htmlgrin.frame-anchor.test.ts",
+        "src/sw/source/core/doc/poolfmt-frame.native.test.ts",
+        "src/sw/source/core/doc/docnew.native-lifecycle.test.ts",
+        "src/sw/source/core/txtnode/text-collection-numbering.test.ts",
+        "src/sw/source/filter/md/swmd.html-table.test.ts",
+        "src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
+        "src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+        "--coverage",
+        "--coverage.reportsDirectory=coverage/writer-character-defaults-profile-final",
+        "--coverage.include=src/sw/source/core/bastyp/init.ts",
+        "--coverage.include=src/sw/source/core/attr/swatrset.ts",
+        "--coverage.include=src/editeng/source/items/textitem.ts",
+        "--coverage.include=src/editeng/source/items/charhiddenitem.ts",
+        "--coverage.thresholds.statements=90",
+        "--coverage.thresholds.branches=90",
+        "--coverage.thresholds.functions=90",
+        "--coverage.thresholds.lines=90"
+      ],
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "441 cases across46 files; whole4owner coverage passes original user-approved90 thresholds.",
+      "log": "apps/office/coverage/writer-character-defaults-profile-final.log"
+    },
+    {
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts scripts/check-writer-module-boundaries.test.ts",
+      "result": "pass",
+      "evidence": "53 cases in2files; only native Writer package to pure FontRelief enum admitted; adjacent browser/device/unrelated core imports remain forbidden.",
+      "log": "apps/office/coverage/writer-character-defaults-boundary-tests.log"
+    },
+    {
+      "command": "npx vitest run --config vite.config.ts src/sw/source/filter/xml/odt-worker-runtime.test.ts src/sw/source/filter/xml/odt-worker-client.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-client.test.ts",
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "16 cases in4files.",
+      "log": "apps/office/coverage/writer-character-defaults-worker-regression.log"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" npx playwright test --config apps/office/playwright.config.ts --project=shared apps/office/e2e/shared/style-model.spec.ts apps/office/e2e/shared/style-sheet.spec.ts",
+      "result": "pass",
+      "evidence": "2 actual production Chromium style ownership/lifecycle cases.",
+      "log": "apps/office/coverage/writer-character-defaults-browser.log"
+    },
+    {
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-character-defaults-typecheck-final.log"
+    },
+    {
+      "command": "npm run test:static",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-character-defaults-static.log"
+    },
+    {
+      "command": "npx prettier --check <all sourceBlobs paths>; npx eslint <changed TS/TSX/MJS> --max-warnings 0",
+      "result": "pass",
+      "logs": [
+        "apps/office/coverage/writer-character-defaults-format-final.log",
+        "apps/office/coverage/writer-character-defaults-eslint-final.log"
+      ]
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-character-defaults-writer-resources.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-character-defaults-calc-resources.log"
+    },
+    {
+      "command": "npm run check:hintids",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-character-defaults-hintids.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-character-defaults-size.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-character-defaults-source-tree.log"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-character-defaults-doctor.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-character-defaults-routing.log"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-character-defaults-diff.log"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-character-defaults-dependencies-final.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-character-defaults-provenance-final.log"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-character-defaults-invariants-final.log"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-character-defaults-parity-final.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-character-defaults-file-size-final.log"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-character-defaults-diff-final.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "log": "apps/office/coverage/writer-character-defaults-docs.log",
+      "evidence": "Only unchanged pre-existing css-style-matchers.ts:17 missingJSDoc and:76 2/3parameter documentation. No changed-file JSDoc failure."
+    }
+  ],
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 613,
+        "covered": 570,
+        "skipped": 0,
+        "pct": 92.98
+      },
+      "statements": {
+        "total": 662,
+        "covered": 614,
+        "skipped": 0,
+        "pct": 92.74
+      },
+      "functions": {
+        "total": 144,
+        "covered": 133,
+        "skipped": 0,
+        "pct": 92.36
+      },
+      "branches": {
+        "total": 381,
+        "covered": 345,
+        "skipped": 0,
+        "pct": 90.55
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/editeng/source/items/charhiddenitem.ts": {
+      "lines": {
+        "total": 4,
+        "covered": 4,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 5,
+        "covered": 5,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/editeng/source/items/textitem.ts": {
+      "lines": {
+        "total": 174,
+        "covered": 174,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 58,
+        "covered": 58,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 195,
+        "covered": 195,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 125,
+        "covered": 125,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/attr/swatrset.ts": {
+      "lines": {
+        "total": 324,
+        "covered": 281,
+        "skipped": 0,
+        "pct": 86.72
+      },
+      "functions": {
+        "total": 75,
+        "covered": 64,
+        "skipped": 0,
+        "pct": 85.33
+      },
+      "statements": {
+        "total": 348,
+        "covered": 301,
+        "skipped": 0,
+        "pct": 86.49
+      },
+      "branches": {
+        "total": 250,
+        "covered": 215,
+        "skipped": 0,
+        "pct": 86
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/bastyp/init.ts": {
+      "lines": {
+        "total": 111,
+        "covered": 111,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 114,
+        "covered": 113,
+        "skipped": 0,
+        "pct": 99.12
+      },
+      "branches": {
+        "total": 4,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 75
+      }
+    }
+  },
+  "coverageRawSha256": "6275920068bdf50f38299adad0541c0e2b05ef19d79a4ad91459d8d40885299d",
+  "failuresAndResolutions": [
+    "First test invocation used repository root with app-relative Vitest discovery; corrected cwd to apps/office.",
+    "New48-owner test found pre-existing ScriptHint global default missing from actual document registration; added real registration. Initial strict null check corrected with a real non-null assertion guard.",
+    "First184-case and second307-case profiles passed cases but were below90 whole-owner coverage. Existing related factory, document and filter cases expanded final profile to441cases/46files and passed90 without fabricated states or new branch-mirroring tests.",
+    "Existing domain guard rejected new original FontRelief dependency. Added exact init.ts to vcl/inc/fntstyle pure enum admission with adjacent guard tests; no browser/device admission.",
+    "Header reexports do not declare local implementation symbols under the registry parser. Runtime header localSymbols now empty, same as existing native reexport records; implementation lives in canonical source owners. Removed incorrect case/script capability association in favor of existing shared text-item capability.",
+    "Global JSDoc baseline unchanged."
+  ],
+  "originalQA": {
+    "implemented": "Source-backed critical owner/value/Any/defaults/DOCX-consumer cases; no focused original item CppUnit exists in inspected editeng/qa.",
+    "outstanding": "sw/qa/core/uwriter.cxx getModelToViewTestDocument hidden use additionally requires footnote/redline/model-to-view owners. It is not claimed ported or executed. Full native filter acceptance remains outstanding."
+  },
+  "upstreamIssue": "WRITER457 header declares unused3 integer while actual default is SfxVoidItem; table behavior retained.",
+  "limitations": [
+    "Complete Writer/Sdr dense default packages and merged pool ranges remain missing; no inferred ranges or filler defaults.",
+    "Localized hidden/no-hyphen presentation, revision diagnostics/instance caches remain unported.",
+    "Native Writer stylesheet pool, SwDocShell/style service link, SwXTextDefaults, full DOCX/XLSX filters/import/export and existing UI acceptance remain outstanding.",
+    "Whole goal and task remain active/incomplete."
+  ],
+  "fullSuite": {
+    "executed": false,
+    "reason": "Same approved epic prerequisite checkpoint, not a tenth completed agentplane task; user requested related-module tests only."
+  },
+  "finalStatusRequired": "After commit, compare every sourceBlob with HEAD:path and require clean tracked/untracked git status."
+}

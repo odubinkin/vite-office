@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 166
+revision: 169
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T03:43:29.021Z"
+  updated_at: "2026-11-12T04:06:18.525Z"
   updated_by: "CODER"
-  note: "Verified native style-name prerequisite and current consumers:247 profile cases7files,63 ODF/export9files,131 UI/dispatch5files,74 RTF/style4files,4 Chromium desktop/mobile. Source13 ranges208names;3 whole naming/export owners at90 gates S100/B98.70/F100/L100. Actual core/UNO/UI names, native Standard URI, canonical ODF naming/ref encoding. Typecheck/static/scoped gates pass except old JSDoc baseline. Evidence:writer-style-name-mapping-checkpoint.json43 source proofs. Full native document style/default service and DOCX-XLSX/UI acceptance remain incomplete; continue goal."
-  attempts: 50
+  note: "Bounded native character-default checkpoint verified: all48 source classes/values/slots on actual Writer owners;441 related cases,53 boundary cases,16 ODF worker cases and2 Chromium cases pass; whole4owner90 coverage and scoped gates pass except unchanged global JSDoc baseline. Evidence writer-character-defaults-checkpoint.json. Full XLSX/DOCX filter/UI epic remains incomplete and must continue."
+  attempts: 51
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -808,8 +811,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-12T04:06:18.525Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded native character-default checkpoint verified: all48 source classes/values/slots on actual Writer owners;441 related cases,53 boundary cases,16 ODF worker cases and2 Chromium cases pass; whole4owner90 coverage and scoped gates pass except unchanged global JSDoc baseline. Evidence writer-character-defaults-checkpoint.json. Full XLSX/DOCX filter/UI epic remains incomplete and must continue."
+  -
+    type: "status"
+    at: "2026-11-12T04:06:26.143Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-12T03:45:53.331Z"
+doc_updated_at: "2026-11-12T04:06:26.143Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -2324,6 +2340,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T04:06:18.525Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded native character-default checkpoint verified: all48 source classes/values/slots on actual Writer owners;441 related cases,53 boundary cases,16 ODF worker cases and2 Chromium cases pass; whole4owner90 coverage and scoped gates pass except unchanged global JSDoc baseline. Evidence writer-character-defaults-checkpoint.json. Full XLSX/DOCX filter/UI epic remains incomplete and must continue.
+    Attempts: 51
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T04:06:12.261Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -2584,6 +2630,10 @@ sections:
     - Observation: Command: scoped native style-name profile247cases7files, ODF export/worker63cases9files, UI/dispatcher131cases5files, RTF/style74cases4files,4 production Chromium desktop/mobile cases, source generation checks and repository gates. Result: pass except unchanged global JSDoc baseline. Evidence:evidence/writer-style-name-mapping-checkpoint.json;3 complete naming/export modules S122/122 B76/77 F44/44 L109/109 above90 gates. Scope: original13 ranges/208 names/all normal conversions, actual Writer/UNO/UI names, native Standard command URI and real ODF names/reference encoding.
       Impact: Native style-pool prerequisite and existing UI/core name boundaries advance. Real browser test found old ODF UI-name producer drift; corrected source flow rather than accepting duplicate default user styles. Preserve WRITER207/455/456. Full native document style/default services, DOCX-XLSX filter/export and mounted format acceptance remain unfinished; no whole-goal/module-parity promotion.
       Resolution: Use pinned original tables/resources and real format/SwXStyle/dispatcher owners. Correct producer to actual programmatic names and conditional display-name, migrate invalid default-rename/transport-ID assumptions to canonical owner/name assertions while retaining formatting/history checks. Fix native UI labels/programmatic command parameters and ID collision ordering. Source generation, typecheck/static/scoped gates and4 final browser cases pass; only old JSDoc baseline remains. Continue active approved goal.
+
+    - Observation: Native Writer character-default checkpoint: all48 source classes and values now exist in actual global package and document pool; ScriptHint registration omission corrected. WRITER457 table/header mismatch preserved. Evidence: evidence/writer-character-defaults-checkpoint.json.
+      Impact: 441 related cases/46files,53 boundary cases,16 ODF worker cases and2 production Chromium style cases pass; four whole owners pass90 coverage. Typecheck/static/scoped lint/format/dependencies/resources/source/registry gates pass. Only unchanged global css-style-matchers JSDoc baseline remains. Whole DOCX/XLSX epic remains incomplete.
+      Resolution: Retain active epic and source-backed boundaries; no dense ranges inferred. Continue native stylesheet/default-service and full filter/UI integration. Full native hidden-model-to-view QA remains outstanding, not relabeled as ported.
 id_source: "generated"
 ---
 ## Summary
@@ -4108,6 +4158,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T04:06:18.525Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded native character-default checkpoint verified: all48 source classes/values/slots on actual Writer owners;441 related cases,53 boundary cases,16 ODF worker cases and2 Chromium cases pass; whole4owner90 coverage and scoped gates pass except unchanged global JSDoc baseline. Evidence writer-character-defaults-checkpoint.json. Full XLSX/DOCX filter/UI epic remains incomplete and must continue.
+Attempts: 51
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T04:06:12.261Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4372,3 +4452,7 @@ DecisionContextRef:
 - Observation: Command: scoped native style-name profile247cases7files, ODF export/worker63cases9files, UI/dispatcher131cases5files, RTF/style74cases4files,4 production Chromium desktop/mobile cases, source generation checks and repository gates. Result: pass except unchanged global JSDoc baseline. Evidence:evidence/writer-style-name-mapping-checkpoint.json;3 complete naming/export modules S122/122 B76/77 F44/44 L109/109 above90 gates. Scope: original13 ranges/208 names/all normal conversions, actual Writer/UNO/UI names, native Standard command URI and real ODF names/reference encoding.
   Impact: Native style-pool prerequisite and existing UI/core name boundaries advance. Real browser test found old ODF UI-name producer drift; corrected source flow rather than accepting duplicate default user styles. Preserve WRITER207/455/456. Full native document style/default services, DOCX-XLSX filter/export and mounted format acceptance remain unfinished; no whole-goal/module-parity promotion.
   Resolution: Use pinned original tables/resources and real format/SwXStyle/dispatcher owners. Correct producer to actual programmatic names and conditional display-name, migrate invalid default-rename/transport-ID assumptions to canonical owner/name assertions while retaining formatting/history checks. Fix native UI labels/programmatic command parameters and ID collision ordering. Source generation, typecheck/static/scoped gates and4 final browser cases pass; only old JSDoc baseline remains. Continue active approved goal.
+
+- Observation: Native Writer character-default checkpoint: all48 source classes and values now exist in actual global package and document pool; ScriptHint registration omission corrected. WRITER457 table/header mismatch preserved. Evidence: evidence/writer-character-defaults-checkpoint.json.
+  Impact: 441 related cases/46files,53 boundary cases,16 ODF worker cases and2 production Chromium style cases pass; four whole owners pass90 coverage. Typecheck/static/scoped lint/format/dependencies/resources/source/registry gates pass. Only unchanged global css-style-matchers JSDoc baseline remains. Whole DOCX/XLSX epic remains incomplete.
+  Resolution: Retain active epic and source-backed boundaries; no dense ranges inferred. Continue native stylesheet/default-service and full filter/UI integration. Full native hidden-model-to-view QA remains outstanding, not relabeled as ported.
