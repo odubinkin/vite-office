@@ -1,4 +1,6 @@
 /** @fileoverview Real native UNO document, parser callback, IO and live-list operations without a host DOM; the production registered DocumentBuilder shares the same realm-local native module. */
+import { Writer as SaxWriterService } from "../../apps/office/src/offapi/com/sun/star/xml/sax/Writer";
+import { XActiveDataSource } from "../../apps/office/src/udkapi/com/sun/star/io/XActiveDataSource";
 import { AttributeList } from "../../apps/office/src/comphelper/source/xml/attributelist";
 import { SaxWriterHelper } from "../../apps/office/src/sax/source/expatwrap/saxwriter.helper";
 import {
@@ -245,6 +247,30 @@ export async function runNativeDomWorkerProbe() {
   const nativeSaxWriterBuffer = {
     valid: saxWriterValid,
     xml: new TextDecoder().decode(saxWriterView),
+  };
+  const registeredWriter = own(
+      SaxWriterService.create(
+        own(new Reference<XComponentContext>(getProcessComponentContext().get())),
+      ),
+    ),
+    registeredWriterBytes = own(new Bytes()),
+    registeredWriterStream = own(new Reference(new OSequenceOutputStream(registeredWriterBytes)));
+  registeredWriter.operatorStar().setOutputStream(registeredWriterStream);
+  saxFacet.operatorStar().serialize(registeredWriter, saxNamespaces);
+  const registeredWriterData = registeredWriterBytes.getConstArray() as SequenceElements,
+    registeredWriterView = new Uint8Array(registeredWriterBytes.getLength());
+  for (let i = 0; i < registeredWriterView.length; ++i)
+    registeredWriterView[i] = (registeredWriterData.get(i) as [number])[0];
+  const registeredSaxWriter = {
+    xml: new TextDecoder().decode(registeredWriterView),
+    sameIdentity:
+      own(
+        new Reference<XActiveDataSource>(
+          registeredWriter,
+          UNO_QUERY,
+          XActiveDataSource.static_type,
+        ),
+      ).get() === registeredWriter.get(),
   };
   const nativeSax = {
     calls: saxHandler.operatorStar().calls,
@@ -763,6 +789,7 @@ export async function runNativeDomWorkerProbe() {
       nativePropertyControl,
       registeredPropertyBag,
       nativeSax,
+      registeredSaxWriter,
       nativeSaxWriterBuffer,
       metadataValues,
       metadataIngestion,

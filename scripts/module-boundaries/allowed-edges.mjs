@@ -35,6 +35,8 @@ export const allowedEdges = new Map([
       "cppuhelper",
       "i18npool",
       "lingucomponent",
+      // Library_sax registers expwrap in services; Desktop bootstrap binds the same factory in the browser registry.
+      "sax",
       "stoc",
       "udkapi",
       "unoxml",

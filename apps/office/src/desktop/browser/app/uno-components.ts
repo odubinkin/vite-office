@@ -1,4 +1,5 @@
 /** @fileoverview Static browser bindings for the consumed i18npool, NumberText and stoc component registrations. */
+import { com_sun_star_extensions_xml_sax_Writer_get_implementation } from "../../../sax/source/expatwrap/saxwriter";
 import { com_sun_star_comp_comphelper_OPropertyBag } from "../../../comphelper/source/property/opropertybag";
 import { unoxml_CXPathAPI_get_implementation } from "../../../unoxml/source/xpath/xpathapi";
 import { unoxml_CDocumentBuilder_get_implementation } from "../../../unoxml/source/dom/documentbuilder";
@@ -18,6 +19,11 @@ import { lingucomponent_NumberText_get_implementation } from "../../../lingucomp
 
 /** Original i18npool.component entries for the two break iterator families and the classifier, followed by the NumberText and stocservices.component converter entries. */
 export const implementations: readonly Implementation[] = [
+  {
+    name: "com.sun.star.extensions.xml.sax.Writer",
+    services: ["com.sun.star.xml.sax.Writer"],
+    constructorFn: com_sun_star_extensions_xml_sax_Writer_get_implementation,
+  },
   {
     name: "com.sun.star.comp.comphelper.OPropertyBag",
     services: ["com.sun.star.beans.PropertyBag"],

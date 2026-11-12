@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/offapi/com/sun/star/xml/sax/SAXInvalidCharacterException.ts",
+    "upstreamPath": "offapi/com/sun/star/xml/sax/SAXInvalidCharacterException.idl",
+    "localSymbols": [
+      "SAXInvalidCharacterException",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "SAXInvalidCharacterException",
+      "SAXException"
+    ],
+    "preservedResponsibilities": [
+      "Complete original SAXWriter WeakImplHelper<XWriter,XServiceInfo> state machine, output/helper ownership, source guards/defaults, indentation/column estimates, empty/full elements, CDATA/text/PI/comment/unknown behavior, original exceptions/messages and source state mutation/retention are implemented in the normal NDEBUG/non-DBG_UTIL profile. Actual XActiveDataSource/two-base XWriter/Writer constructor and derived SAXInvalidCharacterException retain original declared contracts, shared CPPUMaker type identity/inheritance, acquired Reference/Any field ownership and generated exception transport. Production registration matches exact expwrap.component factory/name/service and creates the actual source component through real service-manager SDK helpers. All original OSaxWriterTest invariant/simple/exceptions/DTD/performance operations execute, including Symbol bytes, writeParagraph and the full125x450 event workload/125 closures; genuine UNOMemoryStream changes only output destination, not event counts or checks. Native OSL clock/stdio/filesystem timings and independent C++ binary/performance parity are unqualified. Authored cases use real connected/closed streams, actual missing-service registry and normal SDK storage, with no fake positive provider/private-state/default/type/value generator. Main and DOM-free Worker serialize a native CDocument through XSAXSerializable into the registered Writer, with exact XML and actual interface identity. The old limited XmlStringDocumentHandler remains an explicitly separate legacy manifest/OFOP string carrier pending caller migration, not the actual Writer service. Native physical ABI/allocator/debug assertions/pointers/equal-key sort/shared-memory remain unqualified. Sfx metadata service/storage and final DOCX/XLSX core/shell/UI acceptance remain incomplete; earlier coverage gaps remain open."
+    ],
+    "omittedResponsibilities": [
+      "Physical native ABI/allocator/debug/pointer/shared-memory and independent native binary/timing parity unqualified.",
+      "Legacy manifest/OFOP caller migration, Sfx metadata service/storage and complete DOCX/XLSX core/shell/UI acceptance unfinished."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/SAXInvalidCharacterException.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sax/source/expatwrap/saxwriter.upstream.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sax/source/expatwrap/saxwriter.component.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/xml/sax/SAXInvalidCharacterException.idl",
+          "marker": "SAXInvalidCharacterException"
+        },
+        {
+          "path": "offapi/com/sun/star/xml/sax/SAXInvalidCharacterException.idl",
+          "marker": "SAXException"
+        }
+      ]
+    }
+  }
+}

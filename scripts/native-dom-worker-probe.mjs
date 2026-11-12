@@ -123,6 +123,10 @@ try {
         "x".repeat(1020) +
         "字😀&beta;</r>",
     },
+    registeredSaxWriter: {
+      xml: '<?xml version="1.0" encoding="UTF-8"?>\n<root>worker SAX字</root>',
+      sameIdentity: true,
+    },
     nativeSax: {
       calls: ["begin", "start:root:0", "text:worker SAX字", "end", "finish"],
       sameIdentity: true,

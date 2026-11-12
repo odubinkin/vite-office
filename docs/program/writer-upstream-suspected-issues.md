@@ -3946,3 +3946,23 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 
 - Source: `sax/source/expatwrap/saxwriter.cxx`, `SaxWriterHelper`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC566.
 - The helper writes comment and CDATA marker/content strings directly, applying only UTF16/XML-character validation. It does not reject -- or a trailing minus in comments, nor split ]]> inside CDATA; processingInstruction similarly does not reject ?> in its data. Preserve these source emission routines rather than adding a different XML well-formedness policy. Normal safe marker ordering is executed in tests; full Writer service/DOM serialization QA and compiled native differential are still pending.
+
+### WRITER502 — Writer stream replacement retains pending line-break flags
+
+- Source: `sax/source/expatwrap/saxwriter.cxx`, `SAXWriter`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC567.
+- setOutputStream replaces the helper and resets document-start, level and CDATA state for a different stream, but does not reset either force/allow-line-break flag. A pending allowLineBreak therefore survives a new output and startDocument; a second allowLineBreak throws until another source event consumes it. Preserve the exact source reset set. Tests use two genuine output streams and public calls without private state mutation.
+
+### WRITER503 — Empty-element completion leaves the optional line-break request pending
+
+- Source: `sax/source/expatwrap/saxwriter.cxx`, `SAXWriter`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC568.
+- endElement handles FinishEmptyElement by clearing only m_bForceLineBreak. It skips getIndentPrefixLength, so m_bAllowLineBreak stays true after an empty child closes and another allowLineBreak throws. Preserve this source branch and ordering. Tests continue with actual characters and complete a valid native document.
+
+### WRITER504 — Writer endDocument keeps the document-started flag set
+
+- Source: `sax/source/expatwrap/saxwriter.cxx`, `SAXWriter`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC569.
+- endDocument writes and closes output without resetting m_bDocStarted. Assigning the same stream afterwards enters the flush-only branch of setOutputStream rather than resetting state; startDocument still rejects the call. A distinct stream takes the reset branch and can start a new document. Preserve these source transitions and actual stream identity; native output/allocator reuse after final Sequence shrink remains unqualified.
+
+### WRITER505 — Writer unknown skips every raw string beginning with the XML declaration prefix
+
+- Source: `sax/source/expatwrap/saxwriter.cxx`, `SAXWriter`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC570.
+- unknown returns immediately for startsWith("<?xml"), including <?xml-stylesheet ...?>, and does not consume pending indentation flags. Preserve this prefix check instead of parsing a declaration token or re-emitting the stylesheet PI. Actual registered Writer tests observe both omitted bytes and the retained pending optional-break request; normal processingInstruction remains separately available.

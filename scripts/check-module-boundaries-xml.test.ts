@@ -26,3 +26,8 @@ it("retains the source metadata converter dependency without reverse Sfx couplin
   expect(isForbiddenModuleEdge("sfx2", "sax")).toBe(false);
   expect(isForbiddenModuleEdge("sax", "sfx2")).toBe(true);
 });
+
+it("admits desktop service composition of native SAX without reverse application ownership", /** Library_sax sets expwrap as a services component and Desktop bootstrap loads the registry; the browser statically links that exact factory. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("desktop", "sax")).toBe(false);
+  expect(isForbiddenModuleEdge("sax", "desktop")).toBe(true);
+});
