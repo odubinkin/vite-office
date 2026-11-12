@@ -1,0 +1,612 @@
+{
+  "status": "implemented-native-sax-writer-helper-bounded-checkpoint-parent-continues",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "ef52a3720224a94fb7214f85911dcdf324d8aff8",
+  "capability": "CAP-89fa7108-9dd2-4d99-be47-ad2ed1d9afab",
+  "scope": "Complete original normal NDEBUG/non-DBG_UTIL SaxWriterHelper algorithms over actual acquired XOutputStream, native1024-byte UNO Sequence cache, actual AttributeList/Pair/Any and actual exception ABI. Original constructor member order/unwind, incremental bytes/statuses, normalization, Unicode, custom entities, length estimation, formatting, indentation and flush preserved. Full SAXWriter component/SDK/registration/source service QA/legacy carrier replacement remain pending; helper is not a substitute service.",
+  "tests": {
+    "relatedCases": 36,
+    "relatedFiles": 5,
+    "command": {
+      "cwd": "apps/office",
+      "argv": [
+        "../../node_modules/.bin/vitest",
+        "run",
+        "--config",
+        "vite.config.ts",
+        "src/sax/source/expatwrap/saxwriter.helper.test.ts",
+        "src/comphelper/source/streaming/seqstream.test.ts",
+        "src/udkapi/com/sun/star/beans/StringPair.test.ts",
+        "src/comphelper/source/xml/attributelist.test.ts",
+        "src/cppuhelper/browser/exception-abi.test.ts",
+        "--maxWorkers=2",
+        "--coverage",
+        "--coverage.provider=istanbul",
+        "--coverage.include=src/sax/source/expatwrap/saxwriter.helper.ts",
+        "--coverage.include=src/sax/source/expatwrap/saxwriter.convert.ts",
+        "--coverage.include=src/udkapi/com/sun/star/beans/Pair.ts",
+        "--coverage.reportsDirectory=coverage/sax-writer-helper",
+        "--coverage.thresholds.statements=90",
+        "--coverage.thresholds.branches=90",
+        "--coverage.thresholds.functions=90",
+        "--coverage.thresholds.lines=90"
+      ],
+      "wholeProductionOwners": [
+        "sax/source/expatwrap/saxwriter.helper.ts",
+        "sax/source/expatwrap/saxwriter.convert.ts",
+        "udkapi/com/sun/star/beans/Pair.ts"
+      ]
+    },
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 320,
+          "covered": 315,
+          "skipped": 0,
+          "pct": 98.43
+        },
+        "statements": {
+          "total": 365,
+          "covered": 349,
+          "skipped": 0,
+          "pct": 95.61
+        },
+        "functions": {
+          "total": 46,
+          "covered": 46,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 161,
+          "covered": 146,
+          "skipped": 0,
+          "pct": 90.68
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/expatwrap/saxwriter.convert.ts": {
+        "lines": {
+          "total": 102,
+          "covered": 102,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 116,
+          "covered": 116,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 91,
+          "covered": 89,
+          "skipped": 0,
+          "pct": 97.8
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/expatwrap/saxwriter.helper.ts": {
+        "lines": {
+          "total": 183,
+          "covered": 178,
+          "skipped": 0,
+          "pct": 97.26
+        },
+        "functions": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 213,
+          "covered": 197,
+          "skipped": 0,
+          "pct": 92.48
+        },
+        "branches": {
+          "total": 58,
+          "covered": 45,
+          "skipped": 0,
+          "pct": 77.58
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/udkapi/com/sun/star/beans/Pair.ts": {
+        "lines": {
+          "total": 35,
+          "covered": 35,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 36,
+          "covered": 36,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "coverageGate": {
+      "threshold": 90,
+      "status": "pass",
+      "wholeProductionOwners": 3,
+      "exclusions": [],
+      "counterSelection": false,
+      "summary": "S95.61/B90.68/F100/L98.43. Includes all3 whole new production owners; does not erase earlier metadata/DOM coverage gaps."
+    },
+    "sourceQA": "Original OSaxWriterTest::testExceptions forbidden-character input (a,b,4,9,10) runs at the actual helper boundary: false status and already-emitted a,b,tab,LF. This is not a passing full source service test. Full original testSimple/testExceptions/testDTD and performance remain pending until genuine SAXWriter is connected.",
+    "criticalCases": "Actual Pair<string,string> UNO name, flags, layout, Any/Sequence fields/copy/move/destruction; source declaration/attributes/empty/full tag order, normal/raw text/PI/CDATA/comment bytes; all conversion flags; invalid/surrogate status/order; repeated1024-byte cache/escape/multibyte boundaries; fitting/overflow/zero indentation; same-stream flush pointer refresh; copied/sorted first-prefix custom entities and ASCII bypass; source warning/error precedence; genuine closed OSequenceOutputStream exception captured into dynamic typed SAXException.WrappedException."
+  },
+  "browserQualification": {
+    "realms": [
+      "Chromium main",
+      "DOM-free module Worker"
+    ],
+    "nativeSaxWriterBuffer": {
+      "workerResult": {
+        "valid": true,
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<r a=\"&amp;&#x0a;\">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\u5b57\ud83d\ude00&beta;</r>"
+      },
+      "mainResult": {
+        "valid": true,
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<r a=\"&amp;&#x0a;\">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\u5b57\ud83d\ude00&beta;</r>"
+      }
+    },
+    "completeResults": {
+      "workerResult": {
+        "conversion": {
+          "serviceValue": 42,
+          "rowValue": 42,
+          "rowWasNull": false,
+          "failedFirst": 0,
+          "failedFirstWasNull": false,
+          "failedSecond": 0,
+          "failedSecondWasNull": true
+        },
+        "publicHelpers": {
+          "notifications": 1,
+          "sameEventSource": true,
+          "componentTypeCount": 3
+        },
+        "dynamicProperties": {
+          "changed": true,
+          "value": 42,
+          "initialDefault": 41,
+          "name": "workerValue",
+          "handle": 7,
+          "declaredLong": true,
+          "stableTypeField": true
+        },
+        "propertyArray": {
+          "count": 1,
+          "handle": 7,
+          "missing": -1,
+          "snapshotName": "workerValue",
+          "sameInfoIdentity": true
+        },
+        "legacyListeners": {
+          "remaining": 1,
+          "sameFirst": true,
+          "sameSnapshot": true,
+          "keyCount": 1,
+          "key": -7
+        },
+        "nativeAnyFields": {
+          "value": 43,
+          "initialDefault": 41,
+          "liveType": true,
+          "interfaceIdentity": true
+        },
+        "nativePropertyControl": {
+          "value": 42,
+          "storedLong": true,
+          "notifications": 1,
+          "notifiedTypeLong": false,
+          "notifiedValue": 42,
+          "notifiedOld": 41,
+          "sameSource": true,
+          "state": 0,
+          "initialStates": [
+            1,
+            0
+          ],
+          "typeCount": 7
+        },
+        "registeredPropertyBag": {
+          "value": 42,
+          "count": 1,
+          "modified": true,
+          "directState": 0,
+          "sameIdentity": true
+        },
+        "nativeSax": {
+          "calls": [
+            "begin",
+            "start:root:0",
+            "text:worker SAX\u5b57",
+            "end",
+            "finish"
+          ],
+          "sameIdentity": true
+        },
+        "nativeSaxWriterBuffer": {
+          "valid": true,
+          "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<r a=\"&amp;&#x0a;\">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\u5b57\ud83d\ude00&beta;</r>"
+        },
+        "metadataValues": {
+          "values": [
+            "2024-02-29+05:30",
+            "2024-02-29T03:04:05.000000009-01:30",
+            "-P1DT2H3M4.000000005S"
+          ],
+          "types": [
+            "date",
+            "date",
+            "time"
+          ]
+        },
+        "metadataIngestion": [
+          "Dies ist ein wichtiger Hinweis",
+          "Kann Spuren von N\u00fcssen enthalten"
+        ],
+        "documentBuilder": {
+          "rootName": "document-content",
+          "streamOpen": true,
+          "namespaceAware": true,
+          "validating": false,
+          "emptyImplementation": true,
+          "capturedType": true,
+          "sameContext": true,
+          "exceptionMessage": "worker exception"
+        },
+        "xpath": {
+          "count": 1,
+          "listLength": 1,
+          "sameRoot": true
+        },
+        "globals": {
+          "window": "undefined",
+          "document": "undefined",
+          "DOMParser": "undefined"
+        },
+        "rootName": "document-content",
+        "attribute": "1.0",
+        "listCounts": [
+          0,
+          1,
+          0
+        ],
+        "sameOwner": true,
+        "unicode": "\ud83d\ude00\u5b57",
+        "utf16Length": 3,
+        "borrowedStreamOpen": true,
+        "warnings": 1,
+        "errors": 0,
+        "warningLine": 1
+      },
+      "mainResult": {
+        "conversion": {
+          "serviceValue": 42,
+          "rowValue": 42,
+          "rowWasNull": false,
+          "failedFirst": 0,
+          "failedFirstWasNull": false,
+          "failedSecond": 0,
+          "failedSecondWasNull": true
+        },
+        "publicHelpers": {
+          "notifications": 1,
+          "sameEventSource": true,
+          "componentTypeCount": 3
+        },
+        "dynamicProperties": {
+          "changed": true,
+          "value": 42,
+          "initialDefault": 41,
+          "name": "workerValue",
+          "handle": 7,
+          "declaredLong": true,
+          "stableTypeField": true
+        },
+        "propertyArray": {
+          "count": 1,
+          "handle": 7,
+          "missing": -1,
+          "snapshotName": "workerValue",
+          "sameInfoIdentity": true
+        },
+        "legacyListeners": {
+          "remaining": 1,
+          "sameFirst": true,
+          "sameSnapshot": true,
+          "keyCount": 1,
+          "key": -7
+        },
+        "nativeAnyFields": {
+          "value": 43,
+          "initialDefault": 41,
+          "liveType": true,
+          "interfaceIdentity": true
+        },
+        "nativePropertyControl": {
+          "value": 42,
+          "storedLong": true,
+          "notifications": 1,
+          "notifiedTypeLong": false,
+          "notifiedValue": 42,
+          "notifiedOld": 41,
+          "sameSource": true,
+          "state": 0,
+          "initialStates": [
+            1,
+            0
+          ],
+          "typeCount": 7
+        },
+        "registeredPropertyBag": {
+          "value": 42,
+          "count": 1,
+          "modified": true,
+          "directState": 0,
+          "sameIdentity": true
+        },
+        "nativeSax": {
+          "calls": [
+            "begin",
+            "start:root:0",
+            "text:worker SAX\u5b57",
+            "end",
+            "finish"
+          ],
+          "sameIdentity": true
+        },
+        "nativeSaxWriterBuffer": {
+          "valid": true,
+          "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<r a=\"&amp;&#x0a;\">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\u5b57\ud83d\ude00&beta;</r>"
+        },
+        "metadataValues": {
+          "values": [
+            "2024-02-29+05:30",
+            "2024-02-29T03:04:05.000000009-01:30",
+            "-P1DT2H3M4.000000005S"
+          ],
+          "types": [
+            "date",
+            "date",
+            "time"
+          ]
+        },
+        "metadataIngestion": [
+          "Dies ist ein wichtiger Hinweis",
+          "Kann Spuren von N\u00fcssen enthalten"
+        ],
+        "documentBuilder": {
+          "rootName": "document-content",
+          "streamOpen": true,
+          "namespaceAware": true,
+          "validating": false,
+          "emptyImplementation": true,
+          "capturedType": true,
+          "sameContext": true,
+          "exceptionMessage": "worker exception"
+        },
+        "xpath": {
+          "count": 1,
+          "listLength": 1,
+          "sameRoot": true
+        },
+        "globals": {
+          "window": "object",
+          "document": "object",
+          "DOMParser": "function"
+        },
+        "rootName": "document-content",
+        "attribute": "1.0",
+        "listCounts": [
+          0,
+          1,
+          0
+        ],
+        "sameOwner": true,
+        "unicode": "\ud83d\ude00\u5b57",
+        "utf16Length": 3,
+        "borrowedStreamOpen": true,
+        "warnings": 1,
+        "errors": 0,
+        "warningLine": 1
+      }
+    }
+  },
+  "preservedIssues": [
+    "CALC563/WRITER498: zero-length custom replacement can prevent conversion progress (source analysis only)",
+    "CALC564/WRITER499: exact-full replacement continue skips common flush/reset; physical pointer UB unqualified",
+    "CALC565/WRITER500: size estimator counts invalid characters that conversion drops",
+    "CALC566/WRITER501: raw marker/content delimiter validation absent in source helper"
+  ],
+  "remaining": [
+    "Full actual SAXWriter state machine, generated XWriter/Writer/XActiveDataSource declarations, SAXInvalidCharacterException and registry factory",
+    "Remove limited manifest/OFOP string carrier in favor of actual source Writer route",
+    "Full original SAXWriter service/functional/performance QA",
+    "Actual SfxDocumentMetaData service/lifecycle/DOM/storage/medium and final DOCX/XLSX core/shell/UI acceptance",
+    "Prior native metadata/DOM branch90 gaps remain explicitly open in their own checkpoints"
+  ],
+  "knownBaseline": "check:docs only css-style-matchers.ts:17/:76; doctor pre-existing managed-hook readiness warning. Native physical ABI/allocator/pointer UB/debug grammar/element stacks/equal-key std::sort/shared-memory and other Pair instantiations unqualified.",
+  "recoveries": [
+    "Real closed-stream regression exposed missing platform exception ABI initialization in authored test bootstrap; initialized actual ABI rather than installing any fake handler/provider.",
+    "Fixed JSDoc this parameters and source enum documentation.",
+    "Browser probe missing AttributeList import fixed; full main/Worker proof passes.",
+    "Removed an unnecessary newly authored replacementBytes wrapper after exhaustive mutation-helper inventory caught its misleading name; source now calls original OUStringToOString expression directly at both sites, exactly as upstream. No checker relaxation/allowlist exemption was added.",
+    "Source review corrected helper construction order to acquire stream before Sequence allocation and unwind constructed members, preserving actual source ownership. Final related profile passes without artificial allocation failures."
+  ],
+  "fullSuite": "Not due within same actual agentplane task; approved cadence once every ten actual tasks.",
+  "userStopRule": "Latest user requires continued work without pauses. Goal/parent remain active and incomplete.",
+  "checks": {
+    "related-tests-and-coverage": {
+      "command": "Exact tests.command argv; cwd apps/office",
+      "result": "pass:36cases/5files; whole3-owner scoped90 passes",
+      "log": "apps/office/coverage/sax-writer-helper-tests.log",
+      "sha256": "c895407f5ad20961b08b0c66ee9601f14f33642f24a57bb9c1c956cd7589c947"
+    },
+    "typecheck-final": {
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/sax-writer-helper-typecheck-final.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    "build": {
+      "command": "npm run typecheck; npm run test:static",
+      "result": "typecheck/build/static pass; subsequent initial registry helper-inventory failure corrected in final static log",
+      "log": "apps/office/coverage/sax-writer-helper-gates.log",
+      "sha256": "c70ec42e31987dfbb0a7fb58c18b70139614d4d5b3aa9f352b44d36401b494d9"
+    },
+    "registry-static-gates": {
+      "command": "npm run inventory:registry:build; npm run inventory:registry:check; npm run check:source-provenance; npm run inventory:invariants; npm run inventory:parity; npm run check:dependencies; npm run check:file-size; npm run check:source-tree; npm run check:writer-resources; npm run check:calc-resources; npm run check:writer-hintids; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check",
+      "result": "pass; doctor existing hook readiness warning",
+      "log": "apps/office/coverage/sax-writer-helper-static-gates.log",
+      "sha256": "4450f749cb22ffc7d3e39d0e1d97190755c972c716c112906cc9419e2f2a8253"
+    },
+    "browser": {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node --experimental-strip-types scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/sax-writer-helper-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    "eslint": {
+      "command": "node_modules/.bin/eslint all changed TS/MJS paths --max-warnings 0",
+      "result": "pass",
+      "log": "apps/office/coverage/sax-writer-helper-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "format": {
+      "command": "node_modules/.bin/prettier --check all changed source/docs/registry paths",
+      "result": "pass",
+      "log": "apps/office/coverage/sax-writer-helper-format-check.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    "docs": {
+      "command": "npm run check:docs",
+      "result": "known-baseline-fail:only2css-style-matchersfindings",
+      "log": "apps/office/coverage/sax-writer-helper-docs.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    }
+  },
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/sax/source/expatwrap/saxwriter.convert.ts",
+      "gitBlob": "b21786f09a3ab5ddcbdff4cb76f3ba263ca8821d"
+    },
+    {
+      "path": "apps/office/src/sax/source/expatwrap/saxwriter.helper.test.ts",
+      "gitBlob": "60a7fc556eb45d4c65dd557aeeb366896d3c4a71"
+    },
+    {
+      "path": "apps/office/src/sax/source/expatwrap/saxwriter.helper.ts",
+      "gitBlob": "794320b3f903f4af9412282412131fc2dc73d083"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/beans/Pair.ts",
+      "gitBlob": "3b3b7b8f1559b90b53f5b761e04dca3cd6217acf"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "b1ce65faef55a840ddb0ba53b2da5c0aadccdd7f"
+    },
+    {
+      "path": "docs/program/native-sax-writer-buffer.md",
+      "gitBlob": "5ae9b87e21d740b11648b6637db6a80deb0aed66"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-89fa7108-9dd2-4d99-be47-ad2ed1d9afab.json",
+      "gitBlob": "29c4454d074d3e6864f6e360e95192664b07f95d"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sax/source/expatwrap/saxwriter.convert.ts.json",
+      "gitBlob": "2d0f8d6b84b02d0c603d20f3d19eea6ff7ad6169"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sax/source/expatwrap/saxwriter.helper.ts.json",
+      "gitBlob": "051acb2b1b06e956f49e63b110915a1195191e96"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/Pair.ts.json",
+      "gitBlob": "8b733e37763c2b797267f4cfe9da5a597d3bf243"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sax/source/expatwrap/saxwriter.convert.ts.json",
+      "gitBlob": "2365fb5a350b7d13627d3917941aef76953c68ff"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sax/source/expatwrap/saxwriter.helper.ts.json",
+      "gitBlob": "b28b37857917b22d3e1975232363d3c27e351697"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/Pair.ts.json",
+      "gitBlob": "7d8d1383e31f5cc773a0ee49d5c9322e0150cff3"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "84fa7c090db2993629f67fa72c8a81af4381c410"
+    },
+    {
+      "path": "scripts/fixtures/native-dom-worker-probe.ts",
+      "gitBlob": "36bb815bc247784687178a65661a12bbd04a6d1d"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "gitBlob": "b92178b302d96a070b9d1d2843e41b7f2be52c69"
+    }
+  ],
+  "upstreamBlobs": [
+    {
+      "path": "codemaker/source/cppumaker/cpputype.cxx",
+      "gitBlob": "152dbf476955dd95b1d7623ca7342cc69c24fb0a"
+    },
+    {
+      "path": "include/rtl/character.hxx",
+      "gitBlob": "5801063532da40c02ce6b4202370a0c0426b3efa"
+    },
+    {
+      "path": "include/rtl/ustring.hxx",
+      "gitBlob": "e6eb0e19bd26be966e53d463f95ec3ea6ed0e252"
+    },
+    {
+      "path": "offapi/com/sun/star/xml/sax/SAXException.idl",
+      "gitBlob": "2be5366ee4a6f21644a52afe1436cb3b6186d5cb"
+    },
+    {
+      "path": "sax/source/expatwrap/saxwriter.cxx",
+      "gitBlob": "861a4ce76f2b623bba2748bee61f246137972f17"
+    },
+    {
+      "path": "sax/test/sax/testwriter.cxx",
+      "gitBlob": "2a5d3706d48fc95eb6622f75e64921bc93fbf26e"
+    },
+    {
+      "path": "udkapi/com/sun/star/beans/Pair.idl",
+      "gitBlob": "13c08b4a2a432c782aaf80a30230c846e457b0eb"
+    }
+  ]
+}
