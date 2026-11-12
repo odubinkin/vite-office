@@ -1,0 +1,167 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-2cf81f06-1f62-40e6-a68f-8d2bbefadd80",
+    "capabilityId": "CAP-2cf81f06-1f62-40e6-a68f-8d2bbefadd80",
+    "suite": "shared",
+    "subsystem": "ucb-command-context",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual UCB CommandEnvironment and ActiveDataSink preserve named bases, acquired Reference field/getter semantics, reverse member destruction and absence of automatic stream close. Actual InteractionRequest and four basic continuations preserve Any/Sequence ownership, source selection/query order, flags and borrowed parent pointers. Complete SDK declarations use normal CPPU metadata and original direct bases. No broker, process context, alternate parser or partial positive provider is manufactured. Authentication continuation owners are not ported or advertised. Protected default-constructor access control, physical C++ ABI/threading, complete source service bootstrap, content/broker paths, DocumentBuilder, metadata and DOCX/XLSX/UI acceptance remain unverified."
+    ],
+    "capability": "Native UCB command environment and basic interaction owners",
+    "gaps": [
+      "UCB content/broker/default resolver/URI and DocumentBuilder service wiring remain incomplete.",
+      "Authentication-related continuations are unported and unadvertised.",
+      "Complete source service QA, native physical ABI/threading, metadata and DOCX/XLSX/UI remain unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "ucbhelper/source/client/commandenvironment.cxx",
+          "marker": "CommandEnvironment::getInteractionHandler"
+        },
+        {
+          "path": "ucbhelper/source/client/activedatasink.cxx",
+          "marker": "ActiveDataSink::getInputStream"
+        },
+        {
+          "path": "ucbhelper/source/provider/interactionrequest.cxx",
+          "marker": "InteractionContinuation::recordSelection"
+        },
+        {
+          "path": "ucbhelper/source/provider/simpleinteractionrequest.cxx",
+          "marker": "SimpleInteractionRequest::getResponse"
+        }
+      ],
+      "tests": [
+        {
+          "path": "qadevOOo/tests/java/ifc/io/_XActiveDataSink.java",
+          "marker": "_setInputStream"
+        },
+        {
+          "path": "qadevOOo/tests/java/ifc/io/_XActiveDataSink.java",
+          "marker": "_getInputStream"
+        }
+      ],
+      "docs": [
+        {
+          "path": "offapi/com/sun/star/ucb/XCommandEnvironment.idl",
+          "marker": "getInteractionHandler"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/task/XInteractionAbort.ts",
+          "marker": "XInteractionAbort"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/task/XInteractionContinuation.ts",
+          "marker": "XInteractionContinuation"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/task/XInteractionHandler.ts",
+          "marker": "XInteractionHandler"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/task/XInteractionRequest.ts",
+          "marker": "XInteractionRequest"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/task/XInteractionRetry.ts",
+          "marker": "XInteractionRetry"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/ucb/XCommandEnvironment.ts",
+          "marker": "XCommandEnvironment"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/ucb/XProgressHandler.ts",
+          "marker": "XProgressHandler"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/task/XInteractionApprove.ts",
+          "marker": "XInteractionApprove"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/task/XInteractionDisapprove.ts",
+          "marker": "XInteractionDisapprove"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/io/XActiveDataSink.ts",
+          "marker": "XActiveDataSink"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/client/commandenvironment.ts",
+          "marker": "CommandEnvironment"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/inc/commandenvironment.ts",
+          "marker": "CommandEnvironment"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/client/activedatasink.ts",
+          "marker": "ActiveDataSink"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/inc/activedatasink.ts",
+          "marker": "ActiveDataSink"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/provider/interactionrequest.ts",
+          "marker": "InteractionRequest"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/inc/interactionrequest.ts",
+          "marker": "InteractionRequest"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/provider/simpleinteractionrequest.ts",
+          "marker": "ContinuationFlags"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/inc/simpleinteractionrequest.ts",
+          "marker": "ContinuationFlags"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/ucbhelper/source/client/native-contracts.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/client/native-environment.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/provider/native-interaction.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-ucb-command-context.md",
+          "marker": "# Native UCB command context"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual UCB CommandEnvironment and ActiveDataSink preserve named bases, acquired Reference field/getter semantics, reverse member destruction and absence of automatic stream close. Actual InteractionRequest and four basic continuations preserve Any/Sequence ownership, source selection/query order, flags and borrowed parent pointers. Complete SDK declarations use normal CPPU metadata and original direct bases. No broker, process context, alternate parser or partial positive provider is manufactured. Authentication continuation owners are not ported or advertised. Protected default-constructor access control, physical C++ ABI/threading, complete source service bootstrap, content/broker paths, DocumentBuilder, metadata and DOCX/XLSX/UI acceptance remain unverified."
+    },
+    "scopeLimitations": [
+      "Actual UCB CommandEnvironment and ActiveDataSink preserve named bases, acquired Reference field/getter semantics, reverse member destruction and absence of automatic stream close. Actual InteractionRequest and four basic continuations preserve Any/Sequence ownership, source selection/query order, flags and borrowed parent pointers. Complete SDK declarations use normal CPPU metadata and original direct bases. No broker, process context, alternate parser or partial positive provider is manufactured. Authentication continuation owners are not ported or advertised. Protected default-constructor access control, physical C++ ABI/threading, complete source service bootstrap, content/broker paths, DocumentBuilder, metadata and DOCX/XLSX/UI acceptance remain unverified."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-ucb-command-context"
+  }
+}

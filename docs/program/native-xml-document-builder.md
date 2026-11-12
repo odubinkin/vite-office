@@ -95,3 +95,10 @@ A genuine DOM regression also preserves insertBefore's old-child return and lack
 of a subtree event: a cached element list remains stale until a later ordinary
 attribute mutation. This original behavior is recorded as CALC-533/WRITER467;
 no cache repair or synthetic event was added.
+
+
+The source UCB command environment, active data sink and basic interaction
+request/continuation owners are now available as actual components. Their
+handler/stream ownership and source selection behavior are described in
+[native UCB command context](native-ucb-command-context.md). UCB content/broker
+and full DocumentBuilder/default resolver/service wiring remain pending.

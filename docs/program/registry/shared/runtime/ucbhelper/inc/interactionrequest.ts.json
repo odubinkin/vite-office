@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/ucbhelper/inc/interactionrequest.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "ucb-command-context",
+    "capabilityIds": [
+      "CAP-2cf81f06-1f62-40e6-a68f-8d2bbefadd80"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/ucbhelper/inc/interactionrequest.ts",
+        "apps/office/src/ucbhelper/source/client/native-contracts.test.ts",
+        "apps/office/src/ucbhelper/source/client/native-environment.test.ts",
+        "apps/office/src/ucbhelper/source/provider/native-interaction.test.ts",
+        "docs/program/native-ucb-command-context.md"
+      ],
+      "justification": "Actual UCB CommandEnvironment and ActiveDataSink preserve named bases, acquired Reference field/getter semantics, reverse member destruction and absence of automatic stream close. Actual InteractionRequest and four basic continuations preserve Any/Sequence ownership, source selection/query order, flags and borrowed parent pointers. Complete SDK declarations use normal CPPU metadata and original direct bases. No broker, process context, alternate parser or partial positive provider is manufactured. Authentication continuation owners are not ported or advertised. Protected default-constructor access control, physical C++ ABI/threading, complete source service bootstrap, content/broker paths, DocumentBuilder, metadata and DOCX/XLSX/UI acceptance remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "include/ucbhelper/interactionrequest.hxx",
+      "upstreamSymbols": [
+        "InteractionRequest",
+        "InteractionContinuation",
+        "InteractionAbort",
+        "InteractionRetry",
+        "InteractionApprove",
+        "InteractionDisapprove",
+        "getRequest",
+        "getContinuations",
+        "recordSelection"
+      ]
+    }
+  }
+}

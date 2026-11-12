@@ -3742,3 +3742,10 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 - Sources: `unoxml/source/dom/node.cxx`, `CNode::insertBefore`, and `unoxml/source/dom/elementlist.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-533.
 - The non-attribute insertion path splices native sibling pointers, then returns refChild rather than newChild. It does not emit DOMNodeInserted or DOMSubtreeModified. Preserve this return and absence of notifications rather than adopting host DOM behavior.
 - A genuine cached getElementsByTagName list remains at one result after a second matching element is inserted, while getChildNodes immediately reports two. A later ordinary setAttribute emits the source subtree event and rebuilds the list to two. This is covered on actual CDocument/CNode wrappers over pinned C memory, without private cache access or an alternate node provider. No compiled C++ UNO differential claim is made.
+
+
+### WRITER468 — UCB continuations borrow a request that need not outlive acquired continuation results
+
+- Sources: `include/ucbhelper/interactionrequest.hxx` and `ucbhelper/source/provider/interactionrequest.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC-534.
+- InteractionContinuation keeps a raw InteractionRequest pointer. getContinuations returns an acquired Sequence of continuation references, so those references can remain live after their request is released. recordSelection then dereferences the borrowed parent. Preserve the raw relationship rather than introducing a strong parent reference or expiry fallback.
+- Actual weak-reference tests demonstrate parent destruction while a returned sequence still retains its continuation. No select call is made after parent destruction: that would enter an undefined native lifetime case. This may be an intended caller precondition rather than a reachable filter defect; no compiled C++ failure is claimed.

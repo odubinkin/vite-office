@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/udkapi/com/sun/star/task/XInteractionRetry.ts",
+    "status": "mapped",
+    "upstreamPath": "udkapi/com/sun/star/task/XInteractionRetry.idl",
+    "localSymbols": [
+      "XInteractionRetry",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "XInteractionRetry",
+      "XInteractionContinuation"
+    ],
+    "preservedResponsibilities": [
+      "Actual UCB CommandEnvironment and ActiveDataSink preserve named bases, acquired Reference field/getter semantics, reverse member destruction and absence of automatic stream close. Actual InteractionRequest and four basic continuations preserve Any/Sequence ownership, source selection/query order, flags and borrowed parent pointers. Complete SDK declarations use normal CPPU metadata and original direct bases. No broker, process context, alternate parser or partial positive provider is manufactured. Authentication continuation owners are not ported or advertised. Protected default-constructor access control, physical C++ ABI/threading, complete source service bootstrap, content/broker paths, DocumentBuilder, metadata and DOCX/XLSX/UI acceptance remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Authentication-related continuation interfaces are unported and unadvertised. Content/broker/default resolver/URI and service bootstrap remain pending. Source visibility, physical ABI/threading and full format/UI parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/task/XInteractionRetry.ts",
+          "marker": "XInteractionRetry"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/client/native-contracts.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/client/native-environment.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/ucbhelper/source/provider/native-interaction.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/udkapi/com/sun/star/task/XInteractionRetry.idl",
+          "marker": "XInteractionRetry"
+        },
+        {
+          "path": "vendor/libreoffice-reference/udkapi/com/sun/star/task/XInteractionRetry.idl",
+          "marker": "XInteractionContinuation"
+        },
+        {
+          "path": "vendor/libreoffice-reference/codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "dumpNormalGetCppuType"
+        }
+      ]
+    }
+  }
+}

@@ -46,6 +46,7 @@ const moduleNames = [
   "svx",
   "sw",
   "tools",
+  "ucbhelper",
   "udkapi",
   "unotools",
   "unoxml",

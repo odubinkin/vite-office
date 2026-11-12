@@ -11,6 +11,9 @@ const repositoryRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 /** Files that prove every currently instantiated LibreOffice-derived source area remains present. */
 const requiredFiles = [
+  "apps/office/src/ucbhelper/inc/commandenvironment.ts",
+  "apps/office/src/ucbhelper/source/client/commandenvironment.ts",
+  "apps/office/src/ucbhelper/source/provider/interactionrequest.ts",
   // RXH8BN restores the original native ExecCharAttr/GetAttrState owner; the retired browser wrapper ban is superseded only for this source path.
   "apps/office/src/sw/source/uibase/shells/txtattr.ts",
   "apps/office/src/o3tl/inc/sorted_vector.ts",
