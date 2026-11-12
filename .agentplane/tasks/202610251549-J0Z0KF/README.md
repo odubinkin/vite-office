@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 230
+revision: 234
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T14:03:15.560Z"
+  updated_at: "2026-11-12T17:01:23.899Z"
   updated_by: "CODER"
-  note: "Current prerequisite block verified: actual exception field transport and ownership,500 related cases/84files, complete5-owner90 coverage pass (95.29lines/95.58branches),types/build/static/lint/format/provenance/registry/boundaries48/resources2/size/tree/doctor/routing/diff pass. Existing css-style-matchers JSDoc baseline remains. Parent XLSX/DOCX/exception bridge/resolver/UI scope incomplete; user requests goal pause after committing this block, not parent completion."
-  attempts: 71
+  note: "JavaScript UNO exception ABI/Content cancellation/registered native DocumentBuilder prerequisite: 537 related cases pass across93files; production main/DOM-free Worker probe passes. Full7-owner90 gate remains unmet:75.08statements69.49branches83.60functions76.02lines, with real provider/URI and other field-type paths unqualified. Parent DOCX/XLSX/UI acceptance remains incomplete; continue approved implementation without user pause."
+  attempts: 72
 commit: null
 comments:
   -
@@ -234,6 +234,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Start: Continue the approved native XML/metadata prerequisites and full DOCX/XLSX shell/UI integration after recording the honest seven-owner coverage gap; no completion or pause is claimed."
 events:
   -
     type: "status"
@@ -1144,8 +1147,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-12T17:01:23.899Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "JavaScript UNO exception ABI/Content cancellation/registered native DocumentBuilder prerequisite: 537 related cases pass across93files; production main/DOM-free Worker probe passes. Full7-owner90 gate remains unmet:75.08statements69.49branches83.60functions76.02lines, with real provider/URI and other field-type paths unqualified. Parent DOCX/XLSX/UI acceptance remains incomplete; continue approved implementation without user pause."
+  -
+    type: "status"
+    at: "2026-11-12T17:01:29.624Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: Continue the approved native XML/metadata prerequisites and full DOCX/XLSX shell/UI integration after recording the honest seven-owner coverage gap; no completion or pause is claimed."
 doc_version: 3
-doc_updated_at: "2026-11-12T14:04:04.831Z"
+doc_updated_at: "2026-11-12T17:02:08.448Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -3290,6 +3306,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-12T17:01:23.899Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: JavaScript UNO exception ABI/Content cancellation/registered native DocumentBuilder prerequisite: 537 related cases pass across93files; production main/DOM-free Worker probe passes. Full7-owner90 gate remains unmet:75.08statements69.49branches83.60functions76.02lines, with real provider/URI and other field-type paths unqualified. Parent DOCX/XLSX/UI acceptance remains incomplete; continue approved implementation without user pause.
+    Attempts: 72
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T16:56:44.945Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3638,6 +3684,14 @@ sections:
     - Observation: Native exception-address checkpoint completed before requested goal pause. Shared Exception now supplies real stable Message/Context member addresses; temporary Context cells in UnknownPropertyException/PropertyVetoException are removed. IllegalArgumentException short/DOMException enum retain stable lvalues and original scalar move semantics; wrapped exceptions expose their actual Any member. Existing derived implementations gain required override declarations. The native Any-data caller now uses the actual RuntimeException instead of a shadow Map.
       Impact: Final Command: targeted CPPU public/UNO/typelib, CPPUHelper, UCB, converter, XML DOM/SAX/unoxml and real registered-converter suites with complete5-owner90 coverage. Result:500 tests pass/84files;95.26statements,95.58branches,92.59functions,95.29lines. Twelve new critical cases cover real ActiveDataSink Context ownership, weak-reference destruction, Unicode/base casts/scalar moves and nested dynamic exception Any. Existing source-captured native Any/Reference replays and import-order QA pass. No exception factory, synthetic provider/private hooks, altered source defaults or physical ABI claim.
       Resolution: Final typecheck/build/static/scoped lint/format/provenance/boundaries/48cases/resources2/registry/size/tree/resources/hintids/doctor/routing/diff pass. Only pre-existing css-style-matchers.ts17/76 JSDoc failures remain. A test constructor-parameter edit initially broke six new fixture cases; fixed and final stable full related run passes500 with90 thresholds. A separate diagnostic capture/unused merge attempt was not used for final coverage or assertions. Full suites not run under once-per10-task cadence. Full exception bridge/EnvStack/Content open-cancel/resolver/DocumentBuilder/metadata and DOCX/XLSX shell/UI acceptance remain unfinished. User requested pause after this block; persist evidence/source commit and clean status, then set goal paused without closing parent format tasks or starting another block.
+
+    - Observation: JavaScript exception ABI and native registered DocumentBuilder prerequisite: 521 related cases/88files pass; full five-owner90 coverage fails74.4lines/73.68statements/68branches/80.76functions. Initial builder test stream used a cross-realm TextEncoder buffer; wrapping bytes in the current realm fixed the actual fixture representation. Initial SDK declaration nullability/import/UTF16-view errors were corrected. Registry validation required explicit non-basename source symbols, now corrected; complete final checks remain in progress.
+      Impact: No complete format/UI acceptance is claimed. Missing real broker/SimpleFileAccess provider and source URI QA remain unqualified; no synthetic positive provider or private coverage hook is supplied.
+      Resolution: Continue source service implementation and related validation under the approved parent task. Preserve explicit browser ABI divergence and all original defaults. User latest instruction revokes the earlier pause; do not pause goal or close incomplete format tasks.
+
+    - Observation: Final registered native builder/JavaScript exception ABI prerequisite:537 related tests/93files pass; original misc catch/throw and domtest valid/warning/error plus provider-independent builder assertions run on real owners. Two additional Worker transport readiness cases and main font/native readiness pass. Actual Chromium main and DOM-free Worker probe constructs registered DocumentBuilder, parses XML and roundtrips RuntimeException with nonempty builder Context.
+      Impact: Full7-owner90 coverage fails75.08statements69.49branches83.60functions76.02lines. Native physical exception ABI/TLS/mappings, positive UCB/SimpleFileAccess providers/URI source QA, metadata and full DOCX/XLSX shell/UI remain unqualified. No artificial positive provider or private state coverage hook; full suites remain once per10 actual agentplane tasks.
+      Resolution: Core SDK now links only platform-neutral declaration metadata; public exception helpers receive an injected host ABI initialized by main/Worker composition. Boundaries pass after retaining source unoxml comphelper/ucbhelper links and browser desktop component registration. Final typecheck/build/static/lint/format/provenance/registry/boundaries49/resource2/size/tree/resources/hintids/doctor/routing/diff pass. Only prior css-style-matchers.ts17/76 JSDoc baseline remains. Record bounded evidence, persist checkpoint, then continue native XPath/metadata and full formats without pausing or finishing the parent.
 id_source: "generated"
 ---
 ## Summary
@@ -5792,6 +5846,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-12T17:01:23.899Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: JavaScript UNO exception ABI/Content cancellation/registered native DocumentBuilder prerequisite: 537 related cases pass across93files; production main/DOM-free Worker probe passes. Full7-owner90 gate remains unmet:75.08statements69.49branches83.60functions76.02lines, with real provider/URI and other field-type paths unqualified. Parent DOCX/XLSX/UI acceptance remains incomplete; continue approved implementation without user pause.
+Attempts: 72
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T16:56:44.945Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -6144,3 +6228,11 @@ DecisionContextRef:
 - Observation: Native exception-address checkpoint completed before requested goal pause. Shared Exception now supplies real stable Message/Context member addresses; temporary Context cells in UnknownPropertyException/PropertyVetoException are removed. IllegalArgumentException short/DOMException enum retain stable lvalues and original scalar move semantics; wrapped exceptions expose their actual Any member. Existing derived implementations gain required override declarations. The native Any-data caller now uses the actual RuntimeException instead of a shadow Map.
   Impact: Final Command: targeted CPPU public/UNO/typelib, CPPUHelper, UCB, converter, XML DOM/SAX/unoxml and real registered-converter suites with complete5-owner90 coverage. Result:500 tests pass/84files;95.26statements,95.58branches,92.59functions,95.29lines. Twelve new critical cases cover real ActiveDataSink Context ownership, weak-reference destruction, Unicode/base casts/scalar moves and nested dynamic exception Any. Existing source-captured native Any/Reference replays and import-order QA pass. No exception factory, synthetic provider/private hooks, altered source defaults or physical ABI claim.
   Resolution: Final typecheck/build/static/scoped lint/format/provenance/boundaries/48cases/resources2/registry/size/tree/resources/hintids/doctor/routing/diff pass. Only pre-existing css-style-matchers.ts17/76 JSDoc failures remain. A test constructor-parameter edit initially broke six new fixture cases; fixed and final stable full related run passes500 with90 thresholds. A separate diagnostic capture/unused merge attempt was not used for final coverage or assertions. Full suites not run under once-per10-task cadence. Full exception bridge/EnvStack/Content open-cancel/resolver/DocumentBuilder/metadata and DOCX/XLSX shell/UI acceptance remain unfinished. User requested pause after this block; persist evidence/source commit and clean status, then set goal paused without closing parent format tasks or starting another block.
+
+- Observation: JavaScript exception ABI and native registered DocumentBuilder prerequisite: 521 related cases/88files pass; full five-owner90 coverage fails74.4lines/73.68statements/68branches/80.76functions. Initial builder test stream used a cross-realm TextEncoder buffer; wrapping bytes in the current realm fixed the actual fixture representation. Initial SDK declaration nullability/import/UTF16-view errors were corrected. Registry validation required explicit non-basename source symbols, now corrected; complete final checks remain in progress.
+  Impact: No complete format/UI acceptance is claimed. Missing real broker/SimpleFileAccess provider and source URI QA remain unqualified; no synthetic positive provider or private coverage hook is supplied.
+  Resolution: Continue source service implementation and related validation under the approved parent task. Preserve explicit browser ABI divergence and all original defaults. User latest instruction revokes the earlier pause; do not pause goal or close incomplete format tasks.
+
+- Observation: Final registered native builder/JavaScript exception ABI prerequisite:537 related tests/93files pass; original misc catch/throw and domtest valid/warning/error plus provider-independent builder assertions run on real owners. Two additional Worker transport readiness cases and main font/native readiness pass. Actual Chromium main and DOM-free Worker probe constructs registered DocumentBuilder, parses XML and roundtrips RuntimeException with nonempty builder Context.
+  Impact: Full7-owner90 coverage fails75.08statements69.49branches83.60functions76.02lines. Native physical exception ABI/TLS/mappings, positive UCB/SimpleFileAccess providers/URI source QA, metadata and full DOCX/XLSX shell/UI remain unqualified. No artificial positive provider or private state coverage hook; full suites remain once per10 actual agentplane tasks.
+  Resolution: Core SDK now links only platform-neutral declaration metadata; public exception helpers receive an injected host ABI initialized by main/Worker composition. Boundaries pass after retaining source unoxml comphelper/ucbhelper links and browser desktop component registration. Final typecheck/build/static/lint/format/provenance/registry/boundaries49/resource2/size/tree/resources/hintids/doctor/routing/diff pass. Only prior css-style-matchers.ts17/76 JSDoc baseline remains. Record bounded evidence, persist checkpoint, then continue native XPath/metadata and full formats without pausing or finishing the parent.

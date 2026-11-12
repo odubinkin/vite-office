@@ -1,0 +1,1374 @@
+{
+  "status": "verified-functional-prerequisite-coverage-gap-parent-continues",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "d18919797c0bcdfd1ddd858b1ccd6f18488f0e6c",
+  "capability": "CAP-f843f30e-9437-4267-a3b4-902e76c2893c",
+  "scope": "Explicit injected JavaScript UNO exception ABI, actual Any command cancellation and Content opening methods; full registered native CDocumentBuilder with main/Worker prerequisites. Full format goal remains incomplete.",
+  "userStopRule": "Latest user explicitly resumed continued implementation without new pauses. Earlier pause is revoked; do not pause or close parent tasks.",
+  "tests": {
+    "relatedCases": 537,
+    "relatedFiles": 93,
+    "newCriticalCases": 22,
+    "boundaryCases": 49,
+    "resourceCases": 2,
+    "result": "pass",
+    "sourceScope": "Original misc testCatchThrow/testgetCaughtException with host syntax lowering; original domtest valid/warning/error and provider-independent testXDocumentBuilder assertions. URI/provider-dependent source assertions remain pending."
+  },
+  "coverage": {
+    "result": "fails-whole7-owner90-gate",
+    "threshold": 90,
+    "completeSelectedOwnerFiles": 7,
+    "total": {
+      "lines": {
+        "total": 267,
+        "covered": 203,
+        "skipped": 0,
+        "pct": 76.02
+      },
+      "statements": {
+        "total": 285,
+        "covered": 214,
+        "skipped": 0,
+        "pct": 75.08
+      },
+      "functions": {
+        "total": 61,
+        "covered": 51,
+        "skipped": 0,
+        "pct": 83.6
+      },
+      "branches": {
+        "total": 59,
+        "covered": 41,
+        "skipped": 0,
+        "pct": 69.49
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "owners": {
+      "src/cppu/inc/uno/exception-bindings.ts": {
+        "lines": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/cppuhelper/browser/exception-abi.ts": {
+        "lines": {
+          "total": 66,
+          "covered": 51,
+          "skipped": 0,
+          "pct": 77.27
+        },
+        "functions": {
+          "total": 13,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 84.61
+        },
+        "statements": {
+          "total": 75,
+          "covered": 57,
+          "skipped": 0,
+          "pct": 76
+        },
+        "branches": {
+          "total": 20,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 55
+        }
+      },
+      "src/cppuhelper/inc/exc_hlp.ts": {
+        "lines": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 6,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 83.33
+        },
+        "branches": {
+          "total": 2,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 50
+        }
+      },
+      "src/offapi/com/sun/star/ucb/CommandFailedException.ts": {
+        "lines": {
+          "total": 37,
+          "covered": 26,
+          "skipped": 0,
+          "pct": 70.27
+        },
+        "functions": {
+          "total": 11,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 54.54
+        },
+        "statements": {
+          "total": 40,
+          "covered": 28,
+          "skipped": 0,
+          "pct": 70
+        },
+        "branches": {
+          "total": 14,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 85.71
+        }
+      },
+      "src/sc/browser/filter/xml/ods-worker.ts": {
+        "lines": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 7,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 85.71
+        }
+      },
+      "src/ucbhelper/source/provider/cancelcommandexecution.ts": {
+        "lines": {
+          "total": 33,
+          "covered": 33,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 33,
+          "covered": 33,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "src/unoxml/source/dom/documentbuilder.ts": {
+        "lines": {
+          "total": 109,
+          "covered": 71,
+          "skipped": 0,
+          "pct": 65.13
+        },
+        "functions": {
+          "total": 24,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 87.5
+        },
+        "statements": {
+          "total": 113,
+          "covered": 73,
+          "skipped": 0,
+          "pct": 64.6
+        },
+        "branches": {
+          "total": 10,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 50
+        }
+      }
+    }
+  },
+  "browserQualification": {
+    "workerResult": {
+      "conversion": {
+        "serviceValue": 42,
+        "rowValue": 42,
+        "rowWasNull": false,
+        "failedFirst": 0,
+        "failedFirstWasNull": false,
+        "failedSecond": 0,
+        "failedSecondWasNull": true
+      },
+      "documentBuilder": {
+        "rootName": "document-content",
+        "streamOpen": true,
+        "namespaceAware": true,
+        "validating": false,
+        "emptyImplementation": true,
+        "capturedType": true,
+        "sameContext": true,
+        "exceptionMessage": "worker exception"
+      },
+      "globals": {
+        "window": "undefined",
+        "document": "undefined",
+        "DOMParser": "undefined"
+      },
+      "rootName": "document-content",
+      "attribute": "1.0",
+      "listCounts": [
+        0,
+        1,
+        0
+      ],
+      "sameOwner": true,
+      "unicode": "\ud83d\ude00\u5b57",
+      "utf16Length": 3,
+      "borrowedStreamOpen": true,
+      "warnings": 1,
+      "errors": 0,
+      "warningLine": 1
+    },
+    "mainResult": {
+      "conversion": {
+        "serviceValue": 42,
+        "rowValue": 42,
+        "rowWasNull": false,
+        "failedFirst": 0,
+        "failedFirstWasNull": false,
+        "failedSecond": 0,
+        "failedSecondWasNull": true
+      },
+      "documentBuilder": {
+        "rootName": "document-content",
+        "streamOpen": true,
+        "namespaceAware": true,
+        "validating": false,
+        "emptyImplementation": true,
+        "capturedType": true,
+        "sameContext": true,
+        "exceptionMessage": "worker exception"
+      },
+      "globals": {
+        "window": "object",
+        "document": "object",
+        "DOMParser": "function"
+      },
+      "rootName": "document-content",
+      "attribute": "1.0",
+      "listCounts": [
+        0,
+        1,
+        0
+      ],
+      "sameOwner": true,
+      "unicode": "\ud83d\ude00\u5b57",
+      "utf16Length": 3,
+      "borrowedStreamOpen": true,
+      "warnings": 1,
+      "errors": 0,
+      "warningLine": 1
+    }
+  },
+  "knownBaseline": "JSDoc css-style-matchers.ts17 missing comment and76 two/three params; unchanged.",
+  "remaining": [
+    "Physical C++ binary exception mappings/TLS/ABI not ported; explicit browser ABI is separate.",
+    "Real UCB and SimpleFileAccess provider and full original URI QA.",
+    "Native XPath, document metadata, full DOCX/XLSX core/shell import/export and existing UI acceptance."
+  ],
+  "fullSuite": "Not run: once per10 actual agentplane task cadence; current epics remain active.",
+  "checks": [
+    {
+      "name": "final",
+      "cwd": "apps/office",
+      "command": "../../node_modules/.bin/vitest run --config vite.config.ts src/cppu/inc/com/sun/star src/cppu/source/uno src/cppu/source/typelib src/cppuhelper src/ucbhelper src/stoc/source/typeconv src/offapi/com/sun/star/xml/dom src/offapi/com/sun/star/xml/sax src/unoxml src/external/libxml2/parsercallbacks.test.ts src/desktop/browser/app/uno-converter.test.ts src/desktop/browser/app/uno-components.test.ts src/main.test.ts src/sc/browser/filter/xml/ods-worker-entry.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-client.test.ts src/sc/browser/filter/xml/ods-worker-boundaries.test.ts --coverage --coverage.include=src/cppuhelper/browser/exception-abi.ts --coverage.include=src/cppu/inc/uno/exception-bindings.ts --coverage.include=src/cppuhelper/inc/exc_hlp.ts --coverage.include=src/ucbhelper/source/provider/cancelcommandexecution.ts --coverage.include=src/offapi/com/sun/star/ucb/CommandFailedException.ts --coverage.include=src/unoxml/source/dom/documentbuilder.ts --coverage.include=src/sc/browser/filter/xml/ods-worker.ts --coverage.reportsDirectory=coverage/exception-builder-final --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.functions=90 --coverage.thresholds.branches=90",
+      "result": "tests-pass-coverage-fails",
+      "log": "apps/office/coverage/exception-builder-final.log",
+      "sha256": "181a10a965fdeba3dc4cb7389a873bf483243d06fcdfc951bccf0405513b44db"
+    },
+    {
+      "name": "typecheck",
+      "cwd": ".",
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "name": "build",
+      "cwd": ".",
+      "command": "npm run build",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-build.log",
+      "sha256": "0995dda1d5ee2cdaff8305c7e714fa6a9333ff926f3820e592f8fe5d0d428115"
+    },
+    {
+      "name": "worker",
+      "cwd": ".",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node --experimental-strip-types scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-worker.log",
+      "sha256": "11a752029ca127fa948b9bc7e1d27f5c918e3b445be6451ebf9e2b4c021ea11c"
+    },
+    {
+      "name": "static",
+      "cwd": ".",
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-static.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "name": "lint",
+      "cwd": ".",
+      "command": [
+        "node_modules/.bin/eslint",
+        "--max-warnings",
+        "0",
+        "apps/office/src/calc-ods-worker.ts",
+        "apps/office/src/cppu/inc/com/sun/star/beans/PropertyVetoException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/beans/UnknownPropertyException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/container/ElementExistException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/container/NoSuchElementException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/io/BufferSizeExceededException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/io/IOException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/io/NotConnectedException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/lang/DisposedException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/lang/IllegalArgumentException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/lang/IndexOutOfBoundsException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/lang/NotInitializedException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/lang/WrappedTargetException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/DeploymentException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/Reference.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/exception-values.ts",
+        "apps/office/src/cppu/inc/com/sun/star/xml/dom/DOMException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/xml/sax/SAXException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/xml/sax/SAXParseException.ts",
+        "apps/office/src/cppu/inc/uno/exception-bindings.ts",
+        "apps/office/src/cppuhelper/browser/exception-abi.test.ts",
+        "apps/office/src/cppuhelper/browser/exception-abi.ts",
+        "apps/office/src/cppuhelper/inc/exc_hlp.ts",
+        "apps/office/src/desktop/browser/app/uno-components.ts",
+        "apps/office/src/main.test.ts",
+        "apps/office/src/main.tsx",
+        "apps/office/src/offapi/com/sun/star/embed/InvalidStorageException.ts",
+        "apps/office/src/offapi/com/sun/star/embed/StorageWrappedTargetException.ts",
+        "apps/office/src/offapi/com/sun/star/i18n/MultipleCharsOutputException.ts",
+        "apps/office/src/offapi/com/sun/star/packages/zip/ZipException.ts",
+        "apps/office/src/offapi/com/sun/star/packages/zip/ZipIOException.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/CommandFailedException.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/ContentCreationException.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/IllegalIdentifierException.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/SimpleFileAccess.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/XSimpleFileAccess.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/XSimpleFileAccess2.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/XSimpleFileAccess3.ts",
+        "apps/office/src/offapi/com/sun/star/xml/dom/DocumentBuilder.ts",
+        "apps/office/src/sc/browser/filter/xml/ods-worker-entry.test.ts",
+        "apps/office/src/sc/browser/filter/xml/ods-worker.ts",
+        "apps/office/src/ucbhelper/inc/cancelcommandexecution.ts",
+        "apps/office/src/ucbhelper/source/client/content.ts",
+        "apps/office/src/ucbhelper/source/provider/cancelcommandexecution.ts",
+        "apps/office/src/ucbhelper/source/provider/native-cancelcommandexecution.test.ts",
+        "apps/office/src/udkapi/com/sun/star/script/CannotConvertException.ts",
+        "apps/office/src/unoxml/source/dom/documentbuilder.errors.ts",
+        "apps/office/src/unoxml/source/dom/documentbuilder.test.ts",
+        "apps/office/src/unoxml/source/dom/documentbuilder.ts",
+        "scripts/check-module-boundaries.test.ts",
+        "scripts/fixtures/native-dom-worker-probe.ts",
+        "scripts/module-boundaries/allowed-edges.mjs",
+        "scripts/native-dom-worker-probe.mjs"
+      ],
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "format",
+      "cwd": ".",
+      "command": [
+        "node_modules/.bin/prettier",
+        "--check",
+        "apps/office/src/calc-ods-worker.ts",
+        "apps/office/src/cppu/inc/com/sun/star/beans/PropertyVetoException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/beans/UnknownPropertyException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/container/ElementExistException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/container/NoSuchElementException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/io/BufferSizeExceededException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/io/IOException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/io/NotConnectedException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/lang/DisposedException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/lang/IllegalArgumentException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/lang/IndexOutOfBoundsException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/lang/NotInitializedException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/lang/WrappedTargetException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/DeploymentException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/Reference.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/exception-values.ts",
+        "apps/office/src/cppu/inc/com/sun/star/xml/dom/DOMException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/xml/sax/SAXException.ts",
+        "apps/office/src/cppu/inc/com/sun/star/xml/sax/SAXParseException.ts",
+        "apps/office/src/cppu/inc/uno/exception-bindings.ts",
+        "apps/office/src/cppuhelper/browser/exception-abi.test.ts",
+        "apps/office/src/cppuhelper/browser/exception-abi.ts",
+        "apps/office/src/cppuhelper/inc/exc_hlp.ts",
+        "apps/office/src/desktop/browser/app/uno-components.ts",
+        "apps/office/src/main.test.ts",
+        "apps/office/src/main.tsx",
+        "apps/office/src/offapi/com/sun/star/embed/InvalidStorageException.ts",
+        "apps/office/src/offapi/com/sun/star/embed/StorageWrappedTargetException.ts",
+        "apps/office/src/offapi/com/sun/star/i18n/MultipleCharsOutputException.ts",
+        "apps/office/src/offapi/com/sun/star/packages/zip/ZipException.ts",
+        "apps/office/src/offapi/com/sun/star/packages/zip/ZipIOException.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/CommandFailedException.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/ContentCreationException.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/IllegalIdentifierException.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/SimpleFileAccess.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/XSimpleFileAccess.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/XSimpleFileAccess2.ts",
+        "apps/office/src/offapi/com/sun/star/ucb/XSimpleFileAccess3.ts",
+        "apps/office/src/offapi/com/sun/star/xml/dom/DocumentBuilder.ts",
+        "apps/office/src/sc/browser/filter/xml/ods-worker-entry.test.ts",
+        "apps/office/src/sc/browser/filter/xml/ods-worker.ts",
+        "apps/office/src/ucbhelper/inc/cancelcommandexecution.ts",
+        "apps/office/src/ucbhelper/source/client/content.ts",
+        "apps/office/src/ucbhelper/source/provider/cancelcommandexecution.ts",
+        "apps/office/src/ucbhelper/source/provider/native-cancelcommandexecution.test.ts",
+        "apps/office/src/udkapi/com/sun/star/script/CannotConvertException.ts",
+        "apps/office/src/unoxml/source/dom/documentbuilder.errors.ts",
+        "apps/office/src/unoxml/source/dom/documentbuilder.test.ts",
+        "apps/office/src/unoxml/source/dom/documentbuilder.ts",
+        "docs/program/javascript-uno-exceptions-and-document-builder.md",
+        "docs/program/native-uno-exception-transport.md",
+        "docs/program/native-xml-document-builder.md",
+        "docs/program/registry/calc/provenance/sc/browser/filter/xml/ods-worker.ts.json",
+        "docs/program/registry/calc/runtime/sc/browser/filter/xml/ods-worker.ts.json",
+        "docs/program/registry/shared/capabilities/CAP-f843f30e-9437-4267-a3b4-902e76c2893c.json",
+        "docs/program/registry/shared/provenance/calc-ods-worker.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/beans/PropertyVetoException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/beans/UnknownPropertyException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/container/ElementExistException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/container/NoSuchElementException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/io/BufferSizeExceededException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/io/IOException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/io/NotConnectedException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/DisposedException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/IllegalArgumentException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/IndexOutOfBoundsException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/NotInitializedException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/WrappedTargetException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/DeploymentException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/Reference.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/exception-values.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/xml/dom/DOMException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/xml/sax/SAXException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/xml/sax/SAXParseException.ts.json",
+        "docs/program/registry/shared/provenance/cppu/inc/uno/exception-bindings.ts.json",
+        "docs/program/registry/shared/provenance/cppuhelper/browser/exception-abi.ts.json",
+        "docs/program/registry/shared/provenance/cppuhelper/inc/exc_hlp.ts.json",
+        "docs/program/registry/shared/provenance/desktop/browser/app/uno-components.ts.json",
+        "docs/program/registry/shared/provenance/main.tsx.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/InvalidStorageException.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/StorageWrappedTargetException.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/i18n/MultipleCharsOutputException.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/packages/zip/ZipException.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/packages/zip/ZipIOException.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/CommandFailedException.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/ContentCreationException.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/IllegalIdentifierException.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/SimpleFileAccess.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/XSimpleFileAccess.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/XSimpleFileAccess2.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/XSimpleFileAccess3.ts.json",
+        "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/DocumentBuilder.ts.json",
+        "docs/program/registry/shared/provenance/ucbhelper/inc/cancelcommandexecution.ts.json",
+        "docs/program/registry/shared/provenance/ucbhelper/source/client/content.ts.json",
+        "docs/program/registry/shared/provenance/ucbhelper/source/provider/cancelcommandexecution.ts.json",
+        "docs/program/registry/shared/provenance/udkapi/com/sun/star/script/CannotConvertException.ts.json",
+        "docs/program/registry/shared/provenance/unoxml/source/dom/documentbuilder.errors.ts.json",
+        "docs/program/registry/shared/provenance/unoxml/source/dom/documentbuilder.ts.json",
+        "docs/program/registry/shared/runtime/calc-ods-worker.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/beans/PropertyVetoException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/beans/UnknownPropertyException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/container/ElementExistException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/container/NoSuchElementException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/io/BufferSizeExceededException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/io/IOException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/io/NotConnectedException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/DisposedException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/IllegalArgumentException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/IndexOutOfBoundsException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/NotInitializedException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/WrappedTargetException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/DeploymentException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/Reference.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/exception-values.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/xml/dom/DOMException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/xml/sax/SAXException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/xml/sax/SAXParseException.ts.json",
+        "docs/program/registry/shared/runtime/cppu/inc/uno/exception-bindings.ts.json",
+        "docs/program/registry/shared/runtime/cppuhelper/browser/exception-abi.ts.json",
+        "docs/program/registry/shared/runtime/cppuhelper/inc/exc_hlp.ts.json",
+        "docs/program/registry/shared/runtime/desktop/browser/app/uno-components.ts.json",
+        "docs/program/registry/shared/runtime/main.tsx.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/InvalidStorageException.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/StorageWrappedTargetException.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/i18n/MultipleCharsOutputException.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/packages/zip/ZipException.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/packages/zip/ZipIOException.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/CommandFailedException.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/ContentCreationException.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/IllegalIdentifierException.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/SimpleFileAccess.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/XSimpleFileAccess.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/XSimpleFileAccess2.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/XSimpleFileAccess3.ts.json",
+        "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/DocumentBuilder.ts.json",
+        "docs/program/registry/shared/runtime/ucbhelper/inc/cancelcommandexecution.ts.json",
+        "docs/program/registry/shared/runtime/ucbhelper/source/client/content.ts.json",
+        "docs/program/registry/shared/runtime/ucbhelper/source/provider/cancelcommandexecution.ts.json",
+        "docs/program/registry/shared/runtime/udkapi/com/sun/star/script/CannotConvertException.ts.json",
+        "docs/program/registry/shared/runtime/unoxml/source/dom/documentbuilder.errors.ts.json",
+        "docs/program/registry/shared/runtime/unoxml/source/dom/documentbuilder.ts.json",
+        "scripts/check-module-boundaries.test.ts",
+        "scripts/fixtures/native-dom-worker-probe.ts",
+        "scripts/module-boundaries/allowed-edges.mjs",
+        "scripts/native-dom-worker-probe.mjs"
+      ],
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "name": "provenance",
+      "cwd": ".",
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-provenance.log",
+      "sha256": "0c8068e91d4df7e03cebe1a42d6dacdec3db122b4f7f7f49fb3c8d25ef2e6fb2"
+    },
+    {
+      "name": "boundaries",
+      "cwd": ".",
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-boundaries.log",
+      "sha256": "64f9e53b5565df648bd9846bbbd78f9884808dd6ffbef66a2ff45b4fe9ee0f57"
+    },
+    {
+      "name": "registry-build",
+      "cwd": ".",
+      "command": "npm run inventory:registry:build",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "name": "registry-check",
+      "cwd": ".",
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-registry-check.log",
+      "sha256": "47bb6bb384d3006e3414938df29e003865bddc83f267c1cc0ec620444d74b5ef"
+    },
+    {
+      "name": "docs",
+      "cwd": ".",
+      "command": "npm run check:docs",
+      "result": "known-baseline-failure",
+      "log": "apps/office/coverage/exception-builder-docs.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    },
+    {
+      "name": "size",
+      "cwd": ".",
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-size.log",
+      "sha256": "dd69166ea7fe936536c75b13dc2bcc678c7a35a9a880611a1a612bab96dc7630"
+    },
+    {
+      "name": "tree",
+      "cwd": ".",
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "name": "boundary-tests",
+      "cwd": ".",
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-boundary-tests.log",
+      "sha256": "379ea90351ef4badb35fdfcb64dd54f1db62cd21f4bea3fff98010d6209c7e96"
+    },
+    {
+      "name": "resource-tests",
+      "cwd": ".",
+      "command": "node_modules/.bin/vitest run scripts/writer-ui-resource-model.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-resource-tests.log",
+      "sha256": "0d34a7ba0d3f598a53940a5aaad029a889f1f3b7440d70ef46112085b1b2b4db"
+    },
+    {
+      "name": "writer-resources",
+      "cwd": ".",
+      "command": "npm run check:writer-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-writer-resources.log",
+      "sha256": "49ea09e8d15def476a1232ad1d36fb3174d784db3eb3a8ef34ed168fd7a56817"
+    },
+    {
+      "name": "calc-resources",
+      "cwd": ".",
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-calc-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "name": "hintids",
+      "cwd": ".",
+      "command": "npm run check:writer-hintids",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-hintids.log",
+      "sha256": "513c109068ebf83b3d6fe448c3c44564ec89a64cd9cb64059b5b4b89d11d887a"
+    },
+    {
+      "name": "doctor",
+      "cwd": ".",
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-doctor.log",
+      "sha256": "21aaf715cd0364e72790144d8f378f7966b2d0078864fb6d18baff11d156046f"
+    },
+    {
+      "name": "routing",
+      "cwd": ".",
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "name": "diff",
+      "cwd": ".",
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/exception-builder-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/calc-ods-worker.ts",
+      "gitBlob": "883ace471ffd92a744fbd06133ef3efbc602d058"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/beans/PropertyVetoException.ts",
+      "gitBlob": "2d8b540b86f9768333951a46c2c7a424f4756e5d"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/beans/UnknownPropertyException.ts",
+      "gitBlob": "db2b12ee58f8203c47695b5e1d6ff2c079dc2a7e"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/container/ElementExistException.ts",
+      "gitBlob": "725241ca20a8885c27d4374fa7f13dbd688fe15e"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/container/NoSuchElementException.ts",
+      "gitBlob": "387d944ea40664fc5a4fae8d8e5929e24eadd55b"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/io/BufferSizeExceededException.ts",
+      "gitBlob": "0cfd381eb2c02d8d1196d29184ee96fa5371a5cd"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/io/IOException.ts",
+      "gitBlob": "8982e83a1dec54e9c5dd191aca403ced9d67e4d2"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/io/NotConnectedException.ts",
+      "gitBlob": "afdc661c9e80433002092de55a9217b60912d8cc"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/lang/DisposedException.ts",
+      "gitBlob": "081abdd596ebf6106c636db9f07a0b99cd3fe796"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/lang/IllegalArgumentException.ts",
+      "gitBlob": "37a486952c5d31c24afe227eed9499078af8a91b"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/lang/IndexOutOfBoundsException.ts",
+      "gitBlob": "2a05546e0d503934fcc37c0d39b3185c3d300e03"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/lang/NotInitializedException.ts",
+      "gitBlob": "412fd560e3dba14c13148dc0e5faa2b3015b5845"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/lang/WrappedTargetException.ts",
+      "gitBlob": "285eacd44f843bc000da01d14f0c3296b0e88117"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException.ts",
+      "gitBlob": "c11b3c810f648d027861c48e8e71fc57a638e6d7"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/uno/DeploymentException.ts",
+      "gitBlob": "40aa659cfd0aa6cb60ce1052ce9794734e9ccaac"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/uno/Reference.ts",
+      "gitBlob": "e1f3b8781a692811821e20281f8f71a7c2404907"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/uno/exception-values.ts",
+      "gitBlob": "61814c48c862024b7159dc55677e78c9dfa82b3f"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/xml/dom/DOMException.ts",
+      "gitBlob": "6fc040311942306fa548e38055109b03f4b09f23"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/xml/sax/SAXException.ts",
+      "gitBlob": "2668171152b584122c8f3ea2f9dd218e2a494492"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/xml/sax/SAXParseException.ts",
+      "gitBlob": "44f854b69086179075392188d6d128f17fb88b61"
+    },
+    {
+      "path": "apps/office/src/cppu/inc/uno/exception-bindings.ts",
+      "gitBlob": "b464a7855ff407d7bbabc4abdcda23f3179aa64b"
+    },
+    {
+      "path": "apps/office/src/cppuhelper/browser/exception-abi.test.ts",
+      "gitBlob": "035fc2ab2b01ed1fc1a240682e1ea552caaf348e"
+    },
+    {
+      "path": "apps/office/src/cppuhelper/browser/exception-abi.ts",
+      "gitBlob": "40d7c03351c116581253f4565522aca7156d6a23"
+    },
+    {
+      "path": "apps/office/src/cppuhelper/inc/exc_hlp.ts",
+      "gitBlob": "673f0c7d7c844fb0819764107e3e45e03e663a94"
+    },
+    {
+      "path": "apps/office/src/desktop/browser/app/uno-components.ts",
+      "gitBlob": "e1d32d8f41b7d5d1d8218f9639e17c797317e07f"
+    },
+    {
+      "path": "apps/office/src/main.test.ts",
+      "gitBlob": "65672dde08dfeace0e6395968f3b82d2cca731f5"
+    },
+    {
+      "path": "apps/office/src/main.tsx",
+      "gitBlob": "a52658c57bb8371eea61b4de252787e7e97d817e"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/embed/InvalidStorageException.ts",
+      "gitBlob": "1149c5578eebb6cdfbc4af1c59cb2525fc2da7bb"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/embed/StorageWrappedTargetException.ts",
+      "gitBlob": "f2ba7c2c996e914e43b8e67520c2289e6d3fdd57"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/i18n/MultipleCharsOutputException.ts",
+      "gitBlob": "24a68028bda0b6d4472f4fede24433a6cdbad382"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/packages/zip/ZipException.ts",
+      "gitBlob": "b0fc2424fc4a25c2b7caad9dfe00446c78df1cab"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/packages/zip/ZipIOException.ts",
+      "gitBlob": "e0f1dcae0373a6f06dbede48cd0e96a46cfef812"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/CommandFailedException.ts",
+      "gitBlob": "c0447c69b579cd9e45ece3076dfe2aa9289a8e38"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/ContentCreationException.ts",
+      "gitBlob": "23805b6177edb6709ced4eba744923bbc23117a5"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/IllegalIdentifierException.ts",
+      "gitBlob": "f1634c762817465ec9f4747d2edb2cbe0b1a742f"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/SimpleFileAccess.ts",
+      "gitBlob": "3a8a82773443392e127bff9aad1079b74de0f0a7"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/XSimpleFileAccess.ts",
+      "gitBlob": "e4e34b3e17ba5e5bf920fb0ffa0e9645fe63dc89"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/XSimpleFileAccess2.ts",
+      "gitBlob": "c974a6b03e1ca39f3eb08e2917be6136c4f56b09"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/XSimpleFileAccess3.ts",
+      "gitBlob": "55cfb4fd85130f34acb3c1cb51d73156d23d8c9e"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/xml/dom/DocumentBuilder.ts",
+      "gitBlob": "b3c18cabcbd065bbeaa5f9e5a50fcc8a888d5042"
+    },
+    {
+      "path": "apps/office/src/sc/browser/filter/xml/ods-worker-entry.test.ts",
+      "gitBlob": "b18570a0c86cf7545799eff67a4b1d1e78d560db"
+    },
+    {
+      "path": "apps/office/src/sc/browser/filter/xml/ods-worker.ts",
+      "gitBlob": "47343466990cfc8e48384b4a9c03fe2db1a5d484"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/inc/cancelcommandexecution.ts",
+      "gitBlob": "56aa2a85a7f9dbe3ae73a8ff86a5617202da3d72"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/client/content.ts",
+      "gitBlob": "98cae5f3ba4c5777c8074f3f4e69d2ec3ee5d30e"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/provider/cancelcommandexecution.ts",
+      "gitBlob": "159b328990d8d8d9e4f04a32fd821baa2f806dfa"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/provider/native-cancelcommandexecution.test.ts",
+      "gitBlob": "29dee2451214b412fba8065063ebe5c2ab244b7e"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/script/CannotConvertException.ts",
+      "gitBlob": "30c3ceaeb10b635daf2c94ab8ac513fbebfdcb48"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/documentbuilder.errors.ts",
+      "gitBlob": "5d458efa1d2166c05763681483801775c7307f54"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/documentbuilder.test.ts",
+      "gitBlob": "2e94f888505a1583c51be8c5751451daac22931a"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/documentbuilder.ts",
+      "gitBlob": "0e1b2db85c32f6698539a5a1dff51fdef4ff9f1b"
+    },
+    {
+      "path": "docs/program/javascript-uno-exceptions-and-document-builder.md",
+      "gitBlob": "5210f26458d358c51c0b337728ea1e69930026cf"
+    },
+    {
+      "path": "docs/program/native-uno-exception-transport.md",
+      "gitBlob": "b424b4048e665dc7dc07f3b51a8f77c8778d882d"
+    },
+    {
+      "path": "docs/program/native-xml-document-builder.md",
+      "gitBlob": "8359989ca402ed0117f98c1dc8f61b6e9fd60a65"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/browser/filter/xml/ods-worker.ts.json",
+      "gitBlob": "9527cae9fd8365977acf112ad8ee0d9d878e60c2"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/browser/filter/xml/ods-worker.ts.json",
+      "gitBlob": "9085a4d55b266f3ac66f29f9ccea4d3e059e8ae4"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-f843f30e-9437-4267-a3b4-902e76c2893c.json",
+      "gitBlob": "9029f612124f4895ebd7bcbce8a4bcc84d2df41d"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/calc-ods-worker.ts.json",
+      "gitBlob": "403d44391b56b8b5d3819f3ab979f2015a537c18"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/beans/PropertyVetoException.ts.json",
+      "gitBlob": "4115677c964ed83eaa1c2f495d388983e18fcae7"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/beans/UnknownPropertyException.ts.json",
+      "gitBlob": "4197c7861504bdfdf7381e24d78daaca1dbb7877"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/container/ElementExistException.ts.json",
+      "gitBlob": "e1f2dd61cb35ddafb853adf86d52332a6d5fb401"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/container/NoSuchElementException.ts.json",
+      "gitBlob": "6e0f5ad950a758af822704d31b4a2b17c27d9950"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/io/BufferSizeExceededException.ts.json",
+      "gitBlob": "1439a8f6e560d0faf9e3f116f7aa221064f1666e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/io/IOException.ts.json",
+      "gitBlob": "50aaa751a4374a77f0edf7de8300ab157234e175"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/io/NotConnectedException.ts.json",
+      "gitBlob": "12e3b80f8425673cca79d6085a568e9a31879ed6"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/DisposedException.ts.json",
+      "gitBlob": "75ebf18c5dbbc162567475fd3906d1ff959e06d7"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/IllegalArgumentException.ts.json",
+      "gitBlob": "8ac6906e84be22cc30addd527fbcede281dd43f6"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/IndexOutOfBoundsException.ts.json",
+      "gitBlob": "8af3878622d9e7b2548d9bf23c76042d28aa870f"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/NotInitializedException.ts.json",
+      "gitBlob": "6342e0ff72638502e7e94b9a9d270d860efe6202"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/WrappedTargetException.ts.json",
+      "gitBlob": "7ed1d874713c46d354c6be4676cd3a0d7b5f088f"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException.ts.json",
+      "gitBlob": "5bc85c48019c9e5bcd0e55f6fc0811b4b3b81126"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/DeploymentException.ts.json",
+      "gitBlob": "868009bc7d25c18909524218f6bfcec3da6cdb00"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/Reference.ts.json",
+      "gitBlob": "cc1f693011a5b517d4548695a13acfd519972220"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/exception-values.ts.json",
+      "gitBlob": "331e6c295209489b6af8a97c78331d100da7d8d4"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/xml/dom/DOMException.ts.json",
+      "gitBlob": "538b896bfed01b1e29fafce90ab9fad7488bc917"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/xml/sax/SAXException.ts.json",
+      "gitBlob": "ce6e2cb85c8f2e0addbfa85a53067c7cc74b4ad7"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/xml/sax/SAXParseException.ts.json",
+      "gitBlob": "056382215e2b0a76ed2ef602a524da5ed6cbc2ad"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppu/inc/uno/exception-bindings.ts.json",
+      "gitBlob": "d87f8bee62a085715f511711e64522a23c4fe686"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppuhelper/browser/exception-abi.ts.json",
+      "gitBlob": "382990ad63d312ee19a861feb6eab68fa8351e10"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/cppuhelper/inc/exc_hlp.ts.json",
+      "gitBlob": "155eb66225978ce997fd8a51754e7acaf9c0d6bc"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/desktop/browser/app/uno-components.ts.json",
+      "gitBlob": "c3522a95120b35ffc2621ee51c9f00fadb9e7ae1"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/main.tsx.json",
+      "gitBlob": "526f4d933fce10d6ccfa4d6cc55763b67103273a"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/InvalidStorageException.ts.json",
+      "gitBlob": "65783a5d1b69eb45f894d561eb9af38d1fe10199"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/StorageWrappedTargetException.ts.json",
+      "gitBlob": "a74504d62c6eb9368f15af24e4cbb3642acd5a60"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/i18n/MultipleCharsOutputException.ts.json",
+      "gitBlob": "b13e44f1c5d67cdf5346d0b845e53adf67608b3f"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/packages/zip/ZipException.ts.json",
+      "gitBlob": "8623646f575faf4bdbf9c21d026168484abc914c"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/packages/zip/ZipIOException.ts.json",
+      "gitBlob": "b0864bbec60d2dae75dec74ee2ea206615d24cf6"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/CommandFailedException.ts.json",
+      "gitBlob": "8c52be9ff6cb79af45f5dbac4c7aa703cf4e2750"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/ContentCreationException.ts.json",
+      "gitBlob": "5a67b0078fa643c0f654e5783339b983d925fadc"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/IllegalIdentifierException.ts.json",
+      "gitBlob": "06026b6734a85efca359e0d07eb31a2ea7aaaded"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/SimpleFileAccess.ts.json",
+      "gitBlob": "140b09e4af3f2bf959d5d0b8280e4b8a8ffcbdca"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/XSimpleFileAccess.ts.json",
+      "gitBlob": "0fb8f397cf3f861b5bffc407ee461237de8a0515"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/XSimpleFileAccess2.ts.json",
+      "gitBlob": "405f9ee527e023890a7241b21bc66f8fa9e0ea75"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/XSimpleFileAccess3.ts.json",
+      "gitBlob": "bfe470759c07319d19ca90f1c91e09ddad2b3efd"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/dom/DocumentBuilder.ts.json",
+      "gitBlob": "d5ea91a7007592d824072dbb1268edf72cf6b3e2"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/inc/cancelcommandexecution.ts.json",
+      "gitBlob": "715c8826cb6ca20a4200760de8c732cda2762b6f"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/source/client/content.ts.json",
+      "gitBlob": "140cc0f67f5548578359634e564d655c307ebc6d"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucbhelper/source/provider/cancelcommandexecution.ts.json",
+      "gitBlob": "c7db9585c6612eff97934d5fd69c368557456763"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/udkapi/com/sun/star/script/CannotConvertException.ts.json",
+      "gitBlob": "e776329df5a2653f2455b1713f27f337fe836539"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/documentbuilder.errors.ts.json",
+      "gitBlob": "55dbd0a5f41a5390cfcda5142720a5505799dd9d"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/documentbuilder.ts.json",
+      "gitBlob": "c5ce307ef4f7a2d63fa254bf011f7a3fb0e08c53"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/calc-ods-worker.ts.json",
+      "gitBlob": "9dc2daf83552ca923eb06eebe4ccb24ce16128bb"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/beans/PropertyVetoException.ts.json",
+      "gitBlob": "7379073e77b06137e60f47e09833976e796efec5"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/beans/UnknownPropertyException.ts.json",
+      "gitBlob": "d253b06ff57f0ca032cf49e628c74513ff9c34a4"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/container/ElementExistException.ts.json",
+      "gitBlob": "05fad2e7e86b8b5e1d9df4b05b1402440b952a99"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/container/NoSuchElementException.ts.json",
+      "gitBlob": "29e537e3b46e812c2d3be764e838505620857510"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/io/BufferSizeExceededException.ts.json",
+      "gitBlob": "da2514eb4a84800b6d677d99deac258b4954c73f"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/io/IOException.ts.json",
+      "gitBlob": "46b2cf6993a8f4e5088e32887f7684ce23397bec"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/io/NotConnectedException.ts.json",
+      "gitBlob": "9acc83e90f5a885bbd6c5c303c2ed718602fc01f"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/DisposedException.ts.json",
+      "gitBlob": "78ddb7ba6755f1214b5508bac341fa2c6857125c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/IllegalArgumentException.ts.json",
+      "gitBlob": "514106d79d7088c0138cd249b7f24b9445f91ae1"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/IndexOutOfBoundsException.ts.json",
+      "gitBlob": "cd986453fc76449d4ff99ba3166e7bd62de517bd"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/NotInitializedException.ts.json",
+      "gitBlob": "d6c924cbb31d459ecc1a6f6662dd98e2daf6df9d"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/WrappedTargetException.ts.json",
+      "gitBlob": "d22d195b819b6f6ba278e42497fadbfb35fbb2ab"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/WrappedTargetRuntimeException.ts.json",
+      "gitBlob": "760af6d06b6cd098bd1cb0285a9a4474e36a29ef"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/DeploymentException.ts.json",
+      "gitBlob": "7bfc81e28fde5642287944844fa6f8ad579086a3"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/Reference.ts.json",
+      "gitBlob": "e3e36fa3e2c44ce6e75d14ff3347e76b638dacfb"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/exception-values.ts.json",
+      "gitBlob": "16afa9ad90d9c948070231f8e756b3c5956c1e6a"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/xml/dom/DOMException.ts.json",
+      "gitBlob": "3a796658530eabcf6ab5141557932fc7b43d1b4e"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/xml/sax/SAXException.ts.json",
+      "gitBlob": "2f1a81220e841ed9cebc75a6ae833cdf58ab0936"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/xml/sax/SAXParseException.ts.json",
+      "gitBlob": "12b266dbd35dfa108f4a9657fbe0c39b99049c30"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppu/inc/uno/exception-bindings.ts.json",
+      "gitBlob": "c4243c34b1aa64da43f4ae013879b14c22b76d92"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppuhelper/browser/exception-abi.ts.json",
+      "gitBlob": "bc5953d3d7cc3b4432b29a6723951b97ebefde7d"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/cppuhelper/inc/exc_hlp.ts.json",
+      "gitBlob": "368dae4160a6d4594c6acf6aa9aec8dff9dbf53f"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/desktop/browser/app/uno-components.ts.json",
+      "gitBlob": "9ea6129f394fe1857a8017570ac5350a2d429469"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/main.tsx.json",
+      "gitBlob": "427a7b24cc2ea66fd39be4a158470e43f4f282f9"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/InvalidStorageException.ts.json",
+      "gitBlob": "5894bbc3454045210f1dcd975c41004fc2999c5c"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/StorageWrappedTargetException.ts.json",
+      "gitBlob": "df77ed9ddf169816f92f8179322b8b6f838b9a09"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/i18n/MultipleCharsOutputException.ts.json",
+      "gitBlob": "60482ccdb0b77c49f3f0d7f5465022a06c88b030"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/packages/zip/ZipException.ts.json",
+      "gitBlob": "b5b8c07455869e8f50ae9cfb96bc0dddd0626517"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/packages/zip/ZipIOException.ts.json",
+      "gitBlob": "f9b3fe5411efda71bb69d914f769b28db5ab3cc3"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/CommandFailedException.ts.json",
+      "gitBlob": "e8df19530f1114bc36c4d956d29283f3076d4955"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/ContentCreationException.ts.json",
+      "gitBlob": "18b2aa3be04492c8b81312893acba8164995c55b"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/IllegalIdentifierException.ts.json",
+      "gitBlob": "a3ded8d489e80e4ac6dc12ad09ecd745d7a5a820"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/SimpleFileAccess.ts.json",
+      "gitBlob": "93dbf39cee2279456ff872b2fb841527f8353d95"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/XSimpleFileAccess.ts.json",
+      "gitBlob": "5eb67bf12b0f332468718df138450084b2598412"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/XSimpleFileAccess2.ts.json",
+      "gitBlob": "b83897da9dad85c0388b8a9f6a67ffbc7ad82e72"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/XSimpleFileAccess3.ts.json",
+      "gitBlob": "442ec83f8f322b1bfd595c0953b37450b7287309"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/dom/DocumentBuilder.ts.json",
+      "gitBlob": "66bbdcc5f43f58425c6c886a643cd4359e68b976"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/inc/cancelcommandexecution.ts.json",
+      "gitBlob": "c47f837004b132b3aa3fe098216e34fab2520c8f"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/source/client/content.ts.json",
+      "gitBlob": "21d7857642dbaf70d6240181705b93b0f5faa341"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucbhelper/source/provider/cancelcommandexecution.ts.json",
+      "gitBlob": "d0351c557ce76373e9aee5337c27638a86d2d0cf"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/udkapi/com/sun/star/script/CannotConvertException.ts.json",
+      "gitBlob": "4d93158f8c81d657788b3484c30f3df91784513a"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/documentbuilder.errors.ts.json",
+      "gitBlob": "dd4d37165f50846f5f3de68aeb47d6c1e28abd2f"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/documentbuilder.ts.json",
+      "gitBlob": "053ac6665a72b3f4edf71bf4b7dbec54861ed950"
+    },
+    {
+      "path": "scripts/check-module-boundaries.test.ts",
+      "gitBlob": "73be105389fc8a4910a858cc89c83f62343aa49a"
+    },
+    {
+      "path": "scripts/fixtures/native-dom-worker-probe.ts",
+      "gitBlob": "0c33ef1f58301ae6801fd94672374c171f6290f2"
+    },
+    {
+      "path": "scripts/module-boundaries/allowed-edges.mjs",
+      "gitBlob": "b9ca2e50ba23cb67e56a85f8f498f26f1ca4a920"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "gitBlob": "c1e16eab5efdd5db7427929c11a89cb2826620e1"
+    }
+  ],
+  "upstreamBlobs": [
+    {
+      "path": "include/cppuhelper/exc_hlp.hxx",
+      "gitBlob": "fa3c3d05b331c89ced76584e95196800d9b9c0a2"
+    },
+    {
+      "path": "cppuhelper/qa/misc/test_misc.cxx",
+      "gitBlob": "d4e45ab0da667f981ccaa8ae5f762106b1e02ffc"
+    },
+    {
+      "path": "ucbhelper/source/provider/cancelcommandexecution.cxx",
+      "gitBlob": "57166e49b065bc5fd20d25588ab245e9a8ebd0a6"
+    },
+    {
+      "path": "include/ucbhelper/cancelcommandexecution.hxx",
+      "gitBlob": "d733739ba8a77af48d680d5ca492ef087b03ffd7"
+    },
+    {
+      "path": "ucbhelper/source/client/content.cxx",
+      "gitBlob": "fc655353dd98c233c6fcee552ce65c8bc2c330e6"
+    },
+    {
+      "path": "offapi/com/sun/star/ucb/CommandFailedException.idl",
+      "gitBlob": "b2ec8b8d14baa38f19386f8d3e82c36e04447aa6"
+    },
+    {
+      "path": "offapi/com/sun/star/ucb/XSimpleFileAccess.idl",
+      "gitBlob": "f1248cba251a3c204d4428f5ed682a2658eee9e1"
+    },
+    {
+      "path": "offapi/com/sun/star/ucb/XSimpleFileAccess2.idl",
+      "gitBlob": "ab7fc3294a2b717dda72aac857e3bd9ddbd36afa"
+    },
+    {
+      "path": "offapi/com/sun/star/ucb/XSimpleFileAccess3.idl",
+      "gitBlob": "2a94b9cf9c64e529b91bbed7cd006d0728f557a7"
+    },
+    {
+      "path": "offapi/com/sun/star/ucb/SimpleFileAccess.idl",
+      "gitBlob": "aa279c6f2d7491b3f8a705fa433ea8b05fe7e0f9"
+    },
+    {
+      "path": "offapi/com/sun/star/xml/dom/DocumentBuilder.idl",
+      "gitBlob": "189c60dc172e99248f4fecfe3537aea9184c8dd6"
+    },
+    {
+      "path": "unoxml/source/dom/documentbuilder.cxx",
+      "gitBlob": "9183735f686ce26e55df8c234caecd1a2fcaf38f"
+    },
+    {
+      "path": "unoxml/source/dom/documentbuilder.hxx",
+      "gitBlob": "c63a8970d2899332cdae49c0b8d76399f9159598"
+    },
+    {
+      "path": "unoxml/source/service/unoxml.component",
+      "gitBlob": "6591bde6a70e0673252f07357236945a19c92f7c"
+    },
+    {
+      "path": "unoxml/Library_unoxml.mk",
+      "gitBlob": "a0a9d805ab29e05ffff3f6c52a79810444ef1ded"
+    },
+    {
+      "path": "unoxml/qa/unit/domtest.cxx",
+      "gitBlob": "8d872d765f7e0aeb0d1d97079c19f20c640c5b8e"
+    }
+  ]
+}
