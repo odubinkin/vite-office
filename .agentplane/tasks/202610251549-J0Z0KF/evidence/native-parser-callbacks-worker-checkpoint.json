@@ -1,0 +1,444 @@
+{
+  "status": "in-progress-checkpoint",
+  "task": "202610251549-J0Z0KF",
+  "baselineHead": "a66546b33b6ee9c9dfe22f3ecf75ca869c830893",
+  "scope": "Native C SAX callback ABI, IO context lifetime, source resolver body and genuine UNO DOM Worker qualification; not a completed DocumentBuilder or DOCX/XLSX file/UI path",
+  "tests": {
+    "relatedFiles": 13,
+    "relatedCases": 120,
+    "boundaryCases": 48,
+    "resourceCases": 2,
+    "result": "pass"
+  },
+  "coverage": {
+    "owners": [
+      "external/libxml2/parsercallbacks.ts",
+      "unoxml/source/dom/documentbuilder.io.ts",
+      "unoxml/source/dom/documentbuilder.resolve.ts"
+    ],
+    "aggregate": {
+      "statements": 98.78,
+      "branches": 92.3,
+      "functions": 100,
+      "lines": 100
+    },
+    "threshold": 90,
+    "result": "pass",
+    "unqualified": [
+      "Resolver null-system-ID branch",
+      "IO host-only read exception branch"
+    ],
+    "wholeDomGate": "Still incomplete; prior full DOM tree coverage remains below 90%."
+  },
+  "upstreamFixtureBytes": {
+    "byteIdenticalToOriginalCLiterals": true,
+    "fixtures": {
+      "validTestFile": {
+        "bytes": 352,
+        "sha256": "e0cd5e9c18c24d66da43b3690cdd684cda8ce9db59bdb696ddee13bd6803ab1e"
+      },
+      "warningTestFile": {
+        "bytes": 372,
+        "sha256": "cccf93ab6505175c0d6a8d2565cd61d77b2b1b8925cd3c4506c4c215ac44fd7d"
+      },
+      "errorTestFile": {
+        "bytes": 237,
+        "sha256": "f4af67cc7c4c280010dcccc35c38e889e8afe870f6456dba7e43b423b838e771"
+      }
+    }
+  },
+  "workerGraph": {
+    "workerResult": {
+      "globals": {
+        "window": "undefined",
+        "document": "undefined",
+        "DOMParser": "undefined"
+      },
+      "rootName": "document-content",
+      "attribute": "1.0",
+      "listCounts": [
+        0,
+        1,
+        0
+      ],
+      "sameOwner": true,
+      "unicode": "\ud83d\ude00\u5b57",
+      "utf16Length": 3,
+      "borrowedStreamOpen": true,
+      "warnings": 1,
+      "errors": 0,
+      "warningLine": 1
+    },
+    "mainResult": {
+      "globals": {
+        "window": "object",
+        "document": "object",
+        "DOMParser": "function"
+      },
+      "rootName": "document-content",
+      "attribute": "1.0",
+      "listCounts": [
+        0,
+        1,
+        0
+      ],
+      "sameOwner": true,
+      "unicode": "\ud83d\ude00\u5b57",
+      "utf16Length": 3,
+      "borrowedStreamOpen": true,
+      "warnings": 1,
+      "errors": 0,
+      "warningLine": 1
+    }
+  },
+  "nativeArtifact": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 135,
+    "enumConstantCount": 108,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "b827c5638e3a9362d94abfc4e7341073ea91eaac0cd05e3080cfa3f106af9fdd"
+  },
+  "nativeRebuild": {
+    "byteIdentical": true,
+    "sha256": {
+      "libxml2.mjs": "b827c5638e3a9362d94abfc4e7341073ea91eaac0cd05e3080cfa3f106af9fdd",
+      "index.d.ts": "3c4f29286697e1ba344a272e081661529202acd361194389cfaf641399e1eb88",
+      "constants.mjs": "d28e382ade7c078d8cb6723f9cf8fbc8d613dbeb46c4864b25b59d3d3208fcd1",
+      "constants.d.ts": "c419ac7c444dbfb05e70dea21d5af7317c963f4ab612a7a22c902b1b1ae8c551",
+      "generated-api.json": "becf66a5a9e1c8e5a899dde446cfa2485ff019ed73de2d845c56df21c33762aa",
+      "artifact.json": "0a23e5926c1f360491cddb4ded35925ff901027d9fbe05b2a6ac32614fe9e1db"
+    }
+  },
+  "corrections": [
+    "Unique callback registration identity prevents an older scope from deleting a replacement that reuses the same callback object. Covered through actual C SAX warning dispatch.",
+    "Initial Worker Unicode fixture read an input text wrapper after native coalescing had invalidated it; the fixture now appends to a genuine empty element. Production merge behavior is unchanged.",
+    "Native test pointer access narrows actual CNode RTTI rather than casting an interface to a concrete owner.",
+    "Source SDK edge unoxml -> udkapi is explicitly allowed, matching Library_unoxml.mk use_sdk_api and XInputStream consumption."
+  ],
+  "preservedFindings": [
+    "CALC-532 / WRITER466: returned resolver encoding/IDs remain unused",
+    "CALC-533 / WRITER467: insertBefore returns the old reference child, emits no subtree event and leaves cached element lists stale until another source mutation"
+  ],
+  "knownBaseline": [
+    "Only preexisting css-style-matchers.ts JSDoc errors at lines 17 and 76 remain.",
+    "Doctor has zero errors and the preexisting older managed hook shim warning."
+  ],
+  "remaining": [
+    "Full CDocumentBuilder orchestration, UCB default resolver/URI dependencies and service registration",
+    "Original service-bootstrap parser QA and remaining upstream DOM QA",
+    "Whole DOM coverage gate",
+    "XPath and document SAX/IO facets",
+    "Native metadata initialization",
+    "Complete DOCX/XLSX import/export, shell routing and existing UI acceptance"
+  ],
+  "fullSuite": "Not run; approved once-per-ten-agentplane-task cadence remains unchanged. These epics are open.",
+  "checks": [
+    {
+      "name": "related-tests",
+      "cwd": "apps/office",
+      "command": "npx vitest run --config vite.config.ts src/unoxml src/external/libxml2/parsercallbacks.test.ts src/offapi/com/sun/star/xml/sax/SAXParseException.test.ts src/offapi/com/sun/star/xml/dom/native-dom-values.test.ts src/sax/source/fastparser/InputSource.test.ts --coverage --coverage.include=src/external/libxml2/parsercallbacks.ts --coverage.include=src/unoxml/source/dom/documentbuilder.io.ts --coverage.include=src/unoxml/source/dom/documentbuilder.resolve.ts --coverage.reportsDirectory=coverage/dom-builder-callbacks --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.functions=90 --coverage.thresholds.branches=90",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-coverage-complete.log",
+      "sha256": "3444e4380bea6a961317b49d83c666d64ba69b8aadbd48b53f8d47bf158a6e34"
+    },
+    {
+      "name": "tools-and-app-typecheck",
+      "cwd": ".",
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "name": "final-app-typecheck",
+      "cwd": ".",
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-app-typecheck-final.log",
+      "sha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2"
+    },
+    {
+      "name": "build",
+      "cwd": ".",
+      "command": "npm run build",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-build.log",
+      "sha256": "d39f656f756ba7dd9120f6396496e4c4cef16e5c535b175a134eb80d57b54a6d"
+    },
+    {
+      "name": "static",
+      "cwd": ".",
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-static.log",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    {
+      "name": "scoped-lint",
+      "cwd": ".",
+      "command": "npx eslint <changed native callback, resolver, fixture and Worker-probe files> --max-warnings 0",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "extra-scoped-lint",
+      "cwd": ".",
+      "command": "npx eslint apps/office/src/unoxml/source/dom/native-tree.test.ts scripts/module-boundaries/allowed-edges.mjs --max-warnings 0",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-extra-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "scoped-format",
+      "cwd": ".",
+      "command": "npx prettier --check <all changed supported source/docs/registry files>",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-format-final.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "name": "dependencies",
+      "cwd": ".",
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-boundaries.log",
+      "sha256": "6b32a9768896b1a0f10b77a57cf14de843c92193a7301c5b84882eda097ed86f"
+    },
+    {
+      "name": "boundary-tests",
+      "cwd": ".",
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-boundary-tests.log",
+      "sha256": "0de9af3f5a7df497cd02a335b9e52552ef0cfad0bfcd64baa4297f551f21c3a6"
+    },
+    {
+      "name": "source-provenance",
+      "cwd": ".",
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-provenance.log",
+      "sha256": "13c632f571f33de308ca5e20ec41bff348c9a842f1e4062eda40aaab1fe87a2e"
+    },
+    {
+      "name": "registry",
+      "cwd": ".",
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-registry-check.log",
+      "sha256": "89d2a7b2c7e61baa4b494f026ea2f7674befbe526d5747634ef0bbb4c9432179"
+    },
+    {
+      "name": "file-size",
+      "cwd": ".",
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-size.log",
+      "sha256": "0b228fa9721bafefabe63270e6994e34705ffe457da8886d67ea2a6eec650ac2"
+    },
+    {
+      "name": "source-tree",
+      "cwd": ".",
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-source-tree.log",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    {
+      "name": "worker-and-main-graph",
+      "cwd": ".",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=$PWD/node_modules/.cache/ms-playwright node --experimental-strip-types scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-browser-current.log",
+      "sha256": "6a899e703ce12f91b50bb95e88ea958281b8e96985cef621454616eeb2464a7b"
+    },
+    {
+      "name": "native-rebuild",
+      "cwd": ".",
+      "command": "python3 scripts/build-libxml2-wasm.py; compare all six generated artifact hashes",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-rebuild.log",
+      "sha256": "56d80d6c4d77a13254005b605e5212823abb15fa8d9b1568a16385fe3b98692c"
+    },
+    {
+      "name": "writer-resources",
+      "cwd": ".",
+      "command": "npm run check:writer-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-writer-resources.log",
+      "sha256": "ae113f8336d296d43482a837c62e8de5e96d4947a007af6e5ea80a3c484c8fc5"
+    },
+    {
+      "name": "calc-resources",
+      "cwd": ".",
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-calc-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "name": "hintids",
+      "cwd": ".",
+      "command": "npm run check:writer-hintids",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-hintids.log",
+      "sha256": "513c109068ebf83b3d6fe448c3c44564ec89a64cd9cb64059b5b4b89d11d887a"
+    },
+    {
+      "name": "doctor",
+      "cwd": ".",
+      "command": "ap doctor",
+      "result": "pass-existing-warning",
+      "log": "apps/office/coverage/dom-builder-callback-doctor.log",
+      "sha256": "679af7127ebd0c2d15d29e8e450291f753f300e9f7e596cea6b1b362f6cfc6c2"
+    },
+    {
+      "name": "routing",
+      "cwd": ".",
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/dom-builder-callback-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "name": "jsdoc",
+      "cwd": ".",
+      "command": "npm run check:docs",
+      "result": "baseline-failure",
+      "log": "apps/office/coverage/dom-builder-callback-jsdoc.log",
+      "sha256": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492"
+    }
+  ],
+  "sourceBlobs": [
+    {
+      "path": "apps/office/src/external/libxml2/parsercallbacks.test.ts",
+      "gitBlob": "8da3491a5bf994f8f9eb9b848195c62167bc0f04"
+    },
+    {
+      "path": "apps/office/src/external/libxml2/parsercallbacks.ts",
+      "gitBlob": "76f43ff30c243433ac11c6c0183c95f64378d6cf"
+    },
+    {
+      "path": "apps/office/src/test/native-builder-fixtures.ts",
+      "gitBlob": "74ffbe68bbc836dd80b70df0617dd99dbba103a3"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/documentbuilder.io.test.ts",
+      "gitBlob": "6e0c4210d40fd54b79d9b57731f2b078efaa4dd8"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/documentbuilder.io.ts",
+      "gitBlob": "629f0fcfb4a94d9fc5f72270331ffb5133518dcd"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/documentbuilder.resolve.ts",
+      "gitBlob": "eccd9b89b1fa6fabb5c8be2c786cd2588b8faa11"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/native-parser-callbacks.test.ts",
+      "gitBlob": "793ed151184588c76f92b549b50b1ac7fc99d87c"
+    },
+    {
+      "path": "apps/office/src/unoxml/source/dom/native-tree.test.ts",
+      "gitBlob": "a6924265bccb72b88beb8b2de5af9a34281d4a1e"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "gitBlob": "0993a52d0b4a552254ce62ef5b5921e5036a3be9"
+    },
+    {
+      "path": "docs/program/native-xml-document-builder.md",
+      "gitBlob": "83283b995233de0d570fe7272d5d7cf231d54484"
+    },
+    {
+      "path": "docs/program/native-xml-runtime.md",
+      "gitBlob": "d4f394472b1f3f55c4b0b5ac93bf8de836067f8c"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-50103a1f-6aa6-4b77-b0c4-bd8cf3c650f0.json",
+      "gitBlob": "3220642339557ab6f743fd3d0c9d682c2619d543"
+    },
+    {
+      "path": "docs/program/registry/shared/capabilities/CAP-91436a81-7f1b-4eef-ae3c-06dc8c83f991.json",
+      "gitBlob": "23cd238d57bf0f405bfc5cf587ea7d04a1168cfb"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/external/libxml2/parsercallbacks.ts.json",
+      "gitBlob": "7f75588c4eb0b8785cd8e1321e34738257682cdc"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/documentbuilder.io.ts.json",
+      "gitBlob": "3a4846b6e4c8196d7fe10b7e9a7037e7fd5e1a35"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unoxml/source/dom/documentbuilder.resolve.ts.json",
+      "gitBlob": "149a57acbc2f149cf57882205ce20981c845f565"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/external/libxml2/parsercallbacks.ts.json",
+      "gitBlob": "2c472abbb94e43d240f6f61a3737fa93c8af1a18"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/documentbuilder.io.ts.json",
+      "gitBlob": "0b46d5080ed7745862f5cb8df2460f7772cbfa96"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unoxml/source/dom/documentbuilder.resolve.ts.json",
+      "gitBlob": "5a305436b77311a516bf51ece37aa4c5d496a619"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "259cfee4e9077250afe858a1d239caabc31fbf48"
+    },
+    {
+      "path": "scripts/build-libxml2-wasm.py",
+      "gitBlob": "1a854e6031add2cef55ea46e08eaaede8d2453e3"
+    },
+    {
+      "path": "scripts/fixtures/native-dom-worker-probe.ts",
+      "gitBlob": "33551bb95a96718bccf7261118b80beff5c8c8d1"
+    },
+    {
+      "path": "scripts/module-boundaries/allowed-edges.mjs",
+      "gitBlob": "a885dff662a44bf804494684fc4df595eee8f13b"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "gitBlob": "1cbd4ce56293fd7139d9a749d7fcf4fd1f0cb111"
+    },
+    {
+      "path": "third_party/libxml2-wasm/artifact.json",
+      "gitBlob": "59ec631f5ff0af6759c49c53a26ab1e52556cd7d"
+    },
+    {
+      "path": "third_party/libxml2-wasm/binding.c",
+      "gitBlob": "146e60bfbe3a15b66d03830f1dc2db9152f2eb8f"
+    },
+    {
+      "path": "third_party/libxml2-wasm/constants.d.ts",
+      "gitBlob": "d2303b6885454b809b0101e1362acf76a306e595"
+    },
+    {
+      "path": "third_party/libxml2-wasm/constants.mjs",
+      "gitBlob": "00fb82e35632ce603bac932d9b96ad5c4655ea55"
+    },
+    {
+      "path": "third_party/libxml2-wasm/generated-api.json",
+      "gitBlob": "d7d6ddf44644d2ce36af9c694d4882b5be07219e"
+    },
+    {
+      "path": "third_party/libxml2-wasm/index.d.ts",
+      "gitBlob": "cb644a7463d5b67b6c8331b5b67df8cbe22c8774"
+    },
+    {
+      "path": "third_party/libxml2-wasm/libxml2.mjs",
+      "gitBlob": "53ad05e2b37e246ff7cfac479a6ac79ab794bf59"
+    },
+    {
+      "path": "third_party/libxml2-wasm/source.json",
+      "gitBlob": "e9a75f763a4ce0df8160d3ae9267c69d37e2c72d"
+    }
+  ]
+}

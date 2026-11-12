@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 200
+revision: 203
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T09:43:00.691Z"
+  updated_at: "2026-11-12T10:19:54.992Z"
   updated_by: "CODER"
-  note: "Native DOM/parser checkpoint has 112 passing related cases; changed SAX and builder callback owners exceed 90% across all metrics. Typechecks, build/static, scoped lint/format, dependencies/resources/hintids, provenance/registry, source tree/size, native Chromium probe and reproducible native rebuild pass. Existing JSDoc baseline persists. Whole DOM coverage and full builder/XPath/SAX/metadata/DOCX/XLSX/UI acceptance remain incomplete; see native-dom-tree-builder-dependencies-checkpoint.json."
-  attempts: 61
+  note: "Native callback/resolver Worker checkpoint:120 related cases,48 boundary cases and2 resource cases pass. Changed callback/IO/resolver aggregate passes90 across metrics. Actual UNO graph and native C callbacks pass in Chromium main realm and DOM-free Worker. Rebuild, typechecks, build/static, scoped lint/format, dependencies/provenance/registry/resources/hintids/size/tree, doctor/routing/diff pass except the existing JSDoc baseline. Full builder/UCB, DOM coverage, XPath/SAX, metadata and DOCX/XLSX/UI remain incomplete. Evidence: native-parser-callbacks-worker-checkpoint.json."
+  attempts: 62
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -984,8 +987,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-12T10:19:54.992Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native callback/resolver Worker checkpoint:120 related cases,48 boundary cases and2 resource cases pass. Changed callback/IO/resolver aggregate passes90 across metrics. Actual UNO graph and native C callbacks pass in Chromium main realm and DOM-free Worker. Rebuild, typechecks, build/static, scoped lint/format, dependencies/provenance/registry/resources/hintids/size/tree, doctor/routing/diff pass except the existing JSDoc baseline. Full builder/UCB, DOM coverage, XPath/SAX, metadata and DOCX/XLSX/UI remain incomplete. Evidence: native-parser-callbacks-worker-checkpoint.json."
+  -
+    type: "status"
+    at: "2026-11-12T10:20:02.068Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-12T09:43:08.637Z"
+doc_updated_at: "2026-11-12T10:20:02.068Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -2830,6 +2846,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-12T10:19:54.992Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native callback/resolver Worker checkpoint:120 related cases,48 boundary cases and2 resource cases pass. Changed callback/IO/resolver aggregate passes90 across metrics. Actual UNO graph and native C callbacks pass in Chromium main realm and DOM-free Worker. Rebuild, typechecks, build/static, scoped lint/format, dependencies/provenance/registry/resources/hintids/size/tree, doctor/routing/diff pass except the existing JSDoc baseline. Full builder/UCB, DOM coverage, XPath/SAX, metadata and DOCX/XLSX/UI remain incomplete. Evidence: native-parser-callbacks-worker-checkpoint.json.
+    Attempts: 62
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T10:18:59.073Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -3138,6 +3184,10 @@ sections:
     - Observation: Native DOM/parser dependency checkpoint: 112 related tests in 11 files pass. Whole changed SAXException/SAXParseException and new builder error/IO bodies pass the 90% gate (99.44 statements,98.50 branches,100 functions/lines). The whole DOM tree still needs rework at 75% branches/88.93% lines. Native browser probe and six-artifact reproducibility pass.
       Impact: Real source parser diagnostics and input ownership are available without a fake builder, process context or UCB service. Builder orchestration/UCB, XPath, SAX/IO facets, metadata and DOCX/XLSX file/UI acceptance remain incomplete. The task cannot be marked complete.
       Resolution: Persist native DOM tree and parser dependency work with explicit limitations and continue the approved implementation. Preserve CALC-531/WRITER465 close-failure deletion ordering. OOM from the wrong OUString overload and fixture realm mismatch are corrected; raw failed and final logs are retained. Only the prior css-style-matchers JSDoc baseline remains. Evidence: native-dom-tree-builder-dependencies-checkpoint.json.
+
+    - Observation: Native parser callback checkpoint:120 related cases in13 files,48 boundary cases and2 resource cases pass. Whole changed callback/IO/resolver collection passes90 with98.78 statements,92.30 branches and100 functions/lines. Original three C XML fixtures match byte-for-byte. Actual UNO DOM/parser/stream/mutation-list/Unicode operations pass in Chromium main realm and DOM-free module Worker.
+      Impact: C varargs ABI, nested parser contexts, genuine resolver stream lifetimes and original XML inputs now work through pinned native C. Unique registration scopes prevent stale disposal from deleting a replacement. Full DocumentBuilder/UCB service, whole DOM coverage, XPath/SAX facets, metadata and DOCX/XLSX file/UI remain incomplete.
+      Resolution: Persist this bounded dependency checkpoint and continue the approved epic. Preserve CALC-532/WRITER466 encoding/identifier omission and CALC-533/WRITER467 insertBefore stale-list behavior. Native rebuild is byte-identical. Source SDK dependency is explicit; only prior JSDoc and hook-shim baselines remain. Evidence: native-parser-callbacks-worker-checkpoint.json.
 id_source: "generated"
 ---
 ## Summary
@@ -4992,6 +5042,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-12T10:19:54.992Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native callback/resolver Worker checkpoint:120 related cases,48 boundary cases and2 resource cases pass. Changed callback/IO/resolver aggregate passes90 across metrics. Actual UNO graph and native C callbacks pass in Chromium main realm and DOM-free Worker. Rebuild, typechecks, build/static, scoped lint/format, dependencies/provenance/registry/resources/hintids/size/tree, doctor/routing/diff pass except the existing JSDoc baseline. Full builder/UCB, DOM coverage, XPath/SAX, metadata and DOCX/XLSX/UI remain incomplete. Evidence: native-parser-callbacks-worker-checkpoint.json.
+Attempts: 62
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-12T10:18:59.073Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -5304,3 +5384,7 @@ DecisionContextRef:
 - Observation: Native DOM/parser dependency checkpoint: 112 related tests in 11 files pass. Whole changed SAXException/SAXParseException and new builder error/IO bodies pass the 90% gate (99.44 statements,98.50 branches,100 functions/lines). The whole DOM tree still needs rework at 75% branches/88.93% lines. Native browser probe and six-artifact reproducibility pass.
   Impact: Real source parser diagnostics and input ownership are available without a fake builder, process context or UCB service. Builder orchestration/UCB, XPath, SAX/IO facets, metadata and DOCX/XLSX file/UI acceptance remain incomplete. The task cannot be marked complete.
   Resolution: Persist native DOM tree and parser dependency work with explicit limitations and continue the approved implementation. Preserve CALC-531/WRITER465 close-failure deletion ordering. OOM from the wrong OUString overload and fixture realm mismatch are corrected; raw failed and final logs are retained. Only the prior css-style-matchers JSDoc baseline remains. Evidence: native-dom-tree-builder-dependencies-checkpoint.json.
+
+- Observation: Native parser callback checkpoint:120 related cases in13 files,48 boundary cases and2 resource cases pass. Whole changed callback/IO/resolver collection passes90 with98.78 statements,92.30 branches and100 functions/lines. Original three C XML fixtures match byte-for-byte. Actual UNO DOM/parser/stream/mutation-list/Unicode operations pass in Chromium main realm and DOM-free module Worker.
+  Impact: C varargs ABI, nested parser contexts, genuine resolver stream lifetimes and original XML inputs now work through pinned native C. Unique registration scopes prevent stale disposal from deleting a replacement. Full DocumentBuilder/UCB service, whole DOM coverage, XPath/SAX facets, metadata and DOCX/XLSX file/UI remain incomplete.
+  Resolution: Persist this bounded dependency checkpoint and continue the approved epic. Preserve CALC-532/WRITER466 encoding/identifier omission and CALC-533/WRITER467 insertBefore stale-list behavior. Native rebuild is byte-identical. Source SDK dependency is explicit; only prior JSDoc and hook-shim baselines remain. Evidence: native-parser-callbacks-worker-checkpoint.json.
