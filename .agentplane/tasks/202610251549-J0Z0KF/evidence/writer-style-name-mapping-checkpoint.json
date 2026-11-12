@@ -1,0 +1,510 @@
+{
+  "taskId": "202610251549-J0Z0KF",
+  "checkpoint": "Native Writer style-name tables, actual UI/programmatic name boundaries and ODF named export consumers",
+  "baseCommit": "15433f101299a327aa74fa3e39fa9b109f721a31",
+  "upstream": {
+    "commit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "tag": "libreoffice-26.8.0.2",
+    "paths": [
+      "sw/source/core/doc/SwStyleNameMapper.cxx",
+      "sw/inc/SwStyleNameMapper.hxx",
+      "sw/source/core/doc/DocumentStylePoolManager.cxx",
+      "sw/inc/poolfmt.hxx",
+      "sw/inc/SwGetPoolIdFromName.hxx",
+      "sw/inc/strings.hrc",
+      "include/svx/strings.hrc",
+      "sw/source/core/unocore/unostyle.cxx",
+      "sw/source/uibase/app/docst.cxx",
+      "xmloff/source/style/styleexp.cxx",
+      "xmloff/source/core/xmluconv.cxx",
+      "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu"
+    ]
+  },
+  "implemented": [
+    "All6 normal conversion directions, all26 stable array getters and5 caption conversions over13 source ranges/208 English names, including empty CellStyle. Source exact-family hash/reverse range precedence, user/group masks, fallback/uint16 boundaries and native suffix/default-character/TableStyle rules.",
+    "Actual paragraph format construction stores UI names; represented UNO attach/rename/getName/name lookup use original Fill conversions and keep colliding custom/builtin names distinct, with normal lookup before legacy graph-ID fallback.",
+    "Writer named ODF export queries actual SwXStyle::getName, scopes native strings/wrapper and uses original conditional XML display-name attributes. Current canonical names encode header/parent/follow/body references; no parallel name registry.",
+    "Existing selector, reserved builtin lists and dynamic command labels use original UI resources without materializing unused styles. Programmatic StyleApply arguments remain programmatic; default URI now Standard as in original WriterCommands.xcu. Real dispatcher case checks builtin/custom collision before ID fallback."
+  ],
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 109,
+        "covered": 109,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 122,
+        "covered": 122,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 44,
+        "covered": 44,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 77,
+        "covered": 76,
+        "skipped": 0,
+        "pct": 98.7
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/core/doc/SwStyleNameMapper.ts": {
+      "lines": {
+        "total": 89,
+        "covered": 89,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 39,
+        "covered": 39,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 101,
+        "covered": 101,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 65,
+        "covered": 64,
+        "skipped": 0,
+        "pct": 98.46
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/xml/xmlexp-style-names.ts": {
+      "lines": {
+        "total": 13,
+        "covered": 13,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 14,
+        "covered": 14,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/xmloff/source/style/styleexp.ts": {
+      "lines": {
+        "total": 7,
+        "covered": 7,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 7,
+        "covered": 7,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 10,
+        "covered": 10,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "verification": [
+    {
+      "command": "npx vitest run src/sw/source/core/doc/{native-style-name-mapper,native-integration-boundaries,character-pool,writer-attributes}.test.ts src/sw/source/core/unocore/native-import-style-contracts.test.ts src/sw/source/filter/xml/native-style-name-export.test.ts src/xmloff/source/style/styleexp.test.ts --coverage --coverage.include='src/sw/source/core/doc/SwStyleNameMapper.ts' --coverage.include='src/sw/source/filter/xml/xmlexp-style-names.ts' --coverage.include='src/xmloff/source/style/styleexp.ts' --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-profile.log",
+      "evidence": "247 cases7files;3 whole naming/export modules S122/122 B76/77 F44/44 L109/109. No full SwXStyle/SwXMLExport coverage or ABI claim."
+    },
+    {
+      "command": "npx vitest run src/sw/source/filter/xml/native-style-name-export.test.ts src/sw/source/filter/xml/odt-{style-family-roundtrip,style-container-roundtrip,named-paragraph-ownership,font-style-roundtrip,roundtrip,worker-runtime,worker-client}.test.ts src/xmloff/source/style/styleexp.test.ts",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-export-related.log",
+      "evidence": "63 cases9files;4 cases2files overlap profile. Actual ODF package/worker/owner cycles."
+    },
+    {
+      "command": "npx vitest run src/sw/browser/presentation/writer-style-selector.test.tsx src/sw/source/uibase/app/{docst,docst-by-example,docstyle-preview}.test.ts src/sw/source/core/edit/edfcol-modifier.test.ts",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-ui-tests.log",
+      "evidence": "131 cases5files; actual projection/dialog/dispatcher/native request/history."
+    },
+    {
+      "command": "npx vitest run src/sw/source/filter/ww8/{rtfattributeoutput.style-values,wrtw8sty.styles}.test.ts src/sw/source/writerfilter/rtftok/rtf-{character-styles,list-style}.test.ts",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-rtf-regressions.log",
+      "evidence": "74 cases4files related RTF/style export consumers."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" npx playwright test --config apps/office/playwright.config.ts --project=writer apps/office/e2e/writer-style-selector.spec.ts apps/office/e2e/writer-style-by-example.spec.ts",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-browser.log",
+      "evidence": "4 production Chromium desktop/mobile cases: named ODT import, selector/style dialog, previews, history and actual layout."
+    },
+    {
+      "command": "python3 scripts/generate-writer-style-names.py --check",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-generator.log",
+      "evidence": "13 original range pairs/208 names and5 caption indices; source enums/lengths/resources validated against generated values."
+    },
+    {
+      "command": "npm run generate:writer-resources",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-ui-resources-generate.log",
+      "evidence": "Regenerated tracked native Standard programmatic command alias/inventory, retaining the original UI label."
+    },
+    {
+      "command": "npm run typecheck",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-typecheck-final.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run test:static",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-static.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-writer-resources.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-calc-resources.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run check:writer-hintids",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-hintids.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run check:dependencies",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-dependencies.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-provenance.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-invariants.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run inventory:parity",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-parity.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run check:file-size",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-size.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npm run check:source-tree",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-tree.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-routing.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "git diff --check",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-diff.log",
+      "evidence": "Passed scoped gate."
+    },
+    {
+      "command": "npx eslint $(git diff --name-only -- '*.ts' '*.tsx') apps/office/src/sw/source/core/doc/native-style-name-mapper.test.ts apps/office/src/sw/source/filter/xml/{xmlexp-style-names.ts,native-style-name-export.test.ts} --max-warnings 0",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-lint.log",
+      "evidence": "All changed implementation/test/TS generator files."
+    },
+    {
+      "command": "npx prettier --check $(git diff --name-only -- '*.ts' '*.tsx' '*.json' '*.md') apps/office/src/sw/source/core/doc/{SwStyleNameMapper-data.json,native-style-name-mapper.test.ts} apps/office/src/sw/source/filter/xml/{xmlexp-style-names.ts,native-style-name-export.test.ts} docs/program/writer-style-name-mapping.md docs/program/registry/writer/{runtime,provenance}/sw/source/filter/xml/xmlexp-style-names.ts.json",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-format.log",
+      "evidence": "Changed/new source, generated tables and canonical records/documentation."
+    },
+    {
+      "command": "npm run check:docs",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/writer-style-names-docs.log",
+      "evidence": "Only unchanged css-style-matchers.ts:17 missing JSDoc and :76 documents2/3 parameters."
+    },
+    {
+      "command": "ap doctor",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/writer-style-names-doctor.log",
+      "evidence": "Zero errors; existing managed shim readiness warning and installed pre-push fallback information."
+    }
+  ],
+  "originalQaDisposition": [
+    "All208 original table rows are checked in both directions and generated source values are validated. These are normal-build table invariants, not a claim of executing native binary QA.",
+    "Original _NEED_TO_DEBUG_MAPPING testNameTable is excluded in the normal build and contains stale argument types/order plus wrong final lookup variable (WRITER455). Do not fabricate a runtime result or repair production code to pass it.",
+    "Original sw/qa/extras/odfexport/odfexport3.cxx testTdf129568/testTdf129568ui require unported native table/cell autoformat owners and remain required outstanding full document tests; static mapper cases are not substitutes."
+  ],
+  "sourceIssues": [
+    "Existing WRITER207 suffix length rule preserved for all admitted directions.",
+    "WRITER455 compiled-out stale mapper diagnostic documented without altering source production semantics.",
+    "WRITER456 TableStyle suffix/old-ODF UI-name asymmetry preserved."
+  ],
+  "failedAttemptsAndResolutions": [
+    "Initial table assertion guessed Default Table Style; source STR_TABSTYLE_DEFAULT is Default Style. Corrected the independent fixture literal, preserving source data.",
+    "Initial caption-index extraction assumed spaces around subtraction; source uses mixed whitespace. Match source whitespace and validate all5 original indices. Generator --check compares exact parsed values; repository serializer checked independently.",
+    "An evidence reference to scripts/generate-writer-style-names.py was interpreted as an upstream path by the registry resolver. Kept the tracked generator in source proofs/justification and referenced actual apps/office JSON data in canonical source evidence; no verifier bypass.",
+    "Desktop/mobile selector exposed old ODF UI-name display-name bug after restoring native disambiguation. Fixed actual producer to XStyle programmatic name/conditional-display-name and shared encoded references; no import alias repair or browser assertion weakening.",
+    "Legacy ODF tests assumed unrelated browser IDs survived export or directly renamed the default format despite original IsDefault precondition. Migrated to exact canonical names/owner links, real custom style fixtures, proper encoding and unchanged formatting/history assertions.",
+    "Native resource labels differ from programmatic Text body/Quotations. Updated actual lazy UI/resource/dispatch boundaries to Body Text/Block Quotation and native Standard command URI, regenerated source-owned resources, and checked builtin/custom ID-shadow behavior through actual owners."
+  ],
+  "limitations": [
+    "Dynamic translated UI-language resource maps and physical UIName/ProgName C++ wrapper ownership remain outside this represented English UI slice. Page/numbering adapters elsewhere are not claimed fully migrated.",
+    "Full SwDocStyleSheet/SwDocStyleSheetPool/SwDocShell/default-service and native UNO DisplayName/query/service chains remain unfinished; no fake provider or completed native component is advertised.",
+    "Full current-slice DOCX-XLSX filter/import/export, malformed/stale shell behavior and mounted actual format Open/download/reopen acceptance remain incomplete. Goal remains active.",
+    "Only related cases were run; no whole-suite replay on this checkpoint of the same approved agentplane task, preserving user ten-task cadence.",
+    "Existing global JSDoc baseline remains. No whole-task/goal or module-parity completion claim."
+  ],
+  "sourceBlobs": [
+    {
+      "path": "apps/office/e2e/writer-style-selector.spec.ts",
+      "gitBlob": "a704e74abfcafadda3f3f26e487feb71f5ee5212"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-style-selector.test.tsx",
+      "gitBlob": "1ae7584bad1e728206af872a8b48645adfd3e0b0"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+      "gitBlob": "5d07cb7c9648c4362b7989c0b6457fb3cd884aba"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/SwStyleNameMapper-data.json",
+      "gitBlob": "1842830c02c777ecae3f0fc1cfb83f4fe2f6ca86"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/SwStyleNameMapper.ts",
+      "gitBlob": "d489dee1cf17aad9e78660122b5e77d59c67debd"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/fmtcol.ts",
+      "gitBlob": "3cc857824b9d80f4e8a8b1460f0398c25e3e057a"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/native-style-name-mapper.test.ts",
+      "gitBlob": "c52d038fa92004f36cefcb5181fbb80b1b87490f"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/unocore/unostyle.ts",
+      "gitBlob": "4c339271b1107513dcf5d784de8c47cfe6904a4e"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/native-style-name-export.test.ts",
+      "gitBlob": "90aac67179353e3a6cb763c4f5d93c0f5fb32b63"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-named-paragraph-ownership.test.ts",
+      "gitBlob": "e0e00f53c55a20ab3e22215f8e243aa506f6b1a6"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-roundtrip.test.ts",
+      "gitBlob": "d2bfb087aad7289526823c5bf4a97c9659c62dd1"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlexp-style-names.ts",
+      "gitBlob": "59291587d80efcb78ca8cf27e190cea938f1b390"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+      "gitBlob": "4f1b85a07f48327713d6ca2220324d21696fb019"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/app/docst.test.ts",
+      "gitBlob": "ce407a834c61a3e04aebc678d8a0a6d598177d34"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/app/docst.ts",
+      "gitBlob": "16cd72c6e1f048511210e28a494acc87359f7680"
+    },
+    {
+      "path": "apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands.ts",
+      "gitBlob": "a9f9beaa7bf8c6064fb4bca2b2640a0ac6704138"
+    },
+    {
+      "path": "apps/office/src/sw/uiconfig/swriter/writer-command-resources.ts",
+      "gitBlob": "dded65926289fbe918ad213ee96c3f3a4ed5e2c6"
+    },
+    {
+      "path": "apps/office/src/sw/uiconfig/swriter/writer-ui.generated.json",
+      "gitBlob": "83cefbbd32e2be516a508534955a12866a737e4b"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/style/styleexp.ts",
+      "gitBlob": "2af0796c745a6d0d30405b534a94f3bd2e948074"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/xmloff/source/style/styleexp.ts.json",
+      "gitBlob": "61ea062589e749a387a220559f0ca6c1849373ee"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/xmloff/source/style/styleexp.ts.json",
+      "gitBlob": "0a85b200ef044f4c2b28f2fed5ebe56298e323c4"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/browser/presentation/writer-view-projection.ts.json",
+      "gitBlob": "14dc420cfa7f4b0cc0f1fc0dc2d18ed947559b14"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/doc/SwStyleNameMapper.ts.json",
+      "gitBlob": "3e60f3ae552c2bb675c17f2aed0954c3137041bc"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/doc/fmtcol.ts.json",
+      "gitBlob": "b190825af84fc3bea72fc1f26a792a3f7461c4b0"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/unocore/unostyle.ts.json",
+      "gitBlob": "6643099892a00796096e4a9620f13826fac5e143"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/filter/xml/xmlexp-style-names.ts.json",
+      "gitBlob": "336f46652ae5074658331a3cc262f52b1c657b62"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/filter/xml/xmlexp.ts.json",
+      "gitBlob": "5689f62ae8a284a0571186eda7a93f63439490d5"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/uibase/app/docst.ts.json",
+      "gitBlob": "8948a0a456f86c5cbfa637e6105f3cd75baf46f1"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/uiconfig/swriter/menubar/menubar-commands.ts.json",
+      "gitBlob": "cdac7b30144d811f4105a575f4e59598b20be295"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/uiconfig/swriter/writer-command-resources.ts.json",
+      "gitBlob": "403fa96b7e4ac101301e7a6ec225cfda7f738bc8"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/browser/presentation/writer-view-projection.ts.json",
+      "gitBlob": "3d590504cf3ad127bdca3040e45b23a7ce7eef7c"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/doc/SwStyleNameMapper.ts.json",
+      "gitBlob": "05213461caf9a4012dd44f4e8010b21d72da32c2"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/doc/fmtcol.ts.json",
+      "gitBlob": "6bebacfb39faef23e27b689c40c81f27c8d58ee3"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/unocore/unostyle.ts.json",
+      "gitBlob": "1bfc017e691f0598db4d7845dbebd66f6c27d744"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/filter/xml/xmlexp-style-names.ts.json",
+      "gitBlob": "55dc9ae143eac7ddfb1c5f271b43c9f592c5523f"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/filter/xml/xmlexp.ts.json",
+      "gitBlob": "aa33b741fcb6718f3f3884a25a7513a58fb0f0c8"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/uibase/app/docst.ts.json",
+      "gitBlob": "ea8bb25f643bd0c5bb9866682ff42b223d9d10ae"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/uiconfig/swriter/menubar/menubar-commands.ts.json",
+      "gitBlob": "f715419e53c9a14cf8a13112bb77138536288048"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/uiconfig/swriter/writer-command-resources.ts.json",
+      "gitBlob": "734e76a0448837e7483bca0f78dbd1d9bd2f240e"
+    },
+    {
+      "path": "docs/program/writer-style-name-mapping.md",
+      "gitBlob": "154e64cfddead97552e2d3283d6832a114b3b1b1"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "gitBlob": "68ce2b8fc0bfac7485776cc9cd1df05d2a34e888"
+    },
+    {
+      "path": "scripts/generate-writer-style-names.py",
+      "gitBlob": "8523c85c36bdb7fd7ee6a0e8917a5e084338923d"
+    },
+    {
+      "path": "scripts/generate-writer-ui-resources.ts",
+      "gitBlob": "96295804393a7e2421b23754186a1c69cb262144"
+    }
+  ]
+}
