@@ -1,0 +1,232 @@
+{
+  "sharedEvidence": ".agentplane/tasks/202610251549-J0Z0KF/evidence/native-fastparser-entity-legacy-continuation.json",
+  "status": "unfinished",
+  "checks": [
+    {
+      "command": "../../node_modules/.bin/vitest run src/sax/source/fastparser/fastparser.entity.test.ts src/sax/source/fastparser/InputSource.test.ts src/sax/source/fastparser/fastparser.test.ts src/sax/source/fastparser/FastSaxParser.test.ts src/sax/source/tools/fastattribs.native.test.ts src/sax/source/expatwrap/saxwriter.component.test.ts src/external/libxml2/fastparsercallbacks.test.ts --maxWorkers=2 --coverage --coverage.include='src/sax/source/fastparser/{fastparser.entity,legacyfastparser.handlers}.ts' --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/parser-entity-combined-final",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/parser-entity-combined-final.log",
+      "evidence": "76tests/7files, whole owners S96.29/B95.83/F100/L97.32, each owner independently above90. Actual registered native Writer/token handlers/output streams and public source events; genuine closed-stream callback failures. No fake positive handlers, private fields or failure/counter injection."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/parser-entity-worker-unified.log",
+      "evidence": "Actual Chromium main and DOM-free module Worker; real native Entity/legacy adapters/registered Writer consume explicitly supplied public events. Separate existing C probe still exercises real C-produced SAX2 callbacks. Complete parser assembly NOT qualified."
+    },
+    {
+      "command": "npm run build",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/parser-entity-build.log",
+      "evidence": "Package build stops on exactly4 prior metadata storage type errors; not reported as a successful complete build."
+    },
+    {
+      "command": "../../node_modules/.bin/vite build",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/parser-entity-vite.log",
+      "evidence": "Actual production Vite bundle; separate from package build including app tsc."
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/parser-entity-tools-types-unified.log",
+      "evidence": ""
+    },
+    {
+      "command": "node_modules/.bin/tsc --project apps/office/tsconfig.json --noEmit",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/parser-entity-types-unified.log",
+      "evidence": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(338,9): error TS2304: Cannot find name 'MediaDescriptor'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(410,36): error TS2345: Argument of type 'Sequence<PropertyValue>' is not assignable to parameter of type 'SfxMediumInput'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(411,26): error TS2339: Property 'GetOutputStorage' does not exist on type 'SfxMedium'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(438,27): error TS2339: Property 'Commit' does not exist on type 'SfxMedium'.\n"
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/check-source-provenance.ts",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/parser-entity-provenance.log",
+      "evidence": "2519 runtime modules,2290 mapped,192 browser adaptations,37 infrastructure."
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/parser-entity-registry.log",
+      "evidence": "semanticViolationCount0; broad semantics/defaults still unverified."
+    },
+    {
+      "command": "node scripts/check-module-boundaries.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/parser-entity-boundaries.log",
+      "evidence": "Existing comphelper->sax->comphelper cycle retained; no alias/exemption."
+    },
+    {
+      "command": "node scripts/check-jsdoc.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/parser-entity-jsdoc-final.log",
+      "evidence": "160 older diagnostics; current fixture parameter documentation corrected. No current Entity/adapter/input helper diagnostic remains."
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/sax/source/fastparser/{fastparser.entity,fastparser.entity.test,legacyfastparser.handlers,fastparser,streaminput,InputSource.test}.ts apps/office/src/offapi/com/sun/star/xml/sax/FastToken.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/fixtures/native-dom-worker-probe.ts scripts/native-dom-worker-probe.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/parser-entity-eslint-final-unified.log",
+      "evidence": ""
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/sax/source/fastparser/fastparser.entity.ts apps/office/src/sax/source/fastparser/fastparser.entity.test.ts apps/office/src/sax/source/fastparser/legacyfastparser.handlers.ts apps/office/src/sax/source/fastparser/streaminput.ts apps/office/src/sax/source/fastparser/fastparser.ts apps/office/src/sax/source/fastparser/InputSource.test.ts apps/office/src/offapi/com/sun/star/xml/sax/FastToken.ts scripts/fixtures/native-fastparser-consumer-probe.ts",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/parser-entity-format.log",
+      "evidence": ""
+    },
+    {
+      "command": "node scripts/check-file-size.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/parser-entity-size.log",
+      "evidence": ""
+    },
+    {
+      "command": "node scripts/check-lo-source-tree.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/parser-entity-source-tree.log",
+      "evidence": ""
+    },
+    {
+      "command": "ap doctor",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/parser-entity-doctor.log",
+      "evidence": ""
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/parser-entity-routing.log",
+      "evidence": ""
+    },
+    {
+      "command": "git diff --check",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/parser-entity-diff.log",
+      "evidence": ""
+    }
+  ],
+  "coverage": {
+    "scope": [
+      "sax/source/fastparser/fastparser.entity.ts",
+      "sax/source/fastparser/legacyfastparser.handlers.ts"
+    ],
+    "directory": "apps/office/coverage/parser-entity-combined-final",
+    "summary": {
+      "total": {
+        "lines": {
+          "total": 224,
+          "covered": 218,
+          "skipped": 0,
+          "pct": 97.32
+        },
+        "statements": {
+          "total": 243,
+          "covered": 234,
+          "skipped": 0,
+          "pct": 96.29
+        },
+        "functions": {
+          "total": 38,
+          "covered": 38,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 72,
+          "covered": 69,
+          "skipped": 0,
+          "pct": 95.83
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/fastparser/fastparser.entity.ts": {
+        "lines": {
+          "total": 119,
+          "covered": 117,
+          "skipped": 0,
+          "pct": 98.31
+        },
+        "functions": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 126,
+          "covered": 122,
+          "skipped": 0,
+          "pct": 96.82
+        },
+        "branches": {
+          "total": 50,
+          "covered": 48,
+          "skipped": 0,
+          "pct": 96
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/fastparser/legacyfastparser.handlers.ts": {
+        "lines": {
+          "total": 105,
+          "covered": 101,
+          "skipped": 0,
+          "pct": 96.19
+        },
+        "functions": {
+          "total": 23,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 117,
+          "covered": 112,
+          "skipped": 0,
+          "pct": 95.72
+        },
+        "branches": {
+          "total": 22,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 95.45
+        }
+      }
+    },
+    "rawSha256": {
+      "coverage-final.json": "10a935f989db909bf3eb3a9aef3333e8858fdfb87a51e212e5b48e988d86da41",
+      "coverage-summary.json": "c71807e8769b3b7e4ea92f848762572eb28dbc0386184af322470e25d7141364"
+    },
+    "qualification": "Whole owners, no source-masking changes. Earlier24-case/pre-input-unification and61-case unified runs are separate historical runs, never counter-merged. Nonempty high-mask lexical prefix branch still unqualified; no invented token-provider result to force it. Existing wider failed gates stay open."
+  },
+  "qualification": [
+    "Actual native references/strings/attributes and caught UNO Any ownership, same-object context factories, optional null document/namespace contexts and first-exception behavior exercised with real registered services. Non-UNO host exception ABI/physical C++ mutex/logging/allocation remain unqualified.",
+    "Canonical Entity now owns both source input/converter/shared event and context/exception state. createInputEntity only constructs that actual owner for existing host reader; no second mirror Entity.",
+    "Directly supplied public Event consumer probe and separately C-produced callback ABI probe are distinct, not an assembled native parser-to-consumer pipeline.",
+    "Full native FastSaxParserImpl namespace/locator/error/producer/parse/service and mandatory original parser QA remain unfinished. Source Emscripten profile disables internal threads; non-Emscripten queues not browser acceptance prerequisite.",
+    "LegacyFastParser wrapper/service and separate original Expat Parser remain unfinished; no aliases or fake registrations.",
+    "Metadata/storage/model/filter, Strict+Transitional import/export/reopen, package XML and desktop/mobile UI/cancel/stale/primaryODF acceptance remain unfinished."
+  ],
+  "next": "Continue actual native FastSaxParserImpl ownership/namespace/locator/error/producer assembly against genuine available C API; keep security-option call pending explicit approval. Do not pause/finish/merge or commit incomplete implementation."
+}
