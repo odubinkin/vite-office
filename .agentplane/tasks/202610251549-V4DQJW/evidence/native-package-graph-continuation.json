@@ -1,0 +1,191 @@
+{
+  "scope": "Actual original abstract ZipPackageEntry plus live final ZipPackageFolder constructor/name-container/property/service subset, FolderEnumeration and missing XNamed/NoSupportException declaration/value bindings. Original stream traversal/save and native package service/storage/model/filter/UI remain unfinished.",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSha256": {
+    "apps/office/src/package/source/zippackage/ZipPackageEntry.ts": "529196a7cf4beeb3d398a76d20c6808f02b2e59d457380c5d1cb757d463a0897",
+    "apps/office/src/package/source/zippackage/ZipPackageFolder.native.ts": "03d084e5ffa00491b5861167f71fee7ee2dbd6bd89f70bfa293c9b53c99e9848",
+    "apps/office/src/package/source/zippackage/ZipPackageFolderEnumeration.ts": "ea04db1753dfa413d7d8ccbd4ec50b804224cda0039b726f184a05650e4980fc",
+    "apps/office/src/udkapi/com/sun/star/container/XNamed.ts": "62f78f1b1a47cabe98d84f50fc5ca306eedefad9e1991b26b10abea1293e699d",
+    "apps/office/src/cppu/inc/com/sun/star/lang/NoSupportException.ts": "bf93646b584da5ea359f22e0652f4a897183d9f678a8dfd05fab85a9c47bf873",
+    "apps/office/src/package/source/zippackage/ZipPackageFolder.native.test.ts": "37e63bf6a16498ad6f3787eca0e5f8f4441b4c71f01f23db3bd7cda6b6b7ffee",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "2253414fd17aba2d5320e07da10a8d4750ee3ce13097a733351c881ef8d0a3c5",
+    "scripts/native-dom-worker-probe.mjs": "3ad1a6bee43fa33a9c590d5feac2b78f8af40e8d9d1c8d3f8b724a2a9959a145",
+    "docs/program/writer-upstream-suspected-issues.md": "2da2e0641bfbe3fe6f4a76049be298df99defdb92dd61114a9f439067883312a",
+    "docs/program/calc-upstream-suspected-issues.md": "51f3ca3f2c0f2062d95efc1749f90a56dd62ba260717242b5387ff90b6a3ddd9",
+    "docs/program/registry/shared/runtime/package/source/zippackage/ZipPackageEntry.ts.json": "d97d1ab38a4c61a2220931dc508beaff301411d74c22ef3f5e96b0f33fe08a5e",
+    "docs/program/registry/shared/runtime/package/source/zippackage/ZipPackageFolder.native.ts.json": "b3abb88c0b046482193161dfae250746ee7d05cef580c2b3261356302056878a",
+    "docs/program/registry/shared/runtime/package/source/zippackage/ZipPackageFolderEnumeration.ts.json": "64670eb3733ec4c7a130730168196894e3eebfa7a2a110eba390da246dad14e3",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/container/XNamed.ts.json": "54eb35ca5630be88087487aeafd7b2b8128a4ffacce2f683adaa046a03778187",
+    "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/NoSupportException.ts.json": "dea40f724eba0164cc0a4081c67da90c41f71b28fed89c93cd03191b98b332f8",
+    "docs/program/registry/shared/provenance/package/source/zippackage/ZipPackageEntry.ts.json": "26feeb922062a3180fdbed056d5f283800d322ebb4840285e06a3decefb03e08",
+    "docs/program/registry/shared/provenance/package/source/zippackage/ZipPackageFolder.native.ts.json": "a93a2578ed67e961681b3de524127c300dc8757ff560131dd3b47bc66e15ebff",
+    "docs/program/registry/shared/provenance/package/source/zippackage/ZipPackageFolderEnumeration.ts.json": "fd80ac724cc3ce71f566797cb0785c9f39fc324939bce20eeec27a1f7a0bee94",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/container/XNamed.ts.json": "a5ec1639c15a6e4592697eddc6b5588805465e215aa1916123595edfacdb491b",
+    "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/NoSupportException.ts.json": "a1ef1b82ee94e6972bf8d0761b2f604b0edea21afcf299caadef974422463902"
+  },
+  "checks": [
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/package/source/zippackage/ZipPackageFolder.native.test.ts --coverage --coverage.include=src/package/source/zippackage/ZipPackageEntry.ts --coverage.include=src/package/source/zippackage/ZipPackageFolder.native.ts --coverage.include=src/package/source/zippackage/ZipPackageFolderEnumeration.ts --coverage.include=src/udkapi/com/sun/star/container/XNamed.ts --coverage.include=src/cppu/inc/com/sun/star/lang/NoSupportException.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-package-graph",
+      "result": "pass",
+      "log": "apps/office/coverage/native-package-graph-tests.log",
+      "sha256": "76b1f1e6a67f315a8e1e1ab1bbc01f67103957936e4d49d9872db3fa1c76c88a"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/package/source/zippackage/ZipPackageBuffer.test.ts src/package/source/zippackage/native-plain-manifest.test.ts src/package/source/zippackage/document-archive.integration.test.ts --maxWorkers=2",
+      "result": "pass",
+      "log": "apps/office/coverage/native-package-graph-related.log",
+      "sha256": "1f40f446317cd8d2558f08faa7124dc13834521928462e0d67bd6f5f3806f9db"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-package-graph-worker.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "node_modules/.bin/tsc --noEmit --project apps/office/tsconfig.json",
+      "result": "fail",
+      "log": "apps/office/coverage/native-package-graph-types.log",
+      "sha256": "191e4bdf87792572048a2d40ec89fdf71fbac07a0325f9aa1a25ce7df4266208"
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/package/source/zippackage/ZipPackageEntry.ts apps/office/src/package/source/zippackage/ZipPackageFolder.native.ts apps/office/src/package/source/zippackage/ZipPackageFolderEnumeration.ts apps/office/src/udkapi/com/sun/star/container/XNamed.ts apps/office/src/cppu/inc/com/sun/star/lang/NoSupportException.ts apps/office/src/package/source/zippackage/ZipPackageFolder.native.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-package-graph-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/package/source/zippackage/ZipPackageEntry.ts apps/office/src/package/source/zippackage/ZipPackageFolder.native.ts apps/office/src/package/source/zippackage/ZipPackageFolderEnumeration.ts apps/office/src/package/source/zippackage/ZipPackageFolder.native.test.ts apps/office/src/udkapi/com/sun/star/container/XNamed.ts apps/office/src/cppu/inc/com/sun/star/lang/NoSupportException.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-package-graph-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-package-graph-docs.log",
+      "sha256": "03bc18aef30bca0974dbce6c60c4f6f63ef2e76250865177eae76d9b93c7a790"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "log": "apps/office/coverage/native-package-graph-deps.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-package-graph-provenance.log",
+      "sha256": "d022e293687f3fbd81484040118906da466396bdcc241eb62dcd61c0f753606b"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-package-graph-registry.log",
+      "sha256": "67899c2ab7d34b87d3b186c1135db095c597233113e35fb2c6a6ec4251f99c69"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/native-package-graph-size.log",
+      "sha256": "59c3ce57527a87256e03720507b1fe823d95e9c834141a89cfbeb81245291e59"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/native-package-graph-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-package-graph-doctor.log",
+      "sha256": "c465b57930e9b03edd68ae6c71f5029c1448e1591ac5007e08e629f9f9eabbd8"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-package-graph-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-package-graph-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/native-package-graph-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-package-graph-vite.log",
+      "sha256": "283b351da7d2b77d18d801655ecf900dcb922b588a2648ab774b960ef2955589"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-package-graph-static.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    }
+  ],
+  "coverage": {
+    "src/cppu/inc/com/sun/star/lang/NoSupportException.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "src/package/source/zippackage/ZipPackageEntry.ts": {
+      "statements": 98.18,
+      "branches": 96,
+      "functions": 100,
+      "lines": 100
+    },
+    "src/package/source/zippackage/ZipPackageFolder.native.ts": {
+      "statements": 100,
+      "branches": 96.96,
+      "functions": 100,
+      "lines": 100
+    },
+    "src/package/source/zippackage/ZipPackageFolderEnumeration.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "src/udkapi/com/sun/star/container/XNamed.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    }
+  },
+  "tests": {
+    "focused": 6,
+    "related": 21,
+    "browser": "Actual original folder/child/Any identity/names/parent/destructive rename in Chromium main realm and DOM-free module Worker; existing ZIP output/buffer/read chain retained."
+  },
+  "upstreamQA": {
+    "read": [
+      "package/qa/cppunit/test_zippackage.cxx",
+      "package/qa/storages"
+    ],
+    "result": "No isolated direct folder/base QA was found by targeted lookup. Critical source contracts tested here. testDuplicate/testUnicodeODT/testUnicodeDOCX depend on actual ZipPackage service initialization and remain pending, including original non-recovery rejection assertions previously implemented in ZipFile; full factory/package QA not claimed."
+  },
+  "findings": [
+    "WRITER556/CALC619 remove-before-validation/rename detachment/destructive replacement.",
+    "WRITER557/CALC620 moved ZipContentInfo temporary raw parent clearing."
+  ],
+  "remaining": [
+    "ZipPackageStream is not implemented; no fake stream is introduced. Original saveChild/saveContents/extension/manifest traversal binding remains incomplete.",
+    "Actual Deflater/ZipOutputEntry/full reset-capable zlib API, native task/pool/parallel profiles, package factory/OStorage/model/filter/UI acceptance remain unfinished. Pako network approval remains pending; no network/dependency changes this block.",
+    "Native std::unordered_map order/rehash/invalidation, allocator/RTTI/ABI and undefined pointer domains remain unqualified.",
+    "Earlier four metadata type errors, comphelper/sax cycle and157 JSDoc findings remain, along with older independent coverage failures. New owner gates do not supersede those failures."
+  ],
+  "goalStatus": "active; parent tasks unfinished, no full suite due"
+}
