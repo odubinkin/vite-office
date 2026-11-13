@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 82
+revision: 85
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T10:53:55.066Z"
+  updated_at: "2026-11-13T11:08:17.711Z"
   updated_by: "CODER"
-  note: "Shared native AttributeList date/token-list and actual byte token-view source scenarios pass132 related tests and main/Worker; AttributeList passes90 but whole o3tl function88.88 remains failed independently. Original Z UTC/calendar quirks preserved as WRITER528/CALC591. Existing global/older owner failures retained. Full Writer DOCX core/filter/model/export/UI acceptance remains unfinished; no implementation merge/commit. Evidence native-attribute-collections-continuation.json."
-  attempts: 14
+  note: "Shared original synchronous storage owner/native ZipStorage and format-specific helper/OOX parser overload progress: 127 related tests and actual main/Worker pass, whole-owner90 remains failed without positive backend; existing older failures retained. Full native StorageFactory/OStorage, original storage integration QA and Writer model/filter/export/UI acceptance remain unfinished. Source READ existing-substorage/inherited wrapper mode preserved and documented WRITER529/CALC592. Evidence native-storage-continuation.json; goal active, no implementation merge/commit."
+  attempts: 15
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -232,8 +235,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T11:08:17.711Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared original synchronous storage owner/native ZipStorage and format-specific helper/OOX parser overload progress: 127 related tests and actual main/Worker pass, whole-owner90 remains failed without positive backend; existing older failures retained. Full native StorageFactory/OStorage, original storage integration QA and Writer model/filter/export/UI acceptance remain unfinished. Source READ existing-substorage/inherited wrapper mode preserved and documented WRITER529/CALC592. Evidence native-storage-continuation.json; goal active, no implementation merge/commit."
+  -
+    type: "status"
+    at: "2026-11-13T11:08:25.215Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T10:54:16.225Z"
+doc_updated_at: "2026-11-13T11:08:25.215Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -666,6 +682,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T11:08:17.711Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared original synchronous storage owner/native ZipStorage and format-specific helper/OOX parser overload progress: 127 related tests and actual main/Worker pass, whole-owner90 remains failed without positive backend; existing older failures retained. Full native StorageFactory/OStorage, original storage integration QA and Writer model/filter/export/UI acceptance remain unfinished. Source READ existing-substorage/inherited wrapper mode preserved and documented WRITER529/CALC592. Evidence native-storage-continuation.json; goal active, no implementation merge/commit.
+    Attempts: 15
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T11:07:48.442Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -870,6 +916,10 @@ sections:
     - Observation: Native OOXML AttributeList DateTime/token-list and byte getToken source specializations now retain original value/index/default behavior with132related cases and actual main/Worker. See `evidence/native-attribute-collections-continuation.json`.
       Impact: Shared parsing advances, but whole o3tl function coverage88.88 remains below90 despite passing attribute owner; all older failed scopes and full model/filter/UI gaps remain.
       Resolution: Preserve source DateTime quirks (WRITER528/CALC591); continue actual synchronous StorageBase/XStorage/filter integration without fake cache/providers. Goal active; no incomplete implementation commit.
+
+    - Observation: Original synchronous StorageBase/native ZipStorage and format-specific helper factory arguments/FastParser storage overload now have127related cases and real main/Worker evidence. See `evidence/native-storage-continuation.json`.
+      Impact: Native storage ownership progresses; real positive StorageFactory/OStorage backend/cache/copy/commit and full model/filter/export/UI remain unfinished. Current whole-owner90 and all older failures are retained explicitly.
+      Resolution: Implement actual native storage backend/source storage integration QA, then native filter/default-fragment/cache routing. Preserve source WRITER529/CALC592 and browser workflows; goal active, no fake provider or incomplete source implementation commit.
 id_source: "generated"
 ---
 ## Summary
@@ -1313,6 +1363,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T11:08:17.711Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared original synchronous storage owner/native ZipStorage and format-specific helper/OOX parser overload progress: 127 related tests and actual main/Worker pass, whole-owner90 remains failed without positive backend; existing older failures retained. Full native StorageFactory/OStorage, original storage integration QA and Writer model/filter/export/UI acceptance remain unfinished. Source READ existing-substorage/inherited wrapper mode preserved and documented WRITER529/CALC592. Evidence native-storage-continuation.json; goal active, no implementation merge/commit.
+Attempts: 15
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T11:07:48.442Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -1522,3 +1602,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Native OOXML AttributeList DateTime/token-list and byte getToken source specializations now retain original value/index/default behavior with132related cases and actual main/Worker. See `evidence/native-attribute-collections-continuation.json`.
   Impact: Shared parsing advances, but whole o3tl function coverage88.88 remains below90 despite passing attribute owner; all older failed scopes and full model/filter/UI gaps remain.
   Resolution: Preserve source DateTime quirks (WRITER528/CALC591); continue actual synchronous StorageBase/XStorage/filter integration without fake cache/providers. Goal active; no incomplete implementation commit.
+
+- Observation: Original synchronous StorageBase/native ZipStorage and format-specific helper factory arguments/FastParser storage overload now have127related cases and real main/Worker evidence. See `evidence/native-storage-continuation.json`.
+  Impact: Native storage ownership progresses; real positive StorageFactory/OStorage backend/cache/copy/commit and full model/filter/export/UI remain unfinished. Current whole-owner90 and all older failures are retained explicitly.
+  Resolution: Implement actual native storage backend/source storage integration QA, then native filter/default-fragment/cache routing. Preserve source WRITER529/CALC592 and browser workflows; goal active, no fake provider or incomplete source implementation commit.
