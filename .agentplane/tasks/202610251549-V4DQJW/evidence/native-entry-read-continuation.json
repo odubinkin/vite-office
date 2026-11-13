@@ -1,0 +1,196 @@
+{
+  "scope": "Original nonencrypted native ZIP entry read chain: ZipFile getInputStream/getDataStream/getRawData, Emscripten eager XBufferedStream, actual XUnbufferedStream/CRC32/rtl_crc32 and unchanged existing JS CRC library. Package storage/model/export/UI unfinished.",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSha256": {
+    "apps/office/src/external/zlib/crc32.ts": "7d30f16054432d5767b518e8403c4f83ca63e22016a526b7e3a89227268f3842",
+    "apps/office/src/sal/rtl/crc.ts": "b16fac46f3d85b684fc53db6a5ce3c9c6763c4d6717746811770cc627ba7bb7f",
+    "apps/office/src/package/inc/PackageConstants.ts": "02a37cb03d853f71318e48d0ed60e1af35e3cdd35ed20e38cad2f45bed77232e",
+    "apps/office/src/package/source/zipapi/CRC32.ts": "a04ad1e9c74fe59454a2cbb1df8d6716d49263f2568db5dbd96a5a8c09bd3cf4",
+    "apps/office/src/package/source/zipapi/XUnbufferedStream.ts": "fdd4e37a0c1d5585deb9be8e177a3488213dec05df59009fe705e1eda4256cb3",
+    "apps/office/src/package/source/zipapi/ZipFile.ts": "31e74b2a62627de89745e4a8682f5cef52a74c2f1d278cb00ee80f36bec64462",
+    "apps/office/src/package/source/zipapi/native-entry-read.test.ts": "5918a88320315d9fecf8e0a75b576fbeb37d09823ca833a5975411dcbfe718c1",
+    "apps/office/src/package/source/manifest/native-manifest-export.test.ts": "991058e9f34de0a439e28fd1726a8905253203b5d82663f5fa746902bbdd0f4a",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "6d5a7098129951cc2d40bebd0ab1fbdf66d41c68bc943d1faf872bd52c20b25d",
+    "scripts/native-dom-worker-probe.mjs": "064ee9624f6ff8f4747cfd383d0f3f694fc8328d0cd37f047f1cb4bc4a1aa818",
+    "apps/office/package.json": "56a39090ef7910c92beac76e79569aa0c30fc8f856e354b869fdfeed75f9c153",
+    "package-lock.json": "af83345ead6b500300124c482527747c07f3fe0d2a5c84136e5842bc8f12936f",
+    ".prettierignore": "3c5a063b0b661837310bd09c875f937fa9e846e5212bf2b483e903c1e1026312",
+    "third_party/zipjs-codecs/crc32.mjs": "fa9df771f65cd371189a9d957f773d2c262340bbf24061e1d579390b9553b913",
+    "third_party/zipjs-codecs/crc32.d.mts": "d800c1f5b4a28e90a16450f8c6f83b7e44ac227c79f4c1d0090fdd2372740d5c",
+    "third_party/zipjs-codecs/source.json": "1b22e5cffe7b0b17d8ec74b24727d894231ebf12b41d8d1ba6a9391d38b9f4e9",
+    "third_party/zipjs-codecs/package.json": "a5259d211d1b67afcf44873c0cf10714848e4f1440901773461617dd86020d7b"
+  },
+  "checks": [
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/package/source/zipapi/native-entry-read.test.ts src/package/source/zipapi/ZipFile.test.ts src/package/source/zipapi/ZipFile.buffered.test.ts src/package/source/zipapi/InflateZlib.test.ts src/package/source/zipapi/byte-io.test.ts src/package/source/manifest/native-manifest-export.test.ts src/package/source/manifest/native-manifest-import.test.ts --maxWorkers=2 --coverage --coverage.include=src/package/source/zipapi/XUnbufferedStream.ts --coverage.include=src/package/source/zipapi/CRC32.ts --coverage.include=src/sal/rtl/crc.ts --coverage.include=src/external/zlib/crc32.ts --coverage.include=src/package/source/zipapi/ZipFile.buffered.ts --coverage.include=src/package/source/zipapi/ZipFile.ts --coverage.include=src/package/source/zipapi/ByteGrabber.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-entry-read",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-read-tests.log",
+      "sha256": "73de7999b1c0c06391e227d27f26f9184f8231383663b7c14ab2a73ed6b12318"
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/external/zlib/crc32.ts apps/office/src/sal/rtl/crc.ts apps/office/src/package/inc/PackageConstants.ts apps/office/src/package/source/zipapi/CRC32.ts apps/office/src/package/source/zipapi/XUnbufferedStream.ts apps/office/src/package/source/zipapi/ZipFile.ts apps/office/src/package/source/zipapi/native-entry-read.test.ts apps/office/src/package/source/manifest/native-manifest-export.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-read-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/package.json apps/office/src/external/zlib/crc32.ts apps/office/src/sal/rtl/crc.ts apps/office/src/package/inc/PackageConstants.ts apps/office/src/package/source/zipapi/CRC32.ts apps/office/src/package/source/zipapi/XUnbufferedStream.ts apps/office/src/package/source/zipapi/ZipFile.ts apps/office/src/package/source/zipapi/native-entry-read.test.ts apps/office/src/package/source/manifest/native-manifest-export.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs third_party/zipjs-codecs/package.json third_party/zipjs-codecs/source.json third_party/zipjs-codecs/crc32.d.mts",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-read-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "node_modules/.bin/tsc --noEmit --project apps/office/tsconfig.json",
+      "result": "fail",
+      "log": "apps/office/coverage/native-entry-read-types.log",
+      "sha256": "191e4bdf87792572048a2d40ec89fdf71fbac07a0325f9aa1a25ce7df4266208"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-entry-read-docs.log",
+      "sha256": "0d64659347842d68a624c5105b4c8ef9d8f4ca6a33bb1008785dbf93aae2ec19"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "log": "apps/office/coverage/native-entry-read-deps.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-read-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-read-size.log",
+      "sha256": "9f9f7c395147cdcb39876bf9165f0750a3ff7efa3f8c48e7283ac52c0456f4fe"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-read-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-read-provenance.log",
+      "sha256": "8cbdba75b9ca2f37204a40a77cf66d9d37d581cffa94c827371d69a833c28b71"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-read-registry.log",
+      "sha256": "784c167a352c5732159530582daadddb2460d2fd356232832ca2497258b05191"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-read-vite.log",
+      "sha256": "281751ee1154c58c2dedc3c775cd494c5418be1f7612b5c1dc3fab1fbc8246f6"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-read-static.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-read-doctor.log",
+      "sha256": "f5a6e80cef1afa2d173e0923a0aac25ef8c4d2ccf0c3cdf1d456af33d6797189"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-read-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-read-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-read-worker.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "NPM_CONFIG_CACHE=\"$PWD/node_modules/.cache/npm-zipjs-codecs/cache\" NPM_CONFIG_USERCONFIG=\"$PWD/node_modules/.cache/npm-zipjs-codecs/user.npmrc\" NPM_CONFIG_GLOBALCONFIG=\"$PWD/node_modules/.cache/npm-zipjs-codecs/global.npmrc\" npm install --offline --ignore-scripts --no-audit --no-fund",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-read-offline-install.log",
+      "sha256": "b9210219340e3123fa98d6f63acdca0e50d6cbde89e96a8d15ad28dd1e0c34eb"
+    }
+  ],
+  "coverage": {
+    "apps/office/src/external/zlib/crc32.ts": {
+      "statements": 100.0,
+      "branches": 100,
+      "functions": 100.0,
+      "lines": 100.0
+    },
+    "apps/office/src/package/source/zipapi/ByteGrabber.ts": {
+      "statements": 100.0,
+      "branches": 100.0,
+      "functions": 100.0,
+      "lines": 100.0
+    },
+    "apps/office/src/package/source/zipapi/CRC32.ts": {
+      "statements": 100.0,
+      "branches": 100.0,
+      "functions": 100.0,
+      "lines": 100.0
+    },
+    "apps/office/src/package/source/zipapi/XUnbufferedStream.ts": {
+      "statements": 98.2,
+      "branches": 93.1,
+      "functions": 100.0,
+      "lines": 99.02
+    },
+    "apps/office/src/package/source/zipapi/ZipFile.buffered.ts": {
+      "statements": 100.0,
+      "branches": 100.0,
+      "functions": 100.0,
+      "lines": 100.0
+    },
+    "apps/office/src/package/source/zipapi/ZipFile.ts": {
+      "statements": 94.15,
+      "branches": 92.83,
+      "functions": 100.0,
+      "lines": 95.04
+    },
+    "apps/office/src/sal/rtl/crc.ts": {
+      "statements": 100.0,
+      "branches": 100.0,
+      "functions": 100.0,
+      "lines": 100.0
+    }
+  },
+  "tests": "147 passed across7files, full scoped90 command passes. Six original sal rtl_crc32 QA assertions retained; Node independently validates seeds/chunks/results. Five unchanged pinned Strict/Transitional DOCX/XLSX/ZIP64 entries now read through original native getDataStream/getInputStream/raw APIs with native CRC, including original styles.xml1112-byte assertion. Real short/corrupt input, source bug cases, independent shared archive views and actual non-ByteReader fallback are exercised without fake providers or private state injection.",
+  "worker": "Actual complete directory -> getDataStream -> XUnbufferedStream -> CRC -> XBufferedStream -> ByteGrabber chain executes in Chromium main realm and DOM-free module Worker.",
+  "library": "No new external download or pako. Exact existing zip.js2.24.0 standalone CRC module is copied unchanged with its complete BSD notice and verified source hash. A local file dependency @vite-office/zipjs-codecs packages this standalone module; npm offline added exactly1 local package, no scripts/audit/network/global config. Only the byte-exact vendor file is excluded from formatting; authored adapter and declarations are checked.",
+  "regressionRepair": "The existing OASIS manifest test iterated all documentconstants exports; added Sun XML types and OASIS-named report constants carry non-OASIS literal values. It now enumerates the actual OASIS MIME namespace, explicitly checks16cases and retains all original XML assertions. Runtime ManifestExport is unchanged. Initial failing related run is resolved by the final complete147pass profile.",
+  "suspectedIssues": [
+    "WRITER549/CALC612 STORED data mode omits CRC as original RAW path",
+    "WRITER550/CALC613 zero-length eager data path avoids CRC",
+    "WRITER551/CALC614 exact size/CRC may accept missing final DEFLATE block",
+    "WRITER552/CALC615 compressed remainder narrows signed32",
+    "WRITER553/CALC616 report constants OASIS names carry Sun XML literals"
+  ],
+  "remaining": [
+    "Native package storage factories/ZipPackage/OStorage and model/filter/export/UI integration remain unfinished; no whole-application format acceptance claim.",
+    "Four unchanged metadata type errors; existing comphelper/sax cycle;157older JSDoc findings.",
+    "Previous ByteGrabber/buffered constructor coverage gaps are superseded by actual non-ByteReader stream evidence; older independent external zlib adapter/SAL/SDK/OOX/storage/persistence/stream coverage failures remain unqualified and are not diluted.",
+    "Encryption/decrypted-header/recovery profiles, physical ABI/allocator/OOM/undefined/native threaded domains remain unported or unqualified. Separate file-access/auth approval paths are untouched."
+  ],
+  "fullSuite": "Not due: no executable task completed; user cadence is one full run per ten completed tasks.",
+  "status": "Unfinished approved direct parents; continue full goal without pause/finish."
+}
