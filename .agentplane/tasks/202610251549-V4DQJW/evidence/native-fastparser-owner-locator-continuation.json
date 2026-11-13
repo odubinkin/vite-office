@@ -1,0 +1,269 @@
+{
+  "sharedEvidence": ".agentplane/tasks/202610251549-J0Z0KF/evidence/native-fastparser-owner-locator-continuation.json",
+  "status": "unfinished",
+  "checks": [
+    {
+      "command": "../../node_modules/.bin/vitest run src/sax/source/fastparser/fastparser.impl.test.ts src/sax/source/fastparser/fastparser.entity.test.ts src/sax/source/fastparser/InputSource.test.ts src/sax/source/fastparser/fastparser.test.ts src/sax/source/fastparser/FastSaxParser.test.ts src/external/libxml2/fastparsercallbacks.test.ts --maxWorkers=2 --coverage --coverage.include='src/sax/source/fastparser/{fastparser.impl,fastparser.locator,fastparser.entity}.ts' --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/fastparser-core-final-current",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-core-final-current.log",
+      "evidence": "69tests/6files. Whole3owners S98.02/B96.51/F100/L99.14. Each owner independently exceeds90. No fake positive UNO namespace/stream/locator provider, private-state patch or exception/counter injector. Public native namespace aggregate setup is explicit, not producer qualification."
+    },
+    {
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries-xml.test.ts --maxWorkers=2",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-core-boundaries-tests.log",
+      "evidence": "8 tests preserve actual source XML dependency directions; SAX external follows libxml/parser.h and Library_sax.mk use_externals libxml2. No reverse edge or cycle exemption."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-core-worker.log",
+      "evidence": "Actual Chromium main and DOM-free module Worker observe real C location calls/current native Entity/source identifiers/borrowed namespace value identity. Existing distinct C-callback and supplied-Event consumers remain qualified independently, not assembled parseStream."
+    },
+    {
+      "command": "../../node_modules/.bin/vite build",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-core-vite.log",
+      "evidence": "Production bundle; complete package build is not green because app tsc has4 existing errors."
+    },
+    {
+      "command": "node_modules/.bin/tsc --project apps/office/tsconfig.json --noEmit",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/fastparser-core-types-final.log",
+      "evidence": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(338,9): error TS2304: Cannot find name 'MediaDescriptor'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(410,36): error TS2345: Argument of type 'Sequence<PropertyValue>' is not assignable to parameter of type 'SfxMediumInput'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(411,26): error TS2339: Property 'GetOutputStorage' does not exist on type 'SfxMedium'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(438,27): error TS2339: Property 'Commit' does not exist on type 'SfxMedium'.\n"
+    },
+    {
+      "command": "node_modules/.bin/tsc --project tsconfig.tools.json --noEmit",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-core-tools-types.log",
+      "evidence": ""
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/check-source-provenance.ts",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-core-provenance.log",
+      "evidence": "2521runtime/2292mapped/192browser/37infrastructure."
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-core-registry.log",
+      "evidence": "semanticViolationCount0; new owners foundation/unverified, no broad parity promotion."
+    },
+    {
+      "command": "node scripts/check-module-boundaries.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/fastparser-core-boundaries-final.log",
+      "evidence": "Same old comphelper->sax->comphelper cycle; new source-backed sax->external dependency now correctly recorded. No validator weakened."
+    },
+    {
+      "command": "node scripts/check-jsdoc.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/fastparser-core-jsdoc-current.log",
+      "evidence": "160 older diagnostics; no current impl/locator/Entity/consumer probe finding."
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/sax/source/fastparser/fastparser.impl.ts apps/office/src/sax/source/fastparser/fastparser.impl.test.ts apps/office/src/sax/source/fastparser/fastparser.locator.ts apps/office/src/sax/source/fastparser/fastparser.entity.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs scripts/check-module-boundaries-xml.test.ts scripts/module-boundaries/allowed-edges.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-core-eslint-final.log",
+      "evidence": ""
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/sax/source/fastparser/fastparser.impl.ts apps/office/src/sax/source/fastparser/fastparser.impl.test.ts apps/office/src/sax/source/fastparser/fastparser.locator.ts apps/office/src/sax/source/fastparser/fastparser.entity.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs scripts/check-module-boundaries-xml.test.ts scripts/module-boundaries/allowed-edges.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-core-format-current.log",
+      "evidence": ""
+    },
+    {
+      "command": "node scripts/check-file-size.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-core-size.log",
+      "evidence": ""
+    },
+    {
+      "command": "node scripts/check-lo-source-tree.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-core-source-tree.log",
+      "evidence": ""
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-core-routing.log",
+      "evidence": ""
+    },
+    {
+      "command": "ap doctor",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-core-doctor.log",
+      "evidence": ""
+    },
+    {
+      "command": "git diff --check",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-core-diff-final.log",
+      "evidence": ""
+    }
+  ],
+  "coverage": {
+    "scope": [
+      "sax/source/fastparser/fastparser.impl.ts",
+      "sax/source/fastparser/fastparser.locator.ts",
+      "sax/source/fastparser/fastparser.entity.ts"
+    ],
+    "directory": "apps/office/coverage/fastparser-core-final-current",
+    "summary": {
+      "total": {
+        "lines": {
+          "total": 233,
+          "covered": 231,
+          "skipped": 0,
+          "pct": 99.14
+        },
+        "statements": {
+          "total": 253,
+          "covered": 248,
+          "skipped": 0,
+          "pct": 98.02
+        },
+        "functions": {
+          "total": 39,
+          "covered": 39,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 86,
+          "covered": 83,
+          "skipped": 0,
+          "pct": 96.51
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/fastparser/fastparser.entity.ts": {
+        "lines": {
+          "total": 134,
+          "covered": 132,
+          "skipped": 0,
+          "pct": 98.5
+        },
+        "functions": {
+          "total": 19,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 142,
+          "covered": 138,
+          "skipped": 0,
+          "pct": 97.18
+        },
+        "branches": {
+          "total": 56,
+          "covered": 54,
+          "skipped": 0,
+          "pct": 96.42
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/fastparser/fastparser.impl.ts": {
+        "lines": {
+          "total": 88,
+          "covered": 88,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 13,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 99,
+          "covered": 98,
+          "skipped": 0,
+          "pct": 98.98
+        },
+        "branches": {
+          "total": 28,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 96.42
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/fastparser/fastparser.locator.ts": {
+        "lines": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "rawSha256": {
+      "coverage-final.json": "d516ff68ae18e30b92948fc115717fca4ba6229a6ecb23080b7482172887f25e",
+      "coverage-summary.json": "3539cb5e994812b7210fef8bf590516d97613e7bb67a4643a20b9461b21f9344"
+    },
+    "qualification": "Whole owners independently above90; final current aggregate not counter-merged with older implementation/fixture epochs. Non-UNO host exception branch remains unqualified; no failure injector. Older wider failed scopes remain open."
+  },
+  "securityScopes": {
+    "nativeFastParserOptions": {
+      "approval": "Explicit human reply received this turn: approved transferring the original flags.",
+      "questionItemId": "[\"request_user_input_async\",\"call_679ee1d522f94f7db63a6a16697ac3fc\",0]",
+      "scope": "Original xmlCtxtUseOptions(context, XML_PARSE_NOENT | XML_PARSE_HUGE) call in the upcoming source parse loop.",
+      "currentImplementation": "Raw API already available. This ownership block does not yet add parse() or execute the options call; no replacement option policy or resolver introduced."
+    },
+    "urlTrustAuthenticationCertificate": "Separate old explicit URL trust/authentication/certificate request remains unanswered; no relevant edits."
+  },
+  "qualification": [
+    "Actual source class is partial without parse/producer/error/custom-entity methods or positive parser-service stub/registration. Missing responsibilities remain missing, not supplied by alternate handlers.",
+    "Native Unicode namespace keys/hash/equality and owned lifetime exercised, including real hash collisions, key copies, exact minimum, duplicate rejection and reverse current-count scope lookup. Native std::unordered_map bucket allocation/layout/complexity and physical ABI are not certified.",
+    "Entity source fields are actual public native value aggregates, initialized explicitly in owner tests. There is no private-field patch or claim the unfinished C callback producer populated these scopes.",
+    "Actual locator class is separately constructed by its public source constructor and queried through real UNO XLocator. Real C context source line/column and nested Entity source IDs observed. Explicit locator disposal is exercised; normal document callback handoff of the private owner locator is not yet qualified.",
+    "Native source cache retention/release is observed through actual registered handlers and genuine weak references; no private refcount access. Native debug assertions, physical mutex/exception/allocator ABI and C++ compiler differential remain unqualified.",
+    "Full FastSaxParserImpl native producer/error/parse/normalization/custom entities, original complete parser QA and FastSaxParser/LegacyFastParser/service registration remain unfinished. Separate Expat Parser remains separate.",
+    "Metadata/storage/model/filter/Strict+Transitional package import/export/reopen and desktop/mobile UI/cancel/stale/primaryODF acceptance remain unfinished. Existing4 metadata type errors, cycle,160 older docs diagnostics and wider failed coverage scopes remain open."
+  ],
+  "next": "Implement original native FastParser C callback/namespace/token producer, locator-based SAXParseException preparation and parse/cleanup loop with the now explicitly approved original XML_PARSE_NOENT|XML_PARSE_HUGE call. Use actual source Emscripten thread=false profile and original parser QA; no fake providers or substitutes. Goal stays active; no finish/pause/merge/unfinished source implementation commit."
+}
