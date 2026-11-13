@@ -1,0 +1,415 @@
+{
+  "scope": "Actual OSL native mutex/RefCountedMutex and ZipEntry prerequisites for original ZipFile directory/LOC parser; directory binding is not implemented/accepted yet",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "artifact": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 162,
+    "enumConstantCount": 851,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "24fb69f8bcfb09a95826a597c705bd9f4a38cc71bfe2f5e14b6b72345854f780"
+  },
+  "previousArtifactSha256": "e45f0b54031bd3662e5fc173a8fd217259392c8f1c22e900245cf4b4d4276f0c",
+  "sourceSha256": {
+    "third_party/libxml2-wasm/osl-mutex.c": "d9aaf93edf7ebf4bc19bd697f3e97717a248695341bee0a10ef3347fb8fcce39",
+    "third_party/libxml2-wasm/binding.c": "559f4dee06ddff8f227f79d651c24dfce98adf027a2ae19077ef1151cd999438",
+    "third_party/libxml2-wasm/index.d.ts": "ada3c2c2e551f3c73b28c27df987bbe4999925ac8a1a32626523c3d78dd67033",
+    "scripts/build-libxml2-wasm.py": "37371386d6144b9f9352239ff23167045fc5fbbf833d83a7d70f03d7439a0e02",
+    "apps/office/src/sal/osl/unx/mutex.ts": "6ceeb8736abd3c45e0419f3e1422e2cea73dcdad67940ad72e4b83b220e95ccc",
+    "apps/office/src/sal/inc/osl/mutex.ts": "62010e57eef7930673841d8200c7a0fcb4d553e888e40ae8bb1efb88d9bcdd27",
+    "apps/office/src/comphelper/inc/refcountedmutex.ts": "4130a746ae284a66c4f55a2d0ece0291a8a8c9ef296a45719008c913c41ce5ce",
+    "apps/office/src/package/inc/ZipEntry.ts": "afecf4f98158f5547b66250f6f2043ca1f5c68b073c905cf380033a9ffe73b90",
+    "apps/office/src/package/source/zipapi/native-directory-prerequisites.test.ts": "1647604ed0a0573f1d3c27756e9964cae68f2672bbb3e130c330424e30abf1e2",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "d15f139f823e448bfdfff32d01b7dcb3366d54736f8444b72fd076127d7b8980",
+    "scripts/native-dom-worker-probe.mjs": "8e276e0ad8584e4a56f967a73f6e4618fa85021713892f9c2ed8fd8668cf03d8"
+  },
+  "checks": [
+    {
+      "command": "python3 scripts/build-libxml2-wasm.py",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-build.log",
+      "sha256": "f801913271826b8646d8817f0599d738cc09c0d9ffddaedf8bd047bdb5e7a904"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/package/source/zipapi/native-directory-prerequisites.test.ts src/package/source/zipapi/byte-io.test.ts src/external/emscripten/runtime.test.ts src/external/libxml2/libxml2.test.ts src/unoxml/source/dom/documentbuilder.test.ts src/unoxml/source/dom/documentbuilder.io.test.ts src/sal/qa/rtl/ref/rtl_ref.test.ts --maxWorkers=2 --coverage --coverage.include=src/sal/osl/unx/mutex.ts --coverage.include=src/sal/inc/osl/mutex.ts --coverage.include=src/comphelper/inc/refcountedmutex.ts --coverage.include=src/package/inc/ZipEntry.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-zip-directory-prerequisites",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-prerequisites-tests.log",
+      "sha256": "16a2b9b90b192c64182bc0aa91f48345dd457d3d7c29fba7600d8fbaf2fd599e"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-worker.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "node_modules/.bin/tsc --noEmit --project apps/office/tsconfig.json",
+      "result": "fail",
+      "log": "apps/office/coverage/native-zip-directory-types.log",
+      "sha256": "191e4bdf87792572048a2d40ec89fdf71fbac07a0325f9aa1a25ce7df4266208"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-vite.log",
+      "sha256": "2b6aaf1e525fb227baff23c430ecedd04440225285082f486ddce6a7a5ab8849"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-static.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-provenance.log",
+      "sha256": "3782feef1a6b6fc104383fb57b177bb82019c82ab5ad36c03a00a85692a0ea93"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-registry.log",
+      "sha256": "1bd1801a28b6008a2ad198a450df3d072f98cee5bdf1a2e2bfc86d27d61b2b82"
+    },
+    {
+      "command": "node scripts/check-module-boundaries.mjs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-zip-directory-dependencies.log",
+      "sha256": "3c3d8285010c210a2f86de408d81831a304532cf0d4bea2c9c32e84fcdd846eb"
+    },
+    {
+      "command": "node scripts/check-jsdoc.mjs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-zip-directory-docs.log",
+      "sha256": "2e31be5dff5b1029a71c8e89f9870b2b1c88fd7ee0e111011b8037553658c30b"
+    },
+    {
+      "command": "node scripts/check-file-size.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-size.log",
+      "sha256": "990975430adec00e2d726da03d5de6c96f42b9f64540a6049cb36b23da5e7962"
+    },
+    {
+      "command": "node scripts/check-lo-source-tree.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-tree.log",
+      "sha256": "444d529b6df4a6f35f802469bf703a496dc372e53e16295756c8f09af5f0040f"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-doctor.log",
+      "sha256": "bc99209e3a09f2192733564ace984b314053c404374d1871ecad5496422480f8"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "(npm run check:writer-resources && npm run check:calc-resources)",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-resources.log",
+      "sha256": "b7a75c240ebe5f5aa04324170d2cc43a8bb393989d938056bd2952350bd0e78a"
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/sal/osl/unx/mutex.ts apps/office/src/sal/inc/osl/mutex.ts apps/office/src/comphelper/inc/refcountedmutex.ts apps/office/src/package/inc/ZipEntry.ts apps/office/src/package/source/zipapi/native-directory-prerequisites.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs --max-warnings 0",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "tests": "34passed/7files; complete4new TS owners100/100/100/100. This is not native C code coverage, full POSIX/threaded mutex QA or ZipFile acceptance. Old failed profiles retained independently.",
+  "behavior": [
+    "Original consumed sal/osl/unx/mutex.cxx C bodies execute actual malloc/pthread recursive attributes/init/lock/try/unlock/destroy/free in the same genuine runtime, with original null/failure statuses. No JavaScript mutex counters/owner queues/provider or memory-lifetime emulator. Source diagnostics and global mutex are not bound.",
+    "Actual pinned Emscripten4.0.19 non-pthread libc supplies its real pthread stub implementation. Native shared-memory/thread contention/busy destroy/OOM/physical ABI remain unqualified; no invented successful thread/mutex provider. Runtime remains realm-local, no host filesystem mount/network/global user file access.",
+    "Original osl::Mutex/Guard return/ownership protocol, actual RefCountedMutex member/base destruction and existing intrusive rtl::Reference/SimpleReferenceObject retained. Guard template return values are unconstrained/ignored, matching C++ rather than a Boolean/void-only restriction. JS null precondition test is a compiler assertion test, not a native abort differential.",
+    "Original ZipEntry aggregate retains native OUString and copy/destructor semantics; source scalar members are not given invented zero defaults. Only initialized scalar values observed; physical uninitialized values remain unqualified.",
+    "Original osl_Mutex acquire_002 exact single-thread assertions ported, including two acquires/one try/one release; no balancing correction. Actual bootstrap/null/native statuses, nested guards/reference member identity, real current C DOM/IO/runtime and ZIP binary fixture cases pass. Main/DOM-free Worker observes same actual owned mutex member and real recursive/release statuses, alongside existing C/FS/OSL/native byte/parsing probes."
+  ],
+  "sourceQA": "Original sal/qa/osl/mutex/osl_Mutex.cxx acquire_002 consumed assertions execute. ctor_001/002, acquire_001, tryToAcquire_001/release_001 use original native threads; global-mutex QA needs the still-unported global API. These are pending/unqualified rather than replaced by serial JS or independent-realm workers. Empty release_002 adds no behavioral assertions. Complete original ZIP package/directory/inflate/storage QA remains pending.",
+  "quality": "Scoped lint/format/tools types/Vite/static/resources/size/tree/provenance/registry/doctor/routing/diff PASS. Same4metadata type errors/dependency cycle/157olderJSDoc failures remain. Provenance2552runtime/2321mapped/193browser/38infra; semanticViolationCount0. No full suite due (0parents completed). Native source/archive/compiler pinned;162exports (5original OSL entry points added),851enums unchanged.",
+  "observations": [
+    "Actual ZipFile requires concrete RefCountedMutex, absent from this working slice. Implemented original native owner instead of fabricating a lock or a successful constructor. Full directory/local header logic remains the next source block.",
+    "Initial lint caught Boolean|void template return union; changed to unconstrained ignored return (unknown), matching original Guard<T>.",
+    "Registry records now list the exported ZipEntry class as local symbol and use the actual sPath field as source evidence; field is not falsely declared an independent exported symbol. Validators unchanged.",
+    "First targeted command included an unmatched non-existent salhelper test filter; final command uses actual pinned rtl_ref test and7files. No test or coverage masks introduced."
+  ],
+  "olderFailedGatesRetained": [
+    "Individual native OOXML parser85.45/78.26/100/93.87",
+    "Broader SDK86.44/86.11/92.30/87.96",
+    "Whole SAL79.20/75.47/73.24/80.62",
+    "Older4metadata storage errors, dependency cycle, JSDoc and all earlier broader unqualified scopes remain open.",
+    "Previous native-attribute-collections complete o3tl string_view function88.88 remains failed independently; current source storage coverage does not close it.",
+    "Previous native-storage complete-file failures retained: base73.15/66.66/100/73.33; nativeZip41.41/45.23/100/43.82; helper64.8/75.64/63.15/62.27; parser85.24/80/100/92.72. Current passing stream cases do not close them.",
+    "Previous native-persistence complete SwitchablePersistenceStream scope remains failed S86.27/B82.14/F100/L94.01. Current bootstrap100 does not close or dilute it.",
+    {
+      "native": {
+        "statements": 92.97,
+        "branches": 85.2,
+        "functions": 96.15,
+        "lines": 94.88,
+        "result": "fail90"
+      },
+      "host": {
+        "statements": 99.4,
+        "branches": 98.16,
+        "functions": 100,
+        "lines": 100
+      },
+      "aggregate": "94.78/89.83/97.11/96.33; not native acceptance"
+    },
+    "234 passed, one RTF style failure across16files; expected quotations, actual block-quotation.",
+    "39passed/3files; complete2owner90 FAIL. File S74.33/B77.14/F100/L82.54; errno S23.07/B28.57/F100/L21.56; aggregate65.93/65.36/100/70.72 not individual acceptance. No masks or fake fault provider. Older native-stream branch85.20 and all older failures remain independent.",
+    "42passed/3files; whole1owner90 FAIL S87.03/B75.33/F96/L90.87. No masks, no source private patch or fake failing/successful stream provider.",
+    {
+      "result": "fail90, complete10affected executable owners retained individually",
+      "tests": "81passed/9files",
+      "owners": {
+        "apps/office/src/comphelper/inc/bytereader.ts": {
+          "statements": {
+            "covered": 6,
+            "total": 6,
+            "pct": 100.0
+          },
+          "branches": {
+            "covered": 6,
+            "total": 6,
+            "pct": 100.0
+          },
+          "functions": {
+            "covered": 2,
+            "total": 2,
+            "pct": 100.0
+          },
+          "lines": {
+            "covered": 6,
+            "total": 6,
+            "pct": 100.0
+          }
+        },
+        "apps/office/src/comphelper/source/streaming/memorystream.ts": {
+          "statements": {
+            "covered": 92,
+            "total": 92,
+            "pct": 100.0
+          },
+          "branches": {
+            "covered": 36,
+            "total": 36,
+            "pct": 100.0
+          },
+          "functions": {
+            "covered": 23,
+            "total": 23,
+            "pct": 100.0
+          },
+          "lines": {
+            "covered": 80,
+            "total": 80,
+            "pct": 100.0
+          }
+        },
+        "apps/office/src/comphelper/source/streaming/seqstream.ts": {
+          "statements": {
+            "covered": 125,
+            "total": 126,
+            "pct": 99.2
+          },
+          "branches": {
+            "covered": 51,
+            "total": 53,
+            "pct": 96.22
+          },
+          "functions": {
+            "covered": 19,
+            "total": 19,
+            "pct": 100.0
+          },
+          "lines": {
+            "covered": 114,
+            "total": 114,
+            "pct": 100.0
+          }
+        },
+        "apps/office/src/package/source/xstor/ocompinstream.ts": {
+          "statements": {
+            "covered": 219,
+            "total": 221,
+            "pct": 99.09
+          },
+          "branches": {
+            "covered": 46,
+            "total": 48,
+            "pct": 95.83
+          },
+          "functions": {
+            "covered": 39,
+            "total": 39,
+            "pct": 100.0
+          },
+          "lines": {
+            "covered": 201,
+            "total": 201,
+            "pct": 100.0
+          }
+        },
+        "apps/office/src/package/source/xstor/switchpersistencestream.ts": {
+          "statements": {
+            "covered": 132,
+            "total": 157,
+            "pct": 84.07
+          },
+          "branches": {
+            "covered": 69,
+            "total": 88,
+            "pct": 78.4
+          },
+          "functions": {
+            "covered": 21,
+            "total": 21,
+            "pct": 100.0
+          },
+          "lines": {
+            "covered": 110,
+            "total": 121,
+            "pct": 90.9
+          }
+        },
+        "apps/office/src/package/source/zipapi/ByteChucker.ts": {
+          "statements": {
+            "covered": 26,
+            "total": 26,
+            "pct": 100.0
+          },
+          "branches": {
+            "covered": 8,
+            "total": 8,
+            "pct": 100.0
+          },
+          "functions": {
+            "covered": 9,
+            "total": 9,
+            "pct": 100.0
+          },
+          "lines": {
+            "covered": 25,
+            "total": 25,
+            "pct": 100.0
+          }
+        },
+        "apps/office/src/package/source/zipapi/ByteGrabber.ts": {
+          "statements": {
+            "covered": 40,
+            "total": 53,
+            "pct": 75.47
+          },
+          "branches": {
+            "covered": 13,
+            "total": 24,
+            "pct": 54.16
+          },
+          "functions": {
+            "covered": 13,
+            "total": 13,
+            "pct": 100.0
+          },
+          "lines": {
+            "covered": 34,
+            "total": 44,
+            "pct": 77.27
+          }
+        },
+        "apps/office/src/package/source/zipapi/MemoryByteGrabber.ts": {
+          "statements": {
+            "covered": 21,
+            "total": 21,
+            "pct": 100.0
+          },
+          "branches": {
+            "covered": 10,
+            "total": 10,
+            "pct": 100.0
+          },
+          "functions": {
+            "covered": 11,
+            "total": 11,
+            "pct": 100.0
+          },
+          "lines": {
+            "covered": 19,
+            "total": 19,
+            "pct": 100.0
+          }
+        },
+        "apps/office/src/tools/source/stream/stream.native.ts": {
+          "statements": {
+            "covered": 401,
+            "total": 427,
+            "pct": 93.91
+          },
+          "branches": {
+            "covered": 171,
+            "total": 196,
+            "pct": 87.24
+          },
+          "functions": {
+            "covered": 77,
+            "total": 78,
+            "pct": 98.71
+          },
+          "lines": {
+            "covered": 374,
+            "total": 391,
+            "pct": 95.65
+          }
+        },
+        "apps/office/src/unotools/source/streaming/streamwrap.ts": {
+          "statements": {
+            "covered": 131,
+            "total": 133,
+            "pct": 98.49
+          },
+          "branches": {
+            "covered": 40,
+            "total": 41,
+            "pct": 97.56
+          },
+          "functions": {
+            "covered": 28,
+            "total": 29,
+            "pct": 96.55
+          },
+          "lines": {
+            "covered": 123,
+            "total": 125,
+            "pct": 98.4
+          }
+        }
+      },
+      "aggregate": "94.53/88.23/99.18/96.44, not acceptance for failed ByteGrabber/native stream/persistence scopes",
+      "newOwners": "ByteChucker100/100/100/100; MemoryByteGrabber100/100/100/100; ByteGrabber75.47/54.16/100/77.27. No actual source non-ByteReader provider yet; fallback paths unqualified, no fabricated stream/provider to cover them."
+    }
+  ],
+  "suspectedIssues": [
+    "WRITER543/CALC606 native destroy frees after pthread destroy failure (busy profile unqualified)",
+    "WRITER544/CALC607 source directory-disk sentinel checks other field; source observation only",
+    "WRITER545/CALC608 source empty ZIP zero-interval hole rejection; source observation only"
+  ],
+  "pendingApproval": "Question sent for exact original setAllowedPaths/isForbidden and pre-open security hook from sal/osl/unx/file.cxx under security.must explicit-scope rule. No permission reply yet, no security-hook mutation; independent wrapper progress completed. No host files mounted/accessed.",
+  "remaining": [
+    "Implement original ZipFile directory/local/data descriptor/extra-field logic and actual native-key/hash/entry enumeration, using this real mutex owner and native byte readers.",
+    "Actual directory/entry/inflate/ZipPackage/OStorage backend and original integration QA; no directory import claim from current prerequisite tests.",
+    "Source file URL/open/security/temp and full DOCX/XLSX native metadata/model/filter/export/reopen through existing desktop/mobile UI.",
+    "Older failed coverage/quality scopes, original native threading/global mutex/full broader QA remain open."
+  ],
+  "status": "Both parent tasks unfinished, goal active. Canonical task evidence only checkpointed; source WIP, no merge."
+}
