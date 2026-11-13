@@ -1,0 +1,236 @@
+{
+  "sharedEvidence": ".agentplane/tasks/202610251549-J0Z0KF/evidence/native-fastparser-errors-normalization-continuation.json",
+  "status": "unfinished",
+  "checks": [
+    {
+      "command": "../../node_modules/.bin/vitest run src/sax/source/fastparser/fastparser.normalize.test.ts src/sax/source/fastparser/fastparser.errors.test.ts src/sax/source/fastparser/fastparser.entity.test.ts src/sax/source/fastparser/fastparser.impl.test.ts src/sax/source/fastparser/InputSource.test.ts src/sax/source/fastparser/fastparser.test.ts src/sax/source/fastparser/FastSaxParser.test.ts --maxWorkers=2 --coverage --coverage.include='src/sax/source/fastparser/{fastparser.normalize,fastparser.entity}.ts' --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/fastparser-errors-final",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-errors-final.log",
+      "evidence": "99tests/7files. Whole2owners S96.81/B95.37/F100/L97.84; Entity independently S95.67/B92.85/F100/L97.14, normalization100 all metrics. Actual native C errors/locator/Any and registered Writer failure; no fake positive error handler, error-field injection or source/counter masking."
+    },
+    {
+      "command": "../../node_modules/.bin/vitest run src/sax/source/fastparser/fastparser.errors.test.ts --maxWorkers=2",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-errors-fixture-current.log",
+      "evidence": "5 source-error cases after correcting fixture to the SDK-required actual owned component-context Reference. Same owner implementation; no counter merging/reinterpretation."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-worker.log",
+      "evidence": "Actual main/DOM-free Worker see native malformed C-context SAXParseException, real source Unicode IDs and normalized alias. Existing independent C-callback/supplied-Event consumers remain separate from the unfinished complete parser pipeline."
+    },
+    {
+      "command": "../../node_modules/.bin/vite build",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-vite.log",
+      "evidence": "Production Vite; package build remains unqualified because app tsc fails."
+    },
+    {
+      "command": "node_modules/.bin/tsc --project apps/office/tsconfig.json --noEmit",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/fastparser-parse-types-corrected.log",
+      "evidence": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(338,9): error TS2304: Cannot find name 'MediaDescriptor'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(410,36): error TS2345: Argument of type 'Sequence<PropertyValue>' is not assignable to parameter of type 'SfxMediumInput'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(411,26): error TS2339: Property 'GetOutputStorage' does not exist on type 'SfxMedium'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(438,27): error TS2339: Property 'Commit' does not exist on type 'SfxMedium'.\n"
+    },
+    {
+      "command": "node_modules/.bin/tsc --project tsconfig.tools.json --noEmit",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-tools-types.log",
+      "evidence": ""
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/check-source-provenance.ts",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-provenance.log",
+      "evidence": "2522runtime/2293mapped/192browser/37infrastructure."
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-registry.log",
+      "evidence": "semanticViolationCount0; all broad semantic/default fields remain unverified."
+    },
+    {
+      "command": "node scripts/check-module-boundaries.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/fastparser-parse-boundaries.log",
+      "evidence": "Existing comphelper->sax->comphelper cycle, no new dependency exception or validator weakening."
+    },
+    {
+      "command": "node scripts/check-jsdoc.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/fastparser-parse-jsdoc.log",
+      "evidence": "160 older diagnostics; no current error/normalization/probe findings."
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/sax/source/fastparser/fastparser.entity.ts apps/office/src/sax/source/fastparser/fastparser.normalize.ts apps/office/src/sax/source/fastparser/fastparser.normalize.test.ts apps/office/src/sax/source/fastparser/fastparser.errors.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-eslint-final.log",
+      "evidence": ""
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/sax/source/fastparser/fastparser.entity.ts apps/office/src/sax/source/fastparser/fastparser.normalize.ts apps/office/src/sax/source/fastparser/fastparser.errors.test.ts apps/office/src/sax/source/fastparser/fastparser.normalize.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs docs/program/registry/shared/runtime/sax/source/fastparser/fastparser.normalize.ts.json docs/program/registry/shared/provenance/sax/source/fastparser/fastparser.normalize.ts.json",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-format.log",
+      "evidence": ""
+    },
+    {
+      "command": "node scripts/check-file-size.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-size.log",
+      "evidence": ""
+    },
+    {
+      "command": "node scripts/check-lo-source-tree.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-source-tree.log",
+      "evidence": ""
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-routing.log",
+      "evidence": ""
+    },
+    {
+      "command": "ap doctor",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-doctor.log",
+      "evidence": ""
+    },
+    {
+      "command": "git diff --check",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-diff-final.log",
+      "evidence": ""
+    }
+  ],
+  "coverage": {
+    "scope": [
+      "sax/source/fastparser/fastparser.entity.ts",
+      "sax/source/fastparser/fastparser.normalize.ts"
+    ],
+    "directory": "apps/office/coverage/fastparser-errors-final",
+    "summary": {
+      "total": {
+        "lines": {
+          "total": 232,
+          "covered": 227,
+          "skipped": 0,
+          "pct": 97.84
+        },
+        "statements": {
+          "total": 251,
+          "covered": 243,
+          "skipped": 0,
+          "pct": 96.81
+        },
+        "functions": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 108,
+          "covered": 103,
+          "skipped": 0,
+          "pct": 95.37
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/fastparser/fastparser.entity.ts": {
+        "lines": {
+          "total": 175,
+          "covered": 170,
+          "skipped": 0,
+          "pct": 97.14
+        },
+        "functions": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 185,
+          "covered": 177,
+          "skipped": 0,
+          "pct": 95.67
+        },
+        "branches": {
+          "total": 70,
+          "covered": 65,
+          "skipped": 0,
+          "pct": 92.85
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/fastparser/fastparser.normalize.ts": {
+        "lines": {
+          "total": 57,
+          "covered": 57,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 66,
+          "covered": 66,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 38,
+          "covered": 38,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "rawSha256": {
+      "coverage-final.json": "2bc88cb796f42f240ee0493221a94f920be214568c41b47a1425511a9fc43ccf",
+      "coverage-summary.json": "32c9af38b61c021ed5dd78da3767232baea456ee74b9a5ed04e28346bb162422"
+    },
+    "qualification": "Whole owners independently above90; no sliced range, counter merging, fake fatal handler or native-error field injection. Nonnull fatal handler/its thrown-exception unwind, native threaded suppression and non-UNO host exception remain unqualified. Older wider failed gates stay open."
+  },
+  "qualification": [
+    "Original saved-exception Any assignment, generated SAXParseException fields, nil-handler unconditional throw and native diagnostics are executed; error handler nonnull/fatal throw path is implemented but not runtime-qualified with an invented positive provider.",
+    "Namespace rules use native RTL values/indexes/static literal storage and the original implicit concat temporary/move assignment. The same source copy remains separate from xmloff; no new URI resolver/namespace/type/default provider.",
+    "Actual C malformed-context and alias probes run in main/DOM-free Worker. This is not C callbacks connected to the Entity producer or a complete FastParser service/parseStream.",
+    "Original full parser QA, callbacks/parse/cleanup/custom entities, normal parser locator handoff and UNO FastParser/LegacyFastParser remain unfinished; Expat remains separate. Source Emscripten thread=false profile is still authoritative.",
+    "Native C++ physical mutex/allocator/thread/ABI and independent compiled original C++ component differential are unqualified.",
+    "Whole metadata/storage/model/filter/Strict+Transitional/package/XML/desktop+mobile UI/cancel/stale/primaryODF acceptance remains unfinished. Existing4 metadata errors, module cycle,160 older docs diagnostics and wider failed scopes remain open."
+  ],
+  "securityScopes": {
+    "nativeFastParserOptions": "Explicit human approval already received for original xmlCtxtUseOptions(XML_PARSE_NOENT|XML_PARSE_HUGE). This block ports diagnostics/aliases only; no source parse loop or options call yet added.",
+    "urlTrustAuthenticationCertificate": "Separate old scope question remains unanswered, no related edits."
+  },
+  "next": "Connect original C SAX callbacks/token/namespace producers to the existing actual Entity and finish original parse/cleanup loop with now-approved source XML_PARSE_NOENT|XML_PARSE_HUGE. Implement missing original custom-entity/native numeric ABI instead of substitutes; run complete original parser QA before service/format route promotion. Keep goal active, no finish/pause/merge or unfinished source commit."
+}
