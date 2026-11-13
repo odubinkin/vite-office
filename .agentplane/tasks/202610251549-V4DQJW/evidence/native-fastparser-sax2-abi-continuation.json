@@ -1,0 +1,104 @@
+{
+  "sharedEvidence": ".agentplane/tasks/202610251549-J0Z0KF/evidence/native-fastparser-sax2-abi-continuation.json",
+  "status": "unfinished",
+  "checks": [
+    {
+      "command": "python3 scripts/build-libxml2-wasm.py",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Existing verified archive/compiler inputs; no download.7 genuine C functions, static source SAX2 aggregate and actual myDoc accessor added.154 exports/851 C-header enums; artifact SHA256 c8d2aa56cdda2cf38b7bcd87a5de7ca4018cdcba7b08bc355a561ce1992fd420. Native libxml2 implementation/configuration unchanged."
+    },
+    {
+      "command": "../../node_modules/.bin/vitest run src/external/libxml2/fastparsercallbacks.test.ts src/external/libxml2/parsercallbacks.test.ts src/external/libxml2/libxml2.test.ts src/unoxml/source/dom/native-parser-callbacks.test.ts src/unoxml/source/dom/documentbuilder.test.ts src/unoxml/source/dom/documentbuilder.io.test.ts src/unoxml/source/dom/documentbuilder.errors.test.ts --maxWorkers=2 --coverage --coverage.include=src/external/libxml2/fastparsercallbacks.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/fastparser-native-abi-final",
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "28tests/7files. Complete ABI owner S100/B100/F100/L100 at user-authorized90; original DocumentBuilder regressions retained. Actual C-produced callbacks exercise all5 entries, namespaces/attributes, native custom entity and overlapping native contexts continuing after older-scope destruction. No fake UNO/parser provider, private fields, failure injector or counter edits."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Actual Chromium main and DOM-free module Worker observe C SAX2 push callbacks, inherited namespace URI, counted UTF8 attribute, PI, split supplementary UTF8 codepoint, exact characters and successful native completion. Existing DOM/URI/UNO/token/attribute/Writer package probes also pass."
+    },
+    {
+      "command": "../../node_modules/.bin/vite build",
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "Production bundle built in5.81seconds, distinct from the package build including currently failing app tsc."
+    },
+    {
+      "command": "node_modules/.bin/tsc --project apps/office/tsconfig.json --noEmit",
+      "cwd": ".",
+      "result": "fail",
+      "evidence": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(338,9): error TS2304: Cannot find name 'MediaDescriptor'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(410,36): error TS2345: Argument of type 'Sequence<PropertyValue>' is not assignable to parameter of type 'SfxMediumInput'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(411,26): error TS2339: Property 'GetOutputStorage' does not exist on type 'SfxMedium'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(438,27): error TS2339: Property 'Commit' does not exist on type 'SfxMedium'.\n"
+    },
+    {
+      "command": "node_modules/.bin/tsc --project tsconfig.tools.json --noEmit",
+      "cwd": ".",
+      "result": "pass"
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/check-source-provenance.ts",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Source provenance check passed for 2516 runtime modules (2287 mapped, 192 browser adaptations, 37 local infrastructure).\n"
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Complete registry/invariant/parity check semanticViolationCount0; new browser-owned ABI record unverified broad semantics/defaults."
+    },
+    {
+      "command": "node scripts/check-module-boundaries.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "evidence": "Module boundary check failed:\n- runtime module cycle: comphelper -> sax -> comphelper\n"
+    },
+    {
+      "command": "node scripts/check-jsdoc.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "evidence": "160 older diagnostics retained; no current FastParser ABI/test/fixture diagnostic."
+    },
+    {
+      "command": "node scripts/check-file-size.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Main Worker fixture992lines, below1000 cap."
+    },
+    {
+      "command": "node scripts/check-lo-source-tree.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "LibreOffice source-tree check passed for 116 required paths and 32 retired roots.\n"
+    },
+    {
+      "command": "ap doctor",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "0errors; earlier managed-hook readiness warning retained."
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "cwd": ".",
+      "result": "pass"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": ".",
+      "result": "pass"
+    }
+  ],
+  "sourceProfileCorrection": {
+    "source": "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx#FastSaxParserImpl::parseStream",
+    "evidence": "#ifdef __EMSCRIPTEN__ sets rEntity.mbEnableThreads=false; only #else uses SAX_DISABLE_THREADS/m_bDisableThreadedParser/seekable or available input>10000.",
+    "consequence": "Implement original Emscripten parse profile for browser/WASM. Prior notes requiring the non-Emscripten producer/consumer thread as a browser acceptance prerequisite are superseded. Outer module Worker remains possible and is actually tested. Other-platform native threading/ABI not certified."
+  },
+  "securityScopes": {
+    "urlTrustAuthenticationCertificate": "Earlier explicit scope request remains unanswered; no relevant edits.",
+    "nativeFastParserOptions": "New async question asks permission for the actual source xmlCtxtUseOptions(XML_PARSE_NOENT | XML_PARSE_HUGE) call under .agentplane/policy/security.must.md. Tool accepted delivery only; no human approval observed. Do not infer approval from automatic goal continuations.",
+    "currentChanges": "Only raw API export and callback/field ABI added. No new xmlCtxtUseOptions call, XML parser-option/entity/resolver policy, FastParser service registration or production format route enabled."
+  },
+  "next": "Port real FastSaxParserImpl/FastSaxParser and source handler/entity/namespace/locator/error owners against available actual C API, using original Emscripten profile. Keep security-option call pending explicit approval; continue independent authorized owners. Goal active; no finish/pause/merge/source implementation commit."
+}
