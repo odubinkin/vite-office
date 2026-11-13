@@ -1,0 +1,109 @@
+{
+  "sharedEvidence": ".agentplane/tasks/202610251549-J0Z0KF/evidence/native-token-service-continuation.json",
+  "status": "unfinished",
+  "checks": [
+    {
+      "command": "../../node_modules/.bin/vitest run src/oox/source/token/tokenmap.test.ts src/oox/source/core/fasttokenhandler.test.ts src/sax/source/tools/fastattribs.test.ts src/sax/source/tools/fastserializer.test.ts src/oox/source/helper/attributelist-values.test.ts src/oox/source/helper/attributelist.test.ts src/oox/source/core/xmlfilterbase.test.ts src/sw/source/filter/ww8/docxattributeoutput.test.ts src/sw/source/filter/ww8/docxattributeoutput.effects.test.ts --maxWorkers=2 --coverage --coverage.include='src/{oox/source/token/tokenmap,oox/source/core/fasttokenhandler,offapi/com/sun/star/xml/sax/FastTokenHandler,sax/source/tools/fastattribs,sax/source/tools/fastserializer,sax/inc/fshelper}.ts' --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-token-service",
+      "cwd": "apps/office",
+      "result": "pass",
+      "scope": [
+        "oox/source/token/tokenmap.ts",
+        "oox/source/core/fasttokenhandler.ts",
+        "offapi/com/sun/star/xml/sax/FastTokenHandler.ts",
+        "sax/source/tools/fastattribs.ts",
+        "sax/source/tools/fastserializer.ts",
+        "sax/inc/fshelper.ts"
+      ],
+      "evidence": "155 tests in9files; six full owners S95.13/B94.53/F99.02/L96.32; SDK helper separately S63.41/B37.5/F75/L68.42 remains incomplete."
+    },
+    {
+      "command": "../../node_modules/.bin/vitest run src/oox/source/token/tokenmap.test.ts src/oox/source/core/fasttokenhandler.test.ts src/sax/source/tools/fastattribs.test.ts src/sax/source/tools/fastserializer.test.ts src/cppuhelper/source/native-inheritance.test.ts src/cppuhelper/source/native-implbase.test.ts src/cppu/inc/com/sun/star/uno/Sequence.test.ts src/cppu/inc/com/sun/star/uno/Sequence-type-index.test.ts src/sw/source/filter/ww8/docxattributeoutput.test.ts src/sw/source/filter/ww8/docxattributeoutput.effects.test.ts --maxWorkers=2",
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "76 tests in10files."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Actual Chromium main and DOM-free module Worker; registered FastTokenHandler, static Sequence sharing, COW detachment, exact lookup before/after mutation and serializer <document/> output. Existing actual native DOM/UNO/URI and Writer package cases also pass. Initial invocation without repo-local browser path failed before launch; no download or global cache access was used."
+    },
+    {
+      "command": "../../node_modules/.bin/vite build",
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "Production bundling passes. This is distinct from the package build including tsc; typecheck remains failing as below."
+    },
+    {
+      "command": "node_modules/.bin/tsc --project apps/office/tsconfig.json --noEmit",
+      "cwd": ".",
+      "result": "fail",
+      "evidence": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(338,9): error TS2304: Cannot find name 'MediaDescriptor'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(410,36): error TS2345: Argument of type 'Sequence<PropertyValue>' is not assignable to parameter of type 'SfxMediumInput'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(411,26): error TS2339: Property 'GetOutputStorage' does not exist on type 'SfxMedium'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(438,27): error TS2339: Property 'Commit' does not exist on type 'SfxMedium'.\n"
+    },
+    {
+      "command": "node_modules/.bin/tsc --project tsconfig.tools.json --noEmit",
+      "cwd": ".",
+      "result": "pass"
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/check-source-provenance.ts",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Source provenance check passed for 2515 runtime modules (2287 mapped, 191 browser adaptations, 37 local infrastructure).\n"
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Full registry/invariant/parity check, semanticViolationCount0; no broad semantic/default status promotion."
+    },
+    {
+      "command": "node scripts/check-module-boundaries.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "evidence": "Module boundary check failed:\n- runtime module cycle: comphelper -> sax -> comphelper\n",
+      "resolution": "Keep cycle check intact. New actual FastSaxSerializer -> comphelper/processfactory exposes earlier comphelper/OFOPXMLHelper -> sax/legacy parser shortcut; original OFOPXMLHelper uses SDK Parser service, not a direct SAX implementation. Its genuine Parser/Expat and context route must replace the shortcut; do not suppress this cycle or add fake parser registration."
+    },
+    {
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries-xml.test.ts --maxWorkers=2",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "7 source-direction assertions pass, including original desktop composition of oox.component and oox CPPU helper dependency."
+    },
+    {
+      "command": "node scripts/check-jsdoc.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "evidence": "160 diagnostic rows in earlier unfinished metadata/URI/SDK and other WIP files. No remaining diagnostic in current token owner/test/SDK modules; no checker weakened."
+    },
+    {
+      "command": "node scripts/check-file-size.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Main Worker probe986lines; below1000 limit."
+    },
+    {
+      "command": "node scripts/check-lo-source-tree.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "LibreOffice source-tree check passed for 116 required paths and 32 retired roots.\n"
+    },
+    {
+      "command": "ap doctor",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "0errors; existing managed-hook readiness warning retained."
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "cwd": ".",
+      "result": "pass"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": ".",
+      "result": "pass"
+    }
+  ],
+  "next": "Port actual FastAttributeList/XCloneable/native unknown and fast Sequence attributes with original sax/qa/cppunit/attributes.cxx, then real FastParser and storage/metadata prerequisites; preserve original source defaults and browser file workflow deviations. Do not finish parents or pause goal."
+}
