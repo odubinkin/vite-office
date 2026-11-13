@@ -1,0 +1,141 @@
+{
+  "scope": "Original native FastSaxParser public UNO wrapper/factory and real registered service path; shared Writer/Calc XML prerequisite, not full DOCX/XLSX acceptance",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "checks": [
+    {
+      "name": "parser gate",
+      "log": "apps/office/coverage/fastparser-uno-final.log",
+      "result": "pass",
+      "observation": "63 tests/7 files; whole implementation + public wrapper S95.79 B92.43 F98.43 L96.62 at90"
+    },
+    {
+      "name": "broader public gate",
+      "log": "apps/office/coverage/fastparser-uno-public-whole.log",
+      "result": "fail",
+      "observation": "63 tests/6 files pass; S86.44 B86.11 F92.30 L87.96; actual SDK helper catch/translation branches remain uncovered, not hidden"
+    },
+    {
+      "name": "Chromium main/Worker",
+      "log": "apps/office/coverage/fastparser-uno-worker-current.log",
+      "result": "pass",
+      "observation": "Actual generated FastParser.create -> registered native component -> InputSource/converter/C callbacks/custom emoji -> Writer in both realms"
+    },
+    {
+      "name": "tools types",
+      "log": "apps/office/coverage/fastparser-uno-tools-types.log",
+      "result": "pass",
+      "observation": "tools tsc"
+    },
+    {
+      "name": "app types",
+      "log": "apps/office/coverage/fastparser-uno-types-final.log",
+      "result": "fail",
+      "observation": "Exactly4 older metadata storage dependencies: MediaDescriptor, SfxMedium ctor/GetOutputStorage/Commit"
+    },
+    {
+      "name": "production Vite",
+      "log": "apps/office/coverage/fastparser-uno-vite.log",
+      "result": "pass",
+      "observation": "Vite build, chunk warnings retained"
+    },
+    {
+      "name": "source provenance",
+      "log": "apps/office/coverage/fastparser-uno-provenance-current.log",
+      "result": "pass",
+      "observation": "2526runtime/2297mapped/192browser/37infrastructure"
+    },
+    {
+      "name": "registry/invariants/parity",
+      "log": "apps/office/coverage/fastparser-uno-registry-final.log",
+      "result": "pass",
+      "observation": "semanticViolationCount0; original module/helper inventory exhaustive"
+    },
+    {
+      "name": "lint",
+      "log": "apps/office/coverage/fastparser-uno-eslint-current.log",
+      "result": "pass",
+      "observation": "Focused runtime/test/probe owners"
+    },
+    {
+      "name": "format",
+      "log": "apps/office/coverage/fastparser-uno-format.log",
+      "result": "pass",
+      "observation": "Focused runtime/test/probe owners"
+    },
+    {
+      "name": "JSDoc",
+      "log": "apps/office/coverage/fastparser-uno-jsdoc-current.log",
+      "result": "fail",
+      "observation": "Older160 findings; no current changed parser/split tests findings"
+    },
+    {
+      "name": "boundaries",
+      "log": "apps/office/coverage/fastparser-uno-boundaries.log",
+      "result": "fail",
+      "observation": "Existing comphelper -> sax -> comphelper cycle retained"
+    },
+    {
+      "name": "size",
+      "log": "apps/office/coverage/fastparser-uno-size.log",
+      "result": "pass",
+      "observation": "No source-size exemption"
+    },
+    {
+      "name": "tree",
+      "log": "apps/office/coverage/fastparser-uno-tree.log",
+      "result": "pass",
+      "observation": "Source tree check"
+    },
+    {
+      "name": "routing",
+      "log": "apps/office/coverage/fastparser-uno-routing.log",
+      "result": "pass",
+      "observation": "No policy edits"
+    },
+    {
+      "name": "doctor",
+      "log": "apps/office/coverage/fastparser-uno-doctor.log",
+      "result": "pass",
+      "observation": "0 errors, older managed hook warning"
+    },
+    {
+      "name": "Calc resources",
+      "log": "apps/office/coverage/fastparser-uno-calc-resources.log",
+      "result": "pass",
+      "observation": "464commands/11menus/17dispositions"
+    },
+    {
+      "name": "diff",
+      "log": "apps/office/coverage/fastparser-uno-diff.log",
+      "result": "pass",
+      "observation": "git diff --check"
+    }
+  ],
+  "sourceHashes": {
+    "apps/office/src/sax/source/fastparser/fastparser.service.ts": "01a523bf95b9ed2c1ba04d823dadfe6a90d7eda695640fa0b483c273bf877e6e",
+    "apps/office/src/sax/source/fastparser/fastparser.service.test.ts": "6eb26d56ccddb101d77a46f357ae419b595de4449853e9a5efeede51a2a48221",
+    "apps/office/src/sax/inc/fastparser.ts": "3e2131e3066581ea06b87891179f358f7cf15e7bd717cfd3a69b752736389e7c",
+    "apps/office/src/offapi/com/sun/star/xml/sax/FastParser.ts": "2e494af2d08d941474415e0ffe8be3af3be7293ce3caa4aa745600c7f0b4701a",
+    "apps/office/src/comphelper/source/misc/string.ts": "b8e105bca2f9da7c364100a613f2631a9b7b203546ca5fdf18cbed5a33822f8f",
+    "apps/office/src/comphelper/source/misc/string.test.ts": "bdb44a539b51c31042b57103cae70ce881260070d5c5d019b77785ca92bd982c",
+    "apps/office/src/desktop/browser/app/uno-components.ts": "ab0b71ebdc7cccf169f817bad105e09af7e3ed6acf9c2f8fee4efac5d6869ebb",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "3e9eb28edaaf78b381ec8c6dc99e7eaeb4d1faa6b3dc4860abf4f8d6a34ccd81"
+  },
+  "olderEvidenceRetained": [
+    "native-fastparser-stream-entities-continuation.json",
+    "Older failed whole SAL gate S79.20/B75.47/F73.24/L80.62 and earlier broader coverage gates remain open."
+  ],
+  "initialFailures": [
+    "Initial service argument extraction used methods on generated field values; corrected through actual Any.prototype extraction as used by native existing owners.",
+    "Initial recognized-malformed assertion incorrectly used7byte Pipe QA input over MemoryInputStream: actual source converter loses that prefix. Corrected test scope, retained explicit short-prefix regression and documented original Pipe EOF sequence difference. Original Pipe QA not claimed.",
+    "Initial worker invocation lacked repository-local PLAYWRIGHT_BROWSERS_PATH; corrected to existing local browser without downloading.",
+    "Initial inventory lacked source filename divergence and split operation metadata; corrected metadata without changing validators."
+  ],
+  "remaining": [
+    "Full original parser QA requires real Pipe; LegacyFastParser outer wrapper and complete XMLImport QA remain unfinished.",
+    "SDK helper catch/translation coverage, optional nonnull XMap and physical C++ differential remain unqualified.",
+    "Native metadata/storage/model/filter and Strict/Transitional DOCX/XLSX package/UI acceptance remain unfinished.",
+    "Separate old URL trust/auth/certificate approval remains unanswered/untouched; exact NOENT|HUGE approval is implemented/tested."
+  ],
+  "status": "Parent tasks and goal remain active. No finish/pause/merge or incomplete implementation commit."
+}
