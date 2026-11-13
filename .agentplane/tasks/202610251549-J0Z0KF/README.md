@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 367
+revision: 370
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T13:28:18.297Z"
+  updated_at: "2026-11-13T13:51:22.874Z"
   updated_by: "CODER"
-  note: "Reverse UNO/byte adapters and full data pipe:42related cases/main-Worker/C XML pass; owner90 fails87.03/75.33/96/90.87. Older failures/full file/temp/backend/model/UI unfinished. See native-strmadpt-continuation.json."
-  attempts: 114
+  note: "ZIP binary/pointer checkpoint:81related cases/main-Worker/4actual package headers pass;10owners measured, reader/native stream/persistence90 still fail. Full ZIP/backend/model/UI and older failures unfinished. See native-zip-byte-continuation.json."
+  attempts: 115
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1832,8 +1835,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T13:51:22.874Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "ZIP binary/pointer checkpoint:81related cases/main-Worker/4actual package headers pass;10owners measured, reader/native stream/persistence90 still fail. Full ZIP/backend/model/UI and older failures unfinished. See native-zip-byte-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-13T13:51:28.061Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T13:28:24.191Z"
+doc_updated_at: "2026-11-13T13:51:28.061Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -5268,6 +5284,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T13:51:22.874Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: ZIP binary/pointer checkpoint:81related cases/main-Worker/4actual package headers pass;10owners measured, reader/native stream/persistence90 still fail. Full ZIP/backend/model/UI and older failures unfinished. See native-zip-byte-continuation.json.
+    Attempts: 115
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T13:51:21.845Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -5823,6 +5869,10 @@ sections:
     - Observation: Original reverse UNO/byte adapters and full data pipe now execute with42related cases, actual C Unicode parser and main/Worker. Evidence: `evidence/native-strmadpt-continuation.json`.
       Impact: Byte/UNO prerequisite advances; new owner90 fails87.03/75.33/96/90.87, all older failures/full file/temp/backend/model/UI remain open. Security hook approval remains pending, no dependent mutation.
       Resolution: Preserve WRITER538/CALC601 through WRITER540/CALC603; continue actual native source graph and original broader QA without fake providers or masks. Goal active; no unfinished source implementation commit.
+
+    - Observation: Original ZIP binary IO and actual typed/cell byte-pointer contract now execute through real streams/4pinned package headers/main-Worker;81related cases,10whole owners measured. Evidence: `evidence/native-zip-byte-continuation.json`.
+      Impact: ZIP prerequisite progresses; ByteGrabber/native stream/persistence90 and all older failures remain open. Full ZIP backend/file/temp/storage/model/UI unfinished; security approval pending.
+      Resolution: Preserve WRITER541/CALC604 and WRITER542/CALC605; implement actual archive backend/source QA without fake fallback providers, then full format/model/UI. Goal active; no unfinished source implementation commit.
 id_source: "generated"
 ---
 ## Summary
@@ -9267,6 +9317,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T13:51:22.874Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: ZIP binary/pointer checkpoint:81related cases/main-Worker/4actual package headers pass;10owners measured, reader/native stream/persistence90 still fail. Full ZIP/backend/model/UI and older failures unfinished. See native-zip-byte-continuation.json.
+Attempts: 115
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T13:51:21.845Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -9826,3 +9906,7 @@ Native DOM classic SAX and attribute ownership checkpoint (2026-11-13):
 - Observation: Original reverse UNO/byte adapters and full data pipe now execute with42related cases, actual C Unicode parser and main/Worker. Evidence: `evidence/native-strmadpt-continuation.json`.
   Impact: Byte/UNO prerequisite advances; new owner90 fails87.03/75.33/96/90.87, all older failures/full file/temp/backend/model/UI remain open. Security hook approval remains pending, no dependent mutation.
   Resolution: Preserve WRITER538/CALC601 through WRITER540/CALC603; continue actual native source graph and original broader QA without fake providers or masks. Goal active; no unfinished source implementation commit.
+
+- Observation: Original ZIP binary IO and actual typed/cell byte-pointer contract now execute through real streams/4pinned package headers/main-Worker;81related cases,10whole owners measured. Evidence: `evidence/native-zip-byte-continuation.json`.
+  Impact: ZIP prerequisite progresses; ByteGrabber/native stream/persistence90 and all older failures remain open. Full ZIP backend/file/temp/storage/model/UI unfinished; security approval pending.
+  Resolution: Preserve WRITER541/CALC604 and WRITER542/CALC605; implement actual archive backend/source QA without fake fallback providers, then full format/model/UI. Goal active; no unfinished source implementation commit.

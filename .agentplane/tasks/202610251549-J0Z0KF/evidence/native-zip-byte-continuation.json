@@ -1,0 +1,401 @@
+{
+  "scope": "Original ZIP binary IO and shared native byte-pointer contract prerequisite; actual DOCX/XLSX local-file header bytes only, not native full ZIP directory/inflate/storage/model/UI acceptance",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "artifact": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 157,
+    "enumConstantCount": 851,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "e45f0b54031bd3662e5fc173a8fd217259392c8f1c22e900245cf4b4d4276f0c"
+  },
+  "sourceSha256": {
+    "apps/office/src/comphelper/inc/bytereader.ts": "39e9cc2fb01df9dc61f6d6e161761fa26a5f7d57115a9e8557afd1ca6bf1c4db",
+    "apps/office/src/comphelper/source/streaming/memorystream.ts": "af886f9481420048518248107364d8682e3f3a237a9ded17ba01c7eaca92db93",
+    "apps/office/src/comphelper/source/streaming/seqstream.ts": "1a93775b656bf8395189f491fdfa436e78a66f21ab5b1a9992bac324d3a31e95",
+    "apps/office/src/package/source/xstor/ocompinstream.ts": "76833406aba5f83cbad0d863867014a3d43c52a4a005d7dbe9298398de11185a",
+    "apps/office/src/package/source/xstor/switchpersistencestream.ts": "bc09dba1889af858989330242c9e8f4380cc5415dc3a08fb91249e3299ac4e0c",
+    "apps/office/src/package/source/zipapi/ByteChucker.ts": "93a5539787f39c131d803ae0c035b33726ffab48dc2e613a94c30b7a5ff6691b",
+    "apps/office/src/package/source/zipapi/ByteGrabber.ts": "2ef67a16d92d69a41584f3a54b1bf2788cf75ab84daff6e4b01bc2d645dc3e9e",
+    "apps/office/src/package/source/zipapi/MemoryByteGrabber.ts": "2b7dced92449f842ff3cf7207c13481330eb55479a3e2cc8b85932a82548e90e",
+    "apps/office/src/tools/source/stream/stream.native.ts": "bdcf7402907c4629f3e8ae802c7bb56b8475d51ca3478d20ed5b0b0093383d14",
+    "apps/office/src/unotools/source/streaming/streamwrap.ts": "0c26629579cab55a7f1d00c84bc6e6d15db8ffb0602eedf5da3f823313e5dacc",
+    "apps/office/src/package/source/zipapi/byte-io.test.ts": "25f05736db5e3bfea16f90f0bb59edb90f4d01b2f93931cfd13ac33f4cd4239e",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "ade1f06b90189640042bd91b228d8bd93abac0f31b410dce1b8538b76fe72925",
+    "scripts/native-dom-worker-probe.mjs": "d729e938bf0f63151a05e0602162c428597c0466a355696b2b865684183d8923"
+  },
+  "checks": [
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/package/source/zipapi/byte-io.test.ts src/comphelper/source/streaming/seqstream.test.ts src/comphelper/source/streaming/memorystream.test.ts src/package/source/xstor/ocompinstream.test.ts src/package/source/xstor/oseekinstream.test.ts src/package/source/xstor/switchpersistencestream.test.ts src/unotools/source/streaming/streamwrap.test.ts src/tools/source/stream/stream.native.test.ts src/svl/source/misc/strmadpt.test.ts --maxWorkers=2 --coverage --coverage.include=src/package/source/zipapi/ByteGrabber.ts --coverage.include=src/package/source/zipapi/ByteChucker.ts --coverage.include=src/package/source/zipapi/MemoryByteGrabber.ts --coverage.include=src/comphelper/inc/bytereader.ts --coverage.include=src/comphelper/source/streaming/seqstream.ts --coverage.include=src/comphelper/source/streaming/memorystream.ts --coverage.include=src/package/source/xstor/ocompinstream.ts --coverage.include=src/package/source/xstor/switchpersistencestream.ts --coverage.include=src/unotools/source/streaming/streamwrap.ts --coverage.include=src/tools/source/stream/stream.native.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-zip-byte",
+      "result": "fail",
+      "log": "apps/office/coverage/native-zip-byte-tests.log",
+      "sha256": "fb8656ba4b458a0ec0148d194fc46bdff18f18338f44271e704e1cae73590613"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-byte-worker.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "node_modules/.bin/tsc --noEmit --project apps/office/tsconfig.json",
+      "result": "fail",
+      "log": "apps/office/coverage/native-zip-byte-types.log",
+      "sha256": "191e4bdf87792572048a2d40ec89fdf71fbac07a0325f9aa1a25ce7df4266208"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-byte-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-byte-vite.log",
+      "sha256": "7a2fbfcef3b026747f999a72c8bf4b9877f33b27e9d2d7ad93eeb527550272c6"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-byte-static.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-byte-provenance.log",
+      "sha256": "3d26b4ad22d6f35f44276bca5a702facae4b86ebab632e7365e3126e12ce1f84"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-byte-registry.log",
+      "sha256": "3020b761819f126f925da49909e2961ef23946325d9f74a70a38e787aba96f15"
+    },
+    {
+      "command": "node scripts/check-module-boundaries.mjs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-zip-byte-dependencies.log",
+      "sha256": "d09526752cf04516047ec4acb12bfd27b2e8aa9108ae0dfb465e782d24a2ee9c"
+    },
+    {
+      "command": "node scripts/check-jsdoc.mjs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-zip-byte-docs.log",
+      "sha256": "2e31be5dff5b1029a71c8e89f9870b2b1c88fd7ee0e111011b8037553658c30b"
+    },
+    {
+      "command": "node scripts/check-file-size.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-byte-size.log",
+      "sha256": "a3b3c36e0098e322138b32555027b3ee7e9d291325f835bc37c0f51b023195bc"
+    },
+    {
+      "command": "node scripts/check-lo-source-tree.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-byte-tree.log",
+      "sha256": "444d529b6df4a6f35f802469bf703a496dc372e53e16295756c8f09af5f0040f"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-byte-doctor.log",
+      "sha256": "fa9a27d3dcf1b09a2d320d038f69e4f88de91ee2f452cd7e4509256b46056563"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-byte-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "(npm run check:writer-resources && npm run check:calc-resources)",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-byte-resources.log",
+      "sha256": "5fca5bfd3c7890f808161f92765a64c3bd82633912fde5a28036ffaf28c3931d"
+    }
+  ],
+  "coverage": {
+    "result": "fail90, complete10affected executable owners retained individually",
+    "tests": "81passed/9files",
+    "owners": {
+      "apps/office/src/comphelper/inc/bytereader.ts": {
+        "statements": {
+          "covered": 6,
+          "total": 6,
+          "pct": 100.0
+        },
+        "branches": {
+          "covered": 6,
+          "total": 6,
+          "pct": 100.0
+        },
+        "functions": {
+          "covered": 2,
+          "total": 2,
+          "pct": 100.0
+        },
+        "lines": {
+          "covered": 6,
+          "total": 6,
+          "pct": 100.0
+        }
+      },
+      "apps/office/src/comphelper/source/streaming/memorystream.ts": {
+        "statements": {
+          "covered": 92,
+          "total": 92,
+          "pct": 100.0
+        },
+        "branches": {
+          "covered": 36,
+          "total": 36,
+          "pct": 100.0
+        },
+        "functions": {
+          "covered": 23,
+          "total": 23,
+          "pct": 100.0
+        },
+        "lines": {
+          "covered": 80,
+          "total": 80,
+          "pct": 100.0
+        }
+      },
+      "apps/office/src/comphelper/source/streaming/seqstream.ts": {
+        "statements": {
+          "covered": 125,
+          "total": 126,
+          "pct": 99.2
+        },
+        "branches": {
+          "covered": 51,
+          "total": 53,
+          "pct": 96.22
+        },
+        "functions": {
+          "covered": 19,
+          "total": 19,
+          "pct": 100.0
+        },
+        "lines": {
+          "covered": 114,
+          "total": 114,
+          "pct": 100.0
+        }
+      },
+      "apps/office/src/package/source/xstor/ocompinstream.ts": {
+        "statements": {
+          "covered": 219,
+          "total": 221,
+          "pct": 99.09
+        },
+        "branches": {
+          "covered": 46,
+          "total": 48,
+          "pct": 95.83
+        },
+        "functions": {
+          "covered": 39,
+          "total": 39,
+          "pct": 100.0
+        },
+        "lines": {
+          "covered": 201,
+          "total": 201,
+          "pct": 100.0
+        }
+      },
+      "apps/office/src/package/source/xstor/switchpersistencestream.ts": {
+        "statements": {
+          "covered": 132,
+          "total": 157,
+          "pct": 84.07
+        },
+        "branches": {
+          "covered": 69,
+          "total": 88,
+          "pct": 78.4
+        },
+        "functions": {
+          "covered": 21,
+          "total": 21,
+          "pct": 100.0
+        },
+        "lines": {
+          "covered": 110,
+          "total": 121,
+          "pct": 90.9
+        }
+      },
+      "apps/office/src/package/source/zipapi/ByteChucker.ts": {
+        "statements": {
+          "covered": 26,
+          "total": 26,
+          "pct": 100.0
+        },
+        "branches": {
+          "covered": 8,
+          "total": 8,
+          "pct": 100.0
+        },
+        "functions": {
+          "covered": 9,
+          "total": 9,
+          "pct": 100.0
+        },
+        "lines": {
+          "covered": 25,
+          "total": 25,
+          "pct": 100.0
+        }
+      },
+      "apps/office/src/package/source/zipapi/ByteGrabber.ts": {
+        "statements": {
+          "covered": 40,
+          "total": 53,
+          "pct": 75.47
+        },
+        "branches": {
+          "covered": 13,
+          "total": 24,
+          "pct": 54.16
+        },
+        "functions": {
+          "covered": 13,
+          "total": 13,
+          "pct": 100.0
+        },
+        "lines": {
+          "covered": 34,
+          "total": 44,
+          "pct": 77.27
+        }
+      },
+      "apps/office/src/package/source/zipapi/MemoryByteGrabber.ts": {
+        "statements": {
+          "covered": 21,
+          "total": 21,
+          "pct": 100.0
+        },
+        "branches": {
+          "covered": 10,
+          "total": 10,
+          "pct": 100.0
+        },
+        "functions": {
+          "covered": 11,
+          "total": 11,
+          "pct": 100.0
+        },
+        "lines": {
+          "covered": 19,
+          "total": 19,
+          "pct": 100.0
+        }
+      },
+      "apps/office/src/tools/source/stream/stream.native.ts": {
+        "statements": {
+          "covered": 401,
+          "total": 427,
+          "pct": 93.91
+        },
+        "branches": {
+          "covered": 171,
+          "total": 196,
+          "pct": 87.24
+        },
+        "functions": {
+          "covered": 77,
+          "total": 78,
+          "pct": 98.71
+        },
+        "lines": {
+          "covered": 374,
+          "total": 391,
+          "pct": 95.65
+        }
+      },
+      "apps/office/src/unotools/source/streaming/streamwrap.ts": {
+        "statements": {
+          "covered": 131,
+          "total": 133,
+          "pct": 98.49
+        },
+        "branches": {
+          "covered": 40,
+          "total": 41,
+          "pct": 97.56
+        },
+        "functions": {
+          "covered": 28,
+          "total": 29,
+          "pct": 96.55
+        },
+        "lines": {
+          "covered": 123,
+          "total": 125,
+          "pct": 98.4
+        }
+      }
+    },
+    "aggregate": "94.53/88.23/99.18/96.44, not acceptance for failed ByteGrabber/native stream/persistence scopes",
+    "newOwners": "ByteChucker100/100/100/100; MemoryByteGrabber100/100/100/100; ByteGrabber75.47/54.16/100/77.27. No actual source non-ByteReader provider yet; fallback paths unqualified, no fabricated stream/provider to cover them."
+  },
+  "behavior": [
+    "Original ByteGrabber explicit RTTI/actual native XInputStream/XSeekable refs, reusable4byte sequence/fixed8byte array, endian/signed scalar/short-read/source replacement and raw pointer API; ByteChucker retained actual2/4/8byte sequences/cached cells/output bits/position; MemoryByteGrabber borrowed storage/displacement/remaining/skip and source signed UInt8/UInt16 result types.",
+    "Earlier cells-only ByteReader/ByteWriter restriction removed: actual SAL Int8Array/Uint8Array pointers and existing CPPU address cells are accepted by real MemoryInputStream/UNOMemoryStream/persistence/input components/SvStream wrappers. Source pointer arithmetic follows actual allocation+byteOffset, independent of JS subview length; no extra stream, fake byte array owner or decoded-value provider.",
+    "MemoryInputStream memcpy lowering creates typed views once per operation, with direct native typed-array copy when possible and actual address-cell fallback; no per-byte view allocation, source cursor/close/error behavior unchanged.",
+    "Actual source stream components verify independent byte images, signed boundaries/uint64, short reads and cursor differences, native RTTI, real pointer views, persistence chains, and original nonseekable IOException checks. Main/DOM-free Worker verifies genuine ZIP reader u16=513, final byte3, count1, position3 plus previous C/relations/FS/OSL/native bridges.",
+    "Unchanged pinned hello.docx/strict.docx/preserve_space.xlsx/universal-content-strict.xlsx first local-file headers are read through actual native ByteGrabber and checked against independent raw little-endian byte observations. This does not prove central-directory/decompression/entry/model/export/UI.",
+    "JS GC controls typed bytes. Native physical ABI/allocator/uninitialized/invalid pointer/overflow/thread/constructor-unwind domains remain unqualified; no manual JS free or pointer-lifetime emulator. Missing ByteChucker seekability native-null domain preserved/unexecuted."
+  ],
+  "sourceQA": "Targeted package/qa ByteGrabber/ByteChucker search has no direct registrations; related original tools byte-stream QA is included. Actual whole package ZIP integration/upstream security/malformed-directory tests remain pending until real ZIP backend exists.",
+  "quality": "Scoped ESLint/Prettier/tools types/Vite/static/resources/size/tree/provenance/registry/doctor/routing/diff PASS. Same4metadata app type errors, dependency cycle and157olderJSDoc failures remain. Provenance2548runtime/2317mapped/193browser/38infra; semanticViolationCount0. No full suite due (0parents completed).",
+  "observations": [
+    "Initial generic Reference query type/unstable double-get narrowing corrected before final tests/types.",
+    "Initial new provenance records supplied only class/basename evidence; exact method responsibilities/markers added without changing validators. Final provenance/registry pass.",
+    "istanbul-lib-coverage import unavailable locally; no install/network attempted. Individual owner report is read-only arithmetic over untouched coverage-final.json hit counters/maps; console figures agree. Coverage counters/configuration unchanged."
+  ],
+  "olderFailedGatesRetained": [
+    "Individual native OOXML parser85.45/78.26/100/93.87",
+    "Broader SDK86.44/86.11/92.30/87.96",
+    "Whole SAL79.20/75.47/73.24/80.62",
+    "Older4metadata storage errors, dependency cycle, JSDoc and all earlier broader unqualified scopes remain open.",
+    "Previous native-attribute-collections complete o3tl string_view function88.88 remains failed independently; current source storage coverage does not close it.",
+    "Previous native-storage complete-file failures retained: base73.15/66.66/100/73.33; nativeZip41.41/45.23/100/43.82; helper64.8/75.64/63.15/62.27; parser85.24/80/100/92.72. Current passing stream cases do not close them.",
+    "Previous native-persistence complete SwitchablePersistenceStream scope remains failed S86.27/B82.14/F100/L94.01. Current bootstrap100 does not close or dilute it.",
+    {
+      "native": {
+        "statements": 92.97,
+        "branches": 85.2,
+        "functions": 96.15,
+        "lines": 94.88,
+        "result": "fail90"
+      },
+      "host": {
+        "statements": 99.4,
+        "branches": 98.16,
+        "functions": 100,
+        "lines": 100
+      },
+      "aggregate": "94.78/89.83/97.11/96.33; not native acceptance"
+    },
+    "234 passed, one RTF style failure across16files; expected quotations, actual block-quotation.",
+    "39passed/3files; complete2owner90 FAIL. File S74.33/B77.14/F100/L82.54; errno S23.07/B28.57/F100/L21.56; aggregate65.93/65.36/100/70.72 not individual acceptance. No masks or fake fault provider. Older native-stream branch85.20 and all older failures remain independent.",
+    "42passed/3files; whole1owner90 FAIL S87.03/B75.33/F96/L90.87. No masks, no source private patch or fake failing/successful stream provider."
+  ],
+  "suspectedIssues": [
+    "WRITER541/CALC604 MemoryByteGrabber signed result declarations",
+    "WRITER542/CALC605 ByteChucker assumes seekable output"
+  ],
+  "pendingApproval": "Question sent for exact original setAllowedPaths/isForbidden and pre-open security hook from sal/osl/unx/file.cxx under security.must explicit-scope rule. No permission reply yet, no security-hook mutation; independent wrapper progress completed. No host files mounted/accessed.",
+  "remaining": [
+    "Actual non-ByteReader source owner (no fake fallback provider), source ZIP directory/local/data descriptor/inflate/entry/backend mechanisms and original package QA.",
+    "Source file URL/open/security/TempFile/OStorage/backend plus native filter/metadata/model and complete existing desktop/mobile DOCX/XLSX import/export/reopen acceptance.",
+    "Current and older failed whole-owner/quality scopes remain open."
+  ],
+  "status": "Goal active; both parent tasks unfinished. Canonical evidence only checkpointed, source remains WIP; no merge."
+}
