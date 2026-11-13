@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 302
+revision: 305
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T01:03:31.775Z"
+  updated_at: "2026-11-13T01:14:33.007Z"
   updated_by: "CODER"
-  note: "Unfinished native medium continuation: 70 focused cases/13 files pass plus final original listener QA3/1; whole five-owner scoped90 retains S37.33 B42.73 F69.87 L38.55. Real provider/native medium, four existing typecheck dependencies, provenance and full format/UI acceptance remain pending. Auth/certificate/trusted-URL scope question is pending; no such paths changed. Continue independent approved work without pause."
-  attempts: 89
+  note: "Unfinished metadata/URI continuation: actual original custom XML and user-property native XML roundtrip pass; 48 related cases/5 files, final complete native URI value15 cases/1 file scoped90 pass S97.26 B95 F100 L98.50. True native URI factory/service, MediaDescriptor, provider/native medium, four current storage typecheck dependencies and prior separate coverage gates remain pending. Auth/security scope question remains unanswered; independent work continues."
+  attempts: 90
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1432,8 +1435,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T01:14:33.007Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Unfinished metadata/URI continuation: actual original custom XML and user-property native XML roundtrip pass; 48 related cases/5 files, final complete native URI value15 cases/1 file scoped90 pass S97.26 B95 F100 L98.50. True native URI factory/service, MediaDescriptor, provider/native medium, four current storage typecheck dependencies and prior separate coverage gates remain pending. Auth/security scope question remains unanswered; independent work continues."
+  -
+    type: "status"
+    at: "2026-11-13T01:14:55.325Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T01:03:41.162Z"
+doc_updated_at: "2026-11-13T01:14:55.325Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -4118,6 +4134,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T01:14:33.007Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Unfinished metadata/URI continuation: actual original custom XML and user-property native XML roundtrip pass; 48 related cases/5 files, final complete native URI value15 cases/1 file scoped90 pass S97.26 B95 F100 L98.50. True native URI factory/service, MediaDescriptor, provider/native medium, four current storage typecheck dependencies and prior separate coverage gates remain pending. Auth/security scope question remains unanswered; independent work continues.
+    Attempts: 90
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T01:14:32.412Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4593,6 +4639,10 @@ sections:
     - Observation: Command: exact argv/source/log hashes in evidence/native-medium-stream-continuation.json. Result:70 focused tests/13 files pass, then final original listener QA3 tests/1 file pass; scoped lint/format, module guard and diff/routing pass. Scope: actual ActiveDataStreamer/XActiveDataStreamer, original three missing Content stream-open methods, complete PostCommandArgument/2 values/types and original metadata setter/keyword/statistic/listener assertions. No substitute positive provider or alternate receiver was installed.
       Impact: Original MediaDescriptor stream/post prerequisites now exist, while whole five-owner scoped90 retains FAIL S37.33 B42.73 F69.87 L38.55 because real provider-backed Content paths remain unavailable. Four previous metadata storage typecheck errors remain; no new component/SDK/QA error. Full original service/medium roundtrip, missing bag/source QA, registry/provenance, native provider/medium and actual DOCX/XLSX/filter/UI acceptance remain unfinished. Prior coverage gaps are not diluted.
       Resolution: Continue the same approved large block with independent source modules/QA and real provider/native-medium implementation. Read-only inspection exposed auth/certificate/trusted-URL dependencies; explicit scope approval was requested asynchronously under security.must.md, no response observed, and no such path modified. Do not infer approval from time or bypass source checks. Independent work is available; this is progress, not an overall blocker. Keep task DOING/needs_rework and goal active without pause. Source remains intentionally uncommitted pending complete block qualification; no full-suite replay or publication.
+
+    - Observation: Command: exact argv/source/log hashes in evidence/native-metadata-uri-roundtrip-continuation.json. Result:48 related cases/5 files pass; final whole native URI value owner15 cases/1 file and unchanged scoped90 PASS S97.26 B95 F100 L98.50. Scope: complete original native RTL UriReference helper plus original CUSTOM metadata XPath preservation and source user-property before/after native DOM/SAX/Writer XML-cycle assertions. Source Time-to-Duration conversion, unsupported type and empty name/removal behavior are preserved. Focused lint/format, module guard and routing/diff pass. Current typecheck retains exactly four original metadata storage dependencies.
+      Impact: Native URI state is now available for the missing true factory; inspection corrected the previous assumption that existing UriReferenceFactory.ts supplied a native UNO service. It is only a string binding. Real SDK/Factory/component registration and full source factory QA are missing; do not use that string model as a native provider. Metadata XML-cycle tests use actual components but do not prove the original SfxMedium/storage wrapper. Earlier Sot/SDK, Content and metadata/DOM coverage gaps remain open and undiluted. Full format/core/shell/UI acceptance and canonical mappings remain pending.
+      Resolution: Continue the same approved large block with complete native URI factory/service/QA, then genuine MediaDescriptor/provider/native medium and metadata completion. Auth/certificate/trusted-URL scope question is still unanswered, no such paths modified; independent work remains available. Task stays DOING/needs_rework, goal active, no pause, full-suite replay or publication. Source edits remain intentionally uncommitted pending complete block qualification; continuation evidence is persisted separately.
 id_source: "generated"
 ---
 ## Summary
@@ -7287,6 +7337,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T01:14:33.007Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Unfinished metadata/URI continuation: actual original custom XML and user-property native XML roundtrip pass; 48 related cases/5 files, final complete native URI value15 cases/1 file scoped90 pass S97.26 B95 F100 L98.50. True native URI factory/service, MediaDescriptor, provider/native medium, four current storage typecheck dependencies and prior separate coverage gates remain pending. Auth/security scope question remains unanswered; independent work continues.
+Attempts: 90
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T01:14:32.412Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7766,3 +7846,7 @@ Native DOM classic SAX and attribute ownership checkpoint (2026-11-13):
 - Observation: Command: exact argv/source/log hashes in evidence/native-medium-stream-continuation.json. Result:70 focused tests/13 files pass, then final original listener QA3 tests/1 file pass; scoped lint/format, module guard and diff/routing pass. Scope: actual ActiveDataStreamer/XActiveDataStreamer, original three missing Content stream-open methods, complete PostCommandArgument/2 values/types and original metadata setter/keyword/statistic/listener assertions. No substitute positive provider or alternate receiver was installed.
   Impact: Original MediaDescriptor stream/post prerequisites now exist, while whole five-owner scoped90 retains FAIL S37.33 B42.73 F69.87 L38.55 because real provider-backed Content paths remain unavailable. Four previous metadata storage typecheck errors remain; no new component/SDK/QA error. Full original service/medium roundtrip, missing bag/source QA, registry/provenance, native provider/medium and actual DOCX/XLSX/filter/UI acceptance remain unfinished. Prior coverage gaps are not diluted.
   Resolution: Continue the same approved large block with independent source modules/QA and real provider/native-medium implementation. Read-only inspection exposed auth/certificate/trusted-URL dependencies; explicit scope approval was requested asynchronously under security.must.md, no response observed, and no such path modified. Do not infer approval from time or bypass source checks. Independent work is available; this is progress, not an overall blocker. Keep task DOING/needs_rework and goal active without pause. Source remains intentionally uncommitted pending complete block qualification; no full-suite replay or publication.
+
+- Observation: Command: exact argv/source/log hashes in evidence/native-metadata-uri-roundtrip-continuation.json. Result:48 related cases/5 files pass; final whole native URI value owner15 cases/1 file and unchanged scoped90 PASS S97.26 B95 F100 L98.50. Scope: complete original native RTL UriReference helper plus original CUSTOM metadata XPath preservation and source user-property before/after native DOM/SAX/Writer XML-cycle assertions. Source Time-to-Duration conversion, unsupported type and empty name/removal behavior are preserved. Focused lint/format, module guard and routing/diff pass. Current typecheck retains exactly four original metadata storage dependencies.
+  Impact: Native URI state is now available for the missing true factory; inspection corrected the previous assumption that existing UriReferenceFactory.ts supplied a native UNO service. It is only a string binding. Real SDK/Factory/component registration and full source factory QA are missing; do not use that string model as a native provider. Metadata XML-cycle tests use actual components but do not prove the original SfxMedium/storage wrapper. Earlier Sot/SDK, Content and metadata/DOM coverage gaps remain open and undiluted. Full format/core/shell/UI acceptance and canonical mappings remain pending.
+  Resolution: Continue the same approved large block with complete native URI factory/service/QA, then genuine MediaDescriptor/provider/native medium and metadata completion. Auth/certificate/trusted-URL scope question is still unanswered, no such paths modified; independent work remains available. Task stays DOING/needs_rework, goal active, no pause, full-suite replay or publication. Source edits remain intentionally uncommitted pending complete block qualification; continuation evidence is persisted separately.

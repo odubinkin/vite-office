@@ -1,0 +1,88 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "unfinished-metadata-owner-continuation",
+  "productionRegistration": false,
+  "implementationCommitted": false,
+  "finalCoverageCommand": {
+    "cwd": "apps/office",
+    "argv": [
+      "../../node_modules/.bin/vitest",
+      "run",
+      "src/stoc/source/uriproc/UriReference.value.test.ts",
+      "--maxWorkers=2",
+      "--coverage",
+      "--coverage.provider=istanbul",
+      "--coverage.include=src/stoc/source/uriproc/UriReference.value.ts",
+      "--coverage.reportsDirectory=coverage/native-uri-value",
+      "--coverage.thresholds.statements=90",
+      "--coverage.thresholds.branches=90",
+      "--coverage.thresholds.functions=90",
+      "--coverage.thresholds.lines=90"
+    ],
+    "result": "15 tests/1 file pass; complete unchanged UriReference.value owner scoped90 pass"
+  },
+  "coverage": {
+    "lines": {
+      "total": 67,
+      "covered": 66,
+      "skipped": 0,
+      "pct": 98.5
+    },
+    "statements": {
+      "total": 73,
+      "covered": 71,
+      "skipped": 0,
+      "pct": 97.26
+    },
+    "functions": {
+      "total": 20,
+      "covered": 20,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 40,
+      "covered": 38,
+      "skipped": 0,
+      "pct": 95
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "relatedCommand": {
+    "cwd": "apps/office",
+    "argv": [
+      "../../node_modules/.bin/vitest",
+      "run",
+      "src/stoc/source/uriproc/UriReference.value.test.ts",
+      "src/stoc/source/uriproc/UriReferenceFactory.test.ts",
+      "src/sfx2/source/doc/SfxDocumentMetaData.roundtrip.test.ts",
+      "src/sfx2/source/doc/SfxDocumentMetaData.qa.test.ts",
+      "src/sfx2/source/doc/SfxDocumentMetaData.owner.test.ts",
+      "--maxWorkers=2"
+    ],
+    "result": "48 cases/5 files pass before final equivalent source StringConcat lowering; final changed whole owner then independently reverified"
+  },
+  "sourceBlobs": {
+    "apps/office/src/stoc/source/uriproc/UriReference.value.ts": "e08575225aedb88447128ccb62663778f6507bb4615f1378b7500a521036c9c9",
+    "apps/office/src/stoc/source/uriproc/UriReference.value.test.ts": "2a5e2ec66a5459c1b72d8512e2efbdd7985b0084e63ce36466e92c6d3a89ac99",
+    "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.roundtrip.test.ts": "1dc915530110113208406b9a48385391df96998245bff927703efdeb1608be6d"
+  },
+  "logs": {
+    "metadata-native-roundtrip.log": "b149cec84df0ea57e05579df35419b36d248666020040ce604894f945cfc2b40",
+    "metadata-uri-value-related.log": "46ae9ddf1748327ca78fa801b2866658a55edf76f9359d6421f6ce118d41b1c6",
+    "metadata-uri-value-coverage.log": "676f659a5a5a5406ce5d19bc74f48e0674fad19c5a206295ceee7b5d1a448d87",
+    "metadata-uri-value-coverage-final.log": "92864c2404d35d790f6e5b2c955e149b9f9edf47ed5a89be74a9e6ca496cce31",
+    "metadata-uri-roundtrip-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "metadata-uri-roundtrip-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "metadata-uri-roundtrip-typecheck.log": "27e41193059ade090cbebaa98ba1e7173ce2a4df41a3e457ee366058e3b383b3",
+    "metadata-uri-roundtrip-boundaries.log": "e4b486b624cf445042930c4bcd09a83690616560636091bf7a37d573881d585b"
+  },
+  "correction": "Existing stoc UriReferenceFactory.ts is a string binding, not a registered native UNO service. Real SDK/factory and URI service registration remain missing. No string model is presented as a native service.",
+  "priorCoverageGapsRemainOpen": true,
+  "pendingSecurityScopeApproval": "No user response observed; no auth/crypto/security-critical implementation changed. Independent native URI/service and metadata work remains available."
+}
