@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 331
+revision: 334
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T09:04:41.972Z"
+  updated_at: "2026-11-13T09:16:24.017Z"
   updated_by: "CODER"
-  note: "Native FastParser UNO service checkpoint:63 related tests pass; implementation/wrapper coverage95.79/92.43/98.43/96.62; real main/Worker service route passes. Broader public SDK gate fails86.44/86.11/92.30/87.96; older whole SAL/type/dependency/JSDoc gates and full original Pipe/Legacy/model/filter/UI acceptance remain open. Evidence native-fastparser-uno-service-continuation.json. Goal continues."
-  attempts: 102
+  note: "Native LegacyFastParser/Pair checkpoint:56 related cases pass; whole owners96.35/100/100/96.24 at90 and real registered main/Worker XML route passes. Original Pipe/Expat/XMLImport and OOXML/native metadata/model/filter/UI acceptance remain unfinished. Earlier SAL/SDK/type/dependency/JSDoc failures retained. Evidence native-legacyfastparser-service-continuation.json; goal continues."
+  attempts: 103
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1640,8 +1643,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T09:16:24.017Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native LegacyFastParser/Pair checkpoint:56 related cases pass; whole owners96.35/100/100/96.24 at90 and real registered main/Worker XML route passes. Original Pipe/Expat/XMLImport and OOXML/native metadata/model/filter/UI acceptance remain unfinished. Earlier SAL/SDK/type/dependency/JSDoc failures retained. Evidence native-legacyfastparser-service-continuation.json; goal continues."
+  -
+    type: "status"
+    at: "2026-11-13T09:16:49.362Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T09:04:50.749Z"
+doc_updated_at: "2026-11-13T09:16:49.362Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -4716,6 +4732,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T09:16:24.017Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native LegacyFastParser/Pair checkpoint:56 related cases pass; whole owners96.35/100/100/96.24 at90 and real registered main/Worker XML route passes. Original Pipe/Expat/XMLImport and OOXML/native metadata/model/filter/UI acceptance remain unfinished. Earlier SAL/SDK/type/dependency/JSDoc failures retained. Evidence native-legacyfastparser-service-continuation.json; goal continues.
+    Attempts: 103
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T09:16:08.277Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -5223,6 +5269,10 @@ sections:
     - Observation: Original FastSaxParser public UNO wrapper/factory is now implemented and registered; the earlier pending exact XML option approval has been received and implemented. Shared evidence: `evidence/native-fastparser-uno-service-continuation.json`.
       Impact: Native public parser and actual Worker service route advance, but broader SDK coverage and complete original Pipe/Legacy/format/UI acceptance remain open; older whole SAL/type/dependency/JSDoc failures retained.
       Resolution: Continue real source owners and original QA, keep goal active and existing browser workflows unchanged; no fake failure providers or parser aliases.
+
+    - Observation: Original LegacyFastParser wrapper/factory and Pair<string,long> native initialization are implemented and tested through real registered services and Chromium main/Worker. Evidence: `evidence/native-legacyfastparser-service-continuation.json`.
+      Impact: Shared source XML service route advances; original Pipe/Expat/XMLImport QA and complete DOCX/XLSX metadata/model/filter/UI acceptance remain open, with earlier failed coverage/type/static gates retained.
+      Resolution: Continue native oox parser/handler service routing and source prerequisites; preserve source quirks, actual owners and browser workflows, with goal active and no incomplete implementation commit.
 id_source: "generated"
 ---
 ## Summary
@@ -8307,6 +8357,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T09:16:24.017Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native LegacyFastParser/Pair checkpoint:56 related cases pass; whole owners96.35/100/100/96.24 at90 and real registered main/Worker XML route passes. Original Pipe/Expat/XMLImport and OOXML/native metadata/model/filter/UI acceptance remain unfinished. Earlier SAL/SDK/type/dependency/JSDoc failures retained. Evidence native-legacyfastparser-service-continuation.json; goal continues.
+Attempts: 103
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T09:16:08.277Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -8818,3 +8898,7 @@ Native DOM classic SAX and attribute ownership checkpoint (2026-11-13):
 - Observation: Original FastSaxParser public UNO wrapper/factory is now implemented and registered; the earlier pending exact XML option approval has been received and implemented. Shared evidence: `evidence/native-fastparser-uno-service-continuation.json`.
   Impact: Native public parser and actual Worker service route advance, but broader SDK coverage and complete original Pipe/Legacy/format/UI acceptance remain open; older whole SAL/type/dependency/JSDoc failures retained.
   Resolution: Continue real source owners and original QA, keep goal active and existing browser workflows unchanged; no fake failure providers or parser aliases.
+
+- Observation: Original LegacyFastParser wrapper/factory and Pair<string,long> native initialization are implemented and tested through real registered services and Chromium main/Worker. Evidence: `evidence/native-legacyfastparser-service-continuation.json`.
+  Impact: Shared source XML service route advances; original Pipe/Expat/XMLImport QA and complete DOCX/XLSX metadata/model/filter/UI acceptance remain open, with earlier failed coverage/type/static gates retained.
+  Resolution: Continue native oox parser/handler service routing and source prerequisites; preserve source quirks, actual owners and browser workflows, with goal active and no incomplete implementation commit.

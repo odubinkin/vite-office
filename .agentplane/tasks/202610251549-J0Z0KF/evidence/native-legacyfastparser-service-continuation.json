@@ -1,0 +1,161 @@
+{
+  "scope": "Original native LegacyFastParser public service/initialization and Pair<string,long>, shared Writer/Calc XML prerequisite; not full import/export acceptance",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "checks": [
+    {
+      "name": "native service/Pair coverage",
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sax/source/fastparser/legacyfastparser.service.test.ts src/udkapi/com/sun/star/beans/Pair.test.ts src/sax/source/fastparser/fastparser.entity.test.ts src/sax/source/fastparser/fastparser.service.test.ts src/sax/source/fastparser/fastparser.stream.test.ts src/sax/source/expatwrap/saxwriter.helper.test.ts src/sax/source/expatwrap/saxwriter.component.test.ts --maxWorkers=2 --coverage --coverage.include=src/sax/source/fastparser/legacyfastparser.service.ts --coverage.include=src/udkapi/com/sun/star/beans/Pair.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/legacy-service-final > coverage/legacy-service-final.log 2>&1",
+      "log": "apps/office/coverage/legacy-service-final.log",
+      "result": "pass",
+      "observation": "56tests/7files; whole2owners S96.35 B100 F100 L96.24. Service S92.30 B100 F100 L92.06; constructor-failure unwind is unqualified, not masked."
+    },
+    {
+      "name": "stronger exact XML assertion",
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sax/source/fastparser/legacyfastparser.service.test.ts --maxWorkers=2 > coverage/legacy-service-exact-output.log 2>&1",
+      "log": "apps/office/coverage/legacy-service-exact-output.log",
+      "result": "pass",
+      "observation": "6tests; exact source known-token prefix loss preserved, native unknown Unicode/namespace output exact."
+    },
+    {
+      "name": "Chromium main/Worker",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs > apps/office/coverage/legacy-service-worker.log 2>&1",
+      "log": "apps/office/coverage/legacy-service-worker.log",
+      "result": "pass",
+      "observation": "Actual registered LegacyFastParser/process-context FastParser/real Writer/native InputSource/C callbacks produce exact Unicode namespace XML in both realms."
+    },
+    {
+      "name": "tools types",
+      "command": "node_modules/.bin/tsc --project tsconfig.tools.json > apps/office/coverage/legacy-service-tools.log 2>&1",
+      "log": "apps/office/coverage/legacy-service-tools.log",
+      "result": "pass",
+      "observation": "Tools tsc"
+    },
+    {
+      "name": "app types",
+      "command": "cd apps/office && ../../node_modules/.bin/tsc --noEmit > coverage/legacy-service-types-current.log 2>&1",
+      "log": "apps/office/coverage/legacy-service-types-current.log",
+      "result": "fail",
+      "observation": "Exactly4 older metadata storage errors: MediaDescriptor/SfxMedium constructor/GetOutputStorage/Commit"
+    },
+    {
+      "name": "Vite",
+      "command": "cd apps/office && ../../node_modules/.bin/vite build > coverage/legacy-service-vite.log 2>&1",
+      "log": "apps/office/coverage/legacy-service-vite.log",
+      "result": "pass",
+      "observation": "Build passes, original chunk/timing warnings retained"
+    },
+    {
+      "name": "provenance",
+      "command": "npm run check:source-provenance > apps/office/coverage/legacy-service-provenance.log 2>&1",
+      "log": "apps/office/coverage/legacy-service-provenance.log",
+      "result": "pass",
+      "observation": "2527runtime/2298mapped/192browser/37infrastructure"
+    },
+    {
+      "name": "registry/invariants/parity",
+      "command": "npm run inventory:registry:check > apps/office/coverage/legacy-service-registry.log 2>&1",
+      "log": "apps/office/coverage/legacy-service-registry.log",
+      "result": "pass",
+      "observation": "semanticViolationCount0"
+    },
+    {
+      "name": "size",
+      "command": "npm run check:file-size > apps/office/coverage/legacy-service-size.log 2>&1",
+      "log": "apps/office/coverage/legacy-service-size.log",
+      "result": "pass",
+      "observation": "No exemption"
+    },
+    {
+      "name": "tree",
+      "command": "npm run check:source-tree > apps/office/coverage/legacy-service-tree.log 2>&1",
+      "log": "apps/office/coverage/legacy-service-tree.log",
+      "result": "pass",
+      "observation": "Original tree guard"
+    },
+    {
+      "name": "JSDoc",
+      "command": "npm run check:docs > apps/office/coverage/legacy-service-jsdoc.log 2>&1",
+      "log": "apps/office/coverage/legacy-service-jsdoc.log",
+      "result": "fail",
+      "observation": "Older160 findings retained; no new LegacyFastParser/Pair findings"
+    },
+    {
+      "name": "boundaries",
+      "command": "npm run check:dependencies > apps/office/coverage/legacy-service-boundaries.log 2>&1",
+      "log": "apps/office/coverage/legacy-service-boundaries.log",
+      "result": "fail",
+      "observation": "Older comphelper -> sax -> comphelper cycle, no exemption"
+    },
+    {
+      "name": "routing",
+      "command": "node .agentplane/policy/check-routing.mjs > apps/office/coverage/legacy-service-routing.log 2>&1",
+      "log": "apps/office/coverage/legacy-service-routing.log",
+      "result": "pass",
+      "observation": "No policy changes"
+    },
+    {
+      "name": "doctor",
+      "command": "ap doctor > apps/office/coverage/legacy-service-doctor.log 2>&1",
+      "log": "apps/office/coverage/legacy-service-doctor.log",
+      "result": "pass",
+      "observation": "0 errors, existing managed shim warning"
+    },
+    {
+      "name": "resources",
+      "command": "npm run check:calc-resources > apps/office/coverage/legacy-service-resources.log 2>&1",
+      "log": "apps/office/coverage/legacy-service-resources.log",
+      "result": "pass",
+      "observation": "464commands/11menus/17dispositions"
+    },
+    {
+      "name": "lint",
+      "command": "node_modules/.bin/eslint apps/office/src/sax/source/fastparser/legacyfastparser.service.ts apps/office/src/sax/source/fastparser/legacyfastparser.service.test.ts apps/office/src/udkapi/com/sun/star/beans/Pair.ts apps/office/src/udkapi/com/sun/star/beans/Pair.test.ts apps/office/src/desktop/browser/app/uno-components.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs --max-warnings 0 > apps/office/coverage/legacy-service-eslint.log 2>&1",
+      "log": "apps/office/coverage/legacy-service-eslint.log",
+      "result": "pass",
+      "observation": "Focused scope"
+    },
+    {
+      "name": "format",
+      "command": "node_modules/.bin/prettier --check apps/office/src/sax/source/fastparser/legacyfastparser.service.ts apps/office/src/sax/source/fastparser/legacyfastparser.service.test.ts apps/office/src/udkapi/com/sun/star/beans/Pair.ts apps/office/src/udkapi/com/sun/star/beans/Pair.test.ts apps/office/src/desktop/browser/app/uno-components.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs > apps/office/coverage/legacy-service-format.log 2>&1",
+      "log": "apps/office/coverage/legacy-service-format.log",
+      "result": "pass",
+      "observation": "Focused scope"
+    },
+    {
+      "name": "diff",
+      "command": "git diff --check > apps/office/coverage/legacy-service-diff.log",
+      "log": "apps/office/coverage/legacy-service-diff.log",
+      "result": "pass",
+      "observation": "No whitespace errors"
+    }
+  ],
+  "sourceHashes": {
+    "apps/office/src/sax/source/fastparser/legacyfastparser.service.ts": "84578c9ba6362fdcb0595e53d6a17dcdd78c49fe3f3ba9b5c6b61846e419a705",
+    "apps/office/src/sax/source/fastparser/legacyfastparser.service.test.ts": "a025171146e93180882d0a5f166bf23a757f4bcaa7583ccf7e7aab8b557c7515",
+    "apps/office/src/udkapi/com/sun/star/beans/Pair.ts": "10bae0ee186ceacf7106f21458599732466be459c0a562fec756ba61279eb075",
+    "apps/office/src/udkapi/com/sun/star/beans/Pair.test.ts": "cad7fdfcc02409b24b273e9e0b000880f54e0df36fab1916e219f19baabd2b77",
+    "apps/office/src/desktop/browser/app/uno-components.ts": "365af7c529212de73867862525c869ae7892c8ef54216edc2918a66b5967804a",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "d1159269fe66eb52bf7e0a7d478711bdf8b1550a5ab00e0e4f00c60ef36db3a3",
+    "scripts/native-dom-worker-probe.mjs": "d0cd0cceadbbaf943afc6f92964ba4f1f15edc74e11111778c0948c45bdcf5d3"
+  },
+  "initialFailures": [
+    "First5 real service cases passed. First broader56case run had2 incorrect test expectations, not production changes: move assignment swaps source OUString with old destination; setProcessServiceFactory does not invalidate successful-once cached context. Corrected through original owners; final56cases pass without private cache resets or fake dependency providers. Initial coverage map was not treated as success while tests failed.",
+    "One grouped inspection used root-relative paths with apps/office working directory, producing missing-file reads; retried from authoritative repository root. No files were mutated by that inspection."
+  ],
+  "preservedSourceIssues": [
+    "WRITER527/CALC590: ignored Pair extraction repeats preceding namespace registration, retains earlier mutations; exact source checks and journal entries.",
+    "Earlier WRITER517/518 and CALC580/581 namespace/token prefix quirks preserved; exact real service XML now asserted."
+  ],
+  "olderFailingGatesRetained": [
+    "Native SAL whole-owner coverage79.20/75.47/73.24/80.62",
+    "Broader public FastParser SDK gate86.44/86.11/92.30/87.96; helper exception translation paths unqualified",
+    "All earlier broader failed scopes,4metadata type errors, dependency cycle and older JSDoc findings remain open."
+  ],
+  "remaining": [
+    "Real Pipe and original parser.cxx QA; original Expat Parser and full XMLImport differential QA. No libxml2/saxes-to-Expat alias.",
+    "Native oox::FastParser/handler service routing, actual native metadata/storage/model/filter integration and complete Strict/Transitional DOCX/XLSX package/desktop/mobile UI acceptance.",
+    "Physical C++ constructor unwind/allocator/mutex/exception ABI and independent native component differential remain unqualified.",
+    "Separate old URL trust/auth/certificate scope remains unanswered/untouched; approved original XML flags remain implemented."
+  ],
+  "status": "Parent tasks and goal remain active; no finish, pause, merge or unfinished implementation commit."
+}
