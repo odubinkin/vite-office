@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 316
+revision: 318
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T05:03:42.471Z"
+  updated_at: "2026-11-13T05:47:24.965Z"
   updated_by: "CODER"
-  note: "Native attribute continuation:182 scoped cases PASS (3owner90 gate S98.29/B97.84/F100/L98.45),86 SAL regressions PASS, actual Chromium main/DOM-freeWorker and production bundle PASS. Original AttributesTest ported; final constructor arity matches source. App tsc retains4 metadata dependencies; legacy OFOP parser cycle and160 older JSDoc diagnostics remain. Full XLSX model/filter/UI acceptance incomplete. Evidence: evidence/native-attributes-and-writer-ownership-continuation.json."
-  attempts: 95
+  note: "Native FastParser SAX2 ABI checkpoint:28 cases PASS, whole ABI owner scoped90 S100/B100/F100/L100; actual Chromium main/DOM-freeWorker split UTF8 push parsing and production bundle PASS. Verified pinned C rebuild154exports/851headerenums. Source explicitly disables internal parser thread under Emscripten; prior other-platform thread prerequisite superseded. Full Native FastParser/model/filter/UI unfinished;4 storage tsc errors, legacy cycle,160 JSDoc rows remain. Evidence: evidence/native-fastparser-sax2-abi-continuation.json."
+  attempts: 96
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1528,8 +1531,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T05:47:24.965Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native FastParser SAX2 ABI checkpoint:28 cases PASS, whole ABI owner scoped90 S100/B100/F100/L100; actual Chromium main/DOM-freeWorker split UTF8 push parsing and production bundle PASS. Verified pinned C rebuild154exports/851headerenums. Source explicitly disables internal parser thread under Emscripten; prior other-platform thread prerequisite superseded. Full Native FastParser/model/filter/UI unfinished;4 storage tsc errors, legacy cycle,160 JSDoc rows remain. Evidence: evidence/native-fastparser-sax2-abi-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-13T05:47:35.651Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T05:03:54.509Z"
+doc_updated_at: "2026-11-13T05:47:35.651Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -4394,6 +4410,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-13T05:47:24.965Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native FastParser SAX2 ABI checkpoint:28 cases PASS, whole ABI owner scoped90 S100/B100/F100/L100; actual Chromium main/DOM-freeWorker split UTF8 push parsing and production bundle PASS. Verified pinned C rebuild154exports/851headerenums. Source explicitly disables internal parser thread under Emscripten; prior other-platform thread prerequisite superseded. Full Native FastParser/model/filter/UI unfinished;4 storage tsc errors, legacy cycle,160 JSDoc rows remain. Evidence: evidence/native-fastparser-sax2-abi-continuation.json.
+    Attempts: 96
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T05:03:54.509Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4893,6 +4939,10 @@ sections:
     - Observation: Native attribute UNO/clone/unknown/iterator and actual Writer intrusive ownership now implemented; physical allocator/vector-capacity/ABI/thread guarantees and old wider failing gates remain unqualified.
       Impact: Checkpoint advances native XML prerequisites but does not meet full task DoD.
       Resolution: Continue genuine FastParser and native storage/metadata/model paths; preserve original defaults, cycle gate and existing browser file workflows.
+
+    - Observation: Actual C callbacks/opaque scopes/native entity and original Emscripten profile are available. Concrete future XML_PARSE_NOENT|XML_PARSE_HUGE option call awaits explicit security-scope answer; delivery is not approval. Earlier URL security scope also unanswered.
+      Impact: ABI prerequisite is verified locally, not complete component/parser QA or XLSX acceptance; goal remains active.
+      Resolution: Continue independent actual entity/context/namespace/locator/error owners. Preserve source Emscripten defaults and all pending security boundaries; no fake parser or service aliases.
 id_source: "generated"
 ---
 ## Summary
@@ -7767,6 +7817,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-13T05:47:24.965Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native FastParser SAX2 ABI checkpoint:28 cases PASS, whole ABI owner scoped90 S100/B100/F100/L100; actual Chromium main/DOM-freeWorker split UTF8 push parsing and production bundle PASS. Verified pinned C rebuild154exports/851headerenums. Source explicitly disables internal parser thread under Emscripten; prior other-platform thread prerequisite superseded. Full Native FastParser/model/filter/UI unfinished;4 storage tsc errors, legacy cycle,160 JSDoc rows remain. Evidence: evidence/native-fastparser-sax2-abi-continuation.json.
+Attempts: 96
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T05:03:54.509Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -8270,3 +8350,7 @@ Native DOM classic SAX and attribute ownership checkpoint (2026-11-13):
 - Observation: Native attribute UNO/clone/unknown/iterator and actual Writer intrusive ownership now implemented; physical allocator/vector-capacity/ABI/thread guarantees and old wider failing gates remain unqualified.
   Impact: Checkpoint advances native XML prerequisites but does not meet full task DoD.
   Resolution: Continue genuine FastParser and native storage/metadata/model paths; preserve original defaults, cycle gate and existing browser file workflows.
+
+- Observation: Actual C callbacks/opaque scopes/native entity and original Emscripten profile are available. Concrete future XML_PARSE_NOENT|XML_PARSE_HUGE option call awaits explicit security-scope answer; delivery is not approval. Earlier URL security scope also unanswered.
+  Impact: ABI prerequisite is verified locally, not complete component/parser QA or XLSX acceptance; goal remains active.
+  Resolution: Continue independent actual entity/context/namespace/locator/error owners. Preserve source Emscripten defaults and all pending security boundaries; no fake parser or service aliases.
