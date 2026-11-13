@@ -1,0 +1,927 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "unfinished-large-native-metadata-owner-block",
+  "pinnedLibreOfficeCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "implementationCommitted": false,
+  "goalMustRemainActive": true,
+  "productionRegistrationAdded": [
+    "com.sun.star.comp.uri.VndSunStarPkgUrlReferenceFactory",
+    "com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript"
+  ],
+  "coverageChecks": {
+    "rtlCodec": {
+      "coverage": {
+        "lines": {
+          "total": 282,
+          "covered": 274,
+          "skipped": 0,
+          "pct": 97.16
+        },
+        "statements": {
+          "total": 305,
+          "covered": 292,
+          "skipped": 0,
+          "pct": 95.73
+        },
+        "functions": {
+          "total": 33,
+          "covered": 32,
+          "skipped": 0,
+          "pct": 96.96
+        },
+        "branches": {
+          "total": 212,
+          "covered": 200,
+          "skipped": 0,
+          "pct": 94.33
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "owners": {
+        "src/sal/inc/rtl/malformeduriexception.ts": {
+          "lines": {
+            "total": 5,
+            "covered": 5,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 4,
+            "covered": 4,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 5,
+            "covered": 5,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 2,
+            "covered": 2,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "src/sal/inc/rtl/uri.ts": {
+          "lines": {
+            "total": 21,
+            "covered": 17,
+            "skipped": 0,
+            "pct": 80.95
+          },
+          "functions": {
+            "total": 4,
+            "covered": 3,
+            "skipped": 0,
+            "pct": 75
+          },
+          "statements": {
+            "total": 21,
+            "covered": 17,
+            "skipped": 0,
+            "pct": 80.95
+          },
+          "branches": {
+            "total": 4,
+            "covered": 3,
+            "skipped": 0,
+            "pct": 75
+          }
+        },
+        "src/sal/rtl/strbuf.ts": {
+          "lines": {
+            "total": 5,
+            "covered": 5,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 5,
+            "covered": 5,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 5,
+            "covered": 5,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "src/sal/rtl/uri-character.ts": {
+          "lines": {
+            "total": 112,
+            "covered": 108,
+            "skipped": 0,
+            "pct": 96.42
+          },
+          "functions": {
+            "total": 9,
+            "covered": 9,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 121,
+            "covered": 114,
+            "skipped": 0,
+            "pct": 94.21
+          },
+          "branches": {
+            "total": 94,
+            "covered": 87,
+            "skipped": 0,
+            "pct": 92.55
+          }
+        },
+        "src/sal/rtl/uri-relative.ts": {
+          "lines": {
+            "total": 87,
+            "covered": 87,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 5,
+            "covered": 5,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 97,
+            "covered": 96,
+            "skipped": 0,
+            "pct": 98.96
+          },
+          "branches": {
+            "total": 73,
+            "covered": 70,
+            "skipped": 0,
+            "pct": 95.89
+          }
+        },
+        "src/sal/rtl/uri.ts": {
+          "lines": {
+            "total": 52,
+            "covered": 52,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 6,
+            "covered": 6,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 56,
+            "covered": 55,
+            "skipped": 0,
+            "pct": 98.21
+          },
+          "branches": {
+            "total": 39,
+            "covered": 38,
+            "skipped": 0,
+            "pct": 97.43
+          }
+        }
+      }
+    },
+    "scriptParser": {
+      "coverage": {
+        "lines": {
+          "total": 186,
+          "covered": 180,
+          "skipped": 0,
+          "pct": 96.77
+        },
+        "statements": {
+          "total": 201,
+          "covered": 195,
+          "skipped": 0,
+          "pct": 97.01
+        },
+        "functions": {
+          "total": 43,
+          "covered": 41,
+          "skipped": 0,
+          "pct": 95.34
+        },
+        "branches": {
+          "total": 82,
+          "covered": 80,
+          "skipped": 0,
+          "pct": 97.56
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "owners": {
+        "src/stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTscript.lexical.ts": {
+          "lines": {
+            "total": 69,
+            "covered": 67,
+            "skipped": 0,
+            "pct": 97.1
+          },
+          "functions": {
+            "total": 5,
+            "covered": 5,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 79,
+            "covered": 77,
+            "skipped": 0,
+            "pct": 97.46
+          },
+          "branches": {
+            "total": 56,
+            "covered": 55,
+            "skipped": 0,
+            "pct": 98.21
+          }
+        },
+        "src/stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTscript.reference.ts": {
+          "lines": {
+            "total": 87,
+            "covered": 87,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 26,
+            "covered": 26,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 91,
+            "covered": 91,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 20,
+            "covered": 20,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "src/stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTscript.ts": {
+          "lines": {
+            "total": 12,
+            "covered": 12,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 6,
+            "covered": 6,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 13,
+            "covered": 13,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 2,
+            "covered": 2,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "src/udkapi/com/sun/star/uri/XVndSunStarScriptUrl.ts": {
+          "lines": {
+            "total": 9,
+            "covered": 7,
+            "skipped": 0,
+            "pct": 77.77
+          },
+          "functions": {
+            "total": 3,
+            "covered": 2,
+            "skipped": 0,
+            "pct": 66.66
+          },
+          "statements": {
+            "total": 9,
+            "covered": 7,
+            "skipped": 0,
+            "pct": 77.77
+          },
+          "branches": {
+            "total": 2,
+            "covered": 1,
+            "skipped": 0,
+            "pct": 50
+          }
+        },
+        "src/udkapi/com/sun/star/uri/XVndSunStarScriptUrlReference.ts": {
+          "lines": {
+            "total": 9,
+            "covered": 7,
+            "skipped": 0,
+            "pct": 77.77
+          },
+          "functions": {
+            "total": 3,
+            "covered": 2,
+            "skipped": 0,
+            "pct": 66.66
+          },
+          "statements": {
+            "total": 9,
+            "covered": 7,
+            "skipped": 0,
+            "pct": 77.77
+          },
+          "branches": {
+            "total": 2,
+            "covered": 2,
+            "skipped": 0,
+            "pct": 100
+          }
+        }
+      }
+    },
+    "packageFactory": {
+      "coverage": {
+        "lines": {
+          "total": 85,
+          "covered": 71,
+          "skipped": 0,
+          "pct": 83.52
+        },
+        "statements": {
+          "total": 88,
+          "covered": 71,
+          "skipped": 0,
+          "pct": 80.68
+        },
+        "functions": {
+          "total": 15,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 86.66
+        },
+        "branches": {
+          "total": 16,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 68.75
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "owners": {
+        "src/stoc/source/uriproc/VndSunStarPkgUrlReferenceFactory.ts": {
+          "lines": {
+            "total": 38,
+            "covered": 38,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 8,
+            "covered": 8,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 38,
+            "covered": 38,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 6,
+            "covered": 6,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "src/udkapi/com/sun/star/uri/VndSunStarPkgUrlReferenceFactory.ts": {
+          "lines": {
+            "total": 38,
+            "covered": 26,
+            "skipped": 0,
+            "pct": 68.42
+          },
+          "functions": {
+            "total": 4,
+            "covered": 3,
+            "skipped": 0,
+            "pct": 75
+          },
+          "statements": {
+            "total": 41,
+            "covered": 26,
+            "skipped": 0,
+            "pct": 63.41
+          },
+          "branches": {
+            "total": 8,
+            "covered": 3,
+            "skipped": 0,
+            "pct": 37.5
+          }
+        },
+        "src/udkapi/com/sun/star/uri/XVndSunStarPkgUrlReferenceFactory.ts": {
+          "lines": {
+            "total": 9,
+            "covered": 7,
+            "skipped": 0,
+            "pct": 77.77
+          },
+          "functions": {
+            "total": 3,
+            "covered": 2,
+            "skipped": 0,
+            "pct": 66.66
+          },
+          "statements": {
+            "total": 9,
+            "covered": 7,
+            "skipped": 0,
+            "pct": 77.77
+          },
+          "branches": {
+            "total": 2,
+            "covered": 2,
+            "skipped": 0,
+            "pct": 100
+          }
+        }
+      }
+    },
+    "previousTwelveUriOwners": {
+      "coverage": {
+        "lines": {
+          "total": 558,
+          "covered": 517,
+          "skipped": 0,
+          "pct": 92.65
+        },
+        "statements": {
+          "total": 621,
+          "covered": 563,
+          "skipped": 0,
+          "pct": 90.66
+        },
+        "functions": {
+          "total": 93,
+          "covered": 89,
+          "skipped": 0,
+          "pct": 95.69
+        },
+        "branches": {
+          "total": 335,
+          "covered": 289,
+          "skipped": 0,
+          "pct": 86.26
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "owners": {
+        "src/stoc/source/uriproc/UriReference.value.ts": {
+          "lines": {
+            "total": 67,
+            "covered": 66,
+            "skipped": 0,
+            "pct": 98.5
+          },
+          "functions": {
+            "total": 20,
+            "covered": 20,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 73,
+            "covered": 71,
+            "skipped": 0,
+            "pct": 97.26
+          },
+          "branches": {
+            "total": 40,
+            "covered": 38,
+            "skipped": 0,
+            "pct": 95
+          }
+        },
+        "src/stoc/source/uriproc/UriReferenceFactory.component.ts": {
+          "lines": {
+            "total": 100,
+            "covered": 85,
+            "skipped": 0,
+            "pct": 85
+          },
+          "functions": {
+            "total": 11,
+            "covered": 11,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 110,
+            "covered": 89,
+            "skipped": 0,
+            "pct": 80.9
+          },
+          "branches": {
+            "total": 34,
+            "covered": 24,
+            "skipped": 0,
+            "pct": 70.58
+          }
+        },
+        "src/stoc/source/uriproc/UriReferenceFactory.generic.ts": {
+          "lines": {
+            "total": 70,
+            "covered": 69,
+            "skipped": 0,
+            "pct": 98.57
+          },
+          "functions": {
+            "total": 22,
+            "covered": 22,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 77,
+            "covered": 76,
+            "skipped": 0,
+            "pct": 98.7
+          },
+          "branches": {
+            "total": 40,
+            "covered": 31,
+            "skipped": 0,
+            "pct": 77.5
+          }
+        },
+        "src/stoc/source/uriproc/UriReferenceFactory.resolve.ts": {
+          "lines": {
+            "total": 142,
+            "covered": 138,
+            "skipped": 0,
+            "pct": 97.18
+          },
+          "functions": {
+            "total": 8,
+            "covered": 8,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 166,
+            "covered": 158,
+            "skipped": 0,
+            "pct": 95.18
+          },
+          "branches": {
+            "total": 146,
+            "covered": 135,
+            "skipped": 0,
+            "pct": 92.46
+          }
+        },
+        "src/stoc/source/uriproc/UriReferenceFactory.segments.ts": {
+          "lines": {
+            "total": 49,
+            "covered": 49,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 1,
+            "covered": 1,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 50,
+            "covered": 50,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 43,
+            "covered": 40,
+            "skipped": 0,
+            "pct": 93.02
+          }
+        },
+        "src/stoc/source/uriproc/UriReferenceFactory.temporaries.ts": {
+          "lines": {
+            "total": 46,
+            "covered": 46,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 15,
+            "covered": 15,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 58,
+            "covered": 55,
+            "skipped": 0,
+            "pct": 94.82
+          },
+          "branches": {
+            "total": 14,
+            "covered": 11,
+            "skipped": 0,
+            "pct": 78.57
+          }
+        },
+        "src/udkapi/com/sun/star/uri/RelativeUriExcessParentSegments.ts": {
+          "lines": {
+            "total": 9,
+            "covered": 6,
+            "skipped": 0,
+            "pct": 66.66
+          },
+          "functions": {
+            "total": 2,
+            "covered": 1,
+            "skipped": 0,
+            "pct": 50
+          },
+          "statements": {
+            "total": 9,
+            "covered": 6,
+            "skipped": 0,
+            "pct": 66.66
+          },
+          "branches": {
+            "total": 2,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 0
+          }
+        },
+        "src/udkapi/com/sun/star/uri/UriReferenceFactory.ts": {
+          "lines": {
+            "total": 38,
+            "covered": 26,
+            "skipped": 0,
+            "pct": 68.42
+          },
+          "functions": {
+            "total": 4,
+            "covered": 3,
+            "skipped": 0,
+            "pct": 75
+          },
+          "statements": {
+            "total": 41,
+            "covered": 26,
+            "skipped": 0,
+            "pct": 63.41
+          },
+          "branches": {
+            "total": 8,
+            "covered": 3,
+            "skipped": 0,
+            "pct": 37.5
+          }
+        },
+        "src/udkapi/com/sun/star/uri/XUriReference.ts": {
+          "lines": {
+            "total": 9,
+            "covered": 9,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 3,
+            "covered": 3,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 9,
+            "covered": 9,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 2,
+            "covered": 2,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "src/udkapi/com/sun/star/uri/XUriReferenceFactory.ts": {
+          "lines": {
+            "total": 9,
+            "covered": 7,
+            "skipped": 0,
+            "pct": 77.77
+          },
+          "functions": {
+            "total": 3,
+            "covered": 2,
+            "skipped": 0,
+            "pct": 66.66
+          },
+          "statements": {
+            "total": 9,
+            "covered": 7,
+            "skipped": 0,
+            "pct": 77.77
+          },
+          "branches": {
+            "total": 2,
+            "covered": 2,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "src/udkapi/com/sun/star/uri/XUriSchemeParser.ts": {
+          "lines": {
+            "total": 9,
+            "covered": 7,
+            "skipped": 0,
+            "pct": 77.77
+          },
+          "functions": {
+            "total": 3,
+            "covered": 2,
+            "skipped": 0,
+            "pct": 66.66
+          },
+          "statements": {
+            "total": 9,
+            "covered": 7,
+            "skipped": 0,
+            "pct": 77.77
+          },
+          "branches": {
+            "total": 2,
+            "covered": 2,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "src/unotools/source/misc/mediadescriptor.uri.ts": {
+          "lines": {
+            "total": 10,
+            "covered": 9,
+            "skipped": 0,
+            "pct": 90
+          },
+          "functions": {
+            "total": 1,
+            "covered": 1,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 10,
+            "covered": 9,
+            "skipped": 0,
+            "pct": 90
+          },
+          "branches": {
+            "total": 2,
+            "covered": 1,
+            "skipped": 0,
+            "pct": 50
+          }
+        }
+      }
+    }
+  },
+  "checks": [
+    {
+      "command": "vitest run --config vitest.shared.config.ts src/sal/rtl/uri.native.test.ts src/sal/rtl/strbuf.test.ts src/sal/rtl/stringbuffer.test.ts src/sal/rtl/oustringbuffer.test.ts src/sal/rtl/strtmpl.assembly.test.ts src/sal/rtl/strtmpl.math.test.ts --maxWorkers=2 --coverage --coverage.provider=istanbul [six explicit new-owner includes, scoped90]",
+      "result": "107 tests / 6 files pass; whole six-new-owner scoped90 PASS",
+      "log": "apps/office/coverage/rtl-uri-coverage.log"
+    },
+    {
+      "command": "vitest run --config vitest.shared.config.ts [script parser, native URI factory, package factory tests] --maxWorkers=2 --coverage --coverage.provider=istanbul [whole five script-owner includes, scoped90]",
+      "result": "423 tests / 3 files pass; whole five-new-owner scoped90 PASS",
+      "log": "apps/office/coverage/uri-script-coverage-final.log"
+    },
+    {
+      "command": "vitest run --config vitest.shared.config.ts [package factory and native URI factory tests] --maxWorkers=2 --coverage --coverage.provider=istanbul [whole three package-owner includes, scoped90]",
+      "result": "396 tests / 2 files pass; scoped90 FAIL; actual component fully covered, genuine SDK exception/legacy type paths remain",
+      "log": "apps/office/coverage/rtl-uri-package-coverage-final.log"
+    },
+    {
+      "command": "vitest run [previous six URI/metadata/helper test files plus script/package tests] --maxWorkers=2 --coverage --coverage.provider=istanbul [same twelve original owners, explicit old five SDK paths rather than widened wildcard] --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "473 tests / 8 files pass; scoped90 FAIL on branches86.26; previous twelve-owner S89.53/B84.77/F93.54/L91.75 improve to S90.66/B86.26/F95.69/L92.65 without adding new owners to the measured set",
+      "log": "apps/office/coverage/uri-factory-with-script-coverage.log"
+    },
+    {
+      "command": "vitest run --config vitest.shared.config.ts src/unotools/source/misc/mediadescriptor.uri.test.ts src/stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTscript.test.ts --maxWorkers=2",
+      "result": "related real rejected-parser fallback regression passes; source SAL_WARN implementation remains unqualified",
+      "log": "apps/office/coverage/uri-real-parser-null-regression.log"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "PASS actual Chromium main and DOM-free module Worker; SAL UTF8/GB18030 codecs, independent resolution, registered package/script URI services, actual invalid-parser MediaDescriptor fallback",
+      "log": "apps/office/coverage/uri-script-worker-final.log"
+    },
+    {
+      "command": "../../node_modules/.bin/tsc --noEmit --pretty false",
+      "cwd": "apps/office",
+      "result": "FAIL exactly four pre-existing native metadata storage dependency errors: MediaDescriptor, SfxMedium sequence constructor, GetOutputStorage and Commit; no new codec/URI/SDK errors",
+      "log": "apps/office/coverage/uri-script-typecheck-final.log"
+    },
+    {
+      "command": "node scripts/check-module-boundaries.mjs",
+      "result": "PASS 2510 runtime sources / 15552 imports / 283 allowed edges",
+      "log": "apps/office/coverage/rtl-uri-boundaries-final.log"
+    },
+    {
+      "command": "scoped eslint and prettier --check for changed/new SAL/URI/SDK/registry/Worker files",
+      "result": "PASS",
+      "logs": [
+        "apps/office/coverage/rtl-uri-all-eslint.log",
+        "apps/office/coverage/rtl-uri-format-final.log"
+      ]
+    },
+    {
+      "command": "ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check",
+      "result": "PASS; existing managed-hook readiness informational note retained",
+      "log": "apps/office/coverage/rtl-uri-doctor.log"
+    }
+  ],
+  "originalQA": {
+    "salRelativeResolutionRows": 54,
+    "salRtlUri": "full original character-class loops, surrogate/charset/strict assertions20..30 and UTF8 roundtrip, including enabled zh charset cases",
+    "stocMakeAbsolute": "original independent rtl::Uri::convertRelToAbs RFC3986-compatible cross-check now ported with actual independent SAL algorithm",
+    "stocPackageFactory": "all three original testPkgUrlFactory rows",
+    "stocScriptParser": "all eight original rows, normalized self-mutations, parameter replacement/append and original IllegalArgumentException cases",
+    "remaining": "testVndSunStarExpand and testTranslator require genuine missing owners; no macro expander/encoding policy substitutes"
+  },
+  "suspectedIssues": [
+    "CALC575/WRITER512",
+    "CALC576/WRITER513",
+    "CALC577/WRITER514"
+  ],
+  "sourceHashes": {
+    "sal/rtl/uri.cxx": "61ddf498b5c28485ea4ff09faa2c6031200e134aaa80db30bce5337d4f5089bf",
+    "sal/inc/uri_internal.hxx": "61b593c2b449c1b18824d91ebb012c1e3ced0579a7831a4c8f84db900db57780",
+    "sal/rtl/strbuf.cxx": "b8860207a4b50c4b70585ad3b338cd350a09481a2454f6a435e28e1dda57ec82",
+    "sal/rtl/strtmpl.hxx": "12d2bc50c11768dd386a3fde274e538f62ae7617ea7ae8ee258ee3940efebcab",
+    "include/rtl/uri.h": "9782cc0ed06d800252a3e9b6398ba51cd0cfe4fa197aa178d1f51ab980a5d21e",
+    "include/rtl/uri.hxx": "5643598338ddf2c6075cd644a9d6bdb4942f2911059def99c03ce4fd7e6a4b69",
+    "include/rtl/malformeduriexception.hxx": "ebf3e7074c895898390a4b61fb9e302c45cdb0d236305325560079e46730e080",
+    "stoc/source/uriproc/VndSunStarPkgUrlReferenceFactory.cxx": "12e4026e0cef6f84383d53cb43a53bfe73cd5592f1c5477f07ae19dbd672aa68",
+    "stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTscript.cxx": "0ee2fad6aa412927de2b9e8116f9dc4ffc7501836228873f0551941e9a2d9a83",
+    "stoc/util/stocservices.component": "395387a50cf93bccc42c13f4ae738c56517fa33cca72521c8cbd7227ad692684",
+    "sal/qa/rtl/uri/rtl_testuri.cxx": "a0f63ff162f9c0f54552647ee38d7b46171732d4438e689e869e2c747c925d1a",
+    "sal/qa/rtl/uri/rtl_Uri.cxx": "deced704dd598f7e4759aac3a2333aac9ba58561a6a1262690d47b0be3c45a92",
+    "stoc/test/uriproc/test_uriproc.cxx": "35a7cfec5ced7f645f948fa68531225321bad0df3546dec09315ef477f24eb9b"
+  },
+  "remaining": [
+    "Real expand parser/MacroExpander and thread-encoding owner/ExternalUriReferenceTranslator.",
+    "Writer native context flow and replacement of legacy string-facing OOXMLStream URI factory still pending.",
+    "Real MediaDescriptor trust/authentication paths await explicit previously requested security scope approval; no approval inferred from automatic continuations.",
+    "Native SfxMedium/storage backend/XML metadata services and original metadata QA unfinished.",
+    "Canonical runtime/provenance/capability/source-tree/static qualification for this entire WIP block remains pending; no deployable or merged implementation claim.",
+    "Full goal filter/model/package/UI Strict/Transitional roundtrip and cancellation/stale/primary ODF-state acceptance remain unfinished.",
+    "Physical native ABI, allocator, shared-memory mutex, independent compiled URI differential and SAL logging not qualified."
+  ],
+  "fullSuite": "not run; related-only checkpoint inside same task, ten-task cadence unchanged"
+}
