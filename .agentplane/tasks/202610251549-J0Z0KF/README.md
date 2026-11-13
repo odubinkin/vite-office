@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 343
+revision: 346
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T10:38:21.966Z"
+  updated_at: "2026-11-13T10:53:41.572Z"
   updated_by: "CODER"
-  note: "Native concrete RelationsFragment/owning AttributeList checkpoint:110related cases/6files pass, whole owner gate98.58/100/100/98.54 and main/Worker positive native relation parse pass.4actual pinned Strict/Transitional DOCX/XLSX root/main relationship parts parsed, not main-part model/export/UI acceptance. Native filter/cache/default fragment ctor/storage and full original QA remain unfinished; older failed gates retained. Evidence native-relations-fragment-continuation.json; goal continues."
-  attempts: 106
+  note: "Native AttributeList DateTime/token-list and byte getToken source contracts: 132 related tests and actual main/Worker pass; AttributeList complete owner passes90; independent whole o3tl function88.88 fails90, not hidden by aggregate. Vite/static/scoped lint/format/tools/resources/provenance/registry/size/tree/doctor/routing/diff pass. Four older app types, existing cycle/JSDoc and prior owner failures retained. Native StorageBase/XStorage/filter orchestration and full DOCX/XLSX model/export/UI remain unfinished; goal active. Evidence native-attribute-collections-continuation.json."
+  attempts: 107
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1704,8 +1707,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T10:53:41.572Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native AttributeList DateTime/token-list and byte getToken source contracts: 132 related tests and actual main/Worker pass; AttributeList complete owner passes90; independent whole o3tl function88.88 fails90, not hidden by aggregate. Vite/static/scoped lint/format/tools/resources/provenance/registry/size/tree/doctor/routing/diff pass. Four older app types, existing cycle/JSDoc and prior owner failures retained. Native StorageBase/XStorage/filter orchestration and full DOCX/XLSX model/export/UI remain unfinished; goal active. Evidence native-attribute-collections-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-13T10:53:53.769Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T10:38:31.689Z"
+doc_updated_at: "2026-11-13T10:53:53.769Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -4900,6 +4916,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T10:53:41.572Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native AttributeList DateTime/token-list and byte getToken source contracts: 132 related tests and actual main/Worker pass; AttributeList complete owner passes90; independent whole o3tl function88.88 fails90, not hidden by aggregate. Vite/static/scoped lint/format/tools/resources/provenance/registry/size/tree/doctor/routing/diff pass. Four older app types, existing cycle/JSDoc and prior owner failures retained. Native StorageBase/XStorage/filter orchestration and full DOCX/XLSX model/export/UI remain unfinished; goal active. Evidence native-attribute-collections-continuation.json.
+    Attempts: 107
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T10:53:17.971Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -5423,6 +5469,10 @@ sections:
     - Observation: Original concrete native RelationsFragment and full consumed AttributeList intrusive ownership now parse actual source DOCX/XLSX relationship streams into the same native owner, with110related cases/90gate/main-Worker evidence. See `evidence/native-relations-fragment-continuation.json`.
       Impact: Positive native relationship XML parsing advances, but main-part model/export/UI and native filter/default fragment constructor/storage routing remain unfinished; all earlier failed scopes retained.
       Resolution: Continue actual native filter/cache/stream orchestration and source QA, preserving source defaults/partial-record behavior and browser workflows; goal active, no fake providers or unfinished implementation commit.
+
+    - Observation: Native OOXML AttributeList DateTime/token-list and byte getToken source specializations now retain original value/index/default behavior with132related cases and actual main/Worker. See `evidence/native-attribute-collections-continuation.json`.
+      Impact: Shared parsing advances, but whole o3tl function coverage88.88 remains below90 despite passing attribute owner; all older failed scopes and full model/filter/UI gaps remain.
+      Resolution: Preserve source DateTime quirks (WRITER528/CALC591); continue actual synchronous StorageBase/XStorage/filter integration without fake cache/providers. Goal active; no incomplete implementation commit.
 id_source: "generated"
 ---
 ## Summary
@@ -8627,6 +8677,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T10:53:41.572Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native AttributeList DateTime/token-list and byte getToken source contracts: 132 related tests and actual main/Worker pass; AttributeList complete owner passes90; independent whole o3tl function88.88 fails90, not hidden by aggregate. Vite/static/scoped lint/format/tools/resources/provenance/registry/size/tree/doctor/routing/diff pass. Four older app types, existing cycle/JSDoc and prior owner failures retained. Native StorageBase/XStorage/filter orchestration and full DOCX/XLSX model/export/UI remain unfinished; goal active. Evidence native-attribute-collections-continuation.json.
+Attempts: 107
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T10:53:17.971Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -9154,3 +9234,7 @@ Native DOM classic SAX and attribute ownership checkpoint (2026-11-13):
 - Observation: Original concrete native RelationsFragment and full consumed AttributeList intrusive ownership now parse actual source DOCX/XLSX relationship streams into the same native owner, with110related cases/90gate/main-Worker evidence. See `evidence/native-relations-fragment-continuation.json`.
   Impact: Positive native relationship XML parsing advances, but main-part model/export/UI and native filter/default fragment constructor/storage routing remain unfinished; all earlier failed scopes retained.
   Resolution: Continue actual native filter/cache/stream orchestration and source QA, preserving source defaults/partial-record behavior and browser workflows; goal active, no fake providers or unfinished implementation commit.
+
+- Observation: Native OOXML AttributeList DateTime/token-list and byte getToken source specializations now retain original value/index/default behavior with132related cases and actual main/Worker. See `evidence/native-attribute-collections-continuation.json`.
+  Impact: Shared parsing advances, but whole o3tl function coverage88.88 remains below90 despite passing attribute owner; all older failed scopes and full model/filter/UI gaps remain.
+  Resolution: Preserve source DateTime quirks (WRITER528/CALC591); continue actual synchronous StorageBase/XStorage/filter integration without fake cache/providers. Goal active; no incomplete implementation commit.

@@ -1,0 +1,190 @@
+{
+  "scope": "Original shared OOXML native AttributeList DateTime/token-list and o3tl byte getToken specializations; source QA value cases and main/Worker; not complete DOCX/XLSX model/filter/UI acceptance",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "checks": [
+    {
+      "name": "related source tests",
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/oox/source/helper/attributelist-collections.test.ts src/oox/source/helper/attributelist-values.test.ts src/oox/source/helper/attributelist.test.ts src/o3tl/inc/string_view-views.test.ts src/o3tl/inc/string_view-tokens-upstream.test.ts src/o3tl/inc/string_view.test.ts src/o3tl/inc/string_view-codepoints.test.ts src/oox/source/core/relationshandler.native.test.ts src/sc/source/filter/oox/richstring.test.ts --maxWorkers=2 --coverage --coverage.include=src/oox/source/helper/attributelist.ts --coverage.include=src/o3tl/inc/string_view.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-attribute-collections > coverage/native-attribute-collections.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections.log",
+      "result": "pass",
+      "observation": "132tests/9files. Actual AttributeList owner S100/B100/F100/L100. Aggregate two-owner S99/B99.5/F97.29/L98.86 does NOT establish every individual owner threshold; separate complete-file check below fails o3tl functions88.88. No masked functions or merged older failing profiles."
+    },
+    {
+      "name": "whole-file owner90 audit",
+      "command": "python3 - <<'PY' > apps/office/coverage/native-attribute-collections-per-owner.log 2>&1\nimport json,sys\nvalues=json.load(open('apps/office/coverage/native-attribute-collections/coverage-summary.json'))\nfailed=False\nfor name,result in values.items():\n if name=='total':continue\n metrics={k:result[k]['pct'] for k in ['statements','branches','functions','lines']}\n ok=all(n>=90 for n in metrics.values());failed|=not ok\n print(('PASS' if ok else 'FAIL'),name,metrics)\nsys.exit(int(failed))\nPY",
+      "log": "apps/office/coverage/native-attribute-collections-per-owner.log",
+      "result": "fail",
+      "observation": "AttributeList passes. Whole o3tl string_view S97.75/B98.93/F88.88/L97.14 fails function90 because prior matchIgnoreAsciiCase is not exercised by this related scope; do not dilute with the passing attribute file or claim full owner acceptance."
+    },
+    {
+      "name": "actual main/Worker",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs > apps/office/coverage/native-attribute-collections-worker.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections-worker.log",
+      "result": "pass",
+      "observation": "Real native AttributeList/DateTime/TokenMap/byte-view results match main and DOM-free Worker; Z retains false UTC and empty tokens retain invalid identities. Existing actual native relationship/C parser checks still pass."
+    },
+    {
+      "name": "tools types",
+      "command": "node_modules/.bin/tsc --project tsconfig.tools.json > apps/office/coverage/native-attribute-collections-tools.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections-tools.log",
+      "result": "pass",
+      "observation": "Tools tsc"
+    },
+    {
+      "name": "app types",
+      "command": "cd apps/office && ../../node_modules/.bin/tsc --noEmit > coverage/native-attribute-collections-types.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections-types.log",
+      "result": "fail",
+      "observation": "Exactly4older SfxDocumentMetaData.storage.ts errors: missing MediaDescriptor import/native medium constructor/GetOutputStorage/Commit. No new owner/test errors."
+    },
+    {
+      "name": "Vite",
+      "command": "cd apps/office && ../../node_modules/.bin/vite build > coverage/native-attribute-collections-vite.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections-vite.log",
+      "result": "pass",
+      "observation": "Production app build; pre-existing chunk/timing warnings"
+    },
+    {
+      "name": "static",
+      "command": "node scripts/check-static-build.mjs > apps/office/coverage/native-attribute-collections-static.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections-static.log",
+      "result": "pass",
+      "observation": "Actual production output relative assets/fourJS bundles/no backend endpoints"
+    },
+    {
+      "name": "lint",
+      "command": "node_modules/.bin/eslint apps/office/src/oox/source/helper/attributelist.ts apps/office/src/oox/source/helper/attributelist-collections.test.ts apps/office/src/o3tl/inc/string_view.ts apps/office/src/o3tl/inc/string_view-views.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs --max-warnings 0 > apps/office/coverage/native-attribute-collections-lint.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections-lint.log",
+      "result": "pass",
+      "observation": "Changed mechanisms/tests/probe"
+    },
+    {
+      "name": "upstream QA lint",
+      "command": "node_modules/.bin/eslint apps/office/src/o3tl/inc/string_view-tokens-upstream.test.ts --max-warnings 0 > apps/office/coverage/native-attribute-collections-upstream-lint.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections-upstream-lint.log",
+      "result": "pass",
+      "observation": "Additional actual source QA scenarios"
+    },
+    {
+      "name": "format",
+      "command": "node_modules/.bin/prettier --check apps/office/src/oox/source/helper/attributelist.ts apps/office/src/oox/source/helper/attributelist-collections.test.ts apps/office/src/o3tl/inc/string_view.ts apps/office/src/o3tl/inc/string_view-views.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs > apps/office/coverage/native-attribute-collections-format.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections-format.log",
+      "result": "pass",
+      "observation": "Changed source/test/probe; new upstream test formatted at creation"
+    },
+    {
+      "name": "provenance",
+      "command": "npm run check:source-provenance > apps/office/coverage/native-attribute-collections-provenance.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections-provenance.log",
+      "result": "pass",
+      "observation": "2533runtime/2303mapped/192browser/38infra, no promotions/exemptions"
+    },
+    {
+      "name": "registry/invariants/parity",
+      "command": "npm run inventory:registry:check > apps/office/coverage/native-attribute-collections-registry.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections-registry.log",
+      "result": "pass",
+      "observation": "semanticViolationCount0"
+    },
+    {
+      "name": "size",
+      "command": "npm run check:file-size > apps/office/coverage/native-attribute-collections-size.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections-size.log",
+      "result": "pass",
+      "observation": "Existing soft warnings; no new over-limit owner"
+    },
+    {
+      "name": "source tree",
+      "command": "npm run check:source-tree > apps/office/coverage/native-attribute-collections-tree.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections-tree.log",
+      "result": "pass",
+      "observation": "Source path validation"
+    },
+    {
+      "name": "dependencies",
+      "command": "npm run check:dependencies > apps/office/coverage/native-attribute-collections-dependencies.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections-dependencies.log",
+      "result": "fail",
+      "observation": "Old comphelper-sax-comphelper cycle remains; no new exemption"
+    },
+    {
+      "name": "JSDoc",
+      "command": "npm run check:docs > apps/office/coverage/native-attribute-collections-docs.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections-docs.log",
+      "result": "fail",
+      "observation": "160older findings; no changed/new owner findings after documenting new callbacks"
+    },
+    {
+      "name": "Calc resources",
+      "command": "npm run check:calc-resources > apps/office/coverage/native-attribute-collections-resources.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections-resources.log",
+      "result": "pass",
+      "observation": "Current source UI resources unchanged"
+    },
+    {
+      "name": "Writer resources",
+      "command": "npm run check:writer-resources > apps/office/coverage/native-attribute-collections-writer-resources.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections-writer-resources.log",
+      "result": "pass",
+      "observation": "Resource check and existing focused tooling tests"
+    },
+    {
+      "name": "doctor",
+      "command": "ap doctor > apps/office/coverage/native-attribute-collections-doctor.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections-doctor.log",
+      "result": "pass",
+      "observation": "Agentplane validation"
+    },
+    {
+      "name": "routing",
+      "command": "node .agentplane/policy/check-routing.mjs > apps/office/coverage/native-attribute-collections-routing.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections-routing.log",
+      "result": "pass",
+      "observation": "Policy routing unchanged"
+    },
+    {
+      "name": "diff",
+      "command": "git diff --check > apps/office/coverage/native-attribute-collections-diff.log 2>&1",
+      "log": "apps/office/coverage/native-attribute-collections-diff.log",
+      "result": "pass",
+      "observation": "No whitespace errors"
+    }
+  ],
+  "sourceHashes": {
+    "apps/office/src/oox/source/helper/attributelist.ts": "f2c4f6a3f75868574814a50188b88349b5ccdc55bcd398666cd821d3451cbbeb",
+    "apps/office/src/oox/source/helper/attributelist-collections.test.ts": "12ae928a2171dec408e2225cdd505ed397cf73b3b5bc9c359dcf38849ce678cc",
+    "apps/office/src/o3tl/inc/string_view.ts": "c7d60f468b41695e3737c68c90461534830d79fee9750f1be44e21299fc483e2",
+    "apps/office/src/o3tl/inc/string_view-views.test.ts": "682b47cdbea822d66e71fadaa8b4292bceac482ef36c06b6da1cbfb6334f59d9",
+    "apps/office/src/o3tl/inc/string_view-tokens-upstream.test.ts": "efd8f4646399a236fae6a7356f02e71e90ee2bc9fbf91dfdb406d97138f33b0e",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "6e447574645373fe3f89cf611c9a711b284766e96cec285e0cb8af309e1449cc",
+    "scripts/native-dom-worker-probe.mjs": "acd909269b0e09774c559444fd624712f77d72d3d68c114c72b50bb9002382b1"
+  },
+  "preservedSourceLogic": [
+    "DateTime exact19/20bytes uppercaseZ/ASCII separators; original partial numeric parsing, unsigned16 casts and signed16 Year field; default nanoseconds0/IsUTCfalse even forZ; independent fallback value copies.",
+    "Token list splits only byte32 with actual o3tl position reference; missing/empty returns empty list, repeated/leading/trailing spaces produce invalid empty tokens; unknown token and Unicode preserve invalid identity; repeated valid tokens retain order.",
+    "Existing UTF16 getToken algorithms now bind actual byte specializations, preserving borrowed storage/terminal index/negative sentinel/default empty type. No host Date/ISO validator/JS whitespace splitter/temporary relation cache introduced."
+  ],
+  "originalQA": "Pinned o3tl/qa/test-string_view.cxx testGetToken native OUString empty/a;b, counted-view changing delimiter/a;;b/trailing period/ab terminal and defined negative-index scenarios, with byte-specialization repeat. Native pointer-address-derived final index computation and unrelated/unported APIs in the final comparison block remain unqualified; no claim of full original C++ fixture execution.",
+  "initialObservations": [
+    "Initial unknown literal was an actual valid token XML_unknown; corrected test input to not-an-oox-token, retaining source lookup unchanged.",
+    "Three missing new test callback JSDoc entries fixed without suppressions.",
+    "Initial registry metadata update ran from apps/office and failed before writing; rerun from repository root succeeded."
+  ],
+  "olderFailedGatesRetained": [
+    "Individual native OOXML parser85.45/78.26/100/93.87",
+    "Broader SDK86.44/86.11/92.30/87.96",
+    "Whole SAL79.20/75.47/73.24/80.62",
+    "Older4metadata storage errors, dependency cycle, JSDoc and all earlier broader unqualified scopes remain open."
+  ],
+  "remaining": [
+    "Native filter relation cache and actual normal FragmentHandler implicit-importRelations constructor/stream/storage orchestration; old host filter/relations route is explicitly not claimed migrated.",
+    "Original Pipe/Expat/full parser QA and complete native metadata/storage/model/Strict+Transitional DOCX/XLSX package/export/reopen/desktop/mobile UI acceptance.",
+    "Separate old URL trust/auth/certificate scope unanswered/untouched; approved original XML options unchanged."
+  ],
+  "integrationFinding": "Existing XmlFilterBase still uses host relationships/context parser route. Original native filter/FragmentHandler public constructor and StorageBase/XStorage are synchronous. Current browser ZipStorage/DocumentArchive opens asynchronously; no synchronous missing-as-cache proxy or eager package preloading was added. Native StorageBase/XStorage/backend orchestration must be implemented before switching primary route.",
+  "suspectedIssues": [
+    "WRITER528",
+    "CALC591"
+  ],
+  "status": "unfinished approved parent tasks, bounded shared owner progress; goal active; no parent finish, implementation commit or merge"
+}
