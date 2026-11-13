@@ -1,0 +1,207 @@
+{
+  "scope": "Original SwitchablePersistenceStream/SPStreamData_Impl and actual generated XAsyncOutputMonitor over genuine native streams, C parser and registered Writer; not complete OStorage/StorageFactory or format/model/UI acceptance",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "checks": [
+    {
+      "name": "source stream and related owner tests",
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/package/source/xstor/switchpersistencestream.test.ts src/package/source/xstor/ocompinstream.test.ts src/package/source/xstor/oseekinstream.test.ts src/oox/source/helper/native-storage.test.ts src/oox/source/helper/binary-streams.test.ts src/oox/source/core/fastparser.test.ts --maxWorkers=2 --coverage --coverage.include=src/package/source/xstor/switchpersistencestream.ts --coverage.include=src/udkapi/com/sun/star/io/XAsyncOutputMonitor.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-xstorage > coverage/native-xstorage-tests.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-tests.log",
+      "result": "fail",
+      "observation": "54tests/6files pass, but whole-owner90 fails. Actual stream S86.27/B82.14/F100/L94.01; SDK100/100/100/100; aggregate87.03/82.55/100/94.44 does not qualify the failed stream. Native pointer fallback without ByteReader and private unreachable source guards remain unverified, no fake positive provider or coverage masks."
+    },
+    {
+      "name": "main/Worker",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs > apps/office/coverage/native-xstorage-worker.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-worker.log",
+      "result": "pass",
+      "observation": "Actual source SwitchablePersistenceStream reads native OOXML input and exposes exact prefix/position/interface identity in main and DOM-free Worker; existing native C/relations/typed attributes/storage paths pass. Not complete XStorage/model/UI acceptance."
+    },
+    {
+      "name": "scoped lint",
+      "command": "node_modules/.bin/eslint apps/office/src/package/source/xstor/switchpersistencestream.ts apps/office/src/package/source/xstor/switchpersistencestream.test.ts apps/office/src/udkapi/com/sun/star/io/XAsyncOutputMonitor.ts apps/office/src/oox/source/core/fastparser.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs --max-warnings 0 > apps/office/coverage/native-xstorage-lint.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-lint.log",
+      "result": "pass",
+      "observation": "Actual owners/tests/probe"
+    },
+    {
+      "name": "scoped format",
+      "command": "node_modules/.bin/prettier --check apps/office/src/package/source/xstor/switchpersistencestream.ts apps/office/src/package/source/xstor/switchpersistencestream.test.ts apps/office/src/udkapi/com/sun/star/io/XAsyncOutputMonitor.ts apps/office/src/oox/source/core/fastparser.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs > apps/office/coverage/native-xstorage-format.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-format.log",
+      "result": "pass",
+      "observation": "Actual owners/tests/probe"
+    },
+    {
+      "name": "tools types",
+      "command": "node_modules/.bin/tsc --project tsconfig.tools.json > apps/office/coverage/native-xstorage-tools.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-tools.log",
+      "result": "pass",
+      "observation": "Current source/test/probe"
+    },
+    {
+      "name": "app types",
+      "command": "node_modules/.bin/tsc --project apps/office/tsconfig.json --noEmit > apps/office/coverage/native-xstorage-types.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-types.log",
+      "result": "fail",
+      "observation": "Exactly4older metadata MediaDescriptor/native SfxMedium ctor/GetOutputStorage/Commit errors, no new owner errors"
+    },
+    {
+      "name": "Vite",
+      "command": "cd apps/office && ../../node_modules/.bin/vite build > coverage/native-xstorage-vite.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-vite.log",
+      "result": "pass",
+      "observation": "Production app build with existing chunk/timing warnings"
+    },
+    {
+      "name": "static",
+      "command": "node scripts/check-static-build.mjs > apps/office/coverage/native-xstorage-static.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-static.log",
+      "result": "pass",
+      "observation": "Relative assets/fourJS bundles/no backend endpoints"
+    },
+    {
+      "name": "provenance",
+      "command": "npm run check:source-provenance > apps/office/coverage/native-xstorage-provenance.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-provenance.log",
+      "result": "pass",
+      "observation": "2537runtime/2307mapped/192browser/38infra, new source/SDK modules foundation/unverified"
+    },
+    {
+      "name": "registry/invariants/parity",
+      "command": "npm run inventory:registry:check > apps/office/coverage/native-xstorage-registry.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-registry.log",
+      "result": "pass",
+      "observation": "semanticViolationCount0, no exemptions/promotions"
+    },
+    {
+      "name": "dependencies",
+      "command": "npm run check:dependencies > apps/office/coverage/native-xstorage-boundaries.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-boundaries.log",
+      "result": "fail",
+      "observation": "Old comphelper-sax-comphelper cycle remains"
+    },
+    {
+      "name": "JSDoc",
+      "command": "npm run check:docs > apps/office/coverage/native-xstorage-docs.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-docs.log",
+      "result": "fail",
+      "observation": "157older findings, no new owner findings"
+    },
+    {
+      "name": "size",
+      "command": "npm run check:file-size > apps/office/coverage/native-xstorage-size.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-size.log",
+      "result": "pass",
+      "observation": "No new over-limit file"
+    },
+    {
+      "name": "tree",
+      "command": "npm run check:source-tree > apps/office/coverage/native-xstorage-tree.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-tree.log",
+      "result": "pass",
+      "observation": "Original source placement"
+    },
+    {
+      "name": "Calc resources",
+      "command": "npm run check:calc-resources > apps/office/coverage/native-xstorage-resources.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-resources.log",
+      "result": "pass",
+      "observation": "Source UI resources unchanged"
+    },
+    {
+      "name": "Writer resources",
+      "command": "npm run check:writer-resources > apps/office/coverage/native-xstorage-writer-resources.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-writer-resources.log",
+      "result": "pass",
+      "observation": "Resource validation/related tooling tests"
+    },
+    {
+      "name": "doctor",
+      "command": "ap doctor > apps/office/coverage/native-xstorage-doctor.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-doctor.log",
+      "result": "pass",
+      "observation": "Agentplane validation"
+    },
+    {
+      "name": "routing",
+      "command": "node .agentplane/policy/check-routing.mjs > apps/office/coverage/native-xstorage-routing.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-routing.log",
+      "result": "pass",
+      "observation": "Policy unchanged"
+    },
+    {
+      "name": "diff",
+      "command": "git diff --check > apps/office/coverage/native-xstorage-diff.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-diff.log",
+      "result": "pass",
+      "observation": "No whitespace errors"
+    },
+    {
+      "name": "final status",
+      "command": "git status --short --untracked-files=all > apps/office/coverage/native-xstorage-status-final.log 2>&1",
+      "log": "apps/office/coverage/native-xstorage-status-final.log",
+      "result": "pass",
+      "observation": "Intentional source WIP retained, no implementation source commit/merge; empty staging area"
+    }
+  ],
+  "sourceHashes": {
+    "apps/office/src/package/source/xstor/switchpersistencestream.ts": "0e2e8e8c0a774d9f038c6da7c3017830283d9eed67fa4f0c26c0fb03fab802eb",
+    "apps/office/src/package/source/xstor/switchpersistencestream.test.ts": "b78d3f0cacb1d4dc1eb0c523b297098cae0094162555ec538c939d0446b9bda3",
+    "apps/office/src/udkapi/com/sun/star/io/XAsyncOutputMonitor.ts": "7b558b4efb9a6d8924c3a39eb474cd07f804e12642c0ea9528169ec8e64fff63",
+    "apps/office/src/oox/source/core/fastparser.test.ts": "72eb299a191b885d7f281c074bea3730de7ed7baea47fc7fe7df00cafba2f839",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "983a07ef533a87768baa1bdd249fc991ad6e0e9d24dc8993a95b16c388256d59",
+    "scripts/native-dom-worker-probe.mjs": "5320e87f95a3fb0935c3da39c7f7f18b2cc2a0232d0d6891ad5982fba05b16c7"
+  },
+  "wholeOwnerCoverage": {
+    "total": {
+      "statements": 87.03,
+      "branches": 82.55,
+      "functions": 100,
+      "lines": 94.44
+    },
+    "switchpersistencestream.ts": {
+      "statements": 86.27,
+      "branches": 82.14,
+      "functions": 100,
+      "lines": 94.01
+    },
+    "XAsyncOutputMonitor.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    }
+  },
+  "preservedSourceLogic": [
+    "Original static XStream/input overload selection uses explicit erased compiler mode; actual native queries/member reference ownership/ByteReader RTTI, initial seek0, equal-length check/previous position/open-flag transfer and old persistence release order retained.",
+    "All consumed original six UNO interfaces and ByteReader raw/Sequence overloads use actual native owners. Sequence readSomeBytes delegates readBytes; pointer path delegates actual ByteReader or original Sequence/memcpy fallback. Closed/input-only flush remains diagnostic-only no-op.",
+    "Original side flags do not enforce read/write method access by themselves; closing a side only clears persistence when opposite not open. getInputStream/getOutputStream still return this facet when disconnected or input-only. Native destructor/reset releases references without calling original stream close methods.",
+    "Actual native XAsyncOutputMonitor generated type/getter/query/Any transport retain same real component and delegate monitor call when actual underlying output supports it; nested original persistence components prove real positive delegation and genuine closed-input failure propagation. No fake successful stream or monitor."
+  ],
+  "compilerProfile": {
+    "profile": "Emscripten4.0.19 without pthreads, realm-local objects; native pthread/shared-memory synchronization and physical ABI unqualified",
+    "evidence": "node_modules/.cache/emsdk/upstream/emscripten/system/lib/pthread/library_pthread_stub.c lines55..81 define mutex init/lock/unlock/destroy as return0; existing scripts/build-libxml2-wasm.py selects --without-threads and no -pthread. Source std::mutex scopes lower to this selected no-op stub behavior; no synthetic mutex/deadlock injector introduced."
+  },
+  "upstreamQA": {
+    "command": "rg -n \"SwitchablePersistenceStream\" vendor/libreoffice-reference/package/qa > apps/office/coverage/native-xstorage-upstream-qa.log",
+    "result": "No direct class QA match in pinned package QA. Previously identified package/qa/storages Java integration suite and actual OStorage/backend/source QA remain required, not claimed executed."
+  },
+  "olderFailedGatesRetained": [
+    "Individual native OOXML parser85.45/78.26/100/93.87",
+    "Broader SDK86.44/86.11/92.30/87.96",
+    "Whole SAL79.20/75.47/73.24/80.62",
+    "Older4metadata storage errors, dependency cycle, JSDoc and all earlier broader unqualified scopes remain open.",
+    "Previous native-attribute-collections complete o3tl string_view function88.88 remains failed independently; current source storage coverage does not close it.",
+    "Previous native-storage complete-file failures retained: base73.15/66.66/100/73.33; nativeZip41.41/45.23/100/43.82; helper64.8/75.64/63.15/62.27; parser85.24/80/100/92.72. Current passing stream cases do not close them."
+  ],
+  "remaining": [
+    "CopyAndSwitchPersistenceTo and actual TempFileFastService remain unported rather than replaced with a fabricated temp stream; required for the full persistence graph.",
+    "Implement actual OStorageFactory/OStorage/ZipPackage backend and original storage integration QA, then positive cache/copy/commit and native filter/default-fragment/relations routing.",
+    "Resolve remaining actual native stream fallback/whole-owner failed gates without private state patches or coverage masks; native pthread/physical ABI/differential remain unqualified.",
+    "Complete source metadata/model/shared prerequisites, full original QA and Strict/Transitional DOCX/XLSX actual model import/export/reopen/current existing desktop/mobile UI acceptance."
+  ],
+  "suspectedIssues": [
+    "WRITER530",
+    "CALC593"
+  ],
+  "status": "approved parent tasks unfinished; actual positive persistence owner/C XML integration progresses; goal active, no implementation source commit or merge"
+}

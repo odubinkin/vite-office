@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 85
+revision: 88
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T11:08:17.711Z"
+  updated_at: "2026-11-13T11:26:35.903Z"
   updated_by: "CODER"
-  note: "Shared original synchronous storage owner/native ZipStorage and format-specific helper/OOX parser overload progress: 127 related tests and actual main/Worker pass, whole-owner90 remains failed without positive backend; existing older failures retained. Full native StorageFactory/OStorage, original storage integration QA and Writer model/filter/export/UI acceptance remain unfinished. Source READ existing-substorage/inherited wrapper mode preserved and documented WRITER529/CALC592. Evidence native-storage-continuation.json; goal active, no implementation merge/commit."
-  attempts: 15
+  note: "Shared original persistence/monitor graph now has54 related passing cases, actual C parser/registered Writer transport and main-Worker native IO/identity. Whole source stream90 fails86.27/82.14/100/94.01; actual fallback/private guards and all older failed scopes remain unqualified. CopyAndSwitchPersistenceTo/TempFile/OStorage/StorageFactory/backend/source storage QA and full Writer core/filter/model/export/UI remain unfinished. Source overload behavior WRITER530/CALC593 preserved; scoped build/static/tools/lint/format/registry/provenance checks pass. Evidence native-persistence-continuation.json; goal active, no implementation merge/commit."
+  attempts: 16
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -248,8 +251,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T11:26:35.903Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared original persistence/monitor graph now has54 related passing cases, actual C parser/registered Writer transport and main-Worker native IO/identity. Whole source stream90 fails86.27/82.14/100/94.01; actual fallback/private guards and all older failed scopes remain unqualified. CopyAndSwitchPersistenceTo/TempFile/OStorage/StorageFactory/backend/source storage QA and full Writer core/filter/model/export/UI remain unfinished. Source overload behavior WRITER530/CALC593 preserved; scoped build/static/tools/lint/format/registry/provenance checks pass. Evidence native-persistence-continuation.json; goal active, no implementation merge/commit."
+  -
+    type: "status"
+    at: "2026-11-13T11:27:17.257Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T11:08:25.215Z"
+doc_updated_at: "2026-11-13T11:27:17.257Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -712,6 +728,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T11:26:35.903Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared original persistence/monitor graph now has54 related passing cases, actual C parser/registered Writer transport and main-Worker native IO/identity. Whole source stream90 fails86.27/82.14/100/94.01; actual fallback/private guards and all older failed scopes remain unqualified. CopyAndSwitchPersistenceTo/TempFile/OStorage/StorageFactory/backend/source storage QA and full Writer core/filter/model/export/UI remain unfinished. Source overload behavior WRITER530/CALC593 preserved; scoped build/static/tools/lint/format/registry/provenance checks pass. Evidence native-persistence-continuation.json; goal active, no implementation merge/commit.
+    Attempts: 16
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T11:25:24.127Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -920,6 +966,10 @@ sections:
     - Observation: Original synchronous StorageBase/native ZipStorage and format-specific helper factory arguments/FastParser storage overload now have127related cases and real main/Worker evidence. See `evidence/native-storage-continuation.json`.
       Impact: Native storage ownership progresses; real positive StorageFactory/OStorage backend/cache/copy/commit and full model/filter/export/UI remain unfinished. Current whole-owner90 and all older failures are retained explicitly.
       Resolution: Implement actual native storage backend/source storage integration QA, then native filter/default-fragment/cache routing. Preserve source WRITER529/CALC592 and browser workflows; goal active, no fake provider or incomplete source implementation commit.
+
+    - Observation: Original switchable persistence/monitor owners now provide genuine positive native IO/position/closure/Any/C XML parser/Writer and main-Worker evidence with54related cases. See `evidence/native-persistence-continuation.json`.
+      Impact: Required OStorage persistence layer progresses, but source whole-owner90, full temp/copy/backend/source QA/filter/model/UI acceptance remain unfinished. Older failed scopes retained independently.
+      Resolution: Preserve source overload distinction WRITER530/CALC593 and selected non-pthread profile; implement actual remaining TempFile/OStorage/backend graph without fake provider, source error injector or coverage masks. Goal active; no incomplete source implementation commit.
 id_source: "generated"
 ---
 ## Summary
@@ -1393,6 +1443,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T11:26:35.903Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared original persistence/monitor graph now has54 related passing cases, actual C parser/registered Writer transport and main-Worker native IO/identity. Whole source stream90 fails86.27/82.14/100/94.01; actual fallback/private guards and all older failed scopes remain unqualified. CopyAndSwitchPersistenceTo/TempFile/OStorage/StorageFactory/backend/source storage QA and full Writer core/filter/model/export/UI remain unfinished. Source overload behavior WRITER530/CALC593 preserved; scoped build/static/tools/lint/format/registry/provenance checks pass. Evidence native-persistence-continuation.json; goal active, no implementation merge/commit.
+Attempts: 16
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T11:25:24.127Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -1606,3 +1686,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Original synchronous StorageBase/native ZipStorage and format-specific helper factory arguments/FastParser storage overload now have127related cases and real main/Worker evidence. See `evidence/native-storage-continuation.json`.
   Impact: Native storage ownership progresses; real positive StorageFactory/OStorage backend/cache/copy/commit and full model/filter/export/UI remain unfinished. Current whole-owner90 and all older failures are retained explicitly.
   Resolution: Implement actual native storage backend/source storage integration QA, then native filter/default-fragment/cache routing. Preserve source WRITER529/CALC592 and browser workflows; goal active, no fake provider or incomplete source implementation commit.
+
+- Observation: Original switchable persistence/monitor owners now provide genuine positive native IO/position/closure/Any/C XML parser/Writer and main-Worker evidence with54related cases. See `evidence/native-persistence-continuation.json`.
+  Impact: Required OStorage persistence layer progresses, but source whole-owner90, full temp/copy/backend/source QA/filter/model/UI acceptance remain unfinished. Older failed scopes retained independently.
+  Resolution: Preserve source overload distinction WRITER530/CALC593 and selected non-pthread profile; implement actual remaining TempFile/OStorage/backend graph without fake provider, source error injector or coverage masks. Goal active; no incomplete source implementation commit.
