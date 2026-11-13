@@ -1,0 +1,222 @@
+{
+  "scope": "Original synchronous StorageBase and concrete native ZipStorage, format-specific OStorageHelper factory construction and FastParser StorageBase overload; real missing-backend/stream ownership/path/mode and main/Worker evidence, not complete native package/filter/model/UI acceptance",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "checks": [
+    {
+      "name": "related tests and whole-owner90",
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/oox/source/helper/native-storage.test.ts src/comphelper/source/misc/storagehelper.test.ts src/comphelper/source/misc/storagehelper-paths.test.ts src/oox/source/core/fastparser.test.ts src/oox/source/helper/binary-streams.test.ts src/oox/source/core/relationshandler.native.test.ts --maxWorkers=2 --coverage --coverage.include=src/oox/source/helper/storagebase.ts --coverage.include=src/oox/source/helper/zipstorage.native.ts --coverage.include=src/comphelper/source/misc/storagehelper.ts --coverage.include=src/oox/source/core/fastparser.ts --coverage.thresholds.perFile=true --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-storage > coverage/native-storage-tests.log 2>&1",
+      "log": "apps/office/coverage/native-storage-tests.log",
+      "result": "fail",
+      "observation": "127tests/6files pass, including13 actual native storage cases; process fails90 coverage. Whole4owner S65.16/B67.28/F87.5/L65.69. Real positive XStorage backend unavailable; no replacement positive provider, fault injector, private pointer patch or coverage masks."
+    },
+    {
+      "name": "actual main/Worker",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs > apps/office/coverage/native-storage-worker-current.log 2>&1",
+      "log": "apps/office/coverage/native-storage-worker-current.log",
+      "result": "pass",
+      "observation": "Actual native ZipStorage/StorageBase/format factory-missing route, native Unicode hierarchy/mode/missing streams execute main and DOM-free Worker. Actual previous native C/relations/attribute paths remain passing. This is not a positive ZIP backend/model/UI claim."
+    },
+    {
+      "name": "lint",
+      "command": "node_modules/.bin/eslint apps/office/src/oox/source/helper/storagebase.ts apps/office/src/oox/source/helper/zipstorage.native.ts apps/office/src/oox/source/helper/native-storage.test.ts apps/office/src/oox/source/core/fastparser.ts apps/office/src/comphelper/source/misc/storagehelper.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs --max-warnings 0 > apps/office/coverage/native-storage-lint.log 2>&1",
+      "log": "apps/office/coverage/native-storage-lint.log",
+      "result": "pass",
+      "observation": "All changed source/test/probe; existing storagehelper callback docs also corrected"
+    },
+    {
+      "name": "format",
+      "command": "node_modules/.bin/prettier --check apps/office/src/oox/source/helper/storagebase.ts apps/office/src/oox/source/helper/zipstorage.native.ts apps/office/src/oox/source/helper/native-storage.test.ts apps/office/src/oox/source/core/fastparser.ts apps/office/src/comphelper/source/misc/storagehelper.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs > apps/office/coverage/native-storage-format.log 2>&1",
+      "log": "apps/office/coverage/native-storage-format.log",
+      "result": "pass",
+      "observation": "Changed source/test/probe"
+    },
+    {
+      "name": "app types",
+      "command": "node_modules/.bin/tsc --project apps/office/tsconfig.json --noEmit > apps/office/coverage/native-storage-types.log 2>&1",
+      "log": "apps/office/coverage/native-storage-types.log",
+      "result": "fail",
+      "observation": "Only4older metadata MediaDescriptor/SfxMedium native ctor/GetOutputStorage/Commit errors; no new storage errors"
+    },
+    {
+      "name": "tools types",
+      "command": "node_modules/.bin/tsc --project tsconfig.tools.json > apps/office/coverage/native-storage-tools.log 2>&1",
+      "log": "apps/office/coverage/native-storage-tools.log",
+      "result": "pass",
+      "observation": "Includes updated actual Worker probe"
+    },
+    {
+      "name": "Vite",
+      "command": "cd apps/office && ../../node_modules/.bin/vite build > coverage/native-storage-vite.log 2>&1",
+      "log": "apps/office/coverage/native-storage-vite.log",
+      "result": "pass",
+      "observation": "Production build with existing chunk/timing warnings"
+    },
+    {
+      "name": "static",
+      "command": "node scripts/check-static-build.mjs > apps/office/coverage/native-storage-static.log 2>&1",
+      "log": "apps/office/coverage/native-storage-static.log",
+      "result": "pass",
+      "observation": "Relative assets/fourJS bundles/no backend endpoints"
+    },
+    {
+      "name": "provenance",
+      "command": "npm run check:source-provenance > apps/office/coverage/native-storage-provenance.log 2>&1",
+      "log": "apps/office/coverage/native-storage-provenance.log",
+      "result": "pass",
+      "observation": "2535runtime/2305mapped/192browser/38infra; both new modules foundation/unverified, no promotion"
+    },
+    {
+      "name": "registry/invariants/parity",
+      "command": "npm run inventory:registry:check > apps/office/coverage/native-storage-registry.log 2>&1",
+      "log": "apps/office/coverage/native-storage-registry.log",
+      "result": "pass",
+      "observation": "semanticViolationCount0"
+    },
+    {
+      "name": "dependencies",
+      "command": "npm run check:dependencies > apps/office/coverage/native-storage-boundaries.log 2>&1",
+      "log": "apps/office/coverage/native-storage-boundaries.log",
+      "result": "fail",
+      "observation": "Existing comphelper-sax-comphelper cycle, no exemptions"
+    },
+    {
+      "name": "JSDoc",
+      "command": "npm run check:docs > apps/office/coverage/native-storage-docs.log 2>&1",
+      "log": "apps/office/coverage/native-storage-docs.log",
+      "result": "fail",
+      "observation": "157older findings, reduced from160 by documenting existing helper callbacks; no new owner/test findings"
+    },
+    {
+      "name": "size",
+      "command": "npm run check:file-size > apps/office/coverage/native-storage-size.log 2>&1",
+      "log": "apps/office/coverage/native-storage-size.log",
+      "result": "pass",
+      "observation": "No hard-limit violations"
+    },
+    {
+      "name": "tree",
+      "command": "npm run check:source-tree > apps/office/coverage/native-storage-tree.log 2>&1",
+      "log": "apps/office/coverage/native-storage-tree.log",
+      "result": "pass",
+      "observation": "Original module placement and qualified native responsibility split"
+    },
+    {
+      "name": "Calc resources",
+      "command": "npm run check:calc-resources > apps/office/coverage/native-storage-resources.log 2>&1",
+      "log": "apps/office/coverage/native-storage-resources.log",
+      "result": "pass",
+      "observation": "Source UI resources unchanged"
+    },
+    {
+      "name": "Writer resources",
+      "command": "npm run check:writer-resources > apps/office/coverage/native-storage-writer-resources.log 2>&1",
+      "log": "apps/office/coverage/native-storage-writer-resources.log",
+      "result": "pass",
+      "observation": "Source resource checks and related tooling tests"
+    },
+    {
+      "name": "doctor",
+      "command": "ap doctor > apps/office/coverage/native-storage-doctor.log 2>&1",
+      "log": "apps/office/coverage/native-storage-doctor.log",
+      "result": "pass",
+      "observation": "Agentplane validation"
+    },
+    {
+      "name": "routing",
+      "command": "node .agentplane/policy/check-routing.mjs > apps/office/coverage/native-storage-routing.log 2>&1",
+      "log": "apps/office/coverage/native-storage-routing.log",
+      "result": "pass",
+      "observation": "Policy unchanged"
+    },
+    {
+      "name": "diff",
+      "command": "git diff --check > apps/office/coverage/native-storage-diff.log 2>&1",
+      "log": "apps/office/coverage/native-storage-diff.log",
+      "result": "pass",
+      "observation": "No whitespace errors"
+    },
+    {
+      "name": "final tracked/untracked state",
+      "command": "git status --short --untracked-files=all > apps/office/coverage/native-storage-status-final.log 2>&1",
+      "log": "apps/office/coverage/native-storage-status-final.log",
+      "result": "pass",
+      "observation": "Intentional accumulated native implementation WIP retained; empty staging area; no incomplete source implementation commit or merge"
+    }
+  ],
+  "wholeOwnerCoverage": {
+    "total": {
+      "statements": 65.16,
+      "branches": 67.28,
+      "functions": 87.5,
+      "lines": 65.69
+    },
+    "storagehelper.ts": {
+      "statements": 64.8,
+      "branches": 75.64,
+      "functions": 63.15,
+      "lines": 62.27
+    },
+    "fastparser.ts": {
+      "statements": 85.24,
+      "branches": 80,
+      "functions": 100,
+      "lines": 92.72
+    },
+    "storagebase.ts": {
+      "statements": 73.15,
+      "branches": 66.66,
+      "functions": 100,
+      "lines": 73.33
+    },
+    "zipstorage.native.ts": {
+      "statements": 41.41,
+      "branches": 45.23,
+      "functions": 100,
+      "lines": 43.82
+    }
+  },
+  "sourceHashes": {
+    "apps/office/src/oox/source/helper/storagebase.ts": "d765e92511309443ca29a7c5eb276db55446e2488b09b59059c8e013da64aa88",
+    "apps/office/src/oox/source/helper/zipstorage.native.ts": "f074bfb472874683b44ea59f0340e88c8e53a6d264423d291b956f0968bd031e",
+    "apps/office/src/oox/source/helper/native-storage.test.ts": "000aad889965ffd7d501d8813fe0707c450f951d14ebd14a875a8475e25595e8",
+    "apps/office/src/oox/source/core/fastparser.ts": "d53389518a21729e2f3b053d6eca4dedf2286bfdab0d94d30ef5185e1445a455",
+    "apps/office/src/comphelper/source/misc/storagehelper.ts": "fa73eda4a21ebee55a703a2868c83c9012d8e10b1399b72ac36b16891f3fcc77",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "693dc60459362b70b9609941d77f883b087f265fa6930966d8f8c3f03ae1044e",
+    "scripts/native-dom-worker-probe.mjs": "7da506377590dee55497f23643f3b1faa50b08141d97faafb78f359ac7340d26"
+  },
+  "preservedSourceLogic": [
+    "StorageBase native Unicode names/paths, source leading-slash split, readonly creation/output guards, base stream lifetime, synchronous descent, logical RefMap native sorted keys/shared ownership, retryable empty slots, stream/substorage recursive copy and child-before-parent commit.",
+    "Native ZipStorage original format strings/required input repair flag, original output READWRITE|TRUNCATE/repairtrue, inherited child read-only flag, READ existing substorages, NoSuchElementException-only create retry, direct input/output stream UNO_QUERY and throwing transaction query. No .getInputStream convenience replacement for original query.",
+    "Original GetStorageOfFormatFromURL/InputStream/Stream native PropertyValue/Sequence/Any argument construction, header defaults and optional RepairPackage property retained. Actual original factory service/query/exception route is invoked, no factory substitute.",
+    "Original FastParser StorageBase overload synchronously opens native input then delegates to existing stream/name overload with default closefalse and actual temporary-reference release. Existing host ZipStorage and XmlFilterBase expanded-name route remain separate until backend migration."
+  ],
+  "initialObservations": [
+    "Corrected temporary optional ZipStorage input repair default against original header: flag is required; original helper context/mode/repair defaults restored.",
+    "Added actual libxml2/exception ABI initialization to the native parser test; initial missing initialization and incorrect import were test setup errors, not changed parser behavior.",
+    "Removed unused imports, documented source/test compiler callbacks, combined equivalent TypeScript overload declarations and removed nonnull assertions without changing original branch behavior.",
+    "Two wrong-cwd test-preparation edits failed before writing; corrected from repository root. No source reset, network action, validator exemption or fake positive storage service."
+  ],
+  "upstreamQA": {
+    "command": "rg -n \"StorageBase|oox::ZipStorage|GetStorageOfFormatFrom\" vendor/libreoffice-reference/oox/qa vendor/libreoffice-reference/comphelper/qa",
+    "result": "No direct matching helper fixture in these pinned QA roots; bounded filename fallback finds package/qa/storages Java integration suite. These backend/full storage source tests remain required pending actual StorageFactory/OStorage backend, not skipped as complete.",
+    "fallbackLog": "apps/office/coverage/native-storage-upstream-qa-fallback.log"
+  },
+  "olderFailedGatesRetained": [
+    "Individual native OOXML parser85.45/78.26/100/93.87",
+    "Broader SDK86.44/86.11/92.30/87.96",
+    "Whole SAL79.20/75.47/73.24/80.62",
+    "Older4metadata storage errors, dependency cycle, JSDoc and all earlier broader unqualified scopes remain open.",
+    "Previous native-attribute-collections complete o3tl string_view function88.88 remains failed independently; current source storage coverage does not close it."
+  ],
+  "remaining": [
+    "Implement actual original StorageFactory/OStorage/XStorage/backend and positive native stream/storage operations, copy/cache/transaction QA; no fabricated provider for coverage.",
+    "Connect native XmlFilterBase relations cache/default FragmentHandler constructor/openFragmentStream and primary parsing route to actual storage; old expanded-name graph remains until real replacement.",
+    "Native metadata/model/shared services, original complete source QA, full Strict/Transitional DOCX/XLSX actual model import/export/reopen and existing UI/desktop/mobile acceptance; preserve intended browser save/open/autosave deviations.",
+    "Retain and resolve failed whole-owner profiles and existing static/type/dependency/docs gates without weakening validators."
+  ],
+  "suspectedIssues": [
+    "WRITER529",
+    "CALC592"
+  ],
+  "status": "approved parent tasks unfinished, bounded genuine storage owner progress; goal remains active; no implementation commit or merge"
+}
