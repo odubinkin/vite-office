@@ -1,0 +1,199 @@
+{
+  "scope": "Original native oox::FastParser direct native parser/ref route, native namespace maps/getter and actual DOCX namespace/optional Unicode serializer ownership; not full filter/UI import-export acceptance",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "checks": [
+    {
+      "name": "related broader5owner gate",
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/oox/source/core/fastparser.test.ts src/oox/source/token/tokenmap.test.ts src/sax/source/tools/fastserializer.test.ts src/sw/source/filter/ww8/docxexport.fonts.test.ts src/sax/source/fastparser/fastparser.producer.test.ts src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts src/oox/source/core/xmlfilterbase.test.ts src/sax/source/tools/fastattribs.test.ts src/sc/source/filter/oox/richstring.test.ts --maxWorkers=2 --coverage --coverage.include=src/oox/source/core/fastparser.ts --coverage.include=src/oox/source/token/namespacemap.ts --coverage.include=src/sax/inc/fshelper.ts --coverage.include=src/oox/source/core/xmlfilterbase.ts --coverage.include=src/sw/source/filter/ww8/docxexport.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/oox-native-parser-broader > coverage/oox-native-parser-broader.log 2>&1",
+      "log": "apps/office/coverage/oox-native-parser-broader.log",
+      "result": "pass",
+      "observation": "68tests/9files; whole5owners S96.49/B95.53/F100/L98.08. No masks/counter merge. Individual parser coverage below90 remains explicit."
+    },
+    {
+      "name": "earlier3owner gate",
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/oox/source/core/fastparser.test.ts src/oox/source/token/tokenmap.test.ts src/sax/source/tools/fastserializer.test.ts src/sw/source/filter/ww8/docxexport.fonts.test.ts src/sax/source/fastparser/fastparser.producer.test.ts src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts --maxWorkers=2 --coverage --coverage.include=src/oox/source/core/fastparser.ts --coverage.include=src/oox/source/token/namespacemap.ts --coverage.include=src/sax/inc/fshelper.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/oox-native-parser-whole > coverage/oox-native-parser-whole.log 2>&1",
+      "log": "apps/office/coverage/oox-native-parser-whole.log",
+      "result": "pass",
+      "observation": "49tests/6files; S94.59/B91.37/F100/L97.67"
+    },
+    {
+      "name": "actual main/Worker",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs > apps/office/coverage/oox-native-parser-worker.log 2>&1",
+      "log": "apps/office/coverage/oox-native-parser-worker.log",
+      "result": "pass",
+      "observation": "Actual native oox::FastParser direct construction/RTL parser ref/UNO handler/token refs/Strict URI native map produce exact Writer XML in both realms, alongside existing native generic/legacy/C/DOM probes."
+    },
+    {
+      "name": "tools types",
+      "command": "node_modules/.bin/tsc --project tsconfig.tools.json > apps/office/coverage/oox-native-parser-tools.log 2>&1",
+      "log": "apps/office/coverage/oox-native-parser-tools.log",
+      "result": "pass",
+      "observation": "Tools tsc"
+    },
+    {
+      "name": "app types",
+      "command": "cd apps/office && ../../node_modules/.bin/tsc --noEmit > coverage/oox-native-parser-types-final.log 2>&1",
+      "log": "apps/office/coverage/oox-native-parser-types-final.log",
+      "result": "fail",
+      "observation": "Exactly4older Sfx metadata storage dependencies, no new types errors"
+    },
+    {
+      "name": "Vite",
+      "command": "cd apps/office && ../../node_modules/.bin/vite build > coverage/oox-native-parser-vite.log 2>&1",
+      "log": "apps/office/coverage/oox-native-parser-vite.log",
+      "result": "pass",
+      "observation": "Production Vite, existing chunk/timing warnings"
+    },
+    {
+      "name": "lint",
+      "command": "node_modules/.bin/eslint apps/office/src/oox/source/core/fastparser.ts apps/office/src/oox/source/core/fastparser.test.ts apps/office/src/oox/source/token/namespacemap.ts apps/office/src/oox/source/token/tokenmap.test.ts apps/office/src/oox/source/core/xmlfilterbase.ts apps/office/src/sax/inc/fshelper.ts apps/office/src/sax/source/tools/fastserializer.test.ts apps/office/src/sax/source/fastparser/fastparser.producer.test.ts apps/office/src/sw/source/filter/ww8/docxexport.ts apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs --max-warnings 0 > apps/office/coverage/oox-native-parser-eslint-current.log 2>&1",
+      "log": "apps/office/coverage/oox-native-parser-eslint-current.log",
+      "result": "pass",
+      "observation": "Focused runtime/tests/probe owners"
+    },
+    {
+      "name": "format",
+      "command": "node_modules/.bin/prettier --check apps/office/src/oox/source/core/fastparser.ts apps/office/src/oox/source/core/fastparser.test.ts apps/office/src/oox/source/token/namespacemap.ts apps/office/src/oox/source/token/tokenmap.test.ts apps/office/src/oox/source/core/xmlfilterbase.ts apps/office/src/sax/inc/fshelper.ts apps/office/src/sax/source/tools/fastserializer.test.ts apps/office/src/sax/source/fastparser/fastparser.producer.test.ts apps/office/src/sw/source/filter/ww8/docxexport.ts apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs > apps/office/coverage/oox-native-parser-format.log 2>&1",
+      "log": "apps/office/coverage/oox-native-parser-format.log",
+      "result": "pass",
+      "observation": "Focused owners"
+    },
+    {
+      "name": "provenance",
+      "command": "npm run check:source-provenance > apps/office/coverage/oox-native-parser-provenance.log 2>&1",
+      "log": "apps/office/coverage/oox-native-parser-provenance.log",
+      "result": "pass",
+      "observation": "2527runtime/2298mapped/192browser/37infrastructure"
+    },
+    {
+      "name": "registry/invariants/parity",
+      "command": "npm run inventory:registry:check > apps/office/coverage/oox-native-parser-registry.log 2>&1",
+      "log": "apps/office/coverage/oox-native-parser-registry.log",
+      "result": "pass",
+      "observation": "semanticViolationCount0"
+    },
+    {
+      "name": "size",
+      "command": "npm run check:file-size > apps/office/coverage/oox-native-parser-size.log 2>&1",
+      "log": "apps/office/coverage/oox-native-parser-size.log",
+      "result": "pass",
+      "observation": "No exemptions"
+    },
+    {
+      "name": "tree",
+      "command": "npm run check:source-tree > apps/office/coverage/oox-native-parser-tree.log 2>&1",
+      "log": "apps/office/coverage/oox-native-parser-tree.log",
+      "result": "pass",
+      "observation": "Source-tree guard"
+    },
+    {
+      "name": "JSDoc",
+      "command": "npm run check:docs > apps/office/coverage/oox-native-parser-jsdoc.log 2>&1",
+      "log": "apps/office/coverage/oox-native-parser-jsdoc.log",
+      "result": "fail",
+      "observation": "Older160 findings, no changed owner findings"
+    },
+    {
+      "name": "boundaries",
+      "command": "npm run check:dependencies > apps/office/coverage/oox-native-parser-boundaries.log 2>&1",
+      "log": "apps/office/coverage/oox-native-parser-boundaries.log",
+      "result": "fail",
+      "observation": "Existing comphelper -> sax -> comphelper cycle, no exemption"
+    },
+    {
+      "name": "routing",
+      "command": "node .agentplane/policy/check-routing.mjs > apps/office/coverage/oox-native-parser-routing.log 2>&1",
+      "log": "apps/office/coverage/oox-native-parser-routing.log",
+      "result": "pass",
+      "observation": "No policy changes"
+    },
+    {
+      "name": "doctor",
+      "command": "ap doctor > apps/office/coverage/oox-native-parser-doctor.log 2>&1",
+      "log": "apps/office/coverage/oox-native-parser-doctor.log",
+      "result": "pass",
+      "observation": "0errors, existing managed shim warning"
+    },
+    {
+      "name": "resources",
+      "command": "npm run check:calc-resources > apps/office/coverage/oox-native-parser-resources.log 2>&1",
+      "log": "apps/office/coverage/oox-native-parser-resources.log",
+      "result": "pass",
+      "observation": "464commands/11menus/17dispositions"
+    },
+    {
+      "name": "diff",
+      "command": "git diff --check > apps/office/coverage/oox-native-parser-diff.log",
+      "log": "apps/office/coverage/oox-native-parser-diff.log",
+      "result": "pass",
+      "observation": "No whitespace errors"
+    }
+  ],
+  "additionalIndividualCoverage": {
+    "scope": "/Users/odubinkin/Projects/vite-office/apps/office/src/oox/source/core/fastparser.ts",
+    "source": "apps/office/coverage/oox-native-parser-broader/coverage-summary.json",
+    "log": "apps/office/coverage/oox-native-parser-independent-final.log",
+    "result": "fail at additional whole-file90 measurement",
+    "metrics": {
+      "lines": {
+        "total": 49,
+        "covered": 46,
+        "skipped": 0,
+        "pct": 93.87
+      },
+      "functions": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 55,
+        "covered": 47,
+        "skipped": 0,
+        "pct": 85.45
+      },
+      "branches": {
+        "total": 23,
+        "covered": 18,
+        "skipped": 0,
+        "pct": 78.26
+      }
+    },
+    "command": "node --input-type=module -e 'import {readFileSync} from \"node:fs\";const data=JSON.parse(readFileSync(\"apps/office/coverage/oox-native-parser-broader/coverage-summary.json\",\"utf8\"));const path=Object.keys(data).find(p=>p.endsWith(\"/oox/source/core/fastparser.ts\"));const summary=data[path];process.stdout.write(JSON.stringify({scope:path,summary},null,2)+\"\\n\");process.exitCode=[\"statements\",\"branches\",\"functions\",\"lines\"].some(k=>summary[k].pct<90)?1:0;' > apps/office/coverage/oox-native-parser-independent-final.log 2>&1",
+    "qualification": "S85.45/B78.26/F100/L93.87. Original null-parser checks and constructor-unwind remain unqualified; no private ref mutation, fake positive provider or forced allocator failure. Broader aggregate does not certify these paths."
+  },
+  "sourceHashes": {
+    "apps/office/src/oox/source/core/fastparser.ts": "62825827a39a2ef8225f2730d3e23959e18dc0cb51db0f4e41f627fda30fb264",
+    "apps/office/src/oox/source/core/fastparser.test.ts": "faac492956a9553f8e3ed226e30a61a45fd73b75be7fdd300afee5fd1a927661",
+    "apps/office/src/oox/source/token/namespacemap.ts": "c3fd82e7e9895cd636fb21d47db9a83747c34b751d69a3dda0327bb498f3f975",
+    "apps/office/src/oox/source/token/tokenmap.test.ts": "5afc5e0a93efd0d714b2688ae47b760d1ab4606dbcc17bb359704f6f653e441f",
+    "apps/office/src/oox/source/core/xmlfilterbase.ts": "5beb9486db6786ffdae19edc33476733d6d346e3341b5ef184950c5b696bbf80",
+    "apps/office/src/sax/inc/fshelper.ts": "1098b2729e2052ee0d764a4351b9d85d95f62846f611b375e154b22dbd4fd45f",
+    "apps/office/src/sax/source/tools/fastserializer.test.ts": "fe456f75946cd6d3c638425a39e527d3f7ca9dc0a217a232259caa2a54f6e065",
+    "apps/office/src/sax/source/fastparser/fastparser.producer.test.ts": "6df0de978d9ad41f67c46847071a8656e26c20b2508383b4ba8189cdb866f699",
+    "apps/office/src/sw/source/filter/ww8/docxexport.ts": "094fe0c1449deafa874a38f8aceb488d6783603acfb216b12a274bc9d0ad8aca",
+    "apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts": "cfa2bc2217a93666aa9e735c3bc2f2a298913e001190a152633d3d5df8d29e30",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts": "e2f8565c9b9d994dccea2d39796ad0827bd7792532304c793b660bd15ea4434a",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "59e1bdfe87b98d1db73d4a320cf701ff4c5a8149c15470386cfc8629cceebb8b",
+    "scripts/native-dom-worker-probe.mjs": "0c5522f4445d0df5c904618f05293a3b8fa204a0a83d2aef5838bdb1495b906b"
+  },
+  "initialFailures": [
+    "Initial NativeMap literals passed TextEncoder arrays from another test realm to the declared Uint8Array char-array constructor. Wrong runtime representation produced zero URI units and a later readonly buffer free. Fixed only the compiled literal carrier with same-realm Uint8Array.from ASCII units, matching established source literal binding; SAL implementation and allocator were not patched. Initial18case run6failures retained; corrected18cases pass.",
+    "Old host fake Handler/close-fault/callback-replacement tests no longer match source native reference contracts. Replaced with real native Writer/legacy adapter/SequenceInputStream/C malformed XML/caller-closed stream cases. Removed host SAX error carrier from this owner.",
+    "Initial new tests used forbidden non-null assertions and incompatible static constructor unions; replaced with explicit declared fixture types and actual owned context reference. Final scoped lint/types show only4older package errors.",
+    "First independent report reader tried unavailable top-level istanbul-lib-coverage; bounded fallback reads the original generated full-file coverage summary without changing counters. Its genuine below90 result is retained."
+  ],
+  "olderFailedGatesRetained": [
+    "Whole SAL gate79.20/75.47/73.24/80.62",
+    "Broader native SDK gate86.44/86.11/92.30/87.96",
+    "Older4metadata storage type errors, dependency cycle, JSDoc findings and all earlier broader unqualified scopes."
+  ],
+  "remaining": [
+    "Native ContextHandler/FragmentHandler and XmlFilterBase import orchestration still pending; existing host expanded-name fragment path remains explicit, not represented as migrated.",
+    "Actual StorageBase overload is not fabricated over async ZipStorage. Original Pipe/Expat/full parser QA remain unfinished.",
+    "Native metadata/storage/model/filter and actual Strict/Transitional DOCX/XLSX package/desktop/mobile UI acceptance remain incomplete.",
+    "Physical C++ ABI/mutex/allocator/constructor unwind, unreachable private null-parser guards and independent native component differential remain unqualified. Separate old URL trust/auth/certificate scope unanswered/untouched."
+  ],
+  "status": "Both parent tasks/goal remain active; no finish/pause/merge or unfinished implementation commit."
+}
