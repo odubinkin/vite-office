@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 312
+revision: 314
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T03:45:44.215Z"
+  updated_at: "2026-11-13T04:38:39.445Z"
   updated_by: "CODER"
-  note: "Canonical native URI owners replace the obsolete string kernel; registered expand parser, actual Writer consumer/context and real package Worker traversal implemented. Native URI six-owner scoped90 and Writer stream scoped90 pass; bootstrap expand positive QA, prior SDK/helper/SOT/UCB/metadata gaps and full DOCX/XLSX model/filter/UI remain unfinished. Canonical provenance/registry now passes for all runtime modules. Goal remains active."
-  attempts: 93
+  note: "Native token service prerequisite checkpoint: 155 scoped tests pass with six-owner90 gate S95.13/B94.53/F99.02/L96.32; actual Chromium main/Worker and production bundle pass. Full app typecheck retains4 metadata dependencies; actual legacy OFOPXMLHelper SAX cycle and160 prior JSDoc diagnostics remain. Full DOCX/XLSX model/filter/UI acceptance incomplete. Evidence: evidence/native-token-service-continuation.json."
+  attempts: 94
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1496,8 +1499,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T04:38:39.445Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native token service prerequisite checkpoint: 155 scoped tests pass with six-owner90 gate S95.13/B94.53/F99.02/L96.32; actual Chromium main/Worker and production bundle pass. Full app typecheck retains4 metadata dependencies; actual legacy OFOPXMLHelper SAX cycle and160 prior JSDoc diagnostics remain. Full DOCX/XLSX model/filter/UI acceptance incomplete. Evidence: evidence/native-token-service-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-13T04:38:49.240Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T03:45:50.714Z"
+doc_updated_at: "2026-11-13T04:38:49.240Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -4302,6 +4318,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T04:38:39.445Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native token service prerequisite checkpoint: 155 scoped tests pass with six-owner90 gate S95.13/B94.53/F99.02/L96.32; actual Chromium main/Worker and production bundle pass. Full app typecheck retains4 metadata dependencies; actual legacy OFOPXMLHelper SAX cycle and160 prior JSDoc diagnostics remain. Full DOCX/XLSX model/filter/UI acceptance incomplete. Evidence: evidence/native-token-service-continuation.json.
+    Attempts: 94
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T03:45:50.714Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4793,6 +4839,10 @@ sections:
     - Observation: Command: exact argv/cwd and complete owner maps in evidence/native-uri-canonical-writer-continuation.json. Result: 473 shared cases and 70 Writer cases pass; expand positive-owner gate fails. Typecheck fails only on the four prior metadata storage dependencies. Scope: native URI, SDK declaration, real stream/context/ZIP Worker prerequisites and complete source mappings.
       Impact: Native medium/storage and complete DOCX/XLSX import-export/desktop/mobile UI acceptance remain unproven; implementation stays WIP, not deployable completion.
       Resolution: Continue the approved real metadata/medium/storage/XML/filter/model/UI and bootstrap/translator owners, preserving prior qualification gaps. Do not finish the task or pause the goal.
+
+    - Observation: Original serializer processfactory dependency exposes legacy direct OFOPXMLHelper-to-SAX parser shortcut; SDK helper exception scope remains partially uncovered.
+      Impact: Parent task cannot be marked complete; dependency gate must remain failing until genuine Parser/context path replaces the shortcut.
+      Resolution: Preserve cycle checker and source defaults; continue actual native attribute/parser and storage prerequisites without fake providers.
 id_source: "generated"
 ---
 ## Summary
@@ -7607,6 +7657,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T04:38:39.445Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native token service prerequisite checkpoint: 155 scoped tests pass with six-owner90 gate S95.13/B94.53/F99.02/L96.32; actual Chromium main/Worker and production bundle pass. Full app typecheck retains4 metadata dependencies; actual legacy OFOPXMLHelper SAX cycle and160 prior JSDoc diagnostics remain. Full DOCX/XLSX model/filter/UI acceptance incomplete. Evidence: evidence/native-token-service-continuation.json.
+Attempts: 94
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T03:45:50.714Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -8102,3 +8182,7 @@ Native DOM classic SAX and attribute ownership checkpoint (2026-11-13):
 - Observation: Command: exact argv/cwd and complete owner maps in evidence/native-uri-canonical-writer-continuation.json. Result: 473 shared cases and 70 Writer cases pass; expand positive-owner gate fails. Typecheck fails only on the four prior metadata storage dependencies. Scope: native URI, SDK declaration, real stream/context/ZIP Worker prerequisites and complete source mappings.
   Impact: Native medium/storage and complete DOCX/XLSX import-export/desktop/mobile UI acceptance remain unproven; implementation stays WIP, not deployable completion.
   Resolution: Continue the approved real metadata/medium/storage/XML/filter/model/UI and bootstrap/translator owners, preserving prior qualification gaps. Do not finish the task or pause the goal.
+
+- Observation: Original serializer processfactory dependency exposes legacy direct OFOPXMLHelper-to-SAX parser shortcut; SDK helper exception scope remains partially uncovered.
+  Impact: Parent task cannot be marked complete; dependency gate must remain failing until genuine Parser/context path replaces the shortcut.
+  Resolution: Preserve cycle checker and source defaults; continue actual native attribute/parser and storage prerequisites without fake providers.
