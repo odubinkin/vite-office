@@ -1,0 +1,1171 @@
+{
+  "taskIds": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "status": "unfinished-native-fastparser-prerequisite",
+  "classification": "progress: new real C push SAX2 ABI, rebuilt native artifact, actual native receiver scopes and source Emscripten profile evidence change authoritative state and next action. Neither parent task complete; no full-suite cadence increment.",
+  "checks": [
+    {
+      "command": "python3 scripts/build-libxml2-wasm.py",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Existing verified archive/compiler inputs; no download.7 genuine C functions, static source SAX2 aggregate and actual myDoc accessor added.154 exports/851 C-header enums; artifact SHA256 c8d2aa56cdda2cf38b7bcd87a5de7ca4018cdcba7b08bc355a561ce1992fd420. Native libxml2 implementation/configuration unchanged."
+    },
+    {
+      "command": "../../node_modules/.bin/vitest run src/external/libxml2/fastparsercallbacks.test.ts src/external/libxml2/parsercallbacks.test.ts src/external/libxml2/libxml2.test.ts src/unoxml/source/dom/native-parser-callbacks.test.ts src/unoxml/source/dom/documentbuilder.test.ts src/unoxml/source/dom/documentbuilder.io.test.ts src/unoxml/source/dom/documentbuilder.errors.test.ts --maxWorkers=2 --coverage --coverage.include=src/external/libxml2/fastparsercallbacks.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/fastparser-native-abi-final",
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "28tests/7files. Complete ABI owner S100/B100/F100/L100 at user-authorized90; original DocumentBuilder regressions retained. Actual C-produced callbacks exercise all5 entries, namespaces/attributes, native custom entity and overlapping native contexts continuing after older-scope destruction. No fake UNO/parser provider, private fields, failure injector or counter edits."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Actual Chromium main and DOM-free module Worker observe C SAX2 push callbacks, inherited namespace URI, counted UTF8 attribute, PI, split supplementary UTF8 codepoint, exact characters and successful native completion. Existing DOM/URI/UNO/token/attribute/Writer package probes also pass."
+    },
+    {
+      "command": "../../node_modules/.bin/vite build",
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "Production bundle built in5.81seconds, distinct from the package build including currently failing app tsc."
+    },
+    {
+      "command": "node_modules/.bin/tsc --project apps/office/tsconfig.json --noEmit",
+      "cwd": ".",
+      "result": "fail",
+      "evidence": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(338,9): error TS2304: Cannot find name 'MediaDescriptor'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(410,36): error TS2345: Argument of type 'Sequence<PropertyValue>' is not assignable to parameter of type 'SfxMediumInput'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(411,26): error TS2339: Property 'GetOutputStorage' does not exist on type 'SfxMedium'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(438,27): error TS2339: Property 'Commit' does not exist on type 'SfxMedium'.\n"
+    },
+    {
+      "command": "node_modules/.bin/tsc --project tsconfig.tools.json --noEmit",
+      "cwd": ".",
+      "result": "pass"
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/check-source-provenance.ts",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Source provenance check passed for 2516 runtime modules (2287 mapped, 192 browser adaptations, 37 local infrastructure).\n"
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Complete registry/invariant/parity check semanticViolationCount0; new browser-owned ABI record unverified broad semantics/defaults."
+    },
+    {
+      "command": "node scripts/check-module-boundaries.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "evidence": "Module boundary check failed:\n- runtime module cycle: comphelper -> sax -> comphelper\n"
+    },
+    {
+      "command": "node scripts/check-jsdoc.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "evidence": "160 older diagnostics retained; no current FastParser ABI/test/fixture diagnostic."
+    },
+    {
+      "command": "node scripts/check-file-size.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Main Worker fixture992lines, below1000 cap."
+    },
+    {
+      "command": "node scripts/check-lo-source-tree.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "LibreOffice source-tree check passed for 116 required paths and 32 retired roots.\n"
+    },
+    {
+      "command": "ap doctor",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "0errors; earlier managed-hook readiness warning retained."
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "cwd": ".",
+      "result": "pass"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": ".",
+      "result": "pass"
+    }
+  ],
+  "nativeArtifact": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 154,
+    "enumConstantCount": 851,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "c8d2aa56cdda2cf38b7bcd87a5de7ca4018cdcba7b08bc355a561ce1992fd420"
+  },
+  "coverage": {
+    "summary": {
+      "total": {
+        "lines": {
+          "total": 26,
+          "covered": 26,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 26,
+          "covered": 26,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/external/libxml2/fastparsercallbacks.ts": {
+        "lines": {
+          "total": 26,
+          "covered": 26,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 26,
+          "covered": 26,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "raw": {
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/external/libxml2/fastparsercallbacks.ts": {
+        "path": "/Users/odubinkin/Projects/vite-office/apps/office/src/external/libxml2/fastparsercallbacks.ts",
+        "statementMap": {
+          "0": {
+            "start": {
+              "line": 26,
+              "column": 17
+            },
+            "end": {
+              "line": 26,
+              "column": null
+            }
+          },
+          "1": {
+            "start": {
+              "line": 30,
+              "column": 2
+            },
+            "end": {
+              "line": 87,
+              "column": null
+            }
+          },
+          "2": {
+            "start": {
+              "line": 31,
+              "column": 14
+            },
+            "end": {
+              "line": 31,
+              "column": null
+            }
+          },
+          "3": {
+            "start": {
+              "line": 32,
+              "column": 14
+            },
+            "end": {
+              "line": 57,
+              "column": null
+            }
+          },
+          "4": {
+            "start": {
+              "line": 45,
+              "column": 10
+            },
+            "end": {
+              "line": 45,
+              "column": null
+            }
+          },
+          "5": {
+            "start": {
+              "line": 46,
+              "column": 10
+            },
+            "end": {
+              "line": 54,
+              "column": null
+            }
+          },
+          "6": {
+            "start": {
+              "line": 58,
+              "column": 12
+            },
+            "end": {
+              "line": 67,
+              "column": null
+            }
+          },
+          "7": {
+            "start": {
+              "line": 61,
+              "column": 10
+            },
+            "end": {
+              "line": 61,
+              "column": null
+            }
+          },
+          "8": {
+            "start": {
+              "line": 62,
+              "column": 10
+            },
+            "end": {
+              "line": 62,
+              "column": null
+            }
+          },
+          "9": {
+            "start": {
+              "line": 63,
+              "column": 10
+            },
+            "end": {
+              "line": 63,
+              "column": null
+            }
+          },
+          "10": {
+            "start": {
+              "line": 64,
+              "column": 10
+            },
+            "end": {
+              "line": 64,
+              "column": null
+            }
+          },
+          "11": {
+            "start": {
+              "line": 68,
+              "column": 19
+            },
+            "end": {
+              "line": 73,
+              "column": null
+            }
+          },
+          "12": {
+            "start": {
+              "line": 71,
+              "column": 11
+            },
+            "end": {
+              "line": 71,
+              "column": null
+            }
+          },
+          "13": {
+            "start": {
+              "line": 74,
+              "column": 20
+            },
+            "end": {
+              "line": 79,
+              "column": null
+            }
+          },
+          "14": {
+            "start": {
+              "line": 77,
+              "column": 11
+            },
+            "end": {
+              "line": 77,
+              "column": null
+            }
+          },
+          "15": {
+            "start": {
+              "line": 80,
+              "column": 15
+            },
+            "end": {
+              "line": 85,
+              "column": null
+            }
+          },
+          "16": {
+            "start": {
+              "line": 83,
+              "column": 11
+            },
+            "end": {
+              "line": 83,
+              "column": null
+            }
+          },
+          "17": {
+            "start": {
+              "line": 86,
+              "column": 4
+            },
+            "end": {
+              "line": 86,
+              "column": null
+            }
+          },
+          "18": {
+            "start": {
+              "line": 88,
+              "column": 2
+            },
+            "end": {
+              "line": 88,
+              "column": null
+            }
+          },
+          "19": {
+            "start": {
+              "line": 97,
+              "column": 12
+            },
+            "end": {
+              "line": 97,
+              "column": null
+            }
+          },
+          "20": {
+            "start": {
+              "line": 98,
+              "column": 10
+            },
+            "end": {
+              "line": 98,
+              "column": null
+            }
+          },
+          "21": {
+            "start": {
+              "line": 99,
+              "column": 15
+            },
+            "end": {
+              "line": 99,
+              "column": null
+            }
+          },
+          "22": {
+            "start": {
+              "line": 100,
+              "column": 2
+            },
+            "end": {
+              "line": 100,
+              "column": null
+            }
+          },
+          "23": {
+            "start": {
+              "line": 101,
+              "column": 2
+            },
+            "end": {
+              "line": 109,
+              "column": null
+            }
+          },
+          "24": {
+            "start": {
+              "line": 106,
+              "column": 6
+            },
+            "end": {
+              "line": 106,
+              "column": null
+            }
+          },
+          "25": {
+            "start": {
+              "line": 107,
+              "column": 6
+            },
+            "end": {
+              "line": 107,
+              "column": null
+            }
+          }
+        },
+        "fnMap": {
+          "0": {
+            "name": "staticHandler",
+            "decl": {
+              "start": {
+                "line": 29,
+                "column": 9
+              },
+              "end": {
+                "line": 29,
+                "column": 33
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 29,
+                "column": 33
+              },
+              "end": {
+                "line": 89,
+                "column": null
+              }
+            }
+          },
+          "1": {
+            "name": "(anonymous_1)",
+            "decl": {
+              "start": {
+                "line": 35,
+                "column": 10
+              },
+              "end": {
+                "line": 35,
+                "column": null
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 44,
+                "column": 13
+              },
+              "end": {
+                "line": 55,
+                "column": null
+              }
+            }
+          },
+          "2": {
+            "name": "(anonymous_2)",
+            "decl": {
+              "start": {
+                "line": 60,
+                "column": 9
+              },
+              "end": {
+                "line": 60,
+                "column": 26
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 60,
+                "column": 73
+              },
+              "end": {
+                "line": 65,
+                "column": null
+              }
+            }
+          },
+          "3": {
+            "name": "(anonymous_3)",
+            "decl": {
+              "start": {
+                "line": 70,
+                "column": 9
+              },
+              "end": {
+                "line": 70,
+                "column": 26
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 71,
+                "column": 11
+              },
+              "end": {
+                "line": 71,
+                "column": null
+              }
+            }
+          },
+          "4": {
+            "name": "(anonymous_4)",
+            "decl": {
+              "start": {
+                "line": 76,
+                "column": 9
+              },
+              "end": {
+                "line": 76,
+                "column": 26
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 77,
+                "column": 11
+              },
+              "end": {
+                "line": 77,
+                "column": null
+              }
+            }
+          },
+          "5": {
+            "name": "(anonymous_5)",
+            "decl": {
+              "start": {
+                "line": 82,
+                "column": 9
+              },
+              "end": {
+                "line": 82,
+                "column": 26
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 83,
+                "column": 11
+              },
+              "end": {
+                "line": 83,
+                "column": null
+              }
+            }
+          },
+          "6": {
+            "name": "createFastParserCallbackBinding",
+            "decl": {
+              "start": {
+                "line": 92,
+                "column": 16
+              },
+              "end": {
+                "line": 92,
+                "column": 48
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 96,
+                "column": 2
+              },
+              "end": {
+                "line": 110,
+                "column": null
+              }
+            }
+          },
+          "7": {
+            "name": "(anonymous_7)",
+            "decl": {
+              "start": {
+                "line": 105,
+                "column": 4
+              },
+              "end": {
+                "line": 105,
+                "column": 20
+              }
+            },
+            "loc": {
+              "start": {
+                "line": 105,
+                "column": 20
+              },
+              "end": {
+                "line": 108,
+                "column": null
+              }
+            }
+          }
+        },
+        "branchMap": {
+          "0": {
+            "loc": {
+              "start": {
+                "line": 30,
+                "column": 2
+              },
+              "end": {
+                "line": 87,
+                "column": null
+              }
+            },
+            "type": "if",
+            "locations": [
+              {
+                "start": {
+                  "line": 30,
+                  "column": 2
+                },
+                "end": {
+                  "line": 87,
+                  "column": null
+                }
+              },
+              {
+                "start": {},
+                "end": {}
+              }
+            ]
+          }
+        },
+        "s": {
+          "0": 1,
+          "1": 3,
+          "2": 1,
+          "3": 1,
+          "4": 4,
+          "5": 4,
+          "6": 1,
+          "7": 4,
+          "8": 4,
+          "9": 4,
+          "10": 4,
+          "11": 1,
+          "12": 6,
+          "13": 1,
+          "14": 1,
+          "15": 1,
+          "16": 1,
+          "17": 1,
+          "18": 3,
+          "19": 3,
+          "20": 3,
+          "21": 3,
+          "22": 3,
+          "23": 3,
+          "24": 3,
+          "25": 3
+        },
+        "f": {
+          "0": 3,
+          "1": 4,
+          "2": 4,
+          "3": 6,
+          "4": 1,
+          "5": 1,
+          "6": 3,
+          "7": 3
+        },
+        "b": {
+          "0": [
+            1,
+            2
+          ]
+        }
+      }
+    }
+  },
+  "browserObservations": {
+    "workerResult": {
+      "conversion": {
+        "serviceValue": 42,
+        "rowValue": 42,
+        "rowWasNull": false,
+        "failedFirst": 0,
+        "failedFirstWasNull": false,
+        "failedSecond": 0,
+        "failedSecondWasNull": true
+      },
+      "publicHelpers": {
+        "notifications": 1,
+        "sameEventSource": true,
+        "componentTypeCount": 3
+      },
+      "dynamicProperties": {
+        "changed": true,
+        "value": 42,
+        "initialDefault": 41,
+        "name": "workerValue",
+        "handle": 7,
+        "declaredLong": true,
+        "stableTypeField": true
+      },
+      "propertyArray": {
+        "count": 1,
+        "handle": 7,
+        "missing": -1,
+        "snapshotName": "workerValue",
+        "sameInfoIdentity": true
+      },
+      "legacyListeners": {
+        "remaining": 1,
+        "sameFirst": true,
+        "sameSnapshot": true,
+        "keyCount": 1,
+        "key": -7
+      },
+      "nativeAnyFields": {
+        "value": 43,
+        "initialDefault": 41,
+        "liveType": true,
+        "interfaceIdentity": true
+      },
+      "nativePropertyControl": {
+        "value": 42,
+        "storedLong": true,
+        "notifications": 1,
+        "notifiedTypeLong": false,
+        "notifiedValue": 42,
+        "notifiedOld": 41,
+        "sameSource": true,
+        "state": 0,
+        "initialStates": [
+          1,
+          0
+        ],
+        "typeCount": 7
+      },
+      "registeredPropertyBag": {
+        "value": 42,
+        "count": 1,
+        "modified": true,
+        "directState": 0,
+        "sameIdentity": true
+      },
+      "nativeSax": {
+        "calls": [
+          "begin",
+          "start:root:0",
+          "text:worker SAX\u5b57",
+          "end",
+          "finish"
+        ],
+        "sameIdentity": true
+      },
+      "registeredSaxWriter": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>worker SAX\u5b57</root>",
+        "sameIdentity": true
+      },
+      "packageSaxWriters": {
+        "manifest": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\" manifest:version=\"1.3\" xmlns:loext=\"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0\">\n <manifest:file-entry manifest:full-path=\"/\" manifest:media-type=\"application/vnd.oasis.opendocument.text\" manifest:version=\"1.3\"/>\n <manifest:file-entry manifest:full-path=\"content.xml\" manifest:media-type=\"text/xml\"/>\n</manifest:manifest>",
+        "relationships": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\"><Relationship Id=\"rId1\" Type=\"worker\u5b57\" Target=\"word/document.xml?a=1&amp;b=2\"/>\n</Relationships>"
+      },
+      "nativeSaxWriterBuffer": {
+        "valid": true,
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<r a=\"&amp;&#x0a;\">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\u5b57\ud83d\ude00&beta;</r>"
+      },
+      "metadataValues": {
+        "values": [
+          "2024-02-29+05:30",
+          "2024-02-29T03:04:05.000000009-01:30",
+          "-P1DT2H3M4.000000005S"
+        ],
+        "types": [
+          "date",
+          "date",
+          "time"
+        ]
+      },
+      "metadataIngestion": [
+        "Dies ist ein wichtiger Hinweis",
+        "Kann Spuren von N\u00fcssen enthalten"
+      ],
+      "metadataServices": {
+        "emptyDocument": true,
+        "baseURI": "file:///metadata-base",
+        "relativePath": "nested/document",
+        "streamName": "meta.xml"
+      },
+      "writerPackage": {
+        "rootTarget": "word/document.xml",
+        "childTarget": "styles.xml",
+        "byId": "styles.xml",
+        "rootText": "<w:document xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"><w:body><w:p><w:r><w:t>\u041f\u0440\u0438\u0432\u0435\u0442</w:t></w:r></w:p></w:body></w:document>",
+        "childText": "<w:styles xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>"
+      },
+      "nativeTokenService": {
+        "sharedBeforeWrite": true,
+        "detachedAfterWrite": true,
+        "roundTrip": true,
+        "mutatedLookup": -1,
+        "cachedLookup": true,
+        "xml": "<document/>"
+      },
+      "nativeAttributes": {
+        "cloneToken": true,
+        "sourceCleared": true,
+        "names": [
+          "urn:\u03a9",
+          "p:\u5b57",
+          "A\u0000B"
+        ],
+        "known": [
+          2,
+          "\u03a9\u0000\u00e9"
+        ],
+        "prefixBoolean": false,
+        "unknownCount": 1
+      },
+      "nativeFastParser": {
+        "starts": [
+          [
+            "root",
+            "p",
+            "urn:push"
+          ],
+          [
+            "child",
+            "p",
+            "urn:push"
+          ]
+        ],
+        "values": [
+          "\u03a9"
+        ],
+        "declarations": [
+          1,
+          0
+        ],
+        "instructions": [
+          [
+            "keep",
+            "native"
+          ]
+        ],
+        "characters": "\u5b57&\ud83d\ude00",
+        "ends": 2,
+        "allChunksOk": true,
+        "line": 1
+      },
+      "nativeUriFactory": {
+        "packageUri": "vnd.sun.star.pkg://file:%2F%2F%2Fstyles.xml",
+        "expandPath": "/",
+        "rejectedExpand": false,
+        "scriptUri": "vnd.sun.star.script:Hello?a=%C3%A4%26value",
+        "scriptParameter": "\u00e4&value",
+        "absolute": "file:///styles.xml",
+        "relative": "../styles.xml",
+        "fragmentRemoved": "file:///a%23b.xlsx",
+        "invalidFragmentPreserved": "vnd.sun.star.script:#fragment",
+        "rtlAbsolute": "file:///styles.xml",
+        "rtlEncoded": "a%20b%2F%C3%A4",
+        "rtlDecoded": "\u028a"
+      },
+      "documentBuilder": {
+        "rootName": "document-content",
+        "streamOpen": true,
+        "namespaceAware": true,
+        "validating": false,
+        "emptyImplementation": true,
+        "capturedType": true,
+        "sameContext": true,
+        "exceptionMessage": "worker exception"
+      },
+      "xpath": {
+        "count": 1,
+        "listLength": 1,
+        "sameRoot": true
+      },
+      "globals": {
+        "window": "undefined",
+        "document": "undefined",
+        "DOMParser": "undefined"
+      },
+      "rootName": "document-content",
+      "attribute": "1.0",
+      "listCounts": [
+        0,
+        1,
+        0
+      ],
+      "sameOwner": true,
+      "unicode": "\ud83d\ude00\u5b57",
+      "utf16Length": 3,
+      "borrowedStreamOpen": true,
+      "warnings": 1,
+      "errors": 0,
+      "warningLine": 1
+    },
+    "mainResult": {
+      "conversion": {
+        "serviceValue": 42,
+        "rowValue": 42,
+        "rowWasNull": false,
+        "failedFirst": 0,
+        "failedFirstWasNull": false,
+        "failedSecond": 0,
+        "failedSecondWasNull": true
+      },
+      "publicHelpers": {
+        "notifications": 1,
+        "sameEventSource": true,
+        "componentTypeCount": 3
+      },
+      "dynamicProperties": {
+        "changed": true,
+        "value": 42,
+        "initialDefault": 41,
+        "name": "workerValue",
+        "handle": 7,
+        "declaredLong": true,
+        "stableTypeField": true
+      },
+      "propertyArray": {
+        "count": 1,
+        "handle": 7,
+        "missing": -1,
+        "snapshotName": "workerValue",
+        "sameInfoIdentity": true
+      },
+      "legacyListeners": {
+        "remaining": 1,
+        "sameFirst": true,
+        "sameSnapshot": true,
+        "keyCount": 1,
+        "key": -7
+      },
+      "nativeAnyFields": {
+        "value": 43,
+        "initialDefault": 41,
+        "liveType": true,
+        "interfaceIdentity": true
+      },
+      "nativePropertyControl": {
+        "value": 42,
+        "storedLong": true,
+        "notifications": 1,
+        "notifiedTypeLong": false,
+        "notifiedValue": 42,
+        "notifiedOld": 41,
+        "sameSource": true,
+        "state": 0,
+        "initialStates": [
+          1,
+          0
+        ],
+        "typeCount": 7
+      },
+      "registeredPropertyBag": {
+        "value": 42,
+        "count": 1,
+        "modified": true,
+        "directState": 0,
+        "sameIdentity": true
+      },
+      "nativeSax": {
+        "calls": [
+          "begin",
+          "start:root:0",
+          "text:worker SAX\u5b57",
+          "end",
+          "finish"
+        ],
+        "sameIdentity": true
+      },
+      "registeredSaxWriter": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>worker SAX\u5b57</root>",
+        "sameIdentity": true
+      },
+      "packageSaxWriters": {
+        "manifest": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\" manifest:version=\"1.3\" xmlns:loext=\"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0\">\n <manifest:file-entry manifest:full-path=\"/\" manifest:media-type=\"application/vnd.oasis.opendocument.text\" manifest:version=\"1.3\"/>\n <manifest:file-entry manifest:full-path=\"content.xml\" manifest:media-type=\"text/xml\"/>\n</manifest:manifest>",
+        "relationships": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\"><Relationship Id=\"rId1\" Type=\"worker\u5b57\" Target=\"word/document.xml?a=1&amp;b=2\"/>\n</Relationships>"
+      },
+      "nativeSaxWriterBuffer": {
+        "valid": true,
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<r a=\"&amp;&#x0a;\">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\u5b57\ud83d\ude00&beta;</r>"
+      },
+      "metadataValues": {
+        "values": [
+          "2024-02-29+05:30",
+          "2024-02-29T03:04:05.000000009-01:30",
+          "-P1DT2H3M4.000000005S"
+        ],
+        "types": [
+          "date",
+          "date",
+          "time"
+        ]
+      },
+      "metadataIngestion": [
+        "Dies ist ein wichtiger Hinweis",
+        "Kann Spuren von N\u00fcssen enthalten"
+      ],
+      "metadataServices": {
+        "emptyDocument": true,
+        "baseURI": "file:///metadata-base",
+        "relativePath": "nested/document",
+        "streamName": "meta.xml"
+      },
+      "writerPackage": {
+        "rootTarget": "word/document.xml",
+        "childTarget": "styles.xml",
+        "byId": "styles.xml",
+        "rootText": "<w:document xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"><w:body><w:p><w:r><w:t>\u041f\u0440\u0438\u0432\u0435\u0442</w:t></w:r></w:p></w:body></w:document>",
+        "childText": "<w:styles xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>"
+      },
+      "nativeTokenService": {
+        "sharedBeforeWrite": true,
+        "detachedAfterWrite": true,
+        "roundTrip": true,
+        "mutatedLookup": -1,
+        "cachedLookup": true,
+        "xml": "<document/>"
+      },
+      "nativeAttributes": {
+        "cloneToken": true,
+        "sourceCleared": true,
+        "names": [
+          "urn:\u03a9",
+          "p:\u5b57",
+          "A\u0000B"
+        ],
+        "known": [
+          2,
+          "\u03a9\u0000\u00e9"
+        ],
+        "prefixBoolean": false,
+        "unknownCount": 1
+      },
+      "nativeFastParser": {
+        "starts": [
+          [
+            "root",
+            "p",
+            "urn:push"
+          ],
+          [
+            "child",
+            "p",
+            "urn:push"
+          ]
+        ],
+        "values": [
+          "\u03a9"
+        ],
+        "declarations": [
+          1,
+          0
+        ],
+        "instructions": [
+          [
+            "keep",
+            "native"
+          ]
+        ],
+        "characters": "\u5b57&\ud83d\ude00",
+        "ends": 2,
+        "allChunksOk": true,
+        "line": 1
+      },
+      "nativeUriFactory": {
+        "packageUri": "vnd.sun.star.pkg://file:%2F%2F%2Fstyles.xml",
+        "expandPath": "/",
+        "rejectedExpand": false,
+        "scriptUri": "vnd.sun.star.script:Hello?a=%C3%A4%26value",
+        "scriptParameter": "\u00e4&value",
+        "absolute": "file:///styles.xml",
+        "relative": "../styles.xml",
+        "fragmentRemoved": "file:///a%23b.xlsx",
+        "invalidFragmentPreserved": "vnd.sun.star.script:#fragment",
+        "rtlAbsolute": "file:///styles.xml",
+        "rtlEncoded": "a%20b%2F%C3%A4",
+        "rtlDecoded": "\u028a"
+      },
+      "documentBuilder": {
+        "rootName": "document-content",
+        "streamOpen": true,
+        "namespaceAware": true,
+        "validating": false,
+        "emptyImplementation": true,
+        "capturedType": true,
+        "sameContext": true,
+        "exceptionMessage": "worker exception"
+      },
+      "xpath": {
+        "count": 1,
+        "listLength": 1,
+        "sameRoot": true
+      },
+      "globals": {
+        "window": "object",
+        "document": "object",
+        "DOMParser": "function"
+      },
+      "rootName": "document-content",
+      "attribute": "1.0",
+      "listCounts": [
+        0,
+        1,
+        0
+      ],
+      "sameOwner": true,
+      "unicode": "\ud83d\ude00\u5b57",
+      "utf16Length": 3,
+      "borrowedStreamOpen": true,
+      "warnings": 1,
+      "errors": 0,
+      "warningLine": 1
+    }
+  },
+  "sourceSha256": {
+    "apps/office/src/external/libxml2/fastparsercallbacks.ts": "8114a383c4f76c6a060d9fb8a487be17a5cce7d92014861e724c31c9edd0c798",
+    "apps/office/src/external/libxml2/fastparsercallbacks.test.ts": "be25fd1467cc82021b03f70bec39c37a14264dae467ef27e73c7cc2b72f58691",
+    "third_party/libxml2-wasm/binding.c": "f4063d22339c6503d82cce043cc709bf344cdcc9b4b876bb0380da199531de91",
+    "third_party/libxml2-wasm/source.json": "551d7ab491f7f084101ef1693f976214bcb48cea36bdf42fa2c4316e6c4b4923",
+    "third_party/libxml2-wasm/index.d.ts": "8adfa4ad8bc0f7e8c70df225ba3e3c9587487f173b990e522141b00675d76a52",
+    "third_party/libxml2-wasm/generated-api.json": "8bdfe235511cf888f599d13769bfb6885a81483787e85b9747b815f9f7ef7265",
+    "third_party/libxml2-wasm/constants.mjs": "057bbc040c9e95ddd8fe1fbfd8fc740855935e0428c73fb8b85e4fca0c4a923a",
+    "third_party/libxml2-wasm/constants.d.ts": "4cdef54d2e8242cc218fc64b4a2e3c9506391279c3638957cc6e2aa613df4a51",
+    "third_party/libxml2-wasm/libxml2.mjs": "c8d2aa56cdda2cf38b7bcd87a5de7ca4018cdcba7b08bc355a561ce1992fd420",
+    "scripts/build-libxml2-wasm.py": "7f697a0845fe9514de4b9ceb27751c3021f5ca9b746c80a7e88144269b72d875",
+    "scripts/fixtures/native-fastparser-probe.ts": "15dcf7733889646d7a293688cd6141a635338f73a7ae5cdfa22caa3425817bfc",
+    "scripts/fixtures/native-dom-worker-probe.ts": "fe3df76603319d309b808058afe3ebf3bf086b15533c62324e9310d18877edda",
+    "scripts/native-dom-worker-probe.mjs": "321d6d8503f74aca2e5a74ec606cc272561f6d0987ccfefd98484cfb04bf68df",
+    "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx": "b03e91d34d0b245e02d08ec807c81a6fac648cfc4ec587b5ee43bd423b680aac"
+  },
+  "sourceProfileCorrection": {
+    "source": "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx#FastSaxParserImpl::parseStream",
+    "evidence": "#ifdef __EMSCRIPTEN__ sets rEntity.mbEnableThreads=false; only #else uses SAX_DISABLE_THREADS/m_bDisableThreadedParser/seekable or available input>10000.",
+    "consequence": "Implement original Emscripten parse profile for browser/WASM. Prior notes requiring the non-Emscripten producer/consumer thread as a browser acceptance prerequisite are superseded. Outer module Worker remains possible and is actually tested. Other-platform native threading/ABI not certified."
+  },
+  "securityScopes": {
+    "urlTrustAuthenticationCertificate": "Earlier explicit scope request remains unanswered; no relevant edits.",
+    "nativeFastParserOptions": "New async question asks permission for the actual source xmlCtxtUseOptions(XML_PARSE_NOENT | XML_PARSE_HUGE) call under .agentplane/policy/security.must.md. Tool accepted delivery only; no human approval observed. Do not infer approval from automatic goal continuations.",
+    "currentChanges": "Only raw API export and callback/field ABI added. No new xmlCtxtUseOptions call, XML parser-option/entity/resolver policy, FastParser service registration or production format route enabled."
+  },
+  "qualification": [
+    "Actual unchanged pinned C library and its WASM callback/struct ABI are exercised, not an independently compiled original C++ FastParser component.",
+    "The complete FastParser UNO/context/namespace/error/custom-entity algorithms and original sax parser QA remain unported; current production simplified SAX path is not silently replaced.",
+    "Separate Expat Parser and LegacyFastParser services remain separate; no alias/fake registration to satisfy OFOP service route or hide module cycle.",
+    "Four metadata storage type errors, legacy comphelper->sax->comphelper shortcut cycle,160 older JSDoc rows, prior wider coverage gaps and full Strict/Transitional model/filter/package/desktop/mobile UI/cancel/stale/primaryODF acceptance remain open."
+  ],
+  "next": "Port real FastSaxParserImpl/FastSaxParser and source handler/entity/namespace/locator/error owners against available actual C API, using original Emscripten profile. Keep security-option call pending explicit approval; continue independent authorized owners. Goal active; no finish/pause/merge/source implementation commit."
+}
