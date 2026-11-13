@@ -1,0 +1,119 @@
+{
+  "sharedEvidence": ".agentplane/tasks/202610251549-J0Z0KF/evidence/native-attributes-and-writer-ownership-continuation.json",
+  "status": "unfinished",
+  "checks": [
+    {
+      "command": "../../node_modules/.bin/vitest run src/sax/source/tools/fastattribs.native.test.ts src/sax/source/tools/fastattribs.test.ts src/sax/source/tools/fastserializer.test.ts src/oox/source/core/fasttokenhandler.test.ts src/oox/source/token/tokenmap.test.ts src/oox/source/helper/attributelist-values.test.ts src/oox/source/helper/attributelist.test.ts src/oox/source/core/xmlfilterbase.test.ts src/sw/source/filter/ww8/docxattributeoutput.test.ts src/sw/source/filter/ww8/docxattributeoutput.effects.test.ts src/sw/source/filter/ww8/docxexport.fonts.test.ts src/sal/rtl/boolean.test.ts --maxWorkers=2 --coverage --coverage.include='src/{sax/source/tools/fastattribs,sax/inc/fshelper,oox/source/core/fasttokenhandler}.ts' --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-attributes",
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "180tests/12files; complete3owner gate S98.29/B97.87/F100/L98.45. Original AttributesTest::test assertions included; native sequence catch paths remain unqualified, without fake failures."
+    },
+    {
+      "command": "../../node_modules/.bin/vitest run src/sw/source/filter/ww8/docxattributeoutput.test.ts src/sw/source/filter/ww8/docxattributeoutput.effects.test.ts src/sw/source/filter/ww8/docxexport.fonts.test.ts --maxWorkers=2 --coverage --coverage.include='src/sw/source/filter/ww8/{docxattributeoutput,docxexport}.ts' --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-attributes-writer",
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "48tests/3files; complete2owner gate S100/B100/F100/L100. Existing prior RunText source-reviewed defensive-branch exclusion is unchanged; no exclusion/counter or source branch changed in this block."
+    },
+    {
+      "command": "../../node_modules/.bin/vitest run src/sal/rtl/boolean.test.ts src/sal/inc/rtl/native-ostring.test.ts src/sal/rtl/string-convert.test.ts src/sal/rtl/string-subview.test.ts src/sal/rtl/string-search.test.ts src/sal/rtl/string-length-realms.test.ts src/sal/rtl/strbuf.test.ts src/sal/rtl/stringbuffer.test.ts src/sal/rtl/strtmpl.assembly.test.ts src/sal/rtl/strtmpl.math.test.ts --maxWorkers=2",
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "86tests/10files. Original byte/Unicode boolean prefix admission, related native OString/scalar/C/template regressions. This does not certify whole SAL owner coverage."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Actual main and DOM-free module Worker: genuine registered token handler, real clone facets, native unknown/known sequences, Unicode and embedded-NUL fields retained after source clear. Existing native DOM/SAX/URI/token/Writer package probes also pass."
+    },
+    {
+      "command": "../../node_modules/.bin/vite build",
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "Production bundle built in5.94seconds. This is distinct from the package build that includes failing app tsc."
+    },
+    {
+      "command": "node_modules/.bin/tsc --project apps/office/tsconfig.json --noEmit",
+      "cwd": ".",
+      "result": "fail",
+      "evidence": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(338,9): error TS2304: Cannot find name 'MediaDescriptor'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(410,36): error TS2345: Argument of type 'Sequence<PropertyValue>' is not assignable to parameter of type 'SfxMediumInput'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(411,26): error TS2339: Property 'GetOutputStorage' does not exist on type 'SfxMedium'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(438,27): error TS2339: Property 'Commit' does not exist on type 'SfxMedium'.\n"
+    },
+    {
+      "command": "node_modules/.bin/tsc --project tsconfig.tools.json --noEmit",
+      "cwd": ".",
+      "result": "pass"
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/check-source-provenance.ts",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Source provenance check passed for 2515 runtime modules (2287 mapped, 191 browser adaptations, 37 local infrastructure).\n"
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "Complete registry/invariant/parity check semanticViolationCount0; broad semantic/default/source-responsibility statuses stay unverified."
+    },
+    {
+      "command": "node scripts/check-module-boundaries.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "evidence": "Module boundary check failed:\n- runtime module cycle: comphelper -> sax -> comphelper\n",
+      "resolution": "Existing comphelper/OFOPXMLHelper -> simplified SAX shortcut must become the actual Parser/Expat/context route; no cycle suppression or fake service added."
+    },
+    {
+      "command": "node scripts/check-jsdoc.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "evidence": "160 diagnostics remain in prior unfinished WIP. Current attribute/SAL boolean/helper/Writer export/Worker fixture diagnostics are absent after fixing two overload comments; checker unchanged."
+    },
+    {
+      "command": "node scripts/check-file-size.mjs",
+      "cwd": ".",
+      "result": "pass"
+    },
+    {
+      "command": "node scripts/check-lo-source-tree.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "LibreOffice source-tree check passed for 116 required paths and 32 retired roots.\n"
+    },
+    {
+      "command": "ap doctor",
+      "cwd": ".",
+      "result": "pass",
+      "evidence": "0errors; retained pre-existing managed-hook readiness warning."
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "cwd": ".",
+      "result": "pass"
+    },
+    {
+      "command": "git diff --check",
+      "cwd": ".",
+      "result": "pass"
+    }
+  ],
+  "sourceSha256": {
+    "apps/office/src/sax/source/tools/fastattribs.ts": "97abf4bcacad25085a93940606a3fb0f00a847435a180819ab97ac3d2b5f3c98",
+    "apps/office/src/sax/source/tools/fastattribs.native.test.ts": "7c0a084a30c2ac6b95319362a35643c8422eb091faf276483ef1d62a7637232b",
+    "apps/office/src/sax/source/tools/fastattribs.test.ts": "2f1be053f7dc0d018a654a7277d779dc26484184dd3946dd0b3179228b2e8010",
+    "apps/office/src/sax/inc/fshelper.ts": "fa9c94072cc706e4ce59fc1651d807557381be9f2b8124cf1183a836f66b9460",
+    "apps/office/src/sal/inc/rtl/string.ts": "c43d9bafff61822ab91527203e9a96d50f2308b0add4c815a2a0dbb3145eed95",
+    "apps/office/src/sal/inc/rtl/string.h.ts": "ae9fac9c760408b119f966db5a4a77f4a10e6f78bf711a4e1b2fc1038dee68a3",
+    "apps/office/src/sal/rtl/string.ts": "4e2ab8d5b562a515b0c8c9bc5cdfc0de16a2f2d4ba0e51514d82b9ac4463cfb2",
+    "apps/office/src/sal/rtl/strtmpl.ts": "ceec19c4e4afc5e55ee917675fb5d3c65b5edba1eb121fe7d49d2f2e1ce70925",
+    "apps/office/src/sal/rtl/boolean.test.ts": "ada9c79932649c54f4ba247f6d9ab304114b53b1ee19b56346865c715fac1719",
+    "apps/office/src/oox/source/helper/attributelist-values.test.ts": "839b34b264a0fbde3f9dcd6c02f2d5bb970363261ec0f4ea457d0da72b8831e6",
+    "apps/office/src/oox/source/core/fasttokenhandler.test.ts": "023127b1dc3c12cef7d70aa83266a93fac6d0e7118db0fdb756f86113e88a908",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.ts": "e918266f829074c06c14a41f7e6eba4216d4c15b002e02061d44424b90061c2d",
+    "apps/office/src/sw/source/filter/ww8/docxexport.ts": "a190d927cfbd5a6f788d8f15a728bbaf2988543716ce3e7f35d283896e2b457b",
+    "apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts": "71381b43a770ebe296f7ab50ade23388633dd76a9ffea294bd2eaf1c50a8aa9e",
+    "scripts/fixtures/native-ooxml-stream-probe.ts": "77f7cd4eb7c37c9f8899ce1af46034723e363c14b1bef9bd061e20335e760451",
+    "scripts/fixtures/native-dom-worker-probe.ts": "f8ea6a505b19540a37e3656c6ed56ba234c786e6d46f1ec1d0e744c255da2849",
+    "scripts/native-dom-worker-probe.mjs": "36d1314d143c6bd20b6c9f980ac469915dd0d6ac65612ca7aabaf67aa857ad58"
+  },
+  "next": "Continue native FastParser and source XML metadata/storage/model/UI prerequisites. Preserve upstream defaults and intentional browser file workflows; keep goal active and both parent tasks unfinished."
+}
