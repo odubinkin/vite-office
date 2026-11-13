@@ -1,0 +1,112 @@
+{
+  "status": "unfinished-metadata-medium-stream-prerequisites",
+  "task": "202610251549-J0Z0KF",
+  "productionMetadataRegistration": false,
+  "implementationCommitted": false,
+  "command": {
+    "cwd": "apps/office",
+    "argv": [
+      "../../node_modules/.bin/vitest",
+      "run",
+      "src/ucbhelper/source/client/activedatastreamer.test.ts",
+      "src/offapi/com/sun/star/ucb/PostCommandArgument.test.ts",
+      "src/ucbhelper/source/client/native-content.test.ts",
+      "src/ucbhelper/source/client/native-content-values.test.ts",
+      "src/ucbhelper/source/client/native-content-exceptions.test.ts",
+      "src/ucbhelper/source/client/native-property-read.test.ts",
+      "src/ucbhelper/source/client/native-command.test.ts",
+      "src/ucbhelper/source/client/native-environment.test.ts",
+      "src/ucbhelper/source/client/native-contracts.test.ts",
+      "src/ucbhelper/source/client/native-row-contracts.test.ts",
+      "src/comphelper/source/streaming/memorystream.test.ts",
+      "src/sfx2/source/doc/SfxDocumentMetaData.qa.test.ts",
+      "src/sfx2/source/doc/SfxDocumentMetaData.owner.test.ts",
+      "--maxWorkers=2",
+      "--coverage",
+      "--coverage.provider=istanbul",
+      "--coverage.include=src/ucbhelper/source/client/activedatastreamer.ts",
+      "--coverage.include=src/udkapi/com/sun/star/io/XActiveDataStreamer.ts",
+      "--coverage.include=src/offapi/com/sun/star/ucb/PostCommandArgument.ts",
+      "--coverage.include=src/offapi/com/sun/star/ucb/PostCommandArgument2.ts",
+      "--coverage.include=src/ucbhelper/source/client/content.ts",
+      "--coverage.reportsDirectory=coverage/native-medium-stream-owners",
+      "--coverage.thresholds.statements=90",
+      "--coverage.thresholds.branches=90",
+      "--coverage.thresholds.functions=90",
+      "--coverage.thresholds.lines=90"
+    ],
+    "result": "70 tests / 13 files pass; unchanged scoped90 gate fails"
+  },
+  "finalQaCommand": {
+    "cwd": "apps/office",
+    "argv": [
+      "../../node_modules/.bin/vitest",
+      "run",
+      "src/sfx2/source/doc/SfxDocumentMetaData.qa.test.ts",
+      "--maxWorkers=2"
+    ],
+    "result": "3 tests / 1 file pass, including added original listener assertions"
+  },
+  "coverage": {
+    "lines": {
+      "total": 498,
+      "covered": 192,
+      "skipped": 0,
+      "pct": 38.55
+    },
+    "statements": {
+      "total": 525,
+      "covered": 196,
+      "skipped": 0,
+      "pct": 37.33
+    },
+    "functions": {
+      "total": 83,
+      "covered": 58,
+      "skipped": 0,
+      "pct": 69.87
+    },
+    "branches": {
+      "total": 117,
+      "covered": 50,
+      "skipped": 0,
+      "pct": 42.73
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "sourceBlobs": {
+    "apps/office/src/ucbhelper/source/client/activedatastreamer.ts": "31a5c6258bf15388598a45137d3a6560f64276b0bf2944d6c973f6d439463e22",
+    "apps/office/src/ucbhelper/source/client/activedatastreamer.test.ts": "5df6dea05a38fb562c3b641da6aaa5c49f55c227364d52e361aa40d2e7b4eed7",
+    "apps/office/src/ucbhelper/source/client/content.ts": "d17e653064860ba25784b9491578ee912419cbada404c327f2eca77125c543a8",
+    "apps/office/src/udkapi/com/sun/star/io/XActiveDataStreamer.ts": "9b6a176591f82c97c26d9b26f866da8498faf4e0206752e9c14fb623cbbb265f",
+    "apps/office/src/offapi/com/sun/star/ucb/PostCommandArgument.ts": "4d71883daf8c2e9f0589b9131b15e5d5d16f7fadfb05ad2f63d203608e0b36bb",
+    "apps/office/src/offapi/com/sun/star/ucb/PostCommandArgument2.ts": "303f7759e7bbda4bdf20af44d95cd44576801ba0c7507c25fc939697f0f84f6c",
+    "apps/office/src/offapi/com/sun/star/ucb/PostCommandArgument.test.ts": "1157a11ed8eab0cc45a1a48d15ebae97f6b8d007890ae46b42ab4fe3f83fbf8c",
+    "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.qa.test.ts": "aaad6dc6ddfb510a95b7d03bc19b2215694d858309da3a390cd363c0dd48fffb"
+  },
+  "logs": {
+    "native-streamer-related.log": "7c197bbac63c9545e71542bf04e5ab68c6c6ad99934bc2e81d174e0de5b9c611",
+    "native-post-related.log": "3ed054e4b2600468c671fa8ad6f7ccf9563731b896ceea2a74c4fd91849846e3",
+    "metadata-original-setter-qa.log": "a4764f0d1c5c72a45bbe51c3c6490bf00405d13c495b2b18568d5d7e612f4876",
+    "native-medium-stream-coverage.log": "99fa44d7b44691cef5d799067731df9f76d2478bffb9c5dbc79e8593e23b1faa",
+    "native-medium-stream-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "native-medium-qa-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "native-medium-stream-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "native-medium-qa-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "native-streamer-typecheck.log": "27e41193059ade090cbebaa98ba1e7173ce2a4df41a3e457ee366058e3b383b3",
+    "native-streamer-boundaries.log": "b7d02954fbc97efb04acffa20ca5e9b91853c52fe11a1859871fd93b626de9c1"
+  },
+  "pendingApproval": "Only original MediaDescriptor URL trust/authentication/certificate handling; explicitly requested due security.must.md. No response observed, no such paths modified. Independent work remains available.",
+  "remaining": [
+    "Actual MediaDescriptor security/interaction and UCB selection dependencies",
+    "Native SfxMedium descriptor constructor/GetOutputStorage/Commit",
+    "Real provider-backed Content stream execution",
+    "Full original metadata pre/post-storage QA, actual filter/core/UI integration",
+    "Canonical runtime/provenance and completed-block static/coverage qualification"
+  ]
+}

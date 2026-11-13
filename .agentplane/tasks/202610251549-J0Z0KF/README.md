@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 299
+revision: 302
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T00:53:33.668Z"
+  updated_at: "2026-11-13T01:03:31.775Z"
   updated_by: "CODER"
-  note: "Unfinished metadata-owner continuation: 76 focused tests/14 files pass plus expanded original TEST.odt read assertions (6 owner tests); source SotExchange/DataFlavor/storage-version and native error diagnostics implemented. Whole eight-owner scoped90 remains FAIL S89.25 B72.90 F94.89 L90.19 and four native storage dependencies still fail typecheck. See evidence/native-metadata-sot-continuation.json and native-metadata-owner-wip.md; continue approved block, no completion or pause."
-  attempts: 88
+  note: "Unfinished native medium continuation: 70 focused cases/13 files pass plus final original listener QA3/1; whole five-owner scoped90 retains S37.33 B42.73 F69.87 L38.55. Real provider/native medium, four existing typecheck dependencies, provenance and full format/UI acceptance remain pending. Auth/certificate/trusted-URL scope question is pending; no such paths changed. Continue independent approved work without pause."
+  attempts: 89
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1416,8 +1419,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T01:03:31.775Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Unfinished native medium continuation: 70 focused cases/13 files pass plus final original listener QA3/1; whole five-owner scoped90 retains S37.33 B42.73 F69.87 L38.55. Real provider/native medium, four existing typecheck dependencies, provenance and full format/UI acceptance remain pending. Auth/certificate/trusted-URL scope question is pending; no such paths changed. Continue independent approved work without pause."
+  -
+    type: "status"
+    at: "2026-11-13T01:03:41.162Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T00:53:42.070Z"
+doc_updated_at: "2026-11-13T01:03:41.162Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -4072,6 +4088,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T01:03:31.775Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Unfinished native medium continuation: 70 focused cases/13 files pass plus final original listener QA3/1; whole five-owner scoped90 retains S37.33 B42.73 F69.87 L38.55. Real provider/native medium, four existing typecheck dependencies, provenance and full format/UI acceptance remain pending. Auth/certificate/trusted-URL scope question is pending; no such paths changed. Continue independent approved work without pause.
+    Attempts: 89
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T01:03:20.217Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4543,6 +4589,10 @@ sections:
     - Observation: Command: focused related Vitest paths/log hashes and source hashes in evidence/native-metadata-sot-continuation.json; continuation details in evidence/native-metadata-owner-wip.md. Result:76 tests/14 files pass, plus final original TEST.odt metadata read expansion6 tests/1 file; five boundary cases and actual module guard pass, scoped ESLint/Prettier/routing/diff pass. Scope: complete original SotExchange native DataFlavor table/registry, selected original XStorage format/version helpers, actual error-code exception/formatting and unsigned RTL overload, complete scalar/string record moves and source accessor responsibility split. No positive metadata/storage service is registered and no existing browser save/open/autosave/recovery policy changes.
       Impact: The unfinished owner now resolves SotStorage and native error diagnostics. Current typecheck retains only four genuine storage dependencies: MediaDescriptor and native SfxMedium descriptor constructor/GetOutputStorage/Commit. Eight whole new mechanism owners retain scoped90 FAIL S89.25 B72.90 F94.89 L90.19; actual positive storage/version paths need a real provider. Prior source/DOM coverage gaps remain open. Original TEST.odt read checks now execute through actual initialize; source medium-loading, remaining full source QA and complete DOCX/XLSX/UI acceptance remain pending. Do not claim a completed, deployable or buildable block.
       Resolution: Continue this same approved large block with actual upstream dependencies, complete native provider/medium and qualification, then canonical registry/provenance and reviewed implementation commit. Source edits remain intentionally uncommitted; artifact continuation preserves current work and evidence. No fake private state/provider, branch exclusion, gate reduction, full-suite replay or publication. Task remains DOING/needs_rework and goal active without pause.
+
+    - Observation: Command: exact argv/source/log hashes in evidence/native-medium-stream-continuation.json. Result:70 focused tests/13 files pass, then final original listener QA3 tests/1 file pass; scoped lint/format, module guard and diff/routing pass. Scope: actual ActiveDataStreamer/XActiveDataStreamer, original three missing Content stream-open methods, complete PostCommandArgument/2 values/types and original metadata setter/keyword/statistic/listener assertions. No substitute positive provider or alternate receiver was installed.
+      Impact: Original MediaDescriptor stream/post prerequisites now exist, while whole five-owner scoped90 retains FAIL S37.33 B42.73 F69.87 L38.55 because real provider-backed Content paths remain unavailable. Four previous metadata storage typecheck errors remain; no new component/SDK/QA error. Full original service/medium roundtrip, missing bag/source QA, registry/provenance, native provider/medium and actual DOCX/XLSX/filter/UI acceptance remain unfinished. Prior coverage gaps are not diluted.
+      Resolution: Continue the same approved large block with independent source modules/QA and real provider/native-medium implementation. Read-only inspection exposed auth/certificate/trusted-URL dependencies; explicit scope approval was requested asynchronously under security.must.md, no response observed, and no such path modified. Do not infer approval from time or bypass source checks. Independent work is available; this is progress, not an overall blocker. Keep task DOING/needs_rework and goal active without pause. Source remains intentionally uncommitted pending complete block qualification; no full-suite replay or publication.
 id_source: "generated"
 ---
 ## Summary
@@ -7207,6 +7257,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T01:03:31.775Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Unfinished native medium continuation: 70 focused cases/13 files pass plus final original listener QA3/1; whole five-owner scoped90 retains S37.33 B42.73 F69.87 L38.55. Real provider/native medium, four existing typecheck dependencies, provenance and full format/UI acceptance remain pending. Auth/certificate/trusted-URL scope question is pending; no such paths changed. Continue independent approved work without pause.
+Attempts: 89
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T01:03:20.217Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7682,3 +7762,7 @@ Native DOM classic SAX and attribute ownership checkpoint (2026-11-13):
 - Observation: Command: focused related Vitest paths/log hashes and source hashes in evidence/native-metadata-sot-continuation.json; continuation details in evidence/native-metadata-owner-wip.md. Result:76 tests/14 files pass, plus final original TEST.odt metadata read expansion6 tests/1 file; five boundary cases and actual module guard pass, scoped ESLint/Prettier/routing/diff pass. Scope: complete original SotExchange native DataFlavor table/registry, selected original XStorage format/version helpers, actual error-code exception/formatting and unsigned RTL overload, complete scalar/string record moves and source accessor responsibility split. No positive metadata/storage service is registered and no existing browser save/open/autosave/recovery policy changes.
   Impact: The unfinished owner now resolves SotStorage and native error diagnostics. Current typecheck retains only four genuine storage dependencies: MediaDescriptor and native SfxMedium descriptor constructor/GetOutputStorage/Commit. Eight whole new mechanism owners retain scoped90 FAIL S89.25 B72.90 F94.89 L90.19; actual positive storage/version paths need a real provider. Prior source/DOM coverage gaps remain open. Original TEST.odt read checks now execute through actual initialize; source medium-loading, remaining full source QA and complete DOCX/XLSX/UI acceptance remain pending. Do not claim a completed, deployable or buildable block.
   Resolution: Continue this same approved large block with actual upstream dependencies, complete native provider/medium and qualification, then canonical registry/provenance and reviewed implementation commit. Source edits remain intentionally uncommitted; artifact continuation preserves current work and evidence. No fake private state/provider, branch exclusion, gate reduction, full-suite replay or publication. Task remains DOING/needs_rework and goal active without pause.
+
+- Observation: Command: exact argv/source/log hashes in evidence/native-medium-stream-continuation.json. Result:70 focused tests/13 files pass, then final original listener QA3 tests/1 file pass; scoped lint/format, module guard and diff/routing pass. Scope: actual ActiveDataStreamer/XActiveDataStreamer, original three missing Content stream-open methods, complete PostCommandArgument/2 values/types and original metadata setter/keyword/statistic/listener assertions. No substitute positive provider or alternate receiver was installed.
+  Impact: Original MediaDescriptor stream/post prerequisites now exist, while whole five-owner scoped90 retains FAIL S37.33 B42.73 F69.87 L38.55 because real provider-backed Content paths remain unavailable. Four previous metadata storage typecheck errors remain; no new component/SDK/QA error. Full original service/medium roundtrip, missing bag/source QA, registry/provenance, native provider/medium and actual DOCX/XLSX/filter/UI acceptance remain unfinished. Prior coverage gaps are not diluted.
+  Resolution: Continue the same approved large block with independent source modules/QA and real provider/native-medium implementation. Read-only inspection exposed auth/certificate/trusted-URL dependencies; explicit scope approval was requested asynchronously under security.must.md, no response observed, and no such path modified. Do not infer approval from time or bypass source checks. Independent work is available; this is progress, not an overall blocker. Keep task DOING/needs_rework and goal active without pause. Source remains intentionally uncommitted pending complete block qualification; no full-suite replay or publication.
