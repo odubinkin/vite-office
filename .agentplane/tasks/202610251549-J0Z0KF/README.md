@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 326
+revision: 328
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T08:18:35.987Z"
+  updated_at: "2026-11-13T08:48:33.228Z"
   updated_by: "CODER"
-  note: "Original4 C producer callbacks now connect actual Entity/legacy/Writer/token/stream owners on source Emscripten thread=false profile.63 related tests and final20-case whole2owner gate pass independently above90; actual Chromium main/DOM-free Worker C pipeline passes. Corrected invalid old w namespace fixture to real doc ID, source issues preserved. Custom entity/stream loop/full QA/service and Calc model/filter/UI acceptance remain unfinished. Same4 metadata errors, old cycle and160 JSDoc findings retained. Evidence: evidence/native-fastparser-producer-continuation.json."
-  attempts: 100
+  note: "Original native custom entities/libc/RTL and complete converted-input parse/cleanup loop now execute approved source XML options and all5callbacks.64 related tests pass, whole parser branch91.32 at90; real main/DOM-free Worker full input path passes.137 SAL tests pass but separate whole3owner coverage gate fails and remains open.157-export pinned artifact rebuilt locally without downloads. Full original parser wrapper/QA/service and Calc model/filter/UI acceptance unfinished; same4 metadata errors/cycle/docs failures retained. Evidence: evidence/native-fastparser-stream-entities-continuation.json."
+  attempts: 101
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1608,8 +1611,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T08:48:33.228Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original native custom entities/libc/RTL and complete converted-input parse/cleanup loop now execute approved source XML options and all5callbacks.64 related tests pass, whole parser branch91.32 at90; real main/DOM-free Worker full input path passes.137 SAL tests pass but separate whole3owner coverage gate fails and remains open.157-export pinned artifact rebuilt locally without downloads. Full original parser wrapper/QA/service and Calc model/filter/UI acceptance unfinished; same4 metadata errors/cycle/docs failures retained. Evidence: evidence/native-fastparser-stream-entities-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-13T08:48:43.839Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T08:18:46.771Z"
+doc_updated_at: "2026-11-13T08:48:43.839Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -4602,6 +4618,36 @@ sections:
     Attempts: 100
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T07:36:55.411Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-13T08:48:33.228Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original native custom entities/libc/RTL and complete converted-input parse/cleanup loop now execute approved source XML options and all5callbacks.64 related tests pass, whole parser branch91.32 at90; real main/DOM-free Worker full input path passes.137 SAL tests pass but separate whole3owner coverage gate fails and remains open.157-export pinned artifact rebuilt locally without downloads. Full original parser wrapper/QA/service and Calc model/filter/UI acceptance unfinished; same4 metadata errors/cycle/docs failures retained. Evidence: evidence/native-fastparser-stream-entities-continuation.json.
+    Attempts: 101
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T08:18:46.771Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
 
     Details:
 
@@ -8129,6 +8175,36 @@ Note: Original4 C producer callbacks now connect actual Entity/legacy/Writer/tok
 Attempts: 100
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T07:36:55.411Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-13T08:48:33.228Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original native custom entities/libc/RTL and complete converted-input parse/cleanup loop now execute approved source XML options and all5callbacks.64 related tests pass, whole parser branch91.32 at90; real main/DOM-free Worker full input path passes.137 SAL tests pass but separate whole3owner coverage gate fails and remains open.157-export pinned artifact rebuilt locally without downloads. Full original parser wrapper/QA/service and Calc model/filter/UI acceptance unfinished; same4 metadata errors/cycle/docs failures retained. Evidence: evidence/native-fastparser-stream-entities-continuation.json.
+Attempts: 101
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T08:18:46.771Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
 
 Details:
 
