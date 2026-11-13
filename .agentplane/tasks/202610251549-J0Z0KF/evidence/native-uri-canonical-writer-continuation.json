@@ -1,0 +1,619 @@
+{
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "goalStatus": "active",
+  "previousGoalTurn": "progress: original SAL codec and real script/package producers, source QA and Worker; not blocked",
+  "implementationCommitted": false,
+  "pinnedLibreOfficeCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "implemented": [
+    "Complete source expand URI parser/component and normal three SDK declarations; original null-expander rejection and delegated expansion call, no concrete fake expander.",
+    "Writer root context is explicit; child/VBA members copy actual parent references and dispose them last. Native first-successful-context static factory initialization/retry is retained.",
+    "Removed unused parallel host-string URI value/factory; real native owners replace them under original UriReference.ts and UriReferenceFactory.ts basenames; prior selected regressions migrated to genuine SDK services.",
+    "Source first-matching invalid relationship terminates lookup; source unconditional native path copy retained, tested through actual package entries.",
+    "124 new runtime/provenance records map62 actual WIP modules; three actual internal mutation operations are inventoried. Existing records/history and all unverified broad statuses remain."
+  ],
+  "checks": [
+    {
+      "cwd": "apps/office",
+      "argv": [
+        "../../node_modules/.bin/vitest",
+        "run",
+        "--config",
+        "vitest.shared.config.ts",
+        "src/stoc/source/uriproc/UriReferenceFactory.test.ts",
+        "src/stoc/source/uriproc/UriReferenceFactory.native.test.ts",
+        "src/stoc/source/uriproc/UriReference.value.test.ts",
+        "src/stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTscript.test.ts",
+        "src/stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTexpand.test.ts",
+        "src/stoc/source/uriproc/VndSunStarPkgUrlReferenceFactory.test.ts",
+        "src/unotools/source/misc/mediadescriptor.uri.test.ts",
+        "--maxWorkers=2",
+        "--coverage",
+        "--coverage.provider=istanbul",
+        "--coverage.include=src/stoc/source/uriproc/UriReferenceFactory.ts",
+        "--coverage.include=src/stoc/source/uriproc/UriReference.ts",
+        "--coverage.include=src/stoc/source/uriproc/UriReferenceFactory.generic.ts",
+        "--coverage.include=src/stoc/source/uriproc/UriReferenceFactory.resolve.ts",
+        "--coverage.include=src/stoc/source/uriproc/UriReferenceFactory.segments.ts",
+        "--coverage.include=src/stoc/source/uriproc/UriReferenceFactory.temporaries.ts",
+        "--coverage.reportsDirectory=coverage/native-uri-canonical-owners",
+        "--coverage.thresholds.statements=90",
+        "--coverage.thresholds.branches=90",
+        "--coverage.thresholds.functions=90",
+        "--coverage.thresholds.lines=90"
+      ],
+      "result": "PASS 473 tests/7 files; same six actual native mechanisms now under canonical upstream basenames; this is a distinct six-owner scope, not a replacement for the earlier twelve-owner SDK/helper gap",
+      "log": "apps/office/coverage/uri-canonical-owners.log",
+      "rawCoverage": {
+        "total": {
+          "lines": {
+            "total": 474,
+            "covered": 454,
+            "skipped": 0,
+            "pct": 95.78
+          },
+          "statements": {
+            "total": 534,
+            "covered": 504,
+            "skipped": 0,
+            "pct": 94.38
+          },
+          "functions": {
+            "total": 77,
+            "covered": 77,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 317,
+            "covered": 289,
+            "skipped": 0,
+            "pct": 91.16
+          },
+          "branchesTrue": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": "Unknown"
+          }
+        },
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/stoc/source/uriproc/UriReference.ts": {
+          "lines": {
+            "total": 67,
+            "covered": 66,
+            "skipped": 0,
+            "pct": 98.5
+          },
+          "functions": {
+            "total": 20,
+            "covered": 20,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 73,
+            "covered": 71,
+            "skipped": 0,
+            "pct": 97.26
+          },
+          "branches": {
+            "total": 40,
+            "covered": 38,
+            "skipped": 0,
+            "pct": 95
+          }
+        },
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/stoc/source/uriproc/UriReferenceFactory.generic.ts": {
+          "lines": {
+            "total": 70,
+            "covered": 69,
+            "skipped": 0,
+            "pct": 98.57
+          },
+          "functions": {
+            "total": 22,
+            "covered": 22,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 77,
+            "covered": 76,
+            "skipped": 0,
+            "pct": 98.7
+          },
+          "branches": {
+            "total": 40,
+            "covered": 31,
+            "skipped": 0,
+            "pct": 77.5
+          }
+        },
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/stoc/source/uriproc/UriReferenceFactory.resolve.ts": {
+          "lines": {
+            "total": 142,
+            "covered": 139,
+            "skipped": 0,
+            "pct": 97.88
+          },
+          "functions": {
+            "total": 8,
+            "covered": 8,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 166,
+            "covered": 162,
+            "skipped": 0,
+            "pct": 97.59
+          },
+          "branches": {
+            "total": 146,
+            "covered": 141,
+            "skipped": 0,
+            "pct": 96.57
+          }
+        },
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/stoc/source/uriproc/UriReferenceFactory.segments.ts": {
+          "lines": {
+            "total": 49,
+            "covered": 49,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 1,
+            "covered": 1,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 50,
+            "covered": 50,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 43,
+            "covered": 43,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/stoc/source/uriproc/UriReferenceFactory.temporaries.ts": {
+          "lines": {
+            "total": 46,
+            "covered": 46,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 15,
+            "covered": 15,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 58,
+            "covered": 55,
+            "skipped": 0,
+            "pct": 94.82
+          },
+          "branches": {
+            "total": 14,
+            "covered": 11,
+            "skipped": 0,
+            "pct": 78.57
+          }
+        },
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/stoc/source/uriproc/UriReferenceFactory.ts": {
+          "lines": {
+            "total": 100,
+            "covered": 85,
+            "skipped": 0,
+            "pct": 85
+          },
+          "functions": {
+            "total": 11,
+            "covered": 11,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 110,
+            "covered": 90,
+            "skipped": 0,
+            "pct": 81.81
+          },
+          "branches": {
+            "total": 34,
+            "covered": 25,
+            "skipped": 0,
+            "pct": 73.52
+          }
+        }
+      }
+    },
+    {
+      "cwd": "apps/office",
+      "argv": [
+        "../../node_modules/.bin/vitest",
+        "run",
+        "--config",
+        "vitest.writer.config.ts",
+        "src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+        "src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.context.test.ts",
+        "src/sw/source/writerfilter/ooxml/OOXMLSettings.test.ts",
+        "src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.test.ts",
+        "src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+        "src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts",
+        "src/sw/source/writerfilter/dmapper/SettingsTable.test.ts",
+        "--maxWorkers=2",
+        "--coverage",
+        "--coverage.provider=istanbul",
+        "--coverage.include=src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+        "--coverage.reportsDirectory=coverage/native-writer-uri-consumer",
+        "--coverage.thresholds.statements=90",
+        "--coverage.thresholds.branches=90",
+        "--coverage.thresholds.functions=90",
+        "--coverage.thresholds.lines=90"
+      ],
+      "result": "PASS 70 tests/7files; complete actual OOXMLStreamImpl owner scoped90 PASS; source specializations and original integration slices retained",
+      "log": "apps/office/coverage/writer-uri-consumer-canonical-final.log",
+      "rawCoverage": {
+        "total": {
+          "lines": {
+            "total": 158,
+            "covered": 158,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 179,
+            "covered": 179,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 16,
+            "covered": 16,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 97,
+            "covered": 96,
+            "skipped": 0,
+            "pct": 98.96
+          },
+          "branchesTrue": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": "Unknown"
+          }
+        },
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts": {
+          "lines": {
+            "total": 158,
+            "covered": 158,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 16,
+            "covered": 16,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 179,
+            "covered": 179,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 97,
+            "covered": 96,
+            "skipped": 0,
+            "pct": 98.96
+          }
+        }
+      }
+    },
+    {
+      "cwd": "apps/office",
+      "argv": [
+        "../../node_modules/.bin/vitest",
+        "run",
+        "--config",
+        "vitest.shared.config.ts",
+        "src/stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTexpand.test.ts",
+        "--maxWorkers=2",
+        "--coverage",
+        "--coverage.provider=istanbul",
+        "--coverage.include=src/stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTexpand*.ts",
+        "--coverage.include=src/udkapi/com/sun/star/uri/XVndSunStarExpandUrl*.ts",
+        "--coverage.include=src/udkapi/com/sun/star/util/XMacroExpander.ts",
+        "--coverage.reportsDirectory=coverage/native-expand-uri-canonical",
+        "--coverage.thresholds.statements=90",
+        "--coverage.thresholds.branches=90",
+        "--coverage.thresholds.functions=90",
+        "--coverage.thresholds.lines=90"
+      ],
+      "result": "7 tests pass; complete five-owner scoped90 FAIL; real bootstrap macro expansion positive branch and original expanded values remain unqualified, no fake expander injected",
+      "log": "apps/office/coverage/expand-uri-canonical-coverage.log",
+      "rawCoverage": {
+        "total": {
+          "lines": {
+            "total": 88,
+            "covered": 68,
+            "skipped": 0,
+            "pct": 77.27
+          },
+          "statements": {
+            "total": 90,
+            "covered": 70,
+            "skipped": 0,
+            "pct": 77.77
+          },
+          "functions": {
+            "total": 36,
+            "covered": 31,
+            "skipped": 0,
+            "pct": 86.11
+          },
+          "branches": {
+            "total": 12,
+            "covered": 8,
+            "skipped": 0,
+            "pct": 66.66
+          },
+          "branchesTrue": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTexpand.reference.ts": {
+          "lines": {
+            "total": 44,
+            "covered": 37,
+            "skipped": 0,
+            "pct": 84.09
+          },
+          "functions": {
+            "total": 20,
+            "covered": 20,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 44,
+            "covered": 37,
+            "skipped": 0,
+            "pct": 84.09
+          },
+          "branches": {
+            "total": 2,
+            "covered": 1,
+            "skipped": 0,
+            "pct": 50
+          }
+        },
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTexpand.ts": {
+          "lines": {
+            "total": 17,
+            "covered": 17,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 7,
+            "covered": 7,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 19,
+            "covered": 19,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 4,
+            "covered": 4,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/udkapi/com/sun/star/uri/XVndSunStarExpandUrl.ts": {
+          "lines": {
+            "total": 9,
+            "covered": 7,
+            "skipped": 0,
+            "pct": 77.77
+          },
+          "functions": {
+            "total": 3,
+            "covered": 2,
+            "skipped": 0,
+            "pct": 66.66
+          },
+          "statements": {
+            "total": 9,
+            "covered": 7,
+            "skipped": 0,
+            "pct": 77.77
+          },
+          "branches": {
+            "total": 2,
+            "covered": 1,
+            "skipped": 0,
+            "pct": 50
+          }
+        },
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/udkapi/com/sun/star/uri/XVndSunStarExpandUrlReference.ts": {
+          "lines": {
+            "total": 9,
+            "covered": 7,
+            "skipped": 0,
+            "pct": 77.77
+          },
+          "functions": {
+            "total": 3,
+            "covered": 2,
+            "skipped": 0,
+            "pct": 66.66
+          },
+          "statements": {
+            "total": 9,
+            "covered": 7,
+            "skipped": 0,
+            "pct": 77.77
+          },
+          "branches": {
+            "total": 2,
+            "covered": 2,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "/Users/odubinkin/Projects/vite-office/apps/office/src/udkapi/com/sun/star/util/XMacroExpander.ts": {
+          "lines": {
+            "total": 9,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 0
+          },
+          "functions": {
+            "total": 3,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 0
+          },
+          "statements": {
+            "total": 9,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 0
+          },
+          "branches": {
+            "total": 2,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 0
+          }
+        }
+      }
+    },
+    {
+      "cwd": "apps/office",
+      "argv": [
+        "../../node_modules/.bin/vitest",
+        "run",
+        "--config",
+        "vitest.writer.config.ts",
+        "src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+        "--testNamePattern=unconditional native path copy"
+      ],
+      "result": "PASS actual opaque:abc -> package entry bc and opaque: -> exact original SAL assert(false); 1 selected test, 26 other tests deliberately filtered after the full70 pass",
+      "log": "apps/office/coverage/writer-uri-opaque-assertion.log"
+    },
+    {
+      "cwd": ".",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "PASS actual Chromium main and DOM-free module Worker: minimal Transitional Word document/styles with original OPC relationship and content MIME types are committed to ZIP, reopened and traversed through explicit-context root/child OOXML native streams and by-ID URI resolution. Exact Unicode XML bytes are asserted; no full SwDoc/filter/UI roundtrip is claimed.",
+      "log": "apps/office/coverage/writer-uri-package-worker-final.log"
+    },
+    {
+      "cwd": "apps/office",
+      "argv": [
+        "../../node_modules/.bin/tsc",
+        "--noEmit",
+        "--pretty",
+        "false"
+      ],
+      "result": "FAIL exactly four unchanged native metadata storage dependency errors: undeclared MediaDescriptor, native SfxMedium sequence constructor, GetOutputStorage and Commit; no new URI/Writer/SDK errors",
+      "log": "apps/office/coverage/writer-uri-typecheck-canonical-final.log"
+    },
+    {
+      "cwd": ".",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "scripts/check-source-provenance.ts"
+      ],
+      "result": "PASS 2514 runtime modules, 2286 mapped, 191 browser adaptations, 37 local infrastructure; all new module semantic/default/source-responsibility statuses remain unverified",
+      "log": "apps/office/coverage/native-prerequisite-provenance-final.log"
+    },
+    {
+      "cwd": ".",
+      "argv": [
+        "node_modules/.bin/tsx",
+        "scripts/libreoffice-inventory/registry-cli.ts",
+        "check"
+      ],
+      "result": "PASS canonical runtime/provenance/capability/invariant/parity evidence; semanticViolationCount0, no broad semantic/default/source-responsibility promotion",
+      "log": "apps/office/coverage/native-prerequisite-registry-final.log"
+    },
+    {
+      "cwd": ".",
+      "argv": [
+        "node",
+        "scripts/check-lo-source-tree.mjs"
+      ],
+      "result": "PASS 116 required paths and32 retired roots",
+      "log": "apps/office/coverage/native-prerequisite-source-tree-final.log"
+    },
+    {
+      "cwd": ".",
+      "argv": [
+        "node",
+        "scripts/check-module-boundaries.mjs"
+      ],
+      "result": "PASS 2513 runtime sources/15606 relative imports/282 observed allowed cross-module edges; Writer native URI lookup now uses the SDK service contract",
+      "log": "apps/office/coverage/writer-uri-boundaries-final.log"
+    },
+    {
+      "cwd": ".",
+      "command": "Scoped ESLint/Prettier over changed URI/SDK/Writer/fixture/registry files; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check",
+      "result": "PASS; existing hook-readiness informational note retained",
+      "logs": [
+        "apps/office/coverage/writer-uri-all-eslint-final.log",
+        "apps/office/coverage/writer-uri-format-final.log",
+        "apps/office/coverage/native-prerequisite-registry-format.log",
+        "apps/office/coverage/writer-uri-doctor-final.log"
+      ]
+    }
+  ],
+  "sourceHashes": {
+    "apps/office/src/stoc/source/uriproc/UriReferenceFactory.ts": "a113779bb42a34e698a5d8d9532d1a13095679717ab9f28a44bde5c52e7d2754",
+    "apps/office/src/stoc/source/uriproc/UriReference.ts": "21f832bb265144bcfe915b8a4d323ee975a38b745271665a56ee649b01e0dc5c",
+    "apps/office/src/stoc/source/uriproc/UriReferenceFactory.generic.ts": "5a53dca8b79d10e41580bb3db70df2fbc115238823e8797038da01b13aba8346",
+    "apps/office/src/stoc/source/uriproc/UriReferenceFactory.resolve.ts": "d20ca9bd99415be7892dcd5eb78e8a591cd66bce7219522ab2f985cca1d16741",
+    "apps/office/src/stoc/source/uriproc/UriReferenceFactory.segments.ts": "d06ad0ab4b8c23649ab7543754093d99b9b1ecee77695981a4e5fd58befa8d3e",
+    "apps/office/src/stoc/source/uriproc/UriReferenceFactory.temporaries.ts": "8e7988243b7ae85dc922f506af9e184153232c37628670767ba725b4b4fa91f6",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts": "c5c4cdf1ce50509377d9a42c6a0a5e5e5a943d7408d8ecda5d20cc6097283be9",
+    "apps/office/src/stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTexpand.ts": "7aa140e2f0e468200fc707ac3697dde86098b5874aeed5e7f4aff33d817b01a8",
+    "apps/office/src/stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTexpand.reference.ts": "7db481ef1267e88bb3cd05d50605bbcc7bad7039e6a5fba0d4da5526760e4ba3",
+    "scripts/fixtures/native-ooxml-stream-probe.ts": "9bb8cdc23c547b93d911f22254dbbef09474e6d324d5f782b32a3ac16a746d07",
+    "scripts/fixtures/native-dom-worker-probe.ts": "917431721db13930604caba6f69fb2b010b12adaa93aad65d13ad339cf042322",
+    "scripts/native-dom-worker-probe.mjs": "f6c8a3b590e29a7fbda1d715e281c80bc2c7b7c867f813ecfb7fcd4a29b4ee3d"
+  },
+  "sourceFidelityCorrection": "Pinned OOXMLStreamImpl.cxx lcl_getTarget breaks the relationship loop after the first matching candidate even when makeAbsolute fails. Any earlier continuation note suggesting retrying later candidates is superseded; current source and duplicate-invalid/valid test preserve the break.",
+  "priorGapsPreserved": [
+    "Earlier twelve URI SDK/helper owner branch gate and three package-owner SDK gate remain unclosed; new six-core-owner passing scope does not dilute them.",
+    "Earlier SOT, UCB stream and metadata owner/DOM/converter qualification gaps remain open.",
+    "Positive original expand macro QA and ExternalUriReferenceTranslator/native thread encoding/bootstrap owners remain missing.",
+    "Metadata production services are not registered; real MediaDescriptor/native medium/StorageFactory backend and XML meta import/export services remain incomplete.",
+    "The prior security scope question for URL trust/authentication/certificate paths has no observed human answer. No such code was changed. Independent work remains available.",
+    "Full DOCX/XLSX SwDoc/ScDocument filter/model/settings/styles/views/formulas, Strict/Transitional export/reopen/package assertions, malformed active graph preservation, cancellation/stale state and actual desktop/mobile existing UI flows remain unfinished.",
+    "Native physical ABI/allocator/thread/shutdown and independent compiled full URI/Writer module differential remain unqualified."
+  ],
+  "fullSuite": "Not run; same two large existing tasks, related-only cadence unchanged.",
+  "next": "Continue real metadata medium/storage/XML/filter prerequisites and genuine bootstrap/translator owners. Do not pause the goal or finish either parent. Do not run stale coverage-directory implementation emitters or old .value/.component path commands."
+}
