@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 320
+revision: 322
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T06:49:49.288Z"
+  updated_at: "2026-11-13T07:14:29.914Z"
   updated_by: "CODER"
-  note: "Prerequisite progress: canonical FastParser Entity/input owner and original legacy consumers implemented; 76 related tests pass, whole two-owner S96.29/B95.83/F100/L97.32 at90; real Chromium main and DOM-free Worker pass. Full native parser assembly and Calc model/filter/UI acceptance remain unfinished. Same4 metadata type errors, old dependency cycle and160 older JSDoc diagnostics remain; security option and URL scopes unanswered. Evidence: evidence/native-fastparser-entity-legacy-continuation.json."
-  attempts: 97
+  note: "Native parser prerequisite progress: source configuration/entity-stack/namespace registry and C SAX2 locator with actual RTL/UNO owners implemented;69 related tests, each whole owner above90,8 boundary tests and genuine Chromium main/DOM-free Worker pass. Source XML options approval explicitly received. Native producer/parse/error/custom-entity/QA/service and Calc model/filter/UI acceptance remain incomplete. Same4 metadata type errors, old cycle and160 docs diagnostics retained. Evidence: evidence/native-fastparser-owner-locator-continuation.json."
+  attempts: 98
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1560,8 +1563,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T07:14:29.914Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native parser prerequisite progress: source configuration/entity-stack/namespace registry and C SAX2 locator with actual RTL/UNO owners implemented;69 related tests, each whole owner above90,8 boundary tests and genuine Chromium main/DOM-free Worker pass. Source XML options approval explicitly received. Native producer/parse/error/custom-entity/QA/service and Calc model/filter/UI acceptance remain incomplete. Same4 metadata type errors, old cycle and160 docs diagnostics retained. Evidence: evidence/native-fastparser-owner-locator-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-13T07:14:52.822Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T06:49:59.859Z"
+doc_updated_at: "2026-11-13T07:14:52.822Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -4464,6 +4480,36 @@ sections:
     Attempts: 97
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T05:47:35.651Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-13T07:14:29.914Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native parser prerequisite progress: source configuration/entity-stack/namespace registry and C SAX2 locator with actual RTL/UNO owners implemented;69 related tests, each whole owner above90,8 boundary tests and genuine Chromium main/DOM-free Worker pass. Source XML options approval explicitly received. Native producer/parse/error/custom-entity/QA/service and Calc model/filter/UI acceptance remain incomplete. Same4 metadata type errors, old cycle and160 docs diagnostics retained. Evidence: evidence/native-fastparser-owner-locator-continuation.json.
+    Attempts: 98
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T06:49:59.859Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
 
     Details:
 
@@ -7901,6 +7947,36 @@ Note: Prerequisite progress: canonical FastParser Entity/input owner and origina
 Attempts: 97
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T05:47:35.651Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-13T07:14:29.914Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native parser prerequisite progress: source configuration/entity-stack/namespace registry and C SAX2 locator with actual RTL/UNO owners implemented;69 related tests, each whole owner above90,8 boundary tests and genuine Chromium main/DOM-free Worker pass. Source XML options approval explicitly received. Native producer/parse/error/custom-entity/QA/service and Calc model/filter/UI acceptance remain incomplete. Same4 metadata type errors, old cycle and160 docs diagnostics retained. Evidence: evidence/native-fastparser-owner-locator-continuation.json.
+Attempts: 98
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T06:49:59.859Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
 
 Details:
 
