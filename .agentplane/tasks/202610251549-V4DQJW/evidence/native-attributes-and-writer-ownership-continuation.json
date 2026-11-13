@@ -94,12 +94,18 @@
       "command": "git diff --check",
       "cwd": ".",
       "result": "pass"
+    },
+    {
+      "command": "../../node_modules/.bin/vitest run src/sax/source/tools/fastattribs.native.test.ts src/sax/source/tools/fastattribs.test.ts src/sax/source/tools/fastserializer.test.ts src/oox/source/core/fasttokenhandler.test.ts src/oox/source/token/tokenmap.test.ts src/oox/source/helper/attributelist-values.test.ts src/oox/source/helper/attributelist.test.ts src/oox/source/core/xmlfilterbase.test.ts src/sw/source/filter/ww8/docxattributeoutput.test.ts src/sw/source/filter/ww8/docxattributeoutput.effects.test.ts src/sw/source/filter/ww8/docxexport.fonts.test.ts src/sal/rtl/boolean.test.ts src/sc/source/filter/oox/richstring.test.ts --maxWorkers=2 --coverage --coverage.include='src/{sax/source/tools/fastattribs,sax/inc/fshelper,oox/source/core/fasttokenhandler}.ts' --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-attributes-final",
+      "cwd": "apps/office",
+      "result": "pass",
+      "evidence": "182tests/13files PASS after final source constructor-arity correction; complete3owner gate S98.29/B97.84/F100/L98.45. Includes actual Calc richstring consumer regression. No counter/map merge with the earlier constructor-default epoch."
     }
   ],
   "sourceSha256": {
-    "apps/office/src/sax/source/tools/fastattribs.ts": "97abf4bcacad25085a93940606a3fb0f00a847435a180819ab97ac3d2b5f3c98",
+    "apps/office/src/sax/source/tools/fastattribs.ts": "4b78aaee5c90e7d8a961516569690e7c84b736bd19d61754fe6dd9c513b55eb7",
     "apps/office/src/sax/source/tools/fastattribs.native.test.ts": "7c0a084a30c2ac6b95319362a35643c8422eb091faf276483ef1d62a7637232b",
-    "apps/office/src/sax/source/tools/fastattribs.test.ts": "2f1be053f7dc0d018a654a7277d779dc26484184dd3946dd0b3179228b2e8010",
+    "apps/office/src/sax/source/tools/fastattribs.test.ts": "0a5b692590d86f1f79f815996848cafa2ace53bb5183ec2c151789ac777b9844",
     "apps/office/src/sax/inc/fshelper.ts": "fa9c94072cc706e4ce59fc1651d807557381be9f2b8124cf1183a836f66b9460",
     "apps/office/src/sal/inc/rtl/string.ts": "c43d9bafff61822ab91527203e9a96d50f2308b0add4c815a2a0dbb3145eed95",
     "apps/office/src/sal/inc/rtl/string.h.ts": "ae9fac9c760408b119f966db5a4a77f4a10e6f78bf711a4e1b2fc1038dee68a3",
@@ -113,7 +119,11 @@
     "apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts": "71381b43a770ebe296f7ab50ade23388633dd76a9ffea294bd2eaf1c50a8aa9e",
     "scripts/fixtures/native-ooxml-stream-probe.ts": "77f7cd4eb7c37c9f8899ce1af46034723e363c14b1bef9bd061e20335e760451",
     "scripts/fixtures/native-dom-worker-probe.ts": "f8ea6a505b19540a37e3656c6ed56ba234c786e6d46f1ec1d0e744c255da2849",
-    "scripts/native-dom-worker-probe.mjs": "36d1314d143c6bd20b6c9f980ac469915dd0d6ac65612ca7aabaf67aa857ad58"
+    "scripts/native-dom-worker-probe.mjs": "36d1314d143c6bd20b6c9f980ac469915dd0d6ac65612ca7aabaf67aa857ad58",
+    "apps/office/src/oox/source/helper/attributelist.test.ts": "f114fbe8f21a0147d20b0303db6fb77561f375ea9d56f188666f0c3ce34344f1",
+    "apps/office/src/sc/source/filter/oox/richstring.test.ts": "1d6e979e4f84680bb2650101acc2ce1185ef76b89e09451abea5b1bb5833d86d"
   },
-  "next": "Continue native FastParser and source XML metadata/storage/model/UI prerequisites. Preserve upstream defaults and intentional browser file workflows; keep goal active and both parent tasks unfinished."
+  "next": "Continue native FastParser and source XML metadata/storage/model/UI prerequisites. Preserve upstream defaults and intentional browser file workflows; keep goal active and both parent tasks unfinished.",
+  "currentXmlCoverageEpoch": "native-attributes-final",
+  "sourceArityCorrection": "Original FastAttributeList constructor requires a handler/null/native-reference operand; remove the old default-null convenience. Three existing tests (SAX, OOX attribute adapter, Calc richstring) now pass explicit null; production factory already does. Related182-case gate passes."
 }
