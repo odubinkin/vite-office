@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 352
+revision: 355
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T11:25:24.805Z"
+  updated_at: "2026-11-13T11:54:55.289Z"
   updated_by: "CODER"
-  note: "Original SwitchablePersistenceStream/SPStreamData_Impl and normal XAsyncOutputMonitor implemented with genuine native IO/seek/close/Any/monitor/C parser+Writer and main-Worker evidence: 54 related tests pass; whole stream90 fails86.27/82.14/100/94.01, SDK100. CopyAndSwitchPersistenceTo/TempFileFastService and real OStorage/StorageFactory/backend/full source QA/model/filter/export/UI remain unfinished. Original Sequence partial-read distinction preserved WRITER530/CALC593. Older failed scopes and4types/cycle/157docs retained; other scoped quality gates pass. Evidence native-persistence-continuation.json; goal active, no incomplete source commit/merge."
-  attempts: 109
+  note: "Shared actual Emscripten libc/MEMFS runtime and XML bootstrap identity verified:46runtime/XML owner cases plus44current SAX/stream regressions,90related total and real main/Worker filesystem evidence. Both complete bootstrap TS owners pass90; older native stream/storage/parser/SAL/SDK/o3tl failures retained separately. Native rebuilt artifact e45f0b54031bd3662e5fc173a8fd217259392c8f1c22e900245cf4b4d4276f0c keeps157Cexports/851enums and approved XML source/config/flags. Actual source SvStream/TempFile/OStorage/backend/model/filter/export/UI remain unfinished. Existing4types/cycle/157docs persist; other scoped checks pass. Evidence native-filesystem-runtime-continuation.json; goal active, no incomplete source commit/merge."
+  attempts: 110
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1752,8 +1755,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T11:54:55.289Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared actual Emscripten libc/MEMFS runtime and XML bootstrap identity verified:46runtime/XML owner cases plus44current SAX/stream regressions,90related total and real main/Worker filesystem evidence. Both complete bootstrap TS owners pass90; older native stream/storage/parser/SAL/SDK/o3tl failures retained separately. Native rebuilt artifact e45f0b54031bd3662e5fc173a8fd217259392c8f1c22e900245cf4b4d4276f0c keeps157Cexports/851enums and approved XML source/config/flags. Actual source SvStream/TempFile/OStorage/backend/model/filter/export/UI remain unfinished. Existing4types/cycle/157docs persist; other scoped checks pass. Evidence native-filesystem-runtime-continuation.json; goal active, no incomplete source commit/merge."
+  -
+    type: "status"
+    at: "2026-11-13T11:55:57.973Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T11:25:30.678Z"
+doc_updated_at: "2026-11-13T11:55:57.973Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -5038,6 +5054,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T11:54:55.289Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared actual Emscripten libc/MEMFS runtime and XML bootstrap identity verified:46runtime/XML owner cases plus44current SAX/stream regressions,90related total and real main/Worker filesystem evidence. Both complete bootstrap TS owners pass90; older native stream/storage/parser/SAL/SDK/o3tl failures retained separately. Native rebuilt artifact e45f0b54031bd3662e5fc173a8fd217259392c8f1c22e900245cf4b4d4276f0c keeps157Cexports/851enums and approved XML source/config/flags. Actual source SvStream/TempFile/OStorage/backend/model/filter/export/UI remain unfinished. Existing4types/cycle/157docs persist; other scoped checks pass. Evidence native-filesystem-runtime-continuation.json; goal active, no incomplete source commit/merge.
+    Attempts: 110
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T11:54:05.985Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -5573,6 +5619,10 @@ sections:
     - Observation: Original switchable persistence/monitor owners now provide genuine positive native IO/position/closure/Any/C XML parser/Writer and main-Worker evidence with54related cases. See `evidence/native-persistence-continuation.json`.
       Impact: Required OStorage persistence layer progresses, but source whole-owner90, full temp/copy/backend/source QA/filter/model/UI acceptance remain unfinished. Older failed scopes retained independently.
       Resolution: Preserve source overload distinction WRITER530/CALC593 and selected non-pthread profile; implement actual remaining TempFile/OStorage/backend graph without fake provider, source error injector or coverage masks. Goal active; no incomplete source implementation commit.
+
+    - Observation: Actual shared Emscripten libc/MEMFS now backs XML and future file owners; native C file IO,90related cases/current artifact and main-Worker evidence pass. See `evidence/native-filesystem-runtime-continuation.json`.
+      Impact: Genuine filesystem foundation advances; source SvStream/TempFile/OStorage/backend/model/UI remain unfinished. New bootstrap100 does not close older whole-owner failures.
+      Resolution: Port actual file/buffering/temp owners and preserve WRITER531/CALC594, then native storage/filter/model/export/UI; no fake temp service or validator exemption. Goal active, no incomplete implementation commit.
 id_source: "generated"
 ---
 ## Summary
@@ -8867,6 +8917,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T11:54:55.289Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared actual Emscripten libc/MEMFS runtime and XML bootstrap identity verified:46runtime/XML owner cases plus44current SAX/stream regressions,90related total and real main/Worker filesystem evidence. Both complete bootstrap TS owners pass90; older native stream/storage/parser/SAL/SDK/o3tl failures retained separately. Native rebuilt artifact e45f0b54031bd3662e5fc173a8fd217259392c8f1c22e900245cf4b4d4276f0c keeps157Cexports/851enums and approved XML source/config/flags. Actual source SvStream/TempFile/OStorage/backend/model/filter/export/UI remain unfinished. Existing4types/cycle/157docs persist; other scoped checks pass. Evidence native-filesystem-runtime-continuation.json; goal active, no incomplete source commit/merge.
+Attempts: 110
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T11:54:05.985Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -9406,3 +9486,7 @@ Native DOM classic SAX and attribute ownership checkpoint (2026-11-13):
 - Observation: Original switchable persistence/monitor owners now provide genuine positive native IO/position/closure/Any/C XML parser/Writer and main-Worker evidence with54related cases. See `evidence/native-persistence-continuation.json`.
   Impact: Required OStorage persistence layer progresses, but source whole-owner90, full temp/copy/backend/source QA/filter/model/UI acceptance remain unfinished. Older failed scopes retained independently.
   Resolution: Preserve source overload distinction WRITER530/CALC593 and selected non-pthread profile; implement actual remaining TempFile/OStorage/backend graph without fake provider, source error injector or coverage masks. Goal active; no incomplete source implementation commit.
+
+- Observation: Actual shared Emscripten libc/MEMFS now backs XML and future file owners; native C file IO,90related cases/current artifact and main-Worker evidence pass. See `evidence/native-filesystem-runtime-continuation.json`.
+  Impact: Genuine filesystem foundation advances; source SvStream/TempFile/OStorage/backend/model/UI remain unfinished. New bootstrap100 does not close older whole-owner failures.
+  Resolution: Port actual file/buffering/temp owners and preserve WRITER531/CALC594, then native storage/filter/model/export/UI; no fake temp service or validator exemption. Goal active, no incomplete implementation commit.
