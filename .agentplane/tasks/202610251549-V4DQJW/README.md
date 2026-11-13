@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 100
+revision: 103
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T13:19:29.157Z"
+  updated_at: "2026-11-13T13:28:55.207Z"
   updated_by: "CODER"
-  note: "Native stream/UNO bridge:41related cases and3whole-owner90 pass; actual C XML/persistence/main-Worker pass. Old failures/full file/temp/backend/model/UI unfinished; security hook approval pending. See native-streamwrap-continuation.json."
-  attempts: 20
+  note: "Reverse UNO/byte adapters and full data pipe:42related cases/main-Worker/C XML pass; owner90 fails87.03/75.33/96/90.87. Older failures/full file/temp/backend/model/UI unfinished. See native-strmadpt-continuation.json."
+  attempts: 21
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -328,8 +331,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T13:28:55.207Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Reverse UNO/byte adapters and full data pipe:42related cases/main-Worker/C XML pass; owner90 fails87.03/75.33/96/90.87. Older failures/full file/temp/backend/model/UI unfinished. See native-strmadpt-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-13T13:29:04.619Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T13:19:33.534Z"
+doc_updated_at: "2026-11-13T13:29:04.619Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -942,6 +958,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T13:28:55.207Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Reverse UNO/byte adapters and full data pipe:42related cases/main-Worker/C XML pass; owner90 fails87.03/75.33/96/90.87. Older failures/full file/temp/backend/model/UI unfinished. See native-strmadpt-continuation.json.
+    Attempts: 21
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T13:28:54.654Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -1170,6 +1216,10 @@ sections:
     - Observation: Original5SvStream/UNO wrappers and actual ImplHelper1 dependency now connect byte/component/persistence/C parser/main-Worker graph with41cases and3whole-owner90PASS. Evidence: `evidence/native-streamwrap-continuation.json`.
       Impact: Native stream bridge progresses; earlier failed scopes and full file/temp/backend/model/UI remain open. File security hook approval is pending; no dependent mutation.
       Resolution: Preserve output seek/shared-close source findings WRITER536/CALC599, WRITER537/CALC600; continue original file/temp/storage and full format/model/UI, without fake providers. Goal active, no incomplete source implementation commit.
+
+    - Observation: Original reverse UNO/byte adapters and full data pipe now execute with42related cases, actual C Unicode parser and main/Worker. Evidence: `evidence/native-strmadpt-continuation.json`.
+      Impact: Byte/UNO prerequisite advances; new owner90 fails87.03/75.33/96/90.87, all older failures/full file/temp/backend/model/UI remain open. Security hook approval remains pending, no dependent mutation.
+      Resolution: Preserve WRITER538/CALC601 through WRITER540/CALC603; continue actual native source graph and original broader QA without fake providers or masks. Goal active; no unfinished source implementation commit.
 id_source: "generated"
 ---
 ## Summary
@@ -1793,6 +1843,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T13:28:55.207Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Reverse UNO/byte adapters and full data pipe:42related cases/main-Worker/C XML pass; owner90 fails87.03/75.33/96/90.87. Older failures/full file/temp/backend/model/UI unfinished. See native-strmadpt-continuation.json.
+Attempts: 21
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T13:28:54.654Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -2026,3 +2106,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Original5SvStream/UNO wrappers and actual ImplHelper1 dependency now connect byte/component/persistence/C parser/main-Worker graph with41cases and3whole-owner90PASS. Evidence: `evidence/native-streamwrap-continuation.json`.
   Impact: Native stream bridge progresses; earlier failed scopes and full file/temp/backend/model/UI remain open. File security hook approval is pending; no dependent mutation.
   Resolution: Preserve output seek/shared-close source findings WRITER536/CALC599, WRITER537/CALC600; continue original file/temp/storage and full format/model/UI, without fake providers. Goal active, no incomplete source implementation commit.
+
+- Observation: Original reverse UNO/byte adapters and full data pipe now execute with42related cases, actual C Unicode parser and main/Worker. Evidence: `evidence/native-strmadpt-continuation.json`.
+  Impact: Byte/UNO prerequisite advances; new owner90 fails87.03/75.33/96/90.87, all older failures/full file/temp/backend/model/UI remain open. Security hook approval remains pending, no dependent mutation.
+  Resolution: Preserve WRITER538/CALC601 through WRITER540/CALC603; continue actual native source graph and original broader QA without fake providers or masks. Goal active; no unfinished source implementation commit.
