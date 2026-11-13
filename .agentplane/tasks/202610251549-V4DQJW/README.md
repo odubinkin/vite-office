@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 73
+revision: 76
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T09:40:38.988Z"
+  updated_at: "2026-11-13T10:24:49.778Z"
   updated_by: "CODER"
-  note: "Shared native OOXML parser/namespace/DOCX temporary ownership checkpoint:68 related cases pass, broader5owner90 gate and actual native main/Worker route pass. Individual parser guard/unwind coverage remains below90; earlier failed gates/full native DOCX metadata/storage/fragment/filter/UI QA remain open. Evidence native-oox-parser-namespace-continuation.json; goal continues."
-  attempts: 11
+  note: "Shared native context/relations owner checkpoint:76cases and all5new owner90gate pass; actual main/Worker base parser/Unicode data route passes. No complete document import claim; native owning attributes/relations/fragment/filter/storage/model/UI and original full QA pending, older failing scopes retained. Evidence native-context-relations-continuation.json; goal continues."
+  attempts: 12
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -184,8 +187,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T10:24:49.778Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared native context/relations owner checkpoint:76cases and all5new owner90gate pass; actual main/Worker base parser/Unicode data route passes. No complete document import claim; native owning attributes/relations/fragment/filter/storage/model/UI and original full QA pending, older failing scopes retained. Evidence native-context-relations-continuation.json; goal continues."
+  -
+    type: "status"
+    at: "2026-11-13T10:25:14.425Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T09:41:52.094Z"
+doc_updated_at: "2026-11-13T10:25:14.425Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -528,6 +544,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T10:24:49.778Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared native context/relations owner checkpoint:76cases and all5new owner90gate pass; actual main/Worker base parser/Unicode data route passes. No complete document import claim; native owning attributes/relations/fragment/filter/storage/model/UI and original full QA pending, older failing scopes retained. Evidence native-context-relations-continuation.json; goal continues.
+    Attempts: 12
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T10:24:15.161Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -720,6 +766,10 @@ sections:
     - Observation: Original native oox::FastParser direct construction/ref route and native namespace/getter/DOCX Unicode temporary ownership now execute with actual source components. Evidence: `evidence/native-oox-parser-namespace-continuation.json`.
       Impact:68related cases and broader5owner90gate pass; individual native parser S85.45/B78.26 remains unqualified, with all earlier failed scopes retained. Native fragment-handler/filter/UI migration and original full parser QA remain unfinished.
       Resolution: Continue original ContextHandler/FragmentHandler and actual import routing; preserve source guards/owners/defaults and browser file workflows, no fake handlers/private ref patches or incomplete implementation commit.
+
+    - Observation: Native ContextHandler/shared FragmentBaseData/Relation collections and explicit native fragment helper now use actual RTL/UNO/source ownership, with76related cases and current main/Worker evidence. See `evidence/native-context-relations-continuation.json`.
+      Impact: Native base/context ownership progresses; positive fragment/relations/filter/model/UI import and original full QA remain unfinished. Earlier failed scopes retained; initial core-to-browser dependency placement fixed in code without exemptions.
+      Resolution: Continue native owning AttributeList/RelationsFragment and actual fragment/filter/storage routing, preserving original defaults/source quirks and browser file workflows; goal active, no unfinished implementation commit.
 id_source: "generated"
 ---
 ## Summary
@@ -1073,6 +1123,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T10:24:49.778Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared native context/relations owner checkpoint:76cases and all5new owner90gate pass; actual main/Worker base parser/Unicode data route passes. No complete document import claim; native owning attributes/relations/fragment/filter/storage/model/UI and original full QA pending, older failing scopes retained. Evidence native-context-relations-continuation.json; goal continues.
+Attempts: 12
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T10:24:15.161Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -1270,3 +1350,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Original native oox::FastParser direct construction/ref route and native namespace/getter/DOCX Unicode temporary ownership now execute with actual source components. Evidence: `evidence/native-oox-parser-namespace-continuation.json`.
   Impact:68related cases and broader5owner90gate pass; individual native parser S85.45/B78.26 remains unqualified, with all earlier failed scopes retained. Native fragment-handler/filter/UI migration and original full parser QA remain unfinished.
   Resolution: Continue original ContextHandler/FragmentHandler and actual import routing; preserve source guards/owners/defaults and browser file workflows, no fake handlers/private ref patches or incomplete implementation commit.
+
+- Observation: Native ContextHandler/shared FragmentBaseData/Relation collections and explicit native fragment helper now use actual RTL/UNO/source ownership, with76related cases and current main/Worker evidence. See `evidence/native-context-relations-continuation.json`.
+  Impact: Native base/context ownership progresses; positive fragment/relations/filter/model/UI import and original full QA remain unfinished. Earlier failed scopes retained; initial core-to-browser dependency placement fixed in code without exemptions.
+  Resolution: Continue native owning AttributeList/RelationsFragment and actual fragment/filter/storage routing, preserving original defaults/source quirks and browser file workflows; goal active, no unfinished implementation commit.
