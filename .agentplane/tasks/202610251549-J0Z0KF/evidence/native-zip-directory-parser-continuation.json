@@ -1,0 +1,170 @@
+{
+  "scope": "Original native ZipFile END/CEN/LOC/ZIP64/data-descriptor/extra validation, real EntryHash and ZipEnumeration; bounded prerequisite for full DOCX/XLSX package/storage/model/UI integration",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSha256": {
+    "apps/office/src/package/inc/HashMaps.ts": "366239054e161ee5967d7deb3b3cff545d2a54cc0efd312366a97c68edb5b114",
+    "apps/office/src/package/source/zipapi/ZipFile.ts": "0f7ecd3ecd6958750204a1187c6c8f0507db55cd68c85b4e926abda273c380d9",
+    "apps/office/src/package/source/zipapi/ZipFile.test.ts": "e23a3dcd74c187e8fafc1c64e5617f9e155cdba7492af8cc414052eb5178fe91",
+    "apps/office/src/package/source/zipapi/ZipEnumeration.ts": "869415d1c04d94e97a700ab3e0328bc0b7af642cec0022110409146f3b0a1079",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "33f659eaad0c9609d5704b80816a46a9c8c845dc36766b119b66d09119dac2eb",
+    "scripts/native-dom-worker-probe.mjs": "a261f798752987fa6c674af1bfcd1dd0fbb61d4c3c7e24d28059fc2e85dcdeae",
+    "scripts/module-boundaries/allowed-edges.mjs": "3a124f8fa65cce86b09e5e3f1b5c1231a4500a55287181767a1ec2b2c4b216ff"
+  },
+  "checks": [
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/package/source/zipapi/ZipFile.test.ts src/package/source/zipapi/native-directory-prerequisites.test.ts src/package/source/zipapi/byte-io.test.ts src/package/source/zippackage/document-archive.integration.test.ts src/package/source/zippackage/native-plain-manifest.test.ts --maxWorkers=2 --coverage --coverage.include=src/package/source/zipapi/ZipFile.ts --coverage.include=src/package/inc/HashMaps.ts --coverage.include=src/package/source/zipapi/ZipEnumeration.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-zip-directory",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-parser-tests.log",
+      "sha256": "286bab33ad7cc3364cd7c8e06fc86a71520ccf91ca46a8a157d557e31c604de4"
+    },
+    {
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts scripts/check-module-boundaries-xml.test.ts --maxWorkers=2",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-parser-boundaries.log",
+      "sha256": "79ab7fc708fdae7455eb70ccdb74cd1e9ac8d13b831fc62aea325c37dbccf7a9"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-parser-worker.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/package/inc/HashMaps.ts apps/office/src/package/source/zipapi/ZipFile.ts apps/office/src/package/source/zipapi/ZipEnumeration.ts apps/office/src/package/source/zipapi/ZipFile.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs scripts/module-boundaries/allowed-edges.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-parser-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-parser-provenance.log",
+      "sha256": "1134ec5befef074da963690795170bc4094128813dfd9b88878566955f67ac43"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-parser-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "node_modules/.bin/tsc --noEmit --project apps/office/tsconfig.json",
+      "result": "fail",
+      "log": "apps/office/coverage/native-zip-directory-parser-types.log",
+      "sha256": "191e4bdf87792572048a2d40ec89fdf71fbac07a0325f9aa1a25ce7df4266208"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-parser-registry.log",
+      "sha256": "a1e76d3733db324a48217e46a016eee7299e9ecbb507705603248276e83886aa"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-parser-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-parser-size.log",
+      "sha256": "d54bb065bfffb0a63db95c2d2ca5148357604e54224d01f7908221beea3ac826"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-parser-vite.log",
+      "sha256": "4011e99eada16dd72b8a79bdcf34ec7007a4ae44f21b9255a2b5b32bdfaf0ffd"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "log": "apps/office/coverage/native-zip-directory-parser-deps.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-zip-directory-parser-docs.log",
+      "sha256": "0d64659347842d68a624c5105b4c8ef9d8f4ca6a33bb1008785dbf93aae2ec19"
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/generate-writer-ui-resources.ts --check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-parser-writer-resources.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-parser-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-parser-doctor.log",
+      "sha256": "1bfde74ddaa280fe31e85f374586f1960f3b679678ad2d91b86b3e4a4ebdcb2a"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-parser-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-parser-static.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/package/inc/HashMaps.ts apps/office/src/package/source/zipapi/ZipFile.ts apps/office/src/package/source/zipapi/ZipEnumeration.ts apps/office/src/package/source/zipapi/ZipFile.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs scripts/module-boundaries/allowed-edges.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-parser-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-directory-parser-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "focusedTests": "101 passed across 5 files, including actual native directory tests plus existing archive/manifest regressions; 56 module-boundary tooling tests passed across 2 files",
+  "coverage": {
+    "apps/office/src/package/inc/HashMaps.ts": {
+      "statements": 100.0,
+      "branches": 100.0,
+      "functions": 100.0,
+      "lines": 100.0
+    },
+    "apps/office/src/package/source/zipapi/ZipEnumeration.ts": {
+      "statements": 100.0,
+      "branches": 100.0,
+      "functions": 100.0,
+      "lines": 100.0
+    },
+    "apps/office/src/package/source/zipapi/ZipFile.ts": {
+      "statements": 93.75,
+      "branches": 92.45,
+      "functions": 100.0,
+      "lines": 94.71
+    }
+  },
+  "nativeEvidence": "Actual same ZipFile/native UNO stream/native OSL mutex and mapped record identity run in Chromium main realm and DOM-free module Worker. Four unchanged Strict/Transitional DOCX/XLSX fixture directories plus original export64.zip/tdf163341.ods and package rejection fixture paths execute; this is not full original XZipFileAccess2/ZipPackage-service QA.",
+  "preservedFindings": [
+    "WRITER544/CALC607 original wrong-disk sentinel condition now exercised with actual ZIP64 image",
+    "WRITER545/CALC608 original empty ZIP hole rejection now exercised through real streams"
+  ],
+  "remaining": [
+    "Native entry streams/inflate/CRC, ZIP output, ZipPackage/OStorage/StorageFactory, model import/export and UI acceptance unfinished",
+    "Four existing metadata type errors; existing comphelper -> sax -> comphelper cycle; 157 existing JSDoc findings. No added findings in new owner/test files.",
+    "Older native reader/SAL/SDK/OOX/StorageBase/nativeZip/storagehelper/persistence/stream/adapter coverage failures remain independent and unqualified, not diluted by these passing owners.",
+    "Original non-ByteReader source, non-pthread contention, physical pointer/iterator/allocator/OOM/undefined domains remain unqualified.",
+    "Pending separate file-access/auth approvals remain untouched; directory parsing needs neither network nor host filesystem access."
+  ],
+  "fullSuite": "Not due: no executable task completed in this checkpoint; user cadence remains one full run per ten completed tasks.",
+  "status": "unfinished: continue_direct; no finish, goal completion or pause"
+}
