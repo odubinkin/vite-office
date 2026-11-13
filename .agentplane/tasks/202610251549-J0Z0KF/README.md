@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 340
+revision: 343
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T10:24:49.064Z"
+  updated_at: "2026-11-13T10:38:21.966Z"
   updated_by: "CODER"
-  note: "Native context/relation/shared ownership checkpoint:76 cases/5files pass, whole5owner gate97.57/97.72/100/97.91 and actual main/Worker base-context/Unicode path ownership pass. Original inert base behavior is not a positive import handler. Native owning attributes/relations parser/normal fragment/filter/UI and full original QA remain unfinished. Older failed scopes retained; new core-browser violation fixed without exemption. Evidence native-context-relations-continuation.json; goal continues."
-  attempts: 105
+  note: "Native concrete RelationsFragment/owning AttributeList checkpoint:110related cases/6files pass, whole owner gate98.58/100/100/98.54 and main/Worker positive native relation parse pass.4actual pinned Strict/Transitional DOCX/XLSX root/main relationship parts parsed, not main-part model/export/UI acceptance. Native filter/cache/default fragment ctor/storage and full original QA remain unfinished; older failed gates retained. Evidence native-relations-fragment-continuation.json; goal continues."
+  attempts: 106
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1688,8 +1691,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T10:38:21.966Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native concrete RelationsFragment/owning AttributeList checkpoint:110related cases/6files pass, whole owner gate98.58/100/100/98.54 and main/Worker positive native relation parse pass.4actual pinned Strict/Transitional DOCX/XLSX root/main relationship parts parsed, not main-part model/export/UI acceptance. Native filter/cache/default fragment ctor/storage and full original QA remain unfinished; older failed gates retained. Evidence native-relations-fragment-continuation.json; goal continues."
+  -
+    type: "status"
+    at: "2026-11-13T10:38:31.689Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T10:25:13.511Z"
+doc_updated_at: "2026-11-13T10:38:31.689Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -4854,6 +4870,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T10:38:21.966Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native concrete RelationsFragment/owning AttributeList checkpoint:110related cases/6files pass, whole owner gate98.58/100/100/98.54 and main/Worker positive native relation parse pass.4actual pinned Strict/Transitional DOCX/XLSX root/main relationship parts parsed, not main-part model/export/UI acceptance. Native filter/cache/default fragment ctor/storage and full original QA remain unfinished; older failed gates retained. Evidence native-relations-fragment-continuation.json; goal continues.
+    Attempts: 106
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T10:38:09.962Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -5373,6 +5419,10 @@ sections:
     - Observation: Native ContextHandler/shared FragmentBaseData/Relation collections and explicit native fragment helper now use actual RTL/UNO/source ownership, with76related cases and current main/Worker evidence. See `evidence/native-context-relations-continuation.json`.
       Impact: Native base/context ownership progresses; positive fragment/relations/filter/model/UI import and original full QA remain unfinished. Earlier failed scopes retained; initial core-to-browser dependency placement fixed in code without exemptions.
       Resolution: Continue native owning AttributeList/RelationsFragment and actual fragment/filter/storage routing, preserving original defaults/source quirks and browser file workflows; goal active, no unfinished implementation commit.
+
+    - Observation: Original concrete native RelationsFragment and full consumed AttributeList intrusive ownership now parse actual source DOCX/XLSX relationship streams into the same native owner, with110related cases/90gate/main-Worker evidence. See `evidence/native-relations-fragment-continuation.json`.
+      Impact: Positive native relationship XML parsing advances, but main-part model/export/UI and native filter/default fragment constructor/storage routing remain unfinished; all earlier failed scopes retained.
+      Resolution: Continue actual native filter/cache/stream orchestration and source QA, preserving source defaults/partial-record behavior and browser workflows; goal active, no fake providers or unfinished implementation commit.
 id_source: "generated"
 ---
 ## Summary
@@ -8547,6 +8597,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T10:38:21.966Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native concrete RelationsFragment/owning AttributeList checkpoint:110related cases/6files pass, whole owner gate98.58/100/100/98.54 and main/Worker positive native relation parse pass.4actual pinned Strict/Transitional DOCX/XLSX root/main relationship parts parsed, not main-part model/export/UI acceptance. Native filter/cache/default fragment ctor/storage and full original QA remain unfinished; older failed gates retained. Evidence native-relations-fragment-continuation.json; goal continues.
+Attempts: 106
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T10:38:09.962Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -9070,3 +9150,7 @@ Native DOM classic SAX and attribute ownership checkpoint (2026-11-13):
 - Observation: Native ContextHandler/shared FragmentBaseData/Relation collections and explicit native fragment helper now use actual RTL/UNO/source ownership, with76related cases and current main/Worker evidence. See `evidence/native-context-relations-continuation.json`.
   Impact: Native base/context ownership progresses; positive fragment/relations/filter/model/UI import and original full QA remain unfinished. Earlier failed scopes retained; initial core-to-browser dependency placement fixed in code without exemptions.
   Resolution: Continue native owning AttributeList/RelationsFragment and actual fragment/filter/storage routing, preserving original defaults/source quirks and browser file workflows; goal active, no unfinished implementation commit.
+
+- Observation: Original concrete native RelationsFragment and full consumed AttributeList intrusive ownership now parse actual source DOCX/XLSX relationship streams into the same native owner, with110related cases/90gate/main-Worker evidence. See `evidence/native-relations-fragment-continuation.json`.
+  Impact: Positive native relationship XML parsing advances, but main-part model/export/UI and native filter/default fragment constructor/storage routing remain unfinished; all earlier failed scopes retained.
+  Resolution: Continue actual native filter/cache/stream orchestration and source QA, preserving source defaults/partial-record behavior and browser workflows; goal active, no fake providers or unfinished implementation commit.
