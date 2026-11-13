@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 296
+revision: 299
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-12T23:53:42.052Z"
+  updated_at: "2026-11-13T00:53:33.668Z"
   updated_by: "CODER"
-  note: "Native metadata service-composition prerequisites implemented:38 related tests and56 boundary tests pass; real main/Worker qualification passes. Whole3-owner scoped90 remains open S80.73 B67.85 F92.30 L83.00 without exclusions or fake providers. Full metadata component/storage/QA and DOCX/XLSX core/shell/UI acceptance remain unfinished. Evidence: native-metadata-service-composition-checkpoint.json."
-  attempts: 87
+  note: "Unfinished metadata-owner continuation: 76 focused tests/14 files pass plus expanded original TEST.odt read assertions (6 owner tests); source SotExchange/DataFlavor/storage-version and native error diagnostics implemented. Whole eight-owner scoped90 remains FAIL S89.25 B72.90 F94.89 L90.19 and four native storage dependencies still fail typecheck. See evidence/native-metadata-sot-continuation.json and native-metadata-owner-wip.md; continue approved block, no completion or pause."
+  attempts: 88
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1400,8 +1403,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T00:53:33.668Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Unfinished metadata-owner continuation: 76 focused tests/14 files pass plus expanded original TEST.odt read assertions (6 owner tests); source SotExchange/DataFlavor/storage-version and native error diagnostics implemented. Whole eight-owner scoped90 remains FAIL S89.25 B72.90 F94.89 L90.19 and four native storage dependencies still fail typecheck. See evidence/native-metadata-sot-continuation.json and native-metadata-owner-wip.md; continue approved block, no completion or pause."
+  -
+    type: "status"
+    at: "2026-11-13T00:53:42.070Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T00:29:01.881Z"
+doc_updated_at: "2026-11-13T00:53:42.070Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -4026,6 +4042,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T00:53:33.668Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Unfinished metadata-owner continuation: 76 focused tests/14 files pass plus expanded original TEST.odt read assertions (6 owner tests); source SotExchange/DataFlavor/storage-version and native error diagnostics implemented. Whole eight-owner scoped90 remains FAIL S89.25 B72.90 F94.89 L90.19 and four native storage dependencies still fail typecheck. See evidence/native-metadata-sot-continuation.json and native-metadata-owner-wip.md; continue approved block, no completion or pause.
+    Attempts: 88
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T00:53:22.266Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4493,6 +4539,10 @@ sections:
     - Observation: Large actual metadata-owner block remains IN PROGRESS, with intentional uncommitted source edits. Command: six-file exact Vitest argv and current source/dependency handoff in evidence/native-metadata-owner-wip.md. Result:30 related tests/6 files pass, including actual component identity, native DOM/SAX/Writer, TEST.odt initialize, clones and actual compatibility subclass. Scope: real six-facet SfxDocumentMetaData owner, source members/properties/DOM caches/init/notifications/serialization/clone/storage bodies and original compatibility subclass, plus complete missing SAX declarations, native attribute values, source storage-factory helper paths, const contracts and original UTF16 Number64 relationship. No positive metadata or storage service is registered prematurely.
       Impact: Most original owner behavior now executes through genuine source components, without a fake private-state owner or alternate metadata model. Source flags/compatibility clone quirks are preserved in CALC573/574 and WRITER508/509. Full storage/medium dependencies, compiler/size/lint/source-provenance/scoped90 and complete source QA/UI qualification remain unfinished. Current typecheck failure is explicit: actual SotStorage/MediaDescriptor, native SfxMedium descriptor/output/commit branch and error-code exception/formatting dependencies. Preserve intentional existing browser file/autosave/recovery behavior while resolving these against pinned source. Do not claim this as a completed, buildable or deployable checkpoint; earlier coverage gaps stay open.
       Resolution: Continue this same large approved block in the current checkout, retaining actual working files and the handoff's exact pending source methods. No source implementation commit yet; do not overwrite with stale coverage emitters or substitute a fake provider/missing-feature stub. The goal remains active without pause; full DOCX/XLSX core/shell/UI acceptance remains the objective. No full-suite replay, external write or publication.
+
+    - Observation: Command: focused related Vitest paths/log hashes and source hashes in evidence/native-metadata-sot-continuation.json; continuation details in evidence/native-metadata-owner-wip.md. Result:76 tests/14 files pass, plus final original TEST.odt metadata read expansion6 tests/1 file; five boundary cases and actual module guard pass, scoped ESLint/Prettier/routing/diff pass. Scope: complete original SotExchange native DataFlavor table/registry, selected original XStorage format/version helpers, actual error-code exception/formatting and unsigned RTL overload, complete scalar/string record moves and source accessor responsibility split. No positive metadata/storage service is registered and no existing browser save/open/autosave/recovery policy changes.
+      Impact: The unfinished owner now resolves SotStorage and native error diagnostics. Current typecheck retains only four genuine storage dependencies: MediaDescriptor and native SfxMedium descriptor constructor/GetOutputStorage/Commit. Eight whole new mechanism owners retain scoped90 FAIL S89.25 B72.90 F94.89 L90.19; actual positive storage/version paths need a real provider. Prior source/DOM coverage gaps remain open. Original TEST.odt read checks now execute through actual initialize; source medium-loading, remaining full source QA and complete DOCX/XLSX/UI acceptance remain pending. Do not claim a completed, deployable or buildable block.
+      Resolution: Continue this same approved large block with actual upstream dependencies, complete native provider/medium and qualification, then canonical registry/provenance and reviewed implementation commit. Source edits remain intentionally uncommitted; artifact continuation preserves current work and evidence. No fake private state/provider, branch exclusion, gate reduction, full-suite replay or publication. Task remains DOING/needs_rework and goal active without pause.
 id_source: "generated"
 ---
 ## Summary
@@ -7127,6 +7177,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T00:53:33.668Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Unfinished metadata-owner continuation: 76 focused tests/14 files pass plus expanded original TEST.odt read assertions (6 owner tests); source SotExchange/DataFlavor/storage-version and native error diagnostics implemented. Whole eight-owner scoped90 remains FAIL S89.25 B72.90 F94.89 L90.19 and four native storage dependencies still fail typecheck. See evidence/native-metadata-sot-continuation.json and native-metadata-owner-wip.md; continue approved block, no completion or pause.
+Attempts: 88
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T00:53:22.266Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7598,3 +7678,7 @@ Native DOM classic SAX and attribute ownership checkpoint (2026-11-13):
 - Observation: Large actual metadata-owner block remains IN PROGRESS, with intentional uncommitted source edits. Command: six-file exact Vitest argv and current source/dependency handoff in evidence/native-metadata-owner-wip.md. Result:30 related tests/6 files pass, including actual component identity, native DOM/SAX/Writer, TEST.odt initialize, clones and actual compatibility subclass. Scope: real six-facet SfxDocumentMetaData owner, source members/properties/DOM caches/init/notifications/serialization/clone/storage bodies and original compatibility subclass, plus complete missing SAX declarations, native attribute values, source storage-factory helper paths, const contracts and original UTF16 Number64 relationship. No positive metadata or storage service is registered prematurely.
   Impact: Most original owner behavior now executes through genuine source components, without a fake private-state owner or alternate metadata model. Source flags/compatibility clone quirks are preserved in CALC573/574 and WRITER508/509. Full storage/medium dependencies, compiler/size/lint/source-provenance/scoped90 and complete source QA/UI qualification remain unfinished. Current typecheck failure is explicit: actual SotStorage/MediaDescriptor, native SfxMedium descriptor/output/commit branch and error-code exception/formatting dependencies. Preserve intentional existing browser file/autosave/recovery behavior while resolving these against pinned source. Do not claim this as a completed, buildable or deployable checkpoint; earlier coverage gaps stay open.
   Resolution: Continue this same large approved block in the current checkout, retaining actual working files and the handoff's exact pending source methods. No source implementation commit yet; do not overwrite with stale coverage emitters or substitute a fake provider/missing-feature stub. The goal remains active without pause; full DOCX/XLSX core/shell/UI acceptance remains the objective. No full-suite replay, external write or publication.
+
+- Observation: Command: focused related Vitest paths/log hashes and source hashes in evidence/native-metadata-sot-continuation.json; continuation details in evidence/native-metadata-owner-wip.md. Result:76 tests/14 files pass, plus final original TEST.odt metadata read expansion6 tests/1 file; five boundary cases and actual module guard pass, scoped ESLint/Prettier/routing/diff pass. Scope: complete original SotExchange native DataFlavor table/registry, selected original XStorage format/version helpers, actual error-code exception/formatting and unsigned RTL overload, complete scalar/string record moves and source accessor responsibility split. No positive metadata/storage service is registered and no existing browser save/open/autosave/recovery policy changes.
+  Impact: The unfinished owner now resolves SotStorage and native error diagnostics. Current typecheck retains only four genuine storage dependencies: MediaDescriptor and native SfxMedium descriptor constructor/GetOutputStorage/Commit. Eight whole new mechanism owners retain scoped90 FAIL S89.25 B72.90 F94.89 L90.19; actual positive storage/version paths need a real provider. Prior source/DOM coverage gaps remain open. Original TEST.odt read checks now execute through actual initialize; source medium-loading, remaining full source QA and complete DOCX/XLSX/UI acceptance remain pending. Do not claim a completed, deployable or buildable block.
+  Resolution: Continue this same approved large block with actual upstream dependencies, complete native provider/medium and qualification, then canonical registry/provenance and reviewed implementation commit. Source edits remain intentionally uncommitted; artifact continuation preserves current work and evidence. No fake private state/provider, branch exclusion, gate reduction, full-suite replay or publication. Task remains DOING/needs_rework and goal active without pause.

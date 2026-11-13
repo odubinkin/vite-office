@@ -1,0 +1,75 @@
+{
+  "status": "unfinished-native-metadata-owner-continuation",
+  "task": "202610251549-J0Z0KF",
+  "productionRegistration": false,
+  "implementationCommitted": false,
+  "coverageThresholdsUnchanged": 90,
+  "coverage": {
+    "lines": {
+      "total": 357,
+      "covered": 322,
+      "skipped": 0,
+      "pct": 90.19
+    },
+    "statements": {
+      "total": 391,
+      "covered": 349,
+      "skipped": 0,
+      "pct": 89.25
+    },
+    "functions": {
+      "total": 98,
+      "covered": 93,
+      "skipped": 0,
+      "pct": 94.89
+    },
+    "branches": {
+      "total": 155,
+      "covered": 113,
+      "skipped": 0,
+      "pct": 72.9
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "residualDependencies": [
+    "utl::MediaDescriptor actual stream-selection family",
+    "SfxMedium native descriptor constructor/GetOutputStorage/Commit",
+    "real native StorageFactory/XStorage backend",
+    "original metadata source QA and main/Worker/filter/UI qualification",
+    "canonical registry/provenance and full changed-owner qualification"
+  ],
+  "sourceBlobs": {
+    "apps/office/src/sot/inc/formats.ts": "c7a55cbe498abd29918183a3997edfe82ea03800c10225b06e6f1f51ef86a510",
+    "apps/office/src/sot/source/base/exchange.ts": "115fc33794d460c03ce973ee5225b0192acebd9488e623974549ace1b9c46959",
+    "apps/office/src/sot/source/base/exchange.table.ts": "db7ff7c224cabf6b62f0d760872aa12fc255655eab611229bc602990d32dd26f",
+    "apps/office/src/sot/source/sdstor/storage.ts": "9755b6780e9f48306162f3c9d0a9b87db573f89ad3f3f6ff733642370b1a1b10",
+    "apps/office/src/offapi/com/sun/star/datatransfer/DataFlavor.ts": "c9762378a6aa7e50f5955e66c92b77be61a3e77d5fc991f20b6378b48e9c0568",
+    "apps/office/src/offapi/com/sun/star/task/ErrorCodeIOException.ts": "aacfbc458ea40c2f8d786dd2c84bc44f46e4de1855774819d3479e23567a69a7",
+    "apps/office/src/offapi/com/sun/star/xml/Attribute.ts": "3f22726944d27dfde14575bcb4393b4849db5da26cba1a757465c1e81ce2c7bf",
+    "apps/office/src/offapi/com/sun/star/xml/FastAttribute.ts": "47fc946ea2a6fd249a801666ab6c2d1d0cff79246681920986b98fbe3c6799bc",
+    "apps/office/src/comphelper/inc/errcode.ts": "ffd76b9424f304551482fe440b3ca8e48d73ebfaf6bd5977a989a8ff4653e761",
+    "apps/office/src/sal/inc/rtl/ustring.ts": "7767c4edbd5e1e90de78232eebfbb3386628006bc4a41c6acf5bd8ac6f779c2a",
+    "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.ts": "558dffd74a336627edee0cbacaf9ea1812de1aecdc00047b11334ac1254003ae",
+    "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.properties.ts": "7fb675cef20b196a89777803273971d709f4f16d56d1625b820d40c07c0028eb",
+    "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts": "fc797617b47b2943135b08670cc2c5d515ecda2a959f854292ce031b97eba281",
+    "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.owner.test.ts": "e7013b2ae11b999e711bda9ffa6f0eb1d5480139a3da9c316cf06f8d64bc341e",
+    "scripts/check-module-boundaries.mjs": "54a654fae76c33c3ab9c5147e89a578ce7a295c1bbbe302d54c6074349fe7a97",
+    "scripts/module-boundaries/allowed-edges.mjs": "495eee876b4ad9a7a6f72882ce9112586df3b51f6d942b7361ca84aacf6f6919",
+    "scripts/check-module-boundaries-xml.test.ts": "42f7473c6ec9ce45e241b77d23c996e8555edc861ba9d55c9943737a68a436a5"
+  },
+  "logs": {
+    "metadata-sot-final-related.log": "fec1a2064bca33e12f7d7fdf7568e4599b9ea98a280b5a0770b1dea0dbc4d8de",
+    "metadata-original-read-qa.log": "0776ea1d6a5d029ee9344d56e007f29a8aa9f2ca6ff1a9585eb2f9195718a38e",
+    "metadata-native-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "metadata-native-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "metadata-boundary-tests.log": "47c807c23e02cb4c63dfcb188197e0d59030747a70b38730a25bd71b2ab8141b",
+    "metadata-boundary-guard.log": "62105b2ab947a3f57eea256010f13c06380a6bbca3fabd22e99468c572521118",
+    "metadata-owner-typecheck.log": "27e41193059ade090cbebaa98ba1e7173ce2a4df41a3e457ee366058e3b383b3",
+    "sot-native-coverage.log": "61c54a09e4ae0a47983c68d154b5f090ab25bb225f57724e56ab56c223dc42ff"
+  }
+}
