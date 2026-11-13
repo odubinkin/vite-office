@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 109
+revision: 112
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T14:39:35.887Z"
+  updated_at: "2026-11-13T14:58:03.787Z"
   updated_by: "CODER"
-  note: "Actual native OSL/RefCountedMutex and ZipEntry prerequisites:34cases/4whole TS owners90/current artifact/main-Worker pass. ZipFile directory/backend/model/UI and older failures unfinished; native threaded/global domains unqualified. See native-zip-directory-prerequisites-continuation.json."
-  attempts: 23
+  note: "Shared original ZIP END/CEN/LOC/ZIP64/descriptors now execute on actual native streams/mutex; 101 focused tests and 56 boundary tests pass, new whole owners above90, Chromium main/DOM-free Worker pass. Native entry/inflate/output/storage/model/DOCX UI acceptance unfinished. Four metadata types, old cycle and157 JSDoc findings remain. Evidence: native-zip-directory-parser-continuation.json."
+  attempts: 24
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -376,8 +379,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T14:58:03.787Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared original ZIP END/CEN/LOC/ZIP64/descriptors now execute on actual native streams/mutex; 101 focused tests and 56 boundary tests pass, new whole owners above90, Chromium main/DOM-free Worker pass. Native entry/inflate/output/storage/model/DOCX UI acceptance unfinished. Four metadata types, old cycle and157 JSDoc findings remain. Evidence: native-zip-directory-parser-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-13T14:58:19.028Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T14:40:18.879Z"
+doc_updated_at: "2026-11-13T14:58:19.028Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -1080,6 +1096,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T14:58:03.787Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared original ZIP END/CEN/LOC/ZIP64/descriptors now execute on actual native streams/mutex; 101 focused tests and 56 boundary tests pass, new whole owners above90, Chromium main/DOM-free Worker pass. Native entry/inflate/output/storage/model/DOCX UI acceptance unfinished. Four metadata types, old cycle and157 JSDoc findings remain. Evidence: native-zip-directory-parser-continuation.json.
+    Attempts: 24
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T14:57:31.460Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -1320,6 +1366,10 @@ sections:
     - Observation: Actual native OSL/RefCountedMutex and original ZipEntry prerequisites now execute with34related cases/4whole-owner90PASS/current native artifact/main-Worker. Evidence: `evidence/native-zip-directory-prerequisites-continuation.json`.
       Impact: Required original ZipFile ownership advances; directory/LOC/backend and full model/UI remain unfinished. Native thread/global/busy/ABI domains and all earlier failed scopes retained.
       Resolution: Implement actual directory/local/descriptors/native collection graph, preserving WRITER543/CALC606 through WRITER545/CALC608; no fake locks/providers. Goal active; security hook pending; no unfinished source implementation commit.
+
+    ### Native ZIP directory/LOC validation continuation
+
+    Original ZipFile END/CEN/LOC/ZIP64/data-descriptor/extra-field checks now execute over actual native UNO streams and RefCountedMutex guards. EntryHash uses real RTL hashes/equality/key-value copies; ZipEnumeration returns actual mapped entries. Strict/Transitional DOCX/XLSX directories, original valid ZIP64 fixtures and non-recovery package rejection fixtures run; 101 tests across 5 files and 56 boundary-tooling tests across 2 files pass. Whole new owners independently exceed scoped90; actual Chromium main/DOM-free Worker ZIP execution passes. Source-backed missing dependency edges were added; the existing comphelper/sax cycle remains failing. Metadata typecheck still has the same four errors; global JSDoc retains157 older findings, none new. Full package service QA, inflation/CRC/entry streams, output, storage factories, models and UI remain unfinished; earlier failed coverages remain independent. See evidence/native-zip-directory-parser-continuation.json for exact commands, log/source hashes and owner coverage. No full suite due and no task/goal completion. Continue original native entry stream/inflate path.
 id_source: "generated"
 ---
 ## Summary
@@ -2033,6 +2083,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T14:58:03.787Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared original ZIP END/CEN/LOC/ZIP64/descriptors now execute on actual native streams/mutex; 101 focused tests and 56 boundary tests pass, new whole owners above90, Chromium main/DOM-free Worker pass. Native entry/inflate/output/storage/model/DOCX UI acceptance unfinished. Four metadata types, old cycle and157 JSDoc findings remain. Evidence: native-zip-directory-parser-continuation.json.
+Attempts: 24
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T14:57:31.460Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -2278,3 +2358,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Actual native OSL/RefCountedMutex and original ZipEntry prerequisites now execute with34related cases/4whole-owner90PASS/current native artifact/main-Worker. Evidence: `evidence/native-zip-directory-prerequisites-continuation.json`.
   Impact: Required original ZipFile ownership advances; directory/LOC/backend and full model/UI remain unfinished. Native thread/global/busy/ABI domains and all earlier failed scopes retained.
   Resolution: Implement actual directory/local/descriptors/native collection graph, preserving WRITER543/CALC606 through WRITER545/CALC608; no fake locks/providers. Goal active; security hook pending; no unfinished source implementation commit.
+
+### Native ZIP directory/LOC validation continuation
+
+Original ZipFile END/CEN/LOC/ZIP64/data-descriptor/extra-field checks now execute over actual native UNO streams and RefCountedMutex guards. EntryHash uses real RTL hashes/equality/key-value copies; ZipEnumeration returns actual mapped entries. Strict/Transitional DOCX/XLSX directories, original valid ZIP64 fixtures and non-recovery package rejection fixtures run; 101 tests across 5 files and 56 boundary-tooling tests across 2 files pass. Whole new owners independently exceed scoped90; actual Chromium main/DOM-free Worker ZIP execution passes. Source-backed missing dependency edges were added; the existing comphelper/sax cycle remains failing. Metadata typecheck still has the same four errors; global JSDoc retains157 older findings, none new. Full package service QA, inflation/CRC/entry streams, output, storage factories, models and UI remain unfinished; earlier failed coverages remain independent. See evidence/native-zip-directory-parser-continuation.json for exact commands, log/source hashes and owner coverage. No full suite due and no task/goal completion. Continue original native entry stream/inflate path.
