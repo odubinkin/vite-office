@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 58
+revision: 60
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T07:14:40.595Z"
+  updated_at: "2026-11-13T07:36:55.123Z"
   updated_by: "CODER"
-  note: "Shared native parser owner/namespace registry/C locator prerequisite implemented;69 related tests, complete owner metrics above90 and actual Chromium main/DOM-free Worker pass. Source XML option flags explicitly approved this turn. Complete C callbacks/parse/QA/service and Writer SwDoc/filter/Strict+Transitional/package/UI acceptance still unfinished. Existing metadata/dependency/docs failures retained. Evidence: evidence/native-fastparser-owner-locator-continuation.json."
-  attempts: 5
+  note: "Shared original Entity native error construction and namespace normalization implemented;99 related cases, scoped owners above90 and genuine Chromium main/DOM-free Worker pass. Complete C callback producer/parse/cleanup/custom entities/original parser QA/service and Writer SwDoc/filter/Strict+Transitional/package/UI acceptance still unfinished. Existing metadata/dependency/docs failures retained; native XML options approved but loop not yet implemented. Evidence: evidence/native-fastparser-errors-normalization-continuation.json."
+  attempts: 6
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -88,8 +91,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T07:36:55.123Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared original Entity native error construction and namespace normalization implemented;99 related cases, scoped owners above90 and genuine Chromium main/DOM-free Worker pass. Complete C callback producer/parse/cleanup/custom entities/original parser QA/service and Writer SwDoc/filter/Strict+Transitional/package/UI acceptance still unfinished. Existing metadata/dependency/docs failures retained; native XML options approved but loop not yet implemented. Evidence: evidence/native-fastparser-errors-normalization-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-13T07:37:06.785Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T07:15:00.890Z"
+doc_updated_at: "2026-11-13T07:37:06.785Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -230,6 +246,36 @@ sections:
     Attempts: 5
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T06:50:10.940Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-13T07:36:55.123Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared original Entity native error construction and namespace normalization implemented;99 related cases, scoped owners above90 and genuine Chromium main/DOM-free Worker pass. Complete C callback producer/parse/cleanup/custom entities/original parser QA/service and Writer SwDoc/filter/Strict+Transitional/package/UI acceptance still unfinished. Existing metadata/dependency/docs failures retained; native XML options approved but loop not yet implemented. Evidence: evidence/native-fastparser-errors-normalization-continuation.json.
+    Attempts: 6
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T07:15:00.890Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
 
     Details:
 
@@ -583,6 +629,36 @@ Note: Shared native parser owner/namespace registry/C locator prerequisite imple
 Attempts: 5
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T06:50:10.940Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-13T07:36:55.123Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared original Entity native error construction and namespace normalization implemented;99 related cases, scoped owners above90 and genuine Chromium main/DOM-free Worker pass. Complete C callback producer/parse/cleanup/custom entities/original parser QA/service and Writer SwDoc/filter/Strict+Transitional/package/UI acceptance still unfinished. Existing metadata/dependency/docs failures retained; native XML options approved but loop not yet implemented. Evidence: evidence/native-fastparser-errors-normalization-continuation.json.
+Attempts: 6
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T07:15:00.890Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
 
 Details:
 
