@@ -1,0 +1,216 @@
+{
+  "scope": "Shared actual Emscripten libc/MEMFS/native runtime delivery prerequisite for source SvFileStream/TempFile/OStorage, with native XML file IO and current artifact regressions; not complete temporary-storage/kernel/model/UI acceptance",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "artifact": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 157,
+    "enumConstantCount": 851,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "e45f0b54031bd3662e5fc173a8fd217259392c8f1c22e900245cf4b4d4276f0c"
+  },
+  "checks": [
+    {
+      "name": "native rebuild",
+      "command": "python3 scripts/build-libxml2-wasm.py > apps/office/coverage/native-temp-build-runtime.log 2>&1",
+      "log": "apps/office/coverage/native-temp-build-runtime.log",
+      "result": "pass",
+      "observation": "Same approved archive SHA78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07, Emscripten4.0.19/source commit verified; make already up-to-date. Public FS runtime export/type declarations added;157Cexports/851enums unchanged. No source download/host FS mount/global config change."
+    },
+    {
+      "name": "runtime/XML owners whole90",
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/external/emscripten/runtime.test.ts src/external/libxml2/libxml2.test.ts src/external/libxml2/parsercallbacks.test.ts src/external/libxml2/fastparsercallbacks.test.ts src/unoxml/source/dom/documentbuilder.test.ts src/unoxml/source/dom/documentbuilder.io.test.ts src/unoxml/source/dom/documentbuilder.errors.test.ts src/oox/source/core/relationshandler.native.test.ts src/package/source/xstor/switchpersistencestream.test.ts --maxWorkers=2 --coverage --coverage.include=src/external/emscripten/runtime.ts --coverage.include=src/external/libxml2/libxml2.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-temp-runtime > coverage/native-temp-runtime-tests.log 2>&1",
+      "log": "apps/office/coverage/native-temp-runtime-tests.log",
+      "result": "pass",
+      "observation": "46tests/9files; both complete TS bootstrap/delivery owners100/100/100/100. Actual XML C fopen consumes same MEMFS Unicode file; native seek/positional IO/truncate/unlink/open inode/real errno and >uint32 seek without growth. This is not C library coverage/full SvStream/TempFile/XStorage acceptance; older failed profiles retained independently."
+    },
+    {
+      "name": "current artifact parser regressions",
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sax/source/fastparser/fastparser.impl.test.ts src/sax/source/fastparser/fastparser.entity.test.ts src/sax/source/fastparser/fastparser.service.test.ts src/sax/source/fastparser/legacyfastparser.service.test.ts --maxWorkers=2 > coverage/native-temp-parser-regressions.log 2>&1",
+      "log": "apps/office/coverage/native-temp-parser-regressions.log",
+      "result": "pass",
+      "observation": "26tests/4files on the rebuilt artifact, including real callbacks/entity/service owners"
+    },
+    {
+      "name": "current artifact stream/flag regressions",
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sax/source/fastparser/fastparser.stream.test.ts src/sax/source/fastparser/fastparser.errors.test.ts --maxWorkers=2 > coverage/native-temp-parser-stream-regressions.log 2>&1",
+      "log": "apps/office/coverage/native-temp-parser-stream-regressions.log",
+      "result": "pass",
+      "observation": "18tests/2files, actual incremental16KiB/malformed/huge>10MB attribute and approved source option behavior on current artifact"
+    },
+    {
+      "name": "actual main/Worker",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs > apps/office/coverage/native-temp-worker.log 2>&1",
+      "log": "apps/office/coverage/native-temp-worker.log",
+      "result": "pass",
+      "observation": "Actual default MEMFS create/write/seek/read/close/unlink in both realms; prior actual native C/DOM/XPath/relations/attributes/persistence evidence still passes. No fake filesystem or host mount."
+    },
+    {
+      "name": "lint",
+      "command": "node_modules/.bin/eslint apps/office/src/external/emscripten/runtime.ts apps/office/src/external/emscripten/runtime.test.ts apps/office/src/external/libxml2/libxml2.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs --max-warnings 0 > apps/office/coverage/native-temp-lint.log 2>&1",
+      "log": "apps/office/coverage/native-temp-lint.log",
+      "result": "pass",
+      "observation": "Changed TS/probe"
+    },
+    {
+      "name": "format",
+      "command": "node_modules/.bin/prettier --check apps/office/src/external/emscripten/runtime.ts apps/office/src/external/emscripten/runtime.test.ts apps/office/src/external/libxml2/libxml2.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs > apps/office/coverage/native-temp-format.log 2>&1",
+      "log": "apps/office/coverage/native-temp-format.log",
+      "result": "pass",
+      "observation": "Changed TS/probe; generated native declarations/artifact produced by builder"
+    },
+    {
+      "name": "tools types",
+      "command": "node_modules/.bin/tsc --project tsconfig.tools.json > apps/office/coverage/native-temp-tools.log 2>&1",
+      "log": "apps/office/coverage/native-temp-tools.log",
+      "result": "pass",
+      "observation": "Updated probe/compiler declaration surface"
+    },
+    {
+      "name": "app types",
+      "command": "node_modules/.bin/tsc --project apps/office/tsconfig.json --noEmit > apps/office/coverage/native-temp-types.log 2>&1",
+      "log": "apps/office/coverage/native-temp-types.log",
+      "result": "fail",
+      "observation": "Exactly4older metadata MediaDescriptor/native SfxMedium ctor/GetOutputStorage/Commit errors, no new owner error"
+    },
+    {
+      "name": "Vite",
+      "command": "cd apps/office && ../../node_modules/.bin/vite build > coverage/native-temp-vite.log 2>&1",
+      "log": "apps/office/coverage/native-temp-vite.log",
+      "result": "pass",
+      "observation": "Actual production build, existing chunk/timing warnings"
+    },
+    {
+      "name": "static",
+      "command": "node scripts/check-static-build.mjs > apps/office/coverage/native-temp-static.log 2>&1",
+      "log": "apps/office/coverage/native-temp-static.log",
+      "result": "pass",
+      "observation": "Relative assets/fourJS bundles/no backend endpoints"
+    },
+    {
+      "name": "provenance",
+      "command": "npm run check:source-provenance > apps/office/coverage/native-temp-provenance.log 2>&1",
+      "log": "apps/office/coverage/native-temp-provenance.log",
+      "result": "pass",
+      "observation": "2538runtime/2307mapped/193browser/38infra; common platform bootstrap browser-owned, no native parity promotion"
+    },
+    {
+      "name": "registry/invariants/parity",
+      "command": "npm run inventory:registry:check > apps/office/coverage/native-temp-registry.log 2>&1",
+      "log": "apps/office/coverage/native-temp-registry.log",
+      "result": "pass",
+      "observation": "semanticViolationCount0"
+    },
+    {
+      "name": "dependencies",
+      "command": "npm run check:dependencies > apps/office/coverage/native-temp-boundaries.log 2>&1",
+      "log": "apps/office/coverage/native-temp-boundaries.log",
+      "result": "fail",
+      "observation": "Old comphelper-sax-comphelper cycle remains, no new exemption"
+    },
+    {
+      "name": "JSDoc",
+      "command": "npm run check:docs > apps/office/coverage/native-temp-docs.log 2>&1",
+      "log": "apps/office/coverage/native-temp-docs.log",
+      "result": "fail",
+      "observation": "157older findings, no new owner findings"
+    },
+    {
+      "name": "size",
+      "command": "npm run check:file-size > apps/office/coverage/native-temp-size.log 2>&1",
+      "log": "apps/office/coverage/native-temp-size.log",
+      "result": "pass",
+      "observation": "Existing soft warnings only"
+    },
+    {
+      "name": "tree",
+      "command": "npm run check:source-tree > apps/office/coverage/native-temp-tree.log 2>&1",
+      "log": "apps/office/coverage/native-temp-tree.log",
+      "result": "pass",
+      "observation": "Source/binding placement accepted"
+    },
+    {
+      "name": "Calc resources",
+      "command": "npm run check:calc-resources > apps/office/coverage/native-temp-resources.log 2>&1",
+      "log": "apps/office/coverage/native-temp-resources.log",
+      "result": "pass",
+      "observation": "Current UI resources unchanged"
+    },
+    {
+      "name": "Writer resources",
+      "command": "npm run check:writer-resources > apps/office/coverage/native-temp-writer-resources.log 2>&1",
+      "log": "apps/office/coverage/native-temp-writer-resources.log",
+      "result": "pass",
+      "observation": "Resources/related tooling tests"
+    },
+    {
+      "name": "doctor",
+      "command": "ap doctor > apps/office/coverage/native-temp-doctor.log 2>&1",
+      "log": "apps/office/coverage/native-temp-doctor.log",
+      "result": "pass",
+      "observation": "Agentplane validation"
+    },
+    {
+      "name": "routing",
+      "command": "node .agentplane/policy/check-routing.mjs > apps/office/coverage/native-temp-routing.log 2>&1",
+      "log": "apps/office/coverage/native-temp-routing.log",
+      "result": "pass",
+      "observation": "Policy unchanged"
+    },
+    {
+      "name": "diff",
+      "command": "git diff --check > apps/office/coverage/native-temp-diff.log 2>&1",
+      "log": "apps/office/coverage/native-temp-diff.log",
+      "result": "pass",
+      "observation": "No whitespace errors"
+    },
+    {
+      "name": "final status",
+      "command": "git status --short --untracked-files=all > apps/office/coverage/native-temp-status-final.log 2>&1",
+      "log": "apps/office/coverage/native-temp-status-final.log",
+      "result": "pass",
+      "observation": "Intentional accumulated source WIP retained, staging empty; no incomplete source implementation commit/merge"
+    }
+  ],
+  "sourceHashes": {
+    "apps/office/src/external/emscripten/runtime.ts": "d57da7a17871962e48e52fee18ce93e3b983115ed698b8f629df137caa8aa2c4",
+    "apps/office/src/external/emscripten/runtime.test.ts": "78ab8a0ca2bb0fedf33118d97acc9229ae47ac4c62bd48028e474208092f84e9",
+    "apps/office/src/external/libxml2/libxml2.ts": "c6c5cdb55ca1db044a8f17ed58ff79f8fd56c12e8d4215c505b9c477173162a9",
+    "scripts/build-libxml2-wasm.py": "1370d1dd2859a6a5aa0e7417fc35276c15c1cafbc65d1fa33c9048cdcf055931",
+    "third_party/libxml2-wasm/libxml2.mjs": "e45f0b54031bd3662e5fc173a8fd217259392c8f1c22e900245cf4b4d4276f0c",
+    "third_party/libxml2-wasm/index.d.ts": "66795ffb2854cd31280eb78f52a08fc72c1d63fe24c6ca71bf6e5c9e4125ddc4",
+    "third_party/libxml2-wasm/artifact.json": "ea486cb33390477efbfadcb5794ec71d0447ef12ba934605ff2ddcceab4a49f5",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "359f6bd085a5a5267ca1878a657219a2fa6fcd34ee767daa5a5c7870c6127603",
+    "scripts/native-dom-worker-probe.mjs": "c97f228ec87477a1e8a6431f7b05cdfd5b2de89058ce362d2335c55eb2be72ec"
+  },
+  "preservedContracts": [
+    "Existing initializeLibXml2 Promise/module singleton and uninitialized diagnostic remain exact through shared runtime ownership; native byte marshalling and all pinned C APIs/configuration unchanged.",
+    "Original TempFileFastService uses actual file/SvStream, so no UNOMemoryStream substitution or fake successful TempFile/XStorage provider introduced. Reuse actual pinned Emscripten FS implementation already linked into native artifact.",
+    "Same actual filesystem is visible to JS public FS and native C fopen/xmlCtxtReadFile. Independent descriptors, positional IO, ftruncate preserving positions, unlink/open inode lifetime, genuine errno and seek beyond32bits execute actual runtime operations.",
+    "Default MEMFS is realm-local with no host filesystem mounted. No network, new source archive or global user file access. Browser file/open/save/autosave/recovery behavior unchanged."
+  ],
+  "initialObservations": [
+    "A wrong-cwd test-preparation attempt failed before source writes; corrected from repository root and final owner tests rerun.",
+    "Registry evidence initially pointed at scripts/build-libxml2-wasm.py, which this validator interprets as an upstream-relative path. Replaced evidence with actual generated third_party index declarations/artifact, retaining build command in task evidence; validators unchanged.",
+    "Kept descriptor scalar before closing actual FS stream and tested invalid seek origin while open; no fake error/status injection."
+  ],
+  "olderFailedGatesRetained": [
+    "Individual native OOXML parser85.45/78.26/100/93.87",
+    "Broader SDK86.44/86.11/92.30/87.96",
+    "Whole SAL79.20/75.47/73.24/80.62",
+    "Older4metadata storage errors, dependency cycle, JSDoc and all earlier broader unqualified scopes remain open.",
+    "Previous native-attribute-collections complete o3tl string_view function88.88 remains failed independently; current source storage coverage does not close it.",
+    "Previous native-storage complete-file failures retained: base73.15/66.66/100/73.33; nativeZip41.41/45.23/100/43.82; helper64.8/75.64/63.15/62.27; parser85.24/80/100/92.72. Current passing stream cases do not close them.",
+    "Previous native-persistence complete SwitchablePersistenceStream scope remains failed S86.27/B82.14/F100/L94.01. Current bootstrap100 does not close or dilute it."
+  ],
+  "remaining": [
+    "Port actual consumed SvStream/SvFileStream/OSL file/temporary-file owners over genuine shared filesystem, preserving source buffering/errors/defaults/lifetime and TempFileFastService seek narrowing (WRITER531/CALC594).",
+    "Implement remaining CopyAndSwitchPersistenceTo and actual OStorageFactory/OStorage/ZipPackage backend with original storage integration QA, then native filter/default fragment/relations cache and positive native cache/copy/commit.",
+    "Complete original source metadata/model/shared prerequisites, failed whole-owner/quality gates, Strict/Transitional DOCX/XLSX actual models/import/export/reopen and existing desktop/mobile file UI acceptance."
+  ],
+  "suspectedIssues": [
+    "WRITER531",
+    "CALC594"
+  ],
+  "status": "approved parent tasks unfinished; actual common native filesystem delivery prerequisite verified, source stream/temp/backend graph and whole-format acceptance pending; goal active; no implementation commit or merge"
+}
