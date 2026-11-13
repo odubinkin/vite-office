@@ -1,0 +1,161 @@
+{
+  "scope": "Original native Relation/Relations map/path/shared owners, FragmentBaseData and ContextHandler XML contracts plus explicit-relations FragmentHandler helper; not full native filter/model/UI acceptance",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "checks": [
+    {
+      "name": "related whole5owner gate",
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/oox/source/core/relations.native.test.ts src/oox/source/core/contexthandler.test.ts src/oox/source/core/relations.test.ts src/oox/source/core/fastparser.test.ts src/oox/source/core/xmlfilterbase.test.ts --maxWorkers=2 --coverage --coverage.include=src/oox/source/core/relations.native.ts --coverage.include=src/oox/source/core/contexthandler.ts --coverage.include=src/oox/source/core/fragmenthandler.data.ts --coverage.include=src/oox/source/core/fragmenthandler.native.ts --coverage.include=src/oox/source/core/shared-reference.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-context-final-core > coverage/native-context-final-core.log 2>&1",
+      "log": "apps/office/coverage/native-context-final-core.log",
+      "result": "pass",
+      "observation": "76tests/5files; S97.57/B97.72/F100/L97.91; core map/context/data/fragment and actual shared-pointer binding all unchanged90. No source mask/private field patch/counter merging."
+    },
+    {
+      "name": "main/DOM-free Worker",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs > apps/office/coverage/native-context-worker-final-core.log 2>&1",
+      "log": "apps/office/coverage/native-context-worker-final-core.log",
+      "result": "pass",
+      "observation": "Actual ContextHandler/FragmentHandler/Relations values and exact native Unicode path, shared relation identity and actual filter identity, with native OOXML parser executing the original inert base fragment. Not a positive document/model import claim."
+    },
+    {
+      "name": "tools types",
+      "command": "node_modules/.bin/tsc --project tsconfig.tools.json > apps/office/coverage/native-context-tools-final.log 2>&1",
+      "log": "apps/office/coverage/native-context-tools-final.log",
+      "result": "pass",
+      "observation": "Tools tsc"
+    },
+    {
+      "name": "app types",
+      "command": "cd apps/office && ../../node_modules/.bin/tsc --noEmit > coverage/native-context-types-final-core.log 2>&1",
+      "log": "apps/office/coverage/native-context-types-final-core.log",
+      "result": "fail",
+      "observation": "Exactly4older Sfx metadata storage dependencies, no new owner errors"
+    },
+    {
+      "name": "Vite",
+      "command": "cd apps/office && ../../node_modules/.bin/vite build > coverage/native-context-vite-final.log 2>&1",
+      "log": "apps/office/coverage/native-context-vite-final.log",
+      "result": "pass",
+      "observation": "Production Vite, existing chunk warnings"
+    },
+    {
+      "name": "lint",
+      "command": "node_modules/.bin/eslint apps/office/src/oox/source/core/shared-reference.ts apps/office/src/oox/source/core/relations.native.ts apps/office/src/oox/source/core/relations.native.test.ts apps/office/src/oox/source/core/contexthandler.ts apps/office/src/oox/source/core/contexthandler.test.ts apps/office/src/oox/source/core/fragmenthandler.data.ts apps/office/src/oox/source/core/fragmenthandler.native.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs --max-warnings 0 > apps/office/coverage/native-context-eslint-final.log 2>&1",
+      "log": "apps/office/coverage/native-context-eslint-final.log",
+      "result": "pass",
+      "observation": "Focused scope"
+    },
+    {
+      "name": "format",
+      "command": "node_modules/.bin/prettier --check apps/office/src/oox/source/core/shared-reference.ts apps/office/src/oox/source/core/relations.native.ts apps/office/src/oox/source/core/relations.native.test.ts apps/office/src/oox/source/core/contexthandler.ts apps/office/src/oox/source/core/contexthandler.test.ts apps/office/src/oox/source/core/fragmenthandler.data.ts apps/office/src/oox/source/core/fragmenthandler.native.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs > apps/office/coverage/native-context-format-final.log 2>&1",
+      "log": "apps/office/coverage/native-context-format-final.log",
+      "result": "pass",
+      "observation": "Focused scope"
+    },
+    {
+      "name": "provenance",
+      "command": "npm run check:source-provenance > apps/office/coverage/native-context-provenance-final.log 2>&1",
+      "log": "apps/office/coverage/native-context-provenance-final.log",
+      "result": "pass",
+      "observation": "2532runtime/2302mapped/192browser/38infrastructure"
+    },
+    {
+      "name": "registry/invariants/parity",
+      "command": "npm run inventory:registry:check > apps/office/coverage/native-context-registry-final.log 2>&1",
+      "log": "apps/office/coverage/native-context-registry-final.log",
+      "result": "pass",
+      "observation": "semanticViolationCount0"
+    },
+    {
+      "name": "size",
+      "command": "npm run check:file-size > apps/office/coverage/native-context-size.log 2>&1",
+      "log": "apps/office/coverage/native-context-size.log",
+      "result": "pass",
+      "observation": "No source-size exemption"
+    },
+    {
+      "name": "tree",
+      "command": "npm run check:source-tree > apps/office/coverage/native-context-tree.log 2>&1",
+      "log": "apps/office/coverage/native-context-tree.log",
+      "result": "pass",
+      "observation": "Source-tree guard"
+    },
+    {
+      "name": "JSDoc",
+      "command": "npm run check:docs > apps/office/coverage/native-context-jsdoc-final.log 2>&1",
+      "log": "apps/office/coverage/native-context-jsdoc-final.log",
+      "result": "fail",
+      "observation": "160older findings retained, no current owner findings"
+    },
+    {
+      "name": "boundaries",
+      "command": "npm run check:dependencies > apps/office/coverage/native-context-boundaries-final.log 2>&1",
+      "log": "apps/office/coverage/native-context-boundaries-final.log",
+      "result": "fail",
+      "observation": "Only existing comphelper -> sax -> comphelper cycle. Initial4new core-to-browser violations fixed by moving pure ownership binding into core, not adding exception/injected fake adapter."
+    },
+    {
+      "name": "routing",
+      "command": "node .agentplane/policy/check-routing.mjs > apps/office/coverage/native-context-routing.log 2>&1",
+      "log": "apps/office/coverage/native-context-routing.log",
+      "result": "pass",
+      "observation": "No policy changes"
+    },
+    {
+      "name": "doctor",
+      "command": "ap doctor > apps/office/coverage/native-context-doctor.log 2>&1",
+      "log": "apps/office/coverage/native-context-doctor.log",
+      "result": "pass",
+      "observation": "0errors, existing managed shim warning"
+    },
+    {
+      "name": "resources",
+      "command": "npm run check:calc-resources > apps/office/coverage/native-context-resources.log 2>&1",
+      "log": "apps/office/coverage/native-context-resources.log",
+      "result": "pass",
+      "observation": "464commands/11menus/17dispositions"
+    },
+    {
+      "name": "diff",
+      "command": "git diff --check > apps/office/coverage/native-context-diff.log",
+      "log": "apps/office/coverage/native-context-diff.log",
+      "result": "pass",
+      "observation": "No whitespace errors"
+    }
+  ],
+  "sourceHashes": {
+    "apps/office/src/oox/source/core/shared-reference.ts": "617f3366f7f4416b0eb6e1a633026fdbeb11d1c2f374660e7c9a73c60cd58e86",
+    "apps/office/src/oox/source/core/relations.native.ts": "4bbe23d65a7fe0040897195dd7f96019bad60a702d39c0f8dce7da7e48193fae",
+    "apps/office/src/oox/source/core/relations.native.test.ts": "cf46ae2bcea2dd8f0d0f6dfdb1af99a3987ce1712256c8f5cf3d4c51926cb824",
+    "apps/office/src/oox/source/core/contexthandler.ts": "353baf3857574779bc06e45afacb32b8020a09e3a971c8992461a8e37c6a3ac5",
+    "apps/office/src/oox/source/core/contexthandler.test.ts": "dc524f7717b9a17c9aaa13b35f5138e8170ba2bb45fff84ee34612be45ef7d23",
+    "apps/office/src/oox/source/core/fragmenthandler.data.ts": "bb909c43dfe4e03b2725d7790b68f7644ab6d1fa57206f766ca2e6cb30a70431",
+    "apps/office/src/oox/source/core/fragmenthandler.native.ts": "b08225751b7c699b218e0db222ba9346bf8dad292648860fb46cfe6f84f3c2ac",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "c99ad7c18fe09ad04b056d2d1e2adef159500fc656c86c4484987ca9e84e7e2f",
+    "scripts/native-dom-worker-probe.mjs": "d293d3afd994e9a36942c731d547a5cee01e3b5719e67ea590a0f9d55b5a5c9f"
+  },
+  "initialFailures": [
+    "First18cases had2 incorrect fixture assumptions: TextEncoder bytes were foreign-realm arrays for actual MemoryInputStream representation; normalized only fixture carrier with Uint8Array.from. Retained native string refcount correctly includes still-live caller input owner (2, not1); native implementation was not patched to fit fixture. Corrected18cases pass.",
+    "Shared-pointer binding initially placed in browser/core caused4genuine core-to-browser boundary violations. Moved the pure standard-library lifetime binding to source/core, updated actual imports/provenance and reran current full-file coverage/Worker/checks. No boundary exception.",
+    "One metadata rename attempted .json rather than .ts.json after source move. Corrected exact metadata paths and revalidated registry/provenance; no validator changes.",
+    "Two missing type-alias JSDoc entries corrected; final scoped lint passes, broader old JSDoc failures retained."
+  ],
+  "sourceQualification": [
+    "Original base context/fragment XML callbacks are inert and decline child contexts. Tests preserve that original negative/default behavior and actual interface/data lifetime; they are not a replacement positive parser/model provider.",
+    "Source default normal FragmentHandler constructor (implicit importRelations) and openFragmentStream overload remain absent, rather than accepting async promises or fake stream values. Explicit original protected constructor static access is compiler-erased for the consumed helper binding.",
+    "Native binary SequenceInputStream record interface remains unported; default getRecordInfos null is the original XML base behavior.",
+    "Native Relations ordered-key binding preserves counted UTF16 lookup/order/first-emplace/copy contracts. Physical std::map tree allocation/complexity/iterator behavior and physical C++ standard-library/atomic/ABI remain unqualified.",
+    "No direct dedicated Relations/ContextHandler test suite found by targeted and bounded whole oox/qa searches. Existing original TokenmapTest loops/generator evidence remains retained; full original Pipe/Expat/parser QA is unfinished."
+  ],
+  "olderFailedGatesRetained": [
+    "Native OOXML parser individual coverage85.45/78.26/100/93.87",
+    "Broader SDK gate86.44/86.11/92.30/87.96",
+    "Whole SAL79.20/75.47/73.24/80.62",
+    "Older4metadata storage types, existing dependency cycle, old JSDoc and all earlier broader failing scopes remain open."
+  ],
+  "remaining": [
+    "Native owning AttributeList and RelationsFragment parsing, normal fragment constructor/actual native filter/storage import orchestration; the old host relation/fragment/filter path remains explicitly separate until migration.",
+    "Original Pipe/Expat/full source parser QA and actual native metadata/storage/model/filter/Strict+Transitional DOCX/XLSX package/desktop/mobile UI acceptance.",
+    "Separate old URL trust/auth/certificate scope unanswered/untouched; approved original XML options remain implemented."
+  ],
+  "status": "Parent tasks/goal stay active; no finish/pause/merge or unfinished implementation commit."
+}
