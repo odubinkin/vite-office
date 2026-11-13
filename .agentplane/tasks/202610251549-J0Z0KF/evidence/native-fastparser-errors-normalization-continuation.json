@@ -1,0 +1,743 @@
+{
+  "taskIds": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "status": "unfinished-native-fastparser-prerequisite",
+  "classification": "Progress: actual source diagnostic/throwException and native namespace normalization owners, current tests/main-Worker evidence change authoritative state. Parent tasks and goal incomplete; no full-suite cadence increment.",
+  "checks": [
+    {
+      "command": "../../node_modules/.bin/vitest run src/sax/source/fastparser/fastparser.normalize.test.ts src/sax/source/fastparser/fastparser.errors.test.ts src/sax/source/fastparser/fastparser.entity.test.ts src/sax/source/fastparser/fastparser.impl.test.ts src/sax/source/fastparser/InputSource.test.ts src/sax/source/fastparser/fastparser.test.ts src/sax/source/fastparser/FastSaxParser.test.ts --maxWorkers=2 --coverage --coverage.include='src/sax/source/fastparser/{fastparser.normalize,fastparser.entity}.ts' --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/fastparser-errors-final",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-errors-final.log",
+      "evidence": "99tests/7files. Whole2owners S96.81/B95.37/F100/L97.84; Entity independently S95.67/B92.85/F100/L97.14, normalization100 all metrics. Actual native C errors/locator/Any and registered Writer failure; no fake positive error handler, error-field injection or source/counter masking."
+    },
+    {
+      "command": "../../node_modules/.bin/vitest run src/sax/source/fastparser/fastparser.errors.test.ts --maxWorkers=2",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-errors-fixture-current.log",
+      "evidence": "5 source-error cases after correcting fixture to the SDK-required actual owned component-context Reference. Same owner implementation; no counter merging/reinterpretation."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-worker.log",
+      "evidence": "Actual main/DOM-free Worker see native malformed C-context SAXParseException, real source Unicode IDs and normalized alias. Existing independent C-callback/supplied-Event consumers remain separate from the unfinished complete parser pipeline."
+    },
+    {
+      "command": "../../node_modules/.bin/vite build",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-vite.log",
+      "evidence": "Production Vite; package build remains unqualified because app tsc fails."
+    },
+    {
+      "command": "node_modules/.bin/tsc --project apps/office/tsconfig.json --noEmit",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/fastparser-parse-types-corrected.log",
+      "evidence": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(338,9): error TS2304: Cannot find name 'MediaDescriptor'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(410,36): error TS2345: Argument of type 'Sequence<PropertyValue>' is not assignable to parameter of type 'SfxMediumInput'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(411,26): error TS2339: Property 'GetOutputStorage' does not exist on type 'SfxMedium'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(438,27): error TS2339: Property 'Commit' does not exist on type 'SfxMedium'.\n"
+    },
+    {
+      "command": "node_modules/.bin/tsc --project tsconfig.tools.json --noEmit",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-tools-types.log",
+      "evidence": ""
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/check-source-provenance.ts",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-provenance.log",
+      "evidence": "2522runtime/2293mapped/192browser/37infrastructure."
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-registry.log",
+      "evidence": "semanticViolationCount0; all broad semantic/default fields remain unverified."
+    },
+    {
+      "command": "node scripts/check-module-boundaries.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/fastparser-parse-boundaries.log",
+      "evidence": "Existing comphelper->sax->comphelper cycle, no new dependency exception or validator weakening."
+    },
+    {
+      "command": "node scripts/check-jsdoc.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/fastparser-parse-jsdoc.log",
+      "evidence": "160 older diagnostics; no current error/normalization/probe findings."
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/sax/source/fastparser/fastparser.entity.ts apps/office/src/sax/source/fastparser/fastparser.normalize.ts apps/office/src/sax/source/fastparser/fastparser.normalize.test.ts apps/office/src/sax/source/fastparser/fastparser.errors.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-eslint-final.log",
+      "evidence": ""
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/sax/source/fastparser/fastparser.entity.ts apps/office/src/sax/source/fastparser/fastparser.normalize.ts apps/office/src/sax/source/fastparser/fastparser.errors.test.ts apps/office/src/sax/source/fastparser/fastparser.normalize.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs docs/program/registry/shared/runtime/sax/source/fastparser/fastparser.normalize.ts.json docs/program/registry/shared/provenance/sax/source/fastparser/fastparser.normalize.ts.json",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-format.log",
+      "evidence": ""
+    },
+    {
+      "command": "node scripts/check-file-size.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-size.log",
+      "evidence": ""
+    },
+    {
+      "command": "node scripts/check-lo-source-tree.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-source-tree.log",
+      "evidence": ""
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-routing.log",
+      "evidence": ""
+    },
+    {
+      "command": "ap doctor",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-doctor.log",
+      "evidence": ""
+    },
+    {
+      "command": "git diff --check",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-parse-diff-final.log",
+      "evidence": ""
+    }
+  ],
+  "coverage": {
+    "scope": [
+      "sax/source/fastparser/fastparser.entity.ts",
+      "sax/source/fastparser/fastparser.normalize.ts"
+    ],
+    "directory": "apps/office/coverage/fastparser-errors-final",
+    "summary": {
+      "total": {
+        "lines": {
+          "total": 232,
+          "covered": 227,
+          "skipped": 0,
+          "pct": 97.84
+        },
+        "statements": {
+          "total": 251,
+          "covered": 243,
+          "skipped": 0,
+          "pct": 96.81
+        },
+        "functions": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 108,
+          "covered": 103,
+          "skipped": 0,
+          "pct": 95.37
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/fastparser/fastparser.entity.ts": {
+        "lines": {
+          "total": 175,
+          "covered": 170,
+          "skipped": 0,
+          "pct": 97.14
+        },
+        "functions": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 185,
+          "covered": 177,
+          "skipped": 0,
+          "pct": 95.67
+        },
+        "branches": {
+          "total": 70,
+          "covered": 65,
+          "skipped": 0,
+          "pct": 92.85
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/fastparser/fastparser.normalize.ts": {
+        "lines": {
+          "total": 57,
+          "covered": 57,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 66,
+          "covered": 66,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 38,
+          "covered": 38,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "rawSha256": {
+      "coverage-final.json": "2bc88cb796f42f240ee0493221a94f920be214568c41b47a1425511a9fc43ccf",
+      "coverage-summary.json": "32c9af38b61c021ed5dd78da3767232baea456ee74b9a5ed04e28346bb162422"
+    },
+    "qualification": "Whole owners independently above90; no sliced range, counter merging, fake fatal handler or native-error field injection. Nonnull fatal handler/its thrown-exception unwind, native threaded suppression and non-UNO host exception remain unqualified. Older wider failed gates stay open."
+  },
+  "sourceSha256": {
+    "apps/office/src/sax/source/fastparser/fastparser.entity.ts": "f213a9ad509d7b834c639ba59f0cfea494bf7c7bf7f43906b7e1b784d304c5a1",
+    "apps/office/src/sax/source/fastparser/fastparser.normalize.ts": "96a9c68c00f864e3883367701a21248cd34bb97d28d718dabfdf6ea1733b427c",
+    "apps/office/src/sax/source/fastparser/fastparser.normalize.test.ts": "7b8dc2d8932a4b27962f7735f19336a1f860a5844032846cb89eaa4d343f44f5",
+    "apps/office/src/sax/source/fastparser/fastparser.errors.test.ts": "3057a574a601b14b7331a90e09a6ee87ec07c7d1c4ffb01664804a5ad9f27f54",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "fd45893ef826dabf42ccfabcc2d157c8363ff646efaa888684074f320dc08173",
+    "scripts/native-dom-worker-probe.mjs": "891d1907c10eab63eb0172c467baed7fbfd9408026f816b0f802971b109224a7",
+    "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx": "b03e91d34d0b245e02d08ec807c81a6fac648cfc4ec587b5ee43bd423b680aac",
+    "vendor/libreoffice-reference/cppu/source/uno/copy.hxx": "10d301a18fa73bf8aac885a4f4c1bde3bba8e593a83d6d74aa28c96d6e750102"
+  },
+  "browserObservations": {
+    "workerResult": {
+      "conversion": {
+        "serviceValue": 42,
+        "rowValue": 42,
+        "rowWasNull": false,
+        "failedFirst": 0,
+        "failedFirstWasNull": false,
+        "failedSecond": 0,
+        "failedSecondWasNull": true
+      },
+      "publicHelpers": {
+        "notifications": 1,
+        "sameEventSource": true,
+        "componentTypeCount": 3
+      },
+      "dynamicProperties": {
+        "changed": true,
+        "value": 42,
+        "initialDefault": 41,
+        "name": "workerValue",
+        "handle": 7,
+        "declaredLong": true,
+        "stableTypeField": true
+      },
+      "propertyArray": {
+        "count": 1,
+        "handle": 7,
+        "missing": -1,
+        "snapshotName": "workerValue",
+        "sameInfoIdentity": true
+      },
+      "legacyListeners": {
+        "remaining": 1,
+        "sameFirst": true,
+        "sameSnapshot": true,
+        "keyCount": 1,
+        "key": -7
+      },
+      "nativeAnyFields": {
+        "value": 43,
+        "initialDefault": 41,
+        "liveType": true,
+        "interfaceIdentity": true
+      },
+      "nativePropertyControl": {
+        "value": 42,
+        "storedLong": true,
+        "notifications": 1,
+        "notifiedTypeLong": false,
+        "notifiedValue": 42,
+        "notifiedOld": 41,
+        "sameSource": true,
+        "state": 0,
+        "initialStates": [
+          1,
+          0
+        ],
+        "typeCount": 7
+      },
+      "registeredPropertyBag": {
+        "value": 42,
+        "count": 1,
+        "modified": true,
+        "directState": 0,
+        "sameIdentity": true
+      },
+      "nativeSax": {
+        "calls": [
+          "begin",
+          "start:root:0",
+          "text:worker SAX\u5b57",
+          "end",
+          "finish"
+        ],
+        "sameIdentity": true
+      },
+      "registeredSaxWriter": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>worker SAX\u5b57</root>",
+        "sameIdentity": true
+      },
+      "packageSaxWriters": {
+        "manifest": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\" manifest:version=\"1.3\" xmlns:loext=\"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0\">\n <manifest:file-entry manifest:full-path=\"/\" manifest:media-type=\"application/vnd.oasis.opendocument.text\" manifest:version=\"1.3\"/>\n <manifest:file-entry manifest:full-path=\"content.xml\" manifest:media-type=\"text/xml\"/>\n</manifest:manifest>",
+        "relationships": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\"><Relationship Id=\"rId1\" Type=\"worker\u5b57\" Target=\"word/document.xml?a=1&amp;b=2\"/>\n</Relationships>"
+      },
+      "nativeSaxWriterBuffer": {
+        "valid": true,
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<r a=\"&amp;&#x0a;\">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\u5b57\ud83d\ude00&beta;</r>"
+      },
+      "metadataValues": {
+        "values": [
+          "2024-02-29+05:30",
+          "2024-02-29T03:04:05.000000009-01:30",
+          "-P1DT2H3M4.000000005S"
+        ],
+        "types": [
+          "date",
+          "date",
+          "time"
+        ]
+      },
+      "metadataIngestion": [
+        "Dies ist ein wichtiger Hinweis",
+        "Kann Spuren von N\u00fcssen enthalten"
+      ],
+      "metadataServices": {
+        "emptyDocument": true,
+        "baseURI": "file:///metadata-base",
+        "relativePath": "nested/document",
+        "streamName": "meta.xml"
+      },
+      "writerPackage": {
+        "rootTarget": "word/document.xml",
+        "childTarget": "styles.xml",
+        "byId": "styles.xml",
+        "rootText": "<w:document xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"><w:body><w:p><w:r><w:t>\u041f\u0440\u0438\u0432\u0435\u0442</w:t></w:r></w:p></w:body></w:document>",
+        "childText": "<w:styles xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>"
+      },
+      "nativeTokenService": {
+        "sharedBeforeWrite": true,
+        "detachedAfterWrite": true,
+        "roundTrip": true,
+        "mutatedLookup": -1,
+        "cachedLookup": true,
+        "xml": "<document/>"
+      },
+      "nativeAttributes": {
+        "cloneToken": true,
+        "sourceCleared": true,
+        "names": [
+          "urn:\u03a9",
+          "p:\u5b57",
+          "A\u0000B"
+        ],
+        "known": [
+          2,
+          "\u03a9\u0000\u00e9"
+        ],
+        "prefixBoolean": false,
+        "unknownCount": 1
+      },
+      "nativeFastParser": {
+        "starts": [
+          [
+            "root",
+            "p",
+            "urn:push"
+          ],
+          [
+            "child",
+            "p",
+            "urn:push"
+          ]
+        ],
+        "values": [
+          "\u03a9"
+        ],
+        "declarations": [
+          1,
+          0
+        ],
+        "instructions": [
+          [
+            "keep",
+            "native"
+          ]
+        ],
+        "characters": "\u5b57&\ud83d\ude00",
+        "ends": 2,
+        "allChunksOk": true,
+        "line": 1
+      },
+      "nativeFastParserConsumer": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root xmlns:p=\"urn:probe\"><p>\u5b57&amp;\ud83d\ude00</p></root>",
+        "savedException": false,
+        "owner": {
+          "publicId": "public\ud83d\ude00",
+          "systemId": "package:/\u5b57.xml",
+          "line": 2,
+          "columnPositive": true,
+          "namespace": "urn:owner",
+          "borrowedNamespace": true,
+          "normalizedAlias": "http://www.w3.org/2002/xforms",
+          "failure": {
+            "nativeException": true,
+            "line": 2,
+            "systemId": "package:/\u5b57.xml",
+            "wrapped": false,
+            "hasSourcePrefix": true
+          }
+        }
+      },
+      "nativeUriFactory": {
+        "packageUri": "vnd.sun.star.pkg://file:%2F%2F%2Fstyles.xml",
+        "expandPath": "/",
+        "rejectedExpand": false,
+        "scriptUri": "vnd.sun.star.script:Hello?a=%C3%A4%26value",
+        "scriptParameter": "\u00e4&value",
+        "absolute": "file:///styles.xml",
+        "relative": "../styles.xml",
+        "fragmentRemoved": "file:///a%23b.xlsx",
+        "invalidFragmentPreserved": "vnd.sun.star.script:#fragment",
+        "rtlAbsolute": "file:///styles.xml",
+        "rtlEncoded": "a%20b%2F%C3%A4",
+        "rtlDecoded": "\u028a"
+      },
+      "documentBuilder": {
+        "rootName": "document-content",
+        "streamOpen": true,
+        "namespaceAware": true,
+        "validating": false,
+        "emptyImplementation": true,
+        "capturedType": true,
+        "sameContext": true,
+        "exceptionMessage": "worker exception"
+      },
+      "xpath": {
+        "count": 1,
+        "listLength": 1,
+        "sameRoot": true
+      },
+      "globals": {
+        "window": "undefined",
+        "document": "undefined",
+        "DOMParser": "undefined"
+      },
+      "rootName": "document-content",
+      "attribute": "1.0",
+      "listCounts": [
+        0,
+        1,
+        0
+      ],
+      "sameOwner": true,
+      "unicode": "\ud83d\ude00\u5b57",
+      "utf16Length": 3,
+      "borrowedStreamOpen": true,
+      "warnings": 1,
+      "errors": 0,
+      "warningLine": 1
+    },
+    "mainResult": {
+      "conversion": {
+        "serviceValue": 42,
+        "rowValue": 42,
+        "rowWasNull": false,
+        "failedFirst": 0,
+        "failedFirstWasNull": false,
+        "failedSecond": 0,
+        "failedSecondWasNull": true
+      },
+      "publicHelpers": {
+        "notifications": 1,
+        "sameEventSource": true,
+        "componentTypeCount": 3
+      },
+      "dynamicProperties": {
+        "changed": true,
+        "value": 42,
+        "initialDefault": 41,
+        "name": "workerValue",
+        "handle": 7,
+        "declaredLong": true,
+        "stableTypeField": true
+      },
+      "propertyArray": {
+        "count": 1,
+        "handle": 7,
+        "missing": -1,
+        "snapshotName": "workerValue",
+        "sameInfoIdentity": true
+      },
+      "legacyListeners": {
+        "remaining": 1,
+        "sameFirst": true,
+        "sameSnapshot": true,
+        "keyCount": 1,
+        "key": -7
+      },
+      "nativeAnyFields": {
+        "value": 43,
+        "initialDefault": 41,
+        "liveType": true,
+        "interfaceIdentity": true
+      },
+      "nativePropertyControl": {
+        "value": 42,
+        "storedLong": true,
+        "notifications": 1,
+        "notifiedTypeLong": false,
+        "notifiedValue": 42,
+        "notifiedOld": 41,
+        "sameSource": true,
+        "state": 0,
+        "initialStates": [
+          1,
+          0
+        ],
+        "typeCount": 7
+      },
+      "registeredPropertyBag": {
+        "value": 42,
+        "count": 1,
+        "modified": true,
+        "directState": 0,
+        "sameIdentity": true
+      },
+      "nativeSax": {
+        "calls": [
+          "begin",
+          "start:root:0",
+          "text:worker SAX\u5b57",
+          "end",
+          "finish"
+        ],
+        "sameIdentity": true
+      },
+      "registeredSaxWriter": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root>worker SAX\u5b57</root>",
+        "sameIdentity": true
+      },
+      "packageSaxWriters": {
+        "manifest": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<manifest:manifest xmlns:manifest=\"urn:oasis:names:tc:opendocument:xmlns:manifest:1.0\" manifest:version=\"1.3\" xmlns:loext=\"urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0\">\n <manifest:file-entry manifest:full-path=\"/\" manifest:media-type=\"application/vnd.oasis.opendocument.text\" manifest:version=\"1.3\"/>\n <manifest:file-entry manifest:full-path=\"content.xml\" manifest:media-type=\"text/xml\"/>\n</manifest:manifest>",
+        "relationships": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<Relationships xmlns=\"http://schemas.openxmlformats.org/package/2006/relationships\"><Relationship Id=\"rId1\" Type=\"worker\u5b57\" Target=\"word/document.xml?a=1&amp;b=2\"/>\n</Relationships>"
+      },
+      "nativeSaxWriterBuffer": {
+        "valid": true,
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<r a=\"&amp;&#x0a;\">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\u5b57\ud83d\ude00&beta;</r>"
+      },
+      "metadataValues": {
+        "values": [
+          "2024-02-29+05:30",
+          "2024-02-29T03:04:05.000000009-01:30",
+          "-P1DT2H3M4.000000005S"
+        ],
+        "types": [
+          "date",
+          "date",
+          "time"
+        ]
+      },
+      "metadataIngestion": [
+        "Dies ist ein wichtiger Hinweis",
+        "Kann Spuren von N\u00fcssen enthalten"
+      ],
+      "metadataServices": {
+        "emptyDocument": true,
+        "baseURI": "file:///metadata-base",
+        "relativePath": "nested/document",
+        "streamName": "meta.xml"
+      },
+      "writerPackage": {
+        "rootTarget": "word/document.xml",
+        "childTarget": "styles.xml",
+        "byId": "styles.xml",
+        "rootText": "<w:document xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"><w:body><w:p><w:r><w:t>\u041f\u0440\u0438\u0432\u0435\u0442</w:t></w:r></w:p></w:body></w:document>",
+        "childText": "<w:styles xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>"
+      },
+      "nativeTokenService": {
+        "sharedBeforeWrite": true,
+        "detachedAfterWrite": true,
+        "roundTrip": true,
+        "mutatedLookup": -1,
+        "cachedLookup": true,
+        "xml": "<document/>"
+      },
+      "nativeAttributes": {
+        "cloneToken": true,
+        "sourceCleared": true,
+        "names": [
+          "urn:\u03a9",
+          "p:\u5b57",
+          "A\u0000B"
+        ],
+        "known": [
+          2,
+          "\u03a9\u0000\u00e9"
+        ],
+        "prefixBoolean": false,
+        "unknownCount": 1
+      },
+      "nativeFastParser": {
+        "starts": [
+          [
+            "root",
+            "p",
+            "urn:push"
+          ],
+          [
+            "child",
+            "p",
+            "urn:push"
+          ]
+        ],
+        "values": [
+          "\u03a9"
+        ],
+        "declarations": [
+          1,
+          0
+        ],
+        "instructions": [
+          [
+            "keep",
+            "native"
+          ]
+        ],
+        "characters": "\u5b57&\ud83d\ude00",
+        "ends": 2,
+        "allChunksOk": true,
+        "line": 1
+      },
+      "nativeFastParserConsumer": {
+        "xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<root xmlns:p=\"urn:probe\"><p>\u5b57&amp;\ud83d\ude00</p></root>",
+        "savedException": false,
+        "owner": {
+          "publicId": "public\ud83d\ude00",
+          "systemId": "package:/\u5b57.xml",
+          "line": 2,
+          "columnPositive": true,
+          "namespace": "urn:owner",
+          "borrowedNamespace": true,
+          "normalizedAlias": "http://www.w3.org/2002/xforms",
+          "failure": {
+            "nativeException": true,
+            "line": 2,
+            "systemId": "package:/\u5b57.xml",
+            "wrapped": false,
+            "hasSourcePrefix": true
+          }
+        }
+      },
+      "nativeUriFactory": {
+        "packageUri": "vnd.sun.star.pkg://file:%2F%2F%2Fstyles.xml",
+        "expandPath": "/",
+        "rejectedExpand": false,
+        "scriptUri": "vnd.sun.star.script:Hello?a=%C3%A4%26value",
+        "scriptParameter": "\u00e4&value",
+        "absolute": "file:///styles.xml",
+        "relative": "../styles.xml",
+        "fragmentRemoved": "file:///a%23b.xlsx",
+        "invalidFragmentPreserved": "vnd.sun.star.script:#fragment",
+        "rtlAbsolute": "file:///styles.xml",
+        "rtlEncoded": "a%20b%2F%C3%A4",
+        "rtlDecoded": "\u028a"
+      },
+      "documentBuilder": {
+        "rootName": "document-content",
+        "streamOpen": true,
+        "namespaceAware": true,
+        "validating": false,
+        "emptyImplementation": true,
+        "capturedType": true,
+        "sameContext": true,
+        "exceptionMessage": "worker exception"
+      },
+      "xpath": {
+        "count": 1,
+        "listLength": 1,
+        "sameRoot": true
+      },
+      "globals": {
+        "window": "object",
+        "document": "object",
+        "DOMParser": "function"
+      },
+      "rootName": "document-content",
+      "attribute": "1.0",
+      "listCounts": [
+        0,
+        1,
+        0
+      ],
+      "sameOwner": true,
+      "unicode": "\ud83d\ude00\u5b57",
+      "utf16Length": 3,
+      "borrowedStreamOpen": true,
+      "warnings": 1,
+      "errors": 0,
+      "warningLine": 1
+    }
+  },
+  "sourceFindings": [
+    "CALC583 / WRITER520: W3 normalization prefix/suffix overlap admits absent, nonnumeric or nested year component; preserve.",
+    "CALC584 / WRITER521: source ASCII_US decoding loses a genuine native UTF8 XML name in diagnostics; preserve.",
+    "Source Any assignment with UnoType<Any> flattens through original copy.hxx and actual shared CPPU implementation; no nested-Any bug is asserted."
+  ],
+  "failureHistory": [
+    "Initial47-case run46pass/1fail: fixture expected no rewrite for http://www.w3.org/xforms. Re-read original prefix/suffix logic: its slash overlaps, so source returns true. Corrected only fixture expectation; no production validation change.",
+    "App typecheck initially included one fixture SDK-context constness error alongside4 old metadata errors. Constructed the actual required Reference over the actual process context;5-case current error regression passes and current app tsc returns exactly4 old errors.",
+    "Initial/final raw coverage maps retained separately; no cross-epoch counter merge."
+  ],
+  "securityScopes": {
+    "nativeFastParserOptions": "Explicit human approval already received for original xmlCtxtUseOptions(XML_PARSE_NOENT|XML_PARSE_HUGE). This block ports diagnostics/aliases only; no source parse loop or options call yet added.",
+    "urlTrustAuthenticationCertificate": "Separate old scope question remains unanswered, no related edits."
+  },
+  "qualification": [
+    "Original saved-exception Any assignment, generated SAXParseException fields, nil-handler unconditional throw and native diagnostics are executed; error handler nonnull/fatal throw path is implemented but not runtime-qualified with an invented positive provider.",
+    "Namespace rules use native RTL values/indexes/static literal storage and the original implicit concat temporary/move assignment. The same source copy remains separate from xmloff; no new URI resolver/namespace/type/default provider.",
+    "Actual C malformed-context and alias probes run in main/DOM-free Worker. This is not C callbacks connected to the Entity producer or a complete FastParser service/parseStream.",
+    "Original full parser QA, callbacks/parse/cleanup/custom entities, normal parser locator handoff and UNO FastParser/LegacyFastParser remain unfinished; Expat remains separate. Source Emscripten thread=false profile is still authoritative.",
+    "Native C++ physical mutex/allocator/thread/ABI and independent compiled original C++ component differential are unqualified.",
+    "Whole metadata/storage/model/filter/Strict+Transitional/package/XML/desktop+mobile UI/cancel/stale/primaryODF acceptance remains unfinished. Existing4 metadata errors, module cycle,160 older docs diagnostics and wider failed scopes remain open."
+  ],
+  "next": "Connect original C SAX callbacks/token/namespace producers to the existing actual Entity and finish original parse/cleanup loop with now-approved source XML_PARSE_NOENT|XML_PARSE_HUGE. Implement missing original custom-entity/native numeric ABI instead of substitutes; run complete original parser QA before service/format route promotion. Keep goal active, no finish/pause/merge or unfinished source commit."
+}
