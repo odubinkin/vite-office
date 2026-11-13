@@ -1,0 +1,162 @@
+{
+  "scope": "Complete original WrapStreamForShare component required by ZipPackageStream: shared underlying input/seek, independent wrapper position, original mutex placement, ByteReader/UNO dispatch and release-only close. No ZipPackageStream/storage/model/UI completion claimed.",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSha256": {
+    "apps/office/src/package/source/zippackage/wrapstreamforshare.ts": "0a0f579437c1f6dcd66b2a5a12d8b45a266b8482dc263b51dae1447e19216ccc",
+    "apps/office/src/package/source/zippackage/wrapstreamforshare.test.ts": "d4e994f62c7c21f03bafaed321672f629df328f406f59327a309feb4c682253e",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "022fc624c28faeb32d257f863a2d286fe1b36660c57b7b8b61b8562e2ebc5ce2",
+    "scripts/native-dom-worker-probe.mjs": "92bc021380b2281db161bc8c92e56a1a8b16b2e48ad240ff4ba822d76e87738a",
+    "docs/program/writer-upstream-suspected-issues.md": "4e0b94b0fc396614dc5ecfac7bd4b86f58a089d13c09c54d3f69fcd0d47707d2",
+    "docs/program/calc-upstream-suspected-issues.md": "c0f646757ee525905cc600f4bc851eb75267d14b15d438d4faffce347ddd7ceb",
+    "docs/program/registry/shared/runtime/package/source/zippackage/wrapstreamforshare.ts.json": "9712ebed5d01228c2f7085846b8a8aaff685fd825a533b44636bdc547d8a08e9",
+    "docs/program/registry/shared/provenance/package/source/zippackage/wrapstreamforshare.ts.json": "6fa09602234952599b7d369e619eee0c2c5c8beaf05aaf1f5920bc779e11a1e5"
+  },
+  "checks": [
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/package/source/zippackage/wrapstreamforshare.test.ts --coverage --coverage.include=src/package/source/zippackage/wrapstreamforshare.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-shared-stream",
+      "result": "pass",
+      "log": "apps/office/coverage/native-shared-stream-tests.log",
+      "sha256": "7b172b0d65c3d9c2996ef158aee7d2adce769f77890879eac020e9f403370b3e"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/package/source/zippackage/ZipPackageFolder.native.test.ts src/package/source/zippackage/ZipPackageBuffer.test.ts src/package/source/zipapi/byte-io.test.ts src/package/source/zipapi/native-entry-read.test.ts --maxWorkers=2",
+      "result": "pass",
+      "log": "apps/office/coverage/native-shared-stream-related.log",
+      "sha256": "1fc538154be3fba308e0ee576c28449ec05c9eac7e22ff69f0cae5551b392c96"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-shared-stream-worker.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "node_modules/.bin/tsc --noEmit --project apps/office/tsconfig.json",
+      "result": "fail",
+      "log": "apps/office/coverage/native-shared-stream-types.log",
+      "sha256": "191e4bdf87792572048a2d40ec89fdf71fbac07a0325f9aa1a25ce7df4266208"
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/package/source/zippackage/wrapstreamforshare.ts apps/office/src/package/source/zippackage/wrapstreamforshare.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-shared-stream-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/package/source/zippackage/wrapstreamforshare.ts apps/office/src/package/source/zippackage/wrapstreamforshare.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs docs/program/registry/shared/runtime/package/source/zippackage/wrapstreamforshare.ts.json docs/program/registry/shared/provenance/package/source/zippackage/wrapstreamforshare.ts.json",
+      "result": "pass",
+      "log": "apps/office/coverage/native-shared-stream-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-shared-stream-docs.log",
+      "sha256": "03bc18aef30bca0974dbce6c60c4f6f63ef2e76250865177eae76d9b93c7a790"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "log": "apps/office/coverage/native-shared-stream-deps.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/native-shared-stream-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-shared-stream-provenance.log",
+      "sha256": "cb0a86f46e213d90d9a43cc6ec3004567ee4dc77608a30da9f8b19d7b10ea03c"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-shared-stream-registry.log",
+      "sha256": "899dc9766f31efa116d40a8bf012dd055548a7be28567cc6fbd99e29633de56c"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/native-shared-stream-size.log",
+      "sha256": "170db091392b89eb167baed5a3a4b55d5171cebd4e881cdf15d3c7ca9fef8b96"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/native-shared-stream-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-shared-stream-doctor.log",
+      "sha256": "d35653d7ce89b32226eb5cc24ff762e6afd19ae59cc0e12a2a834d9ca099cbef"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-shared-stream-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-shared-stream-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-shared-stream-vite.log",
+      "sha256": "0b61a2d14eda708099da31fe0c24b645d29d15d8d47e8e9916ad38ae53a418fa"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-shared-stream-static.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    }
+  ],
+  "coverage": {
+    "wrapstreamforshare.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    }
+  },
+  "tests": {
+    "focused": 10,
+    "related": 48,
+    "originalFixtures": [
+      "sw/qa/extras/ooxmlexport/data/hello.docx",
+      "sw/qa/extras/ooxmlexport/data/strict.docx",
+      "sc/qa/unit/data/xlsx/preserve_space.xlsx",
+      "sc/qa/unit/data/xlsx/universal-content-strict.xlsx"
+    ],
+    "browser": "Actual native ZIP part read source + two WrapStreamForShare/ByteGrabber readers, interleaved sequence/raw reads, original availability and surviving reader after close in Chromium main and DOM-free module Worker."
+  },
+  "upstreamQA": {
+    "targetedSearch": "rg WrapStreamForShare/wrapstreamforshare in package/qa, comphelper/qa and qadevOOo; no direct class QA found. Existing broader package service QA remains pending until package services exist; critical original source contracts tested with actual streams and fixtures.",
+    "searchLogHashes": {
+      "apps/office/coverage/native-shared-stream-upstream-qa-search.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "apps/office/coverage/native-shared-stream-upstream-qa-fallback.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "findings": [
+    "WRITER558/CALC621 source read methods omit mutex guards.",
+    "WRITER559/CALC622 available reports shared source position.",
+    "WRITER560/CALC623 debug ByteReader assertion versus seekable-only source requirement; no fake fallback."
+  ],
+  "remaining": [
+    "Native ZipPackageStream and actual ZipPackage service graph/factory/OStorage/model/filter/UI remain unfinished. OSeekableInputWrapper/TempFile and full synchronous Deflater/reset API remain missing.",
+    "Debug assertions, native null raw-pointer calls, multithread races, allocator/OOM/physical ABI remain unqualified. Sequence-only real ZipPackageBuffer operation is a release-profile test, not debug/native pointer acceptance.",
+    "Earlier four metadata type errors, comphelper/sax cycle and157 JSDoc findings remain; earlier independent coverage failures are retained.",
+    "Pako/network and file-access security approvals remain pending; no network, dependency, auth or crypto changes this block."
+  ],
+  "goalStatus": "active; no task completion/full suite due"
+}
