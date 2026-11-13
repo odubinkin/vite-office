@@ -1,0 +1,166 @@
+{
+  "scope": "Original OSL FD buffering/IO/position/size/close/error prerequisite over actual linked filesystem, not URL/open/security or complete SvFileStream/TempFile/backend/model/UI",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "artifact": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 157,
+    "enumConstantCount": 851,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "e45f0b54031bd3662e5fc173a8fd217259392c8f1c22e900245cf4b4d4276f0c"
+  },
+  "sourceSha256": {
+    "apps/office/src/sal/osl/unx/file.ts": "7d23862afa8d2d1e504b1ba989638da4131894fe486084f8da5bd6af123e050b",
+    "apps/office/src/sal/osl/unx/file.test.ts": "32fb390fd48221f6bd1895bb742c128ea9e09ccb6cdec082a670e262d4372ce2",
+    "apps/office/src/sal/osl/unx/file_error_transl.ts": "c1e952597a57be6fc4d2fc61a793730d8ea1f4615a9cfc8da2066108cc1381c6",
+    "apps/office/src/sal/inc/osl/file.ts": "35baf7c2a1b6515650e1e28fbdba7ca0d8ce19eae30b778ec839fc713e190546",
+    "third_party/libxml2-wasm/index.d.ts": "12a2edb682bfac11a9fda0b9ba9f0ea426191d145246107f76e618795df7bf1c",
+    "scripts/build-libxml2-wasm.py": "e7f4e59e7666245a8df0c9ed8abc026463b026409781f523d9c8ea06f32f96c7",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "713e8d164881f5f88b513145164af0850d9ef74475ef6ac7d64afeea6dfa91c9",
+    "scripts/native-dom-worker-probe.mjs": "563391c3348b2aaa92d782cce966867a1c219ec90a1b97bc33a203b2b04b7a71"
+  },
+  "checks": [
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/osl/unx/file.test.ts src/external/emscripten/runtime.test.ts src/tools/source/stream/stream.native.test.ts --maxWorkers=2 --coverage --coverage.include=src/sal/osl/unx/file.ts --coverage.include=src/sal/osl/unx/file_error_transl.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-osl-file",
+      "result": "fail",
+      "log": "apps/office/coverage/native-osl-file-tests.log",
+      "sha256": "36de56460aeb5c633f2de8f3f2956f7ebbfdae3a58203ba5272ba6b45fb6012b"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-osl-file-worker.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "node_modules/.bin/tsc --noEmit --project apps/office/tsconfig.json",
+      "result": "fail",
+      "log": "apps/office/coverage/native-osl-file-types.log",
+      "sha256": "191e4bdf87792572048a2d40ec89fdf71fbac07a0325f9aa1a25ce7df4266208"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/native-osl-file-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-osl-file-vite.log",
+      "sha256": "ad8ae0908414f78b7051185b67554e8b36dbe0dbdc5ab6c9d2f127b47638b24e"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-osl-file-static.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-osl-file-provenance.log",
+      "sha256": "6ec729e53fd7b8d2656463a8188235426a8eebff01fd0fbf1d0820ae572b54d5"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-osl-file-registry.log",
+      "sha256": "4d7ddce9816fd2a74e60e8dee9987045c9830ac773b3ba6d358ee03d4e0004cd"
+    },
+    {
+      "command": "node scripts/check-module-boundaries.mjs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-osl-file-dependencies.log",
+      "sha256": "5816e25ce9938b62fa9fa7c9673f4973c4753562f9a3f92e630f39f5ab84cc8f"
+    },
+    {
+      "command": "node scripts/check-jsdoc.mjs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-osl-file-docs.log",
+      "sha256": "2e31be5dff5b1029a71c8e89f9870b2b1c88fd7ee0e111011b8037553658c30b"
+    },
+    {
+      "command": "node scripts/check-file-size.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-osl-file-size.log",
+      "sha256": "667f3c6d9a3ad017131789581b2bc2a52622650ab127eb5d9495d3891d963cf7"
+    },
+    {
+      "command": "node scripts/check-lo-source-tree.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-osl-file-tree.log",
+      "sha256": "444d529b6df4a6f35f802469bf703a496dc372e53e16295756c8f09af5f0040f"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-osl-file-doctor.log",
+      "sha256": "e27862b8b51c089da4f0a705fca90f082e971c8ef9158de3e74e595714517fa5"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-osl-file-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/sal/osl/unx/file.ts apps/office/src/sal/osl/unx/file.test.ts apps/office/src/sal/osl/unx/file_error_transl.ts apps/office/src/sal/inc/osl/file.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs --max-warnings 0",
+      "result": "pass",
+      "log": "apps/office/coverage/native-osl-file-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/sal/osl/unx/file.ts apps/office/src/sal/osl/unx/file.test.ts apps/office/src/sal/osl/unx/file_error_transl.ts apps/office/src/sal/inc/osl/file.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-osl-file-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    }
+  ],
+  "testResult": "39passed/3files; complete2owner90 FAIL. File S74.33/B77.14/F100/L82.54; errno S23.07/B28.57/F100/L21.56; aggregate65.93/65.36/100/70.72 not individual acceptance. No masks or fake fault provider. Older native-stream branch85.20 and all older failures remain independent.",
+  "sourceQA": "Original sal/qa/osl/file/osl_File.cxx setPos_001/002/003, getPos_001, read_001/002, write_001, setSize_001/002, isEndOfFile_001/002 byte/cursor/error assertions use original53byte pBuffer_Char including NUL. Actual descriptor setup replaces only unavailable URL/open test harness; source File wrapper/open APIs are not claimed implemented. Remaining original URL/open/map/line/storage QA pending.",
+  "behavior": [
+    "Actual linked Emscripten FS owns every descriptor. Original createFileHandleFromFD, page-cache/direct IO threshold, dirty flush, independent logical cursor, cached size, positional operations, checked signed64/ssize_t boundaries, shrink/expand and close-after-error semantics are implemented.",
+    "Selected libc page size65536 comes from pinned musl arch/emscripten/bits/limits.h and sysconf implementation. Actual FS methods lower consumed POSIX operations. Actual fd_sync optional stream_ops.fsync semantics retained for synchronous runtime. Shared memory/pthread/ABI/allocator/OOM failure domains and unsafe-number FS positions remain unqualified. JS GC controls byte storage lifetime.",
+    "Header ordinal enums and actual wasm32 libc errno constants preserve source ENXIO-to-IO and EUSERS/ENOTSUP aliases. Initial declaration extraction failed on different WASI macro syntax; corrected to actual pinned headers. Review caught extended musl136/138 aliases, corrected before final test run. Initial quoted2BIG TS enum syntax fixed before tests.",
+    "Actual readonly descriptor verifies source writeable assumption: small buffered write succeeds, real flush returns BADF; close still closes and returns BADF. No descriptor flag monkeypatch, private field injection, replacement filesystem or fake provider.",
+    "Actual main/DOM-free Worker memory->OSL descriptor write/sync/seek/read/close statuses all0 and bytes123. Current artifact binary unchanged; new public FS type declarations describe already exported getStreamChecked/stream_ops.fsync, with generator template updated. No source download, host mount or global user files accessed."
+  ],
+  "quality": "Scoped lint/format/tools types/direct Vite/static/provenance/registry/size/tree/doctor/routing/diff pass. Provenance2542runtime/2311mapped/193browser/38infra; semanticViolationCount0. Writer resources2tests pass with stdout in tool output; Calc command log passes464commands/11menus/17dispositions. App TS same4metadata errors, dependency cycle and157olderJSDoc findings remain failed. New callback/fileoverview docs corrected to restore157baseline. No full suite due (0parents completed).",
+  "olderFailedGatesRetained": [
+    "Individual native OOXML parser85.45/78.26/100/93.87",
+    "Broader SDK86.44/86.11/92.30/87.96",
+    "Whole SAL79.20/75.47/73.24/80.62",
+    "Older4metadata storage errors, dependency cycle, JSDoc and all earlier broader unqualified scopes remain open.",
+    "Previous native-attribute-collections complete o3tl string_view function88.88 remains failed independently; current source storage coverage does not close it.",
+    "Previous native-storage complete-file failures retained: base73.15/66.66/100/73.33; nativeZip41.41/45.23/100/43.82; helper64.8/75.64/63.15/62.27; parser85.24/80/100/92.72. Current passing stream cases do not close them.",
+    "Previous native-persistence complete SwitchablePersistenceStream scope remains failed S86.27/B82.14/F100/L94.01. Current bootstrap100 does not close or dilute it.",
+    {
+      "native": {
+        "statements": 92.97,
+        "branches": 85.2,
+        "functions": 96.15,
+        "lines": 94.88,
+        "result": "fail90"
+      },
+      "host": {
+        "statements": 99.4,
+        "branches": 98.16,
+        "functions": 100,
+        "lines": 100
+      },
+      "aggregate": "94.78/89.83/97.11/96.33; not native acceptance"
+    },
+    "234 passed, one RTF style failure across16files; expected quotations, actual block-quotation."
+  ],
+  "suspectedIssues": [
+    "WRITER534/CALC597 FD writable assumption/deferred error",
+    "WRITER535/CALC598 ENXIO maps IO despite separate NXIO enum"
+  ],
+  "remaining": [
+    "Original OSL file URL/open/security hooks and SvFileStream, TempFileFastService, remaining CopyAndSwitchPersistenceTo.",
+    "Actual StorageFactory/OStorage/ZipPackage backend and original integration QA.",
+    "Whole-owner90/older failures; native filter/defaultFragment/cache/metadata/model, full DOCX/XLSX import/export/reopen through existing desktop/mobile UI."
+  ],
+  "status": "Both parent tasks remain unfinished; goal active. Canonical evidence only committed; source remains WIP; no merge."
+}

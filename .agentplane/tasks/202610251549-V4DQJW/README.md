@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 94
+revision: 97
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T12:55:45.845Z"
+  updated_at: "2026-11-13T13:07:31.294Z"
   updated_by: "CODER"
-  note: "Source byte stream checkpoint: 234pass/1old RTF failure; native branches85.20 below90. Main/Worker and direct Vite/static pass. Full native storage/model/UI and older failures unfinished; see native-sv-stream-continuation.json."
-  attempts: 18
+  note: "OSL FD/page prerequisite:39related tests pass; real main/Worker descriptor IO pass. Whole-owner90 fails file/errno, older failures and full file/temp/backend/model/UI remain. See native-osl-file-continuation.json."
+  attempts: 19
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -296,8 +299,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T13:07:31.294Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "OSL FD/page prerequisite:39related tests pass; real main/Worker descriptor IO pass. Whole-owner90 fails file/errno, older failures and full file/temp/backend/model/UI remain. See native-osl-file-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-13T13:07:35.262Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T12:55:50.658Z"
+doc_updated_at: "2026-11-13T13:07:35.262Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -850,6 +866,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T13:07:31.294Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: OSL FD/page prerequisite:39related tests pass; real main/Worker descriptor IO pass. Whole-owner90 fails file/errno, older failures and full file/temp/backend/model/UI remain. See native-osl-file-continuation.json.
+    Attempts: 19
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T13:07:30.661Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -1070,6 +1116,10 @@ sections:
     - Observation: Original byte SvStream/SvMemoryStream and shared active host buffer now execute with source QA/234passing cases and main/Worker. Evidence: `evidence/native-sv-stream-continuation.json`.
       Impact: Byte prerequisite advances; native branch coverage85.20, old RTF style failure and prior quality/whole-owner failures remain open. JS storage is GC-managed; source flag controls logical resize/transfer only.
       Resolution: Continue actual file/OSL/TempFile/storage graph and native filter/model/export/UI without fake backend or allocator emulation. Goal active, no incomplete source implementation commit.
+
+    - Observation: Original OSL FD/page IO owner, errno/header bindings and actual Worker descriptor path now execute with39related tests/source assertions. See `evidence/native-osl-file-continuation.json`.
+      Impact: File prerequisite progresses; new whole-owner90 and all older failures remain open. Original URL/open/security/FileStream/temp/backend/model/UI still pending; no successful provider substitution.
+      Resolution: Preserve source deferred readonly/ENXIO behavior (WRITER534/CALC597, WRITER535/CALC598), continue actual file/temp/storage/filter/model/UI. Goal active; no unfinished source implementation commit.
 id_source: "generated"
 ---
 ## Summary
@@ -1633,6 +1683,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T13:07:31.294Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: OSL FD/page prerequisite:39related tests pass; real main/Worker descriptor IO pass. Whole-owner90 fails file/errno, older failures and full file/temp/backend/model/UI remain. See native-osl-file-continuation.json.
+Attempts: 19
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T13:07:30.661Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -1858,3 +1938,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Original byte SvStream/SvMemoryStream and shared active host buffer now execute with source QA/234passing cases and main/Worker. Evidence: `evidence/native-sv-stream-continuation.json`.
   Impact: Byte prerequisite advances; native branch coverage85.20, old RTF style failure and prior quality/whole-owner failures remain open. JS storage is GC-managed; source flag controls logical resize/transfer only.
   Resolution: Continue actual file/OSL/TempFile/storage graph and native filter/model/export/UI without fake backend or allocator emulation. Goal active, no incomplete source implementation commit.
+
+- Observation: Original OSL FD/page IO owner, errno/header bindings and actual Worker descriptor path now execute with39related tests/source assertions. See `evidence/native-osl-file-continuation.json`.
+  Impact: File prerequisite progresses; new whole-owner90 and all older failures remain open. Original URL/open/security/FileStream/temp/backend/model/UI still pending; no successful provider substitution.
+  Resolution: Preserve source deferred readonly/ENXIO behavior (WRITER534/CALC597, WRITER535/CALC598), continue actual file/temp/storage/filter/model/UI. Goal active; no unfinished source implementation commit.
