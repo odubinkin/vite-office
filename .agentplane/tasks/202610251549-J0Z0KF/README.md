@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 379
+revision: 382
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T15:20:51.017Z"
+  updated_at: "2026-11-13T16:02:53.699Z"
   updated_by: "CODER"
-  note: "Original InflateZlib and eager XBufferedStream implemented; existing public zip.js WASM reused without download.101 functional tests pass including native Strict/Transitional/ZIP64 entry inflation, but independent buffered/external scoped90 gates fail. Core inflater above90; real main/DOM-free Worker passes. CRC/XUnbufferedStream/storage/model/UI and older failures remain unfinished. Evidence native-entry-streams-continuation.json."
-  attempts: 118
+  note: "Plain native ZIP entry chain now runs getDataStream/getInputStream/raw via actual XUnbufferedStream, CRC32/rtl_crc32 and eager buffer.147 focused/upstream CRC/ODF tests pass; all current whole-owner scoped90 gates and main/DOM-free Worker pass. Older global/coverage failures and storage/model/export/UI acceptance remain unfinished. Evidence native-entry-read-continuation.json."
+  attempts: 119
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1896,8 +1899,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T16:02:53.699Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Plain native ZIP entry chain now runs getDataStream/getInputStream/raw via actual XUnbufferedStream, CRC32/rtl_crc32 and eager buffer.147 focused/upstream CRC/ODF tests pass; all current whole-owner scoped90 gates and main/DOM-free Worker pass. Older global/coverage failures and storage/model/export/UI acceptance remain unfinished. Evidence native-entry-read-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-13T16:02:58.823Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T15:21:38.467Z"
+doc_updated_at: "2026-11-13T16:02:58.823Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -5452,6 +5468,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T16:02:53.699Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Plain native ZIP entry chain now runs getDataStream/getInputStream/raw via actual XUnbufferedStream, CRC32/rtl_crc32 and eager buffer.147 focused/upstream CRC/ODF tests pass; all current whole-owner scoped90 gates and main/DOM-free Worker pass. Older global/coverage failures and storage/model/export/UI acceptance remain unfinished. Evidence native-entry-read-continuation.json.
+    Attempts: 119
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T16:01:20.287Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -6023,6 +6069,10 @@ sections:
     ### Native entry streams and existing zlib continuation
 
     Original Inflater/InflateZlib now uses actual synchronous exports from the installed zip.js2.24.0 public WASM artifact, preserving source Sequence/COW, segment/status/error/consumption/end semantics. Bounded ABI windows pass actual1MiB incompressible input and >16MiB output. No pako/download or dependency change is needed; the earlier optional pako request became unnecessary. Source-internal XBufferedStream is implemented over actual native UNO/ByteReader; EOF and unchecked-skip findings are recorded.101 functional tests pass across4files, including native directory+inflation of five unchanged upstream Strict/Transitional/ZIP64 parts and original styles.xml1112-byte assertion; actual main/DOM-free Worker passes. Core inflater exceeds scoped90, but external adapter and buffered constructor whole-owner coverage remain failing independently; non-ByteReader real input/allocator failures are not faked. Existing4metadata type errors, comphelper/sax cycle and157JSDoc findings remain. Complete CRC/XUnbufferedStream, storage factories, models, filter routes and UI acceptance remain unfinished. See evidence/native-entry-streams-continuation.json for commands/hashes and coverage. No full suite due, task completion or pause.
+
+    ### Native complete plain entry-read continuation
+
+    Original nonencrypted ZipFile entry methods now construct real XUnbufferedStream/CRC32/rtl_crc32 and original Emscripten XBufferedStream, with actual input/seek/mutex/Sequence owners and existing installed zlib. The byte-exact existing JS CRC module is packaged locally; offline installation adds one local file package, no external download/pako or scripts.147tests across7files and all current whole-owner scoped90 gates pass, including six original SAL CRC assertions, actual upstream Strict/Transitional DOCX/XLSX/ZIP64 getDataStream payloads and source error/quirk tests. Actual Chromium main/DOM-free Worker chain passes. Real non-ByteReader input resolves older ByteGrabber/buffered owner coverage gaps without fake providers/RTTI/private injection. The OASIS regression test now selects actual OASIS MIME literal namespace and all16originalcases as legacy constants expand; ManifestExport runtime is unchanged. Source findings WRITER549..553/CALC612..616 are recorded and preserved. Existing4metadata types/157JSDoc/cycle and older independent coverage failures remain, including external inflate adapter. Package storage factories/models/export/filter/UI acceptance remains unfinished. See evidence/native-entry-read-continuation.json for commands, log/source hashes, coverage and remaining domains. No task/goal completion or pause; no full suite due. Continue actual native package storage integration.
 id_source: "generated"
 ---
 ## Summary
@@ -9587,6 +9637,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T16:02:53.699Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Plain native ZIP entry chain now runs getDataStream/getInputStream/raw via actual XUnbufferedStream, CRC32/rtl_crc32 and eager buffer.147 focused/upstream CRC/ODF tests pass; all current whole-owner scoped90 gates and main/DOM-free Worker pass. Older global/coverage failures and storage/model/export/UI acceptance remain unfinished. Evidence native-entry-read-continuation.json.
+Attempts: 119
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T16:01:20.287Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -10162,3 +10242,7 @@ Original ZipFile END/CEN/LOC/ZIP64/data-descriptor/extra-field checks now execut
 ### Native entry streams and existing zlib continuation
 
 Original Inflater/InflateZlib now uses actual synchronous exports from the installed zip.js2.24.0 public WASM artifact, preserving source Sequence/COW, segment/status/error/consumption/end semantics. Bounded ABI windows pass actual1MiB incompressible input and >16MiB output. No pako/download or dependency change is needed; the earlier optional pako request became unnecessary. Source-internal XBufferedStream is implemented over actual native UNO/ByteReader; EOF and unchecked-skip findings are recorded.101 functional tests pass across4files, including native directory+inflation of five unchanged upstream Strict/Transitional/ZIP64 parts and original styles.xml1112-byte assertion; actual main/DOM-free Worker passes. Core inflater exceeds scoped90, but external adapter and buffered constructor whole-owner coverage remain failing independently; non-ByteReader real input/allocator failures are not faked. Existing4metadata type errors, comphelper/sax cycle and157JSDoc findings remain. Complete CRC/XUnbufferedStream, storage factories, models, filter routes and UI acceptance remain unfinished. See evidence/native-entry-streams-continuation.json for commands/hashes and coverage. No full suite due, task completion or pause.
+
+### Native complete plain entry-read continuation
+
+Original nonencrypted ZipFile entry methods now construct real XUnbufferedStream/CRC32/rtl_crc32 and original Emscripten XBufferedStream, with actual input/seek/mutex/Sequence owners and existing installed zlib. The byte-exact existing JS CRC module is packaged locally; offline installation adds one local file package, no external download/pako or scripts.147tests across7files and all current whole-owner scoped90 gates pass, including six original SAL CRC assertions, actual upstream Strict/Transitional DOCX/XLSX/ZIP64 getDataStream payloads and source error/quirk tests. Actual Chromium main/DOM-free Worker chain passes. Real non-ByteReader input resolves older ByteGrabber/buffered owner coverage gaps without fake providers/RTTI/private injection. The OASIS regression test now selects actual OASIS MIME literal namespace and all16originalcases as legacy constants expand; ManifestExport runtime is unchanged. Source findings WRITER549..553/CALC612..616 are recorded and preserved. Existing4metadata types/157JSDoc/cycle and older independent coverage failures remain, including external inflate adapter. Package storage factories/models/export/filter/UI acceptance remains unfinished. See evidence/native-entry-read-continuation.json for commands, log/source hashes, coverage and remaining domains. No task/goal completion or pause; no full suite due. Continue actual native package storage integration.
