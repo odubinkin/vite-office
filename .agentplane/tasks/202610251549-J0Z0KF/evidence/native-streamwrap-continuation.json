@@ -1,0 +1,167 @@
+{
+  "scope": "Original SvStream/UNO wrapper components and non-reference-counting ImplHelper1 dependency; actual byte/UNO/persistence/C XML/Worker graph, not full file/temp/backend/model/UI",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "artifact": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 157,
+    "enumConstantCount": 851,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "e45f0b54031bd3662e5fc173a8fd217259392c8f1c22e900245cf4b4d4276f0c"
+  },
+  "sourceSha256": {
+    "apps/office/src/unotools/source/streaming/streamwrap.ts": "40bfaa747f7dfb52ed64f0046baa65c4c22ed31f57f23d92bf1b854ff680a1d0",
+    "apps/office/src/unotools/source/streaming/streamwrap.test.ts": "1cd6ea28c6aa9dd84eb8d35b45ac78878aedce6c8cbc7c4b261e89f7175bd3dc",
+    "apps/office/src/cppuhelper/inc/implbase1.ts": "88ecb93511b5d8246facf9c99ceb08913f485f44c88b5a0eb41e3daa30f07501",
+    "apps/office/src/cppuhelper/inc/implbase_ex.ts": "8097fee5e08ab6d69a979697ec2b8c0acf10434eca73d21bd30cbdea94e579de",
+    "apps/office/src/cppuhelper/source/implbase_ex.ts": "760ca78ddc04e4dc6130dde525e0127d48221af5e277fd0de6e631f6714aba81",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "2ed559abca18d8dbd2566cdb9402aeb172c2061d60be41065030ab4d3a747bed",
+    "scripts/native-dom-worker-probe.mjs": "3f7d22a3646173285617c73ebed332f7b7f51bb01ce671adb670fc94bb01fbe0"
+  },
+  "checks": [
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/unotools/source/streaming/streamwrap.test.ts src/cppuhelper/source/native-implbase.test.ts src/cppuhelper/source/native-inheritance.test.ts src/tools/source/stream/stream.native.test.ts src/package/source/xstor/switchpersistencestream.test.ts --maxWorkers=2 --coverage --coverage.include=src/unotools/source/streaming/streamwrap.ts --coverage.include=src/cppuhelper/inc/implbase1.ts --coverage.include=src/cppuhelper/source/implbase_ex.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-streamwrap",
+      "result": "pass",
+      "log": "apps/office/coverage/native-streamwrap-tests.log",
+      "sha256": "2bbc827a0d3923b9bbada122f8cc3805611d4f871ab27ee7eaa0d6d51247b505"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-streamwrap-worker.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "node_modules/.bin/tsc --noEmit --project apps/office/tsconfig.json",
+      "result": "fail",
+      "log": "apps/office/coverage/native-streamwrap-types.log",
+      "sha256": "191e4bdf87792572048a2d40ec89fdf71fbac07a0325f9aa1a25ce7df4266208"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/native-streamwrap-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-streamwrap-vite.log",
+      "sha256": "0f596154ccac6d9cace83c8def0fe85249ac75eb6fd2a37f24f06d80d327ebf7"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-streamwrap-static.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-streamwrap-provenance.log",
+      "sha256": "61727e2e953ebb7a5f13b72c87a913ea69161962b56e16a259471ae1534d4c4e"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-streamwrap-registry.log",
+      "sha256": "904a71264797bc37eee1bfe9b118e4665e8a9ae0ce9a94a04d66192744636732"
+    },
+    {
+      "command": "node scripts/check-module-boundaries.mjs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-streamwrap-dependencies.log",
+      "sha256": "d09526752cf04516047ec4acb12bfd27b2e8aa9108ae0dfb465e782d24a2ee9c"
+    },
+    {
+      "command": "node scripts/check-jsdoc.mjs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-streamwrap-docs.log",
+      "sha256": "2e31be5dff5b1029a71c8e89f9870b2b1c88fd7ee0e111011b8037553658c30b"
+    },
+    {
+      "command": "node scripts/check-file-size.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-streamwrap-size.log",
+      "sha256": "9ab018dda55fc2d12c46fe85262d82a7ce53f38e1ebaf146da9b2f5609a3d5ff"
+    },
+    {
+      "command": "node scripts/check-lo-source-tree.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-streamwrap-tree.log",
+      "sha256": "444d529b6df4a6f35f802469bf703a496dc372e53e16295756c8f09af5f0040f"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-streamwrap-doctor.log",
+      "sha256": "9e5c5c8eda87a1a5aa8dd7c1474ec79505913b411a4ae3a49601e5ef19665261"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-streamwrap-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "(npm run check:writer-resources && npm run check:calc-resources)",
+      "result": "pass",
+      "log": "apps/office/coverage/native-streamwrap-resources.log",
+      "sha256": "4ea73d7184e49806d84094e02bd145a22ffbc8ed79bed93ffc12b431569b2a4f"
+    }
+  ],
+  "coverage": {
+    "result": "pass90 complete3owners",
+    "tests": "41passed/5files",
+    "streamwrap": "S98.49/B95.12/F96.55/L98.40",
+    "implbase1": "100/100/100/100 (hidden in console table by skipFull; confirmed coverage-final.json)",
+    "implbase_ex": "S96.36/B94.11/F100/L95.78",
+    "aggregate": "97.66/94.80/98.11/97.42, not used to dilute individual scopes"
+  },
+  "behavior": [
+    "Original5wrappers retain real native byte stream, WeakImplHelper/ImplInheritanceHelper/ImplHelper1, acquired identical facets, actual ByteReader pointer RTTI, Sequence/error/context/cursor/close contracts. No secondary component or reference registry.",
+    "Original input negative count/connection/error/EOF order, signed relative skips, error message and actual context, source lifecycle ownership and byte GC semantics preserved. Output close remains no-op; FlushBuffer only; truncate ignores returned error.",
+    "Output seek narrows64to32 while input casts64unsigned. OStreamWrapper shared input close clears pointer; unguarded output-after-close native null domain is preserved/unexecuted, no replacement exception claim.",
+    "Actual C DocumentBuilder parses Unicode via SvMemoryStream/UNO wrapper. Original SwitchablePersistenceStream uses the same wrapper and real acquired interfaces. Main/DOM-free Worker confirms native bytes123, length3 and identical output facet, alongside existing C/FS/OSL/relations/persistence probes.",
+    "Selected non-pthread mutex stubs and JS GC remain unchanged. Physical C++ layout/ABI/invalid pointer/native threading/allocator domains unqualified; no fake backend/provider, private patch or numeric source state injection."
+  ],
+  "sourceQA": "No direct wrapper registrations found in targeted local unotools/qa and package/qa searches. Existing original tools stream QA is included in related scope; genuine new critical wrapper/component/persistence/C parser scenarios added. Complete upstream storage/temp integration QA and all original broader format QA remain unfinished.",
+  "quality": "Scoped lint/format/tools types/Vite/static/resources/size/tree/provenance/registry/doctor/routing/diff pass. Provenance2544runtime/2313mapped/193browser/38infra; semanticViolationCount0. Same4metadata TS errors/dependency cycle/157olderJSDoc findings remain. Initial wrong Type Sequence argument/root interface import and unused imports fixed; final tests rerun. New5abstract-method docs added to restore157baseline, no coverage masks. No full suite due (0parents completed).",
+  "olderFailedGatesRetained": [
+    "Individual native OOXML parser85.45/78.26/100/93.87",
+    "Broader SDK86.44/86.11/92.30/87.96",
+    "Whole SAL79.20/75.47/73.24/80.62",
+    "Older4metadata storage errors, dependency cycle, JSDoc and all earlier broader unqualified scopes remain open.",
+    "Previous native-attribute-collections complete o3tl string_view function88.88 remains failed independently; current source storage coverage does not close it.",
+    "Previous native-storage complete-file failures retained: base73.15/66.66/100/73.33; nativeZip41.41/45.23/100/43.82; helper64.8/75.64/63.15/62.27; parser85.24/80/100/92.72. Current passing stream cases do not close them.",
+    "Previous native-persistence complete SwitchablePersistenceStream scope remains failed S86.27/B82.14/F100/L94.01. Current bootstrap100 does not close or dilute it.",
+    {
+      "native": {
+        "statements": 92.97,
+        "branches": 85.2,
+        "functions": 96.15,
+        "lines": 94.88,
+        "result": "fail90"
+      },
+      "host": {
+        "statements": 99.4,
+        "branches": 98.16,
+        "functions": 100,
+        "lines": 100
+      },
+      "aggregate": "94.78/89.83/97.11/96.33; not native acceptance"
+    },
+    "234 passed, one RTF style failure across16files; expected quotations, actual block-quotation.",
+    "39passed/3files; complete2owner90 FAIL. File S74.33/B77.14/F100/L82.54; errno S23.07/B28.57/F100/L21.56; aggregate65.93/65.36/100/70.72 not individual acceptance. No masks or fake fault provider. Older native-stream branch85.20 and all older failures remain independent."
+  ],
+  "suspectedIssues": [
+    "WRITER536/CALC599 output seek narrowing",
+    "WRITER537/CALC600 output-after-shared-input-close null pointer domain"
+  ],
+  "pendingApproval": "Question sent for exact original setAllowedPaths/isForbidden and pre-open security hook from sal/osl/unx/file.cxx under security.must explicit-scope rule. No permission reply yet, no security-hook mutation; independent wrapper progress completed. No host files mounted/accessed.",
+  "remaining": [
+    "Source OSL URL/open/security hooks, SvFileStream/TempFileFastService/remaining CopyAndSwitchPersistenceTo and real OStorageFactory/OStorage/ZipPackage backend.",
+    "Older whole-owner/quality failures, original broader QA; native filter/cache/defaultFragment/metadata/model and full DOCX/XLSX export/reopen through existing desktop/mobile UI."
+  ],
+  "status": "Goal active, both parents unfinished. Canonical evidence only checkpointed; source remains WIP; no merge."
+}
