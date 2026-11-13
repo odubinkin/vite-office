@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 106
+revision: 109
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T13:52:25.550Z"
+  updated_at: "2026-11-13T14:39:35.887Z"
   updated_by: "CODER"
-  note: "ZIP binary/pointer checkpoint:81related cases/main-Worker/4actual package headers pass;10owners measured, reader/native stream/persistence90 still fail. Full ZIP/backend/model/UI and older failures unfinished. See native-zip-byte-continuation.json."
-  attempts: 22
+  note: "Actual native OSL/RefCountedMutex and ZipEntry prerequisites:34cases/4whole TS owners90/current artifact/main-Worker pass. ZipFile directory/backend/model/UI and older failures unfinished; native threaded/global domains unqualified. See native-zip-directory-prerequisites-continuation.json."
+  attempts: 23
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -360,8 +363,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T14:39:35.887Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Actual native OSL/RefCountedMutex and ZipEntry prerequisites:34cases/4whole TS owners90/current artifact/main-Worker pass. ZipFile directory/backend/model/UI and older failures unfinished; native threaded/global domains unqualified. See native-zip-directory-prerequisites-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-13T14:40:18.879Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T13:52:30.852Z"
+doc_updated_at: "2026-11-13T14:40:18.879Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -1034,6 +1050,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T14:39:35.887Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Actual native OSL/RefCountedMutex and ZipEntry prerequisites:34cases/4whole TS owners90/current artifact/main-Worker pass. ZipFile directory/backend/model/UI and older failures unfinished; native threaded/global domains unqualified. See native-zip-directory-prerequisites-continuation.json.
+    Attempts: 23
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T14:39:35.291Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -1270,6 +1316,10 @@ sections:
     - Observation: Original ZIP binary IO and actual typed/cell byte-pointer contract now execute through real streams/4pinned package headers/main-Worker;81related cases,10whole owners measured. Evidence: `evidence/native-zip-byte-continuation.json`.
       Impact: ZIP prerequisite progresses; ByteGrabber/native stream/persistence90 and all older failures remain open. Full ZIP backend/file/temp/storage/model/UI unfinished; security approval pending.
       Resolution: Preserve WRITER541/CALC604 and WRITER542/CALC605; implement actual archive backend/source QA without fake fallback providers, then full format/model/UI. Goal active; no unfinished source implementation commit.
+
+    - Observation: Actual native OSL/RefCountedMutex and original ZipEntry prerequisites now execute with34related cases/4whole-owner90PASS/current native artifact/main-Worker. Evidence: `evidence/native-zip-directory-prerequisites-continuation.json`.
+      Impact: Required original ZipFile ownership advances; directory/LOC/backend and full model/UI remain unfinished. Native thread/global/busy/ABI domains and all earlier failed scopes retained.
+      Resolution: Implement actual directory/local/descriptors/native collection graph, preserving WRITER543/CALC606 through WRITER545/CALC608; no fake locks/providers. Goal active; security hook pending; no unfinished source implementation commit.
 id_source: "generated"
 ---
 ## Summary
@@ -1953,6 +2003,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T14:39:35.887Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Actual native OSL/RefCountedMutex and ZipEntry prerequisites:34cases/4whole TS owners90/current artifact/main-Worker pass. ZipFile directory/backend/model/UI and older failures unfinished; native threaded/global domains unqualified. See native-zip-directory-prerequisites-continuation.json.
+Attempts: 23
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T14:39:35.291Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -2194,3 +2274,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Original ZIP binary IO and actual typed/cell byte-pointer contract now execute through real streams/4pinned package headers/main-Worker;81related cases,10whole owners measured. Evidence: `evidence/native-zip-byte-continuation.json`.
   Impact: ZIP prerequisite progresses; ByteGrabber/native stream/persistence90 and all older failures remain open. Full ZIP backend/file/temp/storage/model/UI unfinished; security approval pending.
   Resolution: Preserve WRITER541/CALC604 and WRITER542/CALC605; implement actual archive backend/source QA without fake fallback providers, then full format/model/UI. Goal active; no unfinished source implementation commit.
+
+- Observation: Actual native OSL/RefCountedMutex and original ZipEntry prerequisites now execute with34related cases/4whole-owner90PASS/current native artifact/main-Worker. Evidence: `evidence/native-zip-directory-prerequisites-continuation.json`.
+  Impact: Required original ZipFile ownership advances; directory/LOC/backend and full model/UI remain unfinished. Native thread/global/busy/ABI domains and all earlier failed scopes retained.
+  Resolution: Implement actual directory/local/descriptors/native collection graph, preserving WRITER543/CALC606 through WRITER545/CALC608; no fake locks/providers. Goal active; security hook pending; no unfinished source implementation commit.
