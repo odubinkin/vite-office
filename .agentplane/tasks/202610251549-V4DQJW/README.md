@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 64
+revision: 67
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T08:48:43.542Z"
+  updated_at: "2026-11-13T09:04:42.703Z"
   updated_by: "CODER"
-  note: "Shared actual source custom entity/RTL/libc/stream loop stage complete on Emscripten profile;64 related tests/whole parser90 gate and main/DOM-free Worker real input path pass.157-export genuine pinned native build, approved NOENT/HUGE executes. Broader SAL137 tests pass but whole-owner90 gate fails; retain separately. Native UNO wrapper/full original QA/service and Writer SwDoc/filter/Strict+Transitional/package/UI acceptance incomplete, metadata/cycle/docs failures retained. Evidence: evidence/native-fastparser-stream-entities-continuation.json."
-  attempts: 8
+  note: "Shared native FastParser UNO service checkpoint:63 tests pass and whole implementation/wrapper gate above90, actual registered main/Worker parse route passes. Broader SDK gate fails; original Pipe/Legacy QA and full native metadata/model/DOCX UI acceptance remain unfinished. Earlier failed gates retained. Evidence native-fastparser-uno-service-continuation.json. Goal continues."
+  attempts: 9
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -136,8 +139,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T09:04:42.703Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared native FastParser UNO service checkpoint:63 tests pass and whole implementation/wrapper gate above90, actual registered main/Worker parse route passes. Broader SDK gate fails; original Pipe/Legacy QA and full native metadata/model/DOCX UI acceptance remain unfinished. Earlier failed gates retained. Evidence native-fastparser-uno-service-continuation.json. Goal continues."
+  -
+    type: "status"
+    at: "2026-11-13T09:04:51.664Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T08:48:51.490Z"
+doc_updated_at: "2026-11-13T09:04:51.664Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -390,6 +406,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-13T09:04:42.703Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared native FastParser UNO service checkpoint:63 tests pass and whole implementation/wrapper gate above90, actual registered main/Worker parse route passes. Broader SDK gate fails; original Pipe/Legacy QA and full native metadata/model/DOCX UI acceptance remain unfinished. Earlier failed gates retained. Evidence native-fastparser-uno-service-continuation.json. Goal continues.
+    Attempts: 9
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T09:04:30.098Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -570,6 +616,10 @@ sections:
     - Observation: Genuine native C callback/entity/location/opaque-scope APIs now available; XML option policy not activated. Explicit NOENT|HUGE scope question and earlier URL security question lack observed human answer.
       Impact: Shared prerequisite progress cannot certify full Writer import/export.4 metadata storage tsc errors, legacy parser cycle and160 older JSDoc diagnostics remain.
       Resolution: Continue independent real source entity/context/namespace/locator/error owners under original Emscripten profile; hold only the concrete unapproved security changes.
+
+    - Observation: Original FastSaxParser public UNO wrapper/factory is now implemented and registered; the earlier pending exact XML option approval has been received and implemented. Shared evidence: `evidence/native-fastparser-uno-service-continuation.json`.
+      Impact: Native public parser and actual Worker service route advance, but broader SDK coverage and complete original Pipe/Legacy/format/UI acceptance remain open; older whole SAL/type/dependency/JSDoc failures retained.
+      Resolution: Continue real source owners and original QA, keep goal active and existing browser workflows unchanged; no fake failure providers or parser aliases.
 id_source: "generated"
 ---
 ## Summary
@@ -833,6 +883,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-13T09:04:42.703Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared native FastParser UNO service checkpoint:63 tests pass and whole implementation/wrapper gate above90, actual registered main/Worker parse route passes. Broader SDK gate fails; original Pipe/Legacy QA and full native metadata/model/DOCX UI acceptance remain unfinished. Earlier failed gates retained. Evidence native-fastparser-uno-service-continuation.json. Goal continues.
+Attempts: 9
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T09:04:30.098Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -1018,3 +1098,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Genuine native C callback/entity/location/opaque-scope APIs now available; XML option policy not activated. Explicit NOENT|HUGE scope question and earlier URL security question lack observed human answer.
   Impact: Shared prerequisite progress cannot certify full Writer import/export.4 metadata storage tsc errors, legacy parser cycle and160 older JSDoc diagnostics remain.
   Resolution: Continue independent real source entity/context/namespace/locator/error owners under original Emscripten profile; hold only the concrete unapproved security changes.
+
+- Observation: Original FastSaxParser public UNO wrapper/factory is now implemented and registered; the earlier pending exact XML option approval has been received and implemented. Shared evidence: `evidence/native-fastparser-uno-service-continuation.json`.
+  Impact: Native public parser and actual Worker service route advance, but broader SDK coverage and complete original Pipe/Legacy/format/UI acceptance remain open; older whole SAL/type/dependency/JSDoc failures retained.
+  Resolution: Continue real source owners and original QA, keep goal active and existing browser workflows unchanged; no fake failure providers or parser aliases.
