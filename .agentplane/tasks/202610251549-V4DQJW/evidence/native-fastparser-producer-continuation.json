@@ -1,0 +1,242 @@
+{
+  "sharedEvidence": ".agentplane/tasks/202610251549-J0Z0KF/evidence/native-fastparser-producer-continuation.json",
+  "status": "unfinished",
+  "checks": [
+    {
+      "command": "../../node_modules/.bin/vitest run src/sax/source/fastparser/fastparser.producer.test.ts src/sax/source/fastparser/fastparser.impl.test.ts src/sax/source/fastparser/fastparser.entity.test.ts src/sax/source/fastparser/fastparser.errors.test.ts src/sax/source/fastparser/fastparser.normalize.test.ts src/external/libxml2/fastparsercallbacks.test.ts --maxWorkers=2 --coverage --coverage.include='src/sax/source/fastparser/fastparser.impl.ts' --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/fastparser-producer-final",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-producer-final.log",
+      "evidence": "63cases/6files; actual C callbacks/native consumers/diagnostics/normalization/ABI regressions. Whole callback owner S96.47/B90.75/F100/L97.71 at90."
+    },
+    {
+      "command": "../../node_modules/.bin/vitest run src/sax/source/fastparser/fastparser.producer.test.ts src/sax/source/fastparser/fastparser.impl.test.ts --maxWorkers=2 --coverage --coverage.include='src/sax/source/fastparser/fastparser.impl.ts' --coverage.include='src/udkapi/com/sun/star/container/XMap.ts' --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/fastparser-producer-final-current",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-producer-final-current.log",
+      "evidence": "Current20cases/2files, complete impl owner S96.47/B90.75/F100/L97.71; XMap declared-type binding100 independently. Combined S96.56/B90.90/F100/L97.78. Real C records are distinct from direct nullable C-ABI calls; no fake positive parser/handler/map or private-state/error/counter injection."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-producer-worker.log",
+      "evidence": "Actual main/DOM-free module Worker now connects4 real C callbacks through original producers to actual Entity/legacy/registered Writer/token/output stream. Supplementary UTF8 chunk split preserved. Old supplied-Event consumer probe replaced; fifth fixture callback still genuine C predefined lookup, not original custom entity logic."
+    },
+    {
+      "command": "../../node_modules/.bin/vite build",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-producer-vite.log",
+      "evidence": "Production Vite. Complete package build not green because app tsc still fails."
+    },
+    {
+      "command": "node_modules/.bin/tsc --project apps/office/tsconfig.json --noEmit",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/fastparser-producer-types-current.log",
+      "evidence": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(338,9): error TS2304: Cannot find name 'MediaDescriptor'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(410,36): error TS2345: Argument of type 'Sequence<PropertyValue>' is not assignable to parameter of type 'SfxMediumInput'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(411,26): error TS2339: Property 'GetOutputStorage' does not exist on type 'SfxMedium'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(438,27): error TS2339: Property 'Commit' does not exist on type 'SfxMedium'.\n"
+    },
+    {
+      "command": "node_modules/.bin/tsc --project tsconfig.tools.json --noEmit",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-producer-tools-types.log",
+      "evidence": ""
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/check-source-provenance.ts",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-producer-provenance-current.log",
+      "evidence": "2523runtime/2294mapped/192browser/37infrastructure."
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-producer-registry-current.log",
+      "evidence": "semanticViolationCount0; broad semantics/defaults stay unverified."
+    },
+    {
+      "command": "node scripts/check-module-boundaries.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/fastparser-producer-boundaries.log",
+      "evidence": "Same old comphelper->sax->comphelper cycle; no new edge or exemption."
+    },
+    {
+      "command": "node scripts/check-jsdoc.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/fastparser-producer-jsdoc-final.log",
+      "evidence": "160 older diagnostics, no current producer/contract/probe finding."
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/sax/source/fastparser/fastparser.impl.ts apps/office/src/sax/source/fastparser/fastparser.producer.test.ts apps/office/src/sax/source/fastparser/fastparser.impl.test.ts apps/office/src/udkapi/com/sun/star/container/XMap.ts scripts/fixtures/native-fastparser-consumer-probe.ts",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-producer-eslint-final.log",
+      "evidence": ""
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/sax/source/fastparser/fastparser.impl.ts apps/office/src/sax/source/fastparser/fastparser.impl.test.ts apps/office/src/sax/source/fastparser/fastparser.producer.test.ts apps/office/src/udkapi/com/sun/star/container/XMap.ts scripts/fixtures/native-fastparser-consumer-probe.ts docs/program/registry/shared/provenance/udkapi/com/sun/star/container/XMap.ts.json docs/program/registry/shared/runtime/udkapi/com/sun/star/container/XMap.ts.json",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-producer-format.log",
+      "evidence": ""
+    },
+    {
+      "command": "node scripts/check-file-size.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-producer-size.log",
+      "evidence": ""
+    },
+    {
+      "command": "node scripts/check-lo-source-tree.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-producer-source-tree.log",
+      "evidence": ""
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-producer-routing.log",
+      "evidence": ""
+    },
+    {
+      "command": "ap doctor",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-producer-doctor.log",
+      "evidence": ""
+    },
+    {
+      "command": "git diff --check",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-producer-diff.log",
+      "evidence": ""
+    }
+  ],
+  "coverage": {
+    "scope": [
+      "sax/source/fastparser/fastparser.impl.ts",
+      "udkapi/com/sun/star/container/XMap.ts"
+    ],
+    "directory": "apps/office/coverage/fastparser-producer-final-current",
+    "summary": {
+      "total": {
+        "lines": {
+          "total": 316,
+          "covered": 309,
+          "skipped": 0,
+          "pct": 97.78
+        },
+        "statements": {
+          "total": 349,
+          "covered": 337,
+          "skipped": 0,
+          "pct": 96.56
+        },
+        "functions": {
+          "total": 33,
+          "covered": 33,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 121,
+          "covered": 110,
+          "skipped": 0,
+          "pct": 90.9
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/fastparser/fastparser.impl.ts": {
+        "lines": {
+          "total": 307,
+          "covered": 300,
+          "skipped": 0,
+          "pct": 97.71
+        },
+        "functions": {
+          "total": 30,
+          "covered": 30,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 340,
+          "covered": 328,
+          "skipped": 0,
+          "pct": 96.47
+        },
+        "branches": {
+          "total": 119,
+          "covered": 108,
+          "skipped": 0,
+          "pct": 90.75
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/udkapi/com/sun/star/container/XMap.ts": {
+        "lines": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "rawSha256": {
+      "coverage-final.json": "8da3a0fd30a461cb02e176ba857a6d335f491d5a955870d6b8960ae37aba7ac8",
+      "coverage-summary.json": "1e457c2f8b810cf1a91da84783e368eaa3e998220a66269bd80a7fa73759c9b9"
+    },
+    "qualification": "Whole2owners independently pass90.63-case prior current-source gate and20-case final2owner gate are separate unmerged maps. Remaining nonnull-map/other-platform/invalid-private-domain branches stay unqualified. Older failed wider gates remain open."
+  },
+  "qualification": [
+    "Actual C SAX2 start/end/characters/PI now feed original target-profile producers, real Entity/context/attribute owners and native registered Writer/token/output stream. Full converted-input stream loop/cleanup and custom-entity fifth callback remain missing.",
+    "Fixture fifth C callback uses the real predefined C API; it is not a substitute source custom-entity provider or a registered native FastParser. Direct NULL URI/PI callback operands are explicitly separate from actual C-emitted-record tests.",
+    "Complete XMap declarations/type getter are ported; nonnull actual map implementation/execution is unported/unqualified, no fake lookup/default/type/value provider.",
+    "Original full parser QA, locator service handoff, FastSaxParser/LegacyFastParser UNO wrappers/factories and separate original Expat Parser remain unfinished.",
+    "Physical C++ ABI/locking/allocator, non-UNO host exception transport, non-Emscripten queues/threading and independent compiled original C++ differential remain unqualified.",
+    "Full metadata/storage/model/filter/Strict+Transitional package import/export/reopen/XML and desktop/mobile UI/cancel/stale/primaryODF acceptance remain unfinished. Same4 metadata errors, legacy cycle,160 older JSDoc diagnostics and broader failed coverage scopes remain open."
+  ],
+  "sourceProfile": {
+    "target": "Pinned LibreOffice __EMSCRIPTEN__ branch, actual browser/WASM library build",
+    "evidence": "FastSaxParserImpl::parseStream explicitly resets mbEnableThreads=false under __EMSCRIPTEN__. Constructor also defaults false.",
+    "implementation": "Four producers select that exact direct-consumer branch, using maSharedEvent, the exact source getEvent(single-thread) return without maType initialization. This is not an arbitrary browser override of a source true default. Non-Emscripten queues/threads remain unported and no such profile is certified.",
+    "qualification": "Full original parseStream is not yet implemented/registered; direct internal owner fixtures use actual constructor false. No test sets mbEnableThreads=true or claims other-platform support."
+  },
+  "securityScopes": {
+    "nativeFastParserOptions": "Exact original XML_PARSE_NOENT|XML_PARSE_HUGE call explicitly approved, still not yet added because stream parse loop remains unfinished. No alternate options/resolver policy activated by producer fixtures.",
+    "urlTrustAuthenticationCertificate": "Separate old explicit scope question remains unanswered; untouched."
+  },
+  "next": "Implement original source custom-entity callback and required actual libc/RTL numeric/Unicode entry points, then original converted-input parse/cleanup loop with approved source options. Run complete original parser QA before actual UNO parser/format route promotion. Goal active; no finish/pause/merge/unfinished implementation commit."
+}
