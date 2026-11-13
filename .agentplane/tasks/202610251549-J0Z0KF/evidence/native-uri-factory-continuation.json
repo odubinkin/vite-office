@@ -1,0 +1,147 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "unfinished-large-metadata-owner-block",
+  "pinnedLibreOfficeCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "uriFactoryProductionRegistration": true,
+  "metadataProductionRegistration": false,
+  "implementationCommitted": false,
+  "coverageCommand": {
+    "cwd": "apps/office",
+    "argv": [
+      "../../node_modules/.bin/vitest",
+      "run",
+      "src/stoc/source/uriproc/UriReferenceFactory.native.test.ts",
+      "src/stoc/source/uriproc/UriReference.value.test.ts",
+      "src/stoc/source/uriproc/UriReferenceFactory.test.ts",
+      "src/sfx2/source/doc/SfxDocumentMetaData.roundtrip.test.ts",
+      "src/sfx2/source/doc/SfxDocumentMetaData.owner.test.ts",
+      "src/unotools/source/misc/mediadescriptor.uri.test.ts",
+      "--maxWorkers=2",
+      "--coverage",
+      "--coverage.provider=istanbul",
+      "--coverage.include=src/stoc/source/uriproc/UriReferenceFactory.component.ts",
+      "--coverage.include=src/stoc/source/uriproc/UriReferenceFactory.generic.ts",
+      "--coverage.include=src/stoc/source/uriproc/UriReferenceFactory.resolve.ts",
+      "--coverage.include=src/stoc/source/uriproc/UriReferenceFactory.segments.ts",
+      "--coverage.include=src/stoc/source/uriproc/UriReferenceFactory.temporaries.ts",
+      "--coverage.include=src/stoc/source/uriproc/UriReference.value.ts",
+      "--coverage.include=src/udkapi/com/sun/star/uri/*.ts",
+      "--coverage.include=src/unotools/source/misc/mediadescriptor.uri.ts",
+      "--coverage.reportsDirectory=coverage/native-uri-factory",
+      "--coverage.thresholds.statements=90",
+      "--coverage.thresholds.branches=90",
+      "--coverage.thresholds.functions=90",
+      "--coverage.thresholds.lines=90"
+    ],
+    "result": "441 tests/6 files pass; whole twelve-owner scoped90 FAIL"
+  },
+  "coverage": {
+    "lines": {
+      "total": 558,
+      "covered": 512,
+      "skipped": 0,
+      "pct": 91.75
+    },
+    "statements": {
+      "total": 621,
+      "covered": 556,
+      "skipped": 0,
+      "pct": 89.53
+    },
+    "functions": {
+      "total": 93,
+      "covered": 87,
+      "skipped": 0,
+      "pct": 93.54
+    },
+    "branches": {
+      "total": 335,
+      "covered": 284,
+      "skipped": 0,
+      "pct": 84.77
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "measuredWholeOwners": 12,
+  "originalSourceTables": {
+    "testParse": 13,
+    "testMakeAbsolute": 329,
+    "testMakeRelative": 47,
+    "portedAssertions": "original expected fields/results and relative resolve-back assertions",
+    "pending": "independent rtl::Uri::convertRelToAbs cross-check and testVndSunStarExpand/testVndSunStarScript/testTranslator/testPkgUrlFactory with genuine corresponding producers"
+  },
+  "runtimeConstContractProof": [
+    {
+      "path": "apps/office/src/cppu/inc/com/sun/star/uno/Reference.ts",
+      "identicalRuntime": true,
+      "sha256": "96b6335b7a1e0bc75b40521f858d9a62e8e0bf03e9a358534453ed2d8791a7a2"
+    },
+    {
+      "path": "apps/office/src/cppuhelper/source/servicemanager.ts",
+      "identicalRuntime": true,
+      "sha256": "45e8075a6673d69d148be97547451796168fdfc9d6eb2e441830726434d54693"
+    },
+    {
+      "path": "apps/office/src/udkapi/com/sun/star/lang/XMultiComponentFactory.ts",
+      "identicalRuntime": true,
+      "sha256": "949b2f7cd00b6e9af817179623485ee8b45dff9635c1104a4dadbd3c07e2447e"
+    }
+  ],
+  "workerCommand": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+  "workerResult": "Actual registered URI factory absolute/relative resolution and MediaDescriptor fragment removal pass in Chromium main realm and DOM-free module Worker, along with existing complete native probe assertions. Inspect native-dom-worker-result.json nativeUriFactory fields.",
+  "sourceBlobs": {
+    "apps/office/src/stoc/source/uriproc/UriReferenceFactory.component.ts": "c6260425912018bac63adce88d38cd55dd02b42283aa71192eecf88686142529",
+    "apps/office/src/stoc/source/uriproc/UriReferenceFactory.generic.ts": "f7f6884729fa706f9f7c0411d9fc59b234c1f03cfb166188b2b761e7233a6431",
+    "apps/office/src/stoc/source/uriproc/UriReferenceFactory.resolve.ts": "ef618b30a4b9a431f1400754c1e471aee01f6d769cec009652debc46ad46692d",
+    "apps/office/src/stoc/source/uriproc/UriReferenceFactory.segments.ts": "d06ad0ab4b8c23649ab7543754093d99b9b1ecee77695981a4e5fd58befa8d3e",
+    "apps/office/src/stoc/source/uriproc/UriReferenceFactory.temporaries.ts": "8e7988243b7ae85dc922f506af9e184153232c37628670767ba725b4b4fa91f6",
+    "apps/office/src/stoc/source/uriproc/UriReferenceFactory.native.test.ts": "ddc4b9d8bd843c7c3bdf8a0d528178470a295c0349374fa5d8a10bffa3105baa",
+    "apps/office/src/stoc/source/uriproc/UriReferenceFactory.qa.json": "8bc3b37b45a30711448246df83dcd728bd10598f036c31e02feb04c69ee9bc0f",
+    "apps/office/src/udkapi/com/sun/star/uri/XUriReference.ts": "454c036164ed77aaf66fb0265358c175039f29969138274857f104ba785eeb75",
+    "apps/office/src/udkapi/com/sun/star/uri/XUriReferenceFactory.ts": "e36a980ff4ab9cd63e29292d20a0ccca0f16a1d11dfa3c0809daa669b593ee73",
+    "apps/office/src/udkapi/com/sun/star/uri/XUriSchemeParser.ts": "0edb82d6ce9a2a4aba1e85e0eea8f7880f5b163ddf49f3baebc64bc813294ecc",
+    "apps/office/src/udkapi/com/sun/star/uri/RelativeUriExcessParentSegments.ts": "da651f0093ff9ac3db33a2a632f77c7369e2840993dfcce7f2f20d882c809362",
+    "apps/office/src/udkapi/com/sun/star/uri/UriReferenceFactory.ts": "411f31963586f02148662def01ea1784ba6aa8c919638197c28a0bb8b965edd8",
+    "apps/office/src/stoc/source/uriproc/UriReference.value.ts": "e08575225aedb88447128ccb62663778f6507bb4615f1378b7500a521036c9c9",
+    "apps/office/src/unotools/source/misc/mediadescriptor.uri.ts": "746751c37d5268d0528c566e9c26d153bef81307233c3d0fdba8bfdee9e8ef8e",
+    "apps/office/src/unotools/source/misc/mediadescriptor.uri.test.ts": "798cb54d2e065d60fd00e655973dec321834d514ce6797a64ccecdd0037ba31e",
+    "apps/office/src/cppu/inc/com/sun/star/uno/Reference.ts": "88e8a64c645b954250e76dc3d35555057985da4760c86d54bbea282e1c20c3b7",
+    "apps/office/src/cppuhelper/source/servicemanager.ts": "511f23912f6b2d12ddcdca294c62cc14bd3ecedba7058842e4e373aae7457739",
+    "apps/office/src/udkapi/com/sun/star/lang/XMultiComponentFactory.ts": "8cc59bd41c0c281ed810d37f368a4f7c7c6a1ec0d3da687eac24d0a0519133e0",
+    "apps/office/src/desktop/browser/app/uno-components.ts": "01d9b9f9a5c08b7e908b142dcc96bfb8034c202a9e4c28cdc70449a023170bfd",
+    "scripts/module-boundaries/allowed-edges.mjs": "42382c64f576f560a9d88e4aa948dd004f648903c8ff674f780f9cc69629212a",
+    "scripts/check-module-boundaries-xml.test.ts": "d9c7ae2cfd1732798f87d7285fa45024ab33a7f2823c37b00053cc7998e826cf",
+    "scripts/native-dom-worker-probe.mjs": "0801db520d71251ba93fa1b9200b26d96bb180802e6748addab06a9817adf319",
+    "scripts/fixtures/native-dom-worker-probe.ts": "bd4f664e810f207aa10527bcf4e025347fdd75b5d44d88e7adfb6f96a8ed9095",
+    "docs/program/writer-upstream-suspected-issues.md": "23116d63b7f9f8d4e6f1f12cde171844a171c64db3df3e36f51b4ba58858843b"
+  },
+  "logs": {
+    "uri-factory-native-coverage.log": "ec442ab9149ec2e7d3e466db76d3e2b8cc0ced36947e2cd5f3ae6df533809324",
+    "uri-factory-const-context-regressions.log": "d667a3d62f14ea2b264408b919881778e31b993c489d12e7cdc7f685bda699fb",
+    "uri-factory-native-worker.log": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee",
+    "native-dom-worker-result.json": "940fb0f404cb8051e332ef4ae5cda22a817087f36e94e1b174b932d7ede61316",
+    "uri-factory-const-runtime-equivalence.json": "379ee5775e8a7a2bf948b2b04920df1f005877f67903e25b90f94c8f31e9cbf4",
+    "uri-factory-typecheck-final.log": "27e41193059ade090cbebaa98ba1e7173ce2a4df41a3e457ee366058e3b383b3",
+    "uri-factory-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "uri-factory-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "uri-factory-boundaries.log": "3e4f7d8f821d0badb531c3dadca2455b6fc29c0809dbc424155ab35e29db1e70",
+    "uri-factory-boundary-tests.log": "762cfb79929bc1aaae134deed793164987959553bc40c307e5a379d0e4cc5426",
+    "uri-factory-doctor.log": "ed7bf9deace5e65a0703a52c4e9bb05fab679b22e56b319845172f0ee8d676ac",
+    "uri-factory-journal-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+  },
+  "remaining": [
+    "Four metadata storage typecheck dependencies: MediaDescriptor main selection, SfxMedium native descriptor constructor/GetOutputStorage/Commit",
+    "Actual UCB/native XStorage and storage-factory provider",
+    "Genuine specialized URI parsers and remaining original URI family QA",
+    "OOXMLStreamImpl original mxContext constructor/first-context static factory migration; remove legacy string implementation/mock-null coverage without a process-context shortcut",
+    "Canonical runtime/provenance/capability records and all full-block static/coverage qualification",
+    "Complete DOCX/XLSX canonical model/filter/shell/desktop/mobile existing UI acceptance"
+  ],
+  "securityApproval": "Question still unanswered. No auth/certificate/trusted-URL or crypto code modified; independent work remains available.",
+  "priorCoverageGapsRemainOpen": true
+}

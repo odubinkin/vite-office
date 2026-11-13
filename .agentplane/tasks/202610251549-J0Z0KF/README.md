@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 305
+revision: 308
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T01:14:33.007Z"
+  updated_at: "2026-11-13T02:33:51.137Z"
   updated_by: "CODER"
-  note: "Unfinished metadata/URI continuation: actual original custom XML and user-property native XML roundtrip pass; 48 related cases/5 files, final complete native URI value15 cases/1 file scoped90 pass S97.26 B95 F100 L98.50. True native URI factory/service, MediaDescriptor, provider/native medium, four current storage typecheck dependencies and prior separate coverage gates remain pending. Auth/security scope question remains unanswered; independent work continues."
-  attempts: 90
+  note: "Unfinished large metadata block: actual registered URI factory/SDK/MediaDescriptor URI helper pass441 cases/6 files,49 const context/reference regressions and6 boundary cases; main/DOM-free Chromium Worker pass. All3 const-only shared owners emit identical runtime JS. Whole12-owner scoped90 remains S89.53 B84.77 F93.54 L91.75 FAIL; four metadata storage typecheck dependencies and actual producers/caller/medium/registry/full format UI acceptance remain pending. See native-uri-factory-continuation.json. Independent work continues; no pause."
+  attempts: 91
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1448,8 +1451,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T02:33:51.137Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Unfinished large metadata block: actual registered URI factory/SDK/MediaDescriptor URI helper pass441 cases/6 files,49 const context/reference regressions and6 boundary cases; main/DOM-free Chromium Worker pass. All3 const-only shared owners emit identical runtime JS. Whole12-owner scoped90 remains S89.53 B84.77 F93.54 L91.75 FAIL; four metadata storage typecheck dependencies and actual producers/caller/medium/registry/full format UI acceptance remain pending. See native-uri-factory-continuation.json. Independent work continues; no pause."
+  -
+    type: "status"
+    at: "2026-11-13T02:35:44.026Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T01:14:55.325Z"
+doc_updated_at: "2026-11-13T02:35:44.026Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -4164,6 +4180,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T02:33:51.137Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Unfinished large metadata block: actual registered URI factory/SDK/MediaDescriptor URI helper pass441 cases/6 files,49 const context/reference regressions and6 boundary cases; main/DOM-free Chromium Worker pass. All3 const-only shared owners emit identical runtime JS. Whole12-owner scoped90 remains S89.53 B84.77 F93.54 L91.75 FAIL; four metadata storage typecheck dependencies and actual producers/caller/medium/registry/full format UI acceptance remain pending. See native-uri-factory-continuation.json. Independent work continues; no pause.
+    Attempts: 91
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T02:33:50.156Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -4643,6 +4689,10 @@ sections:
     - Observation: Command: exact argv/source/log hashes in evidence/native-metadata-uri-roundtrip-continuation.json. Result:48 related cases/5 files pass; final whole native URI value owner15 cases/1 file and unchanged scoped90 PASS S97.26 B95 F100 L98.50. Scope: complete original native RTL UriReference helper plus original CUSTOM metadata XPath preservation and source user-property before/after native DOM/SAX/Writer XML-cycle assertions. Source Time-to-Duration conversion, unsupported type and empty name/removal behavior are preserved. Focused lint/format, module guard and routing/diff pass. Current typecheck retains exactly four original metadata storage dependencies.
       Impact: Native URI state is now available for the missing true factory; inspection corrected the previous assumption that existing UriReferenceFactory.ts supplied a native UNO service. It is only a string binding. Real SDK/Factory/component registration and full source factory QA are missing; do not use that string model as a native provider. Metadata XML-cycle tests use actual components but do not prove the original SfxMedium/storage wrapper. Earlier Sot/SDK, Content and metadata/DOM coverage gaps remain open and undiluted. Full format/core/shell/UI acceptance and canonical mappings remain pending.
       Resolution: Continue the same approved large block with complete native URI factory/service/QA, then genuine MediaDescriptor/provider/native medium and metadata completion. Auth/certificate/trusted-URL scope question is still unanswered, no such paths modified; independent work remains available. Task stays DOING/needs_rework, goal active, no pause, full-suite replay or publication. Source edits remain intentionally uncommitted pending complete block qualification; continuation evidence is persisted separately.
+
+    - Observation: Command: exact argv/source/log hashes, pinned source QA counts and runtime equivalence proof in evidence/native-uri-factory-continuation.json. Result:441 focused cases/6 files pass,49 context/reference regressions/7 files pass,6 boundary tests and actual main/DOM-free Chromium Worker probe pass. Scope: full original generic URI factory/adapter/resolution/SDK and real production registration, original table assertions (13 parse/329 absolute/47 relative plus resolve-back), actual MediaDescriptor fragment helper and original borrowed const context contracts. All three shared const-only owners emit byte-identical runtime JS. No substitute URI/parser/context or private state was installed.
+      Impact: The genuine URI service prerequisite now executes in core, main realm and Worker. Whole twelve-owner scoped90 remains FAIL S89.53 B84.77 F93.54 L91.75; original specialized parser dispatch/exception/SDK branches need genuine producer/source QA, not mock-null or throwing providers. Earlier coverage gaps remain undiluted. Typecheck still has exactly four metadata storage dependencies; full native storage/medium, registry/provenance, source URI family/RTL cross-check, metadata and final DOCX/XLSX UI acceptance remain pending. Writer510/511 document source-analysis-only first-context static factory and unconditional path copy(1), with no claimed Calc equivalent/native Writer observation.
+      Resolution: Continue the same approved large block. Port genuine URI producers/remaining QA, restore source OOXMLStreamImpl mxContext/static factory before migrating its legacy string path, then complete actual MediaDescriptor/provider/native medium and metadata ownership. Preserve original first-context cache/copy/preconditions; no process-context shortcut or forgiving slice. Auth/trust scope question remains unanswered, no such code changed; independent work remains available. Focused lint/format, guard/doctor/routing/diff pass with existing hook readiness note. Keep task DOING/needs_rework and goal active; no full-suite replay, source implementation commit or publication yet.
 id_source: "generated"
 ---
 ## Summary
@@ -7367,6 +7417,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T02:33:51.137Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Unfinished large metadata block: actual registered URI factory/SDK/MediaDescriptor URI helper pass441 cases/6 files,49 const context/reference regressions and6 boundary cases; main/DOM-free Chromium Worker pass. All3 const-only shared owners emit identical runtime JS. Whole12-owner scoped90 remains S89.53 B84.77 F93.54 L91.75 FAIL; four metadata storage typecheck dependencies and actual producers/caller/medium/registry/full format UI acceptance remain pending. See native-uri-factory-continuation.json. Independent work continues; no pause.
+Attempts: 91
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T02:33:50.156Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7850,3 +7930,7 @@ Native DOM classic SAX and attribute ownership checkpoint (2026-11-13):
 - Observation: Command: exact argv/source/log hashes in evidence/native-metadata-uri-roundtrip-continuation.json. Result:48 related cases/5 files pass; final whole native URI value owner15 cases/1 file and unchanged scoped90 PASS S97.26 B95 F100 L98.50. Scope: complete original native RTL UriReference helper plus original CUSTOM metadata XPath preservation and source user-property before/after native DOM/SAX/Writer XML-cycle assertions. Source Time-to-Duration conversion, unsupported type and empty name/removal behavior are preserved. Focused lint/format, module guard and routing/diff pass. Current typecheck retains exactly four original metadata storage dependencies.
   Impact: Native URI state is now available for the missing true factory; inspection corrected the previous assumption that existing UriReferenceFactory.ts supplied a native UNO service. It is only a string binding. Real SDK/Factory/component registration and full source factory QA are missing; do not use that string model as a native provider. Metadata XML-cycle tests use actual components but do not prove the original SfxMedium/storage wrapper. Earlier Sot/SDK, Content and metadata/DOM coverage gaps remain open and undiluted. Full format/core/shell/UI acceptance and canonical mappings remain pending.
   Resolution: Continue the same approved large block with complete native URI factory/service/QA, then genuine MediaDescriptor/provider/native medium and metadata completion. Auth/certificate/trusted-URL scope question is still unanswered, no such paths modified; independent work remains available. Task stays DOING/needs_rework, goal active, no pause, full-suite replay or publication. Source edits remain intentionally uncommitted pending complete block qualification; continuation evidence is persisted separately.
+
+- Observation: Command: exact argv/source/log hashes, pinned source QA counts and runtime equivalence proof in evidence/native-uri-factory-continuation.json. Result:441 focused cases/6 files pass,49 context/reference regressions/7 files pass,6 boundary tests and actual main/DOM-free Chromium Worker probe pass. Scope: full original generic URI factory/adapter/resolution/SDK and real production registration, original table assertions (13 parse/329 absolute/47 relative plus resolve-back), actual MediaDescriptor fragment helper and original borrowed const context contracts. All three shared const-only owners emit byte-identical runtime JS. No substitute URI/parser/context or private state was installed.
+  Impact: The genuine URI service prerequisite now executes in core, main realm and Worker. Whole twelve-owner scoped90 remains FAIL S89.53 B84.77 F93.54 L91.75; original specialized parser dispatch/exception/SDK branches need genuine producer/source QA, not mock-null or throwing providers. Earlier coverage gaps remain undiluted. Typecheck still has exactly four metadata storage dependencies; full native storage/medium, registry/provenance, source URI family/RTL cross-check, metadata and final DOCX/XLSX UI acceptance remain pending. Writer510/511 document source-analysis-only first-context static factory and unconditional path copy(1), with no claimed Calc equivalent/native Writer observation.
+  Resolution: Continue the same approved large block. Port genuine URI producers/remaining QA, restore source OOXMLStreamImpl mxContext/static factory before migrating its legacy string path, then complete actual MediaDescriptor/provider/native medium and metadata ownership. Preserve original first-context cache/copy/preconditions; no process-context shortcut or forgiving slice. Auth/trust scope question remains unanswered, no such code changed; independent work remains available. Focused lint/format, guard/doctor/routing/diff pass with existing hook readiness note. Keep task DOING/needs_rework and goal active; no full-suite replay, source implementation commit or publication yet.
