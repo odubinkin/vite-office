@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 50
+revision: 51
 origin:
   system: "manual"
 depends_on:
@@ -20,11 +20,11 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
-  attempts: 0
+  state: "needs_rework"
+  updated_at: "2026-11-13T03:46:50.308Z"
+  updated_by: "CODER"
+  note: "Implemented actual OOXMLStreamImpl context flow and native SDK URI consumer, removed parallel string URI kernel, and preserved source static retry/cache, invalid-first-match stopping and native opaque-path copy. 70 related Writer tests pass at whole-owner scoped90; actual DOCX ZIP stream traversal passes in Chromium main/DOM-free Worker. Full SwDoc/filter/Strict+Transitional export-reopen/existing desktop-mobile UI and native metadata/medium/storage remain unfinished; goal stays active."
+  attempts: 1
 commit: null
 comments:
   -
@@ -38,8 +38,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    type: "verify"
+    at: "2026-11-13T03:46:50.308Z"
+    author: "CODER"
+    state: "needs_rework"
+    note: "Implemented actual OOXMLStreamImpl context flow and native SDK URI consumer, removed parallel string URI kernel, and preserved source static retry/cache, invalid-first-match stopping and native opaque-path copy. 70 related Writer tests pass at whole-owner scoped90; actual DOCX ZIP stream traversal passes in Chromium main/DOM-free Worker. Full SwDoc/filter/Strict+Transitional export-reopen/existing desktop-mobile UI and native metadata/medium/storage remain unfinished; goal stays active."
 doc_version: 3
-doc_updated_at: "2026-10-26T21:45:20.725Z"
+doc_updated_at: "2026-11-13T03:46:50.371Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -52,6 +58,36 @@ sections:
   Verify Steps: "Use focused npm run test:writer -- tests for new writerfilter/DOCX modules, impacted UNO/core owners and existing shell/file/browser controls. Require true SwDoc graph assertions for imported styles/runs/lists/tables/page settings and DOCX ZIP XML assertions plus export/reopen; include actual pinned strict/transitional fixtures when local research corpus exists. Verify empty and formatted documents, Unicode/whitespace, nondefault formatting and default fallback, links/bookmarks, supported lists/table structure/cell items, page descriptors, cancellation/concurrent Open, failed import preserving active graph, export preserving primary modified/medium state and downloaded DOCX reopening through the production UI. Measure all newly implemented executable owners at unchanged scoped100 coverage; use relevant ODT/primary-storage regressions. Run typecheck, build, scoped ESLint/Prettier, dependencies/resources/docs/size/tree/provenance/registry/invariants/parity/static, doctor/routing/diff and real production Chromium browser scenarios at desktop/mobile widths. Preserve all thresholds; no full suite due (second task after SWRD7X full checkpoint)."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-11-13T03:46:50.308Z — VERIFY — needs_rework
+
+    By: CODER
+
+    Note: Implemented actual OOXMLStreamImpl context flow and native SDK URI consumer, removed parallel string URI kernel, and preserved source static retry/cache, invalid-first-match stopping and native opaque-path copy. 70 related Writer tests pass at whole-owner scoped90; actual DOCX ZIP stream traversal passes in Chromium main/DOM-free Worker. Full SwDoc/filter/Strict+Transitional export-reopen/existing desktop-mobile UI and native metadata/medium/storage remain unfinished; goal stays active.
+    Attempts: 1
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-26T21:45:20.725Z, excerpt_hash=sha256:c8de65de609995b9426232fa8a8255cd7bd599b7cbe3f55da2465b13a779af0b
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -220,6 +256,10 @@ sections:
     - Observation: Paragraph-creation audit exposed ignored family arguments in the automatic-style manager. Restored all4native family IDs, exactly two pools/caches, generic PARA input/found-handle assertions, null-name cache slots and cache clearing. StylePool now clones/partitions ignorable range items; SwDoc supplies exact paragraph list range86..91. WRITER166 preserves the shared-pool subtype collision.
       Impact: 20focused tests/3files pass at unchanged scoped100 S93 B54 F20 L87 for the expanded mechanisms/enum;389Writer core/ODT regressions/32files pass. Typecheck/build/static, scoped lint/format, dependencies/docs/size/tree/resources/provenance/registry and doctor/routing/diff pass. Existing doctor hook warning remains.
       Resolution: Evidence: .agentplane/tasks/202610251549-V4DQJW/evidence/native-style-families-checkpoint.json. Corrected test range API and missing parameter docs; no guard weakened. Native use_count-aware iterator/cache fallback parity remains unported/unverified; current raw retained-handle fallback is explicit. GetNewAutoStyle/SetModifyAtAttr, paragraph creation/undo, table managers/model and complete DOCX/XLSX UI remain pending. Task DOING, broad parity flags false; full suite not due.
+
+    - Observation: Command: exact Writer/shared argv/cwd and actual coverage maps in evidence/native-uri-canonical-context-continuation.json and shared native-uri-canonical-writer-continuation.json. Result: whole OOXMLStreamImpl S100 B98.96 F100 L100; current canonical native URI mechanisms scoped90 pass; real cold-bootstrap and opaque source assertions pass. Typecheck retains exactly four pre-existing metadata storage dependency errors. Scope: explicit root/copied child context, real SDK/URI/package streams and related settings/table/track/document regressions.
+      Impact: This is a verified prerequisite slice, not a completed or deployable DOCX/UI feature. Independent compiled/physical runtime and full model/filter/package/desktop/mobile acceptance remain unqualified.
+      Resolution: Continue approved native metadata/medium/storage/XML and model/filter/UI dependencies; preserve prior gaps and deliberate browser persistence choices. Do not finish the parent or pause the goal.
 id_source: "generated"
 ---
 ## Summary
@@ -243,6 +283,36 @@ Use focused npm run test:writer -- tests for new writerfilter/DOCX modules, impa
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-11-13T03:46:50.308Z — VERIFY — needs_rework
+
+By: CODER
+
+Note: Implemented actual OOXMLStreamImpl context flow and native SDK URI consumer, removed parallel string URI kernel, and preserved source static retry/cache, invalid-first-match stopping and native opaque-path copy. 70 related Writer tests pass at whole-owner scoped90; actual DOCX ZIP stream traversal passes in Chromium main/DOM-free Worker. Full SwDoc/filter/Strict+Transitional export-reopen/existing desktop-mobile UI and native metadata/medium/storage remain unfinished; goal stays active.
+Attempts: 1
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-26T21:45:20.725Z, excerpt_hash=sha256:c8de65de609995b9426232fa8a8255cd7bd599b7cbe3f55da2465b13a779af0b
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -416,3 +486,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Paragraph-creation audit exposed ignored family arguments in the automatic-style manager. Restored all4native family IDs, exactly two pools/caches, generic PARA input/found-handle assertions, null-name cache slots and cache clearing. StylePool now clones/partitions ignorable range items; SwDoc supplies exact paragraph list range86..91. WRITER166 preserves the shared-pool subtype collision.
   Impact: 20focused tests/3files pass at unchanged scoped100 S93 B54 F20 L87 for the expanded mechanisms/enum;389Writer core/ODT regressions/32files pass. Typecheck/build/static, scoped lint/format, dependencies/docs/size/tree/resources/provenance/registry and doctor/routing/diff pass. Existing doctor hook warning remains.
   Resolution: Evidence: .agentplane/tasks/202610251549-V4DQJW/evidence/native-style-families-checkpoint.json. Corrected test range API and missing parameter docs; no guard weakened. Native use_count-aware iterator/cache fallback parity remains unported/unverified; current raw retained-handle fallback is explicit. GetNewAutoStyle/SetModifyAtAttr, paragraph creation/undo, table managers/model and complete DOCX/XLSX UI remain pending. Task DOING, broad parity flags false; full suite not due.
+
+- Observation: Command: exact Writer/shared argv/cwd and actual coverage maps in evidence/native-uri-canonical-context-continuation.json and shared native-uri-canonical-writer-continuation.json. Result: whole OOXMLStreamImpl S100 B98.96 F100 L100; current canonical native URI mechanisms scoped90 pass; real cold-bootstrap and opaque source assertions pass. Typecheck retains exactly four pre-existing metadata storage dependency errors. Scope: explicit root/copied child context, real SDK/URI/package streams and related settings/table/track/document regressions.
+  Impact: This is a verified prerequisite slice, not a completed or deployable DOCX/UI feature. Independent compiled/physical runtime and full model/filter/package/desktop/mobile acceptance remain unqualified.
+  Resolution: Continue approved native metadata/medium/storage/XML and model/filter/UI dependencies; preserve prior gaps and deliberate browser persistence choices. Do not finish the parent or pause the goal.
