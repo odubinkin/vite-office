@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 124
+revision: 127
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T17:12:55.637Z"
+  updated_at: "2026-11-13T17:24:39.446Z"
   updated_by: "CODER"
-  note: "Shared native entry/folder graph passes6 focused and21 related scenarios, all5 independent scoped90 and actual main/Worker. Writer storage/model/filter/UI export remains unfinished; evidence/native-package-graph-continuation.json."
-  attempts: 28
+  note: "Original shared-stream wrapper passes10 focused and48 related cases, scoped90 and Chromium main/Worker on actual native ZIP parts. Writer package storage/model/filter/UI remains unfinished; evidence/native-shared-stream-continuation.json."
+  attempts: 29
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -456,8 +459,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T17:24:39.446Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original shared-stream wrapper passes10 focused and48 related cases, scoped90 and Chromium main/Worker on actual native ZIP parts. Writer package storage/model/filter/UI remains unfinished; evidence/native-shared-stream-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-13T17:24:45.498Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T17:13:01.707Z"
+doc_updated_at: "2026-11-13T17:24:45.498Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -1310,6 +1326,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T17:24:39.446Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original shared-stream wrapper passes10 focused and48 related cases, scoped90 and Chromium main/Worker on actual native ZIP parts. Writer package storage/model/filter/UI remains unfinished; evidence/native-shared-stream-continuation.json.
+    Attempts: 29
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T17:24:38.802Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -1566,6 +1612,8 @@ sections:
     Original ZipOutputStream raw-copy/header producer passes143 related tests and whole-owner scoped90 (98.6/93.02/100/99.24). New original ZipPackageBuffer passes6 tests and whole-owner100/95/100/100, actual UNO identity/Sequence COW/close/seek/growth/exceptions and native writer/reader integration. Actual Chromium main/DOM-free Worker now uses the real package buffer for ZIP output and reopen. Four unchanged Strict/Transitional DOCX/XLSX archive raw-copy results are independently extracted by zip.js; this is container acceptance, not model export. Source findings WRITER554..555/CALC617..618 are preserved. Typecheck retains4metadata errors, dependencies retainscomphelper/sax cycle, docs157olderfindings; older independent coverage failures remain. Lint/format/tools/provenance/registry/tree/size/Vite/static/doctor/routing/diff pass. Native compression/reset/taskpool/package storage/model/filter/UI remains unfinished. Pako approval pending; no download, no fake compression/pool or manual JS byte-buffer lifetime. See evidence/native-zip-output-continuation.json. Goal stays active, no full suite due.
 
     Actual abstract ZipPackageEntry and final live ZipPackageFolder name/container/property/service subset, FolderEnumeration and missing XNamed/NoSupportException now use real UNO/RTL/Any/reference contracts.6critical source scenarios and21related package tests pass; all5whole-owner coverages independently exceed scoped90. Actual Chromium main/DOM-free Worker verifies folder/child identity, parent/name transport and original destructive rename; existing ZIP output/read probe remains. WRITER556..557/CALC619..620 document and preserve parent/container temporary quirks. Source/provenance/registry/lint/format/tools/size/tree/Vite/static/doctor/routing/diff pass; prior4metadata types, comphelper/sax cycle,157JSDoc and older independent coverage gaps remain. Stream/traversal/save/factory/storage/model/filter/UI and complete original service QA are still unfinished; no fake provider, network/dependency changes, threshold change, full suite or goal completion. See evidence/native-package-graph-continuation.json.
+
+    Complete original WrapStreamForShare uses actual UNO input/seek/ByteReader, native shared OSL mutex and source per-wrapper cursor/guard placement/available/release-only-close.10critical tests and48related cases pass; whole owner passes scoped90 independently (100allmetrics naturally from public paths). Four unchanged Strict/Transitional DOCX/XLSX parts and actual main/DOM-free Worker interleaved readers/close/availability execute. No fake input, mutex, RTTI, private fields or byte-buffer lifetime is supplied. WRITER558..560/CALC621..623 preserve source read-lock omission, source-position availability and ByteReader precondition. Lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass; older4metadata types, cycle,157JSDoc and independent coverage gaps remain. Original ZipPackageStream/seekable-copy/tempfile/native package storage/models/filter/UI and complete original service QA remain unfinished; pako/security approvals pending, no download or risk expansion. See evidence/native-shared-stream-continuation.json. Goal stays active, no full suite due.
 id_source: "generated"
 ---
 ## Summary
@@ -2429,6 +2477,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T17:24:39.446Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original shared-stream wrapper passes10 focused and48 related cases, scoped90 and Chromium main/Worker on actual native ZIP parts. Writer package storage/model/filter/UI remains unfinished; evidence/native-shared-stream-continuation.json.
+Attempts: 29
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T17:24:38.802Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -2690,3 +2768,5 @@ Original nonencrypted ZipFile entry methods now construct real XUnbufferedStream
 Original ZipOutputStream raw-copy/header producer passes143 related tests and whole-owner scoped90 (98.6/93.02/100/99.24). New original ZipPackageBuffer passes6 tests and whole-owner100/95/100/100, actual UNO identity/Sequence COW/close/seek/growth/exceptions and native writer/reader integration. Actual Chromium main/DOM-free Worker now uses the real package buffer for ZIP output and reopen. Four unchanged Strict/Transitional DOCX/XLSX archive raw-copy results are independently extracted by zip.js; this is container acceptance, not model export. Source findings WRITER554..555/CALC617..618 are preserved. Typecheck retains4metadata errors, dependencies retainscomphelper/sax cycle, docs157olderfindings; older independent coverage failures remain. Lint/format/tools/provenance/registry/tree/size/Vite/static/doctor/routing/diff pass. Native compression/reset/taskpool/package storage/model/filter/UI remains unfinished. Pako approval pending; no download, no fake compression/pool or manual JS byte-buffer lifetime. See evidence/native-zip-output-continuation.json. Goal stays active, no full suite due.
 
 Actual abstract ZipPackageEntry and final live ZipPackageFolder name/container/property/service subset, FolderEnumeration and missing XNamed/NoSupportException now use real UNO/RTL/Any/reference contracts.6critical source scenarios and21related package tests pass; all5whole-owner coverages independently exceed scoped90. Actual Chromium main/DOM-free Worker verifies folder/child identity, parent/name transport and original destructive rename; existing ZIP output/read probe remains. WRITER556..557/CALC619..620 document and preserve parent/container temporary quirks. Source/provenance/registry/lint/format/tools/size/tree/Vite/static/doctor/routing/diff pass; prior4metadata types, comphelper/sax cycle,157JSDoc and older independent coverage gaps remain. Stream/traversal/save/factory/storage/model/filter/UI and complete original service QA are still unfinished; no fake provider, network/dependency changes, threshold change, full suite or goal completion. See evidence/native-package-graph-continuation.json.
+
+Complete original WrapStreamForShare uses actual UNO input/seek/ByteReader, native shared OSL mutex and source per-wrapper cursor/guard placement/available/release-only-close.10critical tests and48related cases pass; whole owner passes scoped90 independently (100allmetrics naturally from public paths). Four unchanged Strict/Transitional DOCX/XLSX parts and actual main/DOM-free Worker interleaved readers/close/availability execute. No fake input, mutex, RTTI, private fields or byte-buffer lifetime is supplied. WRITER558..560/CALC621..623 preserve source read-lock omission, source-position availability and ByteReader precondition. Lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass; older4metadata types, cycle,157JSDoc and independent coverage gaps remain. Original ZipPackageStream/seekable-copy/tempfile/native package storage/models/filter/UI and complete original service QA remain unfinished; pako/security approvals pending, no download or risk expansion. See evidence/native-shared-stream-continuation.json. Goal stays active, no full suite due.
