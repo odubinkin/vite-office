@@ -1,0 +1,342 @@
+{
+  "sharedEvidence": ".agentplane/tasks/202610251549-J0Z0KF/evidence/native-fastparser-stream-entities-continuation.json",
+  "status": "unfinished",
+  "checks": [
+    {
+      "command": "python3 scripts/build-libxml2-wasm.py",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-entities-native-build-final.log",
+      "evidence": "Genuine existing pinned source/archive/compiler/configuration, no download. Native libc strtoul plus actual xmlEntity content field accessors;157exports/851Clang-header constants; final SHA2568ef858126ec1ec7909d6e25f7c4c539b882eb3f668bd839c579b3ca0292eac8d. Initial155-export strtoul-only rebuild retained separately."
+    },
+    {
+      "command": "../../node_modules/.bin/vitest run src/sal/rtl/ustring-codepoints.test.ts src/sal/rtl/ustring.test.ts src/sal/rtl/ustring-ownership.test.ts src/sal/rtl/ustring-convert.native.test.ts src/sal/inc/rtl/character.test.ts src/sax/source/fastparser/fastparser.stream.test.ts src/sax/source/fastparser/fastparser.producer.test.ts src/sax/source/fastparser/fastparser.impl.test.ts src/external/libxml2/fastparsercallbacks.test.ts --maxWorkers=2 --coverage --coverage.include='src/sax/source/fastparser/fastparser.impl.ts' --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/fastparser-stream-final",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-stream-final.log",
+      "evidence": "64cases/9files, whole parser S95.39/B91.32/F100/L96.51. Genuine custom pairs/C entities/libc/RTL, >10MiB attribute, actual input/output closure failures and real malformed later chunks; no fake parser/entity/allocator/throw provider or private-error/counter mutation."
+    },
+    {
+      "command": "../../node_modules/.bin/vitest run src/sal/rtl/ustring*.test.ts src/sal/rtl/strtmpl*.test.ts src/sal/rtl/string*.test.ts src/sal/inc/rtl/native-ustring*.test.ts src/sal/inc/rtl/character.test.ts --maxWorkers=2 --coverage --coverage.include='src/sal/rtl/{ustring,strtmpl}.ts' --coverage.include='src/sal/inc/rtl/ustring.ts' --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/fastparser-sal-whole",
+      "cwd": "apps/office",
+      "result": "fail",
+      "log": "apps/office/coverage/fastparser-sal-whole.log",
+      "evidence": "137tests/21files PASS, but entire3SALowner gate FAIL S79.20/B75.47/F73.24/L80.62. Preserve this separate failed wider scope; do not combine parser coverage or slice source ranges."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-entities-worker.log",
+      "evidence": "Actual main/DOM-free Worker now runs actual InputSource/converter/parseStream/all5source C callbacks/custom emoji entity/registered Writer. Replaces former fixture-fed C chunks and predefined-only fifth callback; completion observed from actual void-returning parse and byte output, not a live Entity after cleanup."
+    },
+    {
+      "command": "../../node_modules/.bin/vite build",
+      "cwd": "apps/office",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-entities-vite.log",
+      "evidence": "Production Vite, distinct from app/package typecheck failure."
+    },
+    {
+      "command": "node_modules/.bin/tsc --project apps/office/tsconfig.json --noEmit",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/fastparser-entities-types-current.log",
+      "evidence": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(338,9): error TS2304: Cannot find name 'MediaDescriptor'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(410,36): error TS2345: Argument of type 'Sequence<PropertyValue>' is not assignable to parameter of type 'SfxMediumInput'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(411,26): error TS2339: Property 'GetOutputStorage' does not exist on type 'SfxMedium'.\napps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(438,27): error TS2339: Property 'Commit' does not exist on type 'SfxMedium'.\n"
+    },
+    {
+      "command": "node_modules/.bin/tsc --project tsconfig.tools.json --noEmit",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-entities-tools-types.log",
+      "evidence": ""
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/check-source-provenance.ts",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-entities-provenance.log",
+      "evidence": "2523runtime/2294mapped/192browser/37infrastructure."
+    },
+    {
+      "command": "node_modules/.bin/tsx scripts/libreoffice-inventory/registry-cli.ts check",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-entities-registry-current.log",
+      "evidence": "semanticViolationCount0; header-only reexports correctly remain with actual implementation owner, not fabricated local bodies. Broad statuses unverified."
+    },
+    {
+      "command": "node scripts/check-module-boundaries.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/fastparser-entities-boundaries.log",
+      "evidence": "Same old comphelper->sax->comphelper cycle; no exemption."
+    },
+    {
+      "command": "node scripts/check-jsdoc.mjs",
+      "cwd": ".",
+      "result": "fail",
+      "log": "apps/office/coverage/fastparser-entities-jsdoc.log",
+      "evidence": "160 older diagnostics; no current new-source/probe findings."
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/sax/source/fastparser/fastparser.impl.ts apps/office/src/sax/source/fastparser/fastparser.stream.test.ts apps/office/src/sal/rtl/ustring-codepoints.test.ts apps/office/src/sal/rtl/ustring.ts apps/office/src/sal/rtl/strtmpl.ts apps/office/src/sal/inc/rtl/ustring.ts scripts/fixtures/native-fastparser-consumer-probe.ts",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-entities-eslint.log",
+      "evidence": ""
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/sax/source/fastparser/fastparser.impl.ts apps/office/src/sax/source/fastparser/fastparser.stream.test.ts apps/office/src/sal/rtl/ustring-codepoints.test.ts apps/office/src/sal/rtl/strtmpl.ts apps/office/src/sal/rtl/ustring.ts apps/office/src/sal/inc/rtl/ustring.ts apps/office/src/sal/inc/rtl/ustring.h.ts scripts/fixtures/native-fastparser-consumer-probe.ts third_party/libxml2-wasm/source.json",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-entities-format-final.log",
+      "evidence": ""
+    },
+    {
+      "command": "node scripts/check-file-size.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-entities-size.log",
+      "evidence": ""
+    },
+    {
+      "command": "node scripts/check-lo-source-tree.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-entities-source-tree.log",
+      "evidence": ""
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-entities-routing.log",
+      "evidence": ""
+    },
+    {
+      "command": "ap doctor",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-entities-doctor.log",
+      "evidence": ""
+    },
+    {
+      "command": "git diff --check",
+      "cwd": ".",
+      "result": "pass",
+      "log": "apps/office/coverage/fastparser-entities-diff.log",
+      "evidence": ""
+    }
+  ],
+  "coverage": {
+    "scope": [
+      "sax/source/fastparser/fastparser.impl.ts"
+    ],
+    "directory": "apps/office/coverage/fastparser-stream-final",
+    "summary": {
+      "total": {
+        "lines": {
+          "total": 431,
+          "covered": 416,
+          "skipped": 0,
+          "pct": 96.51
+        },
+        "statements": {
+          "total": 478,
+          "covered": 456,
+          "skipped": 0,
+          "pct": 95.39
+        },
+        "functions": {
+          "total": 45,
+          "covered": 45,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 173,
+          "covered": 158,
+          "skipped": 0,
+          "pct": 91.32
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/fastparser/fastparser.impl.ts": {
+        "lines": {
+          "total": 431,
+          "covered": 416,
+          "skipped": 0,
+          "pct": 96.51
+        },
+        "functions": {
+          "total": 45,
+          "covered": 45,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 478,
+          "covered": 456,
+          "skipped": 0,
+          "pct": 95.39
+        },
+        "branches": {
+          "total": 173,
+          "covered": 158,
+          "skipped": 0,
+          "pct": 91.32
+        }
+      }
+    },
+    "rawSha256": {
+      "coverage-final.json": "cc4e6ab0e57689c077cee00d14ae7586c81bc7484328fe6752f683d1f2ae01cc",
+      "coverage-summary.json": "0911f3ba623da11e3cece5649d3adc4d79f0399f1ca82e15b01f05f05c4571a7"
+    },
+    "qualification": "Whole owner at90. Initial37-case gate S93.72/B86.12/F100/L96.05 failed branches; real source fallback/numeric/builtin/stream failure cases yielded43-case expanded PASS and final64-case PASS. No masks, fake failure providers or counter merge. Native NULL allocation branch and nonnull optional map execution remain unqualified."
+  },
+  "failedBroaderSAL": {
+    "scope": [
+      "sal/rtl/ustring.ts",
+      "sal/rtl/strtmpl.ts",
+      "sal/inc/rtl/ustring.ts"
+    ],
+    "directory": "apps/office/coverage/fastparser-sal-whole",
+    "summary": {
+      "total": {
+        "lines": {
+          "total": 774,
+          "covered": 624,
+          "skipped": 0,
+          "pct": 80.62
+        },
+        "statements": {
+          "total": 981,
+          "covered": 777,
+          "skipped": 0,
+          "pct": 79.2
+        },
+        "functions": {
+          "total": 157,
+          "covered": 115,
+          "skipped": 0,
+          "pct": 73.24
+        },
+        "branches": {
+          "total": 730,
+          "covered": 551,
+          "skipped": 0,
+          "pct": 75.47
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sal/inc/rtl/ustring.ts": {
+        "lines": {
+          "total": 176,
+          "covered": 129,
+          "skipped": 0,
+          "pct": 73.29
+        },
+        "functions": {
+          "total": 52,
+          "covered": 30,
+          "skipped": 0,
+          "pct": 57.69
+        },
+        "statements": {
+          "total": 198,
+          "covered": 142,
+          "skipped": 0,
+          "pct": 71.71
+        },
+        "branches": {
+          "total": 132,
+          "covered": 96,
+          "skipped": 0,
+          "pct": 72.72
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sal/rtl/strtmpl.ts": {
+        "lines": {
+          "total": 405,
+          "covered": 341,
+          "skipped": 0,
+          "pct": 84.19
+        },
+        "functions": {
+          "total": 51,
+          "covered": 44,
+          "skipped": 0,
+          "pct": 86.27
+        },
+        "statements": {
+          "total": 553,
+          "covered": 461,
+          "skipped": 0,
+          "pct": 83.36
+        },
+        "branches": {
+          "total": 473,
+          "covered": 367,
+          "skipped": 0,
+          "pct": 77.58
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sal/rtl/ustring.ts": {
+        "lines": {
+          "total": 193,
+          "covered": 154,
+          "skipped": 0,
+          "pct": 79.79
+        },
+        "functions": {
+          "total": 54,
+          "covered": 41,
+          "skipped": 0,
+          "pct": 75.92
+        },
+        "statements": {
+          "total": 230,
+          "covered": 174,
+          "skipped": 0,
+          "pct": 75.65
+        },
+        "branches": {
+          "total": 125,
+          "covered": 88,
+          "skipped": 0,
+          "pct": 70.4
+        }
+      }
+    },
+    "rawSha256": {
+      "coverage-final.json": "adbc7b37700612c763269fc4d5ad9b87bcf3205a55b4e3c6f55701e129473d7e",
+      "coverage-summary.json": "8e6d235248d007aa13d90f47e8dbdf953d8972c67dd4e16ea8df66c1615b9eb2"
+    },
+    "qualification": "137cases pass, whole3owner90 gate FAIL; retained as a separate open scope. Original createFromCodePoints test all7unit/empty assertions ported; source allocator/huge-count failure boundaries not proved through fabricated faults."
+  },
+  "qualification": [
+    "Original Emscripten parseStream assigns mbEnableThreads=false, all5real C callbacks execute on this profile. Other-platform native queues/threading and physical C++ mutex/allocator/ABI remain unqualified.",
+    "Original first-chunk-before-mpParser assignment, source EOF/error/saved Any polling and document/context-before-Entity cleanup preserved. Lazy opaque receiver scope lowers original void* this identity through all contexts and teardown.",
+    "Replacement members/sequence copy/sort/lower_bound/ASCII comparison and temporal native entity allocation/free are actual source owners; genuine libc strtoul/Unicode-codepoint constructor replace missing mechanisms, no JS parseInt/fromCodePoint/entity provider.",
+    "Actual Native InputSource/converter/stream loop/custom entity now replaces fixture-fed C callbacks in browser main/DOM-free Worker. This is not yet original UNO FastSaxParser wrapper/service, full original parser QA or native document filter/UI acceptance.",
+    "137test whole-SAL scope fails90 despite test pass; older failed broader gates remain open. Original codepoint QA is ported, but full other SAL/shared/native allocation/physical ABI qualification remains incomplete.",
+    "Full FastSaxParser/LegacyFastParser wrappers/factories, original complete parser QA, optional actual map component and separate Expat Parser remain unfinished.",
+    "Full metadata/storage/model/filter/Strict+Transitional package/XML/desktop+mobile UI/cancel/stale/primaryODF acceptance remains unfinished; same4 metadata errors, old cycle and160 older JSDoc findings remain."
+  ],
+  "securityScopes": {
+    "nativeFastParserOptions": "Exact human-approved xmlCtxtUseOptions(XML_PARSE_NOENT|XML_PARSE_HUGE) is now executed in the original source location after first-chunk creation. Actual >10MiB attribute validates real behavior; no substituted options, limit or resolver policy.",
+    "urlTrustAuthenticationCertificate": "Separate older scope question remains unanswered and untouched."
+  },
+  "next": "Port actual original FastSaxParser UNO wrapper/factory and remaining original parser QA, then LegacyFastParser/original service route and full metadata/storage/model/filter/package/UI acceptance. Keep source options/profile and known issues. Do not pause/finish/merge or commit unfinished implementation; goal active."
+}
