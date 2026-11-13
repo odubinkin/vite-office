@@ -1,0 +1,165 @@
+{
+  "scope": "Original concrete native RelationsFragment and full consumed AttributeList intrusive ownership, actual source package relation XML; not complete native filter/model/UI import-export acceptance",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "checks": [
+    {
+      "name": "whole owners",
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/oox/source/core/relationshandler.native.test.ts src/oox/source/helper/attributelist.test.ts src/oox/source/helper/attributelist-values.test.ts src/sc/source/filter/oox/richstring.test.ts src/oox/source/core/contexthandler.test.ts src/oox/source/core/relations.native.test.ts --maxWorkers=2 --coverage --coverage.include=src/oox/source/core/relationshandler.native.ts --coverage.include=src/oox/source/helper/attributelist.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-relfragment-whole > coverage/native-relfragment-whole.log 2>&1",
+      "log": "apps/office/coverage/native-relfragment-whole.log",
+      "result": "pass",
+      "observation": "110tests/6files; whole handler+attribute owner S98.58/B100/F100/L98.54; actual constructor/checked cast/intrusive lifetime/const borrow retain source contract"
+    },
+    {
+      "name": "actual main/Worker",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs > apps/office/coverage/native-relfragment-worker.log 2>&1",
+      "log": "apps/office/coverage/native-relfragment-worker.log",
+      "result": "pass",
+      "observation": "Actual source RelationsFragment/owning AttributeList/OOXML C callbacks parse native Unicode/internal/external targets and part path in both realms; no observer positive handler or relation projection"
+    },
+    {
+      "name": "tools types",
+      "command": "node_modules/.bin/tsc --project tsconfig.tools.json > apps/office/coverage/native-relfragment-tools.log 2>&1",
+      "log": "apps/office/coverage/native-relfragment-tools.log",
+      "result": "pass",
+      "observation": "Tools tsc"
+    },
+    {
+      "name": "app types",
+      "command": "cd apps/office && ../../node_modules/.bin/tsc --noEmit > coverage/native-relfragment-types-current.log 2>&1",
+      "log": "apps/office/coverage/native-relfragment-types-current.log",
+      "result": "fail",
+      "observation": "Exactly4older metadata storage dependencies, no new owner errors"
+    },
+    {
+      "name": "Vite",
+      "command": "cd apps/office && ../../node_modules/.bin/vite build > coverage/native-relfragment-vite.log 2>&1",
+      "log": "apps/office/coverage/native-relfragment-vite.log",
+      "result": "pass",
+      "observation": "Production build, existing chunk/timing warnings"
+    },
+    {
+      "name": "lint",
+      "command": "node_modules/.bin/eslint apps/office/src/oox/source/core/relationshandler.native.ts apps/office/src/oox/source/core/relationshandler.native.test.ts apps/office/src/oox/source/helper/attributelist.ts apps/office/src/oox/source/helper/attributelist.test.ts apps/office/src/oox/source/helper/attributelist-values.test.ts apps/office/src/sc/source/filter/oox/richstring.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs --max-warnings 0 > apps/office/coverage/native-relfragment-eslint.log 2>&1",
+      "log": "apps/office/coverage/native-relfragment-eslint.log",
+      "result": "pass",
+      "observation": "Focused owners/callers/tests/probe"
+    },
+    {
+      "name": "format",
+      "command": "node_modules/.bin/prettier --check apps/office/src/oox/source/core/relationshandler.native.ts apps/office/src/oox/source/core/relationshandler.native.test.ts apps/office/src/oox/source/helper/attributelist.ts apps/office/src/oox/source/helper/attributelist.test.ts apps/office/src/oox/source/helper/attributelist-values.test.ts apps/office/src/sc/source/filter/oox/richstring.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs > apps/office/coverage/native-relfragment-format.log 2>&1",
+      "log": "apps/office/coverage/native-relfragment-format.log",
+      "result": "pass",
+      "observation": "Focused scope"
+    },
+    {
+      "name": "provenance",
+      "command": "npm run check:source-provenance > apps/office/coverage/native-relfragment-provenance.log 2>&1",
+      "log": "apps/office/coverage/native-relfragment-provenance.log",
+      "result": "pass",
+      "observation": "2533runtime/2303mapped/192browser/38infrastructure"
+    },
+    {
+      "name": "registry/invariants/parity",
+      "command": "npm run inventory:registry:check > apps/office/coverage/native-relfragment-registry.log 2>&1",
+      "log": "apps/office/coverage/native-relfragment-registry.log",
+      "result": "pass",
+      "observation": "semanticViolationCount0"
+    },
+    {
+      "name": "size",
+      "command": "npm run check:file-size > apps/office/coverage/native-relfragment-size.log 2>&1",
+      "log": "apps/office/coverage/native-relfragment-size.log",
+      "result": "pass",
+      "observation": "No exemption"
+    },
+    {
+      "name": "tree",
+      "command": "npm run check:source-tree > apps/office/coverage/native-relfragment-tree.log 2>&1",
+      "log": "apps/office/coverage/native-relfragment-tree.log",
+      "result": "pass",
+      "observation": "Source tree"
+    },
+    {
+      "name": "JSDoc",
+      "command": "npm run check:docs > apps/office/coverage/native-relfragment-jsdoc.log 2>&1",
+      "log": "apps/office/coverage/native-relfragment-jsdoc.log",
+      "result": "fail",
+      "observation": "Older160 findings, no changed owner findings"
+    },
+    {
+      "name": "boundaries",
+      "command": "npm run check:dependencies > apps/office/coverage/native-relfragment-boundaries.log 2>&1",
+      "log": "apps/office/coverage/native-relfragment-boundaries.log",
+      "result": "fail",
+      "observation": "Existing comphelper -> sax -> comphelper cycle, no exemption"
+    },
+    {
+      "name": "routing",
+      "command": "node .agentplane/policy/check-routing.mjs > apps/office/coverage/native-relfragment-routing.log 2>&1",
+      "log": "apps/office/coverage/native-relfragment-routing.log",
+      "result": "pass",
+      "observation": "No policy changes"
+    },
+    {
+      "name": "doctor",
+      "command": "ap doctor > apps/office/coverage/native-relfragment-doctor.log 2>&1",
+      "log": "apps/office/coverage/native-relfragment-doctor.log",
+      "result": "pass",
+      "observation": "0errors, existing shim warning"
+    },
+    {
+      "name": "resources",
+      "command": "npm run check:calc-resources > apps/office/coverage/native-relfragment-resources.log 2>&1",
+      "log": "apps/office/coverage/native-relfragment-resources.log",
+      "result": "pass",
+      "observation": "464commands/11menus/17dispositions"
+    },
+    {
+      "name": "diff",
+      "command": "git diff --check > apps/office/coverage/native-relfragment-diff.log",
+      "log": "apps/office/coverage/native-relfragment-diff.log",
+      "result": "pass",
+      "observation": "No whitespace errors"
+    }
+  ],
+  "sourceHashes": {
+    "apps/office/src/oox/source/core/relationshandler.native.ts": "65c397e6106d0070edb2101fd398cca765eaf76429cf7984dcef7e6f31492f25",
+    "apps/office/src/oox/source/core/relationshandler.native.test.ts": "8398e15cef6b9ec13648fec48e227257dfb01d6c26468f7dd7bf817d4ffcbe69",
+    "apps/office/src/oox/source/helper/attributelist.ts": "d773f2a5d3e1b564ecf6be57964f81154dda67d0975b5d538bdf68a66a0758cb",
+    "apps/office/src/oox/source/helper/attributelist.test.ts": "5a352d6158f4409575d8c2e8fb824c52d3baec70fa7c50ab4bb804495addc89c",
+    "apps/office/src/oox/source/helper/attributelist-values.test.ts": "3b71f6e8de69ec2fbf43bcff50de5e61e13c25913f812a76bd5e2fb5fb51ba89",
+    "apps/office/src/sc/source/filter/oox/richstring.test.ts": "104eb6827fb0a1c9007452d317cb3c28247211847f19013fa19cf9bf042b37af",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "8bf72fa888d3c59037ede93357f420719fb7a6cdcc9151d643f1c877f836cb9d",
+    "scripts/native-dom-worker-probe.mjs": "e1768e67bd02357611b60463d970185adff0e131bd67bc32a2264d8bf0d10af5"
+  },
+  "fixtures": [
+    "sw/qa/extras/ooxmlexport/data/hello.docx",
+    "sw/qa/extras/ooxmlexport/data/strict.docx",
+    "sc/qa/unit/data/xlsx/preserve_space.xlsx",
+    "sc/qa/unit/data/xlsx/universal-content-strict.xlsx"
+  ],
+  "packageScope": "For each actual unchanged upstream fixture, real ZipStorage native input for _rels/.rels and main-part .rels passes through the actual native OOXML parser and original RelationsFragment into the same native shared collection. Office document path and nonempty styles path asserted, with no host relation graph conversion. This does not prove main-part model import/export/reopen/UI acceptance.",
+  "preservedSourceLogic": [
+    "Exact counted relation part path helper, native PR_TOKEN root/record switch, unqualified Id/Type/Target required nonempty fields; foreign/unknown/declined subtrees do not insert records.",
+    "Missing TargetMode uses Internal token; present empty/unknown/wrong-case token remains invalid/non-Internal and assumes external. No new validator/normalization.",
+    "First duplicate wins, plain string rather than XString decoding, stored earlier records remain after later malformed XML; source handler has no rollback.",
+    "AttributeList accepts actual UNO reference, casts to the actual source FastAttributeList, holds intrusive owner and returns same const rtl handle. Explicit lifetimes cover all prior callers; no raw compatibility overload or fake list provider remains."
+  ],
+  "initialObservations": [
+    "Initial79attribute/RichString cases passed after constructor/caller migration; first12handler cases passed including4actual packages. Full110case gate passes.",
+    "Initial app type log also had an unused native handler type import; removed it, final log contains only4older metadata errors.",
+    "RichString fixture native wrapper cleanup moved from an inner value-array finally to the outer owner scope so early failures also release wrapper/UNO references. No production behavior patched."
+  ],
+  "olderFailedGatesRetained": [
+    "Individual native OOXML parser85.45/78.26/100/93.87",
+    "Broader SDK86.44/86.11/92.30/87.96",
+    "Whole SAL79.20/75.47/73.24/80.62",
+    "Older4metadata storage errors, dependency cycle, JSDoc and all earlier broader unqualified scopes remain open."
+  ],
+  "remaining": [
+    "Native filter relation cache and actual normal FragmentHandler implicit-importRelations constructor/stream/storage orchestration; old host filter/relations route is explicitly not claimed migrated.",
+    "Original Pipe/Expat/full parser QA and complete native metadata/storage/model/Strict+Transitional DOCX/XLSX package/export/reopen/desktop/mobile UI acceptance.",
+    "Separate old URL trust/auth/certificate scope unanswered/untouched; approved original XML options unchanged."
+  ],
+  "status": "Parent tasks and goal active; no finish/pause/merge or unfinished source commit."
+}
