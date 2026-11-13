@@ -1,0 +1,165 @@
+{
+  "scope": "Original Inflater/InflateZlib, source-internal eager XBufferedStream and actual existing zlib WASM ABI adapter; no complete XUnbufferedStream/CRC/package/model/UI claim",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "codec": {
+    "library": "existing @zip.js/zip.js2.24.0 public dist/zip-module.wasm",
+    "sha256": "1ebaf6e62f247a005189493097f460bc9050f248755c55ecba34fd54257a6bb2",
+    "newDependencyOrDownload": false,
+    "pendingPakoQuestion": "Unnecessary after discovering and exercising the public synchronous WASM exports; do not install pako merely from the earlier question.",
+    "boundary": "Actual native calls, status, consumption and allocator/handle lifetime;64KiB input/output windows accommodate library native heap and packed24-bit output counters."
+  },
+  "sourceSha256": {
+    "apps/office/src/external/zlib/zlib.ts": "110bead9850649ad4ccfccce25d74c2691ecb69c5961e5644499765bee04f80d",
+    "apps/office/src/package/inc/Inflater.ts": "85b295a9e4a29ac1466b394f0746169079240be9bfd8de7d840210599c0e01a9",
+    "apps/office/src/package/source/zipapi/InflateZlib.ts": "1e30a4146951cf67a5a29aa20be940f78e3d30fbf56860dc1e6ced14bd657aa7",
+    "apps/office/src/package/source/zipapi/InflateZlib.test.ts": "27d7f3ceba92cd6ec573305ad0cbcba9bc36337ee0e5e50aba3be944885ae26a",
+    "apps/office/src/package/source/zipapi/ZipFile.buffered.ts": "8b0c6d601ecb97a8b6cf27108953c750ecb351030235df9b90f190b2dcbc72bb",
+    "apps/office/src/package/source/zipapi/ZipFile.buffered.test.ts": "9322d85cbf2cdc01276306002d108025e5533185ee59f752b054c8a27c369a85",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "951ced06e2c149eb2a171122a30a4abac0b96a6b77dbd4a5393ead7fc16fbaff",
+    "scripts/fixtures/native-dom-worker-probe.ts": "9ba098a6f5799aa7066f5cb2237c7dd1c00a1342ea5f477db19131aafb5e4d8b",
+    "scripts/native-dom-worker-probe.mjs": "5f52e9bc739a5a3ea796c47d8d65c34f481511bcdb172bd4d844a072a8ab5b85",
+    "scripts/module-boundaries/allowed-edges.mjs": "2c0fdb9e16470784dccc14d16494a26d0d1562ee65ca4bfc88a5c5d898cb34da"
+  },
+  "checks": [
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/package/source/zipapi/InflateZlib.test.ts src/package/source/zipapi/ZipFile.buffered.test.ts src/package/source/zipapi/ZipFile.test.ts src/package/source/zipapi/byte-io.test.ts --maxWorkers=2 --coverage --coverage.include=src/package/source/zipapi/InflateZlib.ts --coverage.include=src/external/zlib/zlib.ts --coverage.include=src/package/source/zipapi/ZipFile.buffered.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-entry",
+      "result": "fail",
+      "log": "apps/office/coverage/native-entry-tests.log",
+      "sha256": "f90a67ac9f7e11e73ab55f5d462ed7454d280c3f1a1342c0c6c40cb3223afdfa"
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/external/zlib/zlib.ts apps/office/src/package/inc/Inflater.ts apps/office/src/package/source/zipapi/InflateZlib.ts apps/office/src/package/source/zipapi/InflateZlib.test.ts apps/office/src/package/source/zipapi/ZipFile.buffered.ts apps/office/src/package/source/zipapi/ZipFile.buffered.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/fixtures/native-dom-worker-probe.ts scripts/native-dom-worker-probe.mjs scripts/module-boundaries/allowed-edges.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/external/zlib/zlib.ts apps/office/src/package/inc/Inflater.ts apps/office/src/package/source/zipapi/InflateZlib.ts apps/office/src/package/source/zipapi/InflateZlib.test.ts apps/office/src/package/source/zipapi/ZipFile.buffered.ts apps/office/src/package/source/zipapi/ZipFile.buffered.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/fixtures/native-dom-worker-probe.ts scripts/native-dom-worker-probe.mjs scripts/module-boundaries/allowed-edges.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "node_modules/.bin/tsc --noEmit --project apps/office/tsconfig.json",
+      "result": "fail",
+      "log": "apps/office/coverage/native-entry-types.log",
+      "sha256": "191e4bdf87792572048a2d40ec89fdf71fbac07a0325f9aa1a25ce7df4266208"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "log": "apps/office/coverage/native-entry-deps.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-entry-docs.log",
+      "sha256": "0d64659347842d68a624c5105b4c8ef9d8f4ca6a33bb1008785dbf93aae2ec19"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-provenance.log",
+      "sha256": "e625cd1df352a1d11a440d536fcb082c1d8253c6b6e795912f521505d5cc2e27"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-registry.log",
+      "sha256": "ae0eb03382114ca2f323410eea57274de69cf47a45fa4683ea9b64e124b914e5"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-size.log",
+      "sha256": "ff2ec2c7e5ca34e5a43c04ddc6de2e16866662a36f8c2e01665e49ee328ecd17"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-vite.log",
+      "sha256": "5612511a5086920cbecea2ee53f37af449d8086ec0db6758b7e8dda00fd0fced"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-static.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-doctor.log",
+      "sha256": "eeb13b5381be5c01cd98eade251a9b8bbd823a738b27b3b5317c20601a11b04b"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-inflate-worker.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts scripts/check-module-boundaries-xml.test.ts --maxWorkers=2",
+      "result": "pass",
+      "log": "apps/office/coverage/native-entry-boundaries.log",
+      "sha256": "d554074debd7634bdf509f613049f94ff969366f55c3ff253451d2ef150bf670"
+    }
+  ],
+  "tests": "101 functional tests pass across4files; command exits1 due scoped90 coverage failure. Real1MiB incompressible input and >16MiB output are exercised. Five unchanged upstream fixtures including Strict/Transitional DOCX/XLSX and original export64.zip styles.xml1112bytes pass native directory+inflater and independent output/CRC assertions. This is not full service/model QA.",
+  "coverage": {
+    "apps/office/src/external/zlib/zlib.ts": {
+      "statements": 85.11,
+      "branches": 72.73,
+      "functions": 100.0
+    },
+    "apps/office/src/package/source/zipapi/InflateZlib.ts": {
+      "statements": 96.23,
+      "branches": 95.65,
+      "functions": 100.0
+    },
+    "apps/office/src/package/source/zipapi/ZipFile.buffered.ts": {
+      "statements": 70.67,
+      "branches": 86.36,
+      "functions": 100.0
+    }
+  },
+  "coverageCaveat": "Istanbul whole-owner report retains external adapter and buffered owner failures independently; no fake OOM/status/provider, RTTI suppression, private state injection or coverage counter edits. Buffered non-ByteReader source is not implemented yet. Browser real fetch bootstrap is separately exercised by actual Worker/main probe.",
+  "worker": "Actual same synchronous native inflater and XBufferedStream work in Chromium main realm and DOM-free module Worker.",
+  "suspectedIssues": [
+    "WRITER546/CALC609 source fast-constructor zero-progress loop; no manufactured hang",
+    "WRITER547/CALC610 unchanged output Sequence at EOF",
+    "WRITER548/CALC611 unchecked unsigned skip position"
+  ],
+  "remaining": [
+    "Implement original CRC32/rtl_crc32 and XUnbufferedStream then wire ZipFile entry streams; package storage factory/model/filter/UI acceptance still unfinished.",
+    "Four metadata type errors, existing comphelper/sax cycle and157 global older JSDoc findings remain. No new source/type/lint/JSDoc defects.",
+    "Older independent scoped coverage failures remain in prior evidence and are not qualified or diluted here.",
+    "Separate pending file-access/auth approvals remain untouched; no network, global files, host filesystem mounts or new dependency used."
+  ],
+  "status": "Unfinished direct-mode parents; continue full DOCX/XLSX objective. No task finish, goal complete or pause. Full suite not due at ten-completed-task cadence."
+}

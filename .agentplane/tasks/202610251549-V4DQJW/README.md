@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 112
+revision: 115
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T14:58:03.787Z"
+  updated_at: "2026-11-13T15:21:59.577Z"
   updated_by: "CODER"
-  note: "Shared original ZIP END/CEN/LOC/ZIP64/descriptors now execute on actual native streams/mutex; 101 focused tests and 56 boundary tests pass, new whole owners above90, Chromium main/DOM-free Worker pass. Native entry/inflate/output/storage/model/DOCX UI acceptance unfinished. Four metadata types, old cycle and157 JSDoc findings remain. Evidence: native-zip-directory-parser-continuation.json."
-  attempts: 24
+  note: "Shared original InflateZlib/eager XBufferedStream and existing native zlib ABI adapter now execute;101 functional tests include five real Strict/Transitional/ZIP64 directory+inflate parts and real main/DOM-free Worker. External/buffered whole-owner coverage still fails independently. CRC/XUnbufferedStream/storage/DOCX model/UI and older type/docs/cycle failures remain. No new dependency/network. Evidence native-entry-streams-continuation.json."
+  attempts: 25
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -392,8 +395,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T15:21:59.577Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared original InflateZlib/eager XBufferedStream and existing native zlib ABI adapter now execute;101 functional tests include five real Strict/Transitional/ZIP64 directory+inflate parts and real main/DOM-free Worker. External/buffered whole-owner coverage still fails independently. CRC/XUnbufferedStream/storage/DOCX model/UI and older type/docs/cycle failures remain. No new dependency/network. Evidence native-entry-streams-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-13T15:22:26.863Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T14:58:19.028Z"
+doc_updated_at: "2026-11-13T15:22:26.863Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -1126,6 +1142,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T15:21:59.577Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared original InflateZlib/eager XBufferedStream and existing native zlib ABI adapter now execute;101 functional tests include five real Strict/Transitional/ZIP64 directory+inflate parts and real main/DOM-free Worker. External/buffered whole-owner coverage still fails independently. CRC/XUnbufferedStream/storage/DOCX model/UI and older type/docs/cycle failures remain. No new dependency/network. Evidence native-entry-streams-continuation.json.
+    Attempts: 25
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T15:20:24.166Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -1370,6 +1416,10 @@ sections:
     ### Native ZIP directory/LOC validation continuation
 
     Original ZipFile END/CEN/LOC/ZIP64/data-descriptor/extra-field checks now execute over actual native UNO streams and RefCountedMutex guards. EntryHash uses real RTL hashes/equality/key-value copies; ZipEnumeration returns actual mapped entries. Strict/Transitional DOCX/XLSX directories, original valid ZIP64 fixtures and non-recovery package rejection fixtures run; 101 tests across 5 files and 56 boundary-tooling tests across 2 files pass. Whole new owners independently exceed scoped90; actual Chromium main/DOM-free Worker ZIP execution passes. Source-backed missing dependency edges were added; the existing comphelper/sax cycle remains failing. Metadata typecheck still has the same four errors; global JSDoc retains157 older findings, none new. Full package service QA, inflation/CRC/entry streams, output, storage factories, models and UI remain unfinished; earlier failed coverages remain independent. See evidence/native-zip-directory-parser-continuation.json for exact commands, log/source hashes and owner coverage. No full suite due and no task/goal completion. Continue original native entry stream/inflate path.
+
+    ### Native entry streams and existing zlib continuation
+
+    Original Inflater/InflateZlib now uses actual synchronous exports from the installed zip.js2.24.0 public WASM artifact, preserving source Sequence/COW, segment/status/error/consumption/end semantics. Bounded ABI windows pass actual1MiB incompressible input and >16MiB output. No pako/download or dependency change is needed; the earlier optional pako request became unnecessary. Source-internal XBufferedStream is implemented over actual native UNO/ByteReader; EOF and unchecked-skip findings are recorded.101 functional tests pass across4files, including native directory+inflation of five unchanged upstream Strict/Transitional/ZIP64 parts and original styles.xml1112-byte assertion; actual main/DOM-free Worker passes. Core inflater exceeds scoped90, but external adapter and buffered constructor whole-owner coverage remain failing independently; non-ByteReader real input/allocator failures are not faked. Existing4metadata type errors, comphelper/sax cycle and157JSDoc findings remain. Complete CRC/XUnbufferedStream, storage factories, models, filter routes and UI acceptance remain unfinished. See evidence/native-entry-streams-continuation.json for commands/hashes and coverage. No full suite due, task completion or pause.
 id_source: "generated"
 ---
 ## Summary
@@ -2113,6 +2163,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T15:21:59.577Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared original InflateZlib/eager XBufferedStream and existing native zlib ABI adapter now execute;101 functional tests include five real Strict/Transitional/ZIP64 directory+inflate parts and real main/DOM-free Worker. External/buffered whole-owner coverage still fails independently. CRC/XUnbufferedStream/storage/DOCX model/UI and older type/docs/cycle failures remain. No new dependency/network. Evidence native-entry-streams-continuation.json.
+Attempts: 25
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T15:20:24.166Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -2362,3 +2442,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 ### Native ZIP directory/LOC validation continuation
 
 Original ZipFile END/CEN/LOC/ZIP64/data-descriptor/extra-field checks now execute over actual native UNO streams and RefCountedMutex guards. EntryHash uses real RTL hashes/equality/key-value copies; ZipEnumeration returns actual mapped entries. Strict/Transitional DOCX/XLSX directories, original valid ZIP64 fixtures and non-recovery package rejection fixtures run; 101 tests across 5 files and 56 boundary-tooling tests across 2 files pass. Whole new owners independently exceed scoped90; actual Chromium main/DOM-free Worker ZIP execution passes. Source-backed missing dependency edges were added; the existing comphelper/sax cycle remains failing. Metadata typecheck still has the same four errors; global JSDoc retains157 older findings, none new. Full package service QA, inflation/CRC/entry streams, output, storage factories, models and UI remain unfinished; earlier failed coverages remain independent. See evidence/native-zip-directory-parser-continuation.json for exact commands, log/source hashes and owner coverage. No full suite due and no task/goal completion. Continue original native entry stream/inflate path.
+
+### Native entry streams and existing zlib continuation
+
+Original Inflater/InflateZlib now uses actual synchronous exports from the installed zip.js2.24.0 public WASM artifact, preserving source Sequence/COW, segment/status/error/consumption/end semantics. Bounded ABI windows pass actual1MiB incompressible input and >16MiB output. No pako/download or dependency change is needed; the earlier optional pako request became unnecessary. Source-internal XBufferedStream is implemented over actual native UNO/ByteReader; EOF and unchecked-skip findings are recorded.101 functional tests pass across4files, including native directory+inflation of five unchanged upstream Strict/Transitional/ZIP64 parts and original styles.xml1112-byte assertion; actual main/DOM-free Worker passes. Core inflater exceeds scoped90, but external adapter and buffered constructor whole-owner coverage remain failing independently; non-ByteReader real input/allocator failures are not faked. Existing4metadata type errors, comphelper/sax cycle and157JSDoc findings remain. Complete CRC/XUnbufferedStream, storage factories, models, filter routes and UI acceptance remain unfinished. See evidence/native-entry-streams-continuation.json for commands/hashes and coverage. No full suite due, task completion or pause.
