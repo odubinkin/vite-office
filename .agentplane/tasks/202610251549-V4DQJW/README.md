@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 91
+revision: 94
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T11:56:32.297Z"
+  updated_at: "2026-11-13T12:55:45.845Z"
   updated_by: "CODER"
-  note: "Shared actual native Emscripten/MEMFS/XML runtime bootstrap now preserves old XML Promise/module/diagnostic and supports genuine native C file IO,90related tests/current artifact and actual main-Worker files. New whole bootstrap owners pass90; older failed native stream/storage/parser/SAL/SDK/o3tl scopes remain separate. Actual source SvStream/SvFileStream/TempFileFastService/OStorage/backend and full Writer core/filter/model/export/UI remain unfinished. Source TempFile seek truncation documented WRITER531/CALC594 for preservation. Existing4types/cycle/157docs remain failed; other scoped quality checks pass. Evidence native-filesystem-runtime-continuation.json; goal active, no implementation source commit/merge."
-  attempts: 17
+  note: "Source byte stream checkpoint: 234pass/1old RTF failure; native branches85.20 below90. Main/Worker and direct Vite/static pass. Full native storage/model/UI and older failures unfinished; see native-sv-stream-continuation.json."
+  attempts: 18
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -280,8 +283,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-13T12:55:45.845Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Source byte stream checkpoint: 234pass/1old RTF failure; native branches85.20 below90. Main/Worker and direct Vite/static pass. Full native storage/model/UI and older failures unfinished; see native-sv-stream-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-13T12:55:50.658Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T11:56:38.056Z"
+doc_updated_at: "2026-11-13T12:55:50.658Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -804,6 +820,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-13T12:55:45.845Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Source byte stream checkpoint: 234pass/1old RTF failure; native branches85.20 below90. Main/Worker and direct Vite/static pass. Full native storage/model/UI and older failures unfinished; see native-sv-stream-continuation.json.
+    Attempts: 18
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T12:55:45.257Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -1020,6 +1066,10 @@ sections:
     - Observation: Actual shared Emscripten libc/MEMFS now backs XML and future file owners; native C file IO,90related cases/current artifact and main-Worker evidence pass. See `evidence/native-filesystem-runtime-continuation.json`.
       Impact: Genuine filesystem foundation advances; source SvStream/TempFile/OStorage/backend/model/UI remain unfinished. New bootstrap100 does not close older whole-owner failures.
       Resolution: Port actual file/buffering/temp owners and preserve WRITER531/CALC594, then native storage/filter/model/export/UI; no fake temp service or validator exemption. Goal active, no incomplete implementation commit.
+
+    - Observation: Original byte SvStream/SvMemoryStream and shared active host buffer now execute with source QA/234passing cases and main/Worker. Evidence: `evidence/native-sv-stream-continuation.json`.
+      Impact: Byte prerequisite advances; native branch coverage85.20, old RTF style failure and prior quality/whole-owner failures remain open. JS storage is GC-managed; source flag controls logical resize/transfer only.
+      Resolution: Continue actual file/OSL/TempFile/storage graph and native filter/model/export/UI without fake backend or allocator emulation. Goal active, no incomplete source implementation commit.
 id_source: "generated"
 ---
 ## Summary
@@ -1553,6 +1603,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-13T12:55:45.845Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Source byte stream checkpoint: 234pass/1old RTF failure; native branches85.20 below90. Main/Worker and direct Vite/static pass. Full native storage/model/UI and older failures unfinished; see native-sv-stream-continuation.json.
+Attempts: 18
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-13T12:55:45.257Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -1774,3 +1854,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Actual shared Emscripten libc/MEMFS now backs XML and future file owners; native C file IO,90related cases/current artifact and main-Worker evidence pass. See `evidence/native-filesystem-runtime-continuation.json`.
   Impact: Genuine filesystem foundation advances; source SvStream/TempFile/OStorage/backend/model/UI remain unfinished. New bootstrap100 does not close older whole-owner failures.
   Resolution: Port actual file/buffering/temp owners and preserve WRITER531/CALC594, then native storage/filter/model/export/UI; no fake temp service or validator exemption. Goal active, no incomplete implementation commit.
+
+- Observation: Original byte SvStream/SvMemoryStream and shared active host buffer now execute with source QA/234passing cases and main/Worker. Evidence: `evidence/native-sv-stream-continuation.json`.
+  Impact: Byte prerequisite advances; native branch coverage85.20, old RTF style failure and prior quality/whole-owner failures remain open. JS storage is GC-managed; source flag controls logical resize/transfer only.
+  Resolution: Continue actual file/OSL/TempFile/storage graph and native filter/model/export/UI without fake backend or allocator emulation. Goal active, no incomplete source implementation commit.

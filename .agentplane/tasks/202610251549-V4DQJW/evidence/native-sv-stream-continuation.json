@@ -1,0 +1,181 @@
+{
+  "scope": "Source SvStream byte buffering/numeric/copy protocol and SvMemoryStream; host byte adapter uses same active storage; prerequisite only, full DOCX/XLSX model/UI unfinished",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "artifact": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 157,
+    "enumConstantCount": 851,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "e45f0b54031bd3662e5fc173a8fd217259392c8f1c22e900245cf4b4d4276f0c"
+  },
+  "sourceSha256": {
+    "apps/office/src/tools/source/stream/stream.native.ts": "17ec873cb579c34a3ca60918b945383e0f1bf411265929eb627eac36abe48ed5",
+    "apps/office/src/tools/source/stream/stream.native.test.ts": "cc6726c0631d2bb5a3c278b74c5ab43f6146b599c00f8d0b894e2e9579d584f8",
+    "apps/office/src/tools/source/stream/stream.ts": "72febbe82bdc2b4b7014518f8628de4104a9c7390923bc0793856ec7d5e13e1c",
+    "apps/office/src/tools/source/stream/stream.test.ts": "11f83c8c42d2ce222b0bf4d8f75d70c990989cd89e6507d271e62c65f1f0d1bc",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "171b802db51ab79778f334ce22101839ec767692d8c56c9abc09a1fe65933dc3",
+    "scripts/native-dom-worker-probe.mjs": "387ec252a75e66b40eeb4b864bd74771f17bf5a2f08d4ed1a583b5ff7a5744e0"
+  },
+  "checks": [
+    {
+      "name": "tests",
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/tools/source/stream/stream.native.test.ts src/tools/source/stream/stream.test.ts src/tools/source/stream/native-lineend.test.ts src/comphelper/inc/errcode.test.ts src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/docsh.csv-encoding.test.ts src/sc/source/ui/docshell/docsh.csv-diagnostic.test.ts src/svtools/source/svrtf/svparser.test.ts src/svtools/source/svrtf/svparser.boundaries.test.ts src/svtools/source/svhtml/parhtml.test.ts src/svtools/source/svhtml/parhtml.edge-cases.test.ts src/sw/source/filter/md/swmd.test.ts src/sw/source/filter/ww8/rtfexport.test.ts src/sfx2/source/doc/objstor.test.ts --maxWorkers=2 --coverage --coverage.include=src/tools/source/stream/stream.native.ts --coverage.include=src/tools/source/stream/stream.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-sv",
+      "result": "fail",
+      "log": "apps/office/coverage/native-sv-tests.log",
+      "logSha256": "775016d523cafceac0b5c0ac8cbe658576f16520d1c9c781d09136745ab9463b"
+    },
+    {
+      "name": "rtf-baseline",
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run --config coverage/native-sv-rtf-baseline.config.ts src/sw/source/filter/ww8/rtfexport.test.ts --maxWorkers=2",
+      "result": "fail",
+      "log": "apps/office/coverage/native-sv-rtf-baseline.log",
+      "logSha256": "c06a28cfa7e46b79a56947761ddb557c8c6d17a91161443e156e52eaae5cdf09"
+    },
+    {
+      "name": "worker",
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-sv-worker.log",
+      "logSha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "name": "build",
+      "command": "npm run build",
+      "result": "fail",
+      "log": "apps/office/coverage/native-sv-build.log",
+      "logSha256": "bf9357a8dfd1b6ea9fa398f92bc047febb2c58bdceabc6c12c893b20fc107e9c"
+    },
+    {
+      "name": "vite",
+      "command": "cd apps/office && ../../node_modules/.bin/vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-sv-vite.log",
+      "logSha256": "99f30dde06081497b87f28e3d1038e8365511d933524f52db718670f850ab0ca"
+    },
+    {
+      "name": "static",
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-sv-static.log",
+      "logSha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "name": "dependencies",
+      "command": "node scripts/check-module-boundaries.mjs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-sv-dependencies.log",
+      "logSha256": "bdcc7e9dd8ca6144d73ea174c9d2d88a86f801b67f553da15d1ce165df3f1fb5"
+    },
+    {
+      "name": "docs",
+      "command": "node scripts/check-jsdoc.mjs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-sv-docs.log",
+      "logSha256": "2e31be5dff5b1029a71c8e89f9870b2b1c88fd7ee0e111011b8037553658c30b"
+    },
+    {
+      "name": "size",
+      "command": "node scripts/check-file-size.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-sv-size.log",
+      "logSha256": "9179081cbcfb873b3aecbaf7747b5d8c2434939034e0c978f3e5e04782fdab6f"
+    },
+    {
+      "name": "tree",
+      "command": "node scripts/check-lo-source-tree.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-sv-tree.log",
+      "logSha256": "444d529b6df4a6f35f802469bf703a496dc372e53e16295756c8f09af5f0040f"
+    },
+    {
+      "name": "writer-resources",
+      "command": "npm run check:writer-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/native-sv-writer-resources.log",
+      "logSha256": "c7ce8f00d6087785ef0e3ea7a568375b4cf6eab48335cad82eb529740fa9a1ce"
+    },
+    {
+      "name": "calc-resources",
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/native-sv-calc-resources.log",
+      "logSha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "name": "routing",
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-sv-routing.log",
+      "logSha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "name": "doctor",
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-sv-doctor.log",
+      "logSha256": "20a72d3e10985e77afd5ee80247e923d8d92dd639e0afcc075929b98579b490d"
+    },
+    {
+      "name": "provenance",
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-sv-provenance.log",
+      "logSha256": "21ed4587378de4d43e8f13f6a538264f75784bb56eb46870597ffd2232224152"
+    },
+    {
+      "name": "registry",
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-sv-registry.log",
+      "logSha256": "445a9f4508e0159eee1e560dff3185e8de840aa5a9b6ab7809dc1bdd17901e53"
+    }
+  ],
+  "coverage": {
+    "native": {
+      "statements": 92.97,
+      "branches": 85.2,
+      "functions": 96.15,
+      "lines": 94.88,
+      "result": "fail90"
+    },
+    "host": {
+      "statements": 99.4,
+      "branches": 98.16,
+      "functions": 100,
+      "lines": 100
+    },
+    "aggregate": "94.78/89.83/97.11/96.33; not native acceptance"
+  },
+  "testObservations": [
+    "234 passed, one RTF style failure across16files; expected quotations, actual block-quotation.",
+    "Diagnostic reconstructed old host producer loaded via Vite pre-load hook at original absolute module ID, without changing production source:16passed/same1RTFfailure. Reconstruction is not an exact git commit baseline.",
+    "Pinned test_stream.cxx test_stdstream actual SvMemoryStream assertions, test_makereadonly and test_write_from_self ported. No stdstream implementation comparison or physical C++ UAF claim. Remaining text/TempFile source QA pending.",
+    "Actual CPPU Sequence cells, little/big scalar bytes, flush/read/write/seek/resize and32KiB copies. Actual main/DOM-free Worker stream bytes3/position3 and genuine FS operation pass."
+  ],
+  "semantics": [
+    "JS garbage collector controls Uint8Array storage lifetime. bOwnsData only retains upstream logical resize/transfer behavior. dispose drops references, no invalidation of external views or manual JS free.",
+    "Host adapter previously wrote a separate byte array while reads used initial bytes; now all observe actual SvMemoryStream initialized prefix. Original caller bytes remain unchanged.",
+    "Native allocator/uninitialized memory/invalid-pointer/overflow and nonzero crypto domains unqualified; no allocator emulator. LockBytes/text APIs and real file/temp backend still unported."
+  ],
+  "quality": "Scoped lint/format/tools types pass. Direct Vite/static pass; npm build fails on same4metadata TS errors. Source provenance2539runtime/2308mapped/193browser/38infra; registry semanticViolationCount0. Existing dependency cycle and157JSDoc findings remain failed. Size/tree/resources/doctor/routing/diff pass. Full suite not due: no parent task completed.",
+  "olderFailedGatesRetained": [
+    "Individual native OOXML parser85.45/78.26/100/93.87",
+    "Broader SDK86.44/86.11/92.30/87.96",
+    "Whole SAL79.20/75.47/73.24/80.62",
+    "Older4metadata storage errors, dependency cycle, JSDoc and all earlier broader unqualified scopes remain open.",
+    "Previous native-attribute-collections complete o3tl string_view function88.88 remains failed independently; current source storage coverage does not close it.",
+    "Previous native-storage complete-file failures retained: base73.15/66.66/100/73.33; nativeZip41.41/45.23/100/43.82; helper64.8/75.64/63.15/62.27; parser85.24/80/100/92.72. Current passing stream cases do not close them.",
+    "Previous native-persistence complete SwitchablePersistenceStream scope remains failed S86.27/B82.14/F100/L94.01. Current bootstrap100 does not close or dilute it."
+  ],
+  "suspectedIssues": [
+    "WRITER532/CALC595 shrink logical-end minus one; invalid native pointer domain unqualified",
+    "WRITER533/CALC596 transient SeekRel absolute buffer displacement; physical pointer UB unqualified"
+  ],
+  "remaining": [
+    "Whole-owner90 and earlier failed quality/scopes remain open.",
+    "Real SvFileStream/OSL/TempFileFastService, CopyAndSwitchPersistenceTo, actual OStorageFactory/OStorage/ZipPackage backend.",
+    "Native filter/default fragment/cache, metadata/model, full Strict/Transitional DOCX/XLSX import/export/reopen through existing desktop/mobile UI."
+  ],
+  "status": "Goal active; both approved parent tasks unfinished. Canonical evidence checkpoint only; source stays WIP, no merge."
+}
