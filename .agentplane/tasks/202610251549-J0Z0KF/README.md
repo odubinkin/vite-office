@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 391
+revision: 394
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-13T17:23:57.064Z"
+  updated_at: "2026-11-14T05:25:33.788Z"
   updated_by: "CODER"
-  note: "Complete original shared-stream wrapper passes10 focused and48 related cases, whole-owner scoped90 and actual Chromium main/Worker. Native package streams/factories/models/UI and older failures remain; evidence/native-shared-stream-continuation.json."
-  attempts: 122
+  note: "Native seekable wrapper/SDK mutex:5 functional,38 related and56 boundary tests pass plus main/Worker. Actual TempFile service/copy is missing and owner90 gates fail; no fake providers. Native package/model/UI unfinished; evidence/native-seekable-input-continuation.json."
+  attempts: 123
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1960,8 +1963,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-14T05:25:33.788Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native seekable wrapper/SDK mutex:5 functional,38 related and56 boundary tests pass plus main/Worker. Actual TempFile service/copy is missing and owner90 gates fail; no fake providers. Native package/model/UI unfinished; evidence/native-seekable-input-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-14T05:27:13.796Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-13T17:24:21.464Z"
+doc_updated_at: "2026-11-14T05:27:13.796Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -5636,6 +5652,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-14T05:25:33.788Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native seekable wrapper/SDK mutex:5 functional,38 related and56 boundary tests pass plus main/Worker. Actual TempFile service/copy is missing and owner90 gates fail; no fake providers. Native package/model/UI unfinished; evidence/native-seekable-input-continuation.json.
+    Attempts: 123
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T05:25:32.847Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -6217,6 +6263,8 @@ sections:
     Actual abstract ZipPackageEntry and final live ZipPackageFolder name/container/property/service subset, FolderEnumeration and missing XNamed/NoSupportException now use real UNO/RTL/Any/reference contracts.6critical source scenarios and21related package tests pass; all5whole-owner coverages independently exceed scoped90. Actual Chromium main/DOM-free Worker verifies folder/child identity, parent/name transport and original destructive rename; existing ZIP output/read probe remains. WRITER556..557/CALC619..620 document and preserve parent/container temporary quirks. Source/provenance/registry/lint/format/tools/size/tree/Vite/static/doctor/routing/diff pass; prior4metadata types, comphelper/sax cycle,157JSDoc and older independent coverage gaps remain. Stream/traversal/save/factory/storage/model/filter/UI and complete original service QA are still unfinished; no fake provider, network/dependency changes, threshold change, full suite or goal completion. See evidence/native-package-graph-continuation.json.
 
     Complete original WrapStreamForShare uses actual UNO input/seek/ByteReader, native shared OSL mutex and source per-wrapper cursor/guard placement/available/release-only-close.10critical tests and48related cases pass; whole owner passes scoped90 independently (100allmetrics naturally from public paths). Four unchanged Strict/Transitional DOCX/XLSX parts and actual main/DOM-free Worker interleaved readers/close/availability execute. No fake input, mutex, RTTI, private fields or byte-buffer lifetime is supplied. WRITER558..560/CALC621..623 preserve source read-lock omission, source-position availability and ByteReader precondition. Lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass; older4metadata types, cycle,157JSDoc and independent coverage gaps remain. Original ZipPackageStream/seekable-copy/tempfile/native package storage/models/filter/UI and complete original service QA remain unfinished; pako/security approvals pending, no download or risk expansion. See evidence/native-shared-stream-continuation.json. Goal stays active, no full suite due.
+
+    Original OSeekableInputWrapper and generated TempFile/XTempFile now use the real native SDK std::mutex/scoped_lock, actual production service manager, exact seekable identity and original lazy copy/close body. Native artifact rebuild from pinned local SDK succeeds:166exports/851constants, artifact SHA fc83bba5924d99405e8ce72e0c63f1aa4afc3a5237816751b46c60bdebb0e090.5functional,38related DOM/SAX/ZIP and56boundary tests pass; actual Chromium main/DOM-free Worker probes pass with genuine missing TempFile error. OTempFileService is still absent; copy does not work yet, and wrapper/helper whole-owner scoped90 fails (retained, not diluted). Mutex and XTempFile independently pass90. No fake TempFile/memory-copy provider, JS mutex, private fields, altered counters/thresholds, network download or dependency install. WRITER561/CALC624 documents potential constructor-self lifetime. Source-backed comphelper->external edge added; old cycle,4metadata types,157JSDoc and prior failed coverages remain. Lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass. See evidence/native-seekable-input-continuation.json. Next implement actual TempFile/native IO service, then package streams/storage/model/filter/UI; no task/goal completion or full suite due.
 id_source: "generated"
 ---
 ## Summary
@@ -9901,6 +9949,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-14T05:25:33.788Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native seekable wrapper/SDK mutex:5 functional,38 related and56 boundary tests pass plus main/Worker. Actual TempFile service/copy is missing and owner90 gates fail; no fake providers. Native package/model/UI unfinished; evidence/native-seekable-input-continuation.json.
+Attempts: 123
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T05:25:32.847Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -10486,3 +10564,5 @@ Original ZipOutputStream raw-copy/header producer passes143 related tests and wh
 Actual abstract ZipPackageEntry and final live ZipPackageFolder name/container/property/service subset, FolderEnumeration and missing XNamed/NoSupportException now use real UNO/RTL/Any/reference contracts.6critical source scenarios and21related package tests pass; all5whole-owner coverages independently exceed scoped90. Actual Chromium main/DOM-free Worker verifies folder/child identity, parent/name transport and original destructive rename; existing ZIP output/read probe remains. WRITER556..557/CALC619..620 document and preserve parent/container temporary quirks. Source/provenance/registry/lint/format/tools/size/tree/Vite/static/doctor/routing/diff pass; prior4metadata types, comphelper/sax cycle,157JSDoc and older independent coverage gaps remain. Stream/traversal/save/factory/storage/model/filter/UI and complete original service QA are still unfinished; no fake provider, network/dependency changes, threshold change, full suite or goal completion. See evidence/native-package-graph-continuation.json.
 
 Complete original WrapStreamForShare uses actual UNO input/seek/ByteReader, native shared OSL mutex and source per-wrapper cursor/guard placement/available/release-only-close.10critical tests and48related cases pass; whole owner passes scoped90 independently (100allmetrics naturally from public paths). Four unchanged Strict/Transitional DOCX/XLSX parts and actual main/DOM-free Worker interleaved readers/close/availability execute. No fake input, mutex, RTTI, private fields or byte-buffer lifetime is supplied. WRITER558..560/CALC621..623 preserve source read-lock omission, source-position availability and ByteReader precondition. Lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass; older4metadata types, cycle,157JSDoc and independent coverage gaps remain. Original ZipPackageStream/seekable-copy/tempfile/native package storage/models/filter/UI and complete original service QA remain unfinished; pako/security approvals pending, no download or risk expansion. See evidence/native-shared-stream-continuation.json. Goal stays active, no full suite due.
+
+Original OSeekableInputWrapper and generated TempFile/XTempFile now use the real native SDK std::mutex/scoped_lock, actual production service manager, exact seekable identity and original lazy copy/close body. Native artifact rebuild from pinned local SDK succeeds:166exports/851constants, artifact SHA fc83bba5924d99405e8ce72e0c63f1aa4afc3a5237816751b46c60bdebb0e090.5functional,38related DOM/SAX/ZIP and56boundary tests pass; actual Chromium main/DOM-free Worker probes pass with genuine missing TempFile error. OTempFileService is still absent; copy does not work yet, and wrapper/helper whole-owner scoped90 fails (retained, not diluted). Mutex and XTempFile independently pass90. No fake TempFile/memory-copy provider, JS mutex, private fields, altered counters/thresholds, network download or dependency install. WRITER561/CALC624 documents potential constructor-self lifetime. Source-backed comphelper->external edge added; old cycle,4metadata types,157JSDoc and prior failed coverages remain. Lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass. See evidence/native-seekable-input-continuation.json. Next implement actual TempFile/native IO service, then package streams/storage/model/filter/UI; no task/goal completion or full suite due.

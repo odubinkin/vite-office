@@ -1,0 +1,211 @@
+{
+  "scope": "Original OSeekableInputWrapper and generated TempFile/XTempFile bindings plus real native SDK std::mutex. Real seekable identity/closed/lazy-factory behavior exists; actual copy awaits OTempFileService and whole wrapper/helper coverage remains failing. Not full package/format/UI acceptance.",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSha256": {
+    "apps/office/src/comphelper/source/streaming/seekableinput.ts": "3f9096817fb005a9d2e5de6dc611f0de14bb47a1ee8fca974a3df88cb75e3785",
+    "apps/office/src/comphelper/source/streaming/seekableinput.test.ts": "1027e55437204f4354aa69157c82ae6bd1d2bee6a9eba04328a8cae05534ab80",
+    "apps/office/src/external/libcxx/mutex.ts": "9b4449d364ffe8cf897bec7ad47b25725985a108e93d004113a63d4a72e77416",
+    "apps/office/src/external/libcxx/mutex.test.ts": "81ec87523b21b044e8747b2502dae1118f2a1dbcab05339f45011b51bbfa43de",
+    "apps/office/src/udkapi/com/sun/star/io/XTempFile.ts": "4379eb9f01e3ec19462f8110f0a24227ed8e6bcdb5c6f6bd6a7195721f15e646",
+    "apps/office/src/udkapi/com/sun/star/io/TempFile.ts": "571c3ab143582405a7a1ee338c2c89322663c7335bcbf692a4e8daf9e4b6e37a",
+    "scripts/build-libxml2-wasm.py": "adda54781721493f82deb7bf9348adc02587f8a48f34710a02626e7048c23949",
+    "scripts/module-boundaries/allowed-edges.mjs": "99f448844a20418d8412a68ec4cc8fa7ed6bbaba8ac6de32665e932e7b6f44dd",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "c5906ecc13c28208011500792f9b775561c4b470fd132d7b5a835a316f5234d6",
+    "scripts/native-dom-worker-probe.mjs": "9b22e165a68d538c6121267dd3d82cf97d35a37b46b6d1bdc229909f716d7e30",
+    "third_party/libxml2-wasm/binding.c": "ca2d2fbc827712f94078bbbe54787f9870d1793dcf298ed8f3ff801127c9443a",
+    "third_party/libxml2-wasm/std-mutex.cxx": "fe3a2446ac634a72904af28ba43fb0802627382db108b8e83367ba02a2d5dbce",
+    "third_party/libxml2-wasm/source.json": "53e33052584f4a7a7f5313c9f4adcaede7108fd513c7cedc8d09627bcd3de1b8",
+    "third_party/libxml2-wasm/artifact.json": "575b53ce6d07a8425d5f9e23ee1e7a61893775feeaa175cccb175247eec42b50",
+    "third_party/libxml2-wasm/index.d.ts": "b8222ba177e37838b41ef197a135e2d8cbf83489ef7f31ffb0aa5c7ad4c8fe48",
+    "third_party/libxml2-wasm/generated-api.json": "3d41cb16226cf430a475e187f55a985213aa169a4c91d17d93e84c4a4861cbc8",
+    "third_party/libxml2-wasm/libxml2.mjs": "fc83bba5924d99405e8ce72e0c63f1aa4afc3a5237816751b46c60bdebb0e090",
+    "docs/program/writer-upstream-suspected-issues.md": "29d8707b0433371b03454efe5d46ad6c6d8908846668e63d769e73b807354443",
+    "docs/program/calc-upstream-suspected-issues.md": "1549d296da221abee161c6542760de1c8d72329567099765e3c6fc5290e2c58e"
+  },
+  "nativeArtifact": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "cppBindingSha256": "fe3a2446ac634a72904af28ba43fb0802627382db108b8e83367ba02a2d5dbce",
+    "emsdkCommit": "1693ce7359fc9694f198694f902a2cc061239b86",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 166,
+    "enumConstantCount": 851,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "fc83bba5924d99405e8ce72e0c63f1aa4afc3a5237816751b46c60bdebb0e090"
+  },
+  "checks": [
+    {
+      "command": "python3 scripts/build-libxml2-wasm.py",
+      "result": "pass",
+      "log": "apps/office/coverage/native-seekable-build-native.log",
+      "sha256": "b6485230dd95a5dc4ba8a101ea18ea2dd2daf20d453c1431940bd60ef69fd0e2"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/comphelper/source/streaming/seekableinput.test.ts src/external/libcxx/mutex.test.ts --maxWorkers=2 --coverage --coverage.include=src/comphelper/source/streaming/seekableinput.ts --coverage.include=src/external/libcxx/mutex.ts --coverage.include=src/udkapi/com/sun/star/io/TempFile.ts --coverage.include=src/udkapi/com/sun/star/io/XTempFile.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-seekable",
+      "result": "fail",
+      "log": "apps/office/coverage/native-seekable-tests.log",
+      "sha256": "b8e0215d526ca0ce3ba2ace990e792d09f71f94d4b21411a45087b7d7198afa7"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/package/source/zippackage/wrapstreamforshare.test.ts src/package/source/zippackage/ZipPackageBuffer.test.ts src/unoxml/source/dom/documentbuilder.test.ts src/unoxml/source/dom/document.sax.test.ts src/sax/source/fastparser/fastparser.test.ts --maxWorkers=2",
+      "result": "pass",
+      "log": "apps/office/coverage/native-seekable-related.log",
+      "sha256": "5a6ce0134470e6a31a2a9f7fbf5ee5df7bdc0e3522c484d1887cc1c42ffbfd4b"
+    },
+    {
+      "command": "node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts scripts/check-module-boundaries-xml.test.ts --maxWorkers=2",
+      "result": "pass",
+      "log": "apps/office/coverage/native-seekable-boundaries.log",
+      "sha256": "7c89d93e81cb895bdb65602aa063945e8f14198d3f7d14c913a3c70b5a92b08e"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-seekable-worker.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "node_modules/.bin/tsc --noEmit --project apps/office/tsconfig.json",
+      "result": "fail",
+      "log": "apps/office/coverage/native-seekable-types.log",
+      "sha256": "191e4bdf87792572048a2d40ec89fdf71fbac07a0325f9aa1a25ce7df4266208"
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/external/libcxx/mutex.ts apps/office/src/external/libcxx/mutex.test.ts apps/office/src/comphelper/source/streaming/seekableinput.ts apps/office/src/comphelper/source/streaming/seekableinput.test.ts apps/office/src/udkapi/com/sun/star/io/XTempFile.ts apps/office/src/udkapi/com/sun/star/io/TempFile.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs scripts/module-boundaries/allowed-edges.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-seekable-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/external/libcxx/mutex.ts apps/office/src/external/libcxx/mutex.test.ts apps/office/src/comphelper/source/streaming/seekableinput.ts apps/office/src/comphelper/source/streaming/seekableinput.test.ts apps/office/src/udkapi/com/sun/star/io/XTempFile.ts apps/office/src/udkapi/com/sun/star/io/TempFile.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs scripts/module-boundaries/allowed-edges.mjs third_party/libxml2-wasm/source.json",
+      "result": "pass",
+      "log": "apps/office/coverage/native-seekable-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/native-seekable-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-seekable-provenance.log",
+      "sha256": "e2a01eda9588fdc3e6d431f82a27958fbd3207fc3b393e879ba22dfb50757dfc"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-seekable-registry.log",
+      "sha256": "4f947f83f8850870bd0a128250719f345e29b80eb3b0d5108950d55f45a6e39c"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "log": "apps/office/coverage/native-seekable-deps.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-seekable-docs.log",
+      "sha256": "03bc18aef30bca0974dbce6c60c4f6f63ef2e76250865177eae76d9b93c7a790"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/native-seekable-size.log",
+      "sha256": "4031c94778b3af531eb50fb909220ddd4a23771f58815c296f8ce3e45c2a79b5"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/native-seekable-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-seekable-doctor.log",
+      "sha256": "b85a0b8fa92a03be5a7eda6dcdc201734655beb9cfe7deff706b3ba0c9ab540c"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-seekable-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-seekable-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-seekable-vite.log",
+      "sha256": "f6250d224a2bb991f2705450814a10b85fa7d56a6ee305db678024033cd94cd4"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-seekable-static.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    }
+  ],
+  "coverage": {
+    "src/comphelper/source/streaming/seekableinput.ts": {
+      "statements": 51.82,
+      "branches": 42.1,
+      "functions": 80,
+      "lines": 48.83
+    },
+    "src/external/libcxx/mutex.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "src/udkapi/com/sun/star/io/TempFile.ts": {
+      "statements": 62.85,
+      "branches": 25,
+      "functions": 75,
+      "lines": 68.75
+    },
+    "src/udkapi/com/sun/star/io/XTempFile.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    }
+  },
+  "tests": {
+    "functional": 5,
+    "related": 38,
+    "boundaryTools": 56,
+    "coverageCommand": "5functional tests pass, but unchanged scoped90 gate fails; no counters, thresholds or providers were altered. Native mutex and XTempFile individually pass; seekable wrapper and TempFile service helper remain unqualified.",
+    "browser": "Actual native C++ mutex/lazy wrapper/seekable identity/real missing TempFile/closed-state in Chromium main realm and DOM-free module Worker; existing native DOM/SAX/ZIP/shared-stream probes still pass."
+  },
+  "upstreamQA": {
+    "reviewed": [
+      "include/comphelper/seekableinput.hxx",
+      "comphelper/source/streaming/seekableinput.cxx",
+      "udkapi/com/sun/star/io/TempFile.idl",
+      "udkapi/com/sun/star/io/XTempFile.idl",
+      "unotools/qa/python/test_tempfile.py"
+    ],
+    "remaining": "Original TempFile storage/resource/removal/read/write/close QA requires real OTempFileService and native file/service dependencies; source tests are not claimed ported or passing yet."
+  },
+  "findings": [
+    "WRITER561/CALC624 potential failed-constructor self Context lifetime is documented, logic retained, native invalid-lifetime domain unqualified."
+  ],
+  "remaining": [
+    "OTempFileService is not implemented or registered; the actual copy path currently raises real DeploymentException. Default-registry missing-service checkpoint tests/Worker expectation must be replaced by real copy acceptance when that service is bound.",
+    "OSeekableInputWrapper and TempFile helper whole-owner scoped90 gates fail, independently retained. Native copy/close-after-copy/32000-byte loop remains unexecuted; no fake TempFile, direct MemoryStream or private fields are injected.",
+    "Native thread/system_error/OOM/ABI, failed-constructor/self and debug ByteReader domains remain unqualified. Shared native runtime still has no pthread profile or host FS mount.",
+    "Earlier four SfxDocumentMetaData.storage type errors, comphelper/sax cycle,157JSDoc findings and older independent coverage failures remain. Source-backed comphelper->external edge reflects the actual SDK mutex dependency.",
+    "ZipPackageStream/native package storage/factory/model/filter/UI and full DOCX/XLSX acceptance remain unfinished; pako and file/security approvals still pending, no network/dependency download occurred."
+  ],
+  "goalStatus": "active, parent tasks unfinished; no full suite due"
+}
