@@ -1,0 +1,354 @@
+{
+  "status": "bounded native temporary-stream checkpoint; whole parents DOING/rework",
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scope": "Original Guid/consumed RTL UUID, actual UNIX TempFileFast/full FastService and CopyAndSwitchPersistenceTo with actual source mutex/stream/UNO owners.",
+  "uuidDecision": "Native browser crypto.randomUUID, already used by Writer/Calc/BrowserFileDialog, per user preference for native JS. No SDK libuuid linking, filesystem RNG port, new package/download or WASM generation wrapper. Original v4 byte contract, ignored predecessor/Ethernet parameters and existing abort failure remain. JS VM owns Guid bytes. Named/MD5 UUID is unbound.",
+  "sourceQA": "All five original tools GuidTest behaviors plus active SAL createUuid_00120-UUID uniqueness, original generic IO assertions and critical genuine file-error/closure/copy cases. Disabled original createUuid_002 and named UUID QA are not claimed.",
+  "coverage": {
+    "total": {
+      "statements": 94.25,
+      "branches": 88.51,
+      "functions": 100,
+      "lines": 96.25
+    },
+    "src/external/webcrypto/uuid.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "src/package/source/xstor/switchpersistencestream.ts": {
+      "statements": 88.93,
+      "branches": 80,
+      "functions": 100,
+      "lines": 94.2
+    },
+    "src/sal/rtl/uuid.ts": {
+      "statements": 80,
+      "branches": 91.66,
+      "functions": 100,
+      "lines": 76.19
+    },
+    "src/tools/inc/Guid.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "src/unotools/source/ucbhelper/tempfile.fast.ts": {
+      "statements": 99.4,
+      "branches": 94.82,
+      "functions": 100,
+      "lines": 100
+    },
+    "src/unotools/source/ucbhelper/tempfile.ts": {
+      "statements": 97.29,
+      "branches": 91.35,
+      "functions": 100,
+      "lines": 97.19
+    }
+  },
+  "checks": [
+    {
+      "command": "npm run test:shared -- --coverage --coverage.include=src/external/webcrypto/uuid.ts --coverage.include=src/sal/rtl/uuid.ts --coverage.include=src/tools/inc/Guid.ts --coverage.include=src/unotools/source/ucbhelper/tempfile.ts --coverage.include=src/unotools/source/ucbhelper/tempfile.fast.ts --coverage.include=src/package/source/xstor/switchpersistencestream.ts --coverage.reportsDirectory=coverage/native-fast-temp-complete --coverage.reporter=json-summary --coverage.reporter=text --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 src/tools/inc/Guid.test.ts src/unotools/source/ucbhelper/tempfile.fast.test.ts src/unotools/source/ucbhelper/xtempfile.test.ts src/unotools/source/ucbhelper/tempfile.failure.test.ts src/package/source/xstor/switchpersistencestream.test.ts src/comphelper/source/misc/directoryhelper.test.ts src/comphelper/source/misc/directoryhelper.filesystem.test.ts src/sal/osl/unx/tempfile.test.ts",
+      "log": "apps/office/coverage/native-fast-temp-complete.log",
+      "result": "fail",
+      "evidence": "All80 functional tests/8files pass. Complete6-owner scope fails aggregate branch90 at88.51; per-owner results retained. Guid/WebCrypto100all, service99.4S/94.82B/100F/100L, tempfile97.29S/91.35B/100F/97.19L pass90. RTL UUID80S/91.66B/100F/76.19L and persistence88.93S/80B/100F/94.2L remain below90; fatal/invariant/fallback paths not fabricated/excluded."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "log": "apps/office/coverage/native-fast-temp-browser.log",
+      "result": "pass",
+      "evidence": "Actual browser UUID, original fast temporary-file copy/switch,64001bytes, saved position/open flags, subsequent write and native file deletion pass in Chromium main and DOM-free Worker."
+    },
+    {
+      "command": "npx eslint apps/office/src/external/webcrypto/uuid.ts apps/office/src/sal/{rtl/uuid,inc/rtl/uuid}.ts apps/office/src/tools/inc/Guid{,.test}.ts apps/office/src/unotools/{inc/tempfile,source/ucbhelper/tempfile,source/ucbhelper/tempfile.fast,source/ucbhelper/tempfile.fast.test}.ts apps/office/src/package/source/xstor/switchpersistencestream{,.test}.ts scripts/fixtures/native-fast-temp-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs scripts/module-boundaries/allowed-edges.mjs scripts/check-module-boundaries-xml.test.ts && npm run check:docs",
+      "log": "apps/office/coverage/native-fast-temp-style-final.log",
+      "result": "pass",
+      "evidence": "Scoped ESLint and global JSDoc5434 pass."
+    },
+    {
+      "command": "npm run typecheck",
+      "log": "apps/office/coverage/native-fast-temp-types-final.log",
+      "result": "fail",
+      "evidence": "Tools pass; same4 SfxDocumentMetaData.storage.ts errors340/412/413/440 only. New UUID/Guid/temp/copy/boundary/probe owners have no type errors."
+    },
+    {
+      "command": "npm run check:source-provenance && npm run inventory:parity && npx prettier --check docs/program/registry/shared/{runtime,provenance}/external/webcrypto/uuid.ts.json docs/program/registry/shared/{runtime,provenance}/sal/{rtl/uuid,inc/rtl/uuid}.ts.json docs/program/registry/shared/{runtime,provenance}/tools/inc/Guid.ts.json docs/program/registry/shared/{runtime,provenance}/unotools/source/ucbhelper/tempfile.fast.ts.json && git diff --check",
+      "log": "apps/office/coverage/native-fast-temp-registry-final-2.log",
+      "result": "pass",
+      "evidence": "2639runtime modules2401mapped/200browser/38infra, semanticViolationCount0, formatting and diff pass. Browser adapter is browser-owned and claims no upstream file."
+    },
+    {
+      "command": "npx vitest run scripts/check-module-boundaries-xml.test.ts scripts/check-module-boundaries.test.ts && npm run check:dependencies",
+      "log": "apps/office/coverage/native-fast-temp-boundaries-qualified.log",
+      "result": "fail",
+      "evidence": "61 boundary tests/2files pass. Original package->unotools edge added with source include/Library_package2.mk utl evidence and reverse-ownership test. Only pre-existing comphelper->sax->comphelper cycle remains."
+    },
+    {
+      "command": "npx vite build --config apps/office/vite.config.ts apps/office && node scripts/check-static-build.mjs",
+      "log": "apps/office/coverage/native-fast-temp-build.log",
+      "result": "pass",
+      "evidence": "Standalone Vite and4-bundle relative static check pass. Full npm build/typecheck is not claimed."
+    },
+    {
+      "command": "npm run check:source-tree && npm run check:file-size",
+      "log": "apps/office/coverage/native-fast-temp-structure.log",
+      "result": "pass",
+      "evidence": "Source tree and file-size checks pass with existing advisories."
+    },
+    {
+      "command": "ap doctor && node .agentplane/policy/check-routing.mjs && git diff --check",
+      "log": "apps/office/coverage/native-fast-temp-policy.log",
+      "result": "pass",
+      "evidence": "Doctor/routing/diff pass with existing hook advisories."
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "log": "apps/office/coverage/native-fast-temp-provenance-initial.log",
+      "result": "fail",
+      "evidence": "Initial records lacked required omittedResponsibilities; later basename-only Guid anchor and browser upstreamFile claims corrected with actual method anchors/browser-owned metadata. Checkers unchanged; final registry passes."
+    }
+  ],
+  "upstreamSuspectedIssues": [
+    "WRITER615",
+    "CALC678"
+  ],
+  "remaining": [
+    "Fatal RNG/platform/invalid-target abort, source invariants and non-ByteReader fallback have unqualified coverage. No fake RNG/provider/private state injection used.",
+    "Native OOM/thread/physical pointer ABI and other OS profiles remain unqualified.",
+    "Real ParserExpat, full package/storage/filter/model/export/reopen/UI acceptance and same4 metadata type errors/existing module cycle remain incomplete."
+  ],
+  "fullSuite": "Not run; no completed agentplane task and no ten-task cadence increment.",
+  "goal": "Active, not paused/completed; no merge/publication.",
+  "hashes": [
+    {
+      "path": "apps/office/src/external/webcrypto/uuid.ts",
+      "sha256": "94f7117277ed440ce3fe570437fa8789f55e636ca486e135a3ef7eea556b0605"
+    },
+    {
+      "path": "apps/office/src/sal/rtl/uuid.ts",
+      "sha256": "336bff3d007ea2d315d3c705234624146b88987c6bcfad5be4fe41ef5807686e"
+    },
+    {
+      "path": "apps/office/src/sal/inc/rtl/uuid.ts",
+      "sha256": "c775b5de36b174e329866596694060877dd8516696652636ae7f77f6fe15ed3f"
+    },
+    {
+      "path": "apps/office/src/tools/inc/Guid.ts",
+      "sha256": "241aae6050909aadd57d5d268d4ac0f0f26b6f20655d75a9dfae230f4f495205"
+    },
+    {
+      "path": "apps/office/src/tools/inc/Guid.test.ts",
+      "sha256": "c8027f65de7d7b09e055a0b87907b4de3b7ead9aa41dbdcff341980a39410e9a"
+    },
+    {
+      "path": "apps/office/src/unotools/inc/tempfile.ts",
+      "sha256": "9d097277d7c186f2d4aa031b1a053c1afc85631fab0a18c34f12ef43b2c388b3"
+    },
+    {
+      "path": "apps/office/src/unotools/source/ucbhelper/tempfile.ts",
+      "sha256": "dfec867246823ea5dc388399ba3640b7f79ace5a09297f21f9b539fcbfa2a385"
+    },
+    {
+      "path": "apps/office/src/unotools/source/ucbhelper/tempfile.fast.ts",
+      "sha256": "a9f47638a2295859d9b7f53942ded2aa00a544cbb14746caabcc038bfc016e0b"
+    },
+    {
+      "path": "apps/office/src/unotools/source/ucbhelper/tempfile.fast.test.ts",
+      "sha256": "ca4f451396a464b5c89cec73d8304e931cdf4f8ea2d38f48ec4a57f2fde5abcb"
+    },
+    {
+      "path": "apps/office/src/package/source/xstor/switchpersistencestream.ts",
+      "sha256": "896ac24e81346b14626c6136781443ca5e584ebe9cbb778f0b6f69aae4a9484e"
+    },
+    {
+      "path": "apps/office/src/package/source/xstor/switchpersistencestream.test.ts",
+      "sha256": "d2264f846956021f14a678b5db5a218f690b90e978f6f2bf0f7d6a06fad181ce"
+    },
+    {
+      "path": "scripts/fixtures/native-fast-temp-probe.ts",
+      "sha256": "fda78677bd3e68d7d4d4b97248f44f5d6edf4df88379517241ec17a15c241076"
+    },
+    {
+      "path": "scripts/fixtures/native-fastparser-consumer-probe.ts",
+      "sha256": "ed27ea32dc5ebfbd49feae8be817abd580d397a39711cc7bd7e418059eae2c76"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "sha256": "d76e8b9b1649393c66ee3e478b9de2200d8f3b9b1f50984a5a1e4c0e3e6ef38e"
+    },
+    {
+      "path": "scripts/module-boundaries/allowed-edges.mjs",
+      "sha256": "b69c9d5d8dc46cab8f858384cb952097b948da7df33cb90f7a751c01c88411d9"
+    },
+    {
+      "path": "scripts/check-module-boundaries-xml.test.ts",
+      "sha256": "a34138106e22eccb6db47bf6b964fbcb756e5bbc7d55766fa6f5f8a3c9afc453"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "sha256": "d6bf9d93505e98ff1a45cc8008c3d0e9865c5df7725919600914d43c777e2e24"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "sha256": "e5d936da204f4c7ac7a7ebd34153b72b1ea52d046e4199966f99ff57380a37eb"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/tools/Guid.hxx",
+      "sha256": "a56ecbc57d8f012737421a2ddadb41d33c96372555bcce3cd261245bc5059989"
+    },
+    {
+      "path": "vendor/libreoffice-reference/tools/qa/cppunit/test_guid.cxx",
+      "sha256": "f43ce68ef7dc3fb91235b83adc7f10c11a805e1321bc5ced62bf84c96a9f83ae"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/rtl/uuid.h",
+      "sha256": "ebe27b75b7164b244c87ab901f91e60894af2d6c7f00c37f595b4cf49b1db327"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sal/rtl/uuid.cxx",
+      "sha256": "e3f167f0283e8b2a2fd59fb9c35782ff41a0cd22264815b499067ec72b5023a7"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sal/rtl/random.cxx",
+      "sha256": "4ef3a87af65b2394b551e14ad098352e2e6764eb439e9e1f79ba191fa9126865"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sal/qa/rtl/uuid/rtl_Uuid.cxx",
+      "sha256": "d9acf917b6bc82cdaaa5050786a2d35c86883ae1f034faf3ccc3fe2a298beb7d"
+    },
+    {
+      "path": "vendor/libreoffice-reference/unotools/source/ucbhelper/tempfile.cxx",
+      "sha256": "c3c1b08f88f3729920d0976ade444519e743c1c275eb47c6dc2b3a1411a86e9a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/unotools/tempfile.hxx",
+      "sha256": "8558329ecd3aa27e9510de1538c020fe3a6fb8d688008d4ac8a3cb15499e1a7c"
+    },
+    {
+      "path": "vendor/libreoffice-reference/package/source/xstor/switchpersistencestream.cxx",
+      "sha256": "5f6e41310a0181863277aa2cbdf213c35914b269bea19994a0515623d2a3fcca"
+    },
+    {
+      "path": "vendor/libreoffice-reference/package/Library_package2.mk",
+      "sha256": "dd02e71a3c31a1509bef4c471db74776c13964c8b25aed06420e4b573369e54f"
+    },
+    {
+      "path": "apps/office/coverage/native-fast-temp-complete/coverage-summary.json",
+      "sha256": "2782faed74a0e6f021d834ffd7fc6265ab1c0567db0b6a078dbae7f73a3776b9"
+    },
+    {
+      "path": "apps/office/coverage/native-fast-temp-status-final.log",
+      "sha256": "ef805e8e37940e679e6d33a0f047b1aa36217582df3acf7af82a9059f76ff08a"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/external/webcrypto/uuid.ts.json",
+      "sha256": "7ae16447a5d02a30837a355fb3b0be14190352f2172e0c63051f764074e4c06f"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sal/rtl/uuid.ts.json",
+      "sha256": "1b35ffe1311a276578b6dec1bdeb18d22da6238f4f47c4b573ac9db693434abc"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/sal/inc/rtl/uuid.ts.json",
+      "sha256": "d5362f3ce4818fbfb403df65d97f0cbbd7570ce4526a3737291ff9e59691d131"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/tools/inc/Guid.ts.json",
+      "sha256": "2a6c02c8efeada5c6ad28c032dc76e9a2eab8b4bde145e149564e841e7a332b2"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unotools/inc/tempfile.ts.json",
+      "sha256": "9ab850d28191f230ed4b0811786c044a912134d308a20cf5f709092b34a0d586"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unotools/source/ucbhelper/tempfile.ts.json",
+      "sha256": "ea6496805f3fa7b61c122a26f188862f57849ce171e91f2e7b6f1fb79b3f6304"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unotools/source/ucbhelper/tempfile.fast.ts.json",
+      "sha256": "8a2f11273655cddcb82ecdcfe551a59a027d37d8cd28a3c5cffb6ee167b03d74"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/package/source/xstor/switchpersistencestream.ts.json",
+      "sha256": "bddfe1eba1f25b6488599d1a176cbf39c08e0ec3768807869db947510273e158"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/external/webcrypto/uuid.ts.json",
+      "sha256": "cd8108b4fa4bcf4ff1dc83e54d8fb5383fecb8e2153b12fcf291df9b263cc0dc"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sal/rtl/uuid.ts.json",
+      "sha256": "8be0430388d2442ebc8212ff21ca8776995f20f8adcbaee9e92e383ca3753b0c"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/sal/inc/rtl/uuid.ts.json",
+      "sha256": "1d43dfa5242ef2a9f917c64162042cda65801147f6ac51fab4e8e0dd91fd9c6e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/tools/inc/Guid.ts.json",
+      "sha256": "82a5c206d970b1f95656aaf4451173889e3e5da0436c55d5de328af0d4aae6a1"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unotools/inc/tempfile.ts.json",
+      "sha256": "f9ccc85074ac2eda6fe512d6c9f15898f91ed7c38bf083df4541039c58d82e48"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unotools/source/ucbhelper/tempfile.ts.json",
+      "sha256": "dcf2126d6ecd7655771c61df741c11649c4e851734f6663720f54ef49c475c92"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unotools/source/ucbhelper/tempfile.fast.ts.json",
+      "sha256": "f56634dcf6579852a3a123ee6b51378cbef90905850ece36bfadef08514b1398"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/package/source/xstor/switchpersistencestream.ts.json",
+      "sha256": "14c32eaee013a52755484e32f9335a882b34533de7eae1e044ecd1fc8a5f48a4"
+    },
+    {
+      "path": "apps/office/coverage/native-fast-temp-complete.log",
+      "sha256": "4e13078a7a8fccdd1f339dc31ad51b995ef7129811157b697d593cca13ca3c42"
+    },
+    {
+      "path": "apps/office/coverage/native-fast-temp-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "path": "apps/office/coverage/native-fast-temp-style-final.log",
+      "sha256": "c640c6e17fed739921ac327868feb076aa090890ce7ad4cbbeaa74b3e07c0a28"
+    },
+    {
+      "path": "apps/office/coverage/native-fast-temp-types-final.log",
+      "sha256": "590fa40b17d19c58037b0fc7f01d550246d5f79c9e3cde4ef76da0ca7ed979f9"
+    },
+    {
+      "path": "apps/office/coverage/native-fast-temp-registry-final-2.log",
+      "sha256": "8c4651f67aece12a68d6d276e65889c471a476bacd63e3a34356c235af6f39e0"
+    },
+    {
+      "path": "apps/office/coverage/native-fast-temp-boundaries-qualified.log",
+      "sha256": "fc8061012d08188349c7f760844ff56ad537e280ca0acbe0011e5a0f659ba8ae"
+    },
+    {
+      "path": "apps/office/coverage/native-fast-temp-build.log",
+      "sha256": "c817a89bd29cec9cbfa521eb806b1eddf52c82cfe364e74723fcfc327d77a409"
+    },
+    {
+      "path": "apps/office/coverage/native-fast-temp-structure.log",
+      "sha256": "d1b42afd9378ab38451e349742fff2da99447174f545ced18736f00af3705676"
+    },
+    {
+      "path": "apps/office/coverage/native-fast-temp-policy.log",
+      "sha256": "cc43404f2fbe89c6e6227bd53659bf3775cd85156c724d4d9159a0e8dcd75e45"
+    },
+    {
+      "path": "apps/office/coverage/native-fast-temp-provenance-initial.log",
+      "sha256": "00a9099d5a7207c7061c44a643ffe718e7bc1d35940b8ad2d627160e3d2a0798"
+    }
+  ]
+}
