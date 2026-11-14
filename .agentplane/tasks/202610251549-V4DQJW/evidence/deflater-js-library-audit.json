@@ -1,0 +1,29 @@
+{
+  "package": "pako",
+  "version": "2.1.0",
+  "authorization": "Explicit user reply: Да, проверить и подключить pako",
+  "integrity": "sha512-w+eufiZ1WuJYgPXbV/PO3NCMEc3xqylkKHzp8bxp1uW4qaSNQUkwmLLEc3kKsfz8lpV1F8Ht3U1Cm+9Srog2ug==",
+  "consumedExports": [
+    "deflateInit2",
+    "deflate",
+    "deflateReset",
+    "deflateEnd",
+    "ZStream public IO and total fields"
+  ],
+  "sourceCalls": "Original default method8, raw/wrapped windowBits -15/15, memoryLevel8, strategy0, flush0/4. No deflateParams is consumed by the pinned original Deflater.",
+  "existingCodecLimitation": "Both existing zip.js WASM artifacts export deflate init/process/end but not deflateReset. No private export patch or destruction/reinitialization fallback is used.",
+  "libraryVersionBoundary": "Pako README describes a zlib1.2.8 port; pinned LibreOffice downloads zlib1.3.2. This binds the consumed public streaming/reset contract, not native zlib1.3.2 implementation identity or universal bit-for-bit output identity. Independent system zlib and zip.js decode actual output; no new native zlib port is introduced.",
+  "memory": "JavaScript VM owns Pako arrays. Sequence input is marshalled once per retained source segment, output only for the produced prefix. No private codec state is read or counter values injected.",
+  "license": "Original MIT/ZLIB notices remain in npm package; no algorithm source is copied into the repository.",
+  "sha256": {
+    "node_modules/pako/lib/zlib/deflate.js": "07c147a4daec3857ea7a9722c7d5fc5d11ec6cbadf234aace43e6b237a837c30",
+    "node_modules/pako/lib/zlib/zstream.js": "5fa10c7a59ca99113cf92d1260e56cbd6282e15afa85dc8a0eb8e8d6d2321298",
+    "node_modules/pako/lib/zlib/constants.js": "37c65f82b9bacde2bbccc9c980a20dee7e2b7f3658304a30abe1023e02ec407b",
+    "node_modules/pako/LICENSE": "a04665b3b2de56c66730c1f720f528175739e4104f79073614aa611da1e85539",
+    "node_modules/pako/README.md": "08364ec2e4ed230b895a80b72278480ffe476c1fc4acd5ce8512ea78a77c4562",
+    "vendor/libreoffice-reference/package/source/zipapi/Deflater.cxx": "6896d0aa65b76285671eaf182fa79ae9d42577662777f1400c20e5a10d9b76f4",
+    "vendor/libreoffice-reference/include/package/Deflater.hxx": "39c35da5730898a08292c3e765599209d74f7d7d11157b7aeb63d213c07d5415",
+    "apps/office/package.json": "a773af77f5ebebfa0972f1293270542d04a8e66eeb8afe18fe2f0964cb6191c5",
+    "package-lock.json": "91dca25daaadc8607236bb9c5b35aa95b149978b310d8dfd069bc2af8c6816b1"
+  }
+}
