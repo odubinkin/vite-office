@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 179
+revision: 182
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-14T12:43:36.999Z"
+  updated_at: "2026-11-14T16:15:19.276Z"
   updated_by: "CODER"
-  note: "DirectoryHelper/Named-directory final checkpoint:69 related tests,90 owner gates,10static and Chromium main/Worker pass; source Directory-or-Volume predicate and libc++ algorithms retained. Docs5391/registry pass. Four old type errors,cycle and full DOCX storage/model/UI remain open; native-directoryhelper-continuation.json."
-  attempts: 46
+  note: "Native ZipFileAccess continuation:35 service and168 related assertions pass; Chromium main/DOM-free Worker pass. Service88.41 statements/80.82 branches remains below90; real UCB URL/provider/owned-close and full DOCX/XLSX package/storage/model/filter/UI remain incomplete. Four metadata type errors and existing comphelper/sax cycle retained. Exact source/log hashes in evidence/native-zip-access-continuation.json."
+  attempts: 47
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -744,8 +747,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-14T16:15:19.276Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native ZipFileAccess continuation:35 service and168 related assertions pass; Chromium main/DOM-free Worker pass. Service88.41 statements/80.82 branches remains below90; real UCB URL/provider/owned-close and full DOCX/XLSX package/storage/model/filter/UI remain incomplete. Four metadata type errors and existing comphelper/sax cycle retained. Exact source/log hashes in evidence/native-zip-access-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-14T16:15:26.330Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-14T12:43:37.617Z"
+doc_updated_at: "2026-11-14T16:15:26.330Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -2138,6 +2154,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-14T16:15:19.276Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native ZipFileAccess continuation:35 service and168 related assertions pass; Chromium main/DOM-free Worker pass. Service88.41 statements/80.82 branches remains below90; real UCB URL/provider/owned-close and full DOCX/XLSX package/storage/model/filter/UI remain incomplete. Four metadata type errors and existing comphelper/sax cycle retained. Exact source/log hashes in evidence/native-zip-access-continuation.json.
+    Attempts: 47
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T16:15:18.684Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -2430,6 +2476,13 @@ sections:
     Implemented selected UNIX SvFileStream constructors/destructor, source1024-byte buffering/OSL read-write/seek/sync/resize, Open flags/stat/TEMPORARY/symlink copy/readonly retry and internal share table over actual DirectoryItem/std::mutex/unique_lock. Source F_RDLCK0, system-path-vs-URL lookup bypass, silent denial, retained retry flags/mode, ignored failed copy, ResetError position and unsigned sentinel cursor are preserved; WRITER590..595/CALC653..658 document findings. Added canonical tools/inc/stream.ts boundary and moved actual wrappers to it; base stream now captures actual thread encoding and exposes source encoding/mode accessors. Test fixtures initialize real runtime where newly required, no global bootstrap bypass/fake provider/private injection/manual JS allocator. Final213 shared tests/12files,126 Calc CSV/shell regressions,9 tooling assertions and actual Chromium main/DOM-free Worker read/write/flush/seek pass. Exact upstream XML fixture file-read recipe and existing memory-stream QA execute; separate tools XPath/XmlWalker owners are not claimed. New complete strmunx owner passes unchanged90 metrics95.02/90.75/100/98.77; native mutex100. Broader owner gate FAILS base stream.native branches88.26 and remains open; earlier owner gaps unchanged. Same4 metadata type errors/cycle/157 old JSDoc findings remain; scoped lint/format/tools/Vite/provenance/registry/size/tree/doctor/routing/diff pass. Artifact197exports/853constants unchanged, no rebuild/network. Evidence: evidence/native-file-stream-continuation.json. TempFile/service, whole package/storage/model/filter/UI and full DOCX/XLSX reopen acceptance remain unfinished. Parents/goal stay active/rework; no full suite due.
 
     Final source review also retains original FileStatus::isDirectory (Directory or Volume) at the DirectoryHelper call boundary. Real UNIX directory/regular-file calls execute; native Volume entries are not produced by this SDK and are not fabricated. The consumed libc++ tree source attribution/license notice is retained. Final scoped69 cases/browser/typecheck/lint/format/docs/provenance/registry/Vite evidence reflects this source review; whole-parent limitations remain unchanged.
+
+    ### Native ZipFileAccess continuation
+
+    - Command: Focused35 service tests,168 related tests/7 files, actual Chromium main/DOM-free Worker probe, scoped ESLint/Prettier/JSDoc5398, tools typecheck, Vite/static, provenance2616/registry, size/tree, doctor/routing/diff; exact commands are recorded in evidence/native-zip-access-continuation.json.
+    - Result: rework. All assertions and browser probe pass; individual service coverage88.41 statements/80.82 branches is below90, with real UCB URL-provider/owned-close paths still unqualified. Same4 metadata type errors and existing comphelper/sax cycle persist.
+    - Evidence: evidence/native-zip-access-continuation.json contains source/log hashes, per-owner coverage, source QA limits and WRITER608/609/CALC671/672 findings.
+    - Scope: actual OZipFileAccess factory, both IDL interfaces, ZipPackageSink, original wildcard algorithms, source Content sink overload and native input streams. Original ZIP64 styles1112/all26 one-megabyte a2z payload assertions ported; native ThreadPool and original URL setup are not claimed. Full package/storage/model/filter/UI DOCX/XLSX acceptance remains incomplete.
 id_source: "generated"
 ---
 ## Summary
@@ -3833,6 +3886,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-14T16:15:19.276Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native ZipFileAccess continuation:35 service and168 related assertions pass; Chromium main/DOM-free Worker pass. Service88.41 statements/80.82 branches remains below90; real UCB URL/provider/owned-close and full DOCX/XLSX package/storage/model/filter/UI remain incomplete. Four metadata type errors and existing comphelper/sax cycle retained. Exact source/log hashes in evidence/native-zip-access-continuation.json.
+Attempts: 47
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T16:15:18.684Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4130,3 +4213,10 @@ Implemented original public copy/remove, consumed File lifetime/IO/static wrappe
 Implemented selected UNIX SvFileStream constructors/destructor, source1024-byte buffering/OSL read-write/seek/sync/resize, Open flags/stat/TEMPORARY/symlink copy/readonly retry and internal share table over actual DirectoryItem/std::mutex/unique_lock. Source F_RDLCK0, system-path-vs-URL lookup bypass, silent denial, retained retry flags/mode, ignored failed copy, ResetError position and unsigned sentinel cursor are preserved; WRITER590..595/CALC653..658 document findings. Added canonical tools/inc/stream.ts boundary and moved actual wrappers to it; base stream now captures actual thread encoding and exposes source encoding/mode accessors. Test fixtures initialize real runtime where newly required, no global bootstrap bypass/fake provider/private injection/manual JS allocator. Final213 shared tests/12files,126 Calc CSV/shell regressions,9 tooling assertions and actual Chromium main/DOM-free Worker read/write/flush/seek pass. Exact upstream XML fixture file-read recipe and existing memory-stream QA execute; separate tools XPath/XmlWalker owners are not claimed. New complete strmunx owner passes unchanged90 metrics95.02/90.75/100/98.77; native mutex100. Broader owner gate FAILS base stream.native branches88.26 and remains open; earlier owner gaps unchanged. Same4 metadata type errors/cycle/157 old JSDoc findings remain; scoped lint/format/tools/Vite/provenance/registry/size/tree/doctor/routing/diff pass. Artifact197exports/853constants unchanged, no rebuild/network. Evidence: evidence/native-file-stream-continuation.json. TempFile/service, whole package/storage/model/filter/UI and full DOCX/XLSX reopen acceptance remain unfinished. Parents/goal stay active/rework; no full suite due.
 
 Final source review also retains original FileStatus::isDirectory (Directory or Volume) at the DirectoryHelper call boundary. Real UNIX directory/regular-file calls execute; native Volume entries are not produced by this SDK and are not fabricated. The consumed libc++ tree source attribution/license notice is retained. Final scoped69 cases/browser/typecheck/lint/format/docs/provenance/registry/Vite evidence reflects this source review; whole-parent limitations remain unchanged.
+
+### Native ZipFileAccess continuation
+
+- Command: Focused35 service tests,168 related tests/7 files, actual Chromium main/DOM-free Worker probe, scoped ESLint/Prettier/JSDoc5398, tools typecheck, Vite/static, provenance2616/registry, size/tree, doctor/routing/diff; exact commands are recorded in evidence/native-zip-access-continuation.json.
+- Result: rework. All assertions and browser probe pass; individual service coverage88.41 statements/80.82 branches is below90, with real UCB URL-provider/owned-close paths still unqualified. Same4 metadata type errors and existing comphelper/sax cycle persist.
+- Evidence: evidence/native-zip-access-continuation.json contains source/log hashes, per-owner coverage, source QA limits and WRITER608/609/CALC671/672 findings.
+- Scope: actual OZipFileAccess factory, both IDL interfaces, ZipPackageSink, original wildcard algorithms, source Content sink overload and native input streams. Original ZIP64 styles1112/all26 one-megabyte a2z payload assertions ported; native ThreadPool and original URL setup are not claimed. Full package/storage/model/filter/UI DOCX/XLSX acceptance remains incomplete.
