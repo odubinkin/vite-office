@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 439
+revision: 442
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-14T12:03:56.879Z"
+  updated_at: "2026-11-14T12:29:16.917Z"
   updated_by: "CODER"
-  note: "Native Directory checkpoint:87 related tests,7 final upstream cases,10static and Chromium main/Worker pass. Three current owners independently pass90; previous copy-only and other gaps retained. JSDoc5389 and registry pass;4 metadata type errors/cycle/full XLSX storage/model/UI remain open. Evidence:native-directory-continuation.json."
-  attempts: 138
+  note: "DirectoryHelper/Named-directory prerequisite:69 related cases, per-file90, browser main/Worker and10static checks pass. Docs5391/lint/registry pass. Four old metadata type errors,cycle,earlier independent coverage and full XLSX storage/model/UI remain open. Evidence:native-directoryhelper-continuation.json."
+  attempts: 139
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2216,8 +2219,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-14T12:29:16.917Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "DirectoryHelper/Named-directory prerequisite:69 related cases, per-file90, browser main/Worker and10static checks pass. Docs5391/lint/registry pass. Four old metadata type errors,cycle,earlier independent coverage and full XLSX storage/model/UI remain open. Evidence:native-directoryhelper-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-14T12:30:19.506Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-14T12:04:04.939Z"
+doc_updated_at: "2026-11-14T12:30:19.506Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -6350,6 +6366,36 @@ sections:
     Attempts: 138
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T12:03:55.948Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-11-14T12:29:16.917Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: DirectoryHelper/Named-directory prerequisite:69 related cases, per-file90, browser main/Worker and10static checks pass. Docs5391/lint/registry pass. Four old metadata type errors,cycle,earlier independent coverage and full XLSX storage/model/UI remain open. Evidence:native-directoryhelper-continuation.json.
+    Attempts: 139
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T12:28:47.348Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
 
     Details:
 
@@ -11127,6 +11173,36 @@ Note: Native Directory checkpoint:87 related tests,7 final upstream cases,10stat
 Attempts: 138
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T12:03:55.948Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-14T12:29:16.917Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: DirectoryHelper/Named-directory prerequisite:69 related cases, per-file90, browser main/Worker and10static checks pass. Docs5391/lint/registry pass. Four old metadata type errors,cycle,earlier independent coverage and full XLSX storage/model/UI remain open. Evidence:native-directoryhelper-continuation.json.
+Attempts: 139
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T12:28:47.348Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
 
 Details:
 
