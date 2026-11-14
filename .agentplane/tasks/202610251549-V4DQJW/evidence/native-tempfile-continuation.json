@@ -1,0 +1,415 @@
+{
+  "scope": "Original TempFileNamed file specialization, registered OTempFileService, actual OSL directory/temp/global-mutex prerequisites and genuine deferred seekable copy; plus user-requested cleanup of all 157 JSDoc diagnostics.",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "nativeArtifact": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "fileBindingSha256": "0ff16af63632f4926ab9e22918c90bfcd43013f0d13fcd753cf62a37f9dbfa3e",
+    "fileStatBindingSha256": "077599a5251a4bac08cdb5801219adf6ee9b2444bc0f17c6479db124dd022854",
+    "localeBindingSha256": "0f00b270fcde3d33bd142514575582f93ab20832b7a53355f47ff478b4fe55b3",
+    "securityBindingSha256": "1e116824af729eaf09bb21127f040b032d00c47d4b3b59cdd11176079ee68e93",
+    "socketBindingSha256": "22f11273b8c906da0bd1e20632b19dab5b997dd726d9cddc5c317e21eb45c22f",
+    "cppBindingSha256": "50ad1bd0b4f021e432cd3e2e31a39aff491dc0ea94e0085a35ac8082507b3cbb",
+    "emsdkCommit": "1693ce7359fc9694f198694f902a2cc061239b86",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 201,
+    "enumConstantCount": 853,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "d2b3e3872c023714690b119857632b093703237b9648b2a9e0ba60172a627643"
+  },
+  "verification": {
+    "related": "107 tests / 10 files pass",
+    "calc": "126 tests / 3 files pass",
+    "coverage": "39 tests / 4 files pass; aggregate 98.81/91.4/100/99.48; independent service 99.67/94.04/100/100. Independent helper branches remain below90: Named86.66, tokens83.33, tempdir87.5.",
+    "browser": "Actual Chromium main and DOM-free Worker pass registered service, file cleanup and 96017-byte deferred copy.",
+    "productionBuild": "pass",
+    "typecheck": "fail: four existing metadata storage contract errors",
+    "dependencies": "fail: existing comphelper/sax cycle",
+    "registry": "pass: four generated views; semanticViolationCount0",
+    "provenance": "pass: 2610 runtime / 2374 mapped / 198 browser / 38 infrastructure",
+    "jsdoc": {
+      "command": "npm run check:docs",
+      "result": "pass",
+      "evidence": "All157 diagnostics fixed across37 files; validation passes5388 authored files.",
+      "equivalence": {
+        "method": "Recursive TypeScript AST kind/leaf-text comparison; excludes comments, whitespace and formatting-only trailing commas.",
+        "fileCount": 37,
+        "passed": true,
+        "results": [
+          {
+            "file": "apps/office/src/offapi/com/sun/star/xml/sax/XDTDHandler.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "edaab8fd1d0f6046acc1f3e1343e18ca2698606d60d833f80a321e66445ec2f6",
+            "afterSyntaxSha256": "edaab8fd1d0f6046acc1f3e1343e18ca2698606d60d833f80a321e66445ec2f6"
+          },
+          {
+            "file": "apps/office/src/offapi/com/sun/star/xml/sax/XFastAttributeList.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "3c26246bddc247bc026d8c11a4c0b28b83f37c9d7c3d13bdc466f03932682767",
+            "afterSyntaxSha256": "3c26246bddc247bc026d8c11a4c0b28b83f37c9d7c3d13bdc466f03932682767"
+          },
+          {
+            "file": "apps/office/src/offapi/com/sun/star/xml/sax/XFastContextHandler.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "85c0bf916fda581875c9c95c0db66fc046624fabbdf9ee82e991c21b5f6662a2",
+            "afterSyntaxSha256": "85c0bf916fda581875c9c95c0db66fc046624fabbdf9ee82e991c21b5f6662a2"
+          },
+          {
+            "file": "apps/office/src/offapi/com/sun/star/xml/sax/XFastDocumentHandler.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "c07b72418ff6affa8a6b61170f9456f947c0f8ff1318ea58fc0bf18780204f49",
+            "afterSyntaxSha256": "c07b72418ff6affa8a6b61170f9456f947c0f8ff1318ea58fc0bf18780204f49"
+          },
+          {
+            "file": "apps/office/src/offapi/com/sun/star/xml/sax/XFastNamespaceHandler.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "3da73fb37508ad7a350cf5c10e5273cdf10e54936f2c5d57a9713abe3bc6e6eb",
+            "afterSyntaxSha256": "3da73fb37508ad7a350cf5c10e5273cdf10e54936f2c5d57a9713abe3bc6e6eb"
+          },
+          {
+            "file": "apps/office/src/offapi/com/sun/star/xml/sax/XFastParser.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "d85d5320a85c890049ebef9fd848b3fc0f107adec5bb1e57ade8c9b14ff7cc6e",
+            "afterSyntaxSha256": "d85d5320a85c890049ebef9fd848b3fc0f107adec5bb1e57ade8c9b14ff7cc6e"
+          },
+          {
+            "file": "apps/office/src/offapi/com/sun/star/xml/sax/XParser.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "c239114b7c0f84a30881c6820be309e52f36140962abc1f7dac1b73638440ed7",
+            "afterSyntaxSha256": "c239114b7c0f84a30881c6820be309e52f36140962abc1f7dac1b73638440ed7"
+          },
+          {
+            "file": "apps/office/src/sal/inc/rtl/uri.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "71a0306a1b8ef3bc081b705d805c67b9bced4fcd1a8ff59f2991fb24fde26169",
+            "afterSyntaxSha256": "71a0306a1b8ef3bc081b705d805c67b9bced4fcd1a8ff59f2991fb24fde26169"
+          },
+          {
+            "file": "apps/office/src/sal/rtl/strbuf.test.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "5f94afdd8ecdb0de853c560ead81a1da1fbdf6f7cb52f31cf8d4d9aa49d9e5d7",
+            "afterSyntaxSha256": "5f94afdd8ecdb0de853c560ead81a1da1fbdf6f7cb52f31cf8d4d9aa49d9e5d7"
+          },
+          {
+            "file": "apps/office/src/sal/rtl/uri-character.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "998d53837c30887e582bfcadf1964065f2fb5aff3a3af75487ca49cea36a7d46",
+            "afterSyntaxSha256": "998d53837c30887e582bfcadf1964065f2fb5aff3a3af75487ca49cea36a7d46"
+          },
+          {
+            "file": "apps/office/src/sal/rtl/uri-relative.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "d5e57f65aac7ca62ad9e1d02a09b3c408d4cb62fdc776975470c068b32b43fc3",
+            "afterSyntaxSha256": "d5e57f65aac7ca62ad9e1d02a09b3c408d4cb62fdc776975470c068b32b43fc3"
+          },
+          {
+            "file": "apps/office/src/sal/rtl/uri.native.test.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "250ef1e51487bb1f2c53733456a9589097208c5d5910308ac2227732ba17a079",
+            "afterSyntaxSha256": "250ef1e51487bb1f2c53733456a9589097208c5d5910308ac2227732ba17a079"
+          },
+          {
+            "file": "apps/office/src/sal/rtl/uri.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "f86449226a4080ca0aa6b028a5aacdd29ddd1ebc11dfd1446fe7aef0e73ceaaa",
+            "afterSyntaxSha256": "f86449226a4080ca0aa6b028a5aacdd29ddd1ebc11dfd1446fe7aef0e73ceaaa"
+          },
+          {
+            "file": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.compat.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "234f66d5046b8ea4195159ff4fdcceb4250be88ea8ab55bd7594d7606db7cff0",
+            "afterSyntaxSha256": "234f66d5046b8ea4195159ff4fdcceb4250be88ea8ab55bd7594d7606db7cff0"
+          },
+          {
+            "file": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.elements.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "eaeddf7952cc4495cb625cd75783f7627121f34d9f2070ac39a70ca1c358eeb1",
+            "afterSyntaxSha256": "eaeddf7952cc4495cb625cd75783f7627121f34d9f2070ac39a70ca1c358eeb1"
+          },
+          {
+            "file": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.init.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "04838733f1dd5ba1305eb80233e2b6b4b49f797e27b05dc67227b9b2271f0594",
+            "afterSyntaxSha256": "04838733f1dd5ba1305eb80233e2b6b4b49f797e27b05dc67227b9b2271f0594"
+          },
+          {
+            "file": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.owner.test.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "deff8ea3972cd30b25bcf5f63ed0fa2bd1157f896807fdabf2bca3ee3880a75d",
+            "afterSyntaxSha256": "deff8ea3972cd30b25bcf5f63ed0fa2bd1157f896807fdabf2bca3ee3880a75d"
+          },
+          {
+            "file": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.properties.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "5bba220335765f9ce371c7597a098533b7f10d895ae473d3315c60a17614d719",
+            "afterSyntaxSha256": "5bba220335765f9ce371c7597a098533b7f10d895ae473d3315c60a17614d719"
+          },
+          {
+            "file": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "125cabf671253c15acf478fb18f5286917fed88975aa42073dc52435ff22e734",
+            "afterSyntaxSha256": "125cabf671253c15acf478fb18f5286917fed88975aa42073dc52435ff22e734"
+          },
+          {
+            "file": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "7abc8f38c13ecca153b1fea41b52ba2e3333e62223293e160ab8eace710ae6eb",
+            "afterSyntaxSha256": "7abc8f38c13ecca153b1fea41b52ba2e3333e62223293e160ab8eace710ae6eb"
+          },
+          {
+            "file": "apps/office/src/sot/source/base/exchange.table.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "abcc49bd7f87ef6bc9ca73dbf80d63ab4198f67394a6edf816764656e30fac46",
+            "afterSyntaxSha256": "abcc49bd7f87ef6bc9ca73dbf80d63ab4198f67394a6edf816764656e30fac46"
+          },
+          {
+            "file": "apps/office/src/sot/source/base/exchange.test.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "249389287de4bd37fd8a71863d1a3a6d98bccb9f71d5060622ca06f0c5da4114",
+            "afterSyntaxSha256": "249389287de4bd37fd8a71863d1a3a6d98bccb9f71d5060622ca06f0c5da4114"
+          },
+          {
+            "file": "apps/office/src/stoc/source/uriproc/UriReferenceFactory.resolve.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "8125c2faea248b0600fabe4e9dd71bcc5c92134ee744388a1293f29ff9629f55",
+            "afterSyntaxSha256": "8125c2faea248b0600fabe4e9dd71bcc5c92134ee744388a1293f29ff9629f55"
+          },
+          {
+            "file": "apps/office/src/stoc/source/uriproc/UriReferenceFactory.test.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "0aaad0d779b7524f015e834f892eedf49620664f3be3d89ba17a7a33b9353f26",
+            "afterSyntaxSha256": "0aaad0d779b7524f015e834f892eedf49620664f3be3d89ba17a7a33b9353f26"
+          },
+          {
+            "file": "apps/office/src/stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTexpand.test.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "22ab48f5d920b6d50af0d4b589c79fbe364847427775dcd1ed4729539d08359b",
+            "afterSyntaxSha256": "22ab48f5d920b6d50af0d4b589c79fbe364847427775dcd1ed4729539d08359b"
+          },
+          {
+            "file": "apps/office/src/stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTscript.lexical.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "a5988db1f0ef645db01abcb4cd0d45417b9a950af33a77cc5e524a367b988370",
+            "afterSyntaxSha256": "a5988db1f0ef645db01abcb4cd0d45417b9a950af33a77cc5e524a367b988370"
+          },
+          {
+            "file": "apps/office/src/stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTscript.test.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "b7201652be5ae4928cd3c48d54b37f82827178cedb27ae11826680ff4e52f42a",
+            "afterSyntaxSha256": "b7201652be5ae4928cd3c48d54b37f82827178cedb27ae11826680ff4e52f42a"
+          },
+          {
+            "file": "apps/office/src/stoc/source/uriproc/VndSunStarPkgUrlReferenceFactory.test.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "f62110ffaf4089ee79a8893779b954e683dcd4a820fd4b9672628de294fd0e65",
+            "afterSyntaxSha256": "f62110ffaf4089ee79a8893779b954e683dcd4a820fd4b9672628de294fd0e65"
+          },
+          {
+            "file": "apps/office/src/sw/source/writerfilter/dmapper/SettingsTable.test.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "952e98c5012edf8a54eb7f775ad78e6c6c2a3d82ab90630e65e3d5276c66d6e2",
+            "afterSyntaxSha256": "952e98c5012edf8a54eb7f775ad78e6c6c2a3d82ab90630e65e3d5276c66d6e2"
+          },
+          {
+            "file": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.test.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "db6f12e694c9a56e98c8c88cf48af6ea461557bb5bd6d1b55ae95ffdc7129112",
+            "afterSyntaxSha256": "db6f12e694c9a56e98c8c88cf48af6ea461557bb5bd6d1b55ae95ffdc7129112"
+          },
+          {
+            "file": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "1033eae44a5bf6cae5398c7789630112ee83cb045fc3b80e894f408a22f5e800",
+            "afterSyntaxSha256": "1033eae44a5bf6cae5398c7789630112ee83cb045fc3b80e894f408a22f5e800"
+          },
+          {
+            "file": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLSettings.test.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "9e41733160572898953ae4ec1cc67f5ebb2701652cac71ce18276fa1f74f9318",
+            "afterSyntaxSha256": "9e41733160572898953ae4ec1cc67f5ebb2701652cac71ce18276fa1f74f9318"
+          },
+          {
+            "file": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.context.test.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "f42774795db9e01aff461a8e4bb8352dddad65e5f6c9686e99efb102e8a91551",
+            "afterSyntaxSha256": "f42774795db9e01aff461a8e4bb8352dddad65e5f6c9686e99efb102e8a91551"
+          },
+          {
+            "file": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "47dfcd5edf9279161993fba10215ec5e0ef23b862fba8df96d00cf7482c50024",
+            "afterSyntaxSha256": "47dfcd5edf9279161993fba10215ec5e0ef23b862fba8df96d00cf7482c50024"
+          },
+          {
+            "file": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "5e1a37a8f3de6228557d919fb95bff213d6779453090c3c185cfaa7fa9b25740",
+            "afterSyntaxSha256": "5e1a37a8f3de6228557d919fb95bff213d6779453090c3c185cfaa7fa9b25740"
+          },
+          {
+            "file": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "3c0853bb266faf173658f23b9cb8fd2207e97278c6214c8a95e0a1db5a2a8b65",
+            "afterSyntaxSha256": "3c0853bb266faf173658f23b9cb8fd2207e97278c6214c8a95e0a1db5a2a8b65"
+          },
+          {
+            "file": "apps/office/src/test/css-style-matchers.ts",
+            "unchangedSyntax": true,
+            "beforeSyntaxSha256": "00c1f098063b8d09c2cd0eb197a4a117d6431754ef8a90a1cb31eb05afd555d1",
+            "afterSyntaxSha256": "00c1f098063b8d09c2cd0eb197a4a117d6431754ef8a90a1cb31eb05afd555d1"
+          }
+        ]
+      }
+    },
+    "jsdocLint": {
+      "command": "node node_modules/eslint/bin/eslint.js <37 paths listed in jsdoc.equivalence.results>",
+      "result": "fail",
+      "evidence": "One existing @typescript-eslint/no-useless-constructor in SfxDocumentMetaData.compat.ts; unrelated to JSDoc edits. Existing source constructor preserved. No checker suppression introduced."
+    },
+    "format": "pass",
+    "tools": "pass",
+    "scopedTempFileLint": "pass",
+    "static": "10 tests / 2 files pass",
+    "doctorRoutingDiff": "pass"
+  },
+  "sourceSemantics": [
+    "Original empty TMPDIR remains selected; absent-only fallback retained.",
+    "Real native shared global mutex and original token sequence; no synthetic native pointer or injected counters.",
+    "Original file creation failure falls back to SvMemoryStream; default named-file constructor only.",
+    "Original duplicate XPropertySet, property ordering hint, assert-only release listener behavior and seek32 cast retained.",
+    "SDK mkdir ignores host umask; source mode calculation retained.",
+    "Test context references are acquired copies; exception context lifetime can retain the file until dispose."
+  ],
+  "suspectedIssues": "WRITER596..602 / CALC659..665",
+  "openScope": [
+    "Native ZipPackageStream/root ZipPackage/full XStorage and model/filter/UI DOCX/XLSX completion remain unfinished.",
+    "Helper/older independent coverage gaps retained; no aggregate waiver, counters, mock provider, forced OOM or threshold change.",
+    "Four metadata type errors and dependency cycle remain.",
+    "Whole parent tasks remain active/rework; no task completion or full-suite cadence increment."
+  ],
+  "logs": [
+    {
+      "path": "apps/office/coverage/native-tempfile-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-calc.log",
+      "sha256": "ca4d099f20753afb59f27ae02d61324c6fc366a5d0e9b31f87101ebd9849f8b1"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-coverage.log",
+      "sha256": "dd4d06056da2891ad50a1cc5accef32ab90cd62629ae0db72cd73ceef7a830db"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-dependencies.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-docs.log",
+      "sha256": "0d64659347842d68a624c5105b4c8ef9d8f4ca6a33bb1008785dbf93aae2ec19"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-doctor.log",
+      "sha256": "81cb2e94664908c9461eba177133535d089dcfcf88d61ad65d818b1aed982d67"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-format-check.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-format.log",
+      "sha256": "a984d72f2dcd61422e9b6aafd9fe23a6e3f8d99aec61633a8cc4e7df4669b234"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-initial.log",
+      "sha256": "95dfbe25ed620c950e05e83b66606010c52540139792ac872288512fcbf1ff50"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-jsdoc-check.log",
+      "sha256": "7d101b0d6bb18238c25fde6bf73f7dce31ab0137b9052ddce3d0b5891028e1c0"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-jsdoc-format.log",
+      "sha256": "cc56b9e7d5d8246bcd0589e6f4836754d8d6233bb2282a637b8f480993ff990a"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-jsdoc-lint.log",
+      "sha256": "454c431c4a3a28dd68e8dbbd80295a4351b46b5b055402552475db7a5cda4a29"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-production-build.log",
+      "sha256": "cd281bf691679feb3e1965b7d826bc597444dfc4ab64880cb125523e8864eefb"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-provenance.log",
+      "sha256": "0292d8333ef93c9334d27d0fda82d8bf4157675761cb4ad87187aaf70aa7d332"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-registry.log",
+      "sha256": "a0fc95c64e2a1dd2e1031abe898e048044feb9e9cb533d7fe38ddbe30a02ecf8"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-related.log",
+      "sha256": "a124ce7f5db249cf5a478a97eab85b8d73225d219d687aebeed4363f9443c944"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-service-tests.log",
+      "sha256": "da0ca1b8da6ebb7b60b456f9b06c71b35704b81a4d3669a9d7eb8cd51a4a77f9"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-size.log",
+      "sha256": "7df007e39461dc5f3a1431a903786224de34faa23733fd0b4552f9d966c67f67"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-static.log",
+      "sha256": "9f3ea5cb3f0babb1819d90c088015f78feb7ade873129cf6efa60552b5f43f32"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-status.log",
+      "sha256": "8e3b96562eb4c8ee3a6db039e0817e54604d1ce424f00b8fd1d1e8a87ad2156d"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-types.log",
+      "sha256": "ea665cf96a97985469d7bc39ff902442818176787b56a076b2a13aff169000b8"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-wasm-build.log",
+      "sha256": "2c8c7acc932fb1ae04c1c7d9d977d51f71037bc71bafc5caa4e4eada50a7d63b"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-writer-brief.log",
+      "sha256": "06f9285edecae9c59f361762d85400015d12062c1c9b2dea2e48f131de668441"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-writer-route.log",
+      "sha256": "cd5f3d7e172c98c3fdf0c57b7c6c5adf9dfca3b94e538555e37c08f8b456f95e"
+    },
+    {
+      "path": "apps/office/coverage/native-tempfile-writer-verify.log",
+      "sha256": "f90886cebc04c7384ae6fc68b6a6f5d9f1210d8461f4712c56c2a615edf35be8"
+    }
+  ]
+}
