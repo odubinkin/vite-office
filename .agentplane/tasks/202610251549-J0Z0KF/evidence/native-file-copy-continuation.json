@@ -1,0 +1,232 @@
+{
+  "scope": "Original public file copy/remove, consumed File wrapper and safeWrite prerequisites for SvFileStream/TempFile. No full DOCX/XLSX model/filter/UI completion claim.",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "nativeArtifact": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "fileBindingSha256": "0ff16af63632f4926ab9e22918c90bfcd43013f0d13fcd753cf62a37f9dbfa3e",
+    "fileStatBindingSha256": "077599a5251a4bac08cdb5801219adf6ee9b2444bc0f17c6479db124dd022854",
+    "localeBindingSha256": "0f00b270fcde3d33bd142514575582f93ab20832b7a53355f47ff478b4fe55b3",
+    "securityBindingSha256": "1e116824af729eaf09bb21127f040b032d00c47d4b3b59cdd11176079ee68e93",
+    "socketBindingSha256": "22f11273b8c906da0bd1e20632b19dab5b997dd726d9cddc5c317e21eb45c22f",
+    "cppBindingSha256": "fe3a2446ac634a72904af28ba43fb0802627382db108b8e83367ba02a2d5dbce",
+    "emsdkCommit": "1693ce7359fc9694f198694f902a2cc061239b86",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 197,
+    "enumConstantCount": 853,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "37129e8ea76f4da2a30c91f173d3dd5d741a8f4ec35526a507405af2a0d723e9"
+  },
+  "implementation": [
+    "Original File URL-copy constructor, handle/URL destructor ordering, close-null BADF, getURL copy, direct real open/read/write/seek/size/EOF/sync and copy/remove wrappers.",
+    "Exact URL conversion order, already approved read/create/write gates, lstat/remove type check, source size_t cast, destination stat and .osl-tmp rename/copy/rollback/ignored cleanup behavior. Public preserveMetadata=false only; metadata-preserving move branch remains absent.",
+    "Original real link-content copy, 0x7fff read loop, safeWrite cap/EINTR/assertion and actual global errno/ENOSPC behavior. Only actual SDK ErrnoError is published; no fake errno provider, JS filesystem, host mount or manual JS allocator."
+  ],
+  "upstreamQA": "All9 active File copy/remove cases ported (copy001/002/004/005/006; remove001..004). Disabled copy003 has no assertions and is not invented. Existing FileStatus QA rerun; two original root/access expectations still fail.",
+  "sources": [
+    {
+      "path": "apps/office/src/sal/osl/unx/file_misc.ts",
+      "sha256": "2dd7aead4e3debf169e57c47534bdf0ad89b4a282f8d11f492f3b0fc107bac77"
+    },
+    {
+      "path": "apps/office/src/sal/osl/unx/readwrite_helper.ts",
+      "sha256": "eba17f3703e84e22637e20fe64a7ce359ad5ec96654c9e41b034260e55dec78d"
+    },
+    {
+      "path": "apps/office/src/sal/osl/unx/file_misc.copy.test.ts",
+      "sha256": "b1a85dd6ba3d5b3eca6ff180cece4bc5efd6d9df5800eb6360b2f2efdbe5be03"
+    },
+    {
+      "path": "apps/office/src/sal/inc/osl/file.hxx.ts",
+      "sha256": "7050bf727762949a95f1e9cf488502ccc89b780fcbda163281b07721e41d80c3"
+    },
+    {
+      "path": "apps/office/src/sal/inc/osl/file.ts",
+      "sha256": "285cfe5c9588ae1bf9b1fdbae92eb001c8bcbb6f1ec3deb9d10933a99a254540"
+    },
+    {
+      "path": "apps/office/src/sal/osl/unx/file.ts",
+      "sha256": "360e1226c38fe4ae19c799b8f5bbef586d87c23c2ce82362b2c169aa58915242"
+    },
+    {
+      "path": "apps/office/src/external/emscripten/file.ts",
+      "sha256": "d324c686e8af45f4c43c4dc98d50e1d4f109bb85a4c32d0586d6df83ed1e0654"
+    },
+    {
+      "path": "scripts/build-libxml2-wasm.py",
+      "sha256": "44e72eb8efb3d66997da6e65912023fe1a2496c4d8679a64d150338c2b00eeda"
+    },
+    {
+      "path": "scripts/fixtures/native-directory-stat-probe.ts",
+      "sha256": "ea2298b235c55884d04ed517bd66d0ea7969d987b18ead8824fe3564fbab5fdc"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "sha256": "d72bd9e24a039f17f41c0eda68d7888da4c5c25bb85dc3f6599177981d775335"
+    },
+    {
+      "path": "third_party/libxml2-wasm/osl-file.c",
+      "sha256": "0ff16af63632f4926ab9e22918c90bfcd43013f0d13fcd753cf62a37f9dbfa3e"
+    },
+    {
+      "path": "third_party/libxml2-wasm/osl-file-stat.c",
+      "sha256": "077599a5251a4bac08cdb5801219adf6ee9b2444bc0f17c6479db124dd022854"
+    },
+    {
+      "path": "third_party/libxml2-wasm/binding.c",
+      "sha256": "5f531b79ce22f78cf99f06b757a233d692ae3e6582704a94920496cf9234030d"
+    }
+  ],
+  "checks": [
+    {
+      "command": "python3 scripts/build-libxml2-wasm.py",
+      "result": "pass",
+      "evidence": "197 actual exports/853 generated constants; unchanged pinned XML constants; real libc stat/copy syscalls",
+      "log": "apps/office/coverage/native-file-copy-wasm-build.log",
+      "sha256": "78f2f5f5b3c8e6f5c69a3f8b6a92e32f4bd391d68440ae62d1bfdf486b105676"
+    },
+    {
+      "command": "cd apps/office && npx vitest run --config vitest.shared.config.ts src/sal/osl/unx/file_misc.copy.test.ts src/sal/osl/unx/file.test.ts src/sal/osl/unx/file.access.test.ts src/sal/osl/unx/file_stat.test.ts --coverage --coverage.include=src/sal/osl/unx/file_misc.ts --coverage.include=src/sal/osl/unx/readwrite_helper.ts --coverage.include=src/sal/inc/osl/file.hxx.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-file-copy",
+      "result": "fail",
+      "evidence": "65 assertions/cases pass in4 files; aggregate96.65 statements/89.16 branches/100 functions/99.58 lines. Branch90 gate remains failed. File.hxx100/96.15/100/100; file_misc94.77/88.63/100/99.09; safeWrite84.61/66.66/100/100. No threshold, provider or expectation manipulation.",
+      "log": "apps/office/coverage/native-file-copy-coverage.log",
+      "sha256": "01b8f9a0b1f9de5dcd8b7afa2a4e789878b0f3fb086d1f49f473b4dfbd4a56a9"
+    },
+    {
+      "command": "cd apps/office && npx vitest run --config vitest.shared.config.ts src/sal/osl/unx/file_stat.upstream.test.ts src/sal/osl/unx/security.bootstrap.test.ts src/sal/osl/unx/file_url.test.ts src/sal/osl/unx/file_url.encoding.test.ts src/sal/osl/unx/file_url.reverse.test.ts src/sal/osl/unx/file.access-abort.test.ts",
+      "result": "fail",
+      "evidence": "103 pass; same2 original UNIX getAttributes root-profile failures retained without changing expectations.",
+      "log": "apps/office/coverage/native-file-copy-related.log",
+      "sha256": "590a7be484a66c10e3298f6aea24bf1cd2627a724f8f0cb3cb711f9937e20854"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "evidence": "Actual public File regular/link copy, file read and remove alongside existing native XML/ZIP/metadata probes in Chromium main and DOM-free Worker.",
+      "log": "apps/office/coverage/native-file-copy-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "cd apps/office && npx vite build",
+      "result": "pass",
+      "evidence": "Production build; separate typecheck remains failed.",
+      "log": "apps/office/coverage/native-file-copy-build.log",
+      "sha256": "0e7b2f2691aa0c44be98fd0ff6842f2e88eabd59df61588a03b5d412c005ec03"
+    },
+    {
+      "command": "npm --prefix apps/office run typecheck",
+      "result": "fail",
+      "evidence": "Only4 existing SfxDocumentMetaData.storage.ts errors remain; new FS declarations and test typing repaired.",
+      "log": "apps/office/coverage/native-file-copy-types.log",
+      "sha256": "ea665cf96a97985469d7bc39ff902442818176787b56a076b2a13aff169000b8"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "evidence": "Tools typecheck.",
+      "log": "apps/office/coverage/native-file-copy-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "npx eslint apps/office/src/sal/osl/unx/file_misc.ts apps/office/src/sal/osl/unx/file_misc.copy.test.ts apps/office/src/sal/osl/unx/readwrite_helper.ts apps/office/src/sal/osl/unx/file.ts apps/office/src/sal/inc/osl/file.ts apps/office/src/sal/inc/osl/file.hxx.ts apps/office/src/external/emscripten/file.ts scripts/fixtures/native-directory-stat-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "evidence": "Scoped implementation/test/browser lint.",
+      "log": "apps/office/coverage/native-file-copy-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npx prettier --check apps/office/src/sal/osl/unx/file_misc.ts apps/office/src/sal/osl/unx/file_misc.copy.test.ts apps/office/src/sal/osl/unx/readwrite_helper.ts apps/office/src/sal/osl/unx/file.ts apps/office/src/sal/inc/osl/file.ts apps/office/src/sal/inc/osl/file.hxx.ts apps/office/src/external/emscripten/file.ts scripts/fixtures/native-directory-stat-probe.ts scripts/native-dom-worker-probe.mjs docs/program/registry/shared/operations/shared.internal.emscripten.closeDescriptor.json",
+      "result": "pass",
+      "evidence": "Scoped formatting.",
+      "log": "apps/office/coverage/native-file-copy-format-check.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "evidence": "Existing comphelper -> sax -> comphelper cycle retained.",
+      "log": "apps/office/coverage/native-file-copy-dependencies.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "evidence": "157 existing JSDoc findings, none added in touched source/test.",
+      "log": "apps/office/coverage/native-file-copy-docs.log",
+      "sha256": "0d64659347842d68a624c5105b4c8ef9d8f4ca6a33bb1008785dbf93aae2ec19"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "evidence": "2603 modules/2367 mapped/198 browser adaptations/38 local infrastructure.",
+      "log": "apps/office/coverage/native-file-copy-provenance.log",
+      "sha256": "2c11cca4be775aba10f1edf063ad15d0172f090ea021d4e03c8dc3abcdbbc784"
+    },
+    {
+      "command": "npm run inventory:registry:build",
+      "result": "pass",
+      "evidence": "Regenerated4 views; missing exported mutation-helper disposition added with filename/ID lexical order corrected.",
+      "log": "apps/office/coverage/native-file-copy-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "evidence": "Registry/invariants/parity semanticViolationCount0; broad semantic statuses remain unverified.",
+      "log": "apps/office/coverage/native-file-copy-registry.log",
+      "sha256": "0926207ef80b232372c8d597921e1012b85258c35c0de8523ed85b861c5470ae"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "evidence": "Authored size check, decomposition candidates retained.",
+      "log": "apps/office/coverage/native-file-copy-size.log",
+      "sha256": "aa6a7d8c28a8ff9b062a6f5a6c05307da7684182ceb453bda131fe41e048221a"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "evidence": "Source-tree placement.",
+      "log": "apps/office/coverage/native-file-copy-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "command": "npx vitest run scripts/native-file-access-boundary.test.ts scripts/check-module-boundaries-xml.test.ts",
+      "result": "pass",
+      "evidence": "9 related tooling assertions pass.",
+      "log": "apps/office/coverage/native-file-copy-static.log",
+      "sha256": "118c0450e822e7f51022d207ab1a379f64061b31220c2b3c72f0343f55876ccd"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "evidence": "Existing managed pre-push warning retained.",
+      "log": "apps/office/coverage/native-file-copy-doctor.log",
+      "sha256": "5c5c23ea528cece4d39ec79f71e16cd3daad96c1526e8ce4d0a6c187b58db177"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "evidence": "Policy routing.",
+      "log": "apps/office/coverage/native-file-copy-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "evidence": "No whitespace errors.",
+      "log": "apps/office/coverage/native-file-copy-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "findings": [
+    "WRITER588/CALC651 predictable destructive backup, fixed EXIST, same-path failure/restore",
+    "WRITER589/CALC652 global errno dependence, source-close ignored, nontruncating raw open"
+  ],
+  "remaining": [
+    "Independent safeWrite and file_misc90 gates remain failed; no injected EINTR/zero write, race or native OOM provider is added.",
+    "Original UNIX metadata QA root/profile failures; prior4 types, dependency cycle,157 docs and earlier owner gaps remain.",
+    "SvFileStream/TempFile service, full package/storage, model/filter and existing UI import/export/reopen remain unfinished.",
+    "No full-suite run:0 broad parent tasks completed since prior cadence."
+  ],
+  "status": "Both broad parents remain DOING/rework. Intentional implementation WIP is retained; canonical task artifacts only are checkpointed."
+}
