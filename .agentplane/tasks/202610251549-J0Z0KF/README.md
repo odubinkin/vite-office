@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 472
+revision: 475
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-14T19:46:35.239Z"
+  updated_at: "2026-11-14T19:58:34.825Z"
   updated_by: "CODER"
-  note: "Original Deflater plus pinned pako2.1.0:27 actual tests and main/Worker pass; owner87.5 branch coverage and full package/storage/model/filter/UI remain unqualified. Evidence native-deflater-continuation.json; baseline4 type errors and XML module cycle persist."
-  attempts: 149
+  note: "Original synchronous ZipOutputEntry:64 real tests and main/Worker ZIP write/native-reopen pass; owner100all in explicit null-parent/nonencrypted domain. Full package/storage/filter/model/UI and baseline4 type errors/XML cycle remain. Evidence native-zip-output-entry-continuation.json."
+  attempts: 150
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2392,8 +2395,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-14T19:58:34.825Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original synchronous ZipOutputEntry:64 real tests and main/Worker ZIP write/native-reopen pass; owner100all in explicit null-parent/nonencrypted domain. Full package/storage/filter/model/UI and baseline4 type errors/XML cycle remain. Evidence native-zip-output-entry-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-14T19:59:04.530Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-14T19:46:54.626Z"
+doc_updated_at: "2026-11-14T19:59:04.530Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -6856,6 +6872,36 @@ sections:
     Attempts: 149
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T19:46:34.212Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-11-14T19:58:34.825Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original synchronous ZipOutputEntry:64 real tests and main/Worker ZIP write/native-reopen pass; owner100all in explicit null-parent/nonencrypted domain. Full package/storage/filter/model/UI and baseline4 type errors/XML cycle remain. Evidence native-zip-output-entry-continuation.json.
+    Attempts: 150
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T19:58:33.872Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
 
     Details:
 
@@ -11993,6 +12039,36 @@ Note: Original Deflater plus pinned pako2.1.0:27 actual tests and main/Worker pa
 Attempts: 149
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T19:46:34.212Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-14T19:58:34.825Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original synchronous ZipOutputEntry:64 real tests and main/Worker ZIP write/native-reopen pass; owner100all in explicit null-parent/nonencrypted domain. Full package/storage/filter/model/UI and baseline4 type errors/XML cycle remain. Evidence native-zip-output-entry-continuation.json.
+Attempts: 150
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T19:58:33.872Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
 
 Details:
 
