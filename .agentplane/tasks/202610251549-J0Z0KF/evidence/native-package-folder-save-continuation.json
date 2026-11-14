@@ -1,0 +1,131 @@
+{
+  "scope": "Original native folder saveChild/saveContents, abstract entry save boundary, genuine ZIP/manifest/error tests and browser/Worker save/reopen. Whole DOCX/XLSX task remains incomplete.",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSha256": {
+    "apps/office/src/package/source/zippackage/ZipPackageEntry.ts": "b7cc255181a78e677c244cfa332a1f9333dfaecdc62b14f0de70afbef777fb57",
+    "apps/office/src/package/source/zippackage/ZipPackageFolder.native.ts": "52343e9cf6bd5004b2c63e0ac7e4c9850e4dfc42233c93d7d8e7812a4b37a955",
+    "apps/office/src/package/source/zippackage/ZipPackageFolder.save.test.ts": "da0a352dee63798aff2b95734638a4f00c1abaf227e77f02a89c267d54cf10ea",
+    "scripts/fixtures/native-package-folder-save-probe.ts": "72b5de5393c067d64e6e828cac095a7dd8c4fd68c6c71d29c01071da68d01a53",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "66e944faf39349d693e40435661b0277ceb67be44db88bcbfae277f86b7c267d",
+    "scripts/native-dom-worker-probe.mjs": "408a4a1d6905d5f83ec26424ec0fc6dba8b34c1aac18b51e7c1f6e02d2f17c15",
+    "scripts/check-module-boundaries.mjs": "2ed8de5578931fb50de41d065fe829656730291d4aad25454a467327ca519a8e",
+    "scripts/native-file-access-boundary.test.ts": "d664044d1d6c1d0c925c0723388d475ed754b81d301a353dd649fa0b0268c55d"
+  },
+  "checks": [
+    {
+      "log": "apps/office/coverage/native-package-folder-related.log",
+      "result": "pass",
+      "evidence": "34 tests in four files",
+      "sha256": "6fabe0d65b5e6aba731a51c31df38823c07bfc681f8a3bdbf0442f6024c753d6"
+    },
+    {
+      "log": "apps/office/coverage/native-package-folder-coverage90-final.log",
+      "result": "fail",
+      "evidence": "14 tests pass; aggregate branch89.01 and folder86.36 remain below90",
+      "sha256": "b2fb90cdaf4adbb01b0a0bd8e8ab878eef704c2fabcef83252bb00a06e5da21f"
+    },
+    {
+      "log": "apps/office/coverage/native-package-folder-browser.log",
+      "result": "pass",
+      "evidence": "real Chromium main and DOM-free Worker folder save/reopen",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "log": "apps/office/coverage/native-package-folder-boundary-tests.log",
+      "result": "pass",
+      "evidence": "6 tests; only source getToken import admitted",
+      "sha256": "54d5c8b2f223fe29d24a33b4e08198b44f51a151acf56b3606c3cb532cd5f397"
+    },
+    {
+      "log": "apps/office/coverage/native-package-folder-deps-corrected.log",
+      "result": "fail",
+      "evidence": "original SAL/o3tl edge admitted; pre-existing comphelper/sax cycle remains",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "log": "apps/office/coverage/native-package-folder-types-final.log",
+      "result": "fail",
+      "evidence": "four baseline SfxDocumentMetaData.storage.ts errors",
+      "sha256": "a9434f10a68a1e5c94d7ab20773d47510e38e2252740623b6db54e2b80be0846"
+    },
+    {
+      "log": "apps/office/coverage/native-package-folder-build-final.log",
+      "result": "pass",
+      "evidence": "actual Vite production build, typecheck failure recorded separately",
+      "sha256": "b45da2405d98b66f9db2d030e63f2904a3de06fdce49dbcedb4fa2ac83d57ab3"
+    },
+    {
+      "log": "apps/office/coverage/native-package-folder-tools-browser.log",
+      "result": "pass",
+      "evidence": "tools typecheck",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "log": "apps/office/coverage/native-package-folder-provenance.log",
+      "result": "pass",
+      "evidence": "2591 modules",
+      "sha256": "f0d519f29065069f24cbaac9c7d6cd3071b05db73476108dc01afcb1c0305814"
+    },
+    {
+      "log": "apps/office/coverage/native-package-folder-registry.log",
+      "result": "pass",
+      "evidence": "registry invariants/parity; zero semantic violations",
+      "sha256": "9710964d3bf0702856e74439adc03303786d034a3a6c1641fd43d48772b621ad"
+    },
+    {
+      "log": "apps/office/coverage/native-package-folder-tree.log",
+      "result": "pass",
+      "evidence": "source-tree check",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "log": "apps/office/coverage/native-package-folder-final-lint.log",
+      "result": "pass",
+      "evidence": "changed checker/helper lint",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "log": "apps/office/coverage/native-package-folder-lint-browser.log",
+      "result": "pass",
+      "evidence": "source, tests and browser helper lint",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "log": "apps/office/coverage/native-package-folder-final-format.log",
+      "result": "pass",
+      "evidence": "scoped formatting",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "log": "apps/office/coverage/native-package-folder-docs-final.log",
+      "result": "fail",
+      "evidence": "existing JSDoc findings retained",
+      "sha256": "03bc18aef30bca0974dbce6c60c4f6f63ef2e76250865177eae76d9b93c7a790"
+    },
+    {
+      "log": "apps/office/coverage/native-package-folder-doctor.log",
+      "result": "pass",
+      "evidence": "doctor OK with existing hook warning",
+      "sha256": "39d25b800da50aa5fab2aa834fabb7154cc1349ce91a519da38362bad60c8722"
+    },
+    {
+      "log": "apps/office/coverage/native-package-folder-routing.log",
+      "result": "pass",
+      "evidence": "policy routing",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "log": "apps/office/coverage/native-package-folder-diff.log",
+      "result": "pass",
+      "evidence": "diff whitespace",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "upstreamQA": "Inspected package/qa for ZipPackageFolder/saveChild/saveContents references: none found. Critical real archive, manifest and write-failure cases added against pinned source lines235-340; not a compiled C++ oracle certificate.",
+  "remaining": [
+    "Actual native ZipPackageStream and ZipPackage root/services; compression reset dependency; complete storage/model/filter/UI import/export acceptance",
+    "Folder mimetype-stream and failed-child traversal branches need the actual stream implementation; no fake component added",
+    "Approved security-handle/HOME/local-host file-URL dependencies still to implement inside authorized MEMFS scope",
+    "Prior independent coverage and global baseline gaps remain; no parent task completed or full-suite cadence incremented"
+  ]
+}

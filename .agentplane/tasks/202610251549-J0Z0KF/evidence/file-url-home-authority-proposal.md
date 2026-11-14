@@ -47,3 +47,7 @@ This proposal touches the security-context handle and the file-URL authority
 acceptance decision. The earlier approval explicitly covered path allowlists
 and pre-open flags only. Dependent mutation waits for an actual user reply;
 independent buffer/URL-byte work continues.
+
+## Explicit user approval received
+
+The user answered request call_e6d18aceb8f947a69a5134e31a6619ed: “Да, перенести исходные контракты в указанных границах”. The exact security-handle/HOME/local-host-authority scope and exclusions above are approved. Dependent implementation may proceed inside the existing WASM/MEMFS; no host mount, credentials/login, external DNS requests or socket connections are authorized.
