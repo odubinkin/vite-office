@@ -1,0 +1,225 @@
+{
+  "scope": "Approved original allowed-path predicate/setter and genuine source openFilePath on selected Emscripten POSIX profile. No URL entry point/SvFileStream/TempFile/format/model/UI completion claim.",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSha256": {
+    "apps/office/src/external/emscripten/file.ts": "23fcea05369367729b3505a5fd5cb33461f4c50cf65ed6edbc1ff04d830eb259",
+    "apps/office/src/sal/osl/unx/file.access.ts": "f1226d4429b7ddf58fef206dd09e7535f002a7f7d129b8509d3afa1ecc10de47",
+    "apps/office/src/sal/osl/unx/file.ts": "0898a8f85e724e94894600ba74ef9e3b275b61bc328b33a816669cbcd8031c9d",
+    "apps/office/src/sal/osl/unx/file.access.test.ts": "647ff112ad335726e26d344bcd6c732eea38d9f95e2636f44210a5c3f90a4f5e",
+    "apps/office/src/sal/osl/unx/file.access-abort.test.ts": "bcc6e2ad187ae0d0b90e266b9df39cfe62928a3d17a8ec126de99b9b61ebe3ca",
+    "apps/office/src/sal/inc/osl/file.ts": "2f1586bbe16ad381eed85596c4948f6ff7839dfbc25aefc828033814c6455448",
+    "apps/office/src/sal/inc/osl/detail/file.ts": "8d8496a2e9aab6011e4b22759af8e9f50359a8b32b3f5d11dca41fdbe1f2166d",
+    "scripts/fixtures/native-file-access-probe.ts": "0e445c7c9ccd2d33e1dc690d9fd4098c776d7378bd014e9e999be9d470ca9835",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "13727ea091d56d88f8d0cb07264b3f8d52251778bd07a67f8b098d434e5bbe68",
+    "scripts/native-dom-worker-probe.mjs": "a69ad946d3612a5351e43ecdec7cb78c619ab8f52e24282b48cade9b4d688f31",
+    "scripts/build-libxml2-wasm.py": "196ced91a9201b724f0661c63fd5f34ff6a184b2e2f5b64a7be60d3754630e43",
+    "third_party/libxml2-wasm/osl-file.c": "7d35dbd1f0b3d5c668ed19aa6e126ef8691d0e310e5b88a67b39187894235e4a",
+    "third_party/libxml2-wasm/binding.c": "e8af8e7a0841cb480b8322e017e71751ce843a146fa7a320f14c4861385dc9e9",
+    "third_party/libxml2-wasm/source.json": "4371636d6be5ad87f80d95142568e62578fbfd818d4c517e97f3942cf06dfab7",
+    "third_party/libxml2-wasm/index.d.ts": "9c74b1366064b4891f7d9ae2502bc2e7fc1e67957e3ae6d78fa9b483faebe0ff",
+    "third_party/libxml2-wasm/generated-api.json": "a800906f4622b63bdb401c0ac33b8f23f17312bac6a04aa5fbd73f26f2465484",
+    "third_party/libxml2-wasm/artifact.json": "6df0bb46f3e123a4ae0a08cd4232b36b718f9707660137f281fb549ce194215b",
+    "third_party/libxml2-wasm/libxml2.mjs": "89603110041c5e9e75aad303a7511e35bfcf54bbe3ea4e5c04c3e8db6b31e48d"
+  },
+  "artifact": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "fileBindingSha256": "7d35dbd1f0b3d5c668ed19aa6e126ef8691d0e310e5b88a67b39187894235e4a",
+    "localeBindingSha256": "0f00b270fcde3d33bd142514575582f93ab20832b7a53355f47ff478b4fe55b3",
+    "cppBindingSha256": "fe3a2446ac634a72904af28ba43fb0802627382db108b8e83367ba02a2d5dbce",
+    "emsdkCommit": "1693ce7359fc9694f198694f902a2cc061239b86",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 179,
+    "enumConstantCount": 851,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "89603110041c5e9e75aad303a7511e35bfcf54bbe3ea4e5c04c3e8db6b31e48d"
+  },
+  "checks": [
+    {
+      "command": "python3 scripts/build-libxml2-wasm.py",
+      "result": "pass",
+      "log": "apps/office/coverage/native-access-build-latest.log",
+      "sha256": "2a211e610fa1ef9a900efb5eed680b777b6a56a553efc008dffa0769bc8fa2e2"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/osl/unx/file.access.test.ts src/sal/osl/unx/file.access-abort.test.ts --coverage --coverage.include=src/sal/osl/unx/file.access.ts --coverage.include=src/external/emscripten/file.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-access-focused",
+      "result": "pass",
+      "log": "apps/office/coverage/native-access-focused-final.log",
+      "sha256": "05c4f708d3a424a5476eeec332b409d05947507f2fcb0fda3cb1e5a63711f69e"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/osl/unx/file.access.test.ts src/sal/osl/unx/file.access-abort.test.ts src/sal/osl/unx/file.test.ts src/sal/osl/unx/nlsupport.test.ts src/tools/source/stream/strmunx.errors.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/native-access-related-final.log",
+      "sha256": "8e0f0849958024211cde7bc43b31092312e9305d34e05e14e19c4399a5d291b2"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/osl/unx/file.access.test.ts src/sal/osl/unx/file.access-abort.test.ts src/sal/osl/unx/file.test.ts --coverage --coverage.include=src/sal/osl/unx/file.access.ts --coverage.include=src/sal/osl/unx/file.ts --coverage.include=src/external/emscripten/file.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-access-corrected",
+      "result": "fail",
+      "log": "apps/office/coverage/native-access-coverage-corrected.log",
+      "sha256": "4b0bfb3b6be63a917615f473cbfb7fc560192d74d99db1de1406e42ecd502382"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-access-worker-final.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/external/emscripten/file.ts apps/office/src/sal/osl/unx/file.access.ts apps/office/src/sal/osl/unx/file.ts apps/office/src/sal/osl/unx/file.access.test.ts apps/office/src/sal/osl/unx/file.access-abort.test.ts apps/office/src/sal/inc/osl/file.ts apps/office/src/sal/inc/osl/detail/file.ts scripts/fixtures/native-file-access-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-access-lint-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/external/emscripten/file.ts apps/office/src/sal/osl/unx/file.access.ts apps/office/src/sal/osl/unx/file.ts apps/office/src/sal/osl/unx/file.access.test.ts apps/office/src/sal/osl/unx/file.access-abort.test.ts apps/office/src/sal/inc/osl/file.ts apps/office/src/sal/inc/osl/detail/file.ts scripts/fixtures/native-file-access-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-access-format-corrected.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/sal/osl/unx/file.access.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/native-access-format-test-final.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "result": "fail",
+      "log": "apps/office/coverage/native-access-types-corrected.log",
+      "sha256": "a9434f10a68a1e5c94d7ab20773d47510e38e2252740623b6db54e2b80be0846"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/native-access-tools-latest.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-access-provenance-final.log",
+      "sha256": "f50d0eca410037831ba57682c9fa52ff12e769541106501b1ebe9d8b2cf419a6"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-access-registry-final.log",
+      "sha256": "a40dd20612c369f2b3dbaccb68ad612bac5656462b267920c8b420eab6ba7399"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-access-docs-final.log",
+      "sha256": "03bc18aef30bca0974dbce6c60c4f6f63ef2e76250865177eae76d9b93c7a790"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "log": "apps/office/coverage/native-access-deps-latest.log",
+      "sha256": "b2699149c4d4743fefc227673f21ac2f21789622b3fa81a6e422036a9a715f57"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/native-access-size-corrected.log",
+      "sha256": "1e744d37b71caa08494902803865db5620b5e9fbb6e947171f7539cd73fcac7c"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/native-access-tree-latest.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-access-vite-latest.log",
+      "sha256": "bf55bb134a70817738cc0e9e587857e2daa1eacc84ba970e3aae9e3b96aae0e0"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-access-static-final.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-access-doctor-final.log",
+      "sha256": "8eaff64289d0016949d3b97c54393c0ebabec4fd5fc932205094722aca37679d"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-access-routing-final.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-access-diff-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "git status --short --untracked-files=all",
+      "result": "pass",
+      "log": "apps/office/coverage/native-access-status.log",
+      "sha256": "c3de8713e653c61a3de31c107cec67021c70cfb281c81c43a3a4ac26dde47785"
+    }
+  ],
+  "coverage": {
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/external/emscripten/file.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sal/osl/unx/file.access.ts": {
+      "statements": 98.83,
+      "branches": 98,
+      "functions": 100,
+      "lines": 100
+    }
+  },
+  "retainedWholeOwnerGap": {
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sal/osl/unx/file.ts": {
+      "statements": 75.34,
+      "branches": 79.16,
+      "functions": 100,
+      "lines": 82.27
+    }
+  },
+  "tests": {
+    "finalFocused": 9,
+    "related": 34,
+    "relatedIncludesFocusedCaseSet": true,
+    "upstream": "All20 active assertions from sal/qa/osl/file/forbidden.cxx Forbidden::forbidden, with actual directory setup lowered to MEMFS. Commented-out upstream open/copy/nextTests are not misrepresented as active QA. Broader public file URL/temp/file QA remains unfinished.",
+    "critical": "Actual realpath/symlinks/recursive missing parent/prefix/read-write-execute lists and bypass defaults; pre-open denied truncate/create leaves filesystem and output slot unchanged; original create-exclusive/no-excl/truncate/default-read/private600/default666/explicit640; actual native F_SETLK success and bad-descriptor errno8; isolated configured libc abort throws WebAssembly.RuntimeError and no further native operations execute.",
+    "browser": "Actual Chromium main and DOM-free module Worker call production openFilePath for allowed create/read and forbidden write. New coherent helper extracted to keep existing probe below1000 lines; no fake FS/provider."
+  },
+  "approval": {
+    "status": "explicitly approved by user before this block",
+    "requestId": "call_80f61d619ab848bf8e8bc9fab60de9c2",
+    "answer": "\u0414\u0430, \u043f\u0435\u0440\u0435\u043d\u0435\u0441\u0442\u0438 \u0438\u0441\u0445\u043e\u0434\u043d\u0443\u044e \u043b\u043e\u0433\u0438\u043a\u0443 \u0438 \u0444\u043b\u0430\u0433\u0438",
+    "proposal": ".agentplane/tasks/202610251549-J0Z0KF/evidence/file-open-security-proposal.md",
+    "boundary": "Existing actual MEMFS; no host mount, host-directory read, network or unrelated auth/certificate change."
+  },
+  "findings": [
+    "WRITER567/CALC630: regular-file parent accepted by prefix predicate; actual open remains separate.",
+    "WRITER568/CALC631: partial setup early return leaves old abort flag.",
+    "WRITER569/CALC632: negative basename pointer/root-parent fallback; native invalid physical reads remain unqualified despite complete logical QA."
+  ],
+  "corrections": [
+    "Initial regular-file parent test expected rejection, corrected to original fallback acceptance.",
+    "Initial file-lock env setup text insertion did not match formatted code; actual setup now executes genuine setenv before the first source query and real F_SETLK is covered.",
+    "Added missing test callback JSDoc, explicit closing-operation inventory, split growing browser fixture into coherent helper, and narrowed the source guaranteed resolved pointer for TypeScript. Final checks pass except retained baseline/whole-owner gaps."
+  ],
+  "remaining": [
+    "Whole native file.ts owner still fails90 on statements/branches/lines; this is retained independently rather than hidden by new owner gates. Earlier native-stream, seekable/TempFile and libc-locale adapter coverage gaps remain.",
+    "Same4 metadata type errors, comphelper/sax cycle and157 old JSDoc findings remain; new modules have no final JSDoc findings.",
+    "File URL conversion/public osl_openFile, native SvFileStream/TempFile/package/storage/filter/model/UI end-to-end acceptance remain unfinished.",
+    "Native OOM/invalid pointer/other OS/pthread and SAL logging/debug profiles remain unqualified.",
+    "Only canonical parent artifacts are committed at checkpoint; unfinished implementation remains intentional WIP. No completed parent task; full suite not due under completed-task cadence."
+  ],
+  "goalStatus": "active"
+}
