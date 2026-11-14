@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 157
+revision: 160
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-14T08:22:13.964Z"
+  updated_at: "2026-11-14T08:47:11.264Z"
   updated_by: "CODER"
-  note: "Shared native public system-path/home URL checkpoint:all6 upstream UNIX cases,47 related tests and actual Chromium main/Worker pass. Independent file_url branch89.28 below90; reverse URL/TempFile/full DOCX storage/model/UI incomplete; baseline gaps retained."
-  attempts: 39
+  note: "Shared native reverse URL/public open checkpoint:154 related tests and Chromium main/Worker descriptor IO pass. Hostname/full file gates and native length_error domain incomplete; full TempFile/package/DOCX model/UI acceptance and baseline failures retained."
+  attempts: 40
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -632,8 +635,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-14T08:47:11.264Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared native reverse URL/public open checkpoint:154 related tests and Chromium main/Worker descriptor IO pass. Hostname/full file gates and native length_error domain incomplete; full TempFile/package/DOCX model/UI acceptance and baseline failures retained."
+  -
+    type: "status"
+    at: "2026-11-14T08:47:39.419Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-14T08:22:21.243Z"
+doc_updated_at: "2026-11-14T08:47:39.419Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -1794,6 +1810,36 @@ sections:
     Attempts: 39
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T08:21:32.976Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-11-14T08:47:11.264Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared native reverse URL/public open checkpoint:154 related tests and Chromium main/Worker descriptor IO pass. Hostname/full file gates and native length_error domain incomplete; full TempFile/package/DOCX model/UI acceptance and baseline failures retained.
+    Attempts: 40
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T08:46:26.007Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
 
     Details:
 
@@ -3269,6 +3315,36 @@ Note: Shared native public system-path/home URL checkpoint:all6 upstream UNIX ca
 Attempts: 39
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T08:21:32.976Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-14T08:47:11.264Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared native reverse URL/public open checkpoint:154 related tests and Chromium main/Worker descriptor IO pass. Hostname/full file gates and native length_error domain incomplete; full TempFile/package/DOCX model/UI acceptance and baseline failures retained.
+Attempts: 40
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T08:46:26.007Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
 
 Details:
 

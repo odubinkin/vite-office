@@ -1,0 +1,234 @@
+{
+  "scope": "Approved original local hostname/FQDN dependency, reverse Unicode/byte file URL templates, bounded absolute-path conversion, separator removal and public native file URL open. This is a coherent prerequisite block for source SvFileStream/TempFile and package import/export; whole DOCX/XLSX/UI remains incomplete.",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "approval": {
+    "hostnameHomeAuthority": "call_e6d18aceb8f947a69a5134e31a6619ed: \u0414\u0430, \u043f\u0435\u0440\u0435\u043d\u0435\u0441\u0442\u0438 \u0438\u0441\u0445\u043e\u0434\u043d\u044b\u0435 \u043a\u043e\u043d\u0442\u0440\u0430\u043a\u0442\u044b \u0432 \u0443\u043a\u0430\u0437\u0430\u043d\u043d\u044b\u0445 \u0433\u0440\u0430\u043d\u0438\u0446\u0430\u0445",
+    "pathOpenFlags": "call_80f61d619ab848bf8e8bc9fab60de9c2: \u0414\u0430, \u043f\u0435\u0440\u0435\u043d\u0435\u0441\u0442\u0438 \u0438\u0441\u0445\u043e\u0434\u043d\u0443\u044e \u043b\u043e\u0433\u0438\u043a\u0443 \u0438 \u0444\u043b\u0430\u0433\u0438",
+    "boundaries": "Existing WASM/MEMFS only; no host files/mounts, credentials/login, external DNS or socket connections. Native getaddrinfo uses the existing pinned SDK synthetic realm-local table; only the real local name is queried."
+  },
+  "nativeArtifact": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "fileBindingSha256": "6c56bb770a7dc89afa2280ec4639f6ae7545b985e28b8f7229bdb168bde8a31d",
+    "localeBindingSha256": "0f00b270fcde3d33bd142514575582f93ab20832b7a53355f47ff478b4fe55b3",
+    "securityBindingSha256": "1e116824af729eaf09bb21127f040b032d00c47d4b3b59cdd11176079ee68e93",
+    "socketBindingSha256": "22f11273b8c906da0bd1e20632b19dab5b997dd726d9cddc5c317e21eb45c22f",
+    "cppBindingSha256": "fe3a2446ac634a72904af28ba43fb0802627382db108b8e83367ba02a2d5dbce",
+    "emsdkCommit": "1693ce7359fc9694f198694f902a2cc061239b86",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 184,
+    "enumConstantCount": 851,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "2488e282d10656ac7c9285db5bc270992146a55331df7915296caab3d10812af"
+  },
+  "sourceSha256": {
+    "apps/office/src/sal/osl/unx/file_url.ts": "d9dd924782d07eff878ab74f485a1ca717e5b974843faf2880e789a4db69a0d7",
+    "apps/office/src/sal/osl/unx/file_url.reverse.test.ts": "4863fe4330827d0a12d680d2b7b1f53f092b24d363f5809cacbb4e68be52f1d5",
+    "apps/office/src/sal/osl/unx/file_url.open.test.ts": "0464529d0342762258a1437268082f69002c4041d91c1299bd8a8f80d122e53a",
+    "apps/office/src/sal/osl/unx/socket.ts": "8f483938d792089cfac7321b2a910aaa4dfee953fc31f9f936ebac327a9ca689",
+    "apps/office/src/sal/osl/unx/socket.test.ts": "a1a58c1a40fecddb6573433279bf1f87d972ede99c854574ec15ead47baa383a",
+    "apps/office/src/sal/osl/unx/file_path_helper.ts": "ddcc8555f70ac36af5b8eff13834a437a0d7e9332af9777d56fdf5c663895cad",
+    "apps/office/src/sal/osl/unx/file.ts": "a2a5ad2db54eb3316cc42da036d4ec27427e34d3baa2fee0c438777249fb4ff2",
+    "apps/office/src/sal/osl/unx/security.ts": "ed3099a5923de904977cf57fa78a067a65324bfd91634f1a00cf8feb8d56f0a8",
+    "apps/office/src/sal/osl/unx/security.bootstrap.test.ts": "5c16ce2b3f278f2ee668b0710897fbd04f08721d7215a5705ee4ece4424fd91c",
+    "apps/office/src/sal/inc/osl/file.ts": "74e620a1532c92a73e44149eb7387cf759773e9586382e0cbe6f812ef4c82152",
+    "apps/office/src/sal/inc/osl/socket.h.ts": "abdba60ac80c2019815ab2a7502218494dc1aa0be7bbd44330e348939d75b171",
+    "apps/office/src/sal/rtl/ustring.ts": "6d3ebe2b78de6b33a0317be75849ffbd39d60065088e8a3fdf658657e5250009",
+    "apps/office/src/sal/inc/rtl/ustring.h.ts": "75f284d098f40a5baf8e587c5e6a740ea8c37afd0a8c6d6cbe99929a042c15ed",
+    "apps/office/src/sal/rtl/strtmpl.ts": "7e7bd4933984bb466d2ea1f307f6ae6304aab7738472cf571d0094181185ace0",
+    "docs/program/registry/shared/runtime/sal/osl/unx/socket.ts.json": "a6bc821b6a86c361d68e35549af31ee5985303f9ea84593245cf6d960148aaa4",
+    "docs/program/registry/shared/provenance/sal/osl/unx/socket.ts.json": "c8956c560298ef09d48708000c6b5ea34c8fc918cd68f3b8e043a2c646a8a4e0",
+    "docs/program/registry/shared/runtime/sal/inc/osl/socket.h.ts.json": "ec06ad5a0c8cd0b3ae82c7533beb46e38b69c69c8a89a4b48345d0ed40103d15",
+    "docs/program/registry/shared/provenance/sal/inc/osl/socket.h.ts.json": "00a5355127ec6330593c44617f67546707db3adb050c0651a6adddb9d7c236d8",
+    "docs/program/registry/shared/runtime/sal/osl/unx/file_path_helper.ts.json": "a7d06e33bc358337346acd8a87cc3d16ee61539eeed17842f70e4f938d551b90",
+    "docs/program/registry/shared/provenance/sal/osl/unx/file_path_helper.ts.json": "0bf453bbe3c8dfa44a9c8ca2d84144c01698272e9b127623675c900fe337bb15",
+    "docs/program/registry/shared/runtime/sal/osl/unx/file_url.ts.json": "1601855fe3c426cd01bba4c5939f0c34564bcb201cce7e787683e99428c92726",
+    "docs/program/registry/shared/provenance/sal/osl/unx/file_url.ts.json": "6f85f4de5aa481a3eb8962bc2b7860a3b08509b6998ab55c9da0e86d4b3619e5",
+    "docs/program/registry/shared/runtime/sal/osl/unx/file.ts.json": "cee53fa8d5a23816d118ac180ea5fe87465d35c5f31baa9f1b1e381bd331cd18",
+    "docs/program/registry/shared/provenance/sal/osl/unx/file.ts.json": "7de6b6e0fb06ee7dec2a37b078f4f63e31988bcdcb5a20b4ee8afde8dc00f93e",
+    "docs/program/registry/shared/runtime/sal/inc/osl/file.ts.json": "6786e815ae21068443362d8def9c8b55a60fa2e5efdb923f43a6ef570638d8e0",
+    "docs/program/registry/shared/provenance/sal/inc/osl/file.ts.json": "fdf4a0aaf2db3f4db9306d3556d35532ebb122d6839d9bd895c44de606f23b0a",
+    "docs/program/registry/shared/runtime/sal/rtl/ustring.ts.json": "28e868740f397fb78254f23161f06aa2bec52e4ee21ba6707bb6d017307cebbf",
+    "docs/program/registry/shared/provenance/sal/rtl/ustring.ts.json": "1aff44f426b4e6207a2bae678ea95edf62daf560dd4ed0231b29a3248cf85b5f",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/ustring.h.ts.json": "76fe99f6db5ea432834cecd5b55687ed48a836b57fc4c17497415941de1fa963",
+    "docs/program/registry/shared/provenance/sal/inc/rtl/ustring.h.ts.json": "fcaf948ec590c9b10345f184716ff1f202f7dbc857f3a1b97ab1e1edf5b2c66c",
+    "docs/program/registry/shared/runtime/sal/rtl/strtmpl.ts.json": "3e8a99821e3e4ae7ee4142760a265ffa751a5ab3c56a6cf69dd6e785bbdd055a",
+    "docs/program/registry/shared/provenance/sal/rtl/strtmpl.ts.json": "1c1d38050ffe64881fe0ae0d8ddae441d544df6dca3ce1b5d5b8a3a5580ac09a",
+    "scripts/fixtures/native-file-url-reverse-probe.ts": "df9fa69b68eb744a9f47a470c3142d43dd05f10d651592b77b9242e31906fe0d",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "98e842e762a5779cf9e683bde6b8c29667de4d8139a541f342cef3f5e5f67c3b",
+    "scripts/native-dom-worker-probe.mjs": "79f239517423b31d0d4eb26e10780fb17700d3b37f0201664d5c38017234c5a1",
+    "third_party/libxml2-wasm/source.json": "62928d79be6a635a47517adcefc890218e560d20b6c1129856b1114c28f6b6ed",
+    "third_party/libxml2-wasm/README.md": "a1f4ce5b130ed8ebd5b27e1bf094ffb97d8421484d9f0322224448e5e9c25726",
+    "docs/program/writer-upstream-suspected-issues.md": "9506e12ae16ea9c80d9fb3850cccce1f53f2d4cfebb64ace6e9ead80336a2bf7",
+    "docs/program/calc-upstream-suspected-issues.md": "7711ee963c48207ad64e00ffeb7a8af62d739a1f3502c4c4de7a267b7d78a8f5",
+    "third_party/libxml2-wasm/osl-socket.c": "22f11273b8c906da0bd1e20632b19dab5b997dd726d9cddc5c317e21eb45c22f",
+    "third_party/libxml2-wasm/binding.c": "09a8f4da709fed277e8a68e7802ad99dfdb3977cb96865ea78761fcfb58d384d",
+    "third_party/libxml2-wasm/artifact.json": "99546a0aa5ec4f3f3d1d4595b0d597ca5fdfe8232a5b6933e7589a510955e879",
+    "third_party/libxml2-wasm/generated-api.json": "512d44fa0886b142b61ebdc0614ac7ef7907e06b19ac2cedcfe08de6b21340da",
+    "third_party/libxml2-wasm/index.d.ts": "c0c61e157456f5558a7466d96e328293acf3dc25a0224b1579bb073d2c2744d8",
+    "third_party/libxml2-wasm/libxml2.mjs": "2488e282d10656ac7c9285db5bc270992146a55331df7915296caab3d10812af",
+    "scripts/build-libxml2-wasm.py": "f664c04f4474a13818402d2319def804db09767cf101229c72e5ca12c1fc379a"
+  },
+  "checks": [
+    {
+      "command": "python3 scripts/build-libxml2-wasm.py",
+      "result": "pass",
+      "evidence": "Pinned repository-local actual SDK rebuild;184 exports/851 constants; no download/global configuration",
+      "log": "apps/office/coverage/native-hostname-build.log",
+      "sha256": "2d14057ab8720c31a980892e0e45a614d2d8d8b66dfb0d0893240f1eec9929a7"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/osl/unx/file_url.open.test.ts src/sal/osl/unx/file.access.test.ts src/sal/osl/unx/file.test.ts src/sal/osl/unx/file_url.reverse.test.ts src/sal/osl/unx/socket.test.ts src/sal/osl/unx/file_url.test.ts src/sal/osl/unx/security.test.ts src/sal/osl/unx/security.bootstrap.test.ts src/sal/osl/unx/file_url.encoding.test.ts src/sal/osl/unx/file_url.encoding.ascii.test.ts src/sal/rtl/ustring.test.ts src/sal/rtl/ustring-prefix.test.ts src/sal/rtl/strtmpl.assembly.test.ts",
+      "result": "pass",
+      "evidence": "154 tests in13 files pass",
+      "log": "apps/office/coverage/native-file-url-open-related-final.log",
+      "sha256": "1d1ebb7d54b1c4e0ea91ec4f9d27aa9c2a0589972bc452a3fed22c74f2063c52"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/osl/unx/file_url.reverse.test.ts src/sal/osl/unx/security.bootstrap.test.ts",
+      "result": "pass",
+      "evidence": "53 focused tests, including additional real CJK decode and genuine pre-init guards",
+      "log": "apps/office/coverage/native-file-url-reverse-unicode-final.log",
+      "sha256": "515f6e05c5cde9ad9d2aae54efca5dd749a214e0d2bfae9fa95a4a45a832c8c4"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/osl/unx/file_url.open.test.ts src/sal/osl/unx/file_url.reverse.test.ts src/sal/osl/unx/file_url.test.ts src/sal/osl/unx/socket.test.ts src/sal/osl/unx/security.bootstrap.test.ts --coverage --coverage.include=src/sal/osl/unx/file_url.ts --coverage.include=src/sal/osl/unx/file_path_helper.ts --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90",
+      "result": "pass",
+      "evidence": "Full current file_url owner97.45 statements/95.53 branches/100functions/100lines; separate path-helper owner100. Original forward-only subset previously25/28 branches is not declared closed merely by expanded owner scope.",
+      "log": "apps/office/coverage/native-file-url-open-coverage.log",
+      "sha256": "e431a51bdd5c2f83294a3b8124bbdc320d629fae78851425be2c79a330c33261"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/osl/unx/socket.test.ts src/sal/osl/unx/security.bootstrap.test.ts --coverage --coverage.include=src/sal/osl/unx/socket.ts --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90",
+      "result": "fail",
+      "evidence": "Independent socket owner89.47 statements/83.33 branches/100functions/89.47lines remains below90; genuine native error/throw paths not fabricated",
+      "log": "apps/office/coverage/native-hostname-coverage.log",
+      "sha256": "6bbcc674d5771bfcae9cbfc4509ccf19c3bf69db7c41f1e202af7be1b15447d9"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/osl/unx/file.test.ts src/sal/osl/unx/file.access.test.ts src/sal/osl/unx/file_url.open.test.ts --coverage --coverage.include=src/sal/osl/unx/file.ts --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90",
+      "result": "fail",
+      "evidence": "Whole file owner76.23 statements/79.89 branches/100functions/82.92lines; prior buffered-IO gaps retained",
+      "log": "apps/office/coverage/native-file-url-open-file-owner-coverage.log",
+      "sha256": "da3bff324779c4dae6ed993e0f41d4a59c130c3e1906772740d2352129cb5a1d"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "evidence": "Real local-authority/byte/Unicode URL conversion and actual native descriptor create/write/close/reopen/read [7,8,9] in Chromium main and DOM-free Worker; complete existing native DOM/ZIP probe remains passing",
+      "log": "apps/office/coverage/native-file-url-open-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vite build",
+      "result": "pass",
+      "evidence": "Actual production Vite build; types failure recorded separately",
+      "log": "apps/office/coverage/native-file-url-open-build.log",
+      "sha256": "6dad7caf9de1594b3762fe2816b26974b418a7b061eaf7d38464679a96f82b57"
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "result": "fail",
+      "evidence": "Only4 baseline SfxDocumentMetaData.storage.ts errors",
+      "log": "apps/office/coverage/native-file-url-open-types-final.log",
+      "sha256": "a9434f10a68a1e5c94d7ab20773d47510e38e2252740623b6db54e2b80be0846"
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/sal/osl/unx/file_url.ts apps/office/src/sal/osl/unx/file_url.reverse.test.ts apps/office/src/sal/osl/unx/file_url.open.test.ts apps/office/src/sal/osl/unx/socket.ts apps/office/src/sal/osl/unx/socket.test.ts apps/office/src/sal/inc/osl/socket.h.ts apps/office/src/sal/osl/unx/file_path_helper.ts apps/office/src/sal/osl/unx/file.ts apps/office/src/sal/osl/unx/security.bootstrap.test.ts apps/office/src/sal/rtl/strtmpl.ts apps/office/src/sal/rtl/ustring.ts apps/office/src/sal/inc/rtl/ustring.h.ts scripts/fixtures/native-file-url-reverse-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "evidence": "Changed source/tests/browser fixture lint",
+      "log": "apps/office/coverage/native-file-url-open-lint-complete.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "evidence": "Tools typecheck",
+      "log": "apps/office/coverage/native-file-url-open-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "evidence": "Pre-existing comphelper/sax cycle retained",
+      "log": "apps/office/coverage/native-file-url-open-deps.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "evidence": "2598 runtime modules/2362 mapped",
+      "log": "apps/office/coverage/native-file-url-open-provenance-final.log",
+      "sha256": "00e7b479f2ad8e639bef4b17342801ffe3a2d2b40d8c66547df5fe92ac8f4b2a"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "evidence": "Registry invariants/parity; zero semantic violations",
+      "log": "apps/office/coverage/native-file-url-open-registry-final.log",
+      "sha256": "4fed301815e442e04c69bfd92455c26edd62b3c5e4fb180babc1b75b59386929"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "evidence": "Same158 baseline path findings as previous native-security-docs.log; opening fileoverview/nested callback findings corrected; no new findings",
+      "log": "apps/office/coverage/native-file-url-open-docs-corrected.log",
+      "sha256": "03bc18aef30bca0974dbce6c60c4f6f63ef2e76250865177eae76d9b93c7a790"
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/sal/osl/unx/file_url.ts apps/office/src/sal/osl/unx/file_url.reverse.test.ts apps/office/src/sal/osl/unx/file_url.open.test.ts apps/office/src/sal/osl/unx/socket.ts apps/office/src/sal/osl/unx/socket.test.ts apps/office/src/sal/osl/unx/file_path_helper.ts apps/office/src/sal/osl/unx/file.ts apps/office/src/sal/osl/unx/security.ts apps/office/src/sal/osl/unx/security.bootstrap.test.ts apps/office/src/sal/inc/osl/file.ts apps/office/src/sal/inc/osl/socket.h.ts apps/office/src/sal/rtl/ustring.ts apps/office/src/sal/inc/rtl/ustring.h.ts apps/office/src/sal/rtl/strtmpl.ts docs/program/registry/shared/runtime/sal/osl/unx/socket.ts.json docs/program/registry/shared/provenance/sal/osl/unx/socket.ts.json docs/program/registry/shared/runtime/sal/inc/osl/socket.h.ts.json docs/program/registry/shared/provenance/sal/inc/osl/socket.h.ts.json docs/program/registry/shared/runtime/sal/osl/unx/file_path_helper.ts.json docs/program/registry/shared/provenance/sal/osl/unx/file_path_helper.ts.json docs/program/registry/shared/runtime/sal/osl/unx/file_url.ts.json docs/program/registry/shared/provenance/sal/osl/unx/file_url.ts.json docs/program/registry/shared/runtime/sal/osl/unx/file.ts.json docs/program/registry/shared/provenance/sal/osl/unx/file.ts.json docs/program/registry/shared/runtime/sal/inc/osl/file.ts.json docs/program/registry/shared/provenance/sal/inc/osl/file.ts.json docs/program/registry/shared/runtime/sal/rtl/ustring.ts.json docs/program/registry/shared/provenance/sal/rtl/ustring.ts.json docs/program/registry/shared/runtime/sal/inc/rtl/ustring.h.ts.json docs/program/registry/shared/provenance/sal/inc/rtl/ustring.h.ts.json docs/program/registry/shared/runtime/sal/rtl/strtmpl.ts.json docs/program/registry/shared/provenance/sal/rtl/strtmpl.ts.json scripts/fixtures/native-file-url-reverse-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs third_party/libxml2-wasm/source.json third_party/libxml2-wasm/README.md docs/program/writer-upstream-suspected-issues.md docs/program/calc-upstream-suspected-issues.md",
+      "result": "pass",
+      "evidence": "Scoped formatting; final extra CJK vector subsequently formatted by --write",
+      "log": "apps/office/coverage/native-file-url-open-format-final.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "evidence": "File size check",
+      "log": "apps/office/coverage/native-file-url-open-size.log",
+      "sha256": "d4a729a3c525ad092b5538b11c6ddfee5bf6f06f8ec57684921a1713aebf7d1c"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "evidence": "Source tree check",
+      "log": "apps/office/coverage/native-file-url-open-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "evidence": "Doctor OK with existing missing-hook warning",
+      "log": "apps/office/coverage/native-file-url-open-doctor.log",
+      "sha256": "032742077c6b41ec9779e4bce3e0e904cc437c4dfd0a70a2b525768fde3f1802"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "evidence": "Policy routing OK",
+      "log": "apps/office/coverage/native-file-url-open-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "evidence": "No whitespace errors",
+      "log": "apps/office/coverage/native-file-url-open-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "upstreamQA": "All20 active UNIX literal reverse path vectors plus original _004 and _005 fixture relationships from sal/qa/osl/file/osl_File.cxx are ported. As in source helper, empty expected output means status-only. _001_81 has no active assertions (#if0 body) and is not manufactured as an extra passing case. Original _005 UTF16 byte-valued hex escapes and real directory setup/cleanup retained; additional real CJK, Unicode/byte/alias/authority/HOME and native IO/error cases execute. Existing6 forward UNIX vectors remain. No relevant local-hostname QA exists in pinned sal/qa/osl/socket.cxx; socket networking QA and full File C++ QA require unimplemented/out-of-scope APIs and are not claimed ported. Source-backed JS tests are not a compiled C++ oracle certificate.",
+  "upstreamFindings": [
+    "WRITER577/CALC640: FQDN helper can retain short emscripten canonical name",
+    "WRITER578/CALC641: second-character-only home recognition also expands a~/child",
+    "WRITER579/CALC642: legacy CJK QA has byte-valued UTF16 hex escapes",
+    "WRITER580/CALC643: trailing separators removed before opening a regular file"
+  ],
+  "corrections": "Initial mixed-width compare wrapper incorrectly used generic C++ template spellings absent from the existing TS lowering; now reuses and widens the actual existing compare_IgnoreAsciiCaseWithLengths template to byte storage. Opening fileoverview and nested callback docs corrected. Functional native/URL/IO tests pass; no runtime mocks, fake native failures/providers or coverage counter changes.",
+  "remaining": [
+    "Original std::length_error-to-RANGE boundaries are not yet represented by a qualified JS exception owner; source semantics for that native allocation/length-failure domain remain unfinished. Do not treat public wrappers as fully qualified native ABI implementations.",
+    "Independent hostname and full buffered file coverage gaps remain; old forward-only and native folder gaps not waived by expanded source module coverage. Native OOM/debug/invalid handles/other OS/pthread profiles unqualified.",
+    "SvFileStream/TempFile and actual package stream/root/storage/services remain unfinished; pending actual compression reset dependency not substituted.",
+    "True Writer/Calc model/filter/UI DOCX/XLSX import/export/open/download/reopen acceptance and baseline type/dependency/docs failures remain. No whole task completion or full-suite cadence increment."
+  ]
+}
