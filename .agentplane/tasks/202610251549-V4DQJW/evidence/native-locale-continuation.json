@@ -1,0 +1,154 @@
+{
+  "scope": "Complete original RTL locale registry/default/accessor/lifecycle module needed by native file URL charset selection. No process locale/thread encoding, file open/TempFile or DOCX/XLSX UI completion claim.",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSha256": {
+    "apps/office/src/sal/inc/rtl/locale.ts": "5a9459750210ef31c1141751b1ecba77b792e641bb21670465666975deebcbc7",
+    "apps/office/src/sal/rtl/locale.ts": "6928d6fac55a1146f44f69f3fee323c2c5d2e57a561b3377464acd275fb3c2f9",
+    "apps/office/src/sal/rtl/locale.test.ts": "e3f44e7c7c38977edfd86d9a15d38ef9f2f7f70e0e48a174a75a8d36a0d04a54",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "8135ce57a198be0c9486a3fadc928211e00e487dc41dcf7e651136a047743349",
+    "scripts/native-dom-worker-probe.mjs": "83386ff449dca2c1fb8d13ab29d26225fe2572d22b9661ea02a0e086945991f6",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/locale.ts.json": "d76354ab668207e3c37845104e64f2b487ea0f33fa9a075f92093029dd1c5996",
+    "docs/program/registry/shared/runtime/sal/rtl/locale.ts.json": "8182a696a666ebfbfd4bae6619192254fa85f749ee004dd3713b0fb4dbd8da08",
+    "docs/program/registry/shared/provenance/sal/inc/rtl/locale.ts.json": "364a756de34861101839e6179957ff91d05500d52cc862f1add584fbdb10e151",
+    "docs/program/registry/shared/provenance/sal/rtl/locale.ts.json": "39397e704aa0ec22f576be85c2279c7c795cec6a2ce1ae0de1e6bf9e8cd1549e"
+  },
+  "checks": [
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/rtl/locale.test.ts --coverage --coverage.include=src/sal/rtl/locale.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-locale",
+      "result": "pass",
+      "log": "apps/office/coverage/native-locale-tests.log",
+      "sha256": "b62ab96140837a0187fbe413c8004931b84b6f08f783bc84661003137f0a1c24"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/rtl/locale.test.ts src/sal/rtl/ustring-codepoints.test.ts src/sal/rtl/ustring-ownership.test.ts src/tools/source/stream/strmunx.errors.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/native-locale-related-final.log",
+      "sha256": "e309c62fa219e8812caa9d98a5b0de1e83129b7f80cf5cc1ac9f688761c34b8d"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-locale-worker-final.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/sal/inc/rtl/locale.ts apps/office/src/sal/rtl/locale.ts apps/office/src/sal/rtl/locale.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-locale-lint-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/sal/inc/rtl/locale.ts apps/office/src/sal/rtl/locale.ts apps/office/src/sal/rtl/locale.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-locale-format-final.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "result": "fail",
+      "log": "apps/office/coverage/native-locale-types.log",
+      "sha256": "a9434f10a68a1e5c94d7ab20773d47510e38e2252740623b6db54e2b80be0846"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/native-locale-tools-final.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-locale-provenance.log",
+      "sha256": "361ba56f2b0c64e2446737de65bcdc214afb1c7d4738bf71c43c04aca2faaae9"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-locale-registry-final.log",
+      "sha256": "6293d8c6afa8e4794b845395873204579718e29f4a6c113827263d6de609ce2e"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-locale-docs-final.log",
+      "sha256": "03bc18aef30bca0974dbce6c60c4f6f63ef2e76250865177eae76d9b93c7a790"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "log": "apps/office/coverage/native-locale-deps.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/native-locale-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/native-locale-size.log",
+      "sha256": "4bf03d86dbfa2d888398454c9e8c714aaba187fa361a3d305de2ca5dee6e35d6"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-locale-vite-final.log",
+      "sha256": "e4bdca226908288100a97ee7d280066c4c8214b4c27e50d04de20b7d99cc551d"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-locale-static.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-locale-doctor.log",
+      "sha256": "b5e576e9344a6e71476cc4030d5fc0b36e674fa8793f4b7cfd4f7c4936657b59"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-locale-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-locale-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "git status --short --untracked-files=all",
+      "result": "pass",
+      "log": "apps/office/coverage/native-locale-status.log",
+      "sha256": "108f7ad265a1e6b4c32ed60d1710111cd229344d9c27f8917ac9af5d0ff640e2"
+    }
+  ],
+  "tests": {
+    "upstream": "All 12 original sal/qa/rtl/locale/rtl_locale.cxx assertions ported without strengthening their nonzero hash assertion.",
+    "focused": 14,
+    "related": 32,
+    "relatedIncludesFocused": true,
+    "browser": "Actual Chromium main realm and DOM-free module Worker execute original hash collision and record identity. Cached repo browser selected by PLAYWRIGHT_BROWSERS_PATH; no installation or global cache access.",
+    "coverage": "Full rtl/locale.ts owner independently passes unchanged 90 thresholds; measured all metrics100. No counter/threshold manipulation or extra tests solely to chase100."
+  },
+  "findings": [
+    "WRITER565/CALC628: original XOR-hash-only locale interning conflates distinct field tuples; preserved and tested."
+  ],
+  "corrections": [
+    "Initial registry header record incorrectly listed reexports as local declarations; corrected localSymbols to actual rtl_Locale. Final registry check passes.",
+    "First browser attempt used default nonexistent browser executable; rerun with existing repository cache passes.",
+    "New test callbacks initially lacked required JSDoc; added docs and final docs check retains only baseline findings."
+  ],
+  "remaining": [
+    "Same four metadata type errors, comphelper/sax cycle and baseline157 JSDoc findings; earlier independent coverage gaps retained.",
+    "Process locale, actual libc locale/codeset and realm/thread encoding must precede complete file URL conversion. Source security hook still awaits actual user reply; no dependent security mutation.",
+    "TempFile/package/storage/model/filter/UI acceptance remains unfinished. No parent task completes; full suite is not due at completed-task cadence.",
+    "Native ABI/OOM/lifecycle use-after-finalization domains and future pthread profiles unqualified. JS objects are GC-managed; source RTL string logical reference contracts are reused."
+  ],
+  "goalStatus": "active"
+}
