@@ -1,0 +1,631 @@
+{
+  "scope": "Original Directory enumeration/lifetime and libc cursor bridge required by native TempFile/package/storage. Whole DOCX/XLSX/model/filter/UI remains unfinished.",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "previousGoalTurn": "progress:157 JSDoc diagnostics fixed with37 unchanged source ASTs; TempFile evidence persisted.",
+  "nativeArtifact": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "fileBindingSha256": "586633247713cb14a34647feb3abd5d898d45c8fc771de58fa42b76733afc324",
+    "fileStatBindingSha256": "077599a5251a4bac08cdb5801219adf6ee9b2444bc0f17c6479db124dd022854",
+    "localeBindingSha256": "0f00b270fcde3d33bd142514575582f93ab20832b7a53355f47ff478b4fe55b3",
+    "securityBindingSha256": "1e116824af729eaf09bb21127f040b032d00c47d4b3b59cdd11176079ee68e93",
+    "socketBindingSha256": "22f11273b8c906da0bd1e20632b19dab5b997dd726d9cddc5c317e21eb45c22f",
+    "cppBindingSha256": "50ad1bd0b4f021e432cd3e2e31a39aff491dc0ea94e0085a35ac8082507b3cbb",
+    "emsdkCommit": "1693ce7359fc9694f198694f902a2cc061239b86",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 206,
+    "enumConstantCount": 853,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "59854d39effd209fbf9b356a6940a5f127dcaf0fa5ef09ccae62242dee296a67"
+  },
+  "implementation": [
+    "Original DirectoryImpl stays in file_misc owner, VM-managed record with libc-owned DIR.",
+    "Native opendir/readdir/closedir and two mechanical dirent field accessors; no JS cursor or hardcoded layout.",
+    "Existing approved read gate/URL and byte-path helpers; original status/slot/d_type/logical lifetime/EOF behavior.",
+    "Original Directory instance wrappers replace static-only facet while preserving static API and private friend slot."
+  ],
+  "upstreamQa": {
+    "source": "sal/qa/osl/file/osl_File.cxx namespace osl_Directory",
+    "cases": [
+      "ctors_001",
+      "ctors_002",
+      "open_001..004",
+      "isOpen_001..002",
+      "close_001..002",
+      "reset_001..004",
+      "getNextItem_001..004"
+    ],
+    "fixture": "Real MEMFS files, dot-relative URL, symlink and additional Unicode/dangling-link cases. No fake syscall/provider/error injection."
+  },
+  "tests": "87 related cases/6 files pass; final7 directory cases pass after fixture typing and exact ./ URL correction. Static10/2 pass. Actual Chromium main/DOM-free Worker enumerate/reset the registered TempFile parent and retain all native XML/ZIP/service regressions.",
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 234,
+        "covered": 232,
+        "skipped": 0,
+        "pct": 99.14
+      },
+      "statements": {
+        "total": 279,
+        "covered": 270,
+        "skipped": 0,
+        "pct": 96.77
+      },
+      "functions": {
+        "total": 31,
+        "covered": 30,
+        "skipped": 0,
+        "pct": 96.77
+      },
+      "branches": {
+        "total": 183,
+        "covered": 168,
+        "skipped": 0,
+        "pct": 91.8
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sal/osl/unx/file_impl.ts": {
+      "lines": {
+        "total": 6,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4,
+        "covered": 4,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 7,
+        "covered": 7,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 3,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sal/osl/unx/file_misc.ts": {
+      "lines": {
+        "total": 194,
+        "covered": 192,
+        "skipped": 0,
+        "pct": 98.96
+      },
+      "functions": {
+        "total": 22,
+        "covered": 21,
+        "skipped": 0,
+        "pct": 95.45
+      },
+      "statements": {
+        "total": 235,
+        "covered": 227,
+        "skipped": 0,
+        "pct": 96.59
+      },
+      "branches": {
+        "total": 153,
+        "covered": 139,
+        "skipped": 0,
+        "pct": 90.84
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sal/osl/unx/file_path_helper.ts": {
+      "lines": {
+        "total": 34,
+        "covered": 34,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 5,
+        "covered": 5,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 37,
+        "covered": 36,
+        "skipped": 0,
+        "pct": 97.29
+      },
+      "branches": {
+        "total": 27,
+        "covered": 26,
+        "skipped": 0,
+        "pct": 96.29
+      }
+    }
+  },
+  "coverageQualification": "Complete current three owners pass per-file90. This does not close earlier88.63 copy-only branch profile or safeWrite/base-stream/hostname/TempFile-helper gaps by adding new passing directory code.",
+  "checks": [
+    {
+      "command": "python3 scripts/build-libxml2-wasm.py",
+      "result": "pass",
+      "log": "apps/office/coverage/native-directory-wasm-build.log",
+      "sha256": "6e37110033a0b9f4af5cd9ba9be84c065cdf466c0aa8b26e463d65aa85c73a8a"
+    },
+    {
+      "command": "cd apps/office && npx vitest run --config vitest.shared.config.ts src/sal/osl/unx/directory.test.ts src/sal/osl/unx/tempfile.test.ts src/sal/osl/unx/file_misc.copy.test.ts src/sal/osl/unx/file_stat.test.ts src/unotools/source/ucbhelper/xtempfile.test.ts src/comphelper/source/streaming/seekableinput.test.ts --coverage --coverage.include=src/sal/osl/unx/file_misc.ts --coverage.include=src/sal/osl/unx/file_impl.ts --coverage.include=src/sal/osl/unx/file_path_helper.ts --coverage.thresholds.perFile=true --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-directory",
+      "result": "pass",
+      "log": "apps/office/coverage/native-directory-coverage.log",
+      "sha256": "5f978071864e9bd29611280b2fccbb52d13d883d61b2c3f86d144b57a072d974"
+    },
+    {
+      "command": "cd apps/office && npx vitest run --config vitest.shared.config.ts src/sal/osl/unx/directory.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/native-directory-final-tests.log",
+      "sha256": "af1dfaa21b5f5ce23bdf98a9104087b7f0efedbf74ee44efe8443f60cbcac84c"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-directory-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "cd apps/office && npx vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-directory-vite.log",
+      "sha256": "19baef566ded5845010eead67dabe28be602954a8fc042c95900fb3f701bea1a"
+    },
+    {
+      "command": "npm --prefix apps/office run typecheck",
+      "result": "fail",
+      "log": "apps/office/coverage/native-directory-types.log",
+      "sha256": "fbf0fc3f1611ffb721508ec435666fe4838ba8436a9dd8e25d072776dc8a7621"
+    },
+    {
+      "command": "npm --prefix apps/office run build",
+      "result": "fail",
+      "log": "apps/office/coverage/native-directory-production-build.log",
+      "sha256": "cdef7eda8dcbf155b0ec5563e418924eb71e6b20f1d6d2021696a78ee242aaad"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/native-directory-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-directory-docs.log",
+      "sha256": "5967221c6252febc617b0b19e27c3d30cfe697f40f9164235e4a17896c620fcc"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-directory-registry.log",
+      "sha256": "fa6d44250ac557da1b442085621efd87623987ea1a1fc37a518475184dc9d836"
+    },
+    {
+      "command": "npm run inventory:registry:build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-directory-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-directory-provenance.log",
+      "sha256": "0292d8333ef93c9334d27d0fda82d8bf4157675761cb4ad87187aaf70aa7d332"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "log": "apps/office/coverage/native-directory-dependencies.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "command": "npx vitest run scripts/native-file-access-boundary.test.ts scripts/check-module-boundaries-xml.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/native-directory-static.log",
+      "sha256": "05a9d4941e19fbdb999818180b3702bc31478da9fbdf7ffcaec30585e9e8eafa"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-directory-doctor.log",
+      "sha256": "3bee7ea22368a2f18990ead6082b9306d600f4e1cdebc2b54b64641d37e28464"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-directory-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-directory-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/native-directory-size.log",
+      "sha256": "035c96905634e433a2025dbebe6175e9855abf02e02857cc6335d1c79ae769a6"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/native-directory-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    }
+  ],
+  "additionalLogs": [
+    {
+      "path": "apps/office/coverage/native-directory-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-coverage.log",
+      "sha256": "5f978071864e9bd29611280b2fccbb52d13d883d61b2c3f86d144b57a072d974"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-dependencies.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-docs.log",
+      "sha256": "5967221c6252febc617b0b19e27c3d30cfe697f40f9164235e4a17896c620fcc"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-doctor.log",
+      "sha256": "3bee7ea22368a2f18990ead6082b9306d600f4e1cdebc2b54b64641d37e28464"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-final-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-final-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-final-tests.log",
+      "sha256": "af1dfaa21b5f5ce23bdf98a9104087b7f0efedbf74ee44efe8443f60cbcac84c"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-format-check.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-format.log",
+      "sha256": "48a6dc7090e21b5e39c8b33613e2a1f04d6099281f7e46ce08b78cba2411cfac"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-production-build.log",
+      "sha256": "cdef7eda8dcbf155b0ec5563e418924eb71e6b20f1d6d2021696a78ee242aaad"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-provenance.log",
+      "sha256": "0292d8333ef93c9334d27d0fda82d8bf4157675761cb4ad87187aaf70aa7d332"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-registry.log",
+      "sha256": "fa6d44250ac557da1b442085621efd87623987ea1a1fc37a518475184dc9d836"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-related.log",
+      "sha256": "6ede1317b811eff18ed76121ea304bef1320b3d46e58984c601be654b709b6f4"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-size.log",
+      "sha256": "035c96905634e433a2025dbebe6175e9855abf02e02857cc6335d1c79ae769a6"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-build-abi-fixed.log",
+      "sha256": "2708dc92e1d9c987717f98621f1ff4dc9af714516cb08d9e162136bfc0c3cebd"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-build-constants.log",
+      "sha256": "2708dc92e1d9c987717f98621f1ff4dc9af714516cb08d9e162136bfc0c3cebd"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-build-final.log",
+      "sha256": "38e8e6e1bb2bf359a04b77465031c801e6d994c25c27c107f64a44f37906a214"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-build-profile.log",
+      "sha256": "672e9f0f7e3dec1228f11805b9d14843d7a2a553687e723ee082d9fed8d17d1b"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-build-qa.log",
+      "sha256": "0f3f7951411d4372a713109b203cc9e0623335010bf2bef6753066ee116ff2f8"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-build.log",
+      "sha256": "4c3091ccb3632905496fd4391b85b71804deed1da4eabe32a14e86ed55293834"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-byte-related.log",
+      "sha256": "1e98ff20813bba351c5556f965faf689dfa487a161b8b021061acbc3f52e0063"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-calc-next.log",
+      "sha256": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-coverage-final.log",
+      "sha256": "50c29fab6b7a0d52319c072e634e0d52ca81b757f7589aec5d0b6d50280bdc44"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-coverage.log",
+      "sha256": "d3ea981e3f87f6d586bd4ac6830476c92471edb586fbe1d3c4914fa008ea4e73"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-critical-final.log",
+      "sha256": "6f003d5701b77636f3e93cb68c2188f9856bbf97ced68c79ac295949c7884b22"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-deps.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-diff-last.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-docs-final.log",
+      "sha256": "0d64659347842d68a624c5105b4c8ef9d8f4ca6a33bb1008785dbf93aae2ec19"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-docs.log",
+      "sha256": "03bc18aef30bca0974dbce6c60c4f6f63ef2e76250865177eae76d9b93c7a790"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-doctor.log",
+      "sha256": "a1bc4141c7ce9233ccebb17c263d0dccd92dcfb9a0e907ca83359f38b2157ac6"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-kernel-upstream.log",
+      "sha256": "713fbe8193eee7e1e34d76e7e28ab63e49576de59fda3211f67b543bcff5cb96"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-lint-current.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-lint-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-lint-last.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-production-build.log",
+      "sha256": "d0ca4872bae9e398428a9cf61b23c131f56e5871c8a38f1997da4e0391cb39da"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-provenance-final.log",
+      "sha256": "31aeb215099e22addb45cbdf526e4174d33ef4e62af63aa518807ac2b327d64b"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-provenance.log",
+      "sha256": "31aeb215099e22addb45cbdf526e4174d33ef4e62af63aa518807ac2b327d64b"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-registry-final.log",
+      "sha256": "62b7f7a91d029d99456e9983426b4503d2a32e07d973da062b5935fe31d2b9a1"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-registry.log",
+      "sha256": "62b7f7a91d029d99456e9983426b4503d2a32e07d973da062b5935fe31d2b9a1"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-related.log",
+      "sha256": "acc22558bd849b8fbf57cd30db1f263551037aaa03a603f212278fe812031296"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-size.log",
+      "sha256": "6fd6adbeefef39d426f9f50209eeef863018337827721334a18e4f3b8c032369"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-tests-final.log",
+      "sha256": "bf938fb5283ab66f8bb3b18109e3e631f38491d6200ceac8ca02a3f5f056be8b"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-tests.log",
+      "sha256": "40aab8eeb54120e183dcc21af4ae049e54f105bad90a6411231374a4d7f88972"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-tools-last.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-types-base.log",
+      "sha256": "a9434f10a68a1e5c94d7ab20773d47510e38e2252740623b6db54e2b80be0846"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-types-current.log",
+      "sha256": "a9434f10a68a1e5c94d7ab20773d47510e38e2252740623b6db54e2b80be0846"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-types-final.log",
+      "sha256": "a9434f10a68a1e5c94d7ab20773d47510e38e2252740623b6db54e2b80be0846"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-types-last.log",
+      "sha256": "a9434f10a68a1e5c94d7ab20773d47510e38e2252740623b6db54e2b80be0846"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-types-owner.log",
+      "sha256": "a9434f10a68a1e5c94d7ab20773d47510e38e2252740623b6db54e2b80be0846"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-types-wrapper.log",
+      "sha256": "064526e2a92275dfd643cf10def6753856e5f246b1a14af063004fc833427025"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-types.log",
+      "sha256": "80149dbe6139444704259b65621525e16d5e9c0c4f725a1a83a4c66bc4cdaea1"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-upstream.log",
+      "sha256": "a364d619c22acbbdf5207deb5d89840b22e14284c5451b6ffd16e753fd11581d"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-worktree-final.log",
+      "sha256": "e7cea092ba4e6b02b833e87a1456b5f0d67e48c4f3fdf554ba0020322d08cc6f"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-worktree-last.log",
+      "sha256": "e7cea092ba4e6b02b833e87a1456b5f0d67e48c4f3fdf554ba0020322d08cc6f"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-worktree.log",
+      "sha256": "e7cea092ba4e6b02b833e87a1456b5f0d67e48c4f3fdf554ba0020322d08cc6f"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-writer-brief.log",
+      "sha256": "48479815ba7a008dcf4bd4b1a8505d54cc7a6682644e58c119b3f46cc6aca43b"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-writer-next.log",
+      "sha256": "cd5f3d7e172c98c3fdf0c57b7c6c5adf9dfca3b94e538555e37c08f8b456f95e"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-stat-writer-verify.log",
+      "sha256": "f90886cebc04c7384ae6fc68b6a6f5d9f1210d8461f4712c56c2a615edf35be8"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-static.log",
+      "sha256": "05a9d4941e19fbdb999818180b3702bc31478da9fbdf7ffcaec30585e9e8eafa"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-status.log",
+      "sha256": "c5d263748abd96d1eb9520725f05dd30eec1bb9a452d511f3d560367478c91f6"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-types.log",
+      "sha256": "fbf0fc3f1611ffb721508ec435666fe4838ba8436a9dd8e25d072776dc8a7621"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-vite.log",
+      "sha256": "19baef566ded5845010eead67dabe28be602954a8fc042c95900fb3f701bea1a"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-wasm-build.log",
+      "sha256": "6e37110033a0b9f4af5cd9ba9be84c065cdf466c0aa8b26e463d65aa85c73a8a"
+    },
+    {
+      "path": "apps/office/coverage/native-directory-writer-verify.log",
+      "sha256": "f90886cebc04c7384ae6fc68b6a6f5d9f1210d8461f4712c56c2a615edf35be8"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "apps/office/src/sal/osl/unx/file_misc.ts",
+      "sha256": "68d454f9036a607b5ccb43e23c09b8399972359cbe3173f0fc21a84512b2d8a8"
+    },
+    {
+      "path": "apps/office/src/sal/osl/unx/file_impl.ts",
+      "sha256": "ccd273e4c0577681cd5e03a87ba5a3565438fd4222673819c7b43e19a0260cc0"
+    },
+    {
+      "path": "apps/office/src/sal/osl/unx/file_path_helper.ts",
+      "sha256": "a82702928ae78b7cc0149785532d5a19f8c12333927badb8ec4b0267717b433f"
+    },
+    {
+      "path": "apps/office/src/sal/inc/osl/file.ts",
+      "sha256": "bac33533eddd71c38db85aa7ae169d1cfbbe8e47283ee37f0947fef7ce66c6eb"
+    },
+    {
+      "path": "apps/office/src/sal/inc/osl/file.hxx.ts",
+      "sha256": "8b1405794034155e679483be49cf20303b57ecce11e353885d72888168350584"
+    },
+    {
+      "path": "apps/office/src/external/emscripten/file.ts",
+      "sha256": "7109a916c6c4ee3b1561217ab2b681612f8e3eb7caf5e0c57f5a5d24f8393c3a"
+    },
+    {
+      "path": "apps/office/src/sal/osl/unx/directory.test.ts",
+      "sha256": "bf3b36df8eeabc82d8c77853104606414b4cf0db57e7a69cffa462a7a28944b7"
+    },
+    {
+      "path": "third_party/libxml2-wasm/osl-file.c",
+      "sha256": "586633247713cb14a34647feb3abd5d898d45c8fc771de58fa42b76733afc324"
+    },
+    {
+      "path": "scripts/build-libxml2-wasm.py",
+      "sha256": "61e366543a14f6870e29d942c94021165fa5cb4d068b9c318f38b398d36fdfee"
+    }
+  ],
+  "suspectedIssues": "WRITER603..604/CALC666..667",
+  "remaining": [
+    "Four existing metadata/SfxMedium type errors cause full npm build wrapper failure; standalone production Vite build passes.",
+    "Existing comphelper/sax module cycle; no new dependency violation.",
+    "Native OOM/invalid pointers/physical threads/readdir/closedir error delivery and repeated-success-open leak remain source-reviewed/unqualified.",
+    "Native ZipPackageStream/root ZipPackage/full XStorage and actual model/filter/UI import/export/reopen remain unfinished.",
+    "No parent task completed, no full-suite cadence increment; goal remains active."
+  ],
+  "scopedLintCommand": "npx eslint apps/office/src/sal/osl/unx/directory.test.ts apps/office/src/sal/osl/unx/file_misc.ts apps/office/src/sal/osl/unx/file_impl.ts apps/office/src/sal/osl/unx/file_path_helper.ts apps/office/src/sal/inc/osl/file.ts apps/office/src/sal/inc/osl/file.hxx.ts apps/office/src/external/emscripten/file.ts scripts/fixtures/native-tempfile-probe.ts scripts/native-dom-worker-probe.mjs",
+  "scopedFormatCommand": "npx prettier --check apps/office/src/sal/osl/unx/directory.test.ts apps/office/src/sal/osl/unx/file_misc.ts apps/office/src/sal/osl/unx/file_impl.ts apps/office/src/sal/osl/unx/file_path_helper.ts apps/office/src/sal/inc/osl/file.ts apps/office/src/sal/inc/osl/file.hxx.ts apps/office/src/external/emscripten/file.ts scripts/fixtures/native-tempfile-probe.ts scripts/native-dom-worker-probe.mjs"
+}
