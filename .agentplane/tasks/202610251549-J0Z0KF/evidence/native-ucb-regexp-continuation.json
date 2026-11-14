@@ -1,0 +1,399 @@
+{
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "recordedAt": "2026-11-14T16:45:57.076663+00:00",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "status": "bounded-prerequisite-pass-parent-rework",
+  "summary": "Original restricted Regexp and complete ordered RegexpMap/iterator mechanism, with actual native RTL strings and explicit original Val copy/destruction. Exact scheme grammar, ASCII folding, counted UTF16, guarded literals, authority/domain boundaries, translation serialization and source equality omissions are retained. VM arrays lower vector storage; no host RegExp/URL parser or fake content provider supplies core behavior. Iterator cached member address is stable through lazy refresh using original temporary move assignment.",
+  "sourceQaQualification": "No dedicated UCB Regexp/RegexpMap QA was found in the local pinned corpus.49 source-derived assertions cover grammar, malformed syntax, native string lifetime, source map/iterator contracts and all18 actual officecfg UCB URLTemplate values; broader broker/provider QA is unfinished.",
+  "checks": [
+    {
+      "command": "cd apps/office && npx vitest run src/ucb/source/regexp/regexp.test.ts --coverage --coverage.include=src/ucb/source/regexp/regexp.ts --coverage.include=src/ucb/source/inc/regexpmap.ts --coverage.reporter=json-summary --coverage.reporter=text --coverage.reportsDirectory=coverage/native-ucb-regexp-current --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.perFile=true",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-regexp-current.log",
+      "evidence": "All49 tests pass, including all18 pinned configuration URL templates. Regexp99.47 statements/99.34 branches/100 functions/100 lines and RegexpMap98.47/96.96/96.42/99.14 independently pass90."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-regexp-browser-current.log",
+      "evidence": "Actual native RTL/RegexpMap values in Chromium main and DOM-free Worker: file ASCII fold, domain precedence, default fallback/iteration and source equality collision."
+    },
+    {
+      "command": "npm --prefix apps/office run typecheck",
+      "result": "fail",
+      "log": "apps/office/coverage/native-ucb-regexp-types-final.log",
+      "evidence": "Only same4 metadata/MediaDescriptor/SfxMedium errors; no new owner/test type errors."
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-regexp-tools.log",
+      "evidence": "Tools compile."
+    },
+    {
+      "command": "npx eslint apps/office/src/ucb/source/regexp/regexp.ts apps/office/src/ucb/source/inc/regexp.ts apps/office/src/ucb/source/inc/regexpmap.ts apps/office/src/ucb/source/regexp/regexp.test.ts scripts/fixtures/native-ucb-regexp-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-regexp-eslint-current.log",
+      "evidence": "Changed source/probe lint passes; no JSDoc warning baseline."
+    },
+    {
+      "command": "npx prettier --check apps/office/src/ucb/source/regexp/regexp.ts apps/office/src/ucb/source/inc/regexp.ts apps/office/src/ucb/source/inc/regexpmap.ts apps/office/src/ucb/source/regexp/regexp.test.ts scripts/fixtures/native-ucb-regexp-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-regexp-format-current.log",
+      "evidence": "All matched files formatted."
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-regexp-docs-final.log",
+      "evidence": "5409 authored files pass."
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-regexp-provenance-current.log",
+      "evidence": "2623 modules:2386 mapped/199 browser adaptations/38 infrastructure. No semantic parity promotion."
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-regexp-registry-current.log",
+      "evidence": "semanticViolationCount0. Facade records no locally declared symbols; its exported symbols are mapped to the actual implementation in separate provenance."
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "log": "apps/office/coverage/native-ucb-regexp-dependencies.log",
+      "evidence": "Only existing comphelper/sax cycle remains."
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-regexp-size.log",
+      "evidence": "Source sizes pass; existing decomposition advisories retained."
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-regexp-final-check-1.log",
+      "evidence": "Source boundaries retained."
+    },
+    {
+      "command": "npx vitest run scripts/check-module-boundaries-xml.test.ts scripts/native-file-access-boundary.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-regexp-final-check-5.log",
+      "evidence": "12 tests/2 files pass."
+    },
+    {
+      "command": "cd apps/office && npx vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-regexp-vite-current.log",
+      "evidence": "Standalone production bundling; combined build remains blocked by4 type errors."
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-regexp-static-current.log",
+      "evidence": "4 relative bundles, no backend endpoints."
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-regexp-final-check-2.log",
+      "evidence": "doctor OK; existing hook advisory retained."
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-regexp-final-check-3.log",
+      "evidence": "Routing passes."
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-regexp-diff-final.log",
+      "evidence": "No whitespace errors."
+    },
+    {
+      "command": "git status --short --untracked-files=all",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-regexp-status-before-checkpoint.log",
+      "evidence": "Pre-checkpoint WIP snapshot retained; unrelated changes preserved."
+    }
+  ],
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 283,
+        "covered": 282,
+        "skipped": 0,
+        "pct": 99.64
+      },
+      "statements": {
+        "total": 323,
+        "covered": 320,
+        "skipped": 0,
+        "pct": 99.07
+      },
+      "functions": {
+        "total": 45,
+        "covered": 44,
+        "skipped": 0,
+        "pct": 97.77
+      },
+      "branches": {
+        "total": 219,
+        "covered": 216,
+        "skipped": 0,
+        "pct": 98.63
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/ucb/source/inc/regexpmap.ts": {
+      "lines": {
+        "total": 117,
+        "covered": 116,
+        "skipped": 0,
+        "pct": 99.14
+      },
+      "functions": {
+        "total": 28,
+        "covered": 27,
+        "skipped": 0,
+        "pct": 96.42
+      },
+      "statements": {
+        "total": 131,
+        "covered": 129,
+        "skipped": 0,
+        "pct": 98.47
+      },
+      "branches": {
+        "total": 66,
+        "covered": 64,
+        "skipped": 0,
+        "pct": 96.96
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/ucb/source/regexp/regexp.ts": {
+      "lines": {
+        "total": 166,
+        "covered": 166,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 17,
+        "covered": 17,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 192,
+        "covered": 191,
+        "skipped": 0,
+        "pct": 99.47
+      },
+      "branches": {
+        "total": 153,
+        "covered": 152,
+        "skipped": 0,
+        "pct": 99.34
+      }
+    }
+  },
+  "issues": [
+    "WRITER612",
+    "WRITER613",
+    "CALC675",
+    "CALC676"
+  ],
+  "initialFindings": [
+    "Initial fixture expected more than20 config patterns, but the actual pinned file contains exactly18; fixture now asserts the authoritative18 and parses every value.",
+    "Original registry facade record incorrectly listed reexported names as local declarations; the facade now accurately records no local declarations, retaining named source provenance and the separate implementation owner. No checker suppression or semantic parity promotion.",
+    "Source review corrected iterator cache replacement to stable member move assignment; current49 tests and browser/Worker results supersede the initial passing snapshot."
+  ],
+  "remaining": [
+    "Real ProviderListEntry/RegexpMap specialization, UniversalContentBroker configuration/commands and registered file provider/content/TaskManager remain unfinished. No URL-open success is claimed.",
+    "Prior independent file-UCP stream and ZipFileAccess coverage failures remain failures; new passing regexp owners do not waive them.",
+    "Physical native ABI/allocation/debug/vector invalidation and general Val assignment/lifetime profiles beyond actual declared native object specializations remain unqualified.",
+    "Native ZipPackageStream/root ZipPackage/XStorage/SfxMedium/MediaDescriptor and full DOCX/XLSX model/filter/export/reopen/UI remain incomplete.",
+    "Same4 metadata type errors and existing comphelper/sax cycle remain."
+  ],
+  "fullSuite": "Not due: approved ten completed task cadence not reached; both broad parents remain DOING.",
+  "hashes": [
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-current.log",
+      "sha256": "71d1561626b8fb116745b7127f46639aab0c524e0d7810c0d694a896f7a57d3c"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-browser-current.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-types-final.log",
+      "sha256": "fbf0fc3f1611ffb721508ec435666fe4838ba8436a9dd8e25d072776dc8a7621"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-eslint-current.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-format-current.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-docs-final.log",
+      "sha256": "2c71f3a07ebe15058821b001fcde18130150facea08377e0bb417061b2c08ed2"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-provenance-current.log",
+      "sha256": "b37993a1fea81f95b14dbf95467b4a7e20ed62cf60933b2cf19213cea6c83f69"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-registry-current.log",
+      "sha256": "a323d922bc2ea862c71f2e92fc67e0f14048ab864c4b7d186c3140b9391607ad"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-dependencies.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-size.log",
+      "sha256": "a2d5e90b110b21d9bc1f556c152472490e841acc1bed4fc93d180a7f4bd2309c"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-final-check-1.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-final-check-5.log",
+      "sha256": "9c39ae7b70b341342b062db9ed1fdc88632147e7b12cf38cd4de0c5a9d91bfe0"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-vite-current.log",
+      "sha256": "8f2d68236756e9255842da333b70667fe739d40bb78c22a232a83a64a9a44f20"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-static-current.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-final-check-2.log",
+      "sha256": "efc1a87dd9874ee66add05c79f572088f5c52ac6266728a3c71c0d48f394e83f"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-final-check-3.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-diff-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-status-before-checkpoint.log",
+      "sha256": "fa351268f334d5a3cc60c947a4ff3d96167f7ec8d385d8fabe619b902228757c"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-regexp-current/coverage-summary.json",
+      "sha256": "392be85cdbcad1bcf89bb1506bd967bc780f3a712841f3d959c0d562b480d308"
+    },
+    {
+      "path": "apps/office/src/ucb/source/regexp/regexp.ts",
+      "sha256": "e3fc70a60293e82ecbddad580f14c174cb449e3ae62cf49c707370e010d05f8d"
+    },
+    {
+      "path": "apps/office/src/ucb/source/inc/regexp.ts",
+      "sha256": "8a8804d63203aeade3072066376d39a899440d1c62043aad26d193b4cbe7d783"
+    },
+    {
+      "path": "apps/office/src/ucb/source/inc/regexpmap.ts",
+      "sha256": "3c8bc94a6782dc5c8dde7ee8a17d4a3b9e9e5bd67b3d3cc4f0922ca3ac4dbbb2"
+    },
+    {
+      "path": "apps/office/src/ucb/source/regexp/regexp.test.ts",
+      "sha256": "361b7f01b75694518a82f4c3396f2f2aaa08fbb27fdc817b9a3939a9559a11f4"
+    },
+    {
+      "path": "scripts/fixtures/native-ucb-regexp-probe.ts",
+      "sha256": "4aaa65e0c6657a5fa780890337d0dff80ffe6053c7ebbb898e0455733868a01a"
+    },
+    {
+      "path": "scripts/fixtures/native-fastparser-consumer-probe.ts",
+      "sha256": "a9372bed039239ddb58edf95602b159391cf15188d95da8ab49844914827903e"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "sha256": "49550a3ae89dbdba7c4abdf1fc14c5c543e2ad4d0840264501e9c8c982308378"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "sha256": "fdae885c47bc7b8affba786cd8d9adcbd7287354bf6c9cc3336cd83bb3882d41"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "sha256": "05d28d2183dad2c73b5895eafe6e26b88f3cf564735a86f1b7076b7417c3d124"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucb/source/regexp/regexp.cxx",
+      "sha256": "4ebbfe2db538397d5bffd9ff27a047be38c47ca8ee4045688ad36ac8e3e0fc7b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucb/source/inc/regexp.hxx",
+      "sha256": "ddc52d424ab18eb8d7d8121fd8244cda654dd5d814b23b41b12b373eed6d1f02"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucb/source/inc/regexpmap.hxx",
+      "sha256": "3161cecba587da2f7d567ebe4e9ad046bcbca87c10df0c74085ca204a720eed8"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucb/source/core/providermap.hxx",
+      "sha256": "bde5705fd7e6c27bdaca6e0fabba15d9555370ddd190bc218b365694b4162f46"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucb/source/core/ucb.cxx",
+      "sha256": "41fef69ed10362a529ef5e9aa89e1acf30b71bf3ab395608ac6effcb40a76693"
+    },
+    {
+      "path": "vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/ucb/Configuration.xcu",
+      "sha256": "4788010235d782a5168a1193835104f9412c954833e27e7e2d2b6230c6d911f9"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucb/source/regexp/regexp.ts.json",
+      "sha256": "770a831b4044d98d5105dd09cc12914881656d3f58f19532dca21b8d4cffe861"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucb/source/inc/regexp.ts.json",
+      "sha256": "da382851f9e53d22b454d3124e052a1c8ea5d58fea76239d868ae2ffbea2e24e"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucb/source/inc/regexpmap.ts.json",
+      "sha256": "048090ed68eb5c1ce995d5a0680a9a0860bda94a0e04ae1f8acdb39d6e96575a"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucb/source/regexp/regexp.ts.json",
+      "sha256": "7406054accbe737e88b0979bbd94d85c5442a44f5e47015c15a5f70b31791bca"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucb/source/inc/regexp.ts.json",
+      "sha256": "143f593303469582b24386f87554529f5e86ba7d86d1d24eea2f70a774f5cc59"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucb/source/inc/regexpmap.ts.json",
+      "sha256": "b0386517fafd528a5c4c2f1ec2a473062d706c444537c6d0cb10d83e523925a6"
+    }
+  ]
+}
