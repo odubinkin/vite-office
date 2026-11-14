@@ -1,0 +1,163 @@
+{
+  "scope": "Explicitly approved selected Emscripten current-security/native handle and byte-home prerequisites for original file URL/TempFile paths; no full public security/file URL or DOCX/XLSX completion claim.",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "approval": {
+    "request": "call_e6d18aceb8f947a69a5134e31a6619ed",
+    "reply": "\u0414\u0430, \u043f\u0435\u0440\u0435\u043d\u0435\u0441\u0442\u0438 \u0438\u0441\u0445\u043e\u0434\u043d\u044b\u0435 \u043a\u043e\u043d\u0442\u0440\u0430\u043a\u0442\u044b \u0432 \u0443\u043a\u0430\u0437\u0430\u043d\u043d\u044b\u0445 \u0433\u0440\u0430\u043d\u0438\u0446\u0430\u0445",
+    "proposal": ".agentplane/tasks/202610251549-J0Z0KF/evidence/file-url-home-authority-proposal.md",
+    "boundaries": "Existing WASM/MEMFS only; no host mount/files, credentials/login, external DNS or network connections."
+  },
+  "sourceSha256": {
+    "third_party/libxml2-wasm/osl-security.c": "1e116824af729eaf09bb21127f040b032d00c47d4b3b59cdd11176079ee68e93",
+    "third_party/libxml2-wasm/binding.c": "61d2f43f0648c9864e44065ed559ae01449d331594ec683270753835909f9c37",
+    "third_party/libxml2-wasm/source.json": "6c93271c6b5a98fdf900b7ef236b5447eaa2c1c6cc9763d8ef540fd5e72bb8c9",
+    "third_party/libxml2-wasm/artifact.json": "5c5a020329c14ef39f1261a51661bedd32829b0acabefc09f1f0c7a6bc29ae07",
+    "third_party/libxml2-wasm/generated-api.json": "1dd9551b28fa787225e8e9f25e7d705fc7d339bd1cff06d9a06e18c68ee5b5e0",
+    "third_party/libxml2-wasm/index.d.ts": "7888d034f0b054c035fc816bd198b1466a457cf95cec30a3c789139be517d909",
+    "third_party/libxml2-wasm/libxml2.mjs": "ef1bad0f505ae22e30f2cb96e36f69ebec626808359ddf87fad481d999a265ac",
+    "scripts/build-libxml2-wasm.py": "cb4744bef5c1bea85128622c8e343594f2c35c391d788981d049668306af26b7",
+    "apps/office/src/sal/osl/unx/security.ts": "eb76b0c5d5a92341968192acfdb9349b06fd16b9280c7a5c56292c3b9b4db6ee",
+    "apps/office/src/sal/inc/osl/security.h.ts": "c2d090f4a4e47e31980b5a321e8feb7f8bad8ae07b9049ec67f88d5fe1269193",
+    "apps/office/src/sal/osl/unx/security.test.ts": "d0ca47587f67bfd9b4ed53145e577e4173031be2d4e25dc8dd5aee6f0d53d1d8",
+    "apps/office/src/sal/osl/unx/security.bootstrap.test.ts": "879fe4dc94c20e1bd41d95bb5e6dc12a075e632b24f08c829a7d908161feac53",
+    "scripts/fixtures/native-security-probe.ts": "6a51a42da3ef6390aa4e1ffb04dc2d772dbaeede4f6bb9af2195a3d4bcd3d257",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "ca43a4626cb6ef584c6239c8abb13d18396e51092269747b1f6efb19eff595d5",
+    "scripts/native-dom-worker-probe.mjs": "1fb9c7d799a00fbd312c65a845fabb3d5724784f4ef95c66a016bc9cb86eff86"
+  },
+  "checks": [
+    {
+      "command": "python3 scripts/build-libxml2-wasm.py",
+      "result": "pass",
+      "evidence": "Pinned repository-local SDK build;183 exports,851 constants; no download or global configuration",
+      "log": "apps/office/coverage/native-security-build.log",
+      "sha256": "15ed6bf9fb973fc1faf817a54b7cc94ea94ff98647d631ea9c4f18e6da14a76f"
+    },
+    {
+      "command": "cd apps/office && vitest run security, security.bootstrap, file.access, nlsupport, ZipPackageFolder.save, ZipPackageFolder.native, ZipOutputStream, ZipPackageBuffer",
+      "result": "pass",
+      "evidence": "54 tests in8 files",
+      "log": "apps/office/coverage/native-security-related-final.log",
+      "sha256": "67c194c3ce48b2b2b19e2d1b8400673ee7a52e277f58cdc7cab79c19c144beac"
+    },
+    {
+      "command": "cd apps/office && vitest run src/sal/osl/unx/security.test.ts src/sal/osl/unx/security.bootstrap.test.ts --coverage --coverage.include=src/sal/osl/unx/security.ts --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90",
+      "result": "pass",
+      "evidence": "7 tests; complete selected TS owner100 in all dimensions naturally; native C branch/OOM not measured",
+      "log": "apps/office/coverage/native-security-coverage-corrected.log",
+      "sha256": "e3f5c9970c6d2657069b1d43e4d24ba5397f82819229200e020c6aed0d8c4c5c"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "evidence": "Actual current context/byte-home/null unchanged and full existing native DOM/ZIP probes pass in Chromium main/DOM-free Worker",
+      "log": "apps/office/coverage/native-security-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "cd apps/office && vite build",
+      "result": "pass",
+      "evidence": "Vite production output; typecheck recorded separately",
+      "log": "apps/office/coverage/native-security-production-build.log",
+      "sha256": "7c177fb7704e7a90cf9b640cd20a0f907b576f70b5b67cd623753f0ab5055570"
+    },
+    {
+      "command": "cd apps/office && npm run typecheck",
+      "result": "fail",
+      "evidence": "Exactly four baseline SfxDocumentMetaData.storage.ts errors",
+      "log": "apps/office/coverage/native-security-types.log",
+      "sha256": "a9434f10a68a1e5c94d7ab20773d47510e38e2252740623b6db54e2b80be0846"
+    },
+    {
+      "command": "eslint changed native security/header/tests and browser fixtures",
+      "result": "pass",
+      "evidence": "No lint findings after removing forbidden test non-null assertion",
+      "log": "apps/office/coverage/native-security-lint-corrected.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "evidence": "Tools typecheck",
+      "log": "apps/office/coverage/native-security-tools-final.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "prettier --check changed security source/tests/helper/metadata/docs",
+      "result": "pass",
+      "evidence": "Scoped formatting",
+      "log": "apps/office/coverage/native-security-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "evidence": "File size check",
+      "log": "apps/office/coverage/native-security-size.log",
+      "sha256": "1ced3a68850db35bac0e1a404c02d69b7b1e763792420cbb8d454d21cb5c45a5"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "evidence": "Baseline JSDoc failures; no security-owner findings",
+      "log": "apps/office/coverage/native-security-docs.log",
+      "sha256": "03bc18aef30bca0974dbce6c60c4f6f63ef2e76250865177eae76d9b93c7a790"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "evidence": "Pre-existing comphelper/sax cycle retained",
+      "log": "apps/office/coverage/native-security-deps.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "evidence": "116 required paths;32 retired roots",
+      "log": "apps/office/coverage/native-security-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "evidence": "2593 runtime modules;2357 mapped",
+      "log": "apps/office/coverage/native-security-provenance-complete.log",
+      "sha256": "09a4cc72973e4f4641782013326a220337432edb7c9b7e5253f8a8c4d6883a82"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "evidence": "Registry invariants/parity; zero semantic violations",
+      "log": "apps/office/coverage/native-security-registry-complete.log",
+      "sha256": "29de52ee9c3f1c8bc3bf395f94378709d57600cc2d36f0290dee5332cfa0f31e"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "evidence": "OK with existing missing-hook warning",
+      "log": "apps/office/coverage/native-security-doctor.log",
+      "sha256": "fc098257de85bf293e76de547230167984cdce8d251287f194940273b05cd595"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "evidence": "Policy routing OK",
+      "log": "apps/office/coverage/native-security-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "evidence": "No whitespace errors",
+      "log": "apps/office/coverage/native-security-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "upstreamQA": "Ported sal/qa/osl/security/osl_Security.cxx::ctors::ctors_001 relevant to implemented current-security scope. Other source security QA requires unimplemented/unapproved operations and is not claimed ported. Critical byte-home null/output, unset/empty/nonexistent HOME, dynamic real directory/file selection and actual bootstrap cases added. Native C allocation/ABI/invalid handle/OOM and non-Emscripten profiles unqualified.",
+  "corrections": "Initial bootstrap test incorrectly expected null rather than the actual undefined pre-init getter; fixed assertion without runtime reset/mock. Header type declaration moved to actual C contract with documented .h loader discriminator. Test non-null assertion removed. Initial metadata/coverage/lint failures preserved in logs; corrected checks supersede them.",
+  "remaining": [
+    "Public osl_getHomeDir Unicode conversion, original file URL functions and Security C++ wrapper; approved local hostname/FQDN/authority dependencies",
+    "Actual TempFile/SvFileStream, native ZipPackageStream/root package/storage and full DOCX/XLSX model/filter/UI acceptance",
+    "Prior native folder89.01 aggregate/86.36 owner branch gap remains; not diluted with new security owner",
+    "Four baseline type errors, comphelper/sax cycle and JSDoc failures remain; no task completion/full-suite cadence increment"
+  ]
+}
