@@ -1,0 +1,447 @@
+{
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "recordedAt": "2026-11-14T16:15:05.292829+00:00",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "status": "bounded-prerequisite-rework",
+  "summary": "Original registered ZipFileAccess, both interface declarations, native sink and exact source UTF16 pattern algorithms; actual Content sink overload; browser/Worker production factory integration. URL extraction ABI bug corrected by actual negative-provider test. No fake package/provider or changed primary browser open/save policy.",
+  "sourceQaQualification": "Original testZip64 styles1112 assertion and all26 a2z one-megabyte payload rows are ported over genuine seekable stream initialization. Original URL-provider setup, native ThreadPool/concurrency test and physical C++ allocator/thread/ABI domains remain unqualified; this is not complete original package QA.",
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 260,
+        "covered": 240,
+        "skipped": 0,
+        "pct": 92.3
+      },
+      "statements": {
+        "total": 284,
+        "covered": 256,
+        "skipped": 0,
+        "pct": 90.14
+      },
+      "functions": {
+        "total": 28,
+        "covered": 28,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 104,
+        "covered": 89,
+        "skipped": 0,
+        "pct": 85.57
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/package/source/zippackage/ZipPackageSink.ts": {
+      "lines": {
+        "total": 5,
+        "covered": 5,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 5,
+        "covered": 5,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/package/source/zippackage/zipfileaccess.patterns.ts": {
+      "lines": {
+        "total": 39,
+        "covered": 39,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4,
+        "covered": 4,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 46,
+        "covered": 45,
+        "skipped": 0,
+        "pct": 97.82
+      },
+      "branches": {
+        "total": 31,
+        "covered": 30,
+        "skipped": 0,
+        "pct": 96.77
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/package/source/zippackage/zipfileaccess.ts": {
+      "lines": {
+        "total": 216,
+        "covered": 196,
+        "skipped": 0,
+        "pct": 90.74
+      },
+      "functions": {
+        "total": 21,
+        "covered": 21,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 233,
+        "covered": 206,
+        "skipped": 0,
+        "pct": 88.41
+      },
+      "branches": {
+        "total": 73,
+        "covered": 59,
+        "skipped": 0,
+        "pct": 80.82
+      }
+    }
+  },
+  "checks": [
+    {
+      "command": "cd apps/office && npx vitest run src/package/source/zippackage/zipfileaccess.test.ts --coverage --coverage.include=src/package/source/zippackage/zipfileaccess.ts --coverage.include=src/package/source/zippackage/zipfileaccess.patterns.ts --coverage.include=src/package/source/zippackage/ZipPackageSink.ts --coverage.reporter=json-summary --coverage.reporter=text --coverage.reportsDirectory=coverage/native-zip-access-current --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.perFile=true",
+      "result": "fail",
+      "log": "apps/office/coverage/native-zip-access-current.log",
+      "evidence": "All35 assertions pass; scoped90 coverage fails; individual service88.41 statements/80.82 branches/100 functions/90.74 lines. Sink100 all; patterns97.82/96.77/100/100."
+    },
+    {
+      "command": "cd apps/office && npx vitest run src/package/source/zippackage/zipfileaccess.test.ts src/package/source/zipapi/ZipFile.test.ts src/package/source/zipapi/native-entry-read.test.ts src/package/source/zipapi/ZipFile.buffered.test.ts src/ucbhelper/source/client/native-content.test.ts src/ucbhelper/source/client/native-content-exceptions.test.ts src/ucbhelper/source/client/native-contracts.test.ts --coverage --coverage.include=src/package/source/zippackage/zipfileaccess.ts --coverage.include=src/package/source/zippackage/zipfileaccess.patterns.ts --coverage.include=src/package/source/zippackage/ZipPackageSink.ts --coverage.reporter=json-summary --coverage.reporter=text --coverage.reportsDirectory=coverage/native-zip-access-final --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.perFile=true",
+      "result": "fail",
+      "log": "apps/office/coverage/native-zip-access-related-final.log",
+      "evidence": "168 assertions/7 files pass before the added URL-negative test and corrected string extraction; final35 test run supersedes service scope. Coverage failure retained."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-access-browser.log",
+      "evidence": "Production registered native service over real UNO input in Chromium main and DOM-free module Worker: one entry, length17, two independent readers start104,101, disposed methods throw."
+    },
+    {
+      "command": "npm --prefix apps/office run typecheck",
+      "result": "fail",
+      "log": "apps/office/coverage/native-zip-access-typecheck-current.log",
+      "evidence": "Only four known incomplete metadata/MediaDescriptor/SfxMedium dependencies; no ZipFileAccess errors."
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-access-tools.log",
+      "evidence": "Tools compile."
+    },
+    {
+      "command": "npx eslint scripts/fixtures/native-zip-access-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs scripts/module-boundaries/allowed-edges.mjs scripts/check-module-boundaries-xml.test.ts apps/office/src/package/source/zippackage/zipfileaccess.ts apps/office/src/package/source/zippackage/zipfileaccess.patterns.ts apps/office/src/package/source/zippackage/ZipPackageSink.ts apps/office/src/package/source/zippackage/zipfileaccess.test.ts apps/office/src/offapi/com/sun/star/packages/zip/XZipFileAccess.ts apps/office/src/offapi/com/sun/star/packages/zip/XZipFileAccess2.ts apps/office/src/ucbhelper/source/client/content.ts apps/office/src/package/inc/HashMaps.ts apps/office/src/desktop/browser/app/uno-components.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-access-eslint-final.log",
+      "evidence": "All changed owner/tool files pass; latest additions independently checked in final-changes-eslint log."
+    },
+    {
+      "command": "npx eslint apps/office/src/package/source/zippackage/zipfileaccess.test.ts apps/office/src/package/source/zippackage/zipfileaccess.ts scripts/fixtures/native-zip-access-probe.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-access-final-changes-eslint.log",
+      "evidence": "Final added URL test/string extraction passes lint."
+    },
+    {
+      "command": "npx prettier --check scripts/fixtures/native-zip-access-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs scripts/module-boundaries/allowed-edges.mjs scripts/check-module-boundaries-xml.test.ts apps/office/src/package/source/zippackage/zipfileaccess.ts apps/office/src/package/source/zippackage/zipfileaccess.patterns.ts apps/office/src/package/source/zippackage/ZipPackageSink.ts apps/office/src/package/source/zippackage/zipfileaccess.test.ts apps/office/src/offapi/com/sun/star/packages/zip/XZipFileAccess.ts apps/office/src/offapi/com/sun/star/packages/zip/XZipFileAccess2.ts apps/office/src/ucbhelper/source/client/content.ts apps/office/src/package/inc/HashMaps.ts apps/office/src/desktop/browser/app/uno-components.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-access-format-current.log",
+      "evidence": "All matched source files formatted."
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-access-docs-current.log",
+      "evidence": "5398 authored source files pass."
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-access-provenance-current.log",
+      "evidence": "2616 runtime modules:2379 mapped/199 browser adaptations/38 infrastructure. No semantic parity promotion."
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "log": "apps/office/coverage/native-zip-access-dependencies.log",
+      "evidence": "Only existing comphelper -> sax -> comphelper cycle; original package -> ucbhelper edge explicitly mapped."
+    },
+    {
+      "command": "npx vitest run scripts/check-module-boundaries-xml.test.ts scripts/native-file-access-boundary.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-access-static-tests.log",
+      "evidence": "11 tests/2 files."
+    },
+    {
+      "command": "cd apps/office && npx vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-access-vite.log",
+      "evidence": "Standalone production bundling; combined build remains blocked by same4 type errors."
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-access-static-build.log",
+      "evidence": "Relative assets,4 JavaScript bundles,no backend endpoints."
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-access-check-1.log",
+      "evidence": "Size check passes existing budgets."
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-access-check-2.log",
+      "evidence": "Source boundaries retained."
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-access-check-3.log",
+      "evidence": "Registry semanticViolationCount0; foundation/unverified preserved."
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-access-check-4.log",
+      "evidence": "doctor OK; existing hook advisory retained."
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-access-check-5.log",
+      "evidence": "Routing passes."
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-zip-access-check-6.log",
+      "evidence": "No whitespace errors."
+    }
+  ],
+  "issues": [
+    "WRITER608",
+    "WRITER609",
+    "CALC671",
+    "CALC672"
+  ],
+  "remaining": [
+    "ZipFileAccess service coverage below90: genuine URL/provider/owned-close success and defensive source branches remain unqualified; no synthetic branch forcing.",
+    "Generated ZipFileAccess.createWithURL helper and its original declared InteractiveIOException hierarchy remain unbound.",
+    "Actual UCB broker/file provider, native ZipPackageStream/root ZipPackage/XStorage/SfxMedium/MediaDescriptor chains remain unfinished.",
+    "Four metadata type errors and existing comphelper/sax cycle remain.",
+    "Full DOCX/XLSX native model/filter/export/reopen and existing UI acceptance remain unfinished.",
+    "Earlier independent failed coverage scopes remain failures; no aggregate waiver."
+  ],
+  "fullSuite": "Not run: ten completed task cadence not reached; both approved parents remain DOING.",
+  "hashes": [
+    {
+      "path": "apps/office/coverage/native-zip-access-current.log",
+      "sha256": "35818e0200b6da5022bc5006401bc39b38c23a6567a411e6caac60aab4fb1009"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-related-final.log",
+      "sha256": "5f259149e0e8853624dda0f63e0c0a25567e2dd424785e3e0792785daa56bbfd"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-typecheck-current.log",
+      "sha256": "fbf0fc3f1611ffb721508ec435666fe4838ba8436a9dd8e25d072776dc8a7621"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-eslint-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-final-changes-eslint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-format-current.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-docs-current.log",
+      "sha256": "a33f0953760adedf69ff4f345ae588eba006e2e192f7a9d34f19cbcfafde17be"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-provenance-current.log",
+      "sha256": "1dc20bc8e5281e825c99cd1ba2669d2eac709f0f93a16245dde11e924a09b14d"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-dependencies.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-static-tests.log",
+      "sha256": "5b955063d1c8149483375e9fa67b4e1118b7b5175c045a0125b6bcc7a0beeb17"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-vite.log",
+      "sha256": "9ed8f857a5fac428027627f64129ee3532159259101b956ac87af367350c08f6"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-static-build.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-check-1.log",
+      "sha256": "fcb18fee7f9ce73f85cf1a7f0b35f5cfdd336722950704596bd0027c235dd449"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-check-2.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-check-3.log",
+      "sha256": "c57cbff245c45c2859c6056b2a4464fd0fc38e7f795657b51ff1642ece31bfe7"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-check-4.log",
+      "sha256": "3b500a577d7a5ed80b09a778e16701ed5c044ee81ac92fbf61a3abf95e1dd150"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-check-5.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-check-6.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-zip-access-current/coverage-summary.json",
+      "sha256": "328c12bb3f581e9c10f4fc6a6d6ebc946fe82c0325b7393a8fa0c30c75697d5d"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/packages/zip/XZipFileAccess.ts",
+      "sha256": "2443b114a15ca91e07346dd216d56a3cb3bcb30f0edeab5814c2369b60914b1a"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/packages/zip/XZipFileAccess2.ts",
+      "sha256": "784c58eade852ac0f3f54ecc5ce2017c86e224d7c1953e56a8b0a12d62ac9238"
+    },
+    {
+      "path": "apps/office/src/package/source/zippackage/ZipPackageSink.ts",
+      "sha256": "c366c412c4f67d5783154eaf707904273293449a0bea9db40d35440fcf28b78f"
+    },
+    {
+      "path": "apps/office/src/package/source/zippackage/zipfileaccess.ts",
+      "sha256": "36257fa30bb3c52aaf946527d50424d745c50c22fa8c1a565b3321cd1b61c491"
+    },
+    {
+      "path": "apps/office/src/package/source/zippackage/zipfileaccess.patterns.ts",
+      "sha256": "c28ec43d5e6204719d1edf48f188f13fb53699691b4fddf420485906e38334a1"
+    },
+    {
+      "path": "apps/office/src/package/source/zippackage/zipfileaccess.test.ts",
+      "sha256": "a67c826e893b6f88cb207a0ef4e8c7c63fa8bbfd5882bc2467dcb5ba3c640a3d"
+    },
+    {
+      "path": "apps/office/src/package/inc/HashMaps.ts",
+      "sha256": "1ec9b2338d003933bdd97d1194b7ee6555f4e4a7b5cf40ba6aca3c6fff3f279c"
+    },
+    {
+      "path": "apps/office/src/ucbhelper/source/client/content.ts",
+      "sha256": "4c1c88dc0fe5407ba7e93cdd6726ad6a0ef6050395a42aa0ad0abc70fcad0a0f"
+    },
+    {
+      "path": "apps/office/src/desktop/browser/app/uno-components.ts",
+      "sha256": "a2d5b36f3d456f6e9c672c224d79c51d8b2818e6faa74c5d6327002e50d3f767"
+    },
+    {
+      "path": "scripts/fixtures/native-zip-access-probe.ts",
+      "sha256": "7829133c35f01a26a02e419e9ab160960434be35a69e37ce9d3ffff7be38c1a5"
+    },
+    {
+      "path": "scripts/fixtures/native-fastparser-consumer-probe.ts",
+      "sha256": "e4beb7d0d25a2082a99ec3214647783c7b292402cc9de034b3b48887e3d04fa8"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "sha256": "0ed4390269e31bf12809c720022ed23ef3e1ea048086ffa5b20c0c2bf693c623"
+    },
+    {
+      "path": "scripts/module-boundaries/allowed-edges.mjs",
+      "sha256": "00edb6e9b0ada1588f2d26bdd32da6dae10bb7d03bf6c4b49c7fde19a75b910a"
+    },
+    {
+      "path": "scripts/check-module-boundaries-xml.test.ts",
+      "sha256": "5eb7a50298d7d1c94b7284804404bec9e51c3f452b89d9afd0f5aac5664f5bc3"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "sha256": "79b9b5d706833e528b297cc2c85d4798570eb5122c44e8027ee36591eb1da568"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "sha256": "daafbc3947e80dddff9576d9604c6c7f073b5983ca11875082c67c3746f4da02"
+    },
+    {
+      "path": "vendor/libreoffice-reference/package/source/zippackage/zipfileaccess.cxx",
+      "sha256": "716b82e47594c629a43f09b2ab278a218d9a3a7b2edd9e4bd46deb5384d13415"
+    },
+    {
+      "path": "vendor/libreoffice-reference/package/inc/zipfileaccess.hxx",
+      "sha256": "2ec0012a2ebf6b6f56d6b6fc4142b0c80cf9033f72ec3b406b12da8d61eb4d1f"
+    },
+    {
+      "path": "vendor/libreoffice-reference/package/source/zippackage/ZipPackageSink.cxx",
+      "sha256": "8d7523e41e9db9621e8c0bc90c4896aa1ee9a6978f62555b66ff008491bb530a"
+    },
+    {
+      "path": "vendor/libreoffice-reference/package/util/package2.component",
+      "sha256": "dc77891bd2820654609a1387616cbd922aef402c7bf2754d5d98a759e3df3c6f"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/packages/zip/XZipFileAccess.idl",
+      "sha256": "1b00d5bf2f672db50bc3362a7683de9ac6b0ef020ab7b906c77c912bee6b3ed8"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/packages/zip/XZipFileAccess2.idl",
+      "sha256": "2c63b2eb21f96237b633794cfd4688fe68ad449f6a2cedc398d9ee99c2c324fd"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucbhelper/source/client/content.cxx",
+      "sha256": "1d4611164b04dceb2b21e39d24ad62c4ee983083e3a3da7f1ddd40c90ef9c735"
+    },
+    {
+      "path": "vendor/libreoffice-reference/package/qa/cppunit/data/export64.zip",
+      "sha256": "0c00dc8db59acdea94678df8800fbe14470b548719dfc8c68df69818b44a9748"
+    },
+    {
+      "path": "vendor/libreoffice-reference/package/qa/cppunit/data/a2z.zip",
+      "sha256": "af9789568c55e5b9e4d08c575ce589610150863b4c66e5b5b1865e5104c6a20d"
+    }
+  ]
+}
