@@ -1,0 +1,161 @@
+{
+  "scope": "Original UNIX system-path to file-URL C entry point, public security home conversion and consumed Security C++ wrapper; real native home/context dependencies reused. Reverse URL/authority/hostname and full DOCX/XLSX paths remain incomplete.",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSha256": {
+    "apps/office/src/sal/osl/unx/file_url.ts": "dbace1fa5ed91a03fcbdfaecda00e27e639f996145ff4e34f119f797ada6d42c",
+    "apps/office/src/sal/osl/unx/file_url.test.ts": "4c0118b9b334f3735d7de910a4d7186b56e47ba1f9c70897de722e5b63278ea2",
+    "apps/office/src/sal/osl/unx/security.ts": "1f9ab1f1355d3b4bdd6ff90014a5e508090b4eaa0896b6baff2c9f91cf43cc65",
+    "apps/office/src/sal/inc/osl/security.ts": "6d77384ed6442393530da022b60278a8bb3eaf0e6473aa3d7cce90418d0ae055",
+    "apps/office/src/sal/inc/osl/security.h.ts": "76ed13828a4aef7d8697b6149b26f03995f231da60f788be294f5606d1be5dfb",
+    "apps/office/src/sal/inc/osl/file.ts": "9f4192519afd259f3968af1ab9ea65dec4ca315a5d6f1308a0ee7c977587404f",
+    "scripts/fixtures/native-security-probe.ts": "6b6b060819873cecd99b7f22dfc4fea68a330478b62dfe248429d54edbb5d096",
+    "scripts/native-dom-worker-probe.mjs": "9b7d1ec04304f439b2d17e0b9628e94e2f39ad21062c2a0c909f0a74ca31cf4c"
+  },
+  "checks": [
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/osl/unx/file_url.test.ts src/sal/osl/unx/security.test.ts src/sal/osl/unx/security.bootstrap.test.ts",
+      "result": "pass",
+      "evidence": "29 tests, including all6 original UNIX getFileURLFromSystemPath QA cases",
+      "log": "apps/office/coverage/native-file-url-public-tests.log",
+      "sha256": "68de4dacdaec6c3ab3d68cbebc5cc9061c39bd4c42a23aa92cb890938129802c"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/osl/unx/file_url.test.ts src/sal/osl/unx/security.test.ts src/sal/osl/unx/security.bootstrap.test.ts src/sal/osl/unx/file_url.encoding.test.ts src/sal/osl/unx/file_url.encoding.ascii.test.ts src/sal/osl/unx/nlsupport.test.ts src/sal/osl/unx/file.access.test.ts",
+      "result": "pass",
+      "evidence": "47 tests in7 files",
+      "log": "apps/office/coverage/native-file-url-public-related.log",
+      "sha256": "2c8adad737b90a3dfde324e083f79e9aa4b04e06b7da1df6c102881edb3bdc6c"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/osl/unx/file_url.test.ts --coverage --coverage.include=src/sal/osl/unx/file_url.ts --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90",
+      "result": "fail",
+      "evidence": "Complete file_url owner95.74 statements/89.28 branches/100 functions/100 lines; branch gate remains below90",
+      "log": "apps/office/coverage/native-file-url-public-single-owner-coverage.log",
+      "sha256": "c25689f41a53eb28c28fb4b96454088ba660c795773e7d9c3ede31af56f8cb9c"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/osl/unx/file_url.test.ts src/sal/osl/unx/security.test.ts src/sal/osl/unx/security.bootstrap.test.ts --coverage --coverage.include=src/sal/osl/unx/file_url.ts --coverage.include=src/sal/osl/unx/security.ts --coverage.include=src/sal/inc/osl/security.ts --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90",
+      "result": "pass",
+      "evidence": "Combined owners91.17 branches; does not qualify the independent file_url owner gap. Security owners remain100.",
+      "log": "apps/office/coverage/native-file-url-public-coverage.log",
+      "sha256": "442ad2bbaa7cef80d6fade52e00c612858250d25058eabe4bf04fb3bbcfdd7d0"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "evidence": "Actual public home URL and aliased Unicode/path conversion plus existing native DOM/ZIP graph in Chromium main and DOM-free Worker",
+      "log": "apps/office/coverage/native-file-url-public-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "result": "fail",
+      "evidence": "Only4 baseline SfxDocumentMetaData.storage.ts errors after fixing two nullable borrowed-pointer annotations",
+      "log": "apps/office/coverage/native-file-url-public-types-corrected.log",
+      "sha256": "a9434f10a68a1e5c94d7ab20773d47510e38e2252740623b6db54e2b80be0846"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vite build",
+      "result": "pass",
+      "evidence": "Production Vite build; typecheck failure recorded independently",
+      "log": "apps/office/coverage/native-file-url-public-build.log",
+      "sha256": "868bdc5ac18ad52fe38d87859981567d3fde386a998c78f156d0b6ec6136536a"
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/sal/osl/unx/file_url.ts apps/office/src/sal/osl/unx/file_url.test.ts apps/office/src/sal/osl/unx/security.ts apps/office/src/sal/inc/osl/security.ts apps/office/src/sal/inc/osl/security.h.ts apps/office/src/sal/inc/osl/file.ts scripts/fixtures/native-security-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "evidence": "No lint findings",
+      "log": "apps/office/coverage/native-file-url-public-lint-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "evidence": "Tools typecheck",
+      "log": "apps/office/coverage/native-file-url-public-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "evidence": "Pre-existing comphelper/sax cycle",
+      "log": "apps/office/coverage/native-file-url-public-deps.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "evidence": "2595 runtime modules/2359 mapped",
+      "log": "apps/office/coverage/native-file-url-public-provenance-corrected.log",
+      "sha256": "de59f1198b0b57516dd88dcc573a0be88da7172b60dead9d07873760ea4a386e"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "evidence": "Registry invariants/parity; zero semantic violations",
+      "log": "apps/office/coverage/native-file-url-public-registry-corrected.log",
+      "sha256": "70278fdeec00a3a3e05d42f78ed2a2c45a468039ffa79bf6d82bb52a4df8d031"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "evidence": "Existing JSDoc failures; no file_url/security findings",
+      "log": "apps/office/coverage/native-file-url-public-docs.log",
+      "sha256": "03bc18aef30bca0974dbce6c60c4f6f63ef2e76250865177eae76d9b93c7a790"
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/sal/osl/unx/file_url.ts apps/office/src/sal/osl/unx/file_url.test.ts apps/office/src/sal/osl/unx/security.ts apps/office/src/sal/inc/osl/file.ts apps/office/src/sal/inc/osl/security.h.ts apps/office/src/sal/inc/osl/security.ts scripts/fixtures/native-security-probe.ts scripts/native-dom-worker-probe.mjs docs/program/registry/shared/runtime/sal/osl/unx/file_url.ts.json docs/program/registry/shared/provenance/sal/osl/unx/file_url.ts.json docs/program/registry/shared/runtime/sal/inc/osl/security.ts.json docs/program/registry/shared/provenance/sal/inc/osl/security.ts.json docs/program/registry/shared/runtime/sal/osl/unx/security.ts.json docs/program/registry/shared/provenance/sal/osl/unx/security.ts.json docs/program/registry/shared/runtime/sal/inc/osl/security.h.ts.json docs/program/registry/shared/provenance/sal/inc/osl/security.h.ts.json docs/program/registry/shared/runtime/sal/inc/osl/file.ts.json docs/program/registry/shared/provenance/sal/inc/osl/file.ts.json docs/program/writer-upstream-suspected-issues.md docs/program/calc-upstream-suspected-issues.md",
+      "result": "pass",
+      "evidence": "Scoped formatting",
+      "log": "apps/office/coverage/native-file-url-public-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "evidence": "File size check",
+      "log": "apps/office/coverage/native-file-url-public-size.log",
+      "sha256": "45b2c1e8515143a94b824e01baa07332ec19c1014186c9234c23c6bb1021022d"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "evidence": "116 required paths/32 retired roots",
+      "log": "apps/office/coverage/native-file-url-public-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "evidence": "Doctor OK with existing missing-hook warning",
+      "log": "apps/office/coverage/native-file-url-public-doctor.log",
+      "sha256": "a54e090fa0bcfe9b611e43ecf8d4b2a3d4b6a5563660a4e76ef6143c4ccc6ba0"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "evidence": "Routing OK",
+      "log": "apps/office/coverage/native-file-url-public-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "evidence": "No whitespace errors",
+      "log": "apps/office/coverage/native-file-url-public-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "upstreamQA": "All six active UNIX SystemPath_FileURL::getFileURLFromSystemPath_001/002/003/004/004_1/005 from sal/qa/osl/file/osl_File.cxx are ported. _001 uses an existing real MEMFS directory and actual WASM HOME, preserving its original expected expression. Windows variants are outside the selected profile. Critical output retention/aliasing, relative paths, source case sensitivity, no dot normalization, Unicode/percent, tilde slash adaptation, native fallback and ignored-status scenarios are added. This is source-backed QA, not a compiled LibreOffice native oracle certificate.",
+  "sourceFindings": [
+    "WRITER575/CALC638 preserve original HOME escape re-encoding during tilde expansion",
+    "WRITER576/CALC639 preserve original public getHomeDir ignored path-conversion failure"
+  ],
+  "corrections": "Two nullable borrowed-pointer type errors corrected by using the actual non-null source argument. Original case labels are represented as table metadata, not dummy assertions. Provenance now cites qualified Security methods rather than basename-only similarity. Failed initial logs retained.",
+  "remaining": [
+    "Independent file_url89.28 branch gap remains; no fake null native allocation or callback injection to close it",
+    "Source reverse file URL conversion, hostname/FQDN/authority, full native file/SvFileStream/TempFile",
+    "Native package stream/root/storage and true Writer/Calc model/filter/UI import/export acceptance",
+    "Prior folder coverage gap,4 baseline metadata type errors, comphelper/sax cycle and JSDoc findings remain. No full-suite cadence increment or task completion."
+  ]
+}
