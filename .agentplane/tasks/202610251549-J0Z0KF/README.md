@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 397
+revision: 400
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-14T06:16:54.516Z"
+  updated_at: "2026-11-14T06:29:25.131Z"
   updated_by: "CODER"
-  note: "Original file diagnostics/header macro integration passes9 focused and34 combined cases, both independent scoped90 and actual main/Worker. File security approval pending, no dependent edits; broad native format/model/UI unfinished. See evidence/native-file-error-continuation.json."
-  attempts: 124
+  note: "Complete RTL locale prerequisite and all 12 upstream QA assertions implemented; 14 focused/32 related tests and actual Chromium main/Worker pass. Final owner90 gate passes. Evidence native-locale-continuation.json retains baseline failures and pending file-open approval. Full XLSX kernel/filter/UI acceptance unfinished."
+  attempts: 125
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1992,8 +1995,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-14T06:29:25.131Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Complete RTL locale prerequisite and all 12 upstream QA assertions implemented; 14 focused/32 related tests and actual Chromium main/Worker pass. Final owner90 gate passes. Evidence native-locale-continuation.json retains baseline failures and pending file-open approval. Full XLSX kernel/filter/UI acceptance unfinished."
+  -
+    type: "status"
+    at: "2026-11-14T06:29:28.934Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-14T06:18:43.837Z"
+doc_updated_at: "2026-11-14T06:29:28.934Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -5728,6 +5744,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-14T06:29:25.131Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Complete RTL locale prerequisite and all 12 upstream QA assertions implemented; 14 focused/32 related tests and actual Chromium main/Worker pass. Final owner90 gate passes. Evidence native-locale-continuation.json retains baseline failures and pending file-open approval. Full XLSX kernel/filter/UI acceptance unfinished.
+    Attempts: 125
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T06:29:17.722Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -6313,6 +6359,10 @@ sections:
     Original OSeekableInputWrapper and generated TempFile/XTempFile now use the real native SDK std::mutex/scoped_lock, actual production service manager, exact seekable identity and original lazy copy/close body. Native artifact rebuild from pinned local SDK succeeds:166exports/851constants, artifact SHA fc83bba5924d99405e8ce72e0c63f1aa4afc3a5237816751b46c60bdebb0e090.5functional,38related DOM/SAX/ZIP and56boundary tests pass; actual Chromium main/DOM-free Worker probes pass with genuine missing TempFile error. OTempFileService is still absent; copy does not work yet, and wrapper/helper whole-owner scoped90 fails (retained, not diluted). Mutex and XTempFile independently pass90. No fake TempFile/memory-copy provider, JS mutex, private fields, altered counters/thresholds, network download or dependency install. WRITER561/CALC624 documents potential constructor-self lifetime. Source-backed comphelper->external edge added; old cycle,4metadata types,157JSDoc and prior failed coverages remain. Lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass. See evidence/native-seekable-input-continuation.json. Next implement actual TempFile/native IO service, then package streams/storage/model/filter/UI; no task/goal completion or full suite due.
 
     Original SvFileStream GetSvError int/OSL tables now retain source order/sentinel/fallback and explicit overload domains. All original IO packed macros/SVSTREAM aliases are present; SvStream uses these shared header macros instead of three locally reconstructed values.9focused cases pass with both whole owners independently above scoped90 (100allmetrics naturally through real source/error/stream scenarios).34combined related cases include those9; real MEMFS failures, native SvStream warnings/sticky errors and actual Chromium main/DOM-free Worker output pass. WRITER562/CALC625 preserve general invalid-handle alias; WRITER563..564/CALC626..627 document source-only pending security observations. Refreshed concrete security proposal and async approval request; actual reply pending, no dependent mutation. Lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass; old4metadata types/cycle/157docs and all earlier independent failed coverages remain. See evidence/native-file-error-continuation.json. Native file open/TempFile/package streams/storage/models/filter/UI and original full service QA remain unfinished; goal active, no full suite due.
+
+    ### RTL locale prerequisite continuation
+
+    Original complete RTL locale registration/default/accessor/finalization and public header are ported. All12 pinned upstream QA assertions plus2 critical registration/lifecycle regressions pass;32 related tests and real Chromium main/DOM-free Worker pass. Full locale owner passes unchanged scoped90 gates. Hash-only XOR collision retained and recorded as WRITER565/CALC628. Existing JS GC and RTL logical string reference contracts are preserved without a manual JS allocator. Final lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass; same4 metadata type errors, comphelper/sax cycle and157 old JSDoc findings remain. Browser initial executable lookup, registry reexport metadata and new test JSDoc failures were corrected and rechecked. See evidence/native-locale-continuation.json. File-open security approval remains pending; no dependent mutation. Process locale/thread charset, URL/TempFile and complete package/model/filter/UI acceptance remain unfinished. Parent stays rework/active, not complete; no full suite due.
 id_source: "generated"
 ---
 ## Summary
@@ -10057,6 +10107,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-14T06:29:25.131Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Complete RTL locale prerequisite and all 12 upstream QA assertions implemented; 14 focused/32 related tests and actual Chromium main/Worker pass. Final owner90 gate passes. Evidence native-locale-continuation.json retains baseline failures and pending file-open approval. Full XLSX kernel/filter/UI acceptance unfinished.
+Attempts: 125
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T06:29:17.722Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -10646,3 +10726,7 @@ Complete original WrapStreamForShare uses actual UNO input/seek/ByteReader, nati
 Original OSeekableInputWrapper and generated TempFile/XTempFile now use the real native SDK std::mutex/scoped_lock, actual production service manager, exact seekable identity and original lazy copy/close body. Native artifact rebuild from pinned local SDK succeeds:166exports/851constants, artifact SHA fc83bba5924d99405e8ce72e0c63f1aa4afc3a5237816751b46c60bdebb0e090.5functional,38related DOM/SAX/ZIP and56boundary tests pass; actual Chromium main/DOM-free Worker probes pass with genuine missing TempFile error. OTempFileService is still absent; copy does not work yet, and wrapper/helper whole-owner scoped90 fails (retained, not diluted). Mutex and XTempFile independently pass90. No fake TempFile/memory-copy provider, JS mutex, private fields, altered counters/thresholds, network download or dependency install. WRITER561/CALC624 documents potential constructor-self lifetime. Source-backed comphelper->external edge added; old cycle,4metadata types,157JSDoc and prior failed coverages remain. Lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass. See evidence/native-seekable-input-continuation.json. Next implement actual TempFile/native IO service, then package streams/storage/model/filter/UI; no task/goal completion or full suite due.
 
 Original SvFileStream GetSvError int/OSL tables now retain source order/sentinel/fallback and explicit overload domains. All original IO packed macros/SVSTREAM aliases are present; SvStream uses these shared header macros instead of three locally reconstructed values.9focused cases pass with both whole owners independently above scoped90 (100allmetrics naturally through real source/error/stream scenarios).34combined related cases include those9; real MEMFS failures, native SvStream warnings/sticky errors and actual Chromium main/DOM-free Worker output pass. WRITER562/CALC625 preserve general invalid-handle alias; WRITER563..564/CALC626..627 document source-only pending security observations. Refreshed concrete security proposal and async approval request; actual reply pending, no dependent mutation. Lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass; old4metadata types/cycle/157docs and all earlier independent failed coverages remain. See evidence/native-file-error-continuation.json. Native file open/TempFile/package streams/storage/models/filter/UI and original full service QA remain unfinished; goal active, no full suite due.
+
+### RTL locale prerequisite continuation
+
+Original complete RTL locale registration/default/accessor/finalization and public header are ported. All12 pinned upstream QA assertions plus2 critical registration/lifecycle regressions pass;32 related tests and real Chromium main/DOM-free Worker pass. Full locale owner passes unchanged scoped90 gates. Hash-only XOR collision retained and recorded as WRITER565/CALC628. Existing JS GC and RTL logical string reference contracts are preserved without a manual JS allocator. Final lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass; same4 metadata type errors, comphelper/sax cycle and157 old JSDoc findings remain. Browser initial executable lookup, registry reexport metadata and new test JSDoc failures were corrected and rechecked. See evidence/native-locale-continuation.json. File-open security approval remains pending; no dependent mutation. Process locale/thread charset, URL/TempFile and complete package/model/filter/UI acceptance remain unfinished. Parent stays rework/active, not complete; no full suite due.
