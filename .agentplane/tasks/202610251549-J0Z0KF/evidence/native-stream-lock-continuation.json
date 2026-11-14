@@ -1,0 +1,149 @@
+{
+  "status": "bounded-prerequisite-checkpoint; parent tasks remain DOING/rework",
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "change": "Restore source std::mutex/scoped_lock ownership, exact lock/precheck boundaries and exception cleanup in SvStream-to-UNO input and seekable wrappers. Output source lack of locks and sequence EOF shortcut are preserved.",
+  "sourceQA": "Pinned generic qadevOOo XInputStream available/readBytes/readSomeBytes/skipBytes/closeInput assertions ported on all three real input wrapper classes. No dedicated streamwrap QA found in bounded unotools/comphelper QA search or broader filename fallback. Generic harness providers and native pthread races are not claimed.",
+  "coverage": {
+    "statements": 98.74,
+    "branches": 97.56,
+    "functions": 96.55,
+    "lines": 98.67,
+    "threshold": 90,
+    "owner": "apps/office/src/unotools/source/streaming/streamwrap.ts"
+  },
+  "checks": [
+    {
+      "command": "npm run test:shared -- --coverage --coverage.include=src/unotools/source/streaming/streamwrap.ts --coverage.reportsDirectory=coverage/native-stream-locks-qualified --coverage.reporter=json-summary --coverage.reporter=text --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 src/unotools/source/streaming/streamwrap.test.ts src/comphelper/source/streaming/seekableinput.test.ts src/package/source/zippackage/zipfileaccess.test.ts",
+      "log": "apps/office/coverage/native-stream-locks-qualified.log",
+      "result": "pass",
+      "evidence": "50 tests in 3 related files pass; complete production streamwrap owner passes all four approved 90% metrics."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "log": "apps/office/coverage/native-stream-locks-browser.log",
+      "result": "pass",
+      "evidence": "Actual registered ZIP access and native XML stream IO execute in Chromium main and DOM-free Worker."
+    },
+    {
+      "command": "npx eslint apps/office/src/unotools/source/streaming/streamwrap.ts apps/office/src/unotools/source/streaming/streamwrap.test.ts && npx prettier --check apps/office/src/unotools/source/streaming/streamwrap.ts apps/office/src/unotools/source/streaming/streamwrap.test.ts docs/program/registry/shared/runtime/unotools/source/streaming/streamwrap.ts.json docs/program/registry/shared/provenance/unotools/source/streaming/streamwrap.ts.json && npm run check:docs && npm run check:file-size",
+      "log": "apps/office/coverage/native-stream-locks-final-style.log",
+      "result": "pass",
+      "evidence": "Scoped ESLint/Prettier, JSDoc on 5421 authored files and size check pass."
+    },
+    {
+      "command": "npm run check:source-provenance && npm run inventory:parity && git diff --check",
+      "log": "apps/office/coverage/native-stream-locks-final-registry.log",
+      "result": "pass",
+      "evidence": "2633 runtime modules mapped/classified, registry semanticViolationCount=0, diff check clean."
+    },
+    {
+      "command": "npm run typecheck",
+      "log": "apps/office/coverage/native-stream-locks-types.log",
+      "result": "fail",
+      "evidence": "Tools typecheck passes; four existing errors remain in SfxDocumentMetaData.storage.ts at 340/412/413/440. Full task remains incomplete."
+    },
+    {
+      "command": "npm run check:dependencies",
+      "log": "apps/office/coverage/native-stream-locks-boundaries.log",
+      "result": "fail",
+      "evidence": "Existing comphelper -> sax -> comphelper cycle remains. No edge added by this block."
+    },
+    {
+      "command": "npx vite build --config apps/office/vite.config.ts apps/office && node scripts/check-static-build.mjs",
+      "log": "apps/office/coverage/native-stream-locks-build.log",
+      "result": "pass",
+      "evidence": "Vite completed (4471 transformed modules, observed tool output); static check passes for 4 relative JavaScript bundles. Does not imply successful full npm build, which includes the failing typecheck."
+    },
+    {
+      "command": "npm run test:shared -- --coverage --coverage.include=src/unotools/source/streaming/streamwrap.ts --coverage.reportsDirectory=coverage/native-stream-locks --coverage.reporter=json-summary --coverage.reporter=text src/unotools/source/streaming/streamwrap.test.ts src/comphelper/source/streaming/seekableinput.test.ts src/package/source/zippackage/zipfileaccess.test.ts",
+      "log": "apps/office/coverage/native-stream-locks-tests.log",
+      "result": "fail",
+      "evidence": "Initial 47 functional tests passed, but command retained repository default 100% threshold. Raw report retained. Qualified rerun explicitly uses user-approved 90%, adds 3 upstream QA cases, and passes."
+    }
+  ],
+  "remaining": [
+    "Real TempFileFast/TempFileFastService and package/storage/filter/model/export/reopen/UI acceptance remain incomplete.",
+    "UUID random dependency approval proposal is committed as 12cb94513d8b. No random/crypto code modified while approval is pending.",
+    "Native threads, physical C++ ABI, invalid pointers and allocator failure injection remain unqualified.",
+    "Previously recorded individual-owner coverage gaps are not waived by this owner passing 90%."
+  ],
+  "fullSuite": "Not run; no parent task finished and the ten-completed-task cadence did not advance.",
+  "hashes": [
+    {
+      "path": "apps/office/src/unotools/source/streaming/streamwrap.ts",
+      "sha256": "60ee1ae984f1869b974c28270d38ea658e254673bd3ae5fa4534cd6e7eb143f0"
+    },
+    {
+      "path": "apps/office/src/unotools/source/streaming/streamwrap.test.ts",
+      "sha256": "af23aeba62b696a32a1ae94f78eef15c43b17fde50520aaf05c9713ddbb7bf65"
+    },
+    {
+      "path": "apps/office/src/external/libcxx/mutex.ts",
+      "sha256": "78e99d781d53d64fc3595ce6f479fda553465e944231b1be99054631dc0ffa7b"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/unotools/source/streaming/streamwrap.ts.json",
+      "sha256": "d6c602ffec1e0cf6f9f61ba140f008ad9999f60f4bbb39f6dc79c3309dc84c50"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/unotools/source/streaming/streamwrap.ts.json",
+      "sha256": "17e826befd1255a2e344eb51cc1cf8cc64a4de9f9e5de9d6495c53722ea796da"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/unotools/streamwrap.hxx",
+      "sha256": "d9d570ac9f7105e035b786ef175765339c6ad43d96b00bb710cae120bad2eb38"
+    },
+    {
+      "path": "vendor/libreoffice-reference/unotools/source/streaming/streamwrap.cxx",
+      "sha256": "9773defcff61291343691f7518cdcc811c4b63f4ab2478069ea9f8eaba9eecaa"
+    },
+    {
+      "path": "vendor/libreoffice-reference/qadevOOo/tests/java/ifc/io/_XInputStream.java",
+      "sha256": "619099f3e862c3c17dd96bf837fd89fbe57b3ea9ff9e907f3026e4cc0a50c986"
+    },
+    {
+      "path": "apps/office/coverage/native-stream-locks-qualified/coverage-summary.json",
+      "sha256": "f74e9121f3d183a51993b4791c6c6ad747c304f99b52ee42c6e7a91d59c628c6"
+    },
+    {
+      "path": "apps/office/coverage/native-stream-locks-status-final.log",
+      "sha256": "c9cc1e092eb2f063044bd0eeb6d1faacdb3debf7318c13da82d2da68ee845719"
+    },
+    {
+      "path": "apps/office/coverage/native-stream-locks-qualified.log",
+      "sha256": "73ac0938d398084269e2a4de49f4cc031bdf3cb72e9d43fc24f4810f7c0d17aa"
+    },
+    {
+      "path": "apps/office/coverage/native-stream-locks-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "path": "apps/office/coverage/native-stream-locks-final-style.log",
+      "sha256": "152fb7505d1a96a11a93a3a72550018af6c7d3f2b89dd548e81d57d3a4b4295b"
+    },
+    {
+      "path": "apps/office/coverage/native-stream-locks-final-registry.log",
+      "sha256": "b020a1b0f48f0eeb32cac3b01559107307d1052e0fae2b84531a7a563822dfbc"
+    },
+    {
+      "path": "apps/office/coverage/native-stream-locks-types.log",
+      "sha256": "590fa40b17d19c58037b0fc7f01d550246d5f79c9e3cde4ef76da0ca7ed979f9"
+    },
+    {
+      "path": "apps/office/coverage/native-stream-locks-boundaries.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "path": "apps/office/coverage/native-stream-locks-build.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "path": "apps/office/coverage/native-stream-locks-tests.log",
+      "sha256": "d964935802c44cfb57115509621f2e260358a8b9f558e24adf321600731f9c47"
+    }
+  ]
+}

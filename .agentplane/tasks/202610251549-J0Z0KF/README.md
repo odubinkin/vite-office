@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 457
+revision: 460
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-14T17:14:52.662Z"
+  updated_at: "2026-11-14T17:32:08.482Z"
   updated_by: "CODER"
-  note: "Native UCB command contracts:22 related cases and current14 core cases pass; all10 new complete owners independently meet90 and Chromium main/DOM-free Worker pass. Real broker/provider/transfer/check-in and full DOCX/XLSX package/storage/model/filter/UI remain unfinished. Same4 metadata type errors, existing cycle and earlier independent coverage failures retained. Exact evidence: native-ucb-command-contract-continuation.json."
-  attempts: 144
+  note: "Restored original native stream wrapper lock contracts; 50 related tests and complete owner 90% coverage pass; actual main/Worker ZIP/XML IO and JSDoc pass. Full XLSX storage/model/filter/export/UI remains incomplete; four metadata type errors and existing module cycle remain. Evidence: native-stream-lock-continuation.json."
+  attempts: 145
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2312,8 +2315,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-14T17:32:08.482Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Restored original native stream wrapper lock contracts; 50 related tests and complete owner 90% coverage pass; actual main/Worker ZIP/XML IO and JSDoc pass. Full XLSX storage/model/filter/export/UI remains incomplete; four metadata type errors and existing module cycle remain. Evidence: native-stream-lock-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-14T17:32:14.926Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-14T17:15:43.961Z"
+doc_updated_at: "2026-11-14T17:32:14.926Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -6626,6 +6642,36 @@ sections:
     Attempts: 144
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T17:14:51.950Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-11-14T17:32:08.482Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Restored original native stream wrapper lock contracts; 50 related tests and complete owner 90% coverage pass; actual main/Worker ZIP/XML IO and JSDoc pass. Full XLSX storage/model/filter/export/UI remains incomplete; four metadata type errors and existing module cycle remain. Evidence: native-stream-lock-continuation.json.
+    Attempts: 145
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T17:31:58.527Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
 
     Details:
 
@@ -11613,6 +11659,36 @@ Note: Native UCB command contracts:22 related cases and current14 core cases pas
 Attempts: 144
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T17:14:51.950Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-14T17:32:08.482Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Restored original native stream wrapper lock contracts; 50 related tests and complete owner 90% coverage pass; actual main/Worker ZIP/XML IO and JSDoc pass. Full XLSX storage/model/filter/export/UI remains incomplete; four metadata type errors and existing module cycle remain. Evidence: native-stream-lock-continuation.json.
+Attempts: 145
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T17:31:58.527Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
 
 Details:
 
