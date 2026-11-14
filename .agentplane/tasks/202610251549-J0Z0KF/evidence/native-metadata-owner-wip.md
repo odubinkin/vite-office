@@ -616,3 +616,8 @@ Final source review also retains original FileStatus::isDirectory (Directory or 
 ## Native ZipFileAccess continuation
 
 Original registered service, complete interface declarations, sink, UTF16 wildcard parser/matcher and UCB active-data-sink open overload are implemented. All35 service tests and168 related assertions pass; real Chromium main/DOM-free Worker factory entry reads pass. Source QA qualification, exact commands/logs/hashes and remaining gaps are recorded in native-zip-access-continuation.json. Service coverage remains88.41 statements/80.82 branches/100 functions/90.74 lines; do not treat aggregate90.14 statements as individual acceptance. Four metadata type errors and the existing dependency cycle remain. Whole DOCX/XLSX model/filter/storage/UI scope remains rework. No full suite due and no goal pause/completion.
+
+
+## Native file-UCP stream continuation
+
+Original ReconnectingFile, XInputStream_impl, XStream_impl and TaskHandlerErr are implemented over actual OSL/MEMFS, native mutex and UNO owners. Mechanical byte-pointer binding accepts real initialized Sequence lvalues without a substitute stream/provider. All41 related tests/4 files pass; actual file input feeds registered ZIP access in Chromium main and DOM-free Worker. ReconnectingFile independently passes90; input and duplex owners still fail90 on unqualified error branches. Exact evidence and source QA limits are recorded in native-file-ucp-stream-continuation.json. Full broker/provider/storage/model/filter/UI remains incomplete, same4 metadata type errors and comphelper/sax cycle remain; no full-suite replay, goal pause or completion.

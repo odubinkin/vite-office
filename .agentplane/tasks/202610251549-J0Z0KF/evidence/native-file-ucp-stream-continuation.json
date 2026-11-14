@@ -1,0 +1,469 @@
+{
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "recordedAt": "2026-11-14T16:29:57.030655+00:00",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "status": "bounded-prerequisite-rework",
+  "summary": "Original complete file-UCP ReconnectingFile, XInputStream_impl, XStream_impl and TaskHandlerErr. Real OSL File accepts initialized UNO byte lvalues through mechanical byte-pointer marshalling. Actual native mutex and original facet-call flags retain source lifetime; original std::bad_alloc, close and completion exceptions remain in the owner. No broker/provider/stream replacement or host filesystem access.",
+  "sourceQaQualification": "Pinned qadevOOo ifc/io input available/readBytes/readSomeBytes/skip/close and output write/content-check/flush/close assertions are ported on actual file-UCP owners, supplemented by native reconnect, COW, signed bytes, EOF, missing-file errors, query inheritance, facet lifetime and truncate checks. Complete provider/UNOAPI/native-thread/allocation-error QA remains unqualified or unfinished.",
+  "checks": [
+    {
+      "command": "cd apps/office && npx vitest run src/ucb/source/ucp/file/native-file-streams.test.ts src/sal/osl/unx/file.test.ts src/sal/osl/unx/file_url.open.test.ts src/unotools/source/streaming/streamwrap.test.ts --coverage --coverage.include=src/ucb/source/ucp/file/filrec.ts --coverage.include=src/ucb/source/ucp/file/filinpstr.ts --coverage.include=src/ucb/source/ucp/file/filstr.ts --coverage.reporter=json-summary --coverage.reporter=text --coverage.reportsDirectory=coverage/native-ucb-stream-current --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.perFile=true",
+      "result": "fail",
+      "log": "apps/office/coverage/native-ucb-stream-current.log",
+      "evidence": "41 tests/4 files pass, including14 new tests. Individual90 coverage passes ReconnectingFile only; input/duplex error branches remain below90."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-stream-browser.log",
+      "evidence": "Actual file-UCP input feeds registered ZipFileAccess in Chromium main and DOM-free Worker; both native stream facets, truncate/write/read/completion/close and disconnected size/cursor transitions execute."
+    },
+    {
+      "command": "npm --prefix apps/office run typecheck",
+      "result": "fail",
+      "log": "apps/office/coverage/native-ucb-stream-types-current.log",
+      "evidence": "Same four metadata/MediaDescriptor/SfxMedium errors only; no new stream or test type errors."
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-stream-tools.log",
+      "evidence": "Tools compile."
+    },
+    {
+      "command": "npx eslint apps/office/src/ucb/source/ucp/file/filerror.ts apps/office/src/ucb/source/ucp/file/filrec.ts apps/office/src/ucb/source/ucp/file/filinpstr.ts apps/office/src/ucb/source/ucp/file/filstr.ts apps/office/src/ucb/source/ucp/file/native-file-streams.test.ts apps/office/src/sal/inc/osl/file.hxx.ts scripts/fixtures/native-zip-access-probe.ts scripts/fixtures/native-ucb-file-stream-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs scripts/module-boundaries/allowed-edges.mjs scripts/check-module-boundaries.mjs scripts/check-module-boundaries-xml.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-stream-lint-current.log",
+      "evidence": "Changed source and tooling lint pass."
+    },
+    {
+      "command": "npx prettier --check apps/office/src/ucb/source/ucp/file/filerror.ts apps/office/src/ucb/source/ucp/file/filrec.ts apps/office/src/ucb/source/ucp/file/filinpstr.ts apps/office/src/ucb/source/ucp/file/filstr.ts apps/office/src/ucb/source/ucp/file/native-file-streams.test.ts apps/office/src/sal/inc/osl/file.hxx.ts scripts/fixtures/native-zip-access-probe.ts scripts/fixtures/native-ucb-file-stream-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs scripts/module-boundaries/allowed-edges.mjs scripts/check-module-boundaries.mjs scripts/check-module-boundaries-xml.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-stream-format.log",
+      "evidence": "All matched files formatted."
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-stream-provenance-current.log",
+      "evidence": "2620 runtime modules:2383 mapped/199 browser adaptations/38 infrastructure. Foundation/unverified statuses retained."
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "log": "apps/office/coverage/native-ucb-stream-dependencies-current.log",
+      "evidence": "Only existing comphelper/sax cycle remains. Original ucb owner is classified with source-backed dependencies."
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-stream-final-check-0.log",
+      "evidence": "5404 authored files pass."
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-stream-check-3.log",
+      "evidence": "5417 authored files scanned; existing decomposition advisories retained."
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-stream-check-4.log",
+      "evidence": "Source tree check passes."
+    },
+    {
+      "command": "npx vitest run scripts/check-module-boundaries-xml.test.ts scripts/native-file-access-boundary.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-stream-check-5.log",
+      "evidence": "12 tests/2 files pass; new original module edge assertions."
+    },
+    {
+      "command": "cd apps/office && npx vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-stream-vite.log",
+      "evidence": "Standalone production bundling passes; combined build still blocked by4 type errors."
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-stream-registry-current.log",
+      "evidence": "Registry check passes with semanticViolationCount0; no whole-module parity certification."
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-stream-final-check-2.log",
+      "evidence": "doctor OK, existing hook advisory retained."
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-stream-final-check-3.log",
+      "evidence": "Routing passes."
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-stream-final-check-4.log",
+      "evidence": "4 relative JavaScript bundles, no backend endpoints."
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-stream-final-check-5.log",
+      "evidence": "No whitespace errors."
+    },
+    {
+      "command": "git status --short --untracked-files=all",
+      "result": "pass",
+      "log": "apps/office/coverage/native-ucb-stream-status-before-checkpoint.log",
+      "evidence": "Authoritative WIP snapshot before task checkpoint; unrelated source WIP preserved."
+    }
+  ],
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 209,
+        "covered": 183,
+        "skipped": 0,
+        "pct": 87.55
+      },
+      "statements": {
+        "total": 236,
+        "covered": 204,
+        "skipped": 0,
+        "pct": 86.44
+      },
+      "functions": {
+        "total": 47,
+        "covered": 45,
+        "skipped": 0,
+        "pct": 95.74
+      },
+      "branches": {
+        "total": 145,
+        "covered": 121,
+        "skipped": 0,
+        "pct": 83.44
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/ucb/source/ucp/file/filinpstr.ts": {
+      "lines": {
+        "total": 53,
+        "covered": 50,
+        "skipped": 0,
+        "pct": 94.33
+      },
+      "functions": {
+        "total": 12,
+        "covered": 12,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 62,
+        "covered": 57,
+        "skipped": 0,
+        "pct": 91.93
+      },
+      "branches": {
+        "total": 34,
+        "covered": 27,
+        "skipped": 0,
+        "pct": 79.41
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/ucb/source/ucp/file/filrec.ts": {
+      "lines": {
+        "total": 52,
+        "covered": 50,
+        "skipped": 0,
+        "pct": 96.15
+      },
+      "functions": {
+        "total": 13,
+        "covered": 13,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 57,
+        "covered": 55,
+        "skipped": 0,
+        "pct": 96.49
+      },
+      "branches": {
+        "total": 53,
+        "covered": 51,
+        "skipped": 0,
+        "pct": 96.22
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/ucb/source/ucp/file/filstr.ts": {
+      "lines": {
+        "total": 104,
+        "covered": 83,
+        "skipped": 0,
+        "pct": 79.8
+      },
+      "functions": {
+        "total": 22,
+        "covered": 20,
+        "skipped": 0,
+        "pct": 90.9
+      },
+      "statements": {
+        "total": 117,
+        "covered": 92,
+        "skipped": 0,
+        "pct": 78.63
+      },
+      "branches": {
+        "total": 58,
+        "covered": 43,
+        "skipped": 0,
+        "pct": 74.13
+      }
+    }
+  },
+  "issues": [
+    "WRITER610",
+    "WRITER611",
+    "CALC673",
+    "CALC674"
+  ],
+  "remaining": [
+    "Per-owner90 coverage still fails input branch79.41 and duplex statements78.63/branches74.13/lines79.8; genuine allocation, read, destructor, failed-close/sync branches are not fabricated or suppressed.",
+    "ReconnectingFile96.49 statements/96.22 branches/100 functions/96.15 lines passes90; this does not waive other owners.",
+    "Actual UCB broker, configuration/provider map and real file provider/TaskManager/content/property/command graph remain unbound. New stream owners alone do not enable URL opening.",
+    "Prior ZipFileAccess below90 coverage and missing generated service helper/declared exception hierarchy remain.",
+    "Native ZipPackageStream/root ZipPackage/XStorage/SfxMedium/MediaDescriptor and complete DOCX/XLSX model/filter/export/reopen/UI remain unfinished.",
+    "Four metadata type errors, existing dependency cycle and all older independent coverage gaps remain."
+  ],
+  "fullSuite": "Not due: zero completed parent tasks in this continuation; no full test replay.",
+  "hashes": [
+    {
+      "path": "apps/office/coverage/native-ucb-stream-current.log",
+      "sha256": "cceeed6739e33bc7cc9c1f67e42a0a51e1b3fb1589a9f1eb4aa6bd17d7d910ae"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-stream-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-stream-types-current.log",
+      "sha256": "fbf0fc3f1611ffb721508ec435666fe4838ba8436a9dd8e25d072776dc8a7621"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-stream-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-stream-lint-current.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-stream-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-stream-provenance-current.log",
+      "sha256": "4f41fd4ee5ee38663c16a2bfe7c124ac84f03d323d27401e30886467f90e0434"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-stream-dependencies-current.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-stream-final-check-0.log",
+      "sha256": "a54c38cab77e63914b52d4ccbb83a867ff51f8ee5ec8ac4efee5c505568a3815"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-stream-check-3.log",
+      "sha256": "735a04b593a70e1fd578cd271e077df2b2992c9358cd43fa60eb6186a39f9ec1"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-stream-check-4.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-stream-check-5.log",
+      "sha256": "98288c7a4a07f7763052bac2a035dfde48f38beebd01c04706f10500ac2ba122"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-stream-vite.log",
+      "sha256": "1a80931d1b059513b5eec34462b312dad17e9b7c0e1c90b14fd74e855e007f59"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-stream-registry-current.log",
+      "sha256": "701410ac8422d9aa6ae97187928363349f13250742a26f08e98ce7f42a863edf"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-stream-final-check-2.log",
+      "sha256": "932661f7df7e2f1f7dc6957769bbe03b599447e9ef3f12a86166bd16456ef607"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-stream-final-check-3.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-stream-final-check-4.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-stream-final-check-5.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-stream-status-before-checkpoint.log",
+      "sha256": "e4a1506ce052a9094bb57aefdd4c21e2b43e465a0d7ffbe1544992b595df52dd"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-stream-current/coverage-summary.json",
+      "sha256": "2749d9696dd89ba9a2a1b2dc4a0b3ca9d80c66a62400259db599cd053a08539b"
+    },
+    {
+      "path": "apps/office/src/ucb/source/ucp/file/filerror.ts",
+      "sha256": "9f903f5924152aff5d4a87bf637e67b40136e9bd82af6aa993b16dfbabba1364"
+    },
+    {
+      "path": "apps/office/src/ucb/source/ucp/file/filrec.ts",
+      "sha256": "a755848ccdc5b274adb83f0df0bb41f815bd22fc2c65a1795f674caabebedc62"
+    },
+    {
+      "path": "apps/office/src/ucb/source/ucp/file/filinpstr.ts",
+      "sha256": "f0178303862cdeda6152a9e9b6a0a24994a7cc58a1ec5b9cc46378efd4f21b01"
+    },
+    {
+      "path": "apps/office/src/ucb/source/ucp/file/filstr.ts",
+      "sha256": "15fa20b68d20ff0df371a9c64212d81c2b79987d8f2f6924490dcfd25f60035b"
+    },
+    {
+      "path": "apps/office/src/ucb/source/ucp/file/native-file-streams.test.ts",
+      "sha256": "bd7d90a8b193a770ee124e9aa67d84b4c2e23e87674ccac895d327e69d51149a"
+    },
+    {
+      "path": "apps/office/src/sal/inc/osl/file.hxx.ts",
+      "sha256": "a1c2e7549c2b3331faf8cb480a0b5f502ad7a035cd4b0dfa9e711f2a3f2c00b7"
+    },
+    {
+      "path": "scripts/fixtures/native-zip-access-probe.ts",
+      "sha256": "f43a7f0d8ffa5ba27f4df967d48ee82650eab2764bc400e51764aa557082b747"
+    },
+    {
+      "path": "scripts/fixtures/native-ucb-file-stream-probe.ts",
+      "sha256": "32dd28eec3bb763dbf112c3605a1e26370c05ceab8953d26c0a424470a8f7f1e"
+    },
+    {
+      "path": "scripts/fixtures/native-fastparser-consumer-probe.ts",
+      "sha256": "5ece7b3ee4a49ab0a4b72cb1e331df18ceb88dee4e1a936b4e913b6585f54ff7"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "sha256": "d040bea748be02f9ef79ec28dd61d7e96b971fc0deb24edd572b68b7c787d379"
+    },
+    {
+      "path": "scripts/module-boundaries/allowed-edges.mjs",
+      "sha256": "47d66432ec1758b6bf4c546616f51e561a11caf407d7f55ce42e179843f9d14f"
+    },
+    {
+      "path": "scripts/check-module-boundaries.mjs",
+      "sha256": "b083025d2e3af42bc04d1b2816860b1fd40c04ae186d9462e7f47a658c104bdc"
+    },
+    {
+      "path": "scripts/check-module-boundaries-xml.test.ts",
+      "sha256": "a9bdad91b51b45b0e068e29a08153e4aaf43c6d1ef6419dc9569417ea52f506a"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "sha256": "0ae263d51f452e480ae4c7f4e6c8ad70e65beef64d7703037599790369d2cfda"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "sha256": "5c6827564dd85caabbba3fdc0be1b201387e35aec31163289ddcb298e7391172"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucb/source/ucp/file/filerror.hxx",
+      "sha256": "012f3e5756f82bcc93167431cbb3b2480013bdc1a0989353d424165fab1f519c"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucb/source/ucp/file/filrec.hxx",
+      "sha256": "2cba9d8545fbf29dc137bc2d0d3484b33bdd2c4dc28dcc8dc0490a65741d3fc5"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucb/source/ucp/file/filrec.cxx",
+      "sha256": "af5dc28921ee530fd3286da6a3714cf1b32762349075c006f2e9cc18285bb787"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucb/source/ucp/file/filinpstr.hxx",
+      "sha256": "385118b5bbea49cbfcbd34d69b227df9cbcefa1a68526fd05c5e1746147d1c09"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucb/source/ucp/file/filinpstr.cxx",
+      "sha256": "7fb011080643228c70081809796bb637f6cf180c791a0f7394b1f3a4343d0dc7"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucb/source/ucp/file/filstr.hxx",
+      "sha256": "fdf0eda258a56b47ff711f209122345e36fd7789c07f8d1a5afc91bdaa149407"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucb/source/ucp/file/filstr.cxx",
+      "sha256": "24c07f4120f9587cf9f9ec56a501a15a03330848e5e4fd0eaa47f15fc0661565"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucb/Library_ucpfile1.mk",
+      "sha256": "c1d35a82205040715fa7b1e1c7f9001ef9f5186e64b3d880a9b0b7f814173229"
+    },
+    {
+      "path": "vendor/libreoffice-reference/qadevOOo/tests/java/ifc/io/_XInputStream.java",
+      "sha256": "619099f3e862c3c17dd96bf837fd89fbe57b3ea9ff9e907f3026e4cc0a50c986"
+    },
+    {
+      "path": "vendor/libreoffice-reference/qadevOOo/tests/java/ifc/io/_XOutputStream.java",
+      "sha256": "84c9795ad8e6ef733ac1fe9a87a512e0a671dd4432e5697bb76945af77954de5"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucb/source/ucp/file/filstr.ts.json",
+      "sha256": "62cf5144582ac1c841c5e6d9932189df10b03abc1cc662b9cd2b143950b8e52e"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucb/source/ucp/file/filerror.ts.json",
+      "sha256": "96f2de0da95e16191d7618289cad5c182cb45bd7264a3253b206c48068011b4b"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucb/source/ucp/file/filinpstr.ts.json",
+      "sha256": "a08ca49625a488ab8c57188684d99ab7daa428e2d02b58b2276647b33ec19498"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucb/source/ucp/file/filrec.ts.json",
+      "sha256": "99ac57d9bc24c3d89431b61648f84e77ea1344e750dde8782678dff34162e917"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucb/source/ucp/file/filstr.ts.json",
+      "sha256": "a8c254fbb643c178ee25c157790f25634f24915ae4cbc3349fef0f352e6113fb"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucb/source/ucp/file/filerror.ts.json",
+      "sha256": "bb777573939923776c990304c597115baa0d9b5f9a8ca34ff7b643964363255a"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucb/source/ucp/file/filinpstr.ts.json",
+      "sha256": "7fa67361a1bb393555e4d75758288c89ad4167772e6bb1751c89661412b73162"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucb/source/ucp/file/filrec.ts.json",
+      "sha256": "0172865a445e221b8897969bccc8c1bb92ccf6cf0c2dc84c6ef08502edc64b99"
+    }
+  ]
+}
