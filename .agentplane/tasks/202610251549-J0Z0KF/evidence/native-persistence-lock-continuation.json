@@ -1,0 +1,208 @@
+{
+  "status": "bounded prerequisite WIP; whole parents remain DOING/rework",
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scope": "Restore actual std::mutex member, exact original guarded IO boundaries and destructor/constructor unwind in existing SwitchablePersistenceStream; port generic source IO QA and verify genuine browser stream copy/replacement.",
+  "preserved": "SwitchPersistenceTo, CloseAll_Impl and waitForCompletion remain unlocked exactly as upstream. Sequence readSomeBytes still delegates readBytes; pointer overload retains its source behavior. No substitute temporary stream/provider or private state patch.",
+  "sourceQA": "Generic qadevOOo XInputStream and XOutputStream available/read/write/content/flush/skip/close assertions run on actual persistence facets. No dedicated persistence QA found in package/comphelper/unotools QA or broader filename fallback. Generic environment/provider matrix and pthread races not claimed.",
+  "upstreamSuspectedIssues": [
+    "WRITER614",
+    "CALC677"
+  ],
+  "coverage": {
+    "result": "fail",
+    "threshold": 90,
+    "statements": 87.74,
+    "branches": 79.54,
+    "functions": 100,
+    "lines": 93.45
+  },
+  "checks": [
+    {
+      "command": "npm run test:shared -- --coverage --coverage.include=src/package/source/xstor/switchpersistencestream.ts --coverage.reportsDirectory=coverage/native-persistence-locks --coverage.reporter=json-summary --coverage.reporter=text --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 src/package/source/xstor/switchpersistencestream.test.ts src/unotools/source/streaming/streamwrap.test.ts src/package/source/zipapi/byte-io.test.ts src/oox/source/core/fastparser.test.ts",
+      "log": "apps/office/coverage/native-persistence-locks-tests.log",
+      "result": "fail",
+      "evidence": "43 functional tests in 4 files pass. Complete source owner fails approved90: 87.74 statements,79.54 branches,100 functions,93.45 lines. Missing capability/positive non-ByteReader paths are not fabricated or excluded."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "log": "apps/office/coverage/native-persistence-locks-browser-copy.log",
+      "result": "pass",
+      "evidence": "Chromium main and DOM-free Worker copy64001 bytes through actual OStorageHelper/persistence/SvStream, switch equal-length backing preserving31999 position and open flags, assert Sequence/raw/tail bytes and disconnection after both closes."
+    },
+    {
+      "command": "npx eslint apps/office/src/package/source/xstor/switchpersistencestream.ts apps/office/src/package/source/xstor/switchpersistencestream.test.ts scripts/fixtures/native-persistence-stream-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs && npx prettier --check apps/office/src/package/source/xstor/switchpersistencestream.ts apps/office/src/package/source/xstor/switchpersistencestream.test.ts scripts/fixtures/native-persistence-stream-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs && npm run check:docs && npm run check:file-size",
+      "log": "apps/office/coverage/native-persistence-locks-style-final.log",
+      "result": "pass",
+      "evidence": "Scoped lint/format, global JSDoc5422 and file-size check pass."
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "log": "apps/office/coverage/native-persistence-locks-tools-final.log",
+      "result": "pass",
+      "evidence": "New browser probe and tools compile."
+    },
+    {
+      "command": "npm run typecheck",
+      "log": "apps/office/coverage/native-persistence-locks-types.log",
+      "result": "fail",
+      "evidence": "Tools pass; same4 errors at SfxDocumentMetaData.storage.ts340/412/413/440 (MediaDescriptor unresolved and native SfxMedium storage constructor/GetOutputStorage/Commit absent)."
+    },
+    {
+      "command": "npm run check:source-provenance && npm run inventory:parity && npx prettier --check docs/program/registry/shared/{runtime,provenance}/package/source/xstor/switchpersistencestream.ts.json && git diff --check",
+      "log": "apps/office/coverage/native-persistence-locks-registry-qualified.log",
+      "result": "pass",
+      "evidence": "2633 runtime modules, registry semanticViolationCount0, scoped record format and diff pass."
+    },
+    {
+      "command": "npm run check:source-provenance && npm run inventory:parity && npx prettier --check docs/program/registry/shared/{runtime,provenance}/package/source/xstor/switchpersistencestream.ts.json && git diff --check",
+      "log": "apps/office/coverage/native-persistence-locks-registry-final.log",
+      "result": "fail",
+      "evidence": "Initial evidence reference to scripts/fixtures was resolved beneath vendor by the existing checker. Removed the unsupported reference; retained actual runtime/test/header anchors and browser probe hashes in this task evidence. Checker unchanged; corrected run passes."
+    },
+    {
+      "command": "npm run check:source-tree && npm run check:file-size",
+      "log": "apps/office/coverage/native-persistence-locks-structure.log",
+      "result": "pass",
+      "evidence": "Tree and size checks pass with existing advisories."
+    },
+    {
+      "command": "ap doctor && node .agentplane/policy/check-routing.mjs && git diff --check",
+      "log": "apps/office/coverage/native-persistence-locks-policy.log",
+      "result": "pass",
+      "evidence": "Doctor/routing/diff pass with existing hook advisories."
+    },
+    {
+      "command": "npm run check:dependencies",
+      "log": "apps/office/coverage/native-persistence-locks-boundaries.log",
+      "result": "fail",
+      "evidence": "Existing comphelper -> sax -> comphelper cycle remains; this block adds no module edge."
+    },
+    {
+      "command": "npx vite build --config apps/office/vite.config.ts apps/office && node scripts/check-static-build.mjs",
+      "log": "apps/office/coverage/native-persistence-locks-build.log",
+      "result": "pass",
+      "evidence": "Standalone production Vite and static4-bundle check pass. Full npm build remains limited by the recorded type errors."
+    }
+  ],
+  "directStreamAudit": "ZipPackage::writeTempFile explicitly writes directly into empty XStream when m_eMode==e_IMode_XStream and !m_pZipFile. TempFileFastService is required for the temporary-copy path, not every fresh export. Pending UUID approval must not block all new-stream export work. Full real ZipPackage/stream/storage/filter/model/UI owners are still incomplete.",
+  "fullSuite": "Not run; no completed agentplane task, no ten-task cadence increment.",
+  "goal": "Active; no pause, completion, blocker declaration, merge or external publication.",
+  "hashes": [
+    {
+      "path": "apps/office/src/package/source/xstor/switchpersistencestream.ts",
+      "sha256": "b918d9475391ca25ad28c7d3f7ab8a437ca1e048e905bce687f41f2be73d2f06"
+    },
+    {
+      "path": "apps/office/src/package/source/xstor/switchpersistencestream.test.ts",
+      "sha256": "c099828b31592937805f6a0814eff682753307081f9f2ac8b1e05da49aca78aa"
+    },
+    {
+      "path": "apps/office/src/external/libcxx/mutex.ts",
+      "sha256": "78e99d781d53d64fc3595ce6f479fda553465e944231b1be99054631dc0ffa7b"
+    },
+    {
+      "path": "scripts/fixtures/native-persistence-stream-probe.ts",
+      "sha256": "95dfccbf38ac1503af8c63b871f39b71869aad7e794d643ad33ce1c9a9ffa11c"
+    },
+    {
+      "path": "scripts/fixtures/native-fastparser-consumer-probe.ts",
+      "sha256": "31e7c893df57baa9545a8413ea8f882df4b2689fc804d75abce0e2c7a980d494"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "sha256": "40c5350c24b79a8eb92480aae4ef070d22a9c41f621e229aecc18f9f42d276ec"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/package/source/xstor/switchpersistencestream.ts.json",
+      "sha256": "f47c191ceb406b1f6bd7c58f3c66bc3b79423fa8cc8d74d90806bb4c7e11c176"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/package/source/xstor/switchpersistencestream.ts.json",
+      "sha256": "9f7cb989847936ebddfa81791a81a07509f7e7c1cc5c42a84d2f48c50f81eb55"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "sha256": "1f3c229fcb62d1bde743c8b120a5a1400bb8d3f876c0633d89f637888b9ba585"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "sha256": "9aa7048fe592277da281b97ba2180d50f0da1db14df395273860c7c5ea6ddba0"
+    },
+    {
+      "path": "vendor/libreoffice-reference/package/source/xstor/switchpersistencestream.hxx",
+      "sha256": "aac6567c87fa628c3dedf6a862220aca77b51cc8b62f1ef6bac935b33d385ce9"
+    },
+    {
+      "path": "vendor/libreoffice-reference/package/source/xstor/switchpersistencestream.cxx",
+      "sha256": "5f6e41310a0181863277aa2cbdf213c35914b269bea19994a0515623d2a3fcca"
+    },
+    {
+      "path": "vendor/libreoffice-reference/package/source/zippackage/ZipPackage.cxx",
+      "sha256": "be8a854493c067906f5b29c674c67737be9f45540d5843af00262e42d26718a5"
+    },
+    {
+      "path": "vendor/libreoffice-reference/qadevOOo/tests/java/ifc/io/_XInputStream.java",
+      "sha256": "619099f3e862c3c17dd96bf837fd89fbe57b3ea9ff9e907f3026e4cc0a50c986"
+    },
+    {
+      "path": "vendor/libreoffice-reference/qadevOOo/tests/java/ifc/io/_XOutputStream.java",
+      "sha256": "84c9795ad8e6ef733ac1fe9a87a512e0a671dd4432e5697bb76945af77954de5"
+    },
+    {
+      "path": "apps/office/coverage/native-persistence-locks/coverage-summary.json",
+      "sha256": "69060cd8676cc18dbc71fc3c342e5d640846f4af828ba60d054f751fdf68c098"
+    },
+    {
+      "path": "apps/office/coverage/native-persistence-locks-status-final.log",
+      "sha256": "711e8e67eb126d324db04a8b140d50aaf4c5e895b241d933c9e865fd2da337a5"
+    },
+    {
+      "path": "apps/office/coverage/native-persistence-locks-tests.log",
+      "sha256": "db3659d60fc322b8011b5d0ee1bdf0711f439160cf6ca56226df781d10463e2d"
+    },
+    {
+      "path": "apps/office/coverage/native-persistence-locks-browser-copy.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "path": "apps/office/coverage/native-persistence-locks-style-final.log",
+      "sha256": "6b05aa54d1436830490d234662f9d3736b581d79c4903d9c344bac515817b053"
+    },
+    {
+      "path": "apps/office/coverage/native-persistence-locks-tools-final.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "path": "apps/office/coverage/native-persistence-locks-types.log",
+      "sha256": "590fa40b17d19c58037b0fc7f01d550246d5f79c9e3cde4ef76da0ca7ed979f9"
+    },
+    {
+      "path": "apps/office/coverage/native-persistence-locks-registry-qualified.log",
+      "sha256": "e2277a20e38d6b58ff001ce0ed9efe9c56cdc63d4c33fd600a379cd3548523ab"
+    },
+    {
+      "path": "apps/office/coverage/native-persistence-locks-registry-final.log",
+      "sha256": "bd410042b4829ff30b183115c962d0daa0b6bfb936ee82b28028c791ea4e3359"
+    },
+    {
+      "path": "apps/office/coverage/native-persistence-locks-structure.log",
+      "sha256": "4f463f67b136c35740a292e5c03c5fe549b472c40d0c4aa8942ac71dc06fdb2e"
+    },
+    {
+      "path": "apps/office/coverage/native-persistence-locks-policy.log",
+      "sha256": "1c0f4cbcaaa8dd9492290d8ecfb645543483abfe265d051811c68af0882fb54d"
+    },
+    {
+      "path": "apps/office/coverage/native-persistence-locks-boundaries.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "path": "apps/office/coverage/native-persistence-locks-build.log",
+      "sha256": "d9d3a91feaf7c5816c3fd0c8e8b30df3be8b745b5d8cc7f6a6620e0df090896c"
+    }
+  ]
+}
