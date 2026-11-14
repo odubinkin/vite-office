@@ -1,0 +1,217 @@
+{
+  "status": "bounded original Deflater checkpoint; whole parents DOING/rework",
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scope": "Pinned pako2.1.0 public low-level streaming API and original Deflater, genuine native ZIP writer integration tests and DOM-free Worker qualification.",
+  "libraryAudit": "deflater-js-library-audit.json",
+  "sourceQA": "Bounded searches of package/qa and comphelper/qa found no direct Deflater/ZipOutputEntry test. Original implementation/header contracts and critical actual-library integration are tested; no direct upstream QA transplant is claimed.",
+  "coverage": {
+    "total": {
+      "statements": 97.26,
+      "branches": 90,
+      "functions": 100,
+      "lines": 97.1
+    },
+    "src/external/zlib/deflate.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "src/package/source/zipapi/Deflater.ts": {
+      "statements": 96.55,
+      "branches": 87.5,
+      "functions": 100,
+      "lines": 96.29
+    }
+  },
+  "coverageQualification": "Pako boundary100all. Deflater96.55S/87.5B/100F/96.29L; greater-than4GiB counter rollover paths remain unqualified. Aggregate90 branches does not waive owner threshold. No fabricated counters, private-state injection, exclusions or weakened thresholds.",
+  "suspectedIssues": [
+    "WRITER616",
+    "CALC679"
+  ],
+  "checks": [
+    {
+      "command": "npm run test:coverage:shared --workspace @vite-office/office -- src/package/source/zipapi/Deflater.test.ts src/package/source/zipapi/ZipOutputStream.test.ts --coverage.include=src/package/source/zipapi/Deflater.ts --coverage.include=src/external/zlib/deflate.ts --coverage.reporter=json-summary --coverage.reporter=text --coverage.reportsDirectory=coverage/native-deflater-fixtures --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "log": "apps/office/coverage/native-deflater-fixture-coverage.log",
+      "result": "pass",
+      "evidence": "27 tests/2files pass, including unchanged parts of all4 pinned Strict/Transitional DOCX/XLSX archives. Aggregate97.26S/90B/100F/97.1L. Per-owner Deflater branches87.5 remain below90; no owner qualification claimed."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "log": "apps/office/coverage/native-deflater-worker.log",
+      "result": "pass",
+      "evidence": "Actual compression/reset of64001bytes twice and decompression passes in Chromium main and DOM-free module Worker, with existing native XML/stream/temporary probes."
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "log": "apps/office/coverage/native-deflater-types-fixtures.log",
+      "result": "fail",
+      "evidence": "Only pre-existing4 SfxDocumentMetaData.storage.ts errors340/412/413/440; new Deflater/probe/test owners have no type errors."
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "log": "apps/office/coverage/native-deflater-tools.log",
+      "result": "pass",
+      "evidence": "Tools typecheck passes."
+    },
+    {
+      "command": "npm run check:docs",
+      "log": "apps/office/coverage/native-deflater-jsdoc-final.log",
+      "result": "pass",
+      "evidence": "Global JSDoc5440 authored files passes; no suppression."
+    },
+    {
+      "command": "npx --no-install eslint apps/office/src/external/zlib/deflate.ts apps/office/src/external/zlib/pako.d.ts apps/office/src/package/source/zipapi/Deflater.ts apps/office/src/package/inc/Deflater.ts apps/office/src/package/source/zipapi/Deflater.test.ts apps/office/src/package/source/zipapi/ZipOutputStream.test.ts scripts/fixtures/native-deflater-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs --max-warnings 0",
+      "log": "apps/office/coverage/native-deflater-lint-fixtures.log",
+      "result": "pass",
+      "evidence": "All changed source/test/probe paths pass."
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "log": "apps/office/coverage/native-deflater-provenance-complete.log",
+      "result": "pass",
+      "evidence": "2643runtime modules2403mapped/202browser/38infra; foundation remains unverified."
+    },
+    {
+      "command": "npm run inventory:parity",
+      "log": "apps/office/coverage/native-deflater-parity.log",
+      "result": "pass",
+      "evidence": "Registry invariants/parity semanticViolationCount0."
+    },
+    {
+      "command": "npm run check:dependencies",
+      "log": "apps/office/coverage/native-deflater-boundaries.log",
+      "result": "fail",
+      "evidence": "Only existing comphelper -> sax -> comphelper cycle; no exception/checker weakening."
+    },
+    {
+      "command": "npx --no-install vite build apps/office",
+      "log": "apps/office/coverage/native-deflater-build.log",
+      "result": "pass",
+      "evidence": "Standalone Vite production bundle succeeds. Full build including typecheck is not claimed."
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "log": "apps/office/coverage/native-deflater-static.log",
+      "result": "pass",
+      "evidence": "Actual4bundle relative static check passes."
+    },
+    {
+      "command": "npm run check:calc-resources && npm run check:writer-resources",
+      "log": "apps/office/coverage/native-deflater-resources.log",
+      "result": "pass",
+      "evidence": "Generated resources and2 Writer resource tests pass."
+    },
+    {
+      "command": "npm run check:file-size",
+      "log": "apps/office/coverage/native-deflater-size.log",
+      "result": "pass",
+      "evidence": "Source/script size budgets pass with existing advisories."
+    },
+    {
+      "command": "npm run check:source-tree",
+      "log": "apps/office/coverage/native-deflater-tree.log",
+      "result": "pass",
+      "evidence": "Source tree check passes."
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "log": "apps/office/coverage/native-deflater-routing.log",
+      "result": "pass",
+      "evidence": "Policy routing passes."
+    },
+    {
+      "command": "ap doctor",
+      "log": "apps/office/coverage/native-deflater-doctor.log",
+      "result": "pass",
+      "evidence": "Doctor OK with existing managed hook readiness advisories."
+    },
+    {
+      "command": "npx --no-install prettier --check apps/office/src/external/zlib/deflate.ts apps/office/src/external/zlib/pako.d.ts apps/office/src/package/source/zipapi/Deflater.ts apps/office/src/package/inc/Deflater.ts apps/office/src/package/source/zipapi/Deflater.test.ts apps/office/src/package/source/zipapi/ZipOutputStream.test.ts scripts/fixtures/native-deflater-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs docs/program/registry/shared/runtime/external/zlib/deflate.ts.json docs/program/registry/shared/runtime/external/zlib/pako.d.ts.json docs/program/registry/shared/runtime/package/source/zipapi/Deflater.ts.json docs/program/registry/shared/runtime/package/inc/Deflater.ts.json docs/program/registry/shared/provenance/external/zlib/deflate.ts.json docs/program/registry/shared/provenance/external/zlib/pako.d.ts.json docs/program/registry/shared/provenance/package/source/zipapi/Deflater.ts.json docs/program/registry/shared/provenance/package/inc/Deflater.ts.json",
+      "log": "apps/office/coverage/native-deflater-format-check.log",
+      "result": "pass",
+      "evidence": "All matched files formatted."
+    },
+    {
+      "command": "git diff --check",
+      "log": "apps/office/coverage/native-deflater-diff-final.log",
+      "result": "pass",
+      "evidence": "Whitespace check passes."
+    }
+  ],
+  "sourceFiles": [
+    "apps/office/src/external/zlib/deflate.ts",
+    "apps/office/src/external/zlib/pako.d.ts",
+    "apps/office/src/package/source/zipapi/Deflater.ts",
+    "apps/office/src/package/inc/Deflater.ts",
+    "apps/office/src/package/source/zipapi/Deflater.test.ts",
+    "apps/office/src/package/source/zipapi/ZipOutputStream.test.ts",
+    "scripts/fixtures/native-deflater-probe.ts",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts",
+    "scripts/native-dom-worker-probe.mjs",
+    "apps/office/package.json",
+    "package-lock.json",
+    "docs/program/writer-upstream-suspected-issues.md",
+    "docs/program/calc-upstream-suspected-issues.md",
+    "docs/program/registry/shared/runtime/external/zlib/deflate.ts.json",
+    "docs/program/registry/shared/runtime/external/zlib/pako.d.ts.json",
+    "docs/program/registry/shared/runtime/package/source/zipapi/Deflater.ts.json",
+    "docs/program/registry/shared/runtime/package/inc/Deflater.ts.json",
+    "docs/program/registry/shared/runtime/package/source/zipapi/ZipOutputStream.ts.json",
+    "docs/program/registry/shared/provenance/external/zlib/deflate.ts.json",
+    "docs/program/registry/shared/provenance/external/zlib/pako.d.ts.json",
+    "docs/program/registry/shared/provenance/package/source/zipapi/Deflater.ts.json",
+    "docs/program/registry/shared/provenance/package/inc/Deflater.ts.json",
+    "docs/program/registry/shared/provenance/package/source/zipapi/ZipOutputStream.ts.json"
+  ],
+  "sha256": {
+    "apps/office/src/external/zlib/deflate.ts": "2c2d5605b49a586ead31d6517aa63f9a1b5133040528e6ecb91a761680ce95a0",
+    "apps/office/src/external/zlib/pako.d.ts": "0da1bc6f1585322cdbfd7a31207c42f35d4893d2b4a4eaf363babad08622e2a9",
+    "apps/office/src/package/source/zipapi/Deflater.ts": "d3d8d060631fa22651b9dcb19adfc3a3a02ff6c47c33b36bca6489d2730a2e38",
+    "apps/office/src/package/inc/Deflater.ts": "687cd76876d9fd13d32520d4523713516e9f7b3534f1145982864b608f6e0ea4",
+    "apps/office/src/package/source/zipapi/Deflater.test.ts": "af9e89a348e7719eaec05fbc50f7e141579bb60112efea869906f428afe32197",
+    "apps/office/src/package/source/zipapi/ZipOutputStream.test.ts": "8fe76cb326c4e1dd2a481198048c89649a172f52293a11a138bab793996ea6d7",
+    "scripts/fixtures/native-deflater-probe.ts": "50b8d9562d14b8338c09afc65508555223a131617725c4b47a3915f81c8039a8",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "3008d85b908384f10040e5ab5f348bb7e3bfe69c7de7cebb2e00d453492017a3",
+    "scripts/native-dom-worker-probe.mjs": "416abe6d03140cf707bd7cd713a9fbbb7b869cc0a886799beef999133836bca5",
+    "apps/office/package.json": "a773af77f5ebebfa0972f1293270542d04a8e66eeb8afe18fe2f0964cb6191c5",
+    "package-lock.json": "91dca25daaadc8607236bb9c5b35aa95b149978b310d8dfd069bc2af8c6816b1",
+    "docs/program/writer-upstream-suspected-issues.md": "537b3d3e4b9dc83b245bce22aafd2100535c8e4992fdb67820607a5b7dc44ecd",
+    "docs/program/calc-upstream-suspected-issues.md": "a176ae61a8b03406d34cda62d96c4d37af6d8f649de17dac61ca9a9a3099e5a4",
+    "docs/program/registry/shared/runtime/external/zlib/deflate.ts.json": "72e6a13a6240640642ad42bcb642fdd6ace8b802eb99d01bd464bfc098d858c9",
+    "docs/program/registry/shared/runtime/external/zlib/pako.d.ts.json": "9321df0eefb926f94dc29736ee0cdcb9093353de9c8401f1471d25d809daeb6d",
+    "docs/program/registry/shared/runtime/package/source/zipapi/Deflater.ts.json": "42e88ba2b6b0af1df125365e2fc55aa852b906f54e03f3a056830e827147fbb2",
+    "docs/program/registry/shared/runtime/package/inc/Deflater.ts.json": "a8133a495842c151c805cf3892cdd00877c6b5c7ab612c642364b25552f36b6e",
+    "docs/program/registry/shared/runtime/package/source/zipapi/ZipOutputStream.ts.json": "c0cb45c2b7a89ef414f0c819a68a9a3f0c4691ce85a50ee8e793c89f80cfcd41",
+    "docs/program/registry/shared/provenance/external/zlib/deflate.ts.json": "371b2acbf4b34117a32031b63c62e1baa3ab30bd39cddb6655a770e5b7da3df7",
+    "docs/program/registry/shared/provenance/external/zlib/pako.d.ts.json": "3bbbbfea8fdb5b0082c561675d232fbf8765f9616e97dc74d4fdd3e859115167",
+    "docs/program/registry/shared/provenance/package/source/zipapi/Deflater.ts.json": "68843c72c7361f4f1e8b1f6c63ce19fd7b6971b075aa01b2c8ee5089e0e39640",
+    "docs/program/registry/shared/provenance/package/inc/Deflater.ts.json": "34b2f676adfecb025c92dcb97c0c4bbe0c5438b90a56b537330968d25dcfb4ec",
+    "docs/program/registry/shared/provenance/package/source/zipapi/ZipOutputStream.ts.json": "a5a12e19d046708cac4e091346af759660a3f4f6b3e07b0c7f2c5a4fa4a48e2f",
+    "apps/office/coverage/native-deflater-fixture-coverage.log": "d91586a96e8caaabb3cce7b0e2b6e82457c16fb1790a9ea52d3c23021e17a289",
+    "apps/office/coverage/native-deflater-worker.log": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee",
+    "apps/office/coverage/native-deflater-types-fixtures.log": "77e83c111f7dc4777a8d15244f65b082e77d77f583edd63fd7f4c98d1961f0f2",
+    "apps/office/coverage/native-deflater-tools.log": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+    "apps/office/coverage/native-deflater-jsdoc-final.log": "71097aa3e85bced4a826c4827262dd71ce74be288ed8f3981e409c3ad67d8f12",
+    "apps/office/coverage/native-deflater-lint-fixtures.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/native-deflater-provenance-complete.log": "6848a57968e75a5afe4af8800eab79d47eba44f9451b9a0537aa5e9eda8a55b5",
+    "apps/office/coverage/native-deflater-parity.log": "7af0113cbc1c9c8ed0770f1f328f80dee361d2e18145495b357a56e4f7d32c96",
+    "apps/office/coverage/native-deflater-boundaries.log": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf",
+    "apps/office/coverage/native-deflater-build.log": "8c62619589ef86e2326e253f5546debd5f69824b977d4dbf4143222b77c1f4f9",
+    "apps/office/coverage/native-deflater-static.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "apps/office/coverage/native-deflater-resources.log": "eaf75884ea9fbcd205464543a0f7c853564b183d39b04ff7212ca1059af089b8",
+    "apps/office/coverage/native-deflater-size.log": "4d04806826c21951118974fcbea0dafe78efa7a9a6bfb560dd2070212975cea5",
+    "apps/office/coverage/native-deflater-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "apps/office/coverage/native-deflater-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "apps/office/coverage/native-deflater-doctor.log": "55ede09725f0fe31f8fa78d7cb18968b36385134b69556a5ba410a9321b98e4a",
+    "apps/office/coverage/native-deflater-format-check.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/native-deflater-diff-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/native-deflater-fixtures/coverage-summary.json": "e2926aa3404bc5037aecaa93997b44e635b8a886a4ca62bdc17fc8c34b1db152",
+    "apps/office/coverage/native-deflater-status-before-checkpoint.log": "25eb7c72424a0c35e090033580a5ecdb4a824cf5377cff6a587cefaba9b68d2d"
+  },
+  "remaining": "Actual ZipOutputEntry, ZipPackageStream/root package, OStorage/Medium, complete filters/models and mounted UI import/export/reopen remain unfinished; current native compression test is not full document export acceptance. Existing typecheck errors and XML ownership cycle persist. No task completed, full suite or pause."
+}
