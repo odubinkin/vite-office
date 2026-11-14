@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 136
+revision: 139
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-14T06:29:45.451Z"
+  updated_at: "2026-11-14T06:41:21.449Z"
   updated_by: "CODER"
-  note: "Shared RTL locale prerequisite ported with all 12 original QA assertions, 14 focused/32 related tests and actual Chromium main/Worker pass. Evidence native-locale-continuation.json retains baseline failures and original hash collision. Full DOCX package/model/filter/UI acceptance remains unfinished."
-  attempts: 32
+  note: "Shared native OSL locale/thread charset prerequisite implemented; 30 related tests and actual Chromium main/Worker pass. Libc adapter branch coverage87.5 remains below90; baseline failures and whole DOCX acceptance remain open. File-open security hook is now explicitly approved. See native-nls-continuation.json."
+  attempts: 33
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -520,8 +523,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-14T06:41:21.449Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared native OSL locale/thread charset prerequisite implemented; 30 related tests and actual Chromium main/Worker pass. Libc adapter branch coverage87.5 remains below90; baseline failures and whole DOCX acceptance remain open. File-open security hook is now explicitly approved. See native-nls-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-14T06:41:25.982Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-14T06:29:49.084Z"
+doc_updated_at: "2026-11-14T06:41:25.982Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -1494,6 +1510,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-14T06:41:21.449Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared native OSL locale/thread charset prerequisite implemented; 30 related tests and actual Chromium main/Worker pass. Libc adapter branch coverage87.5 remains below90; baseline failures and whole DOCX acceptance remain open. File-open security hook is now explicitly approved. See native-nls-continuation.json.
+    Attempts: 33
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T06:40:49.633Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -1760,6 +1806,10 @@ sections:
     ### RTL locale prerequisite continuation
 
     Original complete RTL locale registration/default/accessor/finalization and public header are ported. All12 pinned upstream QA assertions plus2 critical registration/lifecycle regressions pass;32 related tests and real Chromium main/DOM-free Worker pass. Full locale owner passes unchanged scoped90 gates. Hash-only XOR collision retained and recorded as WRITER565/CALC628. Existing JS GC and RTL logical string reference contracts are preserved without a manual JS allocator. Final lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass; same4 metadata type errors, comphelper/sax cycle and157 old JSDoc findings remain. Browser initial executable lookup, registry reexport metadata and new test JSDoc failures were corrected and rechecked. See evidence/native-locale-continuation.json. File-open security approval remains pending; no dependent mutation. Process locale/thread charset, URL/TempFile and complete package/model/filter/UI acceptance remain unfinished. Parent stays rework/active, not complete; no full suite due.
+
+    ### Native OSL locale/thread charset continuation
+
+    Ported original Linux/Emscripten environment parser/composer,177-pair codeset table, process cache/native pthread mutex and lazy thread charset/exchange. Actual pinned SDK libc executes locale creation/codeset/copy/free and runtime environment operations; native artifact172 exports/851 constants rebuilt locally without downloads. Five native tests and30 combined related tests pass, including all12 original RTL locale assertions. Actual Chromium main/DOM-free Worker and Vite/static pass. Full source-owner metrics exceed90; independent libc adapter branch gate fails87.5/90 and remains open rather than being diluted by aggregate coverage. Final lint/format/tools/provenance/registry/size/tree/doctor/routing/diff pass; same4 type errors, cycle and157 old JSDoc findings remain. WRITER566/CALC629 records retained source ASCII alias/composition behavior. Evidence: evidence/native-nls-continuation.json. User explicitly approved original setAllowedPaths/isForbidden/pre-open hook and flags in this turn; proposal now records approval. No dependent security mutation this block; file URL/open/TempFile and whole DOCX/XLSX package/model/filter/UI remain unfinished. Full suite not due; both parent tasks remain active/rework.
 id_source: "generated"
 ---
 ## Summary
@@ -2743,6 +2793,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-14T06:41:21.449Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared native OSL locale/thread charset prerequisite implemented; 30 related tests and actual Chromium main/Worker pass. Libc adapter branch coverage87.5 remains below90; baseline failures and whole DOCX acceptance remain open. File-open security hook is now explicitly approved. See native-nls-continuation.json.
+Attempts: 33
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T06:40:49.633Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -3014,3 +3094,7 @@ Original SvFileStream GetSvError int/OSL tables now retain source order/sentinel
 ### RTL locale prerequisite continuation
 
 Original complete RTL locale registration/default/accessor/finalization and public header are ported. All12 pinned upstream QA assertions plus2 critical registration/lifecycle regressions pass;32 related tests and real Chromium main/DOM-free Worker pass. Full locale owner passes unchanged scoped90 gates. Hash-only XOR collision retained and recorded as WRITER565/CALC628. Existing JS GC and RTL logical string reference contracts are preserved without a manual JS allocator. Final lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass; same4 metadata type errors, comphelper/sax cycle and157 old JSDoc findings remain. Browser initial executable lookup, registry reexport metadata and new test JSDoc failures were corrected and rechecked. See evidence/native-locale-continuation.json. File-open security approval remains pending; no dependent mutation. Process locale/thread charset, URL/TempFile and complete package/model/filter/UI acceptance remain unfinished. Parent stays rework/active, not complete; no full suite due.
+
+### Native OSL locale/thread charset continuation
+
+Ported original Linux/Emscripten environment parser/composer,177-pair codeset table, process cache/native pthread mutex and lazy thread charset/exchange. Actual pinned SDK libc executes locale creation/codeset/copy/free and runtime environment operations; native artifact172 exports/851 constants rebuilt locally without downloads. Five native tests and30 combined related tests pass, including all12 original RTL locale assertions. Actual Chromium main/DOM-free Worker and Vite/static pass. Full source-owner metrics exceed90; independent libc adapter branch gate fails87.5/90 and remains open rather than being diluted by aggregate coverage. Final lint/format/tools/provenance/registry/size/tree/doctor/routing/diff pass; same4 type errors, cycle and157 old JSDoc findings remain. WRITER566/CALC629 records retained source ASCII alias/composition behavior. Evidence: evidence/native-nls-continuation.json. User explicitly approved original setAllowedPaths/isForbidden/pre-open hook and flags in this turn; proposal now records approval. No dependent security mutation this block; file URL/open/TempFile and whole DOCX/XLSX package/model/filter/UI remain unfinished. Full suite not due; both parent tasks remain active/rework.
