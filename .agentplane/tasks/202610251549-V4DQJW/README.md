@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 142
+revision: 145
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-14T06:59:48.237Z"
+  updated_at: "2026-11-14T07:18:23.249Z"
   updated_by: "CODER"
-  note: "Shared original approved file path access/open prerequisite implemented; all20 upstream predicate assertions, 9 focused/34 related tests and actual Chromium main/Worker pass. Whole file.ts coverage and baseline failures retained. DOCX URL/TempFile/package/model/filter/UI end-to-end remains unfinished; see native-file-access-continuation.json."
-  attempts: 34
+  note: "Shared original file URL charset/byte conversion and consumed OStringBuffer prerequisites implemented; 24 focused/40 related tests and actual Chromium main/Worker pass. Byte-buffer branches88.46 remains below90; legacy/public URL QA and whole DOCX package/model/UI acceptance unfinished. See native-file-url-encoding-continuation.json."
+  attempts: 35
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -552,8 +555,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-14T07:18:23.249Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared original file URL charset/byte conversion and consumed OStringBuffer prerequisites implemented; 24 focused/40 related tests and actual Chromium main/Worker pass. Byte-buffer branches88.46 remains below90; legacy/public URL QA and whole DOCX package/model/UI acceptance unfinished. See native-file-url-encoding-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-14T07:18:28.216Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-14T06:59:52.486Z"
+doc_updated_at: "2026-11-14T07:18:28.216Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -1586,6 +1602,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-14T07:18:23.249Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared original file URL charset/byte conversion and consumed OStringBuffer prerequisites implemented; 24 focused/40 related tests and actual Chromium main/Worker pass. Byte-buffer branches88.46 remains below90; legacy/public URL QA and whole DOCX package/model/UI acceptance unfinished. See native-file-url-encoding-continuation.json.
+    Attempts: 35
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T07:17:01.531Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -1860,6 +1906,10 @@ sections:
     ### Approved original native path access/open continuation
 
     Implemented source setAllowedPaths/isForbidden and pre-open ACCES hook plus original Emscripten openFilePath/native flags/stat/optional record-lock/handle creation using actual libc and existing MEMFS. Explicit user approval is recorded in file-open-security-proposal.md; no host mount/network/unrelated auth changes. All20 active Forbidden::forbidden assertions and critical real FS/permissions/exclusive/truncate/default-read/abort cases pass. Final focused9 and related34 tests pass; actual Chromium main/DOM-free Worker pass. New access and native bridge owners independently exceed unchanged90 metrics; whole existing file.ts owner still fails75.34 statements/79.16 branches/82.27 lines and remains open. Final scoped lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass; same4 type errors, cycle and157 old JSDoc findings remain. WRITER567..569/CALC630..632 record source fallback/partial-state/invalid-pointer concerns without claiming native undefined-domain equivalence. See evidence/native-file-access-continuation.json. URL/osl_openFile/SvFileStream/TempFile/package/model/filter/UI remain unfinished; broad parents stay active/rework, no full suite due.
+
+    ### Native file URL charset/byte conversion continuation
+
+    Ported original file_url.cxx singleton charset conversion, strict escaped-byte decoding, byte-preserving pathname URI encoding and native EOVERFLOW publication. Original consumed OStringBuffer constructors/copy/assignment/reserve/direct length/append/remove/value-clear/toString use actual SAL owners, not a host codec or manual JS allocator. Both modern buffer tests plus15 legacy upstream cases and critical codec scenarios pass:24 focused/40 related tests, actual Chromium main/DOM-free Worker byte roundtrip and Vite/static pass. Aggregate90 passes but independent byte-buffer branches88.46 still fail90; no diluted owner acceptance. Encoding owner exceeds90 all metrics. Final lint/format/tools/provenance/registry/size/tree/doctor/routing/diff pass; baseline4 type errors/cycle/157 JSDoc findings remain. WRITER570..571/CALC633..634 document retained charset capture and length initialization quirks. See evidence/native-file-url-encoding-continuation.json. Mandatory remaining legacy buffer/public URL QA, authority/home/system path, public open/TempFile and whole package/model/filter/UI acceptance remain unfinished. Goal and parents stay active/rework; full suite not due.
 id_source: "generated"
 ---
 ## Summary
@@ -2903,6 +2953,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-14T07:18:23.249Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared original file URL charset/byte conversion and consumed OStringBuffer prerequisites implemented; 24 focused/40 related tests and actual Chromium main/Worker pass. Byte-buffer branches88.46 remains below90; legacy/public URL QA and whole DOCX package/model/UI acceptance unfinished. See native-file-url-encoding-continuation.json.
+Attempts: 35
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T07:17:01.531Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -3182,3 +3262,7 @@ Ported original Linux/Emscripten environment parser/composer,177-pair codeset ta
 ### Approved original native path access/open continuation
 
 Implemented source setAllowedPaths/isForbidden and pre-open ACCES hook plus original Emscripten openFilePath/native flags/stat/optional record-lock/handle creation using actual libc and existing MEMFS. Explicit user approval is recorded in file-open-security-proposal.md; no host mount/network/unrelated auth changes. All20 active Forbidden::forbidden assertions and critical real FS/permissions/exclusive/truncate/default-read/abort cases pass. Final focused9 and related34 tests pass; actual Chromium main/DOM-free Worker pass. New access and native bridge owners independently exceed unchanged90 metrics; whole existing file.ts owner still fails75.34 statements/79.16 branches/82.27 lines and remains open. Final scoped lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass; same4 type errors, cycle and157 old JSDoc findings remain. WRITER567..569/CALC630..632 record source fallback/partial-state/invalid-pointer concerns without claiming native undefined-domain equivalence. See evidence/native-file-access-continuation.json. URL/osl_openFile/SvFileStream/TempFile/package/model/filter/UI remain unfinished; broad parents stay active/rework, no full suite due.
+
+### Native file URL charset/byte conversion continuation
+
+Ported original file_url.cxx singleton charset conversion, strict escaped-byte decoding, byte-preserving pathname URI encoding and native EOVERFLOW publication. Original consumed OStringBuffer constructors/copy/assignment/reserve/direct length/append/remove/value-clear/toString use actual SAL owners, not a host codec or manual JS allocator. Both modern buffer tests plus15 legacy upstream cases and critical codec scenarios pass:24 focused/40 related tests, actual Chromium main/DOM-free Worker byte roundtrip and Vite/static pass. Aggregate90 passes but independent byte-buffer branches88.46 still fail90; no diluted owner acceptance. Encoding owner exceeds90 all metrics. Final lint/format/tools/provenance/registry/size/tree/doctor/routing/diff pass; baseline4 type errors/cycle/157 JSDoc findings remain. WRITER570..571/CALC633..634 document retained charset capture and length initialization quirks. See evidence/native-file-url-encoding-continuation.json. Mandatory remaining legacy buffer/public URL QA, authority/home/system path, public open/TempFile and whole package/model/filter/UI acceptance remain unfinished. Goal and parents stay active/rework; full suite not due.
