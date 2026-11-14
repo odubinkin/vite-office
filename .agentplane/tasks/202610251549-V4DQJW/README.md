@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 130
+revision: 133
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-14T05:27:45.903Z"
+  updated_at: "2026-11-14T06:19:47.649Z"
   updated_by: "CODER"
-  note: "Shared seekable-input/SDK mutex:5 functional,38 related and56 boundary cases pass, actual main/Worker. Real TempFile/copy missing and owner90 gate fails; no fake provider. Writer storage/models/UI unfinished; evidence/native-seekable-input-continuation.json."
-  attempts: 30
+  note: "Shared original file diagnostics/header macros:9 focused and34 combined cases, both owner90 and actual main/Worker pass. Security-hook approval pending, no dependent edits. Writer native storage/model/UI still unfinished; evidence/native-file-error-continuation.json."
+  attempts: 31
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -488,8 +491,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-14T06:19:47.649Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared original file diagnostics/header macros:9 focused and34 combined cases, both owner90 and actual main/Worker pass. Security-hook approval pending, no dependent edits. Writer native storage/model/UI still unfinished; evidence/native-file-error-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-14T06:20:17.016Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-14T05:28:14.660Z"
+doc_updated_at: "2026-11-14T06:20:17.016Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -1402,6 +1418,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-14T06:19:47.649Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared original file diagnostics/header macros:9 focused and34 combined cases, both owner90 and actual main/Worker pass. Security-hook approval pending, no dependent edits. Writer native storage/model/UI still unfinished; evidence/native-file-error-continuation.json.
+    Attempts: 31
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T06:19:47.039Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -1662,6 +1708,8 @@ sections:
     Complete original WrapStreamForShare uses actual UNO input/seek/ByteReader, native shared OSL mutex and source per-wrapper cursor/guard placement/available/release-only-close.10critical tests and48related cases pass; whole owner passes scoped90 independently (100allmetrics naturally from public paths). Four unchanged Strict/Transitional DOCX/XLSX parts and actual main/DOM-free Worker interleaved readers/close/availability execute. No fake input, mutex, RTTI, private fields or byte-buffer lifetime is supplied. WRITER558..560/CALC621..623 preserve source read-lock omission, source-position availability and ByteReader precondition. Lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass; older4metadata types, cycle,157JSDoc and independent coverage gaps remain. Original ZipPackageStream/seekable-copy/tempfile/native package storage/models/filter/UI and complete original service QA remain unfinished; pako/security approvals pending, no download or risk expansion. See evidence/native-shared-stream-continuation.json. Goal stays active, no full suite due.
 
     Original OSeekableInputWrapper and generated TempFile/XTempFile now use the real native SDK std::mutex/scoped_lock, actual production service manager, exact seekable identity and original lazy copy/close body. Native artifact rebuild from pinned local SDK succeeds:166exports/851constants, artifact SHA fc83bba5924d99405e8ce72e0c63f1aa4afc3a5237816751b46c60bdebb0e090.5functional,38related DOM/SAX/ZIP and56boundary tests pass; actual Chromium main/DOM-free Worker probes pass with genuine missing TempFile error. OTempFileService is still absent; copy does not work yet, and wrapper/helper whole-owner scoped90 fails (retained, not diluted). Mutex and XTempFile independently pass90. No fake TempFile/memory-copy provider, JS mutex, private fields, altered counters/thresholds, network download or dependency install. WRITER561/CALC624 documents potential constructor-self lifetime. Source-backed comphelper->external edge added; old cycle,4metadata types,157JSDoc and prior failed coverages remain. Lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass. See evidence/native-seekable-input-continuation.json. Next implement actual TempFile/native IO service, then package streams/storage/model/filter/UI; no task/goal completion or full suite due.
+
+    Original SvFileStream GetSvError int/OSL tables now retain source order/sentinel/fallback and explicit overload domains. All original IO packed macros/SVSTREAM aliases are present; SvStream uses these shared header macros instead of three locally reconstructed values.9focused cases pass with both whole owners independently above scoped90 (100allmetrics naturally through real source/error/stream scenarios).34combined related cases include those9; real MEMFS failures, native SvStream warnings/sticky errors and actual Chromium main/DOM-free Worker output pass. WRITER562/CALC625 preserve general invalid-handle alias; WRITER563..564/CALC626..627 document source-only pending security observations. Refreshed concrete security proposal and async approval request; actual reply pending, no dependent mutation. Lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass; old4metadata types/cycle/157docs and all earlier independent failed coverages remain. See evidence/native-file-error-continuation.json. Native file open/TempFile/package streams/storage/models/filter/UI and original full service QA remain unfinished; goal active, no full suite due.
 id_source: "generated"
 ---
 ## Summary
@@ -2585,6 +2633,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-14T06:19:47.649Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared original file diagnostics/header macros:9 focused and34 combined cases, both owner90 and actual main/Worker pass. Security-hook approval pending, no dependent edits. Writer native storage/model/UI still unfinished; evidence/native-file-error-continuation.json.
+Attempts: 31
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T06:19:47.039Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -2850,3 +2928,5 @@ Actual abstract ZipPackageEntry and final live ZipPackageFolder name/container/p
 Complete original WrapStreamForShare uses actual UNO input/seek/ByteReader, native shared OSL mutex and source per-wrapper cursor/guard placement/available/release-only-close.10critical tests and48related cases pass; whole owner passes scoped90 independently (100allmetrics naturally from public paths). Four unchanged Strict/Transitional DOCX/XLSX parts and actual main/DOM-free Worker interleaved readers/close/availability execute. No fake input, mutex, RTTI, private fields or byte-buffer lifetime is supplied. WRITER558..560/CALC621..623 preserve source read-lock omission, source-position availability and ByteReader precondition. Lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass; older4metadata types, cycle,157JSDoc and independent coverage gaps remain. Original ZipPackageStream/seekable-copy/tempfile/native package storage/models/filter/UI and complete original service QA remain unfinished; pako/security approvals pending, no download or risk expansion. See evidence/native-shared-stream-continuation.json. Goal stays active, no full suite due.
 
 Original OSeekableInputWrapper and generated TempFile/XTempFile now use the real native SDK std::mutex/scoped_lock, actual production service manager, exact seekable identity and original lazy copy/close body. Native artifact rebuild from pinned local SDK succeeds:166exports/851constants, artifact SHA fc83bba5924d99405e8ce72e0c63f1aa4afc3a5237816751b46c60bdebb0e090.5functional,38related DOM/SAX/ZIP and56boundary tests pass; actual Chromium main/DOM-free Worker probes pass with genuine missing TempFile error. OTempFileService is still absent; copy does not work yet, and wrapper/helper whole-owner scoped90 fails (retained, not diluted). Mutex and XTempFile independently pass90. No fake TempFile/memory-copy provider, JS mutex, private fields, altered counters/thresholds, network download or dependency install. WRITER561/CALC624 documents potential constructor-self lifetime. Source-backed comphelper->external edge added; old cycle,4metadata types,157JSDoc and prior failed coverages remain. Lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass. See evidence/native-seekable-input-continuation.json. Next implement actual TempFile/native IO service, then package streams/storage/model/filter/UI; no task/goal completion or full suite due.
+
+Original SvFileStream GetSvError int/OSL tables now retain source order/sentinel/fallback and explicit overload domains. All original IO packed macros/SVSTREAM aliases are present; SvStream uses these shared header macros instead of three locally reconstructed values.9focused cases pass with both whole owners independently above scoped90 (100allmetrics naturally through real source/error/stream scenarios).34combined related cases include those9; real MEMFS failures, native SvStream warnings/sticky errors and actual Chromium main/DOM-free Worker output pass. WRITER562/CALC625 preserve general invalid-handle alias; WRITER563..564/CALC626..627 document source-only pending security observations. Refreshed concrete security proposal and async approval request; actual reply pending, no dependent mutation. Lint/format/tools/provenance/registry/size/tree/Vite/static/doctor/routing/diff pass; old4metadata types/cycle/157docs and all earlier independent failed coverages remain. See evidence/native-file-error-continuation.json. Native file open/TempFile/package streams/storage/models/filter/UI and original full service QA remain unfinished; goal active, no full suite due.
