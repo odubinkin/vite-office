@@ -1,0 +1,166 @@
+{
+  "scope": "Original internal SvFileStream GetSvError overloads, complete original I/O diagnostic macros/aliases, and SvStream use of those source header constants. No file-open security mutation, TempFile completion or format/model/UI acceptance is claimed.",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSha256": {
+    "apps/office/src/comphelper/inc/errcode.ts": "02004976273aa817d292910e26c6a23b8ed1936e7491da02c217120bc4b69095",
+    "apps/office/src/tools/source/stream/stream.native.ts": "c030c323047c65d25498ea0ac579ae0d83d6d7799cff73122d0732b93a05055a",
+    "apps/office/src/tools/source/stream/strmunx.errors.ts": "0bbfdebfe2aea37b629719dfcb5d997a287e5ca5c3306bb793a3857659686bbf",
+    "apps/office/src/tools/source/stream/strmunx.errors.test.ts": "7d2cdb04d2b339cebac840810eaf689417d5814417c612dfbdac59872d6bc63a",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "328faabd06b827f9e08f72c25c84fdde818e98ab527fb085eb4b283adc018e3c",
+    "scripts/native-dom-worker-probe.mjs": "c8ccf8df22f7889970fcd413d719a0a7715b7fb39f666e39eb550e01f767e64c",
+    "docs/program/writer-upstream-suspected-issues.md": "6cba9432ba5ebee0d36e9339cf530225290f942dcbb825e45a877f09a97a9012",
+    "docs/program/calc-upstream-suspected-issues.md": "7e57f69ae1c10fa32723093f34f3938e1bd9cb6653ab7dad9a8a106690bde167",
+    ".agentplane/tasks/202610251549-J0Z0KF/evidence/file-open-security-proposal.md": "cfa42e1bcd400d6f9817eb9fc9f5e70e66e487b5f85abea71b461e46a4e3a5f2"
+  },
+  "checks": [
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/tools/source/stream/strmunx.errors.test.ts src/comphelper/inc/errcode.test.ts --coverage --coverage.include=src/tools/source/stream/strmunx.errors.ts --coverage.include=src/comphelper/inc/errcode.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-file-errors",
+      "result": "pass",
+      "log": "apps/office/coverage/native-file-errors-tests.log",
+      "sha256": "ad9a4a187eb05bf6c78e5a350f0919ad24f097e9b3bf234ed6b0f44a0e4ad2c2"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/tools/source/stream/stream.native.test.ts src/sc/source/ui/docshell/docsh.csv-diagnostic.test.ts src/tools/source/stream/strmunx.errors.test.ts src/comphelper/inc/errcode.test.ts --maxWorkers=2",
+      "result": "pass",
+      "log": "apps/office/coverage/native-file-errors-related-final.log",
+      "sha256": "6268bd2be5034e6465448e579a0794e6e08258715b207e27f40be8e45f184eb9"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-file-errors-worker.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "node_modules/.bin/tsc --noEmit --project apps/office/tsconfig.json",
+      "result": "fail",
+      "log": "apps/office/coverage/native-file-errors-types.log",
+      "sha256": "191e4bdf87792572048a2d40ec89fdf71fbac07a0325f9aa1a25ce7df4266208"
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/comphelper/inc/errcode.ts apps/office/src/tools/source/stream/stream.native.ts apps/office/src/tools/source/stream/strmunx.errors.ts apps/office/src/tools/source/stream/strmunx.errors.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-file-errors-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/comphelper/inc/errcode.ts apps/office/src/tools/source/stream/stream.native.ts apps/office/src/tools/source/stream/strmunx.errors.ts apps/office/src/tools/source/stream/strmunx.errors.test.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-file-errors-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/native-file-errors-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-file-errors-provenance.log",
+      "sha256": "ef1de8f13063491b59045ca2dd8f7fceb33c56dca7ad6f5a14c9facabbbdfcc8"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-file-errors-registry.log",
+      "sha256": "2aba63a12c75da96a98b7708768ce73a4120adce93a63bbb23a3889b38c767d7"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "log": "apps/office/coverage/native-file-errors-deps.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-file-errors-docs.log",
+      "sha256": "03bc18aef30bca0974dbce6c60c4f6f63ef2e76250865177eae76d9b93c7a790"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/native-file-errors-size.log",
+      "sha256": "f7e7b04368ad6ceaa6e153025a227032266583e9e1525a28ec0d1c959229eda4"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/native-file-errors-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-file-errors-doctor.log",
+      "sha256": "97929f0bd3c12b71ca29a3e4aa37b556cfb13caa61307bef0bf99c3040862581"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-file-errors-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-file-errors-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-file-errors-vite.log",
+      "sha256": "2fb1a5cba6c9a580c730adfbeb5927a09fb21faab928913533da3f986f825ae5"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-file-errors-static.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    }
+  ],
+  "coverage": {
+    "src/comphelper/inc/errcode.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "src/tools/source/stream/strmunx.errors.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    }
+  },
+  "tests": {
+    "focused": 9,
+    "combinedRelated": 34,
+    "combinedIncludesFocused": true,
+    "browser": "Actual MEMFS bad-descriptor error and separate int/OSL overload output in Chromium main realm and DOM-free module Worker, retaining existing native DOM/SAX/package/stream probes.",
+    "critical": "Every original header IO macro/stream alias, source mapping vectors, real MEMFS errors and public SvStream warning masking/first-error precedence. No private/protected state injection, fake provider, threshold or counter changes."
+  },
+  "upstreamQA": "Targeted tools/qa and sal/qa/osl/file lookup found no isolated direct GetSvError/private-table QA. Source tables/header and critical integration are tested; complete SvFileStream/TempFile original QA remains pending their actual implementations.",
+  "approval": {
+    "status": "awaiting actual user reply; async tool acceptance is not approval",
+    "scope": "Original setAllowedPaths/isForbidden and pre-open hook including defaults/SAL_ABORT_ON_FORBIDDEN, inside existing MEMFS without host mount.",
+    "proposal": ".agentplane/tasks/202610251549-J0Z0KF/evidence/file-open-security-proposal.md",
+    "policy": ".agentplane/policy/security.must.md",
+    "dependentMutation": "none"
+  },
+  "findings": [
+    "WRITER562/CALC625 invalid-handle alias collapses into general IO; actual runtime error verifies retained behavior.",
+    "WRITER563/CALC626 literal prefix allowlist matching; source review only, no local security implementation.",
+    "WRITER564/CALC627 empty read list and one-character mode token behavior; source review only, no local security implementation."
+  ],
+  "remaining": [
+    "File-open security hook requires user reply. URL/locale/native file-stream/TempFile/storage/package stream/model/filter/UI remain unfinished.",
+    "Old four metadata type errors, comphelper/sax cycle and157 JSDoc findings persist. Earlier independent coverage failures, including seekable-copy/TempFile helper and native stream profile, remain retained and are not superseded by these two owner gates.",
+    "Native physical ABI/undefined error enum/input domains remain unqualified.",
+    "No network/download/auth/crypto/security-policy changes or full suite this block."
+  ],
+  "goalStatus": "active; both broad parent tasks remain unfinished"
+}
