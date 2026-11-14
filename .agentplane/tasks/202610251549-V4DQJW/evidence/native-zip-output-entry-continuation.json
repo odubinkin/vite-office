@@ -1,0 +1,201 @@
+{
+  "status": "bounded original synchronous entry compression checkpoint; whole parents DOING/rework",
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scope": "Original ZipOutputEntryBase/ZipOutputEntry normal synchronous nonencrypted constructor domain, native CRC/Sequence/UNO ownership, genuine native ZIP integration and DOM-free Worker execution.",
+  "bindingBoundary": "Constructor explicitly accepts original null ZipPackageStream pointer and false encryption flag. This is a valid consumed original domain, not a fake package stream or successful encrypted implementation. Non-null parent, encryption/digest/context factories and parallel/background classes remain unbound and must still be implemented for their required profiles. Diagnostic-only native assertions/OOM/physical ABI are unqualified. The source dead initialization of local read length is omitted because the first read overwrites it and ESLint forbids the dead store; observable loop/default behavior is retained.",
+  "coverage": {
+    "total": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "src/package/source/zipapi/ZipOutputEntry.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    }
+  },
+  "suspectedIssues": [
+    "WRITER617",
+    "CALC680"
+  ],
+  "checks": [
+    {
+      "command": "npm run test:coverage:shared --workspace @vite-office/office -- src/package/source/zipapi/ZipOutputEntry.test.ts src/package/source/zipapi/ZipOutputStream.test.ts src/package/source/zipapi/Deflater.test.ts src/package/source/zipapi/native-entry-read.test.ts --coverage.include=src/package/source/zipapi/ZipOutputEntry.ts --coverage.reporter=json-summary --coverage.reporter=text --coverage.reportsDirectory=coverage/native-entry-final --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "log": "apps/office/coverage/native-entry-coverage-final.log",
+      "result": "pass",
+      "evidence": "64 actual tests/4files pass; all4 pinned Strict/Transitional DOCX/XLSX source archives are raw-copied and recompressed by the original synchronous entry owner, independently extracted and byte-compared. New entry owner100all in the explicitly bound nonencrypted/null-parent domain; omitted original encrypted/parallel/threaded domains are not qualified."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "log": "apps/office/coverage/native-entry-browser-final.log",
+      "result": "pass",
+      "evidence": "Chromium main and DOM-free Worker perform actual entry->ZIP output->native ZipFile reopening of65537bytes with real CRC, independent inflate and every-byte checks; input remains open and borrowed record identity is preserved."
+    },
+    {
+      "command": "npm run typecheck",
+      "log": "apps/office/coverage/native-entry-types-final.log",
+      "result": "fail",
+      "evidence": "Tools pass. Only same4 SfxDocumentMetaData.storage.ts errors340/412/413/440; no new source/test/probe errors."
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "log": "apps/office/coverage/native-entry-tools-final.log",
+      "result": "pass",
+      "evidence": "Rechecked after final browser helper change."
+    },
+    {
+      "command": "npx --no-install eslint apps/office/src/package/source/zipapi/ZipOutputEntry.ts apps/office/src/package/inc/ZipOutputEntry.ts apps/office/src/package/source/zipapi/ZipOutputEntry.test.ts apps/office/src/package/source/zipapi/ZipOutputStream.test.ts scripts/fixtures/native-zip-output-entry-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs --max-warnings 0",
+      "log": "apps/office/coverage/native-entry-style-final.log",
+      "result": "pass",
+      "evidence": "Changed source/test/browser probe paths pass."
+    },
+    {
+      "command": "npm run check:docs",
+      "log": "apps/office/coverage/native-entry-jsdoc-final.log",
+      "result": "pass",
+      "evidence": "Global JSDoc5444 authored files pass without suppression."
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "log": "apps/office/coverage/native-entry-provenance.log",
+      "result": "pass",
+      "evidence": "2645runtime modules2405mapped/202browser/38infra. New records remain foundation/unverified with explicit omitted domains."
+    },
+    {
+      "command": "npm run inventory:parity",
+      "log": "apps/office/coverage/native-entry-parity.log",
+      "result": "pass",
+      "evidence": "Registry invariants/parity semanticViolationCount0."
+    },
+    {
+      "command": "npm run check:dependencies",
+      "log": "apps/office/coverage/native-entry-dependencies.log",
+      "result": "fail",
+      "evidence": "Only existing comphelper->sax->comphelper runtime cycle remains; no checker weakening or new exception."
+    },
+    {
+      "command": "npx --no-install vite build --config apps/office/vite.config.ts apps/office",
+      "log": "apps/office/coverage/native-entry-build.log",
+      "result": "pass",
+      "evidence": "Standalone Vite production build passes with existing externalized-module/chunk-size advisories. Full build including typecheck is not claimed."
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "log": "apps/office/coverage/native-entry-static.log",
+      "result": "pass",
+      "evidence": "4 relative frontend JS bundles with no backend endpoints pass."
+    },
+    {
+      "command": "npm run check:file-size",
+      "log": "apps/office/coverage/native-entry-size.log",
+      "result": "pass",
+      "evidence": "File-size budgets pass; consumer probe994lines remains below1000."
+    },
+    {
+      "command": "npm run check:source-tree",
+      "log": "apps/office/coverage/native-entry-tree.log",
+      "result": "pass",
+      "evidence": "Source-tree check passes."
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "log": "apps/office/coverage/native-entry-routing.log",
+      "result": "pass",
+      "evidence": "Routing check passes."
+    },
+    {
+      "command": "ap doctor",
+      "log": "apps/office/coverage/native-entry-doctor.log",
+      "result": "pass",
+      "evidence": "Doctor OK with existing managed-hook readiness advisories."
+    },
+    {
+      "command": "npx --no-install prettier --check apps/office/src/package/source/zipapi/ZipOutputEntry.ts apps/office/src/package/inc/ZipOutputEntry.ts apps/office/src/package/source/zipapi/ZipOutputEntry.test.ts apps/office/src/package/source/zipapi/ZipOutputStream.test.ts scripts/fixtures/native-zip-output-entry-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs docs/program/registry/shared/runtime/package/source/zipapi/ZipOutputEntry.ts.json docs/program/registry/shared/runtime/package/inc/ZipOutputEntry.ts.json docs/program/registry/shared/runtime/package/source/zipapi/ZipOutputStream.ts.json docs/program/registry/shared/provenance/package/source/zipapi/ZipOutputEntry.ts.json docs/program/registry/shared/provenance/package/inc/ZipOutputEntry.ts.json docs/program/registry/shared/provenance/package/source/zipapi/ZipOutputStream.ts.json",
+      "log": "apps/office/coverage/native-entry-format.log",
+      "result": "pass",
+      "evidence": "All matched source/test/probe/registry files use required format."
+    },
+    {
+      "command": "git diff --check",
+      "log": "apps/office/coverage/native-entry-diff.log",
+      "result": "pass",
+      "evidence": "Whitespace check passes."
+    },
+    {
+      "command": "rg -n 'Deflater|ZipOutputEntry' vendor/libreoffice-reference/package/qa vendor/libreoffice-reference/comphelper/qa",
+      "log": "apps/office/coverage/native-entry-upstream-qa.log",
+      "result": "pass",
+      "evidence": "Bounded search found no direct Deflater/ZipOutputEntry QA. No direct original QA transplant is claimed; source-derived contracts and critical real IO tests are present."
+    }
+  ],
+  "unchangedResourceEvidence": {
+    "log": "apps/office/coverage/native-deflater-resources.log",
+    "result": "pass",
+    "scope": "Prior checkpoint generated Calc/Writer resources and2 resource tests; no resource/menu/command paths changed in this block."
+  },
+  "sourceFiles": [
+    "apps/office/src/package/source/zipapi/ZipOutputEntry.ts",
+    "apps/office/src/package/inc/ZipOutputEntry.ts",
+    "apps/office/src/package/source/zipapi/ZipOutputEntry.test.ts",
+    "apps/office/src/package/source/zipapi/ZipOutputStream.test.ts",
+    "scripts/fixtures/native-zip-output-entry-probe.ts",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts",
+    "scripts/native-dom-worker-probe.mjs",
+    "docs/program/writer-upstream-suspected-issues.md",
+    "docs/program/calc-upstream-suspected-issues.md",
+    "docs/program/registry/shared/runtime/package/source/zipapi/ZipOutputEntry.ts.json",
+    "docs/program/registry/shared/runtime/package/inc/ZipOutputEntry.ts.json",
+    "docs/program/registry/shared/runtime/package/source/zipapi/ZipOutputStream.ts.json",
+    "docs/program/registry/shared/provenance/package/source/zipapi/ZipOutputEntry.ts.json",
+    "docs/program/registry/shared/provenance/package/inc/ZipOutputEntry.ts.json",
+    "docs/program/registry/shared/provenance/package/source/zipapi/ZipOutputStream.ts.json"
+  ],
+  "sha256": {
+    "apps/office/src/package/source/zipapi/ZipOutputEntry.ts": "d1fdf498a8c9f9467f2a5672cc760cecba7727263c1456d5c8a6f2bea4d75b87",
+    "apps/office/src/package/inc/ZipOutputEntry.ts": "6103f2474122cb51eb02bafee5a71c37ef0ebf06dc246b734adee66a91b4c949",
+    "apps/office/src/package/source/zipapi/ZipOutputEntry.test.ts": "2023bc2fc5d462689a3afa946f6b7834b9ebc7dca24e211068d303abd685de65",
+    "apps/office/src/package/source/zipapi/ZipOutputStream.test.ts": "d4e02beb5339992cef96636baf8946d34b96b204737718fc883348c24aab8fae",
+    "scripts/fixtures/native-zip-output-entry-probe.ts": "ff253201416bb0e2d9edb8f140d37fd207c5094e0b3891ea15c6bd2471c76e38",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "5243c01866412e5e4a8308350726f955282219333e8666310565e03e459d8097",
+    "scripts/native-dom-worker-probe.mjs": "4f32638b2050450cfefa5c807faac45366f9ce5e967fcc9cab789d6a330a4775",
+    "docs/program/writer-upstream-suspected-issues.md": "57ec46bbf1dcea9fadd4eb9bdfc74f2ef2eb11995357ccb0646e39fb9505fad2",
+    "docs/program/calc-upstream-suspected-issues.md": "2000eef59a109eb60fb6560958104898485bc8c9e834ea7a36088abfd05fc85b",
+    "docs/program/registry/shared/runtime/package/source/zipapi/ZipOutputEntry.ts.json": "f344f77553f304e22b162ba007316cfd20a85753f41e5a565a669aa5f3db84e1",
+    "docs/program/registry/shared/runtime/package/inc/ZipOutputEntry.ts.json": "7d3015fd10bbd5603d817b3eabe07f9679c7b5d60ab52c704aad96e9418d60cf",
+    "docs/program/registry/shared/runtime/package/source/zipapi/ZipOutputStream.ts.json": "fc8b39ed47941dccb871aa623b3e4d776dd69e35bb2062fe64322d087b83585a",
+    "docs/program/registry/shared/provenance/package/source/zipapi/ZipOutputEntry.ts.json": "70539a729ab5c87390a01a0d0b61ed75bd1e585b7622e9c9499d4d424ae6b4e2",
+    "docs/program/registry/shared/provenance/package/inc/ZipOutputEntry.ts.json": "331fe5d142c9204974fdf8b7a20890739bf3eb078f1981965c4b49b71f0e24cd",
+    "docs/program/registry/shared/provenance/package/source/zipapi/ZipOutputStream.ts.json": "3e35287edf282130e324aedfc83eb95ef3f46f3be28e6a4c24d76b7e59e6531f",
+    "apps/office/coverage/native-entry-coverage-final.log": "40459e286f6ef7db7762377b7748365310406edb5432136159ee86c4a09af124",
+    "apps/office/coverage/native-entry-browser-final.log": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee",
+    "apps/office/coverage/native-entry-types-final.log": "590fa40b17d19c58037b0fc7f01d550246d5f79c9e3cde4ef76da0ca7ed979f9",
+    "apps/office/coverage/native-entry-tools-final.log": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+    "apps/office/coverage/native-entry-style-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/native-entry-jsdoc-final.log": "b7b3b7ddd83ba1fb02779fb36745d61aaa2bad081f766375ca05bc6af9b8eb50",
+    "apps/office/coverage/native-entry-provenance.log": "e0178a4feb83c0fd2b705cb5b47983696b016783c6667949f003db100f6f6379",
+    "apps/office/coverage/native-entry-parity.log": "95126c03ae9bde79f36e69cf59b9ecdef005bada17b334ec344bec0828ad2400",
+    "apps/office/coverage/native-entry-dependencies.log": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf",
+    "apps/office/coverage/native-entry-build.log": "deba39c541d76f03b48fdfd66aff88c227a4b626b5a688056dff85e38915206b",
+    "apps/office/coverage/native-entry-static.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "apps/office/coverage/native-entry-size.log": "7f06ccdd8bb359d6f41962f5bfbdf93cb2c65a208250b8d921f6cfe16fd49251",
+    "apps/office/coverage/native-entry-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "apps/office/coverage/native-entry-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "apps/office/coverage/native-entry-doctor.log": "1c716a163cd3055631021c95e1e657e2adc4471ed89f1555a111b75caf6a181b",
+    "apps/office/coverage/native-entry-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/native-entry-diff.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/native-entry-upstream-qa.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "vendor/libreoffice-reference/package/source/zipapi/ZipOutputEntry.cxx": "e5d3a15f924e0c80245284febe887094e847a2d5468ce5329cd8870eded9a92c",
+    "vendor/libreoffice-reference/package/inc/ZipOutputEntry.hxx": "a47170954f626214cfbb4e6e812c713ab233353a58be6e2837abfa91e402328d",
+    "apps/office/coverage/native-entry-final/coverage-summary.json": "4aff4aad10091c6afdbf68cef195ec18e3d413e99d5d28d570a6128ae8037a9e",
+    "apps/office/coverage/native-entry-status-before-checkpoint.log": "24772f1460171f4fa3a507bec7d14c1e3da721c5d6487ba1926f95aec90b10ba",
+    "apps/office/coverage/native-deflater-resources.log": "eaf75884ea9fbcd205464543a0f7c853564b183d39b04ff7212ca1059af089b8"
+  },
+  "remaining": "Actual non-null ZipPackageStream/root ZipPackage, full OStorage/Medium/filter/model/UI import/export and reopen acceptance remain unfinished. Existing4 metadata-storage type errors and XML module cycle persist. No full suite or whole task completion/pause. Source wrapstreamforshare.cxx/.hxx is the next directly inspected native package-stream dependency; all of its actual UNO/mutex/ByteReader dependencies now exist."
+}
