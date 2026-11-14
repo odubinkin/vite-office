@@ -1,0 +1,257 @@
+{
+  "status": "bounded native metadata prerequisite checkpoint; parent tasks remain DOING/rework",
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scope": "Restore original OFOPXMLHelper_Impl and native input/context read functions; existing browser transport delegates schema rules to real native handler. Driver delivers actual closing qualified names without a synthetic stack.",
+  "preserved": "Original native exceptions, ordered/native/copy-on-write result fields, partial failure order, exact root/child names/depth, duplicate/optional admission, no-op document/text/locator callbacks and success-only parser handler reset. No fake Parser service registered.",
+  "sourceQA": "Applicable qadevOOo XDocumentHandler callback/import-check assertions ported for supported metadata event sequences. No dedicated OFOP helper QA found in comphelper/package QA or filename fallback. Generic harness environment/provider matrix is not claimed.",
+  "tests": "134 related functional tests pass:102shared+28Writer+4pinned archive metadata cases. Complete handler/read owner still fails90; full goal is not accepted.",
+  "checks": [
+    {
+      "command": "npm run test:shared -- --coverage --coverage.include=src/comphelper/source/xml/ofopxmlhelper.handler.ts --coverage.include=src/comphelper/source/xml/ofopxmlhelper.ts --coverage.reportsDirectory=coverage/native-ofop-handler --coverage.reporter=json-summary --coverage.reporter=text --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 src/comphelper/source/xml/ofopxmlhelper.handler.test.ts src/comphelper/source/xml/ofopxmlhelper.test.ts src/comphelper/source/xml/ofopxmlhelper.write.test.ts src/sax/source/fastparser/fastparser.test.ts src/sax/source/fastparser/FastSaxParser.test.ts src/sax/source/fastparser/legacyfastparser.service.test.ts src/oox/source/helper/zipstorage-input.test.ts src/oox/source/core/relations.test.ts",
+      "log": "apps/office/coverage/native-ofop-handler-shared.log",
+      "result": "fail",
+      "evidence": "102 tests/8files pass; handler/read shard84.66S/94.73B/100F/83.7L fails90, facade100all. Aggregate89.15S/95.52B/100F/88.65L is not acceptance. Missing ParserExpat success/invariant paths not fabricated/excluded."
+    },
+    {
+      "command": "npm run test:writer -- src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.context.test.ts",
+      "log": "apps/office/coverage/native-ofop-handler-writer.log",
+      "result": "pass",
+      "evidence": "28 related Writer stream tests/2files pass."
+    },
+    {
+      "command": "npm run test:shared -- src/comphelper/source/xml/ofopxmlhelper.fixture.test.ts",
+      "log": "apps/office/coverage/native-ofop-handler-fixtures.log",
+      "result": "pass",
+      "evidence": "4 actual pinned DOCX/XLSX Strict/Transitional archives pass through registered native ZipFileAccess, real entry InputSource and native handler sequences; not full model/filter/UI acceptance."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "log": "apps/office/coverage/native-ofop-handler-browser.log",
+      "result": "pass",
+      "evidence": "Actual UTF8 entry-like inputs, native relationships/duplicates/Unicode/MIME values in Chromium main and DOM-free Worker; original ParserExpat is not aliased or replaced."
+    },
+    {
+      "command": "npx eslint apps/office/src/comphelper/source/xml/ofopxmlhelper{,.handler,.handler.test,.fixture.test}.ts apps/office/src/sax/source/fastparser/fastparser{,.test}.ts scripts/fixtures/native-ofopxml-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs && npm run check:docs && npx prettier --check apps/office/src/comphelper/source/xml/ofopxmlhelper{,.handler,.handler.test,.fixture.test}.ts apps/office/src/sax/source/fastparser/fastparser{,.test}.ts scripts/fixtures/native-ofopxml-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "log": "apps/office/coverage/native-ofop-handler-final-style.log",
+      "result": "pass",
+      "evidence": "Scoped lint/format and global JSDoc5426 pass; no checker weakening."
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "log": "apps/office/coverage/native-ofop-handler-tools-final.log",
+      "result": "pass",
+      "evidence": "Tools/browser probes compile."
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "log": "apps/office/coverage/native-ofop-handler-types-final.log",
+      "result": "fail",
+      "evidence": "Only4 pre-existing SfxDocumentMetaData.storage.ts errors at340/412/413/440; actual native Medium/storage paths remain unfinished."
+    },
+    {
+      "command": "npm run check:source-provenance && npm run inventory:parity && npx prettier --check docs/program/registry/shared/{runtime,provenance}/comphelper/source/xml/ofopxmlhelper{,.handler}.ts.json && git diff --check",
+      "log": "apps/office/coverage/native-ofop-handler-registry-final.log",
+      "result": "pass",
+      "evidence": "2634runtime modules2397mapped/199browser/38infra, semanticViolationCount0, record formatting and diff pass."
+    },
+    {
+      "command": "npx vite build --config apps/office/vite.config.ts apps/office && node scripts/check-static-build.mjs",
+      "log": "apps/office/coverage/native-ofop-handler-build.log",
+      "result": "pass",
+      "evidence": "Standalone production Vite and relative4-bundle static check pass; full npm build is not claimed while typecheck fails."
+    },
+    {
+      "command": "npm run check:source-tree && npm run check:file-size",
+      "log": "apps/office/coverage/native-ofop-handler-structure.log",
+      "result": "pass",
+      "evidence": "Source tree and size pass with existing advisories."
+    },
+    {
+      "command": "ap doctor && node .agentplane/policy/check-routing.mjs && git diff --check",
+      "log": "apps/office/coverage/native-ofop-handler-policy.log",
+      "result": "pass",
+      "evidence": "Doctor/routing/diff pass with existing hook advisories."
+    },
+    {
+      "command": "npm run check:dependencies",
+      "log": "apps/office/coverage/native-ofop-handler-boundaries.log",
+      "result": "fail",
+      "evidence": "Existing comphelper -> sax -> comphelper cycle remains. Native ParserExpat is still missing; browser transport is not disguised as its service."
+    },
+    {
+      "command": "npm run test:shared -- src/comphelper/source/xml/ofopxmlhelper.test.ts src/comphelper/source/xml/ofopxmlhelper.write.test.ts src/sax/source/fastparser/fastparser.test.ts",
+      "log": "apps/office/coverage/native-ofop-handler-initial.log",
+      "result": "fail",
+      "evidence": "Initial8 failures: attempted writes through frozen StringPair const-reference. Corrected to original mutable field-address/rtl_uString_assign lowering; native const binding unchanged. Corrected40 tests pass."
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "log": "apps/office/coverage/native-ofop-handler-provenance.log",
+      "result": "fail",
+      "evidence": "Initial new compiler shard lacked required filenameDivergence record. Added responsibility-split record; checker unchanged and qualified registry passes."
+    }
+  ],
+  "remaining": [
+    "Actual ParserExpat service and native read success, native OStorage/package/filters/models/export/reopen/UI acceptance remain unfinished.",
+    "Same4 metadata type errors and existing comphelper/sax dependency cycle remain.",
+    "Native physical ABI/OOM and unreachable invariant failure are unqualified."
+  ],
+  "issues": "No duplicate ledger entries: existing WRITER120/CALC-300 extension-first MIME lookup and WRITER506/CALC571 relation admission findings remain preserved.",
+  "uuidSteering": {
+    "facts": "SDK libuuid is a JS implementation of a C API, present in build SDK but not linked as an application UUID dependency. User asked for native JS UUID and then conditional reuse if native and already present.",
+    "decision": "Use built-in browser crypto.randomUUID for the JS implementation, preserving original Guid byte/format contracts; no SDK libuuid linking, filesystem RNG port, download or extra WASM wrapper. Earlier proposals are superseded, not recorded as approved.",
+    "implementationInThisCheckpoint": "None; metadata work continued independently. User-facing clarification distinguishes browser API from SDK C-interface emulation."
+  },
+  "fullSuite": "Not run: no completed agentplane task; ten-completed-task cadence unchanged.",
+  "goal": "Active; no pause, completion, merge or external publication.",
+  "hashes": [
+    {
+      "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts",
+      "sha256": "e8ae35c65b8d1e9f8bf03e1ac7b8f16f1a09efd86d2a7609cd5c70694062f265"
+    },
+    {
+      "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.handler.ts",
+      "sha256": "5bf6822c37fbad94115a83038d05db22b5823d46745eb89dfba8d917d637de37"
+    },
+    {
+      "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.handler.test.ts",
+      "sha256": "a0815bcdde8db693c4717761a9543d7204be7ec580acfdb0029125f16adda384"
+    },
+    {
+      "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.fixture.test.ts",
+      "sha256": "218fe1eaac4a10f9a820742b85bbc81461311d5a9d3b429c0e047c462af2392b"
+    },
+    {
+      "path": "apps/office/src/sax/source/fastparser/fastparser.ts",
+      "sha256": "9452bdd2fac9d9ac773f7740dd2747dec57d0a2f45073b592720e742483d36cb"
+    },
+    {
+      "path": "apps/office/src/sax/source/fastparser/fastparser.test.ts",
+      "sha256": "86afd1c84237d45461af5d8886f450ca8481f5ca0cebcb407363e17552f99d6c"
+    },
+    {
+      "path": "scripts/fixtures/native-ofopxml-probe.ts",
+      "sha256": "b061b4030a79661ac7f773499ca96786d229b3530e210bb4808c4251b820dec3"
+    },
+    {
+      "path": "scripts/fixtures/native-fastparser-consumer-probe.ts",
+      "sha256": "0d036b85ac54cdce8c0c89d9440fec673fa38065c3c0d77d4d68a9d6fd4988e7"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "sha256": "7f0c1dfe43f6786b35468c1d3aa938b3eb37078612e60bae42c662ab805f83f8"
+    },
+    {
+      "path": "vendor/libreoffice-reference/comphelper/source/xml/ofopxmlhelper.cxx",
+      "sha256": "0ca92dca4d633b46a601aae210f04159d7bbfefc4fea8810b544c68a935c980c"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/comphelper/ofopxmlhelper.hxx",
+      "sha256": "89a1868e805e8c79417eb27bf807e81215c4b5280504b7d474e5ad866357953f"
+    },
+    {
+      "path": "vendor/libreoffice-reference/qadevOOo/tests/java/ifc/xml/sax/_XDocumentHandler.java",
+      "sha256": "1674e859d2cf6db030bb928abaa8f3facb9411eb14731f36ef5038b60075e7ca"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/hello.docx",
+      "sha256": "4dc73af4d16b42da1d53be74621d5d6c865476c43919906b1e60ea47f8256813"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/strict.docx",
+      "sha256": "6e71a4d554ea90df1ddcc9b6fbbcc677a94c6617cb35f9e5b7d4ccab46f1a79e"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/preserve_space.xlsx",
+      "sha256": "dca72194dda7f51e051c1fd709ff330e172ff141845236694c25c476c23fea6b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/universal-content-strict.xlsx",
+      "sha256": "fbd7591328bdb1b4d3341efcc692d42669b2e6f754babdc2b7b654fe050e2fc5"
+    },
+    {
+      "path": "apps/office/coverage/native-ofop-handler/coverage-summary.json",
+      "sha256": "f3e5efc7778ba2a6ab45aeb1a06eec2cfa05217432538bc4d3a149b3d2597b36"
+    },
+    {
+      "path": "apps/office/coverage/native-ofop-handler-status-final.log",
+      "sha256": "c148e9054c5bf51bc8a0103fe8d5cdd7bf9c14b925b4cd5f255aa762c7b59761"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/comphelper/source/xml/ofopxmlhelper.ts.json",
+      "sha256": "c9bb52ed2f34f817bd976639fecc87a5f7f9cb3fe7162bf5a52e745bb4bb58fa"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/comphelper/source/xml/ofopxmlhelper.handler.ts.json",
+      "sha256": "34358c79e09658fb8461636a803b80f76b4ebda55efc0f2c207b26088832dc7d"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/comphelper/source/xml/ofopxmlhelper.ts.json",
+      "sha256": "062cbf2dfb290f59edb714bd1d3a74bca0274d45e7a02b096283b8d9009eded9"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/comphelper/source/xml/ofopxmlhelper.handler.ts.json",
+      "sha256": "d48529663d1c0f459f98c11d188fe6c78173dbef25ccf6771c4aa9b3d866fbd5"
+    },
+    {
+      "path": "apps/office/coverage/native-ofop-handler-shared.log",
+      "sha256": "f78bba50d2efb92c2bafdb734cf4b5dfbafd8770985dd1940da4d33d59cbbcf5"
+    },
+    {
+      "path": "apps/office/coverage/native-ofop-handler-writer.log",
+      "sha256": "d15e71e4c3bbf52bc5449cf8bf1675c59b26d080f227278784a83a516e42e53a"
+    },
+    {
+      "path": "apps/office/coverage/native-ofop-handler-fixtures.log",
+      "sha256": "3d77ea2653b3356752a5fbcc8044733edb0c85554f6ca1f4908e7afd556dca88"
+    },
+    {
+      "path": "apps/office/coverage/native-ofop-handler-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "path": "apps/office/coverage/native-ofop-handler-final-style.log",
+      "sha256": "ccbe5d8522900c83d0b58c89833f108c5358effd36ef21fd48434a5bdb668386"
+    },
+    {
+      "path": "apps/office/coverage/native-ofop-handler-tools-final.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "path": "apps/office/coverage/native-ofop-handler-types-final.log",
+      "sha256": "77e83c111f7dc4777a8d15244f65b082e77d77f583edd63fd7f4c98d1961f0f2"
+    },
+    {
+      "path": "apps/office/coverage/native-ofop-handler-registry-final.log",
+      "sha256": "6f3f0b5a04acd2149a1b8deb426e6239148baa15fabec7e2b9838111399de765"
+    },
+    {
+      "path": "apps/office/coverage/native-ofop-handler-build.log",
+      "sha256": "cba741dac0ba2cdd7a9d86785fbcda872098fbc854680c59f576d0ffffb3f764"
+    },
+    {
+      "path": "apps/office/coverage/native-ofop-handler-structure.log",
+      "sha256": "2956c4bbf6cf994a628624ff8e9817f7ac0bdad4724029455e567d96e81f4c58"
+    },
+    {
+      "path": "apps/office/coverage/native-ofop-handler-policy.log",
+      "sha256": "73c84197444e59b9759389a5c0b88a963a957f2f917fffb74af65fe4e278086f"
+    },
+    {
+      "path": "apps/office/coverage/native-ofop-handler-boundaries.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "path": "apps/office/coverage/native-ofop-handler-initial.log",
+      "sha256": "2cc0d3a32dad00bf3045491d8301c5c67d0a072e5106da1512a72c4c7450437b"
+    },
+    {
+      "path": "apps/office/coverage/native-ofop-handler-provenance.log",
+      "sha256": "fce919159e9478cdae8ecc35ba886ad8cd6894ca59dc8f531a7b91f85ae06bd5"
+    }
+  ]
+}

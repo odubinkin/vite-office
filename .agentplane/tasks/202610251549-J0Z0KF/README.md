@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 463
+revision: 466
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-14T17:46:06.138Z"
+  updated_at: "2026-11-14T18:31:27.421Z"
   updated_by: "CODER"
-  note: "Original persistence locks and constructor unwind restored; 43 related tests and actual Chromium main/Worker 64001-byte copy/switch pass. Complete owner90 fails87.74S/79.54B; four metadata type errors and existing cycle remain. Native XLSX package/storage/filter/model/UI incomplete. Evidence: native-persistence-lock-continuation.json."
-  attempts: 146
+  note: "Original OFOPXML native handler and stream/context contracts implemented; 134 related functional tests plus Chromium main/Worker metadata pass. Handler/read owner90 still fails84.66S/83.7L because real ParserExpat success is missing. Same4 metadata types/cycle remain; full XLSX kernel/UI unfinished. Evidence: native-ofop-handler-continuation.json."
+  attempts: 147
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2344,8 +2347,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-14T18:31:27.421Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original OFOPXML native handler and stream/context contracts implemented; 134 related functional tests plus Chromium main/Worker metadata pass. Handler/read owner90 still fails84.66S/83.7L because real ParserExpat success is missing. Same4 metadata types/cycle remain; full XLSX kernel/UI unfinished. Evidence: native-ofop-handler-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-14T18:31:36.943Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-14T17:46:21.398Z"
+doc_updated_at: "2026-11-14T18:31:36.943Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -6718,6 +6734,36 @@ sections:
     Attempts: 146
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T17:45:53.740Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-11-14T18:31:27.421Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original OFOPXML native handler and stream/context contracts implemented; 134 related functional tests plus Chromium main/Worker metadata pass. Handler/read owner90 still fails84.66S/83.7L because real ParserExpat success is missing. Same4 metadata types/cycle remain; full XLSX kernel/UI unfinished. Evidence: native-ofop-handler-continuation.json.
+    Attempts: 147
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T18:29:20.146Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
 
     Details:
 
@@ -11765,6 +11811,36 @@ Note: Original persistence locks and constructor unwind restored; 43 related tes
 Attempts: 146
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T17:45:53.740Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-14T18:31:27.421Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original OFOPXML native handler and stream/context contracts implemented; 134 related functional tests plus Chromium main/Worker metadata pass. Handler/read owner90 still fails84.66S/83.7L because real ParserExpat success is missing. Same4 metadata types/cycle remain; full XLSX kernel/UI unfinished. Evidence: native-ofop-handler-continuation.json.
+Attempts: 147
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T18:29:20.146Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
 
 Details:
 
