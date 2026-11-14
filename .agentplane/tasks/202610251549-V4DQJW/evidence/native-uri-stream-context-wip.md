@@ -467,3 +467,8 @@ Original registered service, complete interface declarations, sink, UTF16 wildca
 ## Native file-UCP stream continuation
 
 Original ReconnectingFile, XInputStream_impl, XStream_impl and TaskHandlerErr are implemented over actual OSL/MEMFS, native mutex and UNO owners. Mechanical byte-pointer binding accepts real initialized Sequence lvalues without a substitute stream/provider. All41 related tests/4 files pass; actual file input feeds registered ZIP access in Chromium main and DOM-free Worker. ReconnectingFile independently passes90; input and duplex owners still fail90 on unqualified error branches. Exact evidence and source QA limits are recorded in native-file-ucp-stream-continuation.json. Full broker/provider/storage/model/filter/UI remains incomplete, same4 metadata type errors and comphelper/sax cycle remain; no full-suite replay, goal pause or completion.
+
+
+## Native UCB Regexp/RegexpMap continuation
+
+Original restricted parser/matcher/serializer and ordered map/default/iterator contracts are implemented with actual RTL values.49 source-derived tests, all18 pinned UCB configuration templates and Chromium main/DOM-free Worker pass. Both executable owners independently pass90; stable iterator cache address and source equality/serialization omissions are preserved. Exact commands, source QA limits and hashes are in native-ucb-regexp-continuation.json. This is a bounded prerequisite pass, not parent acceptance: actual broker/provider, all previous independent failed coverages,4 metadata type errors, the comphelper/sax cycle and full DOCX/XLSX storage/model/filter/UI remain incomplete. No full-suite replay, goal pause or completion.

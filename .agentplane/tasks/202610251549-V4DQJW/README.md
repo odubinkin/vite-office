@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 185
+revision: 188
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-14T16:30:11.304Z"
+  updated_at: "2026-11-14T16:46:16.593Z"
   updated_by: "CODER"
-  note: "Native file-UCP streams:41 tests/4 files and Chromium main/DOM-free Worker pass. Original ReconnectingFile independently passes90; input/duplex error branches remain below90. Four metadata type errors and existing comphelper/sax cycle remain; actual UCB broker/provider and DOCX/XLSX package/storage/model/filter/UI unfinished. Exact hashes and source QA limits in evidence/native-file-ucp-stream-continuation.json."
-  attempts: 48
+  note: "Native UCB Regexp/RegexpMap:49 tests/all18 pinned provider configuration templates pass; both new executable owners independently pass90, and Chromium main/DOM-free Worker pass. Whole broker/provider and DOCX/XLSX storage/model/filter/UI remain unfinished; prior coverage failures,4 metadata type errors and existing comphelper/sax cycle retained. Source QA limits and hashes: evidence/native-ucb-regexp-continuation.json."
+  attempts: 49
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -776,8 +779,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-14T16:46:16.593Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native UCB Regexp/RegexpMap:49 tests/all18 pinned provider configuration templates pass; both new executable owners independently pass90, and Chromium main/DOM-free Worker pass. Whole broker/provider and DOCX/XLSX storage/model/filter/UI remain unfinished; prior coverage failures,4 metadata type errors and existing comphelper/sax cycle retained. Source QA limits and hashes: evidence/native-ucb-regexp-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-14T16:46:39.626Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-14T16:30:19.412Z"
+doc_updated_at: "2026-11-14T16:46:39.626Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -2230,6 +2246,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-14T16:46:16.593Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native UCB Regexp/RegexpMap:49 tests/all18 pinned provider configuration templates pass; both new executable owners independently pass90, and Chromium main/DOM-free Worker pass. Whole broker/provider and DOCX/XLSX storage/model/filter/UI remain unfinished; prior coverage failures,4 metadata type errors and existing comphelper/sax cycle retained. Source QA limits and hashes: evidence/native-ucb-regexp-continuation.json.
+    Attempts: 49
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T16:46:15.987Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -2536,6 +2582,13 @@ sections:
     - Result: rework. All assertions/browser checks pass. ReconnectingFile passes90 independently; input/duplex owners still fail90 on genuine unqualified error branches. Same4 metadata type errors and existing comphelper/sax cycle remain.
     - Evidence: evidence/native-file-ucp-stream-continuation.json records raw coverage, source/log hashes, source QA qualification and WRITER610/611/CALC673/674.
     - Scope: original real file-UCP stream/reconnect/error owners and OSL File byte lvalue boundary. No broker/provider substitute, host mount, private-state test injection or threshold suppression. Full UCB URL/provider/TaskManager, native package/storage/model/filter and existing DOCX/XLSX UI acceptance remain incomplete.
+
+    ### Native UCB Regexp/RegexpMap continuation
+
+    - Command: Focused49 tests with per-owner90 coverage, actual Chromium main/DOM-free Worker probe, scoped ESLint/Prettier, JSDoc5409, tools typecheck, Vite/static, provenance2623/registry, boundary12/2, size/tree, doctor/routing/diff; exact commands are in evidence/native-ucb-regexp-continuation.json.
+    - Result: bounded prerequisite pass; parent rework. Both new executable owners independently pass90. Actual UCB broker/provider and DOCX/XLSX package/storage/model/filter/UI remain unfinished; prior independent failed coverage profiles,4 metadata type errors and comphelper/sax cycle are not waived.
+    - Evidence: evidence/native-ucb-regexp-continuation.json contains raw per-owner coverage, all18 source configuration pattern assertions, exact source/log hashes and WRITER612/613/CALC675/676. No dedicated Regexp/RegexpMap upstream QA was found; source-derived assertions are not described as original QA.
+    - Scope: actual restricted grammar/matching/serialization and ordered map/default/iterator/value contracts. Source equality omissions and non-roundtripping empty reverse-prefix serialization remain intact; local iterator cached member identity is corrected with actual RTL move assignment. No host regex/URL-parser core, fabricated provider, threshold suppression or semantic parity promotion.
 id_source: "generated"
 ---
 ## Summary
@@ -3999,6 +4052,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-14T16:46:16.593Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native UCB Regexp/RegexpMap:49 tests/all18 pinned provider configuration templates pass; both new executable owners independently pass90, and Chromium main/DOM-free Worker pass. Whole broker/provider and DOCX/XLSX storage/model/filter/UI remain unfinished; prior coverage failures,4 metadata type errors and existing comphelper/sax cycle retained. Source QA limits and hashes: evidence/native-ucb-regexp-continuation.json.
+Attempts: 49
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T16:46:15.987Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -4310,3 +4393,10 @@ Final source review also retains original FileStatus::isDirectory (Directory or 
 - Result: rework. All assertions/browser checks pass. ReconnectingFile passes90 independently; input/duplex owners still fail90 on genuine unqualified error branches. Same4 metadata type errors and existing comphelper/sax cycle remain.
 - Evidence: evidence/native-file-ucp-stream-continuation.json records raw coverage, source/log hashes, source QA qualification and WRITER610/611/CALC673/674.
 - Scope: original real file-UCP stream/reconnect/error owners and OSL File byte lvalue boundary. No broker/provider substitute, host mount, private-state test injection or threshold suppression. Full UCB URL/provider/TaskManager, native package/storage/model/filter and existing DOCX/XLSX UI acceptance remain incomplete.
+
+### Native UCB Regexp/RegexpMap continuation
+
+- Command: Focused49 tests with per-owner90 coverage, actual Chromium main/DOM-free Worker probe, scoped ESLint/Prettier, JSDoc5409, tools typecheck, Vite/static, provenance2623/registry, boundary12/2, size/tree, doctor/routing/diff; exact commands are in evidence/native-ucb-regexp-continuation.json.
+- Result: bounded prerequisite pass; parent rework. Both new executable owners independently pass90. Actual UCB broker/provider and DOCX/XLSX package/storage/model/filter/UI remain unfinished; prior independent failed coverage profiles,4 metadata type errors and comphelper/sax cycle are not waived.
+- Evidence: evidence/native-ucb-regexp-continuation.json contains raw per-owner coverage, all18 source configuration pattern assertions, exact source/log hashes and WRITER612/613/CALC675/676. No dedicated Regexp/RegexpMap upstream QA was found; source-derived assertions are not described as original QA.
+- Scope: actual restricted grammar/matching/serialization and ordered map/default/iterator/value contracts. Source equality omissions and non-roundtripping empty reverse-prefix serialization remain intact; local iterator cached member identity is corrected with actual RTL move assignment. No host regex/URL-parser core, fabricated provider, threshold suppression or semantic parity promotion.
