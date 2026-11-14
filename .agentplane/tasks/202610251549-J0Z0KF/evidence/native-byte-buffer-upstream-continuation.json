@@ -1,0 +1,181 @@
+{
+  "scope": "Original OStringBuffer pointer/count assertion and explicit counted append overload plus complete legacy basic/reserve/length/borrowed-pointer/counted-append QA families. Public URL security/authority dependencies are only proposed, not mutated.",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceSha256": {
+    "apps/office/src/sal/inc/rtl/strbuf.ts": "c8a1228ebbcf4215f49261a8f5f19a8c6632ed657e6dc2b65b9d83287494f9bd",
+    "apps/office/src/sal/rtl/ostringbuffer.test.ts": "806f0d93fcf5225d42483c61943231cacf01359d3b6d712490d1e1f1d709eb2a",
+    "apps/office/src/sal/rtl/ostringbuffer.basic-upstream.test.ts": "6b53554b731c5e479e1d151beacea4aa8342a1e84e79ac3c32e6dbea527c89b3",
+    "apps/office/src/sal/rtl/ostringbuffer.counted-upstream.test.ts": "e73bc608d6f21e4e769e42cf3d05a02393f60b08258000061020d4b3c7eb1e7f",
+    "apps/office/src/sal/rtl/upstream-ostringbuffer-basic-cases.json": "aff6d4eeafd6018fb237bcefe5db2f3b40a48e925e45ab6782e9cbb29c412e3e",
+    "apps/office/src/sal/rtl/upstream-ostringbuffer-counted-append-cases.json": "85d31968deca6b4e052f87c8aee71722de27b4f9386773c63e3f29481b5c4ad1",
+    "scripts/generate-ostringbuffer-upstream-fixtures.py": "bb777dd6280c1831a57416aa9b732a7f46ce11c88993983e5c77c82882974256",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/strbuf.ts.json": "3a0961415222ac7697d09592e0f196c839b553078f9fc98dd6eaf800911fbcfa",
+    "docs/program/registry/shared/provenance/sal/inc/rtl/strbuf.ts.json": "c9b693b2a7c26dfb1ce552d92c4fcd8b70b2c1c48e579a9c363388a199ccc8f8",
+    ".agentplane/tasks/202610251549-J0Z0KF/evidence/file-url-home-authority-proposal.md": "0aa1df9d4ef6841cd51b1d034ed8d68fb78825a3ce4c66a56b5c40b81ae9718a"
+  },
+  "checks": [
+    {
+      "command": "python3 scripts/generate-ostringbuffer-upstream-fixtures.py --check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-byte-buffer-fixtures-final.log",
+      "sha256": "fddbcef22c872d24922c49e4428975a7312eebd030dc492a8bd435bd6022711f"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/rtl/ostringbuffer.basic-upstream.test.ts src/sal/rtl/ostringbuffer.counted-upstream.test.ts src/sal/rtl/ostringbuffer.test.ts src/sal/rtl/ostringbuffer.upstream.test.ts --coverage --coverage.include=src/sal/inc/rtl/strbuf.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-byte-buffer-upstream-final",
+      "result": "pass",
+      "log": "apps/office/coverage/native-byte-buffer-upstream-final.log",
+      "sha256": "394f567e5301025b61dd8bf8dfa10bcdb670d3ab326831bffdd02395b7894c40"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/rtl/ostringbuffer.test.ts src/sal/rtl/ostringbuffer.upstream.test.ts src/sal/rtl/ostringbuffer.basic-upstream.test.ts src/sal/rtl/ostringbuffer.counted-upstream.test.ts src/sal/osl/unx/file_url.encoding.test.ts src/sal/osl/unx/file_url.encoding.ascii.test.ts src/sal/rtl/strbuf.test.ts src/sal/osl/unx/file.access.test.ts src/sal/osl/unx/file.access-abort.test.ts src/sal/osl/unx/nlsupport.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/native-byte-buffer-related.log",
+      "sha256": "d6a7861f927b6e510863348c34cbb12b304e6777776fd937b5502360208c6bd6"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-byte-buffer-worker.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/sal/inc/rtl/strbuf.ts apps/office/src/sal/rtl/ostringbuffer.test.ts apps/office/src/sal/rtl/ostringbuffer.basic-upstream.test.ts apps/office/src/sal/rtl/ostringbuffer.counted-upstream.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/native-byte-buffer-lint-checked.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/sal/inc/rtl/strbuf.ts apps/office/src/sal/rtl/ostringbuffer.test.ts apps/office/src/sal/rtl/ostringbuffer.basic-upstream.test.ts apps/office/src/sal/rtl/ostringbuffer.counted-upstream.test.ts apps/office/src/sal/rtl/upstream-ostringbuffer-basic-cases.json apps/office/src/sal/rtl/upstream-ostringbuffer-counted-append-cases.json",
+      "result": "pass",
+      "log": "apps/office/coverage/native-byte-buffer-format-checked.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "result": "fail",
+      "log": "apps/office/coverage/native-byte-buffer-types.log",
+      "sha256": "a9434f10a68a1e5c94d7ab20773d47510e38e2252740623b6db54e2b80be0846"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/native-byte-buffer-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-byte-buffer-provenance-final.log",
+      "sha256": "f0d519f29065069f24cbaac9c7d6cd3071b05db73476108dc01afcb1c0305814"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-byte-buffer-registry-final.log",
+      "sha256": "a00d4abe2339b5efaea54f2f99bb60d83b43a339afeb7d16f0fb99b8fa5f34b5"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-byte-buffer-docs.log",
+      "sha256": "03bc18aef30bca0974dbce6c60c4f6f63ef2e76250865177eae76d9b93c7a790"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "log": "apps/office/coverage/native-byte-buffer-deps.log",
+      "sha256": "b2699149c4d4743fefc227673f21ac2f21789622b3fa81a6e422036a9a715f57"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/native-byte-buffer-size.log",
+      "sha256": "3d8fbbb776c3de59e2d2d090ae14c8c43eda6bf03239d59b0165b7cb9002df24"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/native-byte-buffer-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-byte-buffer-vite.log",
+      "sha256": "b49b6bf1263f83c955f25aa942cbddc80c681fce8009688c37aed48541640efe"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-byte-buffer-static-final.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-byte-buffer-doctor-final.log",
+      "sha256": "b5952fcd145899c3aae678e9dd9df01a7690e445a289f8f47f5a2efc52006128"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-byte-buffer-routing-final.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-byte-buffer-diff-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "git status --short --untracked-files=all",
+      "result": "pass",
+      "log": "apps/office/coverage/native-byte-buffer-status.log",
+      "sha256": "9ae9cf812f5f6aea9d741a9e55d0756a8b7e39843c86f4c11d0c1ce434ddbf5e"
+    }
+  ],
+  "coverage": {
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sal/inc/rtl/strbuf.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    }
+  },
+  "tests": {
+    "focused": 96,
+    "related": 117,
+    "relatedIncludesFocused": true,
+    "newUpstreamCases": 76,
+    "newSourceAssertions": 140,
+    "newRegressionCases": 1,
+    "sourceFamilies": "getLength8, getCapacity10, ensureCapacity12, setLength22, csuc2, getStr2 and counted-pointer append20; earlier15 legacy constructor/clear/remove and2 modern cases retained.",
+    "fixtureProvenance": "Generator checks exact registered case set/order and assertion count, reads pinned CppUnit/header literal expectations and records source/header/body SHA-256; never reads production code, runtime outputs or coverage counters. This is source QA porting, not a native runtime oracle certificate.",
+    "critical": "Restored original len==0||str!=NULL assertion before C insert; removed implicit null-to-zero overload default. Genuine null/zero-count no-ops and rejected positive null insert/append preserve existing buffer contents. appendUninitialized retains its source reservation route. No private-state injection/provider or threshold changes.",
+    "browser": "Actual existing Chromium main/DOM-free Worker native DOM/SAX/package/locale/file/URI probes pass with the corrected buffer contract."
+  },
+  "coverageQualification": "Prior independent OStringBuffer88.46 branch gap is closed by real source precondition/overload repair and source QA. All measured owner metrics100 naturally; unchanged90 gates. No extra tests solely to chase100, synthetic counters or exclusion changes. Other earlier owner gaps remain retained.",
+  "approval": {
+    "status": "awaiting actual user reply to queued request; tool accepted=true is not approval",
+    "proposal": ".agentplane/tasks/202610251549-J0Z0KF/evidence/file-url-home-authority-proposal.md",
+    "scope": "Original current-security handle/home lookup and local hostname/FQDN authority contracts, existing WASM/MEMFS only, no host/credential/login/external DNS/socket/certificate activity.",
+    "policy": ".agentplane/policy/security.must.md",
+    "dependentMutation": "none"
+  },
+  "findings": [
+    "WRITER572/CALC635: source-reviewed original Emscripten mobile identity and /var/mobile fallback; implementation awaits security-context approval."
+  ],
+  "corrections": [
+    "Removed unused parameter in source borrowed-pointer tests; final lint passes.",
+    "Provenance resolver supports apps/vendor/third_party evidence roots but not scripts; removed the unsupported script marker reference from source-provenance evidence. The generator remains explicitly linked in runtime/task evidence and actual fixture check. No tooling gate was changed."
+  ],
+  "remaining": [
+    "Security/home/hostname-authority implementation awaits actual approval. Public URL/system-path/open/SvFileStream/TempFile/package/storage/filter/model/UI still unfinished.",
+    "Other legacy OStringBuffer scalar/lazy/move/append families remain unfinished; native ABI/OOM/uninitialized/thread profiles unqualified.",
+    "Same4 metadata type errors, comphelper/sax cycle and157 old JSDoc findings remain; earlier independent native file/stream/seekable/temp/libc-locale gaps retained.",
+    "Read-only repository cache lookup found no cached pinned zlib archive/source; no download or substitute implementation was attempted. Prior download/auth approvals remain separate.",
+    "No full suite due under completed-task cadence. Both broad tasks stay unfinished/active; only canonical artifacts are checkpointed."
+  ],
+  "goalStatus": "active"
+}
