@@ -1,0 +1,222 @@
+{
+  "scope": "Original Linux/Emscripten OSL locale/environment parsing/composition,177-pair encoding table, process locale cache and original native pthread mutex, lazy thread text encoding/exchange and actual pinned SDK libc bridge. File URL/file open/TempFile/model/filter/UI remain unfinished.",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "artifact": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "localeBindingSha256": "0f00b270fcde3d33bd142514575582f93ab20832b7a53355f47ff478b4fe55b3",
+    "cppBindingSha256": "fe3a2446ac634a72904af28ba43fb0802627382db108b8e83367ba02a2d5dbce",
+    "emsdkCommit": "1693ce7359fc9694f198694f902a2cc061239b86",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 172,
+    "enumConstantCount": 851,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "59219bd507bdc63ee1165555dc569e83a1854fee94a93ab74a370a0ec6440f1e"
+  },
+  "sourceSha256": {
+    "apps/office/src/external/emscripten/locale.ts": "67958a50f003c692e00c64588e96a10f534f13a9a8ce43544c46a10e03f6fe9e",
+    "apps/office/src/sal/osl/unx/nlsupport.ts": "52225f493be991abac7719eb535f0674bc6df5bcebab5bc5f9498e462b6935bf",
+    "apps/office/src/sal/osl/unx/nlsupport.table.ts": "a9f137552b57b4738287f35a3c4818830aaba07433ab66bf4604d6f57559dfb0",
+    "apps/office/src/sal/osl/unx/nlsupport.test.ts": "75ef43198b8317431a583b03415b28dd7e2a6e721a157f36ce2f894542a8dd69",
+    "apps/office/src/sal/osl/unx/process_impl.ts": "d4ec9f614697a73c911c98d5eabe45eacb155e33d0d1118b771abd9eea45f6f4",
+    "apps/office/src/sal/osl/unx/thread.ts": "cd490a6337cc45f973ee49588a14b70f131ab82221c260387cfa548c3a0d7ecf",
+    "apps/office/src/sal/osl/all/threadshared.ts": "70efdfb88af31f6428ef21535cc604e48f5ff05190374babfb3e2265a6350f7a",
+    "apps/office/src/sal/inc/osl/process.ts": "8562017c2c1b97341b78661c0873de7b00c3ceac816a5363f455c9e826e8ef6e",
+    "apps/office/src/sal/inc/osl/thread.ts": "ab40bfc89cefd5a38c59752924c979ecb4a19a2bfaa62dba9c0d013393c564f7",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "d4edcd91522a11bc9813f8fe43fd5a8874923154caabb0fdefc07a43f4a2e66a",
+    "scripts/native-dom-worker-probe.mjs": "7c43386168b118c085df028ee20d83c39e762c8580dd41fb990e002e50fa56b2",
+    "scripts/build-libxml2-wasm.py": "45760cc20f75d4b8facf87e61c843be62bf5a35d944583c25a6e5101af8926de",
+    "third_party/libxml2-wasm/osl-locale.c": "0f00b270fcde3d33bd142514575582f93ab20832b7a53355f47ff478b4fe55b3",
+    "third_party/libxml2-wasm/binding.c": "df9a2f7acd9d44318c7604bfeb3dd38fffff6be094ed08593b228c5b923fa06d",
+    "third_party/libxml2-wasm/source.json": "0aaf0adfe9d5bec65b0d7f5f5948f758a90807acbd24fe8ece4c10057216d44a",
+    "third_party/libxml2-wasm/artifact.json": "8af5e770c7fb17bf51b5dd0d164f2bca4e0a767192c3c72f196b56d904dc7c6d",
+    "third_party/libxml2-wasm/index.d.ts": "0464a8831b493cbca305e976b19ab1d04861b50c0d705f443318352bf0a0b5bb",
+    "third_party/libxml2-wasm/generated-api.json": "dd42da8932971668729404a58f6b4c7e669e0c8b71a53e53cd42e766ad9f1981",
+    "third_party/libxml2-wasm/libxml2.mjs": "59219bd507bdc63ee1165555dc569e83a1854fee94a93ab74a370a0ec6440f1e"
+  },
+  "checks": [
+    {
+      "command": "python3 scripts/build-libxml2-wasm.py",
+      "result": "pass",
+      "log": "apps/office/coverage/native-nls-build-final.log",
+      "sha256": "8bdceebc98247382233dd6c121847dad1f885a6feb9ccab8fc366800c7187190"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/osl/unx/nlsupport.test.ts src/sal/rtl/locale.test.ts src/sal/rtl/ustring-convert.native.test.ts --coverage --coverage.include=src/sal/osl/unx/nlsupport.ts --coverage.include=src/sal/osl/unx/process_impl.ts --coverage.include=src/sal/osl/unx/thread.ts --coverage.include=src/sal/osl/all/threadshared.ts --coverage.include=src/external/emscripten/locale.ts --coverage.thresholds.perFile=true --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-nls-final",
+      "result": "pass",
+      "log": "apps/office/coverage/native-nls-tests-final.log",
+      "sha256": "685e030bf7359553dff7e5b59a590253462821c5e2e469943d7a784a1ea297e6"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/osl/unx/nlsupport.test.ts --coverage --coverage.include=src/external/emscripten/locale.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-nls-libc",
+      "result": "fail",
+      "log": "apps/office/coverage/native-nls-externalCoverage-latest.log",
+      "sha256": "5a8ced4cbc281102e532582cef664466887a3a28a7c1e59134a709a4e84fb3af"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-nls-worker-latest.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/external/emscripten/locale.ts apps/office/src/sal/osl/unx/nlsupport.ts apps/office/src/sal/osl/unx/nlsupport.table.ts apps/office/src/sal/osl/unx/nlsupport.test.ts apps/office/src/sal/osl/unx/process_impl.ts apps/office/src/sal/osl/unx/thread.ts apps/office/src/sal/osl/all/threadshared.ts apps/office/src/sal/inc/osl/process.ts apps/office/src/sal/inc/osl/thread.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-nls-lint-latest.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/external/emscripten/locale.ts apps/office/src/sal/osl/unx/nlsupport.ts apps/office/src/sal/osl/unx/nlsupport.table.ts apps/office/src/sal/osl/unx/nlsupport.test.ts apps/office/src/sal/osl/unx/process_impl.ts apps/office/src/sal/osl/unx/thread.ts apps/office/src/sal/osl/all/threadshared.ts apps/office/src/sal/inc/osl/process.ts apps/office/src/sal/inc/osl/thread.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-nls-format-latest.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "result": "fail",
+      "log": "apps/office/coverage/native-nls-types-final.log",
+      "sha256": "a9434f10a68a1e5c94d7ab20773d47510e38e2252740623b6db54e2b80be0846"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "log": "apps/office/coverage/native-nls-tools-latest.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/native-nls-provenance-latest.log",
+      "sha256": "4cc1cbb5987800f11defaf76017be4fe61b6e61b4c6402d99ae8d2cd40dadb92"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-nls-registry-latest.log",
+      "sha256": "86e20ee8cde6b9a9fb9d76ee20ad84c68132ecb9eacf92c5c9f8ab5ec475489d"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "log": "apps/office/coverage/native-nls-docs-final.log",
+      "sha256": "03bc18aef30bca0974dbce6c60c4f6f63ef2e76250865177eae76d9b93c7a790"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "log": "apps/office/coverage/native-nls-deps-latest.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/native-nls-size-latest.log",
+      "sha256": "f4674ddc0471baf0b24256c2133a9eac2aafce7c7328330f6ad00c1047f6c73b"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/native-nls-tree-latest.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vite build",
+      "result": "pass",
+      "log": "apps/office/coverage/native-nls-vite-latest.log",
+      "sha256": "68f682e9b27492949454981d2668b84dc6487c45a5dde77d65719040b061609d"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-nls-static.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/native-nls-doctor.log",
+      "sha256": "e4c96b4ce9e47f812806cbcb78c5a566b4dc894f3e73e6247e3321ccd13c8768"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/native-nls-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "log": "apps/office/coverage/native-nls-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "git status --short --untracked-files=all",
+      "result": "pass",
+      "log": "apps/office/coverage/native-nls-status.log",
+      "sha256": "89a41a22a3ed825d0413987d31005690bb0bf1e8c004a3a4bee1e43cd11b0859"
+    }
+  ],
+  "coverage": {
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/external/emscripten/locale.ts": {
+      "statements": 96.87,
+      "branches": 87.5,
+      "functions": 100,
+      "lines": 100
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sal/osl/all/threadshared.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sal/osl/unx/nlsupport.ts": {
+      "statements": 100,
+      "branches": 94.93,
+      "functions": 100,
+      "lines": 100
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sal/osl/unx/process_impl.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sal/osl/unx/thread.ts": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    }
+  },
+  "coverageQualification": "Aggregate command passes, but does not prove per-owner acceptance: independent libc adapter check fails branches87.5 versus unchanged90. Native locale creation/null-codeset failure is not reached by actual pinned libc normal inputs; no fake provider/OOM injection or threshold dilution. Remaining four executable source owners each exceed90 on all recorded metrics. Earlier independent owner gaps remain retained.",
+  "tests": {
+    "nativeLocale": 5,
+    "combinedRelated": 30,
+    "combinedIncludesNativeLocale": true,
+    "upstream": "Carries all12 original rtl_locale CppUnit assertions in related locale tests. Targeted sal/qa search found no direct dedicated get/set process locale, thread text encoding or nlsupport assertions; original broader process/thread QA remains outside this implemented subset.",
+    "critical": "Actual libc setenv/unsetenv/getenv priority and restoration;2/3-letter source parser; native codeset selection, composition variant limits, missing ASCII alias, process cache/native mutex, cold bootstrap and thread initialization/exchange. Chromium main/Worker execute actual native locale operations with process/thread restoration."
+  },
+  "findings": [
+    "WRITER566/CALC629: native ASCII alias omission plus empty-name libc environment selection retained."
+  ],
+  "approval": {
+    "status": "explicit user approval received in current turn",
+    "requestId": "call_80f61d619ab848bf8e8bc9fab60de9c2",
+    "answer": "\u0414\u0430, \u043f\u0435\u0440\u0435\u043d\u0435\u0441\u0442\u0438 \u0438\u0441\u0445\u043e\u0434\u043d\u0443\u044e \u043b\u043e\u0433\u0438\u043a\u0443 \u0438 \u0444\u043b\u0430\u0433\u0438",
+    "scope": "Original setAllowedPaths/isForbidden and call before osl_openFile including prefix logic/defaults/SAL_ABORT_ON_FORBIDDEN; existing MEMFS without host mount.",
+    "proposal": ".agentplane/tasks/202610251549-J0Z0KF/evidence/file-open-security-proposal.md",
+    "dependentMutationThisBlock": "none; next file-open block may proceed"
+  },
+  "corrections": [
+    "Removed unused comparator initializer flagged by ESLint; final lint passes.",
+    "Added original opaque oslThread header declaration, corrected provenance local-symbol and table responsibility-split metadata; final provenance/registry pass.",
+    "Final native bridge redirects copied codeset pointer to the output buffer before freeing locale, matching source lifetime order; rebuilt artifact and fresh-process native/Chromium checks pass."
+  ],
+  "remaining": [
+    "Independent libc adapter branch coverage87.5 fails90; native creation/OOM failure and other native ABI/thread/debug-diagnostic profiles remain unqualified. No manual JS memory allocator or host locale provider is added.",
+    "Same4 metadata type errors, comphelper/sax cycle and157 baseline JSDoc findings persist; no new findings in new modules. Earlier coverage gaps retained.",
+    "Complete file URL/open/SvFileStream/TempFile/package/storage/model/filter/UI acceptance remains unfinished. Source security hook is now approved and no longer awaiting reply.",
+    "Other prior download and auth/certificate approvals remain separate; no network action, host mount or unrelated security change occurred.",
+    "No completed parent task; full suite not due under completed-task cadence."
+  ],
+  "goalStatus": "active"
+}

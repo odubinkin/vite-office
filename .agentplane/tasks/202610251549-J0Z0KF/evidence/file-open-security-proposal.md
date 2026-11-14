@@ -25,3 +25,7 @@ before approval. Independent URL conversion/error/handle work can proceed.
 Policy requiring approval:
 .agentplane/policy/security.must.md:
 "MUST NOT modify auth/crypto/security-critical codepaths without explicit scope approval."
+
+## Explicit user approval received
+
+The user answered the queued request (call_80f61d619ab848bf8e8bc9fab60de9c2): “Да, перенести исходную логику и флаги”. This authorizes the exact original setAllowedPaths/isForbidden/pre-osl_openFile path described above, including prefix comparisons, defaults and SAL_ABORT_ON_FORBIDDEN, within the existing MEMFS without a host filesystem mount. Subsequent dependent file-open implementation may proceed in the approved parent task. It does not approve unrelated downloads, host mounts or authentication/certificate paths.
