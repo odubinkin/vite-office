@@ -1,0 +1,244 @@
+{
+  "scope": "Original filesystem metadata prerequisites required by SvFileStream Open/LockFile: DirectoryItem record/C APIs, FileStatus/DirectoryItem/FileBase consumed C++ wrappers and native stat/access/realpath integration. SvFileStream and TempFile are still not implemented; no DOCX/XLSX/UI completion claim.",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "nativeArtifact": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "fileBindingSha256": "6c56bb770a7dc89afa2280ec4639f6ae7545b985e28b8f7229bdb168bde8a31d",
+    "fileStatBindingSha256": "69ba242c273cb685c22ac3d0344ff710307aaf6fe10908cb50bb0ef008e6f2be",
+    "localeBindingSha256": "0f00b270fcde3d33bd142514575582f93ab20832b7a53355f47ff478b4fe55b3",
+    "securityBindingSha256": "1e116824af729eaf09bb21127f040b032d00c47d4b3b59cdd11176079ee68e93",
+    "socketBindingSha256": "22f11273b8c906da0bd1e20632b19dab5b997dd726d9cddc5c317e21eb45c22f",
+    "cppBindingSha256": "fe3a2446ac634a72904af28ba43fb0802627382db108b8e83367ba02a2d5dbce",
+    "emsdkCommit": "1693ce7359fc9694f198694f902a2cc061239b86",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 189,
+    "enumConstantCount": 853,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "bea1b62fdc547c30459bc4024d613a1f8315e2a408b712cda786e4e8b6c3c191"
+  },
+  "sourceSha256": {
+    "apps/office/src/sal/inc/osl/file.ts": "32069e4a45f00c8058347117dfdaccecee6e147f427fb970c2649e366fac63c2",
+    "apps/office/src/sal/inc/osl/file.hxx.ts": "b434de173be1110cec5300a13133727965d4254a7a788ea8104d7e535cc82e78",
+    "apps/office/src/sal/osl/unx/file_impl.ts": "ccd273e4c0577681cd5e03a87ba5a3565438fd4222673819c7b43e19a0260cc0",
+    "apps/office/src/sal/osl/unx/file_misc.ts": "77708b8647d036de89a6733fef994c75008e519b6bc2b768234f3d1a8f732722",
+    "apps/office/src/sal/osl/unx/file_stat.ts": "878eca53055e99fd7e842ef5887b3594ae832ddcc53961b76849d0e3f6e890fd",
+    "apps/office/src/sal/osl/unx/file_stat.test.ts": "cbb625f4d000f747c664a5f6cebae562de261501601e8315a1c996c6dfd509c4",
+    "apps/office/src/sal/osl/unx/file_stat.upstream.test.ts": "e3cad2e5455d6385c2f49be028ffbf0d8698ddc7f2f08429fc7d477af89e9f70",
+    "apps/office/src/sal/osl/unx/file_path_helper.ts": "69444809c4b8f04239b32ffdfcda53c41ed84cb780f0070cea34b637f09af8dc",
+    "apps/office/src/sal/osl/unx/security.bootstrap.test.ts": "38506ca94e850bebc7b9cd0509733d0b84c9b49a5c3c85aedef018558e9dc821",
+    "apps/office/src/sal/rtl/string.ts": "d40e5227dd4d3af09ea5ebabd22a83b17dae0e381a2831f18cecd3613755afed",
+    "apps/office/src/sal/rtl/strtmpl.ts": "6e29704f0adce9b92e4b3babe72cbd178a7795ed079f46f8503e254260d767ac",
+    "apps/office/src/sal/inc/rtl/string.ts": "6f5b787cbd1a2380f038feb5a6a41fd49578f1e20ba7ebbb1584d45d5ee962a3",
+    "apps/office/src/sal/inc/rtl/string.h.ts": "cc6b4e3563f090c34da31dc6785cf7b6fb3bcb366b5fc7fe3cb2c5e97b6f5141",
+    "apps/office/src/external/emscripten/file.ts": "3b24a720a6f12062785d00c40239e40ad76be45dfbdf08b930a4504b9ca42d73",
+    "docs/program/registry/shared/runtime/sal/osl/unx/file_impl.ts.json": "fa5d0c788a3f81347034034105d2c61aaa513713fdff15bf716026acf7d0fc27",
+    "docs/program/registry/shared/provenance/sal/osl/unx/file_impl.ts.json": "a6eebad3bc5fdda5237eeaf5c1fbd5a519db7dd058537b30914760f0925baeaf",
+    "docs/program/registry/shared/runtime/sal/osl/unx/file_misc.ts.json": "b962a320cbb806b4dabe797cef59317276a721b90941850add63e603f5ec3f20",
+    "docs/program/registry/shared/provenance/sal/osl/unx/file_misc.ts.json": "8265c625550a15cbe8d1ccbef11bf74e0642e34bcd83ccd67fb15422f2ffce7d",
+    "docs/program/registry/shared/runtime/sal/osl/unx/file_stat.ts.json": "ff11752569134ecca01e9c9145304223be4e17a418b6c669ed6bdf592868a5e3",
+    "docs/program/registry/shared/provenance/sal/osl/unx/file_stat.ts.json": "746088a618bcb37771dcbb1b0d9bb7855c1b3a3cef4a593a69af0b17dfaf7339",
+    "docs/program/registry/shared/runtime/sal/inc/osl/file.hxx.ts.json": "99a3265087dfa5ca4559ebcd8e886f8adce5ebb657e1ec663e9cdffd5c01dd67",
+    "docs/program/registry/shared/provenance/sal/inc/osl/file.hxx.ts.json": "6183388d0c5239f4b329ef52335d57b04fcbfd104ae3cfed28e90ce12f04ed7d",
+    "docs/program/registry/shared/runtime/sal/osl/unx/file_path_helper.ts.json": "3202b94e06bf7fab3ffa6a4a84e1d03cbcb61f10dec4a823e76f8acabedb1638",
+    "docs/program/registry/shared/provenance/sal/osl/unx/file_path_helper.ts.json": "65b630c4d914efe22e58adaad93ab9c814f8229efef3d4c73034bdd13c52f059",
+    "docs/program/registry/shared/runtime/sal/inc/osl/file.ts.json": "08398e962f72f2c8d2e54b87fc4e5f36e26a7c5d9182d8795691d2bbd50e02da",
+    "docs/program/registry/shared/provenance/sal/inc/osl/file.ts.json": "77e3cf84eec7774ca2f0a6f1f7b4a05af653f8e335b89a4e22a6ba84cd083a1d",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/string.ts.json": "6f70faf353a4f617c222ee42ed30d4980b162f61c27403d39deb5ab5882be997",
+    "docs/program/registry/shared/provenance/sal/inc/rtl/string.ts.json": "85f94780e894ea2f5f01077a7884cc9e44886a25c50b101cf1cfca93dab7e3d6",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/string.h.ts.json": "64462fdeef7361ee189afc151aae39ae14cdc85b33ca9e0647c085a5e19aa643",
+    "docs/program/registry/shared/provenance/sal/inc/rtl/string.h.ts.json": "1ace483fc76094f7e2ee00e760bc4af45fb5fa869ab69a909af228295bd526f2",
+    "docs/program/registry/shared/runtime/sal/rtl/string.ts.json": "75c89154e99b053b88b12c78e9c90da0a7b7e8905c2e628fa28d2e618210baa0",
+    "docs/program/registry/shared/provenance/sal/rtl/string.ts.json": "833af5b10918ed112f11663e96f920bb2a9d0c8df2a5f8141fc808e22781d04a",
+    "docs/program/registry/shared/runtime/sal/rtl/strtmpl.ts.json": "7d7f3adcd3e79d167b76eb1251bba6a454d90242ee69dae89a90499afa9773a7",
+    "docs/program/registry/shared/provenance/sal/rtl/strtmpl.ts.json": "f99556be3c1170f1585afcffdcb2bd61c08c75c1167bc5bcf5b6020af3245fda",
+    "docs/program/registry/shared/runtime/external/emscripten/file.ts.json": "5e5751bad0d7d89161d9e957a42c2e0a7eae62a34b5908285a9ebc463e916ede",
+    "docs/program/registry/shared/provenance/external/emscripten/file.ts.json": "90b9f83090ebdc191723107e6d7dc8a690b40b77ccd42487c71d62a0e1beb2f6",
+    "scripts/fixtures/native-directory-stat-probe.ts": "11a25c621823e0f541c1de7a35443f0664be48586e795c9fc6b5baaf70173f9a",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "7960218acf6959007b74e32b5a359395496c4ad6d7ef207d792bed263cda5201",
+    "scripts/native-dom-worker-probe.mjs": "0c38cafc65e2da7fe4147f81d240503f32ae70a72531c101eb6adf014210aaf9",
+    "third_party/libxml2-wasm/source.json": "ed21ef9dcf19c1c298c71c24a6757fc594fc39bd3f92c00372832d26c32ed7f6",
+    "third_party/libxml2-wasm/README.md": "0df4ab9cb54b08f178f2a22514abcfa64f0bf405b3149622a9c98830965e339f",
+    "docs/program/writer-upstream-suspected-issues.md": "e06cb0fda58ff98ee5ddfd06e9ad8ad90b7948e7bc288ebf86a3da04df3ecf23",
+    "docs/program/calc-upstream-suspected-issues.md": "e8917a026387f6ac6fcc92ecbd5581ebf2418a95e43e8ac53c54f60192884c43",
+    "third_party/libxml2-wasm/osl-file-stat.c": "69ba242c273cb685c22ac3d0344ff710307aaf6fe10908cb50bb0ef008e6f2be",
+    "third_party/libxml2-wasm/binding.c": "5c7a3660edeffa74bc1c66214230b35309cafbf50bed5741a3dfa27270c3925b",
+    "third_party/libxml2-wasm/artifact.json": "bbdca9430f3c0be6f16a24aff003a8913269b8caa4f06ce3395bf3aa26d1903f",
+    "third_party/libxml2-wasm/constants.mjs": "f3d93f94d38a8efc3336f01ad670cd30bbec19867574762974da252f8fa5b8f3",
+    "third_party/libxml2-wasm/constants.d.ts": "e4181e14d668652ee76277ce8fce8ec70478eb99972006101caba8ad3c28bd8b",
+    "third_party/libxml2-wasm/generated-api.json": "735647131ebfeec1569f816251a7c898088492672525cce95bc00185f49046a2",
+    "third_party/libxml2-wasm/index.d.ts": "cea385c7f164925e37211b67f24969240cff195c1edd6ac5a0c0b0e2ebe8f43d",
+    "third_party/libxml2-wasm/libxml2.mjs": "bea1b62fdc547c30459bc4024d613a1f8315e2a408b712cda786e4e8b6c3c191",
+    "scripts/build-libxml2-wasm.py": "39f701eee50848f10c4568b8104a25b689fee855ba7f0f7b234925b1d25e5531"
+  },
+  "checks": [
+    {
+      "command": "python3 scripts/build-libxml2-wasm.py",
+      "result": "pass",
+      "evidence": "Pinned repository-local SDK build;189 exports/853 generated enum constants, source header-derived sizeof72 and actual dirent feature1. No network/global configuration.",
+      "log": "apps/office/coverage/native-directory-stat-build-profile.log",
+      "sha256": "672e9f0f7e3dec1228f11805b9d14843d7a2a553687e723ee082d9fed8d17d1b"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/osl/unx/file_stat.test.ts src/sal/osl/unx/file_stat.upstream.test.ts src/sal/osl/unx/security.bootstrap.test.ts src/sal/osl/unx/file_url.open.test.ts src/sal/osl/unx/file_url.reverse.test.ts src/sal/osl/unx/file_url.test.ts src/sal/osl/unx/file.access.test.ts src/sal/osl/unx/file.test.ts src/sal/rtl/string.test.ts src/sal/rtl/ustring.test.ts src/sal/rtl/strtmpl.assembly.test.ts src/sal/rtl/ostringbuffer.test.ts src/package/source/zippackage/ZipPackageFolder.save.test.ts src/package/source/zippackage/ZipPackageFolder.native.test.ts src/package/source/zipapi/ZipOutputStream.test.ts src/tools/source/stream/stream.native.test.ts",
+      "result": "fail",
+      "evidence": "229 pass/2 original UNIX attribute QA failures in15 matched files. An obsolete nonexistent string.test.ts target was discovered and replaced by the actual three byte test files below; not silently used as required evidence.",
+      "log": "apps/office/coverage/native-directory-stat-related.log",
+      "sha256": "acc22558bd849b8fbf57cd30db1f263551037aaa03a603f212278fe812031296"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/rtl/string-search.test.ts src/sal/rtl/string-subview.test.ts src/sal/rtl/string-convert.test.ts",
+      "result": "pass",
+      "evidence": "19 tests in3 actual byte-related files pass",
+      "log": "apps/office/coverage/native-directory-stat-byte-related.log",
+      "sha256": "1e98ff20813bba351c5556f965faf689dfa487a161b8b021061acbc3f52e0063"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vitest run src/sal/osl/unx/file_stat.test.ts src/sal/osl/unx/file_stat.upstream.test.ts src/sal/osl/unx/security.bootstrap.test.ts --coverage --coverage.include=src/sal/osl/unx/file_misc.ts --coverage.include=src/sal/osl/unx/file_impl.ts --coverage.include=src/sal/osl/unx/file_stat.ts --coverage.include=src/sal/inc/osl/file.hxx.ts --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90",
+      "result": "fail",
+      "evidence": "Coverage thresholds pass for all4 complete new owners: aggregate97.37 statements/93.81 branches/100functions/99.01lines; file_stat93.81/90.9/100/97.61, file.hxx100/95.83/100/100, file_misc and file_impl100. Command still fails on2 original root-branch QA assertions; coverage does not waive them.",
+      "log": "apps/office/coverage/native-directory-stat-coverage-final.log",
+      "sha256": "50c29fab6b7a0d52319c072e634e0d52ca81b757f7589aec5d0b6d50280bdc44"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "evidence": "Actual Unicode names/native stat/size/type, symlink target, inode alias identity, retained invalid size and existing full native DOM/ZIP/IO probes pass in Chromium main and DOM-free Worker",
+      "log": "apps/office/coverage/native-directory-stat-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "cd apps/office && ../../node_modules/.bin/vite build",
+      "result": "pass",
+      "evidence": "Production Vite build, typecheck failure separate",
+      "log": "apps/office/coverage/native-directory-stat-production-build.log",
+      "sha256": "d0ca4872bae9e398428a9cf61b23c131f56e5871c8a38f1997da4e0391cb39da"
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "result": "fail",
+      "evidence": "Only4 existing SfxDocumentMetaData.storage.ts errors",
+      "log": "apps/office/coverage/native-directory-stat-types-last.log",
+      "sha256": "a9434f10a68a1e5c94d7ab20773d47510e38e2252740623b6db54e2b80be0846"
+    },
+    {
+      "command": "node_modules/.bin/eslint apps/office/src/sal/osl/unx/file_stat.upstream.test.ts apps/office/src/sal/osl/unx/file_stat.test.ts apps/office/src/sal/osl/unx/file_stat.ts apps/office/src/sal/osl/unx/file_impl.ts apps/office/src/sal/osl/unx/file_misc.ts apps/office/src/sal/osl/unx/file_path_helper.ts apps/office/src/sal/inc/osl/file.ts apps/office/src/sal/inc/osl/file.hxx.ts apps/office/src/sal/rtl/string.ts apps/office/src/sal/inc/rtl/string.ts apps/office/src/sal/inc/rtl/string.h.ts apps/office/src/sal/rtl/strtmpl.ts apps/office/src/external/emscripten/file.ts apps/office/src/sal/osl/unx/security.bootstrap.test.ts scripts/fixtures/native-directory-stat-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "evidence": "Scoped source/test/browser lint",
+      "log": "apps/office/coverage/native-directory-stat-lint-last.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "evidence": "Tools typecheck",
+      "log": "apps/office/coverage/native-directory-stat-tools-last.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "node_modules/.bin/prettier --check apps/office/src/sal/inc/osl/file.ts apps/office/src/sal/inc/osl/file.hxx.ts apps/office/src/sal/osl/unx/file_impl.ts apps/office/src/sal/osl/unx/file_misc.ts apps/office/src/sal/osl/unx/file_stat.ts apps/office/src/sal/osl/unx/file_stat.test.ts apps/office/src/sal/osl/unx/file_stat.upstream.test.ts apps/office/src/sal/osl/unx/file_path_helper.ts apps/office/src/sal/osl/unx/security.bootstrap.test.ts apps/office/src/sal/rtl/string.ts apps/office/src/sal/rtl/strtmpl.ts apps/office/src/sal/inc/rtl/string.ts apps/office/src/sal/inc/rtl/string.h.ts apps/office/src/external/emscripten/file.ts docs/program/registry/shared/runtime/sal/osl/unx/file_impl.ts.json docs/program/registry/shared/provenance/sal/osl/unx/file_impl.ts.json docs/program/registry/shared/runtime/sal/osl/unx/file_misc.ts.json docs/program/registry/shared/provenance/sal/osl/unx/file_misc.ts.json docs/program/registry/shared/runtime/sal/osl/unx/file_stat.ts.json docs/program/registry/shared/provenance/sal/osl/unx/file_stat.ts.json docs/program/registry/shared/runtime/sal/inc/osl/file.hxx.ts.json docs/program/registry/shared/provenance/sal/inc/osl/file.hxx.ts.json docs/program/registry/shared/runtime/sal/osl/unx/file_path_helper.ts.json docs/program/registry/shared/provenance/sal/osl/unx/file_path_helper.ts.json docs/program/registry/shared/runtime/sal/inc/osl/file.ts.json docs/program/registry/shared/provenance/sal/inc/osl/file.ts.json docs/program/registry/shared/runtime/sal/inc/rtl/string.ts.json docs/program/registry/shared/provenance/sal/inc/rtl/string.ts.json docs/program/registry/shared/runtime/sal/inc/rtl/string.h.ts.json docs/program/registry/shared/provenance/sal/inc/rtl/string.h.ts.json docs/program/registry/shared/runtime/sal/rtl/string.ts.json docs/program/registry/shared/provenance/sal/rtl/string.ts.json docs/program/registry/shared/runtime/sal/rtl/strtmpl.ts.json docs/program/registry/shared/provenance/sal/rtl/strtmpl.ts.json docs/program/registry/shared/runtime/external/emscripten/file.ts.json docs/program/registry/shared/provenance/external/emscripten/file.ts.json scripts/fixtures/native-directory-stat-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs third_party/libxml2-wasm/source.json third_party/libxml2-wasm/README.md docs/program/writer-upstream-suspected-issues.md docs/program/calc-upstream-suspected-issues.md",
+      "result": "pass",
+      "evidence": "Scoped formatting. Opening fileoverview was subsequently repaired/formatted in the touched consumer probe; no functional code change.",
+      "log": "apps/office/coverage/native-directory-stat-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "evidence": "2602 runtime modules/2366 mapped",
+      "log": "apps/office/coverage/native-directory-stat-provenance-final.log",
+      "sha256": "31aeb215099e22addb45cbdf526e4174d33ef4e62af63aa518807ac2b327d64b"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "evidence": "Registry invariants/parity; zero semantic violations",
+      "log": "apps/office/coverage/native-directory-stat-registry-final.log",
+      "sha256": "62b7f7a91d029d99456e9983426b4503d2a32e07d973da062b5935fe31d2b9a1"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "evidence": "Pre-existing comphelper/sax cycle remains",
+      "log": "apps/office/coverage/native-directory-stat-deps.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "evidence": "157 baseline findings remain, one touched consumer opening-fileoverview finding repaired; no new findings",
+      "log": "apps/office/coverage/native-directory-stat-docs-final.log",
+      "sha256": "0d64659347842d68a624c5105b4c8ef9d8f4ca6a33bb1008785dbf93aae2ec19"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "evidence": "File size check",
+      "log": "apps/office/coverage/native-directory-stat-size.log",
+      "sha256": "6fd6adbeefef39d426f9f50209eeef863018337827721334a18e4f3b8c032369"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "evidence": "Source tree check",
+      "log": "apps/office/coverage/native-directory-stat-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "evidence": "Doctor OK with existing missing-hook warning",
+      "log": "apps/office/coverage/native-directory-stat-doctor.log",
+      "sha256": "a1bc4141c7ce9233ccebb17c263d0dccd92dcfb9a0e907ca83359f38b2157ac6"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "evidence": "Routing OK",
+      "log": "apps/office/coverage/native-directory-stat-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "evidence": "No whitespace errors",
+      "log": "apps/office/coverage/native-directory-stat-diff-last.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "upstreamQA": {
+    "source": "sal/qa/osl/file/osl_File.cxx",
+    "ported": "FileStatus constructor/validity/type/attribute/access/modify-time/size/name/URL assertions and DirectoryItem constructor/copy/assignment/is/get/status assertions use actual MEMFS/libc. Empty/printing-only source checks do not acquire invented mask expectations. Source one-sided t_compareTime and exact root branch retained. Solaris-only getFileType_007 is separately labeled a selected SDK special-device critical case, not an active Emscripten QA port.",
+    "qualification": "Some original FileStatus fixture setup uses Directory::getNextItem; that enumeration API remains unavailable and is explicitly not claimed ported. Actual DirectoryItem::get supplies those equivalent existing-file/directory assertion fixtures. Full directory-enumeration setup, its cached dtype paths, disabled/no-assertion source bodies and other File/Directory APIs are not manufactured as passing QA.",
+    "failures": [
+      {
+        "case": "UNIX FileStatus::getAttributes_001",
+        "expected": 4672,
+        "actual": 4673
+      },
+      {
+        "case": "UNIX FileStatus::getAttributes_002",
+        "expected": 9360,
+        "actual": 9361
+      }
+    ],
+    "reason": "Actual pinned SDK geteuid()==0 but access(W_OK) still checks MEMFS node permissions. Source osl::access delegates unchanged to libc in this profile. Kernel and original test expectations stay intact; no UID or access result was faked.",
+    "certificate": "Source-backed JS assertions and actual selected libc operations, not a complete compiled LibreOffice ABI/native QA certificate."
+  },
+  "corrections": "Initial sizeof constant extraction missed a nested Clang ConstantExpr through casts and emitted0; generator now reads the evaluated expression, producing72 matching actual compiled sizeof. Only the two new native header constants differ from the previous set; all851 XML/XPath values remain unchanged. Selected actual SDK bits/dirent.h defines the dtype feature; both compiler constant and actual native dtype8->Regular2 were observed. Initial missing native constant/type errors were corrected by real regeneration, not handwritten generated output. Duplicate constructor tests consolidated; native-profile critical attribute masks use explicit independent expectations while original root-branch failures remain.",
+  "sourceFindings": [
+    "WRITER581/CALC644 inode-only identity without device",
+    "WRITER582/CALC645 symlink identity/comment mismatch and same-path fast path",
+    "WRITER583/CALC646 retained invalid scalar metadata",
+    "WRITER584/CALC647 one-sided original time QA",
+    "WRITER585/CALC648 actual root UID/access source-QA mismatch",
+    "WRITER586/CALC649 cheap attribute validity before access-right flags",
+    "WRITER587/CALC650 const/shared basename helper mutates input"
+  ],
+  "remaining": [
+    "Original unmodified2 UNIX QA assertions fail for the pinned SDK profile; not waived or skipped. No whole-task verification/finish.",
+    "SvFileStream internal locking, original File copy/remove, TempFileNamed/service and real CheckSeekableCanWrap copy acceptance still required.",
+    "Remaining FileBase/File/Directory APIs and original directory-enumeration QA setup; physical native ABI/OOM/race/debug/invalid lifetimes and other OS profiles remain unqualified. Ordinary JS records/byte arrays remain VM-owned; no custom JS allocator or fake metadata provider.",
+    "Previous hostname/full file/native folder/forward-only coverage gaps and native length_error-to-RANGE domain remain tracked separately. Compression reset dependency remains pending, not substituted.",
+    "True package root/stream/storage/model/filter/UI DOCX/XLSX import/export/open/download/reopen and baseline type/dependency/docs failures remain. No full-suite cadence increment."
+  ]
+}
