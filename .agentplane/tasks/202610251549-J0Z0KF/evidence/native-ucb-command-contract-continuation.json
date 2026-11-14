@@ -1,0 +1,763 @@
+{
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "recordedAt": "2026-11-14T17:14:14.801370+00:00",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "status": "bounded-prerequisite-pass-parent-rework",
+  "summary": "Original core ContentIdentifier, CommandProcessorInfo/command constants, XCommandInfo, command/legacy+extended transfer/check-in argument values, transfer enum and UnsupportedCommandException. All source defaults, IDL/base/type/member ownership, native Any/Sequence/COW/exception transport, exact lookup and source metadata legacy transfer type are retained. No partial broker/provider is registered.",
+  "sourceQaQualification": "14 current source-derived core/generated-value cases and8 existing ucbhelper identifier cases pass. Factory-level original _XContentIdentifierFactory QA remains unqualified because the real broker/factory is not registered; no fake factory is introduced to run it. No dedicated original CommandProcessorInfo QA was found in the local corpus.",
+  "checks": [
+    {
+      "command": "cd apps/office && npx vitest run src/ucb/source/core/native-command-info.test.ts src/ucbhelper/source/provider/native-identifier.test.ts --coverage --coverage.include=src/ucb/source/core/identify.ts --coverage.include=src/ucb/source/core/ucbcmds.info.ts --coverage.include=src/ucb/source/core/ucbcmds.ts --coverage.include=src/offapi/com/sun/star/ucb/CommandInfo.ts --coverage.include=src/offapi/com/sun/star/ucb/GlobalTransferCommandArgument.ts --coverage.include=src/offapi/com/sun/star/ucb/GlobalTransferCommandArgument2.ts --coverage.include=src/offapi/com/sun/star/ucb/CheckinArgument.ts --coverage.include=src/offapi/com/sun/star/ucb/UnsupportedCommandException.ts --coverage.include=src/offapi/com/sun/star/ucb/TransferCommandOperation.ts --coverage.include=src/offapi/com/sun/star/ucb/XCommandInfo.ts --coverage.reporter=json-summary --coverage.reporter=text --coverage.reportsDirectory=coverage/native-ucb-command-qualified --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.perFile=true",
+      "log": "apps/office/coverage/native-ucb-command-qualified.log",
+      "result": "pass",
+      "evidence": "22 related tests/2 files pass. Complete new10 owners are measured; metadata and actual native value transport are qualified."
+    },
+    {
+      "command": "Read-only Python check of exact10 owner paths and statements/branches/functions/lines >=90 from coverage/native-ucb-command-qualified/coverage-summary.json",
+      "log": "apps/office/coverage/native-ucb-command-owner-gate.log",
+      "result": "pass",
+      "evidence": "All10 individual complete owners pass90 without modifying raw counters or using aggregate acceptance."
+    },
+    {
+      "command": "cd apps/office && npx vitest run src/ucb/source/core/native-command-info.test.ts",
+      "log": "apps/office/coverage/native-ucb-command-current-tests.log",
+      "result": "pass",
+      "evidence": "Latest14 tests pass after explicit shared-sequence identity and typed actual-catch guard; production source is unchanged from the measured profile."
+    },
+    {
+      "command": "cd apps/office && npx vitest run src/ucb/source/core/native-command-info.test.ts -t \"retains actual unsupported-command exception\"",
+      "log": "apps/office/coverage/native-ucb-command-catch-qualified.log",
+      "result": "pass",
+      "evidence": "Actual catch/Any path after TypeScript narrowing fix passes;13 other cases deliberately not rerun in that filtered command."
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "log": "apps/office/coverage/native-ucb-command-browser.log",
+      "result": "pass",
+      "evidence": "Chromium main and DOM-free Worker execute actual core identifier, metadata component, legacy ArgType and extended Any transport; no broker/provider substitute."
+    },
+    {
+      "command": "npm --prefix apps/office run typecheck",
+      "log": "apps/office/coverage/native-ucb-command-types-qualified.log",
+      "result": "fail",
+      "evidence": "Only same4 metadata/MediaDescriptor/SfxMedium errors; new generated/core owners and caught-exception tests have no type errors."
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "log": "apps/office/coverage/native-ucb-command-tools.log",
+      "result": "pass",
+      "evidence": "Tools compile."
+    },
+    {
+      "command": "npx eslint apps/office/src/offapi/com/sun/star/ucb/{CommandInfo,GlobalTransferCommandArgument,GlobalTransferCommandArgument2,CheckinArgument,TransferCommandOperation,XCommandInfo,UnsupportedCommandException}.ts apps/office/src/ucb/source/core/{identify,ucbcmds,ucbcmds.info,native-command-info.test}.ts scripts/fixtures/native-ucb-command-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs scripts/module-boundaries/allowed-edges.mjs scripts/check-module-boundaries-xml.test.ts",
+      "log": "apps/office/coverage/native-ucb-command-eslint-final.log",
+      "result": "pass",
+      "evidence": "All changed runtime/probe/tool files pass; latest test-only updates separately linted."
+    },
+    {
+      "command": "npx eslint apps/office/src/ucb/source/core/native-command-info.test.ts",
+      "log": "apps/office/coverage/native-ucb-command-current-test-lint.log",
+      "result": "pass",
+      "evidence": "Current14-case source passes after typed catch/sequence identity strengthening."
+    },
+    {
+      "command": "npx prettier --check apps/office/src/offapi/com/sun/star/ucb/{CommandInfo,GlobalTransferCommandArgument,GlobalTransferCommandArgument2,CheckinArgument,TransferCommandOperation,XCommandInfo,UnsupportedCommandException}.ts apps/office/src/ucb/source/core/{identify,ucbcmds,ucbcmds.info,native-command-info.test}.ts scripts/fixtures/native-ucb-command-probe.ts scripts/fixtures/native-fastparser-consumer-probe.ts scripts/native-dom-worker-probe.mjs scripts/module-boundaries/allowed-edges.mjs scripts/check-module-boundaries-xml.test.ts",
+      "log": "apps/office/coverage/native-ucb-command-format.log",
+      "result": "pass",
+      "evidence": "All matched files formatted; final test-only changes formatted with the same Prettier."
+    },
+    {
+      "command": "npm run check:docs",
+      "log": "apps/office/coverage/native-ucb-command-check-2.log",
+      "result": "pass",
+      "evidence": "5421 authored files pass."
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "log": "apps/office/coverage/native-ucb-command-provenance-qualified.log",
+      "result": "pass",
+      "evidence": "2633 runtime modules:2396 mapped/199 browser adaptations/38 infrastructure; explicit IDL members/base and CPPUMaker source anchors, no semantic parity promotion."
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "log": "apps/office/coverage/native-ucb-command-registry-qualified.log",
+      "result": "pass",
+      "evidence": "semanticViolationCount0; foundation/unverified statuses retained."
+    },
+    {
+      "command": "npm run check:dependencies",
+      "log": "apps/office/coverage/native-ucb-command-check-1.log",
+      "result": "fail",
+      "evidence": "Only existing comphelper/sax cycle remains; source SDK edge from ucb to offapi is explicit."
+    },
+    {
+      "command": "npm run check:file-size",
+      "log": "apps/office/coverage/native-ucb-command-check-3.log",
+      "result": "pass",
+      "evidence": "Sizes pass, existing decomposition advisories retained."
+    },
+    {
+      "command": "npm run check:source-tree",
+      "log": "apps/office/coverage/native-ucb-command-check-4.log",
+      "result": "pass",
+      "evidence": "Original source boundaries retained."
+    },
+    {
+      "command": "npx vitest run scripts/check-module-boundaries-xml.test.ts scripts/native-file-access-boundary.test.ts",
+      "log": "apps/office/coverage/native-ucb-command-check-6.log",
+      "result": "pass",
+      "evidence": "13 tests/2 files pass, including original broker SDK edge without reverse application ownership."
+    },
+    {
+      "command": "cd apps/office && npx vite build",
+      "log": "apps/office/coverage/native-ucb-command-vite.log",
+      "result": "pass",
+      "evidence": "Standalone production bundling; combined build remains blocked by same4 type errors."
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "log": "apps/office/coverage/native-ucb-command-static.log",
+      "result": "pass",
+      "evidence": "Relative4 JavaScript bundles, no backend endpoints."
+    },
+    {
+      "command": "ap doctor",
+      "log": "apps/office/coverage/native-ucb-command-final-check-2.log",
+      "result": "pass",
+      "evidence": "doctor OK with existing hook advisory."
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "log": "apps/office/coverage/native-ucb-command-final-check-3.log",
+      "result": "pass",
+      "evidence": "Routing passes."
+    },
+    {
+      "command": "git diff --check",
+      "log": "apps/office/coverage/native-ucb-command-diff-final.log",
+      "result": "pass",
+      "evidence": "No whitespace errors."
+    },
+    {
+      "command": "git status --short --untracked-files=all",
+      "log": "apps/office/coverage/native-ucb-command-status-before-checkpoint.log",
+      "result": "pass",
+      "evidence": "Pre-checkpoint WIP snapshot; unrelated changes retained."
+    }
+  ],
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 277,
+        "covered": 274,
+        "skipped": 0,
+        "pct": 98.91
+      },
+      "statements": {
+        "total": 305,
+        "covered": 302,
+        "skipped": 0,
+        "pct": 99.01
+      },
+      "functions": {
+        "total": 119,
+        "covered": 119,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 99,
+        "covered": 96,
+        "skipped": 0,
+        "pct": 96.96
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/ucb/CheckinArgument.ts": {
+      "lines": {
+        "total": 59,
+        "covered": 58,
+        "skipped": 0,
+        "pct": 98.3
+      },
+      "functions": {
+        "total": 27,
+        "covered": 27,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 66,
+        "covered": 65,
+        "skipped": 0,
+        "pct": 98.48
+      },
+      "branches": {
+        "total": 24,
+        "covered": 23,
+        "skipped": 0,
+        "pct": 95.83
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/ucb/CommandInfo.ts": {
+      "lines": {
+        "total": 35,
+        "covered": 34,
+        "skipped": 0,
+        "pct": 97.14
+      },
+      "functions": {
+        "total": 18,
+        "covered": 18,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 39,
+        "covered": 38,
+        "skipped": 0,
+        "pct": 97.43
+      },
+      "branches": {
+        "total": 15,
+        "covered": 14,
+        "skipped": 0,
+        "pct": 93.33
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/ucb/GlobalTransferCommandArgument.ts": {
+      "lines": {
+        "total": 50,
+        "covered": 49,
+        "skipped": 0,
+        "pct": 98
+      },
+      "functions": {
+        "total": 24,
+        "covered": 24,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 56,
+        "covered": 55,
+        "skipped": 0,
+        "pct": 98.21
+      },
+      "branches": {
+        "total": 21,
+        "covered": 20,
+        "skipped": 0,
+        "pct": 95.23
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/ucb/GlobalTransferCommandArgument2.ts": {
+      "lines": {
+        "total": 42,
+        "covered": 42,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 20,
+        "covered": 20,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 45,
+        "covered": 45,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 13,
+        "covered": 13,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/ucb/TransferCommandOperation.ts": {
+      "lines": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/ucb/UnsupportedCommandException.ts": {
+      "lines": {
+        "total": 20,
+        "covered": 20,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 6,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 23,
+        "covered": 23,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 10,
+        "covered": 10,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/ucb/XCommandInfo.ts": {
+      "lines": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/ucb/source/core/identify.ts": {
+      "lines": {
+        "total": 18,
+        "covered": 18,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4,
+        "covered": 4,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 18,
+        "covered": 18,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 6,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/ucb/source/core/ucbcmds.info.ts": {
+      "lines": {
+        "total": 27,
+        "covered": 27,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 13,
+        "covered": 13,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 32,
+        "covered": 32,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 6,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/ucb/source/core/ucbcmds.ts": {
+      "lines": {
+        "total": 8,
+        "covered": 8,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 8,
+        "covered": 8,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "knownSourceBehavior": [
+    "Core identifier preserves colonless input, whereas the separate ucbhelper owner returns empty for colonless input; preserve both, consistent with existing WRITER469/CALC535 finding.",
+    "CommandProcessorInfo advertises legacy GlobalTransferCommandArgument for globalTransfer, even though original execution accepts newer extended arguments as well; retain its exact source ArgType.",
+    "Extended argument includes both MimeType and DocumentId; inherited const projections remain live and generated nonvirtual inequality does not dispatch into derived comparison."
+  ],
+  "initialFindings": [
+    "Generated inherited scalar projection was corrected to live getters, not a spread-value snapshot.",
+    "Normal generated nonvirtual copy/inequality calls are explicitly qualified across the derived struct.",
+    "Initial per-owner evidence found transfer getter and exception move functions below90 despite a passing aggregate; meaningful live-base-field and actual exception move tests close those gaps. Read-only exact-owner gate confirms all10 pass90.",
+    "Source provenance now names actual declared IDL fields/enumerators/base and CPPUMaker generator anchors; no basename-only record, checker suppression or semantic promotion."
+  ],
+  "remaining": [
+    "UniversalContentBroker itself, provider specialization/registration/configuration, transfer/check-in execution and real file provider/content/TaskManager remain unfinished.",
+    "Original factory/positive broker/provider QA remains unqualified; metadata components alone do not enable URL opening.",
+    "Earlier independent stream/ZipFileAccess coverage failures,4 metadata type errors and existing comphelper/sax cycle remain; this passing block does not waive them.",
+    "Native ZipPackageStream/root ZipPackage/XStorage/SfxMedium/MediaDescriptor and DOCX/XLSX native model/filter/export/reopen and existing UI acceptance remain unfinished.",
+    "Physical C++ ABI/allocation/thread and broader generated-value failure profiles remain unqualified."
+  ],
+  "fullSuite": "Not due: ten completed task cadence not reached; both parent tasks remain DOING.",
+  "hashes": [
+    {
+      "path": "apps/office/coverage/native-ucb-command-qualified.log",
+      "sha256": "1989832d3e06c389b12c1120334445c92f09aa5c36f187c4a76dead9db1f8adb"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-owner-gate.log",
+      "sha256": "b6c0e67afd215951770c5ba2dfd0edac2f802cf7dbcd85629ddb0cf943024dcc"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-current-tests.log",
+      "sha256": "1bed9b0bbb5d8a69caf20085940bb40631de5cf937c3ba950576d595092cd1d6"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-catch-qualified.log",
+      "sha256": "61fe4aac387e0044925e9784b2c88412f6ac4c08c5a84304819580f9c5c6a558"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-types-qualified.log",
+      "sha256": "fbf0fc3f1611ffb721508ec435666fe4838ba8436a9dd8e25d072776dc8a7621"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-eslint-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-current-test-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-check-2.log",
+      "sha256": "f5223b53ec3f06123a5e55ac87c49d06ab0c02b437416c52b3ef5264daa9b42e"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-provenance-qualified.log",
+      "sha256": "d69fe5d96a542b86c379332caa3befdbbe4c7999a1cea85586cf2dab43ffbe5e"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-registry-qualified.log",
+      "sha256": "b2a8f068fe19e7b5b52a68c8d82751b7a2b92e8d40eec4f41a7820a62ea3432a"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-check-1.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-check-3.log",
+      "sha256": "352003d7e56bfc8e2ede9c49701708005097fc3a0a226d41ca11b59b2941b84d"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-check-4.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-check-6.log",
+      "sha256": "9ef2140b5e45e1e76f31dc9de41a3986eb56c0bb9da9da5418c24d9bc450d010"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-vite.log",
+      "sha256": "9e1f4bf54081dc054befadeedff0fbd64b02e46ef13a329d93d04d78e385453f"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-static.log",
+      "sha256": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-final-check-2.log",
+      "sha256": "60860a1bedba1e6b92d2381cc665495e5282734c67ff750730fb7892e351173d"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-final-check-3.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-diff-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-status-before-checkpoint.log",
+      "sha256": "c9cc1e092eb2f063044bd0eeb6d1faacdb3debf7318c13da82d2da68ee845719"
+    },
+    {
+      "path": "apps/office/coverage/native-ucb-command-qualified/coverage-summary.json",
+      "sha256": "82ef7cd5572b0f66270c05832abc37810b45e93d4dcfcbf8f10f780b47ea8576"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/CommandInfo.ts",
+      "sha256": "b776568515996264c46d498aa5252fb8f4df286439d4f4163e2b0405e5561c17"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/GlobalTransferCommandArgument.ts",
+      "sha256": "8c6266db48ead2f386a09d6a60dc4da45f9a35a247638a8c6dfb0de144a4a708"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/GlobalTransferCommandArgument2.ts",
+      "sha256": "81b3fc61f837f3eb7e0a4e47100be55c344ae20e8f897b1ab0b65e6263b959e4"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/CheckinArgument.ts",
+      "sha256": "23ec0f3c4ae76ce5cf62ef1f9c300cf7f6db51ad9d7f1f1f819802d9386bd1fc"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/TransferCommandOperation.ts",
+      "sha256": "ba09f4c82159ece2ff047f2a09824f9f17de024165a8bbb0041eb9283407a6f5"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/XCommandInfo.ts",
+      "sha256": "af82dc745b0bbc09569342451ad0b5896071e2dabc3dde72167fd460009aa069"
+    },
+    {
+      "path": "apps/office/src/offapi/com/sun/star/ucb/UnsupportedCommandException.ts",
+      "sha256": "8d90afaeda360c173cd4b42326bad68887d343b424da264962fa7681a65ce220"
+    },
+    {
+      "path": "apps/office/src/ucb/source/core/identify.ts",
+      "sha256": "d50923fc9e0b1a08ea28f162ba56e2c8ac08b2e184bc8df9637499fe7865ef0c"
+    },
+    {
+      "path": "apps/office/src/ucb/source/core/ucbcmds.ts",
+      "sha256": "eb6cc9df82aef8c2085cd4187313efe387e21735279da933ab9419e2c678a6f2"
+    },
+    {
+      "path": "apps/office/src/ucb/source/core/ucbcmds.info.ts",
+      "sha256": "71513f49a9a19ceb025391f280bf3973204f9a00057086a0598d55a6afe9e7ca"
+    },
+    {
+      "path": "apps/office/src/ucb/source/core/native-command-info.test.ts",
+      "sha256": "ec76d37bd0da427bf265a02f2a6a00384a1918385774bdcbe9bc1f9566bfde92"
+    },
+    {
+      "path": "scripts/fixtures/native-ucb-command-probe.ts",
+      "sha256": "3e8a3c11da2090f0599fd119817e2fd6e3795bc5260265e56f575cd87da2794f"
+    },
+    {
+      "path": "scripts/fixtures/native-fastparser-consumer-probe.ts",
+      "sha256": "d1973649d9608d9f0b0fd818ff1f4098b358fd26204d34fb65fa4c0d662b96f1"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "sha256": "f5179c7582b5a731a69fafd24ce6d4c408dc586bc620418509d5523ca25b7de6"
+    },
+    {
+      "path": "scripts/module-boundaries/allowed-edges.mjs",
+      "sha256": "a7fb5f060e852661fceeafefebf26d88b320831230622330e57c37df19294109"
+    },
+    {
+      "path": "scripts/check-module-boundaries-xml.test.ts",
+      "sha256": "c78d6f43b06694b060482bbfae1eeb72342f2bb048de565a3bc9c632e37b2a0d"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/CommandInfo.idl",
+      "sha256": "fe0372c6bb1caccad72695c077a11d495335d5a27c8efd58c188cda1c0f021d2"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/GlobalTransferCommandArgument.idl",
+      "sha256": "92742305e476f35df6980acade34be2f245c7b9669b3529c3d926dd8a25ea66f"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/GlobalTransferCommandArgument2.idl",
+      "sha256": "92d69d040a7dc2c7540538d54f2202f3f14a13b9d26486eb128eb836eb9f04ee"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/CheckinArgument.idl",
+      "sha256": "fc414f6f3e2966dab78097aa8802c3763a79577a9c749139f0db3738ebbd4da3"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/TransferCommandOperation.idl",
+      "sha256": "e02db229731b213790c545d9f16a7a9ed75721d6fd9427faa8f54b8c45802131"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/XCommandInfo.idl",
+      "sha256": "db12db6b6d324affb0dd850603038d7eaaa5d2ab6fe79789015d90212f8b4ad3"
+    },
+    {
+      "path": "vendor/libreoffice-reference/offapi/com/sun/star/ucb/UnsupportedCommandException.idl",
+      "sha256": "5cd592c0e1e757fd411d220c57133408642dadc083034f962294051dc723209e"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucb/source/core/identify.cxx",
+      "sha256": "b2bb1100bbd7fe0e66d9e947b706de67f50f72f28c157675f95aea38eb835c3d"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucb/source/core/identify.hxx",
+      "sha256": "a404ceb49b549d6a7bb92ac75739519bd8ad9c39fca5cb2abc54fa7707e4d136"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucb/source/core/ucbcmds.cxx",
+      "sha256": "8ec034acc769d8765dad9eb6fe7bd00d2b55a91561a53a116f65f767ed71e497"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucb/source/core/ucbcmds.hxx",
+      "sha256": "3c42dc9019f90f48786c9cd8e1ed5f45da005d6d9b17d54b6cb2652e6dd8374b"
+    },
+    {
+      "path": "vendor/libreoffice-reference/ucb/source/core/ucb.cxx",
+      "sha256": "41fef69ed10362a529ef5e9aa89e1acf30b71bf3ab395608ac6effcb40a76693"
+    },
+    {
+      "path": "vendor/libreoffice-reference/codemaker/source/cppumaker/cpputype.cxx",
+      "sha256": "152e753455d6ef17801fc9e0fa4a694cd46dd9d6d5d82f0560abb6c15b8dbbfe"
+    },
+    {
+      "path": "vendor/libreoffice-reference/qadevOOo/tests/java/ifc/ucb/_XContentIdentifierFactory.java",
+      "sha256": "f4eb7453f027b07809213dc78d8d60f99989258bf2450c89411300b0d4dac3e3"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/CommandInfo.ts.json",
+      "sha256": "b43d6700974a43b65f48941b82c4302e8da5f7525e242a8b56b0354f3ea07f8f"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/GlobalTransferCommandArgument.ts.json",
+      "sha256": "6b1bed67a5747dde0dc4200ca6630e7ca4eeffdedae3e1ff2ae29a4656b2dc5a"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/GlobalTransferCommandArgument2.ts.json",
+      "sha256": "f3f5a9d9e22950cfcaccb72ecd18bb513abba2c2c9634e54ae174f51faa934f5"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/CheckinArgument.ts.json",
+      "sha256": "86dfadb2b3d1fe086a03fbe79d4722f9cc4bcc7ad02694edc0f7e76cf07f88b3"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/TransferCommandOperation.ts.json",
+      "sha256": "2e4234f112a2dfa8481011ba53b25ae763cc56d483ee17f705af04e8948c9d86"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/XCommandInfo.ts.json",
+      "sha256": "cbe9a19da041d2e6a15be5cd2fc80f29b4ccf8ad2d34916537304b22fc2b396e"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/offapi/com/sun/star/ucb/UnsupportedCommandException.ts.json",
+      "sha256": "718ac09a3bc5103418cdbe15707f7a17d210a5fedc73b8e763203c9901a2994f"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucb/source/core/identify.ts.json",
+      "sha256": "716feaf7e744679b03582e584fae38c27f30eb0c6643eb7a7eccf51c84886ed9"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucb/source/core/ucbcmds.ts.json",
+      "sha256": "ec4df59ff921785b373f3722baa90e1c4fc8a65095914b100810efea98690603"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/ucb/source/core/ucbcmds.info.ts.json",
+      "sha256": "5962fc3f8dc5b06a0f4551918cc181b8afa874c76b370619996f9c2e6668bd31"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/CommandInfo.ts.json",
+      "sha256": "d3e040f25028730449956574c7f1c1a4633deba2bc6d554e9a25b0eedf5f8eed"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/GlobalTransferCommandArgument.ts.json",
+      "sha256": "91ea58ab6e7a51d156ddeb85ec7bf10b32f888d6554a265dfb90c0f48f5c28b6"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/GlobalTransferCommandArgument2.ts.json",
+      "sha256": "acf43bf26d80f35424fb6212d4dc479e6e6cf2104d6771957bcc22958d73087e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/CheckinArgument.ts.json",
+      "sha256": "f1713f148b110fbb3a6cb111df5ee412c793eabbbd6464f18561938306f625b3"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/TransferCommandOperation.ts.json",
+      "sha256": "453f3d503f5a09956621c545555dc7efab2b0691e17aec5ab4ecd9514a840229"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/XCommandInfo.ts.json",
+      "sha256": "9c9148e38dac1d9e3b0da4008f8656c3f1a3737d4b1b95ea604d51026460feea"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/offapi/com/sun/star/ucb/UnsupportedCommandException.ts.json",
+      "sha256": "4503b02a66059eec2da378c9d6270690c9b77d7cbcd050fa28dbde184f0cf824"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucb/source/core/identify.ts.json",
+      "sha256": "69feeb4ca7fb49dd0f55932aab61ecc4e63a8eee1bbbedb11c8f018f38f6fcb0"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucb/source/core/ucbcmds.ts.json",
+      "sha256": "3afa5a88bb192ba19f7912a147cb0b91b46ed064acb8a0c58e027550e57fc550"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/ucb/source/core/ucbcmds.info.ts.json",
+      "sha256": "9cfdcf4bca25e78a8ed3038ecfd7e4200aef404c8463066c82dc8e79501ff8f6"
+    }
+  ]
+}
