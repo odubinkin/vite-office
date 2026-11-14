@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 172
+revision: 175
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-14T11:49:41.532Z"
+  updated_at: "2026-11-14T12:04:16.475Z"
   updated_by: "CODER"
-  note: "TempFile prerequisite checkpoint and157 JSDoc fixes verified;5388 files pass,37 source ASTs unchanged. Original service tests/browser pass; helper coverage,4 metadata type errors,cycle and full DOCX package/model/UI remain open. Evidence:native-tempfile-continuation.json."
-  attempts: 44
+  note: "Native Directory prerequisite:87 related/7 final cases and10static tests pass, actual main/Worker and per-file90 pass. Docs5389/registry pass; four metadata type errors,cycle,older coverage and full DOCX storage/model/UI acceptance remain open. Evidence:native-directory-continuation.json."
+  attempts: 45
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -712,8 +715,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-14T12:04:16.475Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native Directory prerequisite:87 related/7 final cases and10static tests pass, actual main/Worker and per-file90 pass. Docs5389/registry pass; four metadata type errors,cycle,older coverage and full DOCX storage/model/UI acceptance remain open. Evidence:native-directory-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-14T12:04:26.215Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-14T11:49:50.173Z"
+doc_updated_at: "2026-11-14T12:04:26.215Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -2024,6 +2040,36 @@ sections:
     Attempts: 44
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T11:49:23.275Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-11-14T12:04:16.475Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native Directory prerequisite:87 related/7 final cases and10static tests pass, actual main/Worker and per-file90 pass. Docs5389/registry pass; four metadata type errors,cycle,older coverage and full DOCX storage/model/UI acceptance remain open. Evidence:native-directory-continuation.json.
+    Attempts: 45
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T12:03:56.232Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
 
     Details:
 
@@ -3657,6 +3703,36 @@ Note: TempFile prerequisite checkpoint and157 JSDoc fixes verified;5388 files pa
 Attempts: 44
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T11:49:23.275Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-14T12:04:16.475Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native Directory prerequisite:87 related/7 final cases and10static tests pass, actual main/Worker and per-file90 pass. Docs5389/registry pass; four metadata type errors,cycle,older coverage and full DOCX storage/model/UI acceptance remain open. Evidence:native-directory-continuation.json.
+Attempts: 45
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T12:03:56.232Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
 
 Details:
 
