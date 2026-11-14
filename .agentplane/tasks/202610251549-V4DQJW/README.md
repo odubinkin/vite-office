@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 166
+revision: 169
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-14T10:26:10.362Z"
+  updated_at: "2026-11-14T10:43:15.990Z"
   updated_by: "CODER"
-  note: "Shared native public copy/remove prerequisite:65 tests pass,9 tooling tests and Chromium main/Worker pass. Coverage89.16 branches and independent helper gaps remain; baseline type/docs/cycle and2 upstream metadata QA failures retained. Full DOCX package/model/filter/UI unfinished; evidence/native-file-copy-continuation.json."
-  attempts: 42
+  note: "Shared native SvFileStream and source stream header implemented;213 shared/126 Calc/9 tooling tests and Chromium main/Worker pass. New owner90 gate passes; base branches88.26 and older type/docs/cycle gaps remain. Full DOCX TempFile/storage/model/filter/UI unfinished; evidence/native-file-stream-continuation.json."
+  attempts: 43
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -680,8 +683,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-14T10:43:15.990Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared native SvFileStream and source stream header implemented;213 shared/126 Calc/9 tooling tests and Chromium main/Worker pass. New owner90 gate passes; base branches88.26 and older type/docs/cycle gaps remain. Full DOCX TempFile/storage/model/filter/UI unfinished; evidence/native-file-stream-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-14T10:43:16.588Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-14T10:26:16.754Z"
+doc_updated_at: "2026-11-14T10:43:16.588Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -1954,6 +1970,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-14T10:43:15.990Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared native SvFileStream and source stream header implemented;213 shared/126 Calc/9 tooling tests and Chromium main/Worker pass. New owner90 gate passes; base branches88.26 and older type/docs/cycle gaps remain. Full DOCX TempFile/storage/model/filter/UI unfinished; evidence/native-file-stream-continuation.json.
+    Attempts: 43
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T10:42:18.911Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -2240,6 +2286,10 @@ sections:
     ### Native public file copy/remove continuation
 
     Implemented original public copy/remove, consumed File lifetime/IO/static wrappers and safeWrite over actual pinned libc/MEMFS. Exact .osl-tmp collision/rename/rollback, link contents, wasm32 size and native errno/ENOSPC ordering are preserved; no host mount, fake syscall provider or metadata-preserving move branch. All9 active original copy/remove QA cases and critical real permissions/link/backup/descriptor tests pass:65 focused/related cases in4 files;9 tooling assertions and actual Chromium main/DOM-free Worker public copy/read/remove pass. Additional related suite has103 passes and the same2 original UNIX root/access attribute failures. Unchanged90 coverage remains FAIL: aggregate branches89.16; file_misc88.63 branches; safeWrite84.61 statements/66.66 branches. These gaps are not diluted or marked closed. Same4 metadata type errors, comphelper/sax cycle and157 old JSDoc findings remain; final scoped lint/format/tools/Vite/provenance/registry/size/tree/doctor/routing/diff pass. Native197 exports/853 constants rebuilt locally; registry mutation-helper disposition repaired. WRITER588..589/CALC651..652 document retained upstream concerns. See evidence/native-file-copy-continuation.json. SvFileStream/TempFile and complete package/storage/model/filter/UI remain unfinished; parents/goal stay active/rework, no full suite due.
+
+    ### Original native file stream continuation
+
+    Implemented selected UNIX SvFileStream constructors/destructor, source1024-byte buffering/OSL read-write/seek/sync/resize, Open flags/stat/TEMPORARY/symlink copy/readonly retry and internal share table over actual DirectoryItem/std::mutex/unique_lock. Source F_RDLCK0, system-path-vs-URL lookup bypass, silent denial, retained retry flags/mode, ignored failed copy, ResetError position and unsigned sentinel cursor are preserved; WRITER590..595/CALC653..658 document findings. Added canonical tools/inc/stream.ts boundary and moved actual wrappers to it; base stream now captures actual thread encoding and exposes source encoding/mode accessors. Test fixtures initialize real runtime where newly required, no global bootstrap bypass/fake provider/private injection/manual JS allocator. Final213 shared tests/12files,126 Calc CSV/shell regressions,9 tooling assertions and actual Chromium main/DOM-free Worker read/write/flush/seek pass. Exact upstream XML fixture file-read recipe and existing memory-stream QA execute; separate tools XPath/XmlWalker owners are not claimed. New complete strmunx owner passes unchanged90 metrics95.02/90.75/100/98.77; native mutex100. Broader owner gate FAILS base stream.native branches88.26 and remains open; earlier owner gaps unchanged. Same4 metadata type errors/cycle/157 old JSDoc findings remain; scoped lint/format/tools/Vite/provenance/registry/size/tree/doctor/routing/diff pass. Artifact197exports/853constants unchanged, no rebuild/network. Evidence: evidence/native-file-stream-continuation.json. TempFile/service, whole package/storage/model/filter/UI and full DOCX/XLSX reopen acceptance remain unfinished. Parents/goal stay active/rework; no full suite due.
 id_source: "generated"
 ---
 ## Summary
@@ -3523,6 +3573,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-14T10:43:15.990Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared native SvFileStream and source stream header implemented;213 shared/126 Calc/9 tooling tests and Chromium main/Worker pass. New owner90 gate passes; base branches88.26 and older type/docs/cycle gaps remain. Full DOCX TempFile/storage/model/filter/UI unfinished; evidence/native-file-stream-continuation.json.
+Attempts: 43
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T10:42:18.911Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -3814,3 +3894,7 @@ Restored original OStringBuffer insertion pointer/count assertion before the C h
 ### Native public file copy/remove continuation
 
 Implemented original public copy/remove, consumed File lifetime/IO/static wrappers and safeWrite over actual pinned libc/MEMFS. Exact .osl-tmp collision/rename/rollback, link contents, wasm32 size and native errno/ENOSPC ordering are preserved; no host mount, fake syscall provider or metadata-preserving move branch. All9 active original copy/remove QA cases and critical real permissions/link/backup/descriptor tests pass:65 focused/related cases in4 files;9 tooling assertions and actual Chromium main/DOM-free Worker public copy/read/remove pass. Additional related suite has103 passes and the same2 original UNIX root/access attribute failures. Unchanged90 coverage remains FAIL: aggregate branches89.16; file_misc88.63 branches; safeWrite84.61 statements/66.66 branches. These gaps are not diluted or marked closed. Same4 metadata type errors, comphelper/sax cycle and157 old JSDoc findings remain; final scoped lint/format/tools/Vite/provenance/registry/size/tree/doctor/routing/diff pass. Native197 exports/853 constants rebuilt locally; registry mutation-helper disposition repaired. WRITER588..589/CALC651..652 document retained upstream concerns. See evidence/native-file-copy-continuation.json. SvFileStream/TempFile and complete package/storage/model/filter/UI remain unfinished; parents/goal stay active/rework, no full suite due.
+
+### Original native file stream continuation
+
+Implemented selected UNIX SvFileStream constructors/destructor, source1024-byte buffering/OSL read-write/seek/sync/resize, Open flags/stat/TEMPORARY/symlink copy/readonly retry and internal share table over actual DirectoryItem/std::mutex/unique_lock. Source F_RDLCK0, system-path-vs-URL lookup bypass, silent denial, retained retry flags/mode, ignored failed copy, ResetError position and unsigned sentinel cursor are preserved; WRITER590..595/CALC653..658 document findings. Added canonical tools/inc/stream.ts boundary and moved actual wrappers to it; base stream now captures actual thread encoding and exposes source encoding/mode accessors. Test fixtures initialize real runtime where newly required, no global bootstrap bypass/fake provider/private injection/manual JS allocator. Final213 shared tests/12files,126 Calc CSV/shell regressions,9 tooling assertions and actual Chromium main/DOM-free Worker read/write/flush/seek pass. Exact upstream XML fixture file-read recipe and existing memory-stream QA execute; separate tools XPath/XmlWalker owners are not claimed. New complete strmunx owner passes unchanged90 metrics95.02/90.75/100/98.77; native mutex100. Broader owner gate FAILS base stream.native branches88.26 and remains open; earlier owner gaps unchanged. Same4 metadata type errors/cycle/157 old JSDoc findings remain; scoped lint/format/tools/Vite/provenance/registry/size/tree/doctor/routing/diff pass. Artifact197exports/853constants unchanged, no rebuild/network. Evidence: evidence/native-file-stream-continuation.json. TempFile/service, whole package/storage/model/filter/UI and full DOCX/XLSX reopen acceptance remain unfinished. Parents/goal stay active/rework; no full suite due.

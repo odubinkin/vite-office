@@ -1,0 +1,277 @@
+{
+  "scope": "Original SvFileStream and captured SvStream encoding/mode plus consumed actual unique_lock/header prerequisites for TempFile. Full DOCX/XLSX package/storage/model/filter/UI remains unfinished.",
+  "baseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "nativeArtifact": {
+    "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+    "fileBindingSha256": "0ff16af63632f4926ab9e22918c90bfcd43013f0d13fcd753cf62a37f9dbfa3e",
+    "fileStatBindingSha256": "077599a5251a4bac08cdb5801219adf6ee9b2444bc0f17c6479db124dd022854",
+    "localeBindingSha256": "0f00b270fcde3d33bd142514575582f93ab20832b7a53355f47ff478b4fe55b3",
+    "securityBindingSha256": "1e116824af729eaf09bb21127f040b032d00c47d4b3b59cdd11176079ee68e93",
+    "socketBindingSha256": "22f11273b8c906da0bd1e20632b19dab5b997dd726d9cddc5c317e21eb45c22f",
+    "cppBindingSha256": "fe3a2446ac634a72904af28ba43fb0802627382db108b8e83367ba02a2d5dbce",
+    "emsdkCommit": "1693ce7359fc9694f198694f902a2cc061239b86",
+    "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
+    "exportCount": 197,
+    "enumConstantCount": 853,
+    "artifact": "third_party/libxml2-wasm/libxml2.mjs",
+    "artifactSha256": "37129e8ea76f4da2a30c91f173d3dd5d741a8f4ec35526a507405af2a0d723e9"
+  },
+  "nativeBuild": "No rebuild needed: actual197-export/853-constant pinned libc/libc++ artifact unchanged; consumed unique_lock calls the existing actual native mutex operations.",
+  "implementation": [
+    "Original selected UNIX SvFileStream default/URL constructor, destructor, byte IO/size_t(-1), signed seek conversion/end sentinel/assertion, sync/resize/close/reset and 1024-byte buffer.",
+    "Original Open stat/TEMPORARY/flags/COPY_ON_SYMLINK/readonly retry and internal gLocks identity/denial table using real source DirectoryItem and std::mutex/unique_lock. Source F_RDLCK0 and system-path URL-lookup bypass are retained. JS Map address ordering/native race domains remain unqualified.",
+    "Original base thread-encoding capture/accessors and GetStreamMode, actual header boundary tools/inc/stream.ts and existing OStreamWrapper/SvStream wrapper imports. JS bytes remain VM-managed; consumed signed-byte UNO Sequence spans marshal real IO bytes, no fake byte provider or manual JS allocator."
+  ],
+  "upstreamQA": "Existing pinned tools test_stream memory/byte assertions rerun. Original tools test_xpath.cxx file-stream read recipe executes against the exact pinned test.xml bytes. Separate tools::XPath/XmlWalker owners/assertions are not claimed as ported; no direct standalone SvFileStream fixture exists in tools/qa. Critical real filesystem source quirks, errors, permissions, lock sharing, symlinks and public read/write overflow are tested.",
+  "checks": [
+    {
+      "command": "cd apps/office && npx vitest run --config vitest.shared.config.ts src/tools/source/stream/strmunx.test.ts src/tools/source/stream/stream.native.test.ts src/tools/source/stream/strmunx.errors.test.ts src/tools/source/stream/stream.test.ts src/package/source/zipapi/byte-io.test.ts src/package/source/zipapi/ZipFile.test.ts src/package/source/zipapi/InflateZlib.test.ts src/package/source/zipapi/native-entry-read.test.ts src/package/source/zippackage/ZipPackageFolder.save.test.ts src/unotools/source/streaming/streamwrap.test.ts src/svl/source/misc/strmadpt.test.ts src/external/libcxx/mutex.test.ts",
+      "result": "pass",
+      "evidence": "213 related tests/12 files, including original memory-stream QA, actual OSL file stream, public header consumers and genuine native mutex/unique_lock.",
+      "log": "apps/office/coverage/native-file-stream-related.log",
+      "sha256": "6ca21c2fd3a3733ccb9789e94f5a5ecadbcde1d79d9477cf7e4d5eda48c08863"
+    },
+    {
+      "command": "cd apps/office && npx vitest run --config vitest.calc.config.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/dbgui/asciiopt.test.ts",
+      "result": "pass",
+      "evidence": "126 related Calc CSV/shell/options tests.",
+      "log": "apps/office/coverage/native-file-stream-calc.log",
+      "sha256": "03cecb312e616df273d518f4590c257d42b8d8ff9a4d284e8987fa31e0698cd1"
+    },
+    {
+      "command": "cd apps/office && npx vitest run --config vitest.shared.config.ts src/tools/source/stream/strmunx.test.ts src/tools/source/stream/stream.native.test.ts --coverage --coverage.include=src/tools/source/stream/strmunx.ts --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-file-stream",
+      "result": "pass",
+      "evidence": "43 tests/2files; complete new strmunx.ts95.02 statements/90.75 branches/100 functions/98.77 lines.",
+      "log": "apps/office/coverage/native-file-stream-coverage.log",
+      "sha256": "8ff08a521ed9a0121fc40ca9403d5bd39638b850dfcd60c124c0c572ad016066"
+    },
+    {
+      "command": "cd apps/office && npx vitest run --config vitest.shared.config.ts src/tools/source/stream/strmunx.test.ts src/tools/source/stream/stream.native.test.ts src/tools/source/stream/strmunx.errors.test.ts src/tools/source/stream/stream.test.ts src/package/source/zipapi/byte-io.test.ts src/package/source/zipapi/ZipFile.test.ts src/package/source/zipapi/InflateZlib.test.ts src/package/source/zipapi/native-entry-read.test.ts src/package/source/zippackage/ZipPackageFolder.save.test.ts src/unotools/source/streaming/streamwrap.test.ts src/svl/source/misc/strmadpt.test.ts src/external/libcxx/mutex.test.ts --coverage --coverage.include=src/tools/source/stream/strmunx.ts --coverage.include=src/tools/source/stream/stream.native.ts --coverage.include=src/external/libcxx/mutex.ts --coverage.thresholds.perFile=true --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-file-stream-owners",
+      "result": "fail",
+      "evidence": "All213 tests pass; broader three-owner coverage branch gate fails. Complete stream.native.ts95.32/88.26/100/97.2; mutex100 all; strmunx95.02/90.75/100/98.77. Existing base owner gap is retained, no aggregate dilution or threshold changes.",
+      "log": "apps/office/coverage/native-file-stream-owner-coverage.log",
+      "sha256": "ee45fad559f6232cc8848ceb0442e395a64bc04b1ba79e9ef0481f8965ec5557"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "evidence": "Actual SvFileStream read/write/flush/seek/close through native OSL/MEMFS in Chromium main and DOM-free Worker, alongside earlier native XML/ZIP/metadata/copy probes.",
+      "log": "apps/office/coverage/native-file-stream-browser.log",
+      "sha256": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee"
+    },
+    {
+      "command": "cd apps/office && npx vite build",
+      "result": "pass",
+      "evidence": "Production build; separate typecheck failure is not hidden.",
+      "log": "apps/office/coverage/native-file-stream-production-build.log",
+      "sha256": "ebc7259f484cd763e0a9fb90c9b56a2e860d543abd9a26a6dda706da705ee159"
+    },
+    {
+      "command": "npm --prefix apps/office run typecheck",
+      "result": "fail",
+      "evidence": "Only4 existing SfxDocumentMetaData.storage.ts errors.",
+      "log": "apps/office/coverage/native-file-stream-types.log",
+      "sha256": "ea665cf96a97985469d7bc39ff902442818176787b56a076b2a13aff169000b8"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "evidence": "Tools typecheck.",
+      "log": "apps/office/coverage/native-file-stream-tools.log",
+      "sha256": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308"
+    },
+    {
+      "command": "npx eslint apps/office/src/tools/source/stream/strmunx.ts apps/office/src/tools/source/stream/strmunx.test.ts apps/office/src/tools/source/stream/stream.native.ts apps/office/src/tools/source/stream/stream.native.test.ts apps/office/src/tools/inc/stream.ts apps/office/src/external/libcxx/mutex.ts apps/office/src/external/libcxx/mutex.test.ts apps/office/src/tools/source/stream/stream.test.ts apps/office/src/package/source/zipapi/byte-io.test.ts apps/office/src/sc/source/ui/docshell/docsh.test.ts apps/office/src/sc/source/ui/docshell/impex.test.ts apps/office/src/unotools/source/streaming/streamwrap.ts apps/office/src/svl/source/misc/strmadpt.ts scripts/fixtures/native-directory-stat-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "evidence": "Scoped implementation/test/browser lint.",
+      "log": "apps/office/coverage/native-file-stream-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npx prettier --check apps/office/src/tools/source/stream/strmunx.ts apps/office/src/tools/source/stream/strmunx.test.ts apps/office/src/tools/source/stream/stream.native.ts apps/office/src/tools/source/stream/stream.native.test.ts apps/office/src/tools/inc/stream.ts apps/office/src/external/libcxx/mutex.ts apps/office/src/external/libcxx/mutex.test.ts apps/office/src/tools/source/stream/stream.test.ts apps/office/src/package/source/zipapi/byte-io.test.ts apps/office/src/sc/source/ui/docshell/docsh.test.ts apps/office/src/sc/source/ui/docshell/impex.test.ts apps/office/src/unotools/source/streaming/streamwrap.ts apps/office/src/svl/source/misc/strmadpt.ts scripts/fixtures/native-directory-stat-probe.ts scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "evidence": "Scoped formatting.",
+      "log": "apps/office/coverage/native-file-stream-format-check.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "evidence": "Same comphelper -> sax -> comphelper cycle remains.",
+      "log": "apps/office/coverage/native-file-stream-dependencies.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "fail",
+      "evidence": "157 existing JSDoc findings; no additional touched-file findings.",
+      "log": "apps/office/coverage/native-file-stream-docs.log",
+      "sha256": "0d64659347842d68a624c5105b4c8ef9d8f4ca6a33bb1008785dbf93aae2ec19"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "evidence": "2605 runtime modules/2369 mapped/198 browser adaptations/38 infrastructure.",
+      "log": "apps/office/coverage/native-file-stream-provenance.log",
+      "sha256": "9772007514dbdb225210fcaa1f54fcf0047aa1e50022633ba8675ecc6104ad0a"
+    },
+    {
+      "command": "npm run inventory:registry:build",
+      "result": "pass",
+      "evidence": "4 generated views; pure header reexport lists no duplicate local class declarations.",
+      "log": "apps/office/coverage/native-file-stream-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "evidence": "Registry/invariants/parity semanticViolationCount0; no broad verified semantic claim.",
+      "log": "apps/office/coverage/native-file-stream-registry.log",
+      "sha256": "e61f075ce8478bd0329cf1eb370116d6f6da9b33ed00cbcf222bb1072e869329"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "evidence": "Size check, existing decomposition candidates retained.",
+      "log": "apps/office/coverage/native-file-stream-size.log",
+      "sha256": "31801ebe19e9b01e13630189f0c2edb331d692853502368cd9360685576c6fbc"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "evidence": "Original tools source/header placement.",
+      "log": "apps/office/coverage/native-file-stream-tree.log",
+      "sha256": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6"
+    },
+    {
+      "command": "npx vitest run scripts/native-file-access-boundary.test.ts scripts/check-module-boundaries-xml.test.ts",
+      "result": "pass",
+      "evidence": "9 related tooling tests/2files.",
+      "log": "apps/office/coverage/native-file-stream-static.log",
+      "sha256": "656a48e34be9724683dce7b758d0cdf145eb78414ff1697236d668e05370d68a"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass",
+      "evidence": "Existing managed pre-push warning unchanged.",
+      "log": "apps/office/coverage/native-file-stream-doctor.log",
+      "sha256": "641652388b52914c754c2b18258b762c1fc6a3f8a010d05b95560aa2d47f1c9f"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "evidence": "Routing valid.",
+      "log": "apps/office/coverage/native-file-stream-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "evidence": "No whitespace errors.",
+      "log": "apps/office/coverage/native-file-stream-diff.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "sources": [
+    {
+      "path": "apps/office/src/tools/source/stream/strmunx.ts",
+      "sha256": "cb799b348c84ea57736d62babb84e173e733b52ad5c09cb77a63ef676a610980"
+    },
+    {
+      "path": "apps/office/src/tools/source/stream/strmunx.test.ts",
+      "sha256": "7f670d96c951d18ec1ac4d324bc35fa4c284c30c38ef1ba34f893239c76cc8df"
+    },
+    {
+      "path": "apps/office/src/tools/source/stream/stream.native.ts",
+      "sha256": "45dc461b5cadf4d632a9a15eb2350e5b900fa481beb1fa739701972be4e7ad52"
+    },
+    {
+      "path": "apps/office/src/tools/source/stream/stream.native.test.ts",
+      "sha256": "f1fff47f002805c7dacca3b6dc117ca64b5549a2264ecc38341beaf12b40984e"
+    },
+    {
+      "path": "apps/office/src/tools/inc/stream.ts",
+      "sha256": "568754405c9c45d602a6e4a08778a94343ab5613c723f6e324eafd08ab765b8a"
+    },
+    {
+      "path": "apps/office/src/external/libcxx/mutex.ts",
+      "sha256": "78e99d781d53d64fc3595ce6f479fda553465e944231b1be99054631dc0ffa7b"
+    },
+    {
+      "path": "apps/office/src/external/libcxx/mutex.test.ts",
+      "sha256": "218c929c9c02c17f447d09bd6afcb96d237b275bb93577feaf8e25b57701eebd"
+    },
+    {
+      "path": "apps/office/src/tools/source/stream/stream.test.ts",
+      "sha256": "9797b60da025a6951c3afbb578551c654028e779eb9c4f6022d8f3aeed719090"
+    },
+    {
+      "path": "apps/office/src/package/source/zipapi/byte-io.test.ts",
+      "sha256": "503449ee41f0dce7d5a8d9c116fd794f9e1dd03dbfda7e21a5296470e9c01938"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/docsh.test.ts",
+      "sha256": "d6e2a680c70bd053915ec5394eb62093000d8f17e11ff156c305b9ec083c4c6d"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/impex.test.ts",
+      "sha256": "ec13a5fc12d7ab9c57a53509c2488ae337111bd3a9ad4e578ffa4e820a459bc8"
+    },
+    {
+      "path": "apps/office/src/unotools/source/streaming/streamwrap.ts",
+      "sha256": "a950b8ab8a0d8b4e85904b739ce9e3dfc696784ed5f82a6bae07d84f093b071b"
+    },
+    {
+      "path": "apps/office/src/svl/source/misc/strmadpt.ts",
+      "sha256": "5e49575203832e43fda1717af0dcb749b342a1532571ad8352b9829584c09d2b"
+    },
+    {
+      "path": "scripts/fixtures/native-directory-stat-probe.ts",
+      "sha256": "b28a7681ec4d39b2e4eae5f97fb242bc78e981936897b0bda868922e5fd53d25"
+    },
+    {
+      "path": "scripts/native-dom-worker-probe.mjs",
+      "sha256": "60b21d79b24f3c1eabe52570f9d03c270ec7cb9ddf1decdeda5d80720032b619"
+    },
+    {
+      "path": "vendor/libreoffice-reference/tools/source/stream/strmunx.cxx",
+      "sha256": "5672bbe0c13ee6f8b4b7aa1ebd45713acfd39f380a09a07ff54991d47f735464"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/tools/stream.hxx",
+      "sha256": "b506c144e266c462e35015c33ee2b1e83bfb05fd99df21394fbf8637350243d1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/tools/qa/cppunit/test_stream.cxx",
+      "sha256": "89ac76e2cceb5e0f39b17c82994f8ef8c802f8730a0b7033a6970da51e29c38e"
+    },
+    {
+      "path": "vendor/libreoffice-reference/tools/qa/cppunit/test_xpath.cxx",
+      "sha256": "3c6eb9d272114eabc5170c7cda1776a8678776f9b51f3ef6464c1c80a576f959"
+    },
+    {
+      "path": "vendor/libreoffice-reference/tools/qa/data/test.xml",
+      "sha256": "b1056f2420188a62154650d629d28329b028f01b9dd332c32db52ccba32e1c70"
+    },
+    {
+      "path": "node_modules/.cache/emsdk/upstream/emscripten/cache/sysroot/include/fcntl.h",
+      "sha256": "80b575ae15a62020a8d223af333ddba14dccd720f7a045523d9ff655dee666f3"
+    }
+  ],
+  "findings": [
+    "WRITER590/CALC653 system-path vs URL lock bypass",
+    "WRITER591/CALC654 F_RDLCK0 early return",
+    "WRITER592/CALC655 readonly retry retains create/mode",
+    "WRITER593/CALC656 unsigned error sentinel cursor advance",
+    "WRITER594/CALC657 ResetError does not seek",
+    "WRITER595/CALC658 ignored failed link-content copy"
+  ],
+  "remaining": [
+    "Complete stream.native.ts branch coverage88.26 and earlier file_misc/readwrite_helper/native file/locale/folder/forward URL owner gaps stay open; no fake status/provider injection or100 chase.",
+    "Existing4 metadata type errors, dependency cycle,157 JSDoc findings and previously observed2 upstream metadata root-profile QA failures remain. Metadata QA not rerun this turn because metadata implementation is unchanged.",
+    "TempFile/service and successful seekable-copy acceptance; complete package/storage, original document filter/model import/export and existing desktop/mobile UI remain incomplete.",
+    "Physical ABI/pointer order/invalid spans/native pthread races/OOM and downstream tools XPath/XmlWalker caller owners unqualified.",
+    "No full suite:0 broad agentplane parents completed since cadence."
+  ],
+  "status": "Both broad tasks remain active/rework; intentional source WIP retained, only canonical task artifacts checkpointed."
+}
