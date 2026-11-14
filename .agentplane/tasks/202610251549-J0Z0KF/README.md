@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 442
+revision: 445
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-14T12:29:16.917Z"
+  updated_at: "2026-11-14T12:41:34.073Z"
   updated_by: "CODER"
-  note: "DirectoryHelper/Named-directory prerequisite:69 related cases, per-file90, browser main/Worker and10static checks pass. Docs5391/lint/registry pass. Four old metadata type errors,cycle,earlier independent coverage and full XLSX storage/model/UI remain open. Evidence:native-directoryhelper-continuation.json."
-  attempts: 139
+  note: "Final DirectoryHelper/Named source review:FileStatus Directory-or-Volume predicate retained;69 related tests,90 owner gates and actual browser main/Worker pass. LLVM source attribution retained. Four old type errors/cycle/full XLSX storage/model/UI remain open; see native-directoryhelper-continuation.json."
+  attempts: 140
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2232,8 +2235,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-14T12:41:34.073Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Final DirectoryHelper/Named source review:FileStatus Directory-or-Volume predicate retained;69 related tests,90 owner gates and actual browser main/Worker pass. LLVM source attribution retained. Four old type errors/cycle/full XLSX storage/model/UI remain open; see native-directoryhelper-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-14T12:41:34.939Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-14T12:30:19.506Z"
+doc_updated_at: "2026-11-14T12:41:34.939Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -6418,6 +6434,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-14T12:41:34.073Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Final DirectoryHelper/Named source review:FileStatus Directory-or-Volume predicate retained;69 related tests,90 owner gates and actual browser main/Worker pass. LLVM source attribution retained. Four old type errors/cycle/full XLSX storage/model/UI remain open; see native-directoryhelper-continuation.json.
+    Attempts: 140
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T12:41:14.031Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -7031,6 +7077,8 @@ sections:
     ### Original native file stream continuation
 
     Implemented selected UNIX SvFileStream constructors/destructor, source1024-byte buffering/OSL read-write/seek/sync/resize, Open flags/stat/TEMPORARY/symlink copy/readonly retry and internal share table over actual DirectoryItem/std::mutex/unique_lock. Source F_RDLCK0, system-path-vs-URL lookup bypass, silent denial, retained retry flags/mode, ignored failed copy, ResetError position and unsigned sentinel cursor are preserved; WRITER590..595/CALC653..658 document findings. Added canonical tools/inc/stream.ts boundary and moved actual wrappers to it; base stream now captures actual thread encoding and exposes source encoding/mode accessors. Test fixtures initialize real runtime where newly required, no global bootstrap bypass/fake provider/private injection/manual JS allocator. Final213 shared tests/12files,126 Calc CSV/shell regressions,9 tooling assertions and actual Chromium main/DOM-free Worker read/write/flush/seek pass. Exact upstream XML fixture file-read recipe and existing memory-stream QA execute; separate tools XPath/XmlWalker owners are not claimed. New complete strmunx owner passes unchanged90 metrics95.02/90.75/100/98.77; native mutex100. Broader owner gate FAILS base stream.native branches88.26 and remains open; earlier owner gaps unchanged. Same4 metadata type errors/cycle/157 old JSDoc findings remain; scoped lint/format/tools/Vite/provenance/registry/size/tree/doctor/routing/diff pass. Artifact197exports/853constants unchanged, no rebuild/network. Evidence: evidence/native-file-stream-continuation.json. TempFile/service, whole package/storage/model/filter/UI and full DOCX/XLSX reopen acceptance remain unfinished. Parents/goal stay active/rework; no full suite due.
+
+    Final source review also retains original FileStatus::isDirectory (Directory or Volume) at the DirectoryHelper call boundary. Real UNIX directory/regular-file calls execute; native Volume entries are not produced by this SDK and are not fabricated. The consumed libc++ tree source attribution/license notice is retained. Final scoped69 cases/browser/typecheck/lint/format/docs/provenance/registry/Vite evidence reflects this source review; whole-parent limitations remain unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -11225,6 +11273,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-14T12:41:34.073Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Final DirectoryHelper/Named source review:FileStatus Directory-or-Volume predicate retained;69 related tests,90 owner gates and actual browser main/Worker pass. LLVM source attribution retained. Four old type errors/cycle/full XLSX storage/model/UI remain open; see native-directoryhelper-continuation.json.
+Attempts: 140
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-14T12:41:14.031Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -11842,3 +11920,5 @@ Implemented original public copy/remove, consumed File lifetime/IO/static wrappe
 ### Original native file stream continuation
 
 Implemented selected UNIX SvFileStream constructors/destructor, source1024-byte buffering/OSL read-write/seek/sync/resize, Open flags/stat/TEMPORARY/symlink copy/readonly retry and internal share table over actual DirectoryItem/std::mutex/unique_lock. Source F_RDLCK0, system-path-vs-URL lookup bypass, silent denial, retained retry flags/mode, ignored failed copy, ResetError position and unsigned sentinel cursor are preserved; WRITER590..595/CALC653..658 document findings. Added canonical tools/inc/stream.ts boundary and moved actual wrappers to it; base stream now captures actual thread encoding and exposes source encoding/mode accessors. Test fixtures initialize real runtime where newly required, no global bootstrap bypass/fake provider/private injection/manual JS allocator. Final213 shared tests/12files,126 Calc CSV/shell regressions,9 tooling assertions and actual Chromium main/DOM-free Worker read/write/flush/seek pass. Exact upstream XML fixture file-read recipe and existing memory-stream QA execute; separate tools XPath/XmlWalker owners are not claimed. New complete strmunx owner passes unchanged90 metrics95.02/90.75/100/98.77; native mutex100. Broader owner gate FAILS base stream.native branches88.26 and remains open; earlier owner gaps unchanged. Same4 metadata type errors/cycle/157 old JSDoc findings remain; scoped lint/format/tools/Vite/provenance/registry/size/tree/doctor/routing/diff pass. Artifact197exports/853constants unchanged, no rebuild/network. Evidence: evidence/native-file-stream-continuation.json. TempFile/service, whole package/storage/model/filter/UI and full DOCX/XLSX reopen acceptance remain unfinished. Parents/goal stay active/rework; no full suite due.
+
+Final source review also retains original FileStatus::isDirectory (Directory or Volume) at the DirectoryHelper call boundary. Real UNIX directory/regular-file calls execute; native Volume entries are not produced by this SDK and are not fabricated. The consumed libc++ tree source attribution/license notice is retained. Final scoped69 cases/browser/typecheck/lint/format/docs/provenance/registry/Vite evidence reflects this source review; whole-parent limitations remain unchanged.

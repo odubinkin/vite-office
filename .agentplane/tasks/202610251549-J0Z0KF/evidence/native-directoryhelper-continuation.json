@@ -41,16 +41,20 @@
     {
       "path": "node_modules/.cache/emsdk/upstream/emscripten/cache/sysroot/include/c++/v1/__tree",
       "sha256": "ec927f5fae354d197956f6aeaecf9f60bf2e4d4b77a697c9d91afa3fa4ff0dc3"
+    },
+    {
+      "path": "vendor/libreoffice-reference/include/osl/file.hxx",
+      "sha256": "43830221a53a2eb4225bcd20c0b0720b087ad69bc7d483610712ae8eed574272"
     }
   ],
   "changedSourceHashes": [
     {
       "path": "apps/office/src/external/libcxx/set.ts",
-      "sha256": "fe8e57131349af01fb7170e0d9eddb4a141e2eea0dea9ae7d8dc08928f1396f1"
+      "sha256": "725afd4bfa650f0842115f2ee0154e044d2b0b7cc140af81a865b7250ad16268"
     },
     {
       "path": "apps/office/src/comphelper/source/misc/directoryhelper.ts",
-      "sha256": "289019167ae27e914c84b85d50b3c754c98b268dad5e59a925e6e941a9172f9c"
+      "sha256": "142a49b49d3640f3ea9060b047a0dc794cee85cf57995c87ba0b872f5d3476f0"
     },
     {
       "path": "apps/office/src/unotools/source/ucbhelper/tempfile.ts",
@@ -75,6 +79,10 @@
     {
       "path": "scripts/native-dom-worker-probe.mjs",
       "sha256": "fe2ddc910201fb596fa74a74fd6524a6ad8b5ebfa8259384a63967d75a3e7fe2"
+    },
+    {
+      "path": "apps/office/src/sal/inc/osl/file.hxx.ts",
+      "sha256": "0f954b86bffbe4e6dcc3bbea6bd3a646b100e2e3573614c2763da8ee5efcc25a"
     }
   ],
   "implementation": [
@@ -82,7 +90,8 @@
     "Consumed original libc++ __tree end/begin/root/node links, red-black insertion/recolor/rotations, iterator increment and recursive element destruction. JS VM owns node storage; actual static string/pair value specializations retain RTL lifetime. No native pointer emulation or IO/status provider.",
     "Original optional parent validation/default fallback, private directories, exclusive name collision retries and recursive directory destructor for TempFileNamed first constructor. Default file mode and original empty-name memory fallback retained.",
     "Public CreateTempName/CreateTempURL/SetTempNameBaseDirectory/GetTempNameBaseDirectory retain remove-versus-keep, process base cache/private-child creation/fallback and ignored status behavior.",
-    "Readonly OUString const-reference surface now includes consumed endsWith; method implementation/defaults unchanged."
+    "Readonly OUString const-reference surface now includes consumed endsWith; method implementation/defaults unchanged.",
+    "Original FileStatus::isDirectory includes Directory or Volume and is called directly by DirectoryHelper. Selected UNIX Volume delivery remains unqualified; no fake status fields. Original LLVM attribution/license notice accompanies the tree algorithms."
   ],
   "upstreamQa": "Existing original public Directory and Python TempFile test01/test02 assertions run in the related seven-file profile. No dedicated DirectoryHelper filesystem QA file exists in the supplied pinned corpus; source-backed critical filesystem scenarios and real value-set insertion sequences are added, without fake providers/private counter injection.",
   "result": "69 related tests/7 files pass with unchanged per-file90 gate. Chromium main/DOM-free Worker create parented temporary files and recursively delete a named directory containing a real native stream file. Static10/2 pass; JSDoc5391 passes.",
@@ -211,7 +220,7 @@
       "command": "cd apps/office && npx vitest run --config vitest.shared.config.ts src/comphelper/source/misc/directoryhelper.filesystem.test.ts src/comphelper/source/misc/directoryhelper.test.ts src/unotools/source/ucbhelper/xtempfile.test.ts src/unotools/source/ucbhelper/tempfile.failure.test.ts src/sal/osl/unx/directory.test.ts src/sal/osl/unx/tempfile.test.ts src/comphelper/source/streaming/seekableinput.test.ts --coverage --coverage.include=src/comphelper/source/misc/directoryhelper.ts --coverage.include=src/unotools/source/ucbhelper/tempfile.ts --coverage.include=src/external/libcxx/set.ts --coverage.thresholds.perFile=true --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/native-directoryhelper",
       "result": "pass",
       "log": "apps/office/coverage/native-directoryhelper-coverage.log",
-      "sha256": "e0dc2d64c9077960fa757cd21ac432a5268403fbbfd29dda3c35387a88563ca4"
+      "sha256": "712d4165f01d837e17c0734785c935e93062d903e9d680c65ba5b621a1eeb683"
     },
     {
       "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
@@ -226,13 +235,13 @@
       "sha256": "fbf0fc3f1611ffb721508ec435666fe4838ba8436a9dd8e25d072776dc8a7621"
     },
     {
-      "command": "npx eslint apps/office/src/external/libcxx/set.ts apps/office/src/comphelper/source/misc/directoryhelper.ts apps/office/src/unotools/source/ucbhelper/tempfile.ts apps/office/src/unotools/inc/tempfile.ts apps/office/src/sal/inc/rtl/ustring.ts apps/office/src/comphelper/source/misc/directoryhelper.filesystem.test.ts scripts/fixtures/native-tempfile-probe.ts scripts/native-dom-worker-probe.mjs",
+      "command": "npx eslint apps/office/src/external/libcxx/set.ts apps/office/src/comphelper/source/misc/directoryhelper.ts apps/office/src/unotools/source/ucbhelper/tempfile.ts apps/office/src/unotools/inc/tempfile.ts apps/office/src/sal/inc/rtl/ustring.ts apps/office/src/comphelper/source/misc/directoryhelper.filesystem.test.ts scripts/fixtures/native-tempfile-probe.ts scripts/native-dom-worker-probe.mjs apps/office/src/sal/inc/osl/file.hxx.ts",
       "result": "pass",
       "log": "apps/office/coverage/native-directoryhelper-lint.log",
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "command": "npx prettier --check apps/office/src/external/libcxx/set.ts apps/office/src/comphelper/source/misc/directoryhelper.ts apps/office/src/unotools/source/ucbhelper/tempfile.ts apps/office/src/unotools/inc/tempfile.ts apps/office/src/sal/inc/rtl/ustring.ts apps/office/src/comphelper/source/misc/directoryhelper.filesystem.test.ts scripts/fixtures/native-tempfile-probe.ts scripts/native-dom-worker-probe.mjs",
+      "command": "npx prettier --check apps/office/src/external/libcxx/set.ts apps/office/src/comphelper/source/misc/directoryhelper.ts apps/office/src/unotools/source/ucbhelper/tempfile.ts apps/office/src/unotools/inc/tempfile.ts apps/office/src/sal/inc/rtl/ustring.ts apps/office/src/comphelper/source/misc/directoryhelper.filesystem.test.ts scripts/fixtures/native-tempfile-probe.ts scripts/native-dom-worker-probe.mjs apps/office/src/sal/inc/osl/file.hxx.ts",
       "result": "pass",
       "log": "apps/office/coverage/native-directoryhelper-format-check.log",
       "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
@@ -265,7 +274,7 @@
       "command": "npm run inventory:registry:check",
       "result": "pass",
       "log": "apps/office/coverage/native-directoryhelper-registry.log",
-      "sha256": "f2bb5d50acc5dcf554b4f42392a4fb20f08883191c2fcdfd26de37a772989d41"
+      "sha256": "5f3cd030330646c17d86688e755ef5f93ddd5bcb9a37731caf77e466ff542841"
     },
     {
       "command": "npm run check:source-provenance",
@@ -277,7 +286,7 @@
       "command": "cd apps/office && npx vite build",
       "result": "pass",
       "log": "apps/office/coverage/native-directoryhelper-vite.log",
-      "sha256": "d14114c03ac948e4cd0ce58d3bcd3e60d450b497aa741fe67d59ba17ae3fead9"
+      "sha256": "c563c81b46a18ab841e37f88da186ae70ec302a920f9f7d7eda0072ada3c4e35"
     },
     {
       "command": "npx vitest run scripts/native-file-access-boundary.test.ts scripts/check-module-boundaries-xml.test.ts",
