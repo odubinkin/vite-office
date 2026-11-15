@@ -1,0 +1,286 @@
+{
+  "checkpoint": "Actual shared DOCX list identity/restart/override dispatch and numbering equivalence; not complete numbering.xml or main-text/filter/UI export",
+  "createdAt": "2026-11-15T11:19:17.272517+00:00",
+  "task": "202610251549-V4DQJW",
+  "sourceBaseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "implemented": [
+    "Actual AttributeOutputBase DOCX dispatch resolves SwList default abstract rule, exported formatting equivalence, cached abstract duplication and distinct instance overrides before final Word-level clamp. Existing RTF return buffer is explicitly adapted around native no-output behavior.",
+    "Original per-list abstract cache, nullable used-rule slots, override instance mappings, unsigned16 counter/IDs/restart values and map replacement. No fake list or font provider.",
+    "Original rule/level export comparison uses one/nine Word levels, actual style item-set equality and actual independent copied SwNumFormat values with cleared names/registrations.",
+    "Real DocxAttributeOutput inherits the actual common base and emits numPr, suppressing inherited outline numbering. The existing equivalent GetTextFormatColl binds source GetTextColl.",
+    "Docx destruction also releases the actual base-owned temporary tail; native null placeholders own no rule.",
+    "Actual RTF helper initializes existing runtime before stream/locale operations; main/DOM-free Worker reads original restart map/null slot and independently reopens emitted numPr XML/ZIP."
+  ],
+  "commands": {
+    "coverage": "npm run test:coverage:writer -- src/sw/source/filter/ww8/rtf-paragraph-numbering.test.ts src/sw/source/filter/ww8/rtf-numbering.test.ts src/sw/source/filter/ww8/rtf-numbering-lifetime.test.ts src/sw/source/filter/ww8/rtf-font-table.test.ts src/sw/source/filter/ww8/docxattributeoutput src/sw/source/filter/ww8/docxexport.fonts.test.ts --coverage.include=src/sw/source/filter/ww8/ww8atr.ts --coverage.include=src/sw/source/filter/ww8/ww8par.ts --coverage.include=src/sw/source/filter/ww8/wrtw8num.ts --coverage.include=src/sw/source/filter/ww8/docxattributeoutput.ts --coverage.include=src/sw/source/filter/ww8/docxexport.ts --coverage.reportsDirectory=coverage/docx-numbering-accepted --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+    "browser": "PLAYWRIGHT_BROWSERS_PATH=node_modules/.cache/ms-playwright node scripts/native-dom-worker-probe.mjs"
+  },
+  "results": {
+    "tests": 140,
+    "files": 10,
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 658,
+          "covered": 653,
+          "skipped": 0,
+          "pct": 99.24
+        },
+        "statements": {
+          "total": 735,
+          "covered": 725,
+          "skipped": 0,
+          "pct": 98.63
+        },
+        "functions": {
+          "total": 89,
+          "covered": 89,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 428,
+          "covered": 411,
+          "skipped": 0,
+          "pct": 96.02
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/ww8/docxattributeoutput.ts": {
+        "lines": {
+          "total": 380,
+          "covered": 380,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 62,
+          "covered": 62,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 415,
+          "covered": 415,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 248,
+          "covered": 245,
+          "skipped": 0,
+          "pct": 98.79
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/ww8/docxexport.ts": {
+        "lines": {
+          "total": 51,
+          "covered": 49,
+          "skipped": 0,
+          "pct": 96.07
+        },
+        "functions": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 51,
+          "covered": 49,
+          "skipped": 0,
+          "pct": 96.07
+        },
+        "branches": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/ww8/wrtw8num.ts": {
+        "lines": {
+          "total": 155,
+          "covered": 152,
+          "skipped": 0,
+          "pct": 98.06
+        },
+        "functions": {
+          "total": 13,
+          "covered": 13,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 183,
+          "covered": 176,
+          "skipped": 0,
+          "pct": 96.17
+        },
+        "branches": {
+          "total": 110,
+          "covered": 99,
+          "skipped": 0,
+          "pct": 90
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/ww8/ww8atr.ts": {
+        "lines": {
+          "total": 51,
+          "covered": 51,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 59,
+          "covered": 58,
+          "skipped": 0,
+          "pct": 98.3
+        },
+        "branches": {
+          "total": 47,
+          "covered": 44,
+          "skipped": 0,
+          "pct": 93.61
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/ww8/ww8par.ts": {
+        "lines": {
+          "total": 21,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 17,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "qualification": "All5 measured implemented owners pass90S/B/F/L individually, including wrtw8num90B. Aggregate98.63S96.02B100F99.24L. Earlier narrower/failed maps retained; no exclusions or counter edits.",
+    "browser": "pass actual listOverride in main/DOM-free Worker with independently reopened property XML/ZIP",
+    "quality": "JSDoc5480, provenance2662/semanticViolationCount0, scoped ESLint/Prettier/tools, tree/size, Vite/static4bundles, doctor/routing/diff pass"
+  },
+  "verificationFindings": [
+    "Initial RTF regressions failed before numbering at existing native stream locale initialization: actual runtime was not initialized by the old shared test helper. Add genuine beforeAll(initializeRuntime), then all affected RTF regressions pass.",
+    "Initial standalone SwNumRule comparator fixture omitted its actual constructor mode and document initialization. Fix the fixture using actual document plus label-alignment constructor form. Source code and comparison remain unchanged.",
+    "Initial3-owner coverage failed87.73S79.31B94.44F89.86L; source fixture was still failing. After constructor fix and actual existing font-table/override tests, aggregate91.37B passed but individual wrtw8num89.09B remained unqualified. Actual legacy-only mode rejection and right-aligned/zero-bullet cases now qualify each measured owner at90. Earlier outputs/maps are retained.",
+    "The default source OverrideNumberingDefinition header asserts unsupported WW8/RTF output; the local explicit diagnostic is retained. Complete DOCX override XML and level output remain unadmitted, not replaced by the base diagnostic as a successful format sink.",
+    "A bounded patch failed to match test indentation and made no change; corrected the targeted edit before final accepted coverage."
+  ],
+  "upstreamQa": "testTdf95848/testTdf95848_2 and testTdf153104 source QA were inspected. Current tests exercise actual list identity/override dispatch; full fixture import/model/layout/numbering-part/reopen is not claimed passed. No new suspected source bug is asserted; existing native one/nine-level limits and counter widths remain.",
+  "remaining": [
+    "Actual DOCX NumberingLevel/abstract/override numbering part, paragraph/section/table/style traversal and complete filter/storage/model/mounted DOCX/XLSX UI acceptance remain unfinished.",
+    "Same4 SfxDocumentMetaData.storage.ts type errors and comphelper/sax cycle persist. No new changed-file type error.",
+    "Intentional accumulated source WIP remains. Parent DOING/rework, goal active, no full suite/completed task or implementation-commit claim."
+  ],
+  "sha256": {
+    "apps/office/coverage/docx-numbering-accepted/coverage-final.json": "df0507b720e58b55793e7fe893622e2ce3150736ef38528a9b33ab738a9d2c2f",
+    "apps/office/coverage/docx-numbering-accepted/coverage-summary.json": "1dd0cdbbfa1808b5e5a4dfd6e02fc38874f44c181be517499112ca8ea4795275",
+    "apps/office/coverage/docx-numbering-current/coverage-final.json": "565acc0cd52296a281d31c093c4dbd77344dae21636c8db0bd58b02485ebc043",
+    "apps/office/coverage/docx-numbering-current/coverage-summary.json": "3b9ddc1094f45ca318e4ad33bf19c1de4d977189165032983ba4c3209ea93e10",
+    "apps/office/coverage/docx-numbering-final/coverage-final.json": "289e46d4b9282c07edf2b405d62a848877040a55d9fdc51b100c5598051003c9",
+    "apps/office/coverage/docx-numbering-final/coverage-summary.json": "224ef551ee17510cf2b60fd347c1ecaaf21d259fca4b1e710269087ff343ccb9",
+    "apps/office/coverage/docx-numbering-qualified/coverage-final.json": "e14b92968ab1321cae43e537c872663a94b6ba0c1dd4df0b435123a52cb21e69",
+    "apps/office/coverage/docx-numbering-qualified/coverage-summary.json": "eb896a402a84aff8349cb039489d1cd74d48c707a080ec20687911acef58f7ca",
+    "apps/office/coverage/docx-numbering/coverage-final.json": "27faa6f71306cf4da434a1d99c16b2f598849c290685c0382a169ce15e777bdc",
+    "apps/office/coverage/docx-numbering/coverage-summary.json": "fad48ff227ffd46b93ec3daaa71f778a995550ac2b766ad448aa8bdf4d9097ac",
+    "apps/office/coverage/docx-traversal-active.log": "8bce293037d458fb5caa9ea7e20cc799b66caa08b275825e9b7a6b19eecef92e",
+    "apps/office/coverage/docx-traversal-brief.log": "06f9285edecae9c59f361762d85400015d12062c1c9b2dea2e48f131de668441",
+    "apps/office/coverage/docx-traversal-build.log": "f9d5e156706dac712745278fce8cbd9cbad65c0ade5fabeaeb073fc66a61bd2e",
+    "apps/office/coverage/docx-traversal-config.log": "78b9f751c865f969a4efbddc65c34e9d9ef6bf821d245de10d0da5c1932898b1",
+    "apps/office/coverage/docx-traversal-coverage-accepted.log": "e13a847e5b06cf5050074c54f8939ddeb99c2d0bea760c5b5339095f22c9b924",
+    "apps/office/coverage/docx-traversal-coverage-current.log": "7cc2c592509d8d18338d9a5ec2adb3a2e2770cd0a6614d9d444344fc7c6996e8",
+    "apps/office/coverage/docx-traversal-coverage-final.log": "1ba43ddc010b4327088c642aff294dc3d090ab2e16b9425d4d9080b15bf86d88",
+    "apps/office/coverage/docx-traversal-coverage-qualified.log": "55fa274f0c88dafd77a9c5914e7981a5034636a5328388e248afed3a4dbb6c69",
+    "apps/office/coverage/docx-traversal-coverage.log": "9875dade5e0744914f360669b82a3e1a67bdfce8d57dbac24e49d1d5f200b250",
+    "apps/office/coverage/docx-traversal-dependencies.log": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf",
+    "apps/office/coverage/docx-traversal-diff-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/docx-traversal-diff.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/docx-traversal-docs.log": "03e56f03af39bc9f983ec20ab0ef631c3a6e9b56b8f381976ec48d87d911b463",
+    "apps/office/coverage/docx-traversal-doctor.log": "924d376a45ed248d0c543f1693e4423e5e21ab7e0671068719597b792965e4f2",
+    "apps/office/coverage/docx-traversal-format-test-final.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/docx-traversal-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/docx-traversal-head.log": "6403203dd5a0867eb14d104ee8a73730bd72dd9ad92e78d996a6dba0a5dcfc01",
+    "apps/office/coverage/docx-traversal-lint-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/docx-traversal-lint-test-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/docx-traversal-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/docx-traversal-numbering.log": "108e3cf1e3c5f5ec27541f9f0a64c4965a6b35e5ab0c8d4177abd9a6a7bab1ca",
+    "apps/office/coverage/docx-traversal-provenance.log": "f2f2ab36f8c60a18c5f2e71c2897b7c45965b2a554cef94f7b9d7f7f762c1c97",
+    "apps/office/coverage/docx-traversal-quickstart.log": "7cd29a19b5c0dc18e7eb324075d21cc2fb44715f3c8dd7b8b52dd5f72d2ed8e0",
+    "apps/office/coverage/docx-traversal-registry.log": "5194c897ef8a9435054eb100d7fb035eb085b4b1c583accf82a8b3a628c0eb9d",
+    "apps/office/coverage/docx-traversal-regression.log": "da8e3ba582b123b0caf5d6c0f27ce9040d72e5c89a6a9d29b81628d6e55a1c4e",
+    "apps/office/coverage/docx-traversal-route-before-evidence.log": "cd5f3d7e172c98c3fdf0c57b7c6c5adf9dfca3b94e538555e37c08f8b456f95e",
+    "apps/office/coverage/docx-traversal-route.log": "cd5f3d7e172c98c3fdf0c57b7c6c5adf9dfca3b94e538555e37c08f8b456f95e",
+    "apps/office/coverage/docx-traversal-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "apps/office/coverage/docx-traversal-size.log": "a7c42531b1ade9bbd0bcadf6711135fa9414bd6ce98256466fe618f47879dfc2",
+    "apps/office/coverage/docx-traversal-static.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "apps/office/coverage/docx-traversal-status-final.log": "bd5290c06856b5a3c10820589653cce17d77c9bce2c47d28afd62510fcab81c7",
+    "apps/office/coverage/docx-traversal-status.log": "8b57acc5cf55313f6c6a2485cc11f50019acfac9a08bd5c0760965880954e573",
+    "apps/office/coverage/docx-traversal-tasks.log": "e99986481204fc41cac45662a5db4c2ba32d4c716435621c929abff7679f6f04",
+    "apps/office/coverage/docx-traversal-tools.log": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+    "apps/office/coverage/docx-traversal-tracked.log": "8ea42914202a7369ade4fa0028ec1bd47e406b62bb711c9ad2fc312a7d8de1ac",
+    "apps/office/coverage/docx-traversal-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "apps/office/coverage/docx-traversal-types-current.log": "1c092f4a8b4f643a6ae2ef406a0b31535ce51ec2d0df6a96ff81988c8b947203",
+    "apps/office/coverage/docx-traversal-types-final.log": "77e83c111f7dc4777a8d15244f65b082e77d77f583edd63fd7f4c98d1961f0f2",
+    "apps/office/coverage/docx-traversal-types.log": "422a9fd9c851c1c66ba911b681c4234a8823299dcbfe2ba9a2369b57ac842728",
+    "apps/office/coverage/docx-traversal-worker.log": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.numbering.test.ts": "bb4cf0fb49ea07595462a006b8d664246bd838b60c1fe692a8a5423b138d0b9c",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.ts": "381c6adca0406fa8e9f9b8e0d1b3f2e7fc2e0ea2317d318e3fadf1139baa7dee",
+    "apps/office/src/sw/source/filter/ww8/docxexport.ts": "092fb2be49622a74c976850b09683e0c0b00d415f9ed370a26f8595a5ef9a8c5",
+    "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.ts": "fc312f4a2c9495ea274975b7552ea89d52ec73ee21a215f182545d0c2575183d",
+    "apps/office/src/sw/source/filter/ww8/wrtw8num.ts": "bf34c80574704ce816dd33fe02e34dce83b291401243ecea15c276d1a8bd4bef",
+    "apps/office/src/sw/source/filter/ww8/wrtww8.ts": "3488eab6b0cdc0e5064cfd27ce01345403c3cee8fc36680e983d768694f0f02e",
+    "apps/office/src/sw/source/filter/ww8/ww8atr.ts": "50d3a76cd9c643bdfe43943666b46b5856d36b5c2cd11f6cb4cf67684c9d02c4",
+    "apps/office/src/sw/source/filter/ww8/ww8par.ts": "725a5f05c30037c9b5d697f623d76bbad70ebd2be9071c923d9af2d44bbecde5",
+    "apps/office/src/test/writer-rtf-export.ts": "8328bca3acf92b538965e5a9f28411ea611431c065df47983d19857b3f28eee2",
+    "docs/program/registry/writer/provenance/sw/source/filter/ww8/docxattributeoutput.ts.json": "28d15dbe3079fbc00b75c922855e5716f85553b22056901a296b373f02fe752f",
+    "docs/program/registry/writer/provenance/sw/source/filter/ww8/docxexport.ts.json": "adbf715b45f1d66948efe573751bbd680f7d16d54a55a5641fef45fcd6000df3",
+    "docs/program/registry/writer/provenance/sw/source/filter/ww8/rtfattributeoutput.ts.json": "4bae1dd1a9f5173c56863b5179220ef46b5620dec4dc3cad634c0dc25a0d3000",
+    "docs/program/registry/writer/provenance/sw/source/filter/ww8/wrtw8num.ts.json": "fbce3784e21dfa89ebd74ee915124492f7a6f5fdf1666d054997a610e25b7e7b",
+    "docs/program/registry/writer/provenance/sw/source/filter/ww8/wrtww8.ts.json": "f9406daee756788058127a24e9d9798331299e9ab8b5275fc22b0930badb65c3",
+    "docs/program/registry/writer/provenance/sw/source/filter/ww8/ww8atr.ts.json": "c6791490bb4e98d248cee9064539594c8101a16f233fe4629417a570840c55d9",
+    "docs/program/registry/writer/provenance/sw/source/filter/ww8/ww8par.ts.json": "1a86110a2e97e20249cd122262dd19d9cd24acbb8e27b6851bb653fab788f1e4",
+    "docs/program/registry/writer/runtime/sw/source/filter/ww8/docxattributeoutput.ts.json": "e4ab09c03958dc78ec72f5a4cf1bf21a8e017245fe2e93c7e191bec62eae4b48",
+    "docs/program/registry/writer/runtime/sw/source/filter/ww8/docxexport.ts.json": "5440f6ea9eab1d9f15ce2f53cb02bd082e65201a31f8db8e6675dfd226ac9f62",
+    "docs/program/registry/writer/runtime/sw/source/filter/ww8/rtfattributeoutput.ts.json": "cd35fb54316e79835699aaaee6c48494e93fc4c50b8cbc101833526b27858b24",
+    "docs/program/registry/writer/runtime/sw/source/filter/ww8/wrtw8num.ts.json": "7653c77a03f0dd41f79d542346c6d17ab30ebf3fb64ddddc5f3b37eb64911a23",
+    "docs/program/registry/writer/runtime/sw/source/filter/ww8/wrtww8.ts.json": "934d5810f6f6a7d89a2acbed65f5805e421284787e8404ec0885201d28b800fd",
+    "docs/program/registry/writer/runtime/sw/source/filter/ww8/ww8atr.ts.json": "1b2d01321ef27420e87989bede45d5340188bdd6301fdf1320cfb1719693d054",
+    "docs/program/registry/writer/runtime/sw/source/filter/ww8/ww8par.ts.json": "9315b635c40576b357a497ba72861d617fd3ebf992e605179c85a41f4851b86b",
+    "scripts/fixtures/native-writer-paragraph-probe.ts": "015b73368ebf816ac2bdb50db29b068a96488d227a6326973306b0cdf99c0320",
+    "scripts/native-dom-worker-probe.mjs": "90c3b098d2b80554437ba66e10ce7d0f0c937eda682024bdc505d499ae8e896c",
+    "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/ooxmlexport13.cxx": "1e21e688366773b0518530bf9d70049eaaa7bbfc6297f2e5ea4d69e4fb0c6b3e",
+    "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/ooxmlexport18.cxx": "aa6adff7de114f0628e91a0106fac3e2fed61eed8464395e57fe701009b8c251",
+    "vendor/libreoffice-reference/sw/source/filter/ww8/attributeoutputbase.hxx": "60f4ed8e64a4a82c2077507a0aa509f821db45c1c241f9db5889003ebf7e8272",
+    "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx": "7bdef86219701fe25070201039ae9c9775eed64fbe17efd3cd6b552bfe38ff9d",
+    "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8num.cxx": "9237ae23d594f31b8396714f4cc5fa0ed0623eed3efd21de4ecac1cd6cf55dc8",
+    "vendor/libreoffice-reference/sw/source/filter/ww8/ww8atr.cxx": "3895da4595a2e5e0f8c6c7fd1a83546c62ecaaf4dc562d27904c8d7bea3a41c3",
+    "vendor/libreoffice-reference/sw/source/filter/ww8/ww8par.cxx": "4620f543e73e323ff18c7482f23692726e0f58973d7172889b438ef3b771ee58"
+  }
+}
