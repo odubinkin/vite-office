@@ -1,0 +1,184 @@
+{
+  "checkpoint": "Actual Calc XML record/list and palette-reduction values; not complete font/root/workbook filtering",
+  "createdAt": "2026-11-15T12:21:35.600852+00:00",
+  "task": "202610251549-J0Z0KF",
+  "sourceBaseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "implemented": [
+    "Original XML record callbacks, raw borrowed delegation and genuine intrusive Reference vector ownership, copy, invalidation and compaction.",
+    "Original palette reduction values, nine use ordinals, weighting, RGB distance, midpoint, endpoint-sensitive weighted merge and uint32 arithmetic.",
+    "Real serializer/ZIP reopen and existing main/DOM-free Worker probe now consume actual record list and palette values."
+  ],
+  "commands": {
+    "coverage": "npm run test:coverage:calc -- src/sc/source/filter/excel/xerecord.test.ts src/sc/source/filter/excel/xestyle.values.test.ts src/sc/source/filter/excel/xestream.xml.test.ts src/sc/source/filter/excel/xlstyle.fonts.test.ts --coverage.include=src/sc/source/filter/excel/xerecord.ts --coverage.include=src/sc/source/filter/excel/xestyle.ts --coverage.reportsDirectory=coverage/xlsx-font-record --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+    "browser": "PLAYWRIGHT_BROWSERS_PATH=node_modules/.cache/ms-playwright node scripts/native-dom-worker-probe.mjs",
+    "nativeCompile": "clang++ -std=c++20 -O2 -fsanitize=undefined apps/office/coverage/xlsx-font-record-merge-oracle.cpp -o apps/office/coverage/xlsx-font-record-merge-oracle",
+    "nativeRun": "apps/office/coverage/xlsx-font-record-merge-oracle"
+  },
+  "results": {
+    "tests": 95,
+    "files": 4,
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 108,
+          "covered": 108,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 115,
+          "covered": 113,
+          "skipped": 0,
+          "pct": 98.26
+        },
+        "functions": {
+          "total": 47,
+          "covered": 47,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 60,
+          "covered": 58,
+          "skipped": 0,
+          "pct": 96.66
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/filter/excel/xerecord.ts": {
+        "lines": {
+          "total": 45,
+          "covered": 45,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 29,
+          "covered": 29,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 51,
+          "covered": 49,
+          "skipped": 0,
+          "pct": 96.07
+        },
+        "branches": {
+          "total": 20,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 90
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/filter/excel/xestyle.ts": {
+        "lines": {
+          "total": 63,
+          "covered": 63,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 64,
+          "covered": 64,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 40,
+          "covered": 40,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "nativeOracleCases": 52,
+    "nativeOracleUndefinedSanitizer": "pass, no diagnostics; zero-divisor domain not executed"
+  },
+  "verificationFindings": [
+    "Initial coverage invocation inherited the global100 gate and exited1 at98.26S/96.66B/100F/100L; explicit previously user-approved scoped90 invocation passes without changes to source counters, coverage exclusions or repository global configuration. Initial output is retained in the tool transcript; final log contains the90 run.",
+    "Same four metadata storage type errors block typecheck and npm build; separate Vite bundling succeeds. Existing comphelper/sax module cycle remains.",
+    "All scoped lint/format/docs/tools/tree/size/source provenance/registry/browser checks pass. Semantic registry retains foundation/unverified status."
+  ],
+  "sourceQa": "Bounded rg of sc/qa/unit C++ finds no direct XclExpRecordList/XclListColor/lclGetMergedColorComp unit tests. Source-derived critical ownership/XML cases and52 unchanged C++ merge witnesses are covered; complete workbook/font/style upstream QA is not claimed.",
+  "upstreamIssues": [
+    "CALC685: original uint32 weight/numerator wrap and potential undefined zero-divisor domain preserved."
+  ],
+  "remaining": [
+    "Binary XclExpStream record framing, rvalue/copy assignment and physical ABI domains remain unported or unqualified.",
+    "Complete XclDefaultPalette/XclExpPaletteImpl, XclExpRoot and font record/table/rich-string integration remain unfinished.",
+    "Native package/storage/medium/filter/model traversal and mounted DOCX/XLSX import/export UI acceptance remain unfinished.",
+    "No parent task completion, source implementation commit, full suite or goal pause; existing independent coverage gaps remain open."
+  ],
+  "sha256": {
+    "apps/office/coverage/xlsx-font-record/coverage-summary.json": "bba33a352c101a9c61467bd17f22842662c603febd5cd00ffb30ecdfd150782d",
+    "apps/office/coverage/xlsx-font-record-active.log": "8bce293037d458fb5caa9ea7e20cc799b66caa08b275825e9b7a6b19eecef92e",
+    "apps/office/coverage/xlsx-font-record-brief.log": "3416d03eb02a8dc4b590c58216a7c9bf8a4ed2f4528ea729bee52e2e0bb8a247",
+    "apps/office/coverage/xlsx-font-record-browser.log": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee",
+    "apps/office/coverage/xlsx-font-record-build.log": "3972ead9fc52086372473cd477881a166b7b936654683bf102ce6280ac371cd6",
+    "apps/office/coverage/xlsx-font-record-coder.log": "16d13a563212bb4cba0b10848a9b96c039c73443d959afc4f1daba2c31aae0eb",
+    "apps/office/coverage/xlsx-font-record-config.log": "78b9f751c865f969a4efbddc65c34e9d9ef6bf821d245de10d0da5c1932898b1",
+    "apps/office/coverage/xlsx-font-record-coverage.log": "9c6634413da266c51c1271faa4616648cc08adbf6675e0f9edb1dccbc1dbb9bd",
+    "apps/office/coverage/xlsx-font-record-dependencies.log": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf",
+    "apps/office/coverage/xlsx-font-record-diff.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-font-record-docs.log": "ffbdfa8e0e4bce48672e7469fa2c150aa217510f65cc0ebbb13540031e8e4146",
+    "apps/office/coverage/xlsx-font-record-doctor.log": "b67e382af12eaa431d7d2e355dced48b99923217ebc4b67594e19a9d14762f1e",
+    "apps/office/coverage/xlsx-font-record-format-check.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/xlsx-font-record-format.log": "88d550558f0fca75b7837aa013a5bc83c5d11f410dd59acd9923b29b5637a35c",
+    "apps/office/coverage/xlsx-font-record-head.log": "6403203dd5a0867eb14d104ee8a73730bd72dd9ad92e78d996a6dba0a5dcfc01",
+    "apps/office/coverage/xlsx-font-record-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-font-record-merge-compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-font-record-merge-run.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-font-record-palette-tests.log": "90127ed8c4fa41f97b7563106326dfdd522ed8051b5ee3b13a5132884284bfc6",
+    "apps/office/coverage/xlsx-font-record-provenance.log": "4dee24073f1c3c4293f655d5de880cf943159b38a3570f9b1c24401e740180ae",
+    "apps/office/coverage/xlsx-font-record-quickstart.log": "7cd29a19b5c0dc18e7eb324075d21cc2fb44715f3c8dd7b8b52dd5f72d2ed8e0",
+    "apps/office/coverage/xlsx-font-record-record-tests.log": "1a95abb0e1549a3413a6c938b0b7cc0464935f2564a08be1e8b353e7967128ce",
+    "apps/office/coverage/xlsx-font-record-registry-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-font-record-registry.log": "685df0da1edfac58c5127a15c487bb9aea8d5e22d66c5791b96901809bd54b76",
+    "apps/office/coverage/xlsx-font-record-role.log": "a8899afb593e5ec4f4153783ccfd0fd94cfaaf0513376e0f1d0aeefb1e0da9b2",
+    "apps/office/coverage/xlsx-font-record-route.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/xlsx-font-record-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "apps/office/coverage/xlsx-font-record-size.log": "c7b11e767f4e7a98ce3ffc85751ca34ddf9f1e50cd379615eb009309b18eb207",
+    "apps/office/coverage/xlsx-font-record-source-qa.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-font-record-static.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "apps/office/coverage/xlsx-font-record-status.log": "b31e8eb4bb6ed0ab7271fb93dd85f3c0edcd2e11b11ddd4a459046794b2d0162",
+    "apps/office/coverage/xlsx-font-record-tasks.log": "e99986481204fc41cac45662a5db4c2ba32d4c716435621c929abff7679f6f04",
+    "apps/office/coverage/xlsx-font-record-tools.log": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+    "apps/office/coverage/xlsx-font-record-tracked.log": "3ada1d639a42f57644d1b0bbca53b38f534ed70553c1acb6ddc3912a7c2291eb",
+    "apps/office/coverage/xlsx-font-record-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "apps/office/coverage/xlsx-font-record-types.log": "77e83c111f7dc4777a8d15244f65b082e77d77f583edd63fd7f4c98d1961f0f2",
+    "apps/office/coverage/xlsx-font-record-vite.log": "8f94df4f517fbbd839c84f824f092ee74256adf0ae1def72f448df650b6beb5c",
+    "apps/office/src/sc/source/filter/excel/xerecord.test.ts": "f81544c42d050338c6b9180b4818237fdb7576b2d61bff6b4bd3371452a615ec",
+    "apps/office/src/sc/source/filter/excel/xerecord.ts": "de818e93b83a8414788171dd22c9370dda719df90e524259236addbd4fc993ae",
+    "apps/office/src/sc/source/filter/excel/xestyle.merge-native.json": "002d8a902e5b794258b105202e52f71c9aa705884a4f1c8c3dd1333687989f76",
+    "apps/office/src/sc/source/filter/excel/xestyle.ts": "bbe57db884e3b7ff43cf046438342d34ce393e1ed522ce3f101b606fbafa9ca2",
+    "apps/office/src/sc/source/filter/excel/xestyle.values.test.ts": "6f16796deb7179cc56e5a55f13200463375bbbc4cb3060a599280880bf4bae03",
+    "apps/office/src/sc/source/filter/inc/xerecord.ts": "a1dac9ae98be3190bdaea6093d25367a3f63019375cf07e077d5f1d73171184b",
+    "apps/office/src/sc/source/filter/inc/xestyle.ts": "dafcd07f2d3c7eaed508431d9a3eaa0f1f803474825c70752bc0df07faece76c",
+    "docs/program/calc-upstream-suspected-issues.md": "025f8e92ddc7c0b8de04e6745d87bd8dab3162dd40915cba5bf75e528eb44b39",
+    "docs/program/registry/calc/provenance/sc/source/filter/excel/xerecord.ts.json": "158125b856ce8befae64b055c76657ff60457641937c999d613ac032f7e2b920",
+    "docs/program/registry/calc/provenance/sc/source/filter/excel/xestyle.ts.json": "741115a99352c06717c80e88b18c44887236df60066ea00a68961d6334ccf853",
+    "docs/program/registry/calc/provenance/sc/source/filter/inc/xerecord.ts.json": "92f9de5fc36aae9184287a9862c5b433905c274682161f96ae6f2ddd214d4b0a",
+    "docs/program/registry/calc/provenance/sc/source/filter/inc/xestyle.ts.json": "b53c3aa9e279b9f6407b2db5040b8aca602212be4e333b074b5b7105e0e84525",
+    "docs/program/registry/calc/runtime/sc/source/filter/excel/xerecord.ts.json": "4dbfb27a6e497f652c0dbc8ce8579a99eecb2368264f515a183ec0c2228ae879",
+    "docs/program/registry/calc/runtime/sc/source/filter/excel/xestyle.ts.json": "13fc1e7b2ac7751ceaddbbc8fa83146c0772687190745731b4d3901cbe71a124",
+    "docs/program/registry/calc/runtime/sc/source/filter/inc/xerecord.ts.json": "915e049ed9986f2f59aab78e5e1aded065e69afb3b38ab902005aecfb9ec214b",
+    "docs/program/registry/calc/runtime/sc/source/filter/inc/xestyle.ts.json": "d6320040f17a2b82ea455cd96afac71917926cf8b360049cc9de2fdaf391d375",
+    "scripts/fixtures/native-xlsx-string-probe.ts": "dfaa2f44f29b7f2ac245fd924f8b7f7dc411239488d39b1d3de5b2b25cd6e625",
+    "scripts/native-dom-worker-probe.mjs": "d0df56e309fa4ef1b37788549eea8c2f0a654a4bcab078deeb40543fbf149353",
+    "vendor/libreoffice-reference/sc/source/filter/excel/xerecord.cxx": "23e5fb3bf67b57bff7ae3f2e1fde47ed0b70c47ace956dba8983c8fa38f226d0",
+    "vendor/libreoffice-reference/sc/source/filter/excel/xestyle.cxx": "d863b4ef6fb8f950d43a4b9adea062370aae9c2081c63b518e828eb8fdf4cb87",
+    "vendor/libreoffice-reference/sc/source/filter/inc/xerecord.hxx": "ad7b5150e199ab1f171ba1d7e1cb180f1ad41e0a16c5f449dbe54f3dee5221ca"
+  }
+}

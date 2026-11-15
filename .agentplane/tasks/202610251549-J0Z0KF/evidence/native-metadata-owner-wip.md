@@ -747,3 +747,11 @@ Used native browser crypto.randomUUID, already present in Writer/Calc/BrowserFil
 - QA: initial guessed shared test paths produced only substitution evidence; bounded file discovery selected the genuine native VCL/SVX regression files before final verification. Source C++ QA has no direct extraction-symbol matches; whole font-buffer/root/workbook regressions remain pending, not represented by property/part output. No new suspected upstream issue is asserted.
 - Quality:JSDoc5477, scoped ESLint/Prettier/tools, provenance2661/semanticViolationCount0, tree/size, standalone Vite/static4bundles, doctor/routing/diff pass. Same4 metadata-storage type errors and comphelper/sax cycle remain.
 - Remaining: actual font-record/font-buffer/palette/root and complete rich-string/workbook/filter/model/mounted DOCX/XLSX UI paths remain unfinished. Source remains accumulated intentional WIP; task-artifact commits do not claim implementation commits. Parents stay DOING/rework; no full suite, completed task or goal pause.
+
+
+### Calc XML record/list and palette-value continuation
+
+- Command: Focused95 tests/4files with explicit approved scoped90, unchanged C++ merge function compiled with UBSan and52 cases, actual Chromium main/DOM-free Worker, scoped ESLint/Prettier, JSDoc5493, tools, Vite/static, provenance2669/registry, size/tree, doctor/routing/diff. Exact commands, per-owner coverage and source/log hashes are in evidence/native-xlsx-record-palette-continuation.json.
+- Result: Bounded prerequisite pass; parent rework. Record owner96.07S/90B/100F/100L; palette values100all. Four existing metadata type errors block npm build/typecheck; old comphelper/sax cycle and earlier independent coverage gaps remain.
+- Evidence: Actual record callbacks/list ownership and genuine Color values execute without fake serializers, root/palette providers, private counter injection or manual JS memory allocation. Source weight wrapping is preserved as CALC685.
+- Scope: XML record/list prerequisites and palette-reduction arithmetic/value classes only. Binary framing, complete root/default palette/palette/font table/rich text/workbook/filter/UI remain unfinished. Goal stays active; no full suite or source implementation commit.

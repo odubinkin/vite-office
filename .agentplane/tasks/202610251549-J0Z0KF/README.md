@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 496
+revision: 499
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-15T10:44:26.608Z"
+  updated_at: "2026-11-15T12:21:43.019Z"
   updated_by: "CODER"
-  note: "Actual VCL/SVX font-extraction checkpoint:106tests, implemented owner scoped90 and main/DOM-free Worker XML/ZIP pass. Full font-record/buffer/root/workbook/filter/UI and existing metadata/cycle failures remain incomplete."
-  attempts: 157
+  note: "Actual XML record/list and palette values: 95 tests, 52 unchanged C++ merge witnesses, per-owner scoped90 and main/Worker XML/ZIP pass. Four existing metadata type errors, dependency cycle and full workbook/filter/UI acceptance remain open. Evidence: native-xlsx-record-palette-continuation.json."
+  attempts: 158
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2520,8 +2523,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-15T12:21:43.019Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Actual XML record/list and palette values: 95 tests, 52 unchanged C++ merge witnesses, per-owner scoped90 and main/Worker XML/ZIP pass. Four existing metadata type errors, dependency cycle and full workbook/filter/UI acceptance remain open. Evidence: native-xlsx-record-palette-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-15T12:21:50.986Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-15T10:44:36.080Z"
+doc_updated_at: "2026-11-15T12:21:50.986Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -7246,6 +7262,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-15T12:21:43.019Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Actual XML record/list and palette values: 95 tests, 52 unchanged C++ merge witnesses, per-owner scoped90 and main/Worker XML/ZIP pass. Four existing metadata type errors, dependency cycle and full workbook/filter/UI acceptance remain open. Evidence: native-xlsx-record-palette-continuation.json.
+    Attempts: 158
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T12:21:42.358Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -7889,6 +7935,13 @@ sections:
     - Result: bounded prerequisite pass; parent rework. All10 owners independently pass90 without raw-counter changes.4 metadata type errors, existing comphelper/sax cycle and older independent coverage failures remain.
     - Evidence: evidence/native-ucb-command-contract-continuation.json records source/log hashes, actual inherited Any/Sequence/caught-exception/COW assertions, source defaults and original QA limits. Broker factory QA is not claimed before actual registration; no fake provider or factory is created.
     - Scope: core ContentIdentifier, real source-internal CommandProcessorInfo, command constants and complete consumed generated IDL/value/exception contracts. Core/client colonless behavior remains distinct per source; globalTransfer metadata retains the original legacy ArgType. Full broker/provider/configuration/transfer/check-in, native package/storage/model/filter and DOCX/XLSX existing UI acceptance remain unfinished.
+
+    ### Calc XML record/list and palette-value continuation
+
+    - Command: Focused95 tests/4files with explicit approved scoped90, unchanged C++ merge function compiled with UBSan and52 cases, actual Chromium main/DOM-free Worker, scoped ESLint/Prettier, JSDoc5493, tools, Vite/static, provenance2669/registry, size/tree, doctor/routing/diff. Exact commands, per-owner coverage and source/log hashes are in evidence/native-xlsx-record-palette-continuation.json.
+    - Result: Bounded prerequisite pass; parent rework. Record owner96.07S/90B/100F/100L; palette values100all. Four existing metadata type errors block npm build/typecheck; old comphelper/sax cycle and earlier independent coverage gaps remain.
+    - Evidence: Actual record callbacks/list ownership and genuine Color values execute without fake serializers, root/palette providers, private counter injection or manual JS memory allocation. Source weight wrapping is preserved as CALC685.
+    - Scope: XML record/list prerequisites and palette-reduction arithmetic/value classes only. Binary framing, complete root/default palette/palette/font table/rich text/workbook/filter/UI remain unfinished. Goal stays active; no full suite or source implementation commit.
 id_source: "generated"
 ---
 ## Summary
@@ -12623,6 +12676,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-15T12:21:43.019Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Actual XML record/list and palette values: 95 tests, 52 unchanged C++ merge witnesses, per-owner scoped90 and main/Worker XML/ZIP pass. Four existing metadata type errors, dependency cycle and full workbook/filter/UI acceptance remain open. Evidence: native-xlsx-record-palette-continuation.json.
+Attempts: 158
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T12:21:42.358Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -13270,3 +13353,10 @@ Final source review also retains original FileStatus::isDirectory (Directory or 
 - Result: bounded prerequisite pass; parent rework. All10 owners independently pass90 without raw-counter changes.4 metadata type errors, existing comphelper/sax cycle and older independent coverage failures remain.
 - Evidence: evidence/native-ucb-command-contract-continuation.json records source/log hashes, actual inherited Any/Sequence/caught-exception/COW assertions, source defaults and original QA limits. Broker factory QA is not claimed before actual registration; no fake provider or factory is created.
 - Scope: core ContentIdentifier, real source-internal CommandProcessorInfo, command constants and complete consumed generated IDL/value/exception contracts. Core/client colonless behavior remains distinct per source; globalTransfer metadata retains the original legacy ArgType. Full broker/provider/configuration/transfer/check-in, native package/storage/model/filter and DOCX/XLSX existing UI acceptance remain unfinished.
+
+### Calc XML record/list and palette-value continuation
+
+- Command: Focused95 tests/4files with explicit approved scoped90, unchanged C++ merge function compiled with UBSan and52 cases, actual Chromium main/DOM-free Worker, scoped ESLint/Prettier, JSDoc5493, tools, Vite/static, provenance2669/registry, size/tree, doctor/routing/diff. Exact commands, per-owner coverage and source/log hashes are in evidence/native-xlsx-record-palette-continuation.json.
+- Result: Bounded prerequisite pass; parent rework. Record owner96.07S/90B/100F/100L; palette values100all. Four existing metadata type errors block npm build/typecheck; old comphelper/sax cycle and earlier independent coverage gaps remain.
+- Evidence: Actual record callbacks/list ownership and genuine Color values execute without fake serializers, root/palette providers, private counter injection or manual JS memory allocation. Source weight wrapping is preserved as CALC685.
+- Scope: XML record/list prerequisites and palette-reduction arithmetic/value classes only. Binary framing, complete root/default palette/palette/font table/rich text/workbook/filter/UI remain unfinished. Goal stays active; no full suite or source implementation commit.
