@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 502
+revision: 505
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-15T12:35:40.236Z"
+  updated_at: "2026-11-15T12:51:20.748Z"
   updated_by: "CODER"
-  note: "Calc original pattern-to-font/null-device and differential font values: 50 tests, both complete owners pass scoped90, real cell-items to font-data/XML/ZIP main/Worker path passes. Four old metadata type errors, old dependency cycle and complete root/font table/workbook/filter/UI acceptance remain. Evidence: native-xlsx-pattern-font-continuation.json."
-  attempts: 159
+  note: "Native ComponentData/medium args and typed defaults: 30 shared tests with all owners above90, corrected50 Calc font cases,5 CSV medium cases and main/Worker pass. Prior font fixture/typecheck claims corrected in evidence/native-medium-data-continuation.json. Four metadata errors, existing cycle and full filter/UI acceptance remain open."
+  attempts: 160
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2552,8 +2555,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-15T12:51:20.748Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native ComponentData/medium args and typed defaults: 30 shared tests with all owners above90, corrected50 Calc font cases,5 CSV medium cases and main/Worker pass. Prior font fixture/typecheck claims corrected in evidence/native-medium-data-continuation.json. Four metadata errors, existing cycle and full filter/UI acceptance remain open."
+  -
+    type: "status"
+    at: "2026-11-15T12:51:27.739Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-15T12:35:50.592Z"
+doc_updated_at: "2026-11-15T12:51:27.739Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -7338,6 +7354,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-15T12:51:20.748Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native ComponentData/medium args and typed defaults: 30 shared tests with all owners above90, corrected50 Calc font cases,5 CSV medium cases and main/Worker pass. Prior font fixture/typecheck claims corrected in evidence/native-medium-data-continuation.json. Four metadata errors, existing cycle and full filter/UI acceptance remain open.
+    Attempts: 160
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T12:51:19.831Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -7995,6 +8041,14 @@ sections:
     - Result: Bounded prerequisite pass; parent rework. Actual patattr owner98.9S/97.51B/98.52F/99.23L; ScDxfFont100all. Same4 metadata type errors block npm build/typecheck and old comphelper/sax cycle remains. Earlier independent coverage gaps are not waived.
     - Evidence: Original null-device ScPatternAttr::fillFontOnly, script identities and GetDxfFont use actual document/pool/itemset and VCL owners. Seven original testFormats font assertions are replayed at the native property boundary; full imported workbook/layout QA is not claimed. Main/Worker uses real cell font items through XclFontData and XML/ZIP export.
     - Scope: No fake font/palette/root or private counter injection. Native device maps/metrics, root/default palette/font table/rich strings, package/storage/medium/filter and mounted DOCX/XLSX UI acceptance remain unfinished. Goal stays active, no full suite or source implementation commit.
+
+    ### Native medium arguments and ComponentData continuation
+
+    - Command: Focused30 shared tests/7 files with per-owner scoped90; corrected Calc50/6 and5 related CSV medium cases; actual Chromium main/DOM-free Worker; scoped lint/format, JSDoc5501, tools/resources, Vite/static, provenance2672/registry, size/tree, doctor/routing/diff. Exact commands and source/log hashes: evidence/native-medium-data-continuation.json.
+    - Result: Bounded prerequisite pass; parents rework. All4 affected shared owners independently exceed90; medium98.61S/96.42B/100F/100L. Earlier medium87.5B profile remains recorded; no coverage counter changes. Same4 metadata types and old comphelper/sax cycle remain.
+    - Evidence: Original ComponentData sequence-kind/copy/removal behavior, SfxMedium SetArgs/GetArgs stable const map and stream removal, bool/Unicode extraction use actual native owners. New args preserve existing external read-only browser opening state. No fake storage, descriptor factory, broker/provider or input stream.
+    - Correction: The prior Calc pattern-font checkpoint's typecheck summary overlooked8 fixture errors beyond the4 metadata errors; nonexistent relief enum names also weakened2 assertions. Corrected pool narrowing, native parent binding and actual Engraved/Embossed enum values now pass all50 cases afresh. Historical artifact is retained; this checkpoint supersedes those claims.
+    - Scope: Native medium constructor/TransformParameters/storage/commit/destructor, URL/stream/security selection and complete DOCX/XLSX package/root/model/filter/UI remain unfinished. No new upstream suspicion, security/network change, full suite, source implementation commit, task completion or goal pause is claimed.
 id_source: "generated"
 ---
 ## Summary
@@ -12789,6 +12843,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-15T12:51:20.748Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native ComponentData/medium args and typed defaults: 30 shared tests with all owners above90, corrected50 Calc font cases,5 CSV medium cases and main/Worker pass. Prior font fixture/typecheck claims corrected in evidence/native-medium-data-continuation.json. Four metadata errors, existing cycle and full filter/UI acceptance remain open.
+Attempts: 160
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T12:51:19.831Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -13450,3 +13534,11 @@ Final source review also retains original FileStatus::isDirectory (Directory or 
 - Result: Bounded prerequisite pass; parent rework. Actual patattr owner98.9S/97.51B/98.52F/99.23L; ScDxfFont100all. Same4 metadata type errors block npm build/typecheck and old comphelper/sax cycle remains. Earlier independent coverage gaps are not waived.
 - Evidence: Original null-device ScPatternAttr::fillFontOnly, script identities and GetDxfFont use actual document/pool/itemset and VCL owners. Seven original testFormats font assertions are replayed at the native property boundary; full imported workbook/layout QA is not claimed. Main/Worker uses real cell font items through XclFontData and XML/ZIP export.
 - Scope: No fake font/palette/root or private counter injection. Native device maps/metrics, root/default palette/font table/rich strings, package/storage/medium/filter and mounted DOCX/XLSX UI acceptance remain unfinished. Goal stays active, no full suite or source implementation commit.
+
+### Native medium arguments and ComponentData continuation
+
+- Command: Focused30 shared tests/7 files with per-owner scoped90; corrected Calc50/6 and5 related CSV medium cases; actual Chromium main/DOM-free Worker; scoped lint/format, JSDoc5501, tools/resources, Vite/static, provenance2672/registry, size/tree, doctor/routing/diff. Exact commands and source/log hashes: evidence/native-medium-data-continuation.json.
+- Result: Bounded prerequisite pass; parents rework. All4 affected shared owners independently exceed90; medium98.61S/96.42B/100F/100L. Earlier medium87.5B profile remains recorded; no coverage counter changes. Same4 metadata types and old comphelper/sax cycle remain.
+- Evidence: Original ComponentData sequence-kind/copy/removal behavior, SfxMedium SetArgs/GetArgs stable const map and stream removal, bool/Unicode extraction use actual native owners. New args preserve existing external read-only browser opening state. No fake storage, descriptor factory, broker/provider or input stream.
+- Correction: The prior Calc pattern-font checkpoint's typecheck summary overlooked8 fixture errors beyond the4 metadata errors; nonexistent relief enum names also weakened2 assertions. Corrected pool narrowing, native parent binding and actual Engraved/Embossed enum values now pass all50 cases afresh. Historical artifact is retained; this checkpoint supersedes those claims.
+- Scope: Native medium constructor/TransformParameters/storage/commit/destructor, URL/stream/security selection and complete DOCX/XLSX package/root/model/filter/UI remain unfinished. No new upstream suspicion, security/network change, full suite, source implementation commit, task completion or goal pause is claimed.
