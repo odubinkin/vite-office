@@ -1,0 +1,388 @@
+{
+  "checkpoint": "Native Calc bulk attribute and merge import; not complete DOCX/XLSX acceptance",
+  "taskIds": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "createdAt": "2026-11-15T09:07:57.439313+00:00",
+  "implementation": [
+    "ScAttrEntry composition and copy endpoint correction; actual canonical holder forwarding.",
+    "Actual SetAttrEntries chain, finite copies and last move, sparse whole-width default-column policy, pre-admission Latin hint order.",
+    "Actual merge anchor/overlap application without deleting cell values.",
+    "Mutable and const numeric/no-error formula queries; importer uses const query and never interprets dirty formulas in the existing noniterative/non-table-operation profile."
+  ],
+  "functionalResults": {
+    "relatedTests": 124,
+    "relatedFiles": 19,
+    "finalAttributeTests": 6,
+    "browserMainAndDomFreeWorker": "pass using existing repo-local Playwright browser cache",
+    "standaloneViteAndStatic": "pass; 4 bundles"
+  },
+  "coverage": {
+    "calc-document-import": {
+      "total": {
+        "lines": {
+          "total": 194,
+          "covered": 187,
+          "skipped": 0,
+          "pct": 96.39
+        },
+        "statements": {
+          "total": 233,
+          "covered": 223,
+          "skipped": 0,
+          "pct": 95.7
+        },
+        "functions": {
+          "total": 26,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 92.3
+        },
+        "branches": {
+          "total": 110,
+          "covered": 101,
+          "skipped": 0,
+          "pct": 91.81
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/core/data/documentimport.ts": {
+        "lines": {
+          "total": 194,
+          "covered": 187,
+          "skipped": 0,
+          "pct": 96.39
+        },
+        "functions": {
+          "total": 26,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 92.3
+        },
+        "statements": {
+          "total": 233,
+          "covered": 223,
+          "skipped": 0,
+          "pct": 95.7
+        },
+        "branches": {
+          "total": 110,
+          "covered": 101,
+          "skipped": 0,
+          "pct": 91.81
+        }
+      }
+    },
+    "calc-document-import-related": {
+      "total": {
+        "lines": {
+          "total": 1544,
+          "covered": 1088,
+          "skipped": 0,
+          "pct": 70.46
+        },
+        "statements": {
+          "total": 1761,
+          "covered": 1214,
+          "skipped": 0,
+          "pct": 68.93
+        },
+        "functions": {
+          "total": 168,
+          "covered": 130,
+          "skipped": 0,
+          "pct": 77.38
+        },
+        "branches": {
+          "total": 1178,
+          "covered": 733,
+          "skipped": 0,
+          "pct": 62.22
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/core/data/attarray.delete.ts": {
+        "lines": {
+          "total": 138,
+          "covered": 138,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 150,
+          "covered": 149,
+          "skipped": 0,
+          "pct": 99.33
+        },
+        "branches": {
+          "total": 63,
+          "covered": 58,
+          "skipped": 0,
+          "pct": 92.06
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/core/data/attarray.ts": {
+        "lines": {
+          "total": 511,
+          "covered": 407,
+          "skipped": 0,
+          "pct": 79.64
+        },
+        "functions": {
+          "total": 43,
+          "covered": 38,
+          "skipped": 0,
+          "pct": 88.37
+        },
+        "statements": {
+          "total": 573,
+          "covered": 460,
+          "skipped": 0,
+          "pct": 80.27
+        },
+        "branches": {
+          "total": 399,
+          "covered": 335,
+          "skipped": 0,
+          "pct": 83.95
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/core/data/documentimport.ts": {
+        "lines": {
+          "total": 194,
+          "covered": 187,
+          "skipped": 0,
+          "pct": 96.39
+        },
+        "functions": {
+          "total": 26,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 92.3
+        },
+        "statements": {
+          "total": 233,
+          "covered": 223,
+          "skipped": 0,
+          "pct": 95.7
+        },
+        "branches": {
+          "total": 110,
+          "covered": 101,
+          "skipped": 0,
+          "pct": 91.81
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/core/data/formulacell.ts": {
+        "lines": {
+          "total": 423,
+          "covered": 254,
+          "skipped": 0,
+          "pct": 60.04
+        },
+        "functions": {
+          "total": 66,
+          "covered": 48,
+          "skipped": 0,
+          "pct": 72.72
+        },
+        "statements": {
+          "total": 475,
+          "covered": 266,
+          "skipped": 0,
+          "pct": 56
+        },
+        "branches": {
+          "total": 382,
+          "covered": 162,
+          "skipped": 0,
+          "pct": 42.4
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/core/data/table2.ts": {
+        "lines": {
+          "total": 278,
+          "covered": 102,
+          "skipped": 0,
+          "pct": 36.69
+        },
+        "functions": {
+          "total": 27,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 51.85
+        },
+        "statements": {
+          "total": 330,
+          "covered": 116,
+          "skipped": 0,
+          "pct": 35.15
+        },
+        "branches": {
+          "total": 224,
+          "covered": 77,
+          "skipped": 0,
+          "pct": 34.37
+        }
+      }
+    }
+  },
+  "coverageInterpretation": "ScDocumentImport independently passes the unchanged 90 S/B/F/L gate. The wider five-owner scope fails that gate (68.93 S/62.22 B/77.38 F/70.46 L); no exclusions, counter injection, fake services or threshold reduction were used. Broad owner coverage remains unqualified.",
+  "quality": {
+    "jsdoc": "pass; 5460 files",
+    "provenance": "pass; 2652 runtime modules",
+    "sourceTree": "pass",
+    "moduleSize": "pass",
+    "eslint": "pass; scoped",
+    "prettier": "pass; scoped",
+    "toolsTypes": "pass",
+    "invariants": "pass; semanticViolationCount0",
+    "doctorRoutingDiff": "pass"
+  },
+  "remaining": [
+    "Same four SfxDocumentMetaData.storage type errors; no new Calc errors.",
+    "Existing comphelper -> sax -> comphelper dependency cycle persists.",
+    "Full native package/storage/Medium/filter/workbook traversal and mounted DOCX/XLSX UI acceptance remain unfinished.",
+    "Iteration/table-operation formula dirty owners, full drawing/visibility/outline/style/compute-cache import remain outside this implemented profile.",
+    "Whole source is intentional accumulated WIP; source changes are not committed by the canonical task-artifact checkpoint. Parent tasks remain DOING/rework; no full test suite, goal pause or completion."
+  ],
+  "upstreamQa": "Bounded sc/qa C++ search found no direct attribute-import/const-query symbol matches. Fallback ucalc testMergedCells and testImportStream were inspected; full editing/CSV undo scenarios are not claimed as ported or passed. See upstream-qa log.",
+  "suspectedIssue": "CALC681 preserves reversed-range end-column assignment without hint updates; caller admission suspicion, not demonstrated normal XLSX failure.",
+  "sha256": {
+    "apps/office/coverage/calc-document-import-brief.log": "3416d03eb02a8dc4b590c58216a7c9bf8a4ed2f4528ea729bee52e2e0bb8a247",
+    "apps/office/coverage/calc-document-import-browser.log": "76a1631fd37eddee0c170584a843e2fd1b33691199b561c51721a3bce94359e6",
+    "apps/office/coverage/calc-document-import-build.log": "30e94ad652bc1b51da1f430e6d57d5f8f621d8ae538e6b588a458509e6c40530",
+    "apps/office/coverage/calc-document-import-calc-resources.log": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38",
+    "apps/office/coverage/calc-document-import-coder.log": "16d13a563212bb4cba0b10848a9b96c039c73443d959afc4f1daba2c31aae0eb",
+    "apps/office/coverage/calc-document-import-comment-check.log": "911dda7f63ef36d975e9f20f50a2d519f3087f9297e5602f727e4225d21ec066",
+    "apps/office/coverage/calc-document-import-coverage.log": "93579b32bf79ee13d419b1b5a7e31637d14786838527aaed832964b9f3a00516",
+    "apps/office/coverage/calc-document-import-dependencies.log": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf",
+    "apps/office/coverage/calc-document-import-diff-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/calc-document-import-diff.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/calc-document-import-docs.log": "9e8a11fe6f5c53d6a6737e14d2a15d66ed5e52a3f7cbbe0ae442a700758c2492",
+    "apps/office/coverage/calc-document-import-doctor.log": "dabeda158e9097052cdc886746c60ce63f0b558f13797377f19675b697b0b114",
+    "apps/office/coverage/calc-document-import-eslint-final.log": "d0e0417ce55296f50446a0665719ba021b6a6430d8c6c61d6f8b4921b48e8ef9",
+    "apps/office/coverage/calc-document-import-eslint-final2.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/calc-document-import-eslint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/calc-document-import-existing.log": "76c86910380b8ef7ce735dbc7ccf89e8654944739177784fb39129719e56ee83",
+    "apps/office/coverage/calc-document-import-file-regression.log": "3a77f950dfd2a6a5955b8322c303f82da2387924e01fb8a884b2fcbc407e3da9",
+    "apps/office/coverage/calc-document-import-format-final.log": "93a70011cdca440d5bfe68e3c949211f79a8f39d218bbfc449c5dc6fc616d457",
+    "apps/office/coverage/calc-document-import-format-initial.log": "4ceaba72624ae1f82155a416a54d048c09667963c4a759f6a237652dc2577b0e",
+    "apps/office/coverage/calc-document-import-format.log": "16499245dff15be58fb6ed7b9dfa49a2e9e43811568a545b9ffba680db233ded",
+    "apps/office/coverage/calc-document-import-hintids.log": "513c109068ebf83b3d6fe448c3c44564ec89a64cd9cb64059b5b4b89d11d887a",
+    "apps/office/coverage/calc-document-import-invariants-final.log": "355ec276b1f93225a3a25e88fc1b427a01d1ee957cb9a2e137191e855854356a",
+    "apps/office/coverage/calc-document-import-invariants.log": "f260f462844d5368a45ea2afdc968c0f8d3c58e1e63934d8529ad12c05aa26d9",
+    "apps/office/coverage/calc-document-import-jsdoc.log": "ae661736bac434ef182265b7f5f351d3b1baae010721d36327b68904d771cb86",
+    "apps/office/coverage/calc-document-import-new-tests.log": "f0ab9472a47998d96737bc343d590257e20acc836dec418e1e276ff4ce048949",
+    "apps/office/coverage/calc-document-import-orchestrator.log": "a8899afb593e5ec4f4153783ccfd0fd94cfaaf0513376e0f1d0aeefb1e0da9b2",
+    "apps/office/coverage/calc-document-import-parity-final.log": "ea7dd8727a8e9b2af41ba2d13f885181b0a16a13681ef0fe436452692f209efd",
+    "apps/office/coverage/calc-document-import-parity.log": "ea7dd8727a8e9b2af41ba2d13f885181b0a16a13681ef0fe436452692f209efd",
+    "apps/office/coverage/calc-document-import-policy-resume.log": "b8dfe2f85a79a07de5a25952812ea7b0a86c9434550eed0fc6016ed94e6b957b",
+    "apps/office/coverage/calc-document-import-policy.log": "b8dfe2f85a79a07de5a25952812ea7b0a86c9434550eed0fc6016ed94e6b957b",
+    "apps/office/coverage/calc-document-import-preflight-config.log": "78b9f751c865f969a4efbddc65c34e9d9ef6bf821d245de10d0da5c1932898b1",
+    "apps/office/coverage/calc-document-import-preflight.log": "d30d7141380b58ce27f38e4ef5e7299aed3739be57a37010b2d0c6d94988b093",
+    "apps/office/coverage/calc-document-import-prettier.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/calc-document-import-probe-format.log": "b0914ac67812daf31b6dd3a3a86a505600173607eaf2d0caefc3bc9f0df0bd37",
+    "apps/office/coverage/calc-document-import-profile-broad.log": "bd296d3167de7d4981aad3d3129f0e516750850ca6873f8efc3faf22856a8548",
+    "apps/office/coverage/calc-document-import-profile-final.log": "1e98964d0ae34a75c40718e81724b8556129098d18030fa6429067838621a030",
+    "apps/office/coverage/calc-document-import-profile.log": "d4310c7714242288da7c930774c81b7c2e08510dcc0040a9fe2eb914b8d3d116",
+    "apps/office/coverage/calc-document-import-provenance-final.log": "13052b42e178a02b3501be22f0d3a59c2891f3e16efb7e74fcdc9f9bcc93aaaa",
+    "apps/office/coverage/calc-document-import-provenance.log": "2353979f914177893e14b1b347c52ea4b0f50d48ce2ca272f8583933cc7af280",
+    "apps/office/coverage/calc-document-import-query-tests.log": "6966dbd80fba2f03f1c58e89eb73764a0e865899f8efe8e9001692e1a5d9b900",
+    "apps/office/coverage/calc-document-import-quickstart.log": "7cd29a19b5c0dc18e7eb324075d21cc2fb44715f3c8dd7b8b52dd5f72d2ed8e0",
+    "apps/office/coverage/calc-document-import-record-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/calc-document-import-registry-build.log": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209",
+    "apps/office/coverage/calc-document-import-registry-final.log": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209",
+    "apps/office/coverage/calc-document-import-related.log": "4eaff6c77bcac424a91f6f83b1c1385d484e5602dc22b3b59c9affa925f14e69",
+    "apps/office/coverage/calc-document-import-related/coverage-summary.json": "ed214b77423cddff7baa7623863a3e1f3d90aa806c9f20fc28df09e3a092cbe4",
+    "apps/office/coverage/calc-document-import-role-planning.log": "a8899afb593e5ec4f4153783ccfd0fd94cfaaf0513376e0f1d0aeefb1e0da9b2",
+    "apps/office/coverage/calc-document-import-role.log": "16d13a563212bb4cba0b10848a9b96c039c73443d959afc4f1daba2c31aae0eb",
+    "apps/office/coverage/calc-document-import-route-before-evidence.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/calc-document-import-route10.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/calc-document-import-route2.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/calc-document-import-route3.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/calc-document-import-route4.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/calc-document-import-route5.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/calc-document-import-route6.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/calc-document-import-route7.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/calc-document-import-route8.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/calc-document-import-route9.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/calc-document-import-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "apps/office/coverage/calc-document-import-size-final.log": "7c57f962e2d4568192e8875a1f30b4eab1c36ef9de5d5c5aac41b621067604c9",
+    "apps/office/coverage/calc-document-import-size.log": "e12ee8ddbd36d2071b202e9eccb34855aa6385226f943e71316a00819bcd1a66",
+    "apps/office/coverage/calc-document-import-source-tree.log": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497",
+    "apps/office/coverage/calc-document-import-start-ready.log": "f85f16010b085882e1ad3ad2273acc4c1acc42e503952c12afee30989073e724",
+    "apps/office/coverage/calc-document-import-static.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "apps/office/coverage/calc-document-import-status.log": "8b625e37f5e1be49f84dd63edd7587b17c4059822e3d832b2804f7754e8a1365",
+    "apps/office/coverage/calc-document-import-task-active.log": "8bce293037d458fb5caa9ea7e20cc799b66caa08b275825e9b7a6b19eecef92e",
+    "apps/office/coverage/calc-document-import-task-list.log": "e99986481204fc41cac45662a5db4c2ba32d4c716435621c929abff7679f6f04",
+    "apps/office/coverage/calc-document-import-tests.log": "9afae1436204f61f0006a5ed7156244cfc770b9fdd0d6245c4a4a2320c07e3a3",
+    "apps/office/coverage/calc-document-import-tests2.log": "fb022615886b675bbe6906dca62607b74b2613193175df78a4747d05014d1c75",
+    "apps/office/coverage/calc-document-import-tools-final.log": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+    "apps/office/coverage/calc-document-import-tools.log": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+    "apps/office/coverage/calc-document-import-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "apps/office/coverage/calc-document-import-typecheck-final.log": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+    "apps/office/coverage/calc-document-import-typecheck-final2.log": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+    "apps/office/coverage/calc-document-import-typecheck-initial.log": "d2584274ecbf45a8c05d2f3bf1647bf56ea8f6cae672108be3aaba91962e7107",
+    "apps/office/coverage/calc-document-import-typecheck2.log": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+    "apps/office/coverage/calc-document-import-typecheck3.log": "4e710890d5360b2084e60b730d31e983bffc13b4469d845f4ec97a44357400a6",
+    "apps/office/coverage/calc-document-import-typecheck4.log": "4e710890d5360b2084e60b730d31e983bffc13b4469d845f4ec97a44357400a6",
+    "apps/office/coverage/calc-document-import-types-final.log": "77e83c111f7dc4777a8d15244f65b082e77d77f583edd63fd7f4c98d1961f0f2",
+    "apps/office/coverage/calc-document-import-types-initial.log": "826b40a7f0ffd6fdef9d164d490864043adc9616f3a94717ce062f26a2aca5bf",
+    "apps/office/coverage/calc-document-import-types.log": "77e83c111f7dc4777a8d15244f65b082e77d77f583edd63fd7f4c98d1961f0f2",
+    "apps/office/coverage/calc-document-import-upstream-qa.log": "a03736d20dd5446a087fd51290ebdb3371cd0b925e72a7c09db93bd986a02de7",
+    "apps/office/coverage/calc-document-import-verify-contract.log": "96563066e1b2d88a2f856ea4ea0fd218630209fbd9cdc6bc869498d5ae5f69f4",
+    "apps/office/coverage/calc-document-import-verify-resume.log": "96563066e1b2d88a2f856ea4ea0fd218630209fbd9cdc6bc869498d5ae5f69f4",
+    "apps/office/coverage/calc-document-import-verify-show-final.log": "03c8369977b36dff78068c78a4edaf64c8e6544da931137896cf73feca12a319",
+    "apps/office/coverage/calc-document-import-worker.log": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee",
+    "apps/office/coverage/calc-document-import-writer-resources.log": "316da8ba1fc46e1f24b775d03d0594fb6acdbd673d11eba1a3683d233c5b6bf2",
+    "apps/office/coverage/calc-document-import/coverage-summary.json": "ff871ce721f045ec78a191349b40a519b3fa846abb3d21e9046ecf487537cd5d",
+    "apps/office/src/sc/inc/attarray.ts": "1fdf183ef173f534658b35c5b5840f7ab8ac6b5e08a78ffd8bf70f572ca58e4c",
+    "apps/office/src/sc/source/core/data/attarray.delete.ts": "cf4cf677172149db04d33b984094994f71911b8ff2cfd9702ff2b24a84d79458",
+    "apps/office/src/sc/source/core/data/attarray.ts": "aa90769b222114e5ec85c0ee1582e9fd36ea3079167cc1f2f2032651e45d4a40",
+    "apps/office/src/sc/source/core/data/column.ts": "5825538e9b53df9393459234bb51c08f926bf0781609987940b64eebecce8aeb",
+    "apps/office/src/sc/source/core/data/documentimport.attributes.test.ts": "506681b7ae9827b6804cf54338455d5b4d73b682e81905bbdb7b8e4bce7462a3",
+    "apps/office/src/sc/source/core/data/documentimport.ts": "f7b4156aec8d6e6a23d938e73e89afa094ec56dc0b8383d6f8c06f77e9ac5831",
+    "apps/office/src/sc/source/core/data/formulacell.ts": "98072846d379d479b890ab852d67cba0fca4eda878fde51b2d28e034cfaf6845",
+    "apps/office/src/sc/source/core/data/table.ts": "72f6400f5f88ff0ffe68cdaaa15c0caf9346cac14327f1395d770f79f1aab422",
+    "apps/office/src/sc/source/core/data/table2.ts": "e5b9e5d7f945779301a16d2a0a834ebdfd03f98b31bdaec337d7b238d590b79b",
+    "docs/program/calc-upstream-suspected-issues.md": "81262dda5c2809a0e20643a3b592bb418ae22862b89de5118bd182314e74274d",
+    "docs/program/registry/calc/provenance/sc/inc/attarray.ts.json": "9dc1fbf61b2504a81b79090a193453ce3551d75bbe0410b9d9e9efd9d0666777",
+    "docs/program/registry/calc/provenance/sc/source/core/data/attarray.delete.ts.json": "38930203770d636f20262f18007c69444f5aff3750c070df17dcb0c774f7f6e5",
+    "docs/program/registry/calc/provenance/sc/source/core/data/attarray.ts.json": "1ff1bca8661e11e9bda5e43d605d2bd1f6d8ec099b6f7efb9ea0b25886a449e9",
+    "docs/program/registry/calc/provenance/sc/source/core/data/column.ts.json": "ababdf32fee7dd9a35f21eed807ef32a8aa014522e13b2e3e7a40913a79eeb4d",
+    "docs/program/registry/calc/provenance/sc/source/core/data/documentimport.ts.json": "47f0ca36f0728f85c583cfde8bf45230bd000879bfe81ebfc6e7237149594ba2",
+    "docs/program/registry/calc/provenance/sc/source/core/data/formulacell.ts.json": "e6e63a74189c811b7fffc38cc89792ea3acbf21ca2901fa2b45460e99e897498",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json": "3a25866f0eb08352bbd1dfb26fa6c4491f2a9d19c3304386500a067a167eee57",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table2.ts.json": "f8781f8af5f28ecf8856ee74918f0adde7dc774a8c5ca112ea1c094940bf6788",
+    "docs/program/registry/calc/runtime/sc/inc/attarray.ts.json": "45da439cfe04aa0021545cb49d1467439ab92980c94578ac28fcf930558cf721",
+    "docs/program/registry/calc/runtime/sc/source/core/data/attarray.delete.ts.json": "cfee9e0c72e7b3f3471404e99e96289d61e7c00f745f6a0bfb680389a8eae17c",
+    "docs/program/registry/calc/runtime/sc/source/core/data/attarray.ts.json": "d945bd79851482214766d01cdb3506444834e8c2abab3268c4a70b3c7faa0aee",
+    "docs/program/registry/calc/runtime/sc/source/core/data/column.ts.json": "7371bb568dec3ccd310be96423a3760d4fbbbbb1a745589eb3a662b8b1ca1f3b",
+    "docs/program/registry/calc/runtime/sc/source/core/data/documentimport.ts.json": "d7b8886e3ced95505a5b692381a2bfd59f0f37b58848afcd378e57f37ff94747",
+    "docs/program/registry/calc/runtime/sc/source/core/data/formulacell.ts.json": "f8812b06f119568bce9f3c251578fe86296ccf99ee68207566f71b4a48dfd339",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json": "ca7d652f89d27240751230a315d99db52f719dbfa07bf64592bc6d81f24b566c",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table2.ts.json": "a482f510cde1ca4ea22b5678345a17dbc4e84a5052ccb379a15e6cbbae37ed0c",
+    "scripts/fixtures/native-calc-attributes-probe.ts": "4ab6956c0674f84f1e846b383777bf00e312d544d6e2260a5d3c673f0583bd37",
+    "scripts/fixtures/native-dom-worker-probe.ts": "d17fa5b0408719c7bc0a77a1c1bf94bf555d47ac00eceb6d7d02d6b6947a8f4e",
+    "scripts/fixtures/native-fastparser-consumer-probe.ts": "c414421f2bce23b15466271180a4faeb50259bfcb3ec040cef374ca2e891ecde",
+    "scripts/native-dom-worker-probe.mjs": "cf96b2ec2d1d444a446494267e09decd6888b1fd38c6bf71630f7a82ecd4652a"
+  }
+}
