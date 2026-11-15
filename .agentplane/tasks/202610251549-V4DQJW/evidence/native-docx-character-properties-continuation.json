@@ -1,0 +1,158 @@
+{
+  "checkpoint": "Native DOCX character colors, underlines and three-script language collection; untracked empty-grab-bag profile, not complete DOCX import/export",
+  "createdAt": "2026-11-15T11:02:41.291587+00:00",
+  "task": "202610251549-V4DQJW",
+  "sourceBaseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "implemented": [
+    "Original theme/scheme mappings and text/background roles, last-transform priority with signed16 narrowing and native tint/shade formatting.",
+    "Actual SvxUnderlineItem color/style and transparency predicate, SvxLanguageItem via shared LanguageTag MS BCP47 and detached collected list.",
+    "Actual SvxColorItem collection, independent complex-value copying and source w14 solid-fill emission, signed32 transform result and source clear/reset order.",
+    "Correct local duplicate unconditional flush: source calls before Redline only for nonnull redline, then once unconditionally.",
+    "Actual main/DOM-free Worker property XML through Writer/exporter/serializer and native ZIP output, independently reopened."
+  ],
+  "commands": {
+    "writer": "npm run test:coverage:writer -- src/sw/source/filter/ww8/docxattributeoutput.colors.test.ts src/sw/source/filter/ww8/docxattributeoutput.effects.test.ts src/sw/source/filter/ww8/docxattributeoutput.test.ts src/sw/source/filter/ww8/docxattributeoutput.paragraph.test.ts src/sw/source/filter/ww8/docxexport.fonts.test.ts --coverage.include=src/sw/source/filter/ww8/docxattributeoutput.ts --coverage.reportsDirectory=coverage/docx-colors --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+    "shared": "npm run test:shared -- src/editeng/source/items/native-font-color.test.ts src/editeng/source/items/native-language-item.test.ts src/editeng/source/items/textitem.test.ts src/i18nlangtag/source/languagetag/languagetag.impl.test.ts",
+    "items": "npm run test:writer -- src/editeng/source/items/textitem.test.ts",
+    "browser": "PLAYWRIGHT_BROWSERS_PATH=node_modules/.cache/ms-playwright node scripts/native-dom-worker-probe.mjs"
+  },
+  "results": {
+    "writerTests": 98,
+    "writerFiles": 5,
+    "sharedTests": 34,
+    "sharedFiles": 3,
+    "itemTests": 6,
+    "itemFiles": 1,
+    "uniqueTests": 138,
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 369,
+          "covered": 369,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 403,
+          "covered": 403,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 61,
+          "covered": 61,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 235,
+          "covered": 233,
+          "skipped": 0,
+          "pct": 99.14
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/ww8/docxattributeoutput.ts": {
+        "lines": {
+          "total": 369,
+          "covered": 369,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 61,
+          "covered": 61,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 403,
+          "covered": 403,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 235,
+          "covered": 233,
+          "skipped": 0,
+          "pct": 99.14
+        }
+      }
+    },
+    "browser": "pass main/DOM-free Worker actual characterProperties XML/ZIP",
+    "quality": "JSDoc5478, provenance2661/semanticViolationCount0, scoped ESLint/Prettier/tools, size/tree, standalone and production Vite/static4bundles, doctor/routing/diff pass"
+  },
+  "qaLimits": [
+    "fdo56679 independent underline color, upstream CharTransparence=75 XML assertion, tdf149200 absent redundant textFill and tdf166325 scheme spelling are covered at actual property/exporter owner level. Full fixture import/model/layout/export/reopen remains pending and is not claimed passed.",
+    "Shared suite selected3 files and excluded writer-owned textitem.test.ts; bounded follow-up runs that actual file through Writer:6tests pass.",
+    "Initial authored test syntax had an extra closing parenthesis; corrected before successful focused/final coverage runs. No implementation exclusion or threshold change.",
+    "Native ConvertColor byte overload remains unported: actual shared ConvertColorOU supplies identical native color value at the established Unicode serializer boundary.",
+    "Debug duplicate-color equality assertion, text effects/text-fill grab bags and inline heading context remain unqualified; actual no-grab-bag untracked path is the admitted domain."
+  ],
+  "upstreamIssues": [
+    "WRITER618 transparency exported directly to alpha; preserve original75percent value.",
+    "WRITER619 transform1000 factor versus10000-domain tint helper; preserve source output and signed32 narrowing."
+  ],
+  "remaining": [
+    "Four pre-existing SfxDocumentMetaData.storage.ts type errors and comphelper/sax runtime cycle remain; no new changed-file type error.",
+    "Actual main-text/paragraph/section/table/style traversal, full filters/storage ownership and mounted DOCX/XLSX UI acceptance remain unfinished.",
+    "Existing accumulated source WIP remains intentional. Parent stays DOING/rework, goal active, no full-suite run or completed task."
+  ],
+  "sha256": {
+    "apps/office/coverage/docx-body-next-active.log": "8bce293037d458fb5caa9ea7e20cc799b66caa08b275825e9b7a6b19eecef92e",
+    "apps/office/coverage/docx-body-next-brief.log": "06f9285edecae9c59f361762d85400015d12062c1c9b2dea2e48f131de668441",
+    "apps/office/coverage/docx-body-next-coder.log": "16d13a563212bb4cba0b10848a9b96c039c73443d959afc4f1daba2c31aae0eb",
+    "apps/office/coverage/docx-body-next-config.log": "78b9f751c865f969a4efbddc65c34e9d9ef6bf821d245de10d0da5c1932898b1",
+    "apps/office/coverage/docx-body-next-policy.log": "b8dfe2f85a79a07de5a25952812ea7b0a86c9434550eed0fc6016ed94e6b957b",
+    "apps/office/coverage/docx-body-next-quickstart.log": "7cd29a19b5c0dc18e7eb324075d21cc2fb44715f3c8dd7b8b52dd5f72d2ed8e0",
+    "apps/office/coverage/docx-body-next-role.log": "a8899afb593e5ec4f4153783ccfd0fd94cfaaf0513376e0f1d0aeefb1e0da9b2",
+    "apps/office/coverage/docx-body-next-route.log": "cd5f3d7e172c98c3fdf0c57b7c6c5adf9dfca3b94e538555e37c08f8b456f95e",
+    "apps/office/coverage/docx-body-next-status.log": "bc8763efede2cfceb2e8000ae8dc32a9c8cceb0584878a571f9847af572d0192",
+    "apps/office/coverage/docx-body-next-tasks.log": "e99986481204fc41cac45662a5db4c2ba32d4c716435621c929abff7679f6f04",
+    "apps/office/coverage/docx-body-next-tracked.log": "8ea42914202a7369ade4fa0028ec1bd47e406b62bb711c9ad2fc312a7d8de1ac",
+    "apps/office/coverage/docx-body-next-verify.log": "f90886cebc04c7384ae6fc68b6a6f5d9f1210d8461f4712c56c2a615edf35be8",
+    "apps/office/coverage/docx-colors-build.log": "5c7240fc76a47e1deb4e0ee98830f51d7c39e4ec53f406df69b7b682e0137988",
+    "apps/office/coverage/docx-colors-coverage-final.log": "6e040bc488f3b59d500e70d8b904b980ffd9502e6e999f44ea34bacd1e052762",
+    "apps/office/coverage/docx-colors-coverage.log": "a4263d303f135f51a39a31ec2c3326d44b8ae55653085bd4382431c832cdcd56",
+    "apps/office/coverage/docx-colors-dependencies.log": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf",
+    "apps/office/coverage/docx-colors-diff.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/docx-colors-docs.log": "d8ae396c5e8ac339ef0908da9fcfd47ac3434ee48ed9a41092b7debc57a1116c",
+    "apps/office/coverage/docx-colors-doctor.log": "262ba6b2bc948e7da304aa925b0ba9605f053161344d8cd5d09c1d1770b63b28",
+    "apps/office/coverage/docx-colors-eslint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/docx-colors-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/docx-colors-items.log": "91a143a9d725799f33872e42bc86b24b54fd87953724e9e08abee4ff46830fe3",
+    "apps/office/coverage/docx-colors-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/docx-colors-production-build.log": "8ccd518ba7aeb2678c892fe5ce980fc79fe92e97bc48906683daa5cab19b6ccd",
+    "apps/office/coverage/docx-colors-provenance.log": "c9e35e5e7e3fc6815ef9dc1e4ed23ab3ec970a6f9162fd27c5a2ac60d83ead67",
+    "apps/office/coverage/docx-colors-registry.log": "66c8bf334663b1dc5c3b5ebf8d190b91999161f79dc226df4aed0e60155260d7",
+    "apps/office/coverage/docx-colors-route-before-evidence.log": "cd5f3d7e172c98c3fdf0c57b7c6c5adf9dfca3b94e538555e37c08f8b456f95e",
+    "apps/office/coverage/docx-colors-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "apps/office/coverage/docx-colors-shared.log": "f34ce568dffcb9150f642e83d12a868000754853e5548d120f21ae97e30a2fbe",
+    "apps/office/coverage/docx-colors-static.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "apps/office/coverage/docx-colors-status.log": "8b57acc5cf55313f6c6a2485cc11f50019acfac9a08bd5c0760965880954e573",
+    "apps/office/coverage/docx-colors-tools.log": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+    "apps/office/coverage/docx-colors-tree-size.log": "ca656b5d61eb41f9121565f0ce0f18f87fa05804b0e31d3007798eb94026e32c",
+    "apps/office/coverage/docx-colors-typecheck-final.log": "77e83c111f7dc4777a8d15244f65b082e77d77f583edd63fd7f4c98d1961f0f2",
+    "apps/office/coverage/docx-colors-typecheck.log": "77e83c111f7dc4777a8d15244f65b082e77d77f583edd63fd7f4c98d1961f0f2",
+    "apps/office/coverage/docx-colors-worker.log": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee",
+    "apps/office/coverage/docx-colors-writer.log": "83ee984a69b9e744c7e1af2df927ec12842676de8aaed830863ec5b8679daaaf",
+    "apps/office/coverage/docx-colors/coverage-final.json": "3e31a9a6562005dbac8b0b20d3595e42888ef178be9fe0e7fb1ab43982f80b10",
+    "apps/office/coverage/docx-colors/coverage-summary.json": "63cdf20db59cbaf08c54b70a6e991869b759ab29bde8948e69ece8cc86e37001",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.colors.test.ts": "2a55d82421717168f9ad8091a3592662d768a642ecd3c2b6fe3b8199a8cb72e2",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.ts": "ffac5fe048fe49b972b393d340c1e226abd22e1942e112510da8072daf6029d8",
+    "docs/program/registry/writer/provenance/sw/source/filter/ww8/docxattributeoutput.ts.json": "d763627477c45dacb0427f410d44de80f4b1f9f48dbd2bbd6b14540572be35d6",
+    "docs/program/registry/writer/runtime/sw/source/filter/ww8/docxattributeoutput.ts.json": "03f00d5126ea52474c1f903ef16fe8f9b5b62df36fde75b3f76a9aaeb8da7dac",
+    "docs/program/writer-upstream-suspected-issues.md": "88abf51f53f7a1b51a425ba2f6b1d526deefc2066e68193b4366cbe4c9d06f4f",
+    "scripts/fixtures/native-writer-paragraph-probe.ts": "e17d634149d776b7fa5f95e5da3405172e95fbd53ab1c5ef6f26f0342be1e4ed",
+    "scripts/native-dom-worker-probe.mjs": "bf22e967f8e0f1fb26a87a4549316dac43862a4585ff54d509a023b27f70a9a8",
+    "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/ooxmlexport14.cxx": "5b538461c354bd192f5af4afa9b75f4bcdd1efabb8da72333f7c89ca2e74a35c",
+    "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/ooxmlexport17.cxx": "42f0e38abcf04b4284335f5e4292f49c7f4cfb8124574c394f338e60bbb5b06a",
+    "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/ooxmlexport2.cxx": "6d009232d9232858f6cdae19311138476251d2a9b5f2cfac05ef535d4a33f0fe",
+    "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx": "7bdef86219701fe25070201039ae9c9775eed64fbe17efd3cd6b552bfe38ff9d"
+  }
+}
