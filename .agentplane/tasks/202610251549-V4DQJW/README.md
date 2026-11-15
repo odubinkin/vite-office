@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 218
+revision: 221
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-15T09:08:36.839Z"
+  updated_at: "2026-11-15T09:23:07.067Z"
   updated_by: "CODER"
-  note: "Shared checkpoint recorded: 124 Calc attribute/merge regression tests and browser main/Worker pass. DOCX/XLSX whole storage/filter/model/UI acceptance remains incomplete; four metadata type errors and dependency cycle persist."
-  attempts: 59
+  note: "Calc/shared export-string checkpoint:51tests/scoped90 and main/DOM-free Worker actual ZIP text output pass. DOCX/XLSX whole storage/filter/model/UI acceptance and existing metadata/cycle failures remain incomplete."
+  attempts: 60
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -952,8 +955,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-15T09:23:07.067Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Calc/shared export-string checkpoint:51tests/scoped90 and main/DOM-free Worker actual ZIP text output pass. DOCX/XLSX whole storage/filter/model/UI acceptance and existing metadata/cycle failures remain incomplete."
+  -
+    type: "status"
+    at: "2026-11-15T09:23:25.067Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-15T09:08:44.576Z"
+doc_updated_at: "2026-11-15T09:23:25.067Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -2714,6 +2730,36 @@ sections:
     Attempts: 59
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T09:08:05.412Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-11-15T09:23:07.067Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Calc/shared export-string checkpoint:51tests/scoped90 and main/DOM-free Worker actual ZIP text output pass. DOCX/XLSX whole storage/filter/model/UI acceptance and existing metadata/cycle failures remain incomplete.
+    Attempts: 60
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T09:22:42.616Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
 
     Details:
 
@@ -4827,6 +4873,36 @@ Note: Shared checkpoint recorded: 124 Calc attribute/merge regression tests and 
 Attempts: 59
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T09:08:05.412Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-15T09:23:07.067Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Calc/shared export-string checkpoint:51tests/scoped90 and main/DOM-free Worker actual ZIP text output pass. DOCX/XLSX whole storage/filter/model/UI acceptance and existing metadata/cycle failures remain incomplete.
+Attempts: 60
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T09:22:42.616Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
 
 Details:
 

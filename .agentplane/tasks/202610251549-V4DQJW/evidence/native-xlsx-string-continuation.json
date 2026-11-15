@@ -1,0 +1,204 @@
+{
+  "checkpoint": "Original XLSX export-string value owner and consumed XML conversions; not full XLSX filtering",
+  "createdAt": "2026-11-15T09:22:36.104526+00:00",
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "sourceBaseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "implemented": [
+    "XclStrFlags, exact string constants and XclFormatRun default/two-value/comparison contracts.",
+    "XclExpString Unicode/encoded assignment, actual SAL encoding, same-mode append, exact limits/flags, implicit deep value copy, formatting runs/count limits/sentinels, comparison/hash and memory serialization.",
+    "XclXmlUtils actual value overloads delegate to real Unicode buffer, retaining empty byte-mode result.",
+    "Actual serializer/ZIP shared-string text part is emitted and independently reopened; main/DOM-free Worker observe length7, independent copy, original header, NUL/Unicode/LF and preserve attributes."
+  ],
+  "testCommand": "npm run test:coverage:calc --workspace @vite-office/office -- src/sc/source/filter/excel/xestring.test.ts src/sc/source/filter/excel/xestream.test.ts --coverage.include=src/sc/source/filter/excel/xestring.ts --coverage.include=src/sc/source/filter/excel/xestream.ts --coverage.include=src/sc/source/filter/inc/xlstring.ts --coverage.reportsDirectory=coverage/xlsx-string --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+  "results": {
+    "tests": 51,
+    "files": 2,
+    "rawCoverage": {
+      "total": {
+        "lines": {
+          "total": 228,
+          "covered": 228,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 252,
+          "covered": 252,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 52,
+          "covered": 52,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 178,
+          "covered": 176,
+          "skipped": 0,
+          "pct": 98.87
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/filter/excel/xestream.ts": {
+        "lines": {
+          "total": 66,
+          "covered": 66,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 73,
+          "covered": 73,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 44,
+          "covered": 44,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/filter/excel/xestring.ts": {
+        "lines": {
+          "total": 139,
+          "covered": 139,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 40,
+          "covered": 40,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 156,
+          "covered": 156,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 127,
+          "covered": 125,
+          "skipped": 0,
+          "pct": 98.42
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/filter/inc/xlstring.ts": {
+        "lines": {
+          "total": 23,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 23,
+          "covered": 23,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "browserCommand": "PLAYWRIGHT_BROWSERS_PATH=node_modules/.cache/ms-playwright node scripts/native-dom-worker-probe.mjs",
+    "browser": "pass in main and DOM-free module Worker",
+    "jsdoc": "5466 files pass",
+    "provenance": "2656 modules:2415 mapped/202 browser/39 infrastructure",
+    "invariants": "semanticViolationCount0",
+    "standaloneViteStatic": "pass;4bundles",
+    "eslintPrettierToolsSizeTreeDoctorRoutingDiff": "pass"
+  },
+  "sourceQa": "Bounded sc/qa C++ search found no direct XclExpString/XclStrFlags/XclFormatRun tests. Full source testPreserveTextWhitespaceXLSX and related font/whitespace tests were inspected. Their actual workbook save/reload path remains pending and is not claimed passed by text/part tests; source excerpt and limits are in upstream-qa log.",
+  "suspectedIssues": [
+    "CALC682: original mixed-BIFF ordering lacks a mode discriminator; retain source left-mode selection and document likely single-workbook-version caller precondition."
+  ],
+  "remaining": [
+    "Native XclExpStream record methods/PrepareWrite and their NoHeader state are unported; memory WriteToMem still ignores NoHeader exactly as source.",
+    "Full XclExpXmlStream/XclExpRoot/font-rich output and original workbook/filter/ScDocument traversal/UI acceptance remain unfinished.",
+    "Native diagnostics, pointer/invalid-index domains, compiled native differential and physical ABI/lifetime parity remain unqualified.",
+    "Same4 SfxDocumentMetaData.storage type errors and comphelper->sax->comphelper cycle persist.",
+    "Source remains accumulated intentional WIP. Canonical artifact commits do not claim implementation commits. Parents remain DOING/rework; no full suite, goal pause or completion."
+  ],
+  "sha256": {
+    "apps/office/coverage/xlsx-string-build.log": "a77b0e135660b209f404b1f7bf926c96d47f0b9737dbb8f00ea3cedf728ca199",
+    "apps/office/coverage/xlsx-string-coverage.log": "7e751d7d4a6e496ba95cd43acac628b62e0a7661a125594311436a6e82fd731e",
+    "apps/office/coverage/xlsx-string-dependencies.log": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf",
+    "apps/office/coverage/xlsx-string-diff.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-string-doctor.log": "191242302aff14fa713de3b557cdbc19a2cea63c0fbcedf097c4e09b8ebf0781",
+    "apps/office/coverage/xlsx-string-eslint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-string-format.log": "0093f372ef74686779d74a1368143ec260d070ce401e3ef2632a2003db7519f1",
+    "apps/office/coverage/xlsx-string-invariants.log": "d155f11c2871b984904f1c4baef204775b2fbc716f5e4d1614bb3f44e89f67a7",
+    "apps/office/coverage/xlsx-string-jsdoc.log": "a7d5c95033d2c3211077a2662c427a72fefa3b4f47eb5d612db60303cca87fc2",
+    "apps/office/coverage/xlsx-string-prettier.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/xlsx-string-probe-format.log": "f83ebe0adf8b260824044d9592896ee880d3623437c87673e675e1595c479e4e",
+    "apps/office/coverage/xlsx-string-provenance.log": "24436588b6b1960080e7e0651da2caee01a996d0b269a72f5bf14b9a4fe402d5",
+    "apps/office/coverage/xlsx-string-route-before-evidence.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/xlsx-string-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "apps/office/coverage/xlsx-string-size.log": "0c60062be01f2e458320d34cf3f4a0973e6c4e1f7cd0e1a46b8e977d2848e15c",
+    "apps/office/coverage/xlsx-string-static.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "apps/office/coverage/xlsx-string-status.log": "5a21fcfe8591e8e57351d50edf3897650d262b4489d314951eda71bc1b0e412a",
+    "apps/office/coverage/xlsx-string-test-format.log": "8e88ac3d91b190db43cbcf655435f79142264093765f8a322518e3625157d292",
+    "apps/office/coverage/xlsx-string-tests.log": "45ad67d0de13a8fd24b7a93a267e336b4bd82bfc578d51a2c98639754f9457b8",
+    "apps/office/coverage/xlsx-string-tools.log": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+    "apps/office/coverage/xlsx-string-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "apps/office/coverage/xlsx-string-types.log": "77e83c111f7dc4777a8d15244f65b082e77d77f583edd63fd7f4c98d1961f0f2",
+    "apps/office/coverage/xlsx-string-upstream-direct-qa.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-string-upstream-qa.log": "1205b6c9d97ae9ad26e62c9920927becfb211cd3a0e41efc05bbf153ac254baa",
+    "apps/office/coverage/xlsx-string-worker.log": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee",
+    "apps/office/coverage/xlsx-string/coverage-final.json": "e0f9796d7745dc25f6d515f2b748221354db40a8f18fca0b61d65dc965ad2a1d",
+    "apps/office/coverage/xlsx-string/coverage-summary.json": "632a72fe30c93e7f809a1040533bca37aca4647cd9f7d229a32c1b6956d6b83c",
+    "apps/office/src/sc/source/filter/excel/xestream.ts": "f1736e6a58a467443472c88448c1075e8c33ddd23e544ac243c44a7bf1d49c43",
+    "apps/office/src/sc/source/filter/excel/xestring.test.ts": "98f1959b35505863bd2f01213e4b4b1e37c583db506d0babfcebeb5b8871206d",
+    "apps/office/src/sc/source/filter/excel/xestring.ts": "6ab1ecfa0d090fd1230c6189be4d50021b26719c6866a5bb29069115b0ff8d83",
+    "apps/office/src/sc/source/filter/inc/xestring.ts": "acee42d434dcea98099bd64aee12455225d173b7c918a25f7d0b79bb6cb67b4e",
+    "apps/office/src/sc/source/filter/inc/xlstring.ts": "40aacd7a6be155d98912766df8e23cce86dfe0e193ff8295cb90dc621bf214ee",
+    "apps/office/src/sc/source/filter/inc/xlstyle.ts": "d0d390e7c13ce292ace3c6a5b742ec44a0c4fddb41c0366302705b814dc734f1",
+    "docs/program/calc-upstream-suspected-issues.md": "7b3e9ca194f432eeff345ad28dcaca98a34734277d12ae51c0eeea541c987bf6",
+    "docs/program/registry/calc/provenance/sc/source/filter/excel/xestream.ts.json": "825d06cd6b09eb6d8c3071abfc8ff91f19d83c0791d78201ac15ba1c7f4dca8f",
+    "docs/program/registry/calc/provenance/sc/source/filter/excel/xestring.ts.json": "732fd42f0bf182007bc50a3ebd5b350030cf813d7c060a65c3c198bc163f5ae1",
+    "docs/program/registry/calc/provenance/sc/source/filter/inc/xestring.ts.json": "3fb8c62c7dda520768b87626525d16da4ede246ea4e49a2572d668fde3e9797c",
+    "docs/program/registry/calc/provenance/sc/source/filter/inc/xlstring.ts.json": "92a8b9e5fbb3b33f7f318c296e5f6820e729e5ea7a57274cfb2e20aefec3af1e",
+    "docs/program/registry/calc/provenance/sc/source/filter/inc/xlstyle.ts.json": "11ecd69e5440c1ccbe6149c7c81b5f716c8d5e48cd241b39b08fd7f978404762",
+    "docs/program/registry/calc/runtime/sc/source/filter/excel/xestream.ts.json": "0fa6a308a25b650f33e414cc49d7b3de57681b58578f17c6cff834e670101d18",
+    "docs/program/registry/calc/runtime/sc/source/filter/excel/xestring.ts.json": "8c6a63f02b770b4476774846ec057ca6e4ee8f9ef29e986d1d382f5372e765e7",
+    "docs/program/registry/calc/runtime/sc/source/filter/inc/xestring.ts.json": "e9edbe417675d9c88d9a08270a9e026060d7ef97d29315580af5b36c12a7be71",
+    "docs/program/registry/calc/runtime/sc/source/filter/inc/xlstring.ts.json": "e9b23cf95498ed51c03530cb16951616b1739c0e8aecfdd7c4b269057b7bad4d",
+    "docs/program/registry/calc/runtime/sc/source/filter/inc/xlstyle.ts.json": "71d56bf26fb33e7737528c9092d68a39faad0d31ede74c865200dfb169636640",
+    "scripts/fixtures/native-dom-worker-probe.ts": "3f6eb95cf2cc80ec87df85c7690d70395f28c83a39980a115bf31edfa6f4b981",
+    "scripts/fixtures/native-xlsx-string-probe.ts": "afd62174ce6a1cfd08b1368d921c9b871862c7299f77b1e353b64191360864c9",
+    "scripts/native-dom-worker-probe.mjs": "5dab41024d332a90d311e835e5a1ad665109ffe158b87bc9ed228ccdbc7ff5fd",
+    "vendor/libreoffice-reference/sc/source/filter/excel/xestream.cxx": "a41dc92dea58ee9b12db9a719ee04995f0a6df0624d4262c8c1d6cc852bfca9f",
+    "vendor/libreoffice-reference/sc/source/filter/excel/xestring.cxx": "7744ed450ea125cca3573d7b34727e19e737dc0b84320a7c9c9633f4a370b227",
+    "vendor/libreoffice-reference/sc/source/filter/inc/xestring.hxx": "d169ee221d600fccb85a5f9479527920d4187f7de94d281ef3bb6a075a642174",
+    "vendor/libreoffice-reference/sc/source/filter/inc/xlstring.hxx": "5f0f976c0769bbcfb4c1ecda7dbad741dc68de395f1ca4abf5bba682d7644a4d",
+    "vendor/libreoffice-reference/sc/source/filter/inc/xlstyle.hxx": "ef0f04085ce8e3160332a765b4d74e1922240aefdc0bc41c961078ca3fea3af2"
+  }
+}
