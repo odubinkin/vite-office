@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 493
+revision: 496
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-15T10:20:07.349Z"
+  updated_at: "2026-11-15T10:44:26.608Z"
   updated_by: "CODER"
-  note: "Original font-data/XML/color/byte-format checkpoint:140unique related tests and actual source formatting QA replay pass; Calc/color/shared aggregate90 and main/Worker pass. Individual OString, complete root/font-buffer/workbook/filter/UI and existing metadata/cycle failures remain incomplete."
-  attempts: 156
+  note: "Actual VCL/SVX font-extraction checkpoint:106tests, implemented owner scoped90 and main/DOM-free Worker XML/ZIP pass. Full font-record/buffer/root/workbook/filter/UI and existing metadata/cycle failures remain incomplete."
+  attempts: 157
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2504,8 +2507,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-15T10:44:26.608Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Actual VCL/SVX font-extraction checkpoint:106tests, implemented owner scoped90 and main/DOM-free Worker XML/ZIP pass. Full font-record/buffer/root/workbook/filter/UI and existing metadata/cycle failures remain incomplete."
+  -
+    type: "status"
+    at: "2026-11-15T10:44:36.080Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-15T10:20:42.812Z"
+doc_updated_at: "2026-11-15T10:44:36.080Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -7178,6 +7194,36 @@ sections:
     Attempts: 156
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T10:19:14.343Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-11-15T10:44:26.608Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Actual VCL/SVX font-extraction checkpoint:106tests, implemented owner scoped90 and main/DOM-free Worker XML/ZIP pass. Full font-record/buffer/root/workbook/filter/UI and existing metadata/cycle failures remain incomplete.
+    Attempts: 157
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T10:44:17.670Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
 
     Details:
 
@@ -12525,6 +12571,36 @@ Note: Original font-data/XML/color/byte-format checkpoint:140unique related test
 Attempts: 156
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T10:19:14.343Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-15T10:44:26.608Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Actual VCL/SVX font-extraction checkpoint:106tests, implemented owner scoped90 and main/DOM-free Worker XML/ZIP pass. Full font-record/buffer/root/workbook/filter/UI and existing metadata/cycle failures remain incomplete.
+Attempts: 157
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T10:44:17.670Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
 
 Details:
 

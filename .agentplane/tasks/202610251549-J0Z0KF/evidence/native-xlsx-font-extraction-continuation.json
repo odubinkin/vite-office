@@ -1,0 +1,177 @@
+{
+  "checkpoint": "Actual VCL/SVX font extraction and MS substitution into original Calc font-data/XML owners; not full root/font-buffer/workbook export",
+  "createdAt": "2026-11-15T10:44:17.407128+00:00",
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "sourceBaseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "implemented": [
+    "XclTools::GetXclFontName delegates to actual shipped GetSubsFontName ONLYONE|MS; original unchanged full-list fallback and independent native return value remain.",
+    "XclFontData actual VCL/SVX constructors and FillFromVclFont/FillFromSvxFont use genuine Font/SvxFont/ComplexColor owners. Explicit base=true binds the erased static VCL-reference overload.",
+    "Original Clear-before-VCL/direct-SVX construction, stored const getters without MaybeAskConfig enrichment, style clearing, twip bounds, charset/weight/underline/escapement conversion and complete color copying remain.",
+    "Actual kernel font values now feed the main/DOM-free Worker XML/ZIP probe; source font extraction/aliases/superscript and independent package XML are observed."
+  ],
+  "commands": {
+    "calc": "npm run test:coverage:calc --workspace @vite-office/office -- src/sc/source/filter/excel/xlstyle src/sc/source/filter/excel/xestream src/sc/source/filter/excel/xestring.test.ts --coverage.include=src/sc/source/filter/excel/xlstyle.ts --coverage.include=src/sc/source/filter/excel/xltools.ts --coverage.reportsDirectory=coverage/xlsx-font-extract --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+    "shared": "npm run test:shared --workspace @vite-office/office -- src/unotools/source/config/native-font-substitutions.test.ts src/vcl/source/font/native-font-values.test.ts src/vcl/source/font/native-font-config.test.ts src/vcl/source/font/native-font-metadata.test.ts src/editeng/source/items/native-svx-font-value.test.ts",
+    "browser": "PLAYWRIGHT_BROWSERS_PATH=node_modules/.cache/ms-playwright node scripts/native-dom-worker-probe.mjs"
+  },
+  "results": {
+    "calcTests": 72,
+    "calcFiles": 5,
+    "sharedTests": 34,
+    "sharedFiles": 5,
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 137,
+          "covered": 137,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 141,
+          "covered": 141,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 41,
+          "covered": 41,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 119,
+          "covered": 119,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/filter/excel/xlstyle.ts": {
+        "lines": {
+          "total": 109,
+          "covered": 109,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 37,
+          "covered": 37,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 112,
+          "covered": 112,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 90,
+          "covered": 90,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/filter/excel/xltools.ts": {
+        "lines": {
+          "total": 28,
+          "covered": 28,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 29,
+          "covered": 29,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 29,
+          "covered": 29,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "coverageInterpretation": "Both measured implemented owners100S/B/F/L at unchanged90 thresholds; no exclusions, fake config/font providers or private state injection.",
+    "browser": "pass in Chromium main and DOM-free module Worker; actual fontExtraction and superscript/property output pass",
+    "quality": "Scoped ESLint/Prettier/tools, JSDoc5477, provenance2661/semanticViolationCount0, tree/size, standalone Vite/static4bundles, doctor/routing/diff pass"
+  },
+  "sourceQa": "Bounded sc/qa C++ search found no direct font extraction symbols. Genuine font substitution/configuration and VCL/SVX value regressions run; whole font-buffer/root/workbook QA remains pending and is not claimed passed. No new suspected upstream issue is asserted.",
+  "remaining": [
+    "Actual XclExpFont/FontBuffer/palette/root and complete rich-string/workbook/filter/model/mounted DOCX/XLSX UI acceptance remain unfinished.",
+    "Underlying VCL rendering/device/physical ABI and invalid native argument/allocator domains retain existing unqualified boundaries.",
+    "Same4 SfxDocumentMetaData.storage type errors and comphelper->sax->comphelper cycle persist.",
+    "Source remains accumulated intentional WIP; canonical task-artifact commits do not claim implementation commits. Parents stay DOING/rework; no full suite, completion or goal pause."
+  ],
+  "sha256": {
+    "apps/office/coverage/xlsx-font-extract-active.log": "8bce293037d458fb5caa9ea7e20cc799b66caa08b275825e9b7a6b19eecef92e",
+    "apps/office/coverage/xlsx-font-extract-brief.log": "3416d03eb02a8dc4b590c58216a7c9bf8a4ed2f4528ea729bee52e2e0bb8a247",
+    "apps/office/coverage/xlsx-font-extract-build.log": "bc740ed4fa989da07e1968f860e15d3ddc21f865a1ff8c09b8f6043fafc4da42",
+    "apps/office/coverage/xlsx-font-extract-coder.log": "16d13a563212bb4cba0b10848a9b96c039c73443d959afc4f1daba2c31aae0eb",
+    "apps/office/coverage/xlsx-font-extract-config.log": "78b9f751c865f969a4efbddc65c34e9d9ef6bf821d245de10d0da5c1932898b1",
+    "apps/office/coverage/xlsx-font-extract-dependencies.log": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf",
+    "apps/office/coverage/xlsx-font-extract-diff.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-font-extract-doctor.log": "8672cb3ec8ca1c239dd07e2367a5114a2d022d73598abae943be3daac2b1c60a",
+    "apps/office/coverage/xlsx-font-extract-eslint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-font-extract-final-format.log": "126cd3b731a0b6941eefce6049c79029515ba19e87759e0818b333ef3a620894",
+    "apps/office/coverage/xlsx-font-extract-format.log": "d9aa73b1a88c8372794dc69f5d314fb828380db462130cc2d3c224c738453bc7",
+    "apps/office/coverage/xlsx-font-extract-invariants.log": "0eed562e7d78587f3959b024577236cf9716a4696c59170f43a6e08d15f80d3d",
+    "apps/office/coverage/xlsx-font-extract-jsdoc.log": "14b0d686e34303f0fe058a6bd61900b9affa46993c145f9423660f6027f130e8",
+    "apps/office/coverage/xlsx-font-extract-prettier.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/xlsx-font-extract-probe-format.log": "d3ee2451190bec6d8fa6469f233572b7052a0b3ac570c25d9aa1a67182173401",
+    "apps/office/coverage/xlsx-font-extract-provenance.log": "c9e35e5e7e3fc6815ef9dc1e4ed23ab3ec970a6f9162fd27c5a2ac60d83ead67",
+    "apps/office/coverage/xlsx-font-extract-quickstart.log": "7cd29a19b5c0dc18e7eb324075d21cc2fb44715f3c8dd7b8b52dd5f72d2ed8e0",
+    "apps/office/coverage/xlsx-font-extract-role.log": "a8899afb593e5ec4f4153783ccfd0fd94cfaaf0513376e0f1d0aeefb1e0da9b2",
+    "apps/office/coverage/xlsx-font-extract-route-before-evidence.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/xlsx-font-extract-route.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/xlsx-font-extract-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "apps/office/coverage/xlsx-font-extract-shared-tests.log": "e6b7d587f327ddd1ea6d70fc413cf89a4cb43ad2422e357dd63ccb10d1030c46",
+    "apps/office/coverage/xlsx-font-extract-size.log": "cff4f3f21efeff84039f6b72289930c013b548f7fba07870f049abcfb4acaf9a",
+    "apps/office/coverage/xlsx-font-extract-static.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "apps/office/coverage/xlsx-font-extract-status.log": "bc8763efede2cfceb2e8000ae8dc32a9c8cceb0584878a571f9847af572d0192",
+    "apps/office/coverage/xlsx-font-extract-tasks.log": "e99986481204fc41cac45662a5db4c2ba32d4c716435621c929abff7679f6f04",
+    "apps/office/coverage/xlsx-font-extract-tests.log": "5a66447481b4ca4b5e4dbdaf882abc60cb9acf3c3222998c09d78b1e65ae21ca",
+    "apps/office/coverage/xlsx-font-extract-tools-final.log": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+    "apps/office/coverage/xlsx-font-extract-tools.log": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+    "apps/office/coverage/xlsx-font-extract-tracked.log": "4343044c53f5cb4bf255fec80e6e155a7b61892cb62d1cc91bd1e154a256cbdf",
+    "apps/office/coverage/xlsx-font-extract-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "apps/office/coverage/xlsx-font-extract-types.log": "77e83c111f7dc4777a8d15244f65b082e77d77f583edd63fd7f4c98d1961f0f2",
+    "apps/office/coverage/xlsx-font-extract-upstream-qa.log": "36cbe6326f3045809c4b66c173c0a58951e07fbfc38354539b868fc7c054c62c",
+    "apps/office/coverage/xlsx-font-extract-verify.log": "96563066e1b2d88a2f856ea4ea0fd218630209fbd9cdc6bc869498d5ae5f69f4",
+    "apps/office/coverage/xlsx-font-extract-worker.log": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee",
+    "apps/office/coverage/xlsx-font-extract-writer-brief.log": "06f9285edecae9c59f361762d85400015d12062c1c9b2dea2e48f131de668441",
+    "apps/office/coverage/xlsx-font-extract-writer-route-before-evidence.log": "cd5f3d7e172c98c3fdf0c57b7c6c5adf9dfca3b94e538555e37c08f8b456f95e",
+    "apps/office/coverage/xlsx-font-extract/coverage-final.json": "404e3cc1436e7f7910bf2872e0bd1e1cc4c1acf9e040db1e99296ecf7e05006d",
+    "apps/office/coverage/xlsx-font-extract/coverage-summary.json": "289d2b17057e47ef7bb327a1122c4587712537d4a63f49f923695557a523d268",
+    "apps/office/src/sc/source/filter/excel/xlstyle.fonts.test.ts": "9487f735322d7dd2cab6e68f934cbad29cd3be08fe29992e89b8f8b0bf909355",
+    "apps/office/src/sc/source/filter/excel/xlstyle.ts": "213ba22eb6f2c36493a7c39eb8a1eb0c38de37d836fb14b3bbd9cce2c6bab468",
+    "apps/office/src/sc/source/filter/excel/xltools.ts": "9c1819d233893f781fc11cbb6d01c23c233544a35b3905774a8f1a104aa97ad8",
+    "docs/program/registry/calc/provenance/sc/source/filter/excel/xlstyle.ts.json": "a2281c4506d4ff529fdb89a7e39a121be77cd616d5a5b094f3eef618465da389",
+    "docs/program/registry/calc/provenance/sc/source/filter/excel/xltools.ts.json": "721f06cdc57eee9dc5040a8a52c1a37d6d769f963cccc3c60146511bbd66e524",
+    "docs/program/registry/calc/provenance/sc/source/filter/inc/xlstyle.ts.json": "641fdebfbb4aa9122baf9f24c38bf05b96431452904a3c7e82175fcfc977d0af",
+    "docs/program/registry/calc/runtime/sc/source/filter/excel/xlstyle.ts.json": "1d89a6498b92aac3c951e1bd03c202bba5298d2852a86918ff44b8cb078a9016",
+    "docs/program/registry/calc/runtime/sc/source/filter/excel/xltools.ts.json": "97c12c45555948a9702051a6d37f187c50adef342b594d21787127aefee9b1eb",
+    "docs/program/registry/calc/runtime/sc/source/filter/inc/xlstyle.ts.json": "4c84cb231219d9185dc2a62707b2165e692271263e015b06a15d5eb093e9745c",
+    "scripts/fixtures/native-xlsx-string-probe.ts": "7217ada263cb0b96717017558668576e35961436c1c575b8544f51956a8b368e",
+    "scripts/native-dom-worker-probe.mjs": "1b359e4667ac72e8667e5ff4cc870aecb7a5db587b585ed93a23918f339dd756",
+    "vendor/libreoffice-reference/sc/source/filter/excel/xlstyle.cxx": "23a52c9c77a1a4f73de891e98ec960e8c77f3aed4052714e7138775a6b45688a",
+    "vendor/libreoffice-reference/sc/source/filter/excel/xltools.cxx": "74a3f9bfe7d7dee4dfc6e8e4497cd5c8b7744431dbc01a190304ef974b566965",
+    "vendor/libreoffice-reference/sc/source/filter/inc/xlstyle.hxx": "ef0f04085ce8e3160332a765b4d74e1922240aefdc0bc41c961078ca3fea3af2"
+  }
+}
