@@ -1,0 +1,170 @@
+{
+  "checkpoint": "Original XLSX XML part/relationship/serializer-stack owners and plain string WriteXml; not complete workbook export",
+  "createdAt": "2026-11-15T09:35:19.375040+00:00",
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "sourceBaseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "implemented": [
+    "XclExpXmlStream original CreateOutputStream relation/ID/open/map ordering, exact Unicode lookup and explicit serializer stack.",
+    "Original native-text/counted-UTF8/null-pointer attribute overload behavior over existing actual SAL and serializer bindings.",
+    "Source VBA flag query, export-only import false, sticky dynamic-array flag and preincremented diagram identity. Original constructor mode flags are retained together.",
+    "XclExpString plain WriteXml owns original text element, xml:space=preserve and existing source Unicode-vector conversion behavior including SeparateFormats/byte-mode. Rich-font export explicitly remains rejected until genuine root/font owners exist.",
+    "Implementation remains in original xestream.ts source responsibility; header reexports the real class. Worker/main now use CreateOutputStream, parent relations, real stack/lookup, actual string WriteXml and independent ZIP reopen."
+  ],
+  "commands": {
+    "calc": "npm run test:coverage:calc --workspace @vite-office/office -- src/sc/source/filter/excel/xestream.xml.test.ts src/sc/source/filter/excel/xestring.test.ts src/sc/source/filter/excel/xestream.test.ts --coverage.include=src/sc/source/filter/excel/xestream.ts --coverage.include=src/sc/source/filter/excel/xestring.ts --coverage.reportsDirectory=coverage/xlsx-part-stream --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+    "shared": "npm run test:shared --workspace @vite-office/office -- src/oox/source/core/xmlfilterbase.test.ts src/oox/source/core/relations.test.ts src/oox/source/core/relationshandler.native.test.ts src/oox/source/core/relations.native.test.ts src/oox/source/helper/zipstorage-input.test.ts",
+    "browser": "PLAYWRIGHT_BROWSERS_PATH=node_modules/.cache/ms-playwright node scripts/native-dom-worker-probe.mjs"
+  },
+  "results": {
+    "calcTests": 56,
+    "calcFiles": 3,
+    "sharedTests": 81,
+    "sharedFiles": 5,
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 250,
+          "covered": 250,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 276,
+          "covered": 276,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 62,
+          "covered": 62,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 186,
+          "covered": 183,
+          "skipped": 0,
+          "pct": 98.38
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/filter/excel/xestream.ts": {
+        "lines": {
+          "total": 102,
+          "covered": 102,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 21,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 111,
+          "covered": 111,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 57,
+          "covered": 56,
+          "skipped": 0,
+          "pct": 98.24
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/filter/excel/xestring.ts": {
+        "lines": {
+          "total": 148,
+          "covered": 148,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 41,
+          "covered": 41,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 165,
+          "covered": 165,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 129,
+          "covered": 127,
+          "skipped": 0,
+          "pct": 98.44
+        }
+      }
+    },
+    "browser": "pass in main and DOM-free module Worker; partRouting true",
+    "quality": "Scoped ESLint/Prettier/tools, JSDoc5468, provenance2657, semanticViolationCount0, source tree/size, standalone Vite/static4bundles, doctor/routing/diff pass"
+  },
+  "sourceQa": "Bounded sc/qa C++ search found no direct XclExpXmlStream/CreateOutputStream/XclExpString QA symbols. Whole source whitespace/workbook save/reload regressions remain pending; no part probe is represented as full filter QA. No new suspected upstream issue is asserted by this block.",
+  "remaining": [
+    "Genuine XclExpRoot/font/shape/VBA/document traversal and full exportDocument orchestration remain unported. Rich-font WriteXml branch rejects explicitly, without a fake font/root provider.",
+    "Original component-context/UNO output transport still uses the existing explicit XmlFilterBase storage/ZipFragmentStream binding. Empty-stack/invalid-pair/pointer/overflow/diagnostic/physical ABI domains are not qualified.",
+    "Same4 SfxDocumentMetaData.storage type errors and comphelper->sax->comphelper dependency cycle persist.",
+    "DOCX/XLSX storage/Medium/filter/model/mounted UI acceptance remains unfinished. Sources remain accumulated intentional WIP; task-artifact commits do not claim implementation commits.",
+    "Parent tasks remain DOING/rework; no full test suite, completion or goal pause."
+  ],
+  "sha256": {
+    "apps/office/coverage/xlsx-part-stream-build.log": "21aca32d77ccc266b84b8e10fdd24b838de61838a4f276568aa0767952efbdef",
+    "apps/office/coverage/xlsx-part-stream-coverage.log": "a08862bc2e9bca161e94bad77ea84825258cd29ed145298032db20cb23373e10",
+    "apps/office/coverage/xlsx-part-stream-dependencies.log": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf",
+    "apps/office/coverage/xlsx-part-stream-diff.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-part-stream-doctor.log": "699780ef5e2705a592dc8bbb43b726b8c6f4c3f53a1ed1d1d5eaef8d4743fe10",
+    "apps/office/coverage/xlsx-part-stream-eslint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-part-stream-format.log": "983be07fdb9ad0a13d9b2d4e048a50d14ae200111d1ebf2f79161c1e799fd7f2",
+    "apps/office/coverage/xlsx-part-stream-invariants.log": "6e7ddade203019bb6f7682ec13177a660c679a781c1b7ba4d6f00a0b9d81d3a3",
+    "apps/office/coverage/xlsx-part-stream-jsdoc.log": "2b2b2324abf7804f5d734d0811336850e53ec39d4e691b076849920ee9e9e9d9",
+    "apps/office/coverage/xlsx-part-stream-prettier.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/xlsx-part-stream-probe-format.log": "8d9e723c1364169165cba13f587e53253fa5a3ed028b7b7ddada2d241980dd00",
+    "apps/office/coverage/xlsx-part-stream-provenance.log": "984a117d52e8929afc354744e19b5551ea27ee6f26121dac139a87bd9537b586",
+    "apps/office/coverage/xlsx-part-stream-route-before-evidence.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/xlsx-part-stream-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "apps/office/coverage/xlsx-part-stream-shared-tests.log": "048e62eb9a9f35e1df4bcccf61228b8d93ba63660a6d198987e996bf33b51c1a",
+    "apps/office/coverage/xlsx-part-stream-size.log": "4936b37e453c3284e67b006f3227db273e297745c8c27310cf2d5af7bafb3457",
+    "apps/office/coverage/xlsx-part-stream-static.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "apps/office/coverage/xlsx-part-stream-status.log": "9649e52e208cfa046f5d75959a6d4128c3ccee5cae066d0edd85d8fb8715f6d9",
+    "apps/office/coverage/xlsx-part-stream-tests-format.log": "3872d566b9443a9d91fc7fad8f071b6e4f253af2b94cac034383097659880df1",
+    "apps/office/coverage/xlsx-part-stream-tests.log": "90db4beeb4989e2c00792dfd1534c5ef38a9387e47cc60677012963762e12207",
+    "apps/office/coverage/xlsx-part-stream-tools-final.log": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+    "apps/office/coverage/xlsx-part-stream-tools.log": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+    "apps/office/coverage/xlsx-part-stream-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "apps/office/coverage/xlsx-part-stream-types.log": "77e83c111f7dc4777a8d15244f65b082e77d77f583edd63fd7f4c98d1961f0f2",
+    "apps/office/coverage/xlsx-part-stream-upstream-qa.log": "581d182b99fbac34d6a546b0cf4fe488e92c403c9783d91111e581f1b983f7fd",
+    "apps/office/coverage/xlsx-part-stream-worker.log": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee",
+    "apps/office/coverage/xlsx-part-stream-writer-brief.log": "06f9285edecae9c59f361762d85400015d12062c1c9b2dea2e48f131de668441",
+    "apps/office/coverage/xlsx-part-stream-writer-route-before-evidence.log": "cd5f3d7e172c98c3fdf0c57b7c6c5adf9dfca3b94e538555e37c08f8b456f95e",
+    "apps/office/coverage/xlsx-part-stream/coverage-final.json": "4f04396024dc746b96a4126a5d91ec23a5f3e7efb1bc3fbf086c4dd71407ee0b",
+    "apps/office/coverage/xlsx-part-stream/coverage-summary.json": "b47f9f7741ab89d6e6385643ecc021bb3d1739b77db382d9bc0cf111debdf43c",
+    "apps/office/src/sc/source/filter/excel/xestream.ts": "2067c1e4d92ada27931b603e426066769f9803b8434aa36114f5c61e04a3220e",
+    "apps/office/src/sc/source/filter/excel/xestream.xml.test.ts": "b9dc3a15b835882cebba398afcfe8277c82a0d8970b0cbe7fc2ac0b510452f97",
+    "apps/office/src/sc/source/filter/excel/xestring.ts": "90576c962f507dc9548c61ca9f99c9c3f013a8de4d6f40d3768b74d3ade88c2e",
+    "apps/office/src/sc/source/filter/inc/xestream.ts": "1293acc70c80962d2ecf9614288899c30e0b51106a2dc1f048075827d5f3ab44",
+    "docs/program/registry/calc/provenance/sc/source/filter/excel/xestream.ts.json": "e8d3929d99df95732cb3afe9a91478818a4475cdcee7e5020a3541ddb5b897b9",
+    "docs/program/registry/calc/provenance/sc/source/filter/excel/xestring.ts.json": "9d2b643726ffda322f8260fd1a1154a3601704adfc4050f828f64fc704616c09",
+    "docs/program/registry/calc/provenance/sc/source/filter/inc/xestream.ts.json": "d96fe68d6af4cca3bc130601bfff6d76e4f347192334a1614bbb07e322699e60",
+    "docs/program/registry/calc/runtime/sc/source/filter/excel/xestream.ts.json": "d36afdb9b74441429f515bdf1429680df19f63580e17f8481f27aff9e843ebc5",
+    "docs/program/registry/calc/runtime/sc/source/filter/excel/xestring.ts.json": "9f7e41f32f642563f00b6e3aa1eeb307f3ca3f195816d67ec872dfce5cc1de20",
+    "docs/program/registry/calc/runtime/sc/source/filter/inc/xestream.ts.json": "2054b333ee50e88284eddebe226b84a4d82b20b36c219fd946a153bafe456c3e",
+    "scripts/fixtures/native-xlsx-string-probe.ts": "6850cc2b5452e701d2a34fe874ca047126624b69ff30f5435a9bb1ba32811abe",
+    "scripts/native-dom-worker-probe.mjs": "58f9473c255611849f59f7065478ee722979b1c3607efc6121fd4c520fc0c49d",
+    "vendor/libreoffice-reference/sc/source/filter/excel/xestream.cxx": "a41dc92dea58ee9b12db9a719ee04995f0a6df0624d4262c8c1d6cc852bfca9f",
+    "vendor/libreoffice-reference/sc/source/filter/excel/xestring.cxx": "7744ed450ea125cca3573d7b34727e19e737dc0b84320a7c9c9633f4a370b227",
+    "vendor/libreoffice-reference/sc/source/filter/inc/xestream.hxx": "b858065078a047ca47901509fc3542132888ab3e409a097a2798af8d7a8ffde5"
+  }
+}
