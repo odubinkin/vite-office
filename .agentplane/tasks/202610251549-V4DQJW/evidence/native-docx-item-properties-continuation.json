@@ -1,0 +1,222 @@
+{
+  "checkpoint": "Native Word current-item-set translation and DOCX remaining text properties; not full attribute dispatch, iterator, numbering part, main-text or UI format export",
+  "createdAt": "2026-11-15T11:54:31.365695+00:00",
+  "task": "202610251549-V4DQJW",
+  "sourceBaseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "implemented": [
+    "Original Writer/EditEngine pool translation uses real SfxItemPool/SfxItemSet slot metadata, unsigned16 argument conversion, zero/identity fallback and final native hint bound182. Generic destination-pool tests do not fabricate complete EditEngine ownership.",
+    "Original MSWordExportBase GetItem current-set path reads actual inherited/default items after translation. Alternative native SwWW8AttrIter remains unported and explicitly rejects without an item set; no fake default/iterator provider.",
+    "Original escapement uses actual font-height items and public native style context, signed-short/manual/automatic offsets, binary32 arithmetic, half-away-from-zero rounding and optional font-size has-value semantics, including already-collected0.",
+    "Native fixed pct15/ordinary shading, true Word palette highlights, hidden switch and script hints use real items; original optical-sizing/font-axis callbacks remain deliberate no-ops. Positive inline-heading paragraph-property orchestration remains unbound and unqualified.",
+    "Existing schema order/UTF16 segment helper move unchanged to a same-source run support shard to keep the actual owner under1000lines. Current public helper reexport remains; runtime semantic ownership maps to the actual new defining file.",
+    "Chromium main/DOM-free Worker uses actual node item context for escapement and independently reopens sorted native XML/ZIP."
+  ],
+  "commands": {
+    "coverage": "npm run test:coverage:writer -- src/sw/source/filter/ww8/docxattributeoutput src/sw/source/filter/ww8/docxexport.fonts.test.ts src/sw/source/filter/ww8/writerhelper.test.ts --coverage.include=src/sw/source/filter/ww8/docxattributeoutput.ts --coverage.include=src/sw/source/filter/ww8/docxattributeoutput.run.ts --coverage.include=src/sw/source/filter/ww8/writerhelper.ts --coverage.reportsDirectory=coverage/docx-items-qualified --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+    "browser": "PLAYWRIGHT_BROWSERS_PATH=node_modules/.cache/ms-playwright node scripts/native-dom-worker-probe.mjs"
+  },
+  "results": {
+    "tests": 249,
+    "files": 9,
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 439,
+          "covered": 437,
+          "skipped": 0,
+          "pct": 99.54
+        },
+        "statements": {
+          "total": 481,
+          "covered": 479,
+          "skipped": 0,
+          "pct": 99.58
+        },
+        "functions": {
+          "total": 76,
+          "covered": 76,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 310,
+          "covered": 304,
+          "skipped": 0,
+          "pct": 98.06
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/ww8/docxattributeoutput.run.ts": {
+        "lines": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/ww8/docxattributeoutput.ts": {
+        "lines": {
+          "total": 416,
+          "covered": 414,
+          "skipped": 0,
+          "pct": 99.51
+        },
+        "functions": {
+          "total": 71,
+          "covered": 71,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 455,
+          "covered": 453,
+          "skipped": 0,
+          "pct": 99.56
+        },
+        "branches": {
+          "total": 289,
+          "covered": 283,
+          "skipped": 0,
+          "pct": 97.92
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/ww8/writerhelper.ts": {
+        "lines": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 7,
+          "covered": 7,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "qualification": "All3 measured complete implemented files pass90S/B/F/L. Aggregate99.58S98.06B100F99.54L. Positive inline-heading paragraph-property branch remains unbound; no new exclusion, fake flag/provider, edited counter or threshold waiver.",
+    "browser": "pass actual escapement from native node current set in main/DOM-free Worker, XML/ZIP independently reopened",
+    "quality": "JSDoc5487, provenance2665/semanticViolationCount0, native WhichId113, scoped ESLint/Prettier/tools, source tree/size, Vite/static4bundles, doctor/routing/diff pass"
+  },
+  "sourceQa": "Original tdf127316_autoEscapement and subscript style/size regressions were inspected. Actual24pt/65percent export produces source half-point offsets13/-3 and size31; source expected reload percentages42/-10 are checked algebraically within1. Full ODT/DOCX import/save/reload/layout and whole source QA are not claimed passed. Shading/highlight whole fixtures and caller inheritance/dedup/configuration remain pending.",
+  "verificationFindings": [
+    "Initial new shading test guessed a nonexistent SetShadingValue method. Corrected the test to use genuine SvxBrushItem.PutValue with typed Any/MID_SHADING_VALUE, retaining actual constructor/copy ownership. Raw failed log retained.",
+    "Initial semantic registry still attributed moved impl_WriteRunText to its old defining file despite a public reexport. Corrected the source ownership mapping to the actual run shard; no fake known-violation or checker change. Final semanticViolationCount0.",
+    "Current raw-item invalid proportion cases remain distinct from normal UNO PutValue rejection. No proportional clamp or fallback is added."
+  ],
+  "upstreamIssues": [
+    "WRITER621 documents raw invalid escapement proportions reaching explicit size0 while the UNO property setter rejects them. Preserve original source values and optional0 behavior."
+  ],
+  "remaining": [
+    "Actual generic OutputItem/OutputItemSet/script/character-iterator orchestration, complete numbering part/drawing/version dependencies, main-text/paragraph/style traversal and full DOCX/XLSX filter/storage/model/mounted UI acceptance remain unfinished.",
+    "Same4 SfxDocumentMetaData.storage.ts type errors and comphelper/sax cycle remain; no new changed-file type errors.",
+    "Intentional accumulated source WIP remains. Parent DOING/rework, goal active; no full suite/completed task/source implementation commit claim."
+  ],
+  "sha256": {
+    "apps/office/coverage/docx-items-active.log": "8bce293037d458fb5caa9ea7e20cc799b66caa08b275825e9b7a6b19eecef92e",
+    "apps/office/coverage/docx-items-brief.log": "06f9285edecae9c59f361762d85400015d12062c1c9b2dea2e48f131de668441",
+    "apps/office/coverage/docx-items-build.log": "c09645c762ca857d8bd490d44ac34d3c92f70a056362e27aec2e64689e585c24",
+    "apps/office/coverage/docx-items-coder.log": "16d13a563212bb4cba0b10848a9b96c039c73443d959afc4f1daba2c31aae0eb",
+    "apps/office/coverage/docx-items-config.log": "78b9f751c865f969a4efbddc65c34e9d9ef6bf821d245de10d0da5c1932898b1",
+    "apps/office/coverage/docx-items-coverage-qualified.log": "da9487911e5499ceffac45e0f92534e0c874248612ca089e67e680fe1b05f502",
+    "apps/office/coverage/docx-items-coverage.log": "6040bb812db6f56d69e5fc30056b28eb3186b1ad03f4b4a22e85111eb6c2614c",
+    "apps/office/coverage/docx-items-dependencies.log": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf",
+    "apps/office/coverage/docx-items-diff.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/docx-items-docs.log": "19914618c558da2d18d97d43cd81d4aac08e1ad199e4d175466f523217019361",
+    "apps/office/coverage/docx-items-doctor.log": "0dcdaa056318874d5ee5b96aed1ae4a9f42a46c81fd7313ee4779861696cb1cf",
+    "apps/office/coverage/docx-items-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/docx-items-head.log": "6403203dd5a0867eb14d104ee8a73730bd72dd9ad92e78d996a6dba0a5dcfc01",
+    "apps/office/coverage/docx-items-hintids.log": "513c109068ebf83b3d6fe448c3c44564ec89a64cd9cb64059b5b4b89d11d887a",
+    "apps/office/coverage/docx-items-lint-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/docx-items-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/docx-items-provenance-final.log": "2383bc4ca6462de9ef921684980e6432b3064f32b66bd7d27183f9427858ce9a",
+    "apps/office/coverage/docx-items-provenance.log": "2383bc4ca6462de9ef921684980e6432b3064f32b66bd7d27183f9427858ce9a",
+    "apps/office/coverage/docx-items-qualified/coverage-final.json": "ccd66f57890547fc13efee9857250079a0118f160b0f7953f5e20aa950c73ab6",
+    "apps/office/coverage/docx-items-qualified/coverage-summary.json": "ba504278e45333dd03e4c8573a18d29b7a3c1e626b10f164a544fa9de088eb4a",
+    "apps/office/coverage/docx-items-quickstart.log": "7cd29a19b5c0dc18e7eb324075d21cc2fb44715f3c8dd7b8b52dd5f72d2ed8e0",
+    "apps/office/coverage/docx-items-registry-final.log": "ab95f04823560a9f22db75eafdc173ff205069c6942f4e00477955eb203fba59",
+    "apps/office/coverage/docx-items-registry.log": "eafb01e2e26a9eec7fd5feaa032916a5f3fac975a5c98228cb04c33981cad70b",
+    "apps/office/coverage/docx-items-role.log": "a8899afb593e5ec4f4153783ccfd0fd94cfaaf0513376e0f1d0aeefb1e0da9b2",
+    "apps/office/coverage/docx-items-route-before-evidence.log": "cd5f3d7e172c98c3fdf0c57b7c6c5adf9dfca3b94e538555e37c08f8b456f95e",
+    "apps/office/coverage/docx-items-route.log": "cd5f3d7e172c98c3fdf0c57b7c6c5adf9dfca3b94e538555e37c08f8b456f95e",
+    "apps/office/coverage/docx-items-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "apps/office/coverage/docx-items-static.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "apps/office/coverage/docx-items-status-final.log": "b31e8eb4bb6ed0ab7271fb93dd85f3c0edcd2e11b11ddd4a459046794b2d0162",
+    "apps/office/coverage/docx-items-status.log": "e5f05d37cca65fec723c48da613be7f47aaf60f32303cceb2b4581bd3788349e",
+    "apps/office/coverage/docx-items-tasks.log": "e99986481204fc41cac45662a5db4c2ba32d4c716435621c929abff7679f6f04",
+    "apps/office/coverage/docx-items-tests-corrected.log": "759c29b3ace14df971de2b46880c1b0de0c92de4ab9274133c8368ebe034d22d",
+    "apps/office/coverage/docx-items-text-tests.log": "a4804f1601897b2515b8203030ff65587bba9973e6cb4dbab9c1f52159cb94bc",
+    "apps/office/coverage/docx-items-tools.log": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+    "apps/office/coverage/docx-items-tracked.log": "6861e4bd29d045499a73f4f9744d456695837af0f78d633f873c0142f7a096c5",
+    "apps/office/coverage/docx-items-tree-size.log": "14f7e2c5a7b3efa7040fdce97d0f838e9f965e73985bff24c76725071288adca",
+    "apps/office/coverage/docx-items-types-final.log": "77e83c111f7dc4777a8d15244f65b082e77d77f583edd63fd7f4c98d1961f0f2",
+    "apps/office/coverage/docx-items-types.log": "77e83c111f7dc4777a8d15244f65b082e77d77f583edd63fd7f4c98d1961f0f2",
+    "apps/office/coverage/docx-items-verify.log": "f90886cebc04c7384ae6fc68b6a6f5d9f1210d8461f4712c56c2a615edf35be8",
+    "apps/office/coverage/docx-items-worker.log": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee",
+    "apps/office/coverage/docx-items/coverage-final.json": "374385760f0762918574d203e3f17d61f4b3188e4efc6f2542af5db0dc99b811",
+    "apps/office/coverage/docx-items/coverage-summary.json": "8d267552a47f63022e3cc0e54159397024530529e9d43b75fb314c0f67eeeb3c",
+    "apps/office/src/sw/inc/hintids.ts": "6de3fcc2f1c62756435069f1dbc07c17f45d5943f8de1614209d19b0bc776be7",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.run.ts": "d2ff6dafd17a8b067b08235a991296130ac4ee5c99b3306571772633ce432786",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.text-properties.test.ts": "0836ae9f93b233d3430feb0261a476b12994c665cc3d2489784f8689c0619b8c",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.ts": "3aa857313a910fcf06d74e42d8a8f5b1bd927db51d1cef20b7b3cc3d238c5b26",
+    "apps/office/src/sw/source/filter/ww8/writerhelper.test.ts": "f8dad4cad33ce403f2741aab131d89ab62b5fc3c8e2ed2d42837cf54c6a1b31c",
+    "apps/office/src/sw/source/filter/ww8/writerhelper.ts": "c9089ea74e1f35bca9259e658ec4229106aba739fe66dab6dec29273ea179bfe",
+    "apps/office/src/sw/source/filter/ww8/wrtww8.ts": "f4b0804280b660af17048b3bf141854a92a8309d7917c59c8cad4d899a4e2df0",
+    "docs/program/registry/writer/provenance/sw/inc/hintids.ts.json": "51d754ed9b40e0e96fbbf7a9932be9261684a29ac2f34617e36d3aaef5b957e8",
+    "docs/program/registry/writer/provenance/sw/source/filter/ww8/docxattributeoutput.run.ts.json": "0bd09b492f5ab1ba03c3ec5fb42be0047c5b0da2f333627e9dea121013dc558e",
+    "docs/program/registry/writer/provenance/sw/source/filter/ww8/docxattributeoutput.ts.json": "2388b91a9b7954bff538da1048edb66317ad749668ac93f96d468efb54377710",
+    "docs/program/registry/writer/provenance/sw/source/filter/ww8/writerhelper.ts.json": "86c5e565ef203fc4750a39337eed73260ed2a76f786ce051a700c1c2bc288a9c",
+    "docs/program/registry/writer/provenance/sw/source/filter/ww8/wrtww8.ts.json": "f3fb4441307f187cbae8483aafee9d6fd3bc66804191f40eb6411989d087fff9",
+    "docs/program/registry/writer/runtime/sw/inc/hintids.ts.json": "d5d53d5d40278a9ae78fc16dd2074a67e40db836d1e031137b114ea9f752b984",
+    "docs/program/registry/writer/runtime/sw/source/filter/ww8/docxattributeoutput.run.ts.json": "aaaad50db58157ff157713b94b90fc5a9847044f981d9d3422d6aea848a13302",
+    "docs/program/registry/writer/runtime/sw/source/filter/ww8/docxattributeoutput.ts.json": "25746e04e624d37795873082bfa1528873e6136bd3713bdc219a29137890a296",
+    "docs/program/registry/writer/runtime/sw/source/filter/ww8/writerhelper.ts.json": "8f61e3047ae3722c65111f363e0bf54cada16f1ea90bb16a6b5d9dabac143800",
+    "docs/program/registry/writer/runtime/sw/source/filter/ww8/wrtww8.ts.json": "1272a11916e75be010e762248f64dd7a913b3d8921d395b296acb2e74ee83ec7",
+    "docs/program/writer-upstream-suspected-issues.md": "60173c4282d16ab5074e953a46593282bebd3451e773bf55913f088b1dffa190",
+    "scripts/fixtures/native-writer-paragraph-probe.ts": "2b4b0de3c107ba3b3ae3a9caa837fdde193624f29af2c5498667f60193d674f3",
+    "scripts/native-dom-worker-probe.mjs": "07667635e49c7ed2cdb5f53bbc011390597568e830f059f891708f1d214e54b2",
+    "vendor/libreoffice-reference/sw/inc/hintids.hxx": "c69353d16f8f15575a82843880cc016c6033e2f86e91905f999a0cfec8cf398f",
+    "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/ooxmlexport13.cxx": "1e21e688366773b0518530bf9d70049eaaa7bbfc6297f2e5ea4d69e4fb0c6b3e",
+    "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/ooxmlexport15.cxx": "202e44848176d13aa057a7c18fdc5cb275d2db0fc23721e8d82b124c5001d3a5",
+    "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/ooxmlexport16.cxx": "b502a15dfaa975b01c012a29db2e612718dd08d95b4658dbee313e56ce965f6a",
+    "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx": "7bdef86219701fe25070201039ae9c9775eed64fbe17efd3cd6b552bfe38ff9d",
+    "vendor/libreoffice-reference/sw/source/filter/ww8/writerhelper.cxx": "cc7bae3aff3d73b94fdfff6c14db5b66d3f08de1c822c519db115b038247626e",
+    "vendor/libreoffice-reference/sw/source/filter/ww8/wrtww8.cxx": "088f7af250022546a6c96e82288ecb3da0c9629e88387b6c31c60d57e750023b"
+  }
+}

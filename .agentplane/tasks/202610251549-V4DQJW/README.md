@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 239
+revision: 242
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-15T11:34:55.083Z"
+  updated_at: "2026-11-15T11:54:32.192Z"
   updated_by: "CODER"
-  note: "DOCX numbering dependency continuation:316tests/14files, all3 measured owners pass90S/B/F/L, actual main/DOM-free Worker styleIds/sectionNumbering XML/ZIP pass. Source style IDs/heading slots and numbering mappings are connected. Complete numbering-part, DrawingML/FilterBase, traversal/filter/model/UI remain unfinished. Same4 metadata errors and comphelper/sax cycle persist. Evidence:native-docx-numbering-values-continuation.json."
-  attempts: 66
+  note: "DOCX item/property continuation:249tests/9files, all3 measured owners pass90S/B/F/L, main/DOM-free Worker native item-set escapement/XML/ZIP pass. Original current-set pool translation and remaining text properties are connected. Generic dispatch/iterator/numbering-part/traversal/filter/model/UI remain unfinished. Same4 metadata type errors and comphelper/sax cycle persist. Evidence:native-docx-item-properties-continuation.json."
+  attempts: 67
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1064,8 +1067,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-15T11:54:32.192Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "DOCX item/property continuation:249tests/9files, all3 measured owners pass90S/B/F/L, main/DOM-free Worker native item-set escapement/XML/ZIP pass. Original current-set pool translation and remaining text properties are connected. Generic dispatch/iterator/numbering-part/traversal/filter/model/UI remain unfinished. Same4 metadata type errors and comphelper/sax cycle persist. Evidence:native-docx-item-properties-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-15T11:54:42.026Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-15T11:35:09.793Z"
+doc_updated_at: "2026-11-15T11:54:42.026Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -3036,6 +3052,36 @@ sections:
     Attempts: 66
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T11:34:54.422Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-11-15T11:54:32.192Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: DOCX item/property continuation:249tests/9files, all3 measured owners pass90S/B/F/L, main/DOM-free Worker native item-set escapement/XML/ZIP pass. Original current-set pool translation and remaining text properties are connected. Generic dispatch/iterator/numbering-part/traversal/filter/model/UI remain unfinished. Same4 metadata type errors and comphelper/sax cycle persist. Evidence:native-docx-item-properties-continuation.json.
+    Attempts: 67
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T11:54:31.642Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
 
     Details:
 
@@ -5359,6 +5405,36 @@ Note: DOCX numbering dependency continuation:316tests/14files, all3 measured own
 Attempts: 66
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T11:34:54.422Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-15T11:54:32.192Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: DOCX item/property continuation:249tests/9files, all3 measured owners pass90S/B/F/L, main/DOM-free Worker native item-set escapement/XML/ZIP pass. Original current-set pool translation and remaining text properties are connected. Generic dispatch/iterator/numbering-part/traversal/filter/model/UI remain unfinished. Same4 metadata type errors and comphelper/sax cycle persist. Evidence:native-docx-item-properties-continuation.json.
+Attempts: 67
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T11:54:31.642Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
 
 Details:
 
