@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 505
+revision: 508
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-15T12:51:20.748Z"
+  updated_at: "2026-11-15T13:17:49.381Z"
   updated_by: "CODER"
-  note: "Native ComponentData/medium args and typed defaults: 30 shared tests with all owners above90, corrected50 Calc font cases,5 CSV medium cases and main/Worker pass. Prior font fixture/typecheck claims corrected in evidence/native-medium-data-continuation.json. Four metadata errors, existing cycle and full filter/UI acceptance remain open."
-  attempts: 160
+  note: "OOXML sheet data values/range prerequisites:65 Calc and14 shared cases,12 unchanged native C++ witnesses/UBSan, all measured owners pass90 and final main/Worker probe passes. Source range defects preserved; actual workbook/helper/filter/UI orchestration and four existing metadata type failures remain open. Evidence: native-xlsx-sheet-data-continuation.json."
+  attempts: 161
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2568,8 +2571,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-15T13:17:49.381Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "OOXML sheet data values/range prerequisites:65 Calc and14 shared cases,12 unchanged native C++ witnesses/UBSan, all measured owners pass90 and final main/Worker probe passes. Source range defects preserved; actual workbook/helper/filter/UI orchestration and four existing metadata type failures remain open. Evidence: native-xlsx-sheet-data-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-15T13:18:13.077Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-15T12:51:27.739Z"
+doc_updated_at: "2026-11-15T13:18:13.077Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -7384,6 +7400,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-15T13:17:49.381Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: OOXML sheet data values/range prerequisites:65 Calc and14 shared cases,12 unchanged native C++ witnesses/UBSan, all measured owners pass90 and final main/Worker probe passes. Source range defects preserved; actual workbook/helper/filter/UI orchestration and four existing metadata type failures remain open. Evidence: native-xlsx-sheet-data-continuation.json.
+    Attempts: 161
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T13:17:48.441Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -8049,6 +8095,13 @@ sections:
     - Evidence: Original ComponentData sequence-kind/copy/removal behavior, SfxMedium SetArgs/GetArgs stable const map and stream removal, bool/Unicode extraction use actual native owners. New args preserve existing external read-only browser opening state. No fake storage, descriptor factory, broker/provider or input stream.
     - Correction: The prior Calc pattern-font checkpoint's typecheck summary overlooked8 fixture errors beyond the4 metadata errors; nonexistent relief enum names also weakened2 assertions. Corrected pool narrowing, native parent binding and actual Engraved/Embossed enum values now pass all50 cases afresh. Historical artifact is retained; this checkpoint supersedes those claims.
     - Scope: Native medium constructor/TransformParameters/storage/commit/destructor, URL/stream/security selection and complete DOCX/XLSX package/root/model/filter/UI remain unfinished. No new upstream suspicion, security/network change, full suite, source implementation commit, task completion or goal pause is claimed.
+
+    ### OOXML sheet-data and value-range continuation
+
+    - Command: Focused65 Calc cases/7 files and14 shared cases/1 file with per-owner scoped90;12 unchanged compiled C++ range insertion witnesses/UBSan; actual Chromium main/DOM-free Worker; scoped lint/format, JSDoc5507, tools/resources, Vite/static, provenance2676/full registry, size/tree, doctor/routing/diff. Exact commands, source/log hashes and source QA limits: evidence/native-xlsx-sheet-data-continuation.json.
+    - Result: Bounded prerequisite pass; parents rework. All3 executable value owners naturally100all without edited counters/exclusions. Same4 metadata type errors, old comphelper/sax cycle and earlier independent coverage gaps remain.
+    - Evidence: Actual CellModel/CellFormulaModel/DataTableModel and source row/merge values use original Calc/RTL owners. Original ValueRangeSet adjacency bug is preserved, matching native outputs (WRITER622/CALC686); worksheet-local predicate assumptions remain (CALC687). Dedicated bounded capability records retain false parity/default/verified flags. New browser import caller consumes the actual cell address; it does not parse a workbook.
+    - Scope: Native provided InputStream fastpath means complete UCB URL opening is not a prerequisite for the current browser-file route. Actual workbook/model/WorksheetHelper/style/formula/context/filter integration and full DOCX/XLSX UI acceptance remain unfinished; no replacement root/worksheet/buffer service or full original fixture replay is supplied. No full suite, source implementation commit, task completion or goal pause.
 id_source: "generated"
 ---
 ## Summary
@@ -12873,6 +12926,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-15T13:17:49.381Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: OOXML sheet data values/range prerequisites:65 Calc and14 shared cases,12 unchanged native C++ witnesses/UBSan, all measured owners pass90 and final main/Worker probe passes. Source range defects preserved; actual workbook/helper/filter/UI orchestration and four existing metadata type failures remain open. Evidence: native-xlsx-sheet-data-continuation.json.
+Attempts: 161
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T13:17:48.441Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -13542,3 +13625,10 @@ Final source review also retains original FileStatus::isDirectory (Directory or 
 - Evidence: Original ComponentData sequence-kind/copy/removal behavior, SfxMedium SetArgs/GetArgs stable const map and stream removal, bool/Unicode extraction use actual native owners. New args preserve existing external read-only browser opening state. No fake storage, descriptor factory, broker/provider or input stream.
 - Correction: The prior Calc pattern-font checkpoint's typecheck summary overlooked8 fixture errors beyond the4 metadata errors; nonexistent relief enum names also weakened2 assertions. Corrected pool narrowing, native parent binding and actual Engraved/Embossed enum values now pass all50 cases afresh. Historical artifact is retained; this checkpoint supersedes those claims.
 - Scope: Native medium constructor/TransformParameters/storage/commit/destructor, URL/stream/security selection and complete DOCX/XLSX package/root/model/filter/UI remain unfinished. No new upstream suspicion, security/network change, full suite, source implementation commit, task completion or goal pause is claimed.
+
+### OOXML sheet-data and value-range continuation
+
+- Command: Focused65 Calc cases/7 files and14 shared cases/1 file with per-owner scoped90;12 unchanged compiled C++ range insertion witnesses/UBSan; actual Chromium main/DOM-free Worker; scoped lint/format, JSDoc5507, tools/resources, Vite/static, provenance2676/full registry, size/tree, doctor/routing/diff. Exact commands, source/log hashes and source QA limits: evidence/native-xlsx-sheet-data-continuation.json.
+- Result: Bounded prerequisite pass; parents rework. All3 executable value owners naturally100all without edited counters/exclusions. Same4 metadata type errors, old comphelper/sax cycle and earlier independent coverage gaps remain.
+- Evidence: Actual CellModel/CellFormulaModel/DataTableModel and source row/merge values use original Calc/RTL owners. Original ValueRangeSet adjacency bug is preserved, matching native outputs (WRITER622/CALC686); worksheet-local predicate assumptions remain (CALC687). Dedicated bounded capability records retain false parity/default/verified flags. New browser import caller consumes the actual cell address; it does not parse a workbook.
+- Scope: Native provided InputStream fastpath means complete UCB URL opening is not a prerequisite for the current browser-file route. Actual workbook/model/WorksheetHelper/style/formula/context/filter integration and full DOCX/XLSX UI acceptance remain unfinished; no replacement root/worksheet/buffer service or full original fixture replay is supplied. No full suite, source implementation commit, task completion or goal pause.
