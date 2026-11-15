@@ -701,3 +701,14 @@ Used native browser crypto.randomUUID, already present in Writer/Calc/BrowserFil
 - Upstream:CALC681 documents original reversed-range end-column mutation/hint inconsistency; logic is retained. Bounded sc/qa search and fallback ucalc merge/import tests are recorded; full original editing/CSV undo scenarios are not claimed ported or passed.
 - Quality: scoped ESLint/Prettier/tools, JSDoc5460, provenance2652, semanticViolationCount0, size/tree, standalone Vite/static4bundles, doctor/routing/diff pass. Same4 metadata-storage type errors and comphelper/sax cycle persist.
 - Remaining: full package/storage/Medium/filter/model and mounted DOCX/XLSX UI acceptance, broader owner coverage and unported import services remain unfinished. Parent tasks stay DOING/rework; no full suite, completion or goal pause. Source remains intentional accumulated WIP; task-artifact commits do not claim source commits.
+
+
+## Original XLSX export-string owner and XML conversion
+
+- Command: focused xestring/xestream Calc tests with scoped90 coverage, actual Chromium main/DOM-free Worker text/ZIP probe, scoped lint/format/types and repository structural checks.
+- Result:51tests/2files pass. Raw whole implemented owners pass90S/B/F/L; aggregate100S/98.87B/100F/100L, XclExpString100S/98.42B/100F/100L. No new exclusions, fake font/stream/global providers or injected private counters/state.
+- Evidence: `native-xlsx-string-continuation.json` contains exact commands, per-owner raw coverage and source/log SHA256. Real text values emit whitespace/NUL/Unicode/LF through the actual serializer and native ZIP output and are independently reopened; browser main/DOM-free Worker observations match.
+- Implementation: original Unicode/encoded assignments, actual SAL encoding, clipped append, flags/limits, deep value-copy construction, rich-run values/deduplication/caps, hash/comparisons, memory header/buffer output and actual XclXmlUtils value overloads. Memory writer retains original NoHeader behavior; record-stream Write/PrepareWrite and their flag state remain unported with genuine record/XML/root/font owners. No successful replacement exporter is introduced.
+- Upstream:CALC682 records original mixed-BIFF comparator assumptions; behavior is retained. No direct value-owner tests were found in bounded sc/qa C++ search; full testPreserveTextWhitespaceXLSX and related export QA were inspected but are not claimed passed without genuine workbook save/reload.
+- Quality:JSDoc5466, scoped ESLint/Prettier/tools, provenance2656, semanticViolationCount0, size/tree, standalone Vite/static4bundles, doctor/routing/diff pass. Same4 metadata-storage type errors and comphelper/sax cycle persist.
+- Remaining: record/XML/root/font orchestration, complete XLSX workbook/filter/model and mounted DOCX/XLSX UI acceptance remain unfinished. Source remains intentional accumulated WIP. Parent tasks stay DOING/rework; no full suite, completed task, source-commit claim or goal pause.
