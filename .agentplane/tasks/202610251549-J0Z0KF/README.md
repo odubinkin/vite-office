@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 499
+revision: 502
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-15T12:21:43.019Z"
+  updated_at: "2026-11-15T12:35:40.236Z"
   updated_by: "CODER"
-  note: "Actual XML record/list and palette values: 95 tests, 52 unchanged C++ merge witnesses, per-owner scoped90 and main/Worker XML/ZIP pass. Four existing metadata type errors, dependency cycle and full workbook/filter/UI acceptance remain open. Evidence: native-xlsx-record-palette-continuation.json."
-  attempts: 158
+  note: "Calc original pattern-to-font/null-device and differential font values: 50 tests, both complete owners pass scoped90, real cell-items to font-data/XML/ZIP main/Worker path passes. Four old metadata type errors, old dependency cycle and complete root/font table/workbook/filter/UI acceptance remain. Evidence: native-xlsx-pattern-font-continuation.json."
+  attempts: 159
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2536,8 +2539,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-15T12:35:40.236Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Calc original pattern-to-font/null-device and differential font values: 50 tests, both complete owners pass scoped90, real cell-items to font-data/XML/ZIP main/Worker path passes. Four old metadata type errors, old dependency cycle and complete root/font table/workbook/filter/UI acceptance remain. Evidence: native-xlsx-pattern-font-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-15T12:35:50.592Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-15T12:21:50.986Z"
+doc_updated_at: "2026-11-15T12:35:50.592Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -7292,6 +7308,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-15T12:35:40.236Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Calc original pattern-to-font/null-device and differential font values: 50 tests, both complete owners pass scoped90, real cell-items to font-data/XML/ZIP main/Worker path passes. Four old metadata type errors, old dependency cycle and complete root/font table/workbook/filter/UI acceptance remain. Evidence: native-xlsx-pattern-font-continuation.json.
+    Attempts: 159
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T12:35:39.583Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -7942,6 +7988,13 @@ sections:
     - Result: Bounded prerequisite pass; parent rework. Record owner96.07S/90B/100F/100L; palette values100all. Four existing metadata type errors block npm build/typecheck; old comphelper/sax cycle and earlier independent coverage gaps remain.
     - Evidence: Actual record callbacks/list ownership and genuine Color values execute without fake serializers, root/palette providers, private counter injection or manual JS memory allocation. Source weight wrapping is preserved as CALC685.
     - Scope: XML record/list prerequisites and palette-reduction arithmetic/value classes only. Binary framing, complete root/default palette/palette/font table/rich text/workbook/filter/UI remain unfinished. Goal stays active; no full suite or source implementation commit.
+
+    ### Calc item-to-font extraction continuation
+
+    - Command: Focused50 tests/6 files with the approved scoped90 gate on both complete source owners; actual Chromium main/DOM-free Worker; scoped ESLint/Prettier; JSDoc5495; tools, Vite/static, provenance2670/registry, size/tree, doctor/routing/diff. Exact commands and hashes are in evidence/native-xlsx-pattern-font-continuation.json.
+    - Result: Bounded prerequisite pass; parent rework. Actual patattr owner98.9S/97.51B/98.52F/99.23L; ScDxfFont100all. Same4 metadata type errors block npm build/typecheck and old comphelper/sax cycle remains. Earlier independent coverage gaps are not waived.
+    - Evidence: Original null-device ScPatternAttr::fillFontOnly, script identities and GetDxfFont use actual document/pool/itemset and VCL owners. Seven original testFormats font assertions are replayed at the native property boundary; full imported workbook/layout QA is not claimed. Main/Worker uses real cell font items through XclFontData and XML/ZIP export.
+    - Scope: No fake font/palette/root or private counter injection. Native device maps/metrics, root/default palette/font table/rich strings, package/storage/medium/filter and mounted DOCX/XLSX UI acceptance remain unfinished. Goal stays active, no full suite or source implementation commit.
 id_source: "generated"
 ---
 ## Summary
@@ -12706,6 +12759,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-15T12:35:40.236Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Calc original pattern-to-font/null-device and differential font values: 50 tests, both complete owners pass scoped90, real cell-items to font-data/XML/ZIP main/Worker path passes. Four old metadata type errors, old dependency cycle and complete root/font table/workbook/filter/UI acceptance remain. Evidence: native-xlsx-pattern-font-continuation.json.
+Attempts: 159
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T12:35:39.583Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -13360,3 +13443,10 @@ Final source review also retains original FileStatus::isDirectory (Directory or 
 - Result: Bounded prerequisite pass; parent rework. Record owner96.07S/90B/100F/100L; palette values100all. Four existing metadata type errors block npm build/typecheck; old comphelper/sax cycle and earlier independent coverage gaps remain.
 - Evidence: Actual record callbacks/list ownership and genuine Color values execute without fake serializers, root/palette providers, private counter injection or manual JS memory allocation. Source weight wrapping is preserved as CALC685.
 - Scope: XML record/list prerequisites and palette-reduction arithmetic/value classes only. Binary framing, complete root/default palette/palette/font table/rich text/workbook/filter/UI remain unfinished. Goal stays active; no full suite or source implementation commit.
+
+### Calc item-to-font extraction continuation
+
+- Command: Focused50 tests/6 files with the approved scoped90 gate on both complete source owners; actual Chromium main/DOM-free Worker; scoped ESLint/Prettier; JSDoc5495; tools, Vite/static, provenance2670/registry, size/tree, doctor/routing/diff. Exact commands and hashes are in evidence/native-xlsx-pattern-font-continuation.json.
+- Result: Bounded prerequisite pass; parent rework. Actual patattr owner98.9S/97.51B/98.52F/99.23L; ScDxfFont100all. Same4 metadata type errors block npm build/typecheck and old comphelper/sax cycle remains. Earlier independent coverage gaps are not waived.
+- Evidence: Original null-device ScPatternAttr::fillFontOnly, script identities and GetDxfFont use actual document/pool/itemset and VCL owners. Seven original testFormats font assertions are replayed at the native property boundary; full imported workbook/layout QA is not claimed. Main/Worker uses real cell font items through XclFontData and XML/ZIP export.
+- Scope: No fake font/palette/root or private counter injection. Native device maps/metrics, root/default palette/font table/rich strings, package/storage/medium/filter and mounted DOCX/XLSX UI acceptance remain unfinished. Goal stays active, no full suite or source implementation commit.

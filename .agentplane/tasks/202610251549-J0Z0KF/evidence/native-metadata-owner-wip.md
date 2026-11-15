@@ -755,3 +755,11 @@ Used native browser crypto.randomUUID, already present in Writer/Calc/BrowserFil
 - Result: Bounded prerequisite pass; parent rework. Record owner96.07S/90B/100F/100L; palette values100all. Four existing metadata type errors block npm build/typecheck; old comphelper/sax cycle and earlier independent coverage gaps remain.
 - Evidence: Actual record callbacks/list ownership and genuine Color values execute without fake serializers, root/palette providers, private counter injection or manual JS memory allocation. Source weight wrapping is preserved as CALC685.
 - Scope: XML record/list prerequisites and palette-reduction arithmetic/value classes only. Binary framing, complete root/default palette/palette/font table/rich text/workbook/filter/UI remain unfinished. Goal stays active; no full suite or source implementation commit.
+
+
+### Calc item-to-font extraction continuation
+
+- Command: Focused50 tests/6 files with the approved scoped90 gate on both complete source owners; actual Chromium main/DOM-free Worker; scoped ESLint/Prettier; JSDoc5495; tools, Vite/static, provenance2670/registry, size/tree, doctor/routing/diff. Exact commands and hashes are in evidence/native-xlsx-pattern-font-continuation.json.
+- Result: Bounded prerequisite pass; parent rework. Actual patattr owner98.9S/97.51B/98.52F/99.23L; ScDxfFont100all. Same4 metadata type errors block npm build/typecheck and old comphelper/sax cycle remains. Earlier independent coverage gaps are not waived.
+- Evidence: Original null-device ScPatternAttr::fillFontOnly, script identities and GetDxfFont use actual document/pool/itemset and VCL owners. Seven original testFormats font assertions are replayed at the native property boundary; full imported workbook/layout QA is not claimed. Main/Worker uses real cell font items through XclFontData and XML/ZIP export.
+- Scope: No fake font/palette/root or private counter injection. Native device maps/metrics, root/default palette/font table/rich strings, package/storage/medium/filter and mounted DOCX/XLSX UI acceptance remain unfinished. Goal stays active, no full suite or source implementation commit.
