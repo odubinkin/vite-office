@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 242
+revision: 245
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-15T11:54:32.192Z"
+  updated_at: "2026-11-15T12:51:42.578Z"
   updated_by: "CODER"
-  note: "DOCX item/property continuation:249tests/9files, all3 measured owners pass90S/B/F/L, main/DOM-free Worker native item-set escapement/XML/ZIP pass. Original current-set pool translation and remaining text properties are connected. Generic dispatch/iterator/numbering-part/traversal/filter/model/UI remain unfinished. Same4 metadata type errors and comphelper/sax cycle persist. Evidence:native-docx-item-properties-continuation.json."
-  attempts: 67
+  note: "Shared native medium argument/ComponentData checkpoint: 30 related shared cases, all owners above90, main/DOM-free Worker pass; corrected50 Calc font cases and5 CSV regressions pass. Full DOCX medium/storage/filter/UI remains unfinished, with four old metadata type errors and dependency cycle. Evidence: native-medium-data-continuation.json."
+  attempts: 68
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1080,8 +1083,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-15T12:51:42.578Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared native medium argument/ComponentData checkpoint: 30 related shared cases, all owners above90, main/DOM-free Worker pass; corrected50 Calc font cases and5 CSV regressions pass. Full DOCX medium/storage/filter/UI remains unfinished, with four old metadata type errors and dependency cycle. Evidence: native-medium-data-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-15T12:52:00.281Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-15T11:54:42.026Z"
+doc_updated_at: "2026-11-15T12:52:00.281Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -3104,6 +3120,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-15T12:51:42.578Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared native medium argument/ComponentData checkpoint: 30 related shared cases, all owners above90, main/DOM-free Worker pass; corrected50 Calc font cases and5 CSV regressions pass. Full DOCX medium/storage/filter/UI remains unfinished, with four old metadata type errors and dependency cycle. Evidence: native-medium-data-continuation.json.
+    Attempts: 68
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T12:51:20.129Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -3424,6 +3470,14 @@ sections:
     - Result: bounded prerequisite pass; parent rework. All10 owners independently pass90 without raw-counter changes.4 metadata type errors, existing comphelper/sax cycle and older independent coverage failures remain.
     - Evidence: evidence/native-ucb-command-contract-continuation.json records source/log hashes, actual inherited Any/Sequence/caught-exception/COW assertions, source defaults and original QA limits. Broker factory QA is not claimed before actual registration; no fake provider or factory is created.
     - Scope: core ContentIdentifier, real source-internal CommandProcessorInfo, command constants and complete consumed generated IDL/value/exception contracts. Core/client colonless behavior remains distinct per source; globalTransfer metadata retains the original legacy ArgType. Full broker/provider/configuration/transfer/check-in, native package/storage/model/filter and DOCX/XLSX existing UI acceptance remain unfinished.
+
+    ### Native medium arguments and ComponentData continuation
+
+    - Command: Focused30 shared tests/7 files with per-owner scoped90; corrected Calc50/6 and5 related CSV medium cases; actual Chromium main/DOM-free Worker; scoped lint/format, JSDoc5501, tools/resources, Vite/static, provenance2672/registry, size/tree, doctor/routing/diff. Exact commands and source/log hashes: evidence/native-medium-data-continuation.json.
+    - Result: Bounded prerequisite pass; parents rework. All4 affected shared owners independently exceed90; medium98.61S/96.42B/100F/100L. Earlier medium87.5B profile remains recorded; no coverage counter changes. Same4 metadata types and old comphelper/sax cycle remain.
+    - Evidence: Original ComponentData sequence-kind/copy/removal behavior, SfxMedium SetArgs/GetArgs stable const map and stream removal, bool/Unicode extraction use actual native owners. New args preserve existing external read-only browser opening state. No fake storage, descriptor factory, broker/provider or input stream.
+    - Correction: The prior Calc pattern-font checkpoint's typecheck summary overlooked8 fixture errors beyond the4 metadata errors; nonexistent relief enum names also weakened2 assertions. Corrected pool narrowing, native parent binding and actual Engraved/Embossed enum values now pass all50 cases afresh. Historical artifact is retained; this checkpoint supersedes those claims.
+    - Scope: Native medium constructor/TransformParameters/storage/commit/destructor, URL/stream/security selection and complete DOCX/XLSX package/root/model/filter/UI remain unfinished. No new upstream suspicion, security/network change, full suite, source implementation commit, task completion or goal pause is claimed.
 id_source: "generated"
 ---
 ## Summary
@@ -5457,6 +5511,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-15T12:51:42.578Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared native medium argument/ComponentData checkpoint: 30 related shared cases, all owners above90, main/DOM-free Worker pass; corrected50 Calc font cases and5 CSV regressions pass. Full DOCX medium/storage/filter/UI remains unfinished, with four old metadata type errors and dependency cycle. Evidence: native-medium-data-continuation.json.
+Attempts: 68
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T12:51:20.129Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -5782,3 +5866,11 @@ Final source review also retains original FileStatus::isDirectory (Directory or 
 - Result: bounded prerequisite pass; parent rework. All10 owners independently pass90 without raw-counter changes.4 metadata type errors, existing comphelper/sax cycle and older independent coverage failures remain.
 - Evidence: evidence/native-ucb-command-contract-continuation.json records source/log hashes, actual inherited Any/Sequence/caught-exception/COW assertions, source defaults and original QA limits. Broker factory QA is not claimed before actual registration; no fake provider or factory is created.
 - Scope: core ContentIdentifier, real source-internal CommandProcessorInfo, command constants and complete consumed generated IDL/value/exception contracts. Core/client colonless behavior remains distinct per source; globalTransfer metadata retains the original legacy ArgType. Full broker/provider/configuration/transfer/check-in, native package/storage/model/filter and DOCX/XLSX existing UI acceptance remain unfinished.
+
+### Native medium arguments and ComponentData continuation
+
+- Command: Focused30 shared tests/7 files with per-owner scoped90; corrected Calc50/6 and5 related CSV medium cases; actual Chromium main/DOM-free Worker; scoped lint/format, JSDoc5501, tools/resources, Vite/static, provenance2672/registry, size/tree, doctor/routing/diff. Exact commands and source/log hashes: evidence/native-medium-data-continuation.json.
+- Result: Bounded prerequisite pass; parents rework. All4 affected shared owners independently exceed90; medium98.61S/96.42B/100F/100L. Earlier medium87.5B profile remains recorded; no coverage counter changes. Same4 metadata types and old comphelper/sax cycle remain.
+- Evidence: Original ComponentData sequence-kind/copy/removal behavior, SfxMedium SetArgs/GetArgs stable const map and stream removal, bool/Unicode extraction use actual native owners. New args preserve existing external read-only browser opening state. No fake storage, descriptor factory, broker/provider or input stream.
+- Correction: The prior Calc pattern-font checkpoint's typecheck summary overlooked8 fixture errors beyond the4 metadata errors; nonexistent relief enum names also weakened2 assertions. Corrected pool narrowing, native parent binding and actual Engraved/Embossed enum values now pass all50 cases afresh. Historical artifact is retained; this checkpoint supersedes those claims.
+- Scope: Native medium constructor/TransformParameters/storage/commit/destructor, URL/stream/security selection and complete DOCX/XLSX package/root/model/filter/UI remain unfinished. No new upstream suspicion, security/network change, full suite, source implementation commit, task completion or goal pause is claimed.

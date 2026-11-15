@@ -1,0 +1,365 @@
+{
+  "checkpoint": "Original medium argument retention and descriptor ComponentData/value utilities; actual native medium/storage/filter/UI still unfinished",
+  "createdAt": "2026-11-15T12:51:02.247274+00:00",
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "sourceBaseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "implemented": [
+    "Original MediaDescriptor get/set/clearComponentDataEntry uses real Any, NamedValueCollection and SequenceAsHashMap; preserves NamedValue/PropertyValue sequence type, default named sequence, VOID removal, invalid-kind release behavior, borrowed input and owned output copies.",
+    "Original SfxMedium SetArgs/GetArgs now retains an actual map identity, replaces arguments and removes only Stream/InputStream, leaving OutputStream and other values. The new const-reference view exposes only original const operations, without another map or descriptor representation. Existing browser route/operation/read-only/source state stays unchanged.",
+    "Original SequenceAsHashMap getUnpackedValueOrDefault bool and OUString instantiations use actual Any extraction, initialized temporaries, owned return/default copies and explicit compiler type witnesses. Existing integer instance is preserved.",
+    "Actual main/DOM-free Worker now exercises ComponentData copied through the real medium property sequence, stream-name removal and explicit-false extraction. No native storage constructor, broker/provider or URL/security/password implementation is fabricated.",
+    "Corrected prior Calc font test fixture pool narrowing, true FontRelief.Engraved/Embossed constants and native undefined-parent binding. Fresh current-source50-case coverage and real nonzero relief assertions pass."
+  ],
+  "commands": {
+    "shared": "npm run test:coverage:shared -- src/unotools/source/misc/mediadescriptor.test.ts src/comphelper/source/misc/sequenceashashmap src/comphelper/source/misc/namedvaluecollection.test.ts src/sfx2/source/doc/docfile src/sfx2/source/doc/objsh.test.ts --coverage.include=src/unotools/source/misc/mediadescriptor.ts --coverage.include=src/unotools/inc/mediadescriptor.ts --coverage.include=src/comphelper/source/misc/sequenceashashmap.ts --coverage.include=src/sfx2/source/doc/docfile.ts --coverage.reportsDirectory=coverage/native-medium-data-final --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+    "calcCorrection": "npm run test:coverage:calc -- src/sc/source/core/data/patattr src/sc/source/core/data/edit-item-transfer.test.ts src/sc/source/core/data/cell-style-association.test.ts src/sc/source/core/data/selection-pattern.test.ts src/sc/source/filter/excel/xlstyle.fonts.test.ts --coverage.include=src/sc/source/core/data/patattr.ts --coverage.include=src/sc/inc/fonthelper.ts --coverage.reportsDirectory=coverage/native-medium-data-calc-correction --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+    "calcMedium": "npm run test:calc -- src/sc/source/ui/docshell/docsh.csv-diagnostic.test.ts",
+    "browser": "PLAYWRIGHT_BROWSERS_PATH=node_modules/.cache/ms-playwright node scripts/native-dom-worker-probe.mjs",
+    "build": "npm run build",
+    "typecheck": "npm run typecheck --workspace @vite-office/office",
+    "vite": {
+      "cwd": "apps/office",
+      "command": "npx vite build"
+    },
+    "static": "node scripts/check-static-build.mjs",
+    "lint": "npx eslint apps/office/src/comphelper/source/misc/sequenceashashmap.ts apps/office/src/comphelper/source/misc/sequenceashashmap-values.test.ts apps/office/src/sfx2/source/doc/docfile.ts apps/office/src/sfx2/source/doc/docfile-args.test.ts apps/office/src/unotools/source/misc/mediadescriptor.ts apps/office/src/unotools/source/misc/mediadescriptor.test.ts apps/office/src/unotools/inc/mediadescriptor.ts apps/office/src/sc/source/core/data/patattr.font.test.ts scripts/fixtures/native-medium-data-probe.ts scripts/fixtures/native-ucb-command-probe.ts scripts/native-dom-worker-probe.mjs",
+    "docs": "npm run check:docs",
+    "tools": "npm run typecheck:tools",
+    "size": "npm run check:file-size",
+    "tree": "npm run check:source-tree",
+    "dependencies": "npm run check:dependencies",
+    "provenance": "npm run check:source-provenance",
+    "registry": "npm run inventory:parity:shared",
+    "resources": [
+      "npm run check:writer-resources",
+      "npm run check:calc-resources"
+    ],
+    "doctor": "ap doctor",
+    "routing": "node .agentplane/policy/check-routing.mjs",
+    "diff": "git diff --check"
+  },
+  "results": {
+    "sharedTests": 30,
+    "sharedFiles": 7,
+    "sharedCoverage": {
+      "total": {
+        "lines": {
+          "total": 239,
+          "covered": 239,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 263,
+          "covered": 262,
+          "skipped": 0,
+          "pct": 99.61
+        },
+        "functions": {
+          "total": 51,
+          "covered": 51,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 144,
+          "covered": 142,
+          "skipped": 0,
+          "pct": 98.61
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/comphelper/source/misc/sequenceashashmap.ts": {
+        "lines": {
+          "total": 138,
+          "covered": 138,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 151,
+          "covered": 151,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 70,
+          "covered": 70,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sfx2/source/doc/docfile.ts": {
+        "lines": {
+          "total": 63,
+          "covered": 63,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 21,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 72,
+          "covered": 71,
+          "skipped": 0,
+          "pct": 98.61
+        },
+        "branches": {
+          "total": 56,
+          "covered": 54,
+          "skipped": 0,
+          "pct": 96.42
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/unotools/inc/mediadescriptor.ts": {
+        "lines": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/unotools/source/misc/mediadescriptor.ts": {
+        "lines": {
+          "total": 37,
+          "covered": 37,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 39,
+          "covered": 39,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "correctedCalcTests": 50,
+    "correctedCalcFiles": 6,
+    "correctedCalcCoverage": {
+      "total": {
+        "lines": {
+          "total": 410,
+          "covered": 407,
+          "skipped": 0,
+          "pct": 99.26
+        },
+        "statements": {
+          "total": 473,
+          "covered": 468,
+          "skipped": 0,
+          "pct": 98.94
+        },
+        "functions": {
+          "total": 70,
+          "covered": 69,
+          "skipped": 0,
+          "pct": 98.57
+        },
+        "branches": {
+          "total": 340,
+          "covered": 332,
+          "skipped": 0,
+          "pct": 97.64
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/inc/fonthelper.ts": {
+        "lines": {
+          "total": 16,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 16,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/core/data/patattr.ts": {
+        "lines": {
+          "total": 394,
+          "covered": 391,
+          "skipped": 0,
+          "pct": 99.23
+        },
+        "functions": {
+          "total": 68,
+          "covered": 67,
+          "skipped": 0,
+          "pct": 98.52
+        },
+        "statements": {
+          "total": 457,
+          "covered": 452,
+          "skipped": 0,
+          "pct": 98.9
+        },
+        "branches": {
+          "total": 322,
+          "covered": 314,
+          "skipped": 0,
+          "pct": 97.51
+        }
+      }
+    },
+    "csvMediumTests": 5,
+    "browser": "pass in main realm and DOM-free Worker",
+    "jsdocModules": 5501,
+    "provenanceModules": 2672,
+    "semanticViolations": 0,
+    "viteStatic": "pass"
+  },
+  "sourceQa": "Bounded searches of unotools/qa, sfx2/qa and comphelper/qa C++ found no dedicated ComponentDataEntry/SetArgs/getUnpackedValueOrDefault tests. New critical value/identity/type/copy/removal cases and existing map/NamedValueCollection/medium/shell/CSV regressions execute. Original full medium/filter/package/DOCX/XLSX QA is not claimed.",
+  "supersedes": [
+    "The previous native-xlsx-pattern-font-continuation checkpoint incorrectly described its full typecheck as only the four metadata errors: the complete log also contained8 fixture type errors. Those are now corrected; the new build log confirms exactly the4 original metadata failures. Its relief assertions using nonexistent enum names were weak undefined comparisons; the fresh corrected run asserts actual Engraved2/Embossed1. Historical evidence is retained unchanged."
+  ],
+  "verificationFindings": [
+    "Initial new Unicode template call passed the RTL data address to the existing wrapper-level Any.extract API; one test failed. The actual wrapper is now passed, with all new/shared/current-source checks passing.",
+    "Initial23-case coverage lacked existing shell diagnostics;29-case related profile passed its aggregate gate but the individual medium owner had87.5 branches. A critical native-argument/external-readonly browser-route coexistence regression was added; final30-case complete-owner profile independently passes90 for all4 owners. No counters, maps or exclusions are edited.",
+    "A local probe editing script failed before writing the existing fixture; its initial browser pass therefore did not cover the new observation. The actual fixture/result shape was then corrected and the final browser run verifies the new nested mediumData result.",
+    "Same4 metadata storage type errors block npm build/typecheck. Native input-stream selection and native descriptor constructor/GetOutputStorage/Commit are still absent, not hidden by an import or successful stub. Existing comphelper/sax dependency cycle persists.",
+    "Scoped lint/format/docs/tools/resources/provenance/registry/size/tree, browser, Vite/static, doctor/routing/diff pass. No network, security/authentication/crypto drift, native service stand-in or broad parity promotion."
+  ],
+  "remaining": [
+    "Actual TransformParameters/app pool/filter matcher and native SfxMedium descriptor constructor/storage/commit/transfer/destructor remain unfinished. Arguments can be reset through source SetArgs; no additional GC/finalizer/lifetime system is introduced.",
+    "MediaDescriptor addInputStream URL/POST/locking/security/password and actual UCB broker/provider remain unported; existing security approvals remain constrained to their original MEMFS scope.",
+    "Full native package/storage/root/font-table/workbook/model/filter and mounted DOCX/XLSX import-export UI acceptance remain unfinished. Earlier independent coverage gaps remain.",
+    "Parents/goal stay active/rework; no full-suite run or source implementation commit is claimed."
+  ],
+  "upstreamIssues": [],
+  "sha256": {
+    "apps/office/coverage/native-medium-data-browser-qualified.log": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee",
+    "apps/office/coverage/native-medium-data-browser.log": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee",
+    "apps/office/coverage/native-medium-data-build.log": "3972ead9fc52086372473cd477881a166b7b936654683bf102ce6280ac371cd6",
+    "apps/office/coverage/native-medium-data-calc-correction/coverage-summary.json": "a1754c4c863256753b3fafd34421ced9c1719ab736565125349c4f3d7711271c",
+    "apps/office/coverage/native-medium-data-calc-correction.log": "637797101414fcb9c74c01dced5328b63162120ec834384954c63e29a2c565e2",
+    "apps/office/coverage/native-medium-data-calc-medium.log": "7e78be174458cfc08137b3bedd4c2028e2b74ed96889a0a424a49daa4db00e1e",
+    "apps/office/coverage/native-medium-data-const-format.log": "f4c080d1d249fffdd2506be0f8972366517262d7b71fb807e869912f1eaa3244",
+    "apps/office/coverage/native-medium-data-correction-format.log": "348c40e72e1903b072033b4d9e21f57ed5da00bd403044af324a73b893e33ffd",
+    "apps/office/coverage/native-medium-data-coverage-final.log": "245ced7c90fbdcd523b1483db0ad86b2a027e9a3e80c780f1821894b9bfbb2d1",
+    "apps/office/coverage/native-medium-data-coverage-qualified.log": "8fcc869fc19e7f709f2c1f7d08ceb38ff97ff03bb00f42af1435acfeb669552a",
+    "apps/office/coverage/native-medium-data-coverage.log": "0cc69b6f2235d189af7e25fa279c5d012ea9e99bfb689c0427737a3d3591041d",
+    "apps/office/coverage/native-medium-data-dependencies.log": "58e089319fe14bd88701e8fbe25e7a9292436eb724bbb615ad31ce7ec6dd4e97",
+    "apps/office/coverage/native-medium-data-diff.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/native-medium-data-docs.log": "5ce77ff987cbddd7fa58ab415e08338c0fb988d11643892e0ef871e22273e64e",
+    "apps/office/coverage/native-medium-data-doctor.log": "5811bda917d1acbcf0e151d950c05adb95eef638afa4ed7fbbedd9f71f39c684",
+    "apps/office/coverage/native-medium-data-final/coverage-summary.json": "ae15ae373f7823ac920d9b468b861046f8147f90a954437a043835b5ab134f5f",
+    "apps/office/coverage/native-medium-data-final-format.log": "584a0d18d7da67045f6c5f014032e4bfa731fbe0af91033b7a39049de4fba338",
+    "apps/office/coverage/native-medium-data-final-status.log": "c0c2d03e0c8b0f49ea96db4d0f2ec4ec3f1a232d17be88130efe1a265e9c9b48",
+    "apps/office/coverage/native-medium-data-format-check.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/native-medium-data-format.log": "0d5c855d51d2c15bcd58332913ffd0a6ab73a1b329d564508466105013922ee3",
+    "apps/office/coverage/native-medium-data-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/native-medium-data-probe-format.log": "d6ee325a293c66bcf29f314bc15825ee49c542ab490741b503fbbdaa56145dfb",
+    "apps/office/coverage/native-medium-data-provenance.log": "ec54af128c59a2988d9a02c65914387c5fad840d49ba478f00e964b5296ea049",
+    "apps/office/coverage/native-medium-data-registry.log": "e697517d8056a782a8ea4c25fc7553b61907786156ad9d824e3236efeacfeff3",
+    "apps/office/coverage/native-medium-data-resources.log": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38",
+    "apps/office/coverage/native-medium-data-routing-format.log": "9cb6d1c55d283f9bfda0275054e188c319b7afd02e6951507c4e6189ba5c4b0e",
+    "apps/office/coverage/native-medium-data-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "apps/office/coverage/native-medium-data-size.log": "4aaf89b3b91b6f74c21695decfc1f057bceaa714cabcca7fa63bd61b723b4ef0",
+    "apps/office/coverage/native-medium-data-source-qa.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/native-medium-data-static.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "apps/office/coverage/native-medium-data-tests-final.log": "b050029a083f0aee2b8244c4ac0ae4a61742ffa4a2935a80567e4248b771887e",
+    "apps/office/coverage/native-medium-data-tests-format.log": "b84c51aabd7db94e348e2ef7a18197a98af21003274df448e675898a8c3b9721",
+    "apps/office/coverage/native-medium-data-tests.log": "89653c6131247f9ec0ea2fa276801b0ed5c00c12fdf6f51327777bdef0bf0ee3",
+    "apps/office/coverage/native-medium-data-tools.log": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+    "apps/office/coverage/native-medium-data-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "apps/office/coverage/native-medium-data-types-final.log": "77e83c111f7dc4777a8d15244f65b082e77d77f583edd63fd7f4c98d1961f0f2",
+    "apps/office/coverage/native-medium-data-types.log": "3060a3b6c1c34449e466c06d67ccf6aaf3bb41bdd84dd8bc1625d7eb44de7779",
+    "apps/office/coverage/native-medium-data-vite.log": "dcfe613c957f83427dfc990b79d8b48668957f4f5eccc1a003d59c7493d29463",
+    "apps/office/coverage/native-medium-data-writer-brief.log": "06f9285edecae9c59f361762d85400015d12062c1c9b2dea2e48f131de668441",
+    "apps/office/coverage/native-medium-data-writer-resources.log": "40bdd1c0e5d88208355d2d1d0228a7ae09177d458467c70d44ec9a0211571c4f",
+    "apps/office/coverage/native-medium-data-writer-route.log": "cd5f3d7e172c98c3fdf0c57b7c6c5adf9dfca3b94e538555e37c08f8b456f95e",
+    "apps/office/coverage/native-medium-data-writer-verify-show.log": "f90886cebc04c7384ae6fc68b6a6f5d9f1210d8461f4712c56c2a615edf35be8",
+    "apps/office/src/comphelper/source/misc/sequenceashashmap-values.test.ts": "a9d63a0050219055539e80443dafa253c4dd97fd0d53e14873b967ee935b2cbe",
+    "apps/office/src/comphelper/source/misc/sequenceashashmap.ts": "6af3e265f2f73bc56a930efbdc12e69dd10855a419b6a3b19df68cf671af457c",
+    "apps/office/src/sc/source/core/data/patattr.font.test.ts": "4498629c2354f88ed5ae2a8036cdd063571a74c0acc761ba0f8194eeb6faa30b",
+    "apps/office/src/sfx2/source/doc/docfile-args.test.ts": "3ab601aae42293a1f91e63eebe4c40794dd3b3b878e8e3d5d5e385890113ff7d",
+    "apps/office/src/sfx2/source/doc/docfile.ts": "8cc6fca375c46e530e5b86b6d08e38000a452e7f8afd664ef28c189de2ae5412",
+    "apps/office/src/unotools/inc/mediadescriptor.ts": "78b34a9f0d28f229555d0b84168c3150aa1ab8f942d5b8bd89cd56f762fe85fb",
+    "apps/office/src/unotools/source/misc/mediadescriptor.test.ts": "b9b831b620c4457d76a25e0453cae76ed89631bfc7ab8758334438c01b9ee643",
+    "apps/office/src/unotools/source/misc/mediadescriptor.ts": "52d72e4fc2b0a5df69a671b462a1d5afc25d80cc52dea00c59fe9a46f48bc06c",
+    "docs/program/registry/shared/provenance/comphelper/source/misc/sequenceashashmap.ts.json": "b2688b553e84adb38cb30ebba089a9161ad5daefc2565b2ee0ecbac8a43737a3",
+    "docs/program/registry/shared/provenance/sfx2/source/doc/docfile.ts.json": "cd168fa5947773bc3eca6b5ab6973d9711f73f8ce1cd9f640f7f00e5788aa966",
+    "docs/program/registry/shared/provenance/unotools/inc/mediadescriptor.ts.json": "1b1501ababe3081d7c55c78880d19c2a44afb6a1e320eec627c6382e96a96020",
+    "docs/program/registry/shared/provenance/unotools/source/misc/mediadescriptor.ts.json": "3a9e5a7e1bf856d956c77e4e6d5f23a3b42d84ecac570909f36693796948faa9",
+    "docs/program/registry/shared/runtime/comphelper/source/misc/sequenceashashmap.ts.json": "44e6a17d3918280719ed7827e5d27a1236b99f61c3667e16abaf0c7fff6939df",
+    "docs/program/registry/shared/runtime/sfx2/source/doc/docfile.ts.json": "998345269379c25e10954014ba53b78427a49fe8d5c65c540b92deacab6d6033",
+    "docs/program/registry/shared/runtime/unotools/inc/mediadescriptor.ts.json": "ebaa99c02b6326038154928cc198e16f2e4dbb3c853c1009dacd45566a56ad46",
+    "docs/program/registry/shared/runtime/unotools/source/misc/mediadescriptor.ts.json": "0ca9c57b58faca56a97cd57d29b30c4af4858692229971a807a44192e42b4e26",
+    "scripts/fixtures/native-medium-data-probe.ts": "e3e052dd96385a7bc83a19ed7a4b6192755c60aef5e667ef10db05d1fc0120f2",
+    "scripts/fixtures/native-ucb-command-probe.ts": "4a4aac3a23898faedcd704414c2f9cba642cbb02cd108f0aeec0b51c91b0e367",
+    "scripts/native-dom-worker-probe.mjs": "b9d9e2eaac39677098db77af6a59373611b026877e927f46f491b960543ee1fb",
+    "vendor/libreoffice-reference/include/comphelper/sequenceashashmap.hxx": "d01096889ca1ff575b5d467ee5a6b0057115ee2601d6154ca8e59b6e14b52e02",
+    "vendor/libreoffice-reference/include/unotools/mediadescriptor.hxx": "979b60798deaa00e2915407b12b8c81eebf0f373dc836c55dbbebdd323f58049",
+    "vendor/libreoffice-reference/sfx2/source/doc/docfile.cxx": "7566add8f03a32344ea6f76e924e99b4ac858c05e698830a83db14215ac14cfa",
+    "vendor/libreoffice-reference/unotools/source/misc/mediadescriptor.cxx": "c99027e7682119ce9008454ecaec860c1ef6b720a7a916215331eea6d8bc1e1a"
+  }
+}
