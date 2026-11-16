@@ -1,0 +1,302 @@
+{
+  "checkpoint": "Original OOXML sheet-data value models and signed range values/insertion; not complete worksheet filtering",
+  "createdAt": "2026-11-15T13:17:08.840967+00:00",
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "sourceBaseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "implemented": [
+    "Original CellModel, CellFormulaModel and DataTableModel default/implicit-copy values with actual ScAddress/ScRange/OUString ownership. Array/shared predicates retain source comparisons, defaults and the same-worksheet precondition.",
+    "Original SheetDataBuffer internal XfIdRowRange/MergedRange values retain bidirectional same-style row adjacency and single-row right-neighbor alignment expansion without an extra sheet check. No SheetDataBuffer/WorksheetHelper service or root constructor is fabricated.",
+    "Original ValueRange predicates and ValueRangeSet lower-bound/vector algorithm, including its source adjacency/order defect, match twelve unchanged native C++ witnesses compiled with UBSan. The witness sequence never performs a subsequent lower_bound on an already-unsorted vector; signed-overflow domains are excluded.",
+    "Actual Chromium main/DOM-free Worker core-import caller now passes the original CellModel address to ScDocumentImport; related source row/merge/range values execute. This is not an XLSX worksheet parser or full workbook import."
+  ],
+  "routingDecision": "Source MediaDescriptor::impl_addInputStream accepts an existing InputStream without UCB URL opening. The current intentional browser-file route should progress through a genuine provided stream/ZIP/filter rather than requiring all UCB URL/provider infrastructure first. Real WorkbookGlobals/WorksheetHelper/model/style/formula owners remain required; no replacement caller/global provider is supplied.",
+  "commands": {
+    "calc": "npm run test:coverage:calc -- src/sc/source/filter/oox/sheetdatabuffer.test.ts src/sc/source/filter/oox/addressconverter.test.ts src/sc/source/core/data/documentimport --coverage.include=src/sc/source/filter/oox/sheetdatabuffer.ts --coverage.reportsDirectory=coverage/xlsx-sheet-data-models --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+    "shared": "npm run test:coverage:shared -- src/oox/source/helper/containerhelper.test.ts --coverage.include=src/oox/inc/helper/containerhelper.ts --coverage.include=src/oox/source/helper/containerhelper.ts --coverage.reportsDirectory=coverage/xlsx-sheet-data-ranges --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+    "nativeCompile": "clang++ -std=c++20 -O2 -fsanitize=undefined apps/office/coverage/xlsx-sheet-data-oracle.cpp -o apps/office/coverage/xlsx-sheet-data-oracle",
+    "nativeRun": "apps/office/coverage/xlsx-sheet-data-oracle",
+    "browser": "PLAYWRIGHT_BROWSERS_PATH=node_modules/.cache/ms-playwright node scripts/native-dom-worker-probe.mjs",
+    "build": "npm run build",
+    "typecheck": "npm run typecheck --workspace @vite-office/office",
+    "vite": {
+      "cwd": "apps/office",
+      "command": "npx vite build"
+    },
+    "static": "node scripts/check-static-build.mjs",
+    "docs": "npm run check:docs",
+    "tools": "npm run typecheck:tools",
+    "size": "npm run check:file-size",
+    "tree": "npm run check:source-tree",
+    "dependencies": "npm run check:dependencies",
+    "provenance": "npm run check:source-provenance",
+    "registry": "npm run inventory:parity",
+    "resources": [
+      "npm run check:writer-resources",
+      "npm run check:calc-resources"
+    ],
+    "doctor": "ap doctor",
+    "routing": "node .agentplane/policy/check-routing.mjs",
+    "diff": "git diff --check"
+  },
+  "results": {
+    "calcTests": 65,
+    "calcFiles": 7,
+    "sharedTests": 14,
+    "sharedFiles": 1,
+    "nativeCases": 12,
+    "calcCoverage": {
+      "total": {
+        "lines": {
+          "total": 38,
+          "covered": 38,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 38,
+          "covered": 38,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 55,
+          "covered": 55,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/sc/source/filter/oox/sheetdatabuffer.ts": {
+        "lines": {
+          "total": 38,
+          "covered": 38,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 38,
+          "covered": 38,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 55,
+          "covered": 55,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "sharedCoverage": {
+      "total": {
+        "lines": {
+          "total": 33,
+          "covered": 33,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 34,
+          "covered": 34,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 30,
+          "covered": 30,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/oox/inc/helper/containerhelper.ts": {
+        "lines": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "/Users/odubinkin/Projects/vite-office/apps/office/src/oox/source/helper/containerhelper.ts": {
+        "lines": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 28,
+          "covered": 28,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "browser": "pass in main realm and DOM-free Worker",
+    "nativeUbsan": "pass/no diagnostics",
+    "jsdocModules": 5507,
+    "provenanceModules": 2676,
+    "semanticViolations": 0,
+    "viteStatic": "pass"
+  },
+  "capabilityRecords": [
+    "CAP-51a0ad89-10cd-4c20-9e2e-fcc42760f38d",
+    "CAP-6b87be4e-6c34-408a-ae35-56088721171f"
+  ],
+  "upstreamIssues": [
+    "WRITER622/CALC686: adjacency insertion can invert the source range-set order.",
+    "CALC687: native shared/merged range predicates assume worksheet-local references without extra end/incoming sheet checks."
+  ],
+  "sourceQa": "Bounded source QA searches found no dedicated ValueRangeSet/XfIdRowRange/CellFormulaModel/MergedRange helper tests. All12 compiled native range witnesses and new critical model/predicate/copy cases execute. Capability records name real downstream pivot-cache/shared-formula source QA only as unexecuted context; full original fixture import/export is not claimed.",
+  "verificationFindings": [
+    "Initial browser run failed because an import insertion matched the word import inside a fileoverview comment. The fixture imports and actual alignment token were corrected; final browser/main/Worker probe passes with its new models observation.",
+    "Initial capability templates incorrectly inherited text-string capability IDs. These were replaced by allocated dedicated bounded value capabilities; required local documentation and genuinely related, explicitly unexecuted upstream QA references were added after schema feedback. Final full registry check passes, with all parity/default/verified flags for the new capabilities still false.",
+    "All three executable value owners naturally measure100 in current scoped coverage; no raw counter merging/editing, added exclusion or global threshold mutation. Related ScDocumentImport whole-owner coverage is not measured/promoted by this profile; earlier independent gaps remain.",
+    "Same4 SfxDocumentMetaData.storage type errors block npm build/typecheck, and old comphelper/sax cycle remains. No new source typing errors, security/network change or fake native service is supplied.",
+    "Scoped lint/format/docs/tools/resources/provenance/registry/size/tree, final main/Worker browser, Vite/static, doctor/routing/diff pass."
+  ],
+  "remaining": [
+    "Real workbook/model/WorksheetHelper, complete SheetDataBuffer content/style/formula/finalization orchestration and XML context import remain unfinished.",
+    "Native package/storage/medium/filter integration, complete font/root/export tables and mounted DOCX/XLSX open/download/reopen acceptance remain unfinished.",
+    "Signed-overflow/invalid native partition/physical allocator/iterator/ABI domains and full upstream document QA remain unqualified or unexecuted.",
+    "Parents/goal remain active/rework; no full suite, source implementation commit or task completion is claimed."
+  ],
+  "sha256": {
+    "apps/office/coverage/xlsx-sheet-data-browser-final.log": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee",
+    "apps/office/coverage/xlsx-sheet-data-browser.log": "4578297b3c7bdb64014c0dce3eb4d7e1a7feb0b28e5d4b68eb2294d6dcef8ae9",
+    "apps/office/coverage/xlsx-sheet-data-build.log": "3972ead9fc52086372473cd477881a166b7b936654683bf102ce6280ac371cd6",
+    "apps/office/coverage/xlsx-sheet-data-calc-resources.log": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38",
+    "apps/office/coverage/xlsx-sheet-data-dependencies.log": "58e089319fe14bd88701e8fbe25e7a9292436eb724bbb615ad31ce7ec6dd4e97",
+    "apps/office/coverage/xlsx-sheet-data-diff-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-sheet-data-diff.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-sheet-data-doc-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/xlsx-sheet-data-docs.log": "fadd2182662134849d15ad3f63046b3f6e7eb8679524f6b9b91f1bf10b755678",
+    "apps/office/coverage/xlsx-sheet-data-doctor.log": "4e7b04a8f4f0a93e3e31e14b7e84369de5e19c3d5c1c53ca45dbfb21848bc6ab",
+    "apps/office/coverage/xlsx-sheet-data-final-status.log": "da04b4361da51e34913e6c660b13c0b0f9536409969a2e67c2abecba12bbb7a7",
+    "apps/office/coverage/xlsx-sheet-data-format-check.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/xlsx-sheet-data-format.log": "708f2df7fb1fd4a38eddb8cb6d57424c5dfd0f771c527ceb2846b14ac26c987f",
+    "apps/office/coverage/xlsx-sheet-data-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-sheet-data-model-coverage.log": "7e04ecaadf932212322f029b9a54d06042ff7a0ffd0dedf79a8402c70e430d3d",
+    "apps/office/coverage/xlsx-sheet-data-model-tests.log": "8a6a950b6a1863acc061d24d87d1f1b4984dfb98c5d9cbdf4a7db596ebf3ad43",
+    "apps/office/coverage/xlsx-sheet-data-models/coverage-summary.json": "2d0ac4148a79466efec35c218dd8fb85aa0c6e3347b21707e0f779552ce06576",
+    "apps/office/coverage/xlsx-sheet-data-oracle-compile.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-sheet-data-oracle-meta.json": "ce64d654ea31ef39f9e03f95894a4e0e46f244194aaa94f258bfd6496fec7e4b",
+    "apps/office/coverage/xlsx-sheet-data-oracle-native.json": "ba9b2350f1c349a7187a0b67644d89f098bf5cdbe916a16602d0e2a42839af38",
+    "apps/office/coverage/xlsx-sheet-data-oracle-run.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-sheet-data-oracle.cpp": "9c383bb123f3ab6e3f2d76b084f3e31c224e232c267f253b6e56f2182cb2425c",
+    "apps/office/coverage/xlsx-sheet-data-probe-correction-format.log": "f17646869687dbc481b8502d9c48203e882bb6bcf2c9ebb65b1189e688f4de71",
+    "apps/office/coverage/xlsx-sheet-data-probe-format-final.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/xlsx-sheet-data-probe-format.log": "24a5df95518b309634d57336ec5e3cb8886f6eab07c8fdc7f854ef92d46e71ec",
+    "apps/office/coverage/xlsx-sheet-data-probe-lint-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-sheet-data-provenance.log": "9a232b35b50e03acc361552e31f901e9f6e8ff1bf0281af4e160b680c188db50",
+    "apps/office/coverage/xlsx-sheet-data-ranges/coverage-summary.json": "e67d046f037852451b66e4115c466e10d19e5d595a1499a692a2ddbfa519eab0",
+    "apps/office/coverage/xlsx-sheet-data-ranges-coverage.log": "d0a03f5f3a72c6583429ce99de297554b6ea49dea60db1afdb3e1369ddfa5f21",
+    "apps/office/coverage/xlsx-sheet-data-ranges-tests.log": "45ef23a04c9968bfe5d4d144340bcb50cb8cef581555bebd74077f3e62f1d9c8",
+    "apps/office/coverage/xlsx-sheet-data-registry-complete.log": "179043f6f2721c306a8d56745cbb64e3fd2f28e7a0ac1c061dc07a9950ca9ae1",
+    "apps/office/coverage/xlsx-sheet-data-registry-final.log": "bdd661098018c471b914fcdf4a7fbbcb0f8b0fb7359325bf93c4a3398f73c1af",
+    "apps/office/coverage/xlsx-sheet-data-registry-qualified.log": "fbdd22b2153a17c660d7858e5f854a653e84ff4a4a16bb25d3136018048b4ac1",
+    "apps/office/coverage/xlsx-sheet-data-registry.log": "4591bccd459128a49a3ecb5a0b78039aaf0eaa4757e7477c42fb37b4f81f2ad1",
+    "apps/office/coverage/xlsx-sheet-data-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "apps/office/coverage/xlsx-sheet-data-size.log": "c98b94a628d59fb2ff1ad383bcdfc91bd811ca43de8dadc9a21f52894f5a2ee9",
+    "apps/office/coverage/xlsx-sheet-data-source-qa.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/xlsx-sheet-data-static.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "apps/office/coverage/xlsx-sheet-data-tests-format.log": "9cb3bb7a70fd6b6700080b4d6a44816f400029e01a9ae9dc05deff31328ee290",
+    "apps/office/coverage/xlsx-sheet-data-tools-final.log": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+    "apps/office/coverage/xlsx-sheet-data-tools.log": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+    "apps/office/coverage/xlsx-sheet-data-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "apps/office/coverage/xlsx-sheet-data-types-final.log": "77e83c111f7dc4777a8d15244f65b082e77d77f583edd63fd7f4c98d1961f0f2",
+    "apps/office/coverage/xlsx-sheet-data-types.log": "77e83c111f7dc4777a8d15244f65b082e77d77f583edd63fd7f4c98d1961f0f2",
+    "apps/office/coverage/xlsx-sheet-data-vite.log": "0d849fb8e2c738934495927a9283f693ed34b11979c4bd4eaf7e912c14ad06ba",
+    "apps/office/coverage/xlsx-sheet-data-writer-brief.log": "06f9285edecae9c59f361762d85400015d12062c1c9b2dea2e48f131de668441",
+    "apps/office/coverage/xlsx-sheet-data-writer-resources.log": "a1943ad129e83e2fdffe855827f108d2081fd74326400c434033ed8a2bba109c",
+    "apps/office/coverage/xlsx-sheet-data-writer-route.log": "cd5f3d7e172c98c3fdf0c57b7c6c5adf9dfca3b94e538555e37c08f8b456f95e",
+    "apps/office/coverage/xlsx-sheet-data-writer-verify-show.log": "f90886cebc04c7384ae6fc68b6a6f5d9f1210d8461f4712c56c2a615edf35be8",
+    "apps/office/src/oox/inc/helper/containerhelper.ts": "2eb1e26c4e1bbbfff6c9b770698d7e0468c554856d9ffa081fab51f86be7a9da",
+    "apps/office/src/oox/source/helper/containerhelper.native.json": "1d7232096bd64a9e266f46cac731c56f98d9cf3ba6363d4c90a32ed41527f08f",
+    "apps/office/src/oox/source/helper/containerhelper.test.ts": "42dff4c3430d01779cf0ac28024aed8abefb9df320efb6e8891f537f0bbaea13",
+    "apps/office/src/oox/source/helper/containerhelper.ts": "3daf8de7519aef5549eda1058a20199513674beb4be9fdf900b2faae79868138",
+    "apps/office/src/sc/source/filter/inc/sheetdatabuffer.ts": "7cb298edaff5d9dd8dc6569b1bf0a44aafa57cdf758a2a4422102c20eace73d8",
+    "apps/office/src/sc/source/filter/oox/sheetdatabuffer.test.ts": "93a985e67f04c8ae0424e86e916100356e7ef26e641c4b0ee1ae5dd537c8226a",
+    "apps/office/src/sc/source/filter/oox/sheetdatabuffer.ts": "2b0e55b07d25aaffbe9277542ec409b94ebfd60340b66a782a20377e11963073",
+    "docs/program/calc-oox-sheet-data-values.md": "73976c74f8db511aebe0438af32fd5aee9d41c18f2517309923f8a4d0bcd9534",
+    "docs/program/calc-upstream-suspected-issues.md": "dfb7b967fb2a5070cafbd9bd3548c3552e979ee843ebee4503cd74297aab3132",
+    "docs/program/registry/calc/capabilities/CAP-6b87be4e-6c34-408a-ae35-56088721171f.json": "9880459a584d8d671f1d02c6a1a9fbebbe802d224092d386121b7656e82db762",
+    "docs/program/registry/calc/provenance/sc/source/filter/inc/sheetdatabuffer.ts.json": "eadead360c1a39474eb7466ffe30595826bc894ffbb3f891c435a64b58394d7c",
+    "docs/program/registry/calc/provenance/sc/source/filter/oox/sheetdatabuffer.ts.json": "2d1bb5bf106fbfd8d8d554be479d800a7a87cb9dda375a7acb3cb8abdc6a2847",
+    "docs/program/registry/calc/runtime/sc/source/filter/inc/sheetdatabuffer.ts.json": "069a46320c998d1077812d0c630d7f8efde671f1670f17f0ef91b22774716a8a",
+    "docs/program/registry/calc/runtime/sc/source/filter/oox/sheetdatabuffer.ts.json": "8ff6923454cbbe3bc78b220b0dc6d3a93b9d31e95bc49bd01a801b99387f02ac",
+    "docs/program/registry/shared/capabilities/CAP-51a0ad89-10cd-4c20-9e2e-fcc42760f38d.json": "c2aae3fbdfac89658bed2e7a67a0811fe915a60507059724656577f390281659",
+    "docs/program/registry/shared/provenance/oox/inc/helper/containerhelper.ts.json": "ecc77ae795a11c9aceb5a6e9a8eeed402c95cb18fca6455ffb29a8dfba9ed50c",
+    "docs/program/registry/shared/provenance/oox/source/helper/containerhelper.ts.json": "3666c1facba5b0beba4328ecdaba2e80709468125c019f9b3573250231e6bbfe",
+    "docs/program/registry/shared/runtime/oox/inc/helper/containerhelper.ts.json": "1b2ed9725ac54cb490243e59a337039c733cd750f208153baa94e66ab73b2135",
+    "docs/program/registry/shared/runtime/oox/source/helper/containerhelper.ts.json": "1d405a136da8f66e7428e0fab3b288658da1fee17d2732d3587f574fedc22191",
+    "docs/program/writer-upstream-suspected-issues.md": "8551a47ddc4998de5d0b76ffce45c5ff16ab4073c0544ef267e5ab84522a5090",
+    "scripts/fixtures/native-calc-attributes-probe.ts": "849410eecadf9e8b6d9774fce8d7fb78b2e90331d58b527e270c3f8a7c7fe37a",
+    "scripts/native-dom-worker-probe.mjs": "52949a5d78488b7aa5988ef58fa2ba7f3b7651f03a171eefe6548a252d591f26",
+    "vendor/libreoffice-reference/include/oox/helper/containerhelper.hxx": "7d50a1b33af0d916de5757434b45f8c565068ef75b74caf33fa1d01247abfb46",
+    "vendor/libreoffice-reference/oox/source/helper/containerhelper.cxx": "b3e64eaac863b3b74c955dfb5c1b43d459259ce1095b71b622975dd3941f9e9f",
+    "vendor/libreoffice-reference/sc/source/filter/inc/sheetdatabuffer.hxx": "f1214cc37eec5416abcd9a9b7c8e259ec9ec58a0ab4ed79039ff4279d78704b4",
+    "vendor/libreoffice-reference/sc/source/filter/oox/sheetdatabuffer.cxx": "e4d1780352e7f71561bc3b06eb689bf52bdd329f5a113ca355eb6217affd0814"
+  }
+}

@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 245
+revision: 248
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-15T12:51:42.578Z"
+  updated_at: "2026-11-15T13:18:53.284Z"
   updated_by: "CODER"
-  note: "Shared native medium argument/ComponentData checkpoint: 30 related shared cases, all owners above90, main/DOM-free Worker pass; corrected50 Calc font cases and5 CSV regressions pass. Full DOCX medium/storage/filter/UI remains unfinished, with four old metadata type errors and dependency cycle. Evidence: native-medium-data-continuation.json."
-  attempts: 68
+  note: "Shared OOXML ValueRange/ValueRangeSet checkpoint:14 cases and12 unchanged C++/UBSan witnesses;79 combined related cases and final Chromium main/Worker pass. Source defect WRITER622/CALC686 retained. All measured value owners pass90; complete DOCX/XLSX filters/UI and existing metadata type/dependency failures remain open. Evidence: native-xlsx-sheet-data-continuation.json."
+  attempts: 69
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1096,8 +1099,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-15T13:18:53.284Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared OOXML ValueRange/ValueRangeSet checkpoint:14 cases and12 unchanged C++/UBSan witnesses;79 combined related cases and final Chromium main/Worker pass. Source defect WRITER622/CALC686 retained. All measured value owners pass90; complete DOCX/XLSX filters/UI and existing metadata type/dependency failures remain open. Evidence: native-xlsx-sheet-data-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-15T13:19:19.370Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-15T12:52:00.281Z"
+doc_updated_at: "2026-11-15T13:19:19.370Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -3150,6 +3166,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-15T13:18:53.284Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared OOXML ValueRange/ValueRangeSet checkpoint:14 cases and12 unchanged C++/UBSan witnesses;79 combined related cases and final Chromium main/Worker pass. Source defect WRITER622/CALC686 retained. All measured value owners pass90; complete DOCX/XLSX filters/UI and existing metadata type/dependency failures remain open. Evidence: native-xlsx-sheet-data-continuation.json.
+    Attempts: 69
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T13:17:48.740Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -3478,6 +3524,13 @@ sections:
     - Evidence: Original ComponentData sequence-kind/copy/removal behavior, SfxMedium SetArgs/GetArgs stable const map and stream removal, bool/Unicode extraction use actual native owners. New args preserve existing external read-only browser opening state. No fake storage, descriptor factory, broker/provider or input stream.
     - Correction: The prior Calc pattern-font checkpoint's typecheck summary overlooked8 fixture errors beyond the4 metadata errors; nonexistent relief enum names also weakened2 assertions. Corrected pool narrowing, native parent binding and actual Engraved/Embossed enum values now pass all50 cases afresh. Historical artifact is retained; this checkpoint supersedes those claims.
     - Scope: Native medium constructor/TransformParameters/storage/commit/destructor, URL/stream/security selection and complete DOCX/XLSX package/root/model/filter/UI remain unfinished. No new upstream suspicion, security/network change, full suite, source implementation commit, task completion or goal pause is claimed.
+
+    ### OOXML sheet-data and value-range continuation
+
+    - Command: Focused65 Calc cases/7 files and14 shared cases/1 file with per-owner scoped90;12 unchanged compiled C++ range insertion witnesses/UBSan; actual Chromium main/DOM-free Worker; scoped lint/format, JSDoc5507, tools/resources, Vite/static, provenance2676/full registry, size/tree, doctor/routing/diff. Exact commands, source/log hashes and source QA limits: evidence/native-xlsx-sheet-data-continuation.json.
+    - Result: Bounded prerequisite pass; parents rework. All3 executable value owners naturally100all without edited counters/exclusions. Same4 metadata type errors, old comphelper/sax cycle and earlier independent coverage gaps remain.
+    - Evidence: Actual CellModel/CellFormulaModel/DataTableModel and source row/merge values use original Calc/RTL owners. Original ValueRangeSet adjacency bug is preserved, matching native outputs (WRITER622/CALC686); worksheet-local predicate assumptions remain (CALC687). Dedicated bounded capability records retain false parity/default/verified flags. New browser import caller consumes the actual cell address; it does not parse a workbook.
+    - Scope: Native provided InputStream fastpath means complete UCB URL opening is not a prerequisite for the current browser-file route. Actual workbook/model/WorksheetHelper/style/formula/context/filter integration and full DOCX/XLSX UI acceptance remain unfinished; no replacement root/worksheet/buffer service or full original fixture replay is supplied. No full suite, source implementation commit, task completion or goal pause.
 id_source: "generated"
 ---
 ## Summary
@@ -5541,6 +5594,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-15T13:18:53.284Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared OOXML ValueRange/ValueRangeSet checkpoint:14 cases and12 unchanged C++/UBSan witnesses;79 combined related cases and final Chromium main/Worker pass. Source defect WRITER622/CALC686 retained. All measured value owners pass90; complete DOCX/XLSX filters/UI and existing metadata type/dependency failures remain open. Evidence: native-xlsx-sheet-data-continuation.json.
+Attempts: 69
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-15T13:17:48.740Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -5874,3 +5957,10 @@ Final source review also retains original FileStatus::isDirectory (Directory or 
 - Evidence: Original ComponentData sequence-kind/copy/removal behavior, SfxMedium SetArgs/GetArgs stable const map and stream removal, bool/Unicode extraction use actual native owners. New args preserve existing external read-only browser opening state. No fake storage, descriptor factory, broker/provider or input stream.
 - Correction: The prior Calc pattern-font checkpoint's typecheck summary overlooked8 fixture errors beyond the4 metadata errors; nonexistent relief enum names also weakened2 assertions. Corrected pool narrowing, native parent binding and actual Engraved/Embossed enum values now pass all50 cases afresh. Historical artifact is retained; this checkpoint supersedes those claims.
 - Scope: Native medium constructor/TransformParameters/storage/commit/destructor, URL/stream/security selection and complete DOCX/XLSX package/root/model/filter/UI remain unfinished. No new upstream suspicion, security/network change, full suite, source implementation commit, task completion or goal pause is claimed.
+
+### OOXML sheet-data and value-range continuation
+
+- Command: Focused65 Calc cases/7 files and14 shared cases/1 file with per-owner scoped90;12 unchanged compiled C++ range insertion witnesses/UBSan; actual Chromium main/DOM-free Worker; scoped lint/format, JSDoc5507, tools/resources, Vite/static, provenance2676/full registry, size/tree, doctor/routing/diff. Exact commands, source/log hashes and source QA limits: evidence/native-xlsx-sheet-data-continuation.json.
+- Result: Bounded prerequisite pass; parents rework. All3 executable value owners naturally100all without edited counters/exclusions. Same4 metadata type errors, old comphelper/sax cycle and earlier independent coverage gaps remain.
+- Evidence: Actual CellModel/CellFormulaModel/DataTableModel and source row/merge values use original Calc/RTL owners. Original ValueRangeSet adjacency bug is preserved, matching native outputs (WRITER622/CALC686); worksheet-local predicate assumptions remain (CALC687). Dedicated bounded capability records retain false parity/default/verified flags. New browser import caller consumes the actual cell address; it does not parse a workbook.
+- Scope: Native provided InputStream fastpath means complete UCB URL opening is not a prerequisite for the current browser-file route. Actual workbook/model/WorksheetHelper/style/formula/context/filter integration and full DOCX/XLSX UI acceptance remain unfinished; no replacement root/worksheet/buffer service or full original fixture replay is supplied. No full suite, source implementation commit, task completion or goal pause.
