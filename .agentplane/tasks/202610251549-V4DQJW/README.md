@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 311
+revision: 314
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T17:01:26.335Z"
+  updated_at: "2026-11-18T17:28:52.778Z"
   updated_by: "CODER"
-  note: "Primary ODT now preserves common character styles and direct span precedence through actual browser storage. 554 focused Writer tests, 13 Writer context tests, two shared tests and production Chrome passed; new importer coverage is over 90% for all metrics. Remaining DOCX acceptance stays open. See evidence/docx-primary-odt-character-styles.json."
-  attempts: 90
+  note: "Native DOCX physical page section checkpoint verified by 382 tests and production Chromium. New owner meets scoped 90% coverage. Full DOCX obligations and existing storage typecheck and dependency diagnostics remain."
+  attempts: 91
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1448,8 +1451,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T17:28:52.778Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native DOCX physical page section checkpoint verified by 382 tests and production Chromium. New owner meets scoped 90% coverage. Full DOCX obligations and existing storage typecheck and dependency diagnostics remain."
+  -
+    type: "status"
+    at: "2026-11-18T17:29:03.451Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T17:01:35.083Z"
+doc_updated_at: "2026-11-18T17:29:03.451Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -4162,6 +4178,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T17:28:52.778Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native DOCX physical page section checkpoint verified by 382 tests and production Chromium. New owner meets scoped 90% coverage. Full DOCX obligations and existing storage typecheck and dependency diagnostics remain.
+    Attempts: 91
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T17:28:52.266Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -4674,6 +4720,15 @@ sections:
     - Scope: browser file policy is unchanged. Remaining DOCX page settings, document defaults, linked and latent styles, and complete bookmark/hyperlink acceptance stay open. The prior storage typecheck and dependency diagnostics persist. The full suite is not due.
 
     Evidence: `evidence/docx-primary-odt-character-styles.json`.
+
+    ### Native DOCX physical page sections
+
+    - Command: focused DOCX, mapper, ODT, Writer layout and RTF tests under scoped coverage, Vite production Chromium, and static checks recorded in evidence/docx-native-page-sections.json.
+    - Result: 382 related tests pass. The complete new section output module reaches 97.14% statements, 90% branches, 100% functions and 100% lines. Production Chromium reopened both the document from browser storage and the exported download. The full test suite was deferred on the approved cadence.
+    - Evidence: Native page descriptors emit physical sizes, margins, orientation, parity and the represented direction and numbering start. DOCX import places subsequent native page styles and restarts at the right paragraph. ODT preserves a section restart through primary storage. Selected LibreOffice A3 and landscape geometry assertions run against the original page-size elements in reduced package fixtures.
+    - Scope: Full original A3 and landscape fixtures still require Shape and linked-template handler support. Header/footer content, full content sections, page grid and remaining page style options are open. Existing SfxDocumentMetaData storage type errors and dependency boundary diagnostics remain. WRITER637 records the disabled upstream terminal-section margin assertion.
+
+    Evidence: `evidence/docx-native-page-sections.json`.
 id_source: "generated"
 ---
 ## Summary
@@ -7397,6 +7452,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T17:28:52.778Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native DOCX physical page section checkpoint verified by 382 tests and production Chromium. New owner meets scoped 90% coverage. Full DOCX obligations and existing storage typecheck and dependency diagnostics remain.
+Attempts: 91
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T17:28:52.266Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7914,3 +7999,12 @@ Evidence: `evidence/docx-named-style-roundtrip.json`.
 - Scope: browser file policy is unchanged. Remaining DOCX page settings, document defaults, linked and latent styles, and complete bookmark/hyperlink acceptance stay open. The prior storage typecheck and dependency diagnostics persist. The full suite is not due.
 
 Evidence: `evidence/docx-primary-odt-character-styles.json`.
+
+### Native DOCX physical page sections
+
+- Command: focused DOCX, mapper, ODT, Writer layout and RTF tests under scoped coverage, Vite production Chromium, and static checks recorded in evidence/docx-native-page-sections.json.
+- Result: 382 related tests pass. The complete new section output module reaches 97.14% statements, 90% branches, 100% functions and 100% lines. Production Chromium reopened both the document from browser storage and the exported download. The full test suite was deferred on the approved cadence.
+- Evidence: Native page descriptors emit physical sizes, margins, orientation, parity and the represented direction and numbering start. DOCX import places subsequent native page styles and restarts at the right paragraph. ODT preserves a section restart through primary storage. Selected LibreOffice A3 and landscape geometry assertions run against the original page-size elements in reduced package fixtures.
+- Scope: Full original A3 and landscape fixtures still require Shape and linked-template handler support. Header/footer content, full content sections, page grid and remaining page style options are open. Existing SfxDocumentMetaData storage type errors and dependency boundary diagnostics remain. WRITER637 records the disabled upstream terminal-section margin assertion.
+
+Evidence: `evidence/docx-native-page-sections.json`.
