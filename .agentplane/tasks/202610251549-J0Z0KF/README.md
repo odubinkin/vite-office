@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 511
+revision: 514
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T06:46:43.558Z"
+  updated_at: "2026-11-18T07:01:08.568Z"
   updated_by: "CODER"
-  note: "OOXML filter state checkpoint: 14 focused, 25 shared, 6 Writer, 48 boundary tests and scoped90 pass; Chromium main/Worker pass. Complete model/media/storage/filter/UI and four metadata errors remain. See native-filter-state-continuation.json."
-  attempts: 162
+  note: "Original Calc model XServiceInfo and full service catalog checkpoint: 10 focused Calc, 9 shared and 48 boundary tests pass; real imported document model queried in Chromium main/Worker. Full model/factory/filter/storage/UI and four existing metadata errors remain. See calc-model-services-continuation.json."
+  attempts: 163
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2600,8 +2603,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T07:01:08.568Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original Calc model XServiceInfo and full service catalog checkpoint: 10 focused Calc, 9 shared and 48 boundary tests pass; real imported document model queried in Chromium main/Worker. Full model/factory/filter/storage/UI and four existing metadata errors remain. See calc-model-services-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-18T07:01:21.519Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T06:46:55.622Z"
+doc_updated_at: "2026-11-18T07:01:21.519Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -7476,6 +7492,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T07:01:08.568Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original Calc model XServiceInfo and full service catalog checkpoint: 10 focused Calc, 9 shared and 48 boundary tests pass; real imported document model queried in Chromium main/Worker. Full model/factory/filter/storage/UI and four existing metadata errors remain. See calc-model-services-continuation.json.
+    Attempts: 163
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T07:01:07.707Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -8156,6 +8202,14 @@ sections:
     Evidence: original direction/version/default/reference state and native-mutex exact URL guard; XStatusIndicator now inherits actual XInterface and registers its normal generated type. pako 2.1.0 was already installed and used by actual Deflater reset; focused tests pass, no new network request or codec port.
     Scope: represented FilterBaseImpl state and guard only. Positive full model/factory admission, FilterBase component/helper/media/storage orchestration and mounted DOCX/XLSX UI acceptance remain unfinished. No fake model, factory, progress component or constant filter version getter.
     Result: fail for full typecheck/build (four existing SfxDocumentMetaData.storage errors) and dependency check (existing patattr VCL import boundary and comphelper -> sax -> comphelper cycle). Actual filterbase.cxx std::mutex dependency is recorded in the source-backed oox -> external edge. Earlier dependency log retains the initial new edge failure; final2 removes that failure. Initial lint and registry maturity errors were corrected and final checks pass. No full-suite run due at the approved ten-completed-task cadence.
+
+    ### Calc model service/catalog continuation
+
+    Command: focused Calc scoped90 tests, unchanged compiled native catalog/lookup witness, real Chromium main/DOM-free Worker probe, shared service-helper/filter regressions and boundary/static checks; exact commands and SHA-256 in evidence/calc-model-services-continuation.json.
+    Result: pass for 10 Calc tests/3 files, 9 shared tests/2 files, 48 boundary tests, 2 Writer resource tests. All three newly measured executable owners naturally reach 100%; the approved scoped90 thresholds are unchanged. No counter merging, exclusions or broad parity promotion.
+    Evidence: all 51 provider enum ordinals, 60 modern catalog rows, ten old compatibility rows and nine symbolic service-name constants; original exact modern-first lookup/ordered UNO sequence. Original apitest XServiceInfo assertions run against actual ScModelObj and UNO reference queries. Chromium main/Worker use the actual model referring to the document populated by ScDocumentImport. CALC688 documents the preserved duplicate VBA globals catalog row.
+    Scope: ScModelObj XServiceInfo only, original provider catalog operations and SDK const-reference declaration correction; no MakeInstance, XMultiServiceFactory, complete XModel, formatter aggregation/full type list or full document/filter/storage/UI completion is claimed. The original full ODS-loaded ScModelObj QA suite remains unexecuted; shared apitest assertions are ported and native source witnesses cover only catalog/lookup. Header class export is type-only to avoid an ESM initialization cycle; executable consumers import the real source implementation. Initial cycle/sequence-byte-offset mistakes, a wrong negative fixture, worker catalog-count expectation, local static-class lint and SDK input declaration errors were corrected; raw failed logs are retained.
+    Result: pass for final lint/format/tools/JSDoc (5518 files), provenance (2681 modules), registry (zero semantic violations), resources, size/tree, Vite bundling/static, doctor/routing/diff. Fail for full typecheck/build: same four SfxDocumentMetaData.storage missing native descriptor/medium storage operations. Dependency check retains previous patattr VCL boundary and comphelper -> sax -> comphelper cycle; the actual source-backed sc -> cppuhelper edge is recorded from docuno.cxx includes and Library_sc.mk links, removing only new edge diagnostics. Full DOCX/XLSX import/export/reopen/UI remains required. No full-suite run is due under the ten-completed-task cadence.
 id_source: "generated"
 ---
 ## Summary
@@ -13040,6 +13094,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T07:01:08.568Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original Calc model XServiceInfo and full service catalog checkpoint: 10 focused Calc, 9 shared and 48 boundary tests pass; real imported document model queried in Chromium main/Worker. Full model/factory/filter/storage/UI and four existing metadata errors remain. See calc-model-services-continuation.json.
+Attempts: 163
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T07:01:07.707Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -13724,3 +13808,11 @@ Result: pass for 14 focused, 25 related shared, 6 Writer and 48 boundary tests; 
 Evidence: original direction/version/default/reference state and native-mutex exact URL guard; XStatusIndicator now inherits actual XInterface and registers its normal generated type. pako 2.1.0 was already installed and used by actual Deflater reset; focused tests pass, no new network request or codec port.
 Scope: represented FilterBaseImpl state and guard only. Positive full model/factory admission, FilterBase component/helper/media/storage orchestration and mounted DOCX/XLSX UI acceptance remain unfinished. No fake model, factory, progress component or constant filter version getter.
 Result: fail for full typecheck/build (four existing SfxDocumentMetaData.storage errors) and dependency check (existing patattr VCL import boundary and comphelper -> sax -> comphelper cycle). Actual filterbase.cxx std::mutex dependency is recorded in the source-backed oox -> external edge. Earlier dependency log retains the initial new edge failure; final2 removes that failure. Initial lint and registry maturity errors were corrected and final checks pass. No full-suite run due at the approved ten-completed-task cadence.
+
+### Calc model service/catalog continuation
+
+Command: focused Calc scoped90 tests, unchanged compiled native catalog/lookup witness, real Chromium main/DOM-free Worker probe, shared service-helper/filter regressions and boundary/static checks; exact commands and SHA-256 in evidence/calc-model-services-continuation.json.
+Result: pass for 10 Calc tests/3 files, 9 shared tests/2 files, 48 boundary tests, 2 Writer resource tests. All three newly measured executable owners naturally reach 100%; the approved scoped90 thresholds are unchanged. No counter merging, exclusions or broad parity promotion.
+Evidence: all 51 provider enum ordinals, 60 modern catalog rows, ten old compatibility rows and nine symbolic service-name constants; original exact modern-first lookup/ordered UNO sequence. Original apitest XServiceInfo assertions run against actual ScModelObj and UNO reference queries. Chromium main/Worker use the actual model referring to the document populated by ScDocumentImport. CALC688 documents the preserved duplicate VBA globals catalog row.
+Scope: ScModelObj XServiceInfo only, original provider catalog operations and SDK const-reference declaration correction; no MakeInstance, XMultiServiceFactory, complete XModel, formatter aggregation/full type list or full document/filter/storage/UI completion is claimed. The original full ODS-loaded ScModelObj QA suite remains unexecuted; shared apitest assertions are ported and native source witnesses cover only catalog/lookup. Header class export is type-only to avoid an ESM initialization cycle; executable consumers import the real source implementation. Initial cycle/sequence-byte-offset mistakes, a wrong negative fixture, worker catalog-count expectation, local static-class lint and SDK input declaration errors were corrected; raw failed logs are retained.
+Result: pass for final lint/format/tools/JSDoc (5518 files), provenance (2681 modules), registry (zero semantic violations), resources, size/tree, Vite bundling/static, doctor/routing/diff. Fail for full typecheck/build: same four SfxDocumentMetaData.storage missing native descriptor/medium storage operations. Dependency check retains previous patattr VCL boundary and comphelper -> sax -> comphelper cycle; the actual source-backed sc -> cppuhelper edge is recorded from docuno.cxx includes and Library_sc.mk links, removing only new edge diagnostics. Full DOCX/XLSX import/export/reopen/UI remains required. No full-suite run is due under the ten-completed-task cadence.
