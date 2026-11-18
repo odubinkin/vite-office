@@ -1,0 +1,63 @@
+{
+  "scope": "Native Calc defined names, references and persistence through XLSX, ODS and the existing application file commands",
+  "upstream": [
+    "sc/source/core/tool/rangenam.cxx",
+    "sc/source/core/tool/compiler.cxx",
+    "formula/source/core/api/FormulaCompiler.cxx",
+    "sc/source/filter/oox/defnamesbuffer.cxx",
+    "sc/source/filter/excel/xename.cxx",
+    "sc/source/filter/xml/xmlnexpi.cxx",
+    "sc/qa/unit/subsequent_export_test5.cxx"
+  ],
+  "verification": [
+    {
+      "check": "Focused Calc importer, exporter, document formula, ODS and Worker",
+      "result": "pass",
+      "tests": 61,
+      "suites": 11,
+      "coveragePercent": {
+        "statements": 98.47,
+        "branches": 92.3,
+        "functions": 100,
+        "lines": 99.13
+      },
+      "minimumOwnerBranchCoveragePercent": 90
+    },
+    {
+      "check": "Shared formula compiler and token suites",
+      "result": "pass",
+      "tests": 23,
+      "suites": 4
+    },
+    {
+      "check": "Production build, sequential Chromium and static smoke",
+      "result": "pass",
+      "tests": 2,
+      "evidence": "Pinned XLSX, primary ODS reopen, one scoped name in the actual download, and reopening at 390px. Existing page break UI scenario also passes."
+    },
+    {
+      "check": "Initial Chromium run concurrent with other validation",
+      "result": "fail",
+      "evidence": "Both workbooks displayed, but the dialog dismissal assertions timed out. Both scenarios passed using one worker."
+    },
+    {
+      "check": "JSDoc, size, scoped ESLint/Prettier/diff, Calc resources, source provenance and source tree, inventory registry and routing",
+      "result": "pass"
+    },
+    {
+      "check": "Workspace typecheck",
+      "result": "fail",
+      "evidence": "The same three existing SfxDocumentMetaData.storage.ts errors."
+    },
+    {
+      "check": "Module dependencies",
+      "result": "fail",
+      "evidence": "The existing patattr domain boundary and comphelper/sax cycle."
+    }
+  ],
+  "remaining": [
+    "The built-in print name is serialized once, while application to actual native page setup remains open.",
+    "Formula syntax outside the represented compiler may prevent opening a workbook with such a defined name. External references remain open.",
+    "The full test suite follows the approved cadence. This verification is a checkpoint in the current task."
+  ]
+}
