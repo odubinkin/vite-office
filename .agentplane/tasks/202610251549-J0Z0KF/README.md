@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 569
+revision: 572
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T14:48:44.609Z"
+  updated_at: "2026-11-18T15:25:16.466Z"
   updated_by: "CODER"
-  note: "64 focused tests and all scoped 90% coverage gates passed. Chromium and primary ODS reopened the styled workbook. XLSX number formats, themed colors, dimensions and full working-slice verification remain open."
-  attempts: 181
+  note: "The native XLSX numeric style and primary ODS Worker checkpoint passes 66 tests and 92.15% scoped branch coverage. Chromium confirms XLSX download and formatted browser storage reopen. Localized overrides, extended formats, dimensions, themes and broader feature fidelity remain in scope for task completion."
+  attempts: 182
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2904,8 +2907,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T15:25:16.466Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "The native XLSX numeric style and primary ODS Worker checkpoint passes 66 tests and 92.15% scoped branch coverage. Chromium confirms XLSX download and formatted browser storage reopen. Localized overrides, extended formats, dimensions, themes and broader feature fidelity remain in scope for task completion."
+  -
+    type: "status"
+    at: "2026-11-18T15:25:20.511Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T14:48:58.777Z"
+doc_updated_at: "2026-11-18T15:25:20.511Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -8350,6 +8366,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T15:25:16.466Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: The native XLSX numeric style and primary ODS Worker checkpoint passes 66 tests and 92.15% scoped branch coverage. Chromium confirms XLSX download and formatted browser storage reopen. Localized overrides, extended formats, dimensions, themes and broader feature fidelity remain in scope for task completion.
+    Attempts: 182
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T15:25:10.640Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -9188,6 +9234,16 @@ sections:
     - Number and themed formats, full rich and named styles, dimensions and broader formula fidelity remain open. The full suite is not due.
 
     Evidence: `evidence/xlsx-visual-styles.json`.
+
+    ### Native XLSX number formats and ODS Worker persistence
+
+    - NumberFormatsBuffer and XclExpNumFmtBuffer connect SpreadsheetML format IDs to Calc's native SvNumberFormatter. The pinned tdf81939.xlsx fixture retains all five original escaping expectations, including the fraction and accounting variants, and calculates PI.
+    - Shared xmloff data-style owners serialize and read standard single-section ODF styles. Calc uses the native formatter for grid output. The primary ODS Worker's document graph transfers portable definitions rather than realm-local format keys and also preserves native merge anchors.
+    - Actual Chromium file import, XLSX download, and reopening from browser storage at 390 × 844 preserve percent, date, scientific and custom unit formats. Inspection of the downloaded ZIP verified CRCs, worksheet style references and their format codes.
+    - All 66 focused tests in 11 suites passed. Combined coverage was 96.10% statements, 92.15% branches, 100% functions and 98.85% lines. Scoped ESLint, JSDoc, Vite bundling, source tree, provenance and registry checks passed. Existing metadata type errors and two module-boundary diagnostics remain. The full suite is not due.
+    - Localized built-in overrides, extended and conditional formats, dimensions and theme fidelity remain open.
+
+    Evidence: `evidence/xlsx-native-number-formats.json`.
 id_source: "generated"
 ---
 ## Summary
@@ -14642,6 +14698,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T15:25:16.466Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: The native XLSX numeric style and primary ODS Worker checkpoint passes 66 tests and 92.15% scoped branch coverage. Chromium confirms XLSX download and formatted browser storage reopen. Localized overrides, extended formats, dimensions, themes and broader feature fidelity remain in scope for task completion.
+Attempts: 182
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T15:25:10.640Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -15484,3 +15570,13 @@ Chromium opened the pinned Strict workbook, downloaded it through the existing C
 - Number and themed formats, full rich and named styles, dimensions and broader formula fidelity remain open. The full suite is not due.
 
 Evidence: `evidence/xlsx-visual-styles.json`.
+
+### Native XLSX number formats and ODS Worker persistence
+
+- NumberFormatsBuffer and XclExpNumFmtBuffer connect SpreadsheetML format IDs to Calc's native SvNumberFormatter. The pinned tdf81939.xlsx fixture retains all five original escaping expectations, including the fraction and accounting variants, and calculates PI.
+- Shared xmloff data-style owners serialize and read standard single-section ODF styles. Calc uses the native formatter for grid output. The primary ODS Worker's document graph transfers portable definitions rather than realm-local format keys and also preserves native merge anchors.
+- Actual Chromium file import, XLSX download, and reopening from browser storage at 390 × 844 preserve percent, date, scientific and custom unit formats. Inspection of the downloaded ZIP verified CRCs, worksheet style references and their format codes.
+- All 66 focused tests in 11 suites passed. Combined coverage was 96.10% statements, 92.15% branches, 100% functions and 98.85% lines. Scoped ESLint, JSDoc, Vite bundling, source tree, provenance and registry checks passed. Existing metadata type errors and two module-boundary diagnostics remain. The full suite is not due.
+- Localized built-in overrides, extended and conditional formats, dimensions and theme fidelity remain open.
+
+Evidence: `evidence/xlsx-native-number-formats.json`.

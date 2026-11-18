@@ -1,0 +1,59 @@
+{
+  "scopedCoverageCommand": "vitest run --config vitest.calc.config.ts --coverage src/sc/source/filter/oox/excelfilter.test.ts src/sc/source/filter/xml/ods.test.ts src/sc/source/filter/xml/ods-style-routing.test.ts src/sc/source/filter/xml/ods-sparse-export.test.ts src/sc/source/filter/oox/sheetdatabuffer.test.ts src/sc/browser/presentation/calc-files.test.tsx src/sc/browser/presentation/calc-clear-format.test.tsx src/sc/browser/presentation/calc-formula-pointing.test.tsx src/sc/source/core/tool/token.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-client.test.ts --coverage.include=src/sc/source/filter/oox/numberformatsbuffer.ts --coverage.include=src/sc/source/filter/excel/xestyle.numfmt.ts --coverage.include=src/xmloff/source/style/xmlnumfe.ts --coverage.include=src/xmloff/source/style/xmlnumfi.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=coverage/xlsx-numfmt",
+  "focusedTests": {
+    "files": 11,
+    "passed": 66
+  },
+  "coverage": {
+    "statements": 96.1,
+    "branches": 92.15,
+    "functions": 100,
+    "lines": 98.85,
+    "threshold": 90,
+    "passed": true
+  },
+  "fixture": "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/tdf81939.xlsx",
+  "upstreamTest": "ScFiltersTest::testEscapeCharInNumberFormatXLSX",
+  "witnesses": [
+    "Workbook numFmt and XF relationships resolve to native Calc formatter keys",
+    "The original fixture displays -PI() and emits all five expected Excel escape variants",
+    "German native format converts to Excel decimal and grouping syntax",
+    "Independent standard ODF styles cover currency, time, named months, text, optional digits, scientific notation and positioned text",
+    "Mounted Calc reopens its primary browser document and keeps numeric presentation",
+    "ODS Worker compiles formatter keys in the receiving realm and rebuilds merged ranges from native anchors"
+  ],
+  "chromium": {
+    "workbook": "BrowserNumberFormats",
+    "desktopPickerImport": true,
+    "download": "BrowserNumberFormats.xlsx",
+    "downloadZipCrcAndStyleLinksChecked": true,
+    "mobileBrowserStorageReopenViewport": "390x844",
+    "display": [
+      "12.34%",
+      "1,234.500 kg",
+      "2024-01-01",
+      "1.29E+03"
+    ]
+  },
+  "checks": {
+    "scopedLint": "pass",
+    "format": "pass",
+    "jsdoc": "pass",
+    "viteBundle": "pass",
+    "sourceTree": "pass",
+    "sourceProvenance": "pass",
+    "registry": "pass",
+    "agentplaneDoctor": "pass",
+    "routing": "pass",
+    "gitDiffCheck": "pass",
+    "typecheck": "three existing errors in SfxDocumentMetaData.storage.ts (413, 414, 441)",
+    "moduleBoundaries": "existing patattr browser boundary and comphelper/sax cycle"
+  },
+  "remaining": [
+    "Localized XLSX builtin overrides outside the represented base/en-US table",
+    "Extended and conditional number style mappings",
+    "Theme and indexed colors, dimensions, rich styles and wider Calc formula grammar",
+    "Writer paragraph, list, page and named-style fidelity"
+  ],
+  "fullSuiteRun": false
+}
