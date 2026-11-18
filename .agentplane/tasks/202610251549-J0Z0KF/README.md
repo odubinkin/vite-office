@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 535
+revision: 538
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T11:41:08.767Z"
+  updated_at: "2026-11-18T11:52:38.180Z"
   updated_by: "CODER"
-  note: "MediaDescriptor provided-input and Reference template checkpoint: 34 focused, 12 related and 62 tooling tests pass; main/DOM-free Worker pass. MediaDescriptor owner branch coverage79.54 remains below90; same native Medium blockers now3 type errors and2 existing boundary errors. Full native storage/filter/UI acceptance remains unfinished. Evidence: evidence/native-media-descriptor-stream-continuation.json."
-  attempts: 170
+  note: "Internal OStorage_Impl constructors/catalog checkpoint:11 focused and50 related tests plus main/DOM-free Worker pass. Whole-owner90 fails S75.43/B60.24/F100/L76.38; actual root/package/property and public wrapper/transaction/relationship paths remain incomplete. Same3 Medium type errors/2 boundaries; no full document/UI acceptance. Evidence: evidence/native-storage-impl-continuation.json."
+  attempts: 171
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2728,8 +2731,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T11:52:38.180Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Internal OStorage_Impl constructors/catalog checkpoint:11 focused and50 related tests plus main/DOM-free Worker pass. Whole-owner90 fails S75.43/B60.24/F100/L76.38; actual root/package/property and public wrapper/transaction/relationship paths remain incomplete. Same3 Medium type errors/2 boundaries; no full document/UI acceptance. Evidence: evidence/native-storage-impl-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-18T11:52:44.814Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T11:41:14.004Z"
+doc_updated_at: "2026-11-18T11:52:44.814Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -7844,6 +7860,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T11:52:38.180Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Internal OStorage_Impl constructors/catalog checkpoint:11 focused and50 related tests plus main/DOM-free Worker pass. Whole-owner90 fails S75.43/B60.24/F100/L76.38; actual root/package/property and public wrapper/transaction/relationship paths remain incomplete. Same3 Medium type errors/2 boundaries; no full document/UI acceptance. Evidence: evidence/native-storage-impl-continuation.json.
+    Attempts: 171
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T11:52:37.143Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -8589,6 +8635,14 @@ sections:
     - Evidence: 34 focused tests/5files and12 related tests/4files pass;62 tooling tests/2files pass. Chromium main/DOM-free Worker provided-input/Reference-lifetime/readonly probe passes using repository-local installed browser cache. Whole3owner S92.65/B92.5/F100/L93.12; map and header100, MediaDescriptor S82.2/B79.54/F100/L83.48 remains individually below90. Removed an invalid positive file-Content test assumption because only stream UCP owners exist; no substitute Content/provider supplied. Source input presence behavior preserved as WRITER628/CALC695. Metadata addInputStream namespace call fixed, leaving3 SfxMedium constructor/GetOutputStorage/Commit type errors (4 before checkpoint). Typecheck/full build fail on those3; direct Vite bundling/static pass. Existing patattr VCL gate and comphelper->sax->comphelper cycle persist; new actual sfx2->unotools native source edge is recorded. Tools/lint/format/JSDoc5539/provenance2687/registry semantic0/size/tree/resources/routing/diff/doctor pass. No full document/UI acceptance; previous failed scopes retained; full suite not due; no task completed. Expat approval pending; no download or parser-security mutation.
     - Scope: native map/Any/reference owners and source precedence, existing input identity/cursor, original invalid-source exceptions, declared Reference template copy/extract defaults. Nonempty URL/valid PostData and non-file readonly lookup fail explicitly at missing original orchestration. File-scheme inference/catches remain source-represented but unqualified; no fake provider or test-only mutation added.
     - Pending: actual registered file Content/default command interactions, native descriptor SfxMedium/XStorage/package commit/classic SAX/real filter/model/UI, owner-local90 and prior coverage failures. Existing browser open/save/autosave/no-recovery deviations retained.
+
+    ### Internal storage constructor and package-catalog continuation (2026-11-18)
+
+    - Command: exact focused/related/browser/check commands in `evidence/native-storage-impl-continuation.json`.
+    - Result: fail (partial WIP; whole-owner90 coverage and complete storage/factory/filter/UI acceptance unfinished).
+    - Evidence: 11 focused tests/1file and50 related tests/5files pass; Chromium main/DOM-free Worker actual storage catalog passes. Whole-owner90 gate fails: S75.43/B60.24/F100/L76.38. Native root package/property services and relationships/public wrapper paths remain unqualified; no fake providers/branch exclusions or weakened thresholds. Same3 native SfxMedium type errors and2 module boundary diagnostics persist. Tools/lint/format/JSDoc5542/provenance2688/size/tree/resources/Vite/static/routing/diff pass; registry refreshed with an explicit original internal/public owner responsibility split, final check passes with zero semantic violations. No task complete, full suite not due. Earlier failed scopes and full DOCX/XLSX import-export/UI acceptance remain unfinished. Expat approval pending; no download/parser-security mutation.
+    - Scope: actual OStorage_Impl/SotElement_Impl source state, constructors/mode/defaults, original switch persistence, property sequence copies, URL-only logical closure, genuine folder enumeration, child cache/TRUNCATE/lookup and original package factory argument construction. No XStorage interface, wrapper or package factory success is manufactured. Source WRITER629/CALC696 list-created-on-error behavior is retained.
+    - Pending: public OStorage and weak wrapper lists/InternalDispose, writable stream owners, actual root service/property acquisition, relationships/transactions/encryption, source StorageFactory QA, complete native package/Medium/filter/model/UI and prior coverage failures. No full-suite run due; no task completed.
 id_source: "generated"
 ---
 ## Summary
@@ -13713,6 +13767,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T11:52:38.180Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Internal OStorage_Impl constructors/catalog checkpoint:11 focused and50 related tests plus main/DOM-free Worker pass. Whole-owner90 fails S75.43/B60.24/F100/L76.38; actual root/package/property and public wrapper/transaction/relationship paths remain incomplete. Same3 Medium type errors/2 boundaries; no full document/UI acceptance. Evidence: evidence/native-storage-impl-continuation.json.
+Attempts: 171
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T11:52:37.143Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -14462,3 +14546,11 @@ Next source-backed block: connect ZipPackage.initialize/getZipFileContents and g
 - Evidence: 34 focused tests/5files and12 related tests/4files pass;62 tooling tests/2files pass. Chromium main/DOM-free Worker provided-input/Reference-lifetime/readonly probe passes using repository-local installed browser cache. Whole3owner S92.65/B92.5/F100/L93.12; map and header100, MediaDescriptor S82.2/B79.54/F100/L83.48 remains individually below90. Removed an invalid positive file-Content test assumption because only stream UCP owners exist; no substitute Content/provider supplied. Source input presence behavior preserved as WRITER628/CALC695. Metadata addInputStream namespace call fixed, leaving3 SfxMedium constructor/GetOutputStorage/Commit type errors (4 before checkpoint). Typecheck/full build fail on those3; direct Vite bundling/static pass. Existing patattr VCL gate and comphelper->sax->comphelper cycle persist; new actual sfx2->unotools native source edge is recorded. Tools/lint/format/JSDoc5539/provenance2687/registry semantic0/size/tree/resources/routing/diff/doctor pass. No full document/UI acceptance; previous failed scopes retained; full suite not due; no task completed. Expat approval pending; no download or parser-security mutation.
 - Scope: native map/Any/reference owners and source precedence, existing input identity/cursor, original invalid-source exceptions, declared Reference template copy/extract defaults. Nonempty URL/valid PostData and non-file readonly lookup fail explicitly at missing original orchestration. File-scheme inference/catches remain source-represented but unqualified; no fake provider or test-only mutation added.
 - Pending: actual registered file Content/default command interactions, native descriptor SfxMedium/XStorage/package commit/classic SAX/real filter/model/UI, owner-local90 and prior coverage failures. Existing browser open/save/autosave/no-recovery deviations retained.
+
+### Internal storage constructor and package-catalog continuation (2026-11-18)
+
+- Command: exact focused/related/browser/check commands in `evidence/native-storage-impl-continuation.json`.
+- Result: fail (partial WIP; whole-owner90 coverage and complete storage/factory/filter/UI acceptance unfinished).
+- Evidence: 11 focused tests/1file and50 related tests/5files pass; Chromium main/DOM-free Worker actual storage catalog passes. Whole-owner90 gate fails: S75.43/B60.24/F100/L76.38. Native root package/property services and relationships/public wrapper paths remain unqualified; no fake providers/branch exclusions or weakened thresholds. Same3 native SfxMedium type errors and2 module boundary diagnostics persist. Tools/lint/format/JSDoc5542/provenance2688/size/tree/resources/Vite/static/routing/diff pass; registry refreshed with an explicit original internal/public owner responsibility split, final check passes with zero semantic violations. No task complete, full suite not due. Earlier failed scopes and full DOCX/XLSX import-export/UI acceptance remain unfinished. Expat approval pending; no download/parser-security mutation.
+- Scope: actual OStorage_Impl/SotElement_Impl source state, constructors/mode/defaults, original switch persistence, property sequence copies, URL-only logical closure, genuine folder enumeration, child cache/TRUNCATE/lookup and original package factory argument construction. No XStorage interface, wrapper or package factory success is manufactured. Source WRITER629/CALC696 list-created-on-error behavior is retained.
+- Pending: public OStorage and weak wrapper lists/InternalDispose, writable stream owners, actual root service/property acquisition, relationships/transactions/encryption, source StorageFactory QA, complete native package/Medium/filter/model/UI and prior coverage failures. No full-suite run due; no task completed.
