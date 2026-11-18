@@ -1,0 +1,48 @@
+{
+  "suite": "calc",
+  "format": "XLSX",
+  "tests": "16 related tests in four files pass.",
+  "coverage": "Measured the Excel filter and workbook, worksheet and export records at S89.47/B81.75/F100/L91.51. Scoped90 remains unmet.",
+  "evidence": "Pinned Strict XLSX exercises workbook relationships, shared strings and native formulas. The pinned shared-formula workbook retains relocated editable tokens and recalculates after a cell edit. Actual Calc File dialog downloads and reopens XLSX and persists its browser identity.",
+  "browsers": "Chromium at width390 opened the Strict workbook and downloaded its two-sheet copy. Independently reopened ZIP bytes contained the expected workbook graph and C1+C2 formula. The downloaded copy reopened on Chromium desktop with both sheets.",
+  "residual": "Number and visual styles, merges, charts and broader formula grammar, plus complete storage/service migration remain open.",
+  "paths": [
+    "apps/office/src/sc/source/filter/oox/excelfilter.ts",
+    "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+    "apps/office/src/sc/source/filter/oox/workbookfragment.ts",
+    "apps/office/src/sc/source/filter/oox/worksheetfragment.ts",
+    "apps/office/src/sc/source/filter/excel/xetable.ts",
+    "apps/office/src/sc/source/ui/docshell/docsh.ts",
+    "apps/office/src/sc/browser/presentation/CalcFileDialog.tsx",
+    "apps/office/src/sc/browser/workflows/calc-file-workflows.ts",
+    "apps/office/src/formula/inc/core_resource.ts",
+    "apps/office/src/sc/source/core/tool/compiler.ts",
+    "docs/program/ooxml-file-filters.md"
+  ],
+  "logs": [
+    "xlsx-vertical.log",
+    "xlsx-vertical-coverage.log",
+    "xlsx-playwright-import.log",
+    "xlsx-playwright-download.log",
+    "xlsx-playwright-reopen-import.log"
+  ],
+  "logSha256": {
+    "xlsx-vertical.log": "f97d1cd6f7c971f24310c1adc0440091e973c6f8a08dacf1ac57290f6fab5d25",
+    "xlsx-vertical-coverage.log": "eec9bed533306382b099d5ed0eaa8be9232cfaa6df498c2b8239c34a3b6df0f3",
+    "xlsx-playwright-import.log": "848c7cdb59a0e8096e9c0eca53a74f2334f2c3cc19e967546573ae96ef41c9b2",
+    "xlsx-playwright-download.log": "b3b42b80b9d7faffed4fbc07ae0e75b6861045f86cd8372ef0f8c6cb3c179cdc",
+    "ooxml-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "ooxml-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "ooxml-docs.log": "4734f73cb98f12773b9275c3af058a52c3bb90d2a0f7702f659d67229a25cfb6",
+    "ooxml-provenance.log": "db13249292aa13a6773cf294ff858cc2f752c9539f68aa97a4d637c937a80bc2",
+    "ooxml-registry-check.log": "e4a06de6328f14942801ec03f1c1b847500e442fa7d41f93d0a60794b157e192",
+    "ooxml-formats-types.log": "c2d912329adc965af319b920ac18e7d5588514055446127376ac4f44b94f2106",
+    "ooxml-deps.log": "58e089319fe14bd88701e8fbe25e7a9292436eb724bbb615ad31ce7ec6dd4e97",
+    "ooxml-vite.log": "fca28bcddd3b0debc0f5ac81bbf082dd7ac107a614fbb18dede488c3bd39bbaa",
+    "ooxml-size.log": "46e34a0c6dd572b616aa383aa55f45d9e3652613c1a0a05eb8a4c959dfd1a61d",
+    "ooxml-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "ooxml-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "xlsx-playwright-reopen-import.log": "97d498fffa4a56f785078f0afc210d5ff26150ff089452c086bb94f710c5db64"
+  },
+  "static": "Vite bundle, lint, format, JSDoc, source tree, provenance, registry, routing and diff passed. Typecheck reports the same three SfxMedium errors and the module boundary check reports the previous two diagnostics."
+}

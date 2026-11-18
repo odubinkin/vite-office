@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 559
+revision: 562
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T13:04:42.147Z"
+  updated_at: "2026-11-18T13:41:13.882Z"
   updated_by: "CODER"
-  note: "76 focused tests pass. Original OFOPXML root relationships write and clear through the actual archive. New owner passes scoped90; combined storage coverage and complete XLSX intake/filters/UI remain open."
-  attempts: 178
+  note: "Calc file dialog imports and downloads XLSX using the workbook model and native formula compiler. 16 related tests pass including Strict and shared-formula QA fixtures. Scoped90 and complete style/merge/model fidelity remain open."
+  attempts: 179
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2856,8 +2859,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T13:41:13.882Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Calc file dialog imports and downloads XLSX using the workbook model and native formula compiler. 16 related tests pass including Strict and shared-formula QA fixtures. Scoped90 and complete style/merge/model fidelity remain open."
+  -
+    type: "status"
+    at: "2026-11-18T13:41:38.712Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T13:05:04.606Z"
+doc_updated_at: "2026-11-18T13:41:38.712Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -8212,6 +8228,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T13:41:13.882Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Calc file dialog imports and downloads XLSX using the workbook model and native formula compiler. 16 related tests pass including Strict and shared-formula QA fixtures. Scoped90 and complete style/merge/model fidelity remain open.
+    Attempts: 179
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T13:40:54.530Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -9019,6 +9065,17 @@ sections:
     - Scope: internal root relationship staging and persistence, and existing part relationship catalog changes. Public wrappers, parsed relationships, per-part metadata properties and complete DOCX/XLSX app paths remain open.
 
     Evidence: `evidence/native-storage-relationships.json`.
+
+    ### XLSX application file round trip
+
+    - 16 related tests in four files pass.
+    - Measured the Excel filter and workbook, worksheet and export records at S89.47/B81.75/F100/L91.51. Scoped90 remains unmet.
+    - Pinned Strict XLSX exercises workbook relationships, shared strings and native formulas. The pinned shared-formula workbook retains relocated editable tokens and recalculates after a cell edit. Actual Calc File dialog downloads and reopens XLSX and persists its browser identity.
+    - Chromium at width390 opened the Strict workbook and downloaded its two-sheet copy. Independently reopened ZIP bytes contained the expected workbook graph and C1+C2 formula.
+    - Vite bundle, lint, format, JSDoc, source tree, provenance, registry, routing and diff passed. Typecheck reports the same three SfxMedium errors and the module boundary check reports the previous two diagnostics.
+    - Number and visual styles, merges, charts and broader formula grammar, plus complete storage/service migration remain open.
+
+    Evidence: `evidence/ooxml-file-filter-vertical.json`. The full suite is not due.
 id_source: "generated"
 ---
 ## Summary
@@ -14383,6 +14440,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T13:41:13.882Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Calc file dialog imports and downloads XLSX using the workbook model and native formula compiler. 16 related tests pass including Strict and shared-formula QA fixtures. Scoped90 and complete style/merge/model fidelity remain open.
+Attempts: 179
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T13:40:54.530Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -15194,3 +15281,14 @@ Evidence: `evidence/native-writable-child-commit.json`.
 - Scope: internal root relationship staging and persistence, and existing part relationship catalog changes. Public wrappers, parsed relationships, per-part metadata properties and complete DOCX/XLSX app paths remain open.
 
 Evidence: `evidence/native-storage-relationships.json`.
+
+### XLSX application file round trip
+
+- 16 related tests in four files pass.
+- Measured the Excel filter and workbook, worksheet and export records at S89.47/B81.75/F100/L91.51. Scoped90 remains unmet.
+- Pinned Strict XLSX exercises workbook relationships, shared strings and native formulas. The pinned shared-formula workbook retains relocated editable tokens and recalculates after a cell edit. Actual Calc File dialog downloads and reopens XLSX and persists its browser identity.
+- Chromium at width390 opened the Strict workbook and downloaded its two-sheet copy. Independently reopened ZIP bytes contained the expected workbook graph and C1+C2 formula.
+- Vite bundle, lint, format, JSDoc, source tree, provenance, registry, routing and diff passed. Typecheck reports the same three SfxMedium errors and the module boundary check reports the previous two diagnostics.
+- Number and visual styles, merges, charts and broader formula grammar, plus complete storage/service migration remain open.
+
+Evidence: `evidence/ooxml-file-filter-vertical.json`. The full suite is not due.
