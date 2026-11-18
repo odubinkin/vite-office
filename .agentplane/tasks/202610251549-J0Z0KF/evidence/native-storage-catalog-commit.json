@@ -1,0 +1,33 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "result": "### Storage catalog commit continuation\n\n- Command: focused package/storage coverage, final xstorage.impl tests, related package/facets tests and static gates recorded in evidence/native-storage-catalog-commit.json.\n- Result: 48 focused and 41 related tests passed. The unchanged 90% coverage gate remains unmet (combined S76.66/B61/F93.33/L79.48). Final focused storage retest passed. Three existing SfxMedium compilation failures and two existing boundaries remain.\n- Evidence: real package persisted removals before a rename and reopened the renamed member with its original bytes. Adapted Test06 negative rename cases use genuine package storage. Revert restored the catalog, first substorage commit switched to a new actual package folder, and OFOPXML without relationships emitted actual content types. WRITER631/CALC698 record preserved alias lookup with undefined native destruction excluded.\n- Scope: closed catalog children, first/repeated storage folder commit, and root persistence. Full stream wrapper/relationship synchronization, public storage, native PACKAGE property acquisition and DOCX/XLSX UI acceptance remain open. Full suite not yet due.",
+  "commandEvidence": {
+    "catalog-coverage": "",
+    "catalog-final-tests": "",
+    "catalog-related": "",
+    "catalog-types": "",
+    "catalog-docs": "",
+    "catalog-deps": "",
+    "catalog-size": "",
+    "catalog-registry": ""
+  },
+  "sha256": {
+    "apps/office/src/package/source/xstor/xstorage.catalog.ts": "15c0e783a34c148f637e195512e50520329d54c3f61dcb563b6a6cea77a43d50",
+    "apps/office/src/package/source/xstor/xstorage.impl.ts": "b152586616122a7ce6ae84af2a968cb6f6e47fd18d4b6ab40aa7adaca6ee3201",
+    "apps/office/src/package/source/xstor/xstorage.impl.test.ts": "db5f0fbfddf292b6f5f9151e12644ea84c949a30db3cc532a9fc516f81e9c131",
+    "docs/program/native-storage-catalog-commit.md": "6905673d7a95f4d0301a4c53403c69431dcec8757af32aa1f75516984d319c99",
+    "docs/program/writer-upstream-suspected-issues.md": "86aaa1360e5b33d3be668b92d98395ce9875bb470ec86ce55f29c0f08d17ec3f",
+    "docs/program/calc-upstream-suspected-issues.md": "b082babc268f625fbf4cfd85201b2a28a9aa9003eed638e7f9e509b0b56c2b41",
+    "apps/office/coverage/catalog-coverage.log": "e8867172fb759e1c1e756687b931d131435bac98742d7bf46a996dbb7e2c8f34",
+    "apps/office/coverage/catalog-final-tests.log": "80f11cf04ccd3a6c407415afddd15dd417739316f84a9f1ffe989715ea55a2cb",
+    "apps/office/coverage/catalog-related.log": "b0945c37625f4a16482a97b7913198478c0fe88fb7c9953bb39d1b9ca5d65ef2",
+    "apps/office/coverage/catalog-types.log": "c2d912329adc965af319b920ac18e7d5588514055446127376ac4f44b94f2106",
+    "apps/office/coverage/catalog-docs.log": "cf95a98bc7ef6e1296e3c3ea612a1e689e303277858c04a1c08c8fed7a3343ee",
+    "apps/office/coverage/catalog-deps.log": "58e089319fe14bd88701e8fbe25e7a9292436eb724bbb615ad31ce7ec6dd4e97",
+    "apps/office/coverage/catalog-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/catalog-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/catalog-size.log": "a4a3a4636486a54e727d2729a1984dd65201011e94b9ba5b7713c06af2255064",
+    "apps/office/coverage/catalog-registry.log": "28998bb5338e9e2d7472f29872f7a12d830843c3f382144c98c76342e8cd757a",
+    "apps/office/coverage/catalog-diff.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}
