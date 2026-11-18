@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 332
+revision: 335
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T20:28:05.599Z"
+  updated_at: "2026-11-18T20:46:13.966Z"
   updated_by: "CODER"
-  note: "Native ordinary and seekable readers, catalog and relationship tests pass. Broader owner coverage, public storage and SfxMedium and task-wide DOCX/XLSX acceptance remain open."
-  attempts: 97
+  note: "Native StorageFactory and public OStorage read/nested write checkpoint: 223 related tests, ten production UI regressions, and DOM-free Worker fixture replay passed. Scoped coverage remains below 90%; SfxMedium descriptor/output and UI storage cutover remain pending."
+  attempts: 98
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1560,8 +1563,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T20:46:13.966Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native StorageFactory and public OStorage read/nested write checkpoint: 223 related tests, ten production UI regressions, and DOM-free Worker fixture replay passed. Scoped coverage remains below 90%; SfxMedium descriptor/output and UI storage cutover remain pending."
+  -
+    type: "status"
+    at: "2026-11-18T20:46:17.998Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T20:28:16.275Z"
+doc_updated_at: "2026-11-18T20:46:17.998Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -4484,6 +4500,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-18T20:46:13.966Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native StorageFactory and public OStorage read/nested write checkpoint: 223 related tests, ten production UI regressions, and DOM-free Worker fixture replay passed. Scoped coverage remains below 90%; SfxMedium descriptor/output and UI storage cutover remain pending.
+    Attempts: 98
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T20:46:13.365Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -5048,6 +5094,13 @@ sections:
     - Result: 274 related cases, 52 focused coverage cases, 48 boundary-tooling cases and ten Chromium UI cases passed. Attached ordinary/seekable wrappers and relationship module exceed 90% independently. The catalog, OStorage_Impl and OWriteStream_Impl profiles are below the whole-owner cutoff. Typecheck still identifies the same three missing SfxMedium operations. Parent task-wide acceptance stays open.
     - Evidence: Native ordinary reads own actual XInputStream, XPropertySet and XRelationshipAccess identities. A parent-backed wrapper borrows the original owner, acquires the native mutex, and unregisters on close. Parent release invalidates surviving wrappers. Both cache and TempFileFast paths pass the original 30000-byte boundary, including an entire 32000-byte tail-copy block. Strict DOCX/XLSX returned the same relationship counts and main-part lengths in Chromium main and the DOM-free Worker. The relevant byte/property/relation and missing-read cases from `ofopxmlstorages/TestHelper.java` and `Test06.java` execute over the internal native entrypoint.
     - Scope: Public OStorage, StorageFactory and descriptor-backed SfxMedium remain pending. The browser UI regressions use the current filter entrypoint. WRITER-643/CALC-715 retain the original catalog presence result even when all names are removed. WRITER-644/CALC-716 retain the shared seekable cache cursor. Package uses the source-backed tools dependency from Library_package2. No full test run was due.
+
+    ### Native public OStorage and StorageFactory
+
+    - Command: Focused shared Vitest with scoped coverage, production Chromium Writer/Calc regression cases, and a real native ZipStorage probe in Chromium and a DOM-free Worker. Vite production build and static smoke ran separately from typecheck.
+    - Result: 223 related cases passed, including six on the new factory surface. Ten browser cases passed. The worker and main realm read identical main-part byte lengths from both pinned Strict fixtures. Scoped coverage measured 63.53% statements, 61.03% branches, 55.05% functions and 64.9% lines, below the 90% threshold. Native descriptor construction, GetOutputStorage and Commit on SfxMedium remain missing and typecheck continues to report three errors in SfxDocumentMetaData.storage.ts.
+    - Evidence: Both service names resolve to the same UNO StorageFactory. Real storage reads and nested commits preserve the original public UNO and stream lifecycle, and a nested written part reopens through the same service. ZipPackage hierarchy and its cache retain the same root and traversal behavior after extraction to meet the file-size gate. WRITER-645 and CALC-717 record the source factory's distinct treatment of zero-byte input and an EOCD-only ZIP. See `evidence/native-storage-factory.json`.
+    - Scope: Current UI regression cases use the existing asynchronous adapter. Public root relationships/properties, full storage mutation/copy/clone and SfxMedium integration remain open. Native browser output observes the current decision to disable recovery. No full test run was due.
 id_source: "generated"
 ---
 ## Summary
@@ -7981,6 +8034,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-18T20:46:13.966Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native StorageFactory and public OStorage read/nested write checkpoint: 223 related tests, ten production UI regressions, and DOM-free Worker fixture replay passed. Scoped coverage remains below 90%; SfxMedium descriptor/output and UI storage cutover remain pending.
+Attempts: 98
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T20:46:13.365Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -8550,3 +8633,10 @@ Evidence: `evidence/docx-native-ranged-bookmarks.json`.
 - Result: 274 related cases, 52 focused coverage cases, 48 boundary-tooling cases and ten Chromium UI cases passed. Attached ordinary/seekable wrappers and relationship module exceed 90% independently. The catalog, OStorage_Impl and OWriteStream_Impl profiles are below the whole-owner cutoff. Typecheck still identifies the same three missing SfxMedium operations. Parent task-wide acceptance stays open.
 - Evidence: Native ordinary reads own actual XInputStream, XPropertySet and XRelationshipAccess identities. A parent-backed wrapper borrows the original owner, acquires the native mutex, and unregisters on close. Parent release invalidates surviving wrappers. Both cache and TempFileFast paths pass the original 30000-byte boundary, including an entire 32000-byte tail-copy block. Strict DOCX/XLSX returned the same relationship counts and main-part lengths in Chromium main and the DOM-free Worker. The relevant byte/property/relation and missing-read cases from `ofopxmlstorages/TestHelper.java` and `Test06.java` execute over the internal native entrypoint.
 - Scope: Public OStorage, StorageFactory and descriptor-backed SfxMedium remain pending. The browser UI regressions use the current filter entrypoint. WRITER-643/CALC-715 retain the original catalog presence result even when all names are removed. WRITER-644/CALC-716 retain the shared seekable cache cursor. Package uses the source-backed tools dependency from Library_package2. No full test run was due.
+
+### Native public OStorage and StorageFactory
+
+- Command: Focused shared Vitest with scoped coverage, production Chromium Writer/Calc regression cases, and a real native ZipStorage probe in Chromium and a DOM-free Worker. Vite production build and static smoke ran separately from typecheck.
+- Result: 223 related cases passed, including six on the new factory surface. Ten browser cases passed. The worker and main realm read identical main-part byte lengths from both pinned Strict fixtures. Scoped coverage measured 63.53% statements, 61.03% branches, 55.05% functions and 64.9% lines, below the 90% threshold. Native descriptor construction, GetOutputStorage and Commit on SfxMedium remain missing and typecheck continues to report three errors in SfxDocumentMetaData.storage.ts.
+- Evidence: Both service names resolve to the same UNO StorageFactory. Real storage reads and nested commits preserve the original public UNO and stream lifecycle, and a nested written part reopens through the same service. ZipPackage hierarchy and its cache retain the same root and traversal behavior after extraction to meet the file-size gate. WRITER-645 and CALC-717 record the source factory's distinct treatment of zero-byte input and an EOCD-only ZIP. See `evidence/native-storage-factory.json`.
+- Scope: Current UI regression cases use the existing asynchronous adapter. Public root relationships/properties, full storage mutation/copy/clone and SfxMedium integration remain open. Native browser output observes the current decision to disable recovery. No full test run was due.

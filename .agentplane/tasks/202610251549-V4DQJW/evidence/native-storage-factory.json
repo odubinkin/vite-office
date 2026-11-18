@@ -1,0 +1,178 @@
+{
+  "checkpoint": "Native public OStorage and StorageFactory",
+  "createdAt": "2026-11-18T20:46:08.355560+00:00",
+  "tasks": [
+    "202610251549-V4DQJW",
+    "202610251549-J0Z0KF"
+  ],
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "package/source/xstor/xfactory.cxx",
+    "package/source/xstor/xstorage.cxx",
+    "package/source/xstor/xstor.component",
+    "package/source/zippackage/ZipPackage.cxx",
+    "oox/source/helper/zipstorage.cxx",
+    "cppuhelper/source/servicemanager.cxx"
+  ],
+  "fixtures": {
+    "sw/qa/extras/ooxmlexport/data/strict.docx": "6e71a4d554ea90df1ddcc9b6fbbcc677a94c6617cb35f9e5b7d4ccab46f1a79e",
+    "sc/qa/unit/data/xlsx/universal-content-strict.xlsx": "fbd7591328bdb1b4d3341efcc692d42669b2e6f754babdc2b7b654fe050e2fc5"
+  },
+  "sourceObservations": [
+    "WRITER-645",
+    "CALC-717"
+  ],
+  "commands": {
+    "related": "npm run test:coverage:shared -w @vite-office/office -- xfactory native-storage xstorage servicemanager ZipPackage --coverage.include=src/package/source/xstor/xfactory.ts --coverage.include=src/package/source/xstor/xstorage.ts --coverage.include=src/cppuhelper/source/servicemanager.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/factory-scoped",
+    "worker": "node apps/office/coverage/factory-storage-probe.mjs",
+    "browserDocx": "./node_modules/.bin/playwright test --config apps/office/coverage/docx-links.playwright.config.ts",
+    "browserXlsx": "./node_modules/.bin/playwright test --config apps/office/coverage/xlsx-date-system.playwright.config.ts",
+    "build": "npm exec -w @vite-office/office -- vite build",
+    "staticSmoke": "node scripts/check-static-build.mjs",
+    "typecheck": "npm run typecheck -w @vite-office/office"
+  },
+  "results": {
+    "relatedTestsPassed": 223,
+    "newFactoryTestsPassed": 6,
+    "coveragePercent": {
+      "All files": {
+        "statements": 63.53,
+        "branches": 61.03,
+        "functions": 55.05,
+        "lines": 64.9
+      },
+      "...icemanager.ts": {
+        "statements": 52.38,
+        "branches": 55.26,
+        "functions": 38.7,
+        "lines": 51.42
+      },
+      "xfactory.ts": {
+        "statements": 63.95,
+        "branches": 62.68,
+        "functions": 66.66,
+        "lines": 63.92
+      },
+      "xstorage.ts": {
+        "statements": 67.71,
+        "branches": 61.9,
+        "functions": 62.79,
+        "lines": 70.38
+      }
+    },
+    "coverageGate": "failed; scoped threshold is 90% in each metric",
+    "worker": {
+      "main": {
+        "dom": true,
+        "observations": [
+          [
+            "word",
+            4,
+            5536
+          ],
+          [
+            "xl",
+            4,
+            1208
+          ]
+        ]
+      },
+      "worker": {
+        "dom": false,
+        "observations": [
+          [
+            "word",
+            4,
+            5536
+          ],
+          [
+            "xl",
+            4,
+            1208
+          ]
+        ]
+      }
+    },
+    "writerUiPassed": 5,
+    "calcUiPassed": 5,
+    "typecheck": [
+      "src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(413,36): error TS2345: Argument of type 'Sequence<PropertyValue>' is not assignable to parameter of type 'SfxMediumInput'.",
+      "src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(414,26): error TS2339: Property 'GetOutputStorage' does not exist on type 'SfxMedium'.",
+      "src/sfx2/source/doc/SfxDocumentMetaData.storage.ts(441,27): error TS2339: Property 'Commit' does not exist on type 'SfxMedium'."
+    ]
+  },
+  "remaining": [
+    "The UI uses the existing asynchronous package adapters.",
+    "Public storage relationship/property facets and copy/move/clone paths remain to be connected.",
+    "SfxDocumentMetaData requires descriptor construction, GetOutputStorage and Commit on SfxMedium.",
+    "Synchronous output follows the existing browser decision to disable recovery.",
+    "Unencrypted ZIP paths were tested; encrypted package paths remain outside this checkpoint."
+  ],
+  "files": {
+    "apps/office/src/package/source/xstor/xfactory.ts": "9b57f51999f82b99304bc5dc1447cfd02c2d7ce80e8ef8f6a3f9cd702eb30866",
+    "apps/office/src/package/source/xstor/xfactory.test.ts": "28c613e870fc56727a5434df78de9094083ecaab1bf8b04ecf6509016155b85c",
+    "apps/office/src/package/source/xstor/xstorage.ts": "4d1fb21f9114a95d879f595b0a92b6d0ea3c810b5d318d4f537279eb1a0a1859",
+    "apps/office/src/package/source/xstor/xstorage.impl.ts": "83b16ebecab4ddc852f215e4937f762cc417aab0e48e8fa076519531dd0e88e1",
+    "apps/office/src/package/source/xstor/xstorage.impl.test.ts": "4c5a83c9577503279ac6364ca81053c706e3e341fa4e9c9054683f41c439a37d",
+    "apps/office/src/package/source/xstor/xstorage.catalog.ts": "2df5b3209b66d8b3898b158e3e40ba7eebb16b94c10de465812cc748b19d6f61",
+    "apps/office/src/package/source/zippackage/ZipPackage.ts": "de06ca6e2b3941e74bb371163aa005c7bd2cfa89c34bbebd5a533c37c4d8f78b",
+    "apps/office/src/package/source/zippackage/ZipPackage.hierarchy.ts": "a92217cc1466ed7be3f770eaf89758d733fcfeb6705991d3a262467294b57aaf",
+    "apps/office/src/oox/source/helper/zipstorage.native.ts": "9227e6cc97785b7beb92616c16693ae72fe139da719250f650dfe1d1989d4112",
+    "apps/office/src/cppuhelper/source/servicemanager.ts": "26868fa52cec52a00e40f72557ec80e12dfe174fd2f7f0846ae1640c1b5d1490",
+    "apps/office/src/desktop/browser/app/uno-components.ts": "e5a9e63bddfdaa131cdb3e61cb28b421354bce0c9320a1e4cb9f5869ef9539b6",
+    "docs/program/registry/shared/runtime/package/source/xstor/xfactory.ts.json": "4107d9dd8307bd0ee6faf911920609ae2421a73011e11e3853f8d5c20bf9a74d",
+    "docs/program/registry/shared/provenance/package/source/xstor/xfactory.ts.json": "a52321d8acc0646285f0557b0a26bf63bdd633f157858664449765a301b50b00",
+    "docs/program/registry/shared/runtime/package/source/xstor/xstorage.ts.json": "bf2560fa9bed9c87ba8bdd3e77aff947b19ff1a9524799921bd19b9a64fe39e5",
+    "docs/program/registry/shared/provenance/package/source/xstor/xstorage.ts.json": "ea372f449304287fd581773c2a4b4aa429e9c97ef35857d3f193930a24bce7ed",
+    "docs/program/registry/shared/runtime/package/source/xstor/xstorage.impl.ts.json": "68a2d0985166714b2885888892b6f3b6d80adc3e445cde249a8205f85c2cbfe9",
+    "docs/program/registry/shared/provenance/package/source/xstor/xstorage.impl.ts.json": "063aab1f258fe7e35ffcdfe24ab69c082f1bf82a89b7c25d0b389da9a5d0e205",
+    "docs/program/registry/shared/runtime/package/source/xstor/xstorage.catalog.ts.json": "764ef62a8814006e8b59319a9b53465075b70f4f38411650baaecce1c95f3d01",
+    "docs/program/registry/shared/provenance/package/source/xstor/xstorage.catalog.ts.json": "2c743cf3b9f3c38671506d60acdfa355a52641b17d74bdda7e60a42266e08662",
+    "docs/program/registry/shared/runtime/package/source/zippackage/ZipPackage.ts.json": "52d6cc51a10b3e210131b2cebea9239c4e4839f41fa734c3fcf41df3891304d7",
+    "docs/program/registry/shared/provenance/package/source/zippackage/ZipPackage.ts.json": "b20ec496b249e32b65c1b528ce240549aaaf861c15784c5cc10f11a8af0181ce",
+    "docs/program/registry/shared/runtime/package/source/zippackage/ZipPackage.hierarchy.ts.json": "d59b110f35ca7d1d6c30f74d8bf53ac67f9601043ab43339cac8313de967845c",
+    "docs/program/registry/shared/provenance/package/source/zippackage/ZipPackage.hierarchy.ts.json": "31916d7dd36abcd4dffe21f4a6375228799bb326cc42f2db01ec3facdb95385c",
+    "docs/program/registry/shared/runtime/oox/source/helper/zipstorage.native.ts.json": "46929d3cac04bde2a1a0b4070a2dc910df54647dee6e8a889d97eb120cfc6fbc",
+    "docs/program/registry/shared/provenance/oox/source/helper/zipstorage.native.ts.json": "43a74c4a9b4b40a796cf064d8207b4ea7338cd8ea8781f3f96201a754d7f3dbe",
+    "docs/program/registry/shared/runtime/cppuhelper/source/servicemanager.ts.json": "6e7e02b6d23112d8605dd12c06e80bd5ece53182a13ded2f21590de4107e24f6",
+    "docs/program/registry/shared/provenance/cppuhelper/source/servicemanager.ts.json": "76ee27b43c6253496055db2fca4510172afc6336ff35f7d939e70098b0e57318",
+    "docs/program/registry/shared/runtime/desktop/browser/app/uno-components.ts.json": "0c500614412c3eab655bcc70d1e3dc9a6a4136c5b1cbac335eba6ce116ebb6f2",
+    "docs/program/registry/shared/provenance/desktop/browser/app/uno-components.ts.json": "04472a085be82e686188b28f935b374c7630f4c5a61c93b6c5c8b01ac7c868c0",
+    "docs/program/writer-upstream-suspected-issues.md": "7ed48b8a5431a7bcf10c4cb71911e0e2d7949bc0822fcd76def875995fb96f5d",
+    "docs/program/calc-upstream-suspected-issues.md": "b7dbb64aa5f4656364ed93b7a4cfec834e8e33d79fb64ed7b71e2d7b0bfbd474"
+  },
+  "logs": {
+    "factory-brief.log": "06f9285edecae9c59f361762d85400015d12062c1c9b2dea2e48f131de668441",
+    "factory-browser-docx.log": "7404eafa3835544bb6b189976b9f9a615d17c2cc21cf0b1eb02062e1d090277e",
+    "factory-browser-xlsx.log": "40e77a0fc07d2673371397a1a0151c7426c7c3a888ebebd2fd930747a6e4a1d1",
+    "factory-calc-resources.log": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38",
+    "factory-coder.log": "16d13a563212bb4cba0b10848a9b96c039c73443d959afc4f1daba2c31aae0eb",
+    "factory-config-show.log": "78b9f751c865f969a4efbddc65c34e9d9ef6bf821d245de10d0da5c1932898b1",
+    "factory-coverage.log": "3e1aa0ccb28426735601da7211bf5207f077bc58ad5ef69fdcd1608e08576637",
+    "factory-deps.log": "e2c9d3dca72f0d941c663bc8c7f36b81b66ebc70d76a3936c11ae36ae3618850",
+    "factory-docs.log": "c7afd8fd04ea1f7a9b853dbf739d01664d0b6321206af0aa9b948853fa51ba66",
+    "factory-doctor.log": "a588323513fe44233721fd51d04cf18f18c92a9f04db1051ed7fbb4c28453e7e",
+    "factory-focused.log": "1ef0242a3a6737c1004da1bb1cfb647f38cb201c540f7a97f93cc509067b5ec4",
+    "factory-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "factory-parity.log": "b2b0d02b294a1b82b191bf9a583fe575cde1a127c25f170ef0853d9b43120123",
+    "factory-provenance.log": "dea860105ef86462a8509a01584ccc67df7c41ed22afd816dc969056b47d9fcd",
+    "factory-quickstart.log": "7cd29a19b5c0dc18e7eb324075d21cc2fb44715f3c8dd7b8b52dd5f72d2ed8e0",
+    "factory-registry.log": "0e62e8d724554cf3ac02fcd2a9b4692da8303a96908b891a029384dffa61cf4d",
+    "factory-role.log": "a8899afb593e5ec4f4153783ccfd0fd94cfaaf0513376e0f1d0aeefb1e0da9b2",
+    "factory-route.log": "cd5f3d7e172c98c3fdf0c57b7c6c5adf9dfca3b94e538555e37c08f8b456f95e",
+    "factory-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "factory-size.log": "de56918328040b939b24eff4f2e77ce4b883c645e08bfd4af0d71e5cc6ef8a0b",
+    "factory-static-vite.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "factory-static.log": "a1033133c90177d462016ee2b779d9edd3a0358c721b22b3bf6dde51eb802176",
+    "factory-status.log": "cfaa8f98031455f3a61fc3361929dff405fda88e37908c6f2cd36d3d9426c1e7",
+    "factory-task-active.log": "8bce293037d458fb5caa9ea7e20cc799b66caa08b275825e9b7a6b19eecef92e",
+    "factory-task-list.log": "e99986481204fc41cac45662a5db4c2ba32d4c716435621c929abff7679f6f04",
+    "factory-tests.log": "d775a190357c15bd06a9ed55ed3a88eefa7b434480ef33a3206b20e0b51c85cd",
+    "factory-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "factory-tsc.log": "c2d912329adc965af319b920ac18e7d5588514055446127376ac4f44b94f2106",
+    "factory-verify.log": "f90886cebc04c7384ae6fc68b6a6f5d9f1210d8461f4712c56c2a615edf35be8",
+    "factory-vite.log": "fe0260e5162ceab52567eda6e71a0ca2758389829a7a1954e8f2d7bb85bdcb43",
+    "factory-worker.log": "fae056c57ca76a607f6f49f75c4e73856c6b77b48e21c5b410e3a8a0547d5009",
+    "factory-writer-resources.log": "423193a9f4825bcee5ca6cb7e23b58a3a8a4f7c834f6212abb1d3032c018f2db"
+  }
+}
