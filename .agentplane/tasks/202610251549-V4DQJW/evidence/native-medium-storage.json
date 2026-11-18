@@ -1,0 +1,200 @@
+{
+  "checkpoint": "Descriptor-backed SfxMedium storage and storage properties",
+  "createdAt": "2026-11-18T20:59:42.500235+00:00",
+  "tasks": [
+    "202610251549-V4DQJW",
+    "202610251549-J0Z0KF"
+  ],
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sfx2/source/doc/docfile.cxx#SfxMedium::GetStorage",
+    "sfx2/source/doc/docfile.cxx#SfxMedium::GetOutputStorage",
+    "sfx2/source/doc/docfile.cxx#SfxMedium::StorageCommit_Impl",
+    "sfx2/source/doc/docfile.cxx#SfxMedium::Transfer_Impl",
+    "package/source/xstor/xstorage.cxx#OStorage::setPropertyValue",
+    "package/source/xstor/xstorage.cxx#OStorage::getPropertyValue",
+    "include/comphelper/storagehelper.hxx#GetStorageFromStream",
+    "include/comphelper/storagehelper.hxx#GetStorageOfFormatFromStream"
+  ],
+  "upstreamQa": [
+    "sfx2/qa/cppunit/test_misc.cxx#testODFCustomMetadata",
+    "sfx2/qa/cppunit/test_misc.cxx#testDocumentProperties"
+  ],
+  "sourceObservations": [
+    "WRITER-646",
+    "CALC-718"
+  ],
+  "commands": {
+    "scoped": "npm run test:coverage:shared -w @vite-office/office -- docfile SfxDocumentMetaData native-storage xfactory xstorage sot storagehelper --coverage.include=src/sfx2/source/doc/docfile.storage.ts --coverage.include=src/package/source/xstor/xstorage.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/medium-scoped",
+    "focused": "npm run test:shared -w @vite-office/office -- docfile.storage xfactory",
+    "build": "npm run build",
+    "static": "node scripts/check-static-build.mjs",
+    "browserDocx": "./node_modules/.bin/playwright test --config apps/office/coverage/docx-links.playwright.config.ts",
+    "browserXlsx": "./node_modules/.bin/playwright test --config apps/office/coverage/xlsx-date-system.playwright.config.ts",
+    "worker": "node apps/office/coverage/medium-storage-probe.mjs"
+  },
+  "results": {
+    "relatedTestsPassed": 192,
+    "focusedTestsPassed": 11,
+    "coverage": {
+      "total": {
+        "lines": 67.06,
+        "statements": 64.19,
+        "functions": 63.07,
+        "branches": 56.96
+      },
+      "xstorage.ts": {
+        "lines": 61.97,
+        "functions": 57.89,
+        "statements": 59.68,
+        "branches": 55.77
+      },
+      "docfile.storage.ts": {
+        "lines": 89.24,
+        "functions": 100,
+        "statements": 83.65,
+        "branches": 63.15
+      }
+    },
+    "coverageThreshold": 90,
+    "coverageGate": "failed",
+    "worker": {
+      "main": {
+        "dom": true,
+        "observations": [
+          [
+            true,
+            false,
+            445
+          ]
+        ]
+      },
+      "worker": {
+        "dom": false,
+        "observations": [
+          [
+            true,
+            false,
+            445
+          ]
+        ]
+      }
+    },
+    "checks": {
+      "build": {
+        "passed": true
+      },
+      "static": {
+        "passed": true
+      },
+      "lint": {
+        "passed": true
+      },
+      "format": {
+        "passed": true
+      },
+      "docs": {
+        "passed": true
+      },
+      "size": {
+        "passed": true
+      },
+      "tree": {
+        "passed": true
+      },
+      "provenance": {
+        "passed": true
+      },
+      "deps": {
+        "passed": true
+      },
+      "invariants": {
+        "passed": true
+      },
+      "parity": {
+        "passed": true
+      },
+      "doctor": {
+        "passed": true
+      },
+      "routing": {
+        "passed": true
+      },
+      "browser-docx": {
+        "passed": true
+      },
+      "browser-xlsx": {
+        "passed": true
+      }
+    }
+  },
+  "remaining": [
+    "Browser UI continues to use the existing format filters and asynchronous ZIP adapter.",
+    "Private stream transfer is connected. Full URL transfer requires the actual UCB and transacted destination branches.",
+    "Document metadata persistence still depends on writable PACKAGE entry properties, native manifest import and XML metadata services.",
+    "Per-entry writable OOXML stream properties and public root relationship access are still pending.",
+    "The full upstream test_misc metadata service scenarios are only partly represented by the existing DOM/serialization test ports."
+  ],
+  "files": {
+    "apps/office/src/comphelper/source/misc/storagehelper.ts": "7ac73e27606ca614a5ff83a48562fa18767409709e536ede4c78e085527b6aac",
+    "apps/office/src/package/source/xstor/xstorage.ts": "14d831776a186e5572de36b5ea0029d8fc2565f60a8e4f8717e6af0669292a94",
+    "apps/office/src/package/source/xstor/xfactory.test.ts": "1fd725ab6ffddf3d607330649b6554796207c22d45b56d2253376f5630cbdb01",
+    "apps/office/src/sfx2/source/doc/docfile.ts": "b3826850a941a77449ea48012e3fad868c1bc31b3f925e72017fb3d0957cdc8b",
+    "apps/office/src/sfx2/source/doc/docfile.storage.ts": "6a2d968a85e78de37cbaf4e952109332b9cdb49f0d0b806b8b720b816ae3ee4d",
+    "apps/office/src/sfx2/source/doc/docfile.storage.test.ts": "fb2b749058d3884f83ef6b98fa2a1e1a4763158014ad1e21a1dfcc66f1f673f9",
+    "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts": "24bd93dfbd14b45f8d7d39a4f3b73cc0d250164af4f08d82daf98b7eb5027132",
+    "docs/program/registry/shared/runtime/comphelper/source/misc/storagehelper.ts.json": "c3433bf7e0cb76799a93655708fcc124a7d7d5020f5743467614ff9c3e3ebd14",
+    "docs/program/registry/shared/runtime/package/source/xstor/xstorage.ts.json": "88996bdae6f0de6750a8a97faec8ed67b96a14ba50a82eed29de58e8ed352817",
+    "docs/program/registry/shared/runtime/sfx2/source/doc/docfile.ts.json": "2fbeb18b0190192cf171c728a58a20fb90eb1ea78e83b16eb5daf85168dd0eba",
+    "docs/program/registry/shared/runtime/sfx2/source/doc/docfile.storage.ts.json": "cb0682e4c5f22f87422d5fcdfee12a68e26d1e14b5d461ccd36c356213b6e437",
+    "docs/program/registry/shared/runtime/sfx2/source/doc/SfxDocumentMetaData.storage.ts.json": "1b4e4b28680f519b29d2c66db222f6585ec7cff73119e0cf909bd81f8865d304",
+    "docs/program/registry/shared/provenance/comphelper/source/misc/storagehelper.ts.json": "7b0f151364c5daec7e9cc8146aea5a40033517745ad4c152e0b3feb48217c516",
+    "docs/program/registry/shared/provenance/package/source/xstor/xstorage.ts.json": "75af314020617062fff4727678f2dcb364d83e36087030ccf88ee1cce380673d",
+    "docs/program/registry/shared/provenance/sfx2/source/doc/docfile.ts.json": "4cdb72a1ec03664ca810be4707bfccdcaf6272ac2a62c22e8588e0d82529ff21",
+    "docs/program/registry/shared/provenance/sfx2/source/doc/docfile.storage.ts.json": "ea808718373baf4d01af43e427126bcb745cdc9953d1fa01aa6553c6f5bb529a",
+    "docs/program/registry/shared/provenance/sfx2/source/doc/SfxDocumentMetaData.storage.ts.json": "0c232db5977653ced9cf09cae351d7c021000330f380b28d319d657633b5ce2a",
+    "docs/program/writer-upstream-suspected-issues.md": "b36dbcda4917e9aa73a082ed9673d1c67d1268af78095f72a2cd0c9279e9818c",
+    "docs/program/calc-upstream-suspected-issues.md": "a28522e0131fb722c62b6a355ad00d0ab23c7ba718a4675faa11165c13a101d9"
+  },
+  "logs": {
+    "medium-J0Z0KF-route.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "medium-V4DQJW-route.log": "cd5f3d7e172c98c3fdf0c57b7c6c5adf9dfca3b94e538555e37c08f8b456f95e",
+    "medium-active.log": "8bce293037d458fb5caa9ea7e20cc799b66caa08b275825e9b7a6b19eecef92e",
+    "medium-browser-docx.log": "562e981abf4368516d60fd8f2afb06974c54df81404b9063831f6608fbc14a92",
+    "medium-browser-xlsx.log": "a40cd90be93d6cdf5534def29a3b4560913135c8bed41de146bf0ad0b256c245",
+    "medium-build.log": "59cf2de84edba45c43e9a4c4984fcb93c17f9c90822fded97d06203a51bbb9dc",
+    "medium-coder-role.log": "16d13a563212bb4cba0b10848a9b96c039c73443d959afc4f1daba2c31aae0eb",
+    "medium-config.log": "78b9f751c865f969a4efbddc65c34e9d9ef6bf821d245de10d0da5c1932898b1",
+    "medium-coverage.log": "f65cd514fbecced46c86a2d5f86667f05516767de740dbe1ae7f096f75f6389f",
+    "medium-dependencies.log": "8c81f22c032c3bfd51971d44de7e9771769a1e829b15a72849cd37d9753111b5",
+    "medium-deps.log": "bae3e1cddc36e1f94890ce6c47e896a20b5ec2410ed088ba916585ed49a08496",
+    "medium-docs.log": "0079dbde35ea84c79579eeb1a2b8df739f49a0dfc1aa04eed9096ffc3fb7b3fd",
+    "medium-doctor.log": "8aef41b2ec082649488e9a1a70c74eb83b65e649c871edd71fd9a6f173aed450",
+    "medium-docx-browser.log": "7361a225742ecb3186f188292722156f9a8863a5ff304edf2fcf922aa8ceb246",
+    "medium-final-route.log": "cd5f3d7e172c98c3fdf0c57b7c6c5adf9dfca3b94e538555e37c08f8b456f95e",
+    "medium-focused.log": "21b60f77208b7c3f625d3eb63394764e3f0e5ae62e14f790dcb8f674408038ca",
+    "medium-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "medium-invariants.log": "694d451f01e87c36f281a93dad1c556474cdab4f1f7b8504e4bcef17220962a1",
+    "medium-parity.log": "760845dde058e9af67e25fff24d31a2693799bbc784a4d39938f3b00966ef5b6",
+    "medium-persist-route.log": "4fcbf121da69bf98fd36682d2144b32be74804a68aecfcb970e152b5283b1498",
+    "medium-preflight-role.log": "a8899afb593e5ec4f4153783ccfd0fd94cfaaf0513376e0f1d0aeefb1e0da9b2",
+    "medium-provenance.log": "21705caa82c02d0041959dbb6f9b3cd603997523236b3d70bab6a336a4fc8c59",
+    "medium-quick.log": "7cd29a19b5c0dc18e7eb324075d21cc2fb44715f3c8dd7b8b52dd5f72d2ed8e0",
+    "medium-registry.log": "b6ac4771efb6cec1a64e81436393683d8dc10fa0d10d68a54ae624e3b4428401",
+    "medium-relationships-only.log": "63d07e322af3ed0973b1649798dd984e3672c7d4bed95045516e618d9832c6ab",
+    "medium-rework-route.log": "442b2e57b5964fc4e4c3ded2e75852156ff04f53164157b172be3c0b922e57ab",
+    "medium-role.log": "a8899afb593e5ec4f4153783ccfd0fd94cfaaf0513376e0f1d0aeefb1e0da9b2",
+    "medium-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "medium-running-route.log": "cd5f3d7e172c98c3fdf0c57b7c6c5adf9dfca3b94e538555e37c08f8b456f95e",
+    "medium-size.log": "6b63b68c85a953d4209c9b32e59993680772cd1ca6038c6228c39b92122c9878",
+    "medium-start.log": "4e6d0572593de371ec74a5706139d5808a148421320ca8372f3ac6c2e2e3b933",
+    "medium-static.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "medium-storage-coverage.log": "a78d2ff1a5462f3f2dcd73fb6570187bab2bbc993ead07560a895ea3d8d04d53",
+    "medium-storage.log": "718b5d5537c721757ae64471ef839ac1f13d3d26b9010f74162780ad518cf00f",
+    "medium-tasks.log": "e99986481204fc41cac45662a5db4c2ba32d4c716435621c929abff7679f6f04",
+    "medium-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "medium-vite.log": "dfadcea28bf5d39ab2059fcc8fad9f39a3426c4b561f16098ebcfc8d20efea30",
+    "medium-worker.log": "f98e46d17474efe115757f46817aa26c6c9f9e4f1d3d519cb573ee751f649091",
+    "medium-xlsx-browser.log": "b8e5520f6f9f7b78d0306218b882194616760d3ef611ae64862d82d20fae220c"
+  }
+}
