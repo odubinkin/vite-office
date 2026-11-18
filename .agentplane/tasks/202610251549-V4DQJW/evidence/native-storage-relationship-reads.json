@@ -1,0 +1,245 @@
+{
+  "checkpoint": "Native OStorage_Impl and OWriteStream_Impl relationship reads",
+  "createdAt": "2026-11-18T20:15:36.020564+00:00",
+  "tasks": [
+    "202610251549-V4DQJW",
+    "202610251549-J0Z0KF"
+  ],
+  "upstream": [
+    "package/source/xstor/xstorage.cxx#L487",
+    "package/source/xstor/xstorage.cxx#L892",
+    "package/source/xstor/xstorage.cxx#L1412",
+    "package/source/xstor/xstorage.cxx#L1615",
+    "package/source/xstor/owriteablestream.cxx#L903",
+    "package/source/xstor/owriteablestream.cxx#L1032"
+  ],
+  "observations": [
+    "WRITER-641",
+    "CALC-713",
+    "WRITER-642",
+    "CALC-714"
+  ],
+  "fixtures": [
+    "sw/qa/extras/ooxmlexport/data/hello.docx",
+    "sw/qa/extras/ooxmlexport/data/strict.docx",
+    "sc/qa/unit/data/xlsx/preserve_space.xlsx",
+    "sc/qa/unit/data/xlsx/universal-content-strict.xlsx"
+  ],
+  "upstreamQa": "Four original packages are exercised directly. The focused native state and commit assertions are source-backed. No equivalent dedicated read-state QA was found in the pinned package and oox QA directories.",
+  "commands": {
+    "targeted": "npm run test:coverage:shared -w @vite-office/office -- xstorage.relations xstorage.impl --coverage.include=src/package/source/xstor/xstorage.relations.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/medium-relationships-only",
+    "related": "npm run test:coverage:shared -w @vite-office/office -- xstorage.relations xstorage.impl ocompinstream ofopxmlhelper native-storage ZipPackage --coverage.include=src/package/source/xstor/xstorage.relations.ts --coverage.include=src/package/source/xstor/xstorage.impl.ts --coverage.include=src/package/source/xstor/owriteablestream.ts --coverage.thresholds.perFile=true --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/medium-storage-scoped",
+    "worker": "node apps/office/coverage/medium-storage-probe.mjs",
+    "browserDocx": "./node_modules/.bin/playwright test --config apps/office/coverage/docx-links.playwright.config.ts",
+    "browserXlsx": "./node_modules/.bin/playwright test --config apps/office/coverage/xlsx-date-system.playwright.config.ts",
+    "vite": "npm exec --workspace @vite-office/office -- vite build",
+    "static": "node scripts/check-static-build.mjs",
+    "lint": "./node_modules/.bin/eslint --max-warnings 0 apps/office/src/package/source/xstor/xstorage.impl.ts apps/office/src/package/source/xstor/xstorage.relations.ts apps/office/src/package/source/xstor/xstorage.relations.test.ts apps/office/src/package/source/xstor/owriteablestream.ts",
+    "format": "./node_modules/.bin/prettier --check apps/office/src/package/source/xstor/xstorage.impl.ts apps/office/src/package/source/xstor/xstorage.relations.ts apps/office/src/package/source/xstor/xstorage.relations.test.ts apps/office/src/package/source/xstor/owriteablestream.ts",
+    "typecheck": "npm run typecheck -w @vite-office/office",
+    "docs": "npm run check:docs",
+    "dependencies": "npm run check:dependencies",
+    "provenance": "npm run check:source-provenance",
+    "registry": [
+      "npm run inventory:registry:build",
+      "npm run inventory:registry:check"
+    ],
+    "tree": "npm run check:source-tree",
+    "size": "npm run check:file-size",
+    "doctor": "ap doctor",
+    "routing": "node .agentplane/policy/check-routing.mjs",
+    "diff": "git diff --check"
+  },
+  "results": {
+    "targeted": {
+      "tests": 35,
+      "files": 2,
+      "coverage": {
+        "lines": {
+          "total": 141,
+          "covered": 141,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 163,
+          "covered": 158,
+          "skipped": 0,
+          "pct": 96.93
+        },
+        "functions": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 90,
+          "covered": 82,
+          "skipped": 0,
+          "pct": 91.11
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      }
+    },
+    "related": {
+      "tests": 266,
+      "files": 23,
+      "coverage": {
+        "owriteablestream.ts": {
+          "lines": {
+            "total": 157,
+            "covered": 150,
+            "skipped": 0,
+            "pct": 95.54
+          },
+          "functions": {
+            "total": 12,
+            "covered": 12,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 177,
+            "covered": 161,
+            "skipped": 0,
+            "pct": 90.96
+          },
+          "branches": {
+            "total": 50,
+            "covered": 34,
+            "skipped": 0,
+            "pct": 68
+          }
+        },
+        "xstorage.impl.ts": {
+          "lines": {
+            "total": 397,
+            "covered": 341,
+            "skipped": 0,
+            "pct": 85.89
+          },
+          "functions": {
+            "total": 25,
+            "covered": 25,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 429,
+            "covered": 355,
+            "skipped": 0,
+            "pct": 82.75
+          },
+          "branches": {
+            "total": 130,
+            "covered": 87,
+            "skipped": 0,
+            "pct": 66.92
+          }
+        },
+        "xstorage.relations.ts": {
+          "lines": {
+            "total": 141,
+            "covered": 141,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 10,
+            "covered": 10,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 163,
+            "covered": 158,
+            "skipped": 0,
+            "pct": 96.93
+          },
+          "branches": {
+            "total": 90,
+            "covered": 82,
+            "skipped": 0,
+            "pct": 91.11
+          }
+        }
+      },
+      "coverageGate": "failed for OStorage_Impl and OWriteStream_Impl"
+    },
+    "nativeChromium": {
+      "main": {
+        "dom": true,
+        "observations": [
+          [
+            "word",
+            3,
+            15
+          ],
+          [
+            "xl",
+            4,
+            6
+          ]
+        ]
+      },
+      "worker": {
+        "dom": false,
+        "observations": [
+          [
+            "word",
+            3,
+            15
+          ],
+          [
+            "xl",
+            4,
+            6
+          ]
+        ]
+      }
+    },
+    "uiDocx": 5,
+    "uiXlsx": 5,
+    "fullSuiteRun": false
+  },
+  "limitations": [
+    "The native storage readers are exercised directly. Public OStorage and StorageFactory are not installed by this checkpoint. The browser UI regression uses the existing production filter route.",
+    "SfxDocumentMetaData.storage.ts still has three unresolved SfxMedium type requirements."
+  ],
+  "fileSha256": {
+    "apps/office/src/package/source/xstor/xstorage.impl.ts": "697def927f5e789297eea51b6fca284cdf65badd411c18be0ec62377fe0bd112",
+    "apps/office/src/package/source/xstor/xstorage.relations.ts": "063c6fb5db9cb78eacac0c25466f3376fa20efd6a6cb4d93853f26ae38bb0b75",
+    "apps/office/src/package/source/xstor/xstorage.relations.test.ts": "5ca27e9dd27e80e5dffdf48523f43173e9617a616bb30de0a5cf800bf1846466",
+    "apps/office/src/package/source/xstor/owriteablestream.ts": "0fae971167ee18452457f2cff22e26361ce58186036c678341467fca80a163f0",
+    "docs/program/writer-upstream-suspected-issues.md": "45b58a828f09ee8c900309b0f64ccf04b6fcc10adc242d2b66da60769149e387",
+    "docs/program/calc-upstream-suspected-issues.md": "3473be7741f3993dd61b03fae0fd644f0de479a94c85ee864fb2a5110a2d4b98",
+    "apps/office/coverage/medium-storage-probe.ts": "5fd89a369d2b6c4879d363a14ab43a060634019f921609313cd8afc32209c837",
+    "apps/office/coverage/medium-storage-probe.mjs": "ac5cedb595e060b4cb00bfaec74decbab047fbf54f2872b6c32d598f38533441"
+  },
+  "logSha256": {
+    "medium-storage-coverage.log": "a78d2ff1a5462f3f2dcd73fb6570187bab2bbc993ead07560a895ea3d8d04d53",
+    "medium-relationships-only.log": "63d07e322af3ed0973b1649798dd984e3672c7d4bed95045516e618d9832c6ab",
+    "medium-worker.log": "bd03c5015be8502641d82537cca9b61566cd38afdf714be67a33381e880f242e",
+    "medium-docx-browser.log": "7361a225742ecb3186f188292722156f9a8863a5ff304edf2fcf922aa8ceb246",
+    "medium-xlsx-browser.log": "b8e5520f6f9f7b78d0306218b882194616760d3ef611ae64862d82d20fae220c",
+    "medium-vite.log": "dfadcea28bf5d39ab2059fcc8fad9f39a3426c4b561f16098ebcfc8d20efea30",
+    "medium-static.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "medium-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "medium-tsc.log": "c2d912329adc965af319b920ac18e7d5588514055446127376ac4f44b94f2106",
+    "medium-docs.log": "a39bb7d0bfbf42e15f924d865efa560bc4f7e725ff6c9ede4ad63b253c0bfcca",
+    "medium-dependencies.log": "8c81f22c032c3bfd51971d44de7e9771769a1e829b15a72849cd37d9753111b5",
+    "medium-provenance.log": "9060392de13e4485ea2f927a8e133214360e9df9166513a791177b97d5cfe04e",
+    "medium-registry.log": "b6ac4771efb6cec1a64e81436393683d8dc10fa0d10d68a54ae624e3b4428401",
+    "medium-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "medium-size.log": "1a3c154dac4b21ea8671b15ef8d2bdaa2a4ea1cf3e0ca50db5c83d73a297cd08",
+    "medium-doctor.log": "b343b833e090c769f99ffd12176be24b1908d73544b40b85aa15669fbb706da1",
+    "medium-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "medium-final-status.log": "e989d3744e0ff2e71fa1e2b74952763155225543a5b014d59ef0026b1f35a8a7"
+  }
+}
