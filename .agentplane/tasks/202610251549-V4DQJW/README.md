@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 293
+revision: 296
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T13:04:42.911Z"
+  updated_at: "2026-11-18T13:41:14.712Z"
   updated_by: "CODER"
-  note: "76 focused tests pass. Original OFOPXML root relationships write and clear through the actual archive. New owner passes scoped90; combined storage coverage and complete DOCX intake/filters/UI remain open."
-  attempts: 84
+  note: "Writer file dialog opens and downloads DOCX over actual SwDoc and OOXML filter owners. 62 related tests pass including source QA fixtures and failed/stale open cases. Scoped90 and complete table/style/page/list round trip remain open."
+  attempts: 85
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1352,8 +1355,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T13:41:14.712Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Writer file dialog opens and downloads DOCX over actual SwDoc and OOXML filter owners. 62 related tests pass including source QA fixtures and failed/stale open cases. Scoped90 and complete table/style/page/list round trip remain open."
+  -
+    type: "status"
+    at: "2026-11-18T13:41:39.643Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T13:05:05.494Z"
+doc_updated_at: "2026-11-18T13:41:39.643Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -3886,6 +3902,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T13:41:14.712Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Writer file dialog opens and downloads DOCX over actual SwDoc and OOXML filter owners. 62 related tests pass including source QA fixtures and failed/stale open cases. Scoped90 and complete table/style/page/list round trip remain open.
+    Attempts: 85
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T13:40:54.809Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -4340,6 +4386,17 @@ sections:
     - Scope: internal root relationship staging and persistence, and existing part relationship catalog changes. Public wrappers, parsed relationships, per-part metadata properties and complete DOCX/XLSX app paths remain open.
 
     Evidence: `evidence/native-storage-relationships.json`.
+
+    ### DOCX application file round trip
+
+    - 62 related tests in six files pass.
+    - Measured WriterFilter, body traversal and style receiver at S83.98/B73.86/F100/L87.63. Scoped90 remains unmet.
+    - Pinned Transitional hello.docx and Strict tdf82065_Ind_start_strict.docx import through actual WriterGraph. Existing Open/Export dialog downloads and reopens DOCX; failure and concurrent request tests keep the active graph and select the current request.
+    - Chromium desktop opened and downloaded hello.docx. At width390 the downloaded copy reopened to the Writer editor.
+    - Vite bundle, lint, format, JSDoc, source tree, provenance, registry, routing and diff passed. Typecheck reports the same three SfxMedium errors and the module boundary check reports the previous two diagnostics.
+    - DOCX table input, full styles, lists, links, bookmarks and page export, plus complete storage/service migration remain open.
+
+    Evidence: `evidence/ooxml-file-filter-vertical.json`. The full suite is not due.
 id_source: "generated"
 ---
 ## Summary
@@ -6883,6 +6940,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T13:41:14.712Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Writer file dialog opens and downloads DOCX over actual SwDoc and OOXML filter owners. 62 related tests pass including source QA fixtures and failed/stale open cases. Scoped90 and complete table/style/page/list round trip remain open.
+Attempts: 85
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T13:40:54.809Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7342,3 +7429,14 @@ Evidence: `evidence/native-writable-child-commit.json`.
 - Scope: internal root relationship staging and persistence, and existing part relationship catalog changes. Public wrappers, parsed relationships, per-part metadata properties and complete DOCX/XLSX app paths remain open.
 
 Evidence: `evidence/native-storage-relationships.json`.
+
+### DOCX application file round trip
+
+- 62 related tests in six files pass.
+- Measured WriterFilter, body traversal and style receiver at S83.98/B73.86/F100/L87.63. Scoped90 remains unmet.
+- Pinned Transitional hello.docx and Strict tdf82065_Ind_start_strict.docx import through actual WriterGraph. Existing Open/Export dialog downloads and reopens DOCX; failure and concurrent request tests keep the active graph and select the current request.
+- Chromium desktop opened and downloaded hello.docx. At width390 the downloaded copy reopened to the Writer editor.
+- Vite bundle, lint, format, JSDoc, source tree, provenance, registry, routing and diff passed. Typecheck reports the same three SfxMedium errors and the module boundary check reports the previous two diagnostics.
+- DOCX table input, full styles, lists, links, bookmarks and page export, plus complete storage/service migration remain open.
+
+Evidence: `evidence/ooxml-file-filter-vertical.json`. The full suite is not due.

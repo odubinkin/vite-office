@@ -1,0 +1,47 @@
+{
+  "suite": "writer",
+  "format": "DOCX",
+  "tests": "62 related tests in six files pass.",
+  "coverage": "Measured WriterFilter, body traversal and style receiver at S83.98/B73.86/F100/L87.63. Scoped90 remains unmet.",
+  "evidence": "Pinned Transitional hello.docx and Strict tdf82065_Ind_start_strict.docx import through actual WriterGraph. Existing Open/Export dialog downloads and reopens DOCX; failure and concurrent request tests keep the active graph and select the current request.",
+  "browsers": "Chromium desktop opened and downloaded hello.docx. At width390 the downloaded copy reopened to the Writer editor.",
+  "residual": "DOCX table input, full styles, lists, links, bookmarks and page export, plus complete storage/service migration remain open.",
+  "paths": [
+    "apps/office/src/sw/source/writerfilter/filter/WriterFilter.ts",
+    "apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.ts",
+    "apps/office/src/sw/source/filter/ww8/docxexport.ts",
+    "apps/office/src/sw/source/filter/ww8/docxexport.text.ts",
+    "apps/office/src/sw/source/uibase/app/docsh.ts",
+    "apps/office/src/sw/browser/presentation/WriterFileDialog.tsx",
+    "docs/program/ooxml-file-filters.md",
+    "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.import.ts",
+    "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.ts"
+  ],
+  "logs": [
+    "docx-final.log",
+    "docx-vertical-coverage.log",
+    "docx-playwright-import.log",
+    "docx-playwright-download.log",
+    "docx-playwright-reopen-import.log"
+  ],
+  "logSha256": {
+    "docx-final.log": "fb8f57ec3409aaa3350f05c48fb58556ab09bcd956d5d238fa4d3654a6eb55e9",
+    "docx-vertical-coverage.log": "31feca7467b2c07b9aef179d78d94828c47e527e0c419fa6d52aad21d89a164f",
+    "docx-playwright-import.log": "606c95514bf3dfb79dfbeff18c65401d943f217ed8289c466e2c3096b331aa8c",
+    "docx-playwright-download.log": "9d59544a1d70b9cdc4c3403573560413cff971fbc81c832abb151e9d0df68753",
+    "docx-playwright-reopen-import.log": "7978bf9569ac2f66b391cfb219b33d26e288a7c200509acfa573aab72d7a473b",
+    "ooxml-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "ooxml-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "ooxml-docs.log": "4734f73cb98f12773b9275c3af058a52c3bb90d2a0f7702f659d67229a25cfb6",
+    "ooxml-provenance.log": "db13249292aa13a6773cf294ff858cc2f752c9539f68aa97a4d637c937a80bc2",
+    "ooxml-registry-check.log": "e4a06de6328f14942801ec03f1c1b847500e442fa7d41f93d0a60794b157e192",
+    "ooxml-formats-types.log": "c2d912329adc965af319b920ac18e7d5588514055446127376ac4f44b94f2106",
+    "ooxml-deps.log": "58e089319fe14bd88701e8fbe25e7a9292436eb724bbb615ad31ce7ec6dd4e97",
+    "ooxml-vite.log": "fca28bcddd3b0debc0f5ac81bbf082dd7ac107a614fbb18dede488c3bd39bbaa",
+    "ooxml-size.log": "46e34a0c6dd572b616aa383aa55f45d9e3652613c1a0a05eb8a4c959dfd1a61d",
+    "ooxml-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "ooxml-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+  },
+  "static": "Vite bundle, lint, format, JSDoc, source tree, provenance, registry, routing and diff passed. Typecheck reports the same three SfxMedium errors and the module boundary check reports the previous two diagnostics."
+}
