@@ -1,0 +1,144 @@
+{
+  "checkpoint": "Registered SAX service and the original OFOPXML relationship/content-type stream path",
+  "createdAt": "2026-11-18T20:02:47.012912+00:00",
+  "tasks": [
+    "202610251549-V4DQJW",
+    "202610251549-J0Z0KF"
+  ],
+  "sourceBaseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "fixtures": [
+    "sw/qa/extras/ooxmlexport/data/hello.docx",
+    "sw/qa/extras/ooxmlexport/data/strict.docx",
+    "sc/qa/unit/data/xlsx/preserve_space.xlsx",
+    "sc/qa/unit/data/xlsx/universal-content-strict.xlsx"
+  ],
+  "upstreamQa": "sax/test/sax/testsax.cxx testNamespaces and testEncoding. PI, comments and CDATA are exercised independently. The historical DTD, file and performance paths are outside this package checkpoint.",
+  "observations": [
+    "WRITER-640",
+    "CALC-712"
+  ],
+  "commands": {
+    "shared": "npm run test:shared -w @vite-office/office -- sax_expat ofopxmlhelper fastparser sax/source/expatwrap desktop/browser/app/uno-components",
+    "writer": "npm run test:writer -w @vite-office/office -- OOXMLStreamImpl docx ooxml",
+    "calc": "npm run test:calc -w @vite-office/office -- excelfilter",
+    "coverage": "npm run test:coverage:shared -w @vite-office/office -- sax_expat ofopxmlhelper --coverage.include=src/sax/source/expatwrap/sax_expat.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/opc-sax-scoped",
+    "browserDocx": "./node_modules/.bin/playwright test --config apps/office/coverage/docx-links.playwright.config.ts",
+    "browserXlsx": "./node_modules/.bin/playwright test --config apps/office/coverage/xlsx-date-system.playwright.config.ts",
+    "vite": "npm exec --workspace @vite-office/office -- vite build",
+    "static": "node scripts/check-static-build.mjs",
+    "typecheck": "npm run typecheck -w @vite-office/office",
+    "dependencies": "npm run check:dependencies",
+    "registryBuild": "npm run inventory:registry:build",
+    "registry": "npm run inventory:registry:check",
+    "provenance": "npm run check:source-provenance",
+    "sourceTree": "npm run check:source-tree",
+    "fileSize": "npm run check:file-size",
+    "docs": "npm run check:docs",
+    "lint": "./node_modules/.bin/eslint --max-warnings 0 <changed TypeScript files>",
+    "format": "./node_modules/.bin/prettier --check <changed TypeScript files>",
+    "resources": [
+      "npm run check:writer-resources",
+      "npm run check:calc-resources"
+    ],
+    "doctor": "ap doctor",
+    "routing": "node .agentplane/policy/check-routing.mjs",
+    "diff": "git diff --check"
+  },
+  "results": {
+    "shared": {
+      "tests": 246,
+      "files": 23
+    },
+    "writer": {
+      "tests": 407,
+      "files": 26
+    },
+    "calc": {
+      "tests": 10,
+      "files": 1
+    },
+    "coverage": {
+      "tests": 54,
+      "files": 5,
+      "module": "sax_expat.ts",
+      "summary": {
+        "lines": {
+          "total": 193,
+          "covered": 190,
+          "skipped": 0,
+          "pct": 98.44
+        },
+        "statements": {
+          "total": 224,
+          "covered": 219,
+          "skipped": 0,
+          "pct": 97.76
+        },
+        "functions": {
+          "total": 48,
+          "covered": 48,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 58,
+          "covered": 54,
+          "skipped": 0,
+          "pct": 93.1
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      }
+    },
+    "browserDocx": 5,
+    "browserXlsx": 5,
+    "fullSuiteRun": false
+  },
+  "remaining": [
+    "SfxDocumentMetaData.storage.ts still needs the SfxMedium descriptor constructor, GetOutputStorage and Commit.",
+    "Existing Calc patattr.ts browser dependency boundary violation remains. Removing the comphelper fallback removes the separate comphelper/sax cycle.",
+    "The package XML parser uses Saxes and keeps the existing DTD refusal. Full Expat diagnostics and byte-index locator behavior are unverified.",
+    "Task-wide DOCX/XLSX acceptance is open."
+  ],
+  "fileSha256": {
+    "apps/office/src/sax/source/expatwrap/sax_expat.ts": "c311f3c24eb4c17a69266a33e7951694df02a194d8629a6dd60bab3517a88983",
+    "apps/office/src/sax/source/expatwrap/sax_expat.test.ts": "190d468d68a0ee7fc03a6b3ea14d4d24624257c48409eae8fbb7f2a17a27d7e0",
+    "apps/office/src/desktop/browser/app/uno-components.ts": "d3312e064327e285fec4e02f6f20a155a576abe5dfb41aa48460003a2973f6e1",
+    "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts": "3d59105d03ca5a40115eadfad62921d83ca37b2fd9127009bade3242d4f1f70b",
+    "apps/office/src/comphelper/source/xml/ofopxmlhelper.fixture.test.ts": "429c47464db4982228c1277804f2506e28a60c3fa6bdcb7751b224ddfd7387f7",
+    "apps/office/src/comphelper/source/xml/ofopxmlhelper.handler.test.ts": "806ac258c86542eb695301f6871b739f2b14ebfe984c0bbb0062dc85cf056f43",
+    "apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts": "5f259e1e77a7920a934bc14d8eb3cd945af8e813391c99cd9420ec22b1d8c2b5",
+    "apps/office/src/package/source/zippackage/ZipPackage.metadata.ts": "0c15cb7415f47bdbb0c14293e358205a1d2a260b723f2e88f6187a9f20ddacf0",
+    "apps/office/src/oox/source/helper/zipstorage.ts": "4c4ed408d85414233e4765febd9cc5d4c601228a9dcf98c01002795e9ec656f4",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts": "49b2175f0b298c2344fc7a12002b310166ccd22c6376fdf8c6e4dcf05c308414",
+    "apps/office/src/test/ofopxml-values.ts": "5306815fea90f605457a3d20e89b43a0c302767a92f02533f4de53df87d06f4a",
+    "docs/program/writer-upstream-suspected-issues.md": "6a1a84cdd978bbf6b88600901fdc00a5ea84b73943ac2fbc12f11e039497e89d",
+    "docs/program/calc-upstream-suspected-issues.md": "44cdf28ca5550f1b9d1fac1aa1f120c421a9396f794e73480ab99dea030a1e14"
+  },
+  "logSha256": {
+    "opc-shared.log": "adc84b2f7c3b88ff643d09946c048fd683d4d4efd54ca13e7692c3c79ad519dd",
+    "opc-writer.log": "c547a71e07929085f6f7d2ee76325833f96d45ec89c43a27e5e03bdd5fe9d730",
+    "opc-calc.log": "560f32a371b6a11fb9231089c7ff090b3a896f03f13ee2b080853794541aa34f",
+    "opc-coverage.log": "e5351e388d503fe3384e74dd07a19fa2ac1cc7d3e8710a7cadab9f8ebae50ae6",
+    "opc-browser-docx.log": "df6d9b18e0b371e97ae0a743d6a368b9849e47f594af1118bab7e2770fbbd5cc",
+    "opc-browser-xlsx.log": "a1abf981b97a42465d1b1edffc3bbc99089daa78ec29210b6030450bd91cd528",
+    "opc-vite.log": "dbde90c7b3f402482ab5a40329012315640f975ea5a9a14093faea86736ec6f7",
+    "opc-static.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "opc-tsc.log": "c2d912329adc965af319b920ac18e7d5588514055446127376ac4f44b94f2106",
+    "opc-dependencies.log": "d91f617f13a89dbef61a2bddc4b07b871b7e153efc19d73cc6fa6bd24431b827",
+    "opc-registry.log": "5f6b101e9639c470b19a908e000bd1f1a190b3e83aced71eb8917de10311306d",
+    "opc-provenance.log": "9060392de13e4485ea2f927a8e133214360e9df9166513a791177b97d5cfe04e",
+    "opc-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "opc-size.log": "83bed499a0258722bd938229e3bfc7c7891b5f59b477eee7062bc08945ae6672",
+    "opc-docs.log": "43956959ae716db98b62659010979c63808aa0e1944e345b42dea4e929efa893",
+    "opc-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "opc-writer-resources.log": "ed6dcd5a4f1400231cb2299bbcfe2dd37cb83a09e356abe5e5a9624082ce4181",
+    "opc-calc-resources.log": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38",
+    "opc-doctor.log": "ae0dead70ea486a8ac5128ea8167efe965fae2b8770753ff9382fe1d3abdcb76",
+    "opc-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+  }
+}

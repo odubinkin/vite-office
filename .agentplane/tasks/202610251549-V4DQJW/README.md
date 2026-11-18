@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 323
+revision: 326
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T19:15:34.746Z"
+  updated_at: "2026-11-18T20:02:47.854Z"
   updated_by: "CODER"
-  note: "Writer native paragraph marker DOCX and ODT plus browser numbering verification passed; task-wide acceptance and existing shared type/dependency checks remain open."
-  attempts: 94
+  note: "Registered SAX service and original OOXML package stream reads pass focused tests, scoped 90 percent coverage, and production DOCX/XLSX browser round trips. Task-wide acceptance and existing SfxMedium/Calc checks remain open."
+  attempts: 95
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1512,8 +1515,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T20:02:47.854Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Registered SAX service and original OOXML package stream reads pass focused tests, scoped 90 percent coverage, and production DOCX/XLSX browser round trips. Task-wide acceptance and existing SfxMedium/Calc checks remain open."
+  -
+    type: "status"
+    at: "2026-11-18T20:02:57.164Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T19:15:45.775Z"
+doc_updated_at: "2026-11-18T20:02:57.164Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -4346,6 +4362,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-18T20:02:47.854Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Registered SAX service and original OOXML package stream reads pass focused tests, scoped 90 percent coverage, and production DOCX/XLSX browser round trips. Task-wide acceptance and existing SfxMedium/Calc checks remain open.
+    Attempts: 95
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T20:02:47.259Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -4889,6 +4935,13 @@ sections:
     - Observation: Writer now serializes ListAutoFormat as the extended ODF text automatic style and emits the selected marker properties in DOCX paragraph rPr before sectPr. The native Word compatibility property drives numbering from the original paragraph mark owner through ODT settings and Worker records. Level character styling wins over marker direct/named items and underlining and escapement are excluded from the overlay.
       Impact: The original fdo85542.docx can be opened, stored locally, reopened and exported with its overlapping ranges, point bookmark and German paragraph-mark language intact. Original paragraph-marker DOCX and ParagraphMarkerMarkup FODT assert separate styles for marker and run; the browser checks green normal-weight numbering next to bold text before and after local reopen.
       Resolution: 841 focused cases across 91 files passed. Final 288-case DOCX/numbering profile passed and the two measured runtime owners reached 91.53% and 95.45% branch coverage, respectively, with the other metrics above 90%. Build, static smoke, scoped lint/format, source provenance/tree, Writer resources and registry checks passed. Existing shared type/dependency errors remain separately recorded. See evidence/docx-native-paragraph-marker.json. DOCX/XLSX task-wide acceptance remains open. No full run this checkpoint.
+
+    ### OOXML package SAX reader
+
+    - Command: Focused shared, Writer and Calc test profiles, SAX per-owner coverage, production Chromium DOCX/XLSX round trips, Vite/static, JSDoc, scoped lint/format, source tree/provenance, registry, resources, dependency checks, doctor/routing and diff. Exact commands and file hashes are in `evidence/ooxml-package-sax-reader.json`.
+    - Result: 246 shared, 407 Writer and 10 Calc cases passed. The 54-case coverage replay measured ParserExpat at 97.76% statements, 93.10% branches, 100% functions and 98.44% lines. Chromium passed five Writer and five Calc scenarios. The comphelper-to-sax dependency cycle is gone. The separate Calc patattr boundary and three SfxDocumentMetaData/SfxMedium type errors remain. Parent acceptance stays open.
+    - Evidence: Registered ParserExpat and native OFOPXML streams read four pinned Strict and Transitional package fixtures. The suite replays the upstream SAX namespace and Latin-1 fixtures and exercises extended events, malformed input, error-handler dispatch and package XML limits. The root diagnostic repeats the upstream _rels/ prefix and is recorded as WRITER-640 and CALC-712. No full test run was due.
+    - Scope: Shared relationship and content-type reading uses the UNO stream/context API. The browser uses the existing JavaScript SAX backend and XML byte converter. The existing DTD refusal is retained. Full Expat diagnostics, byte-index locator and external entity behavior are outside the verified package contract.
 id_source: "generated"
 ---
 ## Summary
@@ -7732,6 +7785,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-18T20:02:47.854Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Registered SAX service and original OOXML package stream reads pass focused tests, scoped 90 percent coverage, and production DOCX/XLSX browser round trips. Task-wide acceptance and existing SfxMedium/Calc checks remain open.
+Attempts: 95
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T20:02:47.259Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -8280,3 +8363,10 @@ Evidence: `evidence/docx-native-ranged-bookmarks.json`.
 - Observation: Writer now serializes ListAutoFormat as the extended ODF text automatic style and emits the selected marker properties in DOCX paragraph rPr before sectPr. The native Word compatibility property drives numbering from the original paragraph mark owner through ODT settings and Worker records. Level character styling wins over marker direct/named items and underlining and escapement are excluded from the overlay.
   Impact: The original fdo85542.docx can be opened, stored locally, reopened and exported with its overlapping ranges, point bookmark and German paragraph-mark language intact. Original paragraph-marker DOCX and ParagraphMarkerMarkup FODT assert separate styles for marker and run; the browser checks green normal-weight numbering next to bold text before and after local reopen.
   Resolution: 841 focused cases across 91 files passed. Final 288-case DOCX/numbering profile passed and the two measured runtime owners reached 91.53% and 95.45% branch coverage, respectively, with the other metrics above 90%. Build, static smoke, scoped lint/format, source provenance/tree, Writer resources and registry checks passed. Existing shared type/dependency errors remain separately recorded. See evidence/docx-native-paragraph-marker.json. DOCX/XLSX task-wide acceptance remains open. No full run this checkpoint.
+
+### OOXML package SAX reader
+
+- Command: Focused shared, Writer and Calc test profiles, SAX per-owner coverage, production Chromium DOCX/XLSX round trips, Vite/static, JSDoc, scoped lint/format, source tree/provenance, registry, resources, dependency checks, doctor/routing and diff. Exact commands and file hashes are in `evidence/ooxml-package-sax-reader.json`.
+- Result: 246 shared, 407 Writer and 10 Calc cases passed. The 54-case coverage replay measured ParserExpat at 97.76% statements, 93.10% branches, 100% functions and 98.44% lines. Chromium passed five Writer and five Calc scenarios. The comphelper-to-sax dependency cycle is gone. The separate Calc patattr boundary and three SfxDocumentMetaData/SfxMedium type errors remain. Parent acceptance stays open.
+- Evidence: Registered ParserExpat and native OFOPXML streams read four pinned Strict and Transitional package fixtures. The suite replays the upstream SAX namespace and Latin-1 fixtures and exercises extended events, malformed input, error-handler dispatch and package XML limits. The root diagnostic repeats the upstream _rels/ prefix and is recorded as WRITER-640 and CALC-712. No full test run was due.
+- Scope: Shared relationship and content-type reading uses the UNO stream/context API. The browser uses the existing JavaScript SAX backend and XML byte converter. The existing DTD refusal is retained. Full Expat diagnostics, byte-index locator and external entity behavior are outside the verified package contract.
