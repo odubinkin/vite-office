@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 572
+revision: 575
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T15:25:16.466Z"
+  updated_at: "2026-11-18T16:04:06.816Z"
   updated_by: "CODER"
-  note: "The native XLSX numeric style and primary ODS Worker checkpoint passes 66 tests and 92.15% scoped branch coverage. Chromium confirms XLSX download and formatted browser storage reopen. Localized overrides, extended formats, dimensions, themes and broader feature fidelity remain in scope for task completion."
-  attempts: 182
+  note: "Worksheet geometry passed 124 focused tests with 93.40% scoped branch coverage and Chromium XLSX and primary ODS reopens. Workbook Normal font fidelity, outlines and other styles remain open for the full task."
+  attempts: 183
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2920,8 +2923,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T16:04:06.816Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Worksheet geometry passed 124 focused tests with 93.40% scoped branch coverage and Chromium XLSX and primary ODS reopens. Workbook Normal font fidelity, outlines and other styles remain open for the full task."
+  -
+    type: "status"
+    at: "2026-11-18T16:04:15.354Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T15:25:20.511Z"
+doc_updated_at: "2026-11-18T16:04:15.354Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -8396,6 +8412,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T16:04:06.816Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Worksheet geometry passed 124 focused tests with 93.40% scoped branch coverage and Chromium XLSX and primary ODS reopens. Workbook Normal font fidelity, outlines and other styles remain open for the full task.
+    Attempts: 183
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T16:04:06.233Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -9244,6 +9290,16 @@ sections:
     - Localized built-in overrides, extended and conditional formats, dimensions and theme fidelity remain open.
 
     Evidence: `evidence/xlsx-native-number-formats.json`.
+
+    ### XLSX worksheet dimensions and primary ODS persistence
+
+    - WorksheetGlobals converts source default and explicit columns and rows into native Calc geometry. The OOXML Application property enables the Excel-only 0.75-point rounding. The existing VCL Canvas text-width device supplies the measured digit advance in the browser. The original headless fallbacks remain available.
+    - XLSX export emits sheetFormatPr, grouped column records and manual/hidden row geometry, including rows without cell content. The ODS importer keeps stored optimal geometry outside the native early recalc range, and the worker transfer preserves the optimal row minimum.
+    - Five adapted upstream scenario families passed. The width fixture retains all five exact width values with a deterministic reference device. Chromium confirms 37 px row height across all three paths and 195, 97 and 48 px column widths after XLSX and ODS reopen. The ODS width input adds one cell to the otherwise empty native fixture to exercise the existing autosave policy.
+    - CALC701 records the source behavior for explicit columns without widths and the geometry suite tests the retained behavior. Browser export measures the existing export application font, which can differ from the imported Normal font. The tested very wide record changes from 250 to 274.78 digit units; very wide cross-application fidelity remains unqualified.
+    - All 124 focused tests passed. Coverage is 98.30% statements, 93.40% branches, 100% functions and 100% lines. Scoped lint, Prettier, JSDoc, source size, Vite, registry, source provenance, source tree, routing and doctor passed. Existing global metadata type and dependency diagnostics remain. The full suite is not due.
+
+    Evidence: `evidence/xlsx-worksheet-dimensions.json`.
 id_source: "generated"
 ---
 ## Summary
@@ -14728,6 +14784,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T16:04:06.816Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Worksheet geometry passed 124 focused tests with 93.40% scoped branch coverage and Chromium XLSX and primary ODS reopens. Workbook Normal font fidelity, outlines and other styles remain open for the full task.
+Attempts: 183
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T16:04:06.233Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -15580,3 +15666,13 @@ Evidence: `evidence/xlsx-visual-styles.json`.
 - Localized built-in overrides, extended and conditional formats, dimensions and theme fidelity remain open.
 
 Evidence: `evidence/xlsx-native-number-formats.json`.
+
+### XLSX worksheet dimensions and primary ODS persistence
+
+- WorksheetGlobals converts source default and explicit columns and rows into native Calc geometry. The OOXML Application property enables the Excel-only 0.75-point rounding. The existing VCL Canvas text-width device supplies the measured digit advance in the browser. The original headless fallbacks remain available.
+- XLSX export emits sheetFormatPr, grouped column records and manual/hidden row geometry, including rows without cell content. The ODS importer keeps stored optimal geometry outside the native early recalc range, and the worker transfer preserves the optimal row minimum.
+- Five adapted upstream scenario families passed. The width fixture retains all five exact width values with a deterministic reference device. Chromium confirms 37 px row height across all three paths and 195, 97 and 48 px column widths after XLSX and ODS reopen. The ODS width input adds one cell to the otherwise empty native fixture to exercise the existing autosave policy.
+- CALC701 records the source behavior for explicit columns without widths and the geometry suite tests the retained behavior. Browser export measures the existing export application font, which can differ from the imported Normal font. The tested very wide record changes from 250 to 274.78 digit units; very wide cross-application fidelity remains unqualified.
+- All 124 focused tests passed. Coverage is 98.30% statements, 93.40% branches, 100% functions and 100% lines. Scoped lint, Prettier, JSDoc, source size, Vite, registry, source provenance, source tree, routing and doctor passed. Existing global metadata type and dependency diagnostics remain. The full suite is not due.
+
+Evidence: `evidence/xlsx-worksheet-dimensions.json`.

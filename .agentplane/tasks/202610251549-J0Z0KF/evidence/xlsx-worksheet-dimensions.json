@@ -1,0 +1,66 @@
+{
+  "command": "vitest run --config vitest.calc.config.ts --coverage src/sc/source/filter/oox/worksheethelper.test.ts src/sc/source/filter/oox/excelfilter.test.ts src/sc/source/filter/oox/sheetdatabuffer.test.ts src/sc/source/filter/xml/ods.test.ts src/sc/source/filter/xml/ods-style-routing.test.ts src/sc/source/filter/xml/ods-indent-rows.test.ts src/sc/source/filter/xml/ods-sparse-export.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sc/browser/presentation/calc-files.test.tsx src/sc/source/ui/docshell/docsh.test.ts --coverage.include=src/sc/source/filter/oox/worksheethelper.ts --coverage.include=src/sc/source/filter/oox/unitconverter.ts --coverage.include=src/oox/source/docprop/docprophandler.ts --coverage.include=src/sc/source/filter/excel/xetable.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=coverage/xlsx-layout-final",
+  "focusedTests": {
+    "files": 10,
+    "passed": 124
+  },
+  "coverage": {
+    "statements": 98.3,
+    "branches": 93.4,
+    "functions": 100,
+    "lines": 100,
+    "threshold": 90,
+    "exporterBranchCoverage": 91.3
+  },
+  "upstreamTests": [
+    "testTdf144642_RowHeightRounding_saveByCalc",
+    "testTdf144642_RowHeightRounding_saveByExcel",
+    "testTdf145129_DefaultRowHeightRounding",
+    "testMiscRowHeightExport",
+    "testColumnWidthResaveXLSX"
+  ],
+  "witnesses": [
+    "worksheet geometry retains default ranges, manual row heights and hidden rows and columns on native Calc segments",
+    "geometry-only row records interleave with sparse cell and style data",
+    "the package Application property distinguishes Microsoft Excel and LibreOffice rounding",
+    "Normal workbook style font supplies digit metrics through the existing VCL Canvas device",
+    "primary ODS retains stored optimal row geometry outside the native early recalculation range",
+    "mounted dialogs preserve hidden columns and manual row height"
+  ],
+  "upstreamObservation": "CALC701",
+  "chromium": {
+    "excelFixtureHeightPx": 37,
+    "mobileViewport": "390x844",
+    "heightPrimaryAndDownloadedCopiesConfirmed": true,
+    "downloadedRowRecordsAndCrcConfirmed": true,
+    "widthOriginalAndBothCopiesCssPixels": [
+      195,
+      97,
+      48
+    ],
+    "primaryWidthInput": "Upstream workbook with one numeric cell; existing primary saving excludes empty workbooks.",
+    "widthZipCrcConfirmed": true,
+    "wideColumnFormatLimitation": "Original character width 250 serializes as 274.78 with the current export application font. Calc reopens the narrower observed spans at the original physical widths. Cross-application behavior for the very wide record has not been qualified."
+  },
+  "checks": {
+    "scopedLint": "pass",
+    "format": "pass",
+    "jsdoc": "pass",
+    "fileSize": "pass",
+    "viteBundle": "pass",
+    "registry": "pass",
+    "sourceProvenance": "pass",
+    "sourceTree": "pass",
+    "doctor": "pass",
+    "route": "pass",
+    "gitDiffCheck": "pass",
+    "typecheck": "three existing metadata storage diagnostics at 413, 414 and 441",
+    "moduleBoundaries": "existing patattr browser edge and comphelper/sax cycle"
+  },
+  "remaining": [
+    "workbook Normal style font and broad XLSX style/resource fidelity",
+    "row and column outlines, filtering, theme and extended format fidelity",
+    "full task verification"
+  ],
+  "fullSuiteRun": false
+}
