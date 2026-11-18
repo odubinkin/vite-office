@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 565
+revision: 566
 origin:
   system: "manual"
 depends_on:
@@ -2889,7 +2889,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T14:11:26.486Z"
+doc_updated_at: "2026-11-18T14:27:06.523Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -9130,6 +9130,8 @@ sections:
     - All 43 focused tests passed. Combined scoped coverage was 95.22% statements, 90.93% branches, 100% functions and 96.56% lines. JSDoc and lint passed. XLSX visual and number styles and richer formula fidelity remain open.
 
     Evidence: `evidence/xlsx-merge-roundtrip.json`.
+
+    Chromium opened the pinned Strict workbook, downloaded it through the existing Calc export dialog and reopened the copy at the mobile viewport. The downloaded ZIP contains two sheets and E2:F3 in the first worksheet. Evidence: `evidence/xlsx-merge-browser.json`.
 id_source: "generated"
 ---
 ## Summary
@@ -15384,3 +15386,5 @@ Evidence: `evidence/ooxml-file-filter-vertical.json`. The full suite is not due.
 - All 43 focused tests passed. Combined scoped coverage was 95.22% statements, 90.93% branches, 100% functions and 96.56% lines. JSDoc and lint passed. XLSX visual and number styles and richer formula fidelity remain open.
 
 Evidence: `evidence/xlsx-merge-roundtrip.json`.
+
+Chromium opened the pinned Strict workbook, downloaded it through the existing Calc export dialog and reopened the copy at the mobile viewport. The downloaded ZIP contains two sheets and E2:F3 in the first worksheet. Evidence: `evidence/xlsx-merge-browser.json`.

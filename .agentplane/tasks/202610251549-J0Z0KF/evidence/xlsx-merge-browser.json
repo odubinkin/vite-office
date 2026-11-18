@@ -1,0 +1,15 @@
+{
+  "test": "Production Calc file dialog in Chromium",
+  "desktopViewport": "1366x768",
+  "mobileViewport": "390x844",
+  "import": "universal-content-strict.xlsx",
+  "download": "universal-content-strict.xlsx",
+  "package": {
+    "crc": "pass",
+    "worksheetCount": 2,
+    "worksheet1MergeReferences": [
+      "E2:F3"
+    ]
+  },
+  "reopenedTitle": "ChromiumMergeCopy"
+}
