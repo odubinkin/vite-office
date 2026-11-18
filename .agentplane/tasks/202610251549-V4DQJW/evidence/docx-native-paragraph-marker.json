@@ -1,0 +1,105 @@
+{
+  "task": "202610251549-V4DQJW",
+  "checkpoint": "Writer paragraph mark DOCX, ODT storage and list layout",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "inputs": {
+    "sw/source/filter/ww8/wrtw8nds.cxx": "96faddedab632435a24b9f98b4354eb50b65152d221f1630eca8840043913466",
+    "sw/source/filter/ww8/docxattributeoutput.cxx": "7bdef86219701fe25070201039ae9c9775eed64fbe17efd3cd6b552bfe38ff9d",
+    "sw/source/core/text/txtfld.cxx": "121d478dbc68755ea0869d2a91c3f24bb8df72547e9671c41cb381bd3b06e2dd",
+    "sw/source/core/txtnode/thints.cxx": "fb4f1512995467ae3ba141f5044dce5e69021a81e7c079f3191c2b7f3dea941a",
+    "sw/source/writerfilter/dmapper/DomainMapper.cxx": "d37458f5777c3f059851a76d7ece59dec5cf9396a3e2b0b5f6114499b87ee543",
+    "sw/source/core/doc/DocumentSettingManager.cxx": "a737a8cdb6e967bd81389cc45f5e563bb9624fbf74deb52ca78f9bfd68d2b1ba",
+    "sw/source/uibase/uno/SwXDocumentSettings.cxx": "4cfb4c2f5bc878301896be8cbdfcb58f34ec38530f5132a8e15b99244bd7219d",
+    "xmloff/source/text/txtparae.cxx": "601bb521f1acb8c21fb1e29c5b11ad369a64e892124d3733b63c6c5b07ffb2ff",
+    "xmloff/source/text/txtparai.cxx": "e1433712c1a3e877d54cde391bbf8a5a881cd181656edd5ca97853fd03faa080",
+    "sw/qa/core/unocore/unocore.cxx": "afac71a5fa3b875012df05bb75c526a336d9bc6ee621b0865bfe0cb35f15588c",
+    "sw/qa/extras/odfexport/odfexport4.cxx": "0e7fee79262c50402ebdf280a73c536672e726d2951da4c16de719fc36624a45",
+    "sw/qa/core/unocore/data/paragraph-marker.docx": "017a81e0c6663d213dbb59bd28618b948b15f37a2e526fd94bfe47e541526a28",
+    "sw/qa/core/unocore/data/paragraph-marker-formatted-run.docx": "1f5a67e3e0a69c2d6c3ce27b10279fc4f67b406be73926700d8c84e0d2c6668b",
+    "sw/qa/extras/odfexport/data/ParagraphMarkerMarkup.fodt": "c3ce3d21bb2fa6287b6b2d0e3e479cbf51462cb9c2b586730371ae00fe509162",
+    "sw/qa/extras/ooxmlexport/data/fdo85542.docx": "8cdd1ff0b2f2b627929a440b6478444a60cc15a04c8170bf062b09f489de1f73"
+  },
+  "sourceAndTestPaths": [
+    "apps/office/e2e/writer-docx-links.spec.ts",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.paragraph.ts",
+    "apps/office/src/sw/source/filter/ww8/docx-paragraph-marker.test.ts",
+    "apps/office/src/sw/source/filter/ww8/docx-bookmarks.test.ts",
+    "apps/office/src/sw/source/filter/ww8/rtf-paragraph-marker.test.ts",
+    "apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts",
+    "apps/office/src/sw/source/filter/ww8/docxexport.styles.test.ts",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.section.test.ts",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+    "apps/office/src/xmloff/source/core/xmltoken.ts",
+    "apps/office/src/xmloff/source/text/txtparae.ts",
+    "apps/office/src/xmloff/source/text/txtparai.ts",
+    "apps/office/src/xmloff/source/text/txtimp.ts",
+    "apps/office/src/xmloff/source/text/txtprmap.ts",
+    "apps/office/src/sw/source/core/text/txtfld.ts",
+    "apps/office/src/sw/source/core/text/native-numbering-font.test.ts",
+    "apps/office/src/sw/source/core/doc/DocumentSettingManager.ts",
+    "apps/office/src/sw/source/uibase/uno/SwXDocumentSettings.ts",
+    "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.ts",
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.paragraph.test.ts",
+    "docs/program/writer-upstream-suspected-issues.md"
+  ],
+  "verify": [
+    {
+      "command": "vitest run --config vitest.writer.config.ts src/sw/source/filter/ww8/docx src/sw/source/filter/ww8/rtf-paragraph-marker.test.ts src/sw/source/filter/xml src/xmloff/source/text/txtimp.test.ts src/xmloff/source/text/txtparai.test.ts src/sw/browser/filter/xml src/sw/browser/presentation/WriterFileDialog.test.tsx src/sw/source/core/text/native-numbering-font.test.ts src/sw/browser/editor/native-numbering-font.test.tsx",
+      "result": "pass",
+      "files": 91,
+      "tests": 841
+    },
+    {
+      "command": "vitest run --config vitest.writer.config.ts src/sw/source/filter/ww8/docx src/sw/source/core/text/native-numbering-font.test.ts src/sw/browser/editor/native-numbering-font.test.tsx --coverage --coverage.provider=v8 --coverage.include=src/sw/source/filter/ww8/docxattributeoutput.paragraph.ts --coverage.include=src/sw/source/core/text/txtfld.ts --coverage.thresholds.perFile=true --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reporter=text --coverage.reporter=json --coverage.reportsDirectory=coverage/docx-paragraph-marker-final",
+      "result": "pass",
+      "files": 16,
+      "tests": 288,
+      "perFile": {
+        "docxattributeoutput.paragraph.ts": {
+          "statements": 99.34,
+          "branches": 91.53,
+          "functions": 100,
+          "lines": 99.27
+        },
+        "txtfld.ts": {
+          "statements": 100,
+          "branches": 95.45,
+          "functions": 100,
+          "lines": 100
+        }
+      }
+    },
+    {
+      "command": "npm exec --workspace @vite-office/office -- vite build && node scripts/check-static-build.mjs",
+      "result": "pass"
+    },
+    {
+      "command": "npm exec --workspace @vite-office/office -- playwright test --config coverage/docx-links.playwright.config.ts --workers=1",
+      "result": "pass",
+      "tests": 5
+    },
+    {
+      "command": "npx eslint <changed TS files> && npx prettier --check <changed TS files and suspected-issues note>",
+      "result": "pass"
+    },
+    {
+      "command": "npm run check:docs; npm run check:source-tree; npm run check:source-provenance; npm run check:file-size; npm run check:writer-resources; npm run inventory:registry:build; npm run inventory:registry:check; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check",
+      "result": "pass"
+    },
+    {
+      "command": "npm run typecheck -w @vite-office/office",
+      "result": "baseline failure",
+      "details": "SfxDocumentMetaData.storage.ts:413,414,441, mismatched SfxMedium input, GetOutputStorage and Commit."
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "baseline failure",
+      "details": "Calc patattr.ts browser adapter boundary and comphelper/sax runtime cycle."
+    }
+  ],
+  "residualScope": [
+    "Full source document and layout parity including redline marker markup, shading/highlight normalization and script-specific layout remains open.",
+    "Writer and Calc task-wide verification remains open. Full suite is outside the ten-task cadence for this checkpoint."
+  ]
+}
