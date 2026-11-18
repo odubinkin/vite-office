@@ -1,0 +1,124 @@
+{
+  "checkpoint": "Original large-part ZIP compression in Writer DOCX and Calc XLSX export",
+  "createdAt": "2026-11-18T21:52:36.293Z",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "upstream": [
+    "package/source/zippackage/ZipPackageStream.cxx#ZipPackageStream::saveChild",
+    "package/source/zipapi/ZipOutputStream.cxx#ZipOutputStream::finish",
+    "package/source/zipapi/ZipOutputEntry.cxx#ZipOutputEntryParallel::writeStream",
+    "package/source/zipapi/ThreadedDeflater.cxx#ThreadedDeflater::deflateWrite",
+    "oox/source/helper/zipstorage.cxx#ZipStorage::implCommit"
+  ],
+  "observations": [
+    "WRITER-651",
+    "WRITER-652",
+    "CALC-723",
+    "CALC-724"
+  ],
+  "results": {
+    "shared": {
+      "files": 7,
+      "passed": 100,
+      "coverageThreshold": 90,
+      "coverageGate": "failed",
+      "coverage": {
+        "lines": {
+          "total": 434,
+          "covered": 421,
+          "skipped": 0,
+          "pct": 97
+        },
+        "statements": {
+          "total": 468,
+          "covered": 447,
+          "skipped": 0,
+          "pct": 95.51
+        },
+        "functions": {
+          "total": 71,
+          "covered": 71,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 124,
+          "covered": 104,
+          "skipped": 0,
+          "pct": 83.87
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "writer": {
+      "files": 26,
+      "passed": 407
+    },
+    "calc": {
+      "files": 3,
+      "passed": 57
+    },
+    "chromiumWriter": {
+      "passed": 5
+    },
+    "chromiumCalc": {
+      "initialPassed": 4,
+      "initialTimedOut": 1,
+      "isolatedPassed": 1
+    }
+  },
+  "deferred": [
+    "Branch coverage is below 90%.",
+    "Browser admission rejects a valid self-export when a member exceeds the existing 100:1 expansion ceiling.",
+    "Deferred archive work and block DEFLATE execute in the current JavaScript realm."
+  ],
+  "files": {
+    "apps/office/src/external/zlib/deflate.ts": "1691e75a51778ddd1b3c2ecfe9cec0a4c8247d78f5f98d151abcec431e3bb575",
+    "apps/office/src/external/zlib/pako.d.ts": "843f2bac239f50cab6f827ba183940104eac4c4b985fbb2fbf7f22b06352993d",
+    "apps/office/src/oox/source/core/xmlfilterbase.test.ts": "9e7134a11777768b43a09d07700fa86ff54e94beb20c186248cd825605610391",
+    "apps/office/src/oox/source/helper/native-storage.test.ts": "024d29a88bfe2f73e1d8390e4ae5b4eb100b081c4ac34d7a29426cbe91ed7ff0",
+    "apps/office/src/oox/source/helper/storagebase.ts": "2339bacf1f9919105a82f7ce909a23d1e87fbe20668f53a1ec05aeaea092509f",
+    "apps/office/src/oox/source/helper/zipstorage.native.ts": "5bfdd3e6bfb02189fc56b1ff64bd9f11d0ed0ebd4daa51a8295d7fa1782fe3ae",
+    "apps/office/src/oox/source/helper/zipstorage.output.ts": "4b09fd941695be482a92d7e73ee21285709b545cb48275cdcc62357b31ed28fd",
+    "apps/office/src/package/source/zipapi/ThreadedDeflater.ts": "3aed331ab948623ef34e16d7a90f55df6de6f8d91b61a4a1e63ecb7bc290589b",
+    "apps/office/src/package/source/zipapi/ZipOutputEntry.ts": "75a0c7453f278a4ff874d88c02d6e6092c494edac4fdc788ee148396b4aa37c3",
+    "apps/office/src/package/source/zipapi/ZipOutputEntryInThread.test.ts": "2c7f87d6784b3d3ca6279c2dcd8ecd6cd2d353f5296372bf174ab351132fb345",
+    "apps/office/src/package/source/zipapi/ZipOutputStream.ts": "0f89611eb4ae52ae9af4fe74b6be0970a4b6d2abacf16a7cb8a3e5f440804b3f",
+    "apps/office/src/package/source/zippackage/ZipPackageStream.ts": "9ffe634936d3650390a556879e30d8f41165b1f9ffcaa7593b9501499bfec61c",
+    "apps/office/src/package/source/zippackage/ZipPackageStream.save.test.ts": "63cd02f095fe50139b7990ce9f43a298817002c494a7d5ca29c7a9fd88fc4270",
+    "docs/program/writer-upstream-suspected-issues.md": "0adb12d3d5a4400f6c962726638b0dec1ed9446885b682b5f4e739b5dfb9fd16",
+    "docs/program/calc-upstream-suspected-issues.md": "6fba69bcc75313412b5f5cafb63df39d4b31f887913ec80a506018f3b12e7eb3"
+  },
+  "logs": {
+    "apps/office/coverage/round-large-coverage-final.log": "a6df715ac2a1d657995608592534c0c987b609a7d24faad6d41f8c9337f4d46f",
+    "apps/office/coverage/round-large-calc.log": "03fce620b04b811ef942ade4be3665b4cdef1d51882039f836603e4a47df5e13",
+    "apps/office/coverage/round-large-writer.log": "b60545c26b6c967664aa0c82427396f93f0ab27176f81d9a7dcee95c1520dba6",
+    "apps/office/coverage/round-large-browser-docx.log": "a6693a13d627fed8c0da11b376a2c3ac49273819dce612a6f92e50eceb3d716f",
+    "apps/office/coverage/round-large-browser-xlsx.log": "f998c1be673598d34b504619b9e2ccead670645b6a384c5bb5e924df0b2a5a9a",
+    "apps/office/coverage/round-large-browser-xlsx-retry.log": "dd5b1a24d2dbf43cab5f2181a0338361c022e7b2709d0cc8b6e8a8af29b1869b",
+    "apps/office/coverage/round-large-roundtrip.log": "b69ac1914cca8cf946379e8e48e6964485f9ff7700b5f720c18f531597c72d12",
+    "apps/office/coverage/round-large-deferred-error.log": "eab4bcd94bb760263442cecc37efb78b0031656ccc8967cdce27c6037a54371f",
+    "apps/office/coverage/round-large-expansion.log": "b04507147c39c0b17411cec492904155cf8701ba97c0f0e2012485d04da8a7b3",
+    "apps/office/coverage/round-large-typecheck.log": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2",
+    "apps/office/coverage/round-large-static.log": "27c33d3bbb3aaceb94afa7db9356c4c30de8d81162c561b1578ded8c6676f5e0",
+    "apps/office/coverage/round-large-jsdoc.log": "24c76aec2c5252b1265842f0440a093449f8709b72b42f19b79d648eb36a26e2",
+    "apps/office/coverage/round-large-deps.log": "66142dd1693f050b04a40a8704a88ff462a35dbd09fb82beb15687698d6fd0b7",
+    "apps/office/coverage/round-large-source-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "apps/office/coverage/round-large-provenance.log": "f7ac255ef9df406bc6826a0d9e6e88b2411480035384855a972c1119607df650",
+    "apps/office/coverage/round-large-calc-resources.log": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38",
+    "apps/office/coverage/round-large-writer-resources.log": "c9937994ab28a7fc7b7e1f0e4c16511788a2b981317a0bb8affa7552b464c304",
+    "apps/office/coverage/round-large-size.log": "eaa793b980049ffad454f8b2ab5ce1a25b198606c8e96e259aa539cce8e936b0",
+    "apps/office/coverage/round-large-invariants.log": "8d075d6dba92001872be946152958a2e46013236d795bb45504e8908c135d9b0",
+    "apps/office/coverage/round-large-parity.log": "963e9013303e3389c437467be4b8f138a10b39eae1e84fe8de553617ecea075f",
+    "apps/office/coverage/round-large-doctor.log": "b996354546d538acb57d516c19bf6a84780d28618aebcdf153eb5635aad0c06b",
+    "apps/office/coverage/round-large-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+  }
+}

@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 600
+revision: 603
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T21:33:07.220Z"
+  updated_at: "2026-11-18T21:52:37.056Z"
   updated_by: "CODER"
-  note: "Production DOCX/XLSX imports now use native storage. Scoped 79 shared, 407 Writer, 47 Calc, ten Chromium cases, mounted retries, Worker and build passed. Scoped coverage remains below 90%; full parity and wider regression readiness remain open."
-  attempts: 191
+  note: "Large DOCX/XLSX package export: 100 shared, 407 Writer and 57 Calc tests passed. Five DOCX Chromium cases passed; all five XLSX cases passed across the initial run and isolated retry. Scoped statement, function and line coverage pass; branch coverage is 83.87% of the required 90%. Highly compressible parts can still hit the existing browser admission ceiling."
+  attempts: 192
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3064,8 +3067,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T21:52:37.056Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Large DOCX/XLSX package export: 100 shared, 407 Writer and 57 Calc tests passed. Five DOCX Chromium cases passed; all five XLSX cases passed across the initial run and isolated retry. Scoped statement, function and line coverage pass; branch coverage is 83.87% of the required 90%. Highly compressible parts can still hit the existing browser admission ceiling."
+  -
+    type: "status"
+    at: "2026-11-18T21:52:44.013Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T21:33:11.657Z"
+doc_updated_at: "2026-11-18T21:52:44.013Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -8810,6 +8826,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-18T21:52:37.056Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Large DOCX/XLSX package export: 100 shared, 407 Writer and 57 Calc tests passed. Five DOCX Chromium cases passed; all five XLSX cases passed across the initial run and isolated retry. Scoped statement, function and line coverage pass; branch coverage is 83.87% of the required 90%. Highly compressible parts can still hit the existing browser admission ceiling.
+    Attempts: 192
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T21:52:08.616Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -9730,6 +9776,19 @@ sections:
     - Result: 79 shared, 407 Writer and 47 Calc tests passed in the format selections. The browser cases passed and both mounted reopen cases passed on isolated retry. Worker and main both read the expected 5536-byte Writer and 1208-byte Calc main parts. The broader incidental RTF and CSV selections report missing locale-runtime initialization. Scoped coverage measured 85.06% statements, 72.53% branches, 94.93% functions and 87.08% lines, below 90%.
     - Evidence: Calc opens the original raw ZipFormat path and Writer opens OFOPXML with queried root relationships and readonly hierarchy. The browser passes the immutable admitted snapshot and keeps declared archive ceilings and raw STORED CRC verification. WRITER-649/650 and CALC-721/722 record confirmed source behavior. See `evidence/native-ooxml-input.json`.
     - Scope: Production Open and Download now reach the native package implementations. Full owner coverage, write hierarchy transactions, encrypted streams and broader format regression readiness remain open. No full-suite run was due.
+
+    ### Native OOXML large-part export and transaction failure propagation
+
+    - The original 100,000- and 1,000,000-byte ZIP stream thresholds now dispatch to their respective deferred temporary-file and block DEFLATE owners. The browser executes one realm locally using the explicit no-worker thread pool. Final queued entries replay in source order for each drain and from the back at archive finish. The block writer uses 128 KiB raw blocks, a preceding 32 KiB dictionary, byte-aligned sync flush and a final stream end over the already pinned pako library.
+    - The OFOPXML browser output bridge flushes each actual buffered stream explicitly, then propagates UNO transaction failures from the child-first commit. Default storage commit retains the original diagnostics-only behavior. The original stored task exception is rethrown after central directory and END. Source observations WRITER-651/652 and CALC-723/724 record the hidden default commit error and the use of available() to infer EOF.
+    - Command: npm run test:coverage:shared -w @vite-office/office -- ZipPackageStream.save ZipOutputStream ZipOutputEntry native-storage xmlfilterbase --maxWorkers=1 --coverage.include=src/package/source/zipapi/ThreadedDeflater.ts --coverage.include=src/package/source/zipapi/ZipOutputStream.ts --coverage.include=src/package/source/zipapi/ZipOutputEntry.ts --coverage.include=src/oox/source/helper/zipstorage.output.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/round-large-coverage-final
+      Result: fail. Evidence: 100 tests passed across 7 files. Coverage: 95.51% statements, 83.87% branches, 100% functions, 97% lines. Scope: threshold equality, dictionary reuse, independent zlib and CRC, archive queue drain and tail, failed child storage, disconnected queued input, and native write and reopen of seven large XML parts. The required branch threshold remains 90%.
+    - Command: npm run test:writer -w @vite-office/office -- docx OOXML. Result: pass. Evidence: 407 tests across 26 files. Scope: DOCX and original OOXML format filters.
+    - Command: npm run test:calc -w @vite-office/office -- excelfilter xestream. Result: pass. Evidence: 57 tests across 3 files. Scope: XLSX original import, export and stream owners.
+    - Command: ./node_modules/.bin/playwright test --config apps/office/coverage/docx-links.playwright.config.ts --workers=1. Result: pass. Evidence: 5 browser tests. Scope: production Writer Open, browser storage, Download DOCX and mobile reopen.
+    - Command: ./node_modules/.bin/playwright test --config apps/office/coverage/xlsx-date-system.playwright.config.ts --workers=1. Result: initial concurrent run had 4 passing and one timed-out Open dialog assertion. Command: ./node_modules/.bin/playwright test --config apps/office/coverage/xlsx-date-system.playwright.config.ts --workers=1 --grep 'scoped Print Titles'. Result: pass in isolation. Scope: production Calc Open, browser storage, Download XLSX and mobile reopen.
+    - Commands: npm run typecheck -w @vite-office/office, npm run test:static, npm run check:docs, scoped eslint and prettier, npm run check:dependencies, npm run check:writer-resources, npm run check:calc-resources, npm run check:file-size, npm run check:source-tree, npm run check:source-provenance, npm run inventory:invariants, npm run inventory:parity, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check. Result: pass. Scope: static and project policy checks for this checkpoint.
+    - A focused temporary production-boundary probe confirmed that a valid self-export with more than 100:1 expansion in one part still fails browser admission. The checkpoint retains this existing browser policy. A real worker is still required to run package work off the UI thread.
 id_source: "generated"
 ---
 ## Summary
@@ -15484,6 +15543,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-18T21:52:37.056Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Large DOCX/XLSX package export: 100 shared, 407 Writer and 57 Calc tests passed. Five DOCX Chromium cases passed; all five XLSX cases passed across the initial run and isolated retry. Scoped statement, function and line coverage pass; branch coverage is 83.87% of the required 90%. Highly compressible parts can still hit the existing browser admission ceiling.
+Attempts: 192
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T21:52:08.616Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -16408,3 +16497,16 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Result: 79 shared, 407 Writer and 47 Calc tests passed in the format selections. The browser cases passed and both mounted reopen cases passed on isolated retry. Worker and main both read the expected 5536-byte Writer and 1208-byte Calc main parts. The broader incidental RTF and CSV selections report missing locale-runtime initialization. Scoped coverage measured 85.06% statements, 72.53% branches, 94.93% functions and 87.08% lines, below 90%.
 - Evidence: Calc opens the original raw ZipFormat path and Writer opens OFOPXML with queried root relationships and readonly hierarchy. The browser passes the immutable admitted snapshot and keeps declared archive ceilings and raw STORED CRC verification. WRITER-649/650 and CALC-721/722 record confirmed source behavior. See `evidence/native-ooxml-input.json`.
 - Scope: Production Open and Download now reach the native package implementations. Full owner coverage, write hierarchy transactions, encrypted streams and broader format regression readiness remain open. No full-suite run was due.
+
+### Native OOXML large-part export and transaction failure propagation
+
+- The original 100,000- and 1,000,000-byte ZIP stream thresholds now dispatch to their respective deferred temporary-file and block DEFLATE owners. The browser executes one realm locally using the explicit no-worker thread pool. Final queued entries replay in source order for each drain and from the back at archive finish. The block writer uses 128 KiB raw blocks, a preceding 32 KiB dictionary, byte-aligned sync flush and a final stream end over the already pinned pako library.
+- The OFOPXML browser output bridge flushes each actual buffered stream explicitly, then propagates UNO transaction failures from the child-first commit. Default storage commit retains the original diagnostics-only behavior. The original stored task exception is rethrown after central directory and END. Source observations WRITER-651/652 and CALC-723/724 record the hidden default commit error and the use of available() to infer EOF.
+- Command: npm run test:coverage:shared -w @vite-office/office -- ZipPackageStream.save ZipOutputStream ZipOutputEntry native-storage xmlfilterbase --maxWorkers=1 --coverage.include=src/package/source/zipapi/ThreadedDeflater.ts --coverage.include=src/package/source/zipapi/ZipOutputStream.ts --coverage.include=src/package/source/zipapi/ZipOutputEntry.ts --coverage.include=src/oox/source/helper/zipstorage.output.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/round-large-coverage-final
+  Result: fail. Evidence: 100 tests passed across 7 files. Coverage: 95.51% statements, 83.87% branches, 100% functions, 97% lines. Scope: threshold equality, dictionary reuse, independent zlib and CRC, archive queue drain and tail, failed child storage, disconnected queued input, and native write and reopen of seven large XML parts. The required branch threshold remains 90%.
+- Command: npm run test:writer -w @vite-office/office -- docx OOXML. Result: pass. Evidence: 407 tests across 26 files. Scope: DOCX and original OOXML format filters.
+- Command: npm run test:calc -w @vite-office/office -- excelfilter xestream. Result: pass. Evidence: 57 tests across 3 files. Scope: XLSX original import, export and stream owners.
+- Command: ./node_modules/.bin/playwright test --config apps/office/coverage/docx-links.playwright.config.ts --workers=1. Result: pass. Evidence: 5 browser tests. Scope: production Writer Open, browser storage, Download DOCX and mobile reopen.
+- Command: ./node_modules/.bin/playwright test --config apps/office/coverage/xlsx-date-system.playwright.config.ts --workers=1. Result: initial concurrent run had 4 passing and one timed-out Open dialog assertion. Command: ./node_modules/.bin/playwright test --config apps/office/coverage/xlsx-date-system.playwright.config.ts --workers=1 --grep 'scoped Print Titles'. Result: pass in isolation. Scope: production Calc Open, browser storage, Download XLSX and mobile reopen.
+- Commands: npm run typecheck -w @vite-office/office, npm run test:static, npm run check:docs, scoped eslint and prettier, npm run check:dependencies, npm run check:writer-resources, npm run check:calc-resources, npm run check:file-size, npm run check:source-tree, npm run check:source-provenance, npm run inventory:invariants, npm run inventory:parity, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check. Result: pass. Scope: static and project policy checks for this checkpoint.
+- A focused temporary production-boundary probe confirmed that a valid self-export with more than 100:1 expansion in one part still fails browser admission. The checkpoint retains this existing browser policy. A real worker is still required to run package work off the UI thread.
