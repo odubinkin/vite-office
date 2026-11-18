@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 517
+revision: 520
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T07:18:57.828Z"
+  updated_at: "2026-11-18T07:47:31.059Z"
   updated_by: "CODER"
-  note: "Original local R1C1 address/scanner checkpoint: 140 focused and 72 related tests pass; whole owner scoped90 passes, actual Chromium main/Worker import caller uses parsed address. Complete model/factory/qualified-address/filter/storage/UI and existing metadata errors remain; see calc-r1c1-address-continuation.json."
-  attempts: 164
+  note: "Native package and own-stream state: 73 focused plus97 related tests and scoped90 pass; Chromium main/Worker actual factory/source cursors pass. Complete package/member/commit/storage/filter/model/UI remain unfinished; four metadata errors persist. See native-package-stream-state-continuation.json."
+  attempts: 165
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2632,8 +2635,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T07:47:31.059Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native package and own-stream state: 73 focused plus97 related tests and scoped90 pass; Chromium main/Worker actual factory/source cursors pass. Complete package/member/commit/storage/filter/model/UI remain unfinished; four metadata errors persist. See native-package-stream-state-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-18T07:48:26.411Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T07:19:04.283Z"
+doc_updated_at: "2026-11-18T07:48:26.411Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -7568,6 +7584,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T07:47:31.059Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native package and own-stream state: 73 focused plus97 related tests and scoped90 pass; Chromium main/Worker actual factory/source cursors pass. Complete package/member/commit/storage/filter/model/UI remain unfinished; four metadata errors persist. See native-package-stream-state-continuation.json.
+    Attempts: 165
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T07:47:29.513Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -8264,6 +8310,15 @@ sections:
     Evidence: actual ScAddress/ScRange R1C1 dispatch, shared original signed64 scanner, row/column axis flags and failed-parse mutations, relative/absolute bases, full-axis fallbacks and formatting/singleton control. Twenty-four unchanged compiled scanner witnesses match; witness runs only the scanner, not the complete parser/header. Native testToggleRefFlag local spelling assertions are ported at the scalar owner, not full ScRefFinder/editor orchestration. CALC689 preserves sign-only bracketed zero offsets. Signed-overflow addition domains remain excluded; scanner witnesses use a zero relative row base.
     Scope: service investigation found the missing address primitives needed by the service family. This checkpoint implements numeric R1C1 values, not ScAddressConversionObj/ScServiceProvider::MakeInstance/full XModel/model factory. Real Chromium main/Worker parse into CellModel.maCellAddr, feed that exact address to ScDocumentImport and observe the expected cell and actual model. Qualified/external/name/error-token headers, native physical ABI and complete DOCX/XLSX file/filter/storage/UI remain unfinished or unqualified. No substitute model/factory/header/document provider or source-success stub is supplied.
     Result: pass for final lint/format/tools/JSDoc(5520), provenance(2681), registry zero semantic violations, resources, size/tree, Vite bundling/static, doctor/routing/diff. Full typecheck/build still fail on the same four SfxDocumentMetaData.storage native descriptor/medium-storage gaps. Dependency check retains the prior patattr VCL import gate and comphelper->sax->comphelper cycle. Full suite is not due under the approved ten-completed-task cadence.
+
+    ### Native package/own-stream state continuation
+
+    Command: focused shared scoped90 package/stream tests, original folder/shared-stream/ZIP reader regressions, actual Chromium main/DOM-free Worker and static checks; exact commands and SHA-256 in evidence/native-package-stream-state-continuation.json.
+    Result: pass for 73 focused tests/7 files, 97 related tests/4 files and 2 Writer resource tests. Both complete changed executable files meet approved90: ZipPackage.ts naturally100; ZipPackageStream.ts95.8 statements/90.38 branches/100 functions/97.01 lines; combined98.23/96.21/100/98.69. Earlier profiles exposed unrelated existing metadata branches; existing OFOPXML/native storage input/output tests supply actual related evidence. No exclusions, counter merging or threshold changes. Initial native logical-Any method dispatch, typed query inference and fixture extraction/address assumptions were corrected; failed logs remain.
+    Evidence: real ZipPackage constructor/default format/native shared mutex/root folder and actual folder/stream creation with first-bool/default/ignored-tail semantics. Real ZipPackageStream retains represented defaults, loaded record copy, member transitions, data/input replacement, lazy native seekability and independently positioned WrapStreamForShare readers. MediaType/Size/Compressed preserve source type/error/order semantics. WRITER623/CALC690 document the retained explicit-false-then-text compression override.
+    Scope: represented state and own-stream APIs only. The package service and encryption interface are not registered/advertised; source crypto algorithms are not ported by this block. Initialization/member IO over native ZipFile, full package/stream interfaces/type lists/imported state, raw/encrypted APIs, saveChild/commit, XStorage/SfxMedium/filter/model/UI remain unfinished. Unported read/write/property paths explicitly fail and are not native exception parity or successful substitutes. Actual component tests and main/Worker probe use no fake package/factory/ByteReader/stream provider. Native physical ABI/destructor/allocator/concurrency domains and original whole-package QA remain unqualified; testThreadedStreams is downstream context, not claimed original full-suite execution.
+    Result: pass for final lint/format/tools/JSDoc(5523), provenance(2682), registry zero semantic violations, resources, size/tree, Vite bundling/static, doctor/routing/diff and Chromium. Full typecheck/build retain exactly the four SfxDocumentMetaData.storage native descriptor/medium gaps. Dependency check retains existing patattr VCL boundary and comphelper->sax->comphelper cycle. No complete DOCX/XLSX import/export/reopen/UI claim. Full suite not due under the ten-completed-task cadence.
+    Next source-backed block: connect ZipPackage.initialize/getZipFileContents and getByHierarchicalName to actual ZipFile/entries/folders, replace the explicit package-member getInputStream gap with its native plain-stream call, then complete package stream serialization and OStorage/SfxMedium paths. Keep the real package owner and do not add a test-only ZIP setter or substitute root/factory.
 id_source: "generated"
 ---
 ## Summary
@@ -13208,6 +13263,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T07:47:31.059Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native package and own-stream state: 73 focused plus97 related tests and scoped90 pass; Chromium main/Worker actual factory/source cursors pass. Complete package/member/commit/storage/filter/model/UI remain unfinished; four metadata errors persist. See native-package-stream-state-continuation.json.
+Attempts: 165
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T07:47:29.513Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -13908,3 +13993,12 @@ Result: pass for 140 address tests/9 files and 72 related import/conversion test
 Evidence: actual ScAddress/ScRange R1C1 dispatch, shared original signed64 scanner, row/column axis flags and failed-parse mutations, relative/absolute bases, full-axis fallbacks and formatting/singleton control. Twenty-four unchanged compiled scanner witnesses match; witness runs only the scanner, not the complete parser/header. Native testToggleRefFlag local spelling assertions are ported at the scalar owner, not full ScRefFinder/editor orchestration. CALC689 preserves sign-only bracketed zero offsets. Signed-overflow addition domains remain excluded; scanner witnesses use a zero relative row base.
 Scope: service investigation found the missing address primitives needed by the service family. This checkpoint implements numeric R1C1 values, not ScAddressConversionObj/ScServiceProvider::MakeInstance/full XModel/model factory. Real Chromium main/Worker parse into CellModel.maCellAddr, feed that exact address to ScDocumentImport and observe the expected cell and actual model. Qualified/external/name/error-token headers, native physical ABI and complete DOCX/XLSX file/filter/storage/UI remain unfinished or unqualified. No substitute model/factory/header/document provider or source-success stub is supplied.
 Result: pass for final lint/format/tools/JSDoc(5520), provenance(2681), registry zero semantic violations, resources, size/tree, Vite bundling/static, doctor/routing/diff. Full typecheck/build still fail on the same four SfxDocumentMetaData.storage native descriptor/medium-storage gaps. Dependency check retains the prior patattr VCL import gate and comphelper->sax->comphelper cycle. Full suite is not due under the approved ten-completed-task cadence.
+
+### Native package/own-stream state continuation
+
+Command: focused shared scoped90 package/stream tests, original folder/shared-stream/ZIP reader regressions, actual Chromium main/DOM-free Worker and static checks; exact commands and SHA-256 in evidence/native-package-stream-state-continuation.json.
+Result: pass for 73 focused tests/7 files, 97 related tests/4 files and 2 Writer resource tests. Both complete changed executable files meet approved90: ZipPackage.ts naturally100; ZipPackageStream.ts95.8 statements/90.38 branches/100 functions/97.01 lines; combined98.23/96.21/100/98.69. Earlier profiles exposed unrelated existing metadata branches; existing OFOPXML/native storage input/output tests supply actual related evidence. No exclusions, counter merging or threshold changes. Initial native logical-Any method dispatch, typed query inference and fixture extraction/address assumptions were corrected; failed logs remain.
+Evidence: real ZipPackage constructor/default format/native shared mutex/root folder and actual folder/stream creation with first-bool/default/ignored-tail semantics. Real ZipPackageStream retains represented defaults, loaded record copy, member transitions, data/input replacement, lazy native seekability and independently positioned WrapStreamForShare readers. MediaType/Size/Compressed preserve source type/error/order semantics. WRITER623/CALC690 document the retained explicit-false-then-text compression override.
+Scope: represented state and own-stream APIs only. The package service and encryption interface are not registered/advertised; source crypto algorithms are not ported by this block. Initialization/member IO over native ZipFile, full package/stream interfaces/type lists/imported state, raw/encrypted APIs, saveChild/commit, XStorage/SfxMedium/filter/model/UI remain unfinished. Unported read/write/property paths explicitly fail and are not native exception parity or successful substitutes. Actual component tests and main/Worker probe use no fake package/factory/ByteReader/stream provider. Native physical ABI/destructor/allocator/concurrency domains and original whole-package QA remain unqualified; testThreadedStreams is downstream context, not claimed original full-suite execution.
+Result: pass for final lint/format/tools/JSDoc(5523), provenance(2682), registry zero semantic violations, resources, size/tree, Vite bundling/static, doctor/routing/diff and Chromium. Full typecheck/build retain exactly the four SfxDocumentMetaData.storage native descriptor/medium gaps. Dependency check retains existing patattr VCL boundary and comphelper->sax->comphelper cycle. No complete DOCX/XLSX import/export/reopen/UI claim. Full suite not due under the ten-completed-task cadence.
+Next source-backed block: connect ZipPackage.initialize/getZipFileContents and getByHierarchicalName to actual ZipFile/entries/folders, replace the explicit package-member getInputStream gap with its native plain-stream call, then complete package stream serialization and OStorage/SfxMedium paths. Keep the real package owner and do not add a test-only ZIP setter or substitute root/factory.
