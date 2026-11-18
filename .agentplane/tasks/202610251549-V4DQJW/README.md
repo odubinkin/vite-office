@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 329
+revision: 332
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T20:15:36.909Z"
+  updated_at: "2026-11-18T20:28:05.599Z"
   updated_by: "CODER"
-  note: "Native storage relationship reads pass 266 focused tests and Chromium main/Worker. The relationship owner passes scoped 90; two broader owner profiles and the SfxMedium/typecheck and task-wide acceptance remain open."
-  attempts: 96
+  note: "Native ordinary and seekable readers, catalog and relationship tests pass. Broader owner coverage, public storage and SfxMedium and task-wide DOCX/XLSX acceptance remain open."
+  attempts: 97
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1544,8 +1547,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T20:28:05.599Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native ordinary and seekable readers, catalog and relationship tests pass. Broader owner coverage, public storage and SfxMedium and task-wide DOCX/XLSX acceptance remain open."
+  -
+    type: "status"
+    at: "2026-11-18T20:28:16.275Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T20:15:48.048Z"
+doc_updated_at: "2026-11-18T20:28:16.275Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -4438,6 +4454,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-18T20:28:05.599Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native ordinary and seekable readers, catalog and relationship tests pass. Broader owner coverage, public storage and SfxMedium and task-wide DOCX/XLSX acceptance remain open.
+    Attempts: 97
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T20:28:05.007Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -4995,6 +5041,13 @@ sections:
     - Result: All 266 selected cases passed. The dedicated relationship owner passed the scoped 90% gate (96.93% statements, 91.11% branches, 100% functions and lines). The full OStorage_Impl and OWriteStream_Impl owner profiles remain below 90%, recorded independently. Five Writer and five Calc UI scenarios passed. Typecheck still reports the three SfxMedium integration gaps in SfxDocumentMetaData.storage.ts. Task-wide verification stays open.
     - Evidence: Four pinned Strict and Transitional DOCX/XLSX packages exercise the real package folder, lazy related streams and registered OFOPXML parser. Chromium main and the DOM-free Worker produced 3 root/15 main-part rows for Strict DOCX and 4 root/6 main-part rows for Strict XLSX. Tests exercise staged-read-to-commit, COW results, malformed original retry/sticky states and broken replacement revert. Source findings WRITER-641/CALC-713 preserve the relationship retry distinction. WRITER-642/CALC-714 record a separate source-only custom-property getter issue.
     - Scope: Internal OStorage_Impl and OWriteStream_Impl use source-shaped relationship lookup and parsing over actual package streams. Public OStorage, StorageFactory registration, parent-backed public stream lifecycle, descriptor-backed SfxMedium and complete DOCX/XLSX UI acceptance remain pending. Existing browser file policy stays in effect. No full run was due.
+
+    ### Native OOXML package read wrappers and catalog
+
+    - Command: Related package/SAX Vitest with owner coverage, focused attached-reader coverage, boundary tests, production Chromium DOCX/XLSX regressions and a native main/Worker probe. Vite/static, scoped lint/format, JSDoc, source provenance/registry, dependencies/size/tree and doctor/routing/diff. Exact commands and hashes in `evidence/native-storage-read-wrappers.json`.
+    - Result: 274 related cases, 52 focused coverage cases, 48 boundary-tooling cases and ten Chromium UI cases passed. Attached ordinary/seekable wrappers and relationship module exceed 90% independently. The catalog, OStorage_Impl and OWriteStream_Impl profiles are below the whole-owner cutoff. Typecheck still identifies the same three missing SfxMedium operations. Parent task-wide acceptance stays open.
+    - Evidence: Native ordinary reads own actual XInputStream, XPropertySet and XRelationshipAccess identities. A parent-backed wrapper borrows the original owner, acquires the native mutex, and unregisters on close. Parent release invalidates surviving wrappers. Both cache and TempFileFast paths pass the original 30000-byte boundary, including an entire 32000-byte tail-copy block. Strict DOCX/XLSX returned the same relationship counts and main-part lengths in Chromium main and the DOM-free Worker. The relevant byte/property/relation and missing-read cases from `ofopxmlstorages/TestHelper.java` and `Test06.java` execute over the internal native entrypoint.
+    - Scope: Public OStorage, StorageFactory and descriptor-backed SfxMedium remain pending. The browser UI regressions use the current filter entrypoint. WRITER-643/CALC-715 retain the original catalog presence result even when all names are removed. WRITER-644/CALC-716 retain the shared seekable cache cursor. Package uses the source-backed tools dependency from Library_package2. No full test run was due.
 id_source: "generated"
 ---
 ## Summary
@@ -7898,6 +7951,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-18T20:28:05.599Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native ordinary and seekable readers, catalog and relationship tests pass. Broader owner coverage, public storage and SfxMedium and task-wide DOCX/XLSX acceptance remain open.
+Attempts: 97
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T20:28:05.007Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -8460,3 +8543,10 @@ Evidence: `evidence/docx-native-ranged-bookmarks.json`.
 - Result: All 266 selected cases passed. The dedicated relationship owner passed the scoped 90% gate (96.93% statements, 91.11% branches, 100% functions and lines). The full OStorage_Impl and OWriteStream_Impl owner profiles remain below 90%, recorded independently. Five Writer and five Calc UI scenarios passed. Typecheck still reports the three SfxMedium integration gaps in SfxDocumentMetaData.storage.ts. Task-wide verification stays open.
 - Evidence: Four pinned Strict and Transitional DOCX/XLSX packages exercise the real package folder, lazy related streams and registered OFOPXML parser. Chromium main and the DOM-free Worker produced 3 root/15 main-part rows for Strict DOCX and 4 root/6 main-part rows for Strict XLSX. Tests exercise staged-read-to-commit, COW results, malformed original retry/sticky states and broken replacement revert. Source findings WRITER-641/CALC-713 preserve the relationship retry distinction. WRITER-642/CALC-714 record a separate source-only custom-property getter issue.
 - Scope: Internal OStorage_Impl and OWriteStream_Impl use source-shaped relationship lookup and parsing over actual package streams. Public OStorage, StorageFactory registration, parent-backed public stream lifecycle, descriptor-backed SfxMedium and complete DOCX/XLSX UI acceptance remain pending. Existing browser file policy stays in effect. No full run was due.
+
+### Native OOXML package read wrappers and catalog
+
+- Command: Related package/SAX Vitest with owner coverage, focused attached-reader coverage, boundary tests, production Chromium DOCX/XLSX regressions and a native main/Worker probe. Vite/static, scoped lint/format, JSDoc, source provenance/registry, dependencies/size/tree and doctor/routing/diff. Exact commands and hashes in `evidence/native-storage-read-wrappers.json`.
+- Result: 274 related cases, 52 focused coverage cases, 48 boundary-tooling cases and ten Chromium UI cases passed. Attached ordinary/seekable wrappers and relationship module exceed 90% independently. The catalog, OStorage_Impl and OWriteStream_Impl profiles are below the whole-owner cutoff. Typecheck still identifies the same three missing SfxMedium operations. Parent task-wide acceptance stays open.
+- Evidence: Native ordinary reads own actual XInputStream, XPropertySet and XRelationshipAccess identities. A parent-backed wrapper borrows the original owner, acquires the native mutex, and unregisters on close. Parent release invalidates surviving wrappers. Both cache and TempFileFast paths pass the original 30000-byte boundary, including an entire 32000-byte tail-copy block. Strict DOCX/XLSX returned the same relationship counts and main-part lengths in Chromium main and the DOM-free Worker. The relevant byte/property/relation and missing-read cases from `ofopxmlstorages/TestHelper.java` and `Test06.java` execute over the internal native entrypoint.
+- Scope: Public OStorage, StorageFactory and descriptor-backed SfxMedium remain pending. The browser UI regressions use the current filter entrypoint. WRITER-643/CALC-715 retain the original catalog presence result even when all names are removed. WRITER-644/CALC-716 retain the shared seekable cache cursor. Package uses the source-backed tools dependency from Library_package2. No full test run was due.

@@ -1,0 +1,446 @@
+{
+  "checkpoint": "Original native package ordinary and seekable read wrappers and catalog",
+  "createdAt": "2026-11-18T20:28:04.757781+00:00",
+  "tasks": [
+    "202610251549-V4DQJW",
+    "202610251549-J0Z0KF"
+  ],
+  "upstream": [
+    "package/source/xstor/ocompinstream.cxx",
+    "package/source/xstor/oseekinstream.cxx",
+    "package/source/xstor/owriteablestream.cxx",
+    "package/source/xstor/xstorage.cxx",
+    "package/Library_package2.mk"
+  ],
+  "upstreamQa": [
+    "package/qa/ofopxmlstorages/TestHelper.java#InternalCheckStream",
+    "package/qa/ofopxmlstorages/Test06.java#missing ordinary-read branch"
+  ],
+  "sourceObservations": [
+    "WRITER-643",
+    "CALC-715",
+    "WRITER-644",
+    "CALC-716"
+  ],
+  "commands": {
+    "related": "npm run test:coverage:shared -w @vite-office/office -- xstorage ocompinstream oseekinstream ofopxmlhelper native-storage ZipPackage --coverage.include=src/package/source/xstor/ocompinstream.ts --coverage.include=src/package/source/xstor/oseekinstream.ts --coverage.include=src/package/source/xstor/owriteablestream.ts --coverage.include=src/package/source/xstor/xstorage.catalog.ts --coverage.include=src/package/source/xstor/xstorage.impl.ts --coverage.include=src/package/source/xstor/xstorage.relations.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/ostor-scoped",
+    "targeted": "npm run test:coverage:shared -w @vite-office/office -- xstorage ocompinstream oseekinstream --coverage.include=src/package/source/xstor/ocompinstream.ts --coverage.include=src/package/source/xstor/oseekinstream.ts --coverage.include=src/package/source/xstor/xstorage.relations.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/ostor-read-scoped",
+    "qaReplay": "npm run test:shared -w @vite-office/office -- xstorage.relations",
+    "worker": "node apps/office/coverage/medium-storage-probe.mjs",
+    "browserDocx": "./node_modules/.bin/playwright test --config apps/office/coverage/docx-links.playwright.config.ts",
+    "browserXlsx": "./node_modules/.bin/playwright test --config apps/office/coverage/xlsx-date-system.playwright.config.ts",
+    "deps": "npm run check:dependencies",
+    "boundaryTests": "./node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts",
+    "typecheck": "npm run typecheck -w @vite-office/office",
+    "vite": "npm exec --workspace @vite-office/office -- vite build",
+    "static": "node scripts/check-static-build.mjs",
+    "docs": "npm run check:docs",
+    "format": "./node_modules/.bin/prettier --check <changed source and tooling files>",
+    "lint": "./node_modules/.bin/eslint --max-warnings 0 <changed source and tooling files>",
+    "provenance": "npm run check:source-provenance",
+    "registry": "npm run inventory:registry:build && npm run inventory:registry:check",
+    "tree": "npm run check:source-tree",
+    "size": "npm run check:file-size",
+    "doctor": "ap doctor",
+    "routing": "node .agentplane/policy/check-routing.mjs",
+    "diff": "git diff --check"
+  },
+  "results": {
+    "related": {
+      "passed": 274,
+      "files": 24,
+      "coverage": {
+        "total": {
+          "lines": {
+            "total": 1328,
+            "covered": 1223,
+            "skipped": 0,
+            "pct": 92.09
+          },
+          "statements": {
+            "total": 1469,
+            "covered": 1313,
+            "skipped": 0,
+            "pct": 89.38
+          },
+          "functions": {
+            "total": 113,
+            "covered": 112,
+            "skipped": 0,
+            "pct": 99.11
+          },
+          "branches": {
+            "total": 494,
+            "covered": 378,
+            "skipped": 0,
+            "pct": 76.51
+          },
+          "branchesTrue": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": "Unknown"
+          }
+        },
+        "ocompinstream.ts": {
+          "lines": {
+            "total": 286,
+            "covered": 286,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 40,
+            "covered": 40,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 306,
+            "covered": 304,
+            "skipped": 0,
+            "pct": 99.34
+          },
+          "branches": {
+            "total": 53,
+            "covered": 51,
+            "skipped": 0,
+            "pct": 96.22
+          }
+        },
+        "oseekinstream.ts": {
+          "lines": {
+            "total": 21,
+            "covered": 21,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 6,
+            "covered": 6,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 23,
+            "covered": 23,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 5,
+            "covered": 5,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "owriteablestream.ts": {
+          "lines": {
+            "total": 256,
+            "covered": 241,
+            "skipped": 0,
+            "pct": 94.14
+          },
+          "functions": {
+            "total": 18,
+            "covered": 18,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 286,
+            "covered": 256,
+            "skipped": 0,
+            "pct": 89.51
+          },
+          "branches": {
+            "total": 88,
+            "covered": 60,
+            "skipped": 0,
+            "pct": 68.18
+          }
+        },
+        "xstorage.catalog.ts": {
+          "lines": {
+            "total": 219,
+            "covered": 185,
+            "skipped": 0,
+            "pct": 84.47
+          },
+          "functions": {
+            "total": 12,
+            "covered": 11,
+            "skipped": 0,
+            "pct": 91.66
+          },
+          "statements": {
+            "total": 254,
+            "covered": 209,
+            "skipped": 0,
+            "pct": 82.28
+          },
+          "branches": {
+            "total": 125,
+            "covered": 90,
+            "skipped": 0,
+            "pct": 72
+          }
+        },
+        "xstorage.impl.ts": {
+          "lines": {
+            "total": 406,
+            "covered": 350,
+            "skipped": 0,
+            "pct": 86.2
+          },
+          "functions": {
+            "total": 27,
+            "covered": 27,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 440,
+            "covered": 364,
+            "skipped": 0,
+            "pct": 82.72
+          },
+          "branches": {
+            "total": 137,
+            "covered": 92,
+            "skipped": 0,
+            "pct": 67.15
+          }
+        },
+        "xstorage.relations.ts": {
+          "lines": {
+            "total": 140,
+            "covered": 140,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 10,
+            "covered": 10,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 160,
+            "covered": 157,
+            "skipped": 0,
+            "pct": 98.12
+          },
+          "branches": {
+            "total": 86,
+            "covered": 80,
+            "skipped": 0,
+            "pct": 93.02
+          }
+        }
+      },
+      "coverageGate": "failed for catalog, OStorage_Impl and OWriteStream_Impl"
+    },
+    "targeted": {
+      "passed": 52,
+      "files": 4,
+      "coverage": {
+        "total": {
+          "lines": {
+            "total": 447,
+            "covered": 447,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 489,
+            "covered": 484,
+            "skipped": 0,
+            "pct": 98.97
+          },
+          "functions": {
+            "total": 56,
+            "covered": 56,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 144,
+            "covered": 136,
+            "skipped": 0,
+            "pct": 94.44
+          },
+          "branchesTrue": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": "Unknown"
+          }
+        },
+        "ocompinstream.ts": {
+          "lines": {
+            "total": 286,
+            "covered": 286,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 40,
+            "covered": 40,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 306,
+            "covered": 304,
+            "skipped": 0,
+            "pct": 99.34
+          },
+          "branches": {
+            "total": 53,
+            "covered": 51,
+            "skipped": 0,
+            "pct": 96.22
+          }
+        },
+        "oseekinstream.ts": {
+          "lines": {
+            "total": 21,
+            "covered": 21,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 6,
+            "covered": 6,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 23,
+            "covered": 23,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 5,
+            "covered": 5,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "xstorage.relations.ts": {
+          "lines": {
+            "total": 140,
+            "covered": 140,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 10,
+            "covered": 10,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 160,
+            "covered": 157,
+            "skipped": 0,
+            "pct": 98.12
+          },
+          "branches": {
+            "total": 86,
+            "covered": 80,
+            "skipped": 0,
+            "pct": 93.02
+          }
+        }
+      },
+      "coverageGate": "passed"
+    },
+    "qaReplayPassed": 14,
+    "boundaryTestsPassed": 48,
+    "nativeChromium": {
+      "main": {
+        "dom": true,
+        "observations": [
+          [
+            "word",
+            3,
+            15,
+            5536
+          ],
+          [
+            "xl",
+            4,
+            6,
+            1208
+          ]
+        ]
+      },
+      "worker": {
+        "dom": false,
+        "observations": [
+          [
+            "word",
+            3,
+            15,
+            5536
+          ],
+          [
+            "xl",
+            4,
+            6,
+            1208
+          ]
+        ]
+      }
+    },
+    "browserDocx": 5,
+    "browserXlsx": 5,
+    "fullRun": false
+  },
+  "limitations": [
+    "Actual parent-backed plain and seekable read branches, catalog and original relationships. Public OStorage, StorageFactory and descriptor-backed SfxMedium remain pending.",
+    "Full typecheck still produces the descriptor overload, GetOutputStorage and Commit errors.",
+    "Standalone mutex parity and complete Writable OWriteStream remain pending."
+  ],
+  "fileSha256": {
+    "apps/office/src/package/source/xstor/ocompinstream.ts": "239c953b31363ca300c320f7407a12d7b206ff44fce00950a2f420f543e7fd18",
+    "apps/office/src/package/source/xstor/oseekinstream.ts": "f04d2f2b533bae2538d28118e31b50919692085e7c94097c1defaf0f9ec2c321",
+    "apps/office/src/package/source/xstor/owriteablestream.ts": "a9d75d1a74dad74c110c39a9e3f54cd3b19a7a733e89879f7af63787d09fb4cc",
+    "apps/office/src/package/source/xstor/xstorage.catalog.ts": "ea6939337be78a015212beab8d92c6a3a2522563e4ba2fbcbe877406e0a148c7",
+    "apps/office/src/package/source/xstor/xstorage.impl.ts": "58bbbfe49bed389c986365522df3222d9310bed60f19e7d0ac3b139f033e0227",
+    "apps/office/src/package/source/xstor/xstorage.relations.ts": "54c3a74cb69af21ab25b59dcd3f0975df1930f917f0107c9c76ff95f873ed55a",
+    "apps/office/src/package/source/xstor/xstorage.relations.test.ts": "006cfa1dc3e3a62967731336346e68e9f4312649b823efda18213c4a5357939a",
+    "scripts/module-boundaries/allowed-edges.mjs": "de1f3a9657a8337422f3fb5d1e4fa123e9809cc8e20dde0b5da08312132d9256",
+    "scripts/check-module-boundaries.test.ts": "550f1fcfdd17a82f2364d443e86840049cd0a1906926bd01ce66b45801936e9c",
+    "docs/program/writer-upstream-suspected-issues.md": "d5a08ee1b892fac0ace6ece835aa399fc44bf804cbecc43ec6c4c5f84301751e",
+    "docs/program/calc-upstream-suspected-issues.md": "670ac283c500b40ff25bebfbc6ad4f8acd8fd83909219537a8a2e5419ffcbaa6",
+    "apps/office/coverage/medium-storage-probe.ts": "055a80242141e7e1e6b2537ce720e7a39f51e15772257bc9c2bb4d94b52e0734",
+    "apps/office/coverage/medium-storage-probe.mjs": "038385c42e04eec14aec03d995899775bb59b6194e1bab020f25590e940795e3"
+  },
+  "logSha256": {
+    "ostor-final-coverage.log": "069b8495c506014715829ced474cf27f781e223972cf0fa7d18665788a682694",
+    "ostor-read-coverage.log": "6260b2933d2256d7f94db3e7d9f208feca835e84b421947442fceb81c59437e8",
+    "ostor-final-tests.log": "052b5fe3b869808b251fdc49b672fe1dc004734ea2e57c18ac0aca528ed028f1",
+    "ostor-final-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "ostor-final-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "ostor-final-docs.log": "a39bb7d0bfbf42e15f924d865efa560bc4f7e725ff6c9ede4ad63b253c0bfcca",
+    "ostor-worker.log": "01a539e6e8f03ad53df72b2923788b0d8960e4bfa9f37987e3109092fe4eeb81",
+    "ostor-browser-docx.log": "4690ca4830a1b81ca396a5e827bba3c8657d8798448a622f1a5528db7fb7d534",
+    "ostor-browser-xlsx.log": "770b70d36280dae5d09a0b653365d2dbd845c68d8dee2df993213705219d60d3",
+    "ostor-deps.log": "143a18876f70fec48a5906eb192f34873695f7d87ea690c80932f76af0a4e489",
+    "ostor-boundary-tests.log": "2656e0dbb8c4d630d67e5c1d08d25fa6f3f85b4914ba2e8306045f18618fa85e",
+    "ostor-provenance.log": "9060392de13e4485ea2f927a8e133214360e9df9166513a791177b97d5cfe04e",
+    "ostor-registry.log": "4ad32970ebfdbbbfe7ea490484bbab5ef00c0d5573c60fed1269e1da282fa0cd",
+    "ostor-tsc.log": "c2d912329adc965af319b920ac18e7d5588514055446127376ac4f44b94f2106",
+    "ostor-vite.log": "e4c4a3d7cfa4114d5122a60c36486cabba743556e7e4c75808377f0afca2c268",
+    "ostor-static.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "ostor-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "ostor-size.log": "daee620adac5e282331b0b1e94ccd8362e46fbcba6a392d1a54b8fd44037b571",
+    "ostor-doctor.log": "a74d1ba5b5bf62a5bd0209258771e245d8b90eb4761803d9f05156a9e4e7ffb6",
+    "ostor-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "ostor-status.log": "2f5e21fd8785803f823404f6fcb9aeb16fc26870ef44a7f19c4452017966dac9"
+  }
+}
