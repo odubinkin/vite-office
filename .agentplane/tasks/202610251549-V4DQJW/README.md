@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 305
+revision: 308
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T15:41:58.287Z"
+  updated_at: "2026-11-18T16:44:46.843Z"
   updated_by: "CODER"
-  note: "The native DOCX list numbering checkpoint passed 161 focused tests, 92.62% scoped branch coverage and the production Chromium import, download and 390x844 DOCX/ODT reopens. Named styles, page settings, picture numbering and broader fidelity remain in scope."
-  attempts: 88
+  note: "Named DOCX styles and primary ODT script locales verified. 426 Writer and six shared tests, desktop/mobile browser round trip, and package assertions passed. Complete DOCX acceptance remains open, including primary ODT named character style identity and the existing style importer branch gate. See evidence/docx-named-style-roundtrip.json."
+  attempts: 89
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1416,8 +1419,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T16:44:46.843Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Named DOCX styles and primary ODT script locales verified. 426 Writer and six shared tests, desktop/mobile browser round trip, and package assertions passed. Complete DOCX acceptance remains open, including primary ODT named character style identity and the existing style importer branch gate. See evidence/docx-named-style-roundtrip.json."
+  -
+    type: "status"
+    at: "2026-11-18T16:44:51.234Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T15:42:03.008Z"
+doc_updated_at: "2026-11-18T16:44:51.234Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -4070,6 +4086,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T16:44:46.843Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Named DOCX styles and primary ODT script locales verified. 426 Writer and six shared tests, desktop/mobile browser round trip, and package assertions passed. Complete DOCX acceptance remains open, including primary ODT named character style identity and the existing style importer branch gate. See evidence/docx-named-style-roundtrip.json.
+    Attempts: 89
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T16:44:31.977Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -4564,6 +4610,15 @@ sections:
     - Named-style and page settings export, picture lists, extended numbering providers and remaining paragraph/table fidelity remain open.
 
     Evidence: `evidence/docx-native-list-roundtrip.json`.
+
+    ### DOCX native named styles and primary ODT locales
+
+    - Command: focused Writer style, DOCX and ODT Vitest tests, shared locale handler tests, generated factory check, Vite plus production Chromium, and static checks recorded in evidence/docx-named-style-roundtrip.json.
+    - Result: all 426 Writer tests and six shared tests passed. The complete new style writer reached 100% branch coverage and the complete locale handler reached 97.4%. The existing StyleSheetTableImport owner remains at 87.5% branches despite the combined scope passing 90%.
+    - Evidence: Word style slots provide paragraph and range style references, basedOn and next links, and represented item properties. Named character content enters the actual SwFormatCharFormat through UNO. The pinned tdf138345 test preserves the style reference and Word-compatible highlight omission. Chromium persisted the browser copy, downloaded DOCX and reopened the exported file at width 390. The ODT copy preserves all three native locale IDs and text.
+    - Scope: pending ODT named-character-style identity and general DOCX document-default, linked and latent style, bookmark and page fidelity. Existing three storage typecheck and two dependency diagnostics persist. Full suite is not due.
+
+    Evidence: `evidence/docx-named-style-roundtrip.json`.
 id_source: "generated"
 ---
 ## Summary
@@ -7227,6 +7282,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T16:44:46.843Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Named DOCX styles and primary ODT script locales verified. 426 Writer and six shared tests, desktop/mobile browser round trip, and package assertions passed. Complete DOCX acceptance remains open, including primary ODT named character style identity and the existing style importer branch gate. See evidence/docx-named-style-roundtrip.json.
+Attempts: 89
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T16:44:31.977Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7726,3 +7811,12 @@ Evidence: `evidence/docx-paragraph-roundtrip.json`.
 - Named-style and page settings export, picture lists, extended numbering providers and remaining paragraph/table fidelity remain open.
 
 Evidence: `evidence/docx-native-list-roundtrip.json`.
+
+### DOCX native named styles and primary ODT locales
+
+- Command: focused Writer style, DOCX and ODT Vitest tests, shared locale handler tests, generated factory check, Vite plus production Chromium, and static checks recorded in evidence/docx-named-style-roundtrip.json.
+- Result: all 426 Writer tests and six shared tests passed. The complete new style writer reached 100% branch coverage and the complete locale handler reached 97.4%. The existing StyleSheetTableImport owner remains at 87.5% branches despite the combined scope passing 90%.
+- Evidence: Word style slots provide paragraph and range style references, basedOn and next links, and represented item properties. Named character content enters the actual SwFormatCharFormat through UNO. The pinned tdf138345 test preserves the style reference and Word-compatible highlight omission. Chromium persisted the browser copy, downloaded DOCX and reopened the exported file at width 390. The ODT copy preserves all three native locale IDs and text.
+- Scope: pending ODT named-character-style identity and general DOCX document-default, linked and latent style, bookmark and page fidelity. Existing three storage typecheck and two dependency diagnostics persist. Full suite is not due.
+
+Evidence: `evidence/docx-named-style-roundtrip.json`.

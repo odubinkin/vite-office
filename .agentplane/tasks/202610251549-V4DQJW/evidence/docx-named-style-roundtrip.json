@@ -1,0 +1,72 @@
+{
+  "scope": "DOCX named paragraph and character styles, native UNO character-range dispatch, and ODT script locale transport",
+  "writer": {
+    "suites": 20,
+    "tests": 426,
+    "coverage": {
+      "total": {
+        "statements": 92.85,
+        "branches": 90.69,
+        "functions": 100,
+        "lines": 95.52
+      },
+      "docxattributeoutput.styles.ts": {
+        "statements": 100,
+        "branches": 100,
+        "functions": 100,
+        "lines": 100
+      },
+      "StyleSheetTable.import.ts": {
+        "statements": 89.9,
+        "branches": 87.5,
+        "functions": 100,
+        "lines": 93.75
+      }
+    }
+  },
+  "shared": {
+    "suites": 2,
+    "tests": 6,
+    "coverage": {
+      "total": {
+        "statements": 98.75,
+        "branches": 97.4,
+        "functions": 100,
+        "lines": 100
+      },
+      "chrlohdl.ts": {
+        "statements": 98.75,
+        "branches": 97.4,
+        "functions": 100,
+        "lines": 100
+      }
+    }
+  },
+  "browser": {
+    "result": "passed",
+    "fixture": "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/tdf138345_charStyleHighlight.docx",
+    "desktop": "Chromium opens source, saves browser ODT copy and downloads DOCX through the existing UI",
+    "mobile": "390 x 844 Chromium reopens downloaded DOCX",
+    "package": "word/styles.xml and rStyle references persist; style highlight remains omitted per pinned LibreOffice QA"
+  },
+  "primary_odt": {
+    "result": "passed for content and all three independent locale IDs",
+    "pending": "ODT export and import do not retain named character style identity across a fresh shell reload"
+  },
+  "checks": {
+    "build": "Vite bundle passed; the normal build wrapper remains gated by three existing SfxDocumentMetaData.storage TypeScript diagnostics",
+    "dependencies": "Existing patattr browser adapter diagnostic and comphelper/sax cycle persist",
+    "lint": "pass",
+    "format": "pass",
+    "jsdoc": "pass",
+    "size": "pass",
+    "source_tree": "pass",
+    "provenance": "pass",
+    "doctor": "pass",
+    "routing": "pass",
+    "full_test_suite": "not due",
+    "registry": "pass, semanticViolationCount 0",
+    "generated_factory": "pass"
+  },
+  "log_prefix": "apps/office/coverage/docx-named-styles-"
+}
