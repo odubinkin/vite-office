@@ -1,0 +1,36 @@
+{
+  "checkpoint": "Actual writable stream package commit",
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "commands": {
+    "coverage": "",
+    "registry": "npm run inventory:registry:check",
+    "types": "npm run typecheck --workspace @vite-office/office",
+    "dependencies": "npm run check:dependencies",
+    "docs": "npm run check:docs",
+    "provenance": "npm run check:source-provenance",
+    "size": "npm run check:file-size",
+    "diff": "git diff --check"
+  },
+  "result": "### Stream package commit continuation\n\n- Command: focused Vitest coverage and static checks, recorded in `evidence/native-package-stream-commit.json`.\n- Result: 40 focused tests in 3 files passed. Combined ZIP owner coverage failed the unchanged 90% gate (S73.11/B59.1/F86.48/L75.19).\n- Evidence: A real writable XStream admits direct then temporary-backed commit for ZIP, PACKAGE and OFOPXML. Reopening the actual destination reads the second member version, with the appropriate package metadata. Registry, provenance, JSDoc, lint, formatting, file size and diff checks passed. Typecheck retains three existing SfxMedium errors. Dependency verification retains the existing patattr boundary and comphelper/sax cycle.\n- Scope: original stream-mode writeTempFile and commitChanges flow, original key selection and KDF argument assembly as authorized, genuine fast temporary persistence and typed error scopes. WRITER630 and CALC697 record the empty fast-temp backup URL behavior. URL transfer, full encryption/property service, threaded output, SfxMedium/OStorage and application format I/O remain unfinished. No full-suite run under the agreed cadence.",
+  "hashes": {
+    "apps/office/src/package/source/zippackage/ZipPackage.ts": "20d4a2721138b65b48a57760e12116a7435d996d52b692b594cb3699025c98e3",
+    "apps/office/src/package/source/zippackage/ZipPackage.write.ts": "a734df417afcd921b786d8f6acb67c2b883ad1441d1b4740ebb46dc806a06548",
+    "apps/office/src/package/source/zippackage/ZipPackage.commit-state.test.ts": "e40c785972d5e883fc134b15777b926afd3065a1fffa5149fd5ef2451a7c3294",
+    "docs/program/native-package-stream-commit.md": "6064524897d1ba844d77e2d6c897523e72b3b62607f5ed066ff999b538871888",
+    "docs/program/writer-upstream-suspected-issues.md": "5baf22f16fe90969b326a503f455bca94c88bf5999ff93d1bb3dfa0e494d8c29",
+    "docs/program/calc-upstream-suspected-issues.md": "bac90273d8c5baf529120f979146bae62d2ae53e8066c748eaf2f7451e2d6b1f",
+    "apps/office/coverage/resume-coverage.log": "696c16285255bf1fbb3af2b4ae5898d16b0f5c732d43134d7e3630689a10e595",
+    "apps/office/coverage/resume-registry.log": "5058c27a314b851057306f95a6c15750f596239e12118994a653324efeb5ee0a",
+    "apps/office/coverage/resume-final-types.log": "c2d912329adc965af319b920ac18e7d5588514055446127376ac4f44b94f2106",
+    "apps/office/coverage/resume-final-dependencies.log": "58e089319fe14bd88701e8fbe25e7a9292436eb724bbb615ad31ce7ec6dd4e97",
+    "apps/office/coverage/resume-final-docs.log": "3ddd40d76f8a20eb1494b0e1f5336afe4fe80fdcedbc2bbec42b6956630fb450",
+    "apps/office/coverage/resume-final-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/resume-final-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/resume-final-size.log": "1dfdc22aae9fed0eecd7d91eabf79341c9558546c16eeb5f1d6df168c497561c",
+    "apps/office/coverage/resume-final-provenance.log": "a82599dd4585570bb9feff232109aa20756da46aca0cb2e7c986aadeecf3ba22",
+    "apps/office/coverage/resume-final-diff.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}
