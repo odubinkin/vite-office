@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 341
+revision: 344
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T21:15:04.228Z"
+  updated_at: "2026-11-18T23:27:54.164Z"
   updated_by: "CODER"
-  note: "Production DOCX/XLSX export now commits through native OFOPXML. Shared 91, Calc 47, ten UI cases, isolated Writer retry, Worker and build passed. Scoped coverage below 90%; native import cutover and full contract parity remain open."
-  attempts: 100
+  note: "Writer now carries original document theme and native character theme values through DOCX, ODT, Writer Worker and browser storage. 195 Writer cases, 24 Calc, 13 shared and six Chromium cases passed. New theme owners cleared scoped90 at 90.8% branches. A Word 2010 ligatures element remains unsupported in the unmodified run-color fixture. The umbrella task remains active."
+  attempts: 101
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1608,8 +1611,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T23:27:54.164Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Writer now carries original document theme and native character theme values through DOCX, ODT, Writer Worker and browser storage. 195 Writer cases, 24 Calc, 13 shared and six Chromium cases passed. New theme owners cleared scoped90 at 90.8% branches. A Word 2010 ligatures element remains unsupported in the unmodified run-color fixture. The umbrella task remains active."
+  -
+    type: "status"
+    at: "2026-11-18T23:28:00.121Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T21:15:09.134Z"
+doc_updated_at: "2026-11-18T23:28:00.121Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -4622,6 +4638,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-18T23:27:54.164Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Writer now carries original document theme and native character theme values through DOCX, ODT, Writer Worker and browser storage. 195 Writer cases, 24 Calc, 13 shared and six Chromium cases passed. New theme owners cleared scoped90 at 90.8% branches. A Word 2010 ligatures element remains unsupported in the unmodified run-color fixture. The umbrella task remains active.
+    Attempts: 101
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T23:27:53.599Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -5207,6 +5253,16 @@ sections:
     - Result: Shared 91 cases passed. Writer named selection recorded Tests  1 failed | 406 passed (407); isolated metadata integration rerun recorded Tests  6 passed (6). Calc passed 47 cases. Ten browser cases passed, including downloads and reopening. Worker and main native writes both returned root, per-part relationships and MIME declarations after reopening. Scoped coverage measured 80.47% statements, 63.46% branches, 74.19% functions and 84.48% lines, below 90%.
     - Evidence: The production exporters now package their fragments through registered OFOPXML StorageFactory, real OWriteStream metadata and child-before-parent commit. Root and per-part relationships are owned by their source parts. The package writes the content type table once. WRITER-647/648 and CALC-719/720 document the source truncation and writable property behavior. See `evidence/native-ooxml-output.json`.
     - Scope: Browser reads still use the current asynchronous archive path; moving the format read interfaces to the native owners remains upcoming. The output buffer is still bound at browser commit, and native XRelationshipAccess and previous owner coverage gaps remain pending. No full suite was due.
+
+    ### Writer palette and character theme colors through DOCX and primary ODT
+
+    - The native relationship-selected DrawingML theme is loaded before the Writer font table, styles and main text. The original color handler retains the existing complex-color priority and independent RGB, theme usage, tint and shade. The original UNO color item query/put hook serves both common styles and ranged text through CharComplexColor.
+    - DOCX writes the represented theme through the shared ThemeExport and archive relationship. ODT uses the original palette and character complex-color extension, and the Worker transports actual named palette entries and font schemes. The native heading and flat ODF assertions follow the pinned Writer fixtures. The DOCX run-color assertion removes the unrelated and unported w14:ligatures element from its copied styles part only. The Chromium heading fixture stays unchanged.
+    - Command: npm run test:coverage:writer -w @vite-office/office -- docxexport.theme docxexport.styles docxattributeoutput.colors OOXMLDocumentImpl OOXMLSettings OOXMLFastContextHandler native-cell-color native-property-map-ref WriterFileDialog writer-theme-codec odt-property-roundtrip native-docx-bool-properties rtfexport.layout --maxWorkers=2 --coverage.include=src/docmodel/browser/theme-codec.ts --coverage.include=src/sw/source/writerfilter/dmapper/ThemeColorHandler.ts --coverage.include=src/xmloff/source/text/XMLTextPropertySetContext.ts --coverage.include=src/xmloff/source/text/XMLComplexColorContext.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/writer-theme-verified. Result: pass. Evidence: 195 Writer tests across 14 files, scoped statements 98.5%, branches 90.8%, functions 100%, lines 100%.
+    - Commands: npm run test:calc -w @vite-office/office -- excelfilter.theme ods-native-colors ods-worker --maxWorkers=2 and npm run test:shared -w @vite-office/office -- native-font-color native-grab-bag txtprmap XMLTextPropertySetContext ooXML --maxWorkers=2. Result: pass. Evidence: 24 Calc and 13 shared cases.
+    - Command: ./node_modules/.bin/playwright test --config apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1. Result: pass. Evidence: 6 Chromium cases. Scope: opening, Worker-backed native ODT reload, downloading DOCX and reopening on mobile.
+    - Commands: npm run test:static, typecheck, scoped Prettier and ESLint, check:docs, check:source-provenance, inventory:invariants, inventory:parity, check:dependencies, check:source-tree, check:file-size, check:calc-resources, doctor, routing and git diff --check. Result: pass.
+    - The broader RTF selection reported missing runtime initialization in several pre-existing suites and a Block Quotation canonical-name expectation mismatch. Verified Writer selection includes the initialized RTF layout suite. Drawing format matrix, additional theme font behavior and Word 2010 text effects remain in scope for future work. No archive admission policy changed and the all-app cadence is unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -8230,6 +8286,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-18T23:27:54.164Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Writer now carries original document theme and native character theme values through DOCX, ODT, Writer Worker and browser storage. 195 Writer cases, 24 Calc, 13 shared and six Chromium cases passed. New theme owners cleared scoped90 at 90.8% branches. A Word 2010 ligatures element remains unsupported in the unmodified run-color fixture. The umbrella task remains active.
+Attempts: 101
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T23:27:53.599Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -8820,3 +8906,13 @@ Evidence: `evidence/docx-native-ranged-bookmarks.json`.
 - Result: Shared 91 cases passed. Writer named selection recorded Tests  1 failed | 406 passed (407); isolated metadata integration rerun recorded Tests  6 passed (6). Calc passed 47 cases. Ten browser cases passed, including downloads and reopening. Worker and main native writes both returned root, per-part relationships and MIME declarations after reopening. Scoped coverage measured 80.47% statements, 63.46% branches, 74.19% functions and 84.48% lines, below 90%.
 - Evidence: The production exporters now package their fragments through registered OFOPXML StorageFactory, real OWriteStream metadata and child-before-parent commit. Root and per-part relationships are owned by their source parts. The package writes the content type table once. WRITER-647/648 and CALC-719/720 document the source truncation and writable property behavior. See `evidence/native-ooxml-output.json`.
 - Scope: Browser reads still use the current asynchronous archive path; moving the format read interfaces to the native owners remains upcoming. The output buffer is still bound at browser commit, and native XRelationshipAccess and previous owner coverage gaps remain pending. No full suite was due.
+
+### Writer palette and character theme colors through DOCX and primary ODT
+
+- The native relationship-selected DrawingML theme is loaded before the Writer font table, styles and main text. The original color handler retains the existing complex-color priority and independent RGB, theme usage, tint and shade. The original UNO color item query/put hook serves both common styles and ranged text through CharComplexColor.
+- DOCX writes the represented theme through the shared ThemeExport and archive relationship. ODT uses the original palette and character complex-color extension, and the Worker transports actual named palette entries and font schemes. The native heading and flat ODF assertions follow the pinned Writer fixtures. The DOCX run-color assertion removes the unrelated and unported w14:ligatures element from its copied styles part only. The Chromium heading fixture stays unchanged.
+- Command: npm run test:coverage:writer -w @vite-office/office -- docxexport.theme docxexport.styles docxattributeoutput.colors OOXMLDocumentImpl OOXMLSettings OOXMLFastContextHandler native-cell-color native-property-map-ref WriterFileDialog writer-theme-codec odt-property-roundtrip native-docx-bool-properties rtfexport.layout --maxWorkers=2 --coverage.include=src/docmodel/browser/theme-codec.ts --coverage.include=src/sw/source/writerfilter/dmapper/ThemeColorHandler.ts --coverage.include=src/xmloff/source/text/XMLTextPropertySetContext.ts --coverage.include=src/xmloff/source/text/XMLComplexColorContext.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/writer-theme-verified. Result: pass. Evidence: 195 Writer tests across 14 files, scoped statements 98.5%, branches 90.8%, functions 100%, lines 100%.
+- Commands: npm run test:calc -w @vite-office/office -- excelfilter.theme ods-native-colors ods-worker --maxWorkers=2 and npm run test:shared -w @vite-office/office -- native-font-color native-grab-bag txtprmap XMLTextPropertySetContext ooXML --maxWorkers=2. Result: pass. Evidence: 24 Calc and 13 shared cases.
+- Command: ./node_modules/.bin/playwright test --config apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1. Result: pass. Evidence: 6 Chromium cases. Scope: opening, Worker-backed native ODT reload, downloading DOCX and reopening on mobile.
+- Commands: npm run test:static, typecheck, scoped Prettier and ESLint, check:docs, check:source-provenance, inventory:invariants, inventory:parity, check:dependencies, check:source-tree, check:file-size, check:calc-resources, doctor, routing and git diff --check. Result: pass.
+- The broader RTF selection reported missing runtime initialization in several pre-existing suites and a Block Quotation canonical-name expectation mismatch. Verified Writer selection includes the initialized RTF layout suite. Drawing format matrix, additional theme font behavior and Word 2010 text effects remain in scope for future work. No archive admission policy changed and the all-app cadence is unchanged.
