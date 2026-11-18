@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 263
+revision: 266
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T09:07:35.712Z"
+  updated_at: "2026-11-18T11:23:37.691Z"
   updated_by: "CODER"
-  note: "Shared native task/tag/FIFO/no-worker waiting prerequisites verified with9focused/35related/main-Worker actual package tasks. No production zero-worker scheduler substituted; real thread backend/parallel ZIP/complete document/UI remain unfinished. Evidence native-threadpool-no-worker-continuation.json."
-  attempts: 74
+  note: "Actual background entry work/temp/error/context/record transfer verified in explicit no-worker QA,35focused/40related/62boundary/main-Worker pass. Coverage90 gate still fails; no real worker/default scheduler or full DOCX/XLSX UI acceptance claimed. Evidence native-zip-background-task-continuation.json."
+  attempts: 75
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1192,8 +1195,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T11:23:37.691Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Actual background entry work/temp/error/context/record transfer verified in explicit no-worker QA,35focused/40related/62boundary/main-Worker pass. Coverage90 gate still fails; no real worker/default scheduler or full DOCX/XLSX UI acceptance claimed. Evidence native-zip-background-task-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-18T11:24:07.241Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T09:08:31.182Z"
+doc_updated_at: "2026-11-18T11:24:07.241Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -3426,6 +3442,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T11:23:37.691Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Actual background entry work/temp/error/context/record transfer verified in explicit no-worker QA,35focused/40related/62boundary/main-Worker pass. Coverage90 gate still fails; no real worker/default scheduler or full DOCX/XLSX UI acceptance claimed. Evidence native-zip-background-task-continuation.json.
+    Attempts: 75
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T11:23:17.160Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -3802,6 +3848,14 @@ sections:
     - Evidence:9 focused tests with whole-owner S97.82/B91.3/F100/L98.82;35 related tests/4files and Chromium main/DOM-free Worker actual package save/reopen tasks pass. Tools/lint/format/JSDoc5532/provenance2685/registry semantic0/size/tree/resources/routing/diff/Vite/static pass. Same4 existing metadata/Medium type errors and2 module boundaries persist. Prior failing full ZipPackage metadata scope retained.
     - Scope: original explicit ThreadPool(0), FIFO/task tag accounting, selected-tag waiting/early return, unrelated queue tails, shutdown/destruction, Emscripten default join=false, signed worker-count projection and catch-all exec. Source testNoThreads eight-task sequence ported; observations occur outside exec so swallowed assertions cannot create a false pass. Genuine abstract-task fixture subclasses execute actual ZIP/package owners; no package/provider/shared default pool or worker identity is fabricated. WRITER627/CALC694 retain original no-worker lock scopes; suspected reentrant deadlock is a static source finding, not a deliberately hanging test.
     - Pending: preferred concurrency/shared optimal/actual ThreadWorker and pending condition-variable waits; native numeric thread IDs/shared_ptr/atomics/physical scheduler. Other four upstream pool tests remain pending that backend. Production large ZIP thresholds still explicitly unported; pako lacks required deflateBound and no guessed substitute is introduced. Background/parallel entry tasks, package commit/Medium/filter/UI remain unfinished. Expat approval pending; no fetch/security mutation. Full suite not due; no task finished.
+
+    ### Background ZIP entry work and saved-error continuation (2026-11-18)
+
+    - Command: exact focused/related/boundary/browser/check commands in `evidence/native-zip-background-task-continuation.json`.
+    - Result: fail (partial WIP; no complete native background scheduler/package/filter/UI acceptance).
+    - Evidence:35 focused tests/4files,40 related/4files and62 tooling/2files pass; actual main/DOM-free Worker good/error tasks and compressed archive reopen pass. Whole3owner90 branch gate FAILS: S97.75/B85.96/F100/L98.17; ZipOutputEntry B73.68 remains failing. Neutral facade B93.75 and actual host ABI B90.9 do not qualify/dilute the failed ZIP owner. All prior failed scopes retained. Tools/lint/format/JSDoc5537/provenance2687/registry semantic0/size/tree/resources/routing/diff/Vite/static pass. Same4 existing metadata/Medium type errors and2 module boundaries persist.
+    - Scope: actual ZipOutputEntryInThread task/consumed record/intrusive TempFileFastService/error/finished/input-release/cleanup/move/base-borrow state, real explicit ThreadPool(0) execution and original public consumer operations. Actual temporary files disappear at source final-reference points; genuine disconnected input errors retain derived type and Context through pointer copies. Neutral SDK exception_ptr value delegates to actual CppuHelper ABI at composition, using existing genuine Any/generated exceptions; package imports no browser implementation. Source-backed standard-library edge added for CppuHelper, with original mutex/atomic/rethrow/misc exception_ptr source evidence.
+    - Pending: rare constructor/allocator/inner cleanup failure qualification; real worker scheduler/atomic/cross-realm/native heap/TLS/fatal/OOM/nonobject JS throw domains; production large-stream scheduling/parallel deflateBound/encryption/full package/Medium/filter/UI and original whole threaded package QA. No fake provider/private setter/threshold or counter workaround used. Expat approval pending; no fetch/parser-security mutation. Full suite not due; no task finished.
 id_source: "generated"
 ---
 ## Summary
@@ -6045,6 +6099,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T11:23:37.691Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Actual background entry work/temp/error/context/record transfer verified in explicit no-worker QA,35focused/40related/62boundary/main-Worker pass. Coverage90 gate still fails; no real worker/default scheduler or full DOCX/XLSX UI acceptance claimed. Evidence native-zip-background-task-continuation.json.
+Attempts: 75
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T11:23:17.160Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -6426,3 +6510,11 @@ Next source-backed block: connect ZipPackage.initialize/getZipFileContents and g
 - Evidence:9 focused tests with whole-owner S97.82/B91.3/F100/L98.82;35 related tests/4files and Chromium main/DOM-free Worker actual package save/reopen tasks pass. Tools/lint/format/JSDoc5532/provenance2685/registry semantic0/size/tree/resources/routing/diff/Vite/static pass. Same4 existing metadata/Medium type errors and2 module boundaries persist. Prior failing full ZipPackage metadata scope retained.
 - Scope: original explicit ThreadPool(0), FIFO/task tag accounting, selected-tag waiting/early return, unrelated queue tails, shutdown/destruction, Emscripten default join=false, signed worker-count projection and catch-all exec. Source testNoThreads eight-task sequence ported; observations occur outside exec so swallowed assertions cannot create a false pass. Genuine abstract-task fixture subclasses execute actual ZIP/package owners; no package/provider/shared default pool or worker identity is fabricated. WRITER627/CALC694 retain original no-worker lock scopes; suspected reentrant deadlock is a static source finding, not a deliberately hanging test.
 - Pending: preferred concurrency/shared optimal/actual ThreadWorker and pending condition-variable waits; native numeric thread IDs/shared_ptr/atomics/physical scheduler. Other four upstream pool tests remain pending that backend. Production large ZIP thresholds still explicitly unported; pako lacks required deflateBound and no guessed substitute is introduced. Background/parallel entry tasks, package commit/Medium/filter/UI remain unfinished. Expat approval pending; no fetch/security mutation. Full suite not due; no task finished.
+
+### Background ZIP entry work and saved-error continuation (2026-11-18)
+
+- Command: exact focused/related/boundary/browser/check commands in `evidence/native-zip-background-task-continuation.json`.
+- Result: fail (partial WIP; no complete native background scheduler/package/filter/UI acceptance).
+- Evidence:35 focused tests/4files,40 related/4files and62 tooling/2files pass; actual main/DOM-free Worker good/error tasks and compressed archive reopen pass. Whole3owner90 branch gate FAILS: S97.75/B85.96/F100/L98.17; ZipOutputEntry B73.68 remains failing. Neutral facade B93.75 and actual host ABI B90.9 do not qualify/dilute the failed ZIP owner. All prior failed scopes retained. Tools/lint/format/JSDoc5537/provenance2687/registry semantic0/size/tree/resources/routing/diff/Vite/static pass. Same4 existing metadata/Medium type errors and2 module boundaries persist.
+- Scope: actual ZipOutputEntryInThread task/consumed record/intrusive TempFileFastService/error/finished/input-release/cleanup/move/base-borrow state, real explicit ThreadPool(0) execution and original public consumer operations. Actual temporary files disappear at source final-reference points; genuine disconnected input errors retain derived type and Context through pointer copies. Neutral SDK exception_ptr value delegates to actual CppuHelper ABI at composition, using existing genuine Any/generated exceptions; package imports no browser implementation. Source-backed standard-library edge added for CppuHelper, with original mutex/atomic/rethrow/misc exception_ptr source evidence.
+- Pending: rare constructor/allocator/inner cleanup failure qualification; real worker scheduler/atomic/cross-realm/native heap/TLS/fatal/OOM/nonobject JS throw domains; production large-stream scheduling/parallel deflateBound/encryption/full package/Medium/filter/UI and original whole threaded package QA. No fake provider/private setter/threshold or counter workaround used. Expat approval pending; no fetch/parser-security mutation. Full suite not due; no task finished.
