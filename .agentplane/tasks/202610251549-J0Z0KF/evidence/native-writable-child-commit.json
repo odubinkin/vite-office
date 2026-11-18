@@ -1,0 +1,26 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "result": "### Writable child cache and native package attachment continuation\n\n- Result: 53 focused tests and 24 related tests passed. Combined scoped coverage S81.75/B66.79/F97.56/L85.03 is below the unchanged 90% gate.\n- Evidence: actual internal writable cache, package factory and catalog commit emit inserted and truncated replacement member bytes in ZIP and OFOPXML. Real deleted-vector replacement is restored by revert and applied by commit. Registry, lint, formatting, JSDoc and diff passed. App typecheck has the same three existing SfxMedium errors. Two existing module boundaries remain.\n- Scope: internal writable truncate with genuine memory cache and closed-wrapper property semantics, plain ZIP and OFOPXML without relationship streams. Public wrapper lifecycle, relationship commits, nontruncate cases, PACKAGE encryption, full upstream QA and full DOCX/XLSX app UI acceptance remain open. No full suite due.",
+  "commands": {
+    "coverage": "",
+    "related": "npm run test:shared -- src/package/source/xstor/switchpersistencestream.test.ts src/package/source/zippackage/ZipPackage.serialization.test.ts",
+    "registry": "npm run inventory:registry:check",
+    "types": "npm run typecheck --workspace @vite-office/office"
+  },
+  "sha256": {
+    "apps/office/src/package/source/xstor/owriteablestream.ts": "d2cea9785d289b220a795e9baf0197ee813a72ba22e006cc0df08701c6500259",
+    "apps/office/src/package/source/xstor/xstorage.catalog.ts": "04f72ea4e191d5c63bb81fdd48fd77826231acd8eb0bc0a843ccc5a144583f30",
+    "apps/office/src/package/source/xstor/xstorage.impl.ts": "a554e8922136cb53c08ad9d60c45a352c0be3f30e7fb97fdaff69a18b0379548",
+    "apps/office/src/package/source/xstor/xstorage.impl.test.ts": "77a16d71fd91a392109cdc7f3d8551a240eaec9d04afd8afa381963c1ed308c6",
+    "docs/program/native-writable-child-commit.md": "337e66aefcb0284067dccc19b8b08cfbf0a27382a9a46656c30afd099e1d89b3",
+    "apps/office/coverage/child-coverage.log": "038b03edf740b014417d7918b7db080b7960d1a29e0a7f6969b8ea013d5f84a1",
+    "apps/office/coverage/child-related.log": "f1569ccf62a4eeff22600d5d7a4da08541b4a853b1a2952d217233447ec0a803",
+    "apps/office/coverage/child-types.log": "c2d912329adc965af319b920ac18e7d5588514055446127376ac4f44b94f2106",
+    "apps/office/coverage/child-docs.log": "e68133b127cef9521566419abcf5cba4ae23c1a0f272c45d96b98eb398d1efac",
+    "apps/office/coverage/child-deps.log": "58e089319fe14bd88701e8fbe25e7a9292436eb724bbb615ad31ce7ec6dd4e97",
+    "apps/office/coverage/child-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/child-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/child-registry.log": "ddff75aea14839d4c09ecc8b80c8ada96bb455f023b821c753623a6a76780087",
+    "apps/office/coverage/child-diff.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}
