@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 308
+revision: 311
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T16:44:46.843Z"
+  updated_at: "2026-11-18T17:01:26.335Z"
   updated_by: "CODER"
-  note: "Named DOCX styles and primary ODT script locales verified. 426 Writer and six shared tests, desktop/mobile browser round trip, and package assertions passed. Complete DOCX acceptance remains open, including primary ODT named character style identity and the existing style importer branch gate. See evidence/docx-named-style-roundtrip.json."
-  attempts: 89
+  note: "Primary ODT now preserves common character styles and direct span precedence through actual browser storage. 554 focused Writer tests, 13 Writer context tests, two shared tests and production Chrome passed; new importer coverage is over 90% for all metrics. Remaining DOCX acceptance stays open. See evidence/docx-primary-odt-character-styles.json."
+  attempts: 90
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1432,8 +1435,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T17:01:26.335Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Primary ODT now preserves common character styles and direct span precedence through actual browser storage. 554 focused Writer tests, 13 Writer context tests, two shared tests and production Chrome passed; new importer coverage is over 90% for all metrics. Remaining DOCX acceptance stays open. See evidence/docx-primary-odt-character-styles.json."
+  -
+    type: "status"
+    at: "2026-11-18T17:01:35.083Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T16:44:51.234Z"
+doc_updated_at: "2026-11-18T17:01:35.083Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -4116,6 +4132,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T17:01:26.335Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Primary ODT now preserves common character styles and direct span precedence through actual browser storage. 554 focused Writer tests, 13 Writer context tests, two shared tests and production Chrome passed; new importer coverage is over 90% for all metrics. Remaining DOCX acceptance stays open. See evidence/docx-primary-odt-character-styles.json.
+    Attempts: 90
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T17:01:25.758Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -4619,6 +4665,15 @@ sections:
     - Scope: pending ODT named-character-style identity and general DOCX document-default, linked and latent style, bookmark and page fidelity. Existing three storage typecheck and two dependency diagnostics persist. Full suite is not due.
 
     Evidence: `evidence/docx-named-style-roundtrip.json`.
+
+    ### Common character styles in the primary ODT copy
+
+    - Command: focused Writer XML, DOCX, native character and file-dialog/worker suites, Writer and shared xmloff contexts, new owner coverage, production Chromium, and static checks recorded in evidence/docx-primary-odt-character-styles.json.
+    - Result: 554 related Writer tests, 13 Writer context tests and two shared tests passed. The complete new common character importer reached 96.87% statements, 93.75% branches, and 100% functions and lines.
+    - Evidence: ODT uses named text spans outside the direct automatic span. Common style parents and stacked native hints survive reload. Character style display names, the reserved Standard owner, T-series name allocation, and nested direct override precedence have regressions. Chromium reopened the saved browser ODT in a fresh page and preserved the pinned DOCX style reference in a subsequent download and mobile reopen.
+    - Scope: browser file policy is unchanged. Remaining DOCX page settings, document defaults, linked and latent styles, and complete bookmark/hyperlink acceptance stay open. The prior storage typecheck and dependency diagnostics persist. The full suite is not due.
+
+    Evidence: `evidence/docx-primary-odt-character-styles.json`.
 id_source: "generated"
 ---
 ## Summary
@@ -7312,6 +7367,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T17:01:26.335Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Primary ODT now preserves common character styles and direct span precedence through actual browser storage. 554 focused Writer tests, 13 Writer context tests, two shared tests and production Chrome passed; new importer coverage is over 90% for all metrics. Remaining DOCX acceptance stays open. See evidence/docx-primary-odt-character-styles.json.
+Attempts: 90
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T17:01:25.758Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7820,3 +7905,12 @@ Evidence: `evidence/docx-native-list-roundtrip.json`.
 - Scope: pending ODT named-character-style identity and general DOCX document-default, linked and latent style, bookmark and page fidelity. Existing three storage typecheck and two dependency diagnostics persist. Full suite is not due.
 
 Evidence: `evidence/docx-named-style-roundtrip.json`.
+
+### Common character styles in the primary ODT copy
+
+- Command: focused Writer XML, DOCX, native character and file-dialog/worker suites, Writer and shared xmloff contexts, new owner coverage, production Chromium, and static checks recorded in evidence/docx-primary-odt-character-styles.json.
+- Result: 554 related Writer tests, 13 Writer context tests and two shared tests passed. The complete new common character importer reached 96.87% statements, 93.75% branches, and 100% functions and lines.
+- Evidence: ODT uses named text spans outside the direct automatic span. Common style parents and stacked native hints survive reload. Character style display names, the reserved Standard owner, T-series name allocation, and nested direct override precedence have regressions. Chromium reopened the saved browser ODT in a fresh page and preserved the pinned DOCX style reference in a subsequent download and mobile reopen.
+- Scope: browser file policy is unchanged. Remaining DOCX page settings, document defaults, linked and latent styles, and complete bookmark/hyperlink acceptance stay open. The prior storage typecheck and dependency diagnostics persist. The full suite is not due.
+
+Evidence: `evidence/docx-primary-odt-character-styles.json`.

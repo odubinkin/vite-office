@@ -1,0 +1,60 @@
+{
+  "scope": "Preserve common Writer character styles through the primary ODT save/open path and subsequent DOCX export.",
+  "tests": {
+    "writer_filter_and_ui": {
+      "suites": 76,
+      "passed": 554,
+      "log": "docx-odt-style-broad-final.log"
+    },
+    "writer_contexts": {
+      "suites": 2,
+      "passed": 13,
+      "log": "docx-odt-style-contexts.log"
+    },
+    "shared_contexts": {
+      "suites": 1,
+      "passed": 2,
+      "log": "docx-odt-style-shared-final.log"
+    },
+    "native_style_import_coverage": {
+      "statements": 96.87,
+      "branches": 93.75,
+      "functions": 100,
+      "lines": 100
+    }
+  },
+  "pinned_fixture": "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/tdf138345_charStyleHighlight.docx",
+  "browser": {
+    "result": "passed",
+    "desktop": "Open actual DOCX, wait for local save, reload page, open ODT copy through In browser and download DOCX.",
+    "mobile": "Open downloaded DOCX at 390 by 844 and assert content and package style reference.",
+    "log": "docx-odt-style-browser.log"
+  },
+  "native_evidence": [
+    "Common character style IDs survive styles.xml and content.xml.",
+    "The file preserves base formats, nested named style order, and direct font overrides.",
+    "Reserved name Standard cannot mutate the underlying no-character-style format.",
+    "Common name T1 remains distinct from generated automatic T2."
+  ],
+  "checks": {
+    "vite_bundle": "pass",
+    "typecheck": "Three preexisting errors in SfxDocumentMetaData.storage.ts remain.",
+    "dependencies": "Existing patattr browser boundary and comphelper/sax cycle remain.",
+    "lint": "pass",
+    "format": "pass",
+    "jsdoc": "pass",
+    "tree": "pass",
+    "size": "pass",
+    "provenance": "pass",
+    "registry_and_writer_parity": "pass (zero semantic violations)",
+    "writer_resources": "pass",
+    "doctor": "pass",
+    "routing": "pass",
+    "git_diff_check": "pass",
+    "full_suite": "not due"
+  },
+  "pending": [
+    "Remaining DOCX page properties, document defaults, linked and latent styles, and full bookmark and hyperlink acceptance.",
+    "Remaining XLSX outline groups and broader formatting fidelity."
+  ]
+}
