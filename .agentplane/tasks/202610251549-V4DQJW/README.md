@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 275
+revision: 278
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T12:09:12.614Z"
+  updated_at: "2026-11-18T12:24:40.209Z"
   updated_by: "CODER"
-  note: "Shared source metadata entries/rebind pass31 focused/43 related/18 manifest/archive tests and main/DOM-free Worker. Metadata owner90 gate passes; complete native DOCX filter/model/package/UI remains unfinished with3 Medium type errors/2 existing boundary errors. Evidence: evidence/native-package-metadata-continuation.json."
-  attempts: 78
+  note: "Shared package failure state passes37 focused/71 related and main/DOM-free Worker. Root coverage still below90; positive Commit/storage/factory/model/filter/UI remains unfinished. Same3 Medium type errors/2 boundary diagnostics retained. Key-selection/KDF approval pending with no proposed sensitive changes. Evidence: evidence/native-package-commit-state-continuation.json."
+  attempts: 79
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1256,8 +1259,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T12:24:40.209Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared package failure state passes37 focused/71 related and main/DOM-free Worker. Root coverage still below90; positive Commit/storage/factory/model/filter/UI remains unfinished. Same3 Medium type errors/2 boundary diagnostics retained. Key-selection/KDF approval pending with no proposed sensitive changes. Evidence: evidence/native-package-commit-state-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-18T12:25:26.039Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T12:09:45.343Z"
+doc_updated_at: "2026-11-18T12:25:26.039Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -3610,6 +3626,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T12:24:40.209Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared package failure state passes37 focused/71 related and main/DOM-free Worker. Root coverage still below90; positive Commit/storage/factory/model/filter/UI remains unfinished. Same3 Medium type errors/2 boundary diagnostics retained. Key-selection/KDF approval pending with no proposed sensitive changes. Evidence: evidence/native-package-commit-state-continuation.json.
+    Attempts: 79
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T12:24:38.719Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -4018,6 +4064,14 @@ sections:
     - Evidence: 31 focused tests/2files pass;43 related/4files and18 manifest/archive/3files pass. Actual source entry save/metadata/rebind/member-read and second-input ZipFile identity pass; genuine nonseekable query and closed-output typed-context failures pass. Whole serialization+ZipEntry scope S99.5/B95/F100/L100; serialization alone S99.41/B92.85/F100/L100, ZipEntry100. Initial narrower test scope failed ZipEntry coverage and remains retained; earlier full ZipPackage/internal storage/background/MediaDescriptor coverage failures remain unqualified. Chromium main/DOM-free Worker metadata records/native reopen/ConnectTo identity pass. Same3 Medium type errors and2 boundary diagnostics persist; full tsc-dependent build not accepted. Tools/lint/format/JSDoc5545/provenance2689/registry semantic0/size/tree/resources/Vite/static/routing/diff/doctor pass. Full native package commit/transfer/OStorage/StorageFactory/Medium/filter/model/UI and original full package QA remain unfinished; existing browser persistence/recovery deviations untouched. No task completed/full suite due. Expat proposal still awaits approval; no download or parser security change.
     - Scope: source WriteMimetypeMagicFile/WriteManifest/WriteContentTypes over actual receiver/root/context/sequences and registered ManifestWriter/SAX/ZipPackageBuffer/ZipOutputEntry. Source aggregate value-init is explicit without zeroing default-init records. ConnectTo retains throwing query/assignment/seek0, existing ZipFile identity and new-reader initialise=false/format Checks; source catalog is not rebuilt. Real saved member streams read after output/rebind and replacement. Earlier OStorage_Impl string-extraction calls now pass OUString objects required by actual Any API; positive PACKAGE properties remain unqualified.
     - Pending: root writeTempFile/commit/transfer, large-stream scheduler/parallel deflate, actual OStorage/StorageFactory/Medium and full model/filter/UI. Empty/legacy ManifestExport remains explicitly unsupported, no synthetic root is supplied. Native debug ByteReader assertions and physical ABI/allocator/thread/fatal domains remain unqualified. Source full StorageFactory/package QA remains mandatory and pending, not claimed ported by these direct writer tests.
+
+    ### Package mode and failed-transfer state continuation (2026-11-18)
+
+    - Command: exact focused/related/browser/check commands in `evidence/native-package-commit-state-continuation.json`.
+    - Result: fail (partial WIP; whole root90 and complete Commit/storage/factory/filter/UI acceptance unfinished).
+    - Evidence: 37 focused tests/3files and71 related tests/4files pass; Chromium main/DOM-free Worker readonly/typed-backup profiles pass. Whole root+exception90 gate FAILS: S77.79/B67.46/F92.5/L79.01; root alone S75.97/B65.12/F89.65/L77.28. UseBackupException100 does not qualify/dilute the failing root. Source helpers move unchanged to explicit metadata owner with same API re-exports. Real temp URI/RemoveFile=false/old target release and native exception copy/move/Any are observed; corrected test temporaries and original OUString move-swap expectation, no fake provider. Same3 Medium type errors/2 boundaries remain. Tools/lint/format/JSDoc5549/provenance2691/registry semantic0/size/tree/resources/Vite/static/routing/diff/doctor pass. Positive Commit/transfer, full native package/property/storage/factory/model/filter/UI and original whole storage QA remain unfinished; prior failing scopes retained. Key-selection/KDF proposal awaits explicit security-scope approval, no proposed crypto changes made. Classic SAX/Expat proposal also remains pending. No task finished/full suite due.
+    - Scope: actual original mode ordinals/stream selection/NoFileSync state, XInitialization/XServiceInfo, readonly commit error and DisconnectFromTargetAndThrowException_Impl with real TempFileService/MEMFS properties and typed UseBackupException. Metadata helper split preserves previous exports and one actual package object. No XChangesBatch/full package service registration or successful placeholder commit. Backup notification does not enable automatic application recovery.
+    - Pending: original key selection/KDF save argument approval and classic SAX/Expat approval; no new sensitive code/fetch is assumed authorized. Positive writeTempFile/transfer, package properties/registration, full OStorage/StorageFactory/Medium/model/filter/UI and full source StorageFactory QA remain mandatory and unfinished. Previous failed coverage scopes and original browser save/open/autosave/no-recovery choices retained.
 id_source: "generated"
 ---
 ## Summary
@@ -6381,6 +6435,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T12:24:40.209Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared package failure state passes37 focused/71 related and main/DOM-free Worker. Root coverage still below90; positive Commit/storage/factory/model/filter/UI remains unfinished. Same3 Medium type errors/2 boundary diagnostics retained. Key-selection/KDF approval pending with no proposed sensitive changes. Evidence: evidence/native-package-commit-state-continuation.json.
+Attempts: 79
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T12:24:38.719Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -6794,3 +6878,11 @@ Next source-backed block: connect ZipPackage.initialize/getZipFileContents and g
 - Evidence: 31 focused tests/2files pass;43 related/4files and18 manifest/archive/3files pass. Actual source entry save/metadata/rebind/member-read and second-input ZipFile identity pass; genuine nonseekable query and closed-output typed-context failures pass. Whole serialization+ZipEntry scope S99.5/B95/F100/L100; serialization alone S99.41/B92.85/F100/L100, ZipEntry100. Initial narrower test scope failed ZipEntry coverage and remains retained; earlier full ZipPackage/internal storage/background/MediaDescriptor coverage failures remain unqualified. Chromium main/DOM-free Worker metadata records/native reopen/ConnectTo identity pass. Same3 Medium type errors and2 boundary diagnostics persist; full tsc-dependent build not accepted. Tools/lint/format/JSDoc5545/provenance2689/registry semantic0/size/tree/resources/Vite/static/routing/diff/doctor pass. Full native package commit/transfer/OStorage/StorageFactory/Medium/filter/model/UI and original full package QA remain unfinished; existing browser persistence/recovery deviations untouched. No task completed/full suite due. Expat proposal still awaits approval; no download or parser security change.
 - Scope: source WriteMimetypeMagicFile/WriteManifest/WriteContentTypes over actual receiver/root/context/sequences and registered ManifestWriter/SAX/ZipPackageBuffer/ZipOutputEntry. Source aggregate value-init is explicit without zeroing default-init records. ConnectTo retains throwing query/assignment/seek0, existing ZipFile identity and new-reader initialise=false/format Checks; source catalog is not rebuilt. Real saved member streams read after output/rebind and replacement. Earlier OStorage_Impl string-extraction calls now pass OUString objects required by actual Any API; positive PACKAGE properties remain unqualified.
 - Pending: root writeTempFile/commit/transfer, large-stream scheduler/parallel deflate, actual OStorage/StorageFactory/Medium and full model/filter/UI. Empty/legacy ManifestExport remains explicitly unsupported, no synthetic root is supplied. Native debug ByteReader assertions and physical ABI/allocator/thread/fatal domains remain unqualified. Source full StorageFactory/package QA remains mandatory and pending, not claimed ported by these direct writer tests.
+
+### Package mode and failed-transfer state continuation (2026-11-18)
+
+- Command: exact focused/related/browser/check commands in `evidence/native-package-commit-state-continuation.json`.
+- Result: fail (partial WIP; whole root90 and complete Commit/storage/factory/filter/UI acceptance unfinished).
+- Evidence: 37 focused tests/3files and71 related tests/4files pass; Chromium main/DOM-free Worker readonly/typed-backup profiles pass. Whole root+exception90 gate FAILS: S77.79/B67.46/F92.5/L79.01; root alone S75.97/B65.12/F89.65/L77.28. UseBackupException100 does not qualify/dilute the failing root. Source helpers move unchanged to explicit metadata owner with same API re-exports. Real temp URI/RemoveFile=false/old target release and native exception copy/move/Any are observed; corrected test temporaries and original OUString move-swap expectation, no fake provider. Same3 Medium type errors/2 boundaries remain. Tools/lint/format/JSDoc5549/provenance2691/registry semantic0/size/tree/resources/Vite/static/routing/diff/doctor pass. Positive Commit/transfer, full native package/property/storage/factory/model/filter/UI and original whole storage QA remain unfinished; prior failing scopes retained. Key-selection/KDF proposal awaits explicit security-scope approval, no proposed crypto changes made. Classic SAX/Expat proposal also remains pending. No task finished/full suite due.
+- Scope: actual original mode ordinals/stream selection/NoFileSync state, XInitialization/XServiceInfo, readonly commit error and DisconnectFromTargetAndThrowException_Impl with real TempFileService/MEMFS properties and typed UseBackupException. Metadata helper split preserves previous exports and one actual package object. No XChangesBatch/full package service registration or successful placeholder commit. Backup notification does not enable automatic application recovery.
+- Pending: original key selection/KDF save argument approval and classic SAX/Expat approval; no new sensitive code/fetch is assumed authorized. Positive writeTempFile/transfer, package properties/registration, full OStorage/StorageFactory/Medium/model/filter/UI and full source StorageFactory QA remain mandatory and unfinished. Previous failed coverage scopes and original browser save/open/autosave/no-recovery choices retained.
