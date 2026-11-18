@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 314
+revision: 317
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T17:28:52.778Z"
+  updated_at: "2026-11-18T17:58:06.632Z"
   updated_by: "CODER"
-  note: "Native DOCX physical page section checkpoint verified by 382 tests and production Chromium. New owner meets scoped 90% coverage. Full DOCX obligations and existing storage typecheck and dependency diagnostics remain."
-  attempts: 91
+  note: "Verified DOCX relationship hyperlinks, complex HYPERLINK fields and collapsed bookmarks through native Writer, primary ODT and production UI. 370 targeted tests passed; scoped coverage exceeds 90%. Full DOCX obligations and baseline repository diagnostics remain."
+  attempts: 92
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1464,8 +1467,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T17:58:06.632Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified DOCX relationship hyperlinks, complex HYPERLINK fields and collapsed bookmarks through native Writer, primary ODT and production UI. 370 targeted tests passed; scoped coverage exceeds 90%. Full DOCX obligations and baseline repository diagnostics remain."
+  -
+    type: "status"
+    at: "2026-11-18T17:58:22.444Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T17:29:03.451Z"
+doc_updated_at: "2026-11-18T17:58:22.444Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -4208,6 +4224,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-18T17:58:06.632Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified DOCX relationship hyperlinks, complex HYPERLINK fields and collapsed bookmarks through native Writer, primary ODT and production UI. 370 targeted tests passed; scoped coverage exceeds 90%. Full DOCX obligations and baseline repository diagnostics remain.
+    Attempts: 92
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T17:58:06.084Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -4729,6 +4775,15 @@ sections:
     - Scope: Full original A3 and landscape fixtures still require Shape and linked-template handler support. Header/footer content, full content sections, page grid and remaining page style options are open. Existing SfxDocumentMetaData storage type errors and dependency boundary diagnostics remain. WRITER637 records the disabled upstream terminal-section margin assertion.
 
     Evidence: `evidence/docx-native-page-sections.json`.
+
+    ### Native DOCX hyperlinks and collapsed bookmarks
+
+    - Command: 20 focused DOCX, OOXML, RTF, ODT and graph suites, scoped coverage, generated factory verification, Chromium, and static checks recorded in evidence/docx-native-hyperlinks-bookmarks.json.
+    - Result: 370 Writer tests and both production Chromium scenarios passed. Complete new owners reached 98.51% statement and 95.65% branch coverage. JSDoc, scoped formatting/lint, Vite/static, source tree/provenance, registry, resources and Agentplane checks passed.
+    - Evidence: real Writer hints preserve relationship links, native external-fragment fields and internal anchors. The original fdo69548 and absolute-link fixtures pass. The screen-tip assertion uses the unchanged main part and hyperlink relationship from tdf159897 in a reduced package. The downloaded DOCX preserves the internal anchor and matching bookmark IDs after opening the persisted ODT. WRITER638 records target-frame precedence.
+    - Scope: ranged and column bookmarks, arbitrary fields, hyperlink style synthesis and desktop relative file-base rewriting remain open. Existing storage type errors and module-boundary diagnostics persist. The full test suite was deferred on the approved cadence.
+
+    Evidence: `evidence/docx-native-hyperlinks-bookmarks.json`.
 id_source: "generated"
 ---
 ## Summary
@@ -7482,6 +7537,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-18T17:58:06.632Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified DOCX relationship hyperlinks, complex HYPERLINK fields and collapsed bookmarks through native Writer, primary ODT and production UI. 370 targeted tests passed; scoped coverage exceeds 90%. Full DOCX obligations and baseline repository diagnostics remain.
+Attempts: 92
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T17:58:06.084Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -8008,3 +8093,12 @@ Evidence: `evidence/docx-primary-odt-character-styles.json`.
 - Scope: Full original A3 and landscape fixtures still require Shape and linked-template handler support. Header/footer content, full content sections, page grid and remaining page style options are open. Existing SfxDocumentMetaData storage type errors and dependency boundary diagnostics remain. WRITER637 records the disabled upstream terminal-section margin assertion.
 
 Evidence: `evidence/docx-native-page-sections.json`.
+
+### Native DOCX hyperlinks and collapsed bookmarks
+
+- Command: 20 focused DOCX, OOXML, RTF, ODT and graph suites, scoped coverage, generated factory verification, Chromium, and static checks recorded in evidence/docx-native-hyperlinks-bookmarks.json.
+- Result: 370 Writer tests and both production Chromium scenarios passed. Complete new owners reached 98.51% statement and 95.65% branch coverage. JSDoc, scoped formatting/lint, Vite/static, source tree/provenance, registry, resources and Agentplane checks passed.
+- Evidence: real Writer hints preserve relationship links, native external-fragment fields and internal anchors. The original fdo69548 and absolute-link fixtures pass. The screen-tip assertion uses the unchanged main part and hyperlink relationship from tdf159897 in a reduced package. The downloaded DOCX preserves the internal anchor and matching bookmark IDs after opening the persisted ODT. WRITER638 records target-frame precedence.
+- Scope: ranged and column bookmarks, arbitrary fields, hyperlink style synthesis and desktop relative file-base rewriting remain open. Existing storage type errors and module-boundary diagnostics persist. The full test suite was deferred on the approved cadence.
+
+Evidence: `evidence/docx-native-hyperlinks-bookmarks.json`.

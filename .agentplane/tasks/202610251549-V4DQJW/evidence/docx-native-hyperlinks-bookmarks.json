@@ -1,0 +1,65 @@
+{
+  "scope": "Writer DOCX hyperlinks and collapsed bookmarks across the native graph, ODT storage and existing browser file commands",
+  "upstream": [
+    "sw/source/writerfilter/ooxml/model.xml (CT_Hyperlink, CT_FldChar, CT_instrText and bookmark grammar)",
+    "sw/source/writerfilter/ooxml/Handler.cxx (OOXMLHyperlinkHandler)",
+    "sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx (FieldContext command parsing, result range and bookmark pairing)",
+    "sw/source/filter/ww8/docxattributeoutput.cxx (StartURL, EndURL and bookmark pair IDs)",
+    "sw/source/filter/ww8/wrtww8.cxx (BookmarkToWord)",
+    "sw/qa/extras/ooxmlexport/ooxmlexport10.cxx testFdo69548, ooxmlexport21.cxx testScreenTip and ooxmllinks.cxx absolute-link import"
+  ],
+  "implementation": [
+    "Generated OOXML actions deliver the original field control bytes. OOXML hyperlink attributes resolve against the current package part and become a Word field command. DOCX and RTF share the native command tokenizer and switch decoder.",
+    "The resulting supported hyperlinks attach to actual Writer ranges. The serializer retains independent link boundaries, external part relationships, target frame or tip precedence, and native complex fields for external fragments.",
+    "Existing collapsed bookmarks receive paired Word IDs. Internal anchor names and bookmark names use the same original mapping, including space normalization and the 40-code-unit collision rule. The old ODT file and worker paths continue to own primary browser storage.",
+    "WRITER638 records that the source writer emits a target frame ahead of a screen tip when both are present."
+  ],
+  "checks": [
+    {
+      "command": "npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ww8/docx src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.test.ts src/sw/source/writerfilter/ooxml/OOXMLParserState.test.ts src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts src/sw/source/writerfilter/filter/WriterFilter.test.ts src/sw/source/writerfilter/dmapper/DomainMapper.test.ts src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts src/sw/source/filter/xml/odt-markers.test.ts src/sw/source/filter/xml/hyperlink-item-codec.test.ts --coverage --coverage.include=src/sw/source/filter/ww8/docxattributeoutput.hyperlink.ts --coverage.include=src/sw/source/writerfilter/dmapper/FieldContext.ts --coverage.reporter=text --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "370 tests across 20 files. The two complete new modules reached 98.51% statements, 95.65% branches, and 100% functions and lines. FieldContext alone reached 93.44% branches."
+    },
+    {
+      "command": "npm exec --workspace @vite-office/office -- vite build && npx --no-install playwright test --config=apps/office/coverage/docx-links.playwright.config.ts && node scripts/check-static-build.mjs",
+      "result": "pass",
+      "evidence": "Two production Chromium scenarios pass. Original fdo69548 opens with its internal link; reloading from stored ODT preserves the target, the downloaded DOCX contains the paired bookmark IDs and normalized anchor, and the mobile reopen uses the normalized target. The named styles and page geometry feature also passes. Four relative static JS bundles contain no backend endpoints."
+    },
+    {
+      "command": "python3 scripts/writer-ooxml/generate-factory.py --check && npm run check:source-tree && npm run check:source-provenance && npm run check:writer-resources",
+      "result": "pass",
+      "evidence": "144 generated definitions and 98 actions, source tree and 2734 runtime records, and two Writer resource tests pass."
+    },
+    {
+      "command": "npm run inventory:registry:build && npm run inventory:registry:check",
+      "result": "pass",
+      "evidence": "Four generated inventory views. Registry validates the relocated shared field parser evidence."
+    },
+    {
+      "command": "npm run check:docs && npm run check:file-size; npx --no-install eslint <changed Writer TypeScript paths> --max-warnings 0; npx --no-install prettier --check <changed Writer paths>; git diff --check <Writer paths>",
+      "result": "pass",
+      "evidence": "Global JSDoc and file size, scoped ESLint/Prettier and whitespace checks."
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs && ap doctor",
+      "result": "pass",
+      "evidence": "Valid route and no doctor errors; existing managed shim warning."
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "result": "fail",
+      "evidence": "Only the three existing SfxDocumentMetaData.storage.ts type errors involving SfxMedium remain."
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "evidence": "Existing patattr core/browser dependency and comphelper/sax cycle."
+    }
+  ],
+  "remaining": [
+    "Full ranged and table-column bookmarks and arbitrary Word field services remain open. Bookmark persistence evidence covers collapsed point marks.",
+    "The source tdf159897 screen tip is exercised with the original body and hyperlink relationship in a reduced package. Unported auxiliary style/settings contexts prevent opening the unchanged full input.",
+    "Desktop relative file base rewriting and source hyperlink-style synthesis remain open. Absolute file URIs persist as stored values in the local filter tests.",
+    "The full suite is deferred on the agreed cadence. This is a checkpoint inside the active DOCX task."
+  ]
+}
