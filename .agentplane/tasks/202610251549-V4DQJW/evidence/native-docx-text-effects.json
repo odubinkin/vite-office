@@ -1,0 +1,106 @@
+{
+  "checkpoint": "Writer DOCX ligatures, numeral form and spacing in native run, named style and document defaults",
+  "createdAt": "2026-11-18T23:47:24.944Z",
+  "task": "202610251549-V4DQJW",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sw/source/writerfilter/ooxml/model.xml#ST_Ligatures",
+    "sw/source/writerfilter/ooxml/factoryimpl_ns.py#factoryGetInstance",
+    "sw/source/writerfilter/dmapper/TextEffectsHandler.cxx#getInteropGrabBag",
+    "sw/source/writerfilter/dmapper/StyleSheetTable.cxx#LN_CT_DocDefaults_rPrDefault",
+    "sw/source/core/unocore/unomapproperties.hxx#UNO_NAME_CHAR_INTEROP_GRAB_BAG",
+    "sw/source/filter/ww8/docxattributeoutput.cxx#DocxAttributeOutput::DocDefaults",
+    "sw/source/filter/ww8/docxattributeoutput.cxx#DocxAttributeOutput::CharGrabBag",
+    "sw/qa/extras/ooxmlexport/ooxml_ThemeExport.cxx#testThemePortionLevelCharColor_DOCX"
+  ],
+  "results": {
+    "writer": {
+      "files": 25,
+      "tests": 376
+    },
+    "chromium": 7,
+    "coverageThreshold": 90,
+    "coverage": {
+      "lines": {
+        "total": 107,
+        "covered": 106,
+        "skipped": 0,
+        "pct": 99.06
+      },
+      "statements": {
+        "total": 114,
+        "covered": 113,
+        "skipped": 0,
+        "pct": 99.12
+      },
+      "functions": {
+        "total": 21,
+        "covered": 21,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 79,
+        "covered": 77,
+        "skipped": 0,
+        "pct": 97.46
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "remaining": [
+    "The unchanged LibreOffice run-color fixture passes and retains source-ligatures on direct DOCX export and in the live Worker graph.",
+    "The native ODF property mapper has no Word-only interoperability grab bag entry. The primary ODT path retains the text and the represented theme color.",
+    "Other Word 2010 text effects, full native style defaults and theme font application remain pending.",
+    "The earlier concurrent run recorded two 30-second timeouts and one incorrect literal-space expectation in the new ODT assertion. The final serial verification of the same broad scope checks the actual text:s syntax."
+  ],
+  "fixtures": {
+    "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/Test_ThemePortionLevel_CharColor.docx": "a840c2ad5c2bdf5af45742ab34a1878481354a04e3bfdedcbfdff9f28c6b44f7",
+    "vendor/libreoffice-reference/sw/qa/core/theme/data/ThemeColorInHeading.docx": "d50737470a0892671d2c5622b3369fa346dea74ce27933be710dce032c98cd8f"
+  },
+  "files": {
+    "apps/office/e2e/writer-docx-theme.spec.ts": "05d0720aee054670ad6be26b2823b16e03c89fc412a428d8155321f78c4aa5de",
+    "apps/office/src/sw/inc/hintids.ts": "6fdc967a554f4d72e0fd88d1701f2918c45b8e60edb27a6750f32cf0c145b553",
+    "apps/office/src/sw/browser/filter/xml/item-codec.ts": "b2462f4d9a0f84f8cc11ecae9b6e27740120715aa60e1e42d53bd8db7e91148c",
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": "b0f6e0bb405265742c57637c444fc5aa3d0382828c588c653854b19d78d98199",
+    "apps/office/src/sw/browser/filter/xml/writer-text-effect-codec.ts": "9faa90381ed794888af5c29ca61dd9b783a10afebba476da15499656215be7ad",
+    "apps/office/src/sw/browser/filter/xml/writer-text-effect-codec.test.ts": "cfbfc6ccb7e252424887c61e5ea08f8f29309344ad73c646cd989b425c32502a",
+    "apps/office/src/sw/source/core/unocore/native-text-default-schema.test.ts": "0aabfeaa80705e44f08f25df6c29ef0b3f2a9ee5faa73d4b470b4dea8a24f93a",
+    "apps/office/src/sw/source/core/unocore/unomap.ts": "7f1796131a5312c32fb74fe7ba675b57e9d98a6ae93638eeeb63532881810a42",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.run.ts": "84d7cb6c1665f599df75cb2f9360fce175401432be74477b2a7f97680dcb2f4d",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.styles.ts": "bf48f24f2e5977225069bc4ec0b48201339edb77c17ccdb3d3a24dc57e6e8b6c",
+    "apps/office/src/sw/source/filter/ww8/docxexport.text.ts": "a9d5ecfb61890bfcfd3e7dc12a70744dd8112dfb8717133b3cf1257903533991",
+    "apps/office/src/sw/source/filter/ww8/docxexport.theme.test.ts": "6ac1c753e48dd1e8a6e609ad7e5ae56c7fe92534bd95e1a912c0d05a6c40557d",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts": "b7352d3ea2d44df21c30401e1e9818000dcf182f2e1261dd06b5c59eb5ad1691",
+    "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.ts": "7c6778fbbc40c999288895ccbbfe41ed4a02dfbbd3001ee47a5fb50624da567c",
+    "apps/office/src/sw/source/writerfilter/dmapper/PropertyMap.ts": "9bb6ba323be320f8eff2d58807c611f6c378fac7d51776eb5372ab91d097a0bf",
+    "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.import.ts": "5c2379521d1509cf85b83d1ac85b817aa21903b8bc7cff7729387095130e66c3",
+    "apps/office/src/sw/source/writerfilter/dmapper/TextEffectsHandler.ts": "6de169be2cd7f86a9f6e562f6f89e7b6bbc4412c57489a590d3f6b4d43440262",
+    "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.ts": "c3396451c667822122d18a89939cbabe32e713c21551f474f40979574cd243d2",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.ts": "7a20c6de803d8ad72fd3179e07aad14b0cf0800bd6d1c64b10968fbb0f24465c",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.ts": "af43cabaef29f14cddac27abf36cd076366a285ee74c8a35360166838b8fdc8d",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_w14.ts": "dada469f0911b85910b894d30bacd471cad17c634849e6237dda62b0bbc9890f",
+    "apps/office/src/sw/source/writerfilter/dmapper/TextEffectsHandler.test.ts": "2d81bcfad443cd9f5a8899d18af42d2957c97681637fcd938010a5bb903fee38",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_w14.tables.ts": "35a83a1935ccb3b19ecdcc1c46910528c34ee10b473f453338404106d19ad746",
+    "scripts/writer-ooxml/generate-factory.py": "9f150bab8a86d690d51732ac0e161bdf22e773336498f779e5ec80610378fcdd"
+  },
+  "logs": {
+    "apps/office/coverage/ligatures-coverage-final.log": "481f07ed107f57eac1ab7184ff83b57719f61aeb70a70098e105a15b5894e579",
+    "apps/office/coverage/ligatures-browser.log": "082f37cd3f2db1004d0a0501a1583cf05c73002e7d82ad0af48e776b21558ba0",
+    "apps/office/coverage/ligatures-scoped/coverage-summary.json": "9e0b23ec04852d42a1a24174228efd877c93707c91f1028acbd9a868edcb36de",
+    "apps/office/coverage/ligatures-structure-final.log": "f95ee54fd201267ace3a24c671fb71e894c663da3b23cda817e51b54ba068c85",
+    "apps/office/coverage/ligatures-format-final.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/ligatures-lint-final.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/ligatures-doctor.log": "e8ad7b8738f5737db9f439ab6d38fc008e77fa4836dc5630efb2a019db57e3d8",
+    "apps/office/coverage/ligatures-registry.log": "6c873f07948b5e21653cbaebcff2717d701ec145e67153f0e5330b8ccbe82b8e",
+    "apps/office/coverage/ligatures-resources.log": "81cfeecce1368be23ae74d3d4d36238d9ea058bf9f1deac541ad5479deb79401",
+    "apps/office/coverage/ligatures-source.log": "743e0b0283c736db6cdfd6b95393d47f4088ad57b4e38a466e2f60ad37ba93cc",
+    "apps/office/coverage/ligatures-static.log": "fdfbff314b6aeddc0d01475aafa761fc7e5ce04db7ed2b4a4db04be81935e5bf",
+    "apps/office/coverage/ligatures-typecheck.log": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+  }
+}

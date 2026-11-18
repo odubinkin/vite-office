@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 344
+revision: 347
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T23:27:54.164Z"
+  updated_at: "2026-11-18T23:47:30.597Z"
   updated_by: "CODER"
-  note: "Writer now carries original document theme and native character theme values through DOCX, ODT, Writer Worker and browser storage. 195 Writer cases, 24 Calc, 13 shared and six Chromium cases passed. New theme owners cleared scoped90 at 90.8% branches. A Word 2010 ligatures element remains unsupported in the unmodified run-color fixture. The umbrella task remains active."
-  attempts: 101
+  note: "Writer DOCX ligatures, numeral form and number spacing checkpoint verified with 376 Writer tests, seven Chromium cases and 97.46% scoped branches. Full DOCX scope remains in progress."
+  attempts: 102
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1624,8 +1627,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T23:47:30.597Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Writer DOCX ligatures, numeral form and number spacing checkpoint verified with 376 Writer tests, seven Chromium cases and 97.46% scoped branches. Full DOCX scope remains in progress."
+  -
+    type: "status"
+    at: "2026-11-18T23:47:35.429Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T23:28:00.121Z"
+doc_updated_at: "2026-11-18T23:47:35.429Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -4668,6 +4684,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T23:47:30.597Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Writer DOCX ligatures, numeral form and number spacing checkpoint verified with 376 Writer tests, seven Chromium cases and 97.46% scoped branches. Full DOCX scope remains in progress.
+    Attempts: 102
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T23:47:25.434Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -5263,6 +5309,14 @@ sections:
     - Command: ./node_modules/.bin/playwright test --config apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1. Result: pass. Evidence: 6 Chromium cases. Scope: opening, Worker-backed native ODT reload, downloading DOCX and reopening on mobile.
     - Commands: npm run test:static, typecheck, scoped Prettier and ESLint, check:docs, check:source-provenance, inventory:invariants, inventory:parity, check:dependencies, check:source-tree, check:file-size, check:calc-resources, doctor, routing and git diff --check. Result: pass.
     - The broader RTF selection reported missing runtime initialization in several pre-existing suites and a Block Quotation canonical-name expectation mismatch. Verified Writer selection includes the initialized RTF layout suite. Drawing format matrix, additional theme font behavior and Word 2010 text effects remain in scope for future work. No archive admission policy changed and the all-app cadence is unchanged.
+
+    ### Writer DOCX ligatures, numeral form and spacing
+
+    - The unchanged LibreOffice explicit run-color DOCX now opens and exports directly through the existing Writer filter and file UI. The generated Word 2010 namespace carries original definitions, resource IDs and enum tokens for ligatures, numeral form and spacing. The mapper and UNO properties retain the native nested character interoperability sequence for direct text, named styles and document run defaults. The style part writes the represented item in the original document-default block and preserves style and run schema order.
+    - The browser graph codec preserves the native run and style items and the optional document-pool override across the Worker transport. ODT saves the document and its theme color through the source-native ODF mapper. That mapper has no Word interoperability grab bag property, so a subsequent ODT reopen retains the text and theme color but the three Word typographic markers do not survive the format conversion.
+    - Command: npm run test:coverage:writer -- docxexport docxattributeoutput OOXMLFactory OOXMLFastContextHandler WriterFileDialog writer-text-effect-codec writer-theme-codec native-text-default-schema odt-property-roundtrip StyleSheetTable PropertyMap TextEffectsHandler with the declared90 scoped gates. Result: 376 tests across25 files, 99.12% statements, 97.46% branches, 100% functions and 99.06% lines over the three new executable owners. The initial execution had two timeouts during concurrent build and one incorrect XML-space assertion, all resolved in the same selection.
+    - Commands: production Chromium suite using writer-docx-theme.playwright.config.ts, static build, typecheck, scoped lint and Prettier, dependencies, JSDoc, tree/size/provenance, registry/invariants/parity, Calc and Writer resource checks, routing, doctor and diff. Result: seven Chromium cases and all gates passed. Doctor reported an existing hook readiness warning with no errors.
+    - Evidence: `evidence/native-docx-text-effects.json`. Other Word 2010 effects, the rest of the DOCX run-default contribution and theme font application remain in the umbrella task. No full test run was due.
 id_source: "generated"
 ---
 ## Summary
@@ -8316,6 +8370,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T23:47:30.597Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Writer DOCX ligatures, numeral form and number spacing checkpoint verified with 376 Writer tests, seven Chromium cases and 97.46% scoped branches. Full DOCX scope remains in progress.
+Attempts: 102
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T23:47:25.434Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -8916,3 +9000,11 @@ Evidence: `evidence/docx-native-ranged-bookmarks.json`.
 - Command: ./node_modules/.bin/playwright test --config apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1. Result: pass. Evidence: 6 Chromium cases. Scope: opening, Worker-backed native ODT reload, downloading DOCX and reopening on mobile.
 - Commands: npm run test:static, typecheck, scoped Prettier and ESLint, check:docs, check:source-provenance, inventory:invariants, inventory:parity, check:dependencies, check:source-tree, check:file-size, check:calc-resources, doctor, routing and git diff --check. Result: pass.
 - The broader RTF selection reported missing runtime initialization in several pre-existing suites and a Block Quotation canonical-name expectation mismatch. Verified Writer selection includes the initialized RTF layout suite. Drawing format matrix, additional theme font behavior and Word 2010 text effects remain in scope for future work. No archive admission policy changed and the all-app cadence is unchanged.
+
+### Writer DOCX ligatures, numeral form and spacing
+
+- The unchanged LibreOffice explicit run-color DOCX now opens and exports directly through the existing Writer filter and file UI. The generated Word 2010 namespace carries original definitions, resource IDs and enum tokens for ligatures, numeral form and spacing. The mapper and UNO properties retain the native nested character interoperability sequence for direct text, named styles and document run defaults. The style part writes the represented item in the original document-default block and preserves style and run schema order.
+- The browser graph codec preserves the native run and style items and the optional document-pool override across the Worker transport. ODT saves the document and its theme color through the source-native ODF mapper. That mapper has no Word interoperability grab bag property, so a subsequent ODT reopen retains the text and theme color but the three Word typographic markers do not survive the format conversion.
+- Command: npm run test:coverage:writer -- docxexport docxattributeoutput OOXMLFactory OOXMLFastContextHandler WriterFileDialog writer-text-effect-codec writer-theme-codec native-text-default-schema odt-property-roundtrip StyleSheetTable PropertyMap TextEffectsHandler with the declared90 scoped gates. Result: 376 tests across25 files, 99.12% statements, 97.46% branches, 100% functions and 99.06% lines over the three new executable owners. The initial execution had two timeouts during concurrent build and one incorrect XML-space assertion, all resolved in the same selection.
+- Commands: production Chromium suite using writer-docx-theme.playwright.config.ts, static build, typecheck, scoped lint and Prettier, dependencies, JSDoc, tree/size/provenance, registry/invariants/parity, Calc and Writer resource checks, routing, doctor and diff. Result: seven Chromium cases and all gates passed. Doctor reported an existing hook readiness warning with no errors.
+- Evidence: `evidence/native-docx-text-effects.json`. Other Word 2010 effects, the rest of the DOCX run-default contribution and theme font application remain in the umbrella task. No full test run was due.
