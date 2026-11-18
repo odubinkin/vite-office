@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 257
+revision: 260
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T08:27:16.594Z"
+  updated_at: "2026-11-18T08:43:12.273Z"
   updated_by: "CODER"
-  note: "Shared native raw ZIP package input now reads unchanged Writer/Calc member fixtures and production output in main/Worker.106 focused/111 related pass; coverage90 gate fails, classic Parser/complete document filter/UI pending. Evidence native-package-member-continuation.json."
-  attempts: 72
+  note: "Shared native package DATA/member plain save now uses actual ZIP compression/output, manifest and success-state owners;81focused/83related/main-Worker pass with scope90. Full DOCX/XLSX package/filter/UI acceptance remains pending. Evidence native-package-stream-save-continuation.json."
+  attempts: 73
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1160,8 +1163,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T08:43:12.273Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared native package DATA/member plain save now uses actual ZIP compression/output, manifest and success-state owners;81focused/83related/main-Worker pass with scope90. Full DOCX/XLSX package/filter/UI acceptance remains pending. Evidence native-package-stream-save-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-18T08:44:00.051Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T08:27:43.763Z"
+doc_updated_at: "2026-11-18T08:44:00.051Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -3334,6 +3350,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T08:43:12.273Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared native package DATA/member plain save now uses actual ZIP compression/output, manifest and success-state owners;81focused/83related/main-Worker pass with scope90. Full DOCX/XLSX package/filter/UI acceptance remains pending. Evidence native-package-stream-save-continuation.json.
+    Attempts: 73
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T08:42:59.256Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -3694,6 +3740,14 @@ sections:
     - Evidence:106 focused tests/10files and111 related/3files pass; Chromium main/DOM-free Worker packageMember probe passes. Full-owner scoped coverage fails90: S86.18/B80.4/F96.25/L86.82. Source provenance2683/JSDoc5526, registry semantic0, lint/format/tools/tree/size/resources/Vite/static/routing/diff pass. Same4 metadata/Medium type errors and2 module-boundary diagnostics persist.
     - Scope: actual original stream arguments, ZipFile tree/member readers, hierarchy/cache, native generated XHierarchicalNameAccess and recursive extension assignment. Positive unchanged rawDOCX/XLSX member bytes match independent Python zipfile lengths/SHA256. Malformed upstream package QA fixtures use actual stream argument overload without recovery. Preserve WRITER624/CALC691 trailing-slash parent-cache selection.
     - Pending: real classic SAX Parser/Expat, positive OFOPXML metadata/DD encryption-property validation, whole native package interface/registration/manifest/commit/XStorage/Medium/filter/UI. Expat network/parser-security proposal awaits user response; no dependency fetch or parser security mutation performed. Source package coverage failure retained without dilution or weakened gate. Full suite not due; no task completed.
+
+    ### Native plain package stream save continuation (2026-11-18)
+
+    - Command: exact focused coverage/related/browser/check commands in `evidence/native-package-stream-save-continuation.json`.
+    - Result: pass for represented plain synchronous stream profile; full task remains rework.
+    - Evidence:81 focused tests/6files,83 related/2files and Chromium main/DOM-free Worker pass. Whole3owner scope S97.13/B91.94/F100/L99.15; ZipPackageStream individually S96.3/B91.04/F100/L98.9; other2 owners100. Original90 gate preserved; prior failing ZipPackage metadata scope retained. Tools/lint/format/JSDoc5528/provenance2683/registry semantic0/size/tree/resources/routing/diff/Vite/static pass. Same4 existing metadata/Medium type errors and2 module boundaries persist.
+    - Scope: actual DATA/member save with original manifest rows, STORED prepass/nonseekable optimization/raw matching-method transport/small DEFLATE/JPEG branches, real nullable compressor parent, success closure/state/copy/offset order and original false error returns. Independent Node zlib/CRC validates emitted bytes; actual closed input/lazy seek/null context and rejected filenames exercise failures without fake providers. WRITER625/CALC692 and WRITER626/CALC693 preserve original compression-disable/Size snapshot behavior. Existing ambient pako declarations explicitly accompany the now tools-reachable adapter; no runtime codec change.
+    - Pending: DETECT/encrypted raw parsing, encryption, source background/parallel deflators and upstream threaded QA, package commit/reinitialization/XStorage/Medium/filter/UI, physical native ABI/thread/allocation qualification. Expat network/parser-security proposal still awaiting user response; no fetch or security-sensitive parser implementation performed. Full suite not due; no task finished.
 id_source: "generated"
 ---
 ## Summary
@@ -5877,6 +5931,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T08:43:12.273Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared native package DATA/member plain save now uses actual ZIP compression/output, manifest and success-state owners;81focused/83related/main-Worker pass with scope90. Full DOCX/XLSX package/filter/UI acceptance remains pending. Evidence native-package-stream-save-continuation.json.
+Attempts: 73
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T08:42:59.256Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -6242,3 +6326,11 @@ Next source-backed block: connect ZipPackage.initialize/getZipFileContents and g
 - Evidence:106 focused tests/10files and111 related/3files pass; Chromium main/DOM-free Worker packageMember probe passes. Full-owner scoped coverage fails90: S86.18/B80.4/F96.25/L86.82. Source provenance2683/JSDoc5526, registry semantic0, lint/format/tools/tree/size/resources/Vite/static/routing/diff pass. Same4 metadata/Medium type errors and2 module-boundary diagnostics persist.
 - Scope: actual original stream arguments, ZipFile tree/member readers, hierarchy/cache, native generated XHierarchicalNameAccess and recursive extension assignment. Positive unchanged rawDOCX/XLSX member bytes match independent Python zipfile lengths/SHA256. Malformed upstream package QA fixtures use actual stream argument overload without recovery. Preserve WRITER624/CALC691 trailing-slash parent-cache selection.
 - Pending: real classic SAX Parser/Expat, positive OFOPXML metadata/DD encryption-property validation, whole native package interface/registration/manifest/commit/XStorage/Medium/filter/UI. Expat network/parser-security proposal awaits user response; no dependency fetch or parser security mutation performed. Source package coverage failure retained without dilution or weakened gate. Full suite not due; no task completed.
+
+### Native plain package stream save continuation (2026-11-18)
+
+- Command: exact focused coverage/related/browser/check commands in `evidence/native-package-stream-save-continuation.json`.
+- Result: pass for represented plain synchronous stream profile; full task remains rework.
+- Evidence:81 focused tests/6files,83 related/2files and Chromium main/DOM-free Worker pass. Whole3owner scope S97.13/B91.94/F100/L99.15; ZipPackageStream individually S96.3/B91.04/F100/L98.9; other2 owners100. Original90 gate preserved; prior failing ZipPackage metadata scope retained. Tools/lint/format/JSDoc5528/provenance2683/registry semantic0/size/tree/resources/routing/diff/Vite/static pass. Same4 existing metadata/Medium type errors and2 module boundaries persist.
+- Scope: actual DATA/member save with original manifest rows, STORED prepass/nonseekable optimization/raw matching-method transport/small DEFLATE/JPEG branches, real nullable compressor parent, success closure/state/copy/offset order and original false error returns. Independent Node zlib/CRC validates emitted bytes; actual closed input/lazy seek/null context and rejected filenames exercise failures without fake providers. WRITER625/CALC692 and WRITER626/CALC693 preserve original compression-disable/Size snapshot behavior. Existing ambient pako declarations explicitly accompany the now tools-reachable adapter; no runtime codec change.
+- Pending: DETECT/encrypted raw parsing, encryption, source background/parallel deflators and upstream threaded QA, package commit/reinitialization/XStorage/Medium/filter/UI, physical native ABI/thread/allocation qualification. Expat network/parser-security proposal still awaiting user response; no fetch or security-sensitive parser implementation performed. Full suite not due; no task finished.
