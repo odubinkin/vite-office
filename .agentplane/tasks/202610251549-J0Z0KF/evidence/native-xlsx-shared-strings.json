@@ -1,0 +1,100 @@
+{
+  "checkpoint": "Native SpreadsheetML shared and inline text",
+  "createdAt": "2026-11-18T22:11:50.274Z",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "task": "202610251549-J0Z0KF",
+  "upstream": [
+    "sc/source/filter/oox/richstring.cxx#RichString::convert",
+    "sc/source/filter/oox/richstringcontext.cxx#RichStringContext::onCreateContext",
+    "sc/source/filter/oox/sharedstringsfragment.cxx#SharedStringsFragment::onCreateContext",
+    "sc/source/filter/oox/sharedstringsbuffer.cxx#SharedStringsBuffer::getString",
+    "sc/source/filter/excel/xecontent.cxx#XclExpSstImpl::SaveXml",
+    "sc/source/filter/excel/xetable.cxx#XclExpLabelCell::SaveXml"
+  ],
+  "sourceObservations": [
+    "CALC-725"
+  ],
+  "results": {
+    "calc": {
+      "files": 7,
+      "passed": 90,
+      "coverageGate": "passed",
+      "coverageThreshold": 90,
+      "coverage": {
+        "lines": {
+          "total": 118,
+          "covered": 118,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 135,
+          "covered": 133,
+          "skipped": 0,
+          "pct": 98.51
+        },
+        "functions": {
+          "total": 17,
+          "covered": 17,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 52,
+          "covered": 50,
+          "skipped": 0,
+          "pct": 96.15
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "chromium": {
+      "passed": 4
+    }
+  },
+  "remaining": [
+    "Formatted text portions still require native run fonts and phonetic handling.",
+    "The preserve_space.xlsx optimal row-height assertion remains open (observed 845 mm100, expected below 600).",
+    "High-ratio browser admission and the earlier shared ZIP branch coverage are outside this text verification."
+  ],
+  "files": {
+    "apps/office/e2e/calc/xlsx-text.spec.ts": "c03d81f61faa47d4c4a22114af25e53016fde85b8dd988f27cd6e63d9b3e921e",
+    "apps/office/src/sc/browser/presentation/calc-files.test.tsx": "e2887ab9516be7c384fe02b6e2291a19bc1e4e631dd815197f66b490bd453521",
+    "apps/office/src/sc/source/filter/excel/xetable.ts": "b166fa186a0da0c7d7c3f59e5633420dff0bdd917e553f4408832eb99f64d7ca",
+    "apps/office/src/sc/source/filter/excel/xecontent.ts": "9db01cf3f79462f20968824e43201915c9079cf2341a7a6d192a98d83ff0e109",
+    "apps/office/src/sc/source/filter/oox/excelfilter.ts": "251936932305229b8136bf4b6c2aa86878458ad94c7ee101cc7553f20202f14e",
+    "apps/office/src/sc/source/filter/oox/excelfilter.test.ts": "1446e6d023702b8cf970255feb09f334c694e2c182dd70ae2167e6ab27c28925",
+    "apps/office/src/sc/source/filter/oox/richstring.ts": "6303e9e3c53385e6726f822bf2fc4b0bd0f95754316b8aaa4170459ff6df93e2",
+    "apps/office/src/sc/source/filter/oox/richstringcontext.ts": "dc07df0c15dd2b9f446a71d9fe8ba775a7123afc7b5e421eb3b352cf1d5816df",
+    "apps/office/src/sc/source/filter/oox/sharedstringsbuffer.ts": "f670de59eeba7d4e150fc7f58cf2cf58eb340fdbe91dcf3ac8b8f6b58cd1cdab",
+    "apps/office/src/sc/source/filter/oox/sharedstringsfragment.ts": "5d8ed430cc7ad8b8c1ea2c85fc047d0af4dd82ebdd7881f2f82acf94309e2679",
+    "apps/office/src/sc/source/filter/oox/sheetdatabuffer.ts": "a200396a2299062b725ebfc8da9b0a38afa48bb697ecaa2fda9f859cac82e9cf",
+    "apps/office/src/sc/source/filter/oox/workbookfragment.ts": "6f4d50e996b8134f1887897797a1f49386b7fb620c6d8ba9b0b699c29c003ee1",
+    "apps/office/src/sc/source/filter/oox/worksheetfragment.ts": "16057ec548b3bb88bc00205fec8be6b1806e742cc06704c16a8f41aae3268f07",
+    "docs/program/calc-upstream-suspected-issues.md": "e3c3929e8853f13e170953190f235cc7098dcf6f660d9c5c3d91d6c6204c3305"
+  },
+  "fixtures": {
+    "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/escape-unicode.xlsx": "4fc5bfed83c80264b6bb06e321e404f86a0b99bd5f1c1fbabe1cef3f44c284e0",
+    "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/preserve_space.xlsx": "dca72194dda7f51e051c1fd709ff330e172ff141845236694c25c476c23fea6b"
+  },
+  "logs": {
+    "apps/office/coverage/admission-text-closure.log": "49fb4399867d1bd052abbedb90e9c318d6eb4a101390c9fe1a155c86d83764be",
+    "apps/office/coverage/admission-text-browser-final.log": "e300ed16820b2dba0cd1f22cf19ebaebf055ab18b4a9ec8ca3b6f344b4bfaf17",
+    "apps/office/coverage/admission-text-static-final.log": "83df93b5b39e893cbbf0a8eef4b1eb0375aa2003b6cdf12ee864b72b3b50ce7b",
+    "apps/office/coverage/admission-text-final-typecheck.log": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2",
+    "apps/office/coverage/admission-text-provenance-final.log": "b17a158062fbe2c3408c23dcf1c1420d421ed9c07683095ca7567cb70bb13456",
+    "apps/office/coverage/admission-text-jsdoc.log": "28f11731acf3e5d2379f60f90ed8112cccf7abeb10e4544c93157d726b150e3d",
+    "apps/office/coverage/admission-text-deps.log": "deb0cb9a74ba1c0256af5cdf671612eb127d3a53dd7224a90a046bcba534111e",
+    "apps/office/coverage/admission-text-invariants.log": "41fda0d3d5194ee145914034894a70d1365208c1220524dcb6be5420bb35463f",
+    "apps/office/coverage/admission-text-parity.log": "402961e7d79f40fa70590ffd87e945af921c8a5e8ae378a2939535f03b592f4a",
+    "apps/office/coverage/admission-text-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "apps/office/coverage/admission-text-size.log": "a41b8f74e5b27769fc888bdd84887c8338191382f16f839617a86496a7be34f3",
+    "apps/office/coverage/admission-text-mounted-final.log": "a7629cafd45b2b1b70a8a1430bfae83de9d7d3130e3adcad0eed38ef5aa6a55b",
+    "apps/office/coverage/admission-text-finalcases.log": "5a979ef747f7397edd2b2707a89fff4d2d4f1c8455f2bb602bedf048ed848e28"
+  }
+}

@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 603
+revision: 606
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T21:52:37.056Z"
+  updated_at: "2026-11-18T22:11:50.869Z"
   updated_by: "CODER"
-  note: "Large DOCX/XLSX package export: 100 shared, 407 Writer and 57 Calc tests passed. Five DOCX Chromium cases passed; all five XLSX cases passed across the initial run and isolated retry. Scoped statement, function and line coverage pass; branch coverage is 83.87% of the required 90%. Highly compressible parts can still hit the existing browser admission ceiling."
-  attempts: 192
+  note: "Shared and inline text checkpoint passes 90 Calc tests, four Chromium tests and the scoped 90% gate (96.15% branches). Original escape-unicode.xlsx survives XLSX and ODS reopen. Full rich-run formatting, the whitespace fixture optimal row-height assertion and prior package admission and branch coverage gaps remain."
+  attempts: 193
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3080,8 +3083,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T22:11:50.869Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared and inline text checkpoint passes 90 Calc tests, four Chromium tests and the scoped 90% gate (96.15% branches). Original escape-unicode.xlsx survives XLSX and ODS reopen. Full rich-run formatting, the whitespace fixture optimal row-height assertion and prior package admission and branch coverage gaps remain."
+  -
+    type: "status"
+    at: "2026-11-18T22:12:00.518Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T21:52:44.013Z"
+doc_updated_at: "2026-11-18T22:12:00.518Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -8856,6 +8872,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T22:11:50.869Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared and inline text checkpoint passes 90 Calc tests, four Chromium tests and the scoped 90% gate (96.15% branches). Original escape-unicode.xlsx survives XLSX and ODS reopen. Full rich-run formatting, the whitespace fixture optimal row-height assertion and prior package admission and branch coverage gaps remain.
+    Attempts: 193
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T22:11:50.172Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -9789,6 +9835,17 @@ sections:
     - Command: ./node_modules/.bin/playwright test --config apps/office/coverage/xlsx-date-system.playwright.config.ts --workers=1. Result: initial concurrent run had 4 passing and one timed-out Open dialog assertion. Command: ./node_modules/.bin/playwright test --config apps/office/coverage/xlsx-date-system.playwright.config.ts --workers=1 --grep 'scoped Print Titles'. Result: pass in isolation. Scope: production Calc Open, browser storage, Download XLSX and mobile reopen.
     - Commands: npm run typecheck -w @vite-office/office, npm run test:static, npm run check:docs, scoped eslint and prettier, npm run check:dependencies, npm run check:writer-resources, npm run check:calc-resources, npm run check:file-size, npm run check:source-tree, npm run check:source-provenance, npm run inventory:invariants, npm run inventory:parity, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check. Result: pass. Scope: static and project policy checks for this checkpoint.
     - A focused temporary production-boundary probe confirmed that a valid self-export with more than 100:1 expansion in one part still fails browser admission. The checkpoint retains this existing browser policy. A real worker is still required to run package work off the UI thread.
+
+    ### Calc native SpreadsheetML shared and inline text
+
+    - SharedStringsBuffer owns the indexed workbook strings. SharedStringsFragment and RichStringContext route both SpreadsheetML namespaces through the actual RichStringPortion XString decoder. The parser retains per-text-element boundaries across callbacks and excludes phonetics and foreign extensions from the base text. SheetDataBuffer writes nonempty scalar text or transfers the actual text object created by RichString::convert.
+    - XclExpSst now emits the workbook relationship, shared string table counts, XML space behavior and typed worksheet indices. It reuses XclExpString hashing, ordering and text serialization. Tests cover repeated entries, distinct values with the same hash, sparse and styled blanks, literal Excel escape lookalikes, split text callbacks and actual shared and inline line breaks.
+    - CALC-725 records the original behavior in which a nonnumeric shared string reference converts to zero and can resolve to the first item. An out-of-range index leaves a styled blank.
+    - Command: npm run test:coverage:calc -w @vite-office/office -- excelfilter richstring xestring worksheethelper xestream calc-files --maxWorkers=2 --coverage.include=src/sc/source/filter/oox/richstringcontext.ts --coverage.include=src/sc/source/filter/oox/sharedstringsbuffer.ts --coverage.include=src/sc/source/filter/oox/sharedstringsfragment.ts --coverage.include=src/sc/source/filter/excel/xecontent.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/admission-text-scoped-final
+      Result: pass. Evidence: 90 tests across 7 files; 98.51% statements, 96.15% branches and 100% functions and lines in the selected owners. Scope: workbook text, native export strings, worksheets and the mounted XLSX/ODS/CSV file dialog. The mounted test harness initializes production libxml2 before testing standalone CSV, matching the browser entrypoint.
+    - Command: ./node_modules/.bin/playwright test --config apps/office/coverage/admission-text.playwright.config.ts --workers=1. Result: pass. Evidence: 4 Chromium tests. Scope: actual file open, primary ODS browser persistence, XLSX and CSV downloads, and mobile reopen. The escaped Unicode fixture is tested through browser storage and its exported shared string XML is verified.
+    - Commands: npm run test:static, npm run typecheck -w @vite-office/office, scoped ESLint and Prettier, npm run check:docs, npm run check:dependencies, npm run check:source-tree, npm run check:source-provenance, npm run inventory:invariants, npm run inventory:parity, npm run check:file-size, npm run check:calc-resources, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check. Result: pass. Scope: build and task policy gates for the text checkpoint.
+    - The LibreOffice escape-unicode.xlsx assertion passes on original import, XLSX reopen and primary ODS reopen. The preserve_space.xlsx text and no-wrap style pass. Its optimal row-height assertion is still open, with the observed 845 mm100 exceeding LibreOffice's less-than-600 expectation. The represented rich-run text still requires its font and phonetic conversion paths. Browser archive admission retains the existing expansion limit pending explicit approval for an OOXML-only bounded verification path.
 id_source: "generated"
 ---
 ## Summary
@@ -15573,6 +15630,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T22:11:50.869Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared and inline text checkpoint passes 90 Calc tests, four Chromium tests and the scoped 90% gate (96.15% branches). Original escape-unicode.xlsx survives XLSX and ODS reopen. Full rich-run formatting, the whitespace fixture optimal row-height assertion and prior package admission and branch coverage gaps remain.
+Attempts: 193
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T22:11:50.172Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -16510,3 +16597,14 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Command: ./node_modules/.bin/playwright test --config apps/office/coverage/xlsx-date-system.playwright.config.ts --workers=1. Result: initial concurrent run had 4 passing and one timed-out Open dialog assertion. Command: ./node_modules/.bin/playwright test --config apps/office/coverage/xlsx-date-system.playwright.config.ts --workers=1 --grep 'scoped Print Titles'. Result: pass in isolation. Scope: production Calc Open, browser storage, Download XLSX and mobile reopen.
 - Commands: npm run typecheck -w @vite-office/office, npm run test:static, npm run check:docs, scoped eslint and prettier, npm run check:dependencies, npm run check:writer-resources, npm run check:calc-resources, npm run check:file-size, npm run check:source-tree, npm run check:source-provenance, npm run inventory:invariants, npm run inventory:parity, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check. Result: pass. Scope: static and project policy checks for this checkpoint.
 - A focused temporary production-boundary probe confirmed that a valid self-export with more than 100:1 expansion in one part still fails browser admission. The checkpoint retains this existing browser policy. A real worker is still required to run package work off the UI thread.
+
+### Calc native SpreadsheetML shared and inline text
+
+- SharedStringsBuffer owns the indexed workbook strings. SharedStringsFragment and RichStringContext route both SpreadsheetML namespaces through the actual RichStringPortion XString decoder. The parser retains per-text-element boundaries across callbacks and excludes phonetics and foreign extensions from the base text. SheetDataBuffer writes nonempty scalar text or transfers the actual text object created by RichString::convert.
+- XclExpSst now emits the workbook relationship, shared string table counts, XML space behavior and typed worksheet indices. It reuses XclExpString hashing, ordering and text serialization. Tests cover repeated entries, distinct values with the same hash, sparse and styled blanks, literal Excel escape lookalikes, split text callbacks and actual shared and inline line breaks.
+- CALC-725 records the original behavior in which a nonnumeric shared string reference converts to zero and can resolve to the first item. An out-of-range index leaves a styled blank.
+- Command: npm run test:coverage:calc -w @vite-office/office -- excelfilter richstring xestring worksheethelper xestream calc-files --maxWorkers=2 --coverage.include=src/sc/source/filter/oox/richstringcontext.ts --coverage.include=src/sc/source/filter/oox/sharedstringsbuffer.ts --coverage.include=src/sc/source/filter/oox/sharedstringsfragment.ts --coverage.include=src/sc/source/filter/excel/xecontent.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/admission-text-scoped-final
+  Result: pass. Evidence: 90 tests across 7 files; 98.51% statements, 96.15% branches and 100% functions and lines in the selected owners. Scope: workbook text, native export strings, worksheets and the mounted XLSX/ODS/CSV file dialog. The mounted test harness initializes production libxml2 before testing standalone CSV, matching the browser entrypoint.
+- Command: ./node_modules/.bin/playwright test --config apps/office/coverage/admission-text.playwright.config.ts --workers=1. Result: pass. Evidence: 4 Chromium tests. Scope: actual file open, primary ODS browser persistence, XLSX and CSV downloads, and mobile reopen. The escaped Unicode fixture is tested through browser storage and its exported shared string XML is verified.
+- Commands: npm run test:static, npm run typecheck -w @vite-office/office, scoped ESLint and Prettier, npm run check:docs, npm run check:dependencies, npm run check:source-tree, npm run check:source-provenance, npm run inventory:invariants, npm run inventory:parity, npm run check:file-size, npm run check:calc-resources, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check. Result: pass. Scope: build and task policy gates for the text checkpoint.
+- The LibreOffice escape-unicode.xlsx assertion passes on original import, XLSX reopen and primary ODS reopen. The preserve_space.xlsx text and no-wrap style pass. Its optimal row-height assertion is still open, with the observed 845 mm100 exceeding LibreOffice's less-than-600 expectation. The represented rich-run text still requires its font and phonetic conversion paths. Browser archive admission retains the existing expansion limit pending explicit approval for an OOXML-only bounded verification path.
