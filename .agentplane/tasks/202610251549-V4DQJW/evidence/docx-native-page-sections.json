@@ -1,0 +1,68 @@
+{
+  "scope": "DOCX physical page styles and section boundaries in the existing Writer graph, filter, and browser routes",
+  "upstream": [
+    "sw/source/filter/ww8/wrtw8sty.cxx (MSWordSections and MSWordExportBase::SectionProperties)",
+    "sw/source/filter/ww8/docxexport.cxx (DocxExport::WriteMainText)",
+    "sw/source/filter/ww8/docxattributeoutput.cxx (FormatFrameSize, FormatLRSpace, FormatFrameDirection)",
+    "sw/source/writerfilter/dmapper/PropertyMap.cxx (lcl_GetRangeProperties and CloseSectionGroup)",
+    "sw/source/writerfilter/dmapper/DomainMapper.cxx (section bidi and textDirection)"
+  ],
+  "implementation": [
+    "Native page descriptors and master frames produce section XML. A later page assignment closes the preceding paragraph or adds the structural paragraph after a table. The body owns the final section.",
+    "New-document DOCX import binds the finalized physical page style and optional unsigned restart to the real native paragraph or table frame at the start of the section.",
+    "Preserve the 65500 Word dimension cap, PaperInfo dimension fitting and the source page-flow tokens; decimal page restart persists through browser primary-format ODT serialization.",
+    "Writer suspected-issues WRITER637 records the disabled upstream terminal-section margin assertion."
+  ],
+  "checks": [
+    {
+      "command": "npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ww8/docx src/sw/source/writerfilter/filter/WriterFilter.test.ts src/sw/source/writerfilter/dmapper/DomainMapper.test.ts src/sw/source/writerfilter/dmapper/SectionPropertyMap.test.ts src/sw/source/filter/xml/odt-property-roundtrip.test.ts src/sw/source/core/layout/newfrm.test.ts src/sw/source/writerfilter/rtftok/rtf-section-properties.test.ts src/sw/source/filter/ww8/rtfexport.layout.test.ts --coverage --coverage.include=src/sw/source/filter/ww8/docxattributeoutput.section.ts --coverage.reporter=text --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "382 tests across 18 files. Complete section owner coverage: 97.14% statements, 90% branches, 100% functions and lines."
+    },
+    {
+      "command": "npm exec --workspace @vite-office/office -- vite build && npx --no-install playwright test --config=apps/office/coverage/docx-named-styles.playwright.config.ts",
+      "result": "pass",
+      "evidence": "Production Chromium opened the pinned input, reopened from browser ODT storage, checked exported landscape and 1134-twip side margins, and reopened the downloaded DOCX at 390px width."
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "evidence": "Generated assets are relative; four JavaScript bundles contain no backend endpoint."
+    },
+    {
+      "command": "npm run check:source-provenance && npm run check:source-tree && npm run inventory:registry:check",
+      "result": "pass",
+      "evidence": "2,731 runtime records, complete generated views; source tree preserved."
+    },
+    {
+      "command": "npm run check:docs && npm run check:file-size && npm run check:writer-resources",
+      "result": "pass",
+      "evidence": "Repository JSDoc and size checks and two Writer resource tests pass."
+    },
+    {
+      "command": "npx --no-install eslint <changed TypeScript paths> --max-warnings 0; npx --no-install prettier --check <changed TypeScript and Markdown/JSON paths>; git diff --check <Writer paths>",
+      "result": "pass",
+      "evidence": "Scoped static checks."
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs; ap doctor",
+      "result": "pass",
+      "evidence": "Valid route and zero doctor errors; existing shim readiness warning."
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "result": "fail",
+      "evidence": "Three existing SfxDocumentMetaData.storage.ts errors around SfxMedium input, GetOutputStorage and Commit; no page-section TypeScript errors."
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "evidence": "Existing patattr core/browser edge and comphelper/sax cycle."
+    }
+  ],
+  "remaining": [
+    "Full content sections, header/footer content, page grids, non-decimal formats and complete mirrored/gutter round trips remain open.",
+    "Original full tdf86926_A3.docx hits the unported Shape context. Original full tdf96750_landscapeFollow.docx hits the unported linked-template definition 1769964. The new tests use the exact page-size elements from those files in reduced real packages; full-fixture fidelity remains open.",
+    "Full test run is deferred on the approved cadence. This is a scoped checkpoint within the active DOCX task."
+  ]
+}
