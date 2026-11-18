@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 514
+revision: 517
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T07:01:08.568Z"
+  updated_at: "2026-11-18T07:18:57.828Z"
   updated_by: "CODER"
-  note: "Original Calc model XServiceInfo and full service catalog checkpoint: 10 focused Calc, 9 shared and 48 boundary tests pass; real imported document model queried in Chromium main/Worker. Full model/factory/filter/storage/UI and four existing metadata errors remain. See calc-model-services-continuation.json."
-  attempts: 163
+  note: "Original local R1C1 address/scanner checkpoint: 140 focused and 72 related tests pass; whole owner scoped90 passes, actual Chromium main/Worker import caller uses parsed address. Complete model/factory/qualified-address/filter/storage/UI and existing metadata errors remain; see calc-r1c1-address-continuation.json."
+  attempts: 164
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2616,8 +2619,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T07:18:57.828Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Original local R1C1 address/scanner checkpoint: 140 focused and 72 related tests pass; whole owner scoped90 passes, actual Chromium main/Worker import caller uses parsed address. Complete model/factory/qualified-address/filter/storage/UI and existing metadata errors remain; see calc-r1c1-address-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-18T07:19:04.283Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T07:01:21.519Z"
+doc_updated_at: "2026-11-18T07:19:04.283Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -7522,6 +7538,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T07:18:57.828Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Original local R1C1 address/scanner checkpoint: 140 focused and 72 related tests pass; whole owner scoped90 passes, actual Chromium main/Worker import caller uses parsed address. Complete model/factory/qualified-address/filter/storage/UI and existing metadata errors remain; see calc-r1c1-address-continuation.json.
+    Attempts: 164
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T07:18:57.167Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -8210,6 +8256,14 @@ sections:
     Evidence: all 51 provider enum ordinals, 60 modern catalog rows, ten old compatibility rows and nine symbolic service-name constants; original exact modern-first lookup/ordered UNO sequence. Original apitest XServiceInfo assertions run against actual ScModelObj and UNO reference queries. Chromium main/Worker use the actual model referring to the document populated by ScDocumentImport. CALC688 documents the preserved duplicate VBA globals catalog row.
     Scope: ScModelObj XServiceInfo only, original provider catalog operations and SDK const-reference declaration correction; no MakeInstance, XMultiServiceFactory, complete XModel, formatter aggregation/full type list or full document/filter/storage/UI completion is claimed. The original full ODS-loaded ScModelObj QA suite remains unexecuted; shared apitest assertions are ported and native source witnesses cover only catalog/lookup. Header class export is type-only to avoid an ESM initialization cycle; executable consumers import the real source implementation. Initial cycle/sequence-byte-offset mistakes, a wrong negative fixture, worker catalog-count expectation, local static-class lint and SDK input declaration errors were corrected; raw failed logs are retained.
     Result: pass for final lint/format/tools/JSDoc (5518 files), provenance (2681 modules), registry (zero semantic violations), resources, size/tree, Vite bundling/static, doctor/routing/diff. Fail for full typecheck/build: same four SfxDocumentMetaData.storage missing native descriptor/medium storage operations. Dependency check retains previous patattr VCL boundary and comphelper -> sax -> comphelper cycle; the actual source-backed sc -> cppuhelper edge is recorded from docuno.cxx includes and Library_sc.mk links, removing only new edge diagnostics. Full DOCX/XLSX import/export/reopen/UI remains required. No full-suite run is due under the ten-completed-task cadence.
+
+    ### Local R1C1 address continuation
+
+    Command: focused actual address-owner scoped90 coverage, related OOXML/native-coordinate/ScDocumentImport regressions, actual Chromium main/DOM-free Worker and original compiled signed64 scanner witness; exact commands/hashes in evidence/calc-r1c1-address-continuation.json.
+    Result: pass for 140 address tests/9 files and 72 related import/conversion tests/7 files, plus 2 Writer resource tests. Final whole address.ts coverage: 97.5% statements, 95.22% branches, 100% functions, 98.55% lines. Thresholds remain the approved90; no counter merging/exclusion/config change. Earlier whole-owner profiles exposed uncovered older OOO branches; supported OOO/ODF value regressions now exercise those branches without promoting the old regex parser to complete native parity. The initially separate helper layout was folded into the original address.ts because the combined source fits994 lines; its earlier standalone profile is superseded.
+    Evidence: actual ScAddress/ScRange R1C1 dispatch, shared original signed64 scanner, row/column axis flags and failed-parse mutations, relative/absolute bases, full-axis fallbacks and formatting/singleton control. Twenty-four unchanged compiled scanner witnesses match; witness runs only the scanner, not the complete parser/header. Native testToggleRefFlag local spelling assertions are ported at the scalar owner, not full ScRefFinder/editor orchestration. CALC689 preserves sign-only bracketed zero offsets. Signed-overflow addition domains remain excluded; scanner witnesses use a zero relative row base.
+    Scope: service investigation found the missing address primitives needed by the service family. This checkpoint implements numeric R1C1 values, not ScAddressConversionObj/ScServiceProvider::MakeInstance/full XModel/model factory. Real Chromium main/Worker parse into CellModel.maCellAddr, feed that exact address to ScDocumentImport and observe the expected cell and actual model. Qualified/external/name/error-token headers, native physical ABI and complete DOCX/XLSX file/filter/storage/UI remain unfinished or unqualified. No substitute model/factory/header/document provider or source-success stub is supplied.
+    Result: pass for final lint/format/tools/JSDoc(5520), provenance(2681), registry zero semantic violations, resources, size/tree, Vite bundling/static, doctor/routing/diff. Full typecheck/build still fail on the same four SfxDocumentMetaData.storage native descriptor/medium-storage gaps. Dependency check retains the prior patattr VCL import gate and comphelper->sax->comphelper cycle. Full suite is not due under the approved ten-completed-task cadence.
 id_source: "generated"
 ---
 ## Summary
@@ -13124,6 +13178,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T07:18:57.828Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Original local R1C1 address/scanner checkpoint: 140 focused and 72 related tests pass; whole owner scoped90 passes, actual Chromium main/Worker import caller uses parsed address. Complete model/factory/qualified-address/filter/storage/UI and existing metadata errors remain; see calc-r1c1-address-continuation.json.
+Attempts: 164
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T07:18:57.167Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -13816,3 +13900,11 @@ Result: pass for 10 Calc tests/3 files, 9 shared tests/2 files, 48 boundary test
 Evidence: all 51 provider enum ordinals, 60 modern catalog rows, ten old compatibility rows and nine symbolic service-name constants; original exact modern-first lookup/ordered UNO sequence. Original apitest XServiceInfo assertions run against actual ScModelObj and UNO reference queries. Chromium main/Worker use the actual model referring to the document populated by ScDocumentImport. CALC688 documents the preserved duplicate VBA globals catalog row.
 Scope: ScModelObj XServiceInfo only, original provider catalog operations and SDK const-reference declaration correction; no MakeInstance, XMultiServiceFactory, complete XModel, formatter aggregation/full type list or full document/filter/storage/UI completion is claimed. The original full ODS-loaded ScModelObj QA suite remains unexecuted; shared apitest assertions are ported and native source witnesses cover only catalog/lookup. Header class export is type-only to avoid an ESM initialization cycle; executable consumers import the real source implementation. Initial cycle/sequence-byte-offset mistakes, a wrong negative fixture, worker catalog-count expectation, local static-class lint and SDK input declaration errors were corrected; raw failed logs are retained.
 Result: pass for final lint/format/tools/JSDoc (5518 files), provenance (2681 modules), registry (zero semantic violations), resources, size/tree, Vite bundling/static, doctor/routing/diff. Fail for full typecheck/build: same four SfxDocumentMetaData.storage missing native descriptor/medium storage operations. Dependency check retains previous patattr VCL boundary and comphelper -> sax -> comphelper cycle; the actual source-backed sc -> cppuhelper edge is recorded from docuno.cxx includes and Library_sc.mk links, removing only new edge diagnostics. Full DOCX/XLSX import/export/reopen/UI remains required. No full-suite run is due under the ten-completed-task cadence.
+
+### Local R1C1 address continuation
+
+Command: focused actual address-owner scoped90 coverage, related OOXML/native-coordinate/ScDocumentImport regressions, actual Chromium main/DOM-free Worker and original compiled signed64 scanner witness; exact commands/hashes in evidence/calc-r1c1-address-continuation.json.
+Result: pass for 140 address tests/9 files and 72 related import/conversion tests/7 files, plus 2 Writer resource tests. Final whole address.ts coverage: 97.5% statements, 95.22% branches, 100% functions, 98.55% lines. Thresholds remain the approved90; no counter merging/exclusion/config change. Earlier whole-owner profiles exposed uncovered older OOO branches; supported OOO/ODF value regressions now exercise those branches without promoting the old regex parser to complete native parity. The initially separate helper layout was folded into the original address.ts because the combined source fits994 lines; its earlier standalone profile is superseded.
+Evidence: actual ScAddress/ScRange R1C1 dispatch, shared original signed64 scanner, row/column axis flags and failed-parse mutations, relative/absolute bases, full-axis fallbacks and formatting/singleton control. Twenty-four unchanged compiled scanner witnesses match; witness runs only the scanner, not the complete parser/header. Native testToggleRefFlag local spelling assertions are ported at the scalar owner, not full ScRefFinder/editor orchestration. CALC689 preserves sign-only bracketed zero offsets. Signed-overflow addition domains remain excluded; scanner witnesses use a zero relative row base.
+Scope: service investigation found the missing address primitives needed by the service family. This checkpoint implements numeric R1C1 values, not ScAddressConversionObj/ScServiceProvider::MakeInstance/full XModel/model factory. Real Chromium main/Worker parse into CellModel.maCellAddr, feed that exact address to ScDocumentImport and observe the expected cell and actual model. Qualified/external/name/error-token headers, native physical ABI and complete DOCX/XLSX file/filter/storage/UI remain unfinished or unqualified. No substitute model/factory/header/document provider or source-success stub is supplied.
+Result: pass for final lint/format/tools/JSDoc(5520), provenance(2681), registry zero semantic violations, resources, size/tree, Vite bundling/static, doctor/routing/diff. Full typecheck/build still fail on the same four SfxDocumentMetaData.storage native descriptor/medium-storage gaps. Dependency check retains the prior patattr VCL import gate and comphelper->sax->comphelper cycle. Full suite is not due under the approved ten-completed-task cadence.
