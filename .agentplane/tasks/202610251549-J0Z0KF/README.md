@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 538
+revision: 541
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T11:52:38.180Z"
+  updated_at: "2026-11-18T12:09:11.811Z"
   updated_by: "CODER"
-  note: "Internal OStorage_Impl constructors/catalog checkpoint:11 focused and50 related tests plus main/DOM-free Worker pass. Whole-owner90 fails S75.43/B60.24/F100/L76.38; actual root/package/property and public wrapper/transaction/relationship paths remain incomplete. Same3 Medium type errors/2 boundaries; no full document/UI acceptance. Evidence: evidence/native-storage-impl-continuation.json."
-  attempts: 171
+  note: "Native metadata/rebind checkpoint:31 focused,43 related and18 manifest/archive tests plus Chromium main/DOM-free Worker pass. Serialization/ZipEntry whole scope99.5S/95B/100F/100L; earlier failed owners retained. Same3 Medium type errors/2 boundaries; root commit/transfer/OStorage/model/filter/UI unfinished. Evidence: evidence/native-package-metadata-continuation.json."
+  attempts: 172
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2744,8 +2747,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T12:09:11.811Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native metadata/rebind checkpoint:31 focused,43 related and18 manifest/archive tests plus Chromium main/DOM-free Worker pass. Serialization/ZipEntry whole scope99.5S/95B/100F/100L; earlier failed owners retained. Same3 Medium type errors/2 boundaries; root commit/transfer/OStorage/model/filter/UI unfinished. Evidence: evidence/native-package-metadata-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-18T12:09:18.028Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T11:52:44.814Z"
+doc_updated_at: "2026-11-18T12:09:18.028Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -7890,6 +7906,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T12:09:11.811Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native metadata/rebind checkpoint:31 focused,43 related and18 manifest/archive tests plus Chromium main/DOM-free Worker pass. Serialization/ZipEntry whole scope99.5S/95B/100F/100L; earlier failed owners retained. Same3 Medium type errors/2 boundaries; root commit/transfer/OStorage/model/filter/UI unfinished. Evidence: evidence/native-package-metadata-continuation.json.
+    Attempts: 172
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T12:09:10.867Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -8643,6 +8689,14 @@ sections:
     - Evidence: 11 focused tests/1file and50 related tests/5files pass; Chromium main/DOM-free Worker actual storage catalog passes. Whole-owner90 gate fails: S75.43/B60.24/F100/L76.38. Native root package/property services and relationships/public wrapper paths remain unqualified; no fake providers/branch exclusions or weakened thresholds. Same3 native SfxMedium type errors and2 module boundary diagnostics persist. Tools/lint/format/JSDoc5542/provenance2688/size/tree/resources/Vite/static/routing/diff pass; registry refreshed with an explicit original internal/public owner responsibility split, final check passes with zero semantic violations. No task complete, full suite not due. Earlier failed scopes and full DOCX/XLSX import-export/UI acceptance remain unfinished. Expat approval pending; no download/parser-security mutation.
     - Scope: actual OStorage_Impl/SotElement_Impl source state, constructors/mode/defaults, original switch persistence, property sequence copies, URL-only logical closure, genuine folder enumeration, child cache/TRUNCATE/lookup and original package factory argument construction. No XStorage interface, wrapper or package factory success is manufactured. Source WRITER629/CALC696 list-created-on-error behavior is retained.
     - Pending: public OStorage and weak wrapper lists/InternalDispose, writable stream owners, actual root service/property acquisition, relationships/transactions/encryption, source StorageFactory QA, complete native package/Medium/filter/model/UI and prior coverage failures. No full-suite run due; no task completed.
+
+    ### Native package metadata records and input rebinding continuation (2026-11-18)
+
+    - Command: exact focused/related/browser/check commands in `evidence/native-package-metadata-continuation.json`.
+    - Result: pass for represented metadata/rebind owners; whole task remains rework.
+    - Evidence: 31 focused tests/2files pass;43 related/4files and18 manifest/archive/3files pass. Actual source entry save/metadata/rebind/member-read and second-input ZipFile identity pass; genuine nonseekable query and closed-output typed-context failures pass. Whole serialization+ZipEntry scope S99.5/B95/F100/L100; serialization alone S99.41/B92.85/F100/L100, ZipEntry100. Initial narrower test scope failed ZipEntry coverage and remains retained; earlier full ZipPackage/internal storage/background/MediaDescriptor coverage failures remain unqualified. Chromium main/DOM-free Worker metadata records/native reopen/ConnectTo identity pass. Same3 Medium type errors and2 boundary diagnostics persist; full tsc-dependent build not accepted. Tools/lint/format/JSDoc5545/provenance2689/registry semantic0/size/tree/resources/Vite/static/routing/diff/doctor pass. Full native package commit/transfer/OStorage/StorageFactory/Medium/filter/model/UI and original full package QA remain unfinished; existing browser persistence/recovery deviations untouched. No task completed/full suite due. Expat proposal still awaits approval; no download or parser security change.
+    - Scope: source WriteMimetypeMagicFile/WriteManifest/WriteContentTypes over actual receiver/root/context/sequences and registered ManifestWriter/SAX/ZipPackageBuffer/ZipOutputEntry. Source aggregate value-init is explicit without zeroing default-init records. ConnectTo retains throwing query/assignment/seek0, existing ZipFile identity and new-reader initialise=false/format Checks; source catalog is not rebuilt. Real saved member streams read after output/rebind and replacement. Earlier OStorage_Impl string-extraction calls now pass OUString objects required by actual Any API; positive PACKAGE properties remain unqualified.
+    - Pending: root writeTempFile/commit/transfer, large-stream scheduler/parallel deflate, actual OStorage/StorageFactory/Medium and full model/filter/UI. Empty/legacy ManifestExport remains explicitly unsupported, no synthetic root is supplied. Native debug ByteReader assertions and physical ABI/allocator/thread/fatal domains remain unqualified. Source full StorageFactory/package QA remains mandatory and pending, not claimed ported by these direct writer tests.
 id_source: "generated"
 ---
 ## Summary
@@ -13797,6 +13851,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T12:09:11.811Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native metadata/rebind checkpoint:31 focused,43 related and18 manifest/archive tests plus Chromium main/DOM-free Worker pass. Serialization/ZipEntry whole scope99.5S/95B/100F/100L; earlier failed owners retained. Same3 Medium type errors/2 boundaries; root commit/transfer/OStorage/model/filter/UI unfinished. Evidence: evidence/native-package-metadata-continuation.json.
+Attempts: 172
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T12:09:10.867Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -14554,3 +14638,11 @@ Next source-backed block: connect ZipPackage.initialize/getZipFileContents and g
 - Evidence: 11 focused tests/1file and50 related tests/5files pass; Chromium main/DOM-free Worker actual storage catalog passes. Whole-owner90 gate fails: S75.43/B60.24/F100/L76.38. Native root package/property services and relationships/public wrapper paths remain unqualified; no fake providers/branch exclusions or weakened thresholds. Same3 native SfxMedium type errors and2 module boundary diagnostics persist. Tools/lint/format/JSDoc5542/provenance2688/size/tree/resources/Vite/static/routing/diff pass; registry refreshed with an explicit original internal/public owner responsibility split, final check passes with zero semantic violations. No task complete, full suite not due. Earlier failed scopes and full DOCX/XLSX import-export/UI acceptance remain unfinished. Expat approval pending; no download/parser-security mutation.
 - Scope: actual OStorage_Impl/SotElement_Impl source state, constructors/mode/defaults, original switch persistence, property sequence copies, URL-only logical closure, genuine folder enumeration, child cache/TRUNCATE/lookup and original package factory argument construction. No XStorage interface, wrapper or package factory success is manufactured. Source WRITER629/CALC696 list-created-on-error behavior is retained.
 - Pending: public OStorage and weak wrapper lists/InternalDispose, writable stream owners, actual root service/property acquisition, relationships/transactions/encryption, source StorageFactory QA, complete native package/Medium/filter/model/UI and prior coverage failures. No full-suite run due; no task completed.
+
+### Native package metadata records and input rebinding continuation (2026-11-18)
+
+- Command: exact focused/related/browser/check commands in `evidence/native-package-metadata-continuation.json`.
+- Result: pass for represented metadata/rebind owners; whole task remains rework.
+- Evidence: 31 focused tests/2files pass;43 related/4files and18 manifest/archive/3files pass. Actual source entry save/metadata/rebind/member-read and second-input ZipFile identity pass; genuine nonseekable query and closed-output typed-context failures pass. Whole serialization+ZipEntry scope S99.5/B95/F100/L100; serialization alone S99.41/B92.85/F100/L100, ZipEntry100. Initial narrower test scope failed ZipEntry coverage and remains retained; earlier full ZipPackage/internal storage/background/MediaDescriptor coverage failures remain unqualified. Chromium main/DOM-free Worker metadata records/native reopen/ConnectTo identity pass. Same3 Medium type errors and2 boundary diagnostics persist; full tsc-dependent build not accepted. Tools/lint/format/JSDoc5545/provenance2689/registry semantic0/size/tree/resources/Vite/static/routing/diff/doctor pass. Full native package commit/transfer/OStorage/StorageFactory/Medium/filter/model/UI and original full package QA remain unfinished; existing browser persistence/recovery deviations untouched. No task completed/full suite due. Expat proposal still awaits approval; no download or parser security change.
+- Scope: source WriteMimetypeMagicFile/WriteManifest/WriteContentTypes over actual receiver/root/context/sequences and registered ManifestWriter/SAX/ZipPackageBuffer/ZipOutputEntry. Source aggregate value-init is explicit without zeroing default-init records. ConnectTo retains throwing query/assignment/seek0, existing ZipFile identity and new-reader initialise=false/format Checks; source catalog is not rebuilt. Real saved member streams read after output/rebind and replacement. Earlier OStorage_Impl string-extraction calls now pass OUString objects required by actual Any API; positive PACKAGE properties remain unqualified.
+- Pending: root writeTempFile/commit/transfer, large-stream scheduler/parallel deflate, actual OStorage/StorageFactory/Medium and full model/filter/UI. Empty/legacy ManifestExport remains explicitly unsupported, no synthetic root is supplied. Native debug ByteReader assertions and physical ABI/allocator/thread/fatal domains remain unqualified. Source full StorageFactory/package QA remains mandatory and pending, not claimed ported by these direct writer tests.
