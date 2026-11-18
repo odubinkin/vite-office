@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 526
+revision: 529
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T08:43:11.494Z"
+  updated_at: "2026-11-18T09:07:34.939Z"
   updated_by: "CODER"
-  note: "Native plain stream save profile:81 focused and83 related tests/main-Worker pass. Whole3owner90 gate passes; stream branches91.04. Full package metadata/commit/threaded/filter/UI and same4type errors/2boundaries remain. Evidence native-package-stream-save-continuation.json."
-  attempts: 167
+  note: "Explicit native no-worker pool profile:9 focused and35 related tests/main-Worker real package tasks pass; whole owner90 coverage passes. Shared optimal/ThreadWorker/parallel ZIP/complete package/filter/UI remain pending. Same4type errors/2boundaries retained. Evidence native-threadpool-no-worker-continuation.json."
+  attempts: 168
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2680,8 +2683,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T09:07:34.939Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Explicit native no-worker pool profile:9 focused and35 related tests/main-Worker real package tasks pass; whole owner90 coverage passes. Shared optimal/ThreadWorker/parallel ZIP/complete package/filter/UI remain pending. Same4type errors/2boundaries retained. Evidence native-threadpool-no-worker-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-18T09:07:59.851Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T08:43:26.217Z"
+doc_updated_at: "2026-11-18T09:07:59.851Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -7706,6 +7722,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T09:07:34.939Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Explicit native no-worker pool profile:9 focused and35 related tests/main-Worker real package tasks pass; whole owner90 coverage passes. Shared optimal/ThreadWorker/parallel ZIP/complete package/filter/UI remain pending. Same4type errors/2boundaries retained. Evidence native-threadpool-no-worker-continuation.json.
+    Attempts: 168
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T09:07:14.801Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -8427,6 +8473,14 @@ sections:
     - Evidence:81 focused tests/6files,83 related/2files and Chromium main/DOM-free Worker pass. Whole3owner scope S97.13/B91.94/F100/L99.15; ZipPackageStream individually S96.3/B91.04/F100/L98.9; other2 owners100. Original90 gate preserved; prior failing ZipPackage metadata scope retained. Tools/lint/format/JSDoc5528/provenance2683/registry semantic0/size/tree/resources/routing/diff/Vite/static pass. Same4 existing metadata/Medium type errors and2 module boundaries persist.
     - Scope: actual DATA/member save with original manifest rows, STORED prepass/nonseekable optimization/raw matching-method transport/small DEFLATE/JPEG branches, real nullable compressor parent, success closure/state/copy/offset order and original false error returns. Independent Node zlib/CRC validates emitted bytes; actual closed input/lazy seek/null context and rejected filenames exercise failures without fake providers. WRITER625/CALC692 and WRITER626/CALC693 preserve original compression-disable/Size snapshot behavior. Existing ambient pako declarations explicitly accompany the now tools-reachable adapter; no runtime codec change.
     - Pending: DETECT/encrypted raw parsing, encryption, source background/parallel deflators and upstream threaded QA, package commit/reinitialization/XStorage/Medium/filter/UI, physical native ABI/thread/allocation qualification. Expat network/parser-security proposal still awaiting user response; no fetch or security-sensitive parser implementation performed. Full suite not due; no task finished.
+
+    ### Original task tags and explicit no-worker pool continuation (2026-11-18)
+
+    - Command: exact focused/related/browser/check commands in `evidence/native-threadpool-no-worker-continuation.json`.
+    - Result: pass for represented no-worker source profile; full task remains rework.
+    - Evidence:9 focused tests with whole-owner S97.82/B91.3/F100/L98.82;35 related tests/4files and Chromium main/DOM-free Worker actual package save/reopen tasks pass. Tools/lint/format/JSDoc5532/provenance2685/registry semantic0/size/tree/resources/routing/diff/Vite/static pass. Same4 existing metadata/Medium type errors and2 module boundaries persist. Prior failing full ZipPackage metadata scope retained.
+    - Scope: original explicit ThreadPool(0), FIFO/task tag accounting, selected-tag waiting/early return, unrelated queue tails, shutdown/destruction, Emscripten default join=false, signed worker-count projection and catch-all exec. Source testNoThreads eight-task sequence ported; observations occur outside exec so swallowed assertions cannot create a false pass. Genuine abstract-task fixture subclasses execute actual ZIP/package owners; no package/provider/shared default pool or worker identity is fabricated. WRITER627/CALC694 retain original no-worker lock scopes; suspected reentrant deadlock is a static source finding, not a deliberately hanging test.
+    - Pending: preferred concurrency/shared optimal/actual ThreadWorker and pending condition-variable waits; native numeric thread IDs/shared_ptr/atomics/physical scheduler. Other four upstream pool tests remain pending that backend. Production large ZIP thresholds still explicitly unported; pako lacks required deflateBound and no guessed substitute is introduced. Background/parallel entry tasks, package commit/Medium/filter/UI remain unfinished. Expat approval pending; no fetch/security mutation. Full suite not due; no task finished.
 id_source: "generated"
 ---
 ## Summary
@@ -13461,6 +13515,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T09:07:34.939Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Explicit native no-worker pool profile:9 focused and35 related tests/main-Worker real package tasks pass; whole owner90 coverage passes. Shared optimal/ThreadWorker/parallel ZIP/complete package/filter/UI remain pending. Same4type errors/2boundaries retained. Evidence native-threadpool-no-worker-continuation.json.
+Attempts: 168
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T09:07:14.801Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -14186,3 +14270,11 @@ Next source-backed block: connect ZipPackage.initialize/getZipFileContents and g
 - Evidence:81 focused tests/6files,83 related/2files and Chromium main/DOM-free Worker pass. Whole3owner scope S97.13/B91.94/F100/L99.15; ZipPackageStream individually S96.3/B91.04/F100/L98.9; other2 owners100. Original90 gate preserved; prior failing ZipPackage metadata scope retained. Tools/lint/format/JSDoc5528/provenance2683/registry semantic0/size/tree/resources/routing/diff/Vite/static pass. Same4 existing metadata/Medium type errors and2 module boundaries persist.
 - Scope: actual DATA/member save with original manifest rows, STORED prepass/nonseekable optimization/raw matching-method transport/small DEFLATE/JPEG branches, real nullable compressor parent, success closure/state/copy/offset order and original false error returns. Independent Node zlib/CRC validates emitted bytes; actual closed input/lazy seek/null context and rejected filenames exercise failures without fake providers. WRITER625/CALC692 and WRITER626/CALC693 preserve original compression-disable/Size snapshot behavior. Existing ambient pako declarations explicitly accompany the now tools-reachable adapter; no runtime codec change.
 - Pending: DETECT/encrypted raw parsing, encryption, source background/parallel deflators and upstream threaded QA, package commit/reinitialization/XStorage/Medium/filter/UI, physical native ABI/thread/allocation qualification. Expat network/parser-security proposal still awaiting user response; no fetch or security-sensitive parser implementation performed. Full suite not due; no task finished.
+
+### Original task tags and explicit no-worker pool continuation (2026-11-18)
+
+- Command: exact focused/related/browser/check commands in `evidence/native-threadpool-no-worker-continuation.json`.
+- Result: pass for represented no-worker source profile; full task remains rework.
+- Evidence:9 focused tests with whole-owner S97.82/B91.3/F100/L98.82;35 related tests/4files and Chromium main/DOM-free Worker actual package save/reopen tasks pass. Tools/lint/format/JSDoc5532/provenance2685/registry semantic0/size/tree/resources/routing/diff/Vite/static pass. Same4 existing metadata/Medium type errors and2 module boundaries persist. Prior failing full ZipPackage metadata scope retained.
+- Scope: original explicit ThreadPool(0), FIFO/task tag accounting, selected-tag waiting/early return, unrelated queue tails, shutdown/destruction, Emscripten default join=false, signed worker-count projection and catch-all exec. Source testNoThreads eight-task sequence ported; observations occur outside exec so swallowed assertions cannot create a false pass. Genuine abstract-task fixture subclasses execute actual ZIP/package owners; no package/provider/shared default pool or worker identity is fabricated. WRITER627/CALC694 retain original no-worker lock scopes; suspected reentrant deadlock is a static source finding, not a deliberately hanging test.
+- Pending: preferred concurrency/shared optimal/actual ThreadWorker and pending condition-variable waits; native numeric thread IDs/shared_ptr/atomics/physical scheduler. Other four upstream pool tests remain pending that backend. Production large ZIP thresholds still explicitly unported; pako lacks required deflateBound and no guessed substitute is introduced. Background/parallel entry tasks, package commit/Medium/filter/UI remain unfinished. Expat approval pending; no fetch/security mutation. Full suite not due; no task finished.
