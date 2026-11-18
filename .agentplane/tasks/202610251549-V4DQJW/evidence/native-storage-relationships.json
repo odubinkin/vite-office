@@ -1,0 +1,53 @@
+{
+  "work": "Original OFOPXML internal root and existing part relationship storage commit",
+  "upstream": [
+    "package/source/xstor/xstorage.cxx::OStorage_Impl::CommitRelInfo",
+    "package/source/xstor/xstorage.cxx::OStorage::setPropertyValue",
+    "package/source/xstor/owriteablestream.cxx::OWriteStream_Impl::CommitStreamRelInfo",
+    "package/qa/ofopxmlstorages/TestHelper.java::insertRelationships"
+  ],
+  "tests": [
+    {
+      "command": "npm run test:coverage:shared -- src/package/source/xstor src/comphelper/source/xml/ofopxmlhelper.write.test.ts src/package/source/zippackage/ZipPackage.serialization.test.ts --coverage.include=src/package/source/xstor/xstorage.relations.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90",
+      "result": "8 files, 76 tests pass; complete relationship owner S97.39/B90.62/F100/L99"
+    },
+    {
+      "command": "npm run test:coverage:shared -- src/package/source/xstor src/comphelper/source/xml/ofopxmlhelper.write.test.ts src/package/source/zippackage/ZipPackage.serialization.test.ts --coverage.include=src/package/source/xstor/xstorage.relations.ts --coverage.include=src/package/source/xstor/xstorage.catalog.ts --coverage.include=src/package/source/xstor/xstorage.impl.ts --coverage.include=src/package/source/xstor/owriteablestream.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90",
+      "result": "8 files, 76 tests pass; complete combined scope S85.05/B71.81/F98/L87.97 fails90"
+    },
+    {
+      "command": "npx eslint and npx prettier --check on touched TypeScript",
+      "result": "Pass"
+    },
+    {
+      "command": "npm run check:docs; npm run check:source-provenance; npm run inventory:registry:check; git diff --check",
+      "result": "Pass"
+    },
+    {
+      "command": "npm run typecheck; npm run check:dependencies",
+      "result": "Fail on prior three SfxMedium errors and prior two module boundaries"
+    }
+  ],
+  "witnesses": [
+    "Typed relationship sequence saved in _rels/.rels and cleared with the empty folder",
+    "Seekable original XML stream rewound and copied byte for byte",
+    "Existing part relationship file renamed and removed through actual package tree",
+    "Rejected unset and nonseekable UNO stream values",
+    "WRITER632/CALC699: TRUNCATE first read clears staged relations",
+    "WRITER633/CALC700: closed OFOPXML stream rename reopens removed original name"
+  ],
+  "limitations": [
+    "Relationship metadata reads, public storage and writable stream wrappers, per-part relationship property staging and complete application format/UI acceptance remain pending.",
+    "No completed Agentplane task, so the full suite is not due."
+  ],
+  "paths": {
+    "apps/office/src/package/source/xstor/xstorage.relations.ts": "d90df41b958bd0c7ea71b9e4bc2219d1dfa65693a9cc3f6e3c5fe5364ad166b0",
+    "apps/office/src/package/source/xstor/xstorage.catalog.ts": "69f4ceb0b31dc27efdc3740b1b23e45edd9246c5a230298a7c7f599f42c6ada1",
+    "apps/office/src/package/source/xstor/xstorage.impl.ts": "376615efbe908c9af52c851cc93ae70e8edbcb8ded342bf022f4f5bd446be174",
+    "apps/office/src/package/source/xstor/owriteablestream.ts": "5beef45e4265162c075916591891f07c53ddf3c88b75a0849b2de051e1612fc7",
+    "apps/office/src/package/source/xstor/xstorage.impl.test.ts": "bfaa4380792c25d6f5fd0532d20f88d50474d68d9026cf3ac64f432c1707cc0b",
+    "docs/program/native-storage-relationships.md": "9147c2d3efcc2a4d18d108d4f1bf7e9e87a2ab3edcc30ccb498b54b582014565",
+    "docs/program/writer-upstream-suspected-issues.md": "31b6bbdc1ca5376c4e6a4c676043f853c995325e466a97212ace1d71ddf450e4",
+    "docs/program/calc-upstream-suspected-issues.md": "96de8b5ee9bb2d98c030dae61b2c43ed7b2895044cb5e771004eec504f050b51"
+  }
+}

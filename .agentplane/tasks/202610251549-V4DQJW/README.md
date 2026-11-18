@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 290
+revision: 293
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T12:52:58.474Z"
+  updated_at: "2026-11-18T13:04:42.911Z"
   updated_by: "CODER"
-  note: "Native writable truncate, member insertion/replacement and revert verified against actual resulting package bytes. 53 focused and 24 related tests pass. Coverage branches 66.79%, full storage and format UI remain open. Evidence: evidence/native-writable-child-commit.json."
-  attempts: 83
+  note: "76 focused tests pass. Original OFOPXML root relationships write and clear through the actual archive. New owner passes scoped90; combined storage coverage and complete DOCX intake/filters/UI remain open."
+  attempts: 84
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1336,8 +1339,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T13:04:42.911Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "76 focused tests pass. Original OFOPXML root relationships write and clear through the actual archive. New owner passes scoped90; combined storage coverage and complete DOCX intake/filters/UI remain open."
+  -
+    type: "status"
+    at: "2026-11-18T13:05:05.494Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T12:52:59.078Z"
+doc_updated_at: "2026-11-18T13:05:05.494Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -3840,6 +3856,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T13:04:42.911Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: 76 focused tests pass. Original OFOPXML root relationships write and clear through the actual archive. New owner passes scoped90; combined storage coverage and complete DOCX intake/filters/UI remain open.
+    Attempts: 84
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T13:04:29.848Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -4286,6 +4332,14 @@ sections:
     - Scope: internal writable truncate with genuine memory cache and closed-wrapper property semantics, plain ZIP and OFOPXML without relationship streams. Public wrapper lifecycle, relationship commits, nontruncate cases, PACKAGE encryption, full upstream QA and full DOCX/XLSX app UI acceptance remain open. No full suite due.
 
     Evidence: `evidence/native-writable-child-commit.json`.
+
+    ### Native OFOPXML storage relationships
+
+    - Result: 76 focused tests passed. The complete relationship module meets 90% on all four metrics (S97.39/B90.62/F100/L99). The combined complete storage/stream scope remains below 90% (S85.05/B71.81/F98/L87.97).
+    - Evidence: related tests inspect the emitted ZIP relationship part and content types, check byte-preserving raw stream copy, and exercise empty-folder cleanup, rename and revert. WRITER632/CALC699 and WRITER633/CALC700 retain the two upstream ordering witnesses. Lint, formatting, JSDoc, provenance, registry and diff checks passed. Three SfxMedium type errors and two module-boundary failures persist.
+    - Scope: internal root relationship staging and persistence, and existing part relationship catalog changes. Public wrappers, parsed relationships, per-part metadata properties and complete DOCX/XLSX app paths remain open.
+
+    Evidence: `evidence/native-storage-relationships.json`.
 id_source: "generated"
 ---
 ## Summary
@@ -6799,6 +6853,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T13:04:42.911Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: 76 focused tests pass. Original OFOPXML root relationships write and clear through the actual archive. New owner passes scoped90; combined storage coverage and complete DOCX intake/filters/UI remain open.
+Attempts: 84
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T13:04:29.848Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7250,3 +7334,11 @@ Evidence file: `evidence/native-storage-package-transaction.json`.
 - Scope: internal writable truncate with genuine memory cache and closed-wrapper property semantics, plain ZIP and OFOPXML without relationship streams. Public wrapper lifecycle, relationship commits, nontruncate cases, PACKAGE encryption, full upstream QA and full DOCX/XLSX app UI acceptance remain open. No full suite due.
 
 Evidence: `evidence/native-writable-child-commit.json`.
+
+### Native OFOPXML storage relationships
+
+- Result: 76 focused tests passed. The complete relationship module meets 90% on all four metrics (S97.39/B90.62/F100/L99). The combined complete storage/stream scope remains below 90% (S85.05/B71.81/F98/L87.97).
+- Evidence: related tests inspect the emitted ZIP relationship part and content types, check byte-preserving raw stream copy, and exercise empty-folder cleanup, rename and revert. WRITER632/CALC699 and WRITER633/CALC700 retain the two upstream ordering witnesses. Lint, formatting, JSDoc, provenance, registry and diff checks passed. Three SfxMedium type errors and two module-boundary failures persist.
+- Scope: internal root relationship staging and persistence, and existing part relationship catalog changes. Public wrappers, parsed relationships, per-part metadata properties and complete DOCX/XLSX app paths remain open.
+
+Evidence: `evidence/native-storage-relationships.json`.
