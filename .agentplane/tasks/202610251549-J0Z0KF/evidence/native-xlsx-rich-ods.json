@@ -1,0 +1,113 @@
+{
+  "checkpoint": "Native Calc cell character spans across Worker transfer, primary ODS and subsequent XLSX download",
+  "createdAt": "2026-11-18T22:45:23.748Z",
+  "task": "202610251549-J0Z0KF",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sc/source/filter/xml/celltextparacontext.cxx#ScXMLCellTextParaContext::createFastChildContext",
+    "sc/source/filter/xml/celltextparacontext.cxx#ScXMLCellTextSpanContext::createFastChildContext",
+    "sc/source/filter/xml/xmlcelli.cxx#ScXMLTableRowCellContext::PushParagraphSpan",
+    "sc/source/filter/xml/xmlcelli.cxx#ScXMLTableRowCellContext::PushParagraphEnd",
+    "sc/source/filter/xml/xmlexprt.cxx#ScXMLExport::ExportCellTextAutoStyles",
+    "sc/source/filter/xml/xmlexprt.cxx#ScXMLExport::WriteEditCell",
+    "sc/qa/unit/subsequent_filters_test4.cxx"
+  ],
+  "sourceObservations": [
+    "CALC-727"
+  ],
+  "results": {
+    "calc": {
+      "files": 14,
+      "passed": 78,
+      "coverageGate": "passed",
+      "coverageThreshold": 90,
+      "coverage": {
+        "lines": {
+          "total": 121,
+          "covered": 119,
+          "skipped": 0,
+          "pct": 98.34
+        },
+        "statements": {
+          "total": 136,
+          "covered": 131,
+          "skipped": 0,
+          "pct": 96.32
+        },
+        "functions": {
+          "total": 15,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 93.33
+        },
+        "branches": {
+          "total": 60,
+          "covered": 55,
+          "skipped": 0,
+          "pct": 91.66
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      }
+    },
+    "chromium": {
+      "passed": 5
+    }
+  },
+  "remaining": [
+    "Complete theme font resolution, rich phonetics, device-based optimal row height and unrepresented ODF text properties remain open.",
+    "Fields still transfer as displayed text in this ODF path.",
+    "Browser archive admission limits maintain their existing behavior."
+  ],
+  "files": {
+    "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts": "b1123f5aefc57981c2bc4e5465e2a7ca9c46c8fe4804e068165a07bbb7042867",
+    "apps/office/src/sc/source/core/data/patattr.ts": "32cff5f6f7b0752cb6b4121d0256330bd205a2514480499e7a23122e08d45547",
+    "apps/office/src/sc/source/filter/xml/celltextparacontext.ts": "98fa3bd1af4d87374472fa4746ead82dc6215f2291d0140be8acfd0a17b7bfd0",
+    "apps/office/src/sc/source/filter/xml/xmlcelli.ts": "a6c36377b0198e6ac42e8d4db191c69c31368e84ce294ec624f45c764bbb2ad8",
+    "apps/office/src/sc/source/filter/xml/xmlcelli.edit.ts": "1bd905d1fb1a90aa81c8eb9ced60e086f6c78bfb2a080cdafa3d01f842d72f2c",
+    "apps/office/src/sc/source/filter/xml/xmlimprt.ts": "be37d192d6b04d3c4ba6582883ebdc7689f01a1fd79331d8123db0c9d129531c",
+    "apps/office/src/sc/source/filter/xml/xmlexprt.ts": "f25a5732e136cff20a8a0e832c665e0f4c221b9d9c48fb6c654537136b09af24",
+    "apps/office/src/sc/source/filter/xml/xmlexprt.celltext.ts": "8de56ebcd88b81e00023105852c524224361f09c103e0aa60fb18789531bf08f",
+    "apps/office/src/sc/source/filter/xml/xmlstyle.ts": "67d0f3d80db7fa578387f47ec463b1627dcc635452ce50517dc953c1eeefe0a8",
+    "apps/office/src/sc/source/filter/xml/xmlstyli.ts": "aaabac0e99cfcf174690f6ee837188841dde64a74515f33bf8d5ebdbdc0baf63",
+    "apps/office/src/sc/browser/presentation/calc-files.test.tsx": "6a6e53379e9bdc54010331bfc2b77af227d79ed8d76b6869ccd184de896708be",
+    "apps/office/src/sc/source/filter/oox/excelfilter.test.ts": "710b05633a5bf167fd197cd64ff4c0c040c7e7d95ff7ce2fee698b6f26262ae6",
+    "apps/office/src/sc/source/filter/xml/ods.test.ts": "5682112b1cafe54dc004131cd79fa8fcf3df40f4222ad511fdf38860ca6c61f7",
+    "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts": "8e1d051d80300dd8027580335c4512b825be0da4937461d145da4a06c57c7fa5",
+    "apps/office/e2e/calc/xlsx-text.spec.ts": "b1babfbed059beb9322ab8ed42475a4f372c3da477c940d6610668dd76a873a9",
+    "docs/program/calc-upstream-suspected-issues.md": "02deb10d592b4f8531c27d244558b547333d1f9fe9945c135c04e391d7a1cfe2"
+  },
+  "registry": {
+    "docs/program/registry/calc/runtime/sc/browser/filter/xml/calc-document-codec.ts.json": "a618829e1a4e5f08ca2dc8f4c20780bfecab3a163ab23a3ff4734a1e55cf39aa",
+    "docs/program/registry/calc/provenance/sc/browser/filter/xml/calc-document-codec.ts.json": "29bbf09c39a1d7481646215b2f80a038b54b02d19bc6ef101053a53ab3eda8dc",
+    "docs/program/registry/calc/runtime/sc/source/core/data/patattr.ts.json": "1015eb97e3c45d980956909a45a3f2ebe252cbf65f099d64386f735b11243840",
+    "docs/program/registry/calc/provenance/sc/source/core/data/patattr.ts.json": "950e1ba5f4f2a31f7d4bf4523409d3ba985b83cb51bb41b9fede9070d6c56c3d",
+    "docs/program/registry/calc/runtime/sc/source/filter/xml/celltextparacontext.ts.json": "d5203de3a0c511aa07954153e01ea84f14e55d77fc08d57b590ed7748abe2ff2",
+    "docs/program/registry/calc/provenance/sc/source/filter/xml/celltextparacontext.ts.json": "7c277ad629b43f3dbb125e0697e830497f070d65666b691a055b5d5255af8773",
+    "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlcelli.ts.json": "b0a8c45a0190a7b0ea0098733b92f1d7ece260d1abdb9afc2cbe937e140add36",
+    "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlcelli.ts.json": "f9c17662df3b026bc7b7b5bc89ff61b81cddfc1ccebcb65e673e0b02be58b9c5",
+    "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlcelli.edit.ts.json": "271e02e56dfee0b19107e388e99cdcc1601e6716267e83e7e22608670676d189",
+    "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlcelli.edit.ts.json": "488577fa9ee5351bc9d8a4b50950a5786008951f32e17e086183217fe7d6fb1f",
+    "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlimprt.ts.json": "cb8fc2c45a15db65391fa830b11fb3a8066a82b62591845acbd7c1bfe462f41d",
+    "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlimprt.ts.json": "97c8709a9fa6dca9be9ceefd310bbef36b545a50e83f0faac8cc28f6e7557b9c",
+    "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlexprt.ts.json": "3abb948b7c6843f6562d1949bfbab4a6abdc14d9a981cf30f759bf5f1221ca5f",
+    "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlexprt.ts.json": "d384da85ca1e21ac8a0d39d08cf930293fd750b62f93041a9e230f91073cb05d",
+    "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlexprt.celltext.ts.json": "a7560970023495e0e53f122fbe4d5ff987dcc47e3a9a5ccc5c3822b271d0676b",
+    "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlexprt.celltext.ts.json": "f6472628ba8a3d9bbe51d74ea6d88c95673f9cd5399f2e266de9ff6eedd5c93b",
+    "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlstyle.ts.json": "ede2ac393ebcb5581f307758064d760dc38fc5daf4d7bf0be5bbdef533a400ab",
+    "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlstyle.ts.json": "4c2124e4f1dc402dbc6c34fb6d73da9b53167cf8443bc658fd5d67f627c90fa8",
+    "docs/program/registry/calc/runtime/sc/source/filter/xml/xmlstyli.ts.json": "daa8a6012ae7c418f1da3e44e471ce34e34b8dde88297d72125ba4e2677f5cdc",
+    "docs/program/registry/calc/provenance/sc/source/filter/xml/xmlstyli.ts.json": "a91a817dc9f7654b37b2665ebdacb658500aedd06bf0417750e3aac2d74d561c"
+  },
+  "logs": {
+    "apps/office/coverage/rich-ods-closure.log": "8e6f706a07ba0528d3ae2e90d8263ceaae9a10288946418d4f7e2139cc04e108",
+    "apps/office/coverage/rich-ods-browser-final.log": "9bbda4f57512c16700cc5fffecaa87d6428aec34e496f249b751125486651dab",
+    "apps/office/coverage/rich-ods-static-final.log": "eaccc58dbf29aaf7daf85a76674911647fda0ac117cf0db621977fecf230a2ba",
+    "apps/office/coverage/rich-ods-gate-0.log": "332228f94bed7b719fdb7aacc862b11ed8c7adf2ebb80943b68b98dd89c5b78d",
+    "apps/office/coverage/rich-ods-last-3.log": "c8a2f5e6bfae7802b7a0f352882fbc41f26c9f6dddbaed90265d4b3f1c130cfa"
+  }
+}

@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 609
+revision: 612
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T22:27:42.429Z"
+  updated_at: "2026-11-18T22:45:29.599Z"
   updated_by: "CODER"
-  note: "Native XLSX run formatting passes 119 Calc tests, 53 shared EditEngine tests and five Chromium tests. Scoped branch coverage is 95.23% against 90%. The pinned no-wrap fixture preserves run weight in XLSX; a direct probe confirms that primary ODS still flattens character attributes. Worker transfer, rich ODS spans and related geometry remain open."
-  attempts: 194
+  note: "Calc now preserves native XLSX character formatting through Worker transfer, primary ODS persistence and browser download. 78 focused Calc cases and 5 Chromium cases passed. The selected ODS character-span modules passed the 90% gate with 91.66% branches. Static and provenance gates passed. The umbrella format task remains in progress for remaining source owners."
+  attempts: 195
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3112,8 +3115,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T22:45:29.599Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Calc now preserves native XLSX character formatting through Worker transfer, primary ODS persistence and browser download. 78 focused Calc cases and 5 Chromium cases passed. The selected ODS character-span modules passed the 90% gate with 91.66% branches. Static and provenance gates passed. The umbrella format task remains in progress for remaining source owners."
+  -
+    type: "status"
+    at: "2026-11-18T22:45:34.803Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T22:27:55.805Z"
+doc_updated_at: "2026-11-18T22:45:34.803Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -8948,6 +8964,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T22:45:29.599Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Calc now preserves native XLSX character formatting through Worker transfer, primary ODS persistence and browser download. 78 focused Calc cases and 5 Chromium cases passed. The selected ODS character-span modules passed the 90% gate with 91.66% branches. Static and provenance gates passed. The umbrella format task remains in progress for remaining source owners.
+    Attempts: 195
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T22:45:24.072Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -9904,6 +9950,15 @@ sections:
     - Command: ./node_modules/.bin/playwright test --config apps/office/coverage/admission-text.playwright.config.ts --workers=1. Result: pass. Evidence: 5 Chromium tests. Scope: actual XLSX open, download and mobile reopen with the original preserve_space.xlsx fixture; prior escaped-text, XLSX date-system and CSV browser regressions.
     - Commands: npm run test:static, npm run typecheck -w @vite-office/office, scoped ESLint and Prettier, npm run check:docs, npm run check:dependencies, npm run check:source-tree, npm run check:source-provenance, npm run inventory:invariants, npm run inventory:parity, npm run check:file-size, npm run check:calc-resources, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check. Result: pass. Scope: build and implementation gates.
     - Primary ODS persistence still drops character attributes. A direct ODS save/reopen probe of the pinned fixture observed bold in the source edit object and no character weight in the reopened edit object. The ODS document transfer record also flattens EDIT cells to text in calc-document-codec.ts. Rich ODS spans, worker transfer of native character items, optimal row sizing, and advanced theme/phonetic font resolution remain open.
+
+    #### Native XLSX character spans through Calc primary ODS
+
+    - Native EditTextObject sections populate the ODF automatic text-style family. The same character spans and automatic styles cross the browser Worker boundary and load into the actual EditEngine through native character item sets and selection ranges. Older plain edit transfer records remain readable.
+    - Direct ODS save/reopen keeps the pinned XLSX fixture's bold extent and significant whitespace. Independent ODS input reproduces the original styled-space assertion and covers missing styles, multiple paragraphs and offset/height fallback. Native tab/field display continues to export to CSV and ODS. CALC-727 records the source distinction between paragraph and span child dispatch for structural tabs and breaks.
+    - Command: npm run test:coverage:calc -w @vite-office/office -- excelfilter ods-worker calc-files ods.test ods-native-fonts ods-native-colors ods-native-alignment ods-style-routing docsh.csv-export --maxWorkers=2 --coverage.include=src/sc/source/filter/xml/xmlexprt.celltext.ts --coverage.include=src/sc/source/filter/xml/xmlcelli.edit.ts --coverage.include=src/sc/source/filter/xml/celltextparacontext.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/rich-ods-scoped-final. Result: pass. Evidence: 78 tests passed across 14 files. Scoped statements 96.32%, branches 91.66%, functions 93.33%, lines 98.34%. Scope: three changed ODF span owners, relevant Calc filters, Worker boundaries, dialog, and CSV regression.
+    - Command: ./node_modules/.bin/playwright test --config apps/office/coverage/admission-text.playwright.config.ts --workers=1. Result: pass. Evidence: 5 Chromium tests. Scope: actual file open, primary storage reload, desktop download and mobile re-import/download with native rich runs; Calc date, escaped text and CSV regressions.
+    - Commands: npm run test:static, ./node_modules/.bin/tsc --noEmit -p apps/office/tsconfig.json, scoped ESLint and Prettier, npm run check:docs, npm run check:dependencies, npm run check:source-tree, npm run check:source-provenance, npm run inventory:invariants, npm run inventory:parity, npm run check:file-size, npm run check:calc-resources, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check. Result: pass. Scope: static development and build gates.
+    - Optimal row-height layout, advanced theme/phonetic runs, unrepresented ODF character properties and field identity remain open. The separate browser archive admission policy was not changed.
 id_source: "generated"
 ---
 ## Summary
@@ -15748,6 +15803,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T22:45:29.599Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Calc now preserves native XLSX character formatting through Worker transfer, primary ODS persistence and browser download. 78 focused Calc cases and 5 Chromium cases passed. The selected ODS character-span modules passed the 90% gate with 91.66% branches. Static and provenance gates passed. The umbrella format task remains in progress for remaining source owners.
+Attempts: 195
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T22:45:24.072Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -16708,3 +16793,12 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Command: ./node_modules/.bin/playwright test --config apps/office/coverage/admission-text.playwright.config.ts --workers=1. Result: pass. Evidence: 5 Chromium tests. Scope: actual XLSX open, download and mobile reopen with the original preserve_space.xlsx fixture; prior escaped-text, XLSX date-system and CSV browser regressions.
 - Commands: npm run test:static, npm run typecheck -w @vite-office/office, scoped ESLint and Prettier, npm run check:docs, npm run check:dependencies, npm run check:source-tree, npm run check:source-provenance, npm run inventory:invariants, npm run inventory:parity, npm run check:file-size, npm run check:calc-resources, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check. Result: pass. Scope: build and implementation gates.
 - Primary ODS persistence still drops character attributes. A direct ODS save/reopen probe of the pinned fixture observed bold in the source edit object and no character weight in the reopened edit object. The ODS document transfer record also flattens EDIT cells to text in calc-document-codec.ts. Rich ODS spans, worker transfer of native character items, optimal row sizing, and advanced theme/phonetic font resolution remain open.
+
+#### Native XLSX character spans through Calc primary ODS
+
+- Native EditTextObject sections populate the ODF automatic text-style family. The same character spans and automatic styles cross the browser Worker boundary and load into the actual EditEngine through native character item sets and selection ranges. Older plain edit transfer records remain readable.
+- Direct ODS save/reopen keeps the pinned XLSX fixture's bold extent and significant whitespace. Independent ODS input reproduces the original styled-space assertion and covers missing styles, multiple paragraphs and offset/height fallback. Native tab/field display continues to export to CSV and ODS. CALC-727 records the source distinction between paragraph and span child dispatch for structural tabs and breaks.
+- Command: npm run test:coverage:calc -w @vite-office/office -- excelfilter ods-worker calc-files ods.test ods-native-fonts ods-native-colors ods-native-alignment ods-style-routing docsh.csv-export --maxWorkers=2 --coverage.include=src/sc/source/filter/xml/xmlexprt.celltext.ts --coverage.include=src/sc/source/filter/xml/xmlcelli.edit.ts --coverage.include=src/sc/source/filter/xml/celltextparacontext.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/rich-ods-scoped-final. Result: pass. Evidence: 78 tests passed across 14 files. Scoped statements 96.32%, branches 91.66%, functions 93.33%, lines 98.34%. Scope: three changed ODF span owners, relevant Calc filters, Worker boundaries, dialog, and CSV regression.
+- Command: ./node_modules/.bin/playwright test --config apps/office/coverage/admission-text.playwright.config.ts --workers=1. Result: pass. Evidence: 5 Chromium tests. Scope: actual file open, primary storage reload, desktop download and mobile re-import/download with native rich runs; Calc date, escaped text and CSV regressions.
+- Commands: npm run test:static, ./node_modules/.bin/tsc --noEmit -p apps/office/tsconfig.json, scoped ESLint and Prettier, npm run check:docs, npm run check:dependencies, npm run check:source-tree, npm run check:source-provenance, npm run inventory:invariants, npm run inventory:parity, npm run check:file-size, npm run check:calc-resources, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check. Result: pass. Scope: static development and build gates.
+- Optimal row-height layout, advanced theme/phonetic runs, unrepresented ODF character properties and field identity remain open. The separate browser archive admission policy was not changed.
