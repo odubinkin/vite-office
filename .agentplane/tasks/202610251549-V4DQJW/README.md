@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 338
+revision: 341
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T20:59:49.545Z"
+  updated_at: "2026-11-18T21:15:04.228Z"
   updated_by: "CODER"
-  note: "Descriptor-backed SfxMedium, storage properties and native private:stream transfer: 192 related tests, ten production UI regressions, Worker check and build passed. Scoped coverage remains below 90%; writable entry properties, metadata services and the UI storage cutover remain open."
-  attempts: 99
+  note: "Production DOCX/XLSX export now commits through native OFOPXML. Shared 91, Calc 47, ten UI cases, isolated Writer retry, Worker and build passed. Scoped coverage below 90%; native import cutover and full contract parity remain open."
+  attempts: 100
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1592,8 +1595,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T21:15:04.228Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Production DOCX/XLSX export now commits through native OFOPXML. Shared 91, Calc 47, ten UI cases, isolated Writer retry, Worker and build passed. Scoped coverage below 90%; native import cutover and full contract parity remain open."
+  -
+    type: "status"
+    at: "2026-11-18T21:15:09.134Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T20:59:54.789Z"
+doc_updated_at: "2026-11-18T21:15:09.134Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -4576,6 +4592,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-18T21:15:04.228Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Production DOCX/XLSX export now commits through native OFOPXML. Shared 91, Calc 47, ten UI cases, isolated Writer retry, Worker and build passed. Scoped coverage below 90%; native import cutover and full contract parity remain open.
+    Attempts: 100
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T21:15:03.397Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -5154,6 +5200,13 @@ sections:
     - Result: 192 related tests passed. The ten browser tests passed against the current production UI, and the main realm and Worker both committed 445 bytes via a real private:stream target. TypeScript and Vite build passed. Scoped coverage measured 64.19% statements, 56.96% branches, 63.07% functions and 67.06% lines, below the 90% gate.
     - Evidence: The native descriptor retains acquired UNO streams, provides canonical storage and commits before transfer. The registered OStorage publishes PACKAGE media metadata, OpenMode and OFOPXML RelationsInfoStream through XPropertySet. An exported root relationship was verified after raw-package reopen, with the source READWRITE default. The private stream exception result is documented as WRITER-646 and CALC-718. See `evidence/native-medium-storage.json`.
     - Scope: URL-based transfer and native metadata import/export service parity remain unfinished. Existing browser tests exercise the current asynchronous ZIP path. Native per-entry output properties and the Writer/Calc package cutover remain open. No full test run was due.
+
+    ### Native OFOPXML output used by Writer and Calc export
+
+    - Command: Scoped package/OOXML Vitest with owner coverage, focused Writer DOCX and Calc XLSX tests, production Chromium browser tests, native package write/reopen in main and DOM-free Worker realms, build/static and source gates.
+    - Result: Shared 91 cases passed. Writer named selection recorded Tests  1 failed | 406 passed (407); isolated metadata integration rerun recorded Tests  6 passed (6). Calc passed 47 cases. Ten browser cases passed, including downloads and reopening. Worker and main native writes both returned root, per-part relationships and MIME declarations after reopening. Scoped coverage measured 80.47% statements, 63.46% branches, 74.19% functions and 84.48% lines, below 90%.
+    - Evidence: The production exporters now package their fragments through registered OFOPXML StorageFactory, real OWriteStream metadata and child-before-parent commit. Root and per-part relationships are owned by their source parts. The package writes the content type table once. WRITER-647/648 and CALC-719/720 document the source truncation and writable property behavior. See `evidence/native-ooxml-output.json`.
+    - Scope: Browser reads still use the current asynchronous archive path; moving the format read interfaces to the native owners remains upcoming. The output buffer is still bound at browser commit, and native XRelationshipAccess and previous owner coverage gaps remain pending. No full suite was due.
 id_source: "generated"
 ---
 ## Summary
@@ -8147,6 +8200,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-18T21:15:04.228Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Production DOCX/XLSX export now commits through native OFOPXML. Shared 91, Calc 47, ten UI cases, isolated Writer retry, Worker and build passed. Scoped coverage below 90%; native import cutover and full contract parity remain open.
+Attempts: 100
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T21:15:03.397Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -8730,3 +8813,10 @@ Evidence: `evidence/docx-native-ranged-bookmarks.json`.
 - Result: 192 related tests passed. The ten browser tests passed against the current production UI, and the main realm and Worker both committed 445 bytes via a real private:stream target. TypeScript and Vite build passed. Scoped coverage measured 64.19% statements, 56.96% branches, 63.07% functions and 67.06% lines, below the 90% gate.
 - Evidence: The native descriptor retains acquired UNO streams, provides canonical storage and commits before transfer. The registered OStorage publishes PACKAGE media metadata, OpenMode and OFOPXML RelationsInfoStream through XPropertySet. An exported root relationship was verified after raw-package reopen, with the source READWRITE default. The private stream exception result is documented as WRITER-646 and CALC-718. See `evidence/native-medium-storage.json`.
 - Scope: URL-based transfer and native metadata import/export service parity remain unfinished. Existing browser tests exercise the current asynchronous ZIP path. Native per-entry output properties and the Writer/Calc package cutover remain open. No full test run was due.
+
+### Native OFOPXML output used by Writer and Calc export
+
+- Command: Scoped package/OOXML Vitest with owner coverage, focused Writer DOCX and Calc XLSX tests, production Chromium browser tests, native package write/reopen in main and DOM-free Worker realms, build/static and source gates.
+- Result: Shared 91 cases passed. Writer named selection recorded Tests  1 failed | 406 passed (407); isolated metadata integration rerun recorded Tests  6 passed (6). Calc passed 47 cases. Ten browser cases passed, including downloads and reopening. Worker and main native writes both returned root, per-part relationships and MIME declarations after reopening. Scoped coverage measured 80.47% statements, 63.46% branches, 74.19% functions and 84.48% lines, below 90%.
+- Evidence: The production exporters now package their fragments through registered OFOPXML StorageFactory, real OWriteStream metadata and child-before-parent commit. Root and per-part relationships are owned by their source parts. The package writes the content type table once. WRITER-647/648 and CALC-719/720 document the source truncation and writable property behavior. See `evidence/native-ooxml-output.json`.
+- Scope: Browser reads still use the current asynchronous archive path; moving the format read interfaces to the native owners remains upcoming. The output buffer is still bound at browser commit, and native XRelationshipAccess and previous owner coverage gaps remain pending. No full suite was due.
