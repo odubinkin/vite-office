@@ -1,0 +1,288 @@
+{
+  "checkpoint": "Native Writer DOCX and Calc XLSX input through the production file filters",
+  "createdAt": "2026-11-18T21:33:06.057841+00:00",
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sw/source/writerfilter/ooxml/OOXMLStreamImpl.cxx#OOXMLStreamImpl::OOXMLStreamImpl",
+    "oox/source/helper/zipstorage.cxx#ZipStorage::ZipStorage",
+    "package/source/xstor/xstorage.cxx#OStorage::getAllRelationships",
+    "package/source/xstor/xstorage.cxx#OStorage::openStreamElementByHierarchicalName",
+    "package/source/xstor/ohierarchyholder.cxx#OHierarchyElement_Impl::GetStreamHierarchically",
+    "package/source/zipapi/XUnbufferedStream.cxx#XUnbufferedStream::readBytes"
+  ],
+  "strictFixtures": {
+    "sw/qa/extras/ooxmlexport/data/strict.docx": "6e71a4d554ea90df1ddcc9b6fbbcc677a94c6617cb35f9e5b7d4ccab46f1a79e",
+    "sc/qa/unit/data/xlsx/universal-content-strict.xlsx": "fbd7591328bdb1b4d3341efcc692d42669b2e6f754babdc2b7b654fe050e2fc5"
+  },
+  "sourceObservations": [
+    "WRITER-649",
+    "WRITER-650",
+    "CALC-721",
+    "CALC-722"
+  ],
+  "commands": {
+    "related": "npm run test:coverage:shared -w @vite-office/office -- xfactory xstorage zipstorage xmlfilterbase archive-admission document-archive --coverage.include=src/package/source/xstor/ohierarchyholder.ts --coverage.include=src/package/source/xstor/xstorage.relationship-access.ts --coverage.include=src/package/source/zippackage/document-archive.ts --coverage.include=src/oox/source/helper/zipstorage.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/in-scoped",
+    "writer": "npm run test:writer -- docx OOXML --maxWorkers=1",
+    "calc": "npm run test:calc -- xlsx xestream",
+    "writerDialog": "npm run test:writer -- WriterFileDialog -t 'reopens a Writer DOCX copy|keeps the active graph on a failed DOCX open'",
+    "calcDialog": "npm run test:calc -- calc-files -t 'downloads and reopens an Excel workbook'",
+    "worker": "node apps/office/coverage/in-storage-probe.mjs",
+    "browserDocx": "./node_modules/.bin/playwright test --config apps/office/coverage/docx-links.playwright.config.ts",
+    "browserXlsx": "./node_modules/.bin/playwright test --config apps/office/coverage/xlsx-date-system.playwright.config.ts",
+    "build": "npm run build",
+    "static": "node scripts/check-static-build.mjs"
+  },
+  "results": {
+    "shared": {
+      "summary": "Tests  79 passed (79)",
+      "passed": 79,
+      "failed": 0
+    },
+    "writer": {
+      "summary": "Tests  407 passed (407)",
+      "passed": 407,
+      "failed": 0
+    },
+    "calc": {
+      "summary": "Tests  47 passed (47)",
+      "passed": 47,
+      "failed": 0
+    },
+    "writerDialogRetry": {
+      "summary": "Tests  2 passed | 23 skipped (25)",
+      "passed": 2,
+      "failed": 0
+    },
+    "calcDialogRetry": {
+      "summary": "Tests  1 passed | 6 skipped (7)",
+      "passed": 1,
+      "failed": 0
+    },
+    "coverage": {
+      "total": {
+        "lines": 87.08,
+        "statements": 85.06,
+        "functions": 94.93,
+        "branches": 72.53
+      },
+      "zipstorage.ts": {
+        "lines": 77.77,
+        "functions": 87.09,
+        "statements": 77.1,
+        "branches": 66.66
+      },
+      "ohierarchyholder.ts": {
+        "lines": 81.35,
+        "functions": 100,
+        "statements": 78.46,
+        "branches": 61.11
+      },
+      "xstorage.relationship-access.ts": {
+        "lines": 91.42,
+        "functions": 100,
+        "statements": 88.75,
+        "branches": 62.16
+      },
+      "document-archive.ts": {
+        "lines": 99.18,
+        "functions": 100,
+        "statements": 96.35,
+        "branches": 88.88
+      }
+    },
+    "coverageThreshold": 90,
+    "coverageGate": "failed",
+    "worker": {
+      "main": {
+        "dom": true,
+        "observations": [
+          [
+            "word",
+            5536
+          ],
+          [
+            "xl",
+            1208
+          ]
+        ]
+      },
+      "worker": {
+        "dom": false,
+        "observations": [
+          [
+            "word",
+            5536
+          ],
+          [
+            "xl",
+            1208
+          ]
+        ]
+      }
+    },
+    "checks": {
+      "build-final": {
+        "passed": true
+      },
+      "static-final": {
+        "passed": true
+      },
+      "lint-final": {
+        "passed": true
+      },
+      "format": {
+        "passed": true
+      },
+      "docs": {
+        "passed": true
+      },
+      "size": {
+        "passed": true
+      },
+      "tree": {
+        "passed": true
+      },
+      "provenance": {
+        "passed": true
+      },
+      "deps-final": {
+        "passed": true
+      },
+      "invariants": {
+        "passed": true
+      },
+      "parity": {
+        "passed": true
+      },
+      "doctor": {
+        "passed": true
+      },
+      "routing": {
+        "passed": true
+      },
+      "browser-docx": {
+        "passed": true
+      },
+      "browser-xlsx": {
+        "passed": true
+      },
+      "writer-resources": {
+        "passed": true
+      },
+      "calc-resources": {
+        "passed": true
+      }
+    },
+    "broaderSelections": {
+      "writer": {
+        "result": {
+          "summary": "Tests  43 failed | 990 passed (1033)",
+          "passed": 990,
+          "failed": 43
+        },
+        "observation": "The broad WriterFilter path also selected RTF cases which failed before libc locale initialization. The DOCX-focused selection passed."
+      },
+      "calc": {
+        "result": {
+          "summary": "Tests  11 failed | 184 passed (195)",
+          "passed": 184,
+          "failed": 11
+        },
+        "observation": "The broad docshell path also selected CSV cases which failed before libc locale initialization. The mounted XLSX reopen initially exceeded the dialog assertion deadline and passed when rerun alone."
+      },
+      "writerDialog": {
+        "result": {
+          "summary": "Tests  1 failed | 24 passed (25)",
+          "passed": 24,
+          "failed": 1
+        },
+        "observation": "One mounted DOCX reopen exceeded the dialog assertion deadline during concurrent runs and passed on isolated rerun."
+      }
+    }
+  },
+  "remaining": [
+    "The scoped change coverage remains below 90%.",
+    "Readonly hierarchical access is connected for production import. The writable hierarchy transaction and encrypted-member contract remain incomplete.",
+    "Calc retains browser content type admission and uses the native ZipFormat reader. Writer uses native OFOPXML for root and part properties.",
+    "The standalone fragment snapshot path remains for existing non-production fixtures and callers. Native output still binds already serialized part buffers."
+  ],
+  "files": {
+    "apps/office/src/external/zlib/zlib.ts": "8d485b5b50d29face76c1351dc98df3b1f53a58ea6a53b0a776f1c760d80cb47",
+    "apps/office/src/oox/source/helper/zipstorage.ts": "8fdcb97162def1c668790c56c3f7331ea6a5f8fad2acfef9638e34e5c1c98f87",
+    "apps/office/src/package/source/xstor/ohierarchyholder.ts": "76e63dbc28cd565eab8f65ac11f0ea87f41d450b1dcd1086ecef55e31027e52a",
+    "apps/office/src/package/source/xstor/xstorage.ts": "d332df0068587fad38c785a32201e87bb5f3ac7331a7314a3409a83da7e55dd9",
+    "apps/office/src/package/source/xstor/xstorage.properties.ts": "d02017f6970bec219a0e9df7b423d191b63520aac9abea428e177e13d830e55b",
+    "apps/office/src/package/source/xstor/xstorage.relationship-access.ts": "aa1b4a29d2d3dfdff755b05068d8a4ff46e30ac5df051f6b08d607d196504939",
+    "apps/office/src/package/source/xstor/xfactory.test.ts": "0001dbf419cbc68edde132693cee6c9dbb45aa0ca696c07b0d27fe2c9ffcaf08",
+    "apps/office/src/package/source/zippackage/document-archive.ts": "27028a7f6532983228abdd317ec6880256334dd870ce1c69a407a403d73a5893",
+    "apps/office/src/package/source/zippackage/native-archive-admission.test.ts": "570a5f67c8c3e6508c4a477d9818690901fefe17321925e98cb4af54600f33e6",
+    "apps/office/src/sc/source/filter/oox/excelfilter.ts": "d09d44c194fd877119e10bf394a40d4069918642fb37f89f19e8b97aabafbc29",
+    "apps/office/src/sw/source/writerfilter/filter/WriterFilter.ts": "db3a9c726152a40182758c15aff3234cb8533ffa50586d459344d2a4d9381421",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts": "6fcd057d43761a3f87b46ba51f771da2e8911162e83d1b762b1d0e9cee440fc2",
+    "docs/program/registry/shared/runtime/external/zlib/zlib.ts.json": "a246b37a4c1a92ceaec8d1370d6cc70914e778a3e7df0fb40ed9800f5c508ce6",
+    "docs/program/registry/shared/provenance/external/zlib/zlib.ts.json": "308c52d72c59232054457071882d09538442fffdd64994d00a7a96378ef038ea",
+    "docs/program/registry/shared/runtime/oox/source/helper/zipstorage.ts.json": "7d5515f5620c69f32f8bcc9f02d6cffe2e60ab4c77eed6acc940c40e01c1dc2d",
+    "docs/program/registry/shared/provenance/oox/source/helper/zipstorage.ts.json": "e412d84c4004954d766e7a150d69cb2c4b73144945f32b9e1a4f08e722143c63",
+    "docs/program/registry/shared/runtime/package/source/xstor/ohierarchyholder.ts.json": "637a387387efefa29cc12c8b59e19e6d500649886869dcf75f3afa388859aadf",
+    "docs/program/registry/shared/provenance/package/source/xstor/ohierarchyholder.ts.json": "fbb1b5696b9d3db8a34812e6a6a0de57d886dfe86a2c959622b91b23bf89590e",
+    "docs/program/registry/shared/runtime/package/source/xstor/xstorage.ts.json": "572f1cc3a4301022246267ea66b3e469b83cbe607bdc0c6f3bb08b7430607e03",
+    "docs/program/registry/shared/provenance/package/source/xstor/xstorage.ts.json": "f0b04555e2f70886e86b89357da2ec6e6f8bce6afafb2df5ad0d2248b1d1935f",
+    "docs/program/registry/shared/runtime/package/source/xstor/xstorage.properties.ts.json": "8d6f0549ff74bc406d68472de19f935a1224b1cc48c90d71a387375473aa6dd7",
+    "docs/program/registry/shared/provenance/package/source/xstor/xstorage.properties.ts.json": "06c848c5d52de2333d3a370d9d9d683de3f1138a467d87f94926a3e766636164",
+    "docs/program/registry/shared/runtime/package/source/xstor/xstorage.relationship-access.ts.json": "6a847933658da688a3ab436ed7a988a149d2d819198f75ad5826779efd62ec0d",
+    "docs/program/registry/shared/provenance/package/source/xstor/xstorage.relationship-access.ts.json": "3389602c142146ae7d4044dada00ad2934f5fad317f57af81d07eea672e74573",
+    "docs/program/registry/shared/runtime/package/source/zippackage/document-archive.ts.json": "7b5bac3e67d54c941ab5f837bfddee217ac6982cc68ba49e078cc0ff03a1f277",
+    "docs/program/registry/shared/provenance/package/source/zippackage/document-archive.ts.json": "a1ab29b9effcb8cf0a5b6ea5dd5ed510c5756b1b0b4f500f549ca03854a82777",
+    "docs/program/registry/calc/runtime/sc/source/filter/oox/excelfilter.ts.json": "75a3f99a1d2b3f4dbc8df213c17ac903abc301fba1cb021c61f0ca93dfb95851",
+    "docs/program/registry/calc/provenance/sc/source/filter/oox/excelfilter.ts.json": "75a4a990be443044ee4849c01fb1e455fe414e0ec69bb885b90785e23a030de8",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/filter/WriterFilter.ts.json": "17d3e8356c326a5c6215851b5e53a3305dac52f3dc1ef2a1f7f04e7854fcd57f",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/filter/WriterFilter.ts.json": "fa1e40173614d4a54ff907ccd786121db914e787fe0ccb5724d1767fd16f9997",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts.json": "4f6129388b6a6ffd52452fa89749149b5e4db1749de4b2fb74b61eb8d6067602",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts.json": "6cc495aaefe85dbf2fe427fed65f1b5168f81ea952adc4c1e01247ae28cd6167",
+    "docs/program/registry/shared/operations/shared.internal.package.insert-storage-relationship.json": "5085837308ef2b7a9a92b17c6e074278e78656b00ec8bf45334ffddad0c3ceb1",
+    "docs/program/registry/shared/operations/shared.internal.package.insert-storage-relationships.json": "ed6334f273f5ceaccf63e875a6f479a575ac04e66e4886df0183c7f5e0bde8b6",
+    "docs/program/registry/shared/operations/shared.internal.package.remove-storage-relationship.json": "17e35ae530fb16b80d3ba92c910d237a5f7681aeb0c2ef49faaf5c8c49e4f53b",
+    "docs/program/writer-upstream-suspected-issues.md": "ad069c36af153502c44a6271db38f28a906463b7a899bc0a0d119998db69670e",
+    "docs/program/calc-upstream-suspected-issues.md": "1ca34aa6df9582667df2017f6444c4a21cef5ff8d09692f17e07ba5f5cee9bab"
+  },
+  "logs": {
+    "in-browser-docx.log": "7bae1a805608a5724fa9ca7375a1ce6d9699d48b3a95934c931714338aac3f62",
+    "in-browser-xlsx.log": "257c675dfe7da3f31b46c402333d726a3e76b8f3b4dedc9d8e6d018768cf5fca",
+    "in-build-final.log": "8060a6fbb29280dc977213ea6e1b2fe9524efa739d28e134dc88bc137859a956",
+    "in-build.log": "9104a254cbf68f715a4da675993cf57a10b77421edab912cf8302339ea140bc3",
+    "in-calc-dialog-retry.log": "a556749e0a0f4d1731b14c3496083c284c0a8558360013d90a99909c5bc2ead9",
+    "in-calc-dialog.log": "526123ce14a1a774d80b273b8ddec4f2682d4f5042ebd6154c2323f7c4f17fb4",
+    "in-calc-final.log": "d9473ee6a7f38a3a2b6396c5e4ab1f37ca976cbad541e316a708ddceb1fb3396",
+    "in-calc-first.log": "e8536a32adc4428210c79f33218817927def12f4a463f00dd557a3983e2f0823",
+    "in-calc-resources.log": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38",
+    "in-coverage.log": "704e1f4c283d38c1b04a03c5e7a1547cc74a479a36d73aadea6d8ea809c73849",
+    "in-deps-final.log": "a77cdddf153c37c74eb5ea796864a59dad0cac23c0c3936542cfef3531a7286a",
+    "in-deps.log": "980d864d27692e6723d1a09cfd86953b345b3fed6506d9ec050a02586cb87ec6",
+    "in-docs.log": "46e9d2bd86ef91cdea14c81f3224a272b9ef9b313da966ccf06748bcc2bc8fdb",
+    "in-doctor.log": "5c85db1839a9d934207d6d39c36408079f6619a8f0ee3c3ec3e29b222bd2fec7",
+    "in-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "in-invariants.log": "3522875f25cbfb50a22ae6e34b625d07074e6e0eb20ea21005c4d3c38adc5d51",
+    "in-native-final.log": "ac4834c6dc8876457402fe81b3c71e9305ce6d3cf33a84dfd93b50eb86712f87",
+    "in-native-focused.log": "9257d90be4ef0c7e05b1827ba719de3a2010ae10cc9783f76438a045cf693c41",
+    "in-parity.log": "3db92e7d30b2fdc46b3239a3a278a878eb71770617379523a5f2aa2c6a0cdd87",
+    "in-provenance.log": "9caf4a6b4db476a5022609b4777d376b928eeef2806507a853426b982bffe78e",
+    "in-rel-tests.log": "005004f4f79bceaae54660c8ee8928dd0e63c1c597776a34d6ccefeaace1e967",
+    "in-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "in-shared-first.log": "5fde0a814aa0ea6c93d0ed6119de5db70ac8e29019ab02ea37683b09bc31fc04",
+    "in-size.log": "dc37dae5c5d4202e0f7f29886123ad784064dbefc73d114f2bc779563c4f3745",
+    "in-static-final.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "in-static.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "in-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "in-tsc.log": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2",
+    "in-worker.log": "cf4ca5c2d425584ea76284133713299050acac37a829b57d713b653c0b84adc1",
+    "in-writer-dialog-retry.log": "0a4e52d054d0223a81397589c1fc3ea2c3c0fbc3662d26e268b24c654ae928ea",
+    "in-writer-dialog.log": "5efd7536a9339277a2d3ce27ca6b9f3ebd99cd3b758a2edd6a2f2fb9bc2b9a7a",
+    "in-writer-docx.log": "3c8ce39675d49470c4212cc4fe4a6e98b26445daf0f7027d962def6bd3c14ef2",
+    "in-writer-first.log": "17cf66fd7abf713fdcb528751fe1104b0aec77ce3ac23b7262978bef54f7418e",
+    "in-writer-resources.log": "7f1a23b58f13c9e2e1aed9afa1ca456200f63ee4a981312646916433c1da664d"
+  }
+}

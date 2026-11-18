@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 597
+revision: 600
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T19:46:06.757Z"
+  updated_at: "2026-11-18T21:33:07.220Z"
   updated_by: "CODER"
-  note: "Verified the SpreadsheetML scalar path and real browser ODS persistence. Shared medium and dependency checks and broader acceptance remain open."
-  attempts: 190
+  note: "Production DOCX/XLSX imports now use native storage. Scoped 79 shared, 407 Writer, 47 Calc, ten Chromium cases, mounted retries, Worker and build passed. Scoped coverage remains below 90%; full parity and wider regression readiness remain open."
+  attempts: 191
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3048,8 +3051,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T21:33:07.220Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Production DOCX/XLSX imports now use native storage. Scoped 79 shared, 407 Writer, 47 Calc, ten Chromium cases, mounted retries, Worker and build passed. Scoped coverage remains below 90%; full parity and wider regression readiness remain open."
+  -
+    type: "status"
+    at: "2026-11-18T21:33:11.657Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T20:05:23.509Z"
+doc_updated_at: "2026-11-18T21:33:11.657Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -8764,6 +8780,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-18T21:33:07.220Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Production DOCX/XLSX imports now use native storage. Scoped 79 shared, 407 Writer, 47 Calc, ten Chromium cases, mounted retries, Worker and build passed. Scoped coverage remains below 90%; full parity and wider regression readiness remain open.
+    Attempts: 191
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T21:33:06.575Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -9677,6 +9723,13 @@ sections:
     - Command: `npm run check:dependencies`; focused Vitest module-boundary, font-boundary and Writer-boundary specs; targeted ESLint, Prettier and `git diff --check`.
     - Result: 58 tooling cases passed and module boundaries passed across 2742 runtime sources and 17642 relative imports. The narrow guard accepts the type-only Font value already passed to Calc from the caller. A runtime import, browser adapter or unrelated Calc consumer remains refused.
     - Evidence: `evidence/xlsx-pattern-font-boundary.json` records the original ScPatternAttr signature, exact commands and outputs. The package SAX cycle was removed in the shared Writer checkpoint. SfxMedium type prerequisites and task-wide OOXML acceptance remain open. No full run was due.
+
+    ### Native Writer DOCX and Calc XLSX input through the production file filters
+
+    - Command: Scoped package/OOXML Vitest and coverage, selected Writer DOCX and Calc XLSX suites, mounted file-dialog retries, production Chromium round trips, native Strict archive main/DOM-free Worker probe, build/static and repository gates.
+    - Result: 79 shared, 407 Writer and 47 Calc tests passed in the format selections. The browser cases passed and both mounted reopen cases passed on isolated retry. Worker and main both read the expected 5536-byte Writer and 1208-byte Calc main parts. The broader incidental RTF and CSV selections report missing locale-runtime initialization. Scoped coverage measured 85.06% statements, 72.53% branches, 94.93% functions and 87.08% lines, below 90%.
+    - Evidence: Calc opens the original raw ZipFormat path and Writer opens OFOPXML with queried root relationships and readonly hierarchy. The browser passes the immutable admitted snapshot and keeps declared archive ceilings and raw STORED CRC verification. WRITER-649/650 and CALC-721/722 record confirmed source behavior. See `evidence/native-ooxml-input.json`.
+    - Scope: Production Open and Download now reach the native package implementations. Full owner coverage, write hierarchy transactions, encrypted streams and broader format regression readiness remain open. No full-suite run was due.
 id_source: "generated"
 ---
 ## Summary
@@ -15401,6 +15454,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-18T21:33:07.220Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Production DOCX/XLSX imports now use native storage. Scoped 79 shared, 407 Writer, 47 Calc, ten Chromium cases, mounted retries, Worker and build passed. Scoped coverage remains below 90%; full parity and wider regression readiness remain open.
+Attempts: 191
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T21:33:06.575Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -16318,3 +16401,10 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Command: `npm run check:dependencies`; focused Vitest module-boundary, font-boundary and Writer-boundary specs; targeted ESLint, Prettier and `git diff --check`.
 - Result: 58 tooling cases passed and module boundaries passed across 2742 runtime sources and 17642 relative imports. The narrow guard accepts the type-only Font value already passed to Calc from the caller. A runtime import, browser adapter or unrelated Calc consumer remains refused.
 - Evidence: `evidence/xlsx-pattern-font-boundary.json` records the original ScPatternAttr signature, exact commands and outputs. The package SAX cycle was removed in the shared Writer checkpoint. SfxMedium type prerequisites and task-wide OOXML acceptance remain open. No full run was due.
+
+### Native Writer DOCX and Calc XLSX input through the production file filters
+
+- Command: Scoped package/OOXML Vitest and coverage, selected Writer DOCX and Calc XLSX suites, mounted file-dialog retries, production Chromium round trips, native Strict archive main/DOM-free Worker probe, build/static and repository gates.
+- Result: 79 shared, 407 Writer and 47 Calc tests passed in the format selections. The browser cases passed and both mounted reopen cases passed on isolated retry. Worker and main both read the expected 5536-byte Writer and 1208-byte Calc main parts. The broader incidental RTF and CSV selections report missing locale-runtime initialization. Scoped coverage measured 85.06% statements, 72.53% branches, 94.93% functions and 87.08% lines, below 90%.
+- Evidence: Calc opens the original raw ZipFormat path and Writer opens OFOPXML with queried root relationships and readonly hierarchy. The browser passes the immutable admitted snapshot and keeps declared archive ceilings and raw STORED CRC verification. WRITER-649/650 and CALC-721/722 record confirmed source behavior. See `evidence/native-ooxml-input.json`.
+- Scope: Production Open and Download now reach the native package implementations. Full owner coverage, write hierarchy transactions, encrypted streams and broader format regression readiness remain open. No full-suite run was due.
