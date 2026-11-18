@@ -1,0 +1,28 @@
+{
+  "focusedTests": {
+    "files": 6,
+    "passed": 43
+  },
+  "coverage": {
+    "statements": 95.22,
+    "branches": 90.93,
+    "functions": 100,
+    "lines": 96.56,
+    "threshold": 90,
+    "passed": true
+  },
+  "fixture": "universal-content-strict.xlsx",
+  "witnesses": [
+    "native anchor and overlap flags at E2:F3",
+    "empty sparse anchors",
+    "mounted XLSX download and open",
+    "reopened primary IndexedDB ODS merge at C5:D7",
+    "independent ODS span and covered values"
+  ],
+  "pending": [
+    "XLSX styles and number formats",
+    "broader formula grammar",
+    "suite verification"
+  ],
+  "fullSuiteRun": false
+}
