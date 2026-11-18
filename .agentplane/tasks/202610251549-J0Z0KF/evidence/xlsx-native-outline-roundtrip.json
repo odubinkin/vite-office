@@ -1,0 +1,61 @@
+{
+  "scope": "XLSX and primary ODS row and column outlines over the native ScOutlineTable, including browser worker transport",
+  "fixture": "vendor/libreoffice-reference/sc/qa/unit/data/ods/outline.ods",
+  "native_qa": "testOutlineExportXLSX: 12 column records and 29 row records; both axes have 4 levels; tested collapse markers and retained widths",
+  "tests": {
+    "count": 52,
+    "suites": 5,
+    "coverage": {
+      "total": {
+        "statements": 99.37,
+        "branches": 96.84,
+        "functions": 100,
+        "lines": 100
+      },
+      "olinetab.ts": {
+        "statements": 98.83,
+        "branches": 96.22,
+        "functions": 100,
+        "lines": 100
+      },
+      "xetable.outline.ts": {
+        "statements": 100,
+        "branches": 95.45,
+        "functions": 100,
+        "lines": 100
+      },
+      "XMLColumnRowGroupExport.ts": {
+        "statements": 100,
+        "branches": 100,
+        "functions": 100,
+        "lines": 100
+      }
+    }
+  },
+  "browser": "Production Chromium opened actual outline.ods, reloaded and opened the saved browser copy, verified XLSX download with both depth attributes and the collapsed column marker, then reopened XLSX at width 390.",
+  "suspected_upstream_issues": [
+    "CALC702",
+    "CALC703",
+    "CALC704"
+  ],
+  "checks": {
+    "vite": "pass",
+    "resources": "pass",
+    "lint": "pass",
+    "prettier": "pass",
+    "jsdoc": "pass",
+    "size": "pass",
+    "tree": "pass",
+    "doctor": "pass",
+    "routing": "pass",
+    "registry": "pass, zero semantic violations",
+    "provenance": "pass",
+    "typecheck": "Three existing SfxDocumentMetaData.storage.ts diagnostics",
+    "dependencies": "Existing patattr browser adapter and comphelper/sax cycle diagnostics",
+    "full_suite": "not due"
+  },
+  "pending": [
+    "Outline summary placement and advanced worksheet settings, remaining styles, formats and formula fidelity, final XLSX acceptance."
+  ],
+  "logs": "apps/office/coverage/xlsx-outline-*"
+}

@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 578
+revision: 581
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T16:21:34.809Z"
+  updated_at: "2026-11-18T17:13:49.600Z"
   updated_by: "CODER"
-  note: "Normal/Default style and application-font dimensions passed 83 tests with 95.23% scoped branch coverage. Chromium exports all five exact widths after both XLSX and ODS reopen. Other named styles, themes and full task fidelity remain open."
-  attempts: 184
+  note: "Native XLSX and primary ODS outlines verified in 52 tests and production Chromium through browser storage and mobile XLSX reopen. All three new outline owners meet scoped90. Full XLSX acceptance remains open. See evidence/xlsx-native-outline-roundtrip.json."
+  attempts: 185
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2952,8 +2955,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T17:13:49.600Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native XLSX and primary ODS outlines verified in 52 tests and production Chromium through browser storage and mobile XLSX reopen. All three new outline owners meet scoped90. Full XLSX acceptance remains open. See evidence/xlsx-native-outline-roundtrip.json."
+  -
+    type: "status"
+    at: "2026-11-18T17:13:59.715Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T16:21:47.800Z"
+doc_updated_at: "2026-11-18T17:13:59.715Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -8488,6 +8504,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T17:13:49.600Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native XLSX and primary ODS outlines verified in 52 tests and production Chromium through browser storage and mobile XLSX reopen. All three new outline owners meet scoped90. Full XLSX acceptance remains open. See evidence/xlsx-native-outline-roundtrip.json.
+    Attempts: 185
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T17:13:48.997Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -9355,6 +9401,15 @@ sections:
     - All 83 focused tests passed with 95.23% branch coverage and full line coverage in the cell style owners. Scoped lint, format, bundle, provenance, registry, JSDoc, file-size, doctor and routing checks passed. Existing global metadata type and dependency diagnostics remain. The full suite is not due.
 
     Evidence: `evidence/xlsx-normal-style-width-roundtrip.json`.
+
+    ### Native row and column outlines through XLSX and primary ODS
+
+    - Command: five focused Calc format/kernel/worker suites, scoped export and outline coverage, production Chromium, and static gates recorded in evidence/xlsx-native-outline-roundtrip.json.
+    - Result: 52 tests passed. The new owners each meet scoped90. Combined branches reached 96.84%. The Vite bundle, resource, lint, formatting, JSDoc, source tree, registry/provenance, doctor and routing checks passed.
+    - Evidence: the checked-in LibreOffice outline.ods reproduces the upstream four-level depths, all 12 column records, 29 row records, hidden widths, and closure markers. Chromium loaded the ODS from browser storage after a page reload, verified the downloaded XLSX XML and reopened it at width 390.
+    - Scope: CALC702 through CALC704 document retained source boundary behavior. Summary placement and other advanced worksheet settings remain open. The existing three storage typecheck and two dependency diagnostics persist. No full test suite is due.
+
+    Evidence: `evidence/xlsx-native-outline-roundtrip.json`.
 id_source: "generated"
 ---
 ## Summary
@@ -14899,6 +14954,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T17:13:49.600Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native XLSX and primary ODS outlines verified in 52 tests and production Chromium through browser storage and mobile XLSX reopen. All three new outline owners meet scoped90. Full XLSX acceptance remains open. See evidence/xlsx-native-outline-roundtrip.json.
+Attempts: 185
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T17:13:48.997Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -15770,3 +15855,12 @@ Evidence: `evidence/xlsx-worksheet-dimensions.json`.
 - All 83 focused tests passed with 95.23% branch coverage and full line coverage in the cell style owners. Scoped lint, format, bundle, provenance, registry, JSDoc, file-size, doctor and routing checks passed. Existing global metadata type and dependency diagnostics remain. The full suite is not due.
 
 Evidence: `evidence/xlsx-normal-style-width-roundtrip.json`.
+
+### Native row and column outlines through XLSX and primary ODS
+
+- Command: five focused Calc format/kernel/worker suites, scoped export and outline coverage, production Chromium, and static gates recorded in evidence/xlsx-native-outline-roundtrip.json.
+- Result: 52 tests passed. The new owners each meet scoped90. Combined branches reached 96.84%. The Vite bundle, resource, lint, formatting, JSDoc, source tree, registry/provenance, doctor and routing checks passed.
+- Evidence: the checked-in LibreOffice outline.ods reproduces the upstream four-level depths, all 12 column records, 29 row records, hidden widths, and closure markers. Chromium loaded the ODS from browser storage after a page reload, verified the downloaded XLSX XML and reopened it at width 390.
+- Scope: CALC702 through CALC704 document retained source boundary behavior. Summary placement and other advanced worksheet settings remain open. The existing three storage typecheck and two dependency diagnostics persist. No full test suite is due.
+
+Evidence: `evidence/xlsx-native-outline-roundtrip.json`.
