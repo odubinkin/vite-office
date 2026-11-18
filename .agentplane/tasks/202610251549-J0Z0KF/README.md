@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 547
+revision: 550
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T12:33:06.890Z"
+  updated_at: "2026-11-18T12:40:27.631Z"
   updated_by: "CODER"
-  note: "Actual XStream direct/repeated ZIP/PACKAGE/OFOPXML commits reopen. 40 focused tests pass, 90% coverage gate remains unmet (59.1% branches). SfxMedium, storage and format UI gates remain open. Evidence: evidence/native-package-stream-commit.json."
-  attempts: 174
+  note: "Registered native package and root transaction tail verified with actual output and backup failure, 43 focused and 25 related tests pass. Coverage branches 61.79%, full storage integration and UI still open. Evidence: evidence/native-storage-package-transaction.json."
+  attempts: 175
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2792,8 +2795,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T12:40:27.631Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Registered native package and root transaction tail verified with actual output and backup failure, 43 focused and 25 related tests pass. Coverage branches 61.79%, full storage integration and UI still open. Evidence: evidence/native-storage-package-transaction.json."
+  -
+    type: "status"
+    at: "2026-11-18T12:40:28.473Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T12:33:16.972Z"
+doc_updated_at: "2026-11-18T12:40:28.473Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -8028,6 +8044,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T12:40:27.631Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Registered native package and root transaction tail verified with actual output and backup failure, 43 focused and 25 related tests pass. Coverage branches 61.79%, full storage integration and UI still open. Evidence: evidence/native-storage-package-transaction.json.
+    Attempts: 175
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T12:40:26.767Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -8804,6 +8850,14 @@ sections:
     - Result: 40 focused tests in 3 files passed. Combined ZIP owner coverage failed the unchanged 90% gate (S73.11/B59.1/F86.48/L75.19).
     - Evidence: A real writable XStream admits direct then temporary-backed commit for ZIP, PACKAGE and OFOPXML. Reopening the actual destination reads the second member version, with the appropriate package metadata. Registry, provenance, JSDoc, lint, formatting, file size and diff checks passed. Typecheck retains three existing SfxMedium errors. Dependency verification retains the existing patattr boundary and comphelper/sax cycle.
     - Scope: original stream-mode writeTempFile and commitChanges flow, original key selection and KDF argument assembly as authorized, genuine fast temporary persistence and typed error scopes. WRITER630 and CALC697 record the empty fast-temp backup URL behavior. URL transfer, full encryption/property service, threaded output, SfxMedium/OStorage and application format I/O remain unfinished. No full-suite run under the agreed cadence.
+
+    ### Root package service and storage persistence continuation
+
+    - Result: 43 focused tests and 25 related tests passed. Combined scoped coverage S79.68/B61.79/F100/L81.29 is below the unchanged 90% gate.
+    - Evidence: Registered ZipPackage constructor and XInitialization through the actual manager, then OStorage root folder and XChangesBatch queries, commit, archive reopen and byte comparison. Genuine disconnected stream exercises UseBackupException unwrapping and storage reference release. Registry (zero semantic violations), tools typecheck, lint, format, size, JSDoc, diff and existing main/Worker regression probe passed. Three existing SfxMedium application type errors and two existing module-boundary violations remain.
+    - Scope: Final root persistence phase of OStorage_Impl::Commit only. Child mutations/relationships, PACKAGE property access, public XStorage/StorageFactory, full upstream QA and DOCX/XLSX app UI acceptance remain open. No full test run under the agreed cadence.
+
+    Evidence file: `evidence/native-storage-package-transaction.json`.
 id_source: "generated"
 ---
 ## Summary
@@ -14048,6 +14102,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T12:40:27.631Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Registered native package and root transaction tail verified with actual output and backup failure, 43 focused and 25 related tests pass. Coverage branches 61.79%, full storage integration and UI still open. Evidence: evidence/native-storage-package-transaction.json.
+Attempts: 175
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T12:40:26.767Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -14828,3 +14912,11 @@ Next source-backed block: connect ZipPackage.initialize/getZipFileContents and g
 - Result: 40 focused tests in 3 files passed. Combined ZIP owner coverage failed the unchanged 90% gate (S73.11/B59.1/F86.48/L75.19).
 - Evidence: A real writable XStream admits direct then temporary-backed commit for ZIP, PACKAGE and OFOPXML. Reopening the actual destination reads the second member version, with the appropriate package metadata. Registry, provenance, JSDoc, lint, formatting, file size and diff checks passed. Typecheck retains three existing SfxMedium errors. Dependency verification retains the existing patattr boundary and comphelper/sax cycle.
 - Scope: original stream-mode writeTempFile and commitChanges flow, original key selection and KDF argument assembly as authorized, genuine fast temporary persistence and typed error scopes. WRITER630 and CALC697 record the empty fast-temp backup URL behavior. URL transfer, full encryption/property service, threaded output, SfxMedium/OStorage and application format I/O remain unfinished. No full-suite run under the agreed cadence.
+
+### Root package service and storage persistence continuation
+
+- Result: 43 focused tests and 25 related tests passed. Combined scoped coverage S79.68/B61.79/F100/L81.29 is below the unchanged 90% gate.
+- Evidence: Registered ZipPackage constructor and XInitialization through the actual manager, then OStorage root folder and XChangesBatch queries, commit, archive reopen and byte comparison. Genuine disconnected stream exercises UseBackupException unwrapping and storage reference release. Registry (zero semantic violations), tools typecheck, lint, format, size, JSDoc, diff and existing main/Worker regression probe passed. Three existing SfxMedium application type errors and two existing module-boundary violations remain.
+- Scope: Final root persistence phase of OStorage_Impl::Commit only. Child mutations/relationships, PACKAGE property access, public XStorage/StorageFactory, full upstream QA and DOCX/XLSX app UI acceptance remain open. No full test run under the agreed cadence.
+
+Evidence file: `evidence/native-storage-package-transaction.json`.
