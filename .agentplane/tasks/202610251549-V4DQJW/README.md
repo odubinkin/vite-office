@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 302
+revision: 305
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T14:25:27.221Z"
+  updated_at: "2026-11-18T15:41:58.287Z"
   updated_by: "CODER"
-  note: "89 DOCX/native tests, 52 ODT/browser tests and five impacted RTF spacing tests passed; the combined scoped branch gate and full DOCX working slice remain open."
-  attempts: 87
+  note: "The native DOCX list numbering checkpoint passed 161 focused tests, 92.62% scoped branch coverage and the production Chromium import, download and 390x844 DOCX/ODT reopens. Named styles, page settings, picture numbering and broader fidelity remain in scope."
+  attempts: 88
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1400,8 +1403,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T15:41:58.287Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "The native DOCX list numbering checkpoint passed 161 focused tests, 92.62% scoped branch coverage and the production Chromium import, download and 390x844 DOCX/ODT reopens. Named styles, page settings, picture numbering and broader fidelity remain in scope."
+  -
+    type: "status"
+    at: "2026-11-18T15:42:03.008Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T14:25:40.536Z"
+doc_updated_at: "2026-11-18T15:42:03.008Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -4024,6 +4040,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T15:41:58.287Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: The native DOCX list numbering checkpoint passed 161 focused tests, 92.62% scoped branch coverage and the production Chromium import, download and 390x844 DOCX/ODT reopens. Named styles, page settings, picture numbering and broader fidelity remain in scope.
+    Attempts: 88
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T15:41:52.492Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -4507,6 +4553,17 @@ sections:
     - All 89 focused DOCX/native conversion tests passed. Scoped coverage was 91.39% statements, 80.39% branches, 100% functions and 94.03% lines. The branch gate remains open. JSDoc, lint, Vite bundle, source tree, provenance and registry passed. Typecheck and the module boundary gate report the existing diagnostics.
 
     Evidence: `evidence/docx-paragraph-roundtrip.json`.
+
+    ### Native DOCX list definitions and primary ODT persistence
+
+    - Body paragraphs publish native numPr through the shared Word numbering dispatch. DocxExport writes the document relationship and numbering stream. Shared abstract, instance and level traversal stays on native list rules and emits list restart, geometry and represented character properties.
+    - The source-generated Writer import factory now admits CT_Tabs and CT_TabStop for list label geometry. The pinned numbering1.docx test preserves direct list precedence, Arabic numbering and all seven native levels through DOCX and ODT.
+    - The ODT numbering converter now handles source Latin, Roman and repeated-letter types. The production browser initially reported an unsupported numbering type while storing the pinned DOCX copy. Chromium now completes browser storage, downloads DOCX, reopens the primary ODT copy at 390 × 844 and opens the downloaded DOCX at the same viewport with the original label sequence. The downloaded ZIP and every body-to-level reference also pass independent validation.
+    - WRITER636 documents repeated gap-filler overrides in the pinned source. A native test asserts that exact output order.
+    - All 161 focused tests in 10 suites passed. DOCX numbering scopes reached 92.62% branch coverage and the ODF conversion owner reached 90.62%. Scoped lint, Prettier, JSDoc, native generator, Vite bundling, registry, provenance and source tree checks passed. Existing typecheck and module-boundary diagnostics remain. The full suite is not due.
+    - Named-style and page settings export, picture lists, extended numbering providers and remaining paragraph/table fidelity remain open.
+
+    Evidence: `evidence/docx-native-list-roundtrip.json`.
 id_source: "generated"
 ---
 ## Summary
@@ -7140,6 +7197,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T15:41:58.287Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: The native DOCX list numbering checkpoint passed 161 focused tests, 92.62% scoped branch coverage and the production Chromium import, download and 390x844 DOCX/ODT reopens. Named styles, page settings, picture numbering and broader fidelity remain in scope.
+Attempts: 88
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T15:41:52.492Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7628,3 +7715,14 @@ Evidence: `evidence/docx-table-roundtrip.json`.
 - All 89 focused DOCX/native conversion tests passed. Scoped coverage was 91.39% statements, 80.39% branches, 100% functions and 94.03% lines. The branch gate remains open. JSDoc, lint, Vite bundle, source tree, provenance and registry passed. Typecheck and the module boundary gate report the existing diagnostics.
 
 Evidence: `evidence/docx-paragraph-roundtrip.json`.
+
+### Native DOCX list definitions and primary ODT persistence
+
+- Body paragraphs publish native numPr through the shared Word numbering dispatch. DocxExport writes the document relationship and numbering stream. Shared abstract, instance and level traversal stays on native list rules and emits list restart, geometry and represented character properties.
+- The source-generated Writer import factory now admits CT_Tabs and CT_TabStop for list label geometry. The pinned numbering1.docx test preserves direct list precedence, Arabic numbering and all seven native levels through DOCX and ODT.
+- The ODT numbering converter now handles source Latin, Roman and repeated-letter types. The production browser initially reported an unsupported numbering type while storing the pinned DOCX copy. Chromium now completes browser storage, downloads DOCX, reopens the primary ODT copy at 390 × 844 and opens the downloaded DOCX at the same viewport with the original label sequence. The downloaded ZIP and every body-to-level reference also pass independent validation.
+- WRITER636 documents repeated gap-filler overrides in the pinned source. A native test asserts that exact output order.
+- All 161 focused tests in 10 suites passed. DOCX numbering scopes reached 92.62% branch coverage and the ODF conversion owner reached 90.62%. Scoped lint, Prettier, JSDoc, native generator, Vite bundling, registry, provenance and source tree checks passed. Existing typecheck and module-boundary diagnostics remain. The full suite is not due.
+- Named-style and page settings export, picture lists, extended numbering providers and remaining paragraph/table fidelity remain open.
+
+Evidence: `evidence/docx-native-list-roundtrip.json`.

@@ -1,0 +1,83 @@
+{
+  "commands": {
+    "coverage": "vitest run --config vitest.writer.config.ts --coverage src/sw/source/filter/ww8/docxexport.numbering.test.ts src/sw/source/filter/ww8/docxattributeoutput.numbering.test.ts src/sw/source/filter/ww8/docxattributeoutput.numbering-values.test.ts src/sw/source/filter/ww8/docxexport.fonts.test.ts src/sw/source/filter/ww8/rtf-numbering.test.ts src/sw/source/writerfilter/dmapper/paragraph-numbering.test.ts src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts src/sw/source/filter/xml/native-none-numbering.test.ts src/sw/source/filter/xml/native-bullet-font-roundtrip.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx --coverage.include=src/sw/source/filter/ww8/docxattributeoutput.numbering.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=coverage/docx-native-list",
+    "odf-coverage": "vitest run --config vitest.writer.config.ts --coverage src/sw/source/filter/xml/native-none-numbering.test.ts --coverage.include=src/xmloff/source/core/xmluconv.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=coverage/docx-native-list-odf"
+  },
+  "focusedTests": {
+    "suites": 10,
+    "passed": 161,
+    "sharedDispatchRerun": 27
+  },
+  "coverage": {
+    "threshold": 90,
+    "docxNumberingCallbacks": {
+      "statements": 96.95,
+      "branches": 92.62,
+      "functions": 100,
+      "lines": 98.71
+    },
+    "odfNumberingConverter": {
+      "statements": 96.77,
+      "branches": 90.62,
+      "functions": 100,
+      "lines": 100
+    }
+  },
+  "fixture": "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/numbering1.docx",
+  "upstreamTest": "testNumbering1",
+  "upstreamObservation": "WRITER636",
+  "verified": [
+    "Direct paragraph numbering takes precedence over the inherited named style.",
+    "Native numbering owns the abstract and concrete definitions, restart values, level geometry and bullet fonts.",
+    "Scoped restart values survive the actual DOCX reopen as paragraph state.",
+    "Shared RTF numbering tests continue to pass.",
+    "The ODT primary copy writes standard Latin and Roman numbering and preserves the repeated-letter flag.",
+    "Mounted Writer downloads without changing the medium and opens the browser-stored ODT graph."
+  ],
+  "chromium": {
+    "desktopFilePickerOpened": true,
+    "downloadedZipCrcNumberingRelationshipAndReferencesVerified": true,
+    "mobileViewport": "390x844",
+    "openedPrimaryOdtCopy": true,
+    "reopenedDownloadedDocx": true,
+    "levels": [
+      0,
+      1,
+      1,
+      0,
+      1,
+      1,
+      2
+    ],
+    "labels": [
+      "1.",
+      "1.1.",
+      "1.2.",
+      "2.",
+      "2.1.",
+      "2.2.",
+      "2.2.1."
+    ]
+  },
+  "checks": {
+    "scopedLint": "pass",
+    "format": "pass",
+    "factoryGenerator": "pass",
+    "documentation": "pass",
+    "fileSize": "pass",
+    "viteBundle": "pass",
+    "registry": "pass",
+    "provenance": "pass",
+    "sourceTree": "pass",
+    "diff": "pass",
+    "typecheck": "existing SfxDocumentMetaData.storage.ts errors at 413, 414 and 441",
+    "moduleBoundaries": "existing patattr browser edge and comphelper/sax cycle"
+  },
+  "remaining": [
+    "Named-style and page settings export",
+    "Picture list levels and extended ODF numbering provider",
+    "Remaining paragraph and table fidelity",
+    "Full DOCX task verification"
+  ],
+  "fullSuiteRun": false
+}
