@@ -1,0 +1,213 @@
+{
+  "checkpoint": "Original native package metadata records and source input rebinding; not full root commit/transfer or document import-export",
+  "createdAt": "2026-11-18T12:08:46.099924+00:00",
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "sourceBaseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "changedPaths": [
+    "apps/office/src/package/source/zippackage/ZipPackage.serialization.ts",
+    "apps/office/src/package/source/zippackage/ZipPackage.serialization.test.ts",
+    "apps/office/src/package/source/zippackage/ZipPackage.ts",
+    "apps/office/src/package/inc/ZipEntry.ts",
+    "apps/office/src/package/source/xstor/xstorage.impl.ts",
+    "scripts/fixtures/native-package-metadata-probe.ts",
+    "scripts/fixtures/native-archive-output-probe.ts",
+    "scripts/native-dom-worker-probe.mjs",
+    "docs/program/native-package-metadata-output.md",
+    "docs/program/registry/shared/runtime/package/source/zippackage/ZipPackage.serialization.ts.json",
+    "docs/program/registry/shared/provenance/package/source/zippackage/ZipPackage.serialization.ts.json",
+    "docs/program/registry/shared/runtime/package/source/zippackage/ZipPackage.ts.json",
+    "docs/program/registry/shared/provenance/package/source/zippackage/ZipPackage.ts.json",
+    "docs/program/registry/shared/runtime/package/inc/ZipEntry.ts.json",
+    "docs/program/registry/shared/provenance/package/inc/ZipEntry.ts.json",
+    "docs/program/registry/shared/runtime/package/source/xstor/xstorage.impl.ts.json",
+    "docs/program/registry/shared/provenance/package/source/xstor/xstorage.impl.ts.json",
+    "docs/program/registry/shared/capabilities/CAP-4f62077a-4c7c-483c-b17c-20e141f329ce.json"
+  ],
+  "sourceDependencies": [
+    "vendor/libreoffice-reference/package/source/zippackage/ZipPackage.cxx",
+    "vendor/libreoffice-reference/package/inc/ZipEntry.hxx",
+    "vendor/libreoffice-reference/package/source/xstor/xstorage.cxx",
+    "vendor/libreoffice-reference/package/source/manifest/ManifestExport.cxx",
+    "vendor/libreoffice-reference/package/qa/ofopxmlstorages/Test01.java"
+  ],
+  "commands": [
+    {
+      "command": "npm run test:coverage:shared -- src/package/source/zippackage/ZipPackage.serialization.test.ts src/package/source/zippackage/ZipPackageStream.save.test.ts --coverage.include=src/package/source/zippackage/ZipPackage.serialization.ts --coverage.include=src/package/inc/ZipEntry.ts --coverage.reportsDirectory=coverage/package-serialization-final --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass31tests; whole2owner scope above90",
+      "evidence": "apps/office/coverage/package-commit-coverage-final.log"
+    },
+    {
+      "command": "npm run test:shared -- src/package/source/zippackage/ZipPackageStream.save.test.ts src/package/source/zippackage/ZipPackageFolder.native.test.ts src/package/source/xstor/xstorage.impl.test.ts src/package/source/manifest/ManifestWriter.test.ts src/comphelper/source/xml/ofopxmlhelper.write.test.ts",
+      "result": "pass43tests/4files; inferred ManifestWriter.test.ts did not match, corrected by next command",
+      "evidence": "apps/office/coverage/package-commit-related.log"
+    },
+    {
+      "command": "npm run test:shared -- src/package/source/manifest/native-manifest-export.test.ts src/package/source/manifest/ManifestExport.test.ts src/package/source/zippackage/native-archive-output.test.ts",
+      "result": "pass18tests/3files",
+      "evidence": "apps/office/coverage/package-commit-related-manifest.log"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "evidence": "apps/office/coverage/package-commit-browser.log"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "evidence": "apps/office/coverage/package-commit-tools.log"
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "result": "fail:same3 Medium errors",
+      "evidence": "apps/office/coverage/package-commit-typecheck.log"
+    },
+    {
+      "command": "npx eslint apps/office/src/package/source/zippackage/ZipPackage.serialization.ts apps/office/src/package/source/zippackage/ZipPackage.serialization.test.ts apps/office/src/package/source/zippackage/ZipPackage.ts apps/office/src/package/inc/ZipEntry.ts apps/office/src/package/source/xstor/xstorage.impl.ts scripts/fixtures/native-package-metadata-probe.ts scripts/fixtures/native-archive-output-probe.ts scripts/native-dom-worker-probe.mjs --max-warnings 0",
+      "result": "pass",
+      "evidence": "apps/office/coverage/package-commit-lint.log"
+    },
+    {
+      "command": "npx prettier --check apps/office/src/package/source/zippackage/ZipPackage.serialization.ts apps/office/src/package/source/zippackage/ZipPackage.serialization.test.ts apps/office/src/package/source/zippackage/ZipPackage.ts apps/office/src/package/inc/ZipEntry.ts apps/office/src/package/source/xstor/xstorage.impl.ts scripts/fixtures/native-package-metadata-probe.ts scripts/fixtures/native-archive-output-probe.ts scripts/native-dom-worker-probe.mjs docs/program/native-package-metadata-output.md",
+      "result": "pass",
+      "evidence": "apps/office/coverage/package-commit-format-check.log"
+    },
+    {
+      "command": "npx vite build",
+      "result": "pass; cwd apps/office",
+      "evidence": "apps/office/coverage/package-commit-vite.log"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "evidence": "apps/office/coverage/package-commit-static.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "evidence": "apps/office/coverage/package-commit-provenance.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "pass",
+      "evidence": "apps/office/coverage/package-commit-docs.log"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail:same2",
+      "evidence": "apps/office/coverage/package-commit-boundaries.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "evidence": "apps/office/coverage/package-commit-size.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "evidence": "apps/office/coverage/package-commit-tree.log"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass; semanticViolationCount0",
+      "evidence": "apps/office/coverage/package-commit-registry.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "evidence": "apps/office/coverage/package-commit-resources.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "evidence": "apps/office/coverage/package-commit-routing.log"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "evidence": "apps/office/coverage/package-commit-diff.log"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass; existing hook-shim warning",
+      "evidence": "apps/office/coverage/package-commit-doctor.log"
+    }
+  ],
+  "result": "31 focused tests/2files pass;43 related/4files and18 manifest/archive/3files pass. Actual source entry save/metadata/rebind/member-read and second-input ZipFile identity pass; genuine nonseekable query and closed-output typed-context failures pass. Whole serialization+ZipEntry scope S99.5/B95/F100/L100; serialization alone S99.41/B92.85/F100/L100, ZipEntry100. Initial narrower test scope failed ZipEntry coverage and remains retained; earlier full ZipPackage/internal storage/background/MediaDescriptor coverage failures remain unqualified. Chromium main/DOM-free Worker metadata records/native reopen/ConnectTo identity pass. Same3 Medium type errors and2 boundary diagnostics persist; full tsc-dependent build not accepted. Tools/lint/format/JSDoc5545/provenance2689/registry semantic0/size/tree/resources/Vite/static/routing/diff/doctor pass. Full native package commit/transfer/OStorage/StorageFactory/Medium/filter/model/UI and original full package QA remain unfinished; existing browser persistence/recovery deviations untouched. No task completed/full suite due. Expat proposal still awaits approval; no download or parser security change.",
+  "hashes": {
+    "apps/office/src/package/source/zippackage/ZipPackage.serialization.ts": "5d9298257a7ae0bb30b6a0ddba62a12f9874424df6cf6ad28146cc74364ec11d",
+    "apps/office/src/package/source/zippackage/ZipPackage.serialization.test.ts": "2632e1593a613f096c744f3a71ea246a4bf48d3e6e9d98b7b6d9ea5ff9b739fc",
+    "apps/office/src/package/source/zippackage/ZipPackage.ts": "287acb7ad234d748bfe8021cba17695e2e1cdf1ba752a27ae8d48b90c17fac34",
+    "apps/office/src/package/inc/ZipEntry.ts": "c760772d3b02a3c557cfe92bb72b7ec875b8c15eb6114e3f01f2c5885b0bf69f",
+    "apps/office/src/package/source/xstor/xstorage.impl.ts": "6cbcd6b76d066a7f9e518b72bee0d9973809a8e6d138b9070f705bcab972477d",
+    "scripts/fixtures/native-package-metadata-probe.ts": "9095b105a16111c2f5514bf83445a1aacd37f2f7a6dc6299d2e25371da383bf1",
+    "scripts/fixtures/native-archive-output-probe.ts": "8f1007eae742afe01bf5f30e567302a7542939b65e072bf0fc3052a6c342a300",
+    "scripts/native-dom-worker-probe.mjs": "7999ba0b33ea32d2071c77ad1043ad923899394ab661a08bffc6b6141c8bfcf3",
+    "docs/program/native-package-metadata-output.md": "a0ff8046f755513ed7c3ba55d6f65a400f77c553cb0e50f626b27fc50ddfef5a",
+    "docs/program/registry/shared/runtime/package/source/zippackage/ZipPackage.serialization.ts.json": "3c67cd8b76a3e1e9bc26d6df029c7e62936375217d955070753f6cfe89795ee1",
+    "docs/program/registry/shared/provenance/package/source/zippackage/ZipPackage.serialization.ts.json": "8ce31957c61ae8464f5159a8f43dd5e3a5565f7bcf8cf6b998da373eec2dfeae",
+    "docs/program/registry/shared/runtime/package/source/zippackage/ZipPackage.ts.json": "f25a9a80f332133a114d1374e1a8880bc0fb7a19813aa2d3223ae07106ba0c63",
+    "docs/program/registry/shared/provenance/package/source/zippackage/ZipPackage.ts.json": "fba7daa4f9a7ccd971f755b14d9ea975ecac7a19f77f01e62529ebfab4dea98d",
+    "docs/program/registry/shared/runtime/package/inc/ZipEntry.ts.json": "bcc087957c997b594eed2e71967417c0d3f3e57573f3e9ac7948e2fb158bc137",
+    "docs/program/registry/shared/provenance/package/inc/ZipEntry.ts.json": "da685898a648662d93544b21b05a22f1b9e77ae21de8a3db6f4eeca4f2b9d9ee",
+    "docs/program/registry/shared/runtime/package/source/xstor/xstorage.impl.ts.json": "3c0a017ca8cd46be5261b33587958aad62aec21279e8f673124abb43a6fa3625",
+    "docs/program/registry/shared/provenance/package/source/xstor/xstorage.impl.ts.json": "cf0d4d119129787d388a908f2013c2edee7f2a304f3bbbd8adc977d2b7186888",
+    "docs/program/registry/shared/capabilities/CAP-4f62077a-4c7c-483c-b17c-20e141f329ce.json": "5a546adf7062cc7a3bc106e348c63a984e724885d613d1f12b98142838ad06ac",
+    "vendor/libreoffice-reference/package/source/zippackage/ZipPackage.cxx": "be8a854493c067906f5b29c674c67737be9f45540d5843af00262e42d26718a5",
+    "vendor/libreoffice-reference/package/inc/ZipEntry.hxx": "9d24c56dfa2139682b3ac63a96a791e51cddd17232433821b2f598d1eaac9160",
+    "vendor/libreoffice-reference/package/source/xstor/xstorage.cxx": "db7374cafbe1820203781ff8bef8984eae83b6742e820ad181b992c043bd2043",
+    "vendor/libreoffice-reference/package/source/manifest/ManifestExport.cxx": "8a28ec1ac488d3c246051822418d86d1699a6748aa826dbcb725f501a1f1150d",
+    "vendor/libreoffice-reference/package/qa/ofopxmlstorages/Test01.java": "2a9799c4a4f30d5550cfa9ce50bcf47544254b3fc0b1187eb02144031b800ce8",
+    "apps/office/coverage/package-commit-active.log": "8bce293037d458fb5caa9ea7e20cc799b66caa08b275825e9b7a6b19eecef92e",
+    "apps/office/coverage/package-commit-all.log": "e89b1fcf876447ab82e3087fa1e9b630019d1bc652d60c37a9ad47304dea1d6b",
+    "apps/office/coverage/package-commit-boundaries.log": "58e089319fe14bd88701e8fbe25e7a9292436eb724bbb615ad31ce7ec6dd4e97",
+    "apps/office/coverage/package-commit-brief.log": "3416d03eb02a8dc4b590c58216a7c9bf8a4ed2f4528ea729bee52e2e0bb8a247",
+    "apps/office/coverage/package-commit-browser.log": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee",
+    "apps/office/coverage/package-commit-coder.log": "16d13a563212bb4cba0b10848a9b96c039c73443d959afc4f1daba2c31aae0eb",
+    "apps/office/coverage/package-commit-config.log": "78b9f751c865f969a4efbddc65c34e9d9ef6bf821d245de10d0da5c1932898b1",
+    "apps/office/coverage/package-commit-connect-format.log": "e1b599da441f124a4f89ac7eb4560271368eba9bce9b142c1e04cbc8438e648b",
+    "apps/office/coverage/package-commit-coverage-final.log": "916ddcc584b17cedb90121695f1522df9f6093a4bdb5fe47eb7b4cf086c0a33e",
+    "apps/office/coverage/package-commit-coverage.log": "a8e63ffbb6a240d21326b0e7d80b2e091ea1e8419abab262e15771d35cc2f19a",
+    "apps/office/coverage/package-commit-diff.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/package-commit-doc-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/package-commit-docs.log": "4f9d519bc478bc269b162d55930a185031fb0394055e5e8486e69f1ba03d3fa7",
+    "apps/office/coverage/package-commit-doctor.log": "d32f87635ecc15d88696c12ee861be0772c3b71c627431e68b47de031b85769a",
+    "apps/office/coverage/package-commit-format-check.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/package-commit-format.log": "06c579b09072df1c0ab3925f199b5ea5f629cf666fc859a8013f346196056c76",
+    "apps/office/coverage/package-commit-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/package-commit-orchestrator.log": "a8899afb593e5ec4f4153783ccfd0fd94cfaaf0513376e0f1d0aeefb1e0da9b2",
+    "apps/office/coverage/package-commit-policy.log": "b8dfe2f85a79a07de5a25952812ea7b0a86c9434550eed0fc6016ed94e6b957b",
+    "apps/office/coverage/package-commit-probe-format.log": "58bda01dd25deae381d82121bbd5ac22fd7b2e1e2087293e3671248165194fdd",
+    "apps/office/coverage/package-commit-probe-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/package-commit-provenance.log": "c949b4428c128eddbf9186aa63968afa3ab4e1be77a50fc6257db830d97c39c8",
+    "apps/office/coverage/package-commit-quickstart.log": "7cd29a19b5c0dc18e7eb324075d21cc2fb44715f3c8dd7b8b52dd5f72d2ed8e0",
+    "apps/office/coverage/package-commit-registry-build.log": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209",
+    "apps/office/coverage/package-commit-registry.log": "c33099d3cc644dddfc67a9b5f1f80ef5ffc6dd8488dadc6a93bc779b94f90ec1",
+    "apps/office/coverage/package-commit-related-manifest.log": "ed6be451037d5639788a4bf9eb1bdf1ac17fba51f2f675c18d9d4de377ddfe13",
+    "apps/office/coverage/package-commit-related.log": "cef23da067b5f61238db7e847fe28abfb2f0c1ca3ee826d320f581f36a97919a",
+    "apps/office/coverage/package-commit-resources.log": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38",
+    "apps/office/coverage/package-commit-route2.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/package-commit-route3.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/package-commit-route4.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/package-commit-route5.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/package-commit-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "apps/office/coverage/package-commit-size.log": "d0674232725f38fdffc9dc38c5abd13fd80b8f07f47f57f058906287533921cf",
+    "apps/office/coverage/package-commit-static.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "apps/office/coverage/package-commit-tasks.log": "e99986481204fc41cac45662a5db4c2ba32d4c716435621c929abff7679f6f04",
+    "apps/office/coverage/package-commit-test-format.log": "b68cf6ed50d4f134bb2be359c7e2364d11130fb8c952a198cb58e520236f8492",
+    "apps/office/coverage/package-commit-test-format2.log": "37e034091f58818d6a6cc8c76c80f6d5abfc6e4ace0a36bd4bd66c11b2f20ef2",
+    "apps/office/coverage/package-commit-tests.log": "4fdfdaad4667ca79e41b3ae2a0368671d00c88f1d2b4fbdfba1359c13e7e4dd0",
+    "apps/office/coverage/package-commit-tools.log": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+    "apps/office/coverage/package-commit-tracked.log": "f32b7ba829d4ad83439897f453a670b2906b2d4e381c2213ff438f50e6765c44",
+    "apps/office/coverage/package-commit-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "apps/office/coverage/package-commit-typecheck.log": "c2d912329adc965af319b920ac18e7d5588514055446127376ac4f44b94f2106",
+    "apps/office/coverage/package-commit-verify.log": "96563066e1b2d88a2f856ea4ea0fd218630209fbd9cdc6bc869498d5ae5f69f4",
+    "apps/office/coverage/package-commit-vite.log": "2ad9b9b6850f219e5217926d0aebee9ada25635b02b7ab96e54f6918c1fe971d",
+    "apps/office/coverage/package-commit-writer-brief.log": "06f9285edecae9c59f361762d85400015d12062c1c9b2dea2e48f131de668441",
+    "apps/office/coverage/package-commit-writer-verify.log": "f90886cebc04c7384ae6fc68b6a6f5d9f1210d8461f4712c56c2a615edf35be8",
+    "apps/office/coverage/package-serialization-final/coverage-summary.json": "315be53e07edafc1d59c5689624b5d38726a5902b61af2db5a76511d1e2ab8c9",
+    "apps/office/coverage/native-dom-worker-result.json": "be93e069dee0868748df9c00aa98addf053ba24e440e0901553181255a2b6763"
+  }
+}
