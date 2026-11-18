@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 299
+revision: 302
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T14:10:54.167Z"
+  updated_at: "2026-11-18T14:25:27.221Z"
   updated_by: "CODER"
-  note: "86 focused tests and Chromium import/download/reopen passed; native table coverage remains below the branch threshold and the full DOCX working slice remains open."
-  attempts: 86
+  note: "89 DOCX/native tests, 52 ODT/browser tests and five impacted RTF spacing tests passed; the combined scoped branch gate and full DOCX working slice remain open."
+  attempts: 87
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1384,8 +1387,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T14:25:27.221Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "89 DOCX/native tests, 52 ODT/browser tests and five impacted RTF spacing tests passed; the combined scoped branch gate and full DOCX working slice remain open."
+  -
+    type: "status"
+    at: "2026-11-18T14:25:40.536Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T14:11:00.449Z"
+doc_updated_at: "2026-11-18T14:25:40.536Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -3978,6 +3994,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T14:25:27.221Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: 89 DOCX/native tests, 52 ODT/browser tests and five impacted RTF spacing tests passed; the combined scoped branch gate and full DOCX working slice remain open.
+    Attempts: 87
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T14:25:26.684Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -4452,6 +4498,15 @@ sections:
     - Nested and floating table handling, full styles, lists, links, bookmarks and page export remain open.
 
     Evidence: `evidence/docx-table-roundtrip.json`.
+
+    ### DOCX paragraph properties and line spacing
+
+    - DocxAttributeOutput writes represented native paragraph alignment, horizontal direction, spacing, twip indentation and flow controls in schema order. DOCX and RTF share the Word line-spacing conversion.
+    - DomainMapper applies native fixed, minimum and proportional rules and resolves a missing rule from the inherited paragraph style or the native Word default. The pinned tdf125469 fixture passes and WRITER635 records the exact-rule behavior for negative line values.
+    - The mounted Writer dialog opens a DOCX and a fresh shell reopens the browser ODT record with fixed spacing, centered alignment and the native table still present. The targeted ODT/browser run passed 52 tests and the impacted RTF spacing run passed five.
+    - All 89 focused DOCX/native conversion tests passed. Scoped coverage was 91.39% statements, 80.39% branches, 100% functions and 94.03% lines. The branch gate remains open. JSDoc, lint, Vite bundle, source tree, provenance and registry passed. Typecheck and the module boundary gate report the existing diagnostics.
+
+    Evidence: `evidence/docx-paragraph-roundtrip.json`.
 id_source: "generated"
 ---
 ## Summary
@@ -7055,6 +7110,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T14:25:27.221Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: 89 DOCX/native tests, 52 ODT/browser tests and five impacted RTF spacing tests passed; the combined scoped branch gate and full DOCX working slice remain open.
+Attempts: 87
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T14:25:26.684Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7534,3 +7619,12 @@ Evidence: `evidence/ooxml-file-filter-vertical.json`. The full suite is not due.
 - Nested and floating table handling, full styles, lists, links, bookmarks and page export remain open.
 
 Evidence: `evidence/docx-table-roundtrip.json`.
+
+### DOCX paragraph properties and line spacing
+
+- DocxAttributeOutput writes represented native paragraph alignment, horizontal direction, spacing, twip indentation and flow controls in schema order. DOCX and RTF share the Word line-spacing conversion.
+- DomainMapper applies native fixed, minimum and proportional rules and resolves a missing rule from the inherited paragraph style or the native Word default. The pinned tdf125469 fixture passes and WRITER635 records the exact-rule behavior for negative line values.
+- The mounted Writer dialog opens a DOCX and a fresh shell reopens the browser ODT record with fixed spacing, centered alignment and the native table still present. The targeted ODT/browser run passed 52 tests and the impacted RTF spacing run passed five.
+- All 89 focused DOCX/native conversion tests passed. Scoped coverage was 91.39% statements, 80.39% branches, 100% functions and 94.03% lines. The branch gate remains open. JSDoc, lint, Vite bundle, source tree, provenance and registry passed. Typecheck and the module boundary gate report the existing diagnostics.
+
+Evidence: `evidence/docx-paragraph-roundtrip.json`.
