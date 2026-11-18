@@ -1,0 +1,75 @@
+{
+  "scope": "Writer ordinary collapsed and ranged bookmarks through the native model, DOCX, primary ODT, Worker transfer and browser file commands",
+  "upstream": [
+    "sw/source/core/crsr/bookmark.cxx (MarkBase positions)",
+    "sw/source/core/doc/docbm.cxx (makeMark, repositionMark and deleteMarks)",
+    "sw/source/core/undo/undobj.cxx and rolbck.cxx (DelContentIndex and SwHistoryBookmark)",
+    "sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx (StartOrEndBookmark and IsOutsideAParagraph)",
+    "sw/source/filter/ww8/docxattributeoutput.cxx (DoWriteBookmarkTagStart and DoWriteBookmarkTagEnd)",
+    "xmloff/source/text/XMLTextMarkImportContext.cxx and txtimp.cxx",
+    "sw/source/core/crsr/crbm.cxx (GotoMark selection)",
+    "sw/qa/extras/ooxmlexport/ooxmlexport19.cxx (testFdo85542, testTdf65955 and testTdf65955_2)",
+    "sw/qa/extras/ooxmlexport/ooxmlexport17.cxx (testTdf123642_BookmarkAtDocEnd)"
+  ],
+  "checks": [
+    {
+      "command": "npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ww8/docx-bookmarks.test.ts src/sw/source/filter/ww8/docxattributeoutput.hyperlink.test.ts src/sw/source/filter/xml/odt-markers.test.ts src/sw/source/core/undo/native-bookmark-replace-history.test.ts src/sw/source/core/doc/native-mark-range-deletion.test.ts src/sw/source/core/doc/bookmark-name.test.ts src/sw/source/core/unocore/native-import-failure-contracts.test.ts src/sw/source/core/unocore/native-import-api-states.test.ts src/sw/source/core/unocore/native-text-import-api.test.ts src/sw/browser/presentation/writer-bookmark-selection.test.tsx src/sw/browser/presentation/writer-view.test.tsx src/sw/source/writerfilter/dmapper/DomainMapper.test.ts src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.test.ts src/sw/source/writerfilter/filter/WriterFilter.test.ts src/sw/source/filter/html/swhtml.bookmarks.integration.test.ts src/sw/source/filter/html/htmlgrin.trailing-paragraph.test.ts src/sw/source/filter/xml/odt-text-frame.test.ts src/xmloff/source/text/txtimp.test.ts src/xmloff/source/text/txtparai.test.ts --coverage --coverage.include=src/sw/source/core/crsr/bookmark.ts --coverage.include=src/sw/source/core/unocore/unobkm.ts --coverage.include=src/sw/source/filter/ww8/docxattributeoutput.hyperlink.ts --coverage.reporter=text --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "177 focused tests in 18 suites. The complete bookmark position module and DOCX output module independently exceed all 90% thresholds. Branch coverage is 96.15% and 97.14% respectively."
+    },
+    {
+      "command": "npm run test:writer --workspace @vite-office/office -- src/sw/source/core/unocore/native-import-api-states.test.ts src/sw/source/core/unocore/native-import-failure-contracts.test.ts src/sw/source/core/unocore/native-text-import-api.test.ts --coverage --coverage.include=src/sw/source/core/unocore/unobkm.ts --coverage.reporter=text --coverage.reportsDirectory=coverage/bookmark-uno --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "44 overlapping UNO integration tests across three suites. The complete unobkm owner is covered in all four dimensions."
+    },
+    {
+      "command": "npm exec --workspace @vite-office/office -- vite build && node scripts/check-static-build.mjs",
+      "result": "pass",
+      "evidence": "Four relative JavaScript bundles and static smoke."
+    },
+    {
+      "command": "npx --no-install playwright test --config=apps/office/coverage/docx-links.playwright.config.ts --workers=1",
+      "result": "pass",
+      "evidence": "Three production Chromium scenarios. The original ODT range passed through browser storage, saved DOCX, and a 390px reopen. Go to selected the original range, confirmed by replacing it."
+    },
+    {
+      "command": "npm run check:source-tree && npm run check:writer-resources && npm run check:source-provenance",
+      "result": "pass",
+      "evidence": "Source tree, Writer resources, and 2740 runtime records."
+    },
+    {
+      "command": "npm run inventory:registry:build && npm run inventory:registry:check",
+      "result": "pass",
+      "evidence": "All four generated views and zero semantic violations."
+    },
+    {
+      "command": "npx --no-install eslint --max-warnings 0 <changed paths>; npx --no-install prettier --check <changed paths>; npm run check:docs; npm run check:file-size; git diff --check <changed paths>",
+      "result": "pass",
+      "evidence": "Scoped ESLint and formatting, global JSDoc and size, and whitespace validation."
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs && ap doctor",
+      "result": "pass",
+      "evidence": "Routing and doctor with zero errors. Existing hook-shim warning."
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "result": "fail",
+      "evidence": "Three existing errors in SfxDocumentMetaData.storage.ts."
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "evidence": "Existing patattr boundary and comphelper/sax cycle."
+    },
+    {
+      "command": "npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ww8/docxattributeoutput.hyperlink.test.ts src/sw/source/filter/xml/odt-markers.test.ts src/sw/source/core/undo/native-bookmark-replace-history.test.ts src/sw/source/core/doc/native-mark-range-deletion.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts",
+      "result": "fail",
+      "evidence": "The separate initial run reported a failing assertion on an erased UnknownPropertyException member getter, outside bookmark tests. The initial obsolete expectation that ranged bookmark history is unsupported was replaced by actual endpoint history tests."
+    }
+  ],
+  "remaining": [
+    "The complete fdo85542 DOCX fixture proves all three native anchor text assertions and passes a complete DOCX round trip. Its primary ODT write still encounters unsupported paragraph ListAutoFormat item 91. Primary ODT and Worker preservation are exercised on the other fixtures and a cross-paragraph DOCX.",
+    "Column bookmarks, implicit cross-reference generation, typed marks, and other DOCX features remain open. The full suite follows the approved cadence."
+  ]
+}

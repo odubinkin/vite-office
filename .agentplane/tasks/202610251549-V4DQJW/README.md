@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 317
+revision: 320
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T17:58:06.632Z"
+  updated_at: "2026-11-18T18:56:11.776Z"
   updated_by: "CODER"
-  note: "Verified DOCX relationship hyperlinks, complex HYPERLINK fields and collapsed bookmarks through native Writer, primary ODT and production UI. 370 targeted tests passed; scoped coverage exceeds 90%. Full DOCX obligations and baseline repository diagnostics remain."
-  attempts: 92
+  note: "Verified native ordinary range bookmarks, DOCX and primary ODT transfer, 177 focused tests and three Chromium scenarios. DOCX lifecycle continues; original fdo85542 primary storage still requires ListAutoFormat support."
+  attempts: 93
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1480,8 +1483,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T18:56:11.776Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified native ordinary range bookmarks, DOCX and primary ODT transfer, 177 focused tests and three Chromium scenarios. DOCX lifecycle continues; original fdo85542 primary storage still requires ListAutoFormat support."
+  -
+    type: "status"
+    at: "2026-11-18T18:56:17.755Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T17:58:22.444Z"
+doc_updated_at: "2026-11-18T18:56:17.755Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -4254,6 +4270,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-18T18:56:11.776Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified native ordinary range bookmarks, DOCX and primary ODT transfer, 177 focused tests and three Chromium scenarios. DOCX lifecycle continues; original fdo85542 primary storage still requires ListAutoFormat support.
+    Attempts: 93
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T18:56:11.229Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -4784,6 +4830,15 @@ sections:
     - Scope: ranged and column bookmarks, arbitrary fields, hyperlink style synthesis and desktop relative file-base rewriting remain open. Existing storage type errors and module-boundary diagnostics persist. The full test suite was deferred on the approved cadence.
 
     Evidence: `evidence/docx-native-hyperlinks-bookmarks.json`.
+
+    ### DOCX native ranged bookmarks and ODT persistence
+
+    - Ordinary Writer bookmarks share the registered native mark positions, including cross-paragraph selections, correction after content deletion and independent undo restoration of the endpoints. The UNO anchor and the Go to command expose the actual complete selection.
+    - DOCX pairs ranges by Word IDs and retains the original preceding-paragraph endpoint when an end marker falls between paragraphs. DOCX export emits separate boundaries with the same ID; primary ODT and its worker transfer retain both endpoints.
+    - Passed 177 focused tests across 18 suites and a separate covered run of 44 overlapping UNO tests. Each measured owner reaches at least 96% branches. All three Chromium scenarios pass, including browser storage, downloaded DOCX and range selection after mobile reopen.
+    - The full fdo85542 fixture passes the native assertions and the DOCX round trip. Its ODT save still encounters unsupported ListAutoFormat item 91; the respective primary storage test uses the original tdf65955_2 ODT fixture. Typed and column bookmarks remain open. The separate initial native lifetime suite fails on the unrelated erased UnknownPropertyException member assertion. Existing app typecheck and module-boundary diagnostics persist.
+
+    Evidence: `evidence/docx-native-ranged-bookmarks.json`.
 id_source: "generated"
 ---
 ## Summary
@@ -7567,6 +7622,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-18T18:56:11.776Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified native ordinary range bookmarks, DOCX and primary ODT transfer, 177 focused tests and three Chromium scenarios. DOCX lifecycle continues; original fdo85542 primary storage still requires ListAutoFormat support.
+Attempts: 93
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T18:56:11.229Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -8102,3 +8187,12 @@ Evidence: `evidence/docx-native-page-sections.json`.
 - Scope: ranged and column bookmarks, arbitrary fields, hyperlink style synthesis and desktop relative file-base rewriting remain open. Existing storage type errors and module-boundary diagnostics persist. The full test suite was deferred on the approved cadence.
 
 Evidence: `evidence/docx-native-hyperlinks-bookmarks.json`.
+
+### DOCX native ranged bookmarks and ODT persistence
+
+- Ordinary Writer bookmarks share the registered native mark positions, including cross-paragraph selections, correction after content deletion and independent undo restoration of the endpoints. The UNO anchor and the Go to command expose the actual complete selection.
+- DOCX pairs ranges by Word IDs and retains the original preceding-paragraph endpoint when an end marker falls between paragraphs. DOCX export emits separate boundaries with the same ID; primary ODT and its worker transfer retain both endpoints.
+- Passed 177 focused tests across 18 suites and a separate covered run of 44 overlapping UNO tests. Each measured owner reaches at least 96% branches. All three Chromium scenarios pass, including browser storage, downloaded DOCX and range selection after mobile reopen.
+- The full fdo85542 fixture passes the native assertions and the DOCX round trip. Its ODT save still encounters unsupported ListAutoFormat item 91; the respective primary storage test uses the original tdf65955_2 ODT fixture. Typed and column bookmarks remain open. The separate initial native lifetime suite fails on the unrelated erased UnknownPropertyException member assertion. Existing app typecheck and module-boundary diagnostics persist.
+
+Evidence: `evidence/docx-native-ranged-bookmarks.json`.
