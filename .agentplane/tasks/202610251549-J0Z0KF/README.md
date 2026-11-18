@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 581
+revision: 584
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T17:13:49.600Z"
+  updated_at: "2026-11-18T17:41:06.100Z"
   updated_by: "CODER"
-  note: "Native XLSX and primary ODS outlines verified in 52 tests and production Chromium through browser storage and mobile XLSX reopen. All three new outline owners meet scoped90. Full XLSX acceptance remains open. See evidence/xlsx-native-outline-roundtrip.json."
-  attempts: 185
+  note: "Verified manual page-break checkpoint through native XLSX and ODS, worker transfer and Chromium. 70 targeted tests passed and the XLSX record owner meets scoped90. Full XLSX scope and existing repository diagnostics remain."
+  attempts: 186
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2968,8 +2971,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T17:41:06.100Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified manual page-break checkpoint through native XLSX and ODS, worker transfer and Chromium. 70 targeted tests passed and the XLSX record owner meets scoped90. Full XLSX scope and existing repository diagnostics remain."
+  -
+    type: "status"
+    at: "2026-11-18T17:41:23.755Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T17:13:59.715Z"
+doc_updated_at: "2026-11-18T17:41:23.755Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -8534,6 +8550,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T17:41:06.100Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified manual page-break checkpoint through native XLSX and ODS, worker transfer and Chromium. 70 targeted tests passed and the XLSX record owner meets scoped90. Full XLSX scope and existing repository diagnostics remain.
+    Attempts: 186
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T17:41:05.452Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -9410,6 +9456,15 @@ sections:
     - Scope: CALC702 through CALC704 document retained source boundary behavior. Summary placement and other advanced worksheet settings remain open. The existing three storage typecheck and two dependency diagnostics persist. No full test suite is due.
 
     Evidence: `evidence/xlsx-native-outline-roundtrip.json`.
+
+    ### Manual page breaks through XLSX and primary ODS
+
+    - Command: ten targeted Calc suites with scoped XLSX owner coverage, production Chromium, ODS class measurement and static checks recorded in evidence/xlsx-native-page-break-roundtrip.json.
+    - Result: all 70 targeted tests and both browser scenarios passed. The XLSX page-break module has 100% on all four coverage metrics. The new ODS range cursor has no uncovered branch in its own scope; the separate whole-file ODS measurement remains below the default gate. Existing storage type and dependency failures persist.
+    - Evidence: native Calc manual breaks survive XLSX import, primary ODS storage, worker transfer, XLSX download and reopening. The adapted tdf170963 fixture test retains the 1023 row-break limit with the unsupported named expression removed from its in-memory test input. CALC705 documents the retained 16-bit limits.
+    - Scope: automatic pagination, broader print settings and full source fixture support are still open. The full test suite was deferred on the approved cadence.
+
+    Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 id_source: "generated"
 ---
 ## Summary
@@ -14984,6 +15039,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T17:41:06.100Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified manual page-break checkpoint through native XLSX and ODS, worker transfer and Chromium. 70 targeted tests passed and the XLSX record owner meets scoped90. Full XLSX scope and existing repository diagnostics remain.
+Attempts: 186
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T17:41:05.452Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -15864,3 +15949,12 @@ Evidence: `evidence/xlsx-normal-style-width-roundtrip.json`.
 - Scope: CALC702 through CALC704 document retained source boundary behavior. Summary placement and other advanced worksheet settings remain open. The existing three storage typecheck and two dependency diagnostics persist. No full test suite is due.
 
 Evidence: `evidence/xlsx-native-outline-roundtrip.json`.
+
+### Manual page breaks through XLSX and primary ODS
+
+- Command: ten targeted Calc suites with scoped XLSX owner coverage, production Chromium, ODS class measurement and static checks recorded in evidence/xlsx-native-page-break-roundtrip.json.
+- Result: all 70 targeted tests and both browser scenarios passed. The XLSX page-break module has 100% on all four coverage metrics. The new ODS range cursor has no uncovered branch in its own scope; the separate whole-file ODS measurement remains below the default gate. Existing storage type and dependency failures persist.
+- Evidence: native Calc manual breaks survive XLSX import, primary ODS storage, worker transfer, XLSX download and reopening. The adapted tdf170963 fixture test retains the 1023 row-break limit with the unsupported named expression removed from its in-memory test input. CALC705 documents the retained 16-bit limits.
+- Scope: automatic pagination, broader print settings and full source fixture support are still open. The full test suite was deferred on the approved cadence.
+
+Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.

@@ -1,0 +1,68 @@
+{
+  "scope": "Native Calc manual page breaks across XLSX, ODS, worker transfer and existing file UI",
+  "upstream": [
+    "sc/source/filter/oox/worksheetfragment.cxx (WorksheetFragment::importBrk)",
+    "sc/source/filter/oox/worksheethelper.cxx (WorksheetGlobals::setPageBreak)",
+    "sc/source/filter/excel/xepage.cxx (XclExpPageSettings, XclExpPageBreaks::SaveXml)",
+    "sc/source/filter/xml/xmlstyle.cxx (row/column break-before map and XmlScPropHdl_BreakBefore)",
+    "sc/source/ui/unoobj/docuno.cxx and sc/source/ui/docshell/docfunc.cxx (range breaks and first-row/column rejection)",
+    "sc/qa/unit/subsequent_export_test5.cxx (testTdf170963_row_breaks)"
+  ],
+  "implementation": [
+    "The XLSX fragment reads the original four break attributes through AttributeList. Only positive manual break positions reached through rowBreaks or colBreaks are installed in ScTable.",
+    "The original XLSX export takes sorted manual positions, applies the UInt16 row limit and count limit, and writes the whole-axis min/max records. CALC705 documents the retained UInt16 behavior.",
+    "ODF row and column automatic styles use fo:break-before and repeated spans. Calc worker transfer restores native sets, and old records without break fields retain their defaults."
+  ],
+  "checks": [
+    {
+      "command": "npm run test:calc --workspace @vite-office/office -- src/sc/source/filter/excel/xepage.test.ts src/sc/source/filter/oox/excelfilter.test.ts src/sc/source/filter/oox/worksheethelper.test.ts src/sc/source/filter/xml/ods.test.ts src/sc/source/filter/xml/ods-native-columns.test.ts src/sc/source/filter/xml/ods-indent-rows.test.ts src/sc/source/filter/xml/ods-sparse-export.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-client.test.ts src/sc/source/core/data/native-table-undo.test.ts --coverage --coverage.include=src/sc/source/filter/excel/xepage.ts --coverage.reporter=text --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "70 tests in ten suites. Complete XLSX break owner coverage was 100% statements, branches, functions and lines."
+    },
+    {
+      "command": "npm run test:calc --workspace @vite-office/office -- src/sc/source/filter/excel/xepage.test.ts --coverage --coverage.include=src/sc/source/filter/xml/xmlexprt.ts --coverage.reporter=json --coverage.reportsDirectory=coverage/xlsx-page-break-range-coverage",
+      "result": "fail",
+      "evidence": "The three tests pass. The separate measurement of the existing entire ODS exporter is below its default 100% threshold. The unchanged run counters for its new ScPageBreakRanges class show 18/18 statements, 10/10 branches and 2/2 functions."
+    },
+    {
+      "command": "npm exec --workspace @vite-office/office -- vite build && npx --no-install playwright test --config=apps/office/coverage/xlsx-page-breaks.playwright.config.ts && node scripts/check-static-build.mjs",
+      "result": "pass",
+      "evidence": "Two Chromium scenarios. The new scenario opens XLSX, reconstructs the graph from stored ODS after reload, verifies manual row and column records in exported XLSX and reopens the download at 390px. The outline regression also passes."
+    },
+    {
+      "command": "npm run check:source-provenance && npm run check:source-tree && npm run check:calc-resources",
+      "result": "pass",
+      "evidence": "2732 runtime modules, 116 required source paths and 464 UI commands."
+    },
+    {
+      "command": "npm run inventory:registry:build && npm run inventory:registry:check",
+      "result": "pass",
+      "evidence": "Four generated views and 34 invariants."
+    },
+    {
+      "command": "npm run check:docs && npm run check:file-size; npx --no-install eslint <changed Calc TypeScript paths> --max-warnings 0; npx --no-install prettier --check <changed Calc paths>; git diff --check <Calc paths>",
+      "result": "pass",
+      "evidence": "Scoped lint and formatting, global JSDoc and file size, and Calc whitespace checks."
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs && ap doctor",
+      "result": "pass",
+      "evidence": "Valid route, no doctor errors, existing managed hook shim warning."
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "result": "fail",
+      "evidence": "Only the three existing SfxDocumentMetaData.storage.ts typing errors remain."
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "evidence": "Existing patattr core/browser edge and comphelper/sax dependency cycle."
+    }
+  ],
+  "remaining": [
+    "The full pinned tdf170963 ODS has an unsupported named expression. Its row styles, repeated rows and 1023-break assertions were exercised with that unrelated block removed in test memory.",
+    "Automatic pagination, print settings beyond the manual break records, and unrelated XLSX feature work remain open.",
+    "Full test suite deferred on the approved cadence. The checkpoint remains within the active XLSX task."
+  ]
+}
