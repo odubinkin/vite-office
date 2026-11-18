@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 508
+revision: 511
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-15T13:17:49.381Z"
+  updated_at: "2026-11-18T06:46:43.558Z"
   updated_by: "CODER"
-  note: "OOXML sheet data values/range prerequisites:65 Calc and14 shared cases,12 unchanged native C++ witnesses/UBSan, all measured owners pass90 and final main/Worker probe passes. Source range defects preserved; actual workbook/helper/filter/UI orchestration and four existing metadata type failures remain open. Evidence: native-xlsx-sheet-data-continuation.json."
-  attempts: 161
+  note: "OOXML filter state checkpoint: 14 focused, 25 shared, 6 Writer, 48 boundary tests and scoped90 pass; Chromium main/Worker pass. Complete model/media/storage/filter/UI and four metadata errors remain. See native-filter-state-continuation.json."
+  attempts: 162
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2584,8 +2587,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T06:46:43.558Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "OOXML filter state checkpoint: 14 focused, 25 shared, 6 Writer, 48 boundary tests and scoped90 pass; Chromium main/Worker pass. Complete model/media/storage/filter/UI and four metadata errors remain. See native-filter-state-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-18T06:46:55.622Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-15T13:18:13.077Z"
+doc_updated_at: "2026-11-18T06:46:55.622Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -7430,6 +7446,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T06:46:43.558Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: OOXML filter state checkpoint: 14 focused, 25 shared, 6 Writer, 48 boundary tests and scoped90 pass; Chromium main/Worker pass. Complete model/media/storage/filter/UI and four metadata errors remain. See native-filter-state-continuation.json.
+    Attempts: 162
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T06:46:42.631Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -8102,6 +8148,14 @@ sections:
     - Result: Bounded prerequisite pass; parents rework. All3 executable value owners naturally100all without edited counters/exclusions. Same4 metadata type errors, old comphelper/sax cycle and earlier independent coverage gaps remain.
     - Evidence: Actual CellModel/CellFormulaModel/DataTableModel and source row/merge values use original Calc/RTL owners. Original ValueRangeSet adjacency bug is preserved, matching native outputs (WRITER622/CALC686); worksheet-local predicate assumptions remain (CALC687). Dedicated bounded capability records retain false parity/default/verified flags. New browser import caller consumes the actual cell address; it does not parse a workbook.
     - Scope: Native provided InputStream fastpath means complete UCB URL opening is not a prerequisite for the current browser-file route. Actual workbook/model/WorksheetHelper/style/formula/context/filter integration and full DOCX/XLSX UI acceptance remain unfinished; no replacement root/worksheet/buffer service or full original fixture replay is supplied. No full suite, source implementation commit, task completion or goal pause.
+
+    ### Shared OOXML filter state continuation
+
+    Command: focused shared tests and scoped90 coverage, actual Chromium main/DOM-free Worker probe, related shared/Writer regressions, boundary tests and recorded static checks (exact commands and hashes in evidence/native-filter-state-continuation.json).
+    Result: pass for 14 focused, 25 related shared, 6 Writer and 48 boundary tests; new executable coverage 97.33% statements / 91.66% branches / 100% functions / 98.63% lines. Real browser/Worker, Vite bundling/static, lint/format/JSDoc/tools/size/tree/provenance/registry/doctor/routing/diff pass.
+    Evidence: original direction/version/default/reference state and native-mutex exact URL guard; XStatusIndicator now inherits actual XInterface and registers its normal generated type. pako 2.1.0 was already installed and used by actual Deflater reset; focused tests pass, no new network request or codec port.
+    Scope: represented FilterBaseImpl state and guard only. Positive full model/factory admission, FilterBase component/helper/media/storage orchestration and mounted DOCX/XLSX UI acceptance remain unfinished. No fake model, factory, progress component or constant filter version getter.
+    Result: fail for full typecheck/build (four existing SfxDocumentMetaData.storage errors) and dependency check (existing patattr VCL import boundary and comphelper -> sax -> comphelper cycle). Actual filterbase.cxx std::mutex dependency is recorded in the source-backed oox -> external edge. Earlier dependency log retains the initial new edge failure; final2 removes that failure. Initial lint and registry maturity errors were corrected and final checks pass. No full-suite run due at the approved ten-completed-task cadence.
 id_source: "generated"
 ---
 ## Summary
@@ -12956,6 +13010,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T06:46:43.558Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: OOXML filter state checkpoint: 14 focused, 25 shared, 6 Writer, 48 boundary tests and scoped90 pass; Chromium main/Worker pass. Complete model/media/storage/filter/UI and four metadata errors remain. See native-filter-state-continuation.json.
+Attempts: 162
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T06:46:42.631Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -13632,3 +13716,11 @@ Final source review also retains original FileStatus::isDirectory (Directory or 
 - Result: Bounded prerequisite pass; parents rework. All3 executable value owners naturally100all without edited counters/exclusions. Same4 metadata type errors, old comphelper/sax cycle and earlier independent coverage gaps remain.
 - Evidence: Actual CellModel/CellFormulaModel/DataTableModel and source row/merge values use original Calc/RTL owners. Original ValueRangeSet adjacency bug is preserved, matching native outputs (WRITER622/CALC686); worksheet-local predicate assumptions remain (CALC687). Dedicated bounded capability records retain false parity/default/verified flags. New browser import caller consumes the actual cell address; it does not parse a workbook.
 - Scope: Native provided InputStream fastpath means complete UCB URL opening is not a prerequisite for the current browser-file route. Actual workbook/model/WorksheetHelper/style/formula/context/filter integration and full DOCX/XLSX UI acceptance remain unfinished; no replacement root/worksheet/buffer service or full original fixture replay is supplied. No full suite, source implementation commit, task completion or goal pause.
+
+### Shared OOXML filter state continuation
+
+Command: focused shared tests and scoped90 coverage, actual Chromium main/DOM-free Worker probe, related shared/Writer regressions, boundary tests and recorded static checks (exact commands and hashes in evidence/native-filter-state-continuation.json).
+Result: pass for 14 focused, 25 related shared, 6 Writer and 48 boundary tests; new executable coverage 97.33% statements / 91.66% branches / 100% functions / 98.63% lines. Real browser/Worker, Vite bundling/static, lint/format/JSDoc/tools/size/tree/provenance/registry/doctor/routing/diff pass.
+Evidence: original direction/version/default/reference state and native-mutex exact URL guard; XStatusIndicator now inherits actual XInterface and registers its normal generated type. pako 2.1.0 was already installed and used by actual Deflater reset; focused tests pass, no new network request or codec port.
+Scope: represented FilterBaseImpl state and guard only. Positive full model/factory admission, FilterBase component/helper/media/storage orchestration and mounted DOCX/XLSX UI acceptance remain unfinished. No fake model, factory, progress component or constant filter version getter.
+Result: fail for full typecheck/build (four existing SfxDocumentMetaData.storage errors) and dependency check (existing patattr VCL import boundary and comphelper -> sax -> comphelper cycle). Actual filterbase.cxx std::mutex dependency is recorded in the source-backed oox -> external edge. Earlier dependency log retains the initial new edge failure; final2 removes that failure. Initial lint and registry maturity errors were corrected and final checks pass. No full-suite run due at the approved ten-completed-task cadence.
