@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 590
+revision: 593
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T18:40:02.126Z"
+  updated_at: "2026-11-18T19:27:54.937Z"
   updated_by: "CODER"
-  note: "Verified native print areas and repeating title persistence with 188 Calc tests, 23 shared tests and three production Chromium flows. XLSX task remains active for remaining format coverage."
-  attempts: 188
+  note: "XLSX date-system storage, worker and production browser profiles verified; task-wide acceptance and shared checks remain open."
+  attempts: 189
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3016,8 +3019,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T19:27:54.937Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "XLSX date-system storage, worker and production browser profiles verified; task-wide acceptance and shared checks remain open."
+  -
+    type: "status"
+    at: "2026-11-18T19:28:11.135Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T18:40:08.127Z"
+doc_updated_at: "2026-11-18T19:28:11.135Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -8672,6 +8688,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-18T19:27:54.937Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: XLSX date-system storage, worker and production browser profiles verified; task-wide acceptance and shared checks remain open.
+    Attempts: 189
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T19:27:54.375Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -9571,6 +9617,10 @@ sections:
     - ODS preserves print attributes and title wrappers, including spans that pass through outlines. Worker transfer validates and restores the original coordinates. CALC707 records the first ODS title range's zero embedded sheet coordinate. CALC708 records the strict XFD comparison in sheet-name quoting.
     - Pass results cover 188 Calc tests, 23 shared formula tests, three production Chromium scenarios, and static/provenance checks. Both new module owners satisfy the 90% thresholds independently. The initial Chromium test attempted to reopen a title-only source ODS from storage. The source has no visible cells, so the existing primary save rule excludes it. The dedicated ODS scenario uses direct export. The XLSX scenario exercises stored ODS and mobile reopen.
     - Global typecheck still reports three existing SfxDocumentMetaData.storage.ts errors. The existing patattr domain boundary and comphelper/sax cycle remain. Printing and preview, layout pagination, generalized external links, and further OOXML coverage remain open.
+
+    - Observation: The original tdf165180 workbook keeps serial 60 and the source 1 January 1904 epoch through XLSX import, worker transfer, primary ODS storage, XLSX export and reopen. The original F800 long date initially changed to a fixed date pattern through ODS. The shared number formatter and ODF filter now retain the source system-date selection and matching date elements.
+      Impact: Calc shows Tuesday, March 1, 1904 after browser reload and after importing the XLSX downloaded by the existing File dialog. The imported dateCompatibility=0 does not change the source epoch. The default 30 December 1899 and the transitional date1904 attribute remain verified.
+      Resolution: 302 targeted Calc tests across 34 files and 177 shared tests across five files passed. Scoped coverage meets 90% in both new owners; four production Chromium scenarios passed. JSDoc, scoped ESLint/Prettier, source tree and provenance, Calc UI resources, registry, build/static, routing and diff passed. The existing shared type/dependency failures remain recorded. See evidence/xlsx-date-system.json. No full-suite run this block.
 id_source: "generated"
 ---
 ## Summary
@@ -15235,6 +15285,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-18T19:27:54.937Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: XLSX date-system storage, worker and production browser profiles verified; task-wide acceptance and shared checks remain open.
+Attempts: 189
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T19:27:54.375Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -16138,3 +16218,7 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - ODS preserves print attributes and title wrappers, including spans that pass through outlines. Worker transfer validates and restores the original coordinates. CALC707 records the first ODS title range's zero embedded sheet coordinate. CALC708 records the strict XFD comparison in sheet-name quoting.
 - Pass results cover 188 Calc tests, 23 shared formula tests, three production Chromium scenarios, and static/provenance checks. Both new module owners satisfy the 90% thresholds independently. The initial Chromium test attempted to reopen a title-only source ODS from storage. The source has no visible cells, so the existing primary save rule excludes it. The dedicated ODS scenario uses direct export. The XLSX scenario exercises stored ODS and mobile reopen.
 - Global typecheck still reports three existing SfxDocumentMetaData.storage.ts errors. The existing patattr domain boundary and comphelper/sax cycle remain. Printing and preview, layout pagination, generalized external links, and further OOXML coverage remain open.
+
+- Observation: The original tdf165180 workbook keeps serial 60 and the source 1 January 1904 epoch through XLSX import, worker transfer, primary ODS storage, XLSX export and reopen. The original F800 long date initially changed to a fixed date pattern through ODS. The shared number formatter and ODF filter now retain the source system-date selection and matching date elements.
+  Impact: Calc shows Tuesday, March 1, 1904 after browser reload and after importing the XLSX downloaded by the existing File dialog. The imported dateCompatibility=0 does not change the source epoch. The default 30 December 1899 and the transitional date1904 attribute remain verified.
+  Resolution: 302 targeted Calc tests across 34 files and 177 shared tests across five files passed. Scoped coverage meets 90% in both new owners; four production Chromium scenarios passed. JSDoc, scoped ESLint/Prettier, source tree and provenance, Calc UI resources, registry, build/static, routing and diff passed. The existing shared type/dependency failures remain recorded. See evidence/xlsx-date-system.json. No full-suite run this block.
