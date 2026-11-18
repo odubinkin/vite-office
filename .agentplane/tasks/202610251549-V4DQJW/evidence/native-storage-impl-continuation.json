@@ -1,0 +1,194 @@
+{
+  "checkpoint": "Original internal storage constructors/persistence/catalog prerequisites; not registered XStorage/factory or complete import-export",
+  "createdAt": "2026-11-18T11:52:16.451732+00:00",
+  "tasks": [
+    "202610251549-J0Z0KF",
+    "202610251549-V4DQJW"
+  ],
+  "sourceBaseline": "libreoffice-26.8.0.2 / 9bc445578031fecf56086729d8e4940c77e14d65",
+  "changedPaths": [
+    "apps/office/src/package/source/xstor/xstorage.impl.ts",
+    "apps/office/src/package/source/xstor/xstorage.impl.test.ts",
+    "scripts/fixtures/native-storage-impl-probe.ts",
+    "scripts/fixtures/native-archive-output-probe.ts",
+    "scripts/native-dom-worker-probe.mjs",
+    "docs/program/native-storage-implementation.md",
+    "docs/program/writer-upstream-suspected-issues.md",
+    "docs/program/calc-upstream-suspected-issues.md",
+    "docs/program/registry/shared/runtime/package/source/xstor/xstorage.impl.ts.json",
+    "docs/program/registry/shared/provenance/package/source/xstor/xstorage.impl.ts.json",
+    "docs/program/registry/shared/capabilities/CAP-291a44b3-99d9-4f74-8429-a90ed52f8be5.json"
+  ],
+  "sourceDependencies": [
+    "vendor/libreoffice-reference/package/source/xstor/xstorage.cxx",
+    "vendor/libreoffice-reference/package/source/xstor/xstorage.hxx",
+    "vendor/libreoffice-reference/package/source/xstor/xfactory.cxx",
+    "vendor/libreoffice-reference/package/qa/ofopxmlstorages/Test01.java",
+    "vendor/libreoffice-reference/package/inc/PackageConstants.hxx"
+  ],
+  "commands": [
+    {
+      "command": "npm run test:coverage:shared -- src/package/source/xstor/xstorage.impl.test.ts --coverage.include=src/package/source/xstor/xstorage.impl.ts --coverage.reportsDirectory=coverage/storage-next --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "fail: coverage below90; all11 tests pass",
+      "evidence": "apps/office/coverage/storage-next-coverage.log"
+    },
+    {
+      "command": "npm run test:shared -- src/package/source/xstor/switchpersistencestream.test.ts src/package/source/xstor/ocompinstream.test.ts src/package/source/xstor/oseekinstream.test.ts src/package/source/zippackage/ZipPackageFolder.native.test.ts src/package/source/zippackage/ZipPackage.members.test.ts",
+      "result": "pass50tests",
+      "evidence": "apps/office/coverage/storage-next-related.log"
+    },
+    {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+      "result": "pass",
+      "evidence": "apps/office/coverage/storage-next-browser.log"
+    },
+    {
+      "command": "npm run typecheck:tools",
+      "result": "pass",
+      "evidence": "apps/office/coverage/storage-next-tools.log"
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "result": "fail:same3 Medium errors",
+      "evidence": "apps/office/coverage/storage-next-typecheck.log"
+    },
+    {
+      "command": "npx eslint apps/office/src/package/source/xstor/xstorage.impl.ts apps/office/src/package/source/xstor/xstorage.impl.test.ts scripts/fixtures/native-storage-impl-probe.ts scripts/fixtures/native-archive-output-probe.ts scripts/native-dom-worker-probe.mjs --max-warnings 0",
+      "result": "pass",
+      "evidence": "apps/office/coverage/storage-next-lint.log"
+    },
+    {
+      "command": "npx prettier --check apps/office/src/package/source/xstor/xstorage.impl.ts apps/office/src/package/source/xstor/xstorage.impl.test.ts scripts/fixtures/native-storage-impl-probe.ts scripts/fixtures/native-archive-output-probe.ts scripts/native-dom-worker-probe.mjs docs/program/native-storage-implementation.md",
+      "result": "pass",
+      "evidence": "apps/office/coverage/storage-next-format-check.log"
+    },
+    {
+      "command": "npx vite build",
+      "result": "pass; cwd apps/office",
+      "evidence": "apps/office/coverage/storage-next-vite.log"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "evidence": "apps/office/coverage/storage-next-static.log"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "evidence": "apps/office/coverage/storage-next-provenance.log"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "pass",
+      "evidence": "apps/office/coverage/storage-next-docs.log"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail:same2",
+      "evidence": "apps/office/coverage/storage-next-boundaries.log"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "evidence": "apps/office/coverage/storage-next-size.log"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "evidence": "apps/office/coverage/storage-next-tree.log"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "result": "pass; semanticViolationCount0",
+      "evidence": "apps/office/coverage/storage-next-registry.log"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "evidence": "apps/office/coverage/storage-next-resources.log"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "evidence": "apps/office/coverage/storage-next-routing.log"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass",
+      "evidence": "apps/office/coverage/storage-next-diff.log"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass; existing managed hook-shim warning",
+      "evidence": "apps/office/coverage/storage-next-doctor.log"
+    }
+  ],
+  "result": "11 focused tests/1file and50 related tests/5files pass; Chromium main/DOM-free Worker actual storage catalog passes. Whole-owner90 gate fails: S75.43/B60.24/F100/L76.38. Native root package/property services and relationships/public wrapper paths remain unqualified; no fake providers/branch exclusions or weakened thresholds. Same3 native SfxMedium type errors and2 module boundary diagnostics persist. Tools/lint/format/JSDoc5542/provenance2688/size/tree/resources/Vite/static/routing/diff pass; registry refreshed with an explicit original internal/public owner responsibility split, final check passes with zero semantic violations. No task complete, full suite not due. Earlier failed scopes and full DOCX/XLSX import-export/UI acceptance remain unfinished. Expat approval pending; no download/parser-security mutation.",
+  "hashes": {
+    "apps/office/src/package/source/xstor/xstorage.impl.ts": "12f0a78a7943ae9f57ef77031a73d8885edc880ba31b0f169daa2dc3ae4c0d0a",
+    "apps/office/src/package/source/xstor/xstorage.impl.test.ts": "6e4209127cfb67135dbd7262ca0147ba7463dabad8f042a3b8e621294655811a",
+    "scripts/fixtures/native-storage-impl-probe.ts": "c33e883e86db9e883589054a7aac726de9ea8d628cd747c1e736740cafda05fb",
+    "scripts/fixtures/native-archive-output-probe.ts": "32b2e76b796cf2e6a0068b76d62d22040aed9d0ad6c7ab347b764025b620e567",
+    "scripts/native-dom-worker-probe.mjs": "a8e419f88b4200987f0a794a039b80bda0d8f411ebd174f6572692492333ce9b",
+    "docs/program/native-storage-implementation.md": "6e8b435fa7875c3ca1441abdd69d3140a3ba0213296db622d5e7ce83c5d214d9",
+    "docs/program/writer-upstream-suspected-issues.md": "abe323a90f2c200ca39bae3ea374b6c970c185ddb213e6e80a919c36ae20ee7d",
+    "docs/program/calc-upstream-suspected-issues.md": "94ee8f724b4b292d06d975d55f3cd44e36264c58f87e09fe870d5df0cce17751",
+    "docs/program/registry/shared/runtime/package/source/xstor/xstorage.impl.ts.json": "0980e595f3c909ddbb16458b09addf116bcb85897bd3726acfadde352f96c602",
+    "docs/program/registry/shared/provenance/package/source/xstor/xstorage.impl.ts.json": "422d05767197b45b9cb464a20575721b31d27bc903ba878b660f09b7da76b3f9",
+    "docs/program/registry/shared/capabilities/CAP-291a44b3-99d9-4f74-8429-a90ed52f8be5.json": "3deb35f441af840833694a14b24b23df04b746dec53db3c3711ae49fdf5a835a",
+    "vendor/libreoffice-reference/package/source/xstor/xstorage.cxx": "db7374cafbe1820203781ff8bef8984eae83b6742e820ad181b992c043bd2043",
+    "vendor/libreoffice-reference/package/source/xstor/xstorage.hxx": "901b93cdef6d8f553549730c83705babda39178d922b707821d36f0db3ecbe68",
+    "vendor/libreoffice-reference/package/source/xstor/xfactory.cxx": "92823f594a64550eff2a823390bfce37882a0c9b9ef98f78c5264e9c6215794b",
+    "vendor/libreoffice-reference/package/qa/ofopxmlstorages/Test01.java": "2a9799c4a4f30d5550cfa9ce50bcf47544254b3fc0b1187eb02144031b800ce8",
+    "vendor/libreoffice-reference/package/inc/PackageConstants.hxx": "637de3d89a4c5598bb593d26d158f368215ffb67e8d9cc97f82110e58786cf9a",
+    "apps/office/coverage/storage-next-active.log": "8bce293037d458fb5caa9ea7e20cc799b66caa08b275825e9b7a6b19eecef92e",
+    "apps/office/coverage/storage-next-all.log": "ef0e4b1731cd7c053e0857f2e2399b60f484baded86403d4f247a67845d75f1f",
+    "apps/office/coverage/storage-next-boundaries.log": "58e089319fe14bd88701e8fbe25e7a9292436eb724bbb615ad31ce7ec6dd4e97",
+    "apps/office/coverage/storage-next-brief.log": "3416d03eb02a8dc4b590c58216a7c9bf8a4ed2f4528ea729bee52e2e0bb8a247",
+    "apps/office/coverage/storage-next-browser.log": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee",
+    "apps/office/coverage/storage-next-coder.log": "16d13a563212bb4cba0b10848a9b96c039c73443d959afc4f1daba2c31aae0eb",
+    "apps/office/coverage/storage-next-config.log": "78b9f751c865f969a4efbddc65c34e9d9ef6bf821d245de10d0da5c1932898b1",
+    "apps/office/coverage/storage-next-coverage.log": "3b5871d81ff29ff400e34c3c57c9792bb22622792b1a257d2b934e10d82b35c1",
+    "apps/office/coverage/storage-next-diff.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/storage-next-doc-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/storage-next-docs.log": "1231394db4e2ffdd7357263d3e9b2277db2197ad6dbef51bebdd283d6da3bfe0",
+    "apps/office/coverage/storage-next-doctor.log": "924d376a45ed248d0c543f1693e4423e5e21ab7e0671068719597b792965e4f2",
+    "apps/office/coverage/storage-next-format-check.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/storage-next-format.log": "3c99be93f8a7ee6477a37e0ed9b2843a69684934d2903c2cf38f0a1cd31ccf5b",
+    "apps/office/coverage/storage-next-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/storage-next-orchestrator.log": "a8899afb593e5ec4f4153783ccfd0fd94cfaaf0513376e0f1d0aeefb1e0da9b2",
+    "apps/office/coverage/storage-next-policy.log": "b8dfe2f85a79a07de5a25952812ea7b0a86c9434550eed0fc6016ed94e6b957b",
+    "apps/office/coverage/storage-next-probe-format.log": "4c0f0a5ce46abd2e8beaa5e6a8a2d7032a618e9692f0cc1f8389185c64cb91d9",
+    "apps/office/coverage/storage-next-provenance-format.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/storage-next-provenance.log": "caacf23190e7b086ccb321af88e8a061e7dbc4e31bf07dcb6c1358d47b1d1574",
+    "apps/office/coverage/storage-next-quickstart.log": "7cd29a19b5c0dc18e7eb324075d21cc2fb44715f3c8dd7b8b52dd5f72d2ed8e0",
+    "apps/office/coverage/storage-next-registry-build.log": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209",
+    "apps/office/coverage/storage-next-registry.log": "9badfdaf9c34a96196737f7610e73ea13a4a82ff4837dd622261cc70e026bc86",
+    "apps/office/coverage/storage-next-related.log": "fb2492d6aee5828fd2669673e3b3a9d600f305374996dc1d89e6328ce47947c1",
+    "apps/office/coverage/storage-next-research-route.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/storage-next-resources.log": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38",
+    "apps/office/coverage/storage-next-role.log": "a8899afb593e5ec4f4153783ccfd0fd94cfaaf0513376e0f1d0aeefb1e0da9b2",
+    "apps/office/coverage/storage-next-route2.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/storage-next-route3.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/storage-next-route4.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/storage-next-route5.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/storage-next-route6.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/storage-next-route7.log": "91125e2d60ab5b93d20241f4659763c5ffa9b423bcfdc9422a982d5674e14937",
+    "apps/office/coverage/storage-next-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "apps/office/coverage/storage-next-size.log": "78458ccbd6619573c4469f0618f477efb96f0afc4d79aae3ce8e738acabee175",
+    "apps/office/coverage/storage-next-static.log": "cbf82241f85142b80175c60cb7b6b0cf99b70923b581327d9070eac02b23616c",
+    "apps/office/coverage/storage-next-status.log": "f0ff414c3a73b30823b368aa2823297b69c49275dd7c97d43f875dbe086ba685",
+    "apps/office/coverage/storage-next-tasks.log": "e99986481204fc41cac45662a5db4c2ba32d4c716435621c929abff7679f6f04",
+    "apps/office/coverage/storage-next-tests.log": "aa40c841d8ed50113496fbc7479a30ebef1cfa81fc1df10b90b3c89036c4b82c",
+    "apps/office/coverage/storage-next-tools.log": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+    "apps/office/coverage/storage-next-tracked.log": "f32b7ba829d4ad83439897f453a670b2906b2d4e381c2213ff438f50e6765c44",
+    "apps/office/coverage/storage-next-tree.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "apps/office/coverage/storage-next-typecheck.log": "c2d912329adc965af319b920ac18e7d5588514055446127376ac4f44b94f2106",
+    "apps/office/coverage/storage-next-verify.log": "96563066e1b2d88a2f856ea4ea0fd218630209fbd9cdc6bc869498d5ae5f69f4",
+    "apps/office/coverage/storage-next-vite.log": "4d4bae43dec2c7cbb9eb43a6c7880030d4fb29c33ed0d480b0cca6f6bcd02820",
+    "apps/office/coverage/storage-next-writer-brief.log": "06f9285edecae9c59f361762d85400015d12062c1c9b2dea2e48f131de668441",
+    "apps/office/coverage/storage-next-writer-verify.log": "f90886cebc04c7384ae6fc68b6a6f5d9f1210d8461f4712c56c2a615edf35be8",
+    "apps/office/coverage/storage-next/coverage-summary.json": "68f0365c765f853e3961cef654e0927b96bb7e1c852edb6e05650bf352ccb0ea",
+    "apps/office/coverage/native-dom-worker-result.json": "4d26dae65b74e2c7092c32d6a33ad00ebf0baa7c6cbf84f4d502e2d6df1df82e"
+  }
+}
