@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 566
+revision: 569
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T14:11:13.839Z"
+  updated_at: "2026-11-18T14:48:44.609Z"
   updated_by: "CODER"
-  note: "43 focused tests and combined 90% coverage gates passed. Mounted XLSX open/download and primary IndexedDB ODS reopen preserve merge anchors; style integration remains open."
-  attempts: 180
+  note: "64 focused tests and all scoped 90% coverage gates passed. Chromium and primary ODS reopened the styled workbook. XLSX number formats, themed colors, dimensions and full working-slice verification remain open."
+  attempts: 181
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2888,8 +2891,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T14:48:44.609Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "64 focused tests and all scoped 90% coverage gates passed. Chromium and primary ODS reopened the styled workbook. XLSX number formats, themed colors, dimensions and full working-slice verification remain open."
+  -
+    type: "status"
+    at: "2026-11-18T14:48:58.777Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T14:27:06.523Z"
+doc_updated_at: "2026-11-18T14:48:58.777Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -8304,6 +8320,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T14:48:44.609Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: 64 focused tests and all scoped 90% coverage gates passed. Chromium and primary ODS reopened the styled workbook. XLSX number formats, themed colors, dimensions and full working-slice verification remain open.
+    Attempts: 181
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T14:48:43.987Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -9132,6 +9178,16 @@ sections:
     Evidence: `evidence/xlsx-merge-roundtrip.json`.
 
     Chromium opened the pinned Strict workbook, downloaded it through the existing Calc export dialog and reopened the copy at the mobile viewport. The downloaded ZIP contains two sheets and E2:F3 in the first worksheet. Evidence: `evidence/xlsx-merge-browser.json`.
+
+    ### Native XLSX visual styles
+
+    - ExcelFilter resolves the StylesFragment workbook relationship and its font, fill, style XF and cell XF tables. SheetDataBuffer uses native cell and whole-column attribute owners, including explicit XF zero and inherited defaults.
+    - XclExpFontBuffer reuses the original font-data exporter, and XclExpXFBuffer emits the original indexed style records. Sparse row traversal writes styled blanks and column defaults without expanding each entire column to individual cells.
+    - The pinned column_style.xlsx test preserves the font, size, fill and alignment of an empty native cell. Chromium downloads the actual styled workbook and reopens it on a mobile viewport. The downloaded XML contains the 1–1025 column span and its correct XF. Mounted Calc file tests reopen the actual primary ODS document with the expected style on populated and empty cells.
+    - All 64 focused tests passed. Scoped coverage was 98.62% statements, 91.01% branches, 100% functions and 100% lines. Scoped ESLint, Prettier, JSDoc, Vite compilation, source tree, provenance and registry checks passed. Global typecheck, lint and module boundaries retain unrelated diagnostics recorded in the evidence.
+    - Number and themed formats, full rich and named styles, dimensions and broader formula fidelity remain open. The full suite is not due.
+
+    Evidence: `evidence/xlsx-visual-styles.json`.
 id_source: "generated"
 ---
 ## Summary
@@ -14556,6 +14612,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T14:48:44.609Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: 64 focused tests and all scoped 90% coverage gates passed. Chromium and primary ODS reopened the styled workbook. XLSX number formats, themed colors, dimensions and full working-slice verification remain open.
+Attempts: 181
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T14:48:43.987Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -15388,3 +15474,13 @@ Evidence: `evidence/ooxml-file-filter-vertical.json`. The full suite is not due.
 Evidence: `evidence/xlsx-merge-roundtrip.json`.
 
 Chromium opened the pinned Strict workbook, downloaded it through the existing Calc export dialog and reopened the copy at the mobile viewport. The downloaded ZIP contains two sheets and E2:F3 in the first worksheet. Evidence: `evidence/xlsx-merge-browser.json`.
+
+### Native XLSX visual styles
+
+- ExcelFilter resolves the StylesFragment workbook relationship and its font, fill, style XF and cell XF tables. SheetDataBuffer uses native cell and whole-column attribute owners, including explicit XF zero and inherited defaults.
+- XclExpFontBuffer reuses the original font-data exporter, and XclExpXFBuffer emits the original indexed style records. Sparse row traversal writes styled blanks and column defaults without expanding each entire column to individual cells.
+- The pinned column_style.xlsx test preserves the font, size, fill and alignment of an empty native cell. Chromium downloads the actual styled workbook and reopens it on a mobile viewport. The downloaded XML contains the 1–1025 column span and its correct XF. Mounted Calc file tests reopen the actual primary ODS document with the expected style on populated and empty cells.
+- All 64 focused tests passed. Scoped coverage was 98.62% statements, 91.01% branches, 100% functions and 100% lines. Scoped ESLint, Prettier, JSDoc, Vite compilation, source tree, provenance and registry checks passed. Global typecheck, lint and module boundaries retain unrelated diagnostics recorded in the evidence.
+- Number and themed formats, full rich and named styles, dimensions and broader formula fidelity remain open. The full suite is not due.
+
+Evidence: `evidence/xlsx-visual-styles.json`.

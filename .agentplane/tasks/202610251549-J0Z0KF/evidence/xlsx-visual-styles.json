@@ -1,0 +1,63 @@
+{
+  "scopedCoverageCommand": "vitest run --config vitest.calc.config.ts --coverage src/sc/source/filter/oox/excelfilter.test.ts src/sc/source/filter/oox/sheetdatabuffer.test.ts src/sc/source/filter/excel/xlstyle.test.ts src/sc/source/filter/excel/xlstyle.fonts.test.ts src/sc/source/core/data/documentimport.attributes.test.ts src/sc/source/filter/xml/ods.test.ts src/sc/source/filter/xml/ods-style-routing.test.ts src/sc/source/filter/xml/ods-sparse-export.test.ts src/sc/browser/presentation/calc-files.test.tsx --coverage.include=src/sc/source/filter/oox/stylesbuffer.ts --coverage.include=src/sc/source/filter/oox/stylesfragment.ts --coverage.include=src/sc/source/filter/excel/xestyle.xml.ts --coverage.include=src/sc/source/filter/excel/xetable.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=coverage/xlsx-styles",
+  "focusedTests": {
+    "files": 9,
+    "passed": 64
+  },
+  "coverage": {
+    "statements": 98.62,
+    "branches": 91.01,
+    "functions": 100,
+    "lines": 100,
+    "threshold": 90,
+    "passed": true
+  },
+  "fixture": "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/column_style.xlsx",
+  "upstreamTest": "ScFiltersTest2::testColumnStyle2XLSX",
+  "witnesses": [
+    "workbook styles relationship",
+    "retained explicit and inherited XFs",
+    "native Calc cell and whole-column patterns",
+    "sparse styled blanks",
+    "explicit XF 0 overrides a column",
+    "mounted XLSX dialog and primary IndexedDB ODS copy on formatted populated and empty cells"
+  ],
+  "chromium": {
+    "fixtureOpened": "column_style",
+    "downloadChecked": true,
+    "reopenedCopy": "ChromiumStylesCopy",
+    "reopenedViewport": "390x844",
+    "columnSpan": [
+      1,
+      1025
+    ],
+    "font": "Linux Biolinum G",
+    "fontPoints": 12,
+    "fillArgb": "FFFF3333",
+    "horizontalAlignment": "center"
+  },
+  "checks": {
+    "typecheck": "three SfxDocumentMetaData.storage.ts diagnostics",
+    "moduleBoundaries": "patattr browser boundary and comphelper/sax cycle",
+    "globalLint": "SfxDocumentMetaData.compat.ts unused constructor, crc32.mjs JSDoc errors",
+    "scopedLint": "pass",
+    "format": "pass",
+    "jsdoc": "pass",
+    "viteBundle": "pass",
+    "sourceTree": "pass",
+    "sourceProvenance": "pass",
+    "registry": "pass",
+    "agentplaneDoctor": "pass",
+    "routing": "pass",
+    "gitDiffCheck": "pass"
+  },
+  "remaining": [
+    "number formats",
+    "theme and indexed colors",
+    "full rich and named styles",
+    "dimensions",
+    "wider formula grammar",
+    "full task verification"
+  ],
+  "fullSuiteRun": false
+}
