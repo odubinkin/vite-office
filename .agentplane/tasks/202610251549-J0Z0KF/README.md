@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 587
+revision: 590
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T18:20:51.530Z"
+  updated_at: "2026-11-18T18:40:02.126Z"
   updated_by: "CODER"
-  note: "Verified the native defined-name continuation with 61 Calc and 23 shared tests and two sequential production Chromium scenarios. This is a partial XLSX lifecycle checkpoint. Native page settings and remaining format scope continue."
-  attempts: 187
+  note: "Verified native print areas and repeating title persistence with 188 Calc tests, 23 shared tests and three production Chromium flows. XLSX task remains active for remaining format coverage."
+  attempts: 188
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3000,8 +3003,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T18:40:02.126Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified native print areas and repeating title persistence with 188 Calc tests, 23 shared tests and three production Chromium flows. XLSX task remains active for remaining format coverage."
+  -
+    type: "status"
+    at: "2026-11-18T18:40:08.127Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T18:20:55.727Z"
+doc_updated_at: "2026-11-18T18:40:08.127Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -8626,6 +8642,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-18T18:40:02.126Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified native print areas and repeating title persistence with 188 Calc tests, 23 shared tests and three production Chromium flows. XLSX task remains active for remaining format coverage.
+    Attempts: 188
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T18:40:01.489Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -9518,6 +9564,13 @@ sections:
     - Both complete LibreOffice Print Titles test workbooks round-trip their single scoped definition. The existing manual page-break regression now uses the original tdf170963 ODS, retaining its `#REF!-#REF!` shared definition and its 1023-break assertion. CALC706 records the upstream invalid-base-address fallback.
     - Passed 61 focused Calc tests and 23 shared formula tests. The four new owners achieved 98.47% statements, 92.30% branches, 100% functions and 99.13% lines together, with each owner passing the 90% threshold. The production Chromium runs passed serially, including browser storage and reopening the download at mobile width. An earlier Chromium run concurrent with other checks hit dialog-close assertion timeouts after displaying the imported workbooks.
     - Global typecheck still reports three existing SfxDocumentMetaData.storage.ts errors. The existing patattr boundary and comphelper/sax cycle also remain. Actual page setup for built-in print names, external references and formula syntax beyond the represented compiler remain open. The full XLSX task remains in progress.
+
+    ### Native print areas and repeat titles across XLSX and ODS
+
+    - Calc sheets own whole-sheet selection, explicit print areas, and optional repeating rows and columns. XLSX imports the original Calc built-in names and applies absolute same-sheet ranges. XLSX export generates matching records from the current sheet state and deduplicates equivalent names.
+    - ODS preserves print attributes and title wrappers, including spans that pass through outlines. Worker transfer validates and restores the original coordinates. CALC707 records the first ODS title range's zero embedded sheet coordinate. CALC708 records the strict XFD comparison in sheet-name quoting.
+    - Pass results cover 188 Calc tests, 23 shared formula tests, three production Chromium scenarios, and static/provenance checks. Both new module owners satisfy the 90% thresholds independently. The initial Chromium test attempted to reopen a title-only source ODS from storage. The source has no visible cells, so the existing primary save rule excludes it. The dedicated ODS scenario uses direct export. The XLSX scenario exercises stored ODS and mobile reopen.
+    - Global typecheck still reports three existing SfxDocumentMetaData.storage.ts errors. The existing patattr domain boundary and comphelper/sax cycle remain. Printing and preview, layout pagination, generalized external links, and further OOXML coverage remain open.
 id_source: "generated"
 ---
 ## Summary
@@ -15152,6 +15205,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-18T18:40:02.126Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified native print areas and repeating title persistence with 188 Calc tests, 23 shared tests and three production Chromium flows. XLSX task remains active for remaining format coverage.
+Attempts: 188
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T18:40:01.489Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -16048,3 +16131,10 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Both complete LibreOffice Print Titles test workbooks round-trip their single scoped definition. The existing manual page-break regression now uses the original tdf170963 ODS, retaining its `#REF!-#REF!` shared definition and its 1023-break assertion. CALC706 records the upstream invalid-base-address fallback.
 - Passed 61 focused Calc tests and 23 shared formula tests. The four new owners achieved 98.47% statements, 92.30% branches, 100% functions and 99.13% lines together, with each owner passing the 90% threshold. The production Chromium runs passed serially, including browser storage and reopening the download at mobile width. An earlier Chromium run concurrent with other checks hit dialog-close assertion timeouts after displaying the imported workbooks.
 - Global typecheck still reports three existing SfxDocumentMetaData.storage.ts errors. The existing patattr boundary and comphelper/sax cycle also remain. Actual page setup for built-in print names, external references and formula syntax beyond the represented compiler remain open. The full XLSX task remains in progress.
+
+### Native print areas and repeat titles across XLSX and ODS
+
+- Calc sheets own whole-sheet selection, explicit print areas, and optional repeating rows and columns. XLSX imports the original Calc built-in names and applies absolute same-sheet ranges. XLSX export generates matching records from the current sheet state and deduplicates equivalent names.
+- ODS preserves print attributes and title wrappers, including spans that pass through outlines. Worker transfer validates and restores the original coordinates. CALC707 records the first ODS title range's zero embedded sheet coordinate. CALC708 records the strict XFD comparison in sheet-name quoting.
+- Pass results cover 188 Calc tests, 23 shared formula tests, three production Chromium scenarios, and static/provenance checks. Both new module owners satisfy the 90% thresholds independently. The initial Chromium test attempted to reopen a title-only source ODS from storage. The source has no visible cells, so the existing primary save rule excludes it. The dedicated ODS scenario uses direct export. The XLSX scenario exercises stored ODS and mobile reopen.
+- Global typecheck still reports three existing SfxDocumentMetaData.storage.ts errors. The existing patattr domain boundary and comphelper/sax cycle remain. Printing and preview, layout pagination, generalized external links, and further OOXML coverage remain open.

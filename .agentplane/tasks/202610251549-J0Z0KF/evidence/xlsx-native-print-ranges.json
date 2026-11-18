@@ -1,0 +1,75 @@
+{
+  "scope": "Calc native print areas and repeated title rows and columns through XLSX, primary ODS and browser worker serialization",
+  "upstream": [
+    "sc/source/core/data/table1.cxx (ScTable print area and repeat-title state)",
+    "sc/source/filter/oox/defnamesbuffer.cxx (DefinedName::convertFormula)",
+    "sc/source/filter/oox/formulabase.cxx (FormulaProcessorBase::extractCellRangeList)",
+    "sc/source/filter/excel/xename.cxx (CreateBuiltInNames and FindBuiltInNameIdx)",
+    "sc/source/filter/xml/xmltabi.cxx, xmlrowi.cxx, xmlcoli.cxx and xmlexprt.cxx",
+    "sc/source/core/tool/compiler.cxx (CheckTabQuotes and lcl_TabContainsReference)",
+    "sc/qa/unit/subsequent_filters_test2.cxx (testPrintRangeODS)",
+    "sc/qa/unit/subsequent_filters_test3.cxx (testTdf113596PrintRangeNameXLSX)",
+    "sc/qa/unit/subsequent_export_test2.cxx (testTdf115159, testTdf112567 and testTdf112567b)"
+  ],
+  "verification": [
+    {
+      "command": "npm run test:calc --workspace @vite-office/office -- src/sc/source/filter/excel/print-ranges.test.ts src/sc/source/filter/excel/xename.test.ts src/sc/source/filter/excel/xepage.test.ts src/sc/source/filter/oox/excelfilter.test.ts src/sc/source/filter/xml/ods.test.ts src/sc/source/filter/xml/ods-xml-boundaries.test.ts src/sc/source/filter/xml/ods-sparse-export.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-client.test.ts src/sc/source/core/data/document.formula.test.ts src/sc/source/core/tool/rangeutl.test.ts src/sc/source/core/tool/address.test.ts src/sc/source/core/tool/address.xl-a1.test.ts src/sc/source/core/tool/address.r1c1.test.ts src/sc/source/core/tool/address.ooo-regression.test.ts --coverage --coverage.include=src/sc/source/filter/oox/formulabase.ts --coverage.include=src/sc/source/core/tool/address.ooo.ts --coverage.reporter=text --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "188 tests in 15 suites. The two newly ported modules measured 94.80% statements, 95.45% branches, 100% functions, and 100% lines. Both met all four thresholds individually. Tests use five complete upstream packages and exercise area and title propagation through the worker, including invalid transfer rejection."
+    },
+    {
+      "command": "npm run test:shared --workspace @vite-office/office -- src/formula/source/core/api/compiler-arithmetic.test.ts src/formula/source/core/api/compiler-output.test.ts src/formula/inc/native-token.test.ts src/formula/inc/token.test.ts",
+      "result": "pass",
+      "evidence": "23 tests in four suites."
+    },
+    {
+      "command": "npm exec --workspace @vite-office/office -- vite build && node scripts/check-static-build.mjs",
+      "result": "pass",
+      "evidence": "Production output and relative asset smoke check passed."
+    },
+    {
+      "command": "npx --no-install playwright test --config=apps/office/coverage/xlsx-defined-names.playwright.config.ts --workers=1",
+      "result": "pass",
+      "evidence": "Three production Chromium cases verify direct ODS-to-XLSX export, XLSX reopen from primary ODS and at a mobile viewport, and the manual page-break regression. The original title-only ODS contains no cell content, so the browser case uses direct export under the existing empty-document saving policy."
+    },
+    {
+      "command": "npm run check:source-provenance && npm run check:source-tree && npm run check:calc-resources",
+      "result": "pass",
+      "evidence": "2740 runtime modules, 116 required source paths, and 464 Calc commands."
+    },
+    {
+      "command": "npm run inventory:registry:build && npm run inventory:registry:check",
+      "result": "pass",
+      "evidence": "Four generated views, zero semantic violations."
+    },
+    {
+      "command": "npx --no-install eslint --max-warnings 0 <changed TypeScript paths>; npx --no-install prettier --check <changed TypeScript paths>; npm run check:docs; npm run check:file-size; git diff --check <changed paths>",
+      "result": "pass",
+      "evidence": "Scoped ESLint and Prettier, global JSDoc and file size, and scoped whitespace."
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs; ap doctor",
+      "result": "pass",
+      "evidence": "Valid route and no doctor errors. The existing managed hook shim warning remains."
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "result": "fail",
+      "evidence": "Three existing SfxDocumentMetaData.storage.ts errors."
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "fail",
+      "evidence": "Existing patattr domain boundary and comphelper/sax cycle."
+    }
+  ],
+  "remaining": [
+    "This verifies file persistence of native print settings. Printing, pagination, and print-preview rendering remain outside this checkpoint.",
+    "Generalized external references and their original fixtures remain open. In particular, the complete tdf51022 fixture relies on external-link reload; the independent multiple-area assertion uses native ranges in the print-range coverage.",
+    "The full suite follows the approved ten-task cadence."
+  ],
+  "suspectedUpstreamIssues": [
+    "CALC707",
+    "CALC708"
+  ]
+}
