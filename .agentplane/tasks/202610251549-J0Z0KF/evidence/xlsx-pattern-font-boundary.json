@@ -1,0 +1,28 @@
+{
+  "checkpoint": "Calc XLSX font extraction retains the caller-owned font value",
+  "createdAt": "2026-11-18T20:05:22.972001+00:00",
+  "source": "vendor/libreoffice-reference/sc/inc/patattr.hxx#fillFontOnly",
+  "changes": "The domain boundary admits only the erased Font type import into the original ScPatternAttr caller. Compiled runtime imports and browser adapters remain blocked.",
+  "commands": [
+    "npm run check:dependencies",
+    "./node_modules/.bin/vitest run scripts/check-module-boundaries.test.ts scripts/check-module-boundaries-fonts.test.ts scripts/check-writer-module-boundaries.test.ts",
+    "./node_modules/.bin/eslint --max-warnings 0 scripts/check-module-boundaries.mjs scripts/check-module-boundaries-fonts.test.ts",
+    "./node_modules/.bin/prettier --check scripts/check-module-boundaries.mjs scripts/check-module-boundaries-fonts.test.ts",
+    "git diff --check"
+  ],
+  "results": {
+    "tests": 58,
+    "files": 3,
+    "dependencyCheck": "pass",
+    "relativeImports": 17642,
+    "runtimeSources": 2742
+  },
+  "sourceSha256": {
+    "scripts/check-module-boundaries.mjs": "497d484ef56a58e6f11fefb937c6d7108739a4a5d5e47935e8879f7861b50e64",
+    "scripts/check-module-boundaries-fonts.test.ts": "871675e8b88a45652534078ffebcabbf0dcff1637552cf52eab2f38d440ec0aa"
+  },
+  "logSha256": {
+    "opc-all-dependencies.log": "6786bf392b2aa666ce30e40b5f24e6b2599572ba953113597284ff891fc642c1",
+    "opc-boundary-tests.log": "94d9ad0694cc3e6448908e6a127dbbc194d38430ba95af3be323621b2889f024"
+  }
+}

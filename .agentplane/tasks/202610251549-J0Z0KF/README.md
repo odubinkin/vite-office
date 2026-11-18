@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 596
+revision: 597
 origin:
   system: "manual"
 depends_on:
@@ -3049,7 +3049,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T19:46:12.828Z"
+doc_updated_at: "2026-11-18T20:05:23.509Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -9671,6 +9671,12 @@ sections:
     - Observation: Explicit SpreadsheetML date cells now route through SheetDataBuffer and UnitConverter. The date uses the same Gregorian epoch as the workbook number formatter and keeps the source XF. Invalid dates are retained as original text. Logical and error scalars use the represented native formula path, the ODF Boolean format preserves display, and formula XML export uses XclXmlUtils cached type and value.
       Impact: Strict and Transitional envelopes round-trip valid dates, time zones, pre-epoch serials, immutable formula precedence, invalid date strings, logical constants and published error identities through the primary ODS path. Chromium reopens the actual record and the downloaded XLSX with the expected date, TRUE and #DIV/0!. CALC710 and CALC711 preserve upstream whole-second serial precision and the spill cache token.
       Resolution: 344 related Calc tests, 58 shared tests, 11 Writer regressions and five production Chromium scenarios passed. Scoped coverage passes 90% for both measured workbook owners. A stale R1C1 test now asserts the already implemented parser's actual result. JSDoc, lint, formatting, source tree, provenance, registry, size, resources, Vite/static, routing and diff passed. Existing metadata type errors and dependency-check failures remain. See evidence/xlsx-native-typed-scalars.json. No full suite was run.
+
+    ### Calc XLSX pattern font boundary
+
+    - Command: `npm run check:dependencies`; focused Vitest module-boundary, font-boundary and Writer-boundary specs; targeted ESLint, Prettier and `git diff --check`.
+    - Result: 58 tooling cases passed and module boundaries passed across 2742 runtime sources and 17642 relative imports. The narrow guard accepts the type-only Font value already passed to Calc from the caller. A runtime import, browser adapter or unrelated Calc consumer remains refused.
+    - Evidence: `evidence/xlsx-pattern-font-boundary.json` records the original ScPatternAttr signature, exact commands and outputs. The package SAX cycle was removed in the shared Writer checkpoint. SfxMedium type prerequisites and task-wide OOXML acceptance remain open. No full run was due.
 id_source: "generated"
 ---
 ## Summary
@@ -16306,3 +16312,9 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Observation: Explicit SpreadsheetML date cells now route through SheetDataBuffer and UnitConverter. The date uses the same Gregorian epoch as the workbook number formatter and keeps the source XF. Invalid dates are retained as original text. Logical and error scalars use the represented native formula path, the ODF Boolean format preserves display, and formula XML export uses XclXmlUtils cached type and value.
   Impact: Strict and Transitional envelopes round-trip valid dates, time zones, pre-epoch serials, immutable formula precedence, invalid date strings, logical constants and published error identities through the primary ODS path. Chromium reopens the actual record and the downloaded XLSX with the expected date, TRUE and #DIV/0!. CALC710 and CALC711 preserve upstream whole-second serial precision and the spill cache token.
   Resolution: 344 related Calc tests, 58 shared tests, 11 Writer regressions and five production Chromium scenarios passed. Scoped coverage passes 90% for both measured workbook owners. A stale R1C1 test now asserts the already implemented parser's actual result. JSDoc, lint, formatting, source tree, provenance, registry, size, resources, Vite/static, routing and diff passed. Existing metadata type errors and dependency-check failures remain. See evidence/xlsx-native-typed-scalars.json. No full suite was run.
+
+### Calc XLSX pattern font boundary
+
+- Command: `npm run check:dependencies`; focused Vitest module-boundary, font-boundary and Writer-boundary specs; targeted ESLint, Prettier and `git diff --check`.
+- Result: 58 tooling cases passed and module boundaries passed across 2742 runtime sources and 17642 relative imports. The narrow guard accepts the type-only Font value already passed to Calc from the caller. A runtime import, browser adapter or unrelated Calc consumer remains refused.
+- Evidence: `evidence/xlsx-pattern-font-boundary.json` records the original ScPatternAttr signature, exact commands and outputs. The package SAX cycle was removed in the shared Writer checkpoint. SfxMedium type prerequisites and task-wide OOXML acceptance remain open. No full run was due.
