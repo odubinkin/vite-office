@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 251
+revision: 254
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T06:46:44.363Z"
+  updated_at: "2026-11-18T07:47:31.808Z"
   updated_by: "CODER"
-  note: "Shared OOXML filter state and XStatusIndicator checkpoint tested in Chromium main/Worker and focused regressions. Full DOCX filter/model/storage/UI acceptance remains unfinished; see native-filter-state-continuation.json."
-  attempts: 70
+  note: "Shared native package/own-stream state prerequisite verified with73 focused plus97 related tests, scoped90 and actual Chromium main/Worker. No complete package/storage/DOCX filter/UI claim; see native-package-stream-state-continuation.json."
+  attempts: 71
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1128,8 +1131,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T07:47:31.808Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared native package/own-stream state prerequisite verified with73 focused plus97 related tests, scoped90 and actual Chromium main/Worker. No complete package/storage/DOCX filter/UI claim; see native-package-stream-state-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-18T07:49:40.447Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T06:47:11.435Z"
+doc_updated_at: "2026-11-18T07:49:40.447Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -3242,6 +3258,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T07:47:31.808Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared native package/own-stream state prerequisite verified with73 focused plus97 related tests, scoped90 and actual Chromium main/Worker. No complete package/storage/DOCX filter/UI claim; see native-package-stream-state-continuation.json.
+    Attempts: 71
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T07:47:30.532Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -3585,6 +3631,15 @@ sections:
     Evidence: original direction/version/default/reference state and native-mutex exact URL guard; XStatusIndicator now inherits actual XInterface and registers its normal generated type. pako 2.1.0 was already installed and used by actual Deflater reset; focused tests pass, no new network request or codec port.
     Scope: represented FilterBaseImpl state and guard only. Positive full model/factory admission, FilterBase component/helper/media/storage orchestration and mounted DOCX/XLSX UI acceptance remain unfinished. No fake model, factory, progress component or constant filter version getter.
     Result: fail for full typecheck/build (four existing SfxDocumentMetaData.storage errors) and dependency check (existing patattr VCL import boundary and comphelper -> sax -> comphelper cycle). Actual filterbase.cxx std::mutex dependency is recorded in the source-backed oox -> external edge. Earlier dependency log retains the initial new edge failure; final2 removes that failure. Initial lint and registry maturity errors were corrected and final checks pass. No full-suite run due at the approved ten-completed-task cadence.
+
+    ### Native package/own-stream state continuation
+
+    Command: focused shared scoped90 package/stream tests, original folder/shared-stream/ZIP reader regressions, actual Chromium main/DOM-free Worker and static checks; exact commands and SHA-256 in evidence/native-package-stream-state-continuation.json.
+    Result: pass for 73 focused tests/7 files, 97 related tests/4 files and 2 Writer resource tests. Both complete changed executable files meet approved90: ZipPackage.ts naturally100; ZipPackageStream.ts95.8 statements/90.38 branches/100 functions/97.01 lines; combined98.23/96.21/100/98.69. Earlier profiles exposed unrelated existing metadata branches; existing OFOPXML/native storage input/output tests supply actual related evidence. No exclusions, counter merging or threshold changes. Initial native logical-Any method dispatch, typed query inference and fixture extraction/address assumptions were corrected; failed logs remain.
+    Evidence: real ZipPackage constructor/default format/native shared mutex/root folder and actual folder/stream creation with first-bool/default/ignored-tail semantics. Real ZipPackageStream retains represented defaults, loaded record copy, member transitions, data/input replacement, lazy native seekability and independently positioned WrapStreamForShare readers. MediaType/Size/Compressed preserve source type/error/order semantics. WRITER623/CALC690 document the retained explicit-false-then-text compression override.
+    Scope: represented state and own-stream APIs only. The package service and encryption interface are not registered/advertised; source crypto algorithms are not ported by this block. Initialization/member IO over native ZipFile, full package/stream interfaces/type lists/imported state, raw/encrypted APIs, saveChild/commit, XStorage/SfxMedium/filter/model/UI remain unfinished. Unported read/write/property paths explicitly fail and are not native exception parity or successful substitutes. Actual component tests and main/Worker probe use no fake package/factory/ByteReader/stream provider. Native physical ABI/destructor/allocator/concurrency domains and original whole-package QA remain unqualified; testThreadedStreams is downstream context, not claimed original full-suite execution.
+    Result: pass for final lint/format/tools/JSDoc(5523), provenance(2682), registry zero semantic violations, resources, size/tree, Vite bundling/static, doctor/routing/diff and Chromium. Full typecheck/build retain exactly the four SfxDocumentMetaData.storage native descriptor/medium gaps. Dependency check retains existing patattr VCL boundary and comphelper->sax->comphelper cycle. No complete DOCX/XLSX import/export/reopen/UI claim. Full suite not due under the ten-completed-task cadence.
+    Next source-backed block: connect ZipPackage.initialize/getZipFileContents and getByHierarchicalName to actual ZipFile/entries/folders, replace the explicit package-member getInputStream gap with its native plain-stream call, then complete package stream serialization and OStorage/SfxMedium paths. Keep the real package owner and do not add a test-only ZIP setter or substitute root/factory.
 id_source: "generated"
 ---
 ## Summary
@@ -5708,6 +5763,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T07:47:31.808Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared native package/own-stream state prerequisite verified with73 focused plus97 related tests, scoped90 and actual Chromium main/Worker. No complete package/storage/DOCX filter/UI claim; see native-package-stream-state-continuation.json.
+Attempts: 71
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T07:47:30.532Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -6056,3 +6141,12 @@ Result: pass for 14 focused, 25 related shared, 6 Writer and 48 boundary tests; 
 Evidence: original direction/version/default/reference state and native-mutex exact URL guard; XStatusIndicator now inherits actual XInterface and registers its normal generated type. pako 2.1.0 was already installed and used by actual Deflater reset; focused tests pass, no new network request or codec port.
 Scope: represented FilterBaseImpl state and guard only. Positive full model/factory admission, FilterBase component/helper/media/storage orchestration and mounted DOCX/XLSX UI acceptance remain unfinished. No fake model, factory, progress component or constant filter version getter.
 Result: fail for full typecheck/build (four existing SfxDocumentMetaData.storage errors) and dependency check (existing patattr VCL import boundary and comphelper -> sax -> comphelper cycle). Actual filterbase.cxx std::mutex dependency is recorded in the source-backed oox -> external edge. Earlier dependency log retains the initial new edge failure; final2 removes that failure. Initial lint and registry maturity errors were corrected and final checks pass. No full-suite run due at the approved ten-completed-task cadence.
+
+### Native package/own-stream state continuation
+
+Command: focused shared scoped90 package/stream tests, original folder/shared-stream/ZIP reader regressions, actual Chromium main/DOM-free Worker and static checks; exact commands and SHA-256 in evidence/native-package-stream-state-continuation.json.
+Result: pass for 73 focused tests/7 files, 97 related tests/4 files and 2 Writer resource tests. Both complete changed executable files meet approved90: ZipPackage.ts naturally100; ZipPackageStream.ts95.8 statements/90.38 branches/100 functions/97.01 lines; combined98.23/96.21/100/98.69. Earlier profiles exposed unrelated existing metadata branches; existing OFOPXML/native storage input/output tests supply actual related evidence. No exclusions, counter merging or threshold changes. Initial native logical-Any method dispatch, typed query inference and fixture extraction/address assumptions were corrected; failed logs remain.
+Evidence: real ZipPackage constructor/default format/native shared mutex/root folder and actual folder/stream creation with first-bool/default/ignored-tail semantics. Real ZipPackageStream retains represented defaults, loaded record copy, member transitions, data/input replacement, lazy native seekability and independently positioned WrapStreamForShare readers. MediaType/Size/Compressed preserve source type/error/order semantics. WRITER623/CALC690 document the retained explicit-false-then-text compression override.
+Scope: represented state and own-stream APIs only. The package service and encryption interface are not registered/advertised; source crypto algorithms are not ported by this block. Initialization/member IO over native ZipFile, full package/stream interfaces/type lists/imported state, raw/encrypted APIs, saveChild/commit, XStorage/SfxMedium/filter/model/UI remain unfinished. Unported read/write/property paths explicitly fail and are not native exception parity or successful substitutes. Actual component tests and main/Worker probe use no fake package/factory/ByteReader/stream provider. Native physical ABI/destructor/allocator/concurrency domains and original whole-package QA remain unqualified; testThreadedStreams is downstream context, not claimed original full-suite execution.
+Result: pass for final lint/format/tools/JSDoc(5523), provenance(2682), registry zero semantic violations, resources, size/tree, Vite bundling/static, doctor/routing/diff and Chromium. Full typecheck/build retain exactly the four SfxDocumentMetaData.storage native descriptor/medium gaps. Dependency check retains existing patattr VCL boundary and comphelper->sax->comphelper cycle. No complete DOCX/XLSX import/export/reopen/UI claim. Full suite not due under the ten-completed-task cadence.
+Next source-backed block: connect ZipPackage.initialize/getZipFileContents and getByHierarchicalName to actual ZipFile/entries/folders, replace the explicit package-member getInputStream gap with its native plain-stream call, then complete package stream serialization and OStorage/SfxMedium paths. Keep the real package owner and do not add a test-only ZIP setter or substitute root/factory.
