@@ -1,0 +1,33 @@
+{
+  "result": "### Root package service and storage persistence continuation\n\n- Result: 43 focused tests and 25 related tests passed. Combined scoped coverage S79.68/B61.79/F100/L81.29 is below the unchanged 90% gate.\n- Evidence: Registered ZipPackage constructor and XInitialization through the actual manager, then OStorage root folder and XChangesBatch queries, commit, archive reopen and byte comparison. Genuine disconnected stream exercises UseBackupException unwrapping and storage reference release. Registry (zero semantic violations), tools typecheck, lint, format, size, JSDoc, diff and existing main/Worker regression probe passed. Three existing SfxMedium application type errors and two existing module-boundary violations remain.\n- Scope: Final root persistence phase of OStorage_Impl::Commit only. Child mutations/relationships, PACKAGE property access, public XStorage/StorageFactory, full upstream QA and DOCX/XLSX app UI acceptance remain open. No full test run under the agreed cadence.",
+  "commands": {
+    "coverage": "",
+    "related": "npm run test:shared -- src/desktop/browser/app/uno-components.test.ts src/package/source/xstor/switchpersistencestream.test.ts src/package/source/zippackage/ZipPackage.serialization.test.ts",
+    "browser": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/node_modules/.cache/ms-playwright\" node scripts/native-dom-worker-probe.mjs",
+    "typecheck": "npm run typecheck --workspace @vite-office/office",
+    "registry": "npm run inventory:registry:check"
+  },
+  "sha256": {
+    "apps/office/src/package/source/xstor/xstorage.impl.ts": "fd767ec2871c8daa5b9ce4ed69ddeefd3eb63195823f5d50463d09b7b5030fc0",
+    "apps/office/src/package/source/xstor/xstorage.impl.test.ts": "7892af791b5535d78978f4095377ab249122b74bf2554b697e64ff109682df30",
+    "apps/office/src/package/source/zippackage/ZipPackage.ts": "d92510631d5e4037caddfed092aac54698247a768aa0326e99a2ff55493da6c8",
+    "apps/office/src/package/source/zippackage/ZipPackage.service.ts": "4f668d3b9e09cecfccb62ccc4a79aaf67a8d361a260d8a9a739a6bfaa5f5811c",
+    "apps/office/src/desktop/browser/app/uno-components.ts": "f5f9e31d113fc001e91a0a6aaf38a18eae69492892d89ad319c7a5282501b6b9",
+    "docs/program/native-storage-package-transaction.md": "193a73c9b3bb32425a87ca47b25c27be5b8e6cac3a6bb56c1e8aeed9a8173292",
+    "apps/office/src/offapi/com/sun/star/util/ElementChange.ts": "dc48290f3beb8a20878fb18493d8fd1077572b8c2dd7d1b57b84b72c48b89737",
+    "apps/office/src/offapi/com/sun/star/util/ChangesSet.ts": "c1b2956b7b7a8f6e56b8d305637846c4e3e15e679217e63748031a08badcc0a6",
+    "apps/office/src/offapi/com/sun/star/util/XChangesBatch.ts": "9dc85b2fb9f87e680b8c26d821d740c7cbdb2a2335f8f9915de1a6ad425a0023",
+    "apps/office/coverage/storage-resume-coverage.log": "6b1496e7851e1254911e9baf3c8e6df2632fb52177699024fb051a7507ad0063",
+    "apps/office/coverage/storage-resume-related.log": "1234db1bab0f14925bf335f8312a81349c918af1936f77541fdae4f3596e6ab7",
+    "apps/office/coverage/storage-resume-registry.log": "c46daae202bb9ada2d156ae8e653d6eb2479fda3924d4743e8d47f5b18105828",
+    "apps/office/coverage/storage-resume-docs.log": "3c6cc88a47b7e57961e35d8681bcbf537a8d644f5ca77292e0342a560248a6d0",
+    "apps/office/coverage/storage-resume-types.log": "c2d912329adc965af319b920ac18e7d5588514055446127376ac4f44b94f2106",
+    "apps/office/coverage/storage-resume-tools.log": "435ee4e07e6b0708612a4881b07d834e3882e593da96ee76e5ee4d6b25211308",
+    "apps/office/coverage/storage-resume-browser.log": "a45688e821e7b97dc548f89bdbf69ea9a031fd8ab50fc03f781b90ed74ff65ee",
+    "apps/office/coverage/storage-resume-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/storage-resume-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/storage-resume-size.log": "f10b8937161dd5216027621f4c33ff94cfc1f7b7a2f4dfc561085af18adba5ec",
+    "apps/office/coverage/storage-resume-diff.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/storage-resume-dependencies.log": "58e089319fe14bd88701e8fbe25e7a9292436eb724bbb615ad31ce7ec6dd4e97"
+  }
+}
