@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 266
+revision: 269
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T11:23:37.691Z"
+  updated_at: "2026-11-18T11:41:09.560Z"
   updated_by: "CODER"
-  note: "Actual background entry work/temp/error/context/record transfer verified in explicit no-worker QA,35focused/40related/62boundary/main-Worker pass. Coverage90 gate still fails; no real worker/default scheduler or full DOCX/XLSX UI acceptance claimed. Evidence native-zip-background-task-continuation.json."
-  attempts: 75
+  note: "Shared provided-input/readonly metadata checkpoint passes34 focused,12 related,62 tooling and main/DOM-free Worker profiles. Native Medium remains3 type errors; descriptor owner coverage below90 and earlier gaps retained. Full DOCX model/filter/storage/UI acceptance unfinished. Evidence: evidence/native-media-descriptor-stream-continuation.json."
+  attempts: 76
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1208,8 +1211,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T11:41:09.560Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Shared provided-input/readonly metadata checkpoint passes34 focused,12 related,62 tooling and main/DOM-free Worker profiles. Native Medium remains3 type errors; descriptor owner coverage below90 and earlier gaps retained. Full DOCX model/filter/storage/UI acceptance unfinished. Evidence: evidence/native-media-descriptor-stream-continuation.json."
+  -
+    type: "status"
+    at: "2026-11-18T11:41:33.060Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T11:24:07.241Z"
+doc_updated_at: "2026-11-18T11:41:33.060Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -3472,6 +3488,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T11:41:09.560Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Shared provided-input/readonly metadata checkpoint passes34 focused,12 related,62 tooling and main/DOM-free Worker profiles. Native Medium remains3 type errors; descriptor owner coverage below90 and earlier gaps retained. Full DOCX model/filter/storage/UI acceptance unfinished. Evidence: evidence/native-media-descriptor-stream-continuation.json.
+    Attempts: 76
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T11:41:00.293Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -3856,6 +3902,14 @@ sections:
     - Evidence:35 focused tests/4files,40 related/4files and62 tooling/2files pass; actual main/DOM-free Worker good/error tasks and compressed archive reopen pass. Whole3owner90 branch gate FAILS: S97.75/B85.96/F100/L98.17; ZipOutputEntry B73.68 remains failing. Neutral facade B93.75 and actual host ABI B90.9 do not qualify/dilute the failed ZIP owner. All prior failed scopes retained. Tools/lint/format/JSDoc5537/provenance2687/registry semantic0/size/tree/resources/routing/diff/Vite/static pass. Same4 existing metadata/Medium type errors and2 module boundaries persist.
     - Scope: actual ZipOutputEntryInThread task/consumed record/intrusive TempFileFastService/error/finished/input-release/cleanup/move/base-borrow state, real explicit ThreadPool(0) execution and original public consumer operations. Actual temporary files disappear at source final-reference points; genuine disconnected input errors retain derived type and Context through pointer copies. Neutral SDK exception_ptr value delegates to actual CppuHelper ABI at composition, using existing genuine Any/generated exceptions; package imports no browser implementation. Source-backed standard-library edge added for CppuHelper, with original mutex/atomic/rethrow/misc exception_ptr source evidence.
     - Pending: rare constructor/allocator/inner cleanup failure qualification; real worker scheduler/atomic/cross-realm/native heap/TLS/fatal/OOM/nonobject JS throw domains; production large-stream scheduling/parallel deflateBound/encryption/full package/Medium/filter/UI and original whole threaded package QA. No fake provider/private setter/threshold or counter workaround used. Expat approval pending; no fetch/parser-security mutation. Full suite not due; no task finished.
+
+    ### MediaDescriptor provided-input and readonly continuation (2026-11-18)
+
+    - Command: exact focused/related/tooling/browser/check commands in `evidence/native-media-descriptor-stream-continuation.json`.
+    - Result: fail (partial WIP; no complete storage/Medium/filter/UI acceptance).
+    - Evidence: 34 focused tests/5files and12 related tests/4files pass;62 tooling tests/2files pass. Chromium main/DOM-free Worker provided-input/Reference-lifetime/readonly probe passes using repository-local installed browser cache. Whole3owner S92.65/B92.5/F100/L93.12; map and header100, MediaDescriptor S82.2/B79.54/F100/L83.48 remains individually below90. Removed an invalid positive file-Content test assumption because only stream UCP owners exist; no substitute Content/provider supplied. Source input presence behavior preserved as WRITER628/CALC695. Metadata addInputStream namespace call fixed, leaving3 SfxMedium constructor/GetOutputStorage/Commit type errors (4 before checkpoint). Typecheck/full build fail on those3; direct Vite bundling/static pass. Existing patattr VCL gate and comphelper->sax->comphelper cycle persist; new actual sfx2->unotools native source edge is recorded. Tools/lint/format/JSDoc5539/provenance2687/registry semantic0/size/tree/resources/routing/diff/doctor pass. No full document/UI acceptance; previous failed scopes retained; full suite not due; no task completed. Expat approval pending; no download or parser-security mutation.
+    - Scope: native map/Any/reference owners and source precedence, existing input identity/cursor, original invalid-source exceptions, declared Reference template copy/extract defaults. Nonempty URL/valid PostData and non-file readonly lookup fail explicitly at missing original orchestration. File-scheme inference/catches remain source-represented but unqualified; no fake provider or test-only mutation added.
+    - Pending: actual registered file Content/default command interactions, native descriptor SfxMedium/XStorage/package commit/classic SAX/real filter/model/UI, owner-local90 and prior coverage failures. Existing browser open/save/autosave/no-recovery deviations retained.
 id_source: "generated"
 ---
 ## Summary
@@ -6129,6 +6183,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T11:41:09.560Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Shared provided-input/readonly metadata checkpoint passes34 focused,12 related,62 tooling and main/DOM-free Worker profiles. Native Medium remains3 type errors; descriptor owner coverage below90 and earlier gaps retained. Full DOCX model/filter/storage/UI acceptance unfinished. Evidence: evidence/native-media-descriptor-stream-continuation.json.
+Attempts: 76
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T11:41:00.293Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -6518,3 +6602,11 @@ Next source-backed block: connect ZipPackage.initialize/getZipFileContents and g
 - Evidence:35 focused tests/4files,40 related/4files and62 tooling/2files pass; actual main/DOM-free Worker good/error tasks and compressed archive reopen pass. Whole3owner90 branch gate FAILS: S97.75/B85.96/F100/L98.17; ZipOutputEntry B73.68 remains failing. Neutral facade B93.75 and actual host ABI B90.9 do not qualify/dilute the failed ZIP owner. All prior failed scopes retained. Tools/lint/format/JSDoc5537/provenance2687/registry semantic0/size/tree/resources/routing/diff/Vite/static pass. Same4 existing metadata/Medium type errors and2 module boundaries persist.
 - Scope: actual ZipOutputEntryInThread task/consumed record/intrusive TempFileFastService/error/finished/input-release/cleanup/move/base-borrow state, real explicit ThreadPool(0) execution and original public consumer operations. Actual temporary files disappear at source final-reference points; genuine disconnected input errors retain derived type and Context through pointer copies. Neutral SDK exception_ptr value delegates to actual CppuHelper ABI at composition, using existing genuine Any/generated exceptions; package imports no browser implementation. Source-backed standard-library edge added for CppuHelper, with original mutex/atomic/rethrow/misc exception_ptr source evidence.
 - Pending: rare constructor/allocator/inner cleanup failure qualification; real worker scheduler/atomic/cross-realm/native heap/TLS/fatal/OOM/nonobject JS throw domains; production large-stream scheduling/parallel deflateBound/encryption/full package/Medium/filter/UI and original whole threaded package QA. No fake provider/private setter/threshold or counter workaround used. Expat approval pending; no fetch/parser-security mutation. Full suite not due; no task finished.
+
+### MediaDescriptor provided-input and readonly continuation (2026-11-18)
+
+- Command: exact focused/related/tooling/browser/check commands in `evidence/native-media-descriptor-stream-continuation.json`.
+- Result: fail (partial WIP; no complete storage/Medium/filter/UI acceptance).
+- Evidence: 34 focused tests/5files and12 related tests/4files pass;62 tooling tests/2files pass. Chromium main/DOM-free Worker provided-input/Reference-lifetime/readonly probe passes using repository-local installed browser cache. Whole3owner S92.65/B92.5/F100/L93.12; map and header100, MediaDescriptor S82.2/B79.54/F100/L83.48 remains individually below90. Removed an invalid positive file-Content test assumption because only stream UCP owners exist; no substitute Content/provider supplied. Source input presence behavior preserved as WRITER628/CALC695. Metadata addInputStream namespace call fixed, leaving3 SfxMedium constructor/GetOutputStorage/Commit type errors (4 before checkpoint). Typecheck/full build fail on those3; direct Vite bundling/static pass. Existing patattr VCL gate and comphelper->sax->comphelper cycle persist; new actual sfx2->unotools native source edge is recorded. Tools/lint/format/JSDoc5539/provenance2687/registry semantic0/size/tree/resources/routing/diff/doctor pass. No full document/UI acceptance; previous failed scopes retained; full suite not due; no task completed. Expat approval pending; no download or parser-security mutation.
+- Scope: native map/Any/reference owners and source precedence, existing input identity/cursor, original invalid-source exceptions, declared Reference template copy/extract defaults. Nonempty URL/valid PostData and non-file readonly lookup fail explicitly at missing original orchestration. File-scheme inference/catches remain source-represented but unqualified; no fake provider or test-only mutation added.
+- Pending: actual registered file Content/default command interactions, native descriptor SfxMedium/XStorage/package commit/classic SAX/real filter/model/UI, owner-local90 and prior coverage failures. Existing browser open/save/autosave/no-recovery deviations retained.
