@@ -1,0 +1,38 @@
+{
+  "focusedTests": {
+    "files": 7,
+    "passed": 86
+  },
+  "coverage": {
+    "statements": 92.51,
+    "branches": 78.44,
+    "functions": 100,
+    "lines": 95.23,
+    "threshold": 90,
+    "passed": false
+  },
+  "fixture": "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/2_table_doc.docx",
+  "chromium": {
+    "importedTables": 2,
+    "exportedTables": 2,
+    "exportedCantSplitElements": 1,
+    "reopenedTables": 2,
+    "viewport": "390x844"
+  },
+  "witnesses": [
+    "native table graph",
+    "grid widths",
+    "horizontal and vertical spans",
+    "cell vertical alignment",
+    "fixed row height",
+    "row split flags",
+    "WRITER634 source behavior"
+  ],
+  "pending": [
+    "branch coverage",
+    "nested and floating tables",
+    "full paragraph, list, page and style fidelity",
+    "suite verification"
+  ],
+  "fullSuiteRun": false
+}

@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 296
+revision: 299
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T13:41:14.712Z"
+  updated_at: "2026-11-18T14:10:54.167Z"
   updated_by: "CODER"
-  note: "Writer file dialog opens and downloads DOCX over actual SwDoc and OOXML filter owners. 62 related tests pass including source QA fixtures and failed/stale open cases. Scoped90 and complete table/style/page/list round trip remain open."
-  attempts: 85
+  note: "86 focused tests and Chromium import/download/reopen passed; native table coverage remains below the branch threshold and the full DOCX working slice remains open."
+  attempts: 86
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1368,8 +1371,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T14:10:54.167Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "86 focused tests and Chromium import/download/reopen passed; native table coverage remains below the branch threshold and the full DOCX working slice remains open."
+  -
+    type: "status"
+    at: "2026-11-18T14:11:00.449Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T13:41:39.643Z"
+doc_updated_at: "2026-11-18T14:11:00.449Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -3932,6 +3948,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T14:10:54.167Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: 86 focused tests and Chromium import/download/reopen passed; native table coverage remains below the branch threshold and the full DOCX working slice remains open.
+    Attempts: 86
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T14:10:53.581Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -4397,6 +4443,15 @@ sections:
     - DOCX table input, full styles, lists, links, bookmarks and page export, plus complete storage/service migration remain open.
 
     Evidence: `evidence/ooxml-file-filter-vertical.json`. The full suite is not due.
+
+    ### DOCX native table round trip
+
+    - WordprocessingML table events convert registered text ranges into Writer nodes, using the existing table grid and properties. The export writes supported grids, spans, vertical alignment, row heights and split flags.
+    - The pinned LibreOffice fixture exports exactly two tables and one cantSplit element. Chromium opens it, downloads the DOCX and reopens both tables at the mobile viewport.
+    - All 86 focused tests passed. Scoped coverage was 92.51% statements, 78.44% branches, 100% functions and 95.23% lines. The 90% branch gate remains open. WRITER634 records the upstream vertical merge association across a disjoint row.
+    - Nested and floating table handling, full styles, lists, links, bookmarks and page export remain open.
+
+    Evidence: `evidence/docx-table-roundtrip.json`.
 id_source: "generated"
 ---
 ## Summary
@@ -6970,6 +7025,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T14:10:54.167Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: 86 focused tests and Chromium import/download/reopen passed; native table coverage remains below the branch threshold and the full DOCX working slice remains open.
+Attempts: 86
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T14:10:53.581Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -7440,3 +7525,12 @@ Evidence: `evidence/native-storage-relationships.json`.
 - DOCX table input, full styles, lists, links, bookmarks and page export, plus complete storage/service migration remain open.
 
 Evidence: `evidence/ooxml-file-filter-vertical.json`. The full suite is not due.
+
+### DOCX native table round trip
+
+- WordprocessingML table events convert registered text ranges into Writer nodes, using the existing table grid and properties. The export writes supported grids, spans, vertical alignment, row heights and split flags.
+- The pinned LibreOffice fixture exports exactly two tables and one cantSplit element. Chromium opens it, downloads the DOCX and reopens both tables at the mobile viewport.
+- All 86 focused tests passed. Scoped coverage was 92.51% statements, 78.44% branches, 100% functions and 95.23% lines. The 90% branch gate remains open. WRITER634 records the upstream vertical merge association across a disjoint row.
+- Nested and floating table handling, full styles, lists, links, bookmarks and page export remain open.
+
+Evidence: `evidence/docx-table-roundtrip.json`.
