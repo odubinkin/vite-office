@@ -1,0 +1,106 @@
+{
+  "checkpoint": "Calc native cell borders through XLSX and primary ODS",
+  "createdAt": "2026-11-18T23:59:43.311Z",
+  "task": "202610251549-J0Z0KF",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sc/source/filter/oox/stylesbuffer.cxx#Border::convertBorderLine",
+    "sc/source/filter/oox/stylesbuffer.cxx#Border::fillToItemSet",
+    "sc/source/filter/oox/stylesbuffer.cxx#Xf::createPattern",
+    "sc/source/core/data/attrib.cxx#ScHasPriority",
+    "sc/source/filter/excel/xestyle.cxx#XclExpCellBorder::SaveXml",
+    "include/editeng/borderline.hxx#getComplexColor",
+    "sc/source/filter/xml/xmlstyle.cxx#XML_BORDER_LEFT_COMPLEX_COLOR",
+    "sc/qa/unit/ThemeImportExportTest.cxx#testCellBorderThemeColor",
+    "sc/qa/unit/ThemeImportExportTest.cxx#testCellBorderThemeColorODF",
+    "sc/qa/unit/subsequent_export_test.cxx#testCellBordersXLSX"
+  ],
+  "results": {
+    "calc": {
+      "files": 13,
+      "tests": 131
+    },
+    "shared": {
+      "files": 2,
+      "tests": 32
+    },
+    "writer": {
+      "files": 8,
+      "tests": 125
+    },
+    "chromium": 6,
+    "coverageThreshold": 90,
+    "coverage": {
+      "lines": {
+        "total": 92,
+        "covered": 92,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 103,
+        "covered": 102,
+        "skipped": 0,
+        "pct": 99.02
+      },
+      "functions": {
+        "total": 13,
+        "covered": 13,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 71,
+        "covered": 66,
+        "skipped": 0,
+        "pct": 92.95
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "observations": [
+    "Unchanged native XLSX fixtures cover the full source width/style matrix and actual themed side colors and transformations through XLSX, ODS and Worker transfer.",
+    "An independent Strict style fixture covers start/end normalization, explicit XF override, inner lines and both diagonal flags.",
+    "Source diagonal theme loss is preserved as CALC-730. Native XLSX export omits horizontal and vertical inner XML.",
+    "The real isolated Chromium shell/Worker test now initializes its own exception ABI, registered UNO services and native XML runtime before exercising direct filter owners."
+  ],
+  "fixtures": {
+    "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/cell-borders.xlsx": "edd882ecf3faaea2950c95d347a22b907918e6e2f883891cdfac8945778c4df7",
+    "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/Test_ThemeColor_Text_Background_Border.xlsx": "ce3cd412c0ab5231e8a74ca808a8a44b977263ef9eaeba9847b8c3ce090811f8"
+  },
+  "files": {
+    "apps/office/src/editeng/source/items/borderline.ts": "4a977524fdb57dac002eba12e2c1398a5c0b10f39165005476e1a2acb9c8ea6a",
+    "apps/office/src/sc/source/core/data/attrib.ts": "94a010e1acbb885e301353ceec7ce03c3cd57871cc061e1f97d66b6624af3dd6",
+    "apps/office/src/sc/source/filter/excel/xestyle.border.ts": "79a03924b71a0ad52ab40aea34455c528b122c74e5d6c911f27326577917e20a",
+    "apps/office/src/sc/source/filter/excel/xestyle.xml.ts": "47caa27c771c2241032ff19426fb3dfcd6e317d39b11f95d615b21902f39bf3d",
+    "apps/office/src/sc/source/filter/oox/stylesbuffer.border.ts": "24c4dc19c716e07b3e841bc8609f0a8b11e934b6222f730cdd5e35823a4d020a",
+    "apps/office/src/sc/source/filter/oox/stylesbuffer.color.ts": "825a8c5fa6ecdd3ef94eed4b6e6c29a930ac0a250d5e215f7807c3b4b3fb9052",
+    "apps/office/src/sc/source/filter/oox/stylesbuffer.ts": "6d29b01ad766d5f5851b6db7e3b5e7fbf175a7f33dcb561ca7e99a0daf4fb199",
+    "apps/office/src/sc/source/filter/oox/stylesfragment.ts": "98a4eda7696d4b4364d03521e766d29893465a2519da0995700357bad2189839",
+    "apps/office/src/sc/source/filter/xml/xmlstyle.borders.ts": "15a13c2769dda29f3e9c59e51054a8cfe18dac09c6d381789860d33636249b3d",
+    "apps/office/src/sc/source/filter/xml/xmlstyle.ts": "30815615968d09261157a9845b052153a1c0b759481609358cee636fc11f3e28",
+    "apps/office/src/sc/source/filter/xml/xmlstyli.ts": "076c235b824987548b19227475fb0146367f83a7790ee46ae8fb26dd757f25fd",
+    "apps/office/src/xmloff/source/core/xmltoken.ts": "c91dcff5e50861f252a6f2fb03bac01beccca5f3171bd50dbd7b696b428ec19f",
+    "apps/office/src/sc/source/filter/oox/excelfilter.borders.test.ts": "c4d13d32f51ed09a91c16db27bfdb87d1b642f0951e7e5c3b78b10cdcb5f0f3c",
+    "apps/office/e2e/calc/xlsx-borders.spec.ts": "ba32773a7621f9c7627c6ce7a68243f0f6af079aab73fb32b6020140ebd1b029",
+    "apps/office/e2e/calc/borders.spec.ts": "74443be1f2bcf40087aa2a43746923aeed7e7f251a8be1f207523f57f27752b4",
+    "docs/program/calc-upstream-suspected-issues.md": "698c21f11b51d5cfd067f8b3bf0ba184144192ff30474cab4c439eab276f1f32"
+  },
+  "logs": {
+    "apps/office/coverage/xlsx-borders-coverage-final.log": "e1c896bb9b71384167a179a2c7d5a59694adb502942c71d615289f55df046d43",
+    "apps/office/coverage/xlsx-borders-shared.log": "d356b01e28383fd84a1ccba48c425472c4d9b5301ecfb53f6749a62e89473766",
+    "apps/office/coverage/xlsx-borders-writer.log": "3b0864e9a22b2890720c21f5faafc6cdf30361a6813d9f2a09215f93158060ec",
+    "apps/office/coverage/xlsx-borders-browser-final.log": "ffc6fbe27e54624fb0df76dc9a22393b5ee34d4162980ed715c8be5a19d9c4e5",
+    "apps/office/coverage/xlsx-borders-static.log": "b2c369f3ed9a95a2f199d606aeebeb08ae7e34cb561ceab339c30085fecf5843",
+    "apps/office/coverage/xlsx-borders-structure.log": "9b9e029fd62e64132d49de96916214b7526bbaf6c51a6c4f0d38b947a9efed71",
+    "apps/office/coverage/xlsx-borders-registry.log": "dee3fc589ff9955d95cd507ee3b6875b2b6f5c790073744868997c022ebd4e69",
+    "apps/office/coverage/xlsx-borders-lint.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/xlsx-borders-resources.log": "76301807f57700d0a8843fb6960c1c5b16712d79dc439d81024ac8614ec0eedf",
+    "apps/office/coverage/xlsx-borders-scoped/coverage-summary.json": "1c8a7ad419c7650c3d100dc2ed5999d8470abcd08124c0324eed5fabe6e8f88c"
+  }
+}
