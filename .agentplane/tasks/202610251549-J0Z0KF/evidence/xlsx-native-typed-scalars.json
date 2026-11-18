@@ -1,0 +1,148 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "SpreadsheetML date, Boolean and error scalars",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "inputs": {
+    "sc/source/filter/oox/workbooksettings.cxx": "25ad1e17862c83aa9447a5451fa64ee8bf8c36c0f629f9c62e8b44a61d0e9cbe",
+    "sc/source/filter/oox/sheetdatacontext.cxx": "e6d9c63cc23cc2842da7a11e5e2c7bc49b94933886d28856bcd6e6ad4f738b98",
+    "sc/source/filter/oox/sheetdatabuffer.cxx": "e4d1780352e7f71561bc3b06eb689bf52bdd329f5a113ca355eb6217affd0814",
+    "sc/source/filter/oox/unitconverter.cxx": "764c32e79c00717cc534a04267a0742045d101c171a0c368457289e66a0ec35b",
+    "sc/source/filter/excel/xestream.cxx": "a41dc92dea58ee9b12db9a719ee04995f0a6df0624d4262c8c1d6cc852bfca9f",
+    "sc/source/filter/excel/xetable.cxx": "80e2100a4f38eb195e8e7a8d4035586f4df820743b2904a4bc0cd3947064ac9a",
+    "sc/source/core/tool/interpr1.cxx": "f2b154450b3f3682a0a0108d1806b96892bbeccbaa3b5fdff6af7607e265c852",
+    "sc/source/core/tool/interpr4.cxx": "94df4c610207f280458809f2edd7d4e3ee5f377537177a52cbe1c64ba8442de1",
+    "sc/source/core/data/formulacell.cxx": "52a88db58871186d1486e2bb879e4abac7a292a6119693b7488bedddfec7e7ae",
+    "sc/source/core/tool/address.cxx": "8cb729f76ca00c2cb38c356aeeef2f8107aa4613d2185056cc65b185ba80e09d",
+    "formula/source/core/api/FormulaCompiler.cxx": "8fad42a407c51b457bafb82e7830d8b264657911c98b0f43cd683618226a9667",
+    "formula/inc/core_resource.hrc": "2cda3061274bd3e551b7d20fd046abf44aaea36e7a8e383fa124a5d9cc0dffc8",
+    "xmloff/source/style/xmlnumfe.cxx": "6331d63c05cfb1475f20304c7c55989292a89d811d500c55aabadceb51154688",
+    "xmloff/source/style/xmlnumfi.cxx": "7246bf0c7b8d03242d72e8f2704eaaf5a7bbfc89a27c5203ee15644d43523a1c",
+    "sc/qa/unit/data/xlsx/tdf165180_date1904.xlsx": "23b1189f96c388559bc837b521902a465a5bec6a0b8833858c25f1e0c65f72b7",
+    "sc/qa/unit/data/xlsx/universal-content-strict.xlsx": "fbd7591328bdb1b4d3341efcc692d42669b2e6f754babdc2b7b654fe050e2fc5"
+  },
+  "sourceAndTestPaths": [
+    "apps/office/src/sc/source/filter/oox/typed-date-cells.test.ts",
+    "apps/office/src/sc/source/filter/oox/unitconverter.ts",
+    "apps/office/src/sc/source/filter/oox/workbooksettings.ts",
+    "apps/office/src/sc/source/filter/oox/excelfilter.ts",
+    "apps/office/src/sc/source/filter/oox/sheetdatabuffer.ts",
+    "apps/office/src/sc/source/filter/oox/worksheetfragment.ts",
+    "apps/office/e2e/calc/xlsx-date-system.spec.ts",
+    "apps/office/src/formula/inc/core_resource.ts",
+    "apps/office/src/formula/source/core/api/FormulaCompiler.ts",
+    "apps/office/src/sc/source/core/data/formulacell.ts",
+    "apps/office/src/sc/source/core/tool/interpr4.ts",
+    "apps/office/src/sc/source/core/tool/token.ts",
+    "apps/office/src/sc/source/filter/excel/xetable.ts",
+    "apps/office/src/xmloff/source/core/xmltoken.ts",
+    "apps/office/src/xmloff/source/style/xmlnumfe.ts",
+    "apps/office/src/xmloff/source/style/xmlnumfi.ts",
+    "apps/office/src/sc/source/core/tool/range-formula.test.ts",
+    "docs/program/calc-upstream-suspected-issues.md",
+    "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.ts"
+  ],
+  "verify": [
+    {
+      "command": "vitest run --config vitest.calc.config.ts src/sc/source/filter/oox src/sc/source/filter/excel src/sc/source/filter/xml src/sc/source/core/data/document.formula.test.ts src/sc/source/core/tool/aggregate-formula.test.ts src/sc/source/core/tool/numeric-formula.test.ts src/sc/source/core/tool/range-formula.test.ts src/sc/source/core/tool/token.test.ts src/sc/browser/filter/xml src/sc/browser/presentation/calc-files.test.tsx --coverage --coverage.provider=v8 --coverage.include=src/sc/source/filter/oox/unitconverter.ts --coverage.include=src/sc/source/filter/oox/workbooksettings.ts --coverage.thresholds.perFile=true --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reporter=text --coverage.reporter=json-summary --coverage.reportsDirectory=coverage/xlsx-typed-scalars",
+      "result": "pass",
+      "files": 40,
+      "tests": 344,
+      "perFile": {
+        "unitconverter.ts": {
+          "lines": {
+            "total": 16,
+            "covered": 16,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 5,
+            "covered": 5,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 19,
+            "covered": 18,
+            "skipped": 0,
+            "pct": 94.73
+          },
+          "branches": {
+            "total": 19,
+            "covered": 18,
+            "skipped": 0,
+            "pct": 94.73
+          }
+        },
+        "workbooksettings.ts": {
+          "lines": {
+            "total": 17,
+            "covered": 17,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 3,
+            "covered": 3,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 18,
+            "covered": 18,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 4,
+            "covered": 4,
+            "skipped": 0,
+            "pct": 100
+          }
+        }
+      }
+    },
+    {
+      "command": "vitest run --config vitest.shared.config.ts src/formula/inc/native-token.test.ts src/formula/inc/token.test.ts src/formula/inc/tokenarray.test.ts src/sax/source/tools/converter-temporal.test.ts src/svl/source/numbers/zforlist.test.ts",
+      "result": "pass",
+      "tests": 58
+    },
+    {
+      "command": "vitest run --config vitest.writer.config.ts src/sw/source/filter/ww8/docx-paragraph-marker.test.ts src/sw/source/filter/ww8/docx-bookmarks.test.ts",
+      "result": "pass",
+      "tests": 11
+    },
+    {
+      "command": "npm exec --workspace @vite-office/office -- playwright test --config coverage/xlsx-date-system.playwright.config.ts --workers=1",
+      "result": "pass",
+      "tests": 5
+    },
+    {
+      "command": "npm exec --workspace @vite-office/office -- vite build && node scripts/check-static-build.mjs",
+      "result": "pass"
+    },
+    {
+      "command": "npx eslint <changed source and tests> && npx prettier --check <changed files>",
+      "result": "pass"
+    },
+    {
+      "command": "npm run check:docs; npm run check:source-tree; npm run check:source-provenance; npm run check:file-size; npm run check:calc-resources; npm run inventory:registry:build; npm run inventory:registry:check; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check",
+      "result": "pass"
+    },
+    {
+      "command": "npm run typecheck -w @vite-office/office",
+      "result": "existing failure",
+      "details": "SfxDocumentMetaData.storage.ts still needs the descriptor overload and output storage/commit interfaces of SfxMedium."
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "existing failure",
+      "details": "Calc patattr.ts VCL boundary and comphelper/sax module cycle."
+    }
+  ],
+  "boundaries": [
+    "Other OOXML formula families and complete storage, document metadata and broad application acceptance remain open.",
+    "The Strict test input includes independently authored scalar payloads inside a pinned reference package envelope. The browser test derives inline scalar fixtures from the separate original epoch regression.",
+    "The initial focused profile exposed a stale R1C1 unsupported assertion. The final run verifies successful R1C1 parsing and rejection of A1 in that convention. One initial browser profile selected a tab panel for the upload label. The final run scopes the actual file input."
+  ]
+}

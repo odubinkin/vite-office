@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 593
+revision: 596
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T19:27:54.937Z"
+  updated_at: "2026-11-18T19:46:06.757Z"
   updated_by: "CODER"
-  note: "XLSX date-system storage, worker and production browser profiles verified; task-wide acceptance and shared checks remain open."
-  attempts: 189
+  note: "Verified the SpreadsheetML scalar path and real browser ODS persistence. Shared medium and dependency checks and broader acceptance remain open."
+  attempts: 190
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3032,8 +3035,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T19:46:06.757Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified the SpreadsheetML scalar path and real browser ODS persistence. Shared medium and dependency checks and broader acceptance remain open."
+  -
+    type: "status"
+    at: "2026-11-18T19:46:12.828Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T19:28:11.135Z"
+doc_updated_at: "2026-11-18T19:46:12.828Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -8718,6 +8734,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-18T19:46:06.757Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified the SpreadsheetML scalar path and real browser ODS persistence. Shared medium and dependency checks and broader acceptance remain open.
+    Attempts: 190
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T19:46:06.108Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -9621,6 +9667,10 @@ sections:
     - Observation: The original tdf165180 workbook keeps serial 60 and the source 1 January 1904 epoch through XLSX import, worker transfer, primary ODS storage, XLSX export and reopen. The original F800 long date initially changed to a fixed date pattern through ODS. The shared number formatter and ODF filter now retain the source system-date selection and matching date elements.
       Impact: Calc shows Tuesday, March 1, 1904 after browser reload and after importing the XLSX downloaded by the existing File dialog. The imported dateCompatibility=0 does not change the source epoch. The default 30 December 1899 and the transitional date1904 attribute remain verified.
       Resolution: 302 targeted Calc tests across 34 files and 177 shared tests across five files passed. Scoped coverage meets 90% in both new owners; four production Chromium scenarios passed. JSDoc, scoped ESLint/Prettier, source tree and provenance, Calc UI resources, registry, build/static, routing and diff passed. The existing shared type/dependency failures remain recorded. See evidence/xlsx-date-system.json. No full-suite run this block.
+
+    - Observation: Explicit SpreadsheetML date cells now route through SheetDataBuffer and UnitConverter. The date uses the same Gregorian epoch as the workbook number formatter and keeps the source XF. Invalid dates are retained as original text. Logical and error scalars use the represented native formula path, the ODF Boolean format preserves display, and formula XML export uses XclXmlUtils cached type and value.
+      Impact: Strict and Transitional envelopes round-trip valid dates, time zones, pre-epoch serials, immutable formula precedence, invalid date strings, logical constants and published error identities through the primary ODS path. Chromium reopens the actual record and the downloaded XLSX with the expected date, TRUE and #DIV/0!. CALC710 and CALC711 preserve upstream whole-second serial precision and the spill cache token.
+      Resolution: 344 related Calc tests, 58 shared tests, 11 Writer regressions and five production Chromium scenarios passed. Scoped coverage passes 90% for both measured workbook owners. A stale R1C1 test now asserts the already implemented parser's actual result. JSDoc, lint, formatting, source tree, provenance, registry, size, resources, Vite/static, routing and diff passed. Existing metadata type errors and dependency-check failures remain. See evidence/xlsx-native-typed-scalars.json. No full suite was run.
 id_source: "generated"
 ---
 ## Summary
@@ -15315,6 +15365,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-18T19:46:06.757Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified the SpreadsheetML scalar path and real browser ODS persistence. Shared medium and dependency checks and broader acceptance remain open.
+Attempts: 190
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T19:46:06.108Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -16222,3 +16302,7 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Observation: The original tdf165180 workbook keeps serial 60 and the source 1 January 1904 epoch through XLSX import, worker transfer, primary ODS storage, XLSX export and reopen. The original F800 long date initially changed to a fixed date pattern through ODS. The shared number formatter and ODF filter now retain the source system-date selection and matching date elements.
   Impact: Calc shows Tuesday, March 1, 1904 after browser reload and after importing the XLSX downloaded by the existing File dialog. The imported dateCompatibility=0 does not change the source epoch. The default 30 December 1899 and the transitional date1904 attribute remain verified.
   Resolution: 302 targeted Calc tests across 34 files and 177 shared tests across five files passed. Scoped coverage meets 90% in both new owners; four production Chromium scenarios passed. JSDoc, scoped ESLint/Prettier, source tree and provenance, Calc UI resources, registry, build/static, routing and diff passed. The existing shared type/dependency failures remain recorded. See evidence/xlsx-date-system.json. No full-suite run this block.
+
+- Observation: Explicit SpreadsheetML date cells now route through SheetDataBuffer and UnitConverter. The date uses the same Gregorian epoch as the workbook number formatter and keeps the source XF. Invalid dates are retained as original text. Logical and error scalars use the represented native formula path, the ODF Boolean format preserves display, and formula XML export uses XclXmlUtils cached type and value.
+  Impact: Strict and Transitional envelopes round-trip valid dates, time zones, pre-epoch serials, immutable formula precedence, invalid date strings, logical constants and published error identities through the primary ODS path. Chromium reopens the actual record and the downloaded XLSX with the expected date, TRUE and #DIV/0!. CALC710 and CALC711 preserve upstream whole-second serial precision and the spill cache token.
+  Resolution: 344 related Calc tests, 58 shared tests, 11 Writer regressions and five production Chromium scenarios passed. Scoped coverage passes 90% for both measured workbook owners. A stale R1C1 test now asserts the already implemented parser's actual result. JSDoc, lint, formatting, source tree, provenance, registry, size, resources, Vite/static, routing and diff passed. Existing metadata type errors and dependency-check failures remain. See evidence/xlsx-native-typed-scalars.json. No full suite was run.
