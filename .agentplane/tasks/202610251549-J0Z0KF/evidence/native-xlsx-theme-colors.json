@@ -1,0 +1,121 @@
+{
+  "checkpoint": "Calc theme palette, resolved colors and workbook references across XLSX and primary ODS",
+  "createdAt": "2026-11-18T23:10:35.655Z",
+  "task": "202610251549-J0Z0KF",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sc/source/filter/oox/workbookfragment.cxx#WorkbookFragment::finalizeImport",
+    "sc/source/filter/oox/stylesbuffer.cxx#XlsColor::importColor",
+    "oox/source/drawingml/color.cxx#Color::addExcelTintTransformation",
+    "oox/source/export/ThemeExport.cxx#ThemeExport::write",
+    "xmloff/source/core/xmlexp.cxx#SvXMLExport::ExportThemeElement",
+    "xmloff/source/style/XMLThemeContext.cxx#XMLThemeContext",
+    "xmloff/source/text/XMLComplexColorContext.cxx#XMLComplexColorImport::handleTransformContext",
+    "sc/qa/unit/ThemeImportExportTest.cxx",
+    "sc/qa/unit/subsequent_export_test.cxx#testFontColorWithMultipleAttributesDefined"
+  ],
+  "sourceObservations": [
+    "CALC-728",
+    "CALC-729"
+  ],
+  "results": {
+    "calc": {
+      "files": 17,
+      "tests": 103,
+      "coverageThreshold": 90,
+      "coverageGate": "passed",
+      "coverage": {
+        "lines": {
+          "total": 244,
+          "covered": 243,
+          "skipped": 0,
+          "pct": 99.59
+        },
+        "statements": {
+          "total": 271,
+          "covered": 270,
+          "skipped": 0,
+          "pct": 99.63
+        },
+        "functions": {
+          "total": 44,
+          "covered": 44,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 223,
+          "covered": 209,
+          "skipped": 0,
+          "pct": 93.72
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "chromium": {
+      "related": 6,
+      "finalThemeRecheck": 1
+    },
+    "shared": {
+      "tests": 8
+    }
+  },
+  "remaining": [
+    "Native ODF theme storage retains the color set and the source default FontScheme on reopen. A direct XLSX round trip retains represented font scheme records.",
+    "DrawingML format matrix import, themed borders, alpha and additional theme color encodings remain outside this checkpoint.",
+    "The OOXML archive admission policy was unchanged. The umbrella DOCX/XLSX work and upstream sizing/phonetics are still in progress."
+  ],
+  "fixtures": {
+    "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/tdf113271.xlsx": "564970c4b747f3cc90da5601237623827e9133ca6e21c0bc939b33f4d3afabe8",
+    "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/CalcThemeTest.xlsx": "646fb7b7b0f437b8a999ca096e9a4b2ac636ed27ab1c33b571e2679d298a6d4c",
+    "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/Test_ThemeColor_Text_Background_Border.xlsx": "ce3cd412c0ab5231e8a74ca808a8a44b977263ef9eaeba9847b8c3ce090811f8"
+  },
+  "files": {
+    "apps/office/src/docmodel/inc/theme/ColorSet.ts": "62a49422d3493e46c890d2405a96021940e10c04cd13cc97ef6c2a3f7b8441db",
+    "apps/office/src/docmodel/inc/theme/Theme.ts": "9fe32e319c4617538a1ae85c1a2d02ea3799cb551532b89e8dde5bcdda09e441",
+    "apps/office/src/oox/source/drawingml/color.ts": "bd795bb904c3d85d1e93029b2b7f16d75e69a185271e1e2f50e2a8b2c17158b3",
+    "apps/office/src/oox/source/drawingml/themefragmenthandler.ts": "1851f4bb043c668fbdb3e0a12bd16d08ca16dc00e3671f8afec66ab956401a98",
+    "apps/office/src/oox/source/export/ThemeExport.ts": "d17729a89b265d27075237e55ec9d5a7f2a1a1dfcdd0e3c78484d62904a9fdeb",
+    "apps/office/src/oox/source/helper/graphichelper.ts": "a5d36f13fe86d9f4458435a9f035b7f685c17bfad3333b192c49d21398d02a6c",
+    "apps/office/src/xmloff/source/core/xmltoken.ts": "30dca587ca4ab5a67b89fb017899ace0dc852522fc744332b5e2ca187411c20d",
+    "apps/office/src/xmloff/source/style/XMLThemeContext.ts": "58f8bf07bd9654139f0566ce412ba4c8943772354cdd5850efb380d205c5ba4d",
+    "apps/office/src/xmloff/source/text/XMLComplexColorContext.ts": "597426ee8089222167eb958723388f5e77709d85d7a14e2af7862c7009985e13",
+    "apps/office/src/sc/source/core/data/document.ts": "406b6b14a62a9f8493bfbc71a1a00025a0ad7a3037b95b86df8aea56684430f3",
+    "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts": "42c13017f85141fad6f1c1a046c08de4b2321c955110caa0b9c4fb283cb9a795",
+    "apps/office/src/sc/source/filter/oox/excelfilter.ts": "3f53b04ae1a4a29f00b4bce6d78e828ba1847e7966f155585c3bcaf2ce497b71",
+    "apps/office/src/sc/source/filter/oox/excelfilter.test.ts": "710b05633a5bf167fd197cd64ff4c0c040c7e7d95ff7ce2fee698b6f26262ae6",
+    "apps/office/src/sc/source/filter/oox/excelfilter.theme.test.ts": "59beb9690ffc8214a99ab027c596dd10d87322288d2a0b6c4db0988e228883de",
+    "apps/office/src/sc/source/filter/oox/stylesbuffer.ts": "07602f39f7aac579aabdf95f08eb740044d230125d65991b2e775773a5f75744",
+    "apps/office/src/sc/source/filter/oox/stylesbuffer.color.ts": "06c1dff94d755ddf6aef2224c73d6ff43303e016c9c193924ae4f47d31bdc988",
+    "apps/office/src/sc/source/filter/oox/stylesbuffer.color.test.ts": "4eec4c3cca293142882f53ff5d7af26dfbb0841d8839f088503148f301656aa7",
+    "apps/office/src/sc/source/filter/oox/stylesfragment.ts": "13ba73231f7ab5ffc66ae942ea0a12e4fcb329138b9dadcf94cd3f579afe2a24",
+    "apps/office/src/sc/source/filter/oox/richstring.ts": "aa8ca1caf42863e4857b43d8f1b4434fd62f1dd68532045a3c8c7808a7bf06c8",
+    "apps/office/src/sc/source/filter/oox/richstringcontext.ts": "9c2ea469f4424326455138b2f0f359e3e9cc4481f5def41ff34e7952d6436c29",
+    "apps/office/src/sc/source/filter/oox/sharedstringsfragment.ts": "13cb445588071667c474225c021699834832fac7d44d3fdf16d41ac6f43b8ee4",
+    "apps/office/src/sc/source/filter/oox/worksheetfragment.ts": "fc220321a874cc402f0cecab4733cbd2448c0257aefd10602bc445ca15a67749",
+    "apps/office/src/sc/source/filter/excel/xetable.ts": "bdd5d9bc0e0c27e39030a07c586af53fa5e9bd0aeae1de46d5e445749e6689f9",
+    "apps/office/src/sc/source/filter/excel/xestyle.xml.ts": "4f527b2135377b3fc0d7b731c18a1201ae354f0037b3cfa7ca9e5c4ca83f48d1",
+    "apps/office/src/sc/source/filter/xml/xmlexprt.ts": "73b6cf789b25d1c630f2acaba4111fed0e3df50dc452278de27a070e99623d78",
+    "apps/office/src/sc/source/filter/xml/xmlexprt.celltext.ts": "070c938150379fbfc168c3d84c2bbb5f2800fc06962c217945826b49f52e16da",
+    "apps/office/src/sc/source/filter/xml/xmlstyle.ts": "666f7b5c8f24a9e5c405f5c4f7112fac2a23cc20e91e6cf6ffa9034a9a62841d",
+    "apps/office/src/sc/source/filter/xml/xmlstyli.ts": "25aaadddcec1febc86bfec87521bfede8585f3a8f17bf1060f27a7a17029a61c",
+    "apps/office/src/sc/source/filter/xml/ods-native-colors.test.ts": "522d95b0b59cdf4e9092cace87e4e17b864f3530767e18dafb9e945e95326a69",
+    "apps/office/e2e/calc/xlsx-text.spec.ts": "616bfc428218e88618088a7920a9effe0cf58964fb061be7ff5f7204512fa220",
+    "docs/program/calc-upstream-suspected-issues.md": "72dc92d17a89ba4712a4a3b0ec46f0758634f6c0b7838ad070e7342e1f76914c",
+    "scripts/module-boundaries/allowed-edges.mjs": "f1c7f23678067bef185120cdb0f7758bae0fc873048ef0c4de07d3dd0ee76172"
+  },
+  "logs": {
+    "apps/office/coverage/theme-closure-final.log": "45343fda2bd791efb892448a16071f7d39085228c90290de698630aeacc92edc",
+    "apps/office/coverage/theme-browser-final.log": "8c12b423fa700796e503e80eee8a4e00863bc3e948ae81092c882d688e97a52c",
+    "apps/office/coverage/theme-last-0.log": "efe5bdeec28ce751989855a149f581459fdb2a92bdacb352a08c8f5180623904",
+    "apps/office/coverage/theme-last-1.log": "af58ef30345c73c246cc948d054f937253185e5e603936a9c6b848e1fff04ff6",
+    "apps/office/coverage/theme-last-2.log": "09119f94dc9fde7caa1041d1b5de3e114bd1c75560c68b464ae756fec2563f52",
+    "apps/office/coverage/theme-post-2.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/theme-shared.log": "352b390486c1190811d3f4aa4cb1d4f15acb87bde7209ee3c45842d08c26f850"
+  }
+}

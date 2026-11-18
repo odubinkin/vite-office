@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 612
+revision: 615
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T22:45:29.599Z"
+  updated_at: "2026-11-18T23:10:41.782Z"
   updated_by: "CODER"
-  note: "Calc now preserves native XLSX character formatting through Worker transfer, primary ODS persistence and browser download. 78 focused Calc cases and 5 Chromium cases passed. The selected ODS character-span modules passed the 90% gate with 91.66% branches. Static and provenance gates passed. The umbrella format task remains in progress for remaining source owners."
-  attempts: 195
+  note: "The Calc theme checkpoint preserves workbook palettes and native font, fill and rich-text color references through XLSX, primary ODS and Worker transfer. 103 Calc and 8 shared tests, six Chromium regression scenarios and the final theme recheck passed. Scoped coverage passed at 93.72% branches. Remaining umbrella work includes themed borders, drawing theme matrices and other source owners."
+  attempts: 196
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3128,8 +3131,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T23:10:41.782Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "The Calc theme checkpoint preserves workbook palettes and native font, fill and rich-text color references through XLSX, primary ODS and Worker transfer. 103 Calc and 8 shared tests, six Chromium regression scenarios and the final theme recheck passed. Scoped coverage passed at 93.72% branches. Remaining umbrella work includes themed borders, drawing theme matrices and other source owners."
+  -
+    type: "status"
+    at: "2026-11-18T23:10:47.424Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T22:45:34.803Z"
+doc_updated_at: "2026-11-18T23:10:47.424Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -8994,6 +9010,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T23:10:41.782Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: The Calc theme checkpoint preserves workbook palettes and native font, fill and rich-text color references through XLSX, primary ODS and Worker transfer. 103 Calc and 8 shared tests, six Chromium regression scenarios and the final theme recheck passed. Scoped coverage passed at 93.72% branches. Remaining umbrella work includes themed borders, drawing theme matrices and other source owners.
+    Attempts: 196
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T23:10:35.985Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -9959,6 +10005,16 @@ sections:
     - Command: ./node_modules/.bin/playwright test --config apps/office/coverage/admission-text.playwright.config.ts --workers=1. Result: pass. Evidence: 5 Chromium tests. Scope: actual file open, primary storage reload, desktop download and mobile re-import/download with native rich runs; Calc date, escaped text and CSV regressions.
     - Commands: npm run test:static, ./node_modules/.bin/tsc --noEmit -p apps/office/tsconfig.json, scoped ESLint and Prettier, npm run check:docs, npm run check:dependencies, npm run check:source-tree, npm run check:source-provenance, npm run inventory:invariants, npm run inventory:parity, npm run check:file-size, npm run check:calc-resources, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check. Result: pass. Scope: static development and build gates.
     - Optimal row-height layout, advanced theme/phonetic runs, unrepresented ODF character properties and field identity remain open. The separate browser archive admission policy was not changed.
+
+    #### Workbook theme and source-native color resolution
+
+    - Resolves the workbook theme part before styles and shared strings. Uses one native palette resolver for scalar fonts, solid fills and both shared and inline formatted runs. Preserves the Excel attribute precedence and applies source integer HSL luminance. Workbook theme and item color metadata survive native ODF and the browser Worker transfer. Direct XLSX export writes the actual palette and represented font collections and references.
+    - The pinned tdf113271 fixture verifies theme-over-RGB precedence. CalcThemeTest verifies the actual twelve source palette entries and exported styles. Test_ThemeColor_Text_Background_Border asserts the original RGB values, color slots, transform kinds and source percentages for font and fill through XLSX and ODS. CALC-728 and CALC-729 record the explicit font-name behavior and ODF unnamed palette case.
+    - Command: npm run test:coverage:calc -w @vite-office/office -- excelfilter stylesbuffer.color richstring worksheethelper xlstyle ods-worker calc-files ods.test ods-native-colors ods-style-routing --maxWorkers=2 --coverage.include=src/docmodel/inc/theme/ColorSet.ts --coverage.include=src/docmodel/inc/theme/Theme.ts --coverage.include=src/oox/source/helper/graphichelper.ts --coverage.include=src/oox/source/drawingml/color.ts --coverage.include=src/oox/source/drawingml/themefragmenthandler.ts --coverage.include=src/oox/source/export/ThemeExport.ts --coverage.include=src/sc/source/filter/oox/stylesbuffer.color.ts --coverage.include=src/xmloff/source/style/XMLThemeContext.ts --coverage.include=src/xmloff/source/text/XMLComplexColorContext.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/theme-scoped. Result: pass. Evidence: 103 Calc cases in 17 files. Statements 99.63%, branches 93.72%, functions 100%, lines 99.59%. Scope: nine new executable color/theme owners and related XLSX, ODS, Worker and dialog tests.
+    - Command: ./node_modules/.bin/playwright test --config apps/office/coverage/admission-text.playwright.config.ts --workers=1. Result: pass. Evidence: 6 related Chromium cases, plus 1 fresh named-case recheck on the final production build. Scope: native primary ODS open, later XLSX download, independent package XML and ODS/CSV/browser regressions.
+    - Command: npm run test:shared -w @vite-office/office -- ComplexColor ColorExportUtils xmltoken --maxWorkers=2. Result: pass. Evidence: 8 shared color and token regressions.
+    - Command: npm run test:static, TypeScript, scoped ESLint/Prettier, npm run check:docs, check:dependencies, check:source-tree, check:source-provenance, inventory:invariants, inventory:parity, check:file-size, check:calc-resources, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check. Result: pass. Scope: production build and source gates.
+    - Native ODF reload restores the theme palette with the original default font scheme. DrawingML matrix import, theme color encodings beyond the represented RGB/system colors and themed borders remain open. No archive admission changes or all-app test run.
 id_source: "generated"
 ---
 ## Summary
@@ -15833,6 +15889,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T23:10:41.782Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: The Calc theme checkpoint preserves workbook palettes and native font, fill and rich-text color references through XLSX, primary ODS and Worker transfer. 103 Calc and 8 shared tests, six Chromium regression scenarios and the final theme recheck passed. Scoped coverage passed at 93.72% branches. Remaining umbrella work includes themed borders, drawing theme matrices and other source owners.
+Attempts: 196
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T23:10:35.985Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -16802,3 +16888,13 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Command: ./node_modules/.bin/playwright test --config apps/office/coverage/admission-text.playwright.config.ts --workers=1. Result: pass. Evidence: 5 Chromium tests. Scope: actual file open, primary storage reload, desktop download and mobile re-import/download with native rich runs; Calc date, escaped text and CSV regressions.
 - Commands: npm run test:static, ./node_modules/.bin/tsc --noEmit -p apps/office/tsconfig.json, scoped ESLint and Prettier, npm run check:docs, npm run check:dependencies, npm run check:source-tree, npm run check:source-provenance, npm run inventory:invariants, npm run inventory:parity, npm run check:file-size, npm run check:calc-resources, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check. Result: pass. Scope: static development and build gates.
 - Optimal row-height layout, advanced theme/phonetic runs, unrepresented ODF character properties and field identity remain open. The separate browser archive admission policy was not changed.
+
+#### Workbook theme and source-native color resolution
+
+- Resolves the workbook theme part before styles and shared strings. Uses one native palette resolver for scalar fonts, solid fills and both shared and inline formatted runs. Preserves the Excel attribute precedence and applies source integer HSL luminance. Workbook theme and item color metadata survive native ODF and the browser Worker transfer. Direct XLSX export writes the actual palette and represented font collections and references.
+- The pinned tdf113271 fixture verifies theme-over-RGB precedence. CalcThemeTest verifies the actual twelve source palette entries and exported styles. Test_ThemeColor_Text_Background_Border asserts the original RGB values, color slots, transform kinds and source percentages for font and fill through XLSX and ODS. CALC-728 and CALC-729 record the explicit font-name behavior and ODF unnamed palette case.
+- Command: npm run test:coverage:calc -w @vite-office/office -- excelfilter stylesbuffer.color richstring worksheethelper xlstyle ods-worker calc-files ods.test ods-native-colors ods-style-routing --maxWorkers=2 --coverage.include=src/docmodel/inc/theme/ColorSet.ts --coverage.include=src/docmodel/inc/theme/Theme.ts --coverage.include=src/oox/source/helper/graphichelper.ts --coverage.include=src/oox/source/drawingml/color.ts --coverage.include=src/oox/source/drawingml/themefragmenthandler.ts --coverage.include=src/oox/source/export/ThemeExport.ts --coverage.include=src/sc/source/filter/oox/stylesbuffer.color.ts --coverage.include=src/xmloff/source/style/XMLThemeContext.ts --coverage.include=src/xmloff/source/text/XMLComplexColorContext.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/theme-scoped. Result: pass. Evidence: 103 Calc cases in 17 files. Statements 99.63%, branches 93.72%, functions 100%, lines 99.59%. Scope: nine new executable color/theme owners and related XLSX, ODS, Worker and dialog tests.
+- Command: ./node_modules/.bin/playwright test --config apps/office/coverage/admission-text.playwright.config.ts --workers=1. Result: pass. Evidence: 6 related Chromium cases, plus 1 fresh named-case recheck on the final production build. Scope: native primary ODS open, later XLSX download, independent package XML and ODS/CSV/browser regressions.
+- Command: npm run test:shared -w @vite-office/office -- ComplexColor ColorExportUtils xmltoken --maxWorkers=2. Result: pass. Evidence: 8 shared color and token regressions.
+- Command: npm run test:static, TypeScript, scoped ESLint/Prettier, npm run check:docs, check:dependencies, check:source-tree, check:source-provenance, inventory:invariants, inventory:parity, check:file-size, check:calc-resources, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check. Result: pass. Scope: production build and source gates.
+- Native ODF reload restores the theme palette with the original default font scheme. DrawingML matrix import, theme color encodings beyond the represented RGB/system colors and themed borders remain open. No archive admission changes or all-app test run.
