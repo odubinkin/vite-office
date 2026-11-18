@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 575
+revision: 578
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T16:04:06.816Z"
+  updated_at: "2026-11-18T16:21:34.809Z"
   updated_by: "CODER"
-  note: "Worksheet geometry passed 124 focused tests with 93.40% scoped branch coverage and Chromium XLSX and primary ODS reopens. Workbook Normal font fidelity, outlines and other styles remain open for the full task."
-  attempts: 183
+  note: "Normal/Default style and application-font dimensions passed 83 tests with 95.23% scoped branch coverage. Chromium exports all five exact widths after both XLSX and ODS reopen. Other named styles, themes and full task fidelity remain open."
+  attempts: 184
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2936,8 +2939,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T16:21:34.809Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Normal/Default style and application-font dimensions passed 83 tests with 95.23% scoped branch coverage. Chromium exports all five exact widths after both XLSX and ODS reopen. Other named styles, themes and full task fidelity remain open."
+  -
+    type: "status"
+    at: "2026-11-18T16:21:47.800Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T16:04:15.354Z"
+doc_updated_at: "2026-11-18T16:21:47.800Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -8442,6 +8458,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T16:21:34.809Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Normal/Default style and application-font dimensions passed 83 tests with 95.23% scoped branch coverage. Chromium exports all five exact widths after both XLSX and ODS reopen. Other named styles, themes and full task fidelity remain open.
+    Attempts: 184
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T16:21:34.254Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -9300,6 +9346,15 @@ sections:
     - All 124 focused tests passed. Coverage is 98.30% statements, 93.40% branches, 100% functions and 100% lines. Scoped lint, Prettier, JSDoc, source size, Vite, registry, source provenance, source tree, routing and doctor passed. Existing global metadata type and dependency diagnostics remain. The full suite is not due.
 
     Evidence: `evidence/xlsx-worksheet-dimensions.json`.
+
+    ### Native XLSX Normal style and application-font column widths
+
+    - The original Calc style pool now creates native cell styles with scoped SfxItemSets. The XLSX Normal XF materializes as the actual Default style, its descendants borrow that parent, and the XLSX exporter measures the effective application font. XLSX and ODS retain explicit alignment and fill resets against the imported Normal settings.
+    - The ODS named styles stream stores Default and independently stores ODF document-wide defaults. The Worker carries these definitions and preserves a direct General cell format alongside a default percent format. The browser-downloaded styles.xml validates against the pinned OpenDocument 1.3 schema.
+    - The adapted testColumnWidthResaveXLSX fixture retains all five columns, including width 250. Chromium verifies the same five character widths in the downloaded XLSX both directly and after reopening the primary ODS at 390 × 844. This resolves the observed 250-to-274.78 conversion in the preceding checkpoint. The downloaded XLSX also reopens at the same viewport and reproduces the first column's 195 CSS px display.
+    - All 83 focused tests passed with 95.23% branch coverage and full line coverage in the cell style owners. Scoped lint, format, bundle, provenance, registry, JSDoc, file-size, doctor and routing checks passed. Existing global metadata type and dependency diagnostics remain. The full suite is not due.
+
+    Evidence: `evidence/xlsx-normal-style-width-roundtrip.json`.
 id_source: "generated"
 ---
 ## Summary
@@ -14814,6 +14869,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T16:21:34.809Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Normal/Default style and application-font dimensions passed 83 tests with 95.23% scoped branch coverage. Chromium exports all five exact widths after both XLSX and ODS reopen. Other named styles, themes and full task fidelity remain open.
+Attempts: 184
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T16:21:34.254Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -15676,3 +15761,12 @@ Evidence: `evidence/xlsx-native-number-formats.json`.
 - All 124 focused tests passed. Coverage is 98.30% statements, 93.40% branches, 100% functions and 100% lines. Scoped lint, Prettier, JSDoc, source size, Vite, registry, source provenance, source tree, routing and doctor passed. Existing global metadata type and dependency diagnostics remain. The full suite is not due.
 
 Evidence: `evidence/xlsx-worksheet-dimensions.json`.
+
+### Native XLSX Normal style and application-font column widths
+
+- The original Calc style pool now creates native cell styles with scoped SfxItemSets. The XLSX Normal XF materializes as the actual Default style, its descendants borrow that parent, and the XLSX exporter measures the effective application font. XLSX and ODS retain explicit alignment and fill resets against the imported Normal settings.
+- The ODS named styles stream stores Default and independently stores ODF document-wide defaults. The Worker carries these definitions and preserves a direct General cell format alongside a default percent format. The browser-downloaded styles.xml validates against the pinned OpenDocument 1.3 schema.
+- The adapted testColumnWidthResaveXLSX fixture retains all five columns, including width 250. Chromium verifies the same five character widths in the downloaded XLSX both directly and after reopening the primary ODS at 390 × 844. This resolves the observed 250-to-274.78 conversion in the preceding checkpoint. The downloaded XLSX also reopens at the same viewport and reproduces the first column's 195 CSS px display.
+- All 83 focused tests passed with 95.23% branch coverage and full line coverage in the cell style owners. Scoped lint, format, bundle, provenance, registry, JSDoc, file-size, doctor and routing checks passed. Existing global metadata type and dependency diagnostics remain. The full suite is not due.
+
+Evidence: `evidence/xlsx-normal-style-width-roundtrip.json`.

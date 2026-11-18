@@ -1,0 +1,58 @@
+{
+  "command": "vitest run --config vitest.calc.config.ts --coverage src/sc/source/filter/oox/worksheethelper.test.ts src/sc/source/filter/oox/excelfilter.test.ts src/sc/source/filter/xml/ods.test.ts src/sc/source/filter/xml/ods-native-columns.test.ts src/sc/source/filter/xml/ods-style-routing.test.ts src/sc/source/core/data/formula-copy.test.ts src/sc/source/core/data/clipboard-resources.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-client.test.ts src/sc/browser/presentation/calc-files.test.tsx --coverage.include=src/sc/source/core/data/stlsheet.ts --coverage.include=src/sc/source/core/data/stlpool.ts --coverage.thresholds.branches=90 --coverage.thresholds.statements=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/xlsx-normal",
+  "focusedTests": {
+    "files": 10,
+    "passed": 83
+  },
+  "coverage": {
+    "statements": 97.22,
+    "branches": 95.23,
+    "functions": 100,
+    "lines": 100,
+    "threshold": 90
+  },
+  "upstreamTest": "testColumnWidthResaveXLSX",
+  "sourceFixture": "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/different-column-width-excel2010.xlsx",
+  "verified": [
+    "Normal XF materializes in the native Calc Default cell style and supplies the workbook export font.",
+    "The standard object owns its SfxItemSet and child styles inherit its actual parent. Native copying preserves ownership.",
+    "Primary ODS and its worker preserve the named Default style separately from pool defaults.",
+    "XLSX and ODS preserve differences between a Normal base style and explicit descendant alignment, fill and General formatting."
+  ],
+  "chromium": {
+    "directAndPrimarySizesInXlsx": [
+      24,
+      12,
+      6,
+      1,
+      250
+    ],
+    "exportedAppFont": "Arial 11pt using the native font substitution",
+    "checkedZipCrcAndStyleFontReferences": true,
+    "primaryInput": "Upstream fixture with one cell added so the existing primary-save criteria admit it.",
+    "viewport": "390x844",
+    "downloadedXlsxReopenFirstColumnCssPixels": 195,
+    "downloadedOdsStylesSchema": "OpenDocument v1.3 RELAX NG, valid"
+  },
+  "checks": {
+    "jsdoc": "pass",
+    "fileSize": "pass",
+    "scopedLint": "pass",
+    "format": "pass",
+    "viteBundle": "pass",
+    "registry": "pass",
+    "sourceProvenance": "pass",
+    "sourceTree": "pass",
+    "doctor": "pass",
+    "routing": "pass",
+    "gitDiff": "pass",
+    "typecheck": "existing metadata storage diagnostics",
+    "dependencies": "existing patattr browser boundary and comphelper/sax cycle"
+  },
+  "remaining": [
+    "Other named XLSX styles and workbook themes",
+    "Worksheet outlines and wider feature fidelity",
+    "Full Calc XLSX task acceptance"
+  ],
+  "fullSuiteRun": false
+}
