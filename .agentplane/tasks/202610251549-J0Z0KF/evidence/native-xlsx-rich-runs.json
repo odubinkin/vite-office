@@ -1,0 +1,110 @@
+{
+  "checkpoint": "Formatted XLSX text through native Calc EditEngine and shared string export",
+  "createdAt": "2026-11-18T22:27:41.840Z",
+  "task": "202610251549-J0Z0KF",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "editeng/source/editeng/editeng.cxx#EditEngine::QuickSetAttribs",
+    "editeng/source/editeng/impedit5.cxx#ImpEditEngine::SetAttribs",
+    "sc/source/filter/oox/richstring.cxx#RichStringPortion::convert",
+    "sc/source/filter/oox/stylesbuffer.cxx#Font::fillToItemSet",
+    "sc/source/filter/excel/xehelper.cxx#lclCreateFormattedString",
+    "sc/source/filter/excel/xestring.cxx#XclExpString::WriteXml"
+  ],
+  "sourceObservations": [
+    "CALC-726"
+  ],
+  "results": {
+    "calc": {
+      "files": 6,
+      "passed": 119,
+      "coverageGate": "passed",
+      "coverageThreshold": 90,
+      "coverage": {
+        "lines": {
+          "total": 124,
+          "covered": 124,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 142,
+          "covered": 140,
+          "skipped": 0,
+          "pct": 98.59
+        },
+        "functions": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 63,
+          "covered": 60,
+          "skipped": 0,
+          "pct": 95.23
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "editengine": {
+      "files": 4,
+      "passed": 53
+    },
+    "chromium": {
+      "passed": 5
+    }
+  },
+  "remaining": [
+    "The worker transfer record and the primary ODS path still flatten formatted EDIT cells.",
+    "Optimal row-height layout, rich phonetics and complete theme font resolution remain open.",
+    "The separate browser archive admission limit is unchanged."
+  ],
+  "fixtures": {
+    "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/preserve_space.xlsx": "dca72194dda7f51e051c1fd709ff330e172ff141845236694c25c476c23fea6b"
+  },
+  "files": {
+    "apps/office/e2e/calc/xlsx-text.spec.ts": "4de3e775caf08e7cbd939fd635f9a1ebda9dc548aeda56913bd6c1b705ab79be",
+    "apps/office/src/editeng/source/editeng/editeng.lifecycle.ts": "7ea3a2469daaf0c292e468462c2de4857757a0e611706485503b8f979f62b648",
+    "apps/office/src/editeng/source/editeng/impedit.lifecycle.ts": "8e756895995cd189b26ec3993b593ca4ce525166017b39a1d1cd2652c3a37946",
+    "apps/office/src/sc/source/core/tool/editutil.ts": "c99cabab158c566ed1f3f917f4842ba7f0d800b029d7712632c532df8afea146",
+    "apps/office/src/sc/source/filter/excel/xecontent.ts": "3a75721bb5fa065ca2ba322b56b59fe3bfeda8794084bbc17ca2c41cb2963d08",
+    "apps/office/src/sc/source/filter/excel/xehelper.ts": "73806a7bac13720eb85668142e9c9338ec525d722f49ba749f18dad6bca89af1",
+    "apps/office/src/sc/source/filter/excel/xestring.ts": "fb2c3c8ec470f6f9b14d2f7ac23cb40d3d07aec0e9f64fb1c6f9f6b688adee4c",
+    "apps/office/src/sc/source/filter/excel/xestyle.xml.ts": "8825d78f0d6f93dcb7ea419f5a88d621502f9b441571453993913a9585896a20",
+    "apps/office/src/sc/source/filter/excel/xetable.ts": "fb83d035a28ee09f35a5dd6fe0a3628c6a7cee79ee9e2abad2b7eb582ee90cfd",
+    "apps/office/src/sc/source/filter/oox/excelfilter.ts": "049f2aaf7a9145d1f6ceade8606ae3c0c795f62af9da7fc191a6a7383dd1b658",
+    "apps/office/src/sc/source/filter/oox/excelfilter.test.ts": "258a15a63f2754748619e2695896af8474cc0c3e5e62d7c9f099118a6c4517da",
+    "apps/office/src/sc/source/filter/oox/richstring.ts": "b87eedff6b071019c06364306ccf91e3bb19d973487669a5fb378b75fd0bb695",
+    "apps/office/src/sc/source/filter/oox/richstringcontext.ts": "4dc50bdaf9ac486b20429d280a69fa38f6ca3e849ae76b500fbb42aaa6bb3e40",
+    "apps/office/src/sc/source/filter/oox/sheetdatabuffer.ts": "a55c5f3214f6dc8c2c925882d2e134e44f967416ed74f417337a47eb2e5b86f4",
+    "apps/office/src/sc/source/filter/oox/stylesbuffer.ts": "90759489eaee41cda643fdfdb8138e78182e22a7b63fb75d91bc647a32395b8a",
+    "apps/office/src/sc/source/filter/oox/stylesfragment.ts": "bc3251519b8d2955ed50ce5f46e2dfb943147cc71fd2ec85aceecaa6084eb2d6",
+    "apps/office/src/sc/source/filter/oox/worksheetfragment.ts": "8d215c4a292f72cc6acddefb82bc9200212e3544f76c64011e4280697e670428",
+    "docs/program/calc-upstream-suspected-issues.md": "d0edc8c97c52c2344f7ab17429fc602fcf05e4e52e5747796d4b0bcc406c0a33"
+  },
+  "logs": {
+    "apps/office/coverage/runs-closure.log": "5807242e7f270b00b11e3057ac3ea5d737f92df8b419fc2a281ce0c906e4048b",
+    "apps/office/coverage/runs-editengine.log": "3bed55029e0497ea7e5f9dde2205e94d6bd61005bdf6744ab402964f5bd62d80",
+    "apps/office/coverage/runs-browser-final.log": "f8b0e09644547721ae539a067bfb2bff2d2579218f1f29e5d7b4a0f2bac7a28b",
+    "apps/office/coverage/runs-ods-probe.log": "f2e82c2b6f55ed9ba25ef32a4a0c6fb9985e8a34bcf9b8b6d539657d86786b44",
+    "apps/office/coverage/runs-build-final.log": "01f181426084800f7c9c8baccfb785eeb4b56c68ce9f245796d340f1e2e4f4d7",
+    "apps/office/coverage/runs-typecheck-closure.log": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2",
+    "apps/office/coverage/runs-jsdoc-final.log": "615f5f8120a392395aeb2edc342507385f5b1ff2f219ee6a008550420169351e",
+    "apps/office/coverage/runs-deps-final.log": "5f456309d8abc0069e945cef3c5c4a8282f2f8c77f8fa881e5db785e1dbd0ce0",
+    "apps/office/coverage/runs-tree-final.log": "6222f592b94b71895eeb3d3b5ae04b9271b1e94f393b4c06cc40e0c4738936e6",
+    "apps/office/coverage/runs-provenance-closure.log": "11c342bf6785f8ef2b26dadc32f024490c45b4075b2baa8ba37d343fbd45510e",
+    "apps/office/coverage/runs-invariants.log": "2af1f3f911402fc63714941084685cfb0c1757ac8ce66a8e176b1ec8535aa715",
+    "apps/office/coverage/runs-parity.log": "87ae24f7cc7bac46e4f334d21d03264661a4586db5596dfc5b416111d5458de4",
+    "apps/office/coverage/runs-resources.log": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38",
+    "apps/office/coverage/runs-size.log": "eb3eac01c06169aeea09a116ae7ae097794c6d325046d04a9a070453adc31eab",
+    "apps/office/coverage/runs-doctor.log": "e7f341ea39991c9aff6f0bb30594ad0b87c2fcb19ab6011766e9c3f0bbec1dd3",
+    "apps/office/coverage/runs-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+  }
+}

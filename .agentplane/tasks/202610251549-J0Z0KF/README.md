@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 606
+revision: 609
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T22:11:50.869Z"
+  updated_at: "2026-11-18T22:27:42.429Z"
   updated_by: "CODER"
-  note: "Shared and inline text checkpoint passes 90 Calc tests, four Chromium tests and the scoped 90% gate (96.15% branches). Original escape-unicode.xlsx survives XLSX and ODS reopen. Full rich-run formatting, the whitespace fixture optimal row-height assertion and prior package admission and branch coverage gaps remain."
-  attempts: 193
+  note: "Native XLSX run formatting passes 119 Calc tests, 53 shared EditEngine tests and five Chromium tests. Scoped branch coverage is 95.23% against 90%. The pinned no-wrap fixture preserves run weight in XLSX; a direct probe confirms that primary ODS still flattens character attributes. Worker transfer, rich ODS spans and related geometry remain open."
+  attempts: 194
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3096,8 +3099,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-18T22:27:42.429Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native XLSX run formatting passes 119 Calc tests, 53 shared EditEngine tests and five Chromium tests. Scoped branch coverage is 95.23% against 90%. The pinned no-wrap fixture preserves run weight in XLSX; a direct probe confirms that primary ODS still flattens character attributes. Worker transfer, rich ODS spans and related geometry remain open."
+  -
+    type: "status"
+    at: "2026-11-18T22:27:55.805Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T22:12:00.518Z"
+doc_updated_at: "2026-11-18T22:27:55.805Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -8902,6 +8918,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-18T22:27:42.429Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native XLSX run formatting passes 119 Calc tests, 53 shared EditEngine tests and five Chromium tests. Scoped branch coverage is 95.23% against 90%. The pinned no-wrap fixture preserves run weight in XLSX; a direct probe confirms that primary ODS still flattens character attributes. Worker transfer, rich ODS spans and related geometry remain open.
+    Attempts: 194
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T22:27:41.737Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -9846,6 +9892,18 @@ sections:
     - Command: ./node_modules/.bin/playwright test --config apps/office/coverage/admission-text.playwright.config.ts --workers=1. Result: pass. Evidence: 4 Chromium tests. Scope: actual file open, primary ODS browser persistence, XLSX and CSV downloads, and mobile reopen. The escaped Unicode fixture is tested through browser storage and its exported shared string XML is verified.
     - Commands: npm run test:static, npm run typecheck -w @vite-office/office, scoped ESLint and Prettier, npm run check:docs, npm run check:dependencies, npm run check:source-tree, npm run check:source-provenance, npm run inventory:invariants, npm run inventory:parity, npm run check:file-size, npm run check:calc-resources, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check. Result: pass. Scope: build and task policy gates for the text checkpoint.
     - The LibreOffice escape-unicode.xlsx assertion passes on original import, XLSX reopen and primary ODS reopen. The preserve_space.xlsx text and no-wrap style pass. Its optimal row-height assertion is still open, with the observed 845 mm100 exceeding LibreOffice's less-than-600 expectation. The represented rich-run text still requires its font and phonetic conversion paths. Browser archive admission retains the existing expansion limit pending explicit approval for an OOXML-only bounded verification path.
+
+    ### Native XLSX character formatting in Calc rich strings
+
+    - FontContext dispatches workbook and run font records to the same owner. RichString applies explicit run fonts and the original escapement-dependent first cell font through EditEngine::QuickSetAttribs and actual character item sets. The edit-engine range path uses native text positions, invalidation, and the existing language-specific spelling condition. Source run heights are rounded in hundredths of a millimetre and returned to XLSX in twips. Signed escapement survives both directions.
+    - The shared string exporter derives runs from actual EditTextObject sections and the workbook font table. XLSX writing and reopening preserves bold, italic, superscript, subscript, original line breaks and significant whitespace in the covered fixtures. A malformed worksheet after styled cells were read reports the filter failure and releases the style owners before the document.
+    - CALC-726 records the original LF-only run cursor after the editor normalizes CR and CRLF. The browser verification and fixture corpus remain local.
+    - Command: npm run test:coverage:calc -w @vite-office/office -- excelfilter richstring xestring xestyle worksheethelper calc-files --maxWorkers=1 --coverage.include=src/sc/source/filter/excel/xehelper.ts --coverage.include=src/sc/source/filter/oox/richstring.ts --coverage.include=src/sc/source/filter/oox/richstringcontext.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/runs-closure
+      Result: pass. Evidence: 119 tests across 6 files; 98.59% statements, 95.23% branches and 100% functions and lines across the selected Calc owners. Scope: formatted strings and native spreadsheet file paths.
+    - Command: npm run test:shared -w @vite-office/office -- native-engine-lifecycle native-engine-object native-edit-char-attrib native-engine-directions. Result: pass. Evidence: 53 tests across 4 files. Scope: shared editor selection, text objects and character attributes.
+    - Command: ./node_modules/.bin/playwright test --config apps/office/coverage/admission-text.playwright.config.ts --workers=1. Result: pass. Evidence: 5 Chromium tests. Scope: actual XLSX open, download and mobile reopen with the original preserve_space.xlsx fixture; prior escaped-text, XLSX date-system and CSV browser regressions.
+    - Commands: npm run test:static, npm run typecheck -w @vite-office/office, scoped ESLint and Prettier, npm run check:docs, npm run check:dependencies, npm run check:source-tree, npm run check:source-provenance, npm run inventory:invariants, npm run inventory:parity, npm run check:file-size, npm run check:calc-resources, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check. Result: pass. Scope: build and implementation gates.
+    - Primary ODS persistence still drops character attributes. A direct ODS save/reopen probe of the pinned fixture observed bold in the source edit object and no character weight in the reopened edit object. The ODS document transfer record also flattens EDIT cells to text in calc-document-codec.ts. Rich ODS spans, worker transfer of native character items, optimal row sizing, and advanced theme/phonetic font resolution remain open.
 id_source: "generated"
 ---
 ## Summary
@@ -15660,6 +15718,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-18T22:27:42.429Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native XLSX run formatting passes 119 Calc tests, 53 shared EditEngine tests and five Chromium tests. Scoped branch coverage is 95.23% against 90%. The pinned no-wrap fixture preserves run weight in XLSX; a direct probe confirms that primary ODS still flattens character attributes. Worker transfer, rich ODS spans and related geometry remain open.
+Attempts: 194
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-18T22:27:41.737Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -16608,3 +16696,15 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Command: ./node_modules/.bin/playwright test --config apps/office/coverage/admission-text.playwright.config.ts --workers=1. Result: pass. Evidence: 4 Chromium tests. Scope: actual file open, primary ODS browser persistence, XLSX and CSV downloads, and mobile reopen. The escaped Unicode fixture is tested through browser storage and its exported shared string XML is verified.
 - Commands: npm run test:static, npm run typecheck -w @vite-office/office, scoped ESLint and Prettier, npm run check:docs, npm run check:dependencies, npm run check:source-tree, npm run check:source-provenance, npm run inventory:invariants, npm run inventory:parity, npm run check:file-size, npm run check:calc-resources, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check. Result: pass. Scope: build and task policy gates for the text checkpoint.
 - The LibreOffice escape-unicode.xlsx assertion passes on original import, XLSX reopen and primary ODS reopen. The preserve_space.xlsx text and no-wrap style pass. Its optimal row-height assertion is still open, with the observed 845 mm100 exceeding LibreOffice's less-than-600 expectation. The represented rich-run text still requires its font and phonetic conversion paths. Browser archive admission retains the existing expansion limit pending explicit approval for an OOXML-only bounded verification path.
+
+### Native XLSX character formatting in Calc rich strings
+
+- FontContext dispatches workbook and run font records to the same owner. RichString applies explicit run fonts and the original escapement-dependent first cell font through EditEngine::QuickSetAttribs and actual character item sets. The edit-engine range path uses native text positions, invalidation, and the existing language-specific spelling condition. Source run heights are rounded in hundredths of a millimetre and returned to XLSX in twips. Signed escapement survives both directions.
+- The shared string exporter derives runs from actual EditTextObject sections and the workbook font table. XLSX writing and reopening preserves bold, italic, superscript, subscript, original line breaks and significant whitespace in the covered fixtures. A malformed worksheet after styled cells were read reports the filter failure and releases the style owners before the document.
+- CALC-726 records the original LF-only run cursor after the editor normalizes CR and CRLF. The browser verification and fixture corpus remain local.
+- Command: npm run test:coverage:calc -w @vite-office/office -- excelfilter richstring xestring xestyle worksheethelper calc-files --maxWorkers=1 --coverage.include=src/sc/source/filter/excel/xehelper.ts --coverage.include=src/sc/source/filter/oox/richstring.ts --coverage.include=src/sc/source/filter/oox/richstringcontext.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/runs-closure
+  Result: pass. Evidence: 119 tests across 6 files; 98.59% statements, 95.23% branches and 100% functions and lines across the selected Calc owners. Scope: formatted strings and native spreadsheet file paths.
+- Command: npm run test:shared -w @vite-office/office -- native-engine-lifecycle native-engine-object native-edit-char-attrib native-engine-directions. Result: pass. Evidence: 53 tests across 4 files. Scope: shared editor selection, text objects and character attributes.
+- Command: ./node_modules/.bin/playwright test --config apps/office/coverage/admission-text.playwright.config.ts --workers=1. Result: pass. Evidence: 5 Chromium tests. Scope: actual XLSX open, download and mobile reopen with the original preserve_space.xlsx fixture; prior escaped-text, XLSX date-system and CSV browser regressions.
+- Commands: npm run test:static, npm run typecheck -w @vite-office/office, scoped ESLint and Prettier, npm run check:docs, npm run check:dependencies, npm run check:source-tree, npm run check:source-provenance, npm run inventory:invariants, npm run inventory:parity, npm run check:file-size, npm run check:calc-resources, ap doctor, node .agentplane/policy/check-routing.mjs, git diff --check. Result: pass. Scope: build and implementation gates.
+- Primary ODS persistence still drops character attributes. A direct ODS save/reopen probe of the pinned fixture observed bold in the source edit object and no character weight in the reopened edit object. The ODS document transfer record also flattens EDIT cells to text in calc-document-codec.ts. Rich ODS spans, worker transfer of native character items, optimal row sizing, and advanced theme/phonetic font resolution remain open.
