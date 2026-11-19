@@ -1,0 +1,38 @@
+{
+  "scope": "Paint native Writer header and footer stories and their anchored raster fly frames on the physical browser page using the original encoded media.",
+  "implementation": "25ad075b52a6",
+  "checks": {
+    "writer": {
+      "files": 5,
+      "passed": 37,
+      "logs": ["pic-view-writer.log", "pic-view-position.log"]
+    },
+    "page_story_owner": {
+      "statements": 100,
+      "branches": 100,
+      "functions": 100,
+      "lines": 100
+    },
+    "production_chromium": {
+      "public_scenarios": 6,
+      "private_scenarios": 1,
+      "logs": ["pic-view-browser-final.log", "pic-view-private.log"]
+    },
+    "other": [
+      "typecheck",
+      "production build and static smoke",
+      "scoped ESLint and Prettier",
+      "JSDoc",
+      "file size",
+      "module boundaries",
+      "Writer resources",
+      "source tree",
+      "Agentplane doctor and routing",
+      "git diff check"
+    ]
+  },
+  "private_input": "The supplied DOCX opened through the production Writer UI. Chrome decoded the JPEG at the expected horizontal and vertical offsets in the first header. The same picture decoded after restoring the locally saved document. The input and temporary probe are excluded from Git.",
+  "public_regression": "Adapts the pinned testHeaderImageAlignment DOCX image to a DrawingML floating anchor and exercises import, browser decoding, physical placement and restoration from local ODF storage.",
+  "registry_check_failure": "Whole-repository discovery still lacks runtime records for OfficeTooltips.tsx and available-menu-items.ts. The provenance validator accepted all four records in this change.",
+  "pending": "Header and footer editing, exact character and line-relative placement, full graphic wrap and pagination, inline graphics and further drawing formats remain open."
+}
