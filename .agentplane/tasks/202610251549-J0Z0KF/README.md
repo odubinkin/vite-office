@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 627
+revision: 630
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T01:26:35.289Z"
+  updated_at: "2026-11-19T01:41:38.831Z"
   updated_by: "CODER"
-  note: "Native XLSX cell-format protection passes original fixture, Strict, ODS, Worker and file UI checks. The umbrella remains active for worksheet protection and wider filter scope."
-  attempts: 200
+  note: "Verified the native worksheet-protection XLSX checkpoint with 103 Calc tests, 116 shared tests, seven production Chromium scenarios and per-owner 90% source gates. Evidence: evidence/native-xlsx-sheet-protection.json. The umbrella remains open for ODF persistence, editing and password consumers, enhanced ranges and other remaining workbook paths."
+  attempts: 201
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3208,8 +3211,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T01:41:38.831Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified the native worksheet-protection XLSX checkpoint with 103 Calc tests, 116 shared tests, seven production Chromium scenarios and per-owner 90% source gates. Evidence: evidence/native-xlsx-sheet-protection.json. The umbrella remains open for ODF persistence, editing and password consumers, enhanced ranges and other remaining workbook paths."
+  -
+    type: "status"
+    at: "2026-11-19T01:41:43.837Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T01:26:44.789Z"
+doc_updated_at: "2026-11-19T01:41:43.837Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -9224,6 +9240,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-19T01:41:38.831Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified the native worksheet-protection XLSX checkpoint with 103 Calc tests, 116 shared tests, seven production Chromium scenarios and per-owner 90% source gates. Evidence: evidence/native-xlsx-sheet-protection.json. The umbrella remains open for ODF persistence, editing and password consumers, enhanced ranges and other remaining workbook paths.
+    Attempts: 201
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T01:41:33.052Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -10243,6 +10289,14 @@ sections:
     - Command: ./node_modules/.bin/playwright test -c apps/office/coverage/xlsxalignment.playwright.config.ts --workers=1. Result: pass. Evidence: seven production browser scenarios including source fixture opening, protection flags in XLSX download and mobile reopen.
     - Commands: npm run typecheck, npm run test:static, scoped Prettier and ESLint, docs/dependencies/size/tree/provenance, registry build/invariants/parity, Calc resource checks, routing, doctor and git diff. Result: pass. Evidence: `evidence/native-xlsx-cell-protection.json`.
     - Worksheet-level protection, differential protection styles and browser enforcement remain in the umbrella scope. No full suite was due.
+
+    ### Calc XLSX worksheet protection
+
+    - ScTable owns the copied protection state and invalidates the sheet stream on replacement. The native option order, selected-cell defaults and original inverse OOXML permission semantics are retained.
+    - WorksheetSettings imports the sheet flag, source-default permissions and both imported password hash forms. XclExpSheetProtection exports the original order and omits source defaults. The browser Worker transfer keeps both hash records and the native permissions.
+    - The unchanged ProtecteSheet1234Pass workbook asserts the original legacy verifier and object and scenario settings after export/reload. The unchanged tdfSheetProts workbook asserts the four tabs' original autofilter and pivot permissions through XLSX. The pinned tdf123139 workbook asserts worksheet protection in the production Open and Download XLSX path, followed by mobile reopen.
+    - Focused Calc verification passed 103 tests across 19 files and the per-owner 90 percent thresholds. Shared SAX and OOXML attribute/serializer verification passed 116 tests across 6 files. Production Chromium passed 7 scenarios. Typecheck, build and source gates passed. Evidence in `evidence/native-xlsx-sheet-protection.json`.
+    - ODF persistence of worksheet protection, the editing restriction and password consumers, enhanced ranges and pivot-table objects remain in the umbrella scope. This checkpoint does not alter the existing save or autosave workflow. No full suite was due.
 id_source: "generated"
 ---
 ## Summary
@@ -16267,6 +16321,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-19T01:41:38.831Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified the native worksheet-protection XLSX checkpoint with 103 Calc tests, 116 shared tests, seven production Chromium scenarios and per-owner 90% source gates. Evidence: evidence/native-xlsx-sheet-protection.json. The umbrella remains open for ODF persistence, editing and password consumers, enhanced ranges and other remaining workbook paths.
+Attempts: 201
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T01:41:33.052Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -17290,3 +17374,11 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Command: ./node_modules/.bin/playwright test -c apps/office/coverage/xlsxalignment.playwright.config.ts --workers=1. Result: pass. Evidence: seven production browser scenarios including source fixture opening, protection flags in XLSX download and mobile reopen.
 - Commands: npm run typecheck, npm run test:static, scoped Prettier and ESLint, docs/dependencies/size/tree/provenance, registry build/invariants/parity, Calc resource checks, routing, doctor and git diff. Result: pass. Evidence: `evidence/native-xlsx-cell-protection.json`.
 - Worksheet-level protection, differential protection styles and browser enforcement remain in the umbrella scope. No full suite was due.
+
+### Calc XLSX worksheet protection
+
+- ScTable owns the copied protection state and invalidates the sheet stream on replacement. The native option order, selected-cell defaults and original inverse OOXML permission semantics are retained.
+- WorksheetSettings imports the sheet flag, source-default permissions and both imported password hash forms. XclExpSheetProtection exports the original order and omits source defaults. The browser Worker transfer keeps both hash records and the native permissions.
+- The unchanged ProtecteSheet1234Pass workbook asserts the original legacy verifier and object and scenario settings after export/reload. The unchanged tdfSheetProts workbook asserts the four tabs' original autofilter and pivot permissions through XLSX. The pinned tdf123139 workbook asserts worksheet protection in the production Open and Download XLSX path, followed by mobile reopen.
+- Focused Calc verification passed 103 tests across 19 files and the per-owner 90 percent thresholds. Shared SAX and OOXML attribute/serializer verification passed 116 tests across 6 files. Production Chromium passed 7 scenarios. Typecheck, build and source gates passed. Evidence in `evidence/native-xlsx-sheet-protection.json`.
+- ODF persistence of worksheet protection, the editing restriction and password consumers, enhanced ranges and pivot-table objects remain in the umbrella scope. This checkpoint does not alter the existing save or autosave workflow. No full suite was due.

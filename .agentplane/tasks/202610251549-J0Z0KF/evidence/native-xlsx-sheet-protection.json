@@ -1,0 +1,209 @@
+{
+  "checkpoint": "Calc native worksheet protection and SpreadsheetML round-trip",
+  "createdAt": "2026-11-19T01:41:32.726Z",
+  "task": "202610251549-J0Z0KF",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sc/inc/tabprotection.hxx#ScTableProtection",
+    "sc/source/core/data/tabprotection.cxx#ScTableProtection::ScTableProtection",
+    "sc/source/core/data/documen3.cxx#ScDocument::SetTabProtection",
+    "sc/source/core/data/table5.cxx#ScTable::SetProtection",
+    "sc/source/filter/oox/worksheetsettings.cxx#WorksheetSettings::importSheetProtection",
+    "sc/source/filter/oox/worksheetsettings.cxx#WorksheetSettings::finalizeImport",
+    "sc/source/filter/excel/excrecds.cxx#XclExpSheetProtection::SaveXml",
+    "sc/qa/unit/subsequent_export_test.cxx#testSheetProtectionXLSX",
+    "sc/qa/unit/subsequent_export_test5.cxx#testSheetProtections"
+  ],
+  "results": {
+    "calc": {
+      "files": 19,
+      "tests": 103
+    },
+    "shared": {
+      "files": 6,
+      "tests": 116
+    },
+    "chromium": 7,
+    "coverageThreshold": 90,
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 42,
+          "covered": 42,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 48,
+          "covered": 48,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 36,
+          "covered": 36,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sc/source/core/data/tabprotection.ts": {
+        "lines": {
+          "total": 16,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 16,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sc/source/filter/excel/excrecds.ts": {
+        "lines": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sc/source/filter/oox/worksheetsettings.ts": {
+        "lines": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 18,
+          "covered": 18,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "apps/office/src/sc/inc/tabprotection.ts",
+      "sha256": "080dd39e961060a4dc3a2e4e0b065512c93c1f24f0ebd5ef2557218cc9e2d9d9"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/tabprotection.ts",
+      "sha256": "4ef8873dea3a017e31fe32e18514102404f9dac747f6f2ee5262d080400de0aa"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/table.ts",
+      "sha256": "a6262df5c6e3a21c1e2f8c543200ac822c7733ae5aad0624a3134dd8fb051016"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.ts",
+      "sha256": "6ce9e1412bb3646c0d222cf7b6eff6ffd42d44eab25b129a8b77e3cd0b3510d2"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/inc/sheetprotection.ts",
+      "sha256": "36375297a8e91d2b34cf4975664f39b6474d61a8af4d9e30b2c3a6bdcc330f80"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/oox/worksheetsettings.ts",
+      "sha256": "29bb6b505aedce5fcc0a3782e24a3e3ee48b5c6f6ffe497ecda8d0080962ae63"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/oox/worksheetfragment.ts",
+      "sha256": "1b9a6457ce72643ccdfde409c3ef8748d174a563e81d3c468ced29ba73ff1995"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/oox/excelfilter.sheet-protection.test.ts",
+      "sha256": "ab48ec494d5eacd742fb3d655d1230ddd3e526279a032ae2dd01dd6e5b392baa"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/excel/excrecds.ts",
+      "sha256": "e29c4f85e2bb0eee0700b1a597f373a66a3517c9806209038310c560f2d6a9dd"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/excel/xetable.ts",
+      "sha256": "a4786e5f7ad283a01648d44316c12743889469938bca9665365bc27cfeb1e2cc"
+    },
+    {
+      "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts",
+      "sha256": "c07a1b04b6f150c596515face78dec0a95104d3731612f0f978a51a00932d37e"
+    },
+    {
+      "path": "apps/office/e2e/calc/xlsx-alignment.spec.ts",
+      "sha256": "88f89acd2572b28ac97f23e2908314d09c4d503ec72d05680b3347217650df9c"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/table5.ts",
+      "sha256": "d11625d3392a7cbb815bc0563f3568454a66b8ce6fcee759eaf784a6e9ccd4d7"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documen3.ts",
+      "sha256": "d321f548e8657222f4149d109875c3b712e0f13a2a3e3ffb48ffa76696e92cea"
+    }
+  ],
+  "verified": [
+    "Pinned legacy verifier, worksheet option defaults and inversions, modern verifier fields and mixed verifier round-trip.",
+    "Source worksheet permissions remain independent across four workbook tabs.",
+    "Native copy and stream invalidation, Worker transport, XLSX export and mobile Chromium reopen through existing File controls.",
+    "Typecheck, production build and static smoke, scoped lint and format, JSDoc, dependencies, source size and tree, provenance and inventory, resources, routing and diff checks."
+  ],
+  "remaining": [
+    "Existing ODS autosave does not persist worksheet-level protection. Transfer to a Worker preserves flags but ODF serialization needs its own option and hash binding.",
+    "Calc editing restrictions and password verification require the remaining upstream consumers. Enhanced protection ranges and pivot-table objects remain open."
+  ]
+}
