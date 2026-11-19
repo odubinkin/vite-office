@@ -13,11 +13,13 @@
     "upstreamSymbols": [
       "XMLSettingsExportHelper::exportBool",
       "XMLSettingsExportHelper::exportString",
-      "XMLSettingsExportHelper::exportIndexAccess"
+      "XMLSettingsExportHelper::exportIndexAccess",
+      "XMLSettingsExportHelper::exportInt"
     ],
     "preservedResponsibilities": [
       "Emits boolean configuration items and indexed view map entries containing the represented string properties.",
-      "Writes scalar boolean view properties and real named map entries inside the indexed view settings."
+      "Writes scalar boolean view properties and real named map entries inside the indexed view settings.",
+      "Serializes signed integer view properties under the original ODF int type."
     ],
     "omittedResponsibilities": [
       "Other UNO settings value types, named maps, and additional document-specific groups remain outside the represented serialization."
@@ -49,6 +51,10 @@
         {
           "path": "xmloff/source/core/SettingsExportHelper.cxx",
           "marker": "XMLSettingsExportHelper::exportIndexAccess"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/core/SettingsExportHelper.cxx",
+          "marker": "XMLSettingsExportHelper::exportInt"
         }
       ]
     }

@@ -17,11 +17,103 @@ import { ReadUserDataSequence, WriteUserDataSequence } from "./viewdata.settings
 import type { ScDocument } from "../../../inc/document";
 import { ViewOption } from "../../../inc/viewopti";
 import { ScViewData } from "./viewdata";
+import { ScDocShell } from "../docshell/docsh";
+import { ScTabViewShell } from "./tabvwsh4";
+import { getSheetCursor } from "../../core/data/document.sheet-visibility";
 
 /** Reads an unchanged pinned LibreOffice fixture. @param name - Reference path under Calc unit data. @returns Bytes. */
 function fixture(name: string): Uint8Array {
   return new Uint8Array(readFileSync("../../vendor/libreoffice-reference/sc/qa/unit/data/" + name));
 }
+
+it("reads the active pane's cursor and round-trips it through the view, Worker, ODS and XLSX", /** Exercises the pinned workbook with four different pane cursors. @returns Completion. */ async () => {
+  const source = await ExcelFilter.importDocument(fixture("xlsx/freezePaneStartCell.xlsx"));
+  let worker: ScDocument | undefined;
+  let stored: ScDocument | undefined;
+  let reopened: ScDocument | undefined;
+  try {
+    expect(getSheetCursor(source, 0)).toEqual([5, 10]);
+    const view = new ScTabViewShell(new ScDocShell(source)).GetViewData();
+    expect([view.GetCurX(), view.GetCurY()]).toEqual([5, 10]);
+    view.SetCurX(6);
+    view.SetCurY(7);
+    worker = decodeCalcDocument(structuredClone(encodeCalcDocument(source)));
+    expect(getSheetCursor(worker, 0)).toEqual([6, 7]);
+    const primary = await writeOdsXml(worker);
+    expect(primary.files["settings.xml"]).toContain(
+      'config:name="CursorPositionX" config:type="int">6<',
+    );
+    expect(primary.files["settings.xml"]).toContain(
+      'config:name="CursorPositionY" config:type="int">7<',
+    );
+    stored = await readOdsDocument(primary);
+    expect(getSheetCursor(stored, 0)).toEqual([6, 7]);
+    const bytes = await exportXlsx(stored);
+    const output = await DocumentArchive.open(bytes);
+    expect(await output.readTextEntry("xl/worksheets/sheet1.xml")).toContain(
+      '<selection pane="topLeft" activeCell="G8" activeCellId="0" sqref="G8"/>',
+    );
+    reopened = await ExcelFilter.importDocument(bytes);
+    expect(getSheetCursor(reopened, 0)).toEqual([6, 7]);
+  } finally {
+    reopened?.Dispose();
+    stored?.Dispose();
+    worker?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("uses the first view's active selection or its top-left cell and preserves separate sheet cursors", /** Checks first-view source order, missing and invalid addresses and named-sheet cursor ownership. @returns Completion. */ async () => {
+  const source = await DocumentArchive.open(fixture("xlsx/sheet-names.xlsx"));
+  const writer = new DocumentArchiveWriter();
+  const first =
+    '<sheetView topLeftCell="D7" workbookViewId="0"><pane activePane="bottomRight"/><selection pane="topLeft" activeCell="C4"/></sheetView>';
+  const second =
+    '<sheetView workbookViewId="1"><pane activePane="topLeft"/><selection activeCell="E6"/></sheetView>';
+  const settings = new Map([
+    ["xl/worksheets/sheet1.xml", first + second],
+    [
+      "xl/worksheets/sheet2.xml",
+      '<sheetView topLeftCell="C3" workbookViewId="0"><selection activeCell="not-a-cell"/></sheetView>',
+    ],
+    ["xl/worksheets/sheet3.xml", ""],
+    [
+      "xl/worksheets/sheet5.xml",
+      '<sheetView workbookViewId="0"><selection activeCell="B6"/><selection activeCell="E2"/></sheetView>',
+    ],
+  ]);
+  for (const name of source.getEntryNames()) {
+    const model = settings.get(name);
+    if (model === undefined) writer.putNextEntry(name, await source.readEntry(name));
+    else
+      writer.putNextEntry(
+        name,
+        new TextEncoder().encode(
+          (await source.readTextEntry(name)).replace(
+            /<sheetViews>.*?<\/sheetViews>/su,
+            `<sheetViews>${model}</sheetViews>`,
+          ),
+        ),
+      );
+  }
+  const document = await ExcelFilter.importDocument(await writer.finish());
+  try {
+    expect(document.GetVisibleTab()).toBe(4);
+    expect(getSheetCursor(document, 0)).toEqual([3, 6]);
+    expect(getSheetCursor(document, 1)).toEqual([9873, 0]);
+    expect(getSheetCursor(document, 2)).toEqual([0, 0]);
+    expect(getSheetCursor(document, 4)).toEqual([4, 1]);
+    const view = new ScTabViewShell(new ScDocShell(document)).GetViewData();
+    view.SetTabNo(4);
+    expect([view.GetCurX(), view.GetCurY()]).toEqual([4, 1]);
+    view.SetCurXForTab(5, 0);
+    view.SetCurYForTab(9, 0);
+    expect(getSheetCursor(document, 0)).toEqual([5, 9]);
+    expect([view.GetCurX(), view.GetCurY()]).toEqual([4, 1]);
+  } finally {
+    document.Dispose();
+  }
+});
 
 it("preserves the original Excel sheet names and the fifth active sheet through primary ODS", /** Ports testSheetNamesXLSX and checks the active view by name, not position alone. @returns Completion. */ async () => {
   const source = await ExcelFilter.importDocument(fixture("xlsx/sheet-names.xlsx"));
@@ -80,6 +172,8 @@ it("reads the native ODS first view and ignores unresolved properties", /** Veri
               [
                 ["Unrelated", false],
                 ["ShowGrid", "false"],
+                ["CursorPositionX", 65540],
+                ["CursorPositionY", "4"],
               ],
             ],
           ],
@@ -88,6 +182,9 @@ it("reads the native ODS first view and ignores unresolved properties", /** Veri
       [["ActiveTable", "Sheet1"]],
     ]);
     expect(document.GetVisibleTab()).toBe(1);
+    expect(getSheetCursor(document, 1)).toEqual([4, 65540]);
+    ReadUserDataSequence(document, [[["Tables", [["Sheet2", [["CursorPositionY", 2147483647]]]]]]]);
+    expect(getSheetCursor(document, 1)).toEqual([4, document.MaxRow()]);
     expect(WriteUserDataSequence(document)[0]).toContainEqual(["ActiveTable", "Sheet2"]);
     document.SetVisible(1, false);
     expect(WriteUserDataSequence(document)).toEqual([]);

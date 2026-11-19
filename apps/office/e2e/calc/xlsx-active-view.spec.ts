@@ -7,6 +7,61 @@ import {
   DocumentArchiveWriter,
 } from "../../src/package/source/zippackage/document-archive";
 
+test("Calc restores the XLSX active pane cursor and exports the moved cursor", /** Uses the existing Calc file UI and Name Box through XLSX, local ODS and mobile reopen. @param fixtures - Browser fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
+  page,
+}) => {
+  const path = fileURLToPath(
+    new URL(
+      "../../../../vendor/libreoffice-reference/sc/qa/unit/data/xlsx/freezePaneStartCell.xlsx",
+      import.meta.url,
+    ),
+  );
+  const open = page.getByRole("button", { name: "Open", exact: true });
+  const name = page.getByRole("textbox", { name: "Name Box", exact: true });
+  await page.goto("/calc");
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles(path);
+  await expect(name).toHaveValue("F11");
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Save As…" }).click();
+  await page.getByRole("textbox", { name: "New copy name" }).fill("Cursor view copy");
+  await page.getByRole("button", { name: "Save copy" }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+
+  await page.reload();
+  await open.click();
+  await page.getByRole("tab", { name: "In browser" }).click();
+  await page.getByRole("button", { name: "Cursor view copy", exact: true }).click();
+  await expect(name).toHaveValue("F11");
+  await name.fill("D7");
+  await name.press("Enter");
+  await expect(name).toHaveValue("D7");
+
+  const downloaded = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download XLSX" }).click();
+  const exportPath = await (await downloaded).path();
+  if (!exportPath) throw new Error("Missing XLSX download.");
+  const buffer = await readFile(exportPath);
+  const archive = await DocumentArchive.open(buffer);
+  expect(await archive.readTextEntry("xl/worksheets/sheet1.xml")).toContain(
+    '<selection pane="topLeft" activeCell="D7" activeCellId="0" sqref="D7"/>',
+  );
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer,
+    name: "Cursor view reopened.xlsx",
+    mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(name).toHaveValue("D7");
+});
+
 test("Calc restores the XLSX active sheet when several sheets are visible", /** Exercises local Open, primary ODS, XLSX export and mobile reopen. @param fixtures - Browser state. @param fixtures.page - Chromium page. @returns Completion. */ async ({
   page,
 }) => {

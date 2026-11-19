@@ -5424,6 +5424,7 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 
 - Source: pinned `sc/source/filter/inc/addressconverter.hxx`, `AddressConverter::convertToCellAddressUnchecked`, its body in `sc/source/filter/oox/addressconverter.cxx`, and the local Excel A1 scanner in `sc/source/core/tool/address.cxx`, commit9bc445578031fecf56086729d8e4940c77e14d65.
 - The header promises conversion without checking any sheet limits, but the implementation calls ScAddress::Parse with the real document. The parser can reject columns/rows outside that document's dimensions before the converter's separate overflow checks ever run. Preserve that call and its partial output, rather than replacing it with an unbounded A1 parser to match the comment. Actual local ScDocument tests retain false for XFE1 and A1048577 with ordinary dimensions. This is source/local-core evidence, not an independently compiled complete workbook or UI reproduction.
+- The worksheet-view path calls `AddressConverter::createValidCellAddress`, which clamps the partially parsed row and column after a failed parse. An invalid `activeCell="not-a-cell"` retains the parsed `NOT` column and the default first row in the local XLSX regression. This keeps the native fallback's use of the parser's output.
 
 ### CALC-521 — The raw import formula overload guards null for policy checks but stores it as a formula
 
@@ -7076,3 +7077,14 @@ unrecognized. The shared OOXML VML converter retains these source rules.
 
 - [Original measure conversion](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/oox/source/vml/vmlformatting.cxx#L154-L210)
 - [Shared VML conversion regression](../../apps/office/src/oox/source/vml/vmlshape.test.ts)
+
+### CALC-751 — A mistyped ODF cursor property can reuse the previous coordinate value
+
+`ScViewDataTable::ReadUserDataSequence` extracts both cursor properties into
+one signed 32-bit temporary and uses it even when extraction fails. A
+mistyped row can therefore take the previous column's raw value. Column
+values also narrow to signed 16 bits before Calc applies its sheet bounds.
+The local typed view reader retains both source rules.
+
+- [Original cursor property reader](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/ui/view/viewdata.cxx#L610-L634)
+- [Calc regression](../../apps/office/src/sc/source/ui/view/viewdata.settings.test.ts)

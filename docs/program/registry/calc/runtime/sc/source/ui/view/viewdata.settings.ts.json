@@ -20,9 +20,12 @@
       "evidence": [
         "apps/office/src/sc/source/ui/view/viewdata.settings.ts",
         "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
-        "sc/source/ui/view/viewdata.cxx"
+        "sc/source/ui/view/viewdata.cxx",
+        "apps/office/e2e/calc/xlsx-active-view.spec.ts",
+        "vendor/libreoffice-reference/sc/source/ui/view/viewdata.cxx#ScViewDataTable::ReadUserDataSequence",
+        "vendor/libreoffice-reference/sc/source/ui/view/viewdata.cxx#ScViewDataTable::WriteUserDataSequence"
       ],
-      "justification": "Reads the original ActiveTable property by sheet name from the primary saved view and emits the actual selected sheet in the indexed ODF view settings. Cursor, window, zoom, split and other view properties remain outside this mechanism. Reads and writes the native ShowGrid values independently at the workbook level and inside the Tables map keyed by sheet name. Uses the native HasColumnRowHeaders and ShowZeroValues ODS view booleans. Formula display has no native reader or writer entry.",
+      "justification": "Reads the original ActiveTable property by sheet name from the primary saved view and emits the actual selected sheet in the indexed ODF view settings. Window, zoom, pane split and other view properties remain outside this mechanism. Reads and writes the native ShowGrid values independently at the workbook level and inside the Tables map keyed by sheet name. Uses the native HasColumnRowHeaders and ShowZeroValues ODS view booleans. Formula display has no native reader or writer entry. Reads and writes the signed integer CursorPositionX and CursorPositionY properties in the named sheet’s ODF view record.",
       "knownViolations": [],
       "localSymbols": [
         "ReadUserDataSequence",
@@ -32,7 +35,9 @@
       "upstreamFile": "sc/source/ui/view/viewdata.cxx",
       "upstreamSymbols": [
         "ScViewData::ReadUserDataSequence",
-        "ScViewData::WriteUserDataSequence"
+        "ScViewData::WriteUserDataSequence",
+        "ScViewDataTable::ReadUserDataSequence",
+        "ScViewDataTable::WriteUserDataSequence"
       ]
     }
   }

@@ -3,6 +3,14 @@ import type { ScDocument } from "../../../inc/document";
 import { ValidTab } from "../../../inc/address";
 import type { ScTable } from "../../../inc/table";
 
+/** View settings held by the detached document until the view is constructed. */
+export interface SheetViewState {
+  readonly showGrid: boolean;
+  readonly cursor: readonly [column: number, row: number];
+}
+
+const defaultSheetView: SheetViewState = { showGrid: true, cursor: [0, 0] };
+
 /** Reports the actual sheet ownership count. @param this - Native document. @returns Count. */
 export function GetTableCount(this: ScDocument): number {
   return this["maTabs"].length;
@@ -35,14 +43,40 @@ export function SetVisibleTab(this: ScDocument, tab: number): void {
 
 /** Reads the sheet view setting carried with a detached document. @param this - Workbook. @param tab - Native tab. @returns Grid visibility, true by default. */
 export function GetSheetShowGrid(this: ScDocument, tab: number): boolean {
-  const sheet = this.FetchTable(tab);
-  return !sheet || !this["maSheetsWithoutGrid"].has(sheet);
+  return sheetView(this, tab).showGrid;
 }
 
 /** Stores the detached sheet view without changing global Calc options. @param this - Workbook. @param tab - Native tab. @param show - Sheet grid visibility. @returns Nothing. */
 export function SetSheetShowGrid(this: ScDocument, tab: number, show: boolean): void {
   const sheet = this.FetchTable(tab);
   if (!sheet) return;
-  if (show) this["maSheetsWithoutGrid"].delete(sheet);
-  else this["maSheetsWithoutGrid"].add(sheet);
+  this["maSheetViews"].set(sheet, { ...sheetView(this, tab), showGrid: show });
+}
+
+/** Reads one detached sheet view or its native defaults. @param document - Workbook. @param tab - Native tab. @returns View settings. */
+function sheetView(document: ScDocument, tab: number): SheetViewState {
+  const sheet = document.FetchTable(tab);
+  return (sheet && document["maSheetViews"].get(sheet)) || defaultSheetView;
+}
+
+/** Reads the named sheet's detached view cursor. @param document - Workbook. @param tab - Native tab. @returns Column and row. */
+export function getSheetCursor(document: ScDocument, tab: number): SheetViewState["cursor"] {
+  return sheetView(document, tab).cursor;
+}
+
+/** Publishes a valid cursor for the detached view and file filters. @param document - Workbook. @param tab - Native tab. @param column - Cursor column. @param row - Cursor row. @returns Nothing. */
+export function setSheetCursor(
+  document: ScDocument,
+  tab: number,
+  column: number,
+  row: number,
+): void {
+  const sheet = document.FetchTable(tab);
+  if (
+    sheet &&
+    Number.isInteger(column) &&
+    Number.isInteger(row) &&
+    document.ValidColRow(column, row)
+  )
+    document["maSheetViews"].set(sheet, { ...sheetView(document, tab), cursor: [column, row] });
 }

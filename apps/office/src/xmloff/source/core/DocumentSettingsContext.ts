@@ -5,9 +5,10 @@ import { PropertyState } from "../../../udkapi/com/sun/star/beans/PropertyState"
 import { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "./xmlimp";
 import { ODF_NAMESPACES, XMLToken } from "./xmltoken";
+import { Converter } from "../../../sax/source/tools/converter";
 
 /** Represented scalar properties of one native view record. */
-type ViewItem = readonly [name: string, value: string | boolean];
+export type ViewItem = readonly [name: string, value: string | boolean | number];
 /** Original named map of property sequences, in XML order. */
 export type NamedViewSettings = readonly (readonly [name: string, items: readonly ViewItem[]])[];
 /** Properties of one indexed view record. */
@@ -227,13 +228,21 @@ function createViewItem(
 ): SvXMLImportContext {
   const name = attributes.get(XMLToken.CONFIG_NAME);
   const type = attributes.get(XMLToken.CONFIG_TYPE);
-  if (element !== XMLToken.CONFIG_ITEM || !name || (type !== "string" && type !== "boolean"))
+  if (
+    element !== XMLToken.CONFIG_ITEM ||
+    !name ||
+    (type !== "string" && type !== "boolean" && type !== "int")
+  )
     return new SvXMLIgnoreContext(true);
   return new XMLConfigItemContext(
     /** Stores the typed scalar in native property order. @param value - XML text. @returns Nothing. */
     (value) => {
       if (type === "string") output.push([name, value]);
-      else if (value === "true" || value === "false") output.push([name, value === "true"]);
+      else if (type === "int") {
+        const number: [number] = [0];
+        Converter.convertNumber(number, value);
+        output.push([name, number[0]]);
+      } else if (value === "true" || value === "false") output.push([name, value === "true"]);
     },
   );
 }

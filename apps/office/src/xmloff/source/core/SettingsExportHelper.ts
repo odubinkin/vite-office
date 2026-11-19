@@ -2,11 +2,12 @@
 import type { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
 import { escapeXml } from "../text/txtparae";
 import { ODF_NAMESPACES } from "./xmltoken";
-import type { ViewSettings } from "./DocumentSettingsContext";
+import type { ViewItem, ViewSettings } from "./DocumentSettingsContext";
 
 /** Encodes a typed scalar view property. @param name - Native name. @param value - Native scalar value. @returns XML. */
-function exportViewItem(name: string, value: string | boolean): string {
-  return `<config:config-item config:name="${escapeXml(name)}" config:type="${typeof value}">${escapeXml(String(value))}</config:config-item>`;
+function exportViewItem(name: string, value: ViewItem[1]): string {
+  const type = typeof value === "number" ? "int" : typeof value;
+  return `<config:config-item config:name="${escapeXml(name)}" config:type="${type}">${escapeXml(String(value))}</config:config-item>`;
 }
 
 /** Writes the represented indexed native Views property. @param views - Ordered view records. @returns Settings XML. */
@@ -21,7 +22,7 @@ export function exportViewSettings(views: ViewSettings): string {
   for (const view of views) {
     output.push("<config:config-item-map-entry>");
     for (const [name, value] of view) {
-      if (typeof value === "string" || typeof value === "boolean") {
+      if (typeof value !== "object") {
         output.push(exportViewItem(name, value));
         continue;
       }

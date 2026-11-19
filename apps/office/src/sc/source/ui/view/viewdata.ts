@@ -8,6 +8,7 @@ import { ScMergeAttr } from "../../../inc/attrib";
 import { ATTR_MERGE } from "../../../inc/scitems";
 import { SfxItemState } from "../../../../svl/inc/itemset";
 import { ScAddress, ScRange, ValidTab } from "../../../inc/address";
+import { getSheetCursor, setSheetCursor } from "../../core/data/document.sheet-visibility";
 /** Native viewdata.hxx pane identities; the supported unsplit view starts bottom-left. */
 export const ScSplitPos = {
   SC_SPLIT_TOPLEFT: 0,
@@ -211,6 +212,15 @@ export class ScViewData {
     this.maMarkData = new ScMarkData(mrDoc.GetSheetLimits());
     this.maMarkData.SelectOneTable(0);
   }
+  /** Loads saved cursor properties after the actual document view is attached. @returns Nothing. */
+  ReadCursorPositions(): void {
+    for (let tab = 0; tab < this.mrDoc.GetTableCount(); ++tab) {
+      const [column, row] = getSheetCursor(this.mrDoc, tab);
+      if (column || row) this.CreateTabData(tab);
+      const data = this.FetchTableData(tab);
+      if (data) [data.nCurX, data.nCurY] = [column, row];
+    }
+  }
   /** Original view-owned borrowed option copy. @returns Actual options. */
   GetOptions(): ScViewOptions {
     return this.maOptions;
@@ -285,10 +295,12 @@ export class ScViewData {
   /** Assigns the native cursor field directly; caller enforces the document coordinate precondition. @param nNewCurX - Column. @returns Nothing. */
   SetCurX(nNewCurX: number): void {
     this.pThisTab.nCurX = nNewCurX;
+    this.PublishCursor(this.mnTabNumber, this.pThisTab);
   }
   /** Assigns the native cursor field directly; caller enforces the document coordinate precondition. @param nNewCurY - Row. @returns Nothing. */
   SetCurY(nNewCurY: number): void {
     this.pThisTab.nCurY = nNewCurY;
+    this.PublishCursor(this.mnTabNumber, this.pThisTab);
   }
   /** Reads a created sheet cursor or the source absent-slot sentinel. @param nTabIndex - Tab. @returns Column or -1. */
   GetCurXForTab(nTabIndex: number): number {
@@ -301,12 +313,20 @@ export class ScViewData {
   /** Updates a created sheet only, without allocating missing data. @param nNewCurX - Column. @param nTabIndex - Tab. @returns Nothing. */
   SetCurXForTab(nNewCurX: number, nTabIndex: number): void {
     const data = this.FetchTableData(nTabIndex);
-    if (data) data.nCurX = nNewCurX;
+    if (!data) return;
+    data.nCurX = nNewCurX;
+    this.PublishCursor(nTabIndex, data);
   }
   /** Updates a created sheet only, without allocating missing data. @param nNewCurY - Row. @param nTabIndex - Tab. @returns Nothing. */
   SetCurYForTab(nNewCurY: number, nTabIndex: number): void {
     const data = this.FetchTableData(nTabIndex);
-    if (data) data.nCurY = nNewCurY;
+    if (!data) return;
+    data.nCurY = nNewCurY;
+    this.PublishCursor(nTabIndex, data);
+  }
+  /** Mirrors the attached view's cursor into the detached storage properties. @param tab - Actual sheet. @param data - View-owned cursor. @returns Nothing. */
+  private PublishCursor(tab: number, data: ScViewDataTable): void {
+    if (this.pView) setSheetCursor(this.mrDoc, tab, data.nCurX, data.nCurY);
   }
   /** Uses the saved old column only while valid. @returns Saved or current column. */
   GetOldCurX(): number {

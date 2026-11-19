@@ -11,11 +11,13 @@
     ],
     "upstreamSymbols": [
       "XMLDocumentSettingsContext::createFastChildContext",
-      "XMLDocumentSettingsContext::endFastElement"
+      "XMLDocumentSettingsContext::endFastElement",
+      "XMLConfigItemContext::endFastElement"
     ],
     "preservedResponsibilities": [
       "Resolves the original namespace-qualified configuration and view groups. The indexed Views property retains typed string entries in order, independently of boolean configuration properties.",
-      "Reads typed boolean view properties and the original named maps of scalar property sequences."
+      "Reads typed boolean view properties and the original named maps of scalar property sequences.",
+      "Reads typed signed integer view properties, preserving the converter’s zero output when conversion fails."
     ],
     "omittedResponsibilities": [
       "Document-specific settings and additional property types remain outside the represented groups."
@@ -43,6 +45,10 @@
         {
           "path": "xmloff/source/core/DocumentSettingsContext.cxx",
           "marker": "XMLDocumentSettingsContext::endFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/core/DocumentSettingsContext.cxx",
+          "marker": "XMLConfigItemContext::endFastElement"
         }
       ]
     }

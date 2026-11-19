@@ -21,9 +21,10 @@
         "vendor/libreoffice-reference/xmloff/source/core/DocumentSettingsContext.cxx#XMLDocumentSettingsContext::createFastChildContext",
         "apps/office/src/sw/source/filter/xml/native-rtf-tab-settings-roundtrip.test.ts",
         "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
-        "apps/office/src/xmloff/source/core/DocumentSettingsContext.test.ts"
+        "apps/office/src/xmloff/source/core/DocumentSettingsContext.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/core/DocumentSettingsContext.cxx#XMLConfigItemContext::endFastElement"
       ],
-      "justification": "Resolves the original namespace-qualified configuration and view groups. The indexed Views property retains typed string entries in order, independently of boolean configuration properties. Document-specific settings and additional property types remain outside the represented groups. Reads typed boolean view properties and the original named maps of scalar property sequences.",
+      "justification": "Resolves the original namespace-qualified configuration and view groups. The indexed Views property retains typed string entries in order, independently of boolean configuration properties. Document-specific settings and additional property types remain outside the represented groups. Reads typed boolean view properties and the original named maps of scalar property sequences. Reads typed signed integer view properties, preserving the converter’s zero output when conversion fails.",
       "knownViolations": [],
       "localSymbols": [
         "XMLDocumentSettingsContext"
@@ -32,7 +33,8 @@
       "upstreamFile": "xmloff/source/core/DocumentSettingsContext.cxx",
       "upstreamSymbols": [
         "XMLDocumentSettingsContext::createFastChildContext",
-        "XMLDocumentSettingsContext::endFastElement"
+        "XMLDocumentSettingsContext::endFastElement",
+        "XMLConfigItemContext::endFastElement"
       ]
     }
   }

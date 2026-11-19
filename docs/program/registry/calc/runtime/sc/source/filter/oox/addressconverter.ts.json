@@ -18,19 +18,24 @@
       "evidence": [
         "apps/office/src/sc/source/filter/oox/addressconverter.ts",
         "apps/office/src/sc/source/filter/oox/addressconverter.test.ts",
-        "apps/office/src/sc/source/ui/unoobj/native-coordinate-conversion.test.ts"
+        "apps/office/src/sc/source/ui/unoobj/native-coordinate-conversion.test.ts",
+        "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
+        "apps/office/e2e/calc/xlsx-active-view.spec.ts",
+        "vendor/libreoffice-reference/sc/source/filter/oox/addressconverter.cxx#AddressConverter::createValidCellAddress"
       ],
-      "justification": "Native XLSX static coordinate checkpoint implements the XML AddressConverter static cell/range conversion and typed toApiSequence responsibilities over actual ScDocument/ScAddress/ScRangeStringConverter/ScRangeList owners. The six original convuno.hxx inline coordinate/geometry methods retain narrowing, source order, inclusive comparisons and start-sheet projection. Real published coordinate structs and actual Sequence/Any transport supply compound lvalues without a substitute workbook, parser, limit or query provider. Native reset/partial mutation, complete-consumption guard, embedded NUL and CALC-350 endpoint acceptance remain. WorkbookHelper-owned instance/overflow/limit services, XLSB overloads, locale conversion, full XLSX workbook/filter/export/UI and independent compiled native acceptance remain unported or unverified. CALC-520 records unchecked/header limit mismatch without repair.",
+      "justification": "Native XLSX static coordinate checkpoint implements the XML AddressConverter static cell/range conversion and typed toApiSequence responsibilities over actual ScDocument/ScAddress/ScRangeStringConverter/ScRangeList owners. The six original convuno.hxx inline coordinate/geometry methods retain narrowing, source order, inclusive comparisons and start-sheet projection. Real published coordinate structs and actual Sequence/Any transport supply compound lvalues without a substitute workbook, parser, limit or query provider. Native reset/partial mutation, complete-consumption guard, embedded NUL and CALC-350 endpoint acceptance remain. WorkbookHelper-owned instance/overflow/limit services, XLSB overloads, locale conversion, full XLSX workbook/filter/export/UI and independent compiled native acceptance remain unported or unverified. CALC-520 records unchecked/header limit mismatch without repair. Creates a view address through native OOXML parsing and bounds using the destination sheet and document limits.",
       "knownViolations": [],
       "localSymbols": [
-        "AddressConverter"
+        "AddressConverter",
+        "createValidCellAddress"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/filter/oox/addressconverter.cxx",
       "upstreamSymbols": [
         "AddressConverter::convertToCellAddressUnchecked",
         "AddressConverter::convertToCellRangeUnchecked",
-        "AddressConverter::toApiSequence"
+        "AddressConverter::toApiSequence",
+        "AddressConverter::createValidCellAddress"
       ]
     }
   }

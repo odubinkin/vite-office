@@ -294,7 +294,7 @@ export class CalcViewController {
     return referenceInput.ReferenceRange.call(this);
   }
   inputText = "";
-  addressText = "A1";
+  addressText: string;
   error = "";
   viewport: CalcGridViewport = {
     firstColumn: 0,
@@ -312,23 +312,25 @@ export class CalcViewController {
   private revision = 0;
   private client: { left: number; top: number; width: number; height: number } | undefined;
   private readonly listeners = new Set<() => void>();
-  private anchor = new ScAddress();
+  private anchor: ScAddress;
   /** Binds canonical model/view owners. @param shell - Active shell. @returns Controller. */
   constructor(readonly shell: ScDocShell = new ScDocShell()) {
     this.viewShell = new ScTabViewShell(shell, this.scModule);
     this.BindViewErrorMessage();
     this.viewData = this.viewShell.GetViewData();
+    this.anchor = this.Position();
+    this.addressText = this.Address();
     this.detachShell = shell.Subscribe(
       /** Rebinds only when the canonical model identity changes. @returns Nothing. */ () => {
         if (this.viewData.GetDocument() !== shell.GetDocument()) {
           this.viewShell = new ScTabViewShell(shell, this.scModule);
           this.BindViewErrorMessage();
           this.viewData = this.viewShell.GetViewData();
-          this.anchor = new ScAddress();
+          this.anchor = this.Position();
           this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
           this.inputHandler.ResetInputState();
           this.inputText = "";
-          this.addressText = "A1";
+          this.addressText = this.Address();
           this.error = "";
         }
         this.Changed();

@@ -1,5 +1,5 @@
-/** @fileoverview Original AddressConverter static XML-address/range and API-sequence responsibilities. WorkbookHelper-owned limits/overflow instance methods and XLSB overloads remain unported. */
-import { ScAddress, ScRange, ScRefFlags } from "../../../inc/address";
+/** @fileoverview Original AddressConverter XML-address, view cursor and API-sequence responsibilities. Workbook overflow tracking and XLSB overloads remain unported. */
+import { MAXTAB, ScAddress, ScRange, ScRefFlags } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
 import type { ScRangeList } from "../../../inc/rangelst";
 import { ScRangeStringConverter } from "../../../inc/rangeutl";
@@ -9,7 +9,7 @@ import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { Sequence, type SequenceElements } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
 import { cppu_detail_getUnoType_CellRangeAddress as rangeType } from "../../../../offapi/com/sun/star/table/CellRangeAddress";
 const Ranges = Sequence.specialize<SequenceElements>(rangeType, 20);
-/** Native static members only; no substitute WorkbookGlobals or instantiable converter is supplied. */
+/** Represented native cell/range conversion using the owning document's coordinate limits. */
 export const AddressConverter = {
   /** Original reset-before-parse and native OOXML grammar dispatch. Unchecked still inherits parser admission. @param address - Actual output owner. @param source - Native Unicode input. @param sheet - Native signed16 sheet. @param document - Actual Calc document. @returns Parser VALID flag. */
   convertToCellAddressUnchecked(
@@ -31,6 +31,26 @@ export const AddressConverter = {
         ScRefFlags.VALID) ===
       ScRefFlags.VALID
     );
+  },
+  /** Creates a view address using the worksheet defaults and maximum Calc coordinates, without tracking overflow. @param source - OOXML coordinate. @param sheet - Worksheet index. @param document - Destination workbook. @returns Native address. */
+  createValidCellAddress(
+    source: OUStringConstReference,
+    sheet: number,
+    document: ScDocument,
+  ): ScAddress {
+    const address = new ScAddress();
+    if (
+      !AddressConverter.convertToCellAddressUnchecked(address, source, sheet, document) ||
+      address.Tab() < 0 ||
+      address.Tab() > MAXTAB ||
+      !document.ValidColRow(address.Col(), address.Row())
+    )
+      address.Set(
+        Math.min(address.Col(), document.MaxCol()),
+        Math.min(address.Row(), document.MaxRow()),
+        Math.max(0, Math.min(sheet, MAXTAB)),
+      );
+    return address;
   },
   /** Original sheet assignment and complete-consumption guard over the actual range string converter. @param range - Actual output owner. @param source - Native UTF16 view. @param sheet - Native signed16 sheet. @param document - Actual Calc document. @returns Parsed exactly one complete range. */
   convertToCellRangeUnchecked(

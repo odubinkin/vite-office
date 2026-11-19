@@ -3,13 +3,19 @@ import type { ScDocument } from "../../../inc/document";
 import { ViewOption } from "../../../inc/viewopti";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import type { ViewSettings } from "../../../../xmloff/source/core/DocumentSettingsContext";
+import type {
+  NamedViewSettings,
+  ViewSettings,
+} from "../../../../xmloff/source/core/DocumentSettingsContext";
+import { getSheetCursor, setSheetCursor } from "../../core/data/document.sheet-visibility";
 
 const SC_ACTIVETABLE = "ActiveTable";
 const SC_TABLES = "Tables";
 const SC_UNO_SHOWGRID = "ShowGrid";
 const SC_UNO_SHOWZERO = "ShowZeroValues";
 const SC_UNO_COLROWHDR = "HasColumnRowHeaders";
+const SC_CURSORPOSITIONX = "CursorPositionX";
+const SC_CURSORPOSITIONY = "CursorPositionY";
 const viewOptions = new Map<string, ViewOption>([
   [SC_UNO_SHOWGRID, ViewOption.GRID],
   [SC_UNO_SHOWZERO, ViewOption.NULLVALS],
@@ -35,10 +41,19 @@ export function ReadUserDataSequence(document: ScDocument, views: ViewSettings):
         const name = unicode(sheet);
         const tab: [number] = [0];
         try {
-          if (document.GetTable(name, tab))
-            for (const [property, flag] of items)
-              if (property === SC_UNO_SHOWGRID && typeof flag === "boolean")
-                document.SetSheetShowGrid(tab[0], flag);
+          if (!document.GetTable(name, tab)) continue;
+          let [column, row] = getSheetCursor(document, tab[0]);
+          let cursorValue = 0;
+          for (const [property, scalar] of items) {
+            if (property === SC_UNO_SHOWGRID && typeof scalar === "boolean")
+              document.SetSheetShowGrid(tab[0], scalar);
+            if (property !== SC_CURSORPOSITIONX && property !== SC_CURSORPOSITIONY) continue;
+            if (typeof scalar === "number") cursorValue = scalar;
+            if (property === SC_CURSORPOSITIONX)
+              column = Math.max(0, Math.min((cursorValue << 16) >> 16, document.MaxCol()));
+            else row = Math.max(0, Math.min(cursorValue, document.MaxRow()));
+          }
+          setSheetCursor(document, tab[0], column, row);
         } finally {
           name.dispose();
         }
@@ -54,10 +69,19 @@ export function WriteUserDataSequence(document: ScDocument): ViewSettings {
   try {
     if (!document.IsVisible(tab) || !document.GetName(tab, name)) return [];
     const active = text(name);
-    const sheets: [string, [[string, boolean]]][] = [];
+    const sheets: NamedViewSettings[number][] = [];
     for (let index = 0; index < document.GetTableCount(); ++index) {
-      if (document.GetName(index, name))
-        sheets.push([text(name), [[SC_UNO_SHOWGRID, document.GetSheetShowGrid(index)]]]);
+      if (document.GetName(index, name)) {
+        const [column, row] = getSheetCursor(document, index);
+        sheets.push([
+          text(name),
+          [
+            [SC_CURSORPOSITIONX, column],
+            [SC_CURSORPOSITIONY, row],
+            [SC_UNO_SHOWGRID, document.GetSheetShowGrid(index)],
+          ],
+        ]);
+      }
     }
     return [
       [

@@ -41,6 +41,7 @@ const sheetElements: Readonly<Record<string, readonly string[]>> = {
     "colBreaks",
   ],
   sheetViews: ["sheetView"],
+  sheetView: ["pane", "selection"],
   cols: ["col"],
   protectedRanges: ["protectedRange"],
   mergeCells: ["mergeCell"],
@@ -65,7 +66,7 @@ export class WorksheetFragment extends FragmentHandler {
   private readonly address: ScAddress;
   private readonly sheetData: SheetDataBuffer;
   private readonly settings = new WorksheetSettings();
-  private readonly views = new SheetViewSettings();
+  private readonly views: SheetViewSettings;
   private readonly geometry: WorksheetGlobals;
   private row = -1;
   private column = 0;
@@ -94,6 +95,7 @@ export class WorksheetFragment extends FragmentHandler {
     super(filter, path);
     this.address = new ScAddress(0, 0, tab);
     this.sheetData = new SheetDataBuffer(document, tab, units);
+    this.views = new SheetViewSettings(document, tab);
     const table = document.FetchTable(tab);
     if (!table) throw new Error("Worksheet table is missing.");
     this.geometry = new WorksheetGlobals(table, microsoft, units);
@@ -130,6 +132,20 @@ export class WorksheetFragment extends FragmentHandler {
           attributes,
           /** Dispatches the sheetView attributes. @param values - Borrowed XML attributes. @returns Nothing. */
           (values) => this.views.importSheetView(values),
+        );
+        break;
+      case "pane":
+        this.readAttributes(
+          attributes,
+          /** Imports the active pane token. @param values - Borrowed attributes. @returns Nothing. */
+          (values) => this.views.importPane(values),
+        );
+        break;
+      case "selection":
+        this.readAttributes(
+          attributes,
+          /** Imports the pane's cursor. @param values - Borrowed attributes. @returns Nothing. */
+          (values) => this.views.importSelection(values),
         );
         break;
       case "sheetProtection":

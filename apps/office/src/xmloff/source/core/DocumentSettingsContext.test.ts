@@ -94,6 +94,7 @@ it("decodes string view records in position order and independent boolean settin
     [],
     [
       ["ViewId", "view2"],
+      ["ActiveTable", 1],
       ["ActiveTable", "A&B"],
       ["Tables", [["A&B", [["ShowGrid", false]]]]],
     ],
@@ -135,6 +136,7 @@ it("round-trips escaped view data and distinguishes absent and empty views", /**
             "R&D <Total>",
             [
               ["ShowGrid", false],
+              ["CursorPositionX", 13],
               ["Text", "<&>"],
             ],
           ],

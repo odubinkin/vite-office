@@ -1,5 +1,9 @@
 /** @fileoverview Bounded Calc worker transfer of supported native cells, sparse attributes and geometry; XML remains the durable format. */
 import { GetPrintRanges } from "../../../source/core/data/table1";
+import {
+  getSheetCursor,
+  setSheetCursor,
+} from "../../../source/core/data/document.sheet-visibility";
 import { runCooperatively, runSynchronously } from "../../../../framework/browser/io/cooperative";
 import { ScDocument } from "../../../inc/document";
 import {
@@ -148,6 +152,7 @@ interface Sheet {
   readonly repeatRows?: PrintRange;
   readonly name: string;
   readonly showGrid?: boolean;
+  readonly cursor?: readonly [column: number, row: number];
   readonly optimalMinRowHeight?: number;
   readonly cells: Cell[];
   readonly patterns: Pattern[];
@@ -244,6 +249,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     const repeatColumns = table.GetRepeatColRange();
     const repeatRows = table.GetRepeatRowRange();
     const protection = table.GetProtection();
+    const cursor = getSheetCursor(document, tab);
     const sheet: Sheet = {
       ...(table.IsVisible() ? {} : { visible: false }),
       ...(protection
@@ -274,6 +280,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
       ...(repeatRows ? { repeatRows: encodePrintRange(repeatRows) } : {}),
       name: text(table.GetName()),
       ...(document.GetSheetShowGrid(tab) ? {} : { showGrid: false }),
+      ...(cursor[0] || cursor[1] ? { cursor } : {}),
       optimalMinRowHeight: table.GetOptimalMinRowHeight(),
       cells: [],
       patterns: [],
@@ -532,6 +539,8 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
         if (!document.InsertTab(tab, name)) throw new Error("Calc worker sheet is invalid.");
         if (sheet.visible === false) document.SetVisible(tab, false);
         if (typeof sheet.showGrid === "boolean") document.SetSheetShowGrid(tab, sheet.showGrid);
+        if (Array.isArray(sheet.cursor))
+          setSheetCursor(document, tab, sheet.cursor[0], sheet.cursor[1]);
       } finally {
         name.dispose();
       }

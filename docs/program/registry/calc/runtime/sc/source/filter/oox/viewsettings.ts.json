@@ -18,22 +18,29 @@
       "evidence": [
         "apps/office/src/sc/source/filter/oox/viewsettings.ts",
         "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
-        "vendor/libreoffice-reference/sc/source/filter/oox/viewsettings.cxx#SheetViewSettings::importSheetView"
+        "vendor/libreoffice-reference/sc/source/filter/oox/viewsettings.cxx#SheetViewSettings::importSheetView",
+        "apps/office/e2e/calc/xlsx-active-view.spec.ts",
+        "vendor/libreoffice-reference/sc/source/filter/oox/viewsettings.cxx#SheetViewSettings::importPane",
+        "vendor/libreoffice-reference/sc/source/filter/oox/viewsettings.cxx#SheetViewSettings::importSelection"
       ],
-      "justification": "Reads the first worksheet view's grid flag with Excel's true default and transfers it to the active document's interactive view data. Applies the first worksheet view's grid and the active worksheet's workbook-wide header and zero-value settings. The native view reader ignores the incoming ShowFormulas property (CALC-743).",
+      "justification": "Reads the first worksheet view's grid flag with Excel's true default and transfers it to the active document's interactive view data. Applies the first worksheet view's grid and the active worksheet's workbook-wide header and zero-value settings. The native view reader ignores the incoming ShowFormulas property (CALC-743). Resolves the first sheet view’s cursor from the active pane selection and falls back to that view’s top-left cell.",
       "knownViolations": [],
       "localSymbols": [
         "ViewSettings",
         "SheetViewSettings",
         "importSheetView",
-        "finalizeImport"
+        "finalizeImport",
+        "importPane",
+        "importSelection"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/filter/oox/viewsettings.cxx",
       "upstreamSymbols": [
         "SheetViewSettings::importSheetView",
         "SheetViewSettings::finalizeImport",
-        "ViewSettings::finalizeImport"
+        "ViewSettings::finalizeImport",
+        "SheetViewSettings::importPane",
+        "SheetViewSettings::importSelection"
       ]
     }
   }

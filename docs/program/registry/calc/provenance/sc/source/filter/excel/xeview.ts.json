@@ -10,11 +10,13 @@
     ],
     "upstreamPath": "sc/source/filter/excel/xeview.cxx",
     "upstreamSymbols": [
-      "XclExpTabViewSettings::SaveXml"
+      "XclExpTabViewSettings::SaveXml",
+      "XclExpSelection::SaveXml"
     ],
     "preservedResponsibilities": [
       "Emits the independent per-sheet grid flag in sheetViews for workbook view zero, before the worksheet geometry and sheet data.",
-      "Emits workbook-wide formula mode, header visibility and zero-value visibility from the document view options, and grid visibility from each sheet."
+      "Emits workbook-wide formula mode, header visibility and zero-value visibility from the document view options, and grid visibility from each sheet.",
+      "Exports the current sheet cursor using the native singleton selection record for the unsplit case."
     ],
     "omittedResponsibilities": [
       "Other sheet view options, alternate workbook views, chart sheets and BIFF records remain outside this mechanism."
@@ -28,6 +30,10 @@
         {
           "path": "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
           "marker": "tdf126541"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
+          "marker": "active pane"
         }
       ],
       "upstream": [
@@ -38,6 +44,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests9/tdf126541_GridVisibilityImportXlsx.py",
           "marker": "test_tdf126541_GridVisibilityImportXlsx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xeview.cxx",
+          "marker": "XclExpSelection::SaveXml"
         }
       ]
     }
