@@ -8,16 +8,20 @@
     "upstreamPath": "oox/source/helper/graphichelper.cxx",
     "localSymbols": [
       "getSystemColor",
-      "GraphicHelper"
+      "GraphicHelper",
+      "EmbeddedGraphic",
+      "importEmbeddedGraphic"
     ],
     "upstreamSymbols": [
       "GraphicHelper::getSystemColor",
       "GraphicHelper::convertScreenPixelXToHmm",
-      "GraphicHelper::convertScreenPixelYToHmm"
+      "GraphicHelper::convertScreenPixelYToHmm",
+      "GraphicHelper::importEmbeddedGraphic"
     ],
     "preservedResponsibilities": [
       "Uses the original graphic-helper system palette and lexical fallback to resolve DrawingML system colors.",
-      "Converts device X and Y pixels to physical lengths using the original per-axis scale and rounding."
+      "Converts device X and Y pixels to physical lengths using the original per-axis scale and rounding.",
+      "Loads encoded JPEG and PNG sources through the original package input boundary and caches successful imports."
     ],
     "omittedResponsibilities": [
       "The native graphic provider, acquisition of the default output device and graphic effects remain open."
@@ -39,6 +43,10 @@
         {
           "path": "apps/office/src/oox/source/vml/vmlshape.test.ts",
           "marker": "native asymmetric rounding"
+        },
+        {
+          "path": "apps/office/src/oox/source/drawingml/misccontexts.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -53,6 +61,10 @@
         {
           "path": "vendor/libreoffice-reference/oox/source/helper/graphichelper.cxx",
           "marker": "GraphicHelper::convertScreenPixelYToHmm"
+        },
+        {
+          "path": "vendor/libreoffice-reference/oox/source/helper/graphichelper.cxx",
+          "marker": "GraphicHelper::importEmbeddedGraphic"
         }
       ]
     }

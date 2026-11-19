@@ -214,6 +214,32 @@ export class ZipStorage {
       relations.dispose();
     }
   }
+  /** Reads a fragment's native OFOPXML relationships, which are separate from accessible document streams. @param path - Referring stream. @returns Owned rows or absence for other storage modes. */
+  async getNativePartRelationships(path: string): Promise<Sequence<Sequence<StringPair>> | null> {
+    if (!this.writerInput) return null;
+    if (!path) return this.getNativeRootRelationships();
+    try {
+      const part = await this.openStreamElementByHierarchicalName(path, READ);
+      try {
+        const relations = new Reference<XRelationshipAccess>(
+          part,
+          UNO_QUERY_THROW,
+          XRelationshipAccess.static_type,
+        );
+        try {
+          return relations.operatorStar().getAllRelationships();
+        } finally {
+          relations.dispose();
+        }
+      } finally {
+        part.dispose();
+      }
+    } catch (error) {
+      if (!(error instanceof Exception)) throw error;
+      error.dispose();
+      return new Relations();
+    }
+  }
   /** Reports native storage mode. @returns Readonly input. */
   isReadOnly(): boolean {
     return this.input !== undefined;

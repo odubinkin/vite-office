@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/oox/source/drawingml/misccontexts.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "ooxml-package",
+    "capabilityIds": [
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/oox/source/drawingml/misccontexts.ts#BlipContext",
+        "vendor/libreoffice-reference/oox/source/drawingml/misccontexts.cxx#BlipContext::BlipContext",
+        "apps/office/src/oox/source/drawingml/misccontexts.test.ts"
+      ],
+      "justification": "Resolves an embedded blip using the relationships of its own XML fragment and shares lazily loaded encoded JPEG or PNG sources by native package path. Shape geometry, anchoring, pixel decoding, linked graphics and other image formats are outside this checkpoint.",
+      "knownViolations": [],
+      "localSymbols": [
+        "BlipContext"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "oox/source/drawingml/misccontexts.cxx",
+      "upstreamSymbols": [
+        "BlipContext::BlipContext"
+      ]
+    }
+  }
+}

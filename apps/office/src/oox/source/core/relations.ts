@@ -1,5 +1,24 @@
 /** @fileoverview Ports pinned oox::core::Relation/Relations lookup, map ordering and fragment resolution; UTF16 values use JS strings at the XML/package boundary. */
 
+import { Sequence, type SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import type { uno_Sequence } from "../../../cppu/inc/uno/sequence2";
+import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
+import {
+  StringPair,
+  cppu_detail_getUnoType_StringPair as pairType,
+} from "../../../udkapi/com/sun/star/beans/StringPair";
+
+const Pairs = Sequence.specialize<StringPair>(pairType, 16);
+
+/** Converts UTF16 cells at the relationship model's representation boundary. @param value - Borrowed native string. @returns Host string. */
+function text(value: OUStringConstReference): string {
+  let result = "";
+  const units = value.getStr();
+  for (let index = 0; index < value.getLength(); index++)
+    result += String.fromCharCode(units[index] as number);
+  return result;
+}
+
 /** Original relation value; missing attributes default to empty strings and an internal target. */
 export class Relation {
   maId = "";
@@ -36,6 +55,35 @@ export class Relations {
   private readonly maMap = new Map<string, Readonly<Relation>>();
   /** Retains the owning fragment, with the empty string identifying package relationships. @param maFragmentPath - Owner path. @returns Collection. */
   constructor(private readonly maFragmentPath: string) {}
+  /** Admits native OFOPXML storage rows using the same fields and defaults as the relationship SAX handler. @param rows - Borrowed sequence. @returns Nothing. */
+  assignRelationships(rows: Sequence<Sequence<StringPair>>): void {
+    const elements = rows.getConstArray() as SequenceElements;
+    for (let index = 0; index < rows.getLength(); index++) {
+      const row = Sequence.unacquired(Pairs, elements.get(index * 8) as [uno_Sequence | null]);
+      const fields = row.getConstArray() as SequenceElements;
+      const relation = new Relation();
+      for (let attribute = 0; attribute < row.getLength(); attribute++) {
+        const pair = StringPair.unacquired(fields.get(attribute * 16) as SequenceElements);
+        const value = text(pair.Second);
+        switch (text(pair.First)) {
+          case "Id":
+            relation.maId = value;
+            break;
+          case "Type":
+            relation.maType = value;
+            break;
+          case "Target":
+            relation.maTarget = value;
+            break;
+          case "TargetMode":
+            relation.mbExternal = value !== "Internal";
+            break;
+        }
+      }
+      if (relation.maId && relation.maType && relation.maTarget)
+        this.emplace(relation.maId, relation);
+    }
+  }
   /** Native collection size. @returns Count. */
   size(): number {
     return this.maMap.size;

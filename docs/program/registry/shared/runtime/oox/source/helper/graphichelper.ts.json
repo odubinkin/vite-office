@@ -20,20 +20,24 @@
         "apps/office/src/sc/source/filter/oox/excelfilter.theme.test.ts",
         "apps/office/src/sc/source/filter/xml/ods-native-colors.test.ts",
         "vendor/libreoffice-reference/oox/source/helper/graphichelper.cxx",
-        "apps/office/src/oox/source/vml/vmlshape.test.ts"
+        "apps/office/src/oox/source/vml/vmlshape.test.ts",
+        "apps/office/src/oox/source/drawingml/misccontexts.test.ts"
       ],
-      "justification": "Uses the original system palette and lexical fallback, and converts X and Y device pixels to physical lengths with per-axis output-device density. The graphic provider and acquisition of the default output device remain open.",
+      "justification": "Uses the original system palette and lexical fallback, and converts X and Y device pixels to physical lengths with per-axis output-device density. The graphic provider and acquisition of the default output device remain open. Loads encoded JPEG and PNG sources through the original package input boundary and caches successful imports.",
       "knownViolations": [],
       "localSymbols": [
         "getSystemColor",
-        "GraphicHelper"
+        "GraphicHelper",
+        "EmbeddedGraphic",
+        "importEmbeddedGraphic"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "oox/source/helper/graphichelper.cxx",
       "upstreamSymbols": [
         "GraphicHelper::getSystemColor",
         "GraphicHelper::convertScreenPixelXToHmm",
-        "GraphicHelper::convertScreenPixelYToHmm"
+        "GraphicHelper::convertScreenPixelYToHmm",
+        "GraphicHelper::importEmbeddedGraphic"
       ]
     }
   }

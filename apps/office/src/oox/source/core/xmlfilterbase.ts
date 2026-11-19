@@ -10,6 +10,7 @@ import {
   writeRelationsInfoSequenceXml,
   type StringPair,
 } from "../../../comphelper/source/xml/ofopxmlhelper.string";
+import { GraphicHelper } from "../helper/graphichelper";
 import { ZipStorage, type ZipFragmentStream } from "../helper/zipstorage";
 import { type FragmentContext, type FragmentHandler } from "./fragmenthandler";
 import { OFFICE_DOCUMENT_RELATION, STRICT_OFFICE_DOCUMENT_RELATION, Relations } from "./relations";
@@ -29,6 +30,7 @@ export class XmlFilterBase {
     string,
     { stream?: ZipFragmentStream; entries: StringPair[][] }
   >();
+  private graphicHelper: GraphicHelper | undefined;
   private relId = 1;
   private microsoft = false;
   /** Retains actual storage and cooperative SAX controls. @param storage - Package. @param options - Parser controls. @returns Filter. */
@@ -52,6 +54,12 @@ export class XmlFilterBase {
   /** Opens an exact input fragment without imposing ODF requirements. @param path - Fragment path. @returns Owned native input reference. */
   openInputStream(path: string): Promise<Reference<XInputStream>> {
     return this.storage.openInputStream(path);
+  }
+  /** Borrows the lazy package-specific GraphicHelper. @returns DrawingML graphic owner. */
+  getGraphicHelper(): GraphicHelper {
+    const cssPixelPerMeter = 96 / 0.0254;
+    this.graphicHelper ??= new GraphicHelper(cssPixelPerMeter, cssPixelPerMeter, this.storage);
+    return this.graphicHelper;
   }
   /** Ports the native SAX overload's false-on-missing/parse-error behavior and basename lowercase fallback. @param handler - Fragment handler. @returns Successful parse. */
   async importFragment(handler: FragmentHandler | null): Promise<boolean> {
@@ -130,14 +138,24 @@ export class XmlFilterBase {
   importRelations(path: string): Promise<Relations> {
     let pending = this.relations.get(path);
     if (pending === undefined) {
-      const relations = new Relations(path);
-      pending = this.importFragment(new RelationsFragment(this, relations)).then(
-        /** Retains original partial results after any parser failure. @returns Relations. */ () =>
-          relations,
-      );
+      pending = this.loadRelations(path);
       this.relations.set(path, pending);
     }
     return pending;
+  }
+  /** Uses the package's exposed relationship stream or its OFOPXML facet. @param path - Owner part. @returns Resolved relationship collection. */
+  private async loadRelations(path: string): Promise<Relations> {
+    const relations = new Relations(path);
+    const native = await this.storage.getNativePartRelationships(path);
+    if (native === null) await this.importFragment(new RelationsFragment(this, relations));
+    else {
+      try {
+        relations.assignRelationships(native);
+      } finally {
+        native.dispose();
+      }
+    }
+    return relations;
   }
   /** Native package-root transitional-first, strict fallback uses resolved path emptiness. @param part - Unqualified relation type. @returns Fragment path or empty. */
   async getFragmentPathFromFirstTypeFromOfficeDoc(part: string): Promise<string> {
