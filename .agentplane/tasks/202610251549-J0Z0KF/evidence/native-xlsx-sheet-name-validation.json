@@ -1,0 +1,54 @@
+{
+  "checkpoint": "Calc XLSX worksheet names, section references, and the original tdf79998 package",
+  "implementation": "37bbc069f007d4072dbbec5e515e63f78fd66361",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "fixture": {
+    "path": "vendor/libreoffice-reference/sc/qa/unit/data/ods/tdf79998.ods",
+    "sha256": "02bf39d6f080923a56cd49f534298fbc70561fdf40f85373497a653cc97eb6b2",
+    "upstream": "sc/qa/unit/cond_format.cxx#testTdf79998"
+  },
+  "source": [
+    "officecfg/registry/schema/org/openoffice/Office/Calc.xcs#TruncateLongSheetNames",
+    "sc/source/filter/excel/xestream.cxx#XclExpXmlStream::GenerateUniqueTableName",
+    "sc/source/filter/excel/xestream.cxx#XclExpXmlStream::validateTabNames",
+    "sc/source/filter/excel/xestream.cxx#XclExpXmlStream::restoreTabNames",
+    "sc/source/core/tool/compiler.cxx#ScCompiler::ParsePredetectedErrRefReference",
+    "sc/source/core/tool/compiler.cxx#ConventionXL_OOX"
+  ],
+  "checks": {
+    "calc_regressions": { "tests": 116, "files": 11, "log": "xlsx-sheet-names-regressions.log" },
+    "coverage": {
+      "tests": 97,
+      "files": 8,
+      "threshold": 90,
+      "whole_xestream_statements": "181/185",
+      "whole_xestream_branches": "92/95",
+      "whole_xestream_functions": "26/26",
+      "whole_xestream_lines": "166/167",
+      "log": "xlsx-sheet-names-coverage-final.log",
+      "initial_run": "The original 30-second timeout was exceeded in the existing shared-string test during parallel coverage. The final 90-second coverage run passed with the existing related font serialization tests included."
+    },
+    "compiler_scope": {
+      "log": "xlsx-sheet-names-mechanisms.log",
+      "raw_map": "apps/office/coverage/xlsx-sheet-name-mechanisms/coverage-final.json",
+      "scope": "ParsePredetectedErrRefReference, lines 564–574",
+      "statements": "11/12",
+      "branches": "11/12",
+      "functions": "1/1",
+      "whole_scope": "The narrow six-case run does not meet the whole-file gate for the pre-existing compiler and stream surfaces. Its raw map is used to measure the new compiler mechanism. The whole stream was verified separately."
+    },
+    "chromium": { "tests": 3, "log": "xlsx-sheet-names-browser.log" },
+    "other": [
+      "Typecheck, production build and static smoke passed.",
+      "Scoped ESLint, Prettier and provenance for all three changed runtime files passed.",
+      "JSDoc, file size, module boundaries, Calc resources, source tree, doctor, policy routing and git diff checks passed."
+    ]
+  },
+  "verified": "The original ODS opens with its legacy deleted-sheet expression, writes the modern #REF! spelling for that expression, shortens the Excel sheet name and writes the cell formula against that output name. Cross-sheet dependencies, defined names and print ranges resolve on XLSX reopen. The open ODS retains its original name after export and after a synchronous serialization failure.",
+  "upstream_suspicion": "CALC-752 records the original rejected-rename behavior for a case-insensitive collision and a newly trailing apostrophe. Both cases are retained.",
+  "residual": [
+    "The exporter uses the pinned default. No browser preference for disabling it is represented. External reference table naming and additional legacy broken-coordinate spellings remain open.",
+    "Whole-repository provenance and parity retain the mismatch for OfficeTooltips.tsx and available-menu-items.ts.",
+    "The full regression suite was not due at this checkpoint."
+  ]
+}
