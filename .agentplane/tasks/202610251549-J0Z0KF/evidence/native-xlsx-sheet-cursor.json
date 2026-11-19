@@ -1,0 +1,44 @@
+{
+  "checkpoint": "Calc worksheet cursor through XLSX, the attached view, the Worker, and primary ODS",
+  "implementation": "70bf6147dc65",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    "sc/source/filter/oox/viewsettings.cxx#SheetViewSettings::finalizeImport",
+    "sc/source/filter/oox/addressconverter.cxx#AddressConverter::createValidCellAddress",
+    "sc/source/filter/excel/xeview.cxx#XclExpSelection::SaveXml",
+    "sc/source/ui/view/viewdata.cxx#ScViewDataTable::ReadUserDataSequence",
+    "sc/source/ui/view/viewdata.cxx#ScViewDataTable::WriteUserDataSequence",
+    "xmloff/source/core/DocumentSettingsContext.cxx#XMLConfigItemContext::endFastElement",
+    "xmloff/source/core/SettingsExportHelper.cxx#XMLSettingsExportHelper::exportInt"
+  ],
+  "fixtures": {
+    "freezePaneStartCell.xlsx": "a1252dc9e87a593026d4bac29b26b2eca6d88129d903ee6bd24293f07b0aee19",
+    "sheet-names.xlsx": "e768518ed6161ec4698e6a24506fc71ce2ebf56b0a2fa5d9dd352b2dfb5f47ec"
+  },
+  "checks": {
+    "calc": { "tests": 58, "files": 6, "log": "xlsx-cursor-calc-final.log" },
+    "shared": { "tests": 7, "files": 2, "log": "xlsx-cursor-shared-coverage.log" },
+    "writer": { "tests": 15, "files": 2, "log": "xlsx-cursor-writer-regressions.log" },
+    "production_chromium": { "tests": 6, "log": "xlsx-cursor-browser-final.log" },
+    "branches": {
+      "xlsx_view_settings": 100,
+      "ods_view_settings": 97.22,
+      "odf_config_reader": 94.73,
+      "odf_config_writer": 100
+    },
+    "other": [
+      "Production type check, build and static smoke",
+      "Scoped ESLint and Prettier",
+      "JSDoc, file size, dependencies, source tree and Calc resources",
+      "Agentplane doctor and routing",
+      "Diff check and scoped provenance validation for 13 runtime paths"
+    ]
+  },
+  "verified": "The original four-pane XLSX opens on F11. Explicit primary ODS storage restores F11. Moving to D7 and exporting writes a native singleton selection; mobile XLSX reopen restores D7. The per-sheet slots remain independent. Cursor movement retains the existing document modification and autosave policy.",
+  "source_findings": ["CALC-520 address fallback retains partially parsed coordinates", "CALC-751 a mistyped ODF cursor property can reuse the previous raw coordinate"],
+  "residual": [
+    "Split and freeze geometry, scrolling origins and multi-range selections are outside this cursor path. The upstream freeze-pane fixture was used for its four cursor records; the native geometry assertion remains open.",
+    "The unmodified tdf70455.xlsx was rejected during defined-name compilation before any worksheet view was read. The remaining formula lookup gap was reproduced independently of the cursor path.",
+    "Whole-repository provenance, registry invariants, and registry parity validation still report the existing missing framework runtime records for OfficeTooltips.tsx and available-menu-items.ts."
+  ]
+}
