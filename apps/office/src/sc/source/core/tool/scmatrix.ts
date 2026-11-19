@@ -1,5 +1,6 @@
 /** @fileoverview Original matrix value and internal typed storage/geometry owners; genuine shared values, error helpers and mdds are reused. */
 import { ScMatValType } from "../../../inc/types";
+import { KahanSum } from "../../../inc/kahan";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import {
   GetDoubleErrorValue,
@@ -11,10 +12,13 @@ import {
   multi_type_matrix,
   element_t,
   type MatrixTraits,
+  type element_block_node_type,
 } from "../../../../external/mdds/include/mdds/multi_type_matrix";
 import {
   double_element_callbacks,
+  double_element_block,
   boolean_element_callbacks,
+  boolean_element_block,
   uint8_element_callbacks,
   uint8_element_block,
 } from "../../../../external/mdds/include/mdds/multi_type_vector/standard_element_blocks";
@@ -50,13 +54,88 @@ const matrix_flag_traits: MatrixTraits<SharedString> = {
 const SC_MATFLAG_EMPTYRESULT = 1;
 const SC_MATFLAG_EMPTYPATH = 2;
 
+/** Original ScMatrix::IterateResult value and element count. */
+export interface IterateResult<T> {
+  maAccumulator: T;
+  mnCount: number;
+}
+
+/** Walks the original mdds data blocks in storage order. Flag blocks have no role in the reduction.
+ * @param matrix - Borrowed matrix data.
+ * @param bTextAsZero - Count strings without adding a term.
+ * @param bIgnoreErrorValues - Skip non-finite numeric entries.
+ * @param initial - Native operation's initial accumulator.
+ * @param accumulate - Native numeric operation.
+ * @param copyAccumulator - Copy the accumulator's value for the mdds callable boundary.
+ * @returns Accumulator and count.
+ */
+function GetValueWithCount<T>(
+  matrix: multi_type_matrix<SharedString>,
+  bTextAsZero: boolean,
+  bIgnoreErrorValues: boolean,
+  initial: T,
+  accumulate: (accumulator: T, value: number) => T,
+  copyAccumulator: (accumulator: T) => T,
+): IterateResult<T> {
+  /** Copies the callable's changing result independently. @param result - Previous result. @returns Copied state. */
+  function copy(result: IterateResult<T>): IterateResult<T> {
+    return { maAccumulator: copyAccumulator(result.maAccumulator), mnCount: result.mnCount };
+  }
+  return matrix.walk(
+    { maAccumulator: initial, mnCount: 0 },
+    {
+      argument_is_rvalue: false,
+      copy_construct: copy,
+      move_construct: copy,
+      /** The JS VM manages the accumulator value. @returns Nothing. */
+      destroy() {},
+      /** Reduces one original typed block. @param result - Running result. @param node - Borrowed block. @returns Nothing. */
+      invoke(result: IterateResult<T>, node: element_block_node_type): void {
+        switch (node.type) {
+          case element_t.element_numeric:
+            for (
+              const it = node.begin<number>(double_element_block),
+                end = node.end<number>(double_element_block);
+              !it.equals(end);
+              it.advance(1)
+            ) {
+              const value = it.get();
+              if (bIgnoreErrorValues && !Number.isFinite(value)) continue;
+              result.maAccumulator = accumulate(result.maAccumulator, value);
+              ++result.mnCount;
+            }
+            break;
+          case element_t.element_boolean:
+            for (
+              const it = node.begin<boolean>(boolean_element_block),
+                end = node.end<boolean>(boolean_element_block);
+              !it.equals(end);
+              it.advance(1)
+            )
+              result.maAccumulator = accumulate(result.maAccumulator, Number(it.get()));
+            result.mnCount += node.size;
+            break;
+          case element_t.element_string:
+            if (bTextAsZero) result.mnCount += node.size;
+            break;
+        }
+      },
+    },
+  );
+}
+
+/** Copies the underlying compensated sum into the callable value. @param accumulator - Current sum. @returns Independent value. */
+function copyKahanSum(accumulator: KahanSum): KahanSum {
+  return new KahanSum(accumulator);
+}
+
 /** Native mutable coordinate references grouped for the browser call boundary. */
 export interface MatrixCoordinates {
   column: number;
   row: number;
 }
 
-/** Original internal storage owner slice; ScMatrix facade/interpreter bindings remain unported. GC owns containers without a native global element pool. */
+/** Original internal matrix storage, value queries and typed block reductions. The JS VM manages the containers. */
 export class ScMatrixImpl {
   private readonly maMat: multi_type_matrix<SharedString>;
   private readonly maMatFlag: multi_type_matrix<SharedString>;
@@ -111,6 +190,56 @@ export class ScMatrixImpl {
   GetElementCount(): number {
     const size = this.maMat.size();
     return size.row * size.column;
+  }
+  /** Original compensated sum. @param bTextAsZero - Count text. @param bIgnoreErrorValues - Ignore non-finite entries. @returns Sum and count. */
+  Sum(bTextAsZero: boolean, bIgnoreErrorValues: boolean): IterateResult<KahanSum> {
+    return GetValueWithCount(
+      this.maMat,
+      bTextAsZero,
+      bIgnoreErrorValues,
+      new KahanSum(0),
+      /** Adds the actual numeric member. @param accumulator - Current sum. @param value - Numeric value. @returns Updated sum. */ (
+        accumulator,
+        value,
+      ) => {
+        accumulator.add(value);
+        return accumulator;
+      },
+      copyKahanSum,
+    );
+  }
+  /** Original compensated sum of squares. @param bTextAsZero - Count text. @param bIgnoreErrorValues - Ignore non-finite entries. @returns Sum and count. */
+  SumSquare(bTextAsZero: boolean, bIgnoreErrorValues: boolean): IterateResult<KahanSum> {
+    return GetValueWithCount(
+      this.maMat,
+      bTextAsZero,
+      bIgnoreErrorValues,
+      new KahanSum(0),
+      /** Squares each numeric member before adding it. @param accumulator - Current sum. @param value - Numeric value. @returns Updated sum. */ (
+        accumulator,
+        value,
+      ) => {
+        accumulator.add(value * value);
+        return accumulator;
+      },
+      copyKahanSum,
+    );
+  }
+  /** Original binary64 product. @param bTextAsZero - Count text. @param bIgnoreErrorValues - Ignore non-finite entries. @returns Product and count. */
+  Product(bTextAsZero: boolean, bIgnoreErrorValues: boolean): IterateResult<number> {
+    return GetValueWithCount(
+      this.maMat,
+      bTextAsZero,
+      bIgnoreErrorValues,
+      1,
+      /** Multiplies numeric members in storage order. @param accumulator - Current product. @param value - Numeric value. @returns Updated product. */ (
+        accumulator,
+        value,
+      ) => accumulator * value,
+      /** Copies the native double by value. @param accumulator - Current product. @returns Copied product. */ (
+        accumulator,
+      ) => accumulator,
+    );
   }
   /** Original strict coordinate bounds. @param nC - Column. @param nR - Row. @returns Whether within dimensions. */
   ValidColRow(nC: number, nR: number): boolean {
@@ -427,6 +556,18 @@ export class ScMatrix {
   /** Original count delegate. @returns Count. */
   GetElementCount(): number {
     return this.pImpl.GetElementCount();
+  }
+  /** Original sum delegate. @param bTextAsZero - Count text. @param bIgnoreErrorValues - Ignore non-finite entries. @returns Sum and count. */
+  Sum(bTextAsZero: boolean, bIgnoreErrorValues = false): IterateResult<KahanSum> {
+    return this.pImpl.Sum(bTextAsZero, bIgnoreErrorValues);
+  }
+  /** Original sum of squares delegate. @param bTextAsZero - Count text. @param bIgnoreErrorValues - Ignore non-finite entries. @returns Sum and count. */
+  SumSquare(bTextAsZero: boolean, bIgnoreErrorValues = false): IterateResult<KahanSum> {
+    return this.pImpl.SumSquare(bTextAsZero, bIgnoreErrorValues);
+  }
+  /** Original product delegate. @param bTextAsZero - Count text. @param bIgnoreErrorValues - Ignore non-finite entries. @returns Product and count. */
+  Product(bTextAsZero: boolean, bIgnoreErrorValues = false): IterateResult<number> {
+    return this.pImpl.Product(bTextAsZero, bIgnoreErrorValues);
   }
   /** Original strict coordinate delegate. @param nC - Column. @param nR - Row. @returns Validity. */
   ValidColRow(nC: number, nR: number): boolean {

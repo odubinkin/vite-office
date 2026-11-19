@@ -1,4 +1,4 @@
-/** @fileoverview Numeric/local-reference RPN execution and ordinary scalar aggregate branches from interpr4/interpr6 over actual tokens and cell views. Matrix and locale-conversion services remain unsupported. */
+/** @fileoverview Numeric and local-reference RPN execution, including ordinary aggregates over native ranges and constant matrices. */
 import {
   FormulaToken,
   FormulaDoubleToken,
@@ -23,7 +23,7 @@ import { ScMatrix } from "./scmatrix";
 import type { ScSingleRefData } from "../../../inc/refdata";
 import { RangeColumnSpanSet } from "../../../inc/columnspanset";
 import { ScValueIterator } from "../../../inc/dociter";
-import { FuncSum } from "./interpr6";
+import { FuncSum, IterateMatrix, type MatrixAggregate } from "./interpr6";
 import { ScCompiler } from "../../../inc/compiler";
 import { CellType } from "../../../inc/global";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
@@ -269,8 +269,8 @@ export class ScInterpreter {
       left = this.GetString();
     this.PushString(this.CheckStringResultLen(left.length, right.length) ? left + right : "");
   }
-  /** Executes ordinary non-subtotal SUM/SUMSQ/PRODUCT/AVERAGE parameter iteration from interpr6. Matrix,range and reference-list branches require their native owners. @param op - Aggregate opcode. @param parameterCount - Native byte arity. @returns Nothing. */
-  private IterateParameters(op: OpCode, parameterCount: number): void {
+  /** Executes ordinary non-subtotal SUM/SUMSQ/PRODUCT/AVERAGE parameter iteration from interpr6. @param op - Aggregate opcode. @param parameterCount - Native byte arity. @returns Nothing. */
+  private IterateParameters(op: MatrixAggregate, parameterCount: number): void {
     const result = new KahanSum(op === OpCode.ocProduct ? 1 : 0);
     let count = 0;
     while (parameterCount-- > 0) {
@@ -306,6 +306,13 @@ export class ScInterpreter {
         case StackVar.svError:
           this.PopError();
           continue;
+        case StackVar.svMatrix: {
+          this.pStack.pop();
+          const matrix = (token as ScMatrixToken).GetMatrix();
+          if (matrix === null) this.SetError(FormulaError.UnknownVariable);
+          else count += IterateMatrix(matrix, op, result);
+          continue;
+        }
         case StackVar.svDoubleRef: {
           const range = this.PopDoubleRef();
           if (this.nGlobalError === FormulaError.NoRef) {
@@ -338,7 +345,7 @@ export class ScInterpreter {
           continue;
         }
         default:
-          throw new Error("Aggregate range/matrix/reference-list operands are not implemented");
+          throw new Error("Aggregate operand type is not implemented");
       }
       count++;
       if (op === OpCode.ocProduct) result.multiply_assign(value);

@@ -1,4 +1,4 @@
-/** @fileoverview Native default range SUM block accumulator and column action from interpr6.cxx. Number-format services and other aggregate range actions remain separate native consumers. */
+/** @fileoverview Native range SUM and ordinary matrix aggregate execution from interpr6.cxx. */
 import { KahanSum } from "../../../inc/kahan";
 import { sumArray } from "../../../inc/arraysumfunctor";
 import { ParseBlock, type CellStoreNode, type BlockFunction } from "../../../inc/mtvfunctions";
@@ -15,7 +15,31 @@ import type { ColumnAction } from "../../../inc/columnspanset";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import type { ScInterpreterContext } from "../../../inc/interpretercontext";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
+import { OpCode } from "../../../../formula/inc/opcode";
+import type { ScMatrix } from "../../../inc/scmatrix";
 import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types";
+
+/** Aggregate opcodes with ordinary numeric and matrix execution in this interpreter slice. */
+export type MatrixAggregate =
+  typeof OpCode.ocSum | typeof OpCode.ocSumSQ | typeof OpCode.ocProduct | typeof OpCode.ocAverage;
+
+/** Original IterateMatrix accumulation for the represented ordinary aggregate functions.
+ * @param matrix - Matrix from the evaluation stack.
+ * @param op - Aggregate opcode.
+ * @param total - Running compensated interpreter result.
+ * @returns Count contributed by the matrix.
+ */
+export function IterateMatrix(matrix: ScMatrix, op: MatrixAggregate, total: KahanSum): number {
+  if (op === OpCode.ocProduct) {
+    const result = matrix.Product(false);
+    total.multiply_assign(result.maAccumulator);
+    return result.mnCount;
+  }
+  const result = op === OpCode.ocSumSQ ? matrix.SumSquare(false) : matrix.Sum(false);
+  total.add(result.maAccumulator);
+  return result.mnCount;
+}
+
 /** Original block-wise numeric and formula accumulator,retaining source array partition and error behavior. */
 export class NumericCellAccumulator implements BlockFunction {
   private readonly maSum = new KahanSum(0);

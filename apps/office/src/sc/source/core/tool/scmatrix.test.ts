@@ -2,11 +2,52 @@
 import { expect, it } from "vitest";
 import { gunzipSync } from "node:zlib";
 import original from "./native-matrix-value-cases.json";
-import { ScMatrixValue } from "../../../inc/scmatrix";
+import { ScMatrix, ScMatrixValue } from "../../../inc/scmatrix";
 import { ScMatValType } from "../../../inc/types";
-import { FormulaError, CreateDoubleError } from "../../../../formula/inc/errorcodes";
+import {
+  FormulaError,
+  CreateDoubleError,
+  GetDoubleErrorValue,
+} from "../../../../formula/inc/errorcodes";
 import { SharedString } from "../../../../svl/inc/sharedstring";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
+
+it("reduces typed blocks with the native text and non-finite operand policies", /** Exercises booleans, strings, empty flags and the encoded error payload. @returns Nothing. */ () => {
+  const matrix = new ScMatrix(2, 4);
+  const text = new OUString(65);
+  const string = new SharedString(text);
+  try {
+    matrix.PutDouble(2, 0, 0);
+    matrix.PutBoolean(true, 0, 1);
+    matrix.PutBoolean(false, 0, 2);
+    matrix.PutString(string, 0, 3);
+    matrix.PutError(FormulaError.DivisionByZero, 1, 0);
+    matrix.PutDouble(Infinity, 1, 1);
+    matrix.PutEmptyResultVector(1, 1, 2);
+    matrix.PutEmptyPath(1, 3);
+
+    const sum = matrix.Sum(false, true);
+    expect(sum.mnCount).toBe(3);
+    expect(sum.maAccumulator.get()).toBe(3);
+    const squares = matrix.SumSquare(true, true);
+    expect(squares.mnCount).toBe(4);
+    expect(squares.maAccumulator.get()).toBe(5);
+    expect(matrix.Product(false, true)).toEqual({ maAccumulator: 0, mnCount: 3 });
+
+    const error = new ScMatrix(1, 1);
+    error.PutError(FormulaError.DivisionByZero, 0, 0);
+    const errorSum = error.Sum(false);
+    expect(errorSum.mnCount).toBe(1);
+    expect(GetDoubleErrorValue(errorSum.maAccumulator.get())).toBe(FormulaError.DivisionByZero);
+    expect(GetDoubleErrorValue(error.Product(false).maAccumulator)).toBe(
+      FormulaError.DivisionByZero,
+    );
+    expect(new ScMatrix(1, 1).Product(false)).toEqual({ maAccumulator: 1, mnCount: 0 });
+  } finally {
+    string.dispose();
+    text.dispose();
+  }
+});
 
 /** Decodes a complete original native stream. @param mode - Original capture. @returns Whole original output. */
 function capture(mode: keyof typeof original.captures): string {

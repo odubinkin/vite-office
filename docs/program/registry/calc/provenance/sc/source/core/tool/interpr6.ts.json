@@ -8,15 +8,18 @@
     "upstreamPath": "sc/source/core/tool/interpr6.cxx",
     "localSymbols": [
       "NumericCellAccumulator",
-      "FuncSum"
+      "FuncSum",
+      "IterateMatrix"
     ],
     "upstreamSymbols": [
       "NumericCellAccumulator",
-      "FuncSum"
+      "FuncSum",
+      "IterateMatrix"
     ],
     "preservedResponsibilities": [
       "Original column-block sum action,actual cursor and error ordering;number-format services remain unavailable.",
-      "Block73 extends the prior bounded slices with native local/ODFF rectangular and whole-axis double references,shared RangeLine compilation,default scalar intersection,range aggregate execution over actual typed stores,and ordinary area-slot dependency ownership. Native logarithmic slot geometry,shared identity,bulk/deferred erasure,reference-update chaining,sheet shifts and semantic destruction are consumed without individual-cell listener expansion. ScValueIterator and RangeColumnSpanSet use actual document/column stores;portable array accumulation retains original four-stream Kahan order. Typed double out-references preserve encoded NaN payload storage. Earlier exclusions of these specific services are superseded here. Group/3D/external/named-reference expressions,matrix evaluation,nondefault subtotal/text-zero and number-format services remain unsupported;broader parity remains unverified. CALC250-252 record retained upstream edge behavior and limits on numerical evidence."
+      "Block73 extends the prior bounded slices with native local/ODFF rectangular and whole-axis double references,shared RangeLine compilation,default scalar intersection,range aggregate execution over actual typed stores,and ordinary area-slot dependency ownership. Native logarithmic slot geometry,shared identity,bulk/deferred erasure,reference-update chaining,sheet shifts and semantic destruction are consumed without individual-cell listener expansion. ScValueIterator and RangeColumnSpanSet use actual document/column stores;portable array accumulation retains original four-stream Kahan order. Typed double out-references preserve encoded NaN payload storage. Earlier exclusions of these specific services are superseded here. Group/3D/external/named-reference expressions,matrix evaluation,nondefault subtotal/text-zero and number-format services remain unsupported;broader parity remains unverified. CALC250-252 record retained upstream edge behavior and limits on numerical evidence.",
+      "Original ordinary SUM, AVERAGE, SUMSQ and PRODUCT matrix branches combine native ScMatrix results and counts. Nondefault subtotal and external-reference options remain unqualified."
     ],
     "omittedResponsibilities": [
       "Only the stated consumed slice is implemented;broader native contracts,defaults and behavior remain unverified."
@@ -30,12 +33,32 @@
         {
           "path": "apps/office/src/sc/source/core/tool/range-formula.test.ts",
           "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/numeric-formula.test.ts",
+          "marker": "replays LibreOffice SUMSQ and PRODUCT with inline arrays"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.named-arrays.test.ts",
+          "marker": "verifyAggregates"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr6.cxx",
           "marker": "class NumericCellAccumulator"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr6.cxx",
+          "marker": "static void IterateMatrix"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc_formula2.cxx",
+          "marker": "testFuncSUMSQ"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc_formula.cxx",
+          "marker": "testFuncPRODUCT"
         }
       ]
     }

@@ -6,6 +6,7 @@ import {
   encodeCalcDocument,
 } from "../../../browser/filter/xml/calc-document-codec";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { ScAddress } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
@@ -14,6 +15,26 @@ import { readOdsDocument, writeOdsXml } from "../xml/xmlwrap";
 import { ExcelFilter } from "./excelfilter";
 
 const fixture = "../../vendor/libreoffice-reference/sc/qa/unit/data/xlsx/named-ranges-global.xlsx";
+const aggregates = [
+  ["SUM", 21],
+  ["SUMSQ", 91],
+  ["PRODUCT", 720],
+  ["AVERAGE", 3.5],
+] as const;
+
+/** Asserts formulas refer to the imported name and evaluate against the matrix after each transfer. @param document - Current Calc document. @returns Nothing. */
+function verifyAggregates(document: ScDocument): void {
+  aggregates.forEach(
+    /** Checks the actual calculated cell, including its retained named operand. @param entry - Function and result. @param row - Formula row. @returns Nothing. */ (
+      [name, result],
+      row,
+    ) => {
+      const address = new ScAddress(5, row, 0);
+      expect(document.GetFormulaCell(address)?.GetCode().GetCodeLen()).toBeGreaterThan(0);
+      expect(document.GetValue(address), name).toBe(result);
+    },
+  );
+}
 
 /** Replays the assertions from testRangeNameImpl and checks the inline matrix in its native owner. @param document - Imported document. @returns Nothing. */
 function verifyNames(document: ScDocument): void {
@@ -48,12 +69,21 @@ it("replays testRangeNameXLSX and preserves the named matrix across the existing
   let reopened: ScDocument | undefined;
   try {
     verifyNames(original);
+    for (const [row, [name]] of aggregates.entries())
+      original.SetFormula(
+        new ScAddress(5, row, 0),
+        unicode(`=${name}(Global4)`),
+        FormulaGrammar.Grammar.GRAM_NATIVE,
+      );
+    verifyAggregates(original);
     worker = decodeCalcDocument(structuredClone(encodeCalcDocument(original)));
     verifyNames(worker);
+    verifyAggregates(worker);
     const ods = await writeOdsXml(worker);
     expect(ods.files["content.xml"]).toContain("{1;2;3|4;5;6}");
     stored = await readOdsDocument(ods);
     verifyNames(stored);
+    verifyAggregates(stored);
     const bytes = await exportXlsx(stored);
     const archive = await DocumentArchive.open(bytes);
     expect(await archive.readTextEntry("xl/workbook.xml")).toMatch(
@@ -61,6 +91,7 @@ it("replays testRangeNameXLSX and preserves the named matrix across the existing
     );
     reopened = await ExcelFilter.importDocument(bytes);
     verifyNames(reopened);
+    verifyAggregates(reopened);
   } finally {
     reopened?.Dispose();
     stored?.Dispose();

@@ -13,8 +13,11 @@ import {
   FormulaByteToken,
   FormulaStringToken,
   FormulaErrorToken,
+  type FormulaToken,
   StackVar,
 } from "../../../../formula/inc/token";
+import { ScMatrixToken } from "../../../inc/token";
+import { ScMatrix } from "../../../inc/scmatrix";
 import { SharedString } from "../../../../svl/inc/sharedstring";
 import { ScColumn } from "../../../inc/column";
 import {
@@ -31,6 +34,38 @@ import { multi_type_vector } from "../../../../external/mdds/include/mdds/multi_
 import { div, power } from "../../../inc/math";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 const grammar = FormulaGrammar.Grammar.GRAM_ODFF;
+
+it("replays LibreOffice SUMSQ and PRODUCT with inline arrays", /** Uses the inline array cases of testFuncSUMSQ and testFuncPRODUCT. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  const position = new ScAddress();
+  doc.InsertTab(0, unicode("Test"));
+  try {
+    for (const [source, value] of [
+      ["=SUMSQ({1;2;3})", 14],
+      ["=SUMSQ({3;6;9})", 126],
+      ["=SUMSQ({15;0})", 225],
+      ["=SUMSQ({-3;3;1})", 19],
+      ['=SUMSQ({"a";-4;-5})', 41],
+      ["=SUMSQ({2;3};{4;5})", 54],
+      ["=SUMSQ({-3;3;1};{-1})", 20],
+      ["=SUMSQ({-4};{1;4;2};{-5;7};{9})", 192],
+      ["=SUMSQ({-2;2};{1};{-1};{0;0;0;4})", 26],
+      ["=PRODUCT({2;3;4})", 24],
+      ["=PRODUCT({2;-2;2})", -8],
+      ["=PRODUCT({8;0.125;-1})", -1],
+      ["=PRODUCT({2;3};{4;5})", 120],
+      ["=PRODUCT({10;-8};{3;-1};{15;30};{7})", 756000],
+      ["=PRODUCT({10;-0.1;8};{0.125;4;0.25;2};{0.5};{1};{-1})", 1],
+      ['=AVERAGE({1;"2";5};7)', 13 / 3],
+      ['=SUM({1;"2";5};7)', 13],
+    ] as const) {
+      doc.SetFormula(position, unicode(source), FormulaGrammar.Grammar.GRAM_NATIVE);
+      expect(doc.GetValue(position), source).toBe(value);
+    }
+  } finally {
+    doc.Dispose();
+  }
+});
 
 it("retains native token classes, limits, copy identity and compiler boundaries", /** Scans into the actual owner and exercises public syntax/storage limits. @returns Nothing. */ () => {
   const doc = new ScDocument(),
@@ -76,9 +111,7 @@ it("executes actual RPN result/error/stack boundaries", /** No private-field acc
   const doc = new ScDocument(),
     pos = new ScAddress(0, 0, 0);
   /** Interprets a caller-supplied initialized RPN token stream. @param code - Real tokens. @returns Interpreter. */
-  function run(
-    code: readonly (FormulaDoubleToken | FormulaByteToken | FormulaErrorToken)[],
-  ): ScInterpreter {
+  function run(code: readonly FormulaToken[]): ScInterpreter {
     const array = new ScTokenArray(doc);
     array.CreateNewRPNArrayFromData(code, code.length);
     const interpreter = new ScInterpreter(null, doc, doc.GetNonThreadedContext(), pos, array);
@@ -105,6 +138,23 @@ it("executes actual RPN result/error/stack boundaries", /** No private-field acc
   ).toBe(FormulaError.StackOverflow);
   expect(run([new FormulaErrorToken(FormulaError.NoName)]).GetError()).toBe(FormulaError.NoName);
   expect(run([new FormulaDoubleToken(Infinity)]).GetError()).toBe(FormulaError.IllegalFPOperation);
+  const matrix = new ScMatrix(1, 1);
+  matrix.PutError(FormulaError.DivisionByZero, 0, 0);
+  for (const [operand, error] of [
+    [null, FormulaError.UnknownVariable],
+    [matrix, FormulaError.DivisionByZero],
+    [new ScMatrix(1, 1), FormulaError.DivisionByZero],
+  ] as const) {
+    const interpreter = run([
+      new ScMatrixToken(operand),
+      new FormulaByteToken(OpCode.ocAverage, 1),
+    ]);
+    try {
+      expect(interpreter.GetError()).toBe(error);
+    } finally {
+      interpreter.Dispose();
+    }
+  }
   expect(
     /** Rejects missing opcode execution. @returns Interpreter. */ () =>
       run([new FormulaByteToken(OpCode.ocIf)]),

@@ -52,14 +52,24 @@
       "IsEmptyPath",
       "IsValue",
       "IsValueOrEmpty",
-      "IsBoolean"
+      "IsBoolean",
+      "IterateResult",
+      "GetValueWithCount",
+      "Sum",
+      "SumSquare",
+      "Product"
     ],
     "upstreamSymbols": [
       "ScMatrixValue",
       "ScMatrixImpl",
       "matrix_traits",
       "matrix_flag_traits",
-      "ScMatrix"
+      "ScMatrix",
+      "WalkElementBlocks",
+      "GetValueWithCount",
+      "ScMatrix::Sum",
+      "ScMatrix::SumSquare",
+      "ScMatrix::Product"
     ],
     "preservedResponsibilities": [
       "Original inline matrix value owner/header boundary and genuine shared value/error reuse.",
@@ -67,7 +77,8 @@
       "Original internal data/flag matrix storage and constructor/coordinate replication semantics reuse genuine shared owners.",
       "Original public matrix constructors/resize/geometry/type classifier boundary delegates to actual shared storage.",
       "Original coordinate value/flag/type responsibilities and public delegates reuse genuine shared stores and values.",
-      "Actual range-matrix/cell-state value ownership and matrix-range sharing/copy semantics, genuine matrix peer evidence with full original declarations."
+      "Actual range-matrix/cell-state value ownership and matrix-range sharing/copy semantics, genuine matrix peer evidence with full original declarations.",
+      "Native matrix SUM, SUMSQ and PRODUCT reduce actual mdds data blocks in storage order, with compensated sums, boolean values, and original text counting and non-finite policies."
     ],
     "omittedResponsibilities": [
       "Iteration85 implements original coordinate scalar number/string/boolean/error/empty/path writes, empty-result vector, owned Get value extraction and all coordinate type/empty predicates with actual public ScMatrix delegates. Existing mdds and SharedString are reused, const string input remains borrowed and returned values copy actual shared data. Original flags persist across scalar writes; Empty clears both stores, Get hides the empty-result distinction and predicates retain it. Invalid IsEmptyPath is true, other predicates false; invalid writes are no-ops except unguarded PutError, including in-storage row spill (CALC-073). Ordinary production assertion-mode source-excerpt stream37464bytes over genuine original dependencies compares five shapes, transition histories, UTF16 embedded NUL/non-ASCII, retained returned strings, errors, replication, invalid coordinates and actual internal block/flag witnesses. Internal unsupported flag witness follows release no-op assertions only, with no public reachability/debug-assertion subsystem claim. Existing GC per-matrix limit/refcount adaptation remains; no interpreter substitute or numeric wrapper. Index/transposed/bulk operation families, interpreter-specific queries/Clone/results/document/UI and native exception/ABI/full QA remain incomplete; broad parity flags false. Original QA anchors are unexecuted context, next full91.",
@@ -118,6 +129,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/range-matrix.test.ts",
           "marker": "matches original range matrix, column cell state and range-token value stream"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/scmatrix.test.ts",
+          "marker": "reduces typed blocks with the native text and non-finite operand policies"
         }
       ],
       "upstream": [
@@ -144,6 +159,18 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/types.cxx",
           "marker": "RangeMatrix::RangeMatrix()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/scmatrix.cxx",
+          "marker": "class WalkElementBlocks"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc_formula2.cxx",
+          "marker": "testFuncSUMSQ"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc_formula.cxx",
+          "marker": "testFuncPRODUCT"
         }
       ]
     }

@@ -18,6 +18,7 @@ test("Calc opens and downloads the pinned XLSX with a named matrix", /** Checks 
     .getByRole("tablist", { name: "Sheets" })
     .getByRole("tab", { name: "Sheet2", exact: true });
   const result = grid.getByRole("gridcell", { name: /^A4(?:\s|$)/u });
+  const aggregate = grid.getByRole("gridcell", { name: /^D4(?:\s|$)/u });
   await page.goto("/calc");
   await page.getByRole("button", { name: "Open", exact: true }).click();
   await page.getByRole("tab", { name: "On computer" }).click();
@@ -25,6 +26,10 @@ test("Calc opens and downloads the pinned XLSX with a named matrix", /** Checks 
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(activeSheet).toHaveAttribute("aria-current", "page");
   await expect(result).toHaveText("1");
+  await aggregate.click();
+  await page.keyboard.type("=SUM(Global4)");
+  await page.keyboard.press("Enter");
+  await expect(aggregate).toHaveText("21");
 
   await page.getByRole("menuitem", { name: "File" }).click();
   await page.getByRole("menuitem", { name: "Save As…" }).click();
@@ -38,6 +43,7 @@ test("Calc opens and downloads the pinned XLSX with a named matrix", /** Checks 
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(activeSheet).toHaveAttribute("aria-current", "page");
   await expect(result).toHaveText("1");
+  await expect(aggregate).toHaveText("21");
 
   const pending = page.waitForEvent("download");
   await page.getByRole("menuitem", { name: "File" }).click();
@@ -62,4 +68,5 @@ test("Calc opens and downloads the pinned XLSX with a named matrix", /** Checks 
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(activeSheet).toHaveAttribute("aria-current", "page");
   await expect(result).toHaveText("1");
+  await expect(aggregate).toHaveText("21");
 });
