@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 400
+revision: 402
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T10:06:02.984Z"
+  updated_at: "2026-11-19T10:23:20.241Z"
   updated_by: "CODER"
-  note: "DOCX page borders code fbda05bfa. Scoped Writer and shared coverage, final ODT regression, two production Chrome cases and static gates passed. Refine page painting and header/footer margin geometry in the active task."
-  attempts: 122
+  note: "DOCX header and footer geometry code 3d1853d67. Scoped coverage, final Writer regressions, Chrome desktop/mobile and static gates passed. Raw SDT and VML fixtures still require their missing content handlers."
+  attempts: 123
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1960,8 +1963,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T10:23:20.241Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "DOCX header and footer geometry code 3d1853d67. Scoped coverage, final Writer regressions, Chrome desktop/mobile and static gates passed. Raw SDT and VML fixtures still require their missing content handlers."
+  -
+    type: "status"
+    at: "2026-11-19T10:23:27.486Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T10:06:10.486Z"
+doc_updated_at: "2026-11-19T10:23:27.486Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -5700,6 +5716,49 @@ sections:
     - Commands: python3 scripts/writer-ooxml/generate-factory.py --check; npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:writer-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:writer-hintids; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; npm run inventory:invariants; npm run inventory:parity; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
       Result: pass. Evidence: 182 pinned Word definitions, four static JS bundles, no module boundary or registry semantic violations. Agentplane doctor reports an older hook shim as a warning with no errors.
     - Remaining acceptance: page-border paint and header/footer-relative margin geometry, the broader DOCX/XLSX slice and deployment-specific reproduction remain open. Full regression was outside the ten-task cadence.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-19T10:23:20.241Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: DOCX header and footer geometry code 3d1853d67. Scoped coverage, final Writer regressions, Chrome desktop/mobile and static gates passed. Raw SDT and VML fixtures still require their missing content handlers.
+    Attempts: 123
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T10:06:10.486Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    Writer now stores the original page-edge-to-story field separately from the text-body distance. The page-style UNO properties update the actual nested frame size, UL spacing and dynamic spacing item. DOCX export uses the header/footer edges for vertical page borders and the total distances for body margins. The ODT page-layout styles and Worker transfer preserve those items, and the browser body geometry includes the stored story dimensions. See WRITER-664 and WRITER-665 for source behavior preserved at the Word and UNO boundaries.
+
+    - Command: npm run test:coverage:writer -- docxexport.page-stories.test.ts odt-page-stories.test.ts docxattributeoutput.borders.test.ts docxattributeoutput.section.test.ts native-property-info.test.ts writer-page-story-codec.test.ts rtf-section-properties.test.ts --maxWorkers=2 --testTimeout=120000 --coverage.include=src/sw/source/core/unocore/unostyle.page-stories.ts --coverage.include=src/sw/inc/hfspacingitem.ts --coverage.include=src/xmloff/source/style/PageMasterStyleMap.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/docx-story-geometry
+      Result: pass. Evidence: 90 tests in seven files. Statement, line, and function coverage is 100% in all new implementation files. Branch coverage is 97.36% in the UNO helper, 90.9% in the ODF map and 100% in the spacing item. Scope: native story geometry, ODT persistence, Worker ownership, pinned regression section metrics, adjacent DOCX/RTF page properties and UNO metadata.
+    - Checked pinned full packages: header-border.docx reaches unimplemented block SDT definition 1770000 in footer1.xml, and footer-margin-lost.docx reaches the unimplemented Shape context for a VML picture. The tests keep the original document part, styles, relationships and geometry. The test fixture projection unwraps the SDT content and removes the VML picture only from the relevant header/footer XML. Full-file reproduction is retained as a separate residual gap. No production content skipping was introduced.
+    - Command: npm run test:writer -- docxexport.page-stories.test.ts native-property-info.test.ts writer-page-story-codec.test.ts WriterPageLayout.test.tsx --maxWorkers=2 --testTimeout=120000
+      Result: pass. Evidence: 39 tests across four files. Scope: final UNO state/reset and original metadata, ODT geometry, Worker transport, and browser layout projection.
+    - Command: node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1 --timeout=90000 --grep 'header-relative|page borders and shadow'
+      Result: pass. Evidence: two production Chromium scenarios. Scope: desktop file open, preserved body placement, existing ODT autosave and mobile reopen, DOCX download with exact header and border offsets, and DOCX reopen.
+    - Commands: npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:writer-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:writer-hintids; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; npm run inventory:invariants; npm run inventory:parity; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+      Result: pass. Evidence: four static JS bundles, 5762 documented source files, 117 native Writer identities, and zero registry semantic violations. Agentplane doctor reports the existing older-hook warning with no errors.
+    - Remaining acceptance: original SDT and VML fixture admission, story layout rectangles and rendering of header/footer and page border content, plus negative-margin overlap conversion to anchored frames as covered by testTdf119952. Broader Writer and Calc OOXML work remains open. Full regression was outside the ten-task cadence.
 
     BlueprintSnapshotRef:
     - state: current
@@ -10186,6 +10245,49 @@ The Writer page style owns the physical border lines, signed padding, shadow, an
 - Commands: python3 scripts/writer-ooxml/generate-factory.py --check; npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:writer-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:writer-hintids; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; npm run inventory:invariants; npm run inventory:parity; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
   Result: pass. Evidence: 182 pinned Word definitions, four static JS bundles, no module boundary or registry semantic violations. Agentplane doctor reports an older hook shim as a warning with no errors.
 - Remaining acceptance: page-border paint and header/footer-relative margin geometry, the broader DOCX/XLSX slice and deployment-specific reproduction remain open. Full regression was outside the ten-task cadence.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-19T10:23:20.241Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: DOCX header and footer geometry code 3d1853d67. Scoped coverage, final Writer regressions, Chrome desktop/mobile and static gates passed. Raw SDT and VML fixtures still require their missing content handlers.
+Attempts: 123
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T10:06:10.486Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+Writer now stores the original page-edge-to-story field separately from the text-body distance. The page-style UNO properties update the actual nested frame size, UL spacing and dynamic spacing item. DOCX export uses the header/footer edges for vertical page borders and the total distances for body margins. The ODT page-layout styles and Worker transfer preserve those items, and the browser body geometry includes the stored story dimensions. See WRITER-664 and WRITER-665 for source behavior preserved at the Word and UNO boundaries.
+
+- Command: npm run test:coverage:writer -- docxexport.page-stories.test.ts odt-page-stories.test.ts docxattributeoutput.borders.test.ts docxattributeoutput.section.test.ts native-property-info.test.ts writer-page-story-codec.test.ts rtf-section-properties.test.ts --maxWorkers=2 --testTimeout=120000 --coverage.include=src/sw/source/core/unocore/unostyle.page-stories.ts --coverage.include=src/sw/inc/hfspacingitem.ts --coverage.include=src/xmloff/source/style/PageMasterStyleMap.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/docx-story-geometry
+  Result: pass. Evidence: 90 tests in seven files. Statement, line, and function coverage is 100% in all new implementation files. Branch coverage is 97.36% in the UNO helper, 90.9% in the ODF map and 100% in the spacing item. Scope: native story geometry, ODT persistence, Worker ownership, pinned regression section metrics, adjacent DOCX/RTF page properties and UNO metadata.
+- Checked pinned full packages: header-border.docx reaches unimplemented block SDT definition 1770000 in footer1.xml, and footer-margin-lost.docx reaches the unimplemented Shape context for a VML picture. The tests keep the original document part, styles, relationships and geometry. The test fixture projection unwraps the SDT content and removes the VML picture only from the relevant header/footer XML. Full-file reproduction is retained as a separate residual gap. No production content skipping was introduced.
+- Command: npm run test:writer -- docxexport.page-stories.test.ts native-property-info.test.ts writer-page-story-codec.test.ts WriterPageLayout.test.tsx --maxWorkers=2 --testTimeout=120000
+  Result: pass. Evidence: 39 tests across four files. Scope: final UNO state/reset and original metadata, ODT geometry, Worker transport, and browser layout projection.
+- Command: node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1 --timeout=90000 --grep 'header-relative|page borders and shadow'
+  Result: pass. Evidence: two production Chromium scenarios. Scope: desktop file open, preserved body placement, existing ODT autosave and mobile reopen, DOCX download with exact header and border offsets, and DOCX reopen.
+- Commands: npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:writer-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:writer-hintids; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; npm run inventory:invariants; npm run inventory:parity; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+  Result: pass. Evidence: four static JS bundles, 5762 documented source files, 117 native Writer identities, and zero registry semantic violations. Agentplane doctor reports the existing older-hook warning with no errors.
+- Remaining acceptance: original SDT and VML fixture admission, story layout rectangles and rendering of header/footer and page border content, plus negative-margin overlap conversion to anchored frames as covered by testTdf119952. Broader Writer and Calc OOXML work remains open. Full regression was outside the ten-task cadence.
 
 BlueprintSnapshotRef:
 - state: current
