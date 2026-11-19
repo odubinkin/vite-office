@@ -1,5 +1,7 @@
 /** @fileoverview Consumed writerfilter resource-model Id, Reference, Value, Sprm, Properties and Table contracts from pinned inc/dmapper/resourcemodel.hxx; host references replace SvRef transport. */
 import type { OUString } from "../../../../../sal/inc/rtl/ustring";
+import type { EmbeddedGraphic } from "../../../../../oox/source/helper/graphichelper";
+import type { DrawingAnchor } from "../../dmapper/GraphicImport";
 import type { Any } from "../../../../../cppu/inc/com/sun/star/uno/Any";
 
 /** Original unsigned32 generated resource identity. */
@@ -43,6 +45,7 @@ export enum FieldControl {
 export interface Stream {
   /** Resolves a native part inside the corresponding text-append context, when implemented by the receiver. */
   substream?(id: Id, stream: Reference<Stream>): void;
+  picture?(data: EmbeddedGraphic, anchor: DrawingAnchor): void;
   props(properties: Reference<Properties>): void;
   /** Original resource-table callback; distinct from document table row/cell groups. */
   table(id: Id, table: Reference<Table>): void;

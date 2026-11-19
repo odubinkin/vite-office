@@ -216,6 +216,8 @@ export const resources1 = [
   [1770161, "doc:percent", 92019],
   [1769942, "doc:spelling", 92026],
   [1769942, "doc:grammar", 92027],
+  [1769632, "dmlWordDr:anchor", 91384],
+  [1769632, "dmlWordDr:inline", 91383],
   [1770157, "doc:lang", 92020],
   [1770157, "doc:vendorID", 92021],
   [1770157, "doc:dllVersion", 92022],

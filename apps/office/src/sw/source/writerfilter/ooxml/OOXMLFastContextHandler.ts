@@ -1,5 +1,7 @@
 /** @fileoverview Native text/property/value/resource-table contexts, inherited xml:space, MCE choices and source-ordered callbacks; drawings, document tables and notes remain separate owners. */
 import { FieldControl, type Id, type Stream } from "../inc/dmapper/resourcemodel";
+import type { DrawingAnchor } from "../dmapper/GraphicImport";
+import { WrapTextMode } from "../../../../offapi/com/sun/star/text/WrapTextMode";
 import type { OOXMLDocument } from "../inc/ooxml/OOXMLDocument";
 import { OOXMLFactory, type FastAttribute } from "./OOXMLFactory";
 import { nativeToken } from "./OOXMLFactory_wml";
@@ -490,6 +492,10 @@ export class OOXMLFastContextHandler {
   softHyphen(): void {
     if (this.isForwardEvents()) this.stream().utext(Uint16Array.of(0x00ad), 1);
   }
+  /** Sends a represented picture to the native drawing consumer. @returns Nothing. */
+  handlePicture(): void {
+    if (this instanceof OOXMLFastContextHandlerDrawing) this.resolvePicture();
+  }
   /** Resolves an inline break before releasing the source context properties. @returns Nothing. */
   handleBreak(): void {
     if (!this.isForwardEvents() || !(this instanceof OOXMLFastContextHandlerProperties)) return;
@@ -742,5 +748,182 @@ export class OOXMLFastContextHandlerValue extends OOXMLFastContextHandler {
         string.dispose();
       }
     }
+  }
+}
+
+const drawingAnchor = nativeToken("dmlWordDr:anchor");
+const drawingExtent = nativeToken("dmlWordDr:extent");
+const drawingGraphic = nativeToken("dml:graphic");
+const drawingGraphicData = nativeToken("dml:graphicData");
+const drawingPositionH = nativeToken("dmlWordDr:positionH");
+const drawingPositionV = nativeToken("dmlWordDr:positionV");
+const drawingOffset = nativeToken("dmlWordDr:posOffset");
+const drawingAlign = nativeToken("dmlWordDr:align");
+const drawingSimplePos = nativeToken("dmlWordDr:simplePos");
+const drawingWrapTopAndBottom = nativeToken("dmlWordDr:wrapTopAndBottom");
+const drawingWrapNone = nativeToken("dmlWordDr:wrapNone");
+const unsupportedDrawingWrap = new Set([
+  nativeToken("dmlWordDr:wrapSquare"),
+  nativeToken("dmlWordDr:wrapTight"),
+  nativeToken("dmlWordDr:wrapThrough"),
+]);
+const drawingPicture = nativeToken("dmlPicture:pic");
+const drawingBlipFill = nativeToken("dmlPicture:blipFill");
+const drawingBlip = nativeToken("dml:blip");
+const drawingRoot = nativeToken("doc:drawing");
+
+const drawingChildren = new Map<number, readonly number[]>([
+  [drawingRoot, [drawingAnchor]],
+  [
+    drawingAnchor,
+    [
+      drawingExtent,
+      drawingGraphic,
+      drawingPositionH,
+      drawingPositionV,
+      drawingSimplePos,
+      drawingWrapNone,
+      drawingWrapTopAndBottom,
+    ],
+  ],
+  [drawingPositionH, [drawingOffset, drawingAlign]],
+  [drawingPositionV, [drawingOffset, drawingAlign]],
+  [drawingGraphic, [drawingGraphicData]],
+  [drawingGraphicData, [drawingPicture]],
+  [drawingPicture, [drawingBlipFill]],
+  [drawingBlipFill, [drawingBlip]],
+]);
+
+/** Holds state shared by represented descendants of one source anchor. */
+interface PictureState extends DrawingAnchor {
+  width: number;
+  height: number;
+  behindDocument: boolean;
+  wrap: WrapTextMode;
+  relationship: string;
+  anchored: boolean;
+  simplePosition: boolean;
+}
+
+/** Reads one generated lexical attribute by token. @param attributes - Fast attributes. @param name - Original QName. @returns Value or native empty string. */
+function drawingAttribute(attributes: readonly FastAttribute[], name: string): string {
+  const token = nativeToken(name);
+  return (
+    attributes.find(
+      /** Selects the source attribute by numeric identity. @param attribute - Native attribute. @returns Match. */
+      (attribute) => attribute.token === token,
+    )?.value ?? ""
+  );
+}
+
+/** Native drawing property container with a shape context for an embedded floating raster picture. */
+export class OOXMLFastContextHandlerDrawing extends OOXMLFastContextHandlerProperties {
+  private readonly picture: PictureState = {
+    width: 0,
+    height: 0,
+    horizontal: { relativeFrom: "", align: "", offset: 0 },
+    vertical: { relativeFrom: "", align: "", offset: 0 },
+    behindDocument: false,
+    wrap: WrapTextMode.NONE,
+    relationship: "",
+    anchored: false,
+    simplePosition: false,
+  };
+
+  /** Preserves the DrawingML shape context under this generated drawing definition. @param element - Child fast token. @returns Drawing child or no context. */
+  override createFastChildContext(element: number): OOXMLFastContextHandler | null {
+    return drawingChildren.get(drawingRoot)?.includes(element)
+      ? new OOXMLFastContextHandlerShape(this, element, this.picture)
+      : super.createFastChildContext(element);
+  }
+  /** Runs the native CT_Drawing end action and delivers the resolved picture. @returns Nothing. */
+  resolvePicture(): void {
+    if (!this.isForwardEvents()) return;
+    const picture = this.picture;
+    if (!picture.anchored || !picture.relationship || !(picture.width > 0 && picture.height > 0))
+      throw new Error("Writer does not support this DrawingML drawing.");
+    const graphic = this.mpParserState.getDocument()?.getEmbeddedGraphic?.(picture.relationship);
+    if (!graphic) throw new Error("Writer could not resolve the embedded DrawingML picture.");
+    this.stream().picture?.(graphic, picture);
+  }
+}
+
+/** Receives the represented WordprocessingDrawing and Picture resources under a single drawing. */
+class OOXMLFastContextHandlerShape extends OOXMLFastContextHandler {
+  private value = "";
+  /** Retains the active generated element and picture placement owner. @param parent - Parent SAX context. @param element - Child identity. @param picture - Active drawing state. @returns Context. */
+  constructor(
+    parent: OOXMLFastContextHandler,
+    element: number,
+    private readonly picture: PictureState,
+  ) {
+    super(parent);
+    this.setToken(element);
+  }
+  /** Accepts only the source paths through the represented picture shape. @param element - Child token. @returns Picture context or null. */
+  override createFastChildContext(element: number): OOXMLFastContextHandler | null {
+    if (this.getToken() === drawingAnchor && unsupportedDrawingWrap.has(element))
+      throw new Error("Writer does not support this DrawingML wrapping mode.");
+    return drawingChildren.get(this.getToken())?.includes(element)
+      ? new OOXMLFastContextHandlerShape(this, element, this.picture)
+      : null;
+  }
+  /** Collects the represented DrawingML attributes without opening package streams inside SAX. @param element - Active token. @param attributes - Source attributes. @returns Nothing. */
+  override startFastElement(element: number, attributes: readonly FastAttribute[]): void {
+    const picture = this.picture;
+    switch (element) {
+      case drawingAnchor: {
+        const simple = drawingAttribute(attributes, ":simplePos");
+        picture.simplePosition = simple === "1" || simple === "true";
+        picture.anchored = true;
+        const behind = drawingAttribute(attributes, ":behindDoc");
+        picture.behindDocument = behind === "1" || behind === "true";
+        break;
+      }
+      case drawingExtent:
+        picture.width = Number(drawingAttribute(attributes, ":cx"));
+        picture.height = Number(drawingAttribute(attributes, ":cy"));
+        break;
+      case drawingSimplePos:
+        if (picture.simplePosition) {
+          picture.horizontal.relativeFrom = "page";
+          picture.horizontal.offset = Number.parseInt(drawingAttribute(attributes, ":x"), 10) || 0;
+          picture.vertical.relativeFrom = "page";
+          picture.vertical.offset = Number.parseInt(drawingAttribute(attributes, ":y"), 10) || 0;
+        }
+        break;
+      case drawingPositionH:
+        if (picture.simplePosition) break;
+        picture.horizontal.relativeFrom = drawingAttribute(attributes, ":relativeFrom");
+        break;
+      case drawingPositionV:
+        if (picture.simplePosition) break;
+        picture.vertical.relativeFrom = drawingAttribute(attributes, ":relativeFrom");
+        break;
+      case drawingWrapTopAndBottom:
+        picture.wrap = WrapTextMode.NONE;
+        break;
+      case drawingWrapNone:
+        picture.wrap = WrapTextMode.THROUGH;
+        break;
+      case drawingBlip:
+        picture.relationship = drawingAttribute(attributes, "officeRel:embed");
+        break;
+    }
+  }
+  /** Combines SAX chunks belonging to one original offset or alignment. @param value - Text chunk. @returns Nothing. */
+  override characters(value: string): void {
+    if (this.getToken() === drawingOffset || this.getToken() === drawingAlign) this.value += value;
+  }
+  /** Delivers one axis' lexical value, keeping horizontal and vertical resource state independent. @param element - Closing token. @returns Nothing. */
+  override endFastElement(element: number): void {
+    if (this.picture.simplePosition || (element !== drawingOffset && element !== drawingAlign))
+      return;
+    const axis =
+      this.mpParent?.getToken() === drawingPositionH
+        ? this.picture.horizontal
+        : this.picture.vertical;
+    if (element === drawingOffset) axis.offset = Number.parseInt(this.value, 10) || 0;
+    else axis.align = this.value;
   }
 }

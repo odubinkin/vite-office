@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/dmapper/GraphicImport.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/GraphicImport.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/GraphicImport.cxx",
+        "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts"
+      ],
+      "justification": "Attaches the actual raster node and floating format to the current Writer text position and sets its original graphic anchor, size, alignment, opacity and represented wrap items. Inline images, other wrap modes, drawing effects and complete UNO shape services remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ImportGraphic"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/dmapper/GraphicImport.cxx",
+      "upstreamSymbols": [
+        "GraphicImport::createGraphicObject"
+      ]
+    }
+  }
+}

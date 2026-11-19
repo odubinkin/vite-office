@@ -31,7 +31,7 @@ CONSUMED = (
     "CT_Tbl CT_Row CT_Tc CT_TblGrid CT_TblGridCol CT_TblPr CT_TrPr CT_TcPr CT_TblLook CT_TblOverlap CT_TblLayoutType CT_VMerge CT_HMerge CT_VerticalJc "
     "CT_Ind CT_Spacing CT_Jc CT_OnOff CT_HpsMeasure CT_SignedHpsMeasure CT_SignedTwipsMeasure CT_DecimalNumber CT_String "
     "CT_VerticalAlignRun CT_Highlight CT_TextScale EG_RPrBase CT_TblWidth CT_Height "
-    "CT_View CT_Zoom CT_Proof CT_WritingStyle CT_Rel CT_ShortHexNumber CT_TwipsMeasure CT_CharacterSpacing CT_StylePaneFilter CT_Compat CT_CompatSetting "
+    "CT_View CT_Zoom CT_Proof CT_Drawing CT_WritingStyle CT_Rel CT_ShortHexNumber CT_TwipsMeasure CT_CharacterSpacing CT_StylePaneFilter CT_Compat CT_CompatSetting "
     "CT_TrackChangesView CT_Kinsoku CT_ColorSchemeMapping "
     "CT_DocRsids CT_LongHexNumber CT_Language CT_ShapeDefaults CT_DocProtect "
     "CT_TblCellMar CT_TcMar CT_LatentStyles CT_LsdException CT_TblPrBase CT_TblPrEx CT_TblPrExBase CT_TrPrBase CT_TcPrBase CT_Border CT_TblBorders CT_TcBorders CT_TrackChange CT_Markup CT_Shd CT_TblPPr CT_PBdr CT_FramePr CT_Cnf CT_TextAlignment"
@@ -140,7 +140,7 @@ def generate(namespace="wml", consumed=CONSUMED, included_starts=None):
                 admitted_actions = {"startSectionGroup", "endCharacterGroup", "endParagraphGroup", "setLastSectionGroup", "endSectionGroup", "handleLastParagraphInSection", "startParagraphGroup", "setHandle", "sendTableDepth", "endOfParagraph", "startCharacterGroup", "sendPropertiesWithId", "text", "setDefaultBooleanValue", "setDefaultIntegerValue", "setDefaultHexValue", "setDefaultStringValue", "clearProps", "setLastParagraphInSection", "handleBreak", "handleOutOfOrderBreak", "tab", "cr", "noBreakHyphen", "softHyphen"}
                 admitted_actions.update({"startCell", "endCell", "sendCellProperties", "startRow", "endRow", "sendRowProperties", "sendTableProperties", "propagateCellProperties", "propagateRowProperties", "propagateTableProperties"})
                 admitted_actions.update({"fieldstart", "fieldsep", "fieldend", "fieldlock", "handleHyperlink", "handleHdrFtr"})
-                admitted_actions.update({"printproperty", "fieldlock_simple", "startSdt", "endSdt"})
+                admitted_actions.update({"printproperty", "fieldlock_simple", "startSdt", "endSdt", "handlePicture"})
                 conditions = native.getChildrenByName(action, "cond")
                 if action.getAttribute("action") not in admitted_actions or (conditions and (name != "CT_FldChar" or len(conditions) != 1)):
                     raise ValueError("Unconsumed native event action or condition: " + action.toxml())

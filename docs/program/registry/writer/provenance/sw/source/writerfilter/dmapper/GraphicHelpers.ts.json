@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/GraphicHelpers.ts",
+    "upstreamPath": "sw/source/writerfilter/dmapper/GraphicHelpers.cxx",
+    "localSymbols": [
+      "emuToWriterTwip",
+      "horizontalPosition",
+      "verticalPosition"
+    ],
+    "upstreamSymbols": [
+      "PositionHandler::lcl_attribute",
+      "PositionHandler::lcl_sprm",
+      "PositionHandler::orientation"
+    ],
+    "preservedResponsibilities": [
+      "Maps source reference and alignment values with integral EMU-to-hundredths-of-millimetre-to-twip conversion."
+    ],
+    "omittedResponsibilities": [
+      "The unported wrapping polygon owner remains separate."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/GraphicHelpers.ts",
+          "marker": "emuToWriterTwip"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/GraphicHelpers.cxx",
+          "marker": "PositionHandler::lcl_attribute"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/GraphicHelpers.cxx",
+          "marker": "PositionHandler::lcl_sprm"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/GraphicHelpers.cxx",
+          "marker": "PositionHandler::orientation"
+        }
+      ]
+    }
+  }
+}

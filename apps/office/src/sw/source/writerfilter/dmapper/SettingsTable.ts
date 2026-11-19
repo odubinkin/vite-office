@@ -288,6 +288,11 @@ export class SettingsTable implements Properties, Table {
     }
     SetCompatSettings(model, this.GetCompatSettings());
   }
+  /** Applies completed document settings to the imported OOXML model. @param model - Actual Writer model. @returns Nothing. */
+  ApplyOOXMLProperties(model: SwXTextDocument): void {
+    this.ApplyDocumentProtection(model);
+    this.ApplyCompatProperties(model);
+  }
   /** Applies the original document protection bag entry. @param model - Actual Writer model. @returns Nothing. */
   ApplyDocumentProtection(model: SwXTextDocument): void {
     if (this.m_pDocumentProtection.hasEnforcedEdit())

@@ -2,7 +2,7 @@
 import type { Id } from "../inc/dmapper/resourcemodel";
 import { OOXMLFactory_w14 } from "./OOXMLFactory_w14";
 import { namespaces as w14Namespaces } from "./OOXMLFactory_w14.tables";
-import { OOXMLFactory_wml, type GeneratedNamespaceFactory } from "./OOXMLFactory_wml";
+import { nativeToken, OOXMLFactory_wml, type GeneratedNamespaceFactory } from "./OOXMLFactory_wml";
 import { OOXMLValue as V } from "./OOXMLPropertySet";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { toInt32 } from "../../../../o3tl/inc/string_view";
@@ -13,6 +13,7 @@ import {
   OOXMLFastContextHandlerStream,
   OOXMLFastContextHandlerTextTable,
   OOXMLFastContextHandlerProperties,
+  OOXMLFastContextHandlerDrawing,
   OOXMLFastContextHandlerTable,
   OOXMLFastContextHandlerPropertyTable,
   OOXMLFastContextHandlerValue,
@@ -124,7 +125,10 @@ export class OOXMLFactory {
         context = new OOXMLFastContextHandlerTextTable(parent);
         break;
       case ResourceType.Properties:
-        context = new OOXMLFastContextHandlerProperties(parent);
+        context =
+          token === nativeToken("doc:drawing")
+            ? new OOXMLFastContextHandlerDrawing(parent)
+            : new OOXMLFastContextHandlerProperties(parent);
         break;
       case ResourceType.Table:
         context = new OOXMLFastContextHandlerTable(parent);

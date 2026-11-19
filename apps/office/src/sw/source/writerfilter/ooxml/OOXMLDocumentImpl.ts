@@ -14,6 +14,8 @@ import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { ThemeFragmentHandler } from "../../../../oox/source/drawingml/themefragmenthandler";
 import { XmlFilterBase } from "../../../../oox/source/core/xmlfilterbase";
+import { BlipContext } from "../../../../oox/source/drawingml/misccontexts";
+import type { EmbeddedGraphic } from "../../../../oox/source/helper/graphichelper";
 import type { Theme } from "../../../../docmodel/inc/theme/Theme";
 
 /** Original document owner for represented stream identity and parser-state callbacks; no complete import entry point is advertised. */
@@ -28,10 +30,12 @@ export class OOXMLDocument implements DocumentContract {
     string,
     OOXMLStreamImpl | { readonly failure: unknown }
   >();
-  /** Borrows the original opened stream and status callback; other native constructor services are unported rather than replaced by dummy providers. @param mpStream - Actual package stream. @param mxStatusIndicator - Actual indicator or null. @returns Owner. */
+  /** Borrows the original opened stream and status callback; other native constructor services are unported rather than replaced by dummy providers. @param mpStream - Actual package stream. @param mxStatusIndicator - Actual indicator or null. @param shapeFilter - Shared DrawingML package owner. @param fragmentGraphics - Prepared package images by part. @returns Owner. */
   constructor(
     private mpStream: OOXMLStreamImpl,
     private readonly mxStatusIndicator: XStatusIndicator | null,
+    private readonly shapeFilter = new XmlFilterBase(mpStream.storage),
+    private readonly fragmentGraphics = new Map<string, ReadonlyMap<string, EmbeddedGraphic>>(),
   ) {}
   /** Resolves pre-body filter parts in source order, then parses the main document on the shared mapper. @param handler - Actual Writer resource receiver. @param installTheme - Optional native document theme sink. @returns Completion. */
   async resolve(handler: Stream, installTheme?: (theme: Theme) => void): Promise<void> {
@@ -53,6 +57,12 @@ export class OOXMLDocument implements DocumentContract {
             else this.headerFooterStreams.set(id, { failure: error });
           }
         }
+      if (handler.picture) {
+        await this.prepareEmbeddedGraphics(this.mpStream.getTarget());
+        for (const part of this.headerFooterStreams.values()) {
+          if (part instanceof OOXMLStreamImpl) await this.prepareEmbeddedGraphics(part.getTarget());
+        }
+      }
       const parser = this.mpStream.getFastParser();
       const receiver = new OOXMLFastDocumentHandler(handler, this, this.mnXNoteId);
       parser.setFastDocumentHandler(receiver);
@@ -106,6 +116,7 @@ export class OOXMLDocument implements DocumentContract {
     const part = this.headerFooterStreams.get(id);
     if (!part) return;
     if ("failure" in part) throw part.failure;
+    const { shapeFilter, fragmentGraphics } = this;
     receiver.substream(kind, {
       /** Rewinds the local package part for each reference and resolves its native stream. @param handler - Active header/footer receiver. @returns Nothing. */
       resolve(handler: Stream): void {
@@ -119,7 +130,7 @@ export class OOXMLDocument implements DocumentContract {
             seekable.dispose();
           }
           const parser = part.getFastParser();
-          const document = new OOXMLDocument(part, null);
+          const document = new OOXMLDocument(part, null, shapeFilter, fragmentGraphics);
           const context = new OOXMLFastDocumentHandler(handler, document, 0);
           context.setIsSubstream(true);
           parser.setFastDocumentHandler(context);
@@ -194,6 +205,23 @@ export class OOXMLDocument implements DocumentContract {
     this.mpStream = savedStream;
     this.ownedStream = savedOwnedStream;
     stream.dispose();
+  }
+  /** Resolves package I/O before the synchronous native SAX callbacks. @param fragment - Active body or story fragment. @returns Completion. */
+  private async prepareEmbeddedGraphics(fragment: string): Promise<void> {
+    if (this.fragmentGraphics.has(fragment)) return;
+    const relations = await this.shapeFilter.importRelations(fragment);
+    const graphics = new Map<string, EmbeddedGraphic>();
+    const blip = new BlipContext(this.shapeFilter, fragment);
+    for (const [id, relation] of relations.getRelationsFromTypeFromOfficeDoc("image").entries()) {
+      if (relation.mbExternal) continue;
+      const image = await blip.importEmbeddedGraphic(id);
+      if (image) graphics.set(id, image);
+    }
+    this.fragmentGraphics.set(fragment, graphics);
+  }
+  /** Reads the embedded graphic in the active part's relationship scope. @param id - Fragment-relative relationship ID. @returns Prepared graphic. */
+  getEmbeddedGraphic(id: string): EmbeddedGraphic | undefined {
+    return this.fragmentGraphics.get(this.mpStream.getTarget())?.get(id);
   }
   /** Original input getter returns an owning input reference after destruction of its temporary package stream. Missing relationships return an empty reference; opening errors propagate. @param id - Original relationship identity in the current stream. @returns Owned input reference. */
   async getInputStreamForId(id: string): Promise<Reference<XInputStream>> {

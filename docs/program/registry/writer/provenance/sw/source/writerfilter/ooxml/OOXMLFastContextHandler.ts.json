@@ -26,6 +26,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -64,7 +68,9 @@
       "ResourceEnum_t",
       "OOXMLFastContextHandlerTable",
       "OOXMLFastContextHandlerPropertyTable",
-      "clearProps"
+      "clearProps",
+      "OOXMLFastContextHandlerDrawing",
+      "OOXMLFastContextHandlerShape"
     ],
     "upstreamSymbols": [
       "OOXMLFastContextHandler::startFastElement",

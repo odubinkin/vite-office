@@ -109,6 +109,8 @@ export const elements1 = [
   [1770197, "w14:numSpacing", "Any", 0],
   [1770197, "w14:stylisticSets", "Any", 0],
   [1770197, "w14:cntxtAlts", "Any", 0],
+  [1769632, "dmlWordDr:anchor", "Properties", 1179688],
+  [1769632, "dmlWordDr:inline", "Properties", 1179928],
   [1769582, "doc:useSingleBorderforContiguousCells", "Value", 1769846],
   [1769582, "doc:wpJustification", "Value", 1769846],
   [1769582, "doc:noTabHangInd", "Value", 1769846],

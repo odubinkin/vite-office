@@ -60,6 +60,7 @@ import {
 } from "./DomainMapper.resources";
 import { PushPageHeaderFooter } from "./DomainMapper_Impl.headerfooter";
 import { SdtHelper } from "./SdtHelper";
+import { ImportGraphic } from "./GraphicImport";
 import { initializeMapperDocumentSettings } from "./SettingsTable";
 /** Receives native property sets and paragraph/run groups; lifecycle state remains on the shell, outside this model mapper. */
 export class DomainMapper implements Properties, Stream {
@@ -129,10 +130,8 @@ export class DomainMapper implements Properties, Stream {
   markLastParagraphInSection(): void {
     this.lastParagraphInSection = true;
   }
-  /** Original release-build diagnostic callback. @param _handle - Parser diagnostics handle. @returns Nothing. */
-  info(handle: string): void {
-    void handle;
-  }
+  /** Original release-build diagnostic callback. @returns Nothing. */
+  info(): void {}
   /** Delivers native byte controls emitted by OOXMLBreakHandler. @param data - Original bytes. @param length - Counted span. @returns Nothing. */
   text(data: Uint8Array, length: number): void {
     const code = length === 1 ? data[0] : 0;
@@ -203,6 +202,10 @@ export class DomainMapper implements Properties, Stream {
       this.impl.SetAnyTableImport(false);
     }
   }
+  /** Resolves the picture in the current Writer story. @param graphic - Resolved data and source placement. @returns Nothing. */
+  picture(...graphic: Parameters<NonNullable<Stream["picture"]>>): void {
+    ImportGraphic(this.impl, ...graphic);
+  }
   /** Resolves one native header/footer source under its own table and text append owners. @param id - Substream variant. @param part - Original stream reference. @returns Nothing. */
   substream(id: Id, part: Reference<Stream>): void {
     if (!this.impl.IsNewDoc()) return;
@@ -257,10 +260,7 @@ export class DomainMapper implements Properties, Stream {
   /** Releases original import temporaries and removes only the body paragraph appended by XParagraphAppend. @returns Nothing. */
   finishDocument(): void {
     this.impl.RemoveLastParagraph();
-    if (!this.IsOOXMLImport()) return;
-    const settings = this.impl.GetSettingsTable();
-    settings.ApplyDocumentProtection(this.model);
-    settings.ApplyCompatProperties(this.model);
+    if (this.IsOOXMLImport()) this.impl.GetSettingsTable().ApplyOOXMLProperties(this.model);
   }
   /** Explicit host binding for the native mapper destructor; the destination model is borrowed. @returns Nothing. */ dispose(): void {
     this.tableRanges.dispose();

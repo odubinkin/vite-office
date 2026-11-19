@@ -1,4 +1,5 @@
 /** @fileoverview Browser transport for complete shared native frame-size and LR-space items; table/page owners share these exact encoders. */
+import { SvxOpaqueItem } from "../../../../editeng/inc/opaqitem";
 import { SvxShadowItem } from "../../../../editeng/source/items/frmitems.shadow";
 import { SvxShadowLocation as Shadow } from "../../../../editeng/inc/svxenum";
 import { Color, ColorTransparency } from "../../../../tools/inc/color";
@@ -10,6 +11,7 @@ import {
   RES_LR_SPACE,
   RES_HORI_ORIENT,
   RES_VERT_ORIENT,
+  RES_OPAQUE,
   RES_SURROUND,
   RES_WRAP_INFLUENCE_ON_OBJPOS,
 } from "../../../inc/hintids";
@@ -132,6 +134,11 @@ export function encodeWriterFrameItem(item: SfxPoolItem): SfxPoolItemSnapshot | 
 }
 /** Restores native frame values with exact original measures and percentage fields, including otherwise rejected65535 scale metadata. @param snapshot - Untrusted record. @returns Actual item or null. */
 export function decodeWriterFrameItem(snapshot: SfxPoolItemSnapshot): SfxPoolItem | null {
+  if (snapshot.which === RES_OPAQUE) {
+    if (typeof snapshot.value !== "boolean")
+      throw new Error("Stored Writer frame opacity is invalid.");
+    return new SvxOpaqueItem(RES_OPAQUE, snapshot.value);
+  }
   if (snapshot.which === RES_SHADOW) {
     const value = snapshot.value;
     if (
