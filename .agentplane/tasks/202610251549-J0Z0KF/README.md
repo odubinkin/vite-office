@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 665
+revision: 667
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T08:32:10.888Z"
+  updated_at: "2026-11-19T08:51:58.486Z"
   updated_by: "CODER"
-  note: "Checkpoint 503ed31807b8: original tdf130959 opens and round-trips through XLSX UI; external interpretation and ODS cache persistence remain open."
-  attempts: 215
+  note: "ODS external cache persistence passed its focused coverage and production UI checks. Full external lookup acceptance remains open."
+  attempts: 216
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3448,8 +3451,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T08:51:58.486Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "ODS external cache persistence passed its focused coverage and production UI checks. Full external lookup acceptance remains open."
+  -
+    type: "status"
+    at: "2026-11-19T08:52:13.887Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T08:32:23.516Z"
+doc_updated_at: "2026-11-19T08:52:13.887Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -9963,6 +9979,47 @@ sections:
     - node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=120000 --grep 'pinned XLSX with external names'. Pass: existing production file dialog opens the original workbook, downloads the named ranges and external cache, and reopens the result at mobile width.
     - Typecheck, production build/static smoke, scoped ESLint and Prettier, JSDoc, file size and source tree, dependency boundaries, source provenance, registry validation (zero semantic violations), routing/doctor and Git diff pass.
     - Current bounds: cached-reference evaluation in the interpreter, external range-name tables, 3D external references, source-medium URL conversion and durable ODS external cache tables remain pending. The named expressions themselves survive ODS. The original full testExternalDefinedNameXLSX, which reloads external workbooks and evaluates their names, remains open. Full suite outside the ten-task cadence.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-19T08:51:58.486Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: ODS external cache persistence passed its focused coverage and production UI checks. Full external lookup acceptance remains open.
+    Attempts: 216
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T08:32:23.516Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    Implementation f544563d6 preserves embedded XLSX external sheet caches and references through the primary ODS save path and the Calc Worker boundary. ODF cache tables are recognized from the native quoted URI and sheet-name convention and do not appear in the visible workbook. Sparse repeats use the existing ODS expansion budget. Browser ODS has no filesystem source medium, so relative XLSX package targets retain their original target spelling alongside a canonical file URI.
+
+    - Command: npm run test:coverage:calc -- xmlexternaltabi.test.ts externallinkbuffer.test.ts compiler.external.test.ts ods.test.ts ods-worker-boundaries calc-files.test.tsx calc-primary-save.test.tsx --maxWorkers=2 --testTimeout=120000 --coverage.include=src/sc/source/filter/xml/xmlexternaltabi.ts --coverage.include=src/sc/source/filter/xml/xmlexprt.external.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/ods-external-final
+      Result: pass. Evidence: 50 tests in 9 files. Importer 98.73% statements, 93.75% branches, 100% functions and lines. Exporter 100% on all four metrics. Scope: original ODS cache table, XLSX named external ranges, sparse cache values, Worker/ODS round trip, expansion budget, browser stores and XLSX export.
+    - Command: node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=60000 --grep 'pinned XLSX with external names|active sheet when'
+      Result: pass. Evidence: 2 production Chromium scenarios with desktop import, browser storage reload and open, XLSX download and mobile reopen. Scope: pinned tdf130959.xlsx external names and embedded cache, plus active sheet storage regression. The external-cache fixture contains formatted empty cells on its visible worksheet. The scenario enters one visible value and uses Save As to exercise the existing nonempty browser storage policy.
+    - Commands: npm run typecheck; npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:calc-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:check; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+      Result: pass. Evidence: 4 static bundles, 2,821 mapped or classified runtime modules, 5,747 JSDoc sources, zero registry semantic violations, doctor and routing OK. Scope: implementation and source contracts. Full regression suite was outside the ten-task cadence.
+    - Command: focused local readOdsDocument over the complete unmodified external-ref-cache.ods fixture.
+      Result: fail. Evidence: ScCompiler rejects VLOOKUP with "Formula function/name lookup is not implemented". Scope: full upstream testExternalRefCacheODS including external evaluation and formula-cell registration. The passing test uses the unmodified cache table from that fixture. Full upstream evaluation, temporal and styled cached values, and filter metadata remain pending. Native loss of NaN error payload through ODF is retained and recorded as CALC-747.
 
     BlueprintSnapshotRef:
     - state: current
@@ -17585,6 +17642,47 @@ Implementation 503ed31807b8 compiles SpreadsheetML and OpenFormula single-sheet 
 - node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=120000 --grep 'pinned XLSX with external names'. Pass: existing production file dialog opens the original workbook, downloads the named ranges and external cache, and reopens the result at mobile width.
 - Typecheck, production build/static smoke, scoped ESLint and Prettier, JSDoc, file size and source tree, dependency boundaries, source provenance, registry validation (zero semantic violations), routing/doctor and Git diff pass.
 - Current bounds: cached-reference evaluation in the interpreter, external range-name tables, 3D external references, source-medium URL conversion and durable ODS external cache tables remain pending. The named expressions themselves survive ODS. The original full testExternalDefinedNameXLSX, which reloads external workbooks and evaluates their names, remains open. Full suite outside the ten-task cadence.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-19T08:51:58.486Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: ODS external cache persistence passed its focused coverage and production UI checks. Full external lookup acceptance remains open.
+Attempts: 216
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T08:32:23.516Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+Implementation f544563d6 preserves embedded XLSX external sheet caches and references through the primary ODS save path and the Calc Worker boundary. ODF cache tables are recognized from the native quoted URI and sheet-name convention and do not appear in the visible workbook. Sparse repeats use the existing ODS expansion budget. Browser ODS has no filesystem source medium, so relative XLSX package targets retain their original target spelling alongside a canonical file URI.
+
+- Command: npm run test:coverage:calc -- xmlexternaltabi.test.ts externallinkbuffer.test.ts compiler.external.test.ts ods.test.ts ods-worker-boundaries calc-files.test.tsx calc-primary-save.test.tsx --maxWorkers=2 --testTimeout=120000 --coverage.include=src/sc/source/filter/xml/xmlexternaltabi.ts --coverage.include=src/sc/source/filter/xml/xmlexprt.external.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/ods-external-final
+  Result: pass. Evidence: 50 tests in 9 files. Importer 98.73% statements, 93.75% branches, 100% functions and lines. Exporter 100% on all four metrics. Scope: original ODS cache table, XLSX named external ranges, sparse cache values, Worker/ODS round trip, expansion budget, browser stores and XLSX export.
+- Command: node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=60000 --grep 'pinned XLSX with external names|active sheet when'
+  Result: pass. Evidence: 2 production Chromium scenarios with desktop import, browser storage reload and open, XLSX download and mobile reopen. Scope: pinned tdf130959.xlsx external names and embedded cache, plus active sheet storage regression. The external-cache fixture contains formatted empty cells on its visible worksheet. The scenario enters one visible value and uses Save As to exercise the existing nonempty browser storage policy.
+- Commands: npm run typecheck; npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:calc-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:check; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+  Result: pass. Evidence: 4 static bundles, 2,821 mapped or classified runtime modules, 5,747 JSDoc sources, zero registry semantic violations, doctor and routing OK. Scope: implementation and source contracts. Full regression suite was outside the ten-task cadence.
+- Command: focused local readOdsDocument over the complete unmodified external-ref-cache.ods fixture.
+  Result: fail. Evidence: ScCompiler rejects VLOOKUP with "Formula function/name lookup is not implemented". Scope: full upstream testExternalRefCacheODS including external evaluation and formula-cell registration. The passing test uses the unmodified cache table from that fixture. Full upstream evaluation, temporal and styled cached values, and filter metadata remain pending. Native loss of NaN error payload through ODF is retained and recorded as CALC-747.
 
 BlueprintSnapshotRef:
 - state: current
