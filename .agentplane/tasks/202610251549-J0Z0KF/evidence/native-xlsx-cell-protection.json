@@ -1,0 +1,181 @@
+{
+  "checkpoint": "Calc native cell XF protection and ODF print properties",
+  "createdAt": "2026-11-19T01:26:34.348Z",
+  "task": "202610251549-J0Z0KF",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sc/source/filter/oox/stylesbuffer.cxx#Protection::importProtection",
+    "sc/source/filter/oox/stylesbuffer.cxx#Xf::importProtection",
+    "sc/source/filter/oox/stylesbuffer.cxx#Xf::createPattern",
+    "sc/source/filter/excel/xestyle.cxx#XclExpCellProt::FillFromItemSet",
+    "sc/source/filter/excel/xestyle.cxx#XclExpCellProt::SaveXml",
+    "sc/source/filter/xml/xmlstyle.cxx#XmlScPropHdl_CellProtection",
+    "sc/source/filter/xml/xmlstyle.cxx#XmlScPropHdl_PrintContent",
+    "sc/qa/unit/subsequent_export_test4.cxx#testTdf123139XLSX"
+  ],
+  "results": {
+    "calc": {
+      "files": 17,
+      "tests": 86
+    },
+    "shared": {
+      "files": 9,
+      "tests": 30
+    },
+    "writer": {
+      "files": 1,
+      "tests": 12
+    },
+    "chromium": 7,
+    "coverageThreshold": 90,
+    "coverage": {
+      "lines": {
+        "total": 44,
+        "covered": 44,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 47,
+        "covered": 47,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 49,
+        "covered": 49,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "coveredOwners": {
+      "apps/office/src/sc/source/filter/excel/xestyle.protection.ts": {
+        "lines": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sc/source/filter/oox/stylesbuffer.protection.ts": {
+        "lines": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sc/source/filter/xml/xmlstyle.protection.ts": {
+        "lines": {
+          "total": 24,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 36,
+          "covered": 36,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    }
+  },
+  "observations": [
+    "The unchanged tdf123139 file now exercises the upstream alignment and protection assertions and also its actual C1 formula through Worker, XLSX and ODS reopen.",
+    "Independent Strict input verifies Normal, explicit cell override and parent apply flags, plus alternate native boolean spellings.",
+    "ODS preserves print and full-cell visibility, while XLSX projects hidden-cell to hidden-formula and omits print visibility as in LibreOffice.",
+    "The source malformed ODF fallback is retained and recorded in CALC-733.",
+    "Scope is native cell formatting. Worksheet protection settings and browser enforcement remain open."
+  ],
+  "files": {
+    "apps/office/src/sc/source/filter/oox/stylesbuffer.ts": "97290718dc5881f1ad69b4c046d5e04642f17999edcd5ae4ca75e9930b9932c2",
+    "apps/office/src/sc/source/filter/oox/stylesfragment.ts": "f1051088f75602d4ecbf158e80e0118e242d043b30fdecce1513c34e2bf3b080",
+    "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts": "664f875454d374ceaebd66d3cf2261430e2f0cab2c6c3bf3eb25077bfd3c0c3c",
+    "apps/office/src/sc/source/filter/excel/xestyle.xml.ts": "94634aed44b993d6b1c365355d838ac69ffa7e6ba23bb693e55f794af72f5174",
+    "apps/office/src/sc/source/filter/xml/xmlstyle.protection.ts": "c1e2813348b1317381a84f18ee7d85a383c9e8bb2c5abb426668c2a25cb621c5",
+    "apps/office/src/sc/source/filter/xml/xmlstyle.ts": "27b1081825113fb27fe5a0bd1ae5f9f3a4cc4e4652a3226373487ffa62fac5ef",
+    "apps/office/src/xmloff/source/core/xmltoken.ts": "62d77a6b7a344b19465e75d4105eabc773d79e412a9631dddfa32bc567ae1d10",
+    "apps/office/e2e/calc/xlsx-alignment.spec.ts": "6ea4d3a1897cd18f414e1f1a11af777ea2eb575b77ab5e1b974368b249018de3",
+    "apps/office/src/sc/source/filter/oox/stylesbuffer.protection.ts": "109e7dd8845efc832a58779435058ced2839bcaefd3048d4b66f299b63fec791",
+    "apps/office/src/sc/source/filter/excel/xestyle.protection.ts": "423999c4a74ff8b26bfcd0163aea84703ada5b0348976536078bfb44667ca667",
+    "docs/program/calc-upstream-suspected-issues.md": "b4c1cf6c3a694d5984a4a61b624ee21526295ce890c1413e7c7c7486e2f9f86f"
+  },
+  "fixtures": {
+    "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/tdf123139_applyAlignment.xlsx": "f5d4282bece8a5427edf976866fc93eb65f16120540abf21635102d2bb2d099c",
+    "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/writingMode.xlsx": "477410c7cc8c922ea03924179cb456489ae96f8e67215b9e0bf7650aadfa41fc"
+  },
+  "logs": {
+    "apps/office/coverage/cellprot-coverage.log": "0a4396d64b0e483ac273f19cee206b9ba5ec99e4cd853b3810aa87eae1635197",
+    "apps/office/coverage/cellprot-shared.log": "2f93943e68bf18bdcaae34132b2e6350ee30be31047e09b96f1227b94f04cf9f",
+    "apps/office/coverage/cellprot-writer.log": "9a91d9fac0460d16cea04de0916c86133767551e08e1d63ae9bb7f4a1d3690d6",
+    "apps/office/coverage/cellprot-types.log": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+    "apps/office/coverage/cellprot-static.log": "8ce48f31d3c86d734ec94b83b5bcd6720a1221db78fc5eeb953fe8073f752491",
+    "apps/office/coverage/cellprot-browser.log": "435ab267a9c85462d37ea52efcf6be18317ebbbdf539cd3a2be1b885990e0d70",
+    "apps/office/coverage/cellprot-structure.log": "67c7344f65b18c6104b15da8fa7596aaf83d1eb0a3a8dee10348e1a487adc595",
+    "apps/office/coverage/cellprot-registry.log": "7f488c5495184bcc369db70159d28ec8028f7acb16e9f959d97bf5409e09f01e",
+    "apps/office/coverage/cellprot-resources.log": "f834b28f092f139fb9165d1be33dc0205d1fa2919a9e59ecae237b5b40e4d772",
+    "apps/office/coverage/cellprot-lint.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/cellprot-scoped/coverage-summary.json": "505a16370e856045c86e03505fd33fbeb9c49dc64240b69701d07ae56e2be2d1"
+  }
+}

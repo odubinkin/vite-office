@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 624
+revision: 627
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T00:51:02.093Z"
+  updated_at: "2026-11-19T01:26:35.289Z"
   updated_by: "CODER"
-  note: "Native XLSX scalar text formula checkpoint passes scoped Calc, shared, Writer and Chromium gates. The broad run reproduces known CSV locale failures separately. The umbrella task remains active for remaining filters and visual parity."
-  attempts: 199
+  note: "Native XLSX cell-format protection passes original fixture, Strict, ODS, Worker and file UI checks. The umbrella remains active for worksheet protection and wider filter scope."
+  attempts: 200
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3192,8 +3195,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T01:26:35.289Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native XLSX cell-format protection passes original fixture, Strict, ODS, Worker and file UI checks. The umbrella remains active for worksheet protection and wider filter scope."
+  -
+    type: "status"
+    at: "2026-11-19T01:26:44.789Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T00:51:08.839Z"
+doc_updated_at: "2026-11-19T01:26:44.789Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -9178,6 +9194,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-19T01:26:35.289Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native XLSX cell-format protection passes original fixture, Strict, ODS, Worker and file UI checks. The umbrella remains active for worksheet protection and wider filter scope.
+    Attempts: 200
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T01:26:34.642Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -10186,6 +10232,17 @@ sections:
     - Command: ./node_modules/.bin/playwright test -c apps/office/coverage/xlsxalignment.playwright.config.ts --workers=1. Result: pass. Evidence: seven Chromium cases including source formula import and export through the existing file UI and mobile reopen.
     - Commands: npm run typecheck, npm run test:static, scoped ESLint and Prettier, npm run check:docs, npm run check:dependencies, npm run check:source-tree, npm run check:source-provenance, npm run check:file-size, npm run inventory:registry:build, npm run inventory:invariants, npm run inventory:parity, npm run check:calc-resources, npm run check:writer-hintids, ap doctor, node .agentplane/policy/check-routing.mjs and git diff --check. Result: pass. Scope: production build and affected source gates. Matrix and external reference text formulas remain open. No full test run was due.
     - Command: npm run test:coverage:calc -- text-formula aggregate-formula range-formula formula-output reference-protocol calcconfig-document excelfilter typed-date-cells ods-worker ods-native ods-style-routing calc-files calc-document-codec csv --maxWorkers=3 --testTimeout=90000 --testNamePattern '^(?!.*opens auto-detected SAL encoding (68|85|73)).*$' --coverage.include=src/sc/source/core/tool/interpr4.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=coverage/xlsxconcat-final. Result: pass. Evidence: 138 tests across 25 files, three separately reproduced CSV cases excluded, 93.29% statements, 92.37% branches, 100% functions and 93.4% lines. Scope: native Calc formula owners, real XLSX/ODS packages, browser graph and related CSV regressions. Evidence file: `evidence/native-xlsx-text-formula.json`.
+
+    ### Calc XLSX cell-format protection and ODF print visibility
+
+    - SpreadsheetML uses the original boolean lexical owner, source defaults and XF parent comparison. An explicit cell-XF protection element applies even when applyProtection is false. Export indexes the genuine native item independently and writes source apply, locked and hidden values and Normal fallback values.
+    - Calc's ODF style owners merge cell protection and print content into the four native flags, including Normal, automatic styles and the existing Worker handoff. LibreOffice's XLSX projection combines the two hidden flags and omits print visibility. CALC-733 records the source fallback for an unrecognized ODF value.
+    - The unchanged tdf123139 acceptance now checks all original alignment and cell protection flags along with C1 formula data, Worker transfer and primary ODS. Separate Strict data checks Normal's nondefault protection, explicit override, parent apply flags and alternate lexical spellings. Independent ODF data checks both mapped properties for all represented spellings.
+    - Command: npm run test:coverage:calc -- excelfilter stylesfragment ods-native ods-style-routing calc-files calc-document-codec ods-worker protectionattr calc-borders --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sc/source/filter/oox/stylesbuffer.protection.ts --coverage.include=src/sc/source/filter/excel/xestyle.protection.ts --coverage.include=src/sc/source/filter/xml/xmlstyle.protection.ts --coverage.thresholds.perFile --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=coverage/cellprot-scoped. Result: pass. Evidence: 86 tests across 17 files with every measured counter covered across the three new owners.
+    - Commands: npm run test:shared -- xmltoken converter --maxWorkers=2 --testTimeout=90000 and npm run test:writer -- odt-property-roundtrip --maxWorkers=1 --testTimeout=90000. Result: pass. Evidence: 30 shared tests and 12 Writer tests. Scope: related namespace, converter and primary ODF handling.
+    - Command: ./node_modules/.bin/playwright test -c apps/office/coverage/xlsxalignment.playwright.config.ts --workers=1. Result: pass. Evidence: seven production browser scenarios including source fixture opening, protection flags in XLSX download and mobile reopen.
+    - Commands: npm run typecheck, npm run test:static, scoped Prettier and ESLint, docs/dependencies/size/tree/provenance, registry build/invariants/parity, Calc resource checks, routing, doctor and git diff. Result: pass. Evidence: `evidence/native-xlsx-cell-protection.json`.
+    - Worksheet-level protection, differential protection styles and browser enforcement remain in the umbrella scope. No full suite was due.
 id_source: "generated"
 ---
 ## Summary
@@ -16180,6 +16237,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-19T01:26:35.289Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native XLSX cell-format protection passes original fixture, Strict, ODS, Worker and file UI checks. The umbrella remains active for worksheet protection and wider filter scope.
+Attempts: 200
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T01:26:34.642Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -17192,3 +17279,14 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Command: ./node_modules/.bin/playwright test -c apps/office/coverage/xlsxalignment.playwright.config.ts --workers=1. Result: pass. Evidence: seven Chromium cases including source formula import and export through the existing file UI and mobile reopen.
 - Commands: npm run typecheck, npm run test:static, scoped ESLint and Prettier, npm run check:docs, npm run check:dependencies, npm run check:source-tree, npm run check:source-provenance, npm run check:file-size, npm run inventory:registry:build, npm run inventory:invariants, npm run inventory:parity, npm run check:calc-resources, npm run check:writer-hintids, ap doctor, node .agentplane/policy/check-routing.mjs and git diff --check. Result: pass. Scope: production build and affected source gates. Matrix and external reference text formulas remain open. No full test run was due.
 - Command: npm run test:coverage:calc -- text-formula aggregate-formula range-formula formula-output reference-protocol calcconfig-document excelfilter typed-date-cells ods-worker ods-native ods-style-routing calc-files calc-document-codec csv --maxWorkers=3 --testTimeout=90000 --testNamePattern '^(?!.*opens auto-detected SAL encoding (68|85|73)).*$' --coverage.include=src/sc/source/core/tool/interpr4.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=coverage/xlsxconcat-final. Result: pass. Evidence: 138 tests across 25 files, three separately reproduced CSV cases excluded, 93.29% statements, 92.37% branches, 100% functions and 93.4% lines. Scope: native Calc formula owners, real XLSX/ODS packages, browser graph and related CSV regressions. Evidence file: `evidence/native-xlsx-text-formula.json`.
+
+### Calc XLSX cell-format protection and ODF print visibility
+
+- SpreadsheetML uses the original boolean lexical owner, source defaults and XF parent comparison. An explicit cell-XF protection element applies even when applyProtection is false. Export indexes the genuine native item independently and writes source apply, locked and hidden values and Normal fallback values.
+- Calc's ODF style owners merge cell protection and print content into the four native flags, including Normal, automatic styles and the existing Worker handoff. LibreOffice's XLSX projection combines the two hidden flags and omits print visibility. CALC-733 records the source fallback for an unrecognized ODF value.
+- The unchanged tdf123139 acceptance now checks all original alignment and cell protection flags along with C1 formula data, Worker transfer and primary ODS. Separate Strict data checks Normal's nondefault protection, explicit override, parent apply flags and alternate lexical spellings. Independent ODF data checks both mapped properties for all represented spellings.
+- Command: npm run test:coverage:calc -- excelfilter stylesfragment ods-native ods-style-routing calc-files calc-document-codec ods-worker protectionattr calc-borders --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sc/source/filter/oox/stylesbuffer.protection.ts --coverage.include=src/sc/source/filter/excel/xestyle.protection.ts --coverage.include=src/sc/source/filter/xml/xmlstyle.protection.ts --coverage.thresholds.perFile --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=coverage/cellprot-scoped. Result: pass. Evidence: 86 tests across 17 files with every measured counter covered across the three new owners.
+- Commands: npm run test:shared -- xmltoken converter --maxWorkers=2 --testTimeout=90000 and npm run test:writer -- odt-property-roundtrip --maxWorkers=1 --testTimeout=90000. Result: pass. Evidence: 30 shared tests and 12 Writer tests. Scope: related namespace, converter and primary ODF handling.
+- Command: ./node_modules/.bin/playwright test -c apps/office/coverage/xlsxalignment.playwright.config.ts --workers=1. Result: pass. Evidence: seven production browser scenarios including source fixture opening, protection flags in XLSX download and mobile reopen.
+- Commands: npm run typecheck, npm run test:static, scoped Prettier and ESLint, docs/dependencies/size/tree/provenance, registry build/invariants/parity, Calc resource checks, routing, doctor and git diff. Result: pass. Evidence: `evidence/native-xlsx-cell-protection.json`.
+- Worksheet-level protection, differential protection styles and browser enforcement remain in the umbrella scope. No full suite was due.
