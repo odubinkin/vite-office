@@ -108,6 +108,49 @@ test("Writer preserves Word stylistic sets through the production file dialog", 
   await expect(editor).toContainText("StylisticSets1 StylisticSets2");
 });
 
+for (const [fixture, text, effect] of [
+  ["Outline", "Gradient", '<w14:gs w14:pos="70000">'],
+  ["Fill", "TextFill:", '<w14:lin w14:ang="16200000" w14:scaled="0"/>'],
+] as const) {
+  test(`Writer downloads Word text ${fixture.toLowerCase()} through the Worker`, /** Opens the original Writer test document, checks the DOCX download, and reopens it on mobile. @param fixtures - Browser fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
+    page,
+  }) => {
+    const file = fileURLToPath(
+      new URL(
+        `../../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/TextEffects_Text${fixture}.docx`,
+        import.meta.url,
+      ),
+    );
+    const editor = page.getByRole("textbox", { name: "Writer document text" });
+    await page.goto("/writer");
+    await page.getByRole("button", { name: "Open" }).click();
+    await page.getByRole("tab", { name: "On computer" }).click();
+    await page.getByLabel("Browse").setInputFiles(file);
+    await expect(editor).toContainText(text);
+
+    const finished = page.waitForEvent("download");
+    await page.getByRole("menuitem", { name: "File" }).click();
+    await page.getByRole("menuitem", { name: "Export…" }).click();
+    await page.getByRole("button", { name: "Download DOCX" }).click();
+    const path = await (await finished).path();
+    if (!path) throw new Error("Chromium did not expose the DOCX file.");
+    const buffer = await readFile(path);
+    const archive = await DocumentArchive.open(buffer);
+    expect(await archive.readTextEntry("word/document.xml")).toContain(effect);
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.getByRole("button", { name: "Open" }).click();
+    await page.getByRole("tab", { name: "On computer" }).click();
+    await page.getByLabel("Browse").setInputFiles({
+      buffer,
+      name: "reopened-text-effect.docx",
+      mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    });
+    await expect(page.getByText("reopened-text-effect", { exact: true })).toBeVisible();
+    await expect(editor).toContainText(text);
+  });
+}
+
 test("Writer downloads the original run theme and document ligatures through the Worker", /** Imports the unmodified Writer test package and downloads the current document. @param fixtures - Browser fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
   page,
 }) => {

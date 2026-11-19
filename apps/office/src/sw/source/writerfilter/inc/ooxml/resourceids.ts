@@ -460,6 +460,7 @@ export const NS_ooxml = Object.freeze({
   LN_EG_ColorTransform_lumMod: 90952,
   LN_EG_FillProperties_solidFill: 90956,
   LN_textFill_textFill: 91038,
+  LN_textOutline_textOutline: 91037,
   LN_EG_RPrBase_w14_scene3d: 92597,
   LN_EG_RPrBase_w14_props3d: 92598,
   LN_EG_RPrBase_w14_ligatures: 92599,

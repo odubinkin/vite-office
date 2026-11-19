@@ -10,6 +10,7 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { Reference as RtlReference } from "../../../../sal/inc/rtl/ref";
 import type { FastAttributeList } from "../../../../sax/source/tools/fastattribs";
 import { readTextEffect } from "../../writerfilter/dmapper/TextEffectsHandler";
+import type { DrawingTextEffect } from "../../writerfilter/dmapper/TextEffectsHandler.drawing";
 const w = token("w");
 const w14 = token("w14");
 /** Original InitCollectedRunProperties schema order shared by the actual attribute owner. */
@@ -129,12 +130,34 @@ export function TransHighlightColor(index: number): string {
   );
 }
 
-/** Writes represented Word text effects inside the collected run property mark. @param serializer - Active DOCX serializer. @param item - Writer character interoperability item. @returns Nothing. */
-export function CharGrabBag(serializer: FastSerializerHelper, item: SfxGrabBagItem): void {
+/** Writes a native drawing text effect element and its ordered children. @param serializer - Active DOCX serializer. @param effect - Original interoperability node. @returns Nothing. */
+function writeDrawingTextEffect(serializer: FastSerializerHelper, effect: DrawingTextEffect): void {
+  const element = token(effect.name);
+  const attributes = effect.attributes.flatMap(
+    /** Formats one native attribute. @param pair - Name and value. @returns Serializer pair. */
+    ([name, value]) => [FSNS(w14, token(name)), String(value)],
+  );
+  if (!effect.children.length) {
+    serializer.singleElementNS(w14, element, ...attributes);
+    return;
+  }
+  serializer.startElementNS(w14, element, ...attributes);
+  for (const child of effect.children) writeDrawingTextEffect(serializer, child);
+  serializer.endElementNS(w14, element);
+}
+
+/** Writes represented Word text effects inside the collected run property mark. @param serializer - Active DOCX serializer. @param item - Writer character interoperability item. @returns Whether an explicit text fill was written. */
+export function CharGrabBag(serializer: FastSerializerHelper, item: SfxGrabBagItem): boolean {
+  let explicitTextFill = false;
   for (const [key, value] of item.GetGrabBag()) {
     const effect = readTextEffect(key, value);
     if (!effect) continue;
     const [name, payload] = effect;
+    if (payload && typeof payload !== "string" && "attributes" in payload) {
+      writeDrawingTextEffect(serializer, payload);
+      explicitTextFill ||= name === "textFill";
+      continue;
+    }
     const element = token(name);
     if (typeof payload === "string" || !payload?.length) {
       serializer.singleElementNS(
@@ -155,6 +178,7 @@ export function CharGrabBag(serializer: FastSerializerHelper, item: SfxGrabBagIt
     }
     serializer.endElementNS(w14, element);
   }
+  return explicitTextFill;
 }
 
 /** Retains theme references when the effective concrete font still matches the imported font. @param attributes - Existing collected rFonts attributes. @param item - Native character interoperability bag. @param add - Original lazy attribute writer. @returns Nothing. */

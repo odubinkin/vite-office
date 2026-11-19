@@ -111,3 +111,47 @@ it("validates the transport and rejects unsupported native bag members", /** Ret
     doc.Dispose();
   }
 });
+
+it("validates drawing roots, resource attributes and child definitions", /** Validates incoming properties at the same boundaries as the native Word grammar. @returns Nothing. */ () => {
+  const outline = { name: "textOutline", attributes: [["w", 9525]], children: [] };
+  const fill = { name: "textFill", attributes: [], children: [] };
+  const effects = {
+    effects: [
+      ["textFill", fill],
+      ["textOutline", outline],
+    ],
+  };
+  const item = decodeTextEffects(structuredClone(effects));
+  try {
+    expect(encodeTextEffects(item).value).toEqual(effects);
+  } finally {
+    item.Dispose();
+  }
+  for (const effect of [
+    ["textOutline"],
+    ["textFill", "noFill"],
+    ["textOutline", fill],
+    ["textOutline", { ...outline, attributes: [["w", "9525"]] }],
+    ["textOutline", { ...outline, attributes: [["w", 2147483648]] }],
+    [
+      "textOutline",
+      {
+        ...outline,
+        attributes: [
+          ["w", 9525],
+          ["w", 9525],
+        ],
+      },
+    ],
+    ["textOutline", { ...outline, attributes: [["style", "width"]] }],
+    ["textOutline", { ...outline, attributes: [["prstDash"]] }],
+    ["textOutline", { ...outline, children: [null] }],
+    ["textOutline", { ...outline, children: [fill] }],
+    ["textFill", { ...fill, children: [{ ...fill, name: "noFill", attributes: [["val", 0]] }] }],
+  ]) {
+    expect(
+      /** Decodes a malformed Worker payload. @returns Nothing. */
+      () => decodeTextEffects({ effects: [effect] }),
+    ).toThrow("invalid");
+  }
+});

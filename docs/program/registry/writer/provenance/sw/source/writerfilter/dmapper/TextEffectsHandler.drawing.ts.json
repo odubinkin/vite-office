@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/TextEffectsHandler.drawing.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Generated schema tables supply the native resource names and value classes. A typed representation carries the source interoperability tree across the browser Worker."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/TextEffectsHandler.drawing.ts",
+          "marker": "readDrawingResources"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.text-effects.test.ts",
+          "marker": "Test_TextEffects_TextOutline"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/dmapper/TextEffectsHandler.cxx",
+          "marker": "lclGetNameForElementId"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/TextEffectsHandler.cxx",
+          "marker": "lcl_attribute"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/TextEffectsHandler.cxx",
+          "marker": "lcl_sprm"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/writerfilter/dmapper/TextEffectsHandler.cxx",
+    "localSymbols": [
+      "readDrawingResources",
+      "readElement",
+      "isDrawingTextEffect"
+    ],
+    "upstreamSymbols": [
+      "lclGetNameForElementId",
+      "lcl_attribute",
+      "lcl_sprm"
+    ],
+    "preservedResponsibilities": [
+      "Consumes generated Word 2010 drawing effect resources and preserves the native nested attributes and ordered, repeated child elements of run outlines and non-solid fills."
+    ],
+    "omittedResponsibilities": [
+      "Word drawing effects other than text outlines and fills are pending."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/dmapper/TextEffectsHandler.drawing.ts",
+      "rationale": "Keeps the generated schema dispatch and validation for native drawing effects beside the original TextEffectsHandler owner.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

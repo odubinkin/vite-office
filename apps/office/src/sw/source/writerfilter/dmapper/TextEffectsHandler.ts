@@ -27,6 +27,12 @@ import { Transformation, TransformationType } from "../../../../docmodel/inc/col
 import { createXComplexColor } from "../../../../docmodel/inc/uno/UnoComplexColor";
 import { XComplexColor } from "../../../../offapi/com/sun/star/util/XComplexColor";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
+import {
+  isDrawingTextEffect,
+  readDrawingResources,
+  type DrawingEffectAttribute,
+  type DrawingTextEffect,
+} from "./TextEffectsHandler.drawing";
 
 const Values = Sequence.specialize<PropertyValue>(propertyType, 48);
 const sequenceType = ["Sequence", propertyType] as const;
@@ -36,6 +42,10 @@ const effects = [
   ["numSpacing", P.PROP_CHAR_NUMSPACING_TEXT_EFFECT],
   ["stylisticSets", P.PROP_CHAR_STYLISTICSETS_TEXT_EFFECT],
   ["cntxtAlts", P.PROP_CHAR_CNTXTALTS_TEXT_EFFECT],
+] as const;
+const drawingEffects = [
+  ["textOutline", P.PROP_CHAR_TEXTOUTLINE_TEXT_EFFECT],
+  ["textFill", P.PROP_CHAR_TEXTFILL_TEXT_EFFECT],
 ] as const;
 
 /** Native roots represented by the character interoperability bag. */
@@ -48,7 +58,7 @@ type EffectChild = readonly [
   attributes: readonly EffectAttribute[],
 ];
 /** Original typed attributes and ordered subordinate PropertyValue nodes. */
-export type TextEffectValue = string | readonly EffectChild[];
+export type TextEffectValue = string | readonly EffectChild[] | DrawingTextEffect;
 
 /** Maps a generated list value to the native UNO string; unknown IDs yield the empty string. @param definition - Native list. @param value - Source value. @returns Lexical spelling. */
 function listValue(definition: Id, value: Value): string {
@@ -164,8 +174,8 @@ class TextFillHandler implements Properties {
   }
 }
 
-/** Applies the solid-fill path to the original run color property owner. @param modifier - Text fill root. @param context - Current run or style. @returns Nothing. */
-function resolveTextFill(modifier: Sprm, context: PropertyMap): void {
+/** Applies the native run color properties and reports whether the fill was handled as a solid color. @param modifier - Text fill root. @param context - Current run or style. @returns Whether the fill contains a solid color. */
+function resolveTextFill(modifier: Sprm, context: PropertyMap): boolean {
   const handler = new TextFillHandler();
   let solid = false;
   try {
@@ -184,7 +194,6 @@ function resolveTextFill(modifier: Sprm, context: PropertyMap): void {
   } finally {
     handler.dispose();
   }
-  if (!solid) return;
   const reference = createXComplexColor(handler.color);
   const complex = new Any([reference.get()], XComplexColor.static_type);
   try {
@@ -202,6 +211,7 @@ function resolveTextFill(modifier: Sprm, context: PropertyMap): void {
       alpha.dispose();
     }
   }
+  return solid;
 }
 
 /** Converts actual typographic SPRMs into the original nested PropertyValue shape. */
@@ -252,8 +262,20 @@ export class TextEffectsHandler implements Properties {
 /** Resolves the source property into the current character interoperability bag. @param modifier - Original effect. @param context - Current Writer property map. @returns Whether handled. */
 export function resolveTextEffect(modifier: Sprm, context: PropertyMap): boolean {
   const id = modifier.getId();
-  if (id === N.LN_textFill_textFill) {
-    resolveTextFill(modifier, context);
+  if (id === N.LN_textFill_textFill || id === N.LN_textOutline_textOutline) {
+    const outline = id === N.LN_textOutline_textOutline;
+    if (outline || !resolveTextFill(modifier, context)) {
+      const name = outline ? "textOutline" : "textFill";
+      const property = outline
+        ? P.PROP_CHAR_TEXTOUTLINE_TEXT_EFFECT
+        : P.PROP_CHAR_TEXTFILL_TEXT_EFFECT;
+      const bag = makeTextEffect(name, readDrawingResources(name, modifier.getProps()));
+      try {
+        context.Insert(property, bag, true, GrabBagType.CHAR_GRAB_BAG);
+      } finally {
+        bag.dispose();
+      }
+    }
     return true;
   }
   const effect = effects.find(
@@ -304,7 +326,7 @@ function propertiesAny(values: readonly PropertyValue[]): Any {
 }
 
 /** Wraps a native element's attributes under the original attributes group. @param attributes - Ordered original attributes. @returns Owned group. */
-function makeAttributes(attributes: readonly EffectAttribute[]): PropertyValue {
+function makeAttributes(attributes: readonly DrawingEffectAttribute[]): PropertyValue {
   const entries: PropertyValue[] = [];
   try {
     for (const [name, value] of attributes) {
@@ -331,6 +353,18 @@ function makeAttributes(attributes: readonly EffectAttribute[]): PropertyValue {
   }
 }
 
+/** Wraps drawing nodes in the native ordered PropertyValue tree. @param node - Effect element. @returns Owned UNO property. */
+function makeDrawingElement(node: DrawingTextEffect): PropertyValue {
+  const entries: PropertyValue[] = [];
+  try {
+    if (node.attributes.length) entries.push(makeAttributes(node.attributes));
+    for (const child of node.children) entries.push(makeDrawingElement(child));
+    return makeElement(node.name, entries);
+  } finally {
+    for (const entry of entries) entry.dispose();
+  }
+}
+
 /** Makes one element enclosing the original sequence. @param name - Element name. @param children - Immediate child property records. @returns Owned native property. */
 function makeElement(name: string, children: readonly PropertyValue[]): PropertyValue {
   const sequence = propertiesAny(children);
@@ -343,6 +377,14 @@ function makeElement(name: string, children: readonly PropertyValue[]): Property
 
 /** Builds the original native effect containing an attribute group or ordered effect children. @param element - Effect name. @param value - Lexical or compound value. @returns Owned native PropertyValue Any. */
 export function makeTextEffect(element: string, value: TextEffectValue | undefined): Any {
+  if (value && typeof value !== "string" && "attributes" in value) {
+    const root = makeDrawingElement(value);
+    try {
+      return new Any(root, propertyType);
+    } finally {
+      root.dispose();
+    }
+  }
   const entries: PropertyValue[] = [];
   try {
     if (typeof value === "string") entries.push(makeAttributes([["val", value]]));
@@ -364,6 +406,61 @@ export function makeTextEffect(element: string, value: TextEffectValue | undefin
     }
   } finally {
     for (const entry of entries) entry.dispose();
+  }
+}
+
+/** Reads one ordered drawing node from the native sequence. @param name - Node name. @param group - Child properties. @returns Typed node or invalid. */
+function readDrawingElement(
+  name: string,
+  group: InstanceType<typeof Values>,
+): DrawingTextEffect | undefined {
+  const attributes: DrawingEffectAttribute[] = [];
+  const children: DrawingTextEffect[] = [];
+  let readAttributeGroup = false;
+  for (let index = 0; index < group.getLength(); index++) {
+    const entry = propertyAt(group, index);
+    const nested = new Values();
+    try {
+      if (!entry.Value.extract(nested.getAddress(), sequenceType)) return undefined;
+      const childName = text(entry.Name);
+      if (childName === "attributes") {
+        if (readAttributeGroup || !readDrawingAttributes(nested, attributes)) return undefined;
+        readAttributeGroup = true;
+      } else {
+        const child = readDrawingElement(childName, nested);
+        if (!child) return undefined;
+        children.push(child);
+      }
+    } finally {
+      nested.dispose();
+      entry.dispose();
+    }
+  }
+  return { name, attributes, children };
+}
+
+/** Reads one native attribute sequence. @param group - Ordered attribute properties. @param output - Drawing attribute values. @returns Whether every property is valid. */
+function readDrawingAttributes(
+  group: InstanceType<typeof Values>,
+  output: DrawingEffectAttribute[],
+): boolean {
+  const lexical = new OUString();
+  try {
+    for (let i = 0; i < group.getLength(); i++) {
+      const entry = propertyAt(group, i);
+      try {
+        const key = text(entry.Name);
+        const integer: [number] = [0];
+        if (entry.Value.extract(integer, "sal_Int32")) output.push([key, integer[0]]);
+        else if (entry.Value.extract(lexical, "OUString")) output.push([key, text(lexical)]);
+        else return false;
+      } finally {
+        entry.dispose();
+      }
+    }
+    return true;
+  } finally {
+    lexical.dispose();
   }
 }
 
@@ -443,7 +540,7 @@ export function readTextEffect(
   key: string,
   value: GrabBagValueConstReference,
 ): readonly [string, TextEffectValue | undefined] | undefined {
-  const match = effects.find(
+  const match = [...effects, ...drawingEffects].find(
     /** Matches the original character interop name. @param effect - Native effect. @returns Match. */
     ([, id]) => text(getPropertyName(id)) === key,
   );
@@ -458,6 +555,10 @@ export function readTextEffect(
       !root.Value.extract(group.getAddress(), sequenceType)
     )
       return undefined;
+    if (name === "textOutline" || name === "textFill") {
+      const drawing = readDrawingElement(name, group);
+      return isDrawingTextEffect(name, drawing) ? [name, drawing] : undefined;
+    }
     if (!group.getLength()) return [name, undefined];
     if (name !== "stylisticSets") {
       const attributes = readAttributes(group);
@@ -487,7 +588,7 @@ export function readTextEffect(
 
 /** Finds the original property name for the transported native Word effect. @param element - Effect name. @returns Interoperability name or absence. */
 export function textEffectProperty(element: string): string | undefined {
-  const entry = effects.find(
+  const entry = [...effects, ...drawingEffects].find(
     /** Finds the represented element. @param candidate - Native mapping. @returns Match. */
     ([name]) => name === element,
   );

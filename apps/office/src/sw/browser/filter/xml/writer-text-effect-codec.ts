@@ -16,6 +16,7 @@ import {
   textEffectProperty,
   type TextEffectValue,
 } from "../../../source/writerfilter/dmapper/TextEffectsHandler";
+import { isDrawingTextEffect } from "../../../source/writerfilter/dmapper/TextEffectsHandler.drawing";
 
 /** Encodes the native text effects as cloneable typed values. @param item - Writer character grab bag. @returns Worker item record. */
 export function encodeTextEffects(item: SfxGrabBagItem): SfxPoolItemSnapshot {
@@ -52,18 +53,23 @@ export function decodeTextEffects(value: unknown): SfxGrabBagItem {
         throw new Error("Writer text effect is invalid.");
       const [name, val] = effect as readonly unknown[];
       const key = typeof name === "string" ? textEffectProperty(name) : undefined;
+      const drawing = name === "textOutline" || name === "textFill";
       const native =
         typeof name !== "string"
           ? undefined
-          : typeof val === "string" && name !== "stylisticSets"
-            ? val
-            : isTextEffectChildren(name, val)
+          : drawing
+            ? isDrawingTextEffect(name, val)
               ? val
-              : undefined;
+              : undefined
+            : typeof val === "string" && name !== "stylisticSets"
+              ? val
+              : isTextEffectChildren(name, val)
+                ? val
+                : undefined;
       if (
         !key ||
         typeof name !== "string" ||
-        (effect.length === 2 && native === undefined) ||
+        ((drawing || effect.length === 2) && native === undefined) ||
         entries.has(key)
       )
         throw new Error("Writer text effect is invalid.");

@@ -157,6 +157,7 @@ export class DocxAttributeOutput extends AttributeOutputBase {
   private readonly m_pColorAttrList = new RtlReference<FastAttributeList>();
   private readonly m_aComplexColor = new OwnedComplexColor();
   private m_nCharTransparence = 0;
+  private m_bExplicitTextFill = false;
   private readonly m_pCharLangAttrList = new RtlReference<FastAttributeList>();
   private readonly m_pEastAsianLayoutAttrList = new RtlReference<FastAttributeList>();
   private m_oFontSize: number | undefined;
@@ -293,7 +294,7 @@ export class DocxAttributeOutput extends AttributeOutputBase {
   /** Restores native theme font attributes and Word text effects. @param item - Character interoperability bag. @returns Nothing. */
   CharGrabBag(item: SfxGrabBagItem): void {
     ExportThemeFonts(this.m_pFontsAttrList, item, DocxAttributeOutput.AddToAttrList);
-    CharGrabBag(this.m_pSerializer, item);
+    this.m_bExplicitTextFill = CharGrabBag(this.m_pSerializer, item) || this.m_bExplicitTextFill;
   }
   /** Original font element open. @param name - Native family name. @returns Nothing. */
   StartFont(name: string): void {
@@ -583,6 +584,7 @@ export class DocxAttributeOutput extends AttributeOutputBase {
   }
   /** Original per-run resets and schema order. @returns Nothing. */
   InitCollectedRunProperties(): void {
+    this.m_bExplicitTextFill = false;
     this.m_pFontsAttrList.clear();
     this.m_pEastAsianLayoutAttrList.clear();
     this.m_pCharLangAttrList.clear();
@@ -630,7 +632,8 @@ export class DocxAttributeOutput extends AttributeOutputBase {
             value,
           ) => value.meType !== T.Shade && value.meType !== T.Tint,
         )) &&
-      this.m_pColorAttrList.is()
+      this.m_pColorAttrList.is() &&
+      !this.m_bExplicitTextFill
     ) {
       const value: [Uint8Array] = [new Uint8Array()];
       this.m_pColorAttrList.operatorArrow().getAsView(val, value);
