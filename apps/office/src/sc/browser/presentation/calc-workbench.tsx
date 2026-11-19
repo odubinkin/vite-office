@@ -204,48 +204,69 @@ export function CalcWorkbench({
     },
     [controller],
   );
-  useLayoutEffect(
-    /** Reveals source cursor movement without a second selection model or enormous CSS coordinate domain. @returns Nothing. */ () => {
-      if (restoredViewport.current) {
-        restoredViewport.current = false;
-        return;
-      }
-      const client = grid(),
+  const revealCell = useCallback(
+    /** Scrolls only the movable axes needed to reveal a cursor or selection endpoint. @param column - Native column. @param row - Native row. @param kind - Hit surface. @returns Nothing. */
+    (column: number, row: number, kind: "cell" | "column" | "row"): void => {
+      const client = (root.current as HTMLElement).querySelector<HTMLDivElement>('[role="grid"]'),
         viewport = controller.viewport;
-      if (!client.clientHeight) return;
+      if (!client?.clientWidth || !client.clientHeight) return;
       const table = doc.FetchTable(activeTab) as ScTable;
-      const firstPixel = rowPixels(table, 0, viewport.firstRow - 1);
-      const visibleRows = Math.max(
-          1,
-          rowAtPixel(
-            table,
-            firstPixel + Math.max(1, client.clientHeight - viewport.rowHeight),
-            doc.MaxRow(),
-          ) - viewport.firstRow,
-        ),
-        col = cursorColumn,
-        row = cursorRow;
-      if (
-        row < viewport.firstRow ||
-        row >= viewport.firstRow + visibleRows ||
-        col < viewport.firstColumn ||
-        col >= viewport.firstColumn + viewport.columns - 1
-      ) {
-        const first = Math.max(0, row - visibleRows + 1);
-        client.scrollTop = controller.ScrollTopForRow(first, client.clientHeight);
+      const left = columnPixels(table, 0, viewport.firstColumn - 1) + viewport.columnOffset;
+      const top = rowPixels(table, 0, viewport.firstRow - 1) + viewport.rowOffset;
+      const bodyWidth =
+        client.clientWidth - (view.IsHeaderMode() ? 48 : 0) - (viewport.frozenColumns?.pixels ?? 0);
+      const bodyHeight =
+        client.clientHeight -
+        (view.IsHeaderMode() ? viewport.rowHeight : 0) -
+        (viewport.frozenRows?.pixels ?? 0);
+      const x = columnPixels(table, 0, column - 1),
+        right = columnPixels(table, 0, column);
+      const y = rowPixels(table, 0, row - 1),
+        bottom = rowPixels(table, 0, row);
+      const scrollX =
+        kind !== "row" &&
+        column > (viewport.frozenColumns?.last ?? -1) &&
+        (x < left || right > left + bodyWidth);
+      const scrollY =
+        kind !== "column" &&
+        row > (viewport.frozenRows?.last ?? -1) &&
+        (y < top || bottom > top + bodyHeight);
+      if (scrollX)
         client.scrollLeft = controller.ScrollLeftForColumn(
-          Math.max(0, col - viewport.columns + 2),
+          x < left
+            ? column
+            : Math.min(
+                column,
+                columnAtPixel(table, Math.max(0, right - bodyWidth), doc.MaxCol()) + 1,
+              ),
           client.clientWidth,
         );
+      if (scrollY)
+        client.scrollTop = controller.ScrollTopForRow(
+          y < top
+            ? row
+            : Math.min(row, rowAtPixel(table, Math.max(0, bottom - bodyHeight), doc.MaxRow()) + 1),
+          client.clientHeight,
+        );
+      if (scrollX || scrollY)
         controller.Scroll(
           client.scrollLeft,
           client.scrollTop,
           client.clientWidth,
           client.clientHeight,
         );
-      }
     },
-    [controller, doc, cursorColumn, cursorRow, activeTab, inputMode, cursorRowHeight],
+    [activeTab, controller, doc, view],
+  );
+  useLayoutEffect(
+    /** Reveals source cursor movement in the owning grid part. @returns Nothing. */ () => {
+      if (restoredViewport.current) {
+        restoredViewport.current = false;
+        return;
+      }
+      revealCell(cursorColumn, cursorRow, "cell");
+    },
+    [revealCell, cursorColumn, cursorRow, inputMode, cursorRowHeight],
   );
   /** Projects original input-handler Command selected-reference collapse before DOM paste or IME starts. @param event - Actual editor command. @returns Nothing. */
   function inputCommand(event: SyntheticEvent<HTMLInputElement>): void {
@@ -562,49 +583,8 @@ export function CalcWorkbench({
           referenceMode={controller.inputHandler.IsFormulaMode()}
           referenceRange={controller.ReferenceRange()}
           onReveal={
-            /** Reveals native selection endpoints without moving the actual edit/active cursor. @param position - Hit-tested endpoint. @param kind - Pointer surface. @returns Nothing. */ (
-              position,
-              kind,
-            ) => {
-              const client = grid(),
-                viewport = controller.viewport;
-              if (!client.clientWidth || !client.clientHeight) return;
-              const table = doc.FetchTable(activeTab) as ScTable;
-              const left = columnPixels(table, 0, viewport.firstColumn - 1) + viewport.columnOffset;
-              const top = rowPixels(table, 0, viewport.firstRow - 1) + viewport.rowOffset;
-              const bodyWidth = client.clientWidth - (view.IsHeaderMode() ? 48 : 0),
-                bodyHeight = client.clientHeight - (view.IsHeaderMode() ? viewport.rowHeight : 0);
-              const x = columnPixels(table, 0, position.Col() - 1),
-                right = columnPixels(table, 0, position.Col());
-              const y = rowPixels(table, 0, position.Row() - 1),
-                bottom = rowPixels(table, 0, position.Row());
-              if (kind !== "row" && (x < left || right > left + bodyWidth))
-                client.scrollLeft = controller.ScrollLeftForColumn(
-                  x < left
-                    ? position.Col()
-                    : Math.min(
-                        position.Col(),
-                        columnAtPixel(table, Math.max(0, right - bodyWidth), doc.MaxCol()) + 1,
-                      ),
-                  client.clientWidth,
-                );
-              if (kind !== "column" && (y < top || bottom > top + bodyHeight))
-                client.scrollTop = controller.ScrollTopForRow(
-                  y < top
-                    ? position.Row()
-                    : Math.min(
-                        position.Row(),
-                        rowAtPixel(table, Math.max(0, bottom - bodyHeight), doc.MaxRow()) + 1,
-                      ),
-                  client.clientHeight,
-                );
-              controller.Scroll(
-                client.scrollLeft,
-                client.scrollTop,
-                client.clientWidth,
-                client.clientHeight,
-              );
-            }
+            /** Reveals native selection endpoints without moving the active cursor. @param position - Endpoint. @param kind - Pointer surface. @returns Nothing. */
+            (position, kind) => revealCell(position.Col(), position.Row(), kind)
           }
           onPointerEnd={
             /** Ends actual native pointer selection. @returns Nothing. */ () =>

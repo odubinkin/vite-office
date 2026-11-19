@@ -282,6 +282,28 @@ export class ScViewData {
       second: [layout?.second[0] ?? 0, row],
     });
   }
+  /** Publishes the actual scroll positions of a frozen sheet's movable parts. @param column - Left column in the movable horizontal part. @param row - Top row in the movable vertical part. @param scrollX - Horizontal part is present in the client. @param scrollY - Vertical part is present in the client. @returns Nothing. */
+  SetFrozenOrigin(column: number, row: number, scrollX: boolean, scrollY: boolean): void {
+    const layout = this.GetPaneLayout();
+    if (!layout) return;
+    const x = layout.horizontalMode === SheetSplitMode.FIX;
+    const y = layout.verticalMode === SheetSplitMode.FIX;
+    const first: SheetPaneLayout["first"] = [
+      x || !scrollX ? layout.first[0] : column,
+      y || !scrollY ? layout.first[1] : row,
+    ];
+    const second: SheetPaneLayout["second"] = [
+      x && scrollX ? Math.max(column, layout.horizontalPosition) : layout.second[0],
+      scrollY ? Math.max(row, layout.verticalPosition) : layout.second[1],
+    ];
+    if (
+      first[0] !== layout.first[0] ||
+      first[1] !== layout.first[1] ||
+      second[0] !== layout.second[0] ||
+      second[1] !== layout.second[1]
+    )
+      setSheetPaneLayout(this.mrDoc, this.GetTabNumber(), { ...layout, first, second });
+  }
   /** Original view-owned borrowed option copy. @returns Actual options. */
   GetOptions(): ScViewOptions {
     return this.maOptions;

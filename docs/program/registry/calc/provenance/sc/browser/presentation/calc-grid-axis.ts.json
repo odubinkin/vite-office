@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sc/browser/presentation/calc-grid-axis.ts",
+    "status": "local-only",
+    "rationale": "Platform paint and hit-testing geometry for the fixed and movable sides of the DOM grid.",
+    "responsibilities": [
+      "Projects native visible cells into separate fixed and movable bands, skipping hidden rows and columns. Uses the same geometry for paint and pointer hit testing."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The browser paints clipped pane rectangles in one DOM grid over the already bounded physical scroll tracks."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-grid-axis.ts",
+          "marker": "class CalcGridAxis"
+        },
+        {
+          "path": "apps/office/e2e/calc/xlsx-frozen-grid.spec.ts",
+          "marker": "stationary while scrolling"
+        }
+      ]
+    }
+  }
+}

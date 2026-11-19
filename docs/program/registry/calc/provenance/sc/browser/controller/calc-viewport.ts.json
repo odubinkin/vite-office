@@ -7,7 +7,8 @@
     "status": "local-only",
     "rationale": "DOM scroll track projection over actual ScViewData and compressed sheet dimensions.",
     "responsibilities": [
-      "Restores the unsplit first visible cell exactly using an integer scroll offset and publishes actual scroll movement into the current sheet view."
+      "Restores the unsplit first visible cell exactly using an integer scroll offset and publishes actual scroll movement into the current sheet view.",
+      "Maps frozen geometry to bounded moving scroll domains using native dimensions and the source split margin. Updates only the available movable axes."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

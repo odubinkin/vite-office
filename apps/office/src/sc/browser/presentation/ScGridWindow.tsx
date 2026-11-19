@@ -1,22 +1,18 @@
 /** @fileoverview Controlled browser rendering of ScGridWindow headers, visible cells and inline input; canonical cell/selection/input state stays with the view controller. */
 import type { SyntheticEvent } from "react";
 import { useWindowTracking } from "../../../vcl/browser/use-window-tracking";
-import { columnAtPixel } from "./column-geometry";
-import { rowAtPixel } from "./row-geometry";
 import { createCalcGridFrames, calcGridBorderStyle } from "./calc-grid-borders";
 import { ScHeaderResizeHandle, type ScHeaderSizing } from "./ScHeaderResizeHandle";
 import { ScCellDiagonalBorders } from "./ScCellDiagonalBorders";
 import { ScIndentItem, ScLineBreakCell } from "../../inc/attrib";
 import { SvxMarginItem } from "../../../svx/source/items/algitem";
 import { SvxCellHorJustify } from "../../../editeng/inc/svxenum";
-import { visibleRows } from "./row-geometry";
 import { SvxContourItem } from "../../../editeng/inc/contouritem";
 import { SpecialText } from "../../../vcl/browser/special-text";
 import { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/items/textitem";
 import type { SvxHorJustifyItem, SvxVerJustifyItem } from "../../../editeng/inc/justifyitem";
 import type { ScTable } from "../../inc/table";
-import { columnPixels, visibleColumns } from "./column-geometry";
-import { rowPixels } from "./row-geometry";
+import { CalcGridAxis, type CalcGridViewport } from "./calc-grid-axis";
 import { ScViewData as NativeViewData } from "../../source/ui/inc/viewdata";
 import { ScPatternAttr } from "../../inc/patattr";
 import { ScAutoFontColorMode } from "../../source/core/data/patattr";
@@ -49,24 +45,7 @@ import { COL_AUTO, COL_BLACK, COL_WHITE } from "../../../tools/inc/color";
 import { browserColor } from "../../../vcl/browser/color";
 import { ScAddress, type ScRange } from "../../inc/address";
 import type { ScViewData } from "../../source/ui/inc/viewdata";
-/** Logical visible rectangle and measured browser dimensions; this contains no cell data. */
-export interface CalcGridViewport {
-  readonly firstColumn: number;
-  readonly firstRow: number;
-  readonly columns: number;
-  readonly rows: number;
-  readonly scrollWidth: number;
-  readonly scrollLeft: number;
-  readonly columnOffset: number;
-  /** Column-header height only; body rows use actual native sheet geometry. */
-  readonly rowHeight: number;
-  /** Physical browser scroll offset; kept distinct from the native logical first row. */
-  readonly scrollTop: number;
-  /** Native pixel displacement within the first visible row. */
-  readonly rowOffset: number;
-  /** Physical scroll-track extent supplied by the viewport owner; large logical sheets must not exceed browser CSS geometry limits. */
-  readonly scrollHeight: number;
-}
+export type { CalcGridViewport } from "./calc-grid-axis";
 /** Read-only presentation of one canonical cell, formatted by the controller's display owner. */
 export interface CalcCellPresentation {
   readonly text: string;
@@ -154,6 +133,13 @@ function cellTypography(pattern: ScPatternAttr) {
   };
   return { style, outlined, shadowed, relief, underline, lineColor, fontColor };
 }
+/** Clips partially visible cells at the boundary of an adjacent fixed pane. @param topSeam - First visible pixel of the vertical band. @param y - Cell body position. @param leftSeam - First visible pixel of the horizontal band. @param x - Cell body position. @returns Optional CSS clipping rectangle. */
+function paneClip(topSeam: number, y: number, leftSeam: number, x: number): string | undefined {
+  const top = topSeam ? Math.max(0, topSeam - y) : 0;
+  const left = leftSeam ? Math.max(0, leftSeam - x) : 0;
+  return top || left ? `inset(${top}px 0 0 ${left}px)` : undefined;
+}
+
 /** Paints a bounded window of actual view-owned cells and emits platform input intents. @param props - Read-only view and controller bindings. @returns Accessible Calc grid. */
 export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
   const { viewData, viewport, inputMode } = props;
@@ -174,33 +160,61 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
     tab = viewData.GetTabNumber();
   const document = viewData.GetDocument();
   const table = document.FetchTable(tab) as ScTable;
-  const columns = visibleColumns(
-    table,
-    viewport.firstColumn,
-    Math.min(document.MaxCol(), viewport.firstColumn + viewport.columns - 1),
+  const xAxis = new CalcGridAxis(table, viewport, true, document.MaxCol());
+  const yAxis = new CalcGridAxis(table, viewport, false, document.MaxRow());
+  const headings = xAxis.bands.flatMap(
+    /** Pairs column headers with their pane. @param band - Horizontal pane. @returns Headings. */
+    (band) =>
+      band.cells.map(
+        /** Pairs one heading with its position owner. @param col - Column. @returns Heading. */
+        (col) => ({ col, band }),
+      ),
   );
-  const rows = visibleRows(
-    table,
-    viewport.firstRow,
-    Math.min(document.MaxRow(), viewport.firstRow + viewport.rows - 1),
+  const paintRows = yAxis.bands.flatMap(
+    /** Computes frame adjacency separately in each native pane. @param band - Vertical pane. @returns Painted rows. */
+    (band) => {
+      const cells = xAxis.bands.flatMap(
+        /** Includes borders from the same pane as its column. @param x - Horizontal pane. @returns Cells. */
+        (x) => {
+          const frames = createCalcGridFrames(viewData, x.cells, band.cells);
+          return x.cells.map(
+            /** Associates real cells with the paint frame. @param col - Native column. @returns Cell column and frame. */
+            (col) => ({ col, x, frames }),
+          );
+        },
+      );
+      return band.cells.map(
+        /** Pairs a row with its pane borders. @param r - Native row. @returns Grid row metadata. */
+        (r) => ({ r, band, cells }),
+      );
+    },
   );
   const showGrid = viewData.GetOptions().GetOption(ViewOption.GRID) && viewData.GetShowGrid();
   const headers = viewData.IsHeaderMode(),
     headerWidth = headers ? 48 : 0,
     headerHeight = headers ? viewport.rowHeight : 0;
-  const frames = createCalcGridFrames(viewData, columns, rows);
-  const activeVisible = columns.includes(column) && rows.includes(row);
+  const columnBand = xAxis.bands.find(
+    /** Locates the active cell's horizontal pane. @param band - Candidate band. @returns Whether the cell is painted in the band. */
+    (band) => band.cells.includes(column),
+  );
+  const rowBand = yAxis.bands.find(
+    /** Locates the active cell's vertical pane. @param band - Candidate band. @returns Whether the cell is painted in the band. */
+    (band) => band.cells.includes(row),
+  );
+  const activeVisible = columnBand !== undefined && rowBand !== undefined;
   const editorStyle: CSSProperties | undefined =
     editing && activeVisible
       ? {
           ...cellTypography(document.GetPattern(new ScAddress(column, row, tab)) as ScPatternAttr)
             .style,
-          left:
-            headerWidth -
-            viewport.columnOffset +
-            columnPixels(table, viewport.firstColumn, column - 1) +
-            2,
-          top: headerHeight - viewport.rowOffset + rowPixels(table, viewport.firstRow, row - 1) + 2,
+          left: headerWidth + xAxis.Position(columnBand, column) + 2,
+          top: headerHeight + yAxis.Position(rowBand, row) + 2,
+          clipPath: paneClip(
+            rowBand.clipStart,
+            yAxis.Position(rowBand, row) + 2,
+            columnBand.clipStart,
+            xAxis.Position(columnBand, column) + 2,
+          ),
           width: Math.max(0, NativeViewData.ToPixel(table.GetColWidth(column), 1 / 15) - 4),
           height: Math.max(0, NativeViewData.ToPixel(table.GetRowHeight(row), 1 / 15) - 4),
         }
@@ -226,23 +240,15 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
       if (cell)
         return new ScAddress(Number(cell.dataset.calcColumn), Number(cell.dataset.calcRow), tab);
     }
-    const viewport = currentViewport.current;
-    const bounds = (grid.current as HTMLElement).getBoundingClientRect(),
-      x =
-        pointer.clientX -
-        bounds.left -
-        headerWidth +
-        columnPixels(table, 0, viewport.firstColumn - 1) +
-        viewport.columnOffset,
-      y =
-        pointer.clientY -
-        bounds.top -
-        headerHeight +
-        rowPixels(table, 0, viewport.firstRow - 1) +
-        viewport.rowOffset;
+    const current = currentViewport.current;
+    const bounds = (grid.current as HTMLElement).getBoundingClientRect();
     return new ScAddress(
-      columnAtPixel(table, x, document.MaxCol()),
-      rowAtPixel(table, y, document.MaxRow()),
+      new CalcGridAxis(table, current, true, document.MaxCol()).Hit(
+        pointer.clientX - bounds.left - headerWidth,
+      ),
+      new CalcGridAxis(table, current, false, document.MaxRow()).Hit(
+        pointer.clientY - bounds.top - headerHeight,
+      ),
       tab,
     );
   }
@@ -383,21 +389,17 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                   <span className="sr-only">Select all cells</span>
                 </button>
               </div>
-              {columns.map(
-                /** Renders one canonical column heading. @param col - Column coordinate. @returns Heading. */ (
-                  col,
-                ) => (
+              {headings.map(
+                /** Renders the native column header in its own pane. @param heading - Column and band. @returns Heading. */
+                ({ col, band }) => (
                   <div
                     key={col}
                     role="columnheader"
                     aria-colindex={col + 1 + Number(headers)}
                     aria-label={`Column ${columnLabel(col)}`}
                     style={{
-                      left:
-                        48 +
-                        viewport.scrollLeft -
-                        viewport.columnOffset +
-                        columnPixels(table, viewport.firstColumn, col - 1),
+                      left: 48 + viewport.scrollLeft + xAxis.Position(band, col),
+                      clipPath: paneClip(0, 0, band.clipStart, xAxis.Position(band, col)),
                       width: NativeViewData.ToPixel(table.GetColWidth(col), 1 / 15),
                       height: viewport.rowHeight,
                     }}
@@ -437,21 +439,17 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
               )}
             </div>
           )}
-          {rows.map(
-            /** Renders only a visible native row. @param r - Row coordinate. @returns Grid row. */ (
-              r,
-            ) => (
+          {paintRows.map(
+            /** Renders a visible row with pane-specific cells and borders. @param entry - Row and paint bands. @returns Grid row. */
+            ({ r, band, cells }) => (
               <div
                 key={r}
                 role="row"
                 aria-rowindex={r + 1 + Number(headers)}
                 className="absolute left-0 w-full"
                 style={{
-                  top:
-                    viewport.scrollTop +
-                    headerHeight -
-                    viewport.rowOffset +
-                    rowPixels(table, viewport.firstRow, r - 1),
+                  top: viewport.scrollTop + headerHeight + yAxis.Position(band, r),
+                  clipPath: paneClip(band.clipStart, yAxis.Position(band, r), 0, 0),
                   height: NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15),
                 }}
               >
@@ -497,10 +495,9 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                     )}
                   </div>
                 )}
-                {columns.map(
-                  /** Paints one cell from the display contract, never from an application array. @param col - Column. @returns Cell or inline editor. */ (
-                    col,
-                  ) => {
+                {cells.map(
+                  /** Paints a cell using its native value and pane-specific borders. @param entry - Column and pane border data. @returns Cell. */
+                  ({ col, x, frames }) => {
                     const position = new ScAddress(col, r, tab),
                       cell = props.getCell(position);
                     const pattern = document.GetPattern(position) as ScPatternAttr;
@@ -543,8 +540,8 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         frames,
                         col,
                         r,
-                        col === columns[columns.length - 1],
-                        r === rows[rows.length - 1],
+                        col === x.cells.at(-1),
+                        r === band.cells.at(-1),
                         showGrid,
                       ),
                       paddingLeft: Math.trunc(
@@ -580,11 +577,8 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                         "flex-end",
                         "flex-start",
                       ][(pattern.GetItem(132) as SvxVerJustifyItem).GetValue()],
-                      left:
-                        headerWidth +
-                        viewport.scrollLeft -
-                        viewport.columnOffset +
-                        columnPixels(table, viewport.firstColumn, col - 1),
+                      left: headerWidth + viewport.scrollLeft + xAxis.Position(x, col),
+                      clipPath: paneClip(0, 0, x.clipStart, xAxis.Position(x, col)),
                       width: NativeViewData.ToPixel(table.GetColWidth(col), 1 / 15),
                       height: NativeViewData.ToPixel(table.GetRowHeight(r), 1 / 15),
                     };
@@ -682,6 +676,20 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
           )}
         </div>
       </div>
+      {viewport.frozenColumns && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 z-[10] w-px bg-slate-500"
+          style={{ left: headerWidth + viewport.frozenColumns.pixels - 1 }}
+        />
+      )}
+      {viewport.frozenRows && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 z-[10] h-px bg-slate-500"
+          style={{ top: headerHeight + viewport.frozenRows.pixels - 1 }}
+        />
+      )}
       {editing && (
         <input
           ref={input}

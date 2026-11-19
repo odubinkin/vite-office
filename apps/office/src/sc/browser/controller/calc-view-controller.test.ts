@@ -17,8 +17,14 @@ import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { EditTextObjectImpl, TextRotation } from "../../../editeng/inc/editobj";
 import { SvtScriptType } from "../../../svl/inc/languageoptions";
 import { MapUnit } from "../../../tools/inc/mapunit";
-import { getSheetPaneLayout } from "../../source/core/data/document.sheet-visibility";
+import {
+  getSheetPaneLayout,
+  setSheetPaneLayout,
+  SheetPane,
+  SheetSplitMode,
+} from "../../source/core/data/document.sheet-visibility";
 import { ScHSplitPos, ScVSplitPos } from "../../source/ui/view/viewdata";
+import { CalcGridAxis } from "../presentation/calc-grid-axis";
 
 it("displays and edits native rich-text cells without reading an absent shared-string variant", /** Checks repeated display ownership and preservation of text that resembles a number. @returns Nothing. */ () => {
   const shell = new ScDocShell();
@@ -246,6 +252,56 @@ it("restores measured unsplit origins exactly across sheet changes", /** Verifie
     expect(c.shell.IsModified()).toBe(false);
   } finally {
     secondName.dispose();
+    c.Close();
+    doc.Dispose();
+  }
+});
+
+it("keeps frozen bands and scrolls only their movable counterparts", /** Asserts native origins, real hidden ranges, and hit testing across both pane seams. @returns Nothing. */ () => {
+  const c = new CalcViewController();
+  const doc = c.shell.GetDocument();
+  try {
+    const table = doc.FetchTable(0);
+    if (!table) throw new Error("Missing test sheet.");
+    setSheetPaneLayout(doc, 0, {
+      horizontalMode: SheetSplitMode.FIX,
+      horizontalPosition: 5,
+      verticalMode: SheetSplitMode.FIX,
+      verticalPosition: 9,
+      activePane: SheetPane.BOTTOMRIGHT,
+      first: [1, 2],
+      second: [0, 0],
+    });
+    doc.SetColHidden(1, 2, 0, true);
+    doc.SetRowHidden(3, 4, 0, true);
+    const start = c.RestoreScrollPosition(960, 680);
+    expect(start).toEqual({ left: 0, top: 0, stored: true });
+    c.MeasureViewport(start.left, start.top, 960, 680);
+    expect(c.viewport).toMatchObject({
+      firstColumn: 5,
+      firstRow: 9,
+      frozenColumns: { first: 1, last: 4 },
+      frozenRows: { first: 2, last: 8 },
+    });
+    const x = new CalcGridAxis(table, c.viewport, true, doc.MaxCol());
+    const y = new CalcGridAxis(table, c.viewport, false, doc.MaxRow());
+    expect(x.bands[0]?.cells).toEqual([3, 4]);
+    expect(y.bands[0]?.cells).toEqual([2, 5, 6, 7, 8]);
+    expect(x.Hit(-12)).toBe(3);
+    expect(y.Hit((c.viewport.frozenRows?.pixels ?? 0) - 1)).toBe(8);
+    expect(y.Hit(c.viewport.frozenRows?.pixels ?? 0)).toBe(9);
+    c.Scroll(c.ScrollLeftForColumn(12, 960), c.ScrollTopForRow(30, 680), 960, 680);
+    expect(c.viewport).toMatchObject({ firstColumn: 12, firstRow: 30 });
+    expect(getSheetPaneLayout(doc, 0)).toMatchObject({ first: [1, 2], second: [12, 30] });
+    const reopened = c.RestoreScrollPosition(960, 680);
+    c.MeasureViewport(reopened.left, reopened.top, 960, 680);
+    expect(c.viewport).toMatchObject({ firstColumn: 12, firstRow: 30 });
+    c.MeasureViewport(0, 0, 65, 680);
+    expect(c.viewport.frozenColumns).toBeUndefined();
+    c.Scroll(500, c.ScrollTopForRow(33, 680), 65, 680);
+    expect(getSheetPaneLayout(doc, 0)).toMatchObject({ first: [1, 2], second: [12, 33] });
+    expect(c.shell.IsModified()).toBe(false);
+  } finally {
     c.Close();
     doc.Dispose();
   }
