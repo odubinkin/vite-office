@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 406
+revision: 408
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T10:50:42.425Z"
+  updated_at: "2026-11-19T11:02:51.001Z"
   updated_by: "CODER"
-  note: "VML geometry and picture metadata checkpoint 5a9fe64b0 passed its scoped tests, native fixture extracts and browser regressions. Shape insertion and complete DOCX integration remain open."
-  attempts: 125
+  note: "Embedded graphic node checkpoint 05ba9086e passed scoped Owner, Worker and text-fly regression checks. OOXML drawing and graphic persistence integration remain open."
+  attempts: 126
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2008,8 +2011,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T11:02:51.001Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Embedded graphic node checkpoint 05ba9086e passed scoped Owner, Worker and text-fly regression checks. OOXML drawing and graphic persistence integration remain open."
+  -
+    type: "status"
+    at: "2026-11-19T11:02:57.882Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T10:50:52.086Z"
+doc_updated_at: "2026-11-19T11:02:57.882Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -5867,6 +5883,43 @@ sections:
       Result: pass. Evidence: static production build smoke and two existing file-dialog scenarios, including mobile DOCX re-open. Scope: Writer theme import and DOCX export plus header-relative geometry and ODT persistence.
     - Command: npm run typecheck, scoped npm exec -- prettier --check and npm exec -- eslint, npm run check:docs, npm run check:file-size, npm run check:dependencies, npm run check:source-tree, npm run check:writer-resources, npm run check:calc-resources, npm run check:writer-hintids, npm run check:source-provenance, npm run inventory:registry:build, npm run inventory:registry:check, npm run inventory:invariants, npm run inventory:parity, node .agentplane/policy/check-routing.mjs, ap doctor, git diff --check.
       Result: pass. Evidence: production typechecks and build; JSDoc covered 5770 files; provenance covered 2837 runtime modules; registry reported zero semantic violations; project doctor and routing were OK. Scope: the current repository and the changed VML owner files. The ten-task full regression cadence does not require a full run at this checkpoint.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-19T11:02:51.001Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Embedded graphic node checkpoint 05ba9086e passed scoped Owner, Worker and text-fly regression checks. OOXML drawing and graphic persistence integration remain open.
+    Attempts: 126
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T10:50:52.086Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    - Command: npm run test:coverage:writer -- ndgrf.test.ts doclay.native-name.test.ts native-text-frame-owner.test.tsx writer-page-story-codec.test.ts --maxWorkers=2 --coverage.include=src/sw/source/core/docnode/ndnotxt.ts --coverage.include=src/sw/source/core/graphic/ndgrf.ts --coverage.include=src/vcl/source/gdi/graph.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/writer-embedded-graphics. Result: pass, 17 tests in four files. The three new owners pass 90% per-file, with 13/13 statements, 9/9 functions, 13/13 lines and no executable branches. Scope: graphics owned by native autotext fly sections, graphic style and separate items, image names, source-sized and explicitly sized frames, transferable bytes and content anchors, invalid graphic snapshots and existing frame/page story behavior.
+    - Command: npm run test:writer -- htmlgrin.frame-anchor.test.ts swmd.html-table.test.ts rtf-floating-table.test.ts docxexport.page-stories.test.ts --maxWorkers=2 --testTimeout=120000. Result: pass, 52 tests. Scope: original text fly admission, annex and page story DOCX regressions.
+    - Command: node_modules/.bin/vitest run scripts/check-module-boundaries-graphics.test.ts scripts/check-module-boundaries.test.ts. Result: pass, 145 tests through project selection. Scope: permit the three source-backed type-only VCL Graphic references while retaining the runtime/browser import guard.
+    - Command: npm run test:static && node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1 --timeout=90000 --grep 'header-relative|themed text across'. Result: pass, two production Chrome cases including desktop open and mobile export/reopen.
+    - Scoped Prettier and ESLint, typecheck, dependency boundaries, resource checks, JSDoc, file limits, tree and source provenance, registry and inventory invariants/parity, doctor, routing and diff checks passed.
+    - The embedded Writer graphic model and Worker transport are now source-backed and verified for floating paragraph and character anchors. No OOXML drawing reaches the model yet. Original VML picture insertion via the OOXML/UNO drawing path, inline fly content, ODT storage, DOCX output and rendering still need integration. The user requested a full application and browser regression with repairs after this checkpoint.
 
     BlueprintSnapshotRef:
     - state: current
@@ -10472,6 +10525,43 @@ Details:
   Result: pass. Evidence: static production build smoke and two existing file-dialog scenarios, including mobile DOCX re-open. Scope: Writer theme import and DOCX export plus header-relative geometry and ODT persistence.
 - Command: npm run typecheck, scoped npm exec -- prettier --check and npm exec -- eslint, npm run check:docs, npm run check:file-size, npm run check:dependencies, npm run check:source-tree, npm run check:writer-resources, npm run check:calc-resources, npm run check:writer-hintids, npm run check:source-provenance, npm run inventory:registry:build, npm run inventory:registry:check, npm run inventory:invariants, npm run inventory:parity, node .agentplane/policy/check-routing.mjs, ap doctor, git diff --check.
   Result: pass. Evidence: production typechecks and build; JSDoc covered 5770 files; provenance covered 2837 runtime modules; registry reported zero semantic violations; project doctor and routing were OK. Scope: the current repository and the changed VML owner files. The ten-task full regression cadence does not require a full run at this checkpoint.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-19T11:02:51.001Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Embedded graphic node checkpoint 05ba9086e passed scoped Owner, Worker and text-fly regression checks. OOXML drawing and graphic persistence integration remain open.
+Attempts: 126
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T10:50:52.086Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+- Command: npm run test:coverage:writer -- ndgrf.test.ts doclay.native-name.test.ts native-text-frame-owner.test.tsx writer-page-story-codec.test.ts --maxWorkers=2 --coverage.include=src/sw/source/core/docnode/ndnotxt.ts --coverage.include=src/sw/source/core/graphic/ndgrf.ts --coverage.include=src/vcl/source/gdi/graph.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/writer-embedded-graphics. Result: pass, 17 tests in four files. The three new owners pass 90% per-file, with 13/13 statements, 9/9 functions, 13/13 lines and no executable branches. Scope: graphics owned by native autotext fly sections, graphic style and separate items, image names, source-sized and explicitly sized frames, transferable bytes and content anchors, invalid graphic snapshots and existing frame/page story behavior.
+- Command: npm run test:writer -- htmlgrin.frame-anchor.test.ts swmd.html-table.test.ts rtf-floating-table.test.ts docxexport.page-stories.test.ts --maxWorkers=2 --testTimeout=120000. Result: pass, 52 tests. Scope: original text fly admission, annex and page story DOCX regressions.
+- Command: node_modules/.bin/vitest run scripts/check-module-boundaries-graphics.test.ts scripts/check-module-boundaries.test.ts. Result: pass, 145 tests through project selection. Scope: permit the three source-backed type-only VCL Graphic references while retaining the runtime/browser import guard.
+- Command: npm run test:static && node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1 --timeout=90000 --grep 'header-relative|themed text across'. Result: pass, two production Chrome cases including desktop open and mobile export/reopen.
+- Scoped Prettier and ESLint, typecheck, dependency boundaries, resource checks, JSDoc, file limits, tree and source provenance, registry and inventory invariants/parity, doctor, routing and diff checks passed.
+- The embedded Writer graphic model and Worker transport are now source-backed and verified for floating paragraph and character anchors. No OOXML drawing reaches the model yet. Original VML picture insertion via the OOXML/UNO drawing path, inline fly content, ODT storage, DOCX output and rendering still need integration. The user requested a full application and browser regression with repairs after this checkpoint.
 
 BlueprintSnapshotRef:
 - state: current
