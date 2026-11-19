@@ -1,10 +1,10 @@
 ---
 id: "202610251549-J0Z0KF"
 title: "Implement Calc XLSX import export and existing file UI integration"
-status: "DOING"
+status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 681
+revision: 682
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T21:58:41.441Z"
+  updated_at: "2026-11-19T22:06:18.928Z"
   updated_by: "CODER"
-  note: "Normal split worksheet panes passed the scoped Calc coverage, file controls, static checks and production Chromium round trips. The wider XLSX task remains open for the remaining worksheet and workbook contracts."
-  attempts: 223
+  note: "Live worksheet marks and active range index XLSX export passed scoped coverage, Calc format checks, typecheck, static build and four production Chromium tests. The wider XLSX task remains open."
+  attempts: 224
 commit: null
 comments:
   -
@@ -3576,8 +3576,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T22:06:18.928Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Live worksheet marks and active range index XLSX export passed scoped coverage, Calc format checks, typecheck, static build and four production Chromium tests. The wider XLSX task remains open."
 doc_version: 3
-doc_updated_at: "2026-11-19T21:59:12.727Z"
+doc_updated_at: "2026-11-19T22:06:19.250Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -10398,6 +10404,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-19T22:06:18.928Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Live worksheet marks and active range index XLSX export passed scoped coverage, Calc format checks, typecheck, static build and four production Chromium tests. The wider XLSX task remains open.
+    Attempts: 224
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T21:59:12.727Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -11493,6 +11529,10 @@ sections:
     - Observation: Normal panes restore their own axis origins, route mouse wheel movement by the window under the pointer, and persist the active pane after a click.
       Impact: The four visible grid regions and both origins survive primary ODS and XLSX export. The downloaded workbook reopens at mobile width.
       Resolution: Pinned native sources, browser adaptations and exact verification are recorded in evidence/native-xlsx-normal-split-grid.json.
+
+    - Observation: SpreadsheetML now receives the attached view selection snapshot through the worksheet writer, and the source XLSX import finalizer restores the active cell.
+      Impact: Disjoint ranges, the active pane cursor, and Excel activeCellId are serialized by the existing file controls.
+      Resolution: Record the pinned source, exact commands and checkpoint limits in evidence/native-xlsx-live-selection.json.
 id_source: "generated"
 ---
 ## Summary
@@ -18323,6 +18363,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-19T22:06:18.928Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Live worksheet marks and active range index XLSX export passed scoped coverage, Calc format checks, typecheck, static build and four production Chromium tests. The wider XLSX task remains open.
+Attempts: 224
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T21:59:12.727Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -19422,3 +19492,7 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Observation: Normal panes restore their own axis origins, route mouse wheel movement by the window under the pointer, and persist the active pane after a click.
   Impact: The four visible grid regions and both origins survive primary ODS and XLSX export. The downloaded workbook reopens at mobile width.
   Resolution: Pinned native sources, browser adaptations and exact verification are recorded in evidence/native-xlsx-normal-split-grid.json.
+
+- Observation: SpreadsheetML now receives the attached view selection snapshot through the worksheet writer, and the source XLSX import finalizer restores the active cell.
+  Impact: Disjoint ranges, the active pane cursor, and Excel activeCellId are serialized by the existing file controls.
+  Resolution: Record the pinned source, exact commands and checkpoint limits in evidence/native-xlsx-live-selection.json.
