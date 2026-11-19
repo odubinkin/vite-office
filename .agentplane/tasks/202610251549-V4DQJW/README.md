@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 396
+revision: 398
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T07:41:39.315Z"
+  updated_at: "2026-11-19T09:35:13.725Z"
   updated_by: "CODER"
-  note: "Checkpoint 3348c25e4060: native DOCX outline/fill Worker and Chromium round trips pass; full task continues."
-  attempts: 120
+  note: "Word drawing effect run and style persistence passed focused coverage and production DOCX UI checks. Broader DOCX acceptance remains open."
+  attempts: 121
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1928,8 +1931,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T09:35:13.725Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Word drawing effect run and style persistence passed focused coverage and production DOCX UI checks. Broader DOCX acceptance remains open."
+  -
+    type: "status"
+    at: "2026-11-19T09:35:22.068Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T07:41:46.351Z"
+doc_updated_at: "2026-11-19T09:35:22.068Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -5584,6 +5600,46 @@ sections:
     - Three production Chromium scenarios passed. Both affected fixtures open from disk, export through the existing dialog, expose the checked effect in the downloaded DOCX and reopen at mobile width. The existing stylistic-set case passed alongside them.
     - Typecheck, production/static smoke, scoped ESLint and Prettier, JSDoc, source size/tree, dependency boundaries, source provenance, registry checks, Writer resources and WhichIds, Agentplane doctor/routing and Git diff checks passed. Doctor retains the existing managed-hook notice. The complete test suite was outside the current cadence.
     - Word outline geometry and gradient paint are Word interoperability data in this source slice. The original ODT character schema has no mapping for those items. Preservation was verified for the active document and DOCX export/reopen. Remaining Word drawing effects and task-wide verification are pending.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-19T09:35:13.725Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Word drawing effect run and style persistence passed focused coverage and production DOCX UI checks. Broader DOCX acceptance remains open.
+    Attempts: 121
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T07:41:46.351Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    Implementation 2e26c1580 preserves Word 2010 glow, shadow, reflection, scene3d and props3d in native Writer character interoperability bags. The factory generator admits the same pinned definitions and resource IDs. The existing Worker codec validates the compound grammar and the existing DOCX serializer writes run and style properties. The source camera rotation boundary is retained and documented as WRITER-660.
+
+    - Command: npm run test:coverage:writer -- docxexport.text-effects.test.ts writer-text-effect-codec.test.ts TextEffectsHandler.test.ts OOXMLFactory.test.ts WriterFilter.test.ts docxexport.typography.test.ts docxexport.theme.test.ts --maxWorkers=2 --testTimeout=120000 --coverage.include=src/sw/source/writerfilter/dmapper/TextEffectsHandler.drawing.ts --coverage.include=src/sw/browser/filter/xml/writer-text-effect-codec.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/docx-drawing-effects-qualified
+      Result: pass. Evidence: 30 tests in seven files. Statements/branches/functions/lines: drawing handler 93.44/90.90/100/100%, Worker codec 91.30/92.42/100/97.56%. Scope: original run and style drawing properties in three unchanged QA DOCX files through native graph and Worker transfer, DOCX export, and reopen. The test compares complete XML effect trees independently of merging identically formatted adjacent runs, preserving covered character counts. Scene3D checks the native run item, camera preset, light rig and rotation, and the original camera filtering. Legacy broader handler coverage is outside this measurement.
+    - Command: node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1 --timeout=90000 --grep 'through the Worker|themed text across primary'
+      Result: pass. Evidence: six production Chromium scenarios, including the original glow/shadow/reflection and 3D documents opened at desktop size, DOCX downloaded with matching effect XML and reopened on a mobile viewport. The suite also verifies the existing primary ODT reopen for themed text. Scope: the existing Writer open and download dialogs and their Worker transport.
+    - Commands: python3 scripts/writer-ooxml/generate-factory.py --check; npm run typecheck; npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:writer-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+      Result: pass. Evidence: 77 pinned Word 2010 definitions, four production JS bundles, source provenance for 2,825 runtime modules, 5,754 JSDoc sources and zero registry semantic violations.
+    - Remaining acceptance: browser rendering of these Word-specific effect geometries, primary ODT preservation of Word drawing properties, group-shape effects and broader DOCX revision and drawing paths remain open. Full regression suite was outside the ten-task cadence.
 
     BlueprintSnapshotRef:
     - state: current
@@ -9986,6 +10042,46 @@ Pinned source is 9bc445578031fecf56086729d8e4940c77e14d65. The import follows sw
 - Three production Chromium scenarios passed. Both affected fixtures open from disk, export through the existing dialog, expose the checked effect in the downloaded DOCX and reopen at mobile width. The existing stylistic-set case passed alongside them.
 - Typecheck, production/static smoke, scoped ESLint and Prettier, JSDoc, source size/tree, dependency boundaries, source provenance, registry checks, Writer resources and WhichIds, Agentplane doctor/routing and Git diff checks passed. Doctor retains the existing managed-hook notice. The complete test suite was outside the current cadence.
 - Word outline geometry and gradient paint are Word interoperability data in this source slice. The original ODT character schema has no mapping for those items. Preservation was verified for the active document and DOCX export/reopen. Remaining Word drawing effects and task-wide verification are pending.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-19T09:35:13.725Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Word drawing effect run and style persistence passed focused coverage and production DOCX UI checks. Broader DOCX acceptance remains open.
+Attempts: 121
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T07:41:46.351Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+Implementation 2e26c1580 preserves Word 2010 glow, shadow, reflection, scene3d and props3d in native Writer character interoperability bags. The factory generator admits the same pinned definitions and resource IDs. The existing Worker codec validates the compound grammar and the existing DOCX serializer writes run and style properties. The source camera rotation boundary is retained and documented as WRITER-660.
+
+- Command: npm run test:coverage:writer -- docxexport.text-effects.test.ts writer-text-effect-codec.test.ts TextEffectsHandler.test.ts OOXMLFactory.test.ts WriterFilter.test.ts docxexport.typography.test.ts docxexport.theme.test.ts --maxWorkers=2 --testTimeout=120000 --coverage.include=src/sw/source/writerfilter/dmapper/TextEffectsHandler.drawing.ts --coverage.include=src/sw/browser/filter/xml/writer-text-effect-codec.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/docx-drawing-effects-qualified
+  Result: pass. Evidence: 30 tests in seven files. Statements/branches/functions/lines: drawing handler 93.44/90.90/100/100%, Worker codec 91.30/92.42/100/97.56%. Scope: original run and style drawing properties in three unchanged QA DOCX files through native graph and Worker transfer, DOCX export, and reopen. The test compares complete XML effect trees independently of merging identically formatted adjacent runs, preserving covered character counts. Scene3D checks the native run item, camera preset, light rig and rotation, and the original camera filtering. Legacy broader handler coverage is outside this measurement.
+- Command: node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1 --timeout=90000 --grep 'through the Worker|themed text across primary'
+  Result: pass. Evidence: six production Chromium scenarios, including the original glow/shadow/reflection and 3D documents opened at desktop size, DOCX downloaded with matching effect XML and reopened on a mobile viewport. The suite also verifies the existing primary ODT reopen for themed text. Scope: the existing Writer open and download dialogs and their Worker transport.
+- Commands: python3 scripts/writer-ooxml/generate-factory.py --check; npm run typecheck; npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:writer-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+  Result: pass. Evidence: 77 pinned Word 2010 definitions, four production JS bundles, source provenance for 2,825 runtime modules, 5,754 JSDoc sources and zero registry semantic violations.
+- Remaining acceptance: browser rendering of these Word-specific effect geometries, primary ODT preservation of Word drawing properties, group-shape effects and broader DOCX revision and drawing paths remain open. Full regression suite was outside the ten-task cadence.
 
 BlueprintSnapshotRef:
 - state: current
