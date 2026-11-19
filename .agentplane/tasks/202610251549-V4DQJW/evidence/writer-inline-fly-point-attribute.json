@@ -1,0 +1,46 @@
+{
+  "checkpoint": "Native Writer inline fly point type and pool defaults",
+  "implementation": "3629c725d5890b4deb292d01fa29394ad1c21124",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "source": [
+    "sw/inc/hintids.hxx#RES_TXTATR_FLYCNT",
+    "sw/inc/hintids.hxx#CH_TXTATR_BREAKWORD",
+    "sw/inc/fmtflcnt.hxx#SwFormatFlyCnt",
+    "sw/inc/txtflcnt.hxx#SwTextFlyCnt",
+    "sw/source/core/txtnode/atrflyin.cxx#SwTextFlyCnt::SetAnchor",
+    "sw/source/core/txtnode/ndhints.cxx#CompareSwpHtStart",
+    "sw/source/core/bastyp/init.cxx#ItemInfoPackageSwAttributes"
+  ],
+  "checked": [
+    "Native point type 61, global null format default, non-sharing, cloning the borrowed frame without carrying the text backlink, native equality and logical unlink.",
+    "Actual Writer special frame anchored as a character to the current UTF-16 offset, including a position after a surrogate pair.",
+    "Native mixed point/range ordering by start, effective end, and Which while retaining existing ranged caller behavior."
+  ],
+  "verification": {
+    "writer_regressions": { "tests": 1003, "files": 11, "log": "inline-pic-regressions.log" },
+    "coverage": {
+      "tests_on_final_fixture": 3,
+      "file_threshold": 90,
+      "statements": "25/25",
+      "branches": "10/10",
+      "functions": "10/10",
+      "lines": "25/25",
+      "log": "inline-pic-coverage-final.log"
+    },
+    "browser": {
+      "tests": 2,
+      "scope": "Existing DOCX rectangular drawing and ODT page-story production regressions.",
+      "log": "inline-pic-browser.log"
+    },
+    "other": [
+      "TypeScript production check, production build and static smoke passed.",
+      "Scoped ESLint, Prettier, JSDoc, module boundaries, file size, 120 native Writer Which identities and source tree passed.",
+      "Seven scoped provenance records, Agentplane doctor, policy routing and git diff passed."
+    ]
+  },
+  "pending": [
+    "Use the same native hint maps for the point attribute, insert or erase the dummy character through normal text operations, and connect format copy and deletion to document ownership.",
+    "Connect the DOCX inline element to the native model, transport it through ODT and the Worker, and implement DOCX export and in-line layout through the existing browser entrypoints.",
+    "The known two framework discovery omissions remain in the whole-repository provenance and parity checks. The full regression suite was not due for this checkpoint."
+  ]
+}
