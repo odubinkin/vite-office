@@ -19,10 +19,6 @@ export class CompatWriterDocPropsImpl
   private readonly msManager = new OUString();
   private readonly msCategory = new OUString();
   private readonly msCompany = new OUString();
-  /** Original native constructor. @param context - Actual context. @returns Source owner. */
-  constructor(context: Reference<XComponentContext>) {
-    super(context);
-  }
   /** Original virtual clone factory returns this source class, with default compatibility strings. @param context - Actual context. @returns Source owner. */
   protected override createMe(context: Reference<XComponentContext>): SfxDocumentMetaData {
     return new CompatWriterDocPropsImpl(context);
