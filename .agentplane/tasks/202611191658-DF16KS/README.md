@@ -4,7 +4,7 @@ title: "Polish Writer and Calc browser controls and document opening"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 5
+revision: 7
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,28 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-19T17:18:13.992Z"
+  updated_at: "2026-11-19T17:19:03.011Z"
   updated_by: "CODER"
-  note: "Passed the production build, 155 focused unit checks, and 59 distinct browser scenarios across Writer and Calc."
+  note: "verified-202611191658-DF16KS"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-11-19T17:18:54.472Z"
+  updated_by: "EVALUATOR"
+  note: "All seven browser UI outcomes are implemented and verified in Writer and Calc."
+  evaluated_sha: "f471af7bfa3eb306e3477e5f73823d4aca10e092"
+  blueprint_digest: "223bf989e8cfce945c0e3da8bb8985c625929e1ad4da62d71e1a10dff2647a54"
+  evidence_refs:
+    - ".agentplane/tasks/202611191658-DF16KS/README.md"
+    - ".agentplane/tasks/202611191658-DF16KS/quality/20261119-171854472-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202611191658-DF16KS/quality/20261119-171854472-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202611191658-DF16KS/quality/20261119-171854472-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202611191658-DF16KS/blueprint/resolved-snapshot.json"
+    - "f471af7bfa3eb306e3477e5f73823d4aca10e092"
+    - "155 unit tests and 59 distinct Playwright cases covering final behavior"
+  findings:
+    - "Registered Calc commands remain visible through temporary disabled states; disconnected controls and empty menu branches are pruned in the presentation."
+    - "Real browser runs confirmed stable font geometry, immediate tooltips, separated menu checkmarks, and rendered progress during file import and browser-storage reopen."
 commit: null
 comments:
   -
@@ -41,8 +59,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "Passed the production build, 155 focused unit checks, and 59 distinct browser scenarios across Writer and Calc."
+  -
+    type: "verify"
+    at: "2026-11-19T17:19:03.011Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202611191658-DF16KS"
 doc_version: 3
-doc_updated_at: "2026-11-19T17:18:14.043Z"
+doc_updated_at: "2026-11-19T17:19:03.060Z"
 doc_updated_by: "CODER"
 description: "Remove unavailable launcher controls, stabilize font lists, tighten toolbar spacing, hide unavailable commands, improve menu checkmark spacing, show immediate tooltips and indicate document-opening progress in Writer and Calc."
 sections:
@@ -110,6 +134,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-19T17:19:03.011Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202611191658-DF16KS
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T17:18:14.043Z, excerpt_hash=sha256:2d02ab6385c92bd9e218c46a2fec2a57e00dc48761f55bded9784b017a7ca536
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611191658-DF16KS/blueprint/resolved-snapshot.json
+    - old_digest: 223bf989e8cfce945c0e3da8bb8985c625929e1ad4da62d71e1a10dff2647a54
+    - current_digest: 223bf989e8cfce945c0e3da8bb8985c625929e1ad4da62d71e1a10dff2647a54
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611191658-DF16KS
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611191658-DF16KS --result verified-202611191658-DF16KS --commit f471af7bfa3eb306e3477e5f73823d4aca10e092
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -192,6 +246,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-19T17:19:03.011Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202611191658-DF16KS
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T17:18:14.043Z, excerpt_hash=sha256:2d02ab6385c92bd9e218c46a2fec2a57e00dc48761f55bded9784b017a7ca536
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611191658-DF16KS/blueprint/resolved-snapshot.json
+- old_digest: 223bf989e8cfce945c0e3da8bb8985c625929e1ad4da62d71e1a10dff2647a54
+- current_digest: 223bf989e8cfce945c0e3da8bb8985c625929e1ad4da62d71e1a10dff2647a54
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611191658-DF16KS
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611191658-DF16KS --result verified-202611191658-DF16KS --commit f471af7bfa3eb306e3477e5f73823d4aca10e092
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->

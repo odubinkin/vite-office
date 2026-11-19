@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202611191658-DF16KS",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-11-19T17:18:54.472Z",
+  "verdict": "pass",
+  "summary": "All seven browser UI outcomes are implemented and verified in Writer and Calc.",
+  "evaluated_sha": "f471af7bfa3eb306e3477e5f73823d4aca10e092",
+  "blueprint_digest": "223bf989e8cfce945c0e3da8bb8985c625929e1ad4da62d71e1a10dff2647a54",
+  "findings": [
+    "Registered Calc commands remain visible through temporary disabled states; disconnected controls and empty menu branches are pruned in the presentation.",
+    "Real browser runs confirmed stable font geometry, immediate tooltips, separated menu checkmarks, and rendered progress during file import and browser-storage reopen."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202611191658-DF16KS/README.md",
+    "f471af7bfa3eb306e3477e5f73823d4aca10e092",
+    "155 unit tests and 59 distinct Playwright cases covering final behavior"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
