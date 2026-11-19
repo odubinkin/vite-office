@@ -1,0 +1,57 @@
+{
+  "checkpoint": "Writer DOCX conditional table header import",
+  "implementation": "534cd64733c7",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    "sw/source/writerfilter/dmapper/StyleSheetTable.cxx#StyleSheetTable::lcl_attribute",
+    "sw/source/writerfilter/dmapper/StyleSheetTable.cxx#StyleSheetTable::lcl_sprm",
+    "sw/source/writerfilter/dmapper/TblStylePrHandler.cxx#TblStylePrHandler::lcl_sprm",
+    "sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx#DomainMapperTableManager::finishTableLook",
+    "sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx#DomainMapperTableHandler::endTableGetTableStyle"
+  ],
+  "fixtures": {
+    "tdf81100.docx": "af9054b105b8a6eb54d710219c1dc23b3fdaf7513d9a3d92bab638b230f8d19a",
+    "tdf167843_tblLook_firstRow_tblHeader.docx": "d4c8d6f8bc96040ca827dc1ae73a1564209a0dee6d3c137f33c91cf0ed3eab5a"
+  },
+  "verification": {
+    "related_writer": {
+      "command": "npm run test:writer -- docxexport.table-flow.test.ts native-style-entry-merge.test.ts WriterFilter.test.ts --testTimeout 90000",
+      "result": "pass",
+      "evidence": "31 tests in three files. Verified SwTable header counts, direct false precedence, default and explicit table look cases, primary ODT preservation and DOCX export and reimport of the resolved count. The original tdf167843 package is unmodified for the model assertion. The tdf81100 test removes only the unsupported WordprocessingShape choice and fallback from the footer, leaving its table story and style XML unchanged."
+    },
+    "production_chromium": {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" npm exec -- playwright test --config .git/calc-panes-browser.config.mts --project writer --workers=1 --timeout=90000 writer-docx-table-flow.spec.ts",
+      "result": "pass",
+      "evidence": "Two scenarios. Actual Open, primary reload, and downloadable DOCX reopen use the production Writer worker at desktop and mobile sizes. A single named firstRow flag changes an ordinary cell into a column header."
+    },
+    "static": {
+      "commands": [
+        "npm run typecheck",
+        "npm run test:static",
+        "npm run check:dependencies",
+        "npm run check:docs",
+        "npm run check:file-size",
+        "npm run check:source-tree",
+        "npm run check:writer-resources",
+        "npm run check:writer-hintids",
+        "python3 scripts/writer-ooxml/generate-factory.py --check",
+        "node .agentplane/policy/check-routing.mjs",
+        "ap doctor",
+        "git diff --check"
+      ],
+      "result": "pass",
+      "evidence": "The production build and static smoke passed. Scoped ESLint and Prettier passed. The provenance validator found baseline mappings for all six touched runtime sources. This checkpoint extends existing owners."
+    },
+    "global_registry": {
+      "commands": [
+        "npm run check:source-provenance",
+        "npm run inventory:invariants",
+        "npm run inventory:parity"
+      ],
+      "result": "fail",
+      "evidence": "The baseline registry still omits OfficeTooltips.tsx and available-menu-items.ts."
+    }
+  },
+  "suspected_upstream": "WRITER-671 records and retains the table-style handler's presence rule for tblHeader with val=0.",
+  "residual": "Preserve named table style definitions and look attributes across DOCX and primary storage. Export explicit first-row false when the applied table style would otherwise restore a header. The unmodified tdf81100 footer still requires the WordprocessingShape import path, and conditional fill and exact pagination assertions remain open."
+}
