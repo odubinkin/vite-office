@@ -5199,3 +5199,15 @@ document's original row format.
 
 - [Original one-row export condition](../../vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8nds.cxx)
 - [Original tdf101589 regression](../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/ooxmlexport3.cxx)
+
+### WRITER-671 — A false conditional table-style header enables repetition
+
+The DOCX table-style handler inserts a header row count of one when it sees
+`w:tblHeader` inside a conditional row style. It does so even when the element
+explicitly sets `w:val="0"`. The first-row style can therefore enable
+repetition when the table look activates it. A direct false property on the
+first row still takes precedence. The mapper preserves both rules.
+
+- [Original conditional table-style handler](../../vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TblStylePrHandler.cxx)
+- [Original first-row style application](../../vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx)
+- [Writer table flow regression](../../apps/office/src/sw/source/filter/ww8/docxexport.table-flow.test.ts)

@@ -2,7 +2,10 @@
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
-import { DocumentArchive } from "../src/package/source/zippackage/document-archive";
+import {
+  DocumentArchive,
+  DocumentArchiveWriter,
+} from "../src/package/source/zippackage/document-archive";
 
 test("Writer preserves a DOCX table headline through browser storage and mobile reopen", /** Checks the pinned header fixture with the actual Open and Export dialogs. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
   page,
@@ -51,4 +54,50 @@ test("Writer preserves a DOCX table headline through browser storage and mobile 
   });
   await expect(page.getByRole("button", { name: "Reopened table", exact: true })).toBeVisible();
   await expect(heading.first()).toBeVisible();
+});
+
+test("Writer uses the named first-row flag when opening a DOCX table style", /** Exercises named look precedence through the worker and visible table semantics. @param fixtures - Playwright fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
+  page,
+}) => {
+  const original = await readFile(
+    new URL(
+      "../../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/tdf167843_tblLook_firstRow_tblHeader.docx",
+      import.meta.url,
+    ),
+  );
+  const archive = await DocumentArchive.open(original);
+  const writer = new DocumentArchiveWriter();
+  for (const name of archive.getEntryNames()) {
+    if (name !== "word/document.xml") writer.putNextEntry(name, await archive.readEntry(name));
+    else {
+      const xml = await archive.readTextEntry(name);
+      const look = '<w:tblLook w:val="04A0" w:firstRow="0" />';
+      expect(xml).toContain(look);
+      writer.putNextEntry(
+        name,
+        new TextEncoder().encode(xml.replace(look, '<w:tblLook w:val="04A0" w:firstRow="1"/>')),
+      );
+    }
+  }
+  const enabled = Buffer.from(await writer.finish());
+  const mimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+  const open = page.getByRole("button", { name: "Open", exact: true });
+  const headings = page.getByRole("columnheader", { name: "No Header", exact: true });
+  await page.goto("/writer");
+
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page
+    .getByLabel("Browse")
+    .setInputFiles({ name: "First row off.docx", buffer: original, mimeType });
+  await expect(page.getByRole("cell", { name: "No Header", exact: true }).first()).toBeVisible();
+  await expect(headings).toHaveCount(0);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page
+    .getByLabel("Browse")
+    .setInputFiles({ name: "First row on.docx", buffer: enabled, mimeType });
+  await expect(headings.first()).toBeVisible();
 });

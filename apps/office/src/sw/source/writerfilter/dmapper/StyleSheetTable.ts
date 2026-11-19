@@ -568,7 +568,7 @@ export class TableStyleSheetEntry extends StyleSheetEntry {
     this.m_sStyleName = source.m_sStyleName;
     this.m_sStyleIdentifierD = source.m_sStyleIdentifierD;
   }
-  /** Original edge-style insertion can erase an inside border on the supplied map itself before retaining its identity. @param type - Native conditional type. @param properties - Original shared map. @returns Nothing. */
+  /** Original edge-style insertion can erase an inside border on the supplied map itself before retaining its identity. @param type - Native conditional type. @param properties - Original property map retained by the entry. @returns Nothing. */
   AddTblStylePr(type: TblStyleType, properties: PropertyMap): void {
     const types = [
         TblStyleType.FirstRow,
@@ -591,6 +591,8 @@ export class TableStyleSheetEntry extends StyleSheetEntry {
         break;
       }
     }
+    const previous = this.m_aStyles.get(type);
+    if (previous !== properties) previous?.dispose();
     this.m_aStyles.set(type, properties);
   }
   /** Original returned map merges conditional properties only, without silently adding base or inherited style properties. @param mask - Signed32 condition mask. @returns Owned result. */
@@ -636,8 +638,9 @@ export class TableStyleSheetEntry extends StyleSheetEntry {
     }
     return properties;
   }
-  /** Releases retained JS shared-map references; the supplied property owners keep their native filter lifetime. @returns Nothing. */
+  /** Releases the retained conditional property maps. @returns Nothing. */
   override dispose(): void {
+    for (const properties of this.m_aStyles.values()) properties.dispose();
     this.m_aStyles.clear();
     super.dispose();
   }

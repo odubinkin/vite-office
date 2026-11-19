@@ -3,7 +3,10 @@ import { readFileSync } from "node:fs";
 import { assert, expect, it } from "vitest";
 import { OoxmlVersion } from "../../../../oox/inc/core/filterbase";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
-import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import {
+  DocumentArchive,
+  DocumentArchiveWriter,
+} from "../../../../package/source/zippackage/document-archive";
 import { SvxFrameDirection as Direction } from "../../../../editeng/inc/frmdir";
 import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
@@ -36,6 +39,7 @@ it.each([
   ["tdf64264.docx", 1, true],
   ["tdf58944-repeating-table-header.docx", 0, true],
   ["tdf138020_all_rows_tblHeader.docx", 0, false],
+  ["tdf167843_tblLook_firstRow_tblHeader.docx", 0, true],
 ] as const)(
   "replays the native header count for %s",
   /** Verifies the represented assertions of tdf64264, tdf58944 and tdf138020 through both storage formats. @param file - Unchanged native DOCX. @param expected - Header count. @param split - Expected import split state. @returns Completion. */ async (
@@ -64,6 +68,109 @@ it.each([
       }
     } finally {
       source.Dispose();
+    }
+  },
+);
+
+it("applies the conditional first-row header and honors a direct false override in tdf81100", /** Checks the source tables and the native ODT and DOCX header counts. @returns Completion. */ async () => {
+  const original = await DocumentArchive.open(fixture("tdf81100.docx"));
+  const output = new DocumentArchiveWriter();
+  for (const part of original.getEntryNames()) {
+    if (part !== "word/footer1.xml") output.putNextEntry(part, await original.readEntry(part));
+    else {
+      // Isolate the original tables from the unsupported WordprocessingShape in the footer.
+      const footer = await original.readTextEntry(part);
+      const textOnly = footer.replace(/<mc:AlternateContent>[\s\S]*?<\/mc:AlternateContent>/u, "");
+      expect(textOnly).not.toBe(footer);
+      output.putNextEntry(part, new TextEncoder().encode(textOnly));
+    }
+  }
+  const source = await importOOXML(await output.finish(), {});
+  try {
+    const counts = [1, 0];
+    expect(
+      source
+        .GetTables()
+        .map(
+          /** Reads the native table count. @param table - Document table. @returns Number of header rows. */ (
+            table,
+          ) => table.GetRowsToRepeat(),
+        ),
+    ).toEqual(counts);
+    const { document: restored } = await readOdtDocument(
+      await writeOdtDocument(source, metadata),
+      metadata,
+    );
+    try {
+      expect(
+        restored
+          .GetTables()
+          .map(
+            /** Reads the restored table count. @param table - Document table. @returns Number of header rows. */ (
+              table,
+            ) => table.GetRowsToRepeat(),
+          ),
+      ).toEqual(counts);
+    } finally {
+      restored.Dispose();
+    }
+    const { bytes, xml } = await exportDocument(source);
+    expect(xml.match(/<w:tblHeader w:val="true"\/>/gu)).toHaveLength(1);
+    const reopened = await importOOXML(bytes, {});
+    try {
+      expect(
+        reopened
+          .GetTables()
+          .map(
+            /** Reads the reimported table count. @param table - Document table. @returns Number of header rows. */ (
+              table,
+            ) => table.GetRowsToRepeat(),
+          ),
+      ).toEqual(counts);
+    } finally {
+      reopened.Dispose();
+    }
+  } finally {
+    source.Dispose();
+  }
+});
+
+it.each([
+  ["", 1],
+  ['<w:tblLook w:val="0480"/>', 0],
+  ['<w:tblLook w:val="0480" w:noHBand="0"/>', 1],
+])(
+  "recognizes conditional header presence with table look %s",
+  /** Varies native table look attributes and checks the style's false-value behavior. @param look - Table look markup. @param expected - Repeated header count. @returns Completion. */ async (
+    look,
+    expected,
+  ) => {
+    const original = await DocumentArchive.open(
+      fixture("tdf167843_tblLook_firstRow_tblHeader.docx"),
+    );
+    const ns = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
+    const cell = "<w:tc><w:p><w:r><w:t>Cell</w:t></w:r></w:p></w:tc>";
+    const body = `<w:document xmlns:w="${ns}"><w:body><w:tbl><w:tblPr><w:tblStyle w:val="Header"/>+${look}</w:tblPr><w:tblGrid><w:gridCol w:w="1440"/></w:tblGrid><w:tr>${cell}</w:tr>+<w:tr>${cell}</w:tr></w:tbl></w:body></w:document>`;
+    const styles = `<w:styles xmlns:w="${ns}"><w:style w:type="table" w:styleId="Header">+<w:name w:val="Header"/><w:tblStylePr w:type="firstRow"><w:trPr><w:tblHeader w:val="0"/>+</w:trPr></w:tblStylePr></w:style></w:styles>`;
+    const replacements = new Map([
+      ["word/document.xml", body],
+      ["word/styles.xml", styles],
+    ]);
+    const output = new DocumentArchiveWriter();
+    for (const part of original.getEntryNames()) {
+      const replacement = replacements.get(part);
+      output.putNextEntry(
+        part,
+        replacement === undefined
+          ? await original.readEntry(part)
+          : new TextEncoder().encode(replacement),
+      );
+    }
+    const document = await importOOXML(await output.finish(), {});
+    try {
+      expect(document.GetTables()[0]?.GetRowsToRepeat()).toBe(expected);
+    } finally {
+      document.Dispose();
     }
   },
 );

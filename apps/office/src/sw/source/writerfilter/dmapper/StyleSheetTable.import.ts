@@ -13,8 +13,9 @@ import type { DomainMapper } from "./DomainMapper";
 import type { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 import { ContextType } from "./DomainMapper_Impl";
 import { getPropertyName, PropertyIds as P } from "./PropertyIds";
-import { StyleSheetEntry, StyleType } from "./StyleSheetTable";
-import { TblStylePrHandler } from "./TblStylePrHandler";
+import { PropertyMap } from "./PropertyMap";
+import { StyleSheetEntry, StyleType, TableStyleSheetEntry } from "./StyleSheetTable";
+import { TblStylePrHandler, TblStyleType } from "./TblStylePrHandler";
 
 const styleTypes = new Map<number, StyleType>([
   [N.LN_Value_ST_StyleType_paragraph, StyleType.Paragraph],
@@ -60,16 +61,17 @@ export class StyleSheetTableImport implements Table, Properties {
 
   /** Resolves one source style entry before recording its Word ID. @param _position - Source entry index. @param properties - Actual style resource. @returns Nothing. */
   entry(_position: number, properties: Reference<Properties>): void {
-    const entry = new StyleSheetEntry();
+    this.current = new StyleSheetEntry();
     const impl = this.mapper.impl;
     const styles = impl.GetStyleSheetTable();
-    this.current = entry;
-    styles.SetCurrentEntry(entry);
-    impl.PushStyleProperties(entry.m_pProperties);
+    styles.SetCurrentEntry(this.current);
+    impl.PushStyleProperties(this.current.m_pProperties);
+    let entry: StyleSheetEntry;
     try {
       properties.resolve(this);
+      entry = this.current;
     } catch (error) {
-      entry.dispose();
+      this.current.dispose();
       throw error;
     } finally {
       impl.PopProperties(ContextType.CONTEXT_STYLESHEET);
@@ -93,9 +95,19 @@ export class StyleSheetTableImport implements Table, Properties {
       case N.LN_CT_Style_styleId:
         this.current.m_sStyleIdentifierD = styleString(value);
         break;
-      case N.LN_CT_Style_type:
-        this.current.m_nStyleTypeCode = styleTypes.get(value.getInt()) ?? StyleType.Unknown;
+      case N.LN_CT_Style_type: {
+        const type = styleTypes.get(value.getInt()) ?? StyleType.Unknown;
+        if (type === StyleType.Table) {
+          const original = this.current;
+          const impl = this.mapper.impl;
+          this.current = new TableStyleSheetEntry(original);
+          impl.PopProperties(ContextType.CONTEXT_STYLESHEET);
+          impl.PushStyleProperties(this.current.m_pProperties);
+          impl.GetStyleSheetTable().SetCurrentEntry(this.current);
+          original.dispose();
+        } else this.current.m_nStyleTypeCode = type;
         break;
+      }
       case N.LN_CT_Style_default:
         this.current.m_bIsDefaultStyle = value.getInt() !== 0;
         break;
@@ -114,11 +126,8 @@ export class StyleSheetTableImport implements Table, Properties {
       this.applyCharacterDefaults(modifier);
       return;
     }
-    if (id === N.LN_CT_Style_tblPr) {
-      resolveReturnedReference(
-        modifier.getProps(),
-        new TblStylePrHandler(this.current.m_pProperties),
-      );
+    if (id === N.LN_CT_Style_tblPr || id === N.LN_CT_Style_tblStylePr) {
+      this.resolveTableStyleProperties(this.current, modifier);
       return;
     }
     if (id === N.LN_CT_Style_pPr || id === N.LN_CT_Style_rPr) {
@@ -131,6 +140,24 @@ export class StyleSheetTableImport implements Table, Properties {
     else if (id === N.LN_CT_Style_basedOn) this.current.m_sBaseStyleIdentifier = styleString(value);
     else if (id === N.LN_CT_Style_next) this.current.m_sNextStyleIdentifier = styleString(value);
     else if (id === N.LN_CT_Style_link) this.current.m_sLinkStyleIdentifier = styleString(value);
+  }
+
+  /** Resolves the style map before assigning it to the base or conditional entry. @param entry - Active style. @param modifier - Table style resource. @returns Nothing. */
+  private resolveTableStyleProperties(entry: StyleSheetEntry, modifier: Sprm): void {
+    const properties = new PropertyMap();
+    let retained = false;
+    try {
+      const handler = new TblStylePrHandler(properties);
+      resolveReturnedReference(modifier.getProps(), handler);
+      const type = handler.getType();
+      if (type === TblStyleType.Unknown) entry.m_pProperties.InsertProps(properties);
+      else if (entry instanceof TableStyleSheetEntry) {
+        entry.AddTblStylePr(type, properties);
+        retained = true;
+      }
+    } finally {
+      if (!retained) properties.dispose();
+    }
   }
 
   /** Imports default paragraph tabs through the same property context as named styles. @param modifier - Paragraph default resource. @returns Nothing. */

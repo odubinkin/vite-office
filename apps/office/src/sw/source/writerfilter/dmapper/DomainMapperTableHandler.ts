@@ -18,7 +18,7 @@ import { WritingMode2 } from "../../../../offapi/com/sun/star/text/WritingMode2"
 import { SizeType } from "../../../../offapi/com/sun/star/text/SizeType";
 import { PropertyIds as P } from "./PropertyIds";
 import { TablePropertyMapTarget as T, type TablePropertyMap } from "./PropertyMap";
-import type { StyleSheetTable } from "./StyleSheetTable";
+import { TableStyleSheetEntry, type StyleSheetTable } from "./StyleSheetTable";
 
 const DEF_BORDER_DIST = 190;
 
@@ -31,15 +31,35 @@ export function ApplyOOXMLTableDefaults(properties: TablePropertyMap): void {
 
 /** Resolves inherited style geometry before applying direct table properties. @param properties - Direct table map. @param styles - Original stylesheet table. @returns Nothing. */
 export function ApplyTableStyle(properties: TablePropertyMap, styles: StyleSheetTable): void {
+  const lookProperty = properties.getProperty(P.PROP_TBL_LOOK)?.[1];
+  let look = 0x4a0;
+  try {
+    if (lookProperty) look = scalar(lookProperty, "sal_Int32") as number;
+  } finally {
+    lookProperty?.dispose();
+    properties.Erase(P.PROP_TBL_LOOK);
+  }
   const style = properties.getProperty(P.META_PROP_TABLE_STYLE_NAME)?.[1];
   if (!style) return;
   properties.Erase(P.META_PROP_TABLE_STYLE_NAME);
   const value: [number] = [0];
   try {
-    const merged = styles
-      .FindStyleSheetByISTD(stringValue(style))
-      ?.GetMergedInheritedProperties(styles);
-    if (!merged) return;
+    const entry = styles.FindStyleSheetByISTD(stringValue(style));
+    if (!entry) return;
+    if (entry instanceof TableStyleSheetEntry && look & 0x020) {
+      const firstRow = entry.GetProperties(0x800);
+      try {
+        const header = firstRow.getProperty(P.PROP_HEADER_ROW_COUNT)?.[1];
+        try {
+          if (header) properties.Insert(P.PROP_HEADER_ROW_COUNT, header, false);
+        } finally {
+          header?.dispose();
+        }
+      } finally {
+        firstRow.dispose();
+      }
+    }
+    const merged = entry.GetMergedInheritedProperties(styles);
     try {
       for (const [id, target] of [
         [P.PROP_LEFT_MARGIN, T.LEFT_MARGIN],

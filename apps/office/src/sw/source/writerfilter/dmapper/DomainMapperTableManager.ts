@@ -1,7 +1,12 @@
 /** @fileoverview Native table/row/cell property ownership and original grid separators. */
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { WritingMode2 } from "../../../../offapi/com/sun/star/text/WritingMode2";
-import { resolveReturnedReference, type Sprm } from "../inc/dmapper/resourcemodel";
+import {
+  resolveReturnedReference,
+  type Id,
+  type Sprm,
+  type Value,
+} from "../inc/dmapper/resourcemodel";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { PropertyIds as P } from "./PropertyIds";
 import { SizeType } from "../../../../offapi/com/sun/star/text/SizeType";
@@ -13,6 +18,15 @@ import { convertTwipToMm100_LimitedRoundUp } from "./ConversionHelper";
 import { TablePropertiesHandler } from "./TablePropertiesHandler";
 import { stringAny, text } from "../../core/unocore/unocrsrhelper";
 
+const tableLookFlags = [
+  [N.LN_CT_TblLook_firstRow, 0x020],
+  [N.LN_CT_TblLook_lastRow, 0x040],
+  [N.LN_CT_TblLook_firstColumn, 0x080],
+  [N.LN_CT_TblLook_lastColumn, 0x100],
+  [N.LN_CT_TblLook_noHBand, 0x200],
+  [N.LN_CT_TblLook_noVBand, 0x400],
+] as const;
+
 /** Actual mapper property owners for the represented top-level table direction path. */
 export class DomainMapperTableManager {
   private readonly m_aTableProperties = new TablePropertyMap();
@@ -21,6 +35,7 @@ export class DomainMapperTableManager {
   private m_pRowProps = new TablePropertyMap();
   private m_nRow = 0;
   private m_nHeaderRepeat = 0;
+  private readonly m_TableLook = new Map<Id, number>();
   private readonly m_pTablePropsHandler = new TablePropertiesHandler();
   private m_nTableWidth = 0;
   private m_pTmpPosition: TablePositionHandler | undefined;
@@ -56,10 +71,42 @@ export class DomainMapperTableManager {
     return position;
   }
 
+  /** Records source table look attributes before the table manager normalizes them. @param id - Attribute ID. @param value - Original value. @returns Nothing. */
+  attribute(id: Id, value: Value): void {
+    this.m_TableLook.set(id, value.getInt());
+  }
+
+  /** Original table look normalization. Any named flag supersedes the legacy mask, and absent named flags default to true. @returns Nothing. */
+  private finishTableLook(): void {
+    let mask = this.m_TableLook.get(N.LN_CT_TblLook_val) ?? 0x4a0;
+    if (
+      tableLookFlags.some(
+        /** Checks for a named flag even when its value is zero. @param flag - Resource ID and mask bit. @returns Whether specified. */ ([
+          id,
+        ]) => this.m_TableLook.has(id),
+      )
+    ) {
+      mask = 0;
+      for (const [id, bit] of tableLookFlags) if (this.m_TableLook.get(id) !== 0) mask |= bit;
+    }
+    const item = new Any([mask], "sal_Int32");
+    try {
+      this.m_aTmpTableProperties.Insert(P.PROP_TBL_LOOK, item);
+    } finally {
+      item.dispose();
+      this.m_TableLook.clear();
+    }
+  }
+
   /** Original row and cell property consumers. @param modifier - Actual resource sprm. @returns Whether the table manager consumed it. */
   sprm(modifier: Sprm): boolean {
     const id = modifier.getId(),
       value = modifier.getValue()?.getInt() ?? 0;
+    if (id === N.LN_CT_TblPrBase_tblLook) {
+      resolveReturnedReference(modifier.getProps(), this);
+      this.finishTableLook();
+      return true;
+    }
     if (id === N.LN_CT_TblPrBase_tblStyle) {
       const native = modifier.getValue()?.getString();
       if (native) {
