@@ -16,6 +16,7 @@ import { getPropertyName, PropertyIds as P } from "./PropertyIds";
 import { PropertyMap } from "./PropertyMap";
 import { StyleSheetEntry, StyleType, TableStyleSheetEntry } from "./StyleSheetTable";
 import { TblStylePrHandler, TblStyleType } from "./TblStylePrHandler";
+import { namedProperty, SetDocumentInteropProperties } from "./SettingsTable.compat";
 
 const styleTypes = new Map<number, StyleType>([
   [N.LN_Value_ST_StyleType_paragraph, StyleType.Paragraph],
@@ -94,6 +95,7 @@ export class StyleSheetTableImport implements Table, Properties {
     switch (id) {
       case N.LN_CT_Style_styleId:
         this.current.m_sStyleIdentifierD = styleString(value);
+        this.appendTableStyleProperty("styleId", stringAny(this.current.m_sStyleIdentifierD));
         break;
       case N.LN_CT_Style_type: {
         const type = styleTypes.get(value.getInt()) ?? StyleType.Unknown;
@@ -110,6 +112,10 @@ export class StyleSheetTableImport implements Table, Properties {
       }
       case N.LN_CT_Style_default:
         this.current.m_bIsDefaultStyle = value.getInt() !== 0;
+        this.appendTableStyleProperty("default", new Any([this.current.m_bIsDefaultStyle], "bool"));
+        break;
+      case N.LN_CT_Style_customStyle:
+        this.appendTableStyleProperty("customStyle", new Any([value.getInt() !== 0], "bool"));
         break;
     }
   }
@@ -136,18 +142,50 @@ export class StyleSheetTableImport implements Table, Properties {
     }
     const value = modifier.getValue();
     if (!value) return;
-    if (id === N.LN_CT_Style_name) this.current.m_sStyleName = styleString(value);
-    else if (id === N.LN_CT_Style_basedOn) this.current.m_sBaseStyleIdentifier = styleString(value);
+    if (id === N.LN_CT_Style_name) {
+      this.current.m_sStyleName = styleString(value);
+      this.appendTableStyleProperty("name", stringAny(this.current.m_sStyleName));
+    } else if (id === N.LN_CT_Style_basedOn) {
+      this.current.m_sBaseStyleIdentifier = styleString(value);
+      this.appendTableStyleProperty("basedOn", stringAny(this.current.m_sBaseStyleIdentifier));
+    } else if (id === N.LN_CT_Style_uiPriority) {
+      this.appendTableStyleProperty("uiPriority", stringAny(String(value.getInt())));
+    } else if (id === N.LN_CT_Style_rsid) {
+      this.appendTableStyleProperty(
+        "rsid",
+        stringAny((value.getInt() >>> 0).toString(16).padStart(8, "0")),
+      );
+    } else if (id === N.LN_CT_Style_semiHidden)
+      this.appendTableStyleProperty("semiHidden", new Any());
+    else if (id === N.LN_CT_Style_unhideWhenUsed)
+      this.appendTableStyleProperty("unhideWhenUsed", new Any());
+    else if (id === N.LN_CT_Style_qFormat)
+      this.appendTableStyleProperty("qFormat", new Any([value.getInt()], "sal_Int32"));
     else if (id === N.LN_CT_Style_next) this.current.m_sNextStyleIdentifier = styleString(value);
     else if (id === N.LN_CT_Style_link) this.current.m_sLinkStyleIdentifier = styleString(value);
+  }
+
+  /** Appends a native table stylesheet property. @param name - Native field name. @param value - Owned value. @returns Nothing. */
+  private appendTableStyleProperty(name: string, value: Any): void {
+    try {
+      if (!(this.current instanceof TableStyleSheetEntry)) return;
+      const property = namedProperty(name, value);
+      try {
+        this.current.AppendInteropGrabBag(property);
+      } finally {
+        property.dispose();
+      }
+    } finally {
+      value.dispose();
+    }
   }
 
   /** Resolves the style map before assigning it to the base or conditional entry. @param entry - Active style. @param modifier - Table style resource. @returns Nothing. */
   private resolveTableStyleProperties(entry: StyleSheetEntry, modifier: Sprm): void {
     const properties = new PropertyMap();
     let retained = false;
+    const handler = new TblStylePrHandler(properties);
     try {
-      const handler = new TblStylePrHandler(properties);
       resolveReturnedReference(modifier.getProps(), handler);
       const type = handler.getType();
       if (type === TblStyleType.Unknown) entry.m_pProperties.InsertProps(properties);
@@ -155,7 +193,18 @@ export class StyleSheetTableImport implements Table, Properties {
         entry.AddTblStylePr(type, properties);
         retained = true;
       }
+      if (entry instanceof TableStyleSheetEntry) {
+        const conditional = modifier.getId() === N.LN_CT_Style_tblStylePr;
+        if (conditional) handler.appendInteropGrabBag("type", stringAny(handler.getTypeString()));
+        const property = handler.getInteropGrabBag(conditional ? "tblStylePr" : "tblPr");
+        try {
+          entry.AppendInteropGrabBag(property);
+        } finally {
+          property.dispose();
+        }
+      }
     } finally {
+      handler.dispose();
       if (!retained) properties.dispose();
     }
   }
@@ -224,6 +273,23 @@ export class StyleSheetTableImport implements Table, Properties {
   /** Creates or reuses actual styles and applies their property vectors in source order. @returns Nothing. */
   ApplyStyleSheets(): void {
     const document = this.mapper.model.GetDoc();
+    const tableStyles = this.entries
+      .filter(
+        /** Selects the actual Word table style entries. @param entry - Imported style. @returns Whether table style. */ (
+          entry,
+        ) => entry instanceof TableStyleSheetEntry,
+      )
+      .map(
+        /** Copies one named entry as its native interoperability bag. @param entry - Table style. @returns Owned style record. */ (
+          entry,
+        ) => entry.GetInteropGrabBag(),
+      );
+    try {
+      if (tableStyles.length)
+        SetDocumentInteropProperties(this.mapper.model, "tableStyles", tableStyles);
+    } finally {
+      for (const entry of tableStyles) entry.dispose();
+    }
     for (const entry of this.entries) {
       const type = entry.m_nStyleTypeCode;
       if (type !== StyleType.Paragraph && type !== StyleType.Character) continue;

@@ -184,6 +184,7 @@ export class SwAttrPool extends SfxItemPool {
       WriterWhich.RES_CHRATR_SHADOW,
       WriterWhich.RES_CHRATR_GRABBAG,
       WriterWhich.RES_PARATR_GRABBAG,
+      WriterWhich.RES_FRMATR_GRABBAG,
       WriterWhich.RES_CHRATR_BIDIRTL,
       WriterWhich.RES_CHRATR_UNUSED3,
       WriterWhich.RES_CHRATR_OPTICAL_SIZING,

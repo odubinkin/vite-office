@@ -217,6 +217,7 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SvxShadowItem(W.RES_CHRATR_SHADOW));
     add(new SfxGrabBagItem(W.RES_CHRATR_GRABBAG));
     add(new SfxGrabBagItem(W.RES_PARATR_GRABBAG));
+    add(new SfxGrabBagItem(W.RES_FRMATR_GRABBAG));
     add(new SfxInt16Item(W.RES_CHRATR_BIDIRTL, -1));
     add(new SfxVoidItem(W.RES_CHRATR_UNUSED3));
     add(new SvxOpticalSizingItem(false, W.RES_CHRATR_OPTICAL_SIZING));

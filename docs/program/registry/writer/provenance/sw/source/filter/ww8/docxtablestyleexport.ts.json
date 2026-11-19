@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/ww8/docxtablestyleexport.ts",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxtablestyleexport.ts",
+          "marker": "DocxTableStyleExport"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.table-flow.test.ts",
+          "marker": "direct false override"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/filter/ww8/docxtablestyleexport.cxx",
+          "marker": "DocxTableStyleExport::TableStyles"
+        },
+        {
+          "path": "sw/source/filter/ww8/docxtablestyleexport.cxx",
+          "marker": "DocxTableStyleExport::FirstRowHasTblHeader"
+        },
+        {
+          "path": "sw/source/filter/ww8/docxtablestyleexport.cxx",
+          "marker": "DocxTableStyleExport::Impl::tableStyleTablePr"
+        }
+      ]
+    },
+    "status": "mapped",
+    "upstreamPath": "sw/source/filter/ww8/docxtablestyleexport.cxx",
+    "localSymbols": [
+      "DocxTableStyleExport",
+      "TableStyleTablePr"
+    ],
+    "upstreamSymbols": [
+      "DocxTableStyleExport::TableStyles",
+      "DocxTableStyleExport::FirstRowHasTblHeader",
+      "DocxTableStyleExport::Impl::tableStyleTablePr"
+    ],
+    "preservedResponsibilities": [
+      "Projects native table style interoperability properties into Word styles, including named metadata, ordered conditional row properties, represented table sizes and cell margins, and emitted header tracking."
+    ],
+    "omittedResponsibilities": [
+      "Conditional paragraph, character and cell-format property groups and native border interop remain outside this slice."
+    ]
+  }
+}

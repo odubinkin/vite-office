@@ -100,4 +100,19 @@ test("Writer uses the named first-row flag when opening a DOCX table style", /**
     .getByLabel("Browse")
     .setInputFiles({ name: "First row on.docx", buffer: enabled, mimeType });
   await expect(headings.first()).toBeVisible();
+
+  const pending = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download DOCX" }).click();
+  const path = await (await pending).path();
+  if (path === null) throw new Error("Missing styled DOCX download.");
+  const exported = await DocumentArchive.open(await readFile(path));
+  const styles = await exported.readTextEntry("word/styles.xml");
+  expect(styles).toMatch(
+    /<w:style[^>]*w:styleId="TableGrid">.*?<w:tblStylePr w:type="firstRow">.*?<w:tblHeader\/>/u,
+  );
+  const xml = await exported.readTextEntry("word/document.xml");
+  expect(xml).toContain('<w:tblStyle w:val="TableGrid"/>');
+  expect(xml).toContain('<w:tblLook w:val="07e0" w:firstRow="1"/>');
 });

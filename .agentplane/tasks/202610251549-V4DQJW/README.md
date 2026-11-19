@@ -1,10 +1,10 @@
 ---
 id: "202610251549-V4DQJW"
 title: "Implement Writer DOCX import export and existing file UI integration"
-status: "BLOCKED"
+status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 413
+revision: 414
 origin:
   system: "manual"
 depends_on:
@@ -30,6 +30,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -2054,8 +2057,15 @@ events:
     author: "CODER"
     state: "blocked_external"
     note: "Conditional DOCX table header import passed 31 focused Writer tests and two production Chromium scenarios. Implementation 534cd64733c7 and evidence docx-conditional-header-import.json are committed."
+  -
+    type: "status"
+    at: "2026-11-19T23:24:25.061Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T23:23:52.610Z"
+doc_updated_at: "2026-11-19T23:24:25.061Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:

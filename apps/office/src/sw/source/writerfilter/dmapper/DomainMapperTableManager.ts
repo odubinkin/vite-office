@@ -16,15 +16,16 @@ import { TablePositionHandler } from "./TablePositionHandler";
 import { MeasureHandler } from "./MeasureHandler";
 import { convertTwipToMm100_LimitedRoundUp } from "./ConversionHelper";
 import { TablePropertiesHandler } from "./TablePropertiesHandler";
+import { namedProperty, sequenceAny } from "./SettingsTable.compat";
 import { stringAny, text } from "../../core/unocore/unocrsrhelper";
 
 const tableLookFlags = [
-  [N.LN_CT_TblLook_firstRow, 0x020],
-  [N.LN_CT_TblLook_lastRow, 0x040],
-  [N.LN_CT_TblLook_firstColumn, 0x080],
-  [N.LN_CT_TblLook_lastColumn, 0x100],
-  [N.LN_CT_TblLook_noHBand, 0x200],
-  [N.LN_CT_TblLook_noVBand, 0x400],
+  [N.LN_CT_TblLook_firstRow, 0x020, "firstRow"],
+  [N.LN_CT_TblLook_lastRow, 0x040, "lastRow"],
+  [N.LN_CT_TblLook_firstColumn, 0x080, "firstColumn"],
+  [N.LN_CT_TblLook_lastColumn, 0x100, "lastColumn"],
+  [N.LN_CT_TblLook_noHBand, 0x200, "noHBand"],
+  [N.LN_CT_TblLook_noVBand, 0x400, "noVBand"],
 ] as const;
 
 /** Actual mapper property owners for the represented top-level table direction path. */
@@ -92,6 +93,27 @@ export class DomainMapperTableManager {
     const item = new Any([mask], "sal_Int32");
     try {
       this.m_aTmpTableProperties.Insert(P.PROP_TBL_LOOK, item);
+      const attributes = [namedProperty("val", item)];
+      try {
+        for (const [id, , name] of tableLookFlags) {
+          const specified = this.m_TableLook.get(id);
+          if (specified === undefined) continue;
+          const flag = new Any([Number(specified !== 0)], "sal_Int32");
+          try {
+            attributes.push(namedProperty(name, flag));
+          } finally {
+            flag.dispose();
+          }
+        }
+        const look = sequenceAny(attributes);
+        try {
+          this.m_aTmpTableProperties.Insert(P.META_PROP_TABLE_LOOK, look);
+        } finally {
+          look.dispose();
+        }
+      } finally {
+        for (const attribute of attributes) attribute.dispose();
+      }
     } finally {
       item.dispose();
       this.m_TableLook.clear();

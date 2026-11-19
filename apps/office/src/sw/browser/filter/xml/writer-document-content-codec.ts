@@ -1,5 +1,10 @@
 /** @fileoverview Writer browser graph transport for text nodes and the native table section hierarchy. */
 import {
+  encodeTableInterop,
+  restoreTableInterop,
+  type WriterInteropProperty,
+} from "./writer-table-interop-codec";
+import {
   encodeTextHint,
   decodeTextHint,
   type WriterTextHintRecord,
@@ -56,6 +61,7 @@ export interface WriterTextNodeRecord {
 export interface WriterTableRecord {
   readonly name: string;
   readonly format: WriterTableFormatRecord;
+  readonly interop?: readonly WriterInteropProperty[];
   readonly columnWidths: readonly number[];
   readonly softPageBreakRows: readonly number[];
   readonly rows: readonly Readonly<{
@@ -259,8 +265,10 @@ export function* encodeWriterTableSteps(
     });
     yield;
   }
+  const interop = encodeTableInterop(table.GetFrameFormat());
   return {
     name: table.GetName(),
+    ...(interop === undefined ? {} : { interop }),
     format: encodeTableFormat(table),
     columnWidths: table.GetColumnWidths(),
     softPageBreakRows: table.GetSoftPageBreakRows(),
@@ -364,6 +372,8 @@ export function* decodeWriterTableSteps(
   restoreTableGeometry(table.GetFrameFormat(), nativeGeometry);
   restoreTableSpacing(table.GetFrameFormat(), nativeSpacing);
   restoreTableFlow(table.GetFrameFormat(), nativeFlow);
+  if (tableRecord.interop !== undefined)
+    restoreTableInterop(table.GetFrameFormat(), tableRecord.interop);
   for (const width of tableRecord.columnWidths) table.AddColumnWidth(width);
   for (const [rowIndex, rowRecord] of tableRecord.rows.entries()) {
     if (tableRecord.softPageBreakRows.includes(rowIndex)) table.AddSoftPageBreak();

@@ -17,6 +17,7 @@ import {
   ApplyTableMargins,
   ApplyTableMeasures,
   ApplyTableStyle,
+  ApplyTableInteropGrabBag,
   FinalizeTableFlowProperties,
 } from "./DomainMapperTableHandler";
 import type { TablePropertyMap } from "./PropertyMap";
@@ -195,6 +196,7 @@ class TableLevel {
         const properties = this.manager.getTableProps();
         const first = this.rows[0]?.cells[0]?.properties;
         ApplyTableStyle(properties, mapper.GetStyleSheetTable());
+        ApplyTableInteropGrabBag(table.table, properties);
         ApplyOOXMLTableDefaults(properties);
         ApplyTableMeasures(
           table.table,

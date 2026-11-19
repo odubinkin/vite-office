@@ -18,6 +18,10 @@ import { importOOXML } from "../../writerfilter/filter/WriterFilter";
 import { readOdtDocument } from "../xml/swxml";
 import { writeOdtDocument } from "../xml/wrtxml";
 import { DocxExport } from "./docxexport";
+import {
+  decodeWriterDocument,
+  encodeWriterDocument,
+} from "../../../browser/filter/xml/writer-document-codec";
 
 const metadata = { title: "Table flow" };
 
@@ -114,8 +118,21 @@ it("applies the conditional first-row header and honors a direct false override 
     } finally {
       restored.Dispose();
     }
-    const { bytes, xml } = await exportDocument(source);
+    const worker = decodeWriterDocument(structuredClone(encodeWriterDocument(source)));
+    const { bytes, xml } = await exportDocument(worker).finally(
+      /** Releases the independent worker graph after export. @returns Nothing. */ () =>
+        worker.Dispose(),
+    );
     expect(xml.match(/<w:tblHeader w:val="true"\/>/gu)).toHaveLength(1);
+    expect(xml.match(/<w:tblHeader w:val="false"\/>/gu)).toHaveLength(1);
+    expect(xml.match(/<w:tblStyle w:val="TablewithHeader"\/>/gu)).toHaveLength(2);
+    expect(xml).toContain('<w:tblLook w:val="01e0" w:firstRow="1"');
+    const styles = await (await DocumentArchive.open(bytes)).readTextEntry("word/styles.xml");
+    expect(
+      styles.match(
+        /<w:tblStylePr w:type="firstRow">(?:(?!<\/w:tblStylePr>).)*<w:trPr><w:tblHeader\/><\/w:trPr>/gu,
+      ),
+    ).toHaveLength(4);
     const reopened = await importOOXML(bytes, {});
     try {
       expect(
@@ -136,13 +153,15 @@ it("applies the conditional first-row header and honors a direct false override 
 });
 
 it.each([
-  ["", 1],
-  ['<w:tblLook w:val="0480"/>', 0],
-  ['<w:tblLook w:val="0480" w:noHBand="0"/>', 1],
-])(
-  "recognizes conditional header presence with table look %s",
-  /** Varies native table look attributes and checks the style's false-value behavior. @param look - Table look markup. @param expected - Repeated header count. @returns Completion. */ async (
+  ["", "firstRow", 1],
+  ['<w:tblLook w:val="0480"/>', "firstRow", 0],
+  ['<w:tblLook w:val="0480" w:noHBand="0"/>', "firstRow", 1],
+  ['<w:tblLook w:val="04A0"/>', "lastRow", 0],
+] as const)(
+  "recognizes conditional header presence with table look %s and %s",
+  /** Varies the look flags and source conditional row type through the worker. @param look - Table look markup. @param type - Conditional group. @param expected - Repeated header count. @returns Completion. */ async (
     look,
+    type,
     expected,
   ) => {
     const original = await DocumentArchive.open(
@@ -150,8 +169,17 @@ it.each([
     );
     const ns = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
     const cell = "<w:tc><w:p><w:r><w:t>Cell</w:t></w:r></w:p></w:tc>";
-    const body = `<w:document xmlns:w="${ns}"><w:body><w:tbl><w:tblPr><w:tblStyle w:val="Header"/>+${look}</w:tblPr><w:tblGrid><w:gridCol w:w="1440"/></w:tblGrid><w:tr>${cell}</w:tr>+<w:tr>${cell}</w:tr></w:tbl></w:body></w:document>`;
-    const styles = `<w:styles xmlns:w="${ns}"><w:style w:type="table" w:styleId="Header">+<w:name w:val="Header"/><w:tblStylePr w:type="firstRow"><w:trPr><w:tblHeader w:val="0"/>+</w:trPr></w:tblStylePr></w:style></w:styles>`;
+    const body = `<w:document xmlns:w="${ns}"><w:body><w:tbl>
+      <w:tblPr><w:tblStyle w:val="Header"/>${look}</w:tblPr>
+      <w:tblGrid><w:gridCol w:w="1440"/></w:tblGrid>
+      <w:tr>${cell}</w:tr><w:tr>${cell}</w:tr>
+    </w:tbl></w:body></w:document>`;
+    const styles = `<w:styles xmlns:w="${ns}"><w:style w:type="table" w:styleId="Header" w:default="1" w:customStyle="1">
+      <w:name w:val="Header"/><w:uiPriority w:val="42"/><w:semiHidden/><w:unhideWhenUsed/><w:qFormat/><w:rsid w:val="000000AB"/>
+      <w:tblPr><w:tblStyleRowBandSize w:val="2"/><w:tblStyleColBandSize w:val="3"/>
+      <w:tblCellMar><w:top w:w="107" w:type="dxa"/><w:left w:w="180" w:type="dxa"/></w:tblCellMar></w:tblPr>
+      <w:tblStylePr w:type="${type}"><w:trPr><w:tblHeader w:val="0"/></w:trPr></w:tblStylePr>
+    </w:style></w:styles>`;
     const replacements = new Map([
       ["word/document.xml", body],
       ["word/styles.xml", styles],
@@ -167,9 +195,30 @@ it.each([
       );
     }
     const document = await importOOXML(await output.finish(), {});
+    let worker: SwDoc | undefined;
     try {
       expect(document.GetTables()[0]?.GetRowsToRepeat()).toBe(expected);
+      worker = decodeWriterDocument(structuredClone(encodeWriterDocument(document)));
+      const { bytes, xml } = await exportDocument(worker);
+      const styleXml = await (await DocumentArchive.open(bytes)).readTextEntry("word/styles.xml");
+      expect(styleXml).toContain(
+        '<w:style w:type="table" w:default="1" w:customStyle="1" w:styleId="Header">',
+      );
+      expect(styleXml).toContain(
+        '<w:uiPriority w:val="42"/><w:semiHidden/><w:unhideWhenUsed/><w:qFormat/><w:rsid w:val="000000ab"/>',
+      );
+      expect(styleXml).toContain(
+        '<w:tblStyleRowBandSize w:val="2"/><w:tblStyleColBandSize w:val="3"/>',
+      );
+      expect(styleXml).toContain(
+        '<w:tblCellMar><w:top w:w="107" w:type="dxa"/><w:left w:w="180" w:type="dxa"/></w:tblCellMar>',
+      );
+      expect(styleXml).toContain(
+        `<w:tblStylePr w:type="${type}"><w:tblPr/><w:trPr><w:tblHeader/></w:trPr></w:tblStylePr>`,
+      );
+      expect(xml.includes('<w:tblHeader w:val="false"/>')).toBe(type === "lastRow");
     } finally {
+      worker?.Dispose();
       document.Dispose();
     }
   },

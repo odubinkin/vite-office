@@ -85,7 +85,7 @@ export function scalar(
   return out[0];
 }
 /** Extracts an owned Unicode value before projecting the browser string primitive. @param value - Declared native value. @returns The represented native operation result. */
-export function stringValue(value: Any): string {
+export function stringValue(value: Pick<Any, "extract">): string {
   const out = new OUString();
   try {
     if (!value.extract(out, "OUString")) illegal("Expected a string property");

@@ -278,6 +278,9 @@ export const RES_FOLLOW_TEXT_FLOW = 134 as const;
 /** Native wrap influence and overlap item, RES_FRMATR_BEGIN +44. */
 export const RES_WRAP_INFLUENCE_ON_OBJPOS = 136 as const;
 
+/** Native frame interoperability grab bag, RES_FRMATR_BEGIN +48. */
+export const RES_FRMATR_GRABBAG = 140 as const;
+
 /** Native cell formula identity; concrete calculation remains unimplemented. */
 export const RES_BOXATR_FORMULA = 161 as const;
 /** Native cell numeric value identity; concrete value processing remains unimplemented. */

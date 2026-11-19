@@ -5211,3 +5211,27 @@ first row still takes precedence. The mapper preserves both rules.
 - [Original conditional table-style handler](../../vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TblStylePrHandler.cxx)
 - [Original first-row style application](../../vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx)
 - [Writer table flow regression](../../apps/office/src/sw/source/filter/ww8/docxexport.table-flow.test.ts)
+
+### WRITER-672 — DOCX export counts headers in any conditional style group
+
+`DocxTableStyleExport` tracks styles for the explicit first-row false
+override. Its row-property writer records the style ID whenever it emits
+`tblHeader`, including for a conditional group that applies to other rows.
+A table using that style with first-row look enabled can therefore receive
+`w:tblHeader w:val="false"` even if the style's header belongs to another
+conditional group. The export keeps this source behavior.
+
+- [Original conditional row writer](../../vendor/libreoffice-reference/sw/source/filter/ww8/docxtablestyleexport.cxx)
+- [Original first-row output](../../vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx)
+
+### WRITER-673 — A missing table look can omit the explicit header override
+
+DOCX import uses `0x04A0` as the default table look even when the source
+omits `w:tblLook`. This enables a conditional first-row style. The exporter
+consults the stored table look property before writing the explicit false
+header override. If the source omitted the element, clearing the repeat count
+can therefore export a table whose style enables repetition again. The
+exporter retains the source condition on the stored property.
+
+- [Original table look default](../../vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx)
+- [Original header override lookup](../../vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx)

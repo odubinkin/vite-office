@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-table-interop-codec.ts",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-table-interop-codec.ts",
+          "marker": "encodeTableStyles"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.table-flow.test.ts",
+          "marker": "direct false override"
+        }
+      ],
+      "upstream": []
+    },
+    "status": "local-only",
+    "rationale": "Transfers the native tableStyles and frame table style and look bags without changing the model or UNO contracts.",
+    "responsibilities": [
+      "Transfers the native tableStyles and frame table style and look bags without changing the model or UNO contracts."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Browser structured-clone transport for original Writer property owners."
+    }
+  }
+}

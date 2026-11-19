@@ -19,7 +19,7 @@ import { SwTextFormatColl } from "../../core/doc/fmtcol";
 import type { DocxAttributeOutput } from "./docxattributeoutput";
 import { OutputStyleParagraphProperties } from "./docxattributeoutput.paragraph";
 import { OutputItem } from "./docxexport.text";
-import type { MSWordStyles } from "./wrtw8sty";
+import { MSWORD_MAX_STYLES_LIMIT, type MSWordStyles } from "./wrtw8sty";
 
 const w = token("w");
 const val = FSNS(w, token("val"));
@@ -35,6 +35,10 @@ export function OutputStylesTable(output: DocxAttributeOutput, styles: MSWordSty
       const style = slots[slot];
       if (style !== undefined) OutputStyle(output, styles, style, slot);
     }
+    output.m_pTableStyleExport.TableStyles(
+      output.GetSerializer(),
+      MSWORD_MAX_STYLES_LIMIT - slots.length,
+    );
   } finally {
     owner.m_bStyDef = false;
   }

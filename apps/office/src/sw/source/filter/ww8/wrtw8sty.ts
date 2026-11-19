@@ -222,7 +222,8 @@ import { SwPoolFormatId } from "../../../inc/poolfmt";
 
 /** Word reserves slots 0-14 before document character and paragraph styles. */
 const WW8_RESERVED_SLOTS = 15;
-const MSWORD_MAX_STYLES_LIMIT = 4091;
+/** Original maximum style count shared by the Word and DOCX style writers. */
+export const MSWORD_MAX_STYLES_LIMIT = 4091;
 /** Source OUString::toAsciiLowerCase leaves non-ASCII letters unchanged. @param value - Style name. @returns ASCII-folded key. */
 function asciiLowerCase(value: string): string {
   return value.replace(

@@ -19,6 +19,8 @@ import { SizeType } from "../../../../offapi/com/sun/star/text/SizeType";
 import { PropertyIds as P } from "./PropertyIds";
 import { TablePropertyMapTarget as T, type TablePropertyMap } from "./PropertyMap";
 import { TableStyleSheetEntry, type StyleSheetTable } from "./StyleSheetTable";
+import { RES_FRMATR_GRABBAG } from "../../../inc/hintids";
+import { SfxGrabBagItem } from "../../../../svl/inc/grabbagitem";
 
 const DEF_BORDER_DIST = 190;
 
@@ -41,7 +43,6 @@ export function ApplyTableStyle(properties: TablePropertyMap, styles: StyleSheet
   }
   const style = properties.getProperty(P.META_PROP_TABLE_STYLE_NAME)?.[1];
   if (!style) return;
-  properties.Erase(P.META_PROP_TABLE_STYLE_NAME);
   const value: [number] = [0];
   try {
     const entry = styles.FindStyleSheetByISTD(stringValue(style));
@@ -81,6 +82,31 @@ export function ApplyTableStyle(properties: TablePropertyMap, styles: StyleSheet
     }
   } finally {
     style.dispose();
+  }
+}
+
+/** Copies mapper-only table style and look into the native frame interoperability item. @param table - Converted native table. @param properties - Accumulated table properties. @returns Nothing. */
+export function ApplyTableInteropGrabBag(table: SwTable, properties: TablePropertyMap): void {
+  const grabBag = new Map<string, Any>();
+  try {
+    for (const [id, name] of [
+      [P.META_PROP_TABLE_STYLE_NAME, "TableStyleName"],
+      [P.META_PROP_TABLE_LOOK, "TableStyleLook"],
+    ] as const) {
+      const value = properties.getProperty(id)?.[1];
+      if (!value) continue;
+      grabBag.set(name, value);
+      properties.Erase(id);
+    }
+    if (!grabBag.size) return;
+    const item = new SfxGrabBagItem(RES_FRMATR_GRABBAG, grabBag);
+    try {
+      table.GetFrameFormat().SetFormatAttr(item);
+    } finally {
+      item.Dispose();
+    }
+  } finally {
+    for (const value of grabBag.values()) value.dispose();
   }
 }
 

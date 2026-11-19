@@ -1,4 +1,9 @@
 /** @fileoverview Internal canonical Writer graph codec used behind boundary-specific envelopes. */
+import {
+  encodeTableStyles,
+  restoreTableStyles,
+  type WriterInteropProperty,
+} from "./writer-table-interop-codec";
 import { encodeTextEffectDefault, restoreTextEffectDefault } from "./writer-text-effect-codec";
 import {
   ReadCompatSettings,
@@ -159,6 +164,7 @@ export interface WriterDocumentRecord {
   readonly themeFontLanguages?: SwDoc["themeFontLanguages"];
   readonly documentProtection?: DocumentProtectionSettings;
   readonly compatSettings?: readonly CompatSetting[];
+  readonly tableStyles?: readonly WriterInteropProperty[];
   readonly fontDefaults?: readonly SfxPoolItemSnapshot[];
   readonly tabStopDefault?: SfxPoolItemSnapshot;
   readonly textEffectDefault?: SfxPoolItemSnapshot;
@@ -198,6 +204,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
   const tabStopDefault = document.GetAttrPool().GetUserDefaultItem(RES_PARATR_TABSTOP);
   const textEffectDefault = encodeTextEffectDefault(document);
   const textGridDefault = encodeTextGridDefault(document);
+  const tableStyles = encodeTableStyles(document.interopGrabBag.GetGrabBag().get("tableStyles"));
   const compatSettings = ReadCompatSettings(
     document.interopGrabBag.GetGrabBag().get("CompatSettings"),
   );
@@ -209,6 +216,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
     ...(document.theme ? { theme: encodeTheme(document.theme) } : {}),
     ...(document.themeFontLanguages ? { themeFontLanguages: document.themeFontLanguages } : {}),
     ...(compatSettings === undefined ? {} : { compatSettings }),
+    ...(tableStyles === undefined ? {} : { tableStyles }),
     ...(fontDefaults.length ? { fontDefaults } : {}),
     ...(tabStopDefault ? { tabStopDefault: encodeSfxPoolItem(tabStopDefault) } : {}),
     ...(textFrames.length ? { textFrames } : {}),
@@ -347,6 +355,14 @@ export function* decodeWriterDocumentSteps(
   let complete = false;
   try {
     if (record.theme !== undefined) document.theme = decodeTheme(record.theme);
+    if (record.tableStyles !== undefined) {
+      const model = new SwXTextDocument(document);
+      try {
+        restoreTableStyles(model, record.tableStyles);
+      } finally {
+        model.dispose();
+      }
+    }
     if (record.compatSettings !== undefined) {
       if (!Array.isArray(record.compatSettings))
         throw new Error("Stored Writer compat settings are invalid.");

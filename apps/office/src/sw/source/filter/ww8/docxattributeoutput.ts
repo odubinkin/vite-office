@@ -18,6 +18,7 @@ import { ThemeColorType, ThemeColorUsage } from "../../../../docmodel/inc/theme/
 import type { ComplexColor } from "../../../../docmodel/inc/color/ComplexColor";
 import { TransformationType as T } from "../../../../docmodel/inc/color/Transformation";
 import { ConvertColorOU } from "../../../../filter/source/msfilter/util";
+import { DocxTableStyleExport } from "./docxtablestyleexport";
 import type { DocxExport } from "./docxexport";
 import { OutputParagraphProperties } from "./docxattributeoutput.paragraph";
 import { Reference as RtlReference } from "../../../../sal/inc/rtl/ref";
@@ -164,12 +165,14 @@ export class DocxAttributeOutput extends AttributeOutputBase {
   private m_bCharPostureWritten = false;
   private m_bOpenedParaPr = false;
   private m_sRawText = "";
-  /** Consumed native constructor binds the real exporter and serializer. DrawingML/base/table-style owners remain unported. @param m_rExport - Actual exporter. @param m_pSerializer - Actual fragment serializer. @returns Attribute output. */
+  readonly m_pTableStyleExport: DocxTableStyleExport;
+  /** Consumed native constructor binds the real exporter and serializer. @param m_rExport - Actual exporter. @param m_pSerializer - Actual fragment serializer. @returns Attribute output. */
   constructor(
     private readonly m_rExport: DocxExport,
     private m_pSerializer: FastSerializerHelper,
   ) {
     super();
+    this.m_pTableStyleExport = new DocxTableStyleExport(m_rExport.m_rDoc);
   }
   /** Original empty destructor body followed by destruction of the currently ported intrusive members. Other original drawing/table owners remain unported. @returns Nothing. */
   dispose(): void {

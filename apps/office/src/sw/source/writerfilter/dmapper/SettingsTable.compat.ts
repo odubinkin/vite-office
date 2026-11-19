@@ -40,7 +40,7 @@ export function FindWordCompatibilityMode(settings: readonly CompatSetting[]): n
 }
 
 /** Wraps a native PropertyValue sequence in its owning Any. @param entries - Borrowed original members. @returns Owned sequence. */
-function sequenceAny(entries: readonly PropertyValue[]): Any {
+export function sequenceAny(entries: readonly PropertyValue[]): Any {
   const sequence = new Properties(
     {
       /** Returns a borrowed record at the native compound offset. @param offset - Logical byte offset. @returns Borrowed record. */
@@ -52,6 +52,28 @@ function sequenceAny(entries: readonly PropertyValue[]): Any {
     return new Any(sequence.getAddress(), sequenceType);
   } finally {
     sequence.dispose();
+  }
+}
+
+/** Visits native property values in source order, retaining repeated names. @param source - Borrowed sequence value. @param visit - Receives each borrowed property. @param limit - Maximum number of entries to visit. @returns Nothing. */
+export function forEachProperty(
+  source: GrabBagValueConstReference | undefined,
+  visit: (name: string, value: GrabBagValueConstReference) => void,
+  limit = Infinity,
+): void {
+  const entries = new Properties();
+  try {
+    if (!source?.extract(entries.getAddress(), sequenceType)) return;
+    for (let i = 0; i < Math.min(limit, entries.getLength()); ++i) {
+      const entry = propertyAt(entries, i);
+      try {
+        visit(text(entry.Name), entry.Value);
+      } finally {
+        entry.dispose();
+      }
+    }
+  } finally {
+    entries.dispose();
   }
 }
 
