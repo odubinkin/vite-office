@@ -17,16 +17,30 @@ import { createCalcInterface } from "../../sdi/scalc";
 import { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
 import { CalcFileWorkflows } from "../workflows/calc-file-workflows";
 import { CalcWorkbench } from "../presentation/calc-workbench";
+import { measureBrowserTextWidth } from "../../../vcl/browser/text-width";
+import type { XlsxReferenceDevice } from "../../source/filter/oox/unitconverter";
 /** Creates one actual production session and connects shared Sfx state invalidation. @param store - Injected primary store;defaults to browser IndexedDB when available. @returns Session. */
 export function createCalcSession(
   store: BrowserDocumentStore | undefined = globalThis.indexedDB === undefined
     ? undefined
     : createCalcDocumentStore(),
 ) {
+  const device: XlsxReferenceDevice | undefined =
+    typeof globalThis.CanvasRenderingContext2D === "undefined"
+      ? undefined
+      : {
+          screenPixelTwips: 15,
+          /** Supplies the existing VCL Canvas measurement in document twips. @param font - Source workbook font. @param text - Digit. @returns Advance. */
+          measureTextWidth(font, text) {
+            return measureBrowserTextWidth(globalThis.document, font, text, 0, text.length);
+          },
+        };
   const controller = new CalcViewController(
-      globalThis.Worker === undefined
-        ? new ScDocShell()
-        : new ScDocShell(new ScDocument(), new OdsWorkerClient()),
+      new ScDocShell(
+        new ScDocument(),
+        globalThis.Worker === undefined ? undefined : new OdsWorkerClient(),
+        device,
+      ),
     ),
     frame = new SfxViewFrame<CalcViewController>(new BrowserSfxDispatcher());
   const autosave = store === undefined ? undefined : createCalcAutosave(controller.shell, store),

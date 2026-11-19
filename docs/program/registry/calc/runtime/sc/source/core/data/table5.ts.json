@@ -16,9 +16,10 @@
       "defaultStatus": "unverified",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/sc/source/core/data/native-table-undo.test.ts"
+        "apps/office/src/sc/source/core/data/native-table-undo.test.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.sheet-protection.test.ts"
       ],
-      "justification": "Task76 native UndoToColumn/UndoToTable restore the edited payload,formula-only cells outside its rows/columns,whole conditional-format ownership,and full-axis raw geometry/manual breaks with actual null geometry checks. Marked copying retains the original null-mark-data asymmetry (CALC-265). Real table5 page/manual sets,ordered set value/move binding,stream-validity state/document locking and width-change pagination invalidation are represented. Named-expression maps,pagination/device calculation,full XML streaming and native document-level Undo/paste/history orchestration remain unported;no fake owner or alternate workbook is introduced.",
+      "justification": "Task76 native UndoToColumn/UndoToTable restore the edited payload,formula-only cells outside its rows/columns,whole conditional-format ownership,and full-axis raw geometry/manual breaks with actual null geometry checks. Marked copying retains the original null-mark-data asymmetry (CALC-265). Real table5 page/manual sets,ordered set value/move binding,stream-validity state/document locking and width-change pagination invalidation are represented. Named-expression maps,pagination/device calculation,full XML streaming and native document-level Undo/paste/history orchestration remain unported;no fake owner or alternate workbook is introduced. Copies or clears native sheet protection and invalidates the sheet stream. This owner also exposes the original manual break queries.",
       "knownViolations": [],
       "localSymbols": [
         "RemoveManualBreaks",
@@ -28,7 +29,12 @@
         "GetAllRowBreaks",
         "GetAllColBreaks",
         "SetRowBreak",
-        "SetColBreak"
+        "SetColBreak",
+        "HasRowManualBreak",
+        "HasColManualBreak",
+        "IsProtected",
+        "GetProtection",
+        "SetProtection"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/core/data/table5.cxx",
@@ -40,7 +46,12 @@
         "ScTable::GetAllRowBreaks",
         "ScTable::GetAllColBreaks",
         "ScTable::SetRowBreak",
-        "ScTable::SetColBreak"
+        "ScTable::SetColBreak",
+        "ScTable::HasRowManualBreak",
+        "ScTable::HasColManualBreak",
+        "ScTable::IsProtected",
+        "ScTable::GetProtection",
+        "ScTable::SetProtection"
       ]
     }
   }

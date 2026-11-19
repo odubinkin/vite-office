@@ -3,7 +3,10 @@ import type { EditTextObject } from "../../../../editeng/inc/editobj";
 import type { SfxHintId } from "../../../../svl/inc/hint";
 import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import { ScRange } from "../../../inc/address";
-import type { ScMF } from "../../../inc/attrib";
+import { HasAttrFlags } from "../../../inc/global";
+import { ScMultiSelIter } from "../../../inc/markmulti";
+import { ScMF } from "../../../inc/attrib";
+import { ScAttrEntry } from "../../../inc/attarray";
 import { ScMergeAttr } from "../../../inc/attrib";
 import type { CopyFromClipContext, CopyToDocContext } from "../../../inc/clipcontext";
 import type { ScColumn } from "../../../inc/column";
@@ -553,7 +556,7 @@ export function HasBlockMatrixFragment(
   }
   return false;
 }
-/** Original IsBlockEditable normal unprotected/unlocked nonscenario profile;read-only/protection/scenario services remain unrepresented. Actual cells must pass real matrix-boundary queries. @param this - Actual table. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param onlyMatrix - Optional output. @param noMatrix - Original defaultfalse. @returns Block editable in admitted profile. */
+/** Implements the original protection and matrix checks for ordinary sheets. @param this - Actual table. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param onlyMatrix - Optional output. @param noMatrix - Original default false. @returns Block editability. */
 export function IsBlockEditable(
   this: ScTable,
   col1: number,
@@ -567,9 +570,17 @@ export function IsBlockEditable(
     if (onlyMatrix) onlyMatrix[0] = false;
     return false;
   }
-  this.HasBlockMatrixFragment(col1, row1, col2, row2, noMatrix);
-  if (onlyMatrix) onlyMatrix[0] = false;
-  return true;
+  const protection = this.GetProtection();
+  if (protection?.isProtected() && this.HasAttrib(col1, row1, col2, row2, HasAttrFlags.Protected)) {
+    const tab = this["nTab"];
+    if (!protection.isBlockEditable(new ScRange(col1, row1, tab, col2, row2, tab))) {
+      if (onlyMatrix) onlyMatrix[0] = false;
+      return false;
+    }
+  }
+  const matrix = this.HasBlockMatrixFragment(col1, row1, col2, row2, noMatrix);
+  if (onlyMatrix) onlyMatrix[0] = matrix;
+  return !matrix;
 }
 
 /** Original table2 ApplyFlags rectangle traversal. @param this - Actual table. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param flags - Native flags. @returns Whether changed. */
@@ -626,4 +637,109 @@ export function ApplyPatternIfNumberformatIncompatible(
 export function SetNumberFormat(this: ScTable, col: number, row: number, key: number): void {
   if (!this.GetDoc().ValidColRow(col, row)) return;
   this.CreateColumnIfNotExists(col).SetNumberFormat(row, key);
+}
+
+/** Original ref-counted entry vector copy, preserving endpoints and distinct holder ownership. @param entries - Borrowed original vector. @returns Owned copy. */
+function duplicateScAttrEntries(entries: readonly ScAttrEntry[]): ScAttrEntry[] {
+  return entries.map(
+    /** Original implicit value copy. @param entry - Borrowed value. @returns Copy. */ (entry) =>
+      new ScAttrEntry(entry),
+  );
+}
+/** Original whole-column import attributes, including sparse default-column storage and non-normalized reverse ranges. @param this - Actual sheet. @param first - First column. @param last - Last column. @param entries - Owned vector, moved only on admitted paths. @returns Nothing. */
+export function SetAttrEntries(
+  this: ScTable,
+  first: number,
+  last: number,
+  entries: ScAttrEntry[],
+): void {
+  const document = this.GetDoc(),
+    columns = this["aCol"];
+  if (!document.ValidCol(first) || !document.ValidCol(last)) return;
+  if (last === document.MaxCol()) {
+    if (first < columns.length) {
+      last = columns.length - 1;
+      for (let col = first; col <= last; ++col)
+        (columns[col] as ScColumn).SetAttrEntries(duplicateScAttrEntries(entries));
+      this["aDefaultColData"].SetAttrEntries(entries);
+    } else {
+      this.CreateColumnIfNotExists(first - 1);
+      this["aDefaultColData"].SetAttrEntries(entries);
+    }
+  } else {
+    this.CreateColumnIfNotExists(last);
+    for (let col = first; col < last; ++col)
+      (columns[col] as ScColumn).SetAttrEntries(duplicateScAttrEntries(entries));
+    (columns[last] as ScColumn).SetAttrEntries(entries);
+  }
+}
+/** Original import merge anchor followed by horizontal/vertical overlap flags; no editing operation or cell deletion. @param this - Actual sheet. @param col1 - Start column. @param row1 - Start row. @param col2 - End column. @param row2 - End row. @returns Nothing. */
+export function SetMergedCells(
+  this: ScTable,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+): void {
+  const item = new ScMergeAttr(col2 - col1 + 1, row2 - row1 + 1);
+  try {
+    this.ApplyAttr(col1, row1, item);
+  } finally {
+    item.Dispose();
+  }
+  if (col1 < col2) this.ApplyFlags(col1 + 1, row1, col2, row2, ScMF.Hor);
+  if (row1 < row2) this.ApplyFlags(col1, row1 + 1, col1, row2, ScMF.Ver);
+  if (col1 < col2 && row1 < row2)
+    this.ApplyFlags(col1 + 1, row1 + 1, col2, row2, ScMF.Hor | ScMF.Ver);
+}
+
+/** Tests each multi-marked span without including cells between the marks. @param sheet - Sheet to query. @param marks - Native selection. @returns Whether a selected span contains a protected cell. */
+function hasProtectedSelection(sheet: ScTable, marks: ScMarkData): boolean {
+  for (const span of marks.GetMarkedColSpans()) {
+    for (let col = span.mnStart; col <= span.mnEnd; ++col) {
+      const column = sheet.GetColumnData(col);
+      const rows = new ScMultiSelIter(marks.GetMultiSelData(), col);
+      for (
+        let [found, first, last] = rows.Next(0, 0);
+        found;
+        [found, first, last] = rows.Next(0, 0)
+      ) {
+        if (column.HasAttrib(first, last, HasAttrFlags.Protected)) return true;
+      }
+    }
+  }
+  return false;
+}
+
+/** Tests the marked cells in a normal sheet using the source enhanced exception rule. @param this - Sheet. @param marks - Native selection. @param onlyMatrix - Optional matrix-only failure result. @returns Whether the selection is editable. */
+export function IsSelectionEditable(
+  this: ScTable,
+  marks: ScMarkData,
+  onlyMatrix: [boolean] | null = null,
+): boolean {
+  if (onlyMatrix) onlyMatrix[0] = false;
+  if (!marks.IsMultiMarked()) return true;
+  const ranges = marks.GetMarkedRanges();
+  const protection = this.GetProtection();
+  if (
+    protection?.isProtected() &&
+    hasProtectedSelection(this, marks) &&
+    !protection.isSelectionEditable(ranges)
+  )
+    return false;
+
+  // Ordinary formula blocks are supported. The actual column scan rejects unported matrix cells.
+  const tab = this["nTab"];
+  for (const { aStart, aEnd } of ranges) {
+    if (aStart.Tab() > tab || aEnd.Tab() < tab) continue;
+    const last = Math.min(aEnd.Col(), this.GetAllocatedColumnsCount() - 1);
+    for (let col = aStart.Col(); col <= last; ++col)
+      this.FetchColumn(col)?.GetBlockMatrixEdges(
+        aStart.Row(),
+        aEnd.Row(),
+        MatrixEdge.Nothing,
+        true,
+      );
+  }
+  return true;
 }

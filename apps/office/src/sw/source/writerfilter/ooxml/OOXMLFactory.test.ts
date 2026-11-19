@@ -21,8 +21,8 @@ it("retains every native stream namespace registration identity and duplicate UR
   const maps = new NamespaceMap(),
     expected = new Map<string, number>();
   for (const [id, uri] of maps.maTransitionalNamespaceMap) {
-    expected.set(uri, id);
-    expected.set(maps.maStrictNamespaceMap.get(id) as string, id);
+    expected.set(text(uri), id);
+    expected.set(text(maps.maStrictNamespaceMap.get(id) as ReturnType<typeof unicode>), id);
   }
   expect(streamNamespaces).toEqual(
     [...expected].sort(
@@ -33,6 +33,7 @@ it("retains every native stream namespace registration identity and duplicate UR
     ),
   );
   expect(streamNamespaces).toHaveLength(82);
+  maps.dispose();
 });
 
 /** Source-generated definition identity lookup for readable source-contract cases. @param name - Native define name. @returns Native numeric ID. */
@@ -251,7 +252,9 @@ it.skipIf(!existsSync("../../vendor/libreoffice-reference/sw/source/writerfilter
       ["../../scripts/writer-ooxml/generate-factory.py", "--check"],
       { encoding: "utf8" },
     );
-    expect(output).toContain("attributes=120, elements=520, resources=619, lists=319, actions=47");
+    expect(output).toContain(
+      "defines=170, attributes=283, elements=1001, resources=1212, lists=502, actions=115",
+    );
   },
 );
 

@@ -1,12 +1,11 @@
 /** @fileoverview Original CSS1 page-break, widow and orphan producers from svxcss1.cxx over the current core's registered scalar items. */
+import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
 import { CSS1Token as T, type ConstCSS1Expression } from "./parcss1.h";
 import { SvxCSS1PageBreak as B } from "./svxcss1.enums";
 import type { SvxCSS1PropertyInfo } from "./svxcss1.types";
 import { aItemIds } from "./svxcss1";
 import { cssAsciiLower } from "./svxcss1.properties";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 
 /** Original aPageBreakTable, admitted only for an IDENT expression. */
 const pageBreak = new Map<string, B>([
@@ -42,7 +41,7 @@ export function ParseCSS1PaginationProperty(
   if (property === "page-break-inside") {
     const value = ParseCSS1_page_break_xxx(expression);
     if (value === B.AUTO || value === B.AVOID) {
-      const item = new SfxBoolItem(aItemIds.nFormatSplit, value === B.AUTO);
+      const item = new ParaItems.SvxFormatSplitItem(value === B.AUTO, aItemIds.nFormatSplit);
       try {
         items.Put(item);
       } finally {
@@ -56,7 +55,10 @@ export function ParseCSS1PaginationProperty(
       const number = expression.GetNumber();
       const value = number <= 255 ? Math.trunc(number) & 255 : 255;
       const which = property === "widows" ? aItemIds.nWidows : aItemIds.nOrphans;
-      const item = new SfxInt16Item(which, value);
+      const item =
+        property === "widows"
+          ? new ParaItems.SvxWidowsItem(value, which)
+          : new ParaItems.SvxOrphansItem(value, which);
       try {
         items.Put(item);
       } finally {

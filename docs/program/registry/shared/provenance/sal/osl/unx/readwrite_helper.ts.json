@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/osl/unx/readwrite_helper.ts",
+    "status": "mapped",
+    "upstreamPath": "sal/osl/unx/readwrite_helper.cxx",
+    "localSymbols": [
+      "safeWrite"
+    ],
+    "upstreamSymbols": [
+      "safeWrite"
+    ],
+    "preservedResponsibilities": [
+      "Original public osl_copyFile/osl_removeFile and consumed File wrapper are now ported: URL conversion and already approved read/create/write gates, source lstat/destination stat, wasm32 source size cast, .osl-tmp backup and ignored cleanup/rollback errors, source link-content copying and regular-file 0x7fff buffered copy with original errno/ENOSPC behavior. Exact native destination open omits TRUNC/EXCL. Genuine SDK FS errors publish native errno; no synthetic syscall provider, host filesystem mount, or metadata-preserving move branch is introduced. Active original File copy/remove QA assertions and actual descriptor/permissions/link/backup regression tests are present. Native EINTR, zero-progress write assertion, source races/OOM and full SvFileStream/TempFile/package/storage/model/filter/UI acceptance remain unqualified or unfinished. Coverage gaps are recorded without lowering90 thresholds."
+    ],
+    "omittedResponsibilities": [
+      "safeRead and native EINTR/zero-progress write/ssize_t limit/physical OOM remain unbound or unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/osl/unx/readwrite_helper.ts",
+          "marker": "safeWrite"
+        },
+        {
+          "path": "apps/office/src/sal/osl/unx/file_misc.copy.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sal/osl/unx/readwrite_helper.cxx",
+          "marker": "safeWrite"
+        }
+      ]
+    }
+  }
+}

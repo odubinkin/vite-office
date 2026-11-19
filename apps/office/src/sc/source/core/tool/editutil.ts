@@ -26,10 +26,24 @@ import { SfxItemSet } from "../../../../svl/source/items/itemset";
 
 import { GetDocumentShell } from "../data/documen2";
 
+/** Original ScEditUtil::GetString resolves fields through Calc's field editor. @param edit - Actual cell text. @param document - Workbook that resolves fields. @returns Owned multiline value. */
+export function GetString(edit: EditTextObject, document: ScDocument): OUString {
+  if (!edit.HasField()) return edit.GetText();
+  const engine = document.GetEditEngine();
+  engine.SetText(edit);
+  return engine.GetText();
+}
+
 /** Document callers use the text-object and text operations of the no-view editor. */
 export type DocumentEditEngine = Pick<
   ScFieldEditEngine,
-  "SetText" | "SetTextCurrentDefaults" | "CreateTextObject" | "GetText" | "GetParagraphText"
+  | "SetText"
+  | "SetTextCurrentDefaults"
+  | "CreateTextObject"
+  | "GetText"
+  | "GetParagraphText"
+  | "GetEmptyItemSet"
+  | "QuickSetAttribs"
 >;
 
 /** Original Calc editor layer owns optional paragraph defaults and applies them without recording undo. */
@@ -48,7 +62,6 @@ class ScEditEngineDefaulter extends EditEngine {
   getImpl(): DocumentImpEditEngine {
     return this.implementation;
   }
-
   /** Paragraph-connection undo is outside the document editor boundary. @returns Never. */
   ConnectContents(): never {
     throw new Error("Document EditEngine requires disabled undo");

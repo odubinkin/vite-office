@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/oox/source/core/shared-reference.ts",
+    "classification": "local-infrastructure",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-oox-context",
+    "capabilityIds": [
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/oox/source/core/shared-reference.ts",
+        "apps/office/src/oox/source/core/relations.native.test.ts",
+        "apps/office/src/oox/source/core/contexthandler.test.ts"
+      ],
+      "justification": "Compiler binding for consumed original std::shared_ptr control blocks of actual native Relations/FragmentBaseData, following existing explicit source-native shared-pointer lowering patterns. Callers supply actual new concrete values; no type/default/payload constructor/provider is generated. Empty/copy/move/assign/reset/get/use_count and last-owner actual destructor are explicit within one synchronous realm, with pointer replacement before last old-value destruction. Native atomic/control-block/weak/aliasing/raw-adoption-failure/physical ABI remain unqualified. Native actual relation/path retained copies and context sharing test concrete consumed values, not a fake destructor/provider. Core standard-library ownership lowering has no browser API and stays in the core ownership layer, matching the existing XPath native shared-pointer lowering. No adapter injection or boundary exemption is required.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SharedReference"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

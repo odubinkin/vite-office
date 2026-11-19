@@ -99,6 +99,10 @@ it("retains native initial flags, mutable alternate states, context handles and 
     /** Original lexical target. @returns Target. */ getTarget() {
       return "word/footnotes.xml";
     },
+    /** This callback is unused by the parser-state operations. @returns Empty target. */
+    getTargetForId() {
+      return "";
+    },
   };
   state.setDocument(document);
   expect(state.getDocument()).toBe(document);

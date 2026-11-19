@@ -4,13 +4,13 @@ import { writeRelationsInfoSequenceXml } from "../../../../comphelper/source/xml
 import { writeOutput } from "../../../../test/oox-output";
 import { readOwnedInput, readOwnedXml } from "../../../../test/oox-input";
 import { Reference } from "../../../../cppu/inc/com/sun/star/uno/Reference";
-import { expect, it, vi, afterEach } from "vitest";
+import { expect, it, afterEach } from "vitest";
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { OOXMLStreamImpl as Stream, streamTargets } from "./OOXMLStreamImpl";
 import { StreamType_t as T } from "../inc/ooxml/OOXMLDocument";
 import { ZipStorage } from "../../../../oox/source/helper/zipstorage";
-import { UriReferenceFactory } from "../../../../stoc/source/uriproc/UriReferenceFactory";
+import { getProcessComponentContext } from "../../../../comphelper/inc/processfactory";
 import { type StringPair } from "../../../../comphelper/source/xml/ofopxmlhelper.string";
 import { IOException } from "../../../../cppu/inc/com/sun/star/io/IOException";
 import { XSeekable } from "../../../../udkapi/com/sun/star/io/XSeekable";
@@ -25,9 +25,14 @@ async function missingStream(operation: Promise<Stream>): Promise<void> {
   }
 }
 const streams: Stream[] = [];
-/** Tracks actual successfully constructed owners for native destructor cleanup. @param args - Original factory arguments. @returns Actual stream. */
-async function createStream(...args: Parameters<typeof Stream.createStream>): Promise<Stream> {
-  const stream = await Stream.createStream(...args);
+/** Tracks actual successfully constructed owners for native destructor cleanup. @param source - ZIP storage or parent stream providing the package. @param type - Relationship type or identifier to open. @returns Actual stream. */
+async function createStream(
+  source: ZipStorage | Stream,
+  type: T | string = T.DOCUMENT,
+): Promise<Stream> {
+  const stream = await (source instanceof Stream
+    ? Stream.createStream(source, type)
+    : Stream.createStream(getProcessComponentContext(), source));
   streams.push(stream);
   return stream;
 }
@@ -199,12 +204,14 @@ it("keeps absent optional parts distinct from invalid targets and missing parent
   ]);
   const externalDoc = await createStream(externalStorage);
   await missingStream(createStream(externalDoc, T.STYLES));
-  const failure = vi.spyOn(UriReferenceFactory.prototype, "makeAbsolute").mockReturnValueOnce(null);
-  try {
-    expect(readOwnedInput((await createStream(storage)).getDocumentStream())).toBeNull();
-  } finally {
-    failure.mockRestore();
-  }
+  const rejected = packageOf([
+    relation("rejected", transitional + "styles", "vnd.sun.star.script:"),
+    relation("later", transitional + "styles", "valid.xml"),
+  ]);
+  put(rejected, "word/valid.xml", "<styles/>");
+  const rejectedDoc = await createStream(rejected);
+  const absent = await createStream(rejectedDoc, T.STYLES);
+  expect(readOwnedInput(absent.getDocumentStream())).toBeNull();
 });
 
 it("decodes UTF16 metadata and document parts through the actual input stream", /** Exercises native XML encoding recognition. @returns Nothing. */ async () => {
@@ -269,7 +276,7 @@ it("releases initialized input ownership when a relationship stream fails to par
 });
 
 it("keeps a returned input alive after its Writer wrapper is destroyed", /** Native return-by-value Reference ownership outlives the releasing caller wrapper. @returns Completion. */ async () => {
-  const stream = await Stream.createStream(packageOf([])),
+  const stream = await Stream.createStream(getProcessComponentContext(), packageOf([])),
     input = stream.getDocumentStream();
   stream.dispose();
   expect(readOwnedXml(input)).toBe("<document/>");
@@ -301,4 +308,16 @@ it("opens Writer document input with native SEEKABLEREAD and shared position", /
     seek.dispose();
     input.dispose();
   }
+});
+it("retains the original unconditional native path copy for opaque absolute targets", /** Checks that retains the original unconditional native path copy for opaque absolute targets. @returns Nothing. */ async () => {
+  const storage = packageOf([
+    relation("opaque", transitional + "styles", "opaque:abc"),
+    relation("empty", transitional + "numbering", "opaque:"),
+  ]);
+  put(storage, "bc", "<styles/>");
+  const doc = await createStream(storage),
+    styles = await createStream(doc, T.STYLES);
+  expect(styles.getTarget()).toBe("bc");
+  expect(readOwnedXml(styles.getDocumentStream())).toBe("<styles/>");
+  await expect(createStream(doc, T.NUMBERING)).rejects.toThrow("assert(false)");
 });

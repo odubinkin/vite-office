@@ -34,11 +34,7 @@ import {
   SvxTextLeftMarginItem,
 } from "../../../../editeng/inc/lrspitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
-import {
-  SvxAdjust,
-  SvxInterLineSpaceRule,
-  SvxLineSpaceRule,
-} from "../../../../editeng/inc/svxenum";
+import { SvxAdjust } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import {
   ConvertBorderWidthToWord,
@@ -83,12 +79,12 @@ import { writerColorFromPrimitive, writerColorValue } from "../../core/attr/swat
 import type { SwTextFormatColl } from "../../core/doc/fmtcol";
 import type { SwFrameFormat } from "../../core/layout/atrfrm";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
-import { AttrSetToLineHeight } from "../../core/txtnode/swfont";
+import { ParaLineSpacing } from "./ww8atr";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 
 /** Emits represented native paragraph and character items into one RTF stream. */
-export class RtfAttributeOutput extends AttributeOutputBase {
+export class RtfAttributeOutput extends AttributeOutputBase<string> {
   private readonly associated: RtfAssociatedProperties;
   /** Binds document-scoped font and color table indices. @param fontIndex - Font table lookup. @param colorIndex - Color table lookup. @param exporter - Original document encoding owner.  @returns Constructed instance. */
   public constructor(
@@ -154,6 +150,10 @@ export class RtfAttributeOutput extends AttributeOutputBase {
   /** Original virtual returns the genuine RTF owner. @returns Actual exporter. */
   GetExport(): RtfExport {
     return this.exporter;
+  }
+  /** Existing RTF buffer binding normalizes the source no-output return to empty text. @param item - Actual numbering item. @returns Controls or empty text. */
+  override ParaNumRule(item: SwNumRuleItem): string {
+    return super.ParaNumRule(item) ?? "";
   }
   /** Native paragraph numbering uses the original rule reference even when common dispatch supplies a restart-copy ID. Current numeric format geometry is stored in twips. @param node - Actual text node or native null. @param level - Word level. @param id - Common one-based ID used only by the original guard. @returns Paragraph controls. */
   ParaNumRule_Impl(node: SwTextNode | undefined, level: number, id: number): string {
@@ -637,28 +637,8 @@ export class RtfAttributeOutput extends AttributeOutputBase {
 
   /** Converts the native line rule through the shared Word formula and RTF sl/slmult controls.  @param item - Item. @param set - Set. @param script - Script. @returns The string result. */
   private WriteLineSpacing(item: SvxLineSpacingItem, set: SwAttrSet, script: number): string {
-    let space = 240;
-    let multi = 0;
-    switch (item.GetLineSpaceRule()) {
-      case SvxLineSpaceRule.Fix:
-        space = -((item.GetLineHeight() << 16) >> 16);
-        break;
-      case SvxLineSpaceRule.Min:
-        space = item.GetLineHeight();
-        break;
-      case SvxLineSpaceRule.Auto:
-        if (item.GetInterLineSpaceRule() === SvxInterLineSpaceRule.Fix)
-          space =
-            item.GetInterLineSpace() +
-            AttrSetToLineHeight(set, script, set.GetDoc().GetDefaultFontDevice());
-        else {
-          if (item.GetInterLineSpaceRule() !== SvxInterLineSpaceRule.Off)
-            space = Math.round((240 * item.GetPropLineSpace()) / 100);
-          multi = 1;
-        }
-        break;
-    }
-    return `\\sl${(space << 16) >> 16}\\slmult${multi}`;
+    const [space, multi] = ParaLineSpacing(item, set, script);
+    return `\\sl${space}\\slmult${Number(multi)}`;
   }
 
   /** Source OutTBLBorderLine shared by cell and paragraph border emission. @param control - Border selector. @param line - Native line. @returns RTF controls. */

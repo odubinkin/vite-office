@@ -11,6 +11,8 @@ import {
   createPairRows,
   observePairRows,
   readContentTypes,
+  readContentTypeFixture as ReadContentTypeSequence,
+  readRelationsFixture as ReadRelationsInfoSequence,
   nativeString,
   nativeText,
   type PairInput,
@@ -90,14 +92,11 @@ function readRelations(xml: string): { First: string; Second: string }[][] {
     result.dispose();
   }
 }
-import {
-  GetContentTypeByName,
-  ReadContentTypeSequence,
-  ReadRelationsInfoSequence,
-} from "./ofopxmlhelper";
+import { GetContentTypeByName } from "./ofopxmlhelper";
 import { WriteContentTypes } from "../../../package/source/zippackage/ZipPackage";
 import { createManifestProperty } from "../../../package/source/manifest/ManifestWriter";
 import { ZipStorage } from "../../../oox/source/helper/zipstorage";
+import { SAXParseException } from "../../../offapi/com/sun/star/xml/sax/SAXParseException";
 import { InputSource } from "../../../offapi/com/sun/star/xml/sax/InputSource";
 
 it("retains native ordered relationship sequences, duplicates and Id-only entries", /** Verifies XRelationshipAccess admission used by Writer. @returns Nothing. */ () => {
@@ -327,26 +326,28 @@ it("returns an owned native MIME that remains alive after destroying parsed resu
     mime.dispose();
   }
 });
-it("preserves short-prefix empty result and content result copy-on-write", /** The native parser's initial short EOF and actual outer Sequence copy remain observable. @returns Completion. */ async () => {
+it("rejects a short prefix and preserves content result copy-on-write", /** Expat rejects an input with no document element and outer Sequence copies are independent. @returns Completion. */ async () => {
   const storage = new ZipStorage();
   writeOutput(storage.openOutputStream("short.xml", "application/xml"), Uint8Array.of(32));
   const input = await storage.openInputStream("short.xml"),
     source = new InputSource();
   source.aInputStream = input;
-  const short = ReadContentTypeSequence(source);
+  nativeFailure(
+    /** Parses the truncated document stream. @returns Result or throws. */ () =>
+      ReadContentTypeSequence(source),
+    SAXParseException,
+  );
   const types = ReadContentTypeSequence(
     '<Types><Default Extension="xml" ContentType="one"/></Types>',
   );
   const Rows = Sequence.specialize<Sequence<StringPair>>(["Sequence", pairType], 8),
     copy = new Rows(types);
   try {
-    expect(short.getLength()).toBe(0);
     types.realloc(0);
     expect(observePairRows(copy)).toEqual([[{ First: "xml", Second: "one" }], []]);
   } finally {
     copy.dispose();
     types.dispose();
-    short.dispose();
     source.dispose();
     input.dispose();
   }

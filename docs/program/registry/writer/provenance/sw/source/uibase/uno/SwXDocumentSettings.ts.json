@@ -13,7 +13,8 @@
       "SwXDocumentSettings::_setSingleValue"
     ],
     "preservedResponsibilities": [
-      "Supplies the represented native boolean document compatibility properties and applies the canonical setting manager's values."
+      "Supplies the represented native boolean document compatibility properties and applies the canonical setting manager's values.",
+      "Admits the native AddExternalLeading, DoNotJustifyLinesWithManualBreak and AddParaTableSpacing settings for DOCX and ODT."
     ],
     "omittedResponsibilities": [
       "Other document-settings service properties, UNO introspection and print/view settings are unrepresented."
@@ -27,6 +28,10 @@
         {
           "path": "apps/office/src/sw/source/uibase/uno/SwXDocumentSettings.ts",
           "marker": "SwXDocumentSettings"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.compat.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

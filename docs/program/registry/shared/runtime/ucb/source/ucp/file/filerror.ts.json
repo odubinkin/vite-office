@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/ucb/source/ucp/file/filerror.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-file-ucp-streams",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f",
+      "CAP-6ebb6661-ebeb-41ed-b8d6-04280a3b80b4"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/ucb/source/ucp/file/filerror.ts",
+        "apps/office/src/ucb/source/ucp/file/native-file-streams.test.ts",
+        "scripts/fixtures/native-ucb-file-stream-probe.ts"
+      ],
+      "justification": "Original complete TaskHandlerErr enumeration with source order and values. Actual selected OSL/MEMFS owners and public UNO references are used; no file/broker/provider substitute or host filesystem mount is introduced. Native physical ABI/allocation/OOM/thread domains, complete file-UCP provider/broker and DOCX/XLSX package/storage/model/filter/UI acceptance remain unqualified or unfinished.",
+      "knownViolations": [],
+      "localSymbols": [
+        "TaskHandlerErr"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "ucb/source/ucp/file/filerror.hxx",
+      "upstreamSymbols": [
+        "TaskHandlerErr",
+        "OPEN_FOR_INPUTSTREAM",
+        "OPEN_FOR_STREAM"
+      ]
+    }
+  }
+}

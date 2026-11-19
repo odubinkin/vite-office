@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/zipapi/ZipOutputEntry.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/zipapi/ZipOutputEntry.cxx",
+    "localSymbols": [
+      "ZipOutputEntryBase",
+      "ZipOutputEntry",
+      "ZipOutputEntryInThread",
+      "ZipOutputEntryParallel"
+    ],
+    "upstreamSymbols": [
+      "ZipOutputEntryBase::closeEntry",
+      "ZipOutputEntry::writeStream",
+      "ZipOutputEntry::doDeflate",
+      "ZipOutputEntryInThread",
+      "ZipOutputEntryParallel::writeStream"
+    ],
+    "preservedResponsibilities": [
+      "Owns ordinary DEFLATE, the original temporary-file task and the blocking block-compression entry using actual UNO streams, CRC32 and ZipEntry. Retains input/output counts, CRC update order, known-size diagnostics, the source data-descriptor behavior and original exception handling and ownership in the entry task."
+    ],
+    "omittedResponsibilities": [
+      "The browser runs archive work in its current realm; shared physical worker scheduling, encryption and native ABI domains are unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zipapi/ZipOutputEntry.ts",
+          "marker": "ZipOutputEntry"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/ZipOutputEntry.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackageStream.save.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/ZipOutputEntryInThread.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/zipapi/ZipOutputEntry.cxx",
+          "marker": "ZipOutputEntryBase::closeEntry"
+        }
+      ]
+    }
+  }
+}

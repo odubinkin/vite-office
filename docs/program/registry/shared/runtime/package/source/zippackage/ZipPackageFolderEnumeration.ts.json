@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/zippackage/ZipPackageFolderEnumeration.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-package-graph",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/source/zippackage/ZipPackageFolderEnumeration.ts",
+        "apps/office/src/package/source/zippackage/ZipPackageFolder.native.test.ts"
+      ],
+      "justification": "Original borrowed ContentHash iterator, real XWeak Any acquisition, postincrement, NoSuchElementException and service-name/predicate bodies. No source snapshot or parent acquisition is added. Native unordered order/rehash/invalidation, ABI and complete package storage/model/filter/UI acceptance remain unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ZipPackageFolderEnumeration"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/zippackage/ZipPackageFolderEnumeration.cxx",
+      "upstreamSymbols": [
+        "ZipPackageFolderEnumeration",
+        "hasMoreElements",
+        "nextElement"
+      ]
+    }
+  }
+}

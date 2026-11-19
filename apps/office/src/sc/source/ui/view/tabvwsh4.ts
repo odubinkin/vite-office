@@ -79,6 +79,11 @@ export class ScTabViewShell extends ScViewFunc {
     super(data, viewShellDoc, module);
     // Native pView constructor initialization follows super because JavaScript forbids this before the base constructor.
     data["pView"] = this;
+    const document = data.GetDocument();
+    if (document.GetTableCount()) {
+      const active = document.GetVisibleTab();
+      this.SetTabNo(document.FetchTable(active) ? active : 0, true);
+    }
   }
   /** Original borrowed frame-line pointer. @returns Actual default line or absence. */
   GetDefaultFrameLine(): SvxBorderLine | undefined {

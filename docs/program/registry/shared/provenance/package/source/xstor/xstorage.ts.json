@@ -1,0 +1,103 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/xstor/xstorage.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/xstor/xstorage.cxx",
+    "localSymbols": [
+      "OStorage",
+      "openStreamElement",
+      "openStorageElement",
+      "getByName",
+      "InternalDispose",
+      "commit",
+      "revert",
+      "getPropertyValue",
+      "setPropertyValue",
+      "isModified",
+      "setModified"
+    ],
+    "upstreamSymbols": [
+      "OStorage::OStorage",
+      "OStorage::openStreamElement",
+      "OStorage::openStorageElement",
+      "OStorage::getByName",
+      "OStorage::InternalDispose",
+      "OStorage::commit",
+      "OStorage::revert",
+      "OStorage::getPropertyValue",
+      "OStorage::setPropertyValue",
+      "OStorage::isModified",
+      "OStorage::setModified"
+    ],
+    "preservedResponsibilities": [
+      "Exposes actual XStorage, transaction and listener interfaces over OStorage_Impl with original catalog name admission, acquired child stream and folder values, attached readonly disposal links and original transaction ordering. Bounded output supports new or explicitly truncated parts.",
+      "The registered storage exposes XPropertySet and XModifiable. Plain PACKAGE metadata uses the original shared properties and controlled values; OFOPXML accepts the root relationship stream through the same property contract and persists it during commit. Full package encryption state, XRelationshipAccess and the browser file paths remain pending.",
+      "The plain ZIP/OFOPXML storage uses the real nontransacted OWriteStream component for new/truncated output. It exposes the writable data and property facets, commits the native cache and closes its attachment when both directions close. Transacted streams, nontruncate existing writes and encryption families remain pending.",
+      "The OFOPXML storage publishes XRelationshipAccess and XHierarchicalStorageAccess for the source Writer input. Original root metadata and path reads now use the acquired storage identity. Writable hierarchy transactions and encrypted members remain pending."
+    ],
+    "omittedResponsibilities": [
+      "The public writable stream wrapper, existing-stream nontruncate writes, copy/clone and encrypted facets, and the public root relationship/property adapters remain pending."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The public writable stream wrapper, existing-stream nontruncate writes, copy/clone and encrypted facets, and the public root relationship/property adapters remain pending."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.ts",
+          "marker": "OStorage"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xfactory.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sfx2/source/doc/docfile.storage.test.ts",
+          "marker": "private:stream"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xfactory.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xfactory.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::OStorage"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::openStreamElement"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::openStorageElement"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::getByName"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::InternalDispose"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::commit"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::revert"
+        }
+      ]
+    }
+  }
+}

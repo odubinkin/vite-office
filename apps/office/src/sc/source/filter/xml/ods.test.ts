@@ -6,8 +6,17 @@ import { assert, expect, it, vi } from "vitest";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { ScAddress } from "../../../inc/address";
+import type { ScMergeAttr, ScMergeFlagAttr } from "../../../inc/attrib";
+import { ATTR_MERGE, ATTR_MERGE_FLAG } from "../../../inc/scitems";
 import { ScDocument } from "../../../inc/document";
+import type { EECharAttrib } from "../../../../editeng/inc/editdata";
+import { EE_CHAR_ESCAPEMENT, EE_CHAR_WEIGHT } from "../../../../editeng/inc/eeitem";
+import { DFLT_ESC_AUTO_SUPER } from "../../../../editeng/inc/escapementitem.constants";
+import type { SvxWeightItem } from "../../../../editeng/source/items/textitem";
+import type { SvxEscapementItem } from "../../../../editeng/source/items/textitem.escapement";
+import { FontWeight } from "../../../../tools/inc/fontenum";
 import type { ScPatternAttr } from "../../../inc/patattr";
 import type { ScTable } from "../../../inc/table";
 import type { ScDocumentPool } from "../../core/data/docpool";
@@ -15,6 +24,102 @@ import { ScXMLImport } from "./xmlimprt";
 import { readOdsDocument, writeOdsDocument } from "./xmlwrap";
 const grammar = FormulaGrammar.Grammar.GRAM_ODFF;
 InitApplicationServiceManager(implementations);
+
+it("compiles forward ODF data-style references and retains time and currency displays", /** Independent ODF uses source number fields and a forward style reference. @returns Completion. */ async () => {
+  const xml = independent(
+    '<table:table-row><table:table-cell table:style-name="clock" office:value-type="float" office:value="0.5"/><table:table-cell table:style-name="money" office:value-type="float" office:value="123.5"/></table:table-row>',
+  ).replace(
+    "<office:body>",
+    `<office:automatic-styles xmlns:n="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:s="urn:oasis:names:tc:opendocument:xmlns:style:1.0">
+      <s:style s:name="clock" s:family="table-cell" s:data-style-name="clockFmt"/>
+      <s:style s:name="money" s:family="table-cell" s:data-style-name="moneyFmt"/>
+      <n:time-style s:name="clockFmt"><n:hours n:style="long"/><n:text>:</n:text><n:minutes n:style="long"/><n:text> </n:text><n:am-pm/></n:time-style>
+      <n:currency-style s:name="moneyFmt"><n:currency-symbol>€</n:currency-symbol><n:number n:decimal-places="2" n:min-integer-digits="1"/></n:currency-style>
+    </office:automatic-styles><office:body>`,
+  );
+  const first = load(xml);
+  let copy: ScDocument | undefined;
+  const output = new OUString();
+  try {
+    copy = await readOdsDocument(await writeOdsDocument(first));
+    for (const document of [first, copy]) {
+      const formatter = document.GetFormatTable();
+      for (const [column, expected] of ["12:00 PM", "€123.50"].entries()) {
+        const address = new ScAddress(column, 0, 0);
+        const key = document.GetPattern(address)?.GetNumberFormat(formatter) ?? 0;
+        expect(key).toBeGreaterThan(0);
+        formatter.GetOutputString(document.GetValue(address), key, output, [null]);
+        expect(text(output)).toBe(expected);
+      }
+    }
+  } finally {
+    output.dispose();
+    copy?.Dispose();
+    first.Dispose();
+  }
+});
+
+it("maps optional ODF numeric digits, named months and positioned decimal text", /** Exercises the independent ODF defaults and checks the serialized native styles. @returns Completion. */ async () => {
+  const styles = [
+    '<n:number-style><n:number n:min-integer-digits="0" n:decimal-places="3" n:min-decimal-places="1" n:grouping="1"><n:embedded-text n:position="-1">x</n:embedded-text></n:number></n:number-style>',
+    '<n:date-style><n:month n:textual="1"/><n:text> </n:text><n:month n:textual="true" n:style="long"/></n:date-style>',
+    '<n:number-style><n:scientific-number n:min-integer-digits="1" n:decimal-places="0" n:min-exponent-digits="1" n:forced-exponent-sign="false"/></n:number-style>',
+    '<n:number-style><n:number n:min-integer-digits="1" n:decimal-places="0"><n:embedded-text n:position="0">x</n:embedded-text><n:embedded-text n:position="-1">discarded</n:embedded-text><n:embedded-text>discarded</n:embedded-text></n:number></n:number-style>',
+    "<n:text-style><n:text/><n:text-content/></n:text-style>",
+    "<n:number-style><n:number/><n:unrepresented/></n:number-style>",
+    "<n:number-style/>",
+    "<n:number-style><n:number/></n:number-style>",
+    '<n:number-style><n:scientific-number n:min-integer-digits="1" n:decimal-places="2" n:min-exponent-digits="2"/></n:number-style>',
+  ];
+  const rows = styles
+    .map(
+      /** Adds one cell per separate source style. @param _style - Source entry. @param index - Style index. @returns Cell XML. */
+      (_style, index) =>
+        `<table:table-cell table:style-name="ce${index}" office:value-type="float" office:value="2"/>`,
+    )
+    .join("");
+  const declarations = styles
+    .map(
+      /** Adds an independent data-style declaration and its cell style. @param style - Data-style XML. @param index - Style index. @returns Style XML. */
+      (style, index) =>
+        `<s:style s:name="ce${index}" s:family="table-cell" s:data-style-name="N${index}"/>` +
+        style.replace(/^(<n:[\w-]+)/, `$1 s:name="N${index}"`),
+    )
+    .join("");
+  const xml = independent(`<table:table-row>${rows}</table:table-row>`).replace(
+    "<office:body>",
+    `<office:automatic-styles xmlns:n="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:s="urn:oasis:names:tc:opendocument:xmlns:style:1.0">${declarations}</office:automatic-styles><office:body>`,
+  );
+  const first = load(xml);
+  try {
+    const formatter = first.GetFormatTable();
+    /** Reads the formatter's canonical code for a test cell. @param index - Cell column. @returns Format code. */
+    function code(index: number): string {
+      const key = first.GetPattern(new ScAddress(index, 0, 0))?.GetNumberFormat(formatter) ?? 0;
+      const entry = formatter.GetEntry(key);
+      return entry ? text(entry.GetFormatstring()) : "";
+    }
+    expect(code(0)).toContain('0"x"##');
+    expect(code(1)).toContain('MMM" "MMMM');
+    expect(code(2)).toBe("0E-0");
+    expect(code(3)).toBe('0"x"');
+    expect(code(4)).toBe("@");
+    expect(code(5)).toBe("General");
+    expect(code(6)).toBe("General");
+    expect(code(7)).toBe("General");
+    expect(code(8)).toBe("0.00E+00");
+    const result = await (
+      await DocumentArchive.open(await writeOdsDocument(first))
+    ).readTextEntry("content.xml");
+    expect(result).toContain('number:min-decimal-places="1"');
+    expect(result).toContain('<number:embedded-text number:position="-1">x</number:embedded-text>');
+    expect(result).toContain('<number:month number:style="short" number:textual="true"/>');
+    expect(result).toContain('number:forced-exponent-sign="false"');
+    expect(result).toContain("<number:text-content/>");
+  } finally {
+    first.Dispose();
+  }
+});
 
 it("opens exported actual document bytes,edits and reloads formula results and literal text", /** No alternate workbook model participates. @returns Completion. */ async () => {
   const doc = new ScDocument();
@@ -128,11 +233,8 @@ it("keeps importer APIs on the actual document and does not allocate invalid coo
 it("rejects unsupported cell services and malformed structure explicitly", /** Each input is independent from the exporter. @returns Nothing. */ () => {
   for (const cell of [
     '<table:table-cell office:value-type="date"/>',
-    '<table:table-cell table:number-columns-spanned="2"/>',
-    '<table:table-cell table:number-rows-spanned="2"/>',
     '<table:table-cell table:formula="f:=1" table:number-columns-repeated="2"/>',
-    "<table:table-cell><text:p><text:span>x</text:span></text:p></table:table-cell>",
-    "<table:table-cell><text:p><text:line-break/></text:p></table:table-cell>",
+    "<table:table-cell><text:p><text:ruby/></text:p></table:table-cell>",
     '<table:table-cell><text:p><text:s text:c="1000001"/></text:p></table:table-cell>',
     '<table:table-cell table:formula="unknown:=1"/>',
     "<table:table-cell><text:span>x</text:span></table:table-cell>",
@@ -187,6 +289,100 @@ it("rejects unsupported cell services and malformed structure explicitly", /** E
       /** Invalid roots/grammar/body cannot be treated as an empty spreadsheet. @returns Document. */ () =>
         load(xml),
     ).toThrow();
+});
+
+it("keeps spaced and multiline text spans in the native editor", /** Ports the source text:s and bold span assertions with independent ODF XML. @returns Completion. */ async () => {
+  const input = independent(`<table:table-row>
+    <table:table-cell><text:p>on<text:span text:style-name="B">e <text:s text:c="4"/>t</text:span>wo</text:p></table:table-cell>
+    <table:table-cell><text:p>a<text:span text:style-name="B">b<text:tab/></text:span><text:tab/><text:line-break/><text:span text:style-name="B">c</text:span>d</text:p></table:table-cell>
+    <table:table-cell><text:p><text:span text:style-name="absent">plain</text:span><text:span><text:s/>text</text:span></text:p></table:table-cell>
+    <table:table-cell><text:p><text:span text:style-name="MissingOffset">a</text:span><text:span text:style-name="MissingHeight">b</text:span></text:p><text:p/></table:table-cell>
+  </table:table-row>`).replace(
+    "<office:body>",
+    '<office:automatic-styles xmlns:s="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"><s:style s:name="B" s:family="text"><s:text-properties fo:font-weight="bold"/></s:style><s:style s:name="MissingOffset" s:family="text"><s:text-properties s:text-position="unknown 62%"/></s:style><s:style s:name="MissingHeight" s:family="text"><s:text-properties s:text-position="super invalid"/></s:style></office:automatic-styles><office:body>',
+  );
+  const document = load(input);
+  let reopened: ScDocument | undefined;
+  try {
+    reopened = await readOdsDocument(await writeOdsDocument(document));
+    for (const copy of [document, reopened]) {
+      const edit = copy.GetRefCellValue(new ScAddress()).getEditText();
+      expect(edit?.GetParagraphCount()).toBe(1);
+      const paragraph = edit?.GetText(0);
+      try {
+        expect(paragraph && text(paragraph)).toBe("one     two");
+        const items: EECharAttrib[] = [];
+        edit?.GetCharAttribs(0, items);
+        const bold = items.find(
+          /** Identifies the actual styled extent. @param item - Native character item. @returns Match. */
+          (item) =>
+            item.pAttr?.Which() === EE_CHAR_WEIGHT &&
+            (item.pAttr as SvxWeightItem).GetValue() === FontWeight.WEIGHT_BOLD,
+        );
+        expect(bold && paragraph && text(paragraph).slice(bold.nStart, bold.nEnd)).toBe("e     t");
+      } finally {
+        paragraph?.dispose();
+      }
+      const multiline = copy.GetRefCellValue(new ScAddress(1, 0, 0)).getEditText();
+      expect(multiline?.GetParagraphCount()).toBe(2);
+      if (!multiline) throw new Error("Expected multiline edit cell");
+      const engine = copy.GetEditEngine();
+      engine.SetText(multiline);
+      const value = engine.GetText();
+      try {
+        expect(text(value)).toBe("ab\t\ncd");
+      } finally {
+        value.dispose();
+      }
+      const plain = copy.GetRefCellValue(new ScAddress(2, 0, 0));
+      const plainText = plain.getEditText()?.GetText(0);
+      try {
+        const actualText = plainText ?? plain.getSharedString()?.getString();
+        expect(actualText && text(actualText)).toBe("plain text");
+      } finally {
+        plainText?.dispose();
+      }
+      const positioned = copy.GetRefCellValue(new ScAddress(3, 0, 0)).getEditText();
+      expect(positioned?.GetParagraphCount()).toBe(2);
+      const positions: EECharAttrib[] = [];
+      positioned?.GetCharAttribs(0, positions);
+      const escapement = positions.flatMap(
+        /** Reads the native offset and proportional height for each run. @param entry - Character item. @returns Native values. */
+        ({ pAttr }) => {
+          if (pAttr?.Which() !== EE_CHAR_ESCAPEMENT) return [];
+          const item = pAttr as SvxEscapementItem;
+          return [[item.GetEsc(), item.GetProportionalHeight()]];
+        },
+      );
+      expect(escapement).toEqual([
+        [0, 62],
+        [DFLT_ESC_AUTO_SUPER, 100],
+      ]);
+    }
+  } finally {
+    reopened?.Dispose();
+    document.Dispose();
+  }
+});
+
+it("round-trips sparse merge anchors and covered cell contents", /** Starts from independent ODF and reopens native document bytes. @returns Completion. */ async () => {
+  const doc = load(
+    independent(`<table:table-row table:number-rows-repeated="800"/>
+    <table:table-row><table:table-cell table:number-columns-spanned="2" table:number-rows-spanned="4"/><table:covered-table-cell office:value-type="float" office:value="7"/></table:table-row>
+    <table:table-row table:number-rows-repeated="3"><table:covered-table-cell table:number-columns-repeated="2"/></table:table-row>`),
+  );
+  const bytes = await writeOdsDocument(doc);
+  const xml = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
+  expect(xml).toContain('table:number-columns-spanned="2" table:number-rows-spanned="4"');
+  expect(xml).toContain('<table:covered-table-cell table:number-columns-repeated="2"/>');
+  expect(xml).toContain('table:number-rows-repeated="800"');
+  const loaded = await readOdsDocument(bytes);
+  const sheet = loaded.FetchTable(0);
+  const merge = sheet?.GetPattern(0, 800)?.GetItem(ATTR_MERGE) as ScMergeAttr;
+  const flags = sheet?.GetPattern(1, 803)?.GetItem(ATTR_MERGE_FLAG) as ScMergeFlagAttr;
+  expect([merge.GetColMerge(), merge.GetRowMerge()]).toEqual([2, 4]);
+  expect(flags.IsHorOverlapped() && flags.IsVerOverlapped()).toBe(true);
+  expect(loaded.GetValue(new ScAddress(1, 800, 0))).toBe(7);
 });
 it("bounds scalar expansion and reports actual formatting/range omissions", /** Empty repeats advance positions without expanded cell storage. @returns Nothing. */ () => {
   expect(
@@ -349,7 +545,7 @@ it("distinguishes empty metadata wrappers from unimplemented semantic descendant
         ) => diagnostics.push(value),
     },
   );
-  expect(diagnostics.length).toBe(2);
+  expect(diagnostics.length).toBe(1);
   const warn = vi
     .spyOn(console, "warn")
     .mockImplementation(

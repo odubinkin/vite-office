@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/oox/source/core/relationshandler.native.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-oox-context",
+    "capabilityIds": [
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/oox/source/core/relationshandler.native.ts",
+        "apps/office/src/oox/source/core/relationshandler.native.test.ts",
+        "vendor/libreoffice-reference/oox/source/core/relationshandler.cxx"
+      ],
+      "justification": "Original concrete native RelationsFragment derives from actual native FragmentHandler, constructs the original counted UTF16 lclGetRelationsPath, copies the same actual shared Relations owner, retains a real owning AttributeList over incoming native XFastAttributeList and dispatches exact PR_TOKEN Relationships/Relationship values. Defaulted unqualified Id/Type/Target strings, missing/empty rejection, native TargetMode token/missing-only Internal default, invalid-mode external assumption, first-emplace duplicate retention and partial insertions before later XML failure retain source logic. Real converted C SAX callbacks/native OOXML tokens/streams drive this positive original source handler, not a replacement observer/provider. Four pinned Transitional/Strict DOCX/XLSX root and main-part relationship streams from actual ZipStorage are parsed to the same native collection. Main/DOM-free Worker observes exact native parsed Unicode target, external target and relationship part path. SAL_WARN diagnostics are nonthrowing under the selected source profile; physical native allocator/ABI/fault unwind remain unqualified. Existing host filter relation/fragment route is explicitly not yet migrated; normal fragment ctor/stream/storage/model/UI and complete original parser QA remain unfinished.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RelationsFragment",
+        "lclGetRelationsPath"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "oox/source/core/relationshandler.cxx",
+      "upstreamSymbols": [
+        "RelationsFragment::RelationsFragment",
+        "RelationsFragment::createFastChildContext",
+        "lclGetRelationsPath"
+      ]
+    }
+  }
+}

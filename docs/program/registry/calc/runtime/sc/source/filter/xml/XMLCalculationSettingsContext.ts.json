@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/xml/XMLCalculationSettingsContext.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "ods-content-filter",
+    "capabilityIds": [
+      "CAP-5ed786f7-f652-4f48-ac2a-86fafe2b8fa1"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/xml/XMLCalculationSettingsContext.ts#ScXMLCalculationSettingsContext",
+        "apps/office/src/sc/source/filter/excel/excrecds.test.ts",
+        "apps/office/e2e/calc/xlsx-date-system.spec.ts",
+        "vendor/libreoffice-reference/sc/source/filter/xml/XMLCalculationSettingsContext.cxx",
+        "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test2.cxx#testTdf165180_date1904_XLSX"
+      ],
+      "justification": "Imports the ODF null-date with the native SAX temporal converter, retaining 30 December 1899 for absent and malformed values, and applies the document option before subsequent cells. Other calculation-settings fields and iteration are outside this slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScXMLCalculationSettingsContext"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/filter/xml/XMLCalculationSettingsContext.cxx",
+      "upstreamSymbols": [
+        "ScXMLCalculationSettingsContext::endFastElement",
+        "ScXMLNullDateContext::ScXMLNullDateContext"
+      ]
+    }
+  }
+}

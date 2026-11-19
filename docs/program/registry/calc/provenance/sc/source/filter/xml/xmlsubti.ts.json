@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmlsubti.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/xml/xmlsubti.cxx",
+    "localSymbols": [
+      "readTableProtection",
+      "readTableProtectionOptions"
+    ],
+    "upstreamSymbols": [
+      "ScXMLTabProtectionData::ScXMLTabProtectionData",
+      "ScMyTables::DeleteTable"
+    ],
+    "preservedResponsibilities": [
+      "Builds native ODF sheet-protection state from the original default URI, decoded hash and admitted permissions."
+    ],
+    "omittedResponsibilities": [
+      "Related table style, matrix and control import remain outside this owner."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlsubti.ts",
+          "marker": "readTableProtection"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-sheet-protection.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlsubti.cxx",
+          "marker": "ScXMLTabProtectionData::ScXMLTabProtectionData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlsubti.cxx",
+          "marker": "ScMyTables::DeleteTable"
+        }
+      ]
+    }
+  }
+}

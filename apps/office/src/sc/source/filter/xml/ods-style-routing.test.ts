@@ -39,7 +39,7 @@ it("opens ordinary metadata and preserves scalars and compressed full-sheet form
   expect(doc.GetColWidth(1023, 0)).toBe(1280);
   expect(doc.GetRowHeight(1048575, 0, false)).toBe(256);
   expect(doc.GetCellType(new ScAddress(1023, 1048575, 0))).toBe(0);
-  expect(JSON.stringify(diagnostics)).toContain("automatic style declaration: date-style");
+  expect(diagnostics).toEqual([]);
   const copy = await readOdsDocument(await writeOdsDocument(doc));
   expect(text(copy.GetSharedString(new ScAddress(1, 0, 0)).getString())).toBe("First Name");
   expect(copy.GetRowHeight(1048575, 0, false)).toBe(256);

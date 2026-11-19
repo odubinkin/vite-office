@@ -3,6 +3,9 @@
 import { SwUndoTextFormatCollDelete } from "../undo/SwUndoFmt";
 import { SwFlyFrameFormat, type SwFrameFormat } from "../layout/atrfrm";
 import type { SwFormat } from "../attr/format";
+import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
+import { WRITER_CHARACTER_STYLE_POOL } from "../../../inc/poolfmt";
+import { SwStyleNameMapper } from "./SwStyleNameMapper";
 import type { SwCharFormat } from "../../../inc/charfmt";
 import { SfxItemIter } from "../../../../svl/inc/itemiter";
 import { BroadcastingModify } from "../../../inc/calbck";
@@ -479,4 +482,18 @@ export function DelTextFormatColl(document: SwDoc, collection: SwTextFormatColl)
   const name = collection.GetName();
   collection.DisposeModify();
   document.NotifyModelChange({ kind: "format-inheritance-changed", formatId: name });
+}
+
+/** Resolves original character programmatic names on the real document table and lazy pool. @param doc - Actual document. @param name - Programmatic name. @returns Canonical owner. */
+export function findCharacterStyle(doc: SwDoc, name: string): SwCharFormat | undefined {
+  if (name === "Standard") return doc.GetDfltCharFormat();
+  const uiName = SwStyleNameMapper.FillUIName(name, SwGetPoolIdFromName.ChrFmt);
+  const existing = doc.FindCharFormatByName(uiName);
+  if (existing !== undefined) return existing;
+  const entry = WRITER_CHARACTER_STYLE_POOL.find(
+    /** Finds original pool UI identity. @param value - Native pool entry. @returns Match. */ (
+      value,
+    ) => value.uiName === uiName,
+  );
+  return entry === undefined ? undefined : doc.GetCharFormatFromPool(entry.poolId);
 }

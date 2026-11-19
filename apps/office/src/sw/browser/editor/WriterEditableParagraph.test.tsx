@@ -8,6 +8,9 @@ import { MarkdownReader } from "../../source/filter/md/swmd";
 import { OUStringToOString } from "../../../sal/rtl/ustring-convert";
 import { RTL_TEXTENCODING_UTF8 } from "../../../sal/inc/rtl/textenc";
 import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
+import { SwDoc } from "../../source/core/doc/doc";
+import { SvxKerningItem } from "../../../editeng/inc/kernitem";
+import { RES_CHRATR_KERNING } from "../../inc/hintids";
 import { WriterViewProjection } from "../presentation/writer-view-projection";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
@@ -65,6 +68,40 @@ function paragraph(color?: string, highlight?: string): WriterParagraphProjectio
 }
 
 describe("Writer editable paragraph colors", /** Groups color rendering tests. @returns Nothing. */ () => {
+  it("renders signed spacing from the native Writer character item", /** Checks the model-backed view and CSS used by the existing editor. @returns Nothing. */ () => {
+    const doc = new SwDoc();
+    const node = doc.paragraphs[0];
+    if (!node) throw new Error("Missing native paragraph");
+    const start = new SwPosition(node);
+    const cursor = new SwPaM(start);
+    start.Dispose();
+    const spacing = new SvxKerningItem(-20, RES_CHRATR_KERNING);
+    try {
+      node.SetText("Manual spacing");
+      node.SetAttr(spacing);
+      const state = new WriterViewProjection().Project(
+        doc,
+        node,
+        cursor,
+        createDocument({ id: "native-kerning", suiteId: "writer", title: "Manual spacing" }),
+      );
+      expect(state.activeParagraph.runs[0]?.attributes.kerningTwips).toBe(-20);
+      render(
+        <WriterEditableParagraph
+          index={0}
+          isActive
+          listMarker={undefined}
+          paragraph={state.activeParagraph}
+          retainElement={/** Ignores the fixture element. @returns Nothing. */ () => undefined}
+        />,
+      );
+      expect(screen.getByText("Manual spacing")).toHaveStyle({ letterSpacing: "-1pt" });
+    } finally {
+      spacing.Dispose();
+      cursor.Dispose();
+      doc.Dispose();
+    }
+  });
   it("renders the space separator retained by imported numbering", /** Checks imported space-follow geometry independently of toolbar commands. @returns Nothing. */ () => {
     render(
       <WriterEditableParagraph

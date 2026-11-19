@@ -1,0 +1,82 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts",
+    "status": "mapped",
+    "upstreamPath": "sfx2/source/doc/SfxDocumentMetaData.cxx",
+    "localSymbols": [
+      "loadFromStorage",
+      "storeToStorage",
+      "loadFromMedium",
+      "storeToMedium"
+    ],
+    "upstreamSymbols": [
+      "loadFromStorage",
+      "storeToStorage",
+      "loadFromMedium",
+      "storeToMedium"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source responsibilities retain actual RTL/UNO owners and contracts. Explicit disposal, borrowed UTF16 views, pointer-address cells, compiler overload witnesses and realm-local execution bind the browser host; physical native ABI/thread guarantees remain unqualified."
+    },
+    "preservedResponsibilities": [
+      "Original SfxDocumentMetaData.cxx storage/medium method bodies on the actual receiver. Source storage/version/parser/media dependencies remain under implementation; the metadata component is not registered while these dependencies are incomplete.",
+      "storeToMedium creates the descriptor-backed SfxMedium and releases its temporary storage even on failure. The genuine PACKAGE writable stream properties, XMLOasisMetaExporter/XMLMetaExporter and URL transfers remain dependencies for full metadata service output."
+    ],
+    "omittedResponsibilities": [
+      "Metadata component production registration, actual StorageFactory backend/native SfxMedium and XML metadata services/full original QA remain unfinished. Four storage-path compiler dependency errors remain; no dummy provider or successful storage certificate is supplied.",
+      "Independent native compiled module differential, physical ABI/allocator/mutex/thread lifetime and runtime shutdown are unqualified.",
+      "Complete DOCX/XLSX model/filter/package/desktop/mobile UI import-export acceptance remains unfinished; existing browser open/save/autosave/recovery choices are retained."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts",
+          "marker": "loadFromStorage"
+        },
+        {
+          "path": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts",
+          "marker": "storeToStorage"
+        },
+        {
+          "path": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts",
+          "marker": "loadFromMedium"
+        },
+        {
+          "path": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts",
+          "marker": "storeToMedium"
+        },
+        {
+          "path": "apps/office/src/sfx2/source/doc/docfile.storage.test.ts",
+          "marker": "private:stream"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sfx2/source/doc/SfxDocumentMetaData.cxx",
+          "marker": "loadFromStorage"
+        },
+        {
+          "path": "sfx2/source/doc/SfxDocumentMetaData.cxx",
+          "marker": "storeToStorage"
+        },
+        {
+          "path": "sfx2/source/doc/SfxDocumentMetaData.cxx",
+          "marker": "loadFromMedium"
+        },
+        {
+          "path": "sfx2/source/doc/SfxDocumentMetaData.cxx",
+          "marker": "storeToMedium"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.storage.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The original header and implementation or inline responsibilities share a native basename. This explicit module boundary retains their distinct import identities and the same actual receiver/owner while the original source contracts stay mapped to the pinned translation unit."
+    }
+  }
+}

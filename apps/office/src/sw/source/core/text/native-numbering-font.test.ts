@@ -3,6 +3,9 @@ import { createWriterTextColorItem } from "../attr/swatrset";
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { assert, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
+import { SwFormatAutoFormat, SwFormatCharFormat } from "../txtnode/fmtatr2";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { applyWriterParagraphList } from "../doc/list";
 import { createWriterNumFormat, SvxNumType } from "../doc/number";
 import { Font } from "../../../../vcl/source/font/font";
@@ -20,6 +23,10 @@ import {
   RES_CHRATR_POSTURE,
   RES_CHRATR_WEIGHT,
   RES_CHRATR_UNDERLINE,
+  RES_CHRATR_ESCAPEMENT,
+  RES_CHRATR_BEGIN,
+  RES_TXTATR_CHARFMT,
+  RES_PARATR_LIST_AUTOFMT,
 } from "../../../inc/hintids";
 import { resolveSwNumberPortionFont } from "./txtfld";
 import {
@@ -117,6 +124,7 @@ it("number font compatibility setting roundtrips and older graph records use the
   const copies: SwDoc[] = [];
   try {
     doc.GetDocumentSettingManager().set("DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT", true);
+    doc.GetDocumentSettingManager().set("APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING", true);
     const record = encodeWriterDocument(doc),
       roundtrip = decodeWriterDocument(record);
     copies.push(roundtrip);
@@ -125,9 +133,16 @@ it("number font compatibility setting roundtrips and older graph records use the
     );
     const legacy = JSON.parse(JSON.stringify(record));
     delete legacy.documentSettings.DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT;
+    delete legacy.documentSettings.APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING;
     const old = decodeWriterDocument(legacy);
     copies.push(old);
     expect(old.GetDocumentSettingManager().get("DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT")).toBe(false);
+    expect(old.GetDocumentSettingManager().get("APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING")).toBe(
+      false,
+    );
+    expect(
+      roundtrip.GetDocumentSettingManager().get("APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING"),
+    ).toBe(true);
     expect(Object.hasOwn(legacy.documentSettings, "DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT")).toBe(
       false,
     );
@@ -187,5 +202,58 @@ it("applies actual numbering character style after paragraph resets and before t
     }
   } finally {
     doc.Dispose();
+  }
+});
+
+it("gates the mark overlay and preserves the list style ahead of marker direct and inherited items", /** Replays represented fields and the source exclusions with real style owners. @returns Nothing. */ () => {
+  const doc = new SwDoc();
+  const marker = new SfxItemSet(doc.GetAttrPool(), [[RES_CHRATR_BEGIN, RES_TXTATR_CHARFMT]]);
+  try {
+    const node = doc.paragraphs[0];
+    assert(node);
+    node.SetText("List");
+    applyWriterParagraphList(node, { kind: "numbered", level: 0, ruleName: "Styled marker" });
+    const parent = doc.MakeCharFormat("Marker parent", doc.GetDfltCharFormat());
+    parent.SetFormatAttr(new SvxFontHeightItem(420, 100, RES_CHRATR_FONTSIZE));
+    parent.SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+    const markerStyle = doc.MakeCharFormat("Marker child", parent);
+    const reference = new SwFormatCharFormat(markerStyle);
+    try {
+      marker.Put(reference);
+    } finally {
+      reference.Dispose();
+    }
+    marker.Put(new SvxWeightItem(FontWeight.WEIGHT_NORMAL, RES_CHRATR_WEIGHT));
+    marker.Put(new SvxUnderlineItem(FontLineStyle.LINESTYLE_DOUBLE, RES_CHRATR_UNDERLINE));
+    marker.Put(new SvxEscapementItem(33, 58, RES_CHRATR_ESCAPEMENT));
+    marker.Put(createWriterTextColorItem("#008000"));
+    const item = new SwFormatAutoFormat(RES_PARATR_LIST_AUTOFMT);
+    try {
+      item.SetStyleHandle(marker);
+      node.SetAttr(item);
+    } finally {
+      item.Dispose();
+    }
+    expect(resolveSwNumberPortionFont(node)?.heightTwips).not.toBe(420);
+    const settings = doc.GetDocumentSettingManager();
+    settings.set("APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING", true);
+    expect(resolveSwNumberPortionFont(node)).toMatchObject({
+      color: "#008000",
+      heightTwips: 420,
+      weight: FontWeight.WEIGHT_NORMAL,
+      underline: FontLineStyle.LINESTYLE_NONE,
+    });
+    expect(resolveSwNumberPortionFont(node)?.escapement).toBeUndefined();
+    const listStyle = doc.MakeCharFormat("List level", doc.GetDfltCharFormat());
+    listStyle.SetFormatAttr(createWriterTextColorItem("#ff0000"));
+    const format = createWriterNumFormat("numbered");
+    format.SetCharFormat(listStyle);
+    const rule = node.GetNumRule();
+    assert(rule);
+    rule.Set(0, format);
+    expect(resolveSwNumberPortionFont(node)).toMatchObject({ color: "#ff0000", heightTwips: 420 });
+  } finally {
+    doc.Dispose();
+    marker.Dispose();
   }
 });

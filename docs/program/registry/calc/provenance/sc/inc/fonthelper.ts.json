@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/inc/fonthelper.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/inc/fonthelper.hxx",
+    "localSymbols": [
+      "ScDxfFont"
+    ],
+    "upstreamSymbols": [
+      "ScDxfFont",
+      "isEmpty"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/fonthelper.ts",
+          "marker": "ScDxfFont"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/patattr.font.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/fonthelper.hxx",
+          "marker": "ScDxfFont"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "Original optional aggregate, presence-only emptiness and implicit memberwise copy: raw font pointer stays borrowed and optional Color is copied. Explicit false/zero and an engaged null pointer differ from absent."
+    ],
+    "omittedResponsibilities": [
+      "Physical C++ optional/pointer/aggregate ABI and complete DXF/filter/workbook/UI integration remain unqualified or unfinished."
+    ]
+  }
+}

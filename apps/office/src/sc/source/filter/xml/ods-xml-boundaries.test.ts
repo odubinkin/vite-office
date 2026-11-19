@@ -2,6 +2,7 @@
 import { expect, it, vi } from "vitest";
 import { ScDocument } from "../../../inc/document";
 import { ScProtectionAttr, ScLineBreakCell, ScIndentItem } from "../../../inc/attrib";
+import { ATTR_PROTECTION } from "../../../inc/scitems";
 import { ScAddress } from "../../../inc/address";
 import { ScPatternAttr } from "../../../inc/patattr";
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
@@ -20,6 +21,7 @@ function styled(): ScDocument {
   for (const [col, protect] of [
     [0, true],
     [1, false],
+    [2, true],
   ] as const) {
     const p = new ScPatternAttr(doc.getCellAttributeHelper());
     p.ItemSetPut(new SvxFontHeightItem(280, 100, 101));
@@ -35,17 +37,27 @@ it("shares effective style names across distinct patterns and round-trips them t
   const doc = styled(),
     record = encodeCalcDocument(doc),
     copy = decodeCalcDocument(record),
-    xml = writeOdsXml(copy);
-  expect(String(xml.files["content.xml"]).match(/style:family="table-cell"/g)).toHaveLength(1);
+    xml = await writeOdsXml(copy);
+  expect(String(xml.files["content.xml"]).match(/style:family="table-cell"/g)).toHaveLength(2);
   const loaded = await readOdsDocument(xml);
   expect((loaded.GetPattern(new ScAddress())?.GetItem(101) as SvxFontHeightItem).GetHeight()).toBe(
     280,
   );
+  for (const [column, expected] of [
+    [0, true],
+    [1, false],
+    [2, true],
+  ] as const) {
+    const protection = loaded
+      .GetPattern(new ScAddress(column, 0, 0))
+      ?.GetItem(ATTR_PROTECTION) as ScProtectionAttr;
+    expect(protection.GetProtection()).toBe(expected);
+  }
   for (const d of [doc, copy, loaded]) d.DisposeAttributes();
 });
 it("rejects malformed browser streams and enforces the complete ZIP size ceiling", /** Keeps invalid persistence data outside canonical documents. @returns Completion. */ async () => {
   const doc = styled(),
-    xml = writeOdsXml(doc);
+    xml = await writeOdsXml(doc);
   await expect(
     readOdsDocument({ ...xml, files: { ...xml.files, mimetype: new Uint8Array() } }),
   ).rejects.toThrow("Missing ODS XML");
@@ -60,7 +72,7 @@ it("rejects malformed browser streams and enforces the complete ZIP size ceiling
     /** Checks the browser XML and worker regression boundary.  @returns Regression result or completion. */ async () =>
       await new ScXMLImportWrapper(doc).Export({ maxOutputBytes: size }),
   ).rejects.toThrow("size limit");
-  new ScXMLImportWrapper(doc).ExportXml();
+  await new ScXMLImportWrapper(doc).ExportXml();
   doc.DisposeAttributes();
 });
 it("rejects incompatible, duplicate-sheet and missing-style transfer data and disposes failed candidates", /** Tests actual codec validation rather than fabricated successful state. @returns Nothing. */ () => {

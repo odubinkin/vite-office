@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.unotools.uri-remove-fragment",
+    "modulePath": "apps/office/src/unotools/source/misc/mediadescriptor.uri.ts",
+    "symbol": "removeFragment",
+    "classification": "upstream-mechanism",
+    "capabilityId": "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6",
+    "description": "Original MediaDescriptor helper resolves through the actual registered URI service, clears an actual native fragment, and preserves the original text when a genuine specialized parser rejects it. Trust/authentication/input stream selection and SAL logging remain unfinished."
+  }
+}

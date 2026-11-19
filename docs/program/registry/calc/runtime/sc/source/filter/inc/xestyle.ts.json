@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/inc/xestyle.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-export",
+    "capabilityIds": [
+      "CAP-3433dbbb-6122-4137-823f-fad19a8405ab"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/inc/xestyle.ts",
+        "vendor/libreoffice-reference/sc/source/filter/inc/xestyle.hxx"
+      ],
+      "justification": "Original color-use enumeration retains all nine original ordinal values for native palette weighting. Full palette, font record/buffer and remaining style declarations remain unported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XclExpColorType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/inc/xestyle.hxx",
+      "upstreamSymbols": [
+        "XclExpColorType"
+      ]
+    }
+  }
+}

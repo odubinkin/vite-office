@@ -1,0 +1,79 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-e9a3430f-1545-4e36-8849-bd900998ed83",
+    "capabilityId": "CAP-e9a3430f-1545-4e36-8849-bd900998ed83",
+    "suite": "shared",
+    "subsystem": "native-storage-relationships",
+    "type": "model",
+    "maturity": "mapped",
+    "assertions": [
+      "The actual OFOPXML package writes the root relationship XML and prunes the empty folder.",
+      "The stream-property path copies the original bytes from position zero.",
+      "The relation part follows the persisted member on supported rename and remove paths."
+    ],
+    "capability": "Native OFOPXML storage relationships",
+    "gaps": [
+      "Parsed relationship loading, per-part relationship property staging, full public storage and stream wrappers, and DOCX/XLSX filters and UI acceptance remain pending."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage_Impl::CommitRelInfo"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::setPropertyValue"
+        }
+      ],
+      "tests": [
+        {
+          "path": "package/qa/ofopxmlstorages/TestHelper.java",
+          "marker": "insertRelationships"
+        }
+      ],
+      "docs": [
+        {
+          "path": "offapi/com/sun/star/embed/XRelationshipAccess.idl",
+          "marker": "XRelationshipAccess"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.relations.ts",
+          "marker": "commitStorageRelations"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.impl.test.ts",
+          "marker": "writes the original relationship sequence and prunes the empty folder"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-storage-relationships.md",
+          "marker": "# Native OFOPXML storage relationships"
+        }
+      ]
+    },
+    "implemented": false,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Existing actual SAL/CPPU logical addresses, compiler specialization/interface casts and explicit scope destruction bind native C++ syntax. The actual pinned SDK libc++ mutex implements the original member and guard lifetimes; native pthread/physical C++ ABI remain unqualified."
+    },
+    "scopeLimitations": [
+      "Parsed relationship loading, per-part relationship property staging, full public storage and stream wrappers, and DOCX/XLSX filters and UI acceptance remain pending."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "ofopxml-storage-relationship-commit"
+  }
+}

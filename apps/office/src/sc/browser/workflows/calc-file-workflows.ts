@@ -82,19 +82,24 @@ export class CalcFileWorkflows {
     if (!(await openBrowserCalcDocument(this.controller.shell, this.Store(), id)))
       throw new Error("The saved document no longer exists.");
   }
-  /** Imports ODS or CSV with a collision-resolved identity and persists its primary copy. @param file - Source. @param bytes - Input. @param identity - Selected identity. @returns Completion. */
+  /** Imports a supported document with a collision-resolved identity and persists its primary copy. @param file - Source. @param bytes - Input. @param identity - Selected identity. @returns Completion. */
   async Import(file: File, bytes: Uint8Array, identity: ImportedDocumentIdentity): Promise<void> {
     const store = this.Store(),
       shell = this.controller.shell,
-      csv = /\.csv$/i.test(file.name);
+      csv = /\.csv$/i.test(file.name),
+      xlsx = /\.xlsx$/i.test(file.name);
     await shell.Open(
       bytes,
       createDocument({ id: identity.id, suiteId: "calc", title: identity.title }),
       {
         kind: "input",
         name: file.name,
-        filterId: csv ? ScDocShell.CSV_FILTER_NAME : "calc8",
-        mediaType: csv ? ScDocShell.CSV_MEDIA_TYPE : ScDocShell.ODS_MEDIA_TYPE,
+        filterId: xlsx ? ScDocShell.XLSX_FILTER_NAME : csv ? ScDocShell.CSV_FILTER_NAME : "calc8",
+        mediaType: xlsx
+          ? ScDocShell.XLSX_MEDIA_TYPE
+          : csv
+            ? ScDocShell.CSV_MEDIA_TYPE
+            : ScDocShell.ODS_MEDIA_TYPE,
         source: { kind: "external", reference: file },
       },
     );
@@ -114,6 +119,25 @@ export class CalcFileWorkflows {
         this.documentExport.export({
           data: await shell.SerializeOdsAsync(),
           mediaType: ScDocShell.ODS_MEDIA_TYPE,
+          name,
+        }),
+    );
+  }
+  /** Downloads a workbook copy through the existing browser export port. @returns Completion. */
+  async DownloadXlsx(): Promise<void> {
+    const shell = this.controller.shell;
+    const name = createDownloadFilename(shell.GetTitle(), ".xlsx");
+    await shell.Export(
+      {
+        kind: "export",
+        name,
+        filterId: ScDocShell.XLSX_FILTER_NAME,
+        mediaType: ScDocShell.XLSX_MEDIA_TYPE,
+      },
+      /** Serializes the committed workbook graph. @returns Completion. */ async () =>
+        this.documentExport.export({
+          data: await shell.SerializeXlsx(),
+          mediaType: ScDocShell.XLSX_MEDIA_TYPE,
           name,
         }),
     );

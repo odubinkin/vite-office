@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.numbering.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "writerfilter-docx",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ww8/docxattributeoutput.numbering.ts",
+        "apps/office/src/sw/source/filter/ww8/docxattributeoutput.numbering-values.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx",
+        "apps/office/src/sw/source/filter/ww8/docxexport.numbering.test.ts"
+      ],
+      "justification": "Original numbering-type switch preserves all source mappings, exact custom-output-reference mutation, caller-supplied fallback and actual SfxItemSet/SvxLanguageItem Chinese language selection. Section callbacks preserve optional restart0 and unsigned16/unsigned8 entry conversion; unsupported/custom page formats are omitted. Actual DocxAttributeOutput forwards to these routines without a fake format/version/style provider. Immutable literal text and a one-cell output reference bind original OString values at the existing serializer boundary. Complete native byte value ABI, DrawingML/FilterBase version and complete filter/model/mounted UI closure remain unported or unverified. WRITER620 documents and preserves source Iroha import/export width mismatch. DOCX list levels serialize the shared native label text, geometry, legal and numbering types. Abstract and concrete definitions retain restarts and the original gap cursor documented in WRITER636. The numbering1.docx suite opens the generated package through the actual Writer filter.",
+      "knownViolations": [],
+      "localSymbols": [
+        "lcl_ConvertNumberingType",
+        "SectionPageNumbering",
+        "SectionType",
+        "DocxNumberingOutput",
+        "OverrideNumberingDefinition",
+        "NumberingLevel"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/ww8/docxattributeoutput.cxx",
+      "upstreamSymbols": [
+        "lcl_ConvertNumberingType",
+        "DocxAttributeOutput::SectionPageNumbering",
+        "DocxAttributeOutput::SectionType",
+        "DocxAttributeOutput::OverrideNumberingDefinition",
+        "DocxAttributeOutput::NumberingLevel"
+      ]
+    }
+  }
+}

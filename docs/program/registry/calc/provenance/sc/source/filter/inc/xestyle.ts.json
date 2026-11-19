@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/inc/xestyle.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/inc/xestyle.hxx",
+    "localSymbols": [
+      "XclExpColorType"
+    ],
+    "upstreamSymbols": [
+      "XclExpColorType"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/inc/xestyle.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/inc/xestyle.hxx",
+          "marker": "XclExpColorType"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "Original color-use enumeration retains all nine original ordinal values for native palette weighting."
+    ],
+    "omittedResponsibilities": [
+      "Full palette, font record/buffer and remaining style declarations remain unported."
+    ]
+  }
+}

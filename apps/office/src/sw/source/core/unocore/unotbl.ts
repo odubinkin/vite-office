@@ -6,6 +6,7 @@ import { SwXText, SwXCell } from "./unotext";
 export { SwXCell } from "./unotext";
 import { SwPosition } from "../crsr/pam";
 import { SwXTextRange } from "./unoobj2";
+import { SwTableNode } from "../docnode/node";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
@@ -228,9 +229,29 @@ export function convertToTable(
   )
     illegal("Table row has no cells");
   const doc = textOwner.GetDoc(),
-    body = doc.GetNodes().GetEndOfContent().StartOfSectionNode(),
+    body = textOwner.GetStartNode(),
     positions: SwPosition[] = [];
   try {
+    /** Collects direct body blocks and verifies that nested sections are complete. @param first - Start of native cell. @param last - End of native cell. @returns Body blocks. */
+    function cellBlocks(first: SwPosition, last: SwPosition): (SwTextNode | SwTableNode)[] {
+      const nodes = doc.GetNodes(),
+        end = last.GetNodeIndex();
+      const result: (SwTextNode | SwTableNode)[] = [];
+      for (let index = first.GetNodeIndex(); index <= end; index++) {
+        const node = nodes.at(index);
+        if (
+          !(node instanceof SwTextNode || node instanceof SwTableNode) ||
+          node.StartOfSectionNode() !== body
+        )
+          illegal("Table conversion requires body text");
+        result.push(node);
+        if (node instanceof SwTableNode) {
+          index = node.EndOfSectionIndex();
+          if (index > end) illegal("Table conversion requires complete nested tables");
+        }
+      }
+      return result;
+    }
     const bounds = ranges.map(
       /** Processes one ordered native value at this boundary. @param row - Original row input. @returns The represented native operation result. */
       (row) =>
@@ -247,12 +268,7 @@ export function convertToTable(
             last.nContent.SetAffinity("before");
             positions.push(first, last);
             if (first.compare(last) > 0) illegal("Reversed table cell range");
-            for (const node of doc
-              .GetNodes()
-              .entries()
-              .slice(first.GetNodeIndex(), last.GetNodeIndex() + 1))
-              if (!(node instanceof SwTextNode) || node.StartOfSectionNode() !== body)
-                illegal("Table conversion requires body text");
+            cellBlocks(first, last);
             return { first, last };
           },
         ),
@@ -264,16 +280,17 @@ export function convertToTable(
       if (prev.compare(next) === 0) continue;
       if (
         prev.GetNodeIndex() + 1 !== next.GetNodeIndex() ||
-        prev.GetContentIndex() !== (prev.GetNode() as SwTextNode).Len() ||
+        prev.GetContentIndex() !==
+          (prev.GetNode().IsTextNode() ? (prev.GetNode() as SwTextNode).Len() : 0) ||
         next.GetContentIndex() !== 0
       )
         illegal("Table ranges have a gap or overlap");
     }
     const ops = doc.GetDocumentContentOperationsManager();
     for (const { first, last } of flat) {
-      const node = last.GetNode() as SwTextNode,
+      const node = last.GetNode(),
         end = last.GetContentIndex();
-      if (end < node.Len()) {
+      if (node instanceof SwTextNode && end < node.Len()) {
         const tail = ops.SplitNode(last);
         last.Assign(node, node.Len());
         // A validated first <= last can move into this tail only at the split boundary.
@@ -286,21 +303,17 @@ export function convertToTable(
       }
     }
     const rows = bounds.map(
-      /** Processes one ordered native value at this boundary. @param row - Original row input. @returns The represented native operation result. */
+      /** Collects each row's direct body blocks. @param row - Original row. @returns Cell blocks. */
       (row) =>
         row.map(
-          /** Processes one ordered native value at this boundary. @param entry0 - Original entry0 input. @returns The represented native operation result. */
-          ({ first, last }) =>
-            doc
-              .GetNodes()
-              .entries()
-              .slice(first.GetNodeIndex(), last.GetNodeIndex() + 1) as SwTextNode[],
+          /** Converts one validated full-cell range. @param cell - Position pair. @returns Body blocks. */
+          ({ first, last }) => cellBlocks(first, last),
         ),
     );
 
     let index = 1;
     while (doc.FindTableFormatByName(`Table${index}`)) index++;
-    const result = new SwXTextTable(doc.GetNodes().TextToTable(rows, `Table${index}`));
+    const result = new SwXTextTable(doc.GetNodes().TextToTable(rows, `Table${index}`, body));
     const denied = new Set([
       "ParaTopBorder",
       "ParaTopBorderDistance",

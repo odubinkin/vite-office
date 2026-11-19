@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/zippackage/zipfileaccess.patterns.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/zippackage/zipfileaccess.cxx",
+    "localSymbols": [
+      "GetPatternsFromString_Impl",
+      "StringGoodForPattern_Impl"
+    ],
+    "upstreamSymbols": [
+      "GetPatternsFromString_Impl",
+      "StringGoodForPattern_Impl"
+    ],
+    "preservedResponsibilities": [
+      "Original NUL-terminated UTF16 wildcard parser, escaped literals, empty segments and counted reverse matcher, including the source nEndInd-1 search bound. Actual RTL strings and UNO sequences retain source ownership contracts."
+    ],
+    "omittedResponsibilities": [
+      "Physical C++ ABI/allocation/thread guarantees, URL-provider success and full package/storage/model/filter/UI DOCX/XLSX acceptance remain unqualified or unfinished."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zippackage/zipfileaccess.patterns.ts",
+          "marker": "GetPatternsFromString_Impl"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/zipfileaccess.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/zippackage/zipfileaccess.cxx",
+          "marker": "GetPatternsFromString_Impl"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/package/source/zippackage/zipfileaccess.patterns.ts",
+      "rationale": "Separates the original two UTF16 wildcard algorithms from the service owner without changing their contracts.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

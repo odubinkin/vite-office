@@ -1,10 +1,22 @@
 /** @fileoverview Static browser bindings for the consumed i18npool, NumberText and stoc component registrations. */
+import { package_ZipPackage_get_implementation } from "../../../package/source/zippackage/ZipPackage.service";
+import { package_OZipFileAccess_get_implementation } from "../../../package/source/zippackage/zipfileaccess";
+import { unotools_OTempFileService_get_implementation } from "../../../unotools/source/ucbhelper/xtempfile";
+import { com_sun_star_comp_extensions_xml_sax_LegacyFastParser_get_implementation } from "../../../sax/source/fastparser/legacyfastparser.service";
+import { com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation } from "../../../sax/source/fastparser/fastparser.service";
+import { com_sun_star_comp_oox_core_FastTokenHandler_get_implementation } from "../../../oox/source/core/fasttokenhandler";
+import { com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTexpand_get_implementation } from "../../../stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTexpand";
+import { com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTscript_get_implementation } from "../../../stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTscript";
+import { com_sun_star_comp_uri_VndSunStarPkgUrlReferenceFactory_get_implementation } from "../../../stoc/source/uriproc/VndSunStarPkgUrlReferenceFactory";
+import { com_sun_star_comp_uri_UriReferenceFactory_get_implementation } from "../../../stoc/source/uriproc/UriReferenceFactory";
 import { package_ManifestWriter_get_implementation } from "../../../package/source/manifest/ManifestWriter";
+import { com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation } from "../../../sax/source/expatwrap/sax_expat";
 import { com_sun_star_extensions_xml_sax_Writer_get_implementation } from "../../../sax/source/expatwrap/saxwriter";
 import { com_sun_star_comp_comphelper_OPropertyBag } from "../../../comphelper/source/property/opropertybag";
 import { unoxml_CXPathAPI_get_implementation } from "../../../unoxml/source/xpath/xpathapi";
 import { unoxml_CDocumentBuilder_get_implementation } from "../../../unoxml/source/dom/documentbuilder";
 import { com_sun_star_comp_stoc_TypeConverter_get_implementation } from "../../../stoc/source/typeconv/convert";
+import { package_OStorageFactory_get_implementation } from "../../../package/source/xstor/xfactory";
 import type { Implementation } from "../../../cppuhelper/source/servicemanager";
 import { com_sun_star_i18n_BreakIterator_get_implementation } from "../../../i18npool/source/breakiterator/breakiteratorImpl";
 import { com_sun_star_i18n_BreakIterator_Unicode_get_implementation } from "../../../i18npool/source/breakiterator/breakiterator_unicode";
@@ -21,9 +33,75 @@ import { lingucomponent_NumberText_get_implementation } from "../../../lingucomp
 /** Original i18npool.component entries for the two break iterator families and the classifier, followed by the NumberText and stocservices.component converter entries. */
 export const implementations: readonly Implementation[] = [
   {
+    name: "com.sun.star.comp.embed.StorageFactory",
+    services: ["com.sun.star.comp.embed.StorageFactory", "com.sun.star.embed.StorageFactory"],
+    constructorFn: package_OStorageFactory_get_implementation,
+    singleInstance: true,
+  },
+  {
+    name: "com.sun.star.packages.comp.ZipPackage",
+    services: ["com.sun.star.packages.Package"],
+    constructorFn: package_ZipPackage_get_implementation,
+  },
+  {
+    name: "com.sun.star.comp.package.zip.ZipFileAccess",
+    services: [
+      "com.sun.star.comp.packages.zip.ZipFileAccess",
+      "com.sun.star.packages.zip.ZipFileAccess",
+    ],
+    constructorFn: package_OZipFileAccess_get_implementation,
+  },
+  {
+    name: "com.sun.star.io.comp.TempFile",
+    services: ["com.sun.star.io.TempFile"],
+    constructorFn: unotools_OTempFileService_get_implementation,
+  },
+  {
+    name: "com.sun.star.comp.extensions.xml.sax.LegacyFastParser",
+    services: ["com.sun.star.xml.sax.LegacyFastParser"],
+    constructorFn: com_sun_star_comp_extensions_xml_sax_LegacyFastParser_get_implementation,
+  },
+  {
+    name: "com.sun.star.comp.extensions.xml.sax.FastParser",
+    services: ["com.sun.star.xml.sax.FastParser"],
+    constructorFn: com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation,
+  },
+  {
+    name: "com.sun.star.comp.oox.core.FastTokenHandler",
+    services: ["com.sun.star.xml.sax.FastTokenHandler"],
+    constructorFn: com_sun_star_comp_oox_core_FastTokenHandler_get_implementation,
+  },
+  {
+    name: "com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand",
+    services: ["com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand"],
+    constructorFn:
+      com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTexpand_get_implementation,
+  },
+  {
+    name: "com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript",
+    services: ["com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTscript"],
+    constructorFn:
+      com_sun_star_comp_uri_UriSchemeParser_vndDOTsunDOTstarDOTscript_get_implementation,
+  },
+  {
+    name: "com.sun.star.comp.uri.VndSunStarPkgUrlReferenceFactory",
+    services: ["com.sun.star.uri.VndSunStarPkgUrlReferenceFactory"],
+    constructorFn: com_sun_star_comp_uri_VndSunStarPkgUrlReferenceFactory_get_implementation,
+  },
+  {
+    name: "com.sun.star.comp.uri.UriReferenceFactory",
+    services: ["com.sun.star.uri.UriReferenceFactory"],
+    constructorFn: com_sun_star_comp_uri_UriReferenceFactory_get_implementation,
+  },
+  {
     name: "com.sun.star.packages.manifest.comp.ManifestWriter",
     services: ["com.sun.star.packages.manifest.ManifestWriter"],
     constructorFn: package_ManifestWriter_get_implementation,
+  },
+  {
+    name: "com.sun.star.comp.extensions.xml.sax.ParserExpat",
+    services: ["com.sun.star.xml.sax.Parser"],
+    constructorFn: com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation,
   },
   {
     name: "com.sun.star.extensions.xml.sax.Writer",

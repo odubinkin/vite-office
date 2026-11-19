@@ -7,6 +7,7 @@ import { InsertDeleteFlags } from "../../../inc/global";
 import { createDeleteContentsUndoDoc } from "../docshell/docfuncutil";
 import { ScUndoDeleteContents } from "../undo/undoblk3";
 import { AdjustBlockHeight } from "../view/viewfun2";
+import { ScEditableTester } from "../docshell/editable";
 /** Original cursor deletion across exactly the selected sheets. */
 export class DeleteCellOperation extends Operation {
   /** Borrows source cell/document/marks with original controls. @param shell - Actual owner. @param position - Source cursor. @param marks - Selected sheets. @param flags - Attribute-only flags. @param record - Record history. @param api - API request. @returns Operation. */
@@ -23,11 +24,23 @@ export class DeleteCellOperation extends Operation {
   /** Captures attributes,clears actual areas and records original deletion history without altering scalar payloads. @returns Success. */
   protected override runImplementation(): boolean {
     const doc = this.shell.GetDocument(),
-      range = new ScRange(this.position),
+      p = this.position;
+    const tester = ScEditableTester.CreateAndTestSelectedBlock(
+      doc,
+      p.Col(),
+      p.Row(),
+      p.Col(),
+      p.Row(),
+      this.marks,
+    );
+    if (!tester.IsEditable()) {
+      this.shell.ErrorMessage(tester.GetMessageId());
+      return false;
+    }
+    const range = new ScRange(p),
       undo = this.mbRecord
         ? createDeleteContentsUndoDoc(doc, this.marks, range, false, this.flags)
-        : undefined,
-      p = this.position;
+        : undefined;
     doc.DeleteArea(p.Col(), p.Row(), p.Col(), p.Row(), this.marks, this.flags);
     if (undo)
       this.shell

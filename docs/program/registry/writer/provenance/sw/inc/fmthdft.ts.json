@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "localPath": "apps/office/src/sw/inc/fmthdft.ts",
+    "upstreamPath": "sw/inc/fmthdft.hxx",
+    "localSymbols": [
+      "SwFormatHeader",
+      "SwFormatFooter"
+    ],
+    "upstreamSymbols": [
+      "SwFormatHeader",
+      "SwFormatFooter"
+    ],
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "preservedResponsibilities": [
+      "SwFormatHeader and SwFormatFooter retain active flags and borrowed frame identity through the actual Writer-client registration, share native section ownership across page formats, and release the section and frame at the final owning reference."
+    ],
+    "omittedResponsibilities": [
+      "XML diagnostics, presentation strings and desktop layout/cursor-shell parking remain outside this foundation. Document-content section deletion uses the existing native cursor correction path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/fmthdft.ts",
+          "marker": "SwFormatHeader"
+        },
+        {
+          "path": "apps/office/src/sw/inc/fmthdft.native.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmthdft.hxx",
+          "marker": "SwFormatHeader"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "lcl_DelHFFormat"
+        }
+      ]
+    }
+  }
+}

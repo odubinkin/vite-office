@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/tools/source/stream/strmunx.errors.ts",
+    "status": "mapped",
+    "upstreamPath": "tools/source/stream/strmunx.cxx",
+    "localSymbols": [
+      "GetSvError",
+      "GetSvErrorErrno"
+    ],
+    "upstreamSymbols": [
+      "GetSvError",
+      "errArr",
+      "SVSTREAM_ACCESS_DENIED"
+    ],
+    "preservedResponsibilities": [
+      "Original internal GetSvError int/oslFileError overloads, ordered source tables and sentinel/fallback logic; names lower the C++ static overload selection without guessing equal numeric domains. Actual pinned Emscripten WASI errno is used, not host values. Real MEMFS absent-path/directory-write/invalid-FD errors and actual SvStream warning masking/first-error precedence drive the packed diagnostics. Full I/O macros and stream aliases come from the original comphelper header. No file-open/allowlist hook, fake provider, model or UI binding is supplied; security approval and SvFileStream/TempFile/storage/model/filter/UI remain pending.",
+      "Original selected UNIX SvFileStream constructors/destructor, IO/error/unsigned sentinel, seek/resize/sync, URL/system-path conversion, stat/temporary mode, symlink replacement, readonly retry, internal share table and close/reset order are implemented over actual OSL/MEMFS and native std::mutex with consumed unique_lock. Source F_RDLCK=0, path-vs-URL lookup bypass, original requested mode after readonly retry, silent table denial, ignored copy failure and unsigned cursor advancement remain unchanged. JS owners/buffers stay GC-managed; UNO sequence bytes are marshalled at the native IO boundary, no stream/syscall provider or private-state injection. The canonical include/tools/stream.hxx boundary now exposes actual byte/memory/file owners; native wrappers consume that header. SvStream captures real thread encoding on construction and exposes original encoding/mode accessors. Full TempFile service/storage/package/model/filter/UI, native thread races, pointer ordering/ABI/OOM/invalid spans and downstream tools XPath/XmlWalker owner tests remain incomplete or unqualified."
+    ],
+    "omittedResponsibilities": [
+      "Full SvFileStream open/security/locking/body, TempFile/service/storage/model/filter/UI and native physical ABI."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/tools/source/stream/strmunx.errors.ts",
+          "marker": "GetSvError"
+        },
+        {
+          "path": "apps/office/src/tools/source/stream/strmunx.errors.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/tools/source/stream/strmunx.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "tools/source/stream/strmunx.cxx",
+          "marker": "static ErrCode GetSvError"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/tools/source/stream/strmunx.errors.ts",
+      "rationale": "Source-internal GetSvError overload shard consumed by original strmunx.ts. Static C++ overload selection is represented by typed TS entry points; actual security scope is approved and original SvFileStream is implemented.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

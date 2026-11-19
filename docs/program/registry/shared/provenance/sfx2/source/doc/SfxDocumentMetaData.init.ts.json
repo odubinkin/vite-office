@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.init.ts",
+    "status": "mapped",
+    "upstreamPath": "sfx2/source/doc/SfxDocumentMetaData.cxx",
+    "localSymbols": [
+      "init",
+      "updateUserDefinedAndAttributes"
+    ],
+    "upstreamSymbols": [
+      "init",
+      "updateUserDefinedAndAttributes"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source responsibilities retain actual RTL/UNO owners and contracts. Explicit disposal, borrowed UTF16 views, pointer-address cells, compiler overload witnesses and realm-local execution bind the browser host; physical native ABI/thread guarantees remain unqualified."
+    },
+    "preservedResponsibilities": [
+      "Original SfxDocumentMetaData.cxx DOM initialization and delayed metadata synchronization on the actual component receiver."
+    ],
+    "omittedResponsibilities": [
+      "Metadata component production registration, actual StorageFactory backend/native SfxMedium and XML metadata services/full original QA remain unfinished. Four storage-path compiler dependency errors remain; no dummy provider or successful storage certificate is supplied.",
+      "Independent native compiled module differential, physical ABI/allocator/mutex/thread lifetime and runtime shutdown are unqualified.",
+      "Complete DOCX/XLSX model/filter/package/desktop/mobile UI import-export acceptance remains unfinished; existing browser open/save/autosave/recovery choices are retained."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.init.ts",
+          "marker": "init"
+        },
+        {
+          "path": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.init.ts",
+          "marker": "updateUserDefinedAndAttributes"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sfx2/source/doc/SfxDocumentMetaData.cxx",
+          "marker": "init"
+        },
+        {
+          "path": "sfx2/source/doc/SfxDocumentMetaData.cxx",
+          "marker": "updateUserDefinedAndAttributes"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sfx2/source/doc/SfxDocumentMetaData.init.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The original header and implementation or inline responsibilities share a native basename. This explicit module boundary retains their distinct import identities and the same actual receiver/owner while the original source contracts stay mapped to the pinned translation unit."
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/oox/source/core/fragmenthandler.data.ts",
+    "status": "mapped",
+    "upstreamPath": "oox/source/core/fragmenthandler.cxx",
+    "localSymbols": [
+      "FragmentBaseData"
+    ],
+    "upstreamSymbols": [
+      "FragmentBaseData::FragmentBaseData"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native logical RTL/UNO/source pointer ownership and explicit lifetime lowering are retained; C++ physical standard-library/atomic/ABI layout is not claimed."
+    },
+    "preservedResponsibilities": [
+      "Original FragmentBaseData aggregate borrows actual XmlFilterBase, retains actual native OUString path, native UNO locator and source shared RelationsRef, with original reverse destruction. Shared field/member lifetimes use the explicit same-actual-value control block; no URI/filter/relation value is manufactured. Native fragment-data copy/parent lifetime tests and actual main/Worker route exercise real owners."
+    ],
+    "omittedResponsibilities": [
+      "Native filter orchestration/default fragment ctor/stream overload/binary record interface and complete format/model/UI acceptance remain unfinished; full original QA and independent physical C++ differential remain unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/core/fragmenthandler.data.ts",
+          "marker": "FragmentBaseData"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/oox/source/core/fragmenthandler.cxx",
+          "marker": "FragmentBaseData::FragmentBaseData"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/oox/source/core/fragmenthandler.data.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The source aggregate is split from fragmenthandler.cxx to retain exact ownership while native context/fragment implementation is migrated separately from the old host interface."
+    }
+  }
+}

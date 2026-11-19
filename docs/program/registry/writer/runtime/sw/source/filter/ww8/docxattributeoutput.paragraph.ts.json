@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.paragraph.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "docx-file-filter",
+    "capabilityIds": [
+      "CAP-d48ffd59-e673-4eda-aa2d-bcf1f13a5c84"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ww8/docxattributeoutput.paragraph.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts",
+        "apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx",
+        "apps/office/src/sw/source/filter/ww8/docx-paragraph-marker.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx#lcl_writeParagraphMarkerProperties",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx#DocxAttributeOutput::EndParagraphProperties",
+        "apps/office/src/sw/source/filter/ww8/docxexport.tabs.test.ts",
+        "apps/office/e2e/writer-docx-theme.spec.ts"
+      ],
+      "justification": "Native paragraph controls, alignment, spacing, and twip indentation serialize in WordprocessingML schema order. The line-spacing path shares the Word conversion with RTF. Relative indentation units and full section output remain open. Named paragraph definitions share the native paragraph property serialization. Body paragraphs reference the style slot and emit direct attributes; list overrides remain evaluated on the actual paragraph. Writes the selected native paragraph mark items inside rPr immediately before section properties. Shares western and East Asian size, weight and posture, keeps complex-script fields independent, and resolves terminal style hints. Redline marker markup remains outside the represented path. Writes paragraph and named-style tab deltas in the original paragraph property position with the effective inherited item and the source relative-indent offset.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OutputParagraphProperties",
+        "ParaAdjust",
+        "OutputStyleParagraphProperties",
+        "WriteParagraphMarkerProperties"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/ww8/docxattributeoutput.cxx",
+      "upstreamSymbols": [
+        "DocxAttributeOutput::StartParagraphProperties",
+        "DocxAttributeOutput::ParaAdjust",
+        "DocxAttributeOutput::ParaLineSpacing_Impl",
+        "lcl_writeParagraphMarkerProperties",
+        "DocxAttributeOutput::EndParagraphProperties"
+      ]
+    }
+  }
+}

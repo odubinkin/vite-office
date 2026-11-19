@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/util/XChangesBatch.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-storage-package-transaction",
+    "capabilityIds": [
+      "CAP-b564ff67-65d8-4b13-92df-0f4b391ce7b0"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/util/XChangesBatch.ts",
+        "apps/office/src/package/source/xstor/xstorage.impl.test.ts",
+        "vendor/libreoffice-reference/offapi/com/sun/star/util/XChangesBatch.idl"
+      ],
+      "justification": "Original registered package constructor and XChangesBatch connect OStorage_Impl root persistence to actual ZipPackage stream output. Full child and relationship synchronization, storage wrapper, PACKAGE property support and DOCX/XLSX UI acceptance remain unfinished.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XChangesBatch",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "offapi/com/sun/star/util/XChangesBatch.idl",
+      "upstreamSymbols": [
+        "XChangesBatch"
+      ]
+    }
+  }
+}

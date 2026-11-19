@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/inc/sheetdatabuffer.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/inc/sheetdatabuffer.hxx",
+    "localSymbols": [
+      "CellModel"
+    ],
+    "upstreamSymbols": [
+      "CellModel",
+      "CellFormulaModel",
+      "DataTableModel",
+      "XfIdRowRange",
+      "MergedRange"
+    ],
+    "preservedResponsibilities": [
+      "Original public model declarations and internal range-value types resolve the single original source implementation. No WorksheetHelper or SheetDataBuffer service constructor is fabricated."
+    ],
+    "omittedResponsibilities": [
+      "Full worksheet/buffer declarations, original private/nested C++ visibility/ABI and complete import/export/UI remain unfinished or unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/inc/sheetdatabuffer.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/sheetdatabuffer.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/inc/sheetdatabuffer.hxx",
+          "marker": "CellModel"
+        }
+      ]
+    }
+  }
+}

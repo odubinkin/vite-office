@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sax/source/fastparser/legacyfastparser.service.ts",
+    "status": "mapped",
+    "upstreamPath": "sax/source/fastparser/legacyfastparser.cxx",
+    "localSymbols": [
+      "SaxLegacyFastParser",
+      "com_sun_star_comp_extensions_xml_sax_LegacyFastParser_get_implementation"
+    ],
+    "upstreamSymbols": [
+      "SaxLegacyFastParser::SaxLegacyFastParser",
+      "SaxLegacyFastParser::initialize",
+      "SaxLegacyFastParser::parseStream",
+      "SaxLegacyFastParser::getSupportedServiceNames",
+      "com_sun_star_comp_extensions_xml_sax_LegacyFastParser_get_implementation"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Logical native UNO/RTL ownership is retained with explicit destruction; physical C++ ABI is unqualified."
+    },
+    "preservedResponsibilities": [
+      "Original SaxLegacyFastParser exact ordered XInitialization/XServiceInfo/XParser WeakImplHelper, process-context FastParser acquisition, native NamespaceHandler lifetime, cached legacy/token references, per-parse real CallbackDocumentHandler construction and delegated source setters. Original token/interface, registerNamespaces Pair<string,long>, and FastParser option initialization dispatch retain source extraction order and ignored Pair-extraction result; failed extraction repeats prior Pair and prior namespace registrations are not rolled back. Original DTD setter remains empty. Actual acquired factory is registered as LegacyFastParser; no Expat Parser alias or manufactured SDK helper. Real registered Writer/FastParser/OOX tokens and native streams/Any/Pairs exercise the public service. Physical constructor unwind/cross-language ABI, independent compiled original C++ differential and full Expat/XMLImport/Pipe QA remain unqualified, as does full DOCX/XLSX model/filter/UI acceptance."
+    ],
+    "omittedResponsibilities": [
+      "Complete original Pipe/Expat/XMLImport QA, independent compiled C++ differential/physical ABI and complete model/filter/UI acceptance remain unfinished."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sax/source/fastparser/legacyfastparser.service.ts",
+          "marker": "SaxLegacyFastParser"
+        },
+        {
+          "path": "apps/office/src/sax/source/fastparser/legacyfastparser.service.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sax/source/fastparser/legacyfastparser.cxx",
+          "marker": "SaxLegacyFastParser::initialize"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sax/source/fastparser/legacyfastparser.service.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original outer service wrapper is split from the already shared native NamespaceHandler/CallbackDocumentHandler implementations, preserving their actual receivers and UNO/RTL ownership."
+    }
+  }
+}

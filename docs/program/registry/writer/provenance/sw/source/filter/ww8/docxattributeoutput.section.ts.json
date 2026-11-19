@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.section.ts",
+    "localSymbols": [
+      "MSWordSections",
+      "SectionProperties"
+    ],
+    "upstreamPath": "sw/source/filter/ww8/docxattributeoutput.cxx",
+    "upstreamSymbols": [
+      "DocxAttributeOutput::FormatFrameSize",
+      "DocxAttributeOutput::FormatLRSpace",
+      "DocxAttributeOutput::FormatFrameDirection"
+    ],
+    "preservedResponsibilities": [
+      "Body section output uses native page descriptors and page frames. The initial section uses the first block assignments, subsequent assignments close the preceding paragraph or use a structural paragraph after a table, and the final section is owned by the document body. Page size, physical margins, page parity, writing direction and the optional decimal restart use the represented native Word output."
+    ],
+    "omittedResponsibilities": [
+      "Full content sections, header/footer content, non-decimal page numbering, page-grid and mirrored/gutter round trips remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.section.ts",
+          "marker": "CurrentSectionInfo"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.section.test.ts",
+          "marker": "binds section geometry and restart"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx",
+          "marker": "DocxAttributeOutput::FormatFrameSize"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx",
+          "marker": "MSWordSections::MSWordSections"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.section.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The section attribute output and its traversal bindings are split from the C++ exporter translation units."
+    }
+  }
+}

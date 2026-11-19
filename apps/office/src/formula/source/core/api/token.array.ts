@@ -157,7 +157,7 @@ export class FormulaTokenArray {
       this.CheckToken((this.pRPN as FormulaToken[])[i] as FormulaToken);
   }
   /** Original base array merge has no implementation; separator remains appended. @returns Null. */
-  MergeArray(): null {
+  MergeArray(): FormulaToken | null {
     return null;
   }
   /** Original protected append, finalized rejection and terminal ocStop at8192 preserve logical behavior without capacity allocation/refcounts. @param token - Genuine new token. @returns Added token or null. */

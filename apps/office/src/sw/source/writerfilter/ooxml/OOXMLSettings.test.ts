@@ -1,4 +1,6 @@
 /** @fileoverview Native complex settings resources, hexadecimal defaults and TOKEN_COUNT dispatch boundaries through the actual SAX/context graph. */
+import { getProcessComponentContext } from "../../../../comphelper/inc/processfactory";
+
 import { expect, it } from "vitest";
 import { FastSaxParser } from "../../../../sax/source/fastparser/fastparser";
 import { FastTokenHandler } from "../../../../oox/source/core/fasttokenhandler";
@@ -99,7 +101,10 @@ it.each([
       },
     };
     const parser = new FastSaxParser();
-    const stream = await OOXMLStreamImpl.createStream(new ZipStorage());
+    const stream = await OOXMLStreamImpl.createStream(
+      getProcessComponentContext(),
+      new ZipStorage(),
+    );
     const document = new OOXMLDocument(stream, null);
     parser.setFastDocumentHandler(new OOXMLFastDocumentHandler(receiver, document, 0));
     parser.setTokenHandler(new FastTokenHandler());

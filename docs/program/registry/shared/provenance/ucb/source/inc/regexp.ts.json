@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/ucb/source/inc/regexp.ts",
+    "status": "mapped",
+    "upstreamPath": "ucb/source/inc/regexp.hxx",
+    "localSymbols": [
+      "Regexp",
+      "Kind"
+    ],
+    "upstreamSymbols": [
+      "Regexp",
+      "Kind"
+    ],
+    "preservedResponsibilities": [
+      "Original regexp.hxx declaration facade exposes the real implementation and nested-kind binding; it does not create another matcher or value owner. Source-derived49 tests include all18 actual pinned provider configuration templates; no dedicated Regexp/RegexpMap upstream QA was found in the local corpus. Per-owner90 coverage passes. Chromium main/DOM-free Worker execute actual RTL values and map precedence. Physical C++ ABI/allocation/vector invalidation and full UCB broker/provider/DOCX/XLSX storage/model/filter/UI acceptance remain unqualified or unfinished."
+    ],
+    "omittedResponsibilities": [
+      "Physical C++ ABI/allocation/vector invalidation and complete broker/provider/package/storage/model/filter/UI acceptance."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/ucb/source/inc/regexp.ts",
+          "marker": "Regexp"
+        },
+        {
+          "path": "apps/office/src/ucb/source/regexp/regexp.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "ucb/source/inc/regexp.hxx",
+          "marker": "Regexp"
+        }
+      ]
+    }
+  }
+}

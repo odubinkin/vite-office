@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/external/zlib/zlib.ts",
+    "rationale": "Browser ABI adapter reuses actual installed zip.js2.24.0 public dist/zip-module.wasm exports for synchronous zlib, original raw/wrapped initialization, Z_PARTIAL_FLUSH/status/consumption and native stream/allocator lifetime. The actual library has a bounded native heap and packs output counts into24bits;64KiB input/output windows marshal larger source requests. Initialization and pointer marshalling are browser-owned; the decoder is not reimplemented and no native status/provider is injected. Full zlib initialization-failure/OOM/ABI compatibility remains unqualified and external coverage failure is retained independently. No pako/new download or dependency mutation is needed. The original installed zlib WASM artifact is inlined as a URL so realm-local initialization works in browser and Node test realms before native reads. The zlib ABI and optional direct test bytes are unchanged.",
+    "responsibilities": [
+      "Browser ABI adapter reuses actual installed zip.js2.24.0 public dist/zip-module.wasm exports for synchronous zlib, original raw/wrapped initialization, Z_PARTIAL_FLUSH/status/consumption and native stream/allocator lifetime. The actual library has a bounded native heap and packs output counts into24bits;64KiB input/output windows marshal larger source requests. Initialization and pointer marshalling are browser-owned; the decoder is not reimplemented and no native status/provider is injected. Full zlib initialization-failure/OOM/ABI compatibility remains unqualified and external coverage failure is retained independently. No pako/new download or dependency mutation is needed."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser ABI adapter reuses actual installed zip.js2.24.0 public dist/zip-module.wasm exports for synchronous zlib, original raw/wrapped initialization, Z_PARTIAL_FLUSH/status/consumption and native stream/allocator lifetime. The actual library has a bounded native heap and packs output counts into24bits;64KiB input/output windows marshal larger source requests. Initialization and pointer marshalling are browser-owned; the decoder is not reimplemented and no native status/provider is injected. Full zlib initialization-failure/OOM/ABI compatibility remains unqualified and external coverage failure is retained independently. No pako/new download or dependency mutation is needed."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/zlib/zlib.ts",
+          "marker": "InflateState"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/InflateZlib.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xfactory.test.ts",
+          "marker": "@fileoverview"
+        }
+      ]
+    },
+    "localSymbols": [
+      "initializeZlib",
+      "InflateState"
+    ]
+  }
+}

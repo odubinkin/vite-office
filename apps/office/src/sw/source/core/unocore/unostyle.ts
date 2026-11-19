@@ -7,6 +7,7 @@ import { Reference, UNO_QUERY } from "../../../../cppu/inc/com/sun/star/uno/Refe
 import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
 import {
   WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL,
+  WRITER_PARAGRAPH_STYLE_POOL,
   getWriterMaterializedParagraphStyleDefinition,
 } from "../../../inc/poolfmt";
 import type { SwDoc } from "../doc/doc";
@@ -32,6 +33,7 @@ import {
 import { getDefaultWriterPageDescriptorValue } from "../layout/pagedesc";
 import { toTwips, Length } from "../../../../o3tl/inc/unit_conversion";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
+import { findCharacterStyle } from "../doc/docfmt";
 import { SwStyleNameMapper } from "../doc/SwStyleNameMapper";
 import { SwUnoPageStylePropertyMap } from "./unomap";
 import { UseOnPage } from "../layout/pagedesc";
@@ -565,28 +567,17 @@ function findParagraphStyle(doc: SwDoc, name: string): SwTextFormatColl | undefi
     SwStyleNameMapper.FillUIName(name, SwGetPoolIdFromName.TxtColl),
   );
   if (existing) return existing;
-  const definition =
-    getWriterMaterializedParagraphStyleDefinition(name) ??
-    WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.find(
-      /** Resolves an original supported pool name. @param style - Native pool entry. @returns Whether matching. */
-      (style) => style.name === name || style.id === name,
-    );
-  return definition && getWriterMaterializedParagraphStyleDefinition(definition.id)
-    ? doc.GetTextFormatColl(definition.id)
-    : doc.FindTextFormatColl(name);
+  const id = paragraphPoolStyleId(name);
+  return id === undefined ? doc.FindTextFormatColl(name) : doc.GetTextFormatColl(id);
 }
-/** Resolves original character programmatic names on the real document table and lazy pool. @param doc - Actual document. @param name - Programmatic name. @returns Canonical owner. */
-function findCharacterStyle(doc: SwDoc, name: string): SwCharFormat | undefined {
-  if (name === "Standard") return doc.GetDfltCharFormat();
-  const uiName = SwStyleNameMapper.FillUIName(name, SwGetPoolIdFromName.ChrFmt);
-  const existing = doc.FindCharFormatByName(uiName);
-  if (existing !== undefined) return existing;
-  const entry = WRITER_CHARACTER_STYLE_POOL.find(
-    /** Finds original pool UI identity. @param value - Native pool entry. @returns Match. */ (
-      value,
-    ) => value.uiName === uiName,
+/** Resolves original programmatic names, including materializable internal paragraph styles. @param name - Programmatic name. @returns Stable collection identity. */
+function paragraphPoolStyleId(name: string): string | undefined {
+  const poolId = SwStyleNameMapper.GetPoolIdFromProgName(name, SwGetPoolIdFromName.TxtColl);
+  const style = WRITER_PARAGRAPH_STYLE_POOL.find(
+    /** Matches the native pool identity. @param candidate - Pool entry. @returns Match. */
+    (candidate) => candidate.poolId === poolId,
   );
-  return entry === undefined ? undefined : doc.GetCharFormatFromPool(entry.poolId);
+  return getWriterMaterializedParagraphStyleDefinition(style?.id ?? name)?.id;
 }
 /** Exposes native pool names at the UNO boundary while retaining custom and page/rule identities. @param owner - Actual style owner. @returns Programmatic name. */
 function programmaticStyleName(
@@ -595,7 +586,9 @@ function programmaticStyleName(
   return owner instanceof SwCharFormat
     ? owner === owner.GetAttrSet().GetDoc().GetDfltCharFormat()
       ? "Standard"
-      : SwStyleNameMapper.FillProgName(owner.GetName(), SwGetPoolIdFromName.ChrFmt)
+      : owner.GetName() === "Standard"
+        ? "Standard (user)"
+        : SwStyleNameMapper.FillProgName(owner.GetName(), SwGetPoolIdFromName.ChrFmt)
     : owner instanceof SwTextFormatColl
       ? SwStyleNameMapper.FillProgName(owner.GetName(), SwGetPoolIdFromName.TxtColl)
       : owner.GetName();
@@ -664,6 +657,14 @@ export class SwXStyleFamily {
   }
   /** Implements the represented native hasByName operation. @param name - Native property or element name. @returns The represented native operation result. */
   hasByName(name: OUStringConstReference): boolean {
+    if (this.family === "ParagraphStyles") {
+      const n = text(name);
+      const uiName = SwStyleNameMapper.FillUIName(n, SwGetPoolIdFromName.TxtColl);
+      return (
+        this.doc.FindTextFormatCollByName(uiName) !== undefined ||
+        paragraphPoolStyleId(n) !== undefined
+      );
+    }
     if (this.family === "CharacterStyles") {
       const n = text(name);
       if (n === "Standard") return true;

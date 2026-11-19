@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/stlsheet.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/stlsheet.cxx",
+    "localSymbols": [
+      "ScStyleSheet"
+    ],
+    "upstreamSymbols": [
+      "ScStyleSheet::GetItemSet"
+    ],
+    "preservedResponsibilities": [
+      "Calc cell style item sets use the original pattern Which range and shared Sfx style ownership."
+    ],
+    "omittedResponsibilities": [
+      "Page style setup, the full built-in resource table, and other style-family properties remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/stlsheet.ts",
+          "marker": "ScStyleSheet"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/formula-copy.test.ts",
+          "marker": "Calc cell style"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/stlsheet.cxx",
+          "marker": "ScStyleSheet::GetItemSet"
+        }
+      ]
+    }
+  }
+}

@@ -1,4 +1,4 @@
-/** @fileoverview Original manifest property-slot indices from PackageConstants.hxx;encryption slots are metadata positions only,no crypto implementation. */
+/** @fileoverview Original consumed manifest property-slot indices and native stream buffer size from PackageConstants.hxx; encryption slots are metadata only. */
 /** Original PKG_MNFST_FULLPATH slot/size. */
 export const PKG_MNFST_FULLPATH = 0;
 /** Original PKG_MNFST_VERSION slot/size. */
@@ -33,3 +33,6 @@ export const PKG_MNFST_KEYINFO = 14;
 export const PKG_SIZE_NOENCR_MNFST = 3;
 /** Original PKG_SIZE_ENCR_MNFST slot/size. */
 export const PKG_SIZE_ENCR_MNFST = 15;
+
+/** Original package stream CRC/copy buffer size. */
+export const n_ConstBufferSize = 32768;

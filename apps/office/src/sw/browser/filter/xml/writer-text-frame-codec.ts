@@ -9,32 +9,24 @@ import { aFrameFormatSetRange } from "../../../source/core/bastyp/init";
 import { SwPosition } from "../../../source/core/crsr/pam";
 import type { SwDoc } from "../../../source/core/doc/doc";
 import { MakeFlySection } from "../../../source/core/doc/doclay";
-import { SwStartNode, SwTableNode } from "../../../source/core/docnode/node";
+import { SwStartNode } from "../../../source/core/docnode/node";
 import { SwFlyFrameFormat } from "../../../source/core/layout/atrfrm";
 import type { SwTextNode } from "../../../source/core/txtnode/ndtxt";
 import {
-  decodeTextNode,
-  decodeWriterTableSteps,
-  encodeTextNode,
-  encodeWriterTableSteps,
-  sectionTextNodes,
-  type WriterTextNodeRecord,
-  type WriterTableRecord,
+  decodeSectionBlocks,
+  encodeSectionBlocks,
+  type WriterSectionBlock,
 } from "./writer-document-content-codec";
 import { decodeSfxPoolItem, encodeSfxPoolItem } from "./item-codec";
 
 /** Native text anchors produced by the represented HTML table filter. */
 type TextFlyAnchor = RndStdIds.FLY_AT_PARA | RndStdIds.FLY_AT_CHAR;
-/** An actual direct child of the fly section. */
-type WriterTextFrameBlock =
-  { readonly text: WriterTextNodeRecord } | { readonly table: WriterTableRecord };
-
 /** Native text-frame value record with its actual anchor and ordered section blocks. */
 export interface WriterTextFrameRecord {
   readonly name: string;
   readonly anchor: Readonly<{ type: TextFlyAnchor; node: number; offset: number }>;
   readonly items: readonly SfxPoolItemSnapshot[];
-  readonly blocks: readonly WriterTextFrameBlock[];
+  readonly blocks: readonly WriterSectionBlock[];
 }
 
 /** Encodes the Writer text fly sections, adding each section's text owners for later anchors and bookmarks. @param document - Actual document. @param textOwners - Body and preceding fly text nodes. @returns Cloneable native text-frame records. */
@@ -57,16 +49,7 @@ export function* encodeTextFrames(
     const node = text ? textOwners.indexOf(text) : -1;
     if (node < 0 || (type !== RndStdIds.FLY_AT_PARA && type !== RndStdIds.FLY_AT_CHAR))
       throw new Error("Writer text-frame anchor cannot be transported.");
-    const content = document.nodes.GetSectionContent(start);
-    const blocks: WriterTextFrameBlock[] = [];
-    for (const block of content) {
-      blocks.push(
-        block instanceof SwTableNode
-          ? { table: yield* encodeWriterTableSteps(document, block.GetTable()) }
-          : { text: encodeTextNode(document, block) },
-      );
-      yield;
-    }
+    const blocks = yield* encodeSectionBlocks(document, start, textOwners);
     const items: SfxPoolItemSnapshot[] = [];
     for (const item of format.GetAttrSet().entries())
       if (item.Which() !== RES_ANCHOR && item.Which() !== RES_CNTNT)
@@ -77,7 +60,6 @@ export function* encodeTextFrames(
       items,
       blocks,
     });
-    for (const owner of sectionTextNodes(content)) textOwners.push(owner);
   }
   return frames;
 }
@@ -149,25 +131,6 @@ export function* decodeTextFrames(
       position.Dispose();
     }
 
-    const end = start.EndOfSectionNode();
-    let first = document.nodes.at(start.GetIndex() + 1).GetTextNode();
-    for (const block of record.blocks as readonly WriterTextFrameBlock[]) {
-      if (!block || typeof block !== "object")
-        throw new Error("Stored Writer text-frame content is invalid.");
-      if ("text" in block) {
-        decodeTextNode(
-          document,
-          first ?? document.nodes.MakeTextNode(end, document.GetDfltTextFormatColl()),
-          block.text,
-        );
-        first = null;
-      } else if ("table" in block)
-        yield* decodeWriterTableSteps(document, block.table, first ?? end);
-      else throw new Error("Stored Writer text-frame content is invalid.");
-      yield;
-    }
-    if (first !== null) document.nodes.RemoveNode(first.GetIndex(), 1, true);
-    for (const text of sectionTextNodes(document.nodes.GetSectionContent(start)))
-      textOwners.push(text);
+    yield* decodeSectionBlocks(document, start, record.blocks, textOwners);
   }
 }

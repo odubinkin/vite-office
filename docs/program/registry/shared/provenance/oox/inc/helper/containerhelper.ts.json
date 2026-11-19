@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/oox/inc/helper/containerhelper.ts",
+    "status": "mapped",
+    "upstreamPath": "include/oox/helper/containerhelper.hxx",
+    "localSymbols": [
+      "ValueRange"
+    ],
+    "upstreamSymbols": [
+      "ValueRange",
+      "ValueRangeSet"
+    ],
+    "preservedResponsibilities": [
+      "Original signed32 ValueRange scalar/single/implicit-copy construction, equality, containment and intersection retain inclusive unnormalized endpoints. Public ValueRangeSet export resolves the single implementation."
+    ],
+    "omittedResponsibilities": [
+      "Other Matrix/RefVector/ContainerHelper and native template/iterator/allocator ABI responsibilities remain unported or unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/inc/helper/containerhelper.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/oox/source/helper/containerhelper.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/oox/helper/containerhelper.hxx",
+          "marker": "ValueRange"
+        }
+      ]
+    }
+  }
+}

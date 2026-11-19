@@ -62,7 +62,7 @@ export class SwUndRng {
 /** Owns removed append-only content until the native move from undo storage consumes it. Full SwNodes undo sections and non-end moves remain unverified. */
 export class SwUndoSaveContent {
   protected m_pHistory: SwHistory | undefined;
-  /** Native DelContentIndex bookmark branch for represented collapsed ordinary marks. Footnote/fly/typed/expanded histories are not represented. @param rMark - Native mark. @param rPoint - Native point. @param nDelContentType - Original deletion flags. @returns Nothing. */
+  /** Native ordinary bookmark branch for content removal. @param rMark - Native mark. @param rPoint - Native point. @param nDelContentType - Original deletion flags. @returns Nothing. */
   protected DelContentIndex(
     rMark: SwPosition,
     rPoint: SwPosition,
@@ -77,15 +77,50 @@ export class SwUndoSaveContent {
     const access = doc.GetIDocumentMarkAccess();
     for (const bookmark of access.GetBookmarks()) {
       const position = bookmark.GetMarkPos();
-      const bSavePos =
-        (nDelContentType & DelContentType.CheckNoCntnt) !== 0
-          ? pStart.GetNodeIndex() <= position.GetNodeIndex() &&
-            position.GetNodeIndex() < pEnd.GetNodeIndex()
-          : pStart.compare(position) <= 0 && position.compare(pEnd) < 0;
-      if (bSavePos) {
+      const other = bookmark.IsExpanded() ? bookmark.GetOtherMarkPos() : undefined;
+      let savePosition: boolean,
+        saveOther = false,
+        remove = false;
+      if (nDelContentType & DelContentType.CheckNoCntnt) {
+        /** Tests the original node-only deletion interval. @param endpoint - Mark endpoint. @returns Whether covered. */
+        function insideNodeRange(endpoint: SwPosition): boolean {
+          return (
+            pStart.GetNodeIndex() <= endpoint.GetNodeIndex() &&
+            endpoint.GetNodeIndex() < pEnd.GetNodeIndex()
+          );
+        }
+        savePosition = insideNodeRange(position);
+        saveOther = !!other && insideNodeRange(other);
+        remove = savePosition && saveOther;
+      } else {
+        const first = pStart.compare(position),
+          last = position.compare(pEnd);
+        const maybe = first <= 0 && last <= 0 && (last === 0 || (first === 0 && !!other));
+        savePosition = first <= 0 && last <= 0 && !maybe;
+        if (other) {
+          const otherFirst = pStart.compare(other),
+            otherLast = other.compare(pEnd);
+          if (otherFirst <= 0 && otherLast <= 0) {
+            if (
+              savePosition ||
+              (otherFirst < 0 && otherLast < 0) ||
+              (maybe &&
+                !(nDelContentType & DelContentType.Replace) &&
+                pStart.GetContentIndex() === 0 &&
+                pEnd.GetContentIndex() === pEnd.GetNode().GetTextNode()?.Len())
+            ) {
+              if (maybe) savePosition = true;
+              remove = true;
+            }
+            saveOther = remove || otherLast === 0;
+          }
+          if (maybe && first === 0) savePosition = true;
+        }
+      }
+      if (savePosition || saveOther) {
         this.m_pHistory ??= new SwHistory();
-        this.m_pHistory.AddIMark(bookmark, true, false);
-        access.DeleteMark(bookmark.GetName());
+        this.m_pHistory.AddIMark(bookmark, savePosition, saveOther);
+        if (savePosition && (remove || !other)) access.DeleteMark(bookmark.GetName());
       }
     }
   }

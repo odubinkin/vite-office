@@ -24,6 +24,18 @@
         {
           "path": "oox/source/token/tokenmap.cxx",
           "marker": "TokenMap::getUtf8TokenName"
+        },
+        {
+          "path": "include/oox/token/tokenmap.hxx",
+          "marker": "getUnicodeTokenName"
+        },
+        {
+          "path": "include/oox/token/tokenmap.hxx",
+          "marker": "getTokenFromUnicode"
+        },
+        {
+          "path": "oox/qa/token/tokenmap-test.cxx",
+          "marker": "test_roundTripUnicode"
         }
       ]
     },
@@ -32,14 +44,17 @@
       "getTokenFromUtf8",
       "getUtf8TokenName",
       "XML_TOKEN_INVALID",
-      "XML_TOKEN_COUNT"
+      "XML_TOKEN_COUNT",
+      "getUnicodeTokenName",
+      "getTokenFromUnicode"
     ],
     "upstreamSymbols": [
       "TokenMap::getTokenFromUtf8",
       "TokenMap::getUtf8TokenName"
     ],
     "preservedResponsibilities": [
-      "Complete6079 native local token IDs retain unchanged tokens.txt/generate-tokens.py input order, exact UTF8/case-sensitive lookup, invalid -1 and bounds/empty output. UTF8 names initialize lazily, and owned byte transport protects cached names. Native gperf lookup binds a host Map; generated Sequence sharing, Unicode inline overloads, diagnostic logging and native performance/ABI are not claimed."
+      "Complete6079 native local token IDs retain unchanged tokens.txt/generate-tokens.py input order, exact UTF8/case-sensitive lookup, invalid -1 and bounds/empty output. UTF8 names initialize lazily, and owned byte transport protects cached names. Native gperf lookup binds a host Map; generated Sequence sharing, Unicode inline overloads, diagnostic logging and native performance/ABI are not claimed.",
+      "Continuation superseding the earlier host byte-return binding: getUtf8TokenName now exposes the original function-local static native sal_Int8 Sequence owner and getUTF8Identifier copies it with native COW. Counted signed-byte lookup preserves exact raw bytes. Both original oox/qa/token/tokenmap-test.cxx round-trip methods cover all6079 tokens, including actual native Unicode/string temporaries. The generated gperf lookup is still a host map; physical aliasing at the SAL counted-byte conversion boundary and independent compiled original differential remain unqualified."
     ],
     "omittedResponsibilities": [
       "Unconsumed native interfaces, component services, C++ ABI and native memory/thread/performance contracts remain outside this consumed binding.",

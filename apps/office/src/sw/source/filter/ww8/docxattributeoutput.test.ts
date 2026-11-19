@@ -7,7 +7,6 @@ import { ZipStorage } from "../../../../oox/source/helper/zipstorage";
 import { expect, it } from "vitest";
 import { impl_WriteRunText } from "./docxattributeoutput";
 import { FastSerializerHelper } from "../../../../sax/inc/fshelper";
-import { FastTokenHandler } from "../../../../oox/source/core/fasttokenhandler";
 import { getTokenFromUtf8 as token } from "../../../../oox/source/token/tokenmap";
 import { ZipFragmentStream } from "../../../../oox/source/helper/zipstorage";
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
@@ -29,7 +28,7 @@ import {
 /** Actual fragment serializer and native attribute output. @returns Test output owners. */
 function setup() {
   const stream = new ZipFragmentStream("word/document.xml", "application/xml"),
-    helper = new FastSerializerHelper(stream, false, new FastTokenHandler());
+    helper = new FastSerializerHelper(stream, false);
   const doc = new SwDoc(),
     position = new SwPosition(doc.GetNodes().GetEndOfContent()),
     range = new SwPaM(position);

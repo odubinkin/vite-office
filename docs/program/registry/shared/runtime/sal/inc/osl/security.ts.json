@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/inc/osl/security.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-file-url",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/inc/osl/security.ts",
+        "apps/office/src/sal/osl/unx/file_url.test.ts"
+      ],
+      "justification": "Original osl_getFileURLFromSystemPath uses RTL string slots, source-case file: rejection, original current-security/getHomeDir tilde recursion, repeated slash copy/index adaptation, IgnoreEscapes UTF8 encoding and absolute file:// prefix; input/output aliasing and early output preservation are retained. Public osl_getHomeDir converts native selected HOME bytes with source thread flags and ignores the subsequent path-conversion status exactly as upstream. Original Security current handle/home/getHandle/destructor wrapper is bound; other operations remain absent. All six active UNIX path-to-URL QA vectors and critical actual MEMFS HOME, alias, repeated slash/Unicode/percent/relative and ignored-status cases are tested. Reverse URL/authority/hostname, other file functions, physical native OOM/debug/invalid-lifetime and full TempFile/package/storage/model/filter/UI remain unimplemented or unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Security"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/osl/security.hxx",
+      "upstreamSymbols": [
+        "Security"
+      ]
+    }
+  }
+}

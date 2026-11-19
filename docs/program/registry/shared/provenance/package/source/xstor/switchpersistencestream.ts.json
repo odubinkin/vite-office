@@ -1,0 +1,75 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/xstor/switchpersistencestream.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/xstor/switchpersistencestream.cxx",
+    "localSymbols": [
+      "SwitchablePersistenceStream",
+      "SPStreamData_Impl",
+      "SwitchPersistenceTo",
+      "CloseAll_Impl",
+      "readSomeBytes",
+      "waitForCompletion",
+      "CopyAndSwitchPersistenceTo"
+    ],
+    "upstreamSymbols": [
+      "SwitchablePersistenceStream",
+      "SPStreamData_Impl",
+      "SwitchPersistenceTo",
+      "CloseAll_Impl",
+      "readSomeBytes",
+      "waitForCompletion",
+      "CopyAndSwitchPersistenceTo"
+    ],
+    "preservedResponsibilities": [
+      "Original SwitchablePersistenceStream/SPStreamData_Impl own actual native UNO persistence capabilities and explicit ByteReader RTTI, six real UNO interfaces, source equal-length/position/open-flag transfer, input-only IO rejection, native pointer/Sequence read distinction, logical side closure, actual seek/truncate/monitor forwarding and reverse member lifetime. Real UNOMemoryStream/SequenceInputStream and nested original persistence owners provide positive IO and monitoring/error propagation, not a replacement provider. Original m_aMutex and source scoped_lock boundaries now call the actual pinned libc++ std::mutex owner, including exception cleanup and constructor unwinding. SwitchPersistenceTo, CloseAll_Impl and waitForCompletion retain their source lack of locking; native pthread race behavior is not qualified. Original generic qadevOOo XInputStream and XOutputStream assertions execute over genuine persistence facets. CopyAndSwitchPersistenceTo/actual TempFileFastService and full OStorage/StorageFactory/backend/filter/model/UI graph remain unported; pointer fallback without ByteReader and private unreachable guards remain unqualified.",
+      "Original ByteGrabber/ByteChucker/MemoryByteGrabber ZIP binary IO now consumes actual UNO references, reusable native sequences/fixed8byte storage, explicit ByteReader RTTI and source integer/short-read/seek/borrow rules. Existing ByteReader/ByteWriter and real implementers accept both actual SAL Int8Array/Uint8Array pointers and CPPU byte cells, removing the earlier cells-only restriction without a replacement stream/provider. Pointer arithmetic uses actual backing allocation/byteOffset, source lifecycle remains GC-managed. Unchanged pinned Strict/Transitional DOCX/XLSX local headers prove archive byte IO only. Memory UInt8/UInt16 signed results and ByteChucker unguarded seek assumption retained. Native full directory/inflate/XStorage/filter/model/export/UI and actual non-ByteReader source fallback remain unqualified or unfinished; no source masks/private patches/fake success stream.",
+      "Actual Chromium main and DOM-free Worker copy 64001 bytes through OStorageHelper and genuine persistence/SvStream wrappers, switch to equal-length persistence preserving position/open flags, read Sequence and pointer bytes, and disconnect only after both logical sides close. Borrowed SvStreams outlive all component releases. This is direct stream-contract evidence, not complete DOCX/XLSX package or native thread-race acceptance.",
+      "Original CopyAndSwitchPersistenceTo is now implemented: supplied targets must be empty, absent targets create actual TempFileFastService, real capabilities are queried, original input seeks0/copies/flushes, saved position/open flags transfer, and old data releases before new SPStreamData installation. No mutex/rollback/disconnected guard is invented where source omits it. Actual32000-byte raw/Sequence copy paths and genuine readonly-target failures are tested without fake providers."
+    ],
+    "omittedResponsibilities": [
+      "Positive non-ByteReader fallback and invariant/fatal error paths, native pthread/physical ABI/OOM and complete OStorage/backend/filter/model/UI acceptance remain unqualified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Existing actual SAL/CPPU logical addresses, compiler specialization/interface casts and explicit scope destruction bind native C++ syntax. The actual pinned SDK libc++ mutex implements the original member and guard lifetimes; native pthread/physical C++ ABI remain unqualified."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/xstor/switchpersistencestream.ts",
+          "marker": "SwitchablePersistenceStream"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/switchpersistencestream.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/fastparser.test.ts",
+          "marker": "actual package persistence stream"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/package/source/xstor/switchpersistencestream.cxx",
+          "marker": "SwitchablePersistenceStream::SwitchPersistenceTo"
+        },
+        {
+          "path": "package/source/xstor/switchpersistencestream.hxx",
+          "marker": "m_aMutex"
+        },
+        {
+          "path": "qadevOOo/tests/java/ifc/io/_XInputStream.java",
+          "marker": "public void _readBytes()"
+        },
+        {
+          "path": "qadevOOo/tests/java/ifc/io/_XOutputStream.java",
+          "marker": "public void _writeBytes()"
+        }
+      ]
+    }
+  }
+}

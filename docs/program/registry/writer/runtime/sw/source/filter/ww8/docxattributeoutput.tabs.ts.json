@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.tabs.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "docx-file-filter",
+    "capabilityIds": [
+      "CAP-d48ffd59-e673-4eda-aa2d-bcf1f13a5c84"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ww8/docxattributeoutput.tabs.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.tabs.test.ts",
+        "apps/office/e2e/writer-docx-theme.spec.ts"
+      ],
+      "justification": "Writes Native DOCX clear and custom tab records in source order, inherits equal stops, preserves the per-list 64-record limit and directs the default position to settings.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ParaTabStop"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/filter/ww8/docxattributeoutput.cxx",
+      "upstreamSymbols": [
+        "DocxAttributeOutput::ParaTabStop"
+      ]
+    }
+  }
+}

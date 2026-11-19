@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/xml/XMLColumnRowGroupExport.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "ods-content-filter",
+    "capabilityIds": [
+      "CAP-eec4dd5f-723f-4652-b275-5ad5817f761d",
+      "CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5",
+      "CAP-c13ec941-1af7-4a09-810f-df267da27388",
+      "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681",
+      "CAP-7206d1b8-82a8-4f0a-91c5-ae26cb0251d4",
+      "CAP-0bb796a3-9483-445d-aef3-1deeb40f990a",
+      "CAP-ef411d57-b025-407e-a0b7-fce8342cdeda"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/xml/XMLColumnRowGroupExport.ts",
+        "apps/office/src/sc/source/filter/oox/worksheethelper.test.ts",
+        "vendor/libreoffice-reference/sc/source/filter/xml/XMLColumnRowGroupExport.cxx",
+        "apps/office/src/sc/source/filter/excel/print-ranges.test.ts"
+      ],
+      "justification": "Native ODF group starts and ends divide the repeated row and column records, preserving nesting and visibility. Repeating header wrappers split at native outline boundaries and retain their full interval on import.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScMyOpenCloseColumnRowGroup"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/filter/xml/XMLColumnRowGroupExport.cxx",
+      "upstreamSymbols": [
+        "ScMyOpenCloseColumnRowGroup::OpenGroups",
+        "ScMyOpenCloseColumnRowGroup::CloseGroups"
+      ]
+    }
+  }
+}

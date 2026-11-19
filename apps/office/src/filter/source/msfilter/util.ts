@@ -119,3 +119,67 @@ export function bestFitOpenSymbolToMSFont(
   }
   return value.value;
 }
+
+import { isAsciiAlphanumeric } from "../../../sal/inc/rtl/character";
+/** Original exact-case Word built-in style ID exceptions. */
+const docxStyleIds = new Map<string, string>([
+  ["heading 1", "Heading1"],
+  ["heading 2", "Heading2"],
+  ["heading 3", "Heading3"],
+  ["heading 4", "Heading4"],
+  ["heading 5", "Heading5"],
+  ["heading 6", "Heading6"],
+  ["heading 7", "Heading7"],
+  ["heading 8", "Heading8"],
+  ["heading 9", "Heading9"],
+  ["index 1", "Index1"],
+  ["index 2", "Index2"],
+  ["index 3", "Index3"],
+  ["index 4", "Index4"],
+  ["index 5", "Index5"],
+  ["index 6", "Index6"],
+  ["index 7", "Index7"],
+  ["index 8", "Index8"],
+  ["index 9", "Index9"],
+  ["toc 1", "TOC1"],
+  ["toc 2", "TOC2"],
+  ["toc 3", "TOC3"],
+  ["toc 4", "TOC4"],
+  ["toc 5", "TOC5"],
+  ["toc 6", "TOC6"],
+  ["toc 7", "TOC7"],
+  ["toc 8", "TOC8"],
+  ["toc 9", "TOC9"],
+  ["footnote text", "FootnoteText"],
+  ["annotation text", "CommentText"],
+  ["header", "Header"],
+  ["footer", "Footer"],
+  ["index heading", "IndexHeading"],
+  ["caption", "Caption"],
+  ["table of figures", "TableofFigures"],
+  ["envelope address", "EnvelopeAddress"],
+  ["envelope return", "EnvelopeReturn"],
+  ["footnote reference", "FootnoteReference"],
+  ["annotation reference", "CommentReference"],
+  ["line number", "LineNumber"],
+  ["page number", "PageNumber"],
+  ["endnote reference", "EndnoteReference"],
+  ["endnote text", "EndnoteText"],
+  ["table of authorities", "TableofAuthorities"],
+  ["macro", "MacroText"],
+]);
+/** Original DOCX ID conversion retains only ASCII letters/digits/hyphen without capitalizing arbitrary names. @param name - Actual counted UTF16 view, including embedded NUL. @returns Owned native Unicode ID. */
+export function CreateDOCXStyleId(name: Uint16Array): OUString {
+  let key = "";
+  for (const unit of name) key += String.fromCharCode(unit);
+  const special = docxStyleIds.get(key);
+  if (special !== undefined) {
+    const units = new Uint16Array(special.length);
+    for (let index = 0; index < units.length; ++index) units[index] = special.charCodeAt(index);
+    return new OUString(units, units.length);
+  }
+  const units = new Uint16Array(name.length);
+  let length = 0;
+  for (const unit of name) if (isAsciiAlphanumeric(unit) || unit === 45) units[length++] = unit;
+  return new OUString(units, length);
+}

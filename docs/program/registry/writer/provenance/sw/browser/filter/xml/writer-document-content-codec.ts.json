@@ -18,13 +18,18 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-page-story-codec.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": []
     },
     "rationale": "Transports original Writer text and table sections through existing item and numbering owners. The same section codec serves body tables, nested cell tables and anchored frame tables.",
     "responsibilities": [
-      "Transports original Writer text and table sections through existing item and numbering owners. The same section codec serves body tables, nested cell tables and anchored frame tables."
+      "Transports original Writer text and table sections through existing item and numbering owners. The same section codec serves body tables, nested cell tables and anchored frame tables.",
+      "Shares the existing recursive paragraph and table codec for ordered actual text-frame and page story sections."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

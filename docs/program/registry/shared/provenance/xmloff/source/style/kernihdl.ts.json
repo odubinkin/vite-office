@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/style/kernihdl.ts",
+    "upstreamPath": "xmloff/source/style/kernihdl.cxx",
+    "localSymbols": [
+      "XMLKerningPropHdl",
+      "importXML",
+      "exportXML"
+    ],
+    "upstreamSymbols": [
+      "XMLKerningPropHdl::importXML",
+      "XMLKerningPropHdl::exportXML"
+    ],
+    "preservedResponsibilities": [
+      "Implements the original XMLKerningPropHdl signed-short conversion, normal token and typed success/failure rules using the consumed native XML unit converter."
+    ],
+    "omittedResponsibilities": [
+      "Layout shaping and printer metric behavior are outside this XML property handler."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/style/kernihdl.ts",
+          "marker": "export class XMLKerningPropHdl"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/text/txtprmap.test.ts",
+          "marker": "fo:letter-spacing"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "xmloff/source/style/kernihdl.cxx",
+          "marker": "XMLKerningPropHdl::importXML"
+        },
+        {
+          "path": "xmloff/source/style/kernihdl.cxx",
+          "marker": "XMLKerningPropHdl::exportXML"
+        }
+      ]
+    }
+  }
+}

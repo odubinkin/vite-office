@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/excel/xestring.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-export",
+    "capabilityIds": [
+      "CAP-3433dbbb-6122-4137-823f-fad19a8405ab"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/excel/xestring.ts",
+        "apps/office/src/sc/source/filter/excel/xestring.test.ts",
+        "vendor/libreoffice-reference/sc/source/filter/excel/xestring.cxx",
+        "apps/office/src/sc/source/filter/excel/xestream.xml.test.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.test.ts"
+      ],
+      "justification": "Retains Unicode and byte buffers, native format run comparison and clipping. WriteXml emits inline run properties using the workbook font table and shared XclXmlUtils::WriteFontData. SeparateFormats and the original no-font text path remain in use.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XclExpString",
+        "lclCompareVectors",
+        "lclHashVector",
+        "WriteXml"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/excel/xestring.cxx",
+      "upstreamSymbols": [
+        "XclExpString::Assign",
+        "XclExpString::AppendFormat",
+        "XclExpString::WriteToMem",
+        "lclCompareVectors",
+        "lclHashVector",
+        "XclExpString::WriteXml"
+      ]
+    }
+  }
+}

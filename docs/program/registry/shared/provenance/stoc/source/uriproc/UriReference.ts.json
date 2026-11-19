@@ -19,15 +19,15 @@
       "upstream": [
         {
           "path": "stoc/source/uriproc/UriReference.cxx",
-          "marker": "UriReference::getUriReference"
+          "marker": "UriReference"
         },
         {
           "path": "stoc/source/uriproc/UriReference.cxx",
-          "marker": "UriReference::hasRelativePath"
+          "marker": "getUriReference"
         },
         {
           "path": "stoc/source/uriproc/UriReference.cxx",
-          "marker": "UriReference::getPath"
+          "marker": "getSchemeSpecificPart"
         }
       ]
     },
@@ -36,16 +36,18 @@
       "UriReference"
     ],
     "upstreamSymbols": [
-      "UriReference::getUriReference",
-      "UriReference::hasRelativePath",
-      "UriReference::getPath"
+      "UriReference",
+      "getUriReference",
+      "getSchemeSpecificPart"
     ],
     "preservedResponsibilities": [
-      "Consumed generic URI value operations preserve lexical UTF16 and absent versus empty authority/query/fragment. Component service identity, mutex/native lifetime and unused URI methods are omitted."
+      "Prior checkpoint (superseded implementation): Consumed generic URI value operations preserve lexical UTF16 and absent versus empty authority/query/fragment. Component service identity, mutex/native lifetime and unused URI methods are omitted.",
+      "Replaced the now-unused immutable host-string URI kernel with the actual original native RTL value owner, owned string fields, const-reference/value returns, fragment presence, path segments and reverse destruction. The former .value responsibility split now occupies the original upstream basename."
     ],
     "omittedResponsibilities": [
-      "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",
-      "DOCX full model import/export, shell and UI integration remain in progress in V4DQJW."
+      "Independent native compiled differential, physical native mutex/ABI/allocator and full runtime shutdown remain unqualified.",
+      "Shared bootstrap macro expansion/external translator and native metadata/storage prerequisites remain unfinished.",
+      "Full DOCX/XLSX model/filter/package/UI acceptance remains unfinished; no broad semantic or default status is promoted."
     ]
   }
 }

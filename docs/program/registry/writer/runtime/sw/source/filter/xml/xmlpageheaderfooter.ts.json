@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/xml/xmlpageheaderfooter.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "odf-file-filter",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/xml/xmlpageheaderfooter.ts",
+        "apps/office/src/sw/source/filter/xml/odt-page-stories.test.ts",
+        "apps/office/e2e/writer-odt-page-stories.spec.ts"
+      ],
+      "justification": "Imports original ODF master-page ordinary, even and first header/footer children into actual native Writer formats and text sections. Exports the same variants using the shared paragraph, table and automatic style owners.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getOdfPageStories",
+        "XMLTextMasterPageContext",
+        "XMLTextHeaderFooterContext"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "xmloff/source/text/XMLTextHeaderFooterContext.cxx",
+      "upstreamSymbols": [
+        "XMLTextHeaderFooterContext"
+      ]
+    }
+  }
+}

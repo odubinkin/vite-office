@@ -1,0 +1,96 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/xstor/owriteablestream.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/xstor/owriteablestream.cxx",
+    "localSymbols": [
+      "OWriteStream_Impl",
+      "createPackageStream",
+      "SetMediaType",
+      "GetPlainInputStream",
+      "GetAllRelationshipsIfAny",
+      "ReadRelInfoIfNecessary",
+      "GetReadStream",
+      "FillTempGetFileName",
+      "InputStreamDisposed",
+      "DisposeWrappers"
+    ],
+    "upstreamSymbols": [
+      "OWriteStream_Impl::Commit",
+      "OWriteStream_Impl::InsertIntoPackageFolder",
+      "OWriteStream_Impl::GetStream_Impl",
+      "OWriteStream_Impl::GetAllRelationshipsIfAny",
+      "OWriteStream_Impl::ReadRelInfoIfNecessary",
+      "OWriteStream_Impl::FillTempGetFileName",
+      "OWriteStream_Impl::DisposeWrappers",
+      "OWriteStream_Impl::InputStreamDisposed"
+    ],
+    "preservedResponsibilities": [
+      "Original nonencrypted truncate cache, property copying, factory replacement and flushed insertion are connected to the native storage catalog and actual package. Public writable wrappers, PACKAGE encryption, nontruncate materialization, relationships and document UI remain unfinished.",
+      "Assigns the relationship member MediaType through the original native writable stream property sequence.",
+      "Retains the original part relationship stream and lazy read state in the original owner. Success releases the original input reference after copying rows. Failure preserves the terminal Broken state. Plain reads select native cache or package input. The exact public stream wrapper is still pending.",
+      "Attaches ordinary and seekable readonly streams, adds original relationship properties and invalidates wrappers during parent disposal. Seekable reads use the original 30000-byte cache threshold, existing TempFileFast and the original 32000-byte tail transfer.",
+      "The plain ZIP/OFOPXML storage uses the real nontransacted OWriteStream component for new/truncated output. It exposes the writable data and property facets, commits the native cache and closes its attachment when both directions close. Transacted streams, nontruncate existing writes and encryption families remain pending. Root and per-member relationship XML streams are staged through the seekable RelationsInfoStream property and emitted by the native associated storage commit. The writable plain sequence property preserves the source status omission. Full native relationship interface exposure remains pending."
+    ],
+    "omittedResponsibilities": [
+      "The public wrapper, edited relationship stream state, encryption and full format UI paths remain unfinished."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Existing actual SAL/CPPU logical addresses, compiler specialization/interface casts and explicit scope destruction bind native C++ syntax. The actual pinned SDK libc++ mutex implements the original member and guard lifetimes; native pthread/physical C++ ABI remain unqualified."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/xstor/owriteablestream.ts",
+          "marker": "OWriteStream_Impl"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.impl.test.ts",
+          "marker": "attaches newly written children"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.relations.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xfactory.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/xstor/owriteablestream.cxx",
+          "marker": "OWriteStream_Impl::Commit"
+        },
+        {
+          "path": "package/source/xstor/owriteablestream.cxx",
+          "marker": "OWriteStream_Impl::GetStream_Impl"
+        },
+        {
+          "path": "package/source/xstor/owriteablestream.cxx",
+          "marker": "OWriteStream_Impl::GetAllRelationshipsIfAny"
+        },
+        {
+          "path": "package/source/xstor/owriteablestream.cxx",
+          "marker": "OWriteStream_Impl::ReadRelInfoIfNecessary"
+        },
+        {
+          "path": "package/source/xstor/owriteablestream.cxx",
+          "marker": "OWriteStream_Impl::FillTempGetFileName"
+        },
+        {
+          "path": "package/source/xstor/owriteablestream.cxx",
+          "marker": "OWriteStream_Impl::DisposeWrappers"
+        },
+        {
+          "path": "package/source/xstor/owriteablestream.cxx",
+          "marker": "OWriteStream_Impl::InputStreamDisposed"
+        }
+      ]
+    }
+  }
+}

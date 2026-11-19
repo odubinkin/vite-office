@@ -3,6 +3,7 @@
 /** Setting identities consumed by the currently implemented paragraph, list, style and line paths. */
 export type DocumentSettingId =
   | "ADD_EXT_LEADING"
+  | "APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING"
   | "AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE"
   | "DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK"
   | "DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT"
@@ -23,6 +24,7 @@ export type DocumentSettingId =
 /** Pinned upstream defaults independent of host configuration. */
 const DEFAULT_DOCUMENT_SETTINGS: Readonly<Record<DocumentSettingId, boolean>> = Object.freeze({
   ADD_EXT_LEADING: true,
+  APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING: false,
   AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE: true,
   DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK: false,
   DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT: false,

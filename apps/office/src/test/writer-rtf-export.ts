@@ -1,8 +1,10 @@
 /** @fileoverview Attribute-output tests retain genuine RTF document/range owners and release their borrowed contexts after each test. */
-import { afterEach } from "vitest";
+import { afterEach, beforeAll } from "vitest";
 import { SwDoc } from "../sw/source/core/doc/doc";
 import { SwPaM, SwPosition } from "../sw/source/core/crsr/pam";
 import { RtfExport } from "../sw/source/filter/ww8/rtfexport";
+import { initializeRuntime } from "../external/emscripten/runtime";
+beforeAll(initializeRuntime);
 const contexts: { document: SwDoc | undefined; range: SwPaM; exporter: RtfExport }[] = [];
 afterEach(
   /** Releases range registrations before their document owners. @returns Nothing. */ () => {

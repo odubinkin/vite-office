@@ -1,5 +1,6 @@
 /** @fileoverview Original comphelper surrogate sanitizer and UTF16 strip; other string utilities remain unported. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
+import { getToken, trim } from "../../../o3tl/inc/string_view";
 import { isHighSurrogate, isLowSurrogate } from "../../../sal/inc/rtl/character";
 /** Original first-invalid-surrogate truncation, retaining COW sharing when valid. Nonthrowing native diagnostics have no model mutation. @param value - Actual Unicode input. @returns Owned prefix or shared value copy. */
 export function sanitizeStringSurrogates(value: OUStringConstReference): OUString {
@@ -31,4 +32,15 @@ export function strip(input: OUStringConstReference, character: number): OUStrin
     ++start;
   }
   return input.copy(start, end - start);
+}
+
+/** Original split trims each borrowed token and omits empty tokens. @param input - Counted UTF16 view. @param separator - Native delimiter. @returns Owned native strings. */
+export function split(input: Uint16Array, separator: number): OUString[] {
+  const result: OUString[] = [],
+    position: [number] = [0];
+  do {
+    const token = trim(getToken(input, separator, position));
+    if (token.length !== 0) result.push(new OUString(token, token.length));
+  } while (position[0] !== -1);
+  return result;
 }

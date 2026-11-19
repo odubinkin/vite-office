@@ -190,6 +190,24 @@ export class SwPageDesc extends BroadcastingModify {
   IsFirstShared(): boolean {
     return Boolean(this.m_eUse & UseOnPage.FirstShare);
   }
+  /** Original even-page header sharing flag. @returns Whether left pages share the master header. */
+  IsHeaderShared(): boolean {
+    return Boolean(this.m_eUse & UseOnPage.HeaderShare);
+  }
+  /** Original even-page footer sharing flag. @returns Whether left pages share the master footer. */
+  IsFooterShared(): boolean {
+    return Boolean(this.m_eUse & UseOnPage.FooterShare);
+  }
+  /** Preserves unrelated page usage flags. @param shared - Even-page header sharing. @returns Nothing. */
+  ChgHeaderShare(shared: boolean): void {
+    if (shared) this.m_eUse |= UseOnPage.HeaderShare;
+    else this.m_eUse &= UseOnPage.NoHeaderShare;
+  }
+  /** Preserves unrelated page usage flags. @param shared - Even-page footer sharing. @returns Nothing. */
+  ChgFooterShare(shared: boolean): void {
+    if (shared) this.m_eUse |= UseOnPage.FooterShare;
+    else this.m_eUse &= UseOnPage.NoFooterShare;
+  }
   /** Original first-page sharing mutation preserves every other use flag. @param value - Sharing flag. @returns Nothing. */
   ChgFirstShare(value: boolean): void {
     if (value) this.m_eUse |= UseOnPage.FirstShare;

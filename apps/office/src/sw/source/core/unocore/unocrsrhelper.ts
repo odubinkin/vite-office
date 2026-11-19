@@ -22,12 +22,13 @@ import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { SvxFontItem, SvxUnderlineItem } from "../../../../editeng/source/items/textitem";
+import { SvxKerningItem } from "../../../../editeng/inc/kernitem";
 import {
   BorderLine2,
   cppu_detail_getUnoType_BorderLine2,
 } from "../../../../offapi/com/sun/star/table/BorderLine2";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
+import { SfxByteItem, SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
@@ -39,10 +40,10 @@ import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import { MID_PAGEDESC_PAGEDESCNAME } from "../../../inc/unomid";
 import { SwFormatPageDesc } from "../attr/fmtpdsc";
 import { SwPaM } from "../crsr/pam";
-import { setTextFormatCollAtNode } from "../doc/docfmt";
+import { findCharacterStyle, setTextFormatCollAtNode } from "../doc/docfmt";
 import { SwStyleNameMapper } from "../doc/SwStyleNameMapper";
 import { SwNumRuleItem, SwParaConnectBorderItem } from "../para/paratr";
-import { SwFormatINetFormat } from "../txtnode/fmtatr2";
+import { SwFormatCharFormat, SwFormatINetFormat } from "../txtnode/fmtatr2";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { SwFormatAutoFormat } from "../txtnode/txatbase";
 import { SwUnoPropertyMap, type SwUnoPropertyEntry } from "./unomap";
@@ -149,7 +150,11 @@ export function queryItem(item: SfxPoolItem, entry: SwUnoPropertyEntry): Any {
     );
     return out;
   }
-  if (item instanceof SvxUnderlineItem || item instanceof SvxFrameDirectionItem) {
+  if (
+    item instanceof SfxByteItem ||
+    item instanceof SvxUnderlineItem ||
+    item instanceof SvxFrameDirectionItem
+  ) {
     item.QueryValue(out, entry.member);
     return out;
   }
@@ -246,14 +251,20 @@ export function putItem(item: SfxPoolItem, entry: SwUnoPropertyEntry, value: Any
     if (!copy.PutValue(value, entry.member)) illegal("Invalid underline value");
     return copy;
   }
+  if (copy instanceof SvxKerningItem) {
+    if (!copy.PutValue(value, entry.member)) illegal("Invalid character spacing");
+    return copy;
+  }
   if (copy instanceof SwParaConnectBorderItem)
     return new SwParaConnectBorderItem(scalar(value, "bool") as boolean);
   if (copy instanceof SfxBoolItem) {
     if (!copy.PutValue(value, entry.member)) illegal("Expected bool");
     return copy;
   }
-  if (copy instanceof SfxInt16Item && entry.kind === "byte")
-    return new SfxInt16Item(item.Which(), (scalar(value, "sal_Int8") as number) & 0xff);
+  if (copy instanceof SfxByteItem) {
+    if (!copy.PutValue(value, entry.member)) illegal("Expected byte");
+    return copy;
+  }
   if (copy instanceof SfxInt16Item)
     return new SfxInt16Item(item.Which(), scalar(value, "sal_Int16") as number);
   if (copy instanceof SfxUInt16Item)
@@ -301,6 +312,10 @@ export function SetPropertyValue(
     doc = pam.GetPoint().GetNode().GetDoc();
   if (name === "ListAutoFormat") {
     for (const r of ranges) SetParaListAutoFormat(r.node, value);
+    return;
+  }
+  if (name === "CharStyleName") {
+    doc.InsertPoolItem(pam, SetCharStyle(doc, value), mode);
     return;
   }
   if (name === "CharAutoStyleName") {
@@ -386,6 +401,12 @@ export function SetPropertyValue(
   const current = effectiveItem(first.node, first.start, entry.which),
     item = putItem(current, entry, value);
   doc.InsertPoolItem(pam, item, mode);
+}
+/** Resolves the native character format and creates the ranged UNO character-style item. @param doc - Target document. @param value - Programmatic style name. @returns Native style item. */
+function SetCharStyle(doc: import("../doc/doc").SwDoc, value: Any): SwFormatCharFormat {
+  const style = findCharacterStyle(doc, stringValue(value));
+  if (!style) illegal("Unknown character style");
+  return new SwFormatCharFormat(style);
 }
 /** Queries the item effective at a text offset, including character hints. @param node - Canonical text node. @param offset - Original offset input. @param which - Original which input. @returns The represented native operation result. */
 export function effectiveItem(node: SwTextNode, offset: number, which: number): SfxPoolItem {
@@ -512,6 +533,7 @@ export function SetPropertyValues(
     items = new Map<number, SfxPoolItem>(),
     special: PropertyValue[] = [],
     regular: PropertyValue[] = [];
+  const doc = pam.GetPoint().GetNode().GetDoc();
   let missing = "";
   for (const property of properties) {
     const name = text(property.Name);
@@ -524,7 +546,9 @@ export function SetPropertyValues(
   for (const property of regular) {
     const name = text(property.Name),
       entry = SwUnoPropertyMap.get(name);
-    if (entry) {
+    if (entry?.which === H.RES_TXTATR_CHARFMT) {
+      items.set(entry.which, SetCharStyle(doc, property.Value));
+    } else if (entry) {
       const previous =
         items.get(entry.which) ?? effectiveItem(first.node, first.start, entry.which);
       items.set(entry.which, putItem(previous, entry, property.Value));
@@ -539,8 +563,7 @@ export function SetPropertyValues(
       }
     }
   }
-  for (const item of items.values())
-    pam.GetPoint().GetNode().GetDoc().InsertPoolItem(pam, item, mode);
+  for (const item of items.values()) doc.InsertPoolItem(pam, item, mode);
   if (missing) unknown(missing);
 }
 /** CR separates paragraphs; LF is a line break, not another paragraph. Control characters reject the whole insertion before mutation. @param pam - Original pam input. @param input - Original input input. @param mode - Original mode input. @returns The represented native operation result. */

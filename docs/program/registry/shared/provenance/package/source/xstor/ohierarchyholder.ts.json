@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/xstor/ohierarchyholder.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/xstor/ohierarchyholder.cxx",
+    "localSymbols": [
+      "OHierarchyHolder_Impl",
+      "GetStreamHierarchically"
+    ],
+    "upstreamSymbols": [
+      "OHierarchyHolder_Impl::GetStreamHierarchically",
+      "OHierarchyHolder_Impl::GetListPathFromString"
+    ],
+    "preservedResponsibilities": [
+      "The represented readonly hierarchy retains the actual substorage path and stream owners. Writable hierarchy transaction and encrypted modes remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Writable hierarchy, encrypted storage and native physical ABI remain unqualified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The represented readonly hierarchy retains the actual substorage path and stream owners. Writable hierarchy transaction and encrypted modes remain pending."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/xstor/ohierarchyholder.ts",
+          "marker": "OHierarchyHolder_Impl"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xfactory.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/xstor/ohierarchyholder.cxx",
+          "marker": "OHierarchyHolder_Impl::GetStreamHierarchically"
+        },
+        {
+          "path": "package/source/xstor/ohierarchyholder.cxx",
+          "marker": "OHierarchyHolder_Impl::GetListPathFromString"
+        }
+      ]
+    }
+  }
+}

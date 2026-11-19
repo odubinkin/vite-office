@@ -1,56 +1,121 @@
 /** @fileoverview Scalar ScXMLExport content path over actual row-major document cells and native ODFF serialization. */
+import { GetPrintRanges } from "../../core/data/table1";
+import { ScMyOpenCloseColumnRowGroup } from "./XMLColumnRowGroupExport";
 import type { ScDocumentPool } from "../../core/data/docpool";
 import { convert, Length } from "../../../../o3tl/inc/unit_conversion";
 import { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import {
   cellTextWhichIds,
-  exportCellTextProperties,
-  exportCellProperties,
+  exportCellTextPropertyElement,
+  exportCellPropertyElement,
   exportCellParagraphProperties,
+  exportDefaultCellStyle,
 } from "./xmlstyle";
 import type { ScTable } from "../../../inc/table";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import type { ScDocument } from "../../../inc/document";
-import { MAXCOL, MAXROW } from "../../../inc/address";
+import { MAXCOL, MAXROW, ScRange, ScRefFlags } from "../../../inc/address";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
 import { CRFlags } from "../../../inc/global";
 import { CellType } from "../../../inc/global";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { ScRangeStringConverter } from "../../core/tool/rangeutl";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import { SvXMLUnitConverter } from "../../../../xmloff/source/core/xmluconv";
 import { escapeXml, exportText } from "../../../../xmloff/source/text/txtparae";
+import { StackVar } from "../../../../formula/inc/token";
+import { RangeDataType } from "../../core/tool/rangenam";
 import { doubleToString } from "../../../../sal/rtl/strtmpl.math";
+import { Converter } from "../../../../sax/source/tools/converter";
+import { DateTime } from "../../../../offapi/com/sun/star/util/DateTime";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { OUStringBuffer } from "../../../../sal/inc/rtl/ustrbuf";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { ScRefCellValue } from "../../../inc/cellvalue";
 import type { ScPatternAttr } from "../../../inc/patattr";
+import { ATTR_VALUE_FORMAT } from "../../../inc/scitems";
+import { SC_STYLE_PROG_STANDARD } from "../../../inc/stylehelper";
+import type { ScMergeAttr, ScMergeFlagAttr } from "../../../inc/attrib";
+import { ATTR_MERGE, ATTR_MERGE_FLAG } from "../../../inc/scitems";
 import { SfxItemState } from "../../../../svl/source/items/itemset";
+import { ExportNumberFormat } from "../../../../xmloff/source/style/xmlnumfe";
+import { CellTextStylePool, writeCellParagraphs } from "./xmlexprt.celltext";
+import { writeTableProtectionOptions } from "./xmlexprt.protection";
+import type { ScTableProtection } from "../../core/data/tabprotection";
+/** Effective style and merge state within a horizontal row run. */
+interface RowCellRange {
+  first: number;
+  last: number;
+  style: string;
+  covered: boolean;
+  merge: ScMergeAttr;
+}
 /** Browser export bounds/cancellation over the native content traversal. */
 export interface ScXMLExportOptions {
   readonly isCancelled?: () => boolean;
   readonly maxOutputBytes?: number;
 }
-/** Native spreadsheet content traversal plus consumed automatic font-height styles. Other styles/objects remain unported. */
+/** Streams native page breaks as runs of equal break state for ODS automatic styles. */
+class ScPageBreakRanges {
+  private readonly positions: Iterator<number>;
+  private next: number | undefined;
+  private start = -1;
+  private end = -1;
+  readonly last: number;
+
+  /** Collects one ordered native manual-break axis. @param table - Native sheet. @param rows - Row or column axis. @returns Export cursor. */
+  constructor(table: ScTable, rows: boolean) {
+    const breaks = new Set<number>();
+    if (rows) table.GetAllRowBreaks(breaks, false, true);
+    else table.GetAllColBreaks(breaks, false, true);
+    let last = -1;
+    for (const position of breaks) last = position;
+    this.last = last;
+    this.positions = breaks.values();
+    this.next = this.positions.next().value;
+  }
+
+  /** Clips a format span at the next break-state change. @param first - Current position. @param last - End of the format span. @returns End and manual-break state. */
+  ClipRange(first: number, last: number): { last: number; manual: boolean } {
+    while (this.next !== undefined && this.next <= first) {
+      this.start = this.end = this.next;
+      while ((this.next = this.positions.next().value) === this.end + 1) this.end = this.next;
+    }
+    const manual = first >= this.start && first <= this.end;
+    return { last: Math.min(last, manual ? this.end : (this.next ?? last + 1) - 1), manual };
+  }
+}
+
+/** Native spreadsheet content export, including row and column automatic styles. */
 export class ScXMLExport {
   private fontPool = new XMLFontAutoStylePool();
-  private readonly styles = new Map<string, string>();
+  private textStyles: CellTextStylePool;
+  private readonly styles = new Map<
+    string,
+    { name: string; dataStyle: string; properties: string }
+  >();
+  private readonly numberStyles = new Map<number, { name: string; xml: string } | null>();
   private readonly patternNames = new Map<ScPatternAttr, string>();
-  private readonly columnStyles = new Map<number, string>();
+  private readonly columnStyles = new Map<string, string>();
   private readonly rowStyles = new Map<string, string>();
   /** Binds the actual document and bounds. @param document - Document. @param options - Controls. @returns Exporter. */
   constructor(
     private readonly document: ScDocument,
     private readonly options: ScXMLExportOptions = {},
-  ) {}
+  ) {
+    this.textStyles = new CellTextStylePool(document, this.fontPool);
+  }
   /** Registers direct font-height pattern data in the automatic-style pool. @param pattern - Real cell pattern. @returns Style name or empty default. */
   private styleName(pattern: ScPatternAttr): string {
     const cached = this.patternNames.get(pattern);
     if (cached !== undefined) return cached;
+    const dataStyle = this.numberStyleName(pattern);
     const ids = cellTextWhichIds;
     if (
+      !dataStyle &&
       !ids.some(
         /** Tests genuine direct item state. @param which - Identity. @returns Set. */ (which) =>
           pattern.GetItemSet().GetItemState(which, false) === SfxItemState.SET,
@@ -59,17 +124,37 @@ export class ScXMLExport {
       this.patternNames.set(pattern, "");
       return "";
     }
-    const text = exportCellTextProperties(pattern, this.fontPool),
-      cell = exportCellProperties(pattern),
+    const text = exportCellTextPropertyElement(pattern, this.fontPool),
+      cell = exportCellPropertyElement(pattern),
       paragraph = exportCellParagraphProperties(pattern),
-      key = `${text ? `<style:text-properties${text}/>` : ""}${cell ? `<style:table-cell-properties${cell}/>` : ""}${paragraph ? `<style:paragraph-properties${paragraph}/>` : ""}`;
-    let name = this.styles.get(key);
-    if (name === undefined) {
-      name = `ce${this.styles.size + 1}`;
-      this.styles.set(key, name);
+      properties = `${text}${cell}${paragraph ? `<style:paragraph-properties${paragraph}/>` : ""}`;
+    const key = dataStyle + ":" + properties;
+    let style = this.styles.get(key);
+    if (style === undefined) {
+      style = { name: `ce${this.styles.size + 1}`, dataStyle, properties };
+      this.styles.set(key, style);
     }
-    this.patternNames.set(pattern, name);
-    return name;
+    this.patternNames.set(pattern, style.name);
+    return style.name;
+  }
+  /** Registers a compiled data style once for the effective native key. @param pattern - Native cell pattern. @returns Style name or the empty General default. */
+  private numberStyleName(pattern: ScPatternAttr): string {
+    if (pattern.GetItemSet().GetItemState(ATTR_VALUE_FORMAT, false) !== SfxItemState.SET) return "";
+    const formatter = this.document.GetFormatTable();
+    const key = pattern.GetNumberFormat(formatter);
+    const cached = this.numberStyles.get(key);
+    if (cached !== undefined) return cached?.name ?? "";
+    const name = `N${this.numberStyles.size + 1}`;
+    const xml = ExportNumberFormat(formatter, key, name);
+    this.numberStyles.set(key, xml ? { name, xml } : null);
+    return xml ? name : "";
+  }
+  /** Writes the recognized default style in the ODF named styles stream. @returns ODF styles XML or empty. */
+  exportStyles(): string {
+    const fontPool = new XMLFontAutoStylePool();
+    const styles = exportDefaultCellStyle(this.document, fontPool);
+    if (!styles) return "";
+    return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles xmlns:office="${ODF_NAMESPACES.office}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" office:version="1.3">${fontPool.exportXML()}${styles}</office:document-styles>`;
   }
   /** Collects equal effective cell-style ranges with the minimum native row-repeat boundary,as WriteRowContent consumes ScRowFormatRanges. @param table - Actual sheet. @param row - First row in the format run. @returns Horizontal styles and their common row end. */
   private collectColumnStyles(
@@ -77,7 +162,7 @@ export class ScXMLExport {
     row: number,
   ): {
     endRow: number;
-    ranges: { first: number; last: number; style: string }[];
+    ranges: RowCellRange[];
   } {
     const first: [number] = [0],
       last: [number] = [0];
@@ -87,24 +172,36 @@ export class ScXMLExport {
     let endRow = last[0];
     const allocated = table.GetAllocatedColumnsCount();
     const endColumn = this.styleName(defaultPattern) ? MAXCOL : Math.max(0, allocated - 1);
-    const ranges: { first: number; last: number; style: string }[] = [];
+    const ranges: RowCellRange[] = [];
     for (let column = 0; column <= endColumn;) {
       const pattern = table
         .GetColumnData(column)
         .GetPatternRange(first, last, row) as ScPatternAttr;
       endRow = Math.min(endRow, last[0]);
       const style = this.styleName(pattern),
+        merge = pattern.GetItem(ATTR_MERGE) as ScMergeAttr,
+        covered = (pattern.GetItem(ATTR_MERGE_FLAG) as ScMergeFlagAttr).IsOverlapped(),
         end = column < allocated ? column : endColumn;
+      if (merge.IsMerged()) endRow = row;
       const previous = ranges.at(-1);
-      if (previous !== undefined && previous.style === style) previous.last = end;
-      else ranges.push({ first: column, last: end, style });
+      if (
+        previous?.style === style &&
+        previous.covered === covered &&
+        !merge.IsMerged() &&
+        !previous.merge.IsMerged()
+      )
+        previous.last = end;
+      else ranges.push({ first: column, last: end, style, covered, merge });
       column = end + 1;
     }
     return { endRow, ranges };
   }
-  /** Traverses native content and attribute row runs without expanding styled empty cells or default-column tails. @returns ODF content. */
-  exportContent(): string {
+  /** Traverses native content and attribute row runs without expanding styled empty cells or default-column tails. @param tableProtection - Prepared ODF protection attributes. @returns ODF content. */
+  exportContent(
+    tableProtection: ReadonlyMap<Readonly<ScTableProtection>, string> = new Map(),
+  ): string {
     this.fontPool = new XMLFontAutoStylePool();
+    this.textStyles = new CellTextStylePool(this.document, this.fontPool);
     for (const which of [100, 111, 116]) {
       const font = (this.document.GetPool() as ScDocumentPool).GetUserOrPoolDefaultItem(
         which,
@@ -121,45 +218,104 @@ export class ScXMLExport {
     this.patternNames.clear();
     this.rowStyles.clear();
     this.columnStyles.clear();
-    let body = "";
+    const defaultName = this.document.GetStyleSheetPool()?.GetDefaultStyle()?.GetItemSet().Count()
+      ? escapeXml(text(SC_STYLE_PROG_STANDARD))
+      : "";
+    let body = this.WriteCalculationSettings();
+    let hasHiddenSheet = false;
     for (let tab = 0; tab < this.document.GetTableCount(); tab++) {
       const table = this.document.FetchTable(tab) as ScTable,
         name = new OUString();
       this.document.GetName(tab, name);
-      body += `<table:table table:name="${escapeXml(text(name))}">`;
+      const ranges = ScRangeStringConverter.GetStringFromRangeList(
+        GetPrintRanges(table).map(
+          /** The sheet API supplies its tab regardless of the tab stored in a print area. @param source - Sheet-owned area. @returns Localized range. */
+          (source) =>
+            new ScRange(
+              source.aStart.Col(),
+              source.aStart.Row(),
+              tab,
+              source.aEnd.Col(),
+              source.aEnd.Row(),
+              tab,
+            ),
+        ),
+        this.document,
+        FormulaGrammar.AddressConvention.CONV_OOO,
+      );
+      const print = ranges
+        ? ` table:print-ranges="${escapeXml(ranges)}"`
+        : table.IsPrintEntireSheet()
+          ? ""
+          : ' table:print="false"';
+      const protection = table.GetProtection();
+      const protectionAttributes = protection?.isProtected() ? tableProtection.get(protection) : "";
+      if (protectionAttributes === undefined) {
+        name.dispose();
+        throw new Error("Sheet protection changed during ODS export.");
+      }
+      const hidden = !table.IsVisible();
+      hasHiddenSheet ||= hidden;
+      body += `<table:table table:name="${escapeXml(text(name))}"${hidden ? ' table:style-name="ta1"' : ""}${protectionAttributes}${print}>`;
       name.dispose();
+      if (protection?.isProtected()) body += writeTableProtectionOptions(protection);
+      const outline = table.GetOutlineTable();
+      const columnGroups = new ScMyOpenCloseColumnRowGroup(
+        outline?.GetColArray(),
+        false,
+        table.GetRepeatColRange(),
+      );
+      const rowGroups = new ScMyOpenCloseColumnRowGroup(
+        outline?.GetRowArray(),
+        true,
+        table.GetRepeatRowRange(),
+      );
+      const columnBreaks = new ScPageBreakRanges(table, false);
+      const rowBreaks = new ScPageBreakRanges(table, true);
       for (let column = 0; column <= this.document.MaxCol();) {
         if (this.options.isCancelled?.()) throw new Error("ODS operation was cancelled");
         const width = table.GetColWidthRange(column),
           end: [number] = [0],
           hidden = table.ColHidden(column, undefined, end),
-          stop = Math.min(this.document.MaxCol(), width.mnRow2, end[0]),
-          count = stop - column + 1;
-        let style = this.columnStyles.get(width.maValue);
+          span = columnBreaks.ClipRange(
+            column,
+            Math.min(this.document.MaxCol(), width.mnRow2, end[0]),
+          ),
+          stop = columnGroups.ClipRange(column, span.last),
+          count = stop - column + 1,
+          key = width.maValue + "," + (span.manual ? "page" : "auto");
+        let style = this.columnStyles.get(key);
         if (style === undefined) {
           style = "co" + (this.columnStyles.size + 1);
-          this.columnStyles.set(width.maValue, style);
+          this.columnStyles.set(key, style);
         }
-        body += `<table:table-column table:style-name="${style}"${count > 1 ? ` table:number-columns-repeated="${count}"` : ""}${hidden ? ' table:visibility="collapse"' : ""}/>`;
+        body += columnGroups.OpenGroups(column);
+        body += `<table:table-column table:style-name="${style}"${defaultName ? ` table:default-cell-style-name="${defaultName}"` : ""}${count > 1 ? ` table:number-columns-repeated="${count}"` : ""}${hidden ? ' table:visibility="collapse"' : ""}/>`;
+        body += columnGroups.CloseGroups(stop);
         column = stop + 1;
       }
       const first: [number] = [0],
         last: [number] = [0],
         allocated = table.GetAllocatedColumnsCount();
-      let maxRow = 0;
+      let maxRow = Math.max(0, rowGroups.GetLast(), rowBreaks.last);
       const bounds = new ScHorizontalCellIterator(this.document, tab, 0, 0, MAXCOL, MAXROW),
         bc: [number] = [0],
         br: [number] = [0];
       while (bounds.GetNext(bc, br)) {
         if (this.options.isCancelled?.()) throw new Error("ODS operation was cancelled");
-        maxRow = br[0];
+        maxRow = Math.max(maxRow, br[0]);
       }
       for (let col = 0; col <= allocated; col++)
         for (let row = 0; row <= MAXROW;) {
           const pattern = table
             .GetColumnData(col)
             .GetPatternRange(first, last, row) as ScPatternAttr;
-          if (this.styleName(pattern)) maxRow = Math.max(maxRow, last[0]);
+          if (
+            this.styleName(pattern) ||
+            (pattern.GetItem(ATTR_MERGE) as ScMergeAttr).IsMerged() ||
+            (pattern.GetItem(ATTR_MERGE_FLAG) as ScMergeFlagAttr).IsOverlapped()
+          )
+            maxRow = Math.max(maxRow, last[0]);
           row = last[0] + 1;
         }
       for (let r = 0; r <= MAXROW;) {
@@ -199,8 +355,14 @@ export class ScXMLExport {
           hiddenEnd[0],
           filteredEnd[0],
         );
+        const span = rowBreaks.ClipRange(currentRow, endRow);
+        endRow = span.last;
         const key =
-          heightRun.mnValue + "," + (flagsRun.maValue & CRFlags.ManualSize ? "false" : "true");
+          heightRun.mnValue +
+          "," +
+          (flagsRun.maValue & CRFlags.ManualSize ? "false" : "true") +
+          "," +
+          (span.manual ? "page" : "auto");
         let rowStyle = this.rowStyles.get(key);
         if (rowStyle === undefined) {
           rowStyle = "ro" + (this.rowStyles.size + 1);
@@ -210,13 +372,18 @@ export class ScXMLExport {
           columnStyles = this.collectColumnStyles(table, currentRow);
         endRow = Math.min(endRow, columnStyles.endRow);
         if (cell) endRow = Math.min(endRow, row[0] === currentRow ? currentRow : row[0] - 1);
+        endRow = rowGroups.ClipRange(currentRow, endRow);
         const repeat = endRow - currentRow + 1;
+        body += rowGroups.OpenGroups(currentRow);
         body += `<table:table-row table:style-name="${rowStyle}"${hidden ? ` table:visibility="${filtered ? "filter" : "collapse"}"` : ""}${repeat > 1 ? ` table:number-rows-repeated="${repeat}"` : ""}>`;
         for (const range of columnStyles.ranges) {
-          const attribute = range.style ? ` table:style-name="${range.style}"` : "";
+          const element = range.covered ? "table:covered-table-cell" : "table:table-cell";
+          let attribute = range.style ? ` table:style-name="${range.style}"` : "";
+          if (!range.covered && range.merge.IsMerged())
+            attribute += ` table:number-columns-spanned="${range.merge.GetColMerge()}" table:number-rows-spanned="${range.merge.GetRowMerge()}"`;
           for (let column = range.first; column <= range.last;) {
             if (cell && row[0] === currentRow && col[0] === column) {
-              body += this.exportCell(cell, attribute);
+              body += this.exportCell(cell, element, attribute);
               column++;
               cell = iterator.GetNext(col, row);
             } else {
@@ -225,32 +392,97 @@ export class ScXMLExport {
                 cell && row[0] === currentRow ? col[0] : range.last + 1,
               );
               const count = stop - column;
-              body += `<table:table-cell${attribute}${count > 1 ? ` table:number-columns-repeated="${count}"` : ""}/>`;
+              body += `<${element}${attribute}${count > 1 ? ` table:number-columns-repeated="${count}"` : ""}/>`;
               column = stop;
             }
           }
         }
-        body += "</table:table-row>";
+        body += "</table:table-row>" + rowGroups.CloseGroups(endRow);
         currentRow = endRow + 1;
       }
-      body += "</table:table>";
+      body += this.WriteNamedRange(tab) + "</table:table>";
     }
-    let automatic = "";
-    for (const [key, name] of this.styles) {
-      automatic += `<style:style style:name="${name}" style:family="table-cell">${key}</style:style>`;
+    body += this.WriteNamedRange(-1);
+    let automatic = this.textStyles.exportStyles();
+    if (hasHiddenSheet)
+      automatic +=
+        '<style:style style:name="ta1" style:family="table"><style:table-properties table:display="false"/></style:style>';
+    for (const style of this.numberStyles.values()) if (style) automatic += style.xml;
+    for (const { name, dataStyle, properties } of this.styles.values()) {
+      automatic += `<style:style style:name="${name}" style:family="table-cell"${defaultName ? ` style:parent-style-name="${defaultName}"` : ""}${dataStyle ? ` style:data-style-name="${dataStyle}"` : ""}>${properties}</style:style>`;
     }
     for (const [key, name] of this.rowStyles) {
-      const [height, optimal] = key.split(",");
-      automatic += `<style:style style:name="${name}" style:family="table-row"><style:table-row-properties style:row-height="${new SvXMLUnitConverter("twip").convertMeasureToXML(Number(height))}" style:use-optimal-row-height="${optimal}"/></style:style>`;
+      const [height, optimal, pageBreak] = key.split(",");
+      automatic += `<style:style style:name="${name}" style:family="table-row"><style:table-row-properties style:row-height="${new SvXMLUnitConverter("twip").convertMeasureToXML(Number(height))}" fo:break-before="${pageBreak}" style:use-optimal-row-height="${optimal}"/></style:style>`;
     }
-    for (const [width, name] of this.columnStyles) {
-      const hmm = Number(convert(BigInt(width), Length.twip, Length.mm100));
-      automatic += `<style:style style:name="${name}" style:family="table-column"><style:table-column-properties style:column-width="${new SvXMLUnitConverter("mm100").convertMeasureToXML(hmm)}"/></style:style>`;
+    for (const [key, name] of this.columnStyles) {
+      const [width, pageBreak] = key.split(",");
+      const hmm = Number(convert(BigInt(Number(width)), Length.twip, Length.mm100));
+      automatic += `<style:style style:name="${name}" style:family="table-column"><style:table-column-properties fo:break-before="${pageBreak}" style:column-width="${new SvXMLUnitConverter("mm100").convertMeasureToXML(hmm)}"/></style:style>`;
     }
-    return `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:office="${ODF_NAMESPACES.office}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" office:version="1.3">${this.fontPool.exportXML()}<office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:spreadsheet>${body}</office:spreadsheet></office:body></office:document-content>`;
+    return `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:office="${ODF_NAMESPACES.office}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" office:version="1.3">${this.fontPool.exportXML()}<office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:spreadsheet>${body}</office:spreadsheet></office:body></office:document-content>`;
   }
-  /** Serializes the original scalar/formula alternatives with actual result computation. @param cell - Native cell view. @param attribute - Escaped generated style attribute. @returns Cell XML. */
-  private exportCell(cell: ScRefCellValue, attribute: string): string {
+  /** Writes the nondefault document null date via the original temporal converter. @returns Represented ODF calculation settings. */
+  private WriteCalculationSettings(): string {
+    const day: [number] = [0],
+      month: [number] = [0],
+      year: [number] = [0];
+    this.document.GetDocOptions().GetDate(day, month, year);
+    if (day[0] === 30 && month[0] === 12 && year[0] === 1899) return "";
+    const buffer = new OUStringBuffer();
+    try {
+      Converter.convertDateTime(
+        buffer,
+        new DateTime(0, 0, 0, 0, day[0], month[0], year[0], false),
+        null,
+      );
+      const value = buffer.makeStringAndClear();
+      try {
+        return `<table:calculation-settings><table:null-date table:date-value="${text(value)}"/></table:calculation-settings>`;
+      } finally {
+        value.dispose();
+      }
+    } finally {
+      buffer.dispose();
+    }
+  }
+  /** Writes native named ranges and expressions at workbook or sheet scope. @param scope - Name scope. @returns ODF definitions. */
+  private WriteNamedRange(scope: number): string {
+    let output = "";
+    for (const entry of this.document.GetRangeName(scope) ?? []) {
+      const base = entry.pos.Format(ScRefFlags.ADDR_ABS);
+      const table = this.document.FetchTable(entry.pos.Tab()) ?? this.document.FetchTable(0);
+      const name = table ? text(table.GetName()) : "";
+      const sheet = /^[\p{L}\p{N}_]+$/u.test(name) ? name : "'" + name.replaceAll("'", "''") + "'";
+      const address = "$" + sheet + "." + text(base);
+      base.dispose();
+      const properties = ` table:name="${escapeXml(entry.name)}" table:base-cell-address="${escapeXml(address)}"`;
+      const symbol = entry.GetSymbol();
+      const code = entry.GetCode();
+      const reference = code.GetLen() === 1 ? code.TokenAt(0)?.GetType() : undefined;
+      if (reference === StackVar.svSingleRef || reference === StackVar.svDoubleRef) {
+        const flags = [
+          [RangeDataType.ColHeader, "repeat-column"],
+          [RangeDataType.RowHeader, "repeat-row"],
+          [RangeDataType.Criteria, "filter"],
+          [RangeDataType.PrintArea, "print-range"],
+          [RangeDataType.Hidden, "hidden"],
+        ] as const;
+        const usable = flags
+          .flatMap(
+            /** Preserves native ODF range flags. @param flag - Bit and lexical value. @returns Active flag. */
+            ([bit, keyword]) => (entry.type & bit ? [keyword] : []),
+          )
+          .join(" ");
+        output += `<table:named-range${properties} table:cell-range-address="${escapeXml(symbol.slice(1, -1))}"${usable ? ` table:range-usable-as="${usable}"` : ""}/>`;
+      } else {
+        output += `<table:named-expression${properties} table:expression="${escapeXml(symbol)}"${entry.type & RangeDataType.Hidden ? ' loext:hidden="true"' : ""}/>`;
+      }
+    }
+    return output && "<table:named-expressions>" + output + "</table:named-expressions>";
+  }
+  /** Serializes the original scalar/formula alternatives with actual result computation. @param cell - Native cell view. @param element - ODF cell element. @param attribute - Generated cell attributes. @returns Cell XML. */
+  private exportCell(cell: ScRefCellValue, element: string, attribute: string): string {
     let formula = "",
       value = "",
       children = "";
@@ -277,26 +509,13 @@ export class ScXMLExport {
     else if (type === CellType.CELLTYPE_EDIT) {
       value = ' office:value-type="string"';
       const edit = cell.getEditText();
-      if (edit) {
-        const engine = this.document.GetEditEngine();
-        engine.SetText(edit);
-        const paragraphs: string[] = [];
-        for (let i = 0; i < edit.GetParagraphCount(); i++) {
-          const part = engine.GetParagraphText(i);
-          try {
-            paragraphs.push(`<text:p>${exportText(text(part))}</text:p>`);
-          } finally {
-            part.dispose();
-          }
-        }
-        children = paragraphs.join("");
-      }
+      if (edit) children = writeCellParagraphs(this.textStyles.collect(edit));
     } else {
       value = ' office:value-type="string"';
       const string = cell.getSharedString() as SharedStringConstReference;
       children = this.textParagraph(text(string.getString()));
     }
-    return `<table:table-cell${attribute}${formula}${value}>${children}</table:table-cell>`;
+    return `<${element}${attribute}${formula}${value}>${children}</${element}>`;
   }
   /** Reuses actual shared Writer/Calc inline encoding for a simple literal paragraph. @param value - Literal simple text. @returns Paragraph XML. */
   private textParagraph(value: string): string {

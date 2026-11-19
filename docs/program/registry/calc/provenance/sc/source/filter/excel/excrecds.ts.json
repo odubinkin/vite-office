@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/excel/excrecds.ts",
+    "localSymbols": [
+      "XclExpSheetProtection",
+      "SaveXml"
+    ],
+    "upstreamPath": "sc/source/filter/excel/excrecds.cxx",
+    "upstreamSymbols": [
+      "XclExpSheetProtection::SaveXml"
+    ],
+    "preservedResponsibilities": [
+      "Writes the original worksheet protection record and omits default disallow flags.",
+      "Writes original enhanced protection metadata and emits source shorthand for whole-column ranges."
+    ],
+    "omittedResponsibilities": [
+      "Enhanced protection range and binary records remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/excrecds.ts",
+          "marker": "XclExpSheetProtection"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.sheet-protection.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.enhanced-protection.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/excrecds.cxx",
+          "marker": "XclExpSheetProtection::SaveXml"
+        }
+      ]
+    }
+  }
+}

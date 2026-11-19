@@ -16,6 +16,10 @@
         {
           "path": "apps/office/src/sfx2/source/doc/objsh.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sfx2/source/doc/docfile.storage.test.ts",
+          "marker": "private:stream"
         }
       ],
       "upstream": [
@@ -26,6 +30,10 @@
         {
           "path": "vendor/libreoffice-reference/sfx2/source/doc/docfile.cxx",
           "marker": "SfxMedium::SetWarningError"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sfx2/source/doc/docfile.cxx",
+          "marker": "SfxMedium::SetArgs"
         }
       ]
     },
@@ -42,14 +50,21 @@
       "GetErrorCode",
       "SetWarningError",
       "GetWarningError",
-      "ResetError"
+      "ResetError",
+      "SetArgs",
+      "GetArgs",
+      "GetStorage",
+      "GetOutputStorage",
+      "Commit"
     ],
     "omittedResponsibilities": [
-      "Native streams, UCB content, lock files, item sets, interaction handlers, temporary files, and protocol-specific transfer mechanics remain outside the bounded browser medium."
+      "Native UCB transfer, file locking, item sets, filter matching and protocol-specific behavior remain pending."
     ],
     "preservedResponsibilities": [
       "Preserves one stable SfxMedium object identity, distinct original source and current destination, filter metadata, read-only routing, close state, and in-place operation completion without duplicating document lifecycle state.",
-      "The medium has an independent transient diagnostic and retained load warning. It preserves source first-diagnostic and error replacement rules; resetting transient state preserves the accepted warning."
+      "The medium has an independent transient diagnostic and retained load warning. It preserves source first-diagnostic and error replacement rules; resetting transient state preserves the accepted warning.",
+      "J0Z0KF/V4DQJW descriptor-data checkpoint adds original SfxMedium SetArgs/GetArgs using the actual SequenceAsHashMap member: replacement drops prior entries and erases only Stream/InputStream, while OutputStream and other source values remain copied. GetArgs retains a const-reference view of the same map. Existing intentional browser persistence/open/save/operation state remains unchanged. The native descriptor constructor, TransformParameters/app/filter matcher, storage/commit/transfer and destructor are still unported; no native medium parity or completed DOCX/XLSX filter/UI acceptance is claimed for these new methods.",
+      "The original descriptor owns stream arguments independently of the retained GetArgs map, takes native storage through the registered factory and commits an actual XTransactedObject. Temporary output is transferred through the caller-owned private:stream OutputStream with the source chunk length and exception behavior. The URL transfer path requires UCB providers and filesystem transaction support."
     ],
     "status": "mapped",
     "upstreamPath": "sfx2/source/doc/docfile.cxx",
@@ -64,7 +79,12 @@
       "SfxMedium::GetErrorCode",
       "SfxMedium::SetWarningError",
       "SfxMedium::GetWarningError",
-      "SfxMedium::ResetError"
+      "SfxMedium::ResetError",
+      "SfxMedium::SetArgs",
+      "SfxMedium::GetArgs",
+      "SfxMedium::GetStorage",
+      "SfxMedium::GetOutputStorage",
+      "SfxMedium::Commit"
     ]
   },
   "legacyOrder": 50

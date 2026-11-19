@@ -6,6 +6,7 @@ import {
   type rtl_TextEncoding,
 } from "../../../sal/inc/rtl/textenc";
 import { OStringToOUString, OUStringToOString } from "../../../sal/rtl/ustring-convert";
+import { SvMemoryStream } from "./stream.native";
 import { detectEncoding } from "./stream.encoding";
 
 /** Source stream encoding, byte position and line-reading contract used by Calc's text filter. */
@@ -13,12 +14,16 @@ export class SvStream {
   private position = 0;
   private endOfFile = false;
   private bigEndian = false;
-  private written = new Uint8Array();
-  private writtenLength = 0;
-  private hasWritten = false;
+  private output: SvMemoryStream | null = null;
+  /** Borrows the active actual byte owner; text scanning keeps its existing host binding until its native string API is migrated. @returns Initialized current bytes. */
+  private get bytes(): Uint8Array {
+    if (this.output === null) return this.inputBytes;
+    const length = Number(this.output.GetSize());
+    return (this.output.GetData() as Uint8Array).subarray(0, length);
+  }
   /** Borrows the immutable input bytes and starts at position zero. @param bytes - Source content. @param encoding - Initial stream encoding.  @returns Constructed instance. */
   constructor(
-    private readonly bytes: Uint8Array,
+    private readonly inputBytes: Uint8Array,
     private encoding: rtl_TextEncoding,
   ) {}
 
@@ -37,28 +42,21 @@ export class SvStream {
     const available = this.bytes.subarray(this.position, this.position + output.length);
     output.set(available);
     this.position += available.length;
-    if (available.length < output.length) this.endOfFile = true;
+    this.endOfFile = available.length < output.length;
     return available.length;
   }
 
-  /** Source WriteBytes for the in-memory output stream. @param bytes - Raw output bytes. @returns Written byte count. */
+  /** Existing byte-view write binding now delegates to the actual native SvMemoryStream owner. @param bytes - Raw output bytes. @returns Written byte count. */
   WriteBytes(bytes: Uint8Array): number {
-    if (!this.hasWritten) {
-      this.written = this.bytes.slice();
-      this.writtenLength = this.bytes.length;
-      this.hasWritten = true;
+    if (bytes.length === 0) return 0;
+    if (this.output === null) {
+      this.output = new SvMemoryStream();
+      this.output.WriteBytes(this.inputBytes, this.inputBytes.length);
     }
-    const end = this.position + bytes.length;
-    if (end > this.written.length) {
-      const capacity = Math.max(4096, end, this.written.length * 2);
-      const grown = new Uint8Array(capacity);
-      grown.set(this.written.subarray(0, this.writtenLength));
-      this.written = grown;
-    }
-    this.written.set(bytes, this.position);
-    this.writtenLength = Math.max(this.writtenLength, end);
-    this.position += bytes.length;
-    return bytes.length;
+    this.output.Seek(BigInt(this.position));
+    const count = this.output.WriteBytes(bytes, bytes.length);
+    this.position = Number(this.output.Tell());
+    return count;
   }
 
   /** Original std::string_view write uses raw bytes and its logical length, including embedded NUL. The existing byte-string binding carries bytes as code units. @param value - Byte string view. @returns This stream. */
@@ -112,7 +110,7 @@ export class SvStream {
 
   /** SvMemoryStream-style extraction of the written byte sequence. @returns Independent bytes. */
   GetData(): Uint8Array {
-    return this.hasWritten ? this.written.slice(0, this.writtenLength) : this.bytes.slice();
+    return this.bytes.slice();
   }
 
   /** Source StartReadingUnicodeText: inspect only BOMs allowed by the requested encoding. @param readBomEncoding - Encoding selected before BOM inspection. @returns Nothing. */

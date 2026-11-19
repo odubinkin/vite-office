@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/unonames.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "calc-model-services",
+    "capabilityIds": [
+      "CAP-bdb8cfc9-d6a9-4826-a00f-3e124ba73374"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/inc/unonames.ts",
+        "apps/office/src/sc/source/ui/unoobj/servuno.test.ts",
+        "docs/program/calc-model-services.md",
+        "vendor/libreoffice-reference/sc/inc/unonames.hxx",
+        "apps/office/src/sc/source/ui/unoobj/servuno.native.json"
+      ],
+      "justification": "Nine original service-name constants retain source symbolic names and static RTL storage; other property constants remain unported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SC_SERVICENAME_VALBIND",
+        "SC_SERVICENAME_LISTCELLBIND",
+        "SC_SERVICENAME_LISTSOURCE",
+        "SC_SERVICENAME_CELLADDRESS",
+        "SC_SERVICENAME_RANGEADDRESS",
+        "SC_SERVICENAME_CHDATAPROV",
+        "SC_SERVICENAME_CHART_PIVOTTABLE_DATAPROVIDER",
+        "SC_SERVICENAME_FORMULAPARS",
+        "SC_SERVICENAME_OPCODEMAPPER"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/inc/unonames.hxx",
+      "upstreamSymbols": [
+        "SC_SERVICENAME_VALBIND",
+        "SC_SERVICENAME_OPCODEMAPPER"
+      ]
+    }
+  }
+}

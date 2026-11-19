@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/ww8/writerhelper.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/filter/ww8/writerhelper.cxx",
+    "localSymbols": [
+      "IsValidSlotWhich",
+      "TransformWhichBetweenPools",
+      "GetSetWhichFromSwDocWhich"
+    ],
+    "upstreamSymbols": [
+      "IsValidSlotWhich",
+      "TransformWhichBetweenPools",
+      "GetSetWhichFromSwDocWhich"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/writerhelper.ts",
+          "marker": "IsValidSlotWhich"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/writerhelper.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/filter/ww8/writerhelper.cxx",
+          "marker": "IsValidSlotWhich"
+        },
+        {
+          "path": "sw/source/filter/ww8/writerhelper.cxx",
+          "marker": "TransformWhichBetweenPools"
+        },
+        {
+          "path": "sw/source/filter/ww8/writerhelper.cxx",
+          "marker": "GetSetWhichFromSwDocWhich"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "Original unsigned16 slot validity, source GetSlotId to destination GetWhichIDFromSlotID translation, identity/zero fallback and strict first-range bound use actual shared pool/set/document owners. Tests register actual native item/default metadata in a real generic destination pool; complete EditEngine factory ownership is not fabricated. Frame/OLE/string helpers, full writerhelper module and export traversal/filter/model/UI closure remain unported or unqualified."
+    ],
+    "omittedResponsibilities": [
+      "Full original module/native ABI and traversal/filter/model/mounted UI closure remain unported or unverified."
+    ]
+  }
+}

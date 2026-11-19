@@ -1,4 +1,6 @@
 /** @fileoverview Actual committed ZIP TrackChange XML attributes through native SAX actions and TrackChangesHandler; downstream document redline creation remains separate. */
+import { getProcessComponentContext } from "../../../../comphelper/inc/processfactory";
+
 import { writeOutput } from "../../../../test/oox-output";
 import { InputSource } from "../../../../offapi/com/sun/star/xml/sax/InputSource";
 import { expect, it, afterEach } from "vitest";
@@ -117,7 +119,10 @@ it.each([
         throw new Error("Unexpected resource table");
       },
     };
-    const main = await OOXMLStreamImpl.createStream(await ZipStorage.open(await storage.commit())),
+    const main = await OOXMLStreamImpl.createStream(
+        getProcessComponentContext(),
+        await ZipStorage.open(await storage.commit()),
+      ),
       document = new OOXMLDocument(main, null),
       parser = main.getFastParser();
     parser.setFastDocumentHandler(new OOXMLFastDocumentHandler(output, document, 0));

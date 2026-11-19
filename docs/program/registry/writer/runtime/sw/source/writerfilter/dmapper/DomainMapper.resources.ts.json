@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.resources.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.resources.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.page-stories.test.ts",
+        "sw/source/writerfilter/dmapper/DomainMapper.cxx"
+      ],
+      "justification": "Keeps the existing resource mappings for underline, paragraph borders and highlight unchanged while moving them next to the consuming mapper. Other source resource handlers remain in the consuming mapper.",
+      "knownViolations": [],
+      "localSymbols": [
+        "underline",
+        "paragraphBorderIds",
+        "highlights"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/dmapper/DomainMapper.cxx",
+      "upstreamSymbols": [
+        "LN_CT_Underline_val",
+        "LN_CT_PBdr_top",
+        "LN_Value_ST_HighlightColor_black"
+      ]
+    }
+  }
+}

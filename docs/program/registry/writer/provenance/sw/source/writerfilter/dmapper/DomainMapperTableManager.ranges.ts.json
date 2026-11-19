@@ -1,0 +1,62 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ranges.ts",
+    "localSymbols": [
+      "DomainMapperTableRanges",
+      "endpoint",
+      "sprm",
+      "endCell",
+      "applyGridAndMerge"
+    ],
+    "upstreamPath": "sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+    "upstreamSymbols": [
+      "DomainMapperTableHandler::endTable"
+    ],
+    "preservedResponsibilities": [
+      "Original table, row and cell markers feed the actual property and Writer text range owners. Completed text spans convert through SwXText into the canonical table graph. The represented grid, row split/height, cell alignment and merge groups round trip.",
+      "Keeps row, grid, cell and UNO endpoint state at each original nesting level, then converts each inner table before closing its parent cell."
+    ],
+    "omittedResponsibilities": [
+      "Nested and floating table conversion, full imported table styles and complete DOCX parity remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ranges.ts",
+          "marker": "DomainMapperTableRanges"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts",
+          "marker": "round trips native table geometry"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts",
+          "marker": "preserves the source cantSplit"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.numbered-list.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+          "marker": "DomainMapperTableHandler::endTable"
+        },
+        {
+          "path": "sw/source/core/unocore/unotext.cxx",
+          "marker": "lcl_MergeCells"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ranges.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The range-collection and table conversion callbacks are split from the existing property-heavy mapper and reuse its original property owner."
+    }
+  }
+}

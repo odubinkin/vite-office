@@ -18,9 +18,10 @@
       "evidence": [
         "apps/office/src/sw/inc/doc.ts",
         "apps/office/src/sw/source/core/doc/doc-frameformats.native.test.ts",
-        "vendor/libreoffice-reference/sw/inc/doc.hxx"
+        "vendor/libreoffice-reference/sw/inc/doc.hxx",
+        "apps/office/src/sw/source/filter/ww8/docxexport.theme-fonts.test.ts"
       ],
-      "justification": "S3HW1E HTML70 relocates the original SetNumRuleMode0/1/2/4/8 scalar contract to its doc.hxx header responsibility. Existing document re-exports retain the identical runtime enum and all clients keep their import paths. SwDocOptions and WriterEmbeddedFont are unchanged type-only browser construction/package ingress contracts, not claimed native fields/classes/default or ABI parity. No new model, constructor policy or font provider is introduced. Full native document header/default/contracts remain unverified.",
+      "justification": "S3HW1E HTML70 relocates the original SetNumRuleMode0/1/2/4/8 scalar contract to its doc.hxx header responsibility. Existing document re-exports retain the identical runtime enum and all clients keep their import paths. SwDocOptions and WriterEmbeddedFont are unchanged type-only browser construction/package ingress contracts, not claimed native fields/classes/default or ABI parity. No new model, constructor policy or font provider is introduced. Full native document header/default/contracts remain unverified. Declares the native ThemeFontLangProps attribute values carried by the Writer document.",
       "knownViolations": [],
       "localSymbols": [
         "SetNumRuleMode",

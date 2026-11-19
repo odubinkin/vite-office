@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/unotools/source/ucbhelper/tempfile.fast.ts",
+    "upstreamPath": "unotools/source/ucbhelper/tempfile.cxx",
+    "localSymbols": [
+      "TempFileFastService"
+    ],
+    "upstreamSymbols": [
+      "TempFileFastService",
+      "readBytes",
+      "closeOutput",
+      "checkError"
+    ],
+    "preservedResponsibilities": [
+      "Complete original TempFileFastService owns actual TempFileFast/SvFileStream, actual std::mutex and five UNO interfaces plus explicit ByteReader/ByteWriter. Eager READWRITE, error/precheck/EOF/realloc order, non-idempotent endpoint closure, output rewind, UInt32 seek cast/compare, truncate and reverse destruction follow source. It is not registered as the different named-file/property service. Native OOM/thread/undefined pointer/fatal failure remain unqualified.",
+      "The built-in crypto.randomUUID API is already used by production BrowserFileDialog, Calc document creation/ODS IO and Writer ODT IO; no application dependency or native generation wrapper was added. Actual Chromium main and DOM-free Worker generate source-format GUIDs and copy64001 bytes through original CopyAndSwitchPersistenceTo into real TempFileFastService, preserve position and open flags, accept subsequent writes and remove the actual temporary file. Original Guid QA and active SAL createUuid_001 pass without a random provider mock. Fatal platform/invalid-target abort and native physical ABI/OOM remain unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/unotools/source/ucbhelper/tempfile.fast.ts",
+          "marker": "TempFileFastService"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "unotools/source/ucbhelper/tempfile.cxx",
+          "marker": "TempFileFastService"
+        },
+        {
+          "path": "unotools/source/ucbhelper/tempfile.cxx",
+          "marker": "readBytes"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/unotools/source/ucbhelper/tempfile.fast.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The source CXX includes temporary-name algorithms, named/fast file owners and the complete fast service. Keeping the complete service in a compiler shard preserves source class/member/interface boundaries and file-size budget without substituting the different named-file service or another stream provider."
+    },
+    "omittedResponsibilities": [
+      "Unconsumed APIs, other platform profiles, native physical ABI/thread/OOM/fatal failure and full package/storage/filter/model/UI acceptance remain unbound or unqualified."
+    ]
+  }
+}

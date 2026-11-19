@@ -1,6 +1,8 @@
 /** @fileoverview Consumed native OOXMLFactory attribute conversion and source-ordered delivery over actual OOXMLValue/resource contracts and original numeric fast-token identities. */
 import type { Id } from "../inc/dmapper/resourcemodel";
-import { OOXMLFactory_wml } from "./OOXMLFactory_wml";
+import { OOXMLFactory_w14 } from "./OOXMLFactory_w14";
+import { namespaces as w14Namespaces } from "./OOXMLFactory_w14.tables";
+import { OOXMLFactory_wml, type GeneratedNamespaceFactory } from "./OOXMLFactory_wml";
 import { OOXMLValue as V } from "./OOXMLPropertySet";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { toInt32 } from "../../../../o3tl/inc/string_view";
@@ -9,6 +11,7 @@ import { XML_TOKEN_COUNT } from "../../../../oox/source/token/tokenmap";
 import {
   OOXMLFastContextHandler,
   OOXMLFastContextHandlerStream,
+  OOXMLFastContextHandlerTextTable,
   OOXMLFastContextHandlerProperties,
   OOXMLFastContextHandlerTable,
   OOXMLFastContextHandlerPropertyTable,
@@ -76,12 +79,15 @@ export interface FactoryAttributeHandler {
 /** Native factory dispatch/lexical conversion owner; document context creation remains with OOXMLFastContextHandler. */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class -- Preserve the original static OOXMLFactory owner (OOXMLFactory.hxx deletes its constructor).
 export class OOXMLFactory {
-  /** Original generated start factory tries namespaces in source order; the admitted slice currently contains wml. @param parent - Parent context. @param element - Native fast token. @returns Child or null. */
+  /** Original generated start factory tries namespaces in source order; Word 2010 starts precede the main WordprocessingML namespace. @param parent - Parent context. @param element - Native fast token. @returns Child or null. */
   static createFastChildContextFromStart(
     parent: OOXMLFastContextHandler,
     element: number,
   ): OOXMLFastContextHandler | null {
-    return this.createFastChildContextFromFactory(parent, OOXMLFactory_wml.getInstance(), element);
+    return (
+      this.createFastChildContextFromFactory(parent, OOXMLFactory_w14.getInstance(), element) ??
+      this.createFastChildContextFromFactory(parent, OOXMLFactory_wml.getInstance(), element)
+    );
   }
   /** Original token-count guard prevents unknown-token recursion. @param parent - Parent context. @param element - Token. @returns Child or null. */
   static createFastChildContext(
@@ -99,7 +105,7 @@ export class OOXMLFactory {
   /** Native generated resource selection and helper assignment order. Missing ported owners fail explicitly until implemented. @param parent - Parent. @param factory - Namespace factory. @param token - Token. @returns Child or null. */
   private static createFastChildContextFromFactory(
     parent: OOXMLFastContextHandler,
-    factory: OOXMLFactory_wml | null,
+    factory: GeneratedNamespaceFactory | null,
     token: number,
   ): OOXMLFastContextHandler | null {
     if (!factory) return null;
@@ -110,7 +116,12 @@ export class OOXMLFactory {
     let context: OOXMLFastContextHandler;
     switch (resource[0]) {
       case ResourceType.Stream:
+      case ResourceType.TextTableCell:
+      case ResourceType.TextTableRow:
         context = new OOXMLFastContextHandlerStream(parent);
+        break;
+      case ResourceType.TextTable:
+        context = new OOXMLFastContextHandlerTextTable(parent);
         break;
       case ResourceType.Properties:
         context = new OOXMLFastContextHandlerProperties(parent);
@@ -124,10 +135,17 @@ export class OOXMLFactory {
       case ResourceType.Value:
         context = new OOXMLFastContextHandlerValue(parent);
         break;
-      case ResourceType.Any:
+      case ResourceType.Any: {
+        const child = this.createFastChildContextFromFactory(
+          parent,
+          OOXMLFactory_w14.getInstance(),
+          token,
+        );
+        if (child) return child;
         // Native start dispatch finds this token in another namespace factory
         // before revisiting wml. That namespace owner is not ported yet.
         throw new Error("OOXML start namespace factory is not implemented for token: " + token);
+      }
       default:
         throw new Error("OOXML resource context is not implemented: " + ResourceType[resource[0]]);
     }
@@ -155,15 +173,17 @@ export class OOXMLFactory {
     this.getFactoryForNamespace(handler.getDefine())?.dispatchActions(handler, "characters", text);
   }
   /** Selects the source native namespace from high identity bits; the start handler selects wml explicitly. @param id - Definition identity. @returns Factory or null. */
-  static getFactoryForNamespace(id: Id): OOXMLFactory_wml | null {
-    return (id & 0xffff0000) === namespaces.NN_wml ? OOXMLFactory_wml.getInstance() : null;
+  static getFactoryForNamespace(id: Id): GeneratedNamespaceFactory | null {
+    const namespace = id & 0xffff0000;
+    if (namespace === w14Namespaces.NN_w14) return OOXMLFactory_w14.getInstance();
+    return namespace === namespaces.NN_wml ? OOXMLFactory_wml.getInstance() : null;
   }
   /** Original typed attribute conversion, including no-value unknown list entries and negative-twip zero mode. @param kind - Native type. @param reference - Native list definition. @param value - Lexical value. @param factory - Namespace factory. @returns Native value, possibly empty. */
   static createAttributeValue(
     kind: ResourceType,
     reference: Id,
     value: string,
-    factory: OOXMLFactory_wml,
+    factory: GeneratedNamespaceFactory,
   ): V {
     switch (kind) {
       case ResourceType.Boolean:

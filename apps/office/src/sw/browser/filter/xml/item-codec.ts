@@ -2,6 +2,9 @@
  * @fileoverview Worker transfer codec for the bounded SfxPoolItem graph.
  * Core items expose values and equality only; JSON type discrimination lives here.
  */
+import { SfxGrabBagItem } from "../../../../svl/inc/grabbagitem";
+import { RES_CHRATR_GRABBAG } from "../../../inc/hintids";
+import { encodeTextEffects, decodeTextEffects } from "./writer-text-effect-codec";
 import { encodeFillItem, decodeFillItem } from "../../../../svx/browser/fill-item-codec";
 import {
   encodeComplexColor,
@@ -153,6 +156,8 @@ export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot;
 
 /** Encodes one pooled item without adding persistence methods to the model class. @param item - Core item. @returns JSON record. */
 export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
+  if (item instanceof SfxGrabBagItem && item.Which() === RES_CHRATR_GRABBAG)
+    return encodeTextEffects(item);
   if (item instanceof SwFormatAutoFormat) {
     const handle = item.GetStyleHandle();
     return {
@@ -315,6 +320,7 @@ export function encodeSfxItemSet(set: SfxItemSet): readonly SfxPoolItemSnapshot[
 
 /** Restores one item via the document pool's registered concrete factory. @param pool - Destination pool. @param snapshot - Current-schema record. @returns Core item. */
 export function decodeSfxPoolItem(pool: SfxItemPool, snapshot: SfxPoolItemSnapshot): SfxPoolItem {
+  if (snapshot.which === RES_CHRATR_GRABBAG) return decodeTextEffects(snapshot.value);
   if (snapshot.which === RES_TXTATR_AUTOFMT || snapshot.which === RES_PARATR_LIST_AUTOFMT) {
     const value = snapshot.value;
     if (

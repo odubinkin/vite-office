@@ -1,12 +1,19 @@
 /** @fileoverview Actual Calc file/menu/dialog integration over shared browser UI,IndexedDB and ODS owners. */
 import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { IDBFactory } from "fake-indexeddb";
-import { afterEach, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, expect, it, vi } from "vitest";
 import { IndexedDbDocumentStore } from "../../../framework/browser/storage/document-store";
+import { SvxBrushItem } from "../../../editeng/inc/brushitem";
+import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { OUString } from "../../../sal/inc/rtl/ustring";
+import { NfIndexTableOffset } from "../../../svl/inc/zforlist";
 import type { DocumentExportRequest } from "../../../svl/source/misc/storage";
+import { Color } from "../../../tools/inc/color";
 import { ScAddress } from "../../inc/address";
+import type { ScMergeAttr, ScMergeFlagAttr } from "../../inc/attrib";
 import { ScInputMode } from "../../inc/global";
+import { ATTR_BACKGROUND, ATTR_FONT_HEIGHT, ATTR_MERGE, ATTR_MERGE_FLAG } from "../../inc/scitems";
 import { readOdsDocument } from "../../source/filter/xml/xmlwrap";
 import { ScImportOptions } from "../../source/ui/dbgui/imoptdlg";
 import { ScDocShell } from "../../source/ui/docshell/docsh";
@@ -14,8 +21,13 @@ import { getCalcCommandResource } from "../../uiconfig/scalc/menubar/menubar";
 import { createCalcSession } from "../composition/calc-module";
 import { CalcViewController } from "../controller/calc-view-controller";
 import { CalcFileWorkflows } from "../workflows/calc-file-workflows";
+import { openBrowserCalcDocument } from "../workflows/calc-ods-io";
 import { CalcWorkbench } from "./calc-workbench";
 import { CalcFileDialog } from "./CalcFileDialog";
+import { DocumentArchive } from "../../../package/source/zippackage/document-archive";
+import { initializeLibXml2 } from "../../../external/libxml2/libxml2";
+
+beforeAll(initializeLibXml2);
 
 afterEach(
   /** Releases rendered controls and restores browser mocks. @returns Nothing. */ () => {
@@ -37,6 +49,142 @@ async function ods(): Promise<Uint8Array> {
   c.Close();
   return bytes;
 }
+
+it("downloads and reopens an Excel workbook through the Calc file dialog", /** Asserts production filter bytes, recalculated cells and browser persistence. @returns Completion. */ async () => {
+  const db = store();
+  const controller = new CalcViewController();
+  let exported: DocumentExportRequest | undefined;
+  const workflows = new CalcFileWorkflows(controller, db, undefined, {
+    export:
+      /** Captures the actual browser request. @param request - Export request. @returns Nothing. */ (
+        request,
+      ) => {
+        exported = request;
+      },
+  });
+  try {
+    controller.EnterString("29");
+    controller.Select(1, 0);
+    controller.EnterString("=A1+13");
+    const document = controller.shell.GetDocument();
+    const value = new ScAddress(0, 0, 0);
+    const formatter = document.GetFormatTable();
+    document.SetNumberFormat(value, formatter.GetFormatIndex(NfIndexTableOffset.NF_PERCENT_DEC2));
+    const sheet = document.FetchTable(0);
+    sheet?.SetMergedCells(2, 4, 3, 6);
+    sheet?.SetRowHeightOnly(0, 0, 600);
+    sheet?.SetManualHeight(0, 0, true);
+    sheet?.SetColHidden(8, 8, true);
+    for (const item of [
+      new SvxFontHeightItem(340, 100, ATTR_FONT_HEIGHT),
+      new SvxBrushItem(new Color(0x8fadce), ATTR_BACKGROUND),
+    ]) {
+      try {
+        sheet?.ApplyAttr(1, 0, item);
+        sheet?.ApplyAttr(5, 10, item);
+      } finally {
+        item.Dispose();
+      }
+    }
+    const originalMedium = controller.shell.GetMedium();
+    const modified = controller.shell.IsModified();
+    render(<CalcFileDialog workflows={workflows} kind="export" onClose={vi.fn()} />);
+    fireEvent.click(screen.getByRole("button", { name: "Download XLSX" }));
+    await waitFor(
+      /** Waits for the actual XLSX port call. @returns Nothing. */ () =>
+        expect(exported).toBeDefined(),
+    );
+    if (!exported) throw new Error("Missing Excel download.");
+    expect(exported.mediaType).toBe(ScDocShell.XLSX_MEDIA_TYPE);
+    const bytes = Uint8Array.from(exported.data as Uint8Array);
+    const archive = await DocumentArchive.open(bytes);
+    const xml = await archive.readTextEntry("xl/worksheets/sheet1.xml");
+    expect(xml).toContain("<f>A1+13</f>");
+    expect(xml).toContain(
+      '<row r="1" ht="30" hidden="false" customHeight="true" outlineLevel="0" collapsed="false">',
+    );
+    expect(xml).toMatch(/<col min="9" max="9"[^>]+hidden="true"/);
+    expect(xml).toContain('<mergeCell ref="C5:D7"/>');
+    expect(xml).toMatch(/<c r="F11" s="\d+"\/>/);
+    expect(await archive.readTextEntry("xl/styles.xml")).toContain('rgb="FF8FADCE"');
+    expect(await archive.readTextEntry("xl/styles.xml")).toContain('formatCode="0.00%"');
+    expect(controller.shell.GetMedium()).toBe(originalMedium);
+    expect(controller.shell.IsModified()).toBe(modified);
+    cleanup();
+    const close = vi.fn();
+    render(<CalcFileDialog workflows={workflows} kind="open" onClose={close} />);
+    fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
+    fireEvent.change(screen.getByLabelText("Browse"), {
+      target: { files: [new File([bytes], "Budget.xlsx")] },
+    });
+    await waitFor(
+      /** Waits for import and primary persistence. @returns Nothing. */ () =>
+        expect(close).toHaveBeenCalledOnce(),
+      { timeout: 5000 },
+    );
+    expect(
+      controller.shell
+        .GetDocument()
+        .GetFormulaCell(new ScAddress(1, 0, 0))
+        ?.GetValue(),
+    ).toBe(42);
+    expect(controller.shell.GetTitle()).toBe("Budget");
+    const saved = await first(db);
+    expect(saved.title).toBe("Budget");
+    cleanup();
+    const session = createCalcSession(db);
+    const reopened = session.controller;
+    try {
+      expect(await openBrowserCalcDocument(reopened.shell, db, saved.id)).toBe(true);
+      const restored = reopened.shell.GetDocument();
+      const sheet = restored.FetchTable(0);
+      expect(sheet?.GetRowHeight(0)).toBe(600);
+      expect(sheet?.ColHidden(8)).toBe(true);
+      const merge = sheet?.GetPattern(2, 4)?.GetItem(ATTR_MERGE) as ScMergeAttr;
+      const covered = sheet?.GetPattern(3, 6)?.GetItem(ATTR_MERGE_FLAG) as ScMergeFlagAttr;
+      expect([merge.GetColMerge(), merge.GetRowMerge()]).toEqual([2, 3]);
+      expect(covered.IsHorOverlapped() && covered.IsVerOverlapped()).toBe(true);
+      const formats = restored.GetFormatTable();
+      const output = new OUString();
+      try {
+        formats.GetOutputString(
+          restored.GetValue(value),
+          restored.GetPattern(value)?.GetNumberFormat(formats) ?? 0,
+          output,
+          [null],
+        );
+        expect(text(output)).toBe("2900.00%");
+      } finally {
+        output.dispose();
+      }
+      for (const [col, row] of [
+        [1, 0],
+        [5, 10],
+      ] as const) {
+        const pattern = sheet?.GetPattern(col, row);
+        expect((pattern?.GetItem(ATTR_FONT_HEIGHT) as SvxFontHeightItem).GetHeight()).toBe(340);
+        expect(
+          (pattern?.GetItem(ATTR_BACKGROUND) as SvxBrushItem)
+            .GetColor()
+            .equals(new Color(0x8fadce)),
+        ).toBe(true);
+      }
+      render(
+        <CalcWorkbench
+          controller={reopened}
+          frame={session.frame}
+          fileWorkflows={session.fileWorkflows}
+          sheetWorkflows={session.sheetWorkflows}
+        />,
+      );
+      expect(screen.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveTextContent("2900.00%");
+    } finally {
+      reopened.Close();
+    }
+  } finally {
+    controller.Close();
+  }
+});
 
 it("imports CSV from the file dialog and downloads the active sheet through the text filter", /** Checks imports CSV from the file dialog and downloads the active sheet through the text filter. @returns Test completion or assertion result. */ async () => {
   const db = store(),
@@ -243,7 +391,7 @@ it("imports computer ODS,offers name collision choices,and preserves real formul
     file = new File([bytes as BlobPart], "Budget.ods");
   fireEvent.change(input, { target: { files: [new File(["bad"], "bad.txt")] } });
   await screen.findByRole("alert");
-  expect(screen.getByRole("alert")).toHaveTextContent("Choose an ODS or CSV file");
+  expect(screen.getByRole("alert")).toHaveTextContent("Choose an ODS, XLSX or CSV file");
   fireEvent.change(input, { target: { files: [file] } });
   await waitFor(
     /** Waits for actual ODS storage. @returns Assertion. */ () =>

@@ -27,14 +27,12 @@ export class ScXMLTableRowContext extends ScXMLImportContext {
     if (visibility === "collapse" || visibility === "filter")
       doc.SetRowHidden(this.start, last, table.tab, true);
     if (visibility === "filter") doc.SetRowFiltered(this.start, last, table.tab, true);
-    const style = attributes.get(XMLToken.TABLE_STYLE_NAME);
-    if (style !== null)
-      table.owner.ApplyRowStyle(
-        style,
-        table.tab,
-        this.start,
-        Math.min(table.owner.GetDocument().MaxRow(), this.start + this.repeat - 1),
-      );
+    table.owner.ApplyRowStyle(
+      attributes.get(XMLToken.TABLE_STYLE_NAME),
+      table.tab,
+      this.start,
+      last,
+    );
   }
   /** Creates normal/covered cells on the actual row. @param element - Token. @param attributes - Attributes. @returns Context. */
   override createFastChildContext(

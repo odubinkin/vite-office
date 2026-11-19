@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/zippackage/ZipPackage.metadata.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/zippackage/ZipPackage.cxx",
+    "localSymbols": [
+      "PlainPackageMetadata",
+      "applyPlainManifestMetadata",
+      "readPlainPackageManifest",
+      "WriteContentTypes",
+      "readPlainPackageContentTypes",
+      "native",
+      "text"
+    ],
+    "upstreamSymbols": [
+      "ZipPackage::parseManifest",
+      "ZipPackage::WriteContentTypes",
+      "ZipPackage::parseContentType"
+    ],
+    "preservedResponsibilities": [
+      "Existing plain metadata/flat archive transport functions move unchanged and remain re-exported from their former public module. Actual package tree/state is not duplicated. Native value/SAX helper contracts and intentional existing persistence deviations remain unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Full native package/model/filter/storage/UI and physical ABI/thread parity remain unfinished."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.metadata.ts",
+          "marker": "applyPlainManifestMetadata"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/native-plain-manifest.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/zippackage/ZipPackage.cxx",
+          "marker": "ZipPackage::parseManifest"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/package/source/zippackage/ZipPackage.metadata.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Existing flat transport metadata helpers are split from the native ZipPackage tree/service/transaction owner under the1000-line source limit. Former APIs re-export the same functions; no second package state or replacement service is introduced."
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/oox/formulabase.ts",
+    "localSymbols": [
+      "extractCellRangeList"
+    ],
+    "upstreamPath": "sc/source/filter/oox/formulabase.cxx",
+    "upstreamSymbols": [
+      "FormulaProcessorBase::extractCellRangeList",
+      "lclProcessRef"
+    ],
+    "preservedResponsibilities": [
+      "Calc print settings consume absolute same-sheet native reference tokens through the original reference-list states."
+    ],
+    "omittedResponsibilities": [
+      "General UNO conversion and external references remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/formulabase.ts",
+          "marker": "extractCellRangeList"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/print-ranges.test.ts",
+          "marker": "extracts only absolute same-sheet references"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/formulabase.cxx",
+          "marker": "FormulaProcessorBase::extractCellRangeList"
+        }
+      ]
+    }
+  }
+}

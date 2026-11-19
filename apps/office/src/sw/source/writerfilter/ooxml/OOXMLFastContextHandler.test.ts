@@ -117,6 +117,10 @@ class Document {
   /** Reads current target. @returns Target. */ getTarget(): string {
     return "word/document.xml";
   }
+  /** The test document has no relationships. @returns Empty target. */
+  getTargetForId(): string {
+    return "";
+  }
   /** Records paragraph progress. @returns Nothing. */ incrementProgress(): void {
     ++this.progress;
   }
@@ -377,10 +381,9 @@ it("retains scalar defaults, property ownership and failure boundaries for unpor
       base.createFastChildContext(token("doc:background")),
   ).toThrow("resource context is not implemented");
   base.setDefine(define("CT_P"));
-  expect(
-    /** Not yet ported native hyperlink definition. @returns Never. */ () =>
-      base.createFastChildContext(token("doc:hyperlink")),
-  ).toThrow("definition is not implemented");
+  expect(base.createFastChildContext(token("doc:hyperlink"))?.getDefine()).toBe(
+    define("CT_Hyperlink"),
+  );
   base.setDefine(define("CT_RPr"));
   expect(
     /** Cross-namespace Any requires its native w14 owner. @returns Never. */ () =>

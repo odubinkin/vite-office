@@ -16,13 +16,16 @@
       "OInputSeekStream",
       "seek",
       "getPosition",
-      "getLength"
+      "getLength",
+      "OInputSeekStream::OInputSeekStream",
+      "OInputSeekStream::seek"
     ],
     "preservedResponsibilities": [
-      "Original standalone OInputSeekStream and ImplInheritanceHelper now provide actual seekable readonly components to Writer SEEKABLEREAD. Additional interface/type-provider query precedes qualified base fallback; type lists retain duplicates and per-specialization class data. Seek operations preserve disposed-before-missing-interface exceptions and native underlying bounds. Flat asynchronous ZIP snapshots bind only the consumed readonly hierarchical open signature; full XStorage/XHierarchicalStorageAccess, parent-bound OWriteStream_Impl/OHierarchyHolder graph, mutex/thread/physical ABI guarantees and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Existing browser open/save/autosave/recovery policy is unchanged."
+      "Original standalone OInputSeekStream and ImplInheritanceHelper now provide actual seekable readonly components to Writer SEEKABLEREAD. Additional interface/type-provider query precedes qualified base fallback; type lists retain duplicates and per-specialization class data. Seek operations preserve disposed-before-missing-interface exceptions and native underlying bounds. Flat asynchronous ZIP snapshots bind only the consumed readonly hierarchical open signature; full XStorage/XHierarchicalStorageAccess, parent-bound OWriteStream_Impl/OHierarchyHolder graph, mutex/thread/physical ABI guarantees and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Existing browser open/save/autosave/recovery policy is unchanged.",
+      "The attached seekable reader retains the same actual cache or file-backed input identity, queries its native XSeekable and uses the parent mutex. The standalone caller path is preserved."
     ],
     "omittedResponsibilities": [
-      "Full parent storage, native mutex/thread/ABI and complete document/UI acceptance remain unfinished."
+      "Complete public OStorage and OWriteStream components, standalone native mutex parity and full DOCX/XLSX acceptance remain open."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -37,12 +40,24 @@
         {
           "path": "apps/office/src/package/source/xstor/oseekinstream.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.relations.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "package/source/xstor/oseekinstream.cxx",
           "marker": "OInputSeekStream"
+        },
+        {
+          "path": "package/source/xstor/oseekinstream.cxx",
+          "marker": "OInputSeekStream::OInputSeekStream"
+        },
+        {
+          "path": "package/source/xstor/oseekinstream.cxx",
+          "marker": "OInputSeekStream::seek"
         }
       ]
     }

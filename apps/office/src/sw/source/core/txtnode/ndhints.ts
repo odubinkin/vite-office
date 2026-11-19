@@ -927,6 +927,7 @@ function equalAttributes(
     left.color === right.color &&
     left.fontFamily === right.fontFamily &&
     left.fontSizeTwips === right.fontSizeTwips &&
+    left.kerningTwips === right.kerningTwips &&
     left.highlight === right.highlight &&
     left.italic === right.italic &&
     left.underline === right.underline &&

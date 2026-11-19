@@ -1,0 +1,84 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-4f62077a-4c7c-483c-b17c-20e141f329ce",
+    "capabilityId": "CAP-4f62077a-4c7c-483c-b17c-20e141f329ce",
+    "suite": "shared",
+    "subsystem": "native-package-metadata-output",
+    "type": "model",
+    "maturity": "mapped",
+    "assertions": [
+      "Actual root/context and registered source SAX/manifest owners produce original ZIP metadata records.",
+      "Independent inflate/CRC and native reopen validate emitted content in represented profiles."
+    ],
+    "capability": "Original native package metadata entry output",
+    "gaps": [
+      "Original native metadata entry writers retain actual package receiver/root/context, registered ManifestWriter/SAX Writer, generated property/pair sequences, ZipPackageBuffer, source CRC and ZipOutputEntry. Mimetype replacement/STORED/ASCII/error wrapping, native manifest rows and exact OFOPXML defaults/override selection are represented. Explicit aggregate value-initialization preserves std::make_unique semantics without changing default-initialized records. Full root commit/transfer/storage/factory/model/DOCX/XLSX UI acceptance and earlier owner coverage failures remain unfinished. Empty/legacy ManifestExport, native physical ABI/thread/allocation domains remain unqualified.",
+      "Original ConnectTo performs the throwing XSeekable query, input assignment and seek0, preserving existing ZipFile identity through setInputStream. A new reader uses original initialise=false and format-specific Checks, without rebuilding its catalog. Actual saved member streams read after output/rebind/replacement; a real nonseekable wrapper fails the original query. Main/DOM-free Worker observe identity and empty new-reader catalog. Debug ByteReader assertion remains unqualified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "package/source/zippackage/ZipPackage.cxx",
+          "marker": "ZipPackage::WriteContentTypes"
+        },
+        {
+          "path": "package/source/zippackage/ZipPackage.cxx",
+          "marker": "ZipPackage::WriteManifest"
+        },
+        {
+          "path": "package/source/zippackage/ZipPackage.cxx",
+          "marker": "ZipPackage::WriteMimetypeMagicFile"
+        }
+      ],
+      "tests": [
+        {
+          "path": "package/qa/ofopxmlstorages/Test01.java",
+          "marker": "StorageFactory"
+        }
+      ],
+      "docs": [
+        {
+          "path": "package/inc/ZipEntry.hxx",
+          "marker": "struct ZipEntry"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.serialization.ts",
+          "marker": "WriteContentTypes"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.serialization.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-package-metadata-output.md",
+          "marker": "# Native package metadata entry output"
+        }
+      ]
+    },
+    "implemented": false,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Represented original fields and generated UNO/RTL/native mutex owners use existing host storage while native physical ABI/allocator/thread and full package/stream services remain unqualified."
+    },
+    "scopeLimitations": [
+      "Original native metadata entry writers retain actual package receiver/root/context, registered ManifestWriter/SAX Writer, generated property/pair sequences, ZipPackageBuffer, source CRC and ZipOutputEntry. Mimetype replacement/STORED/ASCII/error wrapping, native manifest rows and exact OFOPXML defaults/override selection are represented. Explicit aggregate value-initialization preserves std::make_unique semantics without changing default-initialized records. Full root commit/transfer/storage/factory/model/DOCX/XLSX UI acceptance and earlier owner coverage failures remain unfinished. Empty/legacy ManifestExport, native physical ABI/thread/allocation domains remain unqualified.",
+      "Original ConnectTo performs the throwing XSeekable query, input assignment and seek0, preserving existing ZipFile identity through setInputStream. A new reader uses original initialise=false and format-specific Checks, without rebuilding its catalog. Actual saved member streams read after output/rebind/replacement; a real nonseekable wrapper fails the original query. Main/DOM-free Worker observe identity and empty new-reader catalog. Debug ByteReader assertion remains unqualified."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "package-metadata-entry-output"
+  }
+}

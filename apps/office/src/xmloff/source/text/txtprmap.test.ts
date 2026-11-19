@@ -2,6 +2,9 @@
 import { expect, it } from "vitest";
 import { FastAttributeList } from "../core/xmlimp";
 import { ODF_NAMESPACES, XMLToken } from "../core/xmltoken";
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { SvXMLUnitConverter } from "../core/xmluconv";
+import { XMLKerningPropHdl } from "../style/kernihdl";
 import {
   exportTextCharacterProperties,
   importTextCharacterProperties,
@@ -45,6 +48,31 @@ it("preserves native line-mode merge order, named-token rejection and typed kern
   expect(xml).toContain('style:text-overline-mode="continuous"');
   expect(xml).toContain('style:text-line-through-mode="continuous"');
   expect(xml).toContain('style:letter-kerning="false"');
+});
+it("uses the original normal keyword and signed measure for character spacing", /** Pins the source UNO short and conversion failure behavior. @returns Nothing. */ () => {
+  expect(importTextCharacterProperties(attributes([["fo:letter-spacing", "normal"]]))).toEqual({
+    kerning: 0,
+  });
+  expect(importTextCharacterProperties(attributes([["fo:letter-spacing", "-0.035cm"]]))).toEqual({
+    kerning: -35,
+  });
+  expect(importTextCharacterProperties(attributes([["fo:letter-spacing", "invalid"]]))).toEqual({});
+  expect(exportTextCharacterProperties({ kerning: 0 })).toContain('fo:letter-spacing="normal"');
+  expect(exportTextCharacterProperties({ kerning: -35 })).toContain('fo:letter-spacing="-0.035cm"');
+  const value = new Any(true);
+  const converter = new SvXMLUnitConverter("mm100");
+  const handler = new XMLKerningPropHdl();
+  try {
+    const result: [string] = ["retained"];
+    expect(handler.exportXML(result, value, converter)).toBe(false);
+    expect(result[0]).toBe("retained");
+    expect(handler.importXML("invalid", value, converter)).toBe(false);
+    const spacing: [number] = [-1];
+    expect(value.extract(spacing, "sal_Int16")).toBe(true);
+    expect(spacing[0]).toBe(0);
+  } finally {
+    value.dispose();
+  }
 });
 it("transports all native independent script values without boolean normalization", /** Covers source maps,invalid conversion and original color filters. @returns Nothing. */ () => {
   const source = attributes([
@@ -127,7 +155,8 @@ it("transports all native independent script values without boolean normalizatio
   ).not.toContain("text-underline-color");
   expect(exportTextCharacterProperties({ underlineStyle: 19 })).toBe("");
   expect(importTextCharacterProperties(attributes([["fo:font-size", "12pt"]]))).toEqual({});
-  expect(textCharacterPropertyTokens).toHaveLength(19);
+  expect(textCharacterPropertyTokens).toHaveLength(32);
+  expect(textCharacterPropertyTokens).toContain(XMLToken.FO_LETTER_SPACING);
   expect(textCharacterPropertyTokens.slice(9, 13)).toEqual([
     XMLToken.STYLE_TEXT_LINE_THROUGH_STYLE,
     XMLToken.STYLE_TEXT_LINE_THROUGH_TYPE,

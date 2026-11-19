@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/inc/osl/detail/file.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-file-open",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/inc/osl/detail/file.ts",
+        "apps/office/src/sal/osl/unx/file.access.test.ts",
+        "apps/office/src/sal/osl/unx/file.access-abort.test.ts"
+      ],
+      "justification": "Explicitly user-approved original setAllowedPaths/isForbidden and pre-open ACCES hook are ported with source read/write/execute lists, literal prefix matching, empty-read bypass, parent/realpath recursion, partial setup and abort environment order. Native openFilePath uses actual libc/MEMFS flags, open/stat/optional F_SETLK/cleanup and original handle state. Full active Forbidden::forbidden QA assertions and real create/truncate/exclusive/read-only/permissions/symlink/abort integration are exercised. Native pointer overread/OOM, SAL diagnostic/debug and other OS profiles remain unqualified; URL entry points, SvFileStream/TempFile/package/model/filter/UI acceptance remain unfinished.",
+      "knownViolations": [],
+      "localSymbols": [
+        "osl_File_OpenFlag_Trunc",
+        "osl_File_OpenFlag_NoExcl",
+        "osl_File_OpenFlag_Private"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/osl/detail/file.h",
+      "upstreamSymbols": [
+        "osl_File_OpenFlag_Trunc",
+        "osl_File_OpenFlag_NoExcl",
+        "osl_File_OpenFlag_Private"
+      ]
+    }
+  }
+}

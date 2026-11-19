@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/osl/unx/file_error_transl.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-file-stream-prerequisite",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/osl/unx/file_error_transl.ts"
+      ],
+      "justification": "Original FD FileHandle_Impl page cache, logical cursor/size, dirty flush and sequential/positional IO with checked ssize_t/off_t bounds are ported over actual pinned Emscripten FS POSIX primitives. Source FD constructor writeable assumption, deferred genuine BADF and close-after-flush-failure are preserved. Header enum order and errno translation preserve ENXIO-to-IO and pinned wasm32 libc aliases. Source page size65536 is compiler profile, JS buffers GC-managed, non-pthread mutex stubs unchanged. Actual descriptor tests port source setPos/getPos/read/write/isEndOfFile/setSize assertions; File URL/open/security hooks, KIND_MEM/line/map, all backend/SvFileStream/TempFile/model/UI and native pthread/ABI/physical allocator/unsafe JS numeric offset domains remain unported or unqualified. No fake FS/descriptor/provider or successful full-format claim.",
+      "knownViolations": [],
+      "localSymbols": [
+        "oslTranslateFileError",
+        "translateFileException"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/osl/unx/file_error_transl.cxx",
+      "upstreamSymbols": [
+        "oslTranslateFileError"
+      ]
+    }
+  }
+}

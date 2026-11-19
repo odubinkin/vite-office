@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/inc/rtl/locale.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-file-locale",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/inc/rtl/locale.ts",
+        "apps/office/src/sal/rtl/locale.test.ts"
+      ],
+      "justification": "Original locale registration, null country/variant defaults, XOR-hash-only interning, pointer equality, default selection, acquired string accessors and lifecycle finalization. Realm-local JS Map preserves the source key/identity contract; GC owns JS allocations and existing RTL string APIs preserve their logical lifetime contract. All 12 pinned sal/qa/rtl/locale assertions plus collisions, terminated input copies, default reset and retained strings are exercised. Process locale, native libc codeset selection, thread encoding, file URL conversion and final DOCX/XLSX model/filter/UI paths remain incomplete; no native ABI/OOM claim.",
+      "knownViolations": [],
+      "localSymbols": [
+        "rtl_Locale"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/rtl/locale.h",
+      "upstreamSymbols": [
+        "rtl_Locale",
+        "rtl_locale_register",
+        "rtl_locale_getDefault",
+        "rtl_locale_setDefault",
+        "rtl_locale_getLanguage",
+        "rtl_locale_getCountry",
+        "rtl_locale_getVariant",
+        "rtl_locale_hashCode",
+        "rtl_locale_equals"
+      ]
+    }
+  }
+}

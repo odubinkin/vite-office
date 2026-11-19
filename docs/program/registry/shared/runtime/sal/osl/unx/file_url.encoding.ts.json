@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/osl/unx/file_url.encoding.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-file-url-encoding",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/osl/unx/file_url.encoding.ts",
+        "apps/office/src/sal/rtl/ostringbuffer.test.ts",
+        "apps/office/src/sal/osl/unx/file_url.encoding.test.ts",
+        "apps/office/src/sal/osl/unx/file_url.encoding.ascii.test.ts",
+        "apps/office/src/sal/rtl/ostringbuffer.upstream.test.ts"
+      ],
+      "justification": "Original file_url.cxx first-use charset singleton conversion, strict decodeFromUtf8 escaped-octet handling, chunked conversion, native EOVERFLOW wrappers and convertPathnameToUrl over original RTL URI owners are ported. OStringBuffer consumed constructors/copy/view assignment/reservation/append/remove/direct length/value-clear semantics use existing SAL C buffer owners; physical JS storage remains GC-managed. Both modern test_ostringbuffer.cxx tests and real UTF8/ASCII/error/large-chunk scenarios execute. Full legacy OStringBuffer QA/scalar/lazy/move surface and complete URL/home/authority/open/temp/package/model/UI acceptance remain unfinished; native ABI/OOM/uninitialized/thread/shutdown and debug diagnostics are unqualified. All6 legacy constructor cases, all8 makeStringAndClear cases and remove_001 are now ported from sal/qa/OStringBuffer/rtl_OStringBuffer.cxx, alongside both modern tests. Remaining legacy capacity/length/scalar/insert families are not claimed complete.",
+      "knownViolations": [],
+      "localSymbols": [
+        "uriCharClass",
+        "decodeFromUtf8",
+        "UnicodeToText",
+        "TextToUnicode",
+        "convertPathnameToUrl"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/osl/unx/file_url.cxx",
+      "upstreamSymbols": [
+        "uriCharClass",
+        "decodeFromUtf8",
+        "UnicodeToText",
+        "TextToUnicode",
+        "convertPathnameToUrl"
+      ]
+    }
+  }
+}

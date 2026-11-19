@@ -1,0 +1,73 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/document.sheet-visibility.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/document.cxx",
+    "localSymbols": [
+      "GetTableCount",
+      "FetchTable",
+      "IsVisible",
+      "SetVisible",
+      "GetVisibleTab",
+      "SetVisibleTab"
+    ],
+    "upstreamSymbols": [
+      "ScDocument::GetTableCount",
+      "ScDocument::FetchTable",
+      "ScDocument::IsVisible",
+      "ScDocument::SetVisible"
+    ],
+    "preservedResponsibilities": [
+      "Forwards native display state through the actual ScTable, preserves missing-sheet results and carries the original visible-tab hint."
+    ],
+    "omittedResponsibilities": [
+      "Embedded-object view handling and named sheet view holders remain outside this represented Calc view."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/document.sheet-visibility.ts",
+          "marker": "IsVisible"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "hidden worksheet visibility"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/core/data/document.cxx",
+          "marker": "ScDocument::GetTableCount"
+        },
+        {
+          "path": "sc/source/core/data/document.cxx",
+          "marker": "ScDocument::FetchTable"
+        },
+        {
+          "path": "sc/source/core/data/document.cxx",
+          "marker": "ScDocument::IsVisible"
+        },
+        {
+          "path": "sc/source/core/data/document.cxx",
+          "marker": "ScDocument::SetVisible"
+        },
+        {
+          "path": "sc/inc/document.hxx",
+          "marker": "GetVisibleTab"
+        },
+        {
+          "path": "sc/inc/document.hxx",
+          "marker": "SetVisibleTab"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/document.sheet-visibility.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps sheet admission and visibility methods in an original ScDocument responsibility split."
+    }
+  }
+}

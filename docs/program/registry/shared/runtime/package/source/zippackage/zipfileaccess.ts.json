@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/zippackage/zipfileaccess.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-zip-access",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/source/zippackage/zipfileaccess.ts",
+        "apps/office/src/package/source/zippackage/zipfileaccess.test.ts",
+        "scripts/fixtures/native-zip-access-probe.ts"
+      ],
+      "justification": "Original registered OZipFileAccess factory and complete service methods over actual native ZipFile, RefCountedMutex, UNO Any/Sequence and stream references. Initialization categories, borrowed versus URL-owned input, source exception wrapping, service aliases, event ordering and non-idempotent disposal are retained. Registered stream-input ZIP64 and all26 original a2z payload rows pass; Chromium main and DOM-free Worker use the actual factory. URL branches call the original UCB Content sink overload; a real registered UCB file provider remains unavailable and URL success/owned-close are unqualified. Physical C++ ABI/allocation/thread guarantees, URL-provider success and full package/storage/model/filter/UI DOCX/XLSX acceptance remain unqualified or unfinished.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OZipFileAccess",
+        "package_OZipFileAccess_get_implementation"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/zippackage/zipfileaccess.cxx",
+      "upstreamSymbols": [
+        "OZipFileAccess",
+        "initialize",
+        "getByName",
+        "getElementNames",
+        "getStreamByPattern",
+        "dispose",
+        "package_OZipFileAccess_get_implementation"
+      ]
+    }
+  }
+}

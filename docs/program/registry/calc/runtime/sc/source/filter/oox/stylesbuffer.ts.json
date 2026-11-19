@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/oox/stylesbuffer.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-file-filter",
+    "capabilityIds": [
+      "CAP-1d1d48a3-5a10-4373-876c-fa5f18a62db9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/oox/stylesbuffer.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+        "vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx",
+        "apps/office/src/sc/source/filter/oox/excelfilter.borders.test.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts"
+      ],
+      "justification": "Indexed fonts, solid literal fills and represented alignment map to native Calc patterns. Explicit cell styles override worksheet column defaults. The theme, format-code, border and differential-format families remain open. The native CellStyle Normal XF materializes in Calc Standard, and dependent cell patterns inherit its named style. Font::fillToItemSet projects the represented SpreadsheetML font into native edit items, converts heights to hundredths of a millimetre and supplies signed escapement. The first run can use the current XF font when it requires rich storage. Uses the workbook resolver for native font and solid fill display and complex-color metadata. Resolves the original border XF ID and applies real line and box items on the Calc pattern. Applies native alignment and rotation-reference items through XF ancestry. Resolves the cell XF and its source style parent protection flags and installs the actual native protection item.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Font",
+        "Xf",
+        "StylesBuffer"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/oox/stylesbuffer.cxx",
+      "upstreamSymbols": [
+        "Font::importAttribs",
+        "Xf::importXf",
+        "Xf::createPattern",
+        "StylesBuffer::getCellXf",
+        "Font::fillToItemSet"
+      ]
+    }
+  }
+}

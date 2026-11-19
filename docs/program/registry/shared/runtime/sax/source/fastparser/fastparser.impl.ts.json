@@ -1,0 +1,63 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sax/source/fastparser/fastparser.impl.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-fastparser-owner",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sax/source/fastparser/fastparser.impl.ts",
+        "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx",
+        "apps/office/src/sax/source/fastparser/fastparser.impl.test.ts",
+        "apps/office/src/sax/source/fastparser/fastparser.producer.test.ts",
+        "apps/office/src/sax/source/fastparser/fastparser.stream.test.ts"
+      ],
+      "justification": "Original parser default flags, actual locator/raw current-Entity pointer, configuration references, source input validation/copy/converter setup, nested entity push/pop, native Unicode-key namespace registration/minimum/duplicate behavior and reverse live-prefix lookup. Actual RTL strings/hash/equality and native References retain ownership; hash buckets bind the source unordered_map without a second native namespace provider. Public aggregate fixture setup is explicit and does not claim producer execution. Actual native streams, registered token/legacy handler owners and weak references exercise retained-cache lifetimes; genuine C parser contexts supply native locator positions. Original four C SAX2 start/end/characters/PI producers now connect the same Entity/RTL/attribute owners to genuine native legacy handlers and registered Writer. Definitions grow64 at a time; namespaces precede attributes/tokens; default/unknown scope effects and byte coalescing/XMap translation retain source logic. This target follows original Emscripten parseStream mbEnableThreads=false: direct maSharedEvent access is exactly getEvent(single-thread), which does not assign maType. No non-Emscripten queue/thread implementation is claimed. Real C-produced records and separately qualified nullable direct-native callback inputs use real native services, with no fake parser/handler or private state patch. Original custom replacement copy/sort/lower_bound and fifth callback now use real Pair sequence fields, native RTL owners, actual pinned libc strtoul and xmlNewEntity; source +2 decimal offset and non-ASCII/ASCII comparison mismatch preserved. Parser destructor frees actual temporal entities. Original converted-input16KiB parse/parseStream/cleanup execute all5 C callbacks, approved XML_PARSE_NOENT|XML_PARSE_HUGE call, native EOF/callback error polling and original empty-stream acceptance. One lazy native opaque this binding lives through all context cleanup and parser teardown. Real streams/Writer and caller-closed streams supply actual positive/failure paths; no fake entity/stream/allocator/parser provider. Full original parser QA, actual FastSaxParser/LegacyFastParser UNO wrapper/service and complete model/filter/UI acceptance remain unfinished. Nonnull optional map component/execution, non-Emscripten event queues/threads, physical C++ mutex/allocator/exception ABI and independent compiled original C++ component differential remain unqualified. Public native FastSaxParser wrapper/factory and SDK route are now implemented separately in fastparser.service.ts, tested through the real registered service. Full original QA and LegacyFastParser wrapper remain unfinished; previous missing-wrapper notes are superseded only for FastSaxParser.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FastSaxParserImpl",
+        "ReplacementPair"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sax/source/fastparser/fastparser.cxx",
+      "upstreamSymbols": [
+        "FastSaxParserImpl::FastSaxParserImpl",
+        "FastSaxParserImpl::~FastSaxParserImpl",
+        "FastSaxParserImpl::setFastDocumentHandler",
+        "FastSaxParserImpl::setTokenHandler",
+        "FastSaxParserImpl::setErrorHandler",
+        "FastSaxParserImpl::setNamespaceHandler",
+        "FastSaxParserImpl::registerNamespace",
+        "FastSaxParserImpl::GetNamespaceToken",
+        "FastSaxParserImpl::GetNamespaceURL",
+        "FastSaxParserImpl::getNamespaceURL",
+        "FastSaxParserImpl::pushEntity",
+        "FastSaxParserImpl::popEntity",
+        "FastSaxParserImpl::DefineNamespace",
+        "FastSaxParserImpl::GetToken",
+        "FastSaxParserImpl::GetTokenWithPrefix",
+        "FastSaxParserImpl::GetTokenWithContextNamespace",
+        "FastSaxParserImpl::callbackStartElement",
+        "FastSaxParserImpl::callbackEndElement",
+        "FastSaxParserImpl::callbackCharacters",
+        "FastSaxParserImpl::sendPendingCharacters",
+        "FastSaxParserImpl::callbackProcessingInstruction",
+        "FastSaxParserImpl::addUnknownElementWithPrefix",
+        "FastSaxParserImpl::setCustomEntityNames",
+        "FastSaxParserImpl::callbackGetEntity",
+        "FastSaxParserImpl::parse",
+        "FastSaxParserImpl::parseStream"
+      ]
+    }
+  }
+}

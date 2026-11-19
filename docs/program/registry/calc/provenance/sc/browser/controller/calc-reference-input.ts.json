@@ -7,7 +7,9 @@
     "status": "local-only",
     "rationale": "Actual browser draft/caret/pointer binding over original Calc owners;no VCL implementation replacement is claimed.",
     "responsibilities": [
-      "Task77 adds normal unmerged local-reference mouse input using actual ScInputHandler selected UTF16 text,ScModule ordered dispatch,ScViewData reference start/end and ScTabView block/function-set owners. Browser formula pointing precedes Commit and preserves the edit origin;ordinary cell dragging retains the active anchor while headers move their native cursor endpoint. Shift extends;Ctrl adds/subtracts native ScMarkData/ScMultiSel selections. This is bounded source-backed foundation work,not full Calc parity. Merged cells,fill/transfer/move,protected/alternate/split views,reference dialogs,external/3D/matrix calculation,EditEngine and complete VCL painting remain unported. React binds the sole controller draft and DOM caret,uses shared Writer/VCL pointer capture and styling,and paints reference rectangles separately from ordinary native marks. Browser viewport/physical scroll mapping and repeat capture are platform adaptations;desktop scroll acceleration and complete range-finder parsing remain unported."
+      "Task77 adds normal unmerged local-reference mouse input using actual ScInputHandler selected UTF16 text,ScModule ordered dispatch,ScViewData reference start/end and ScTabView block/function-set owners. Browser formula pointing precedes Commit and preserves the edit origin;ordinary cell dragging retains the active anchor while headers move their native cursor endpoint. Shift extends;Ctrl adds/subtracts native ScMarkData/ScMultiSel selections. This is bounded source-backed foundation work,not full Calc parity. Merged cells,fill/transfer/move,protected/alternate/split views,reference dialogs,external/3D/matrix calculation,EditEngine and complete VCL painting remain unported. React binds the sole controller draft and DOM caret,uses shared Writer/VCL pointer capture and styling,and paints reference rectangles separately from ordinary native marks. Browser viewport/physical scroll mapping and repeat capture are platform adaptations;desktop scroll acceleration and complete range-finder parsing remain unported.",
+      "Uses the same native cursor protection inputs for formula reference movement.",
+      "Uses the native Shift reference motion owner for formula movement while continuing to bind the original browser draft and reference selection."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -17,6 +19,10 @@
       "local": [
         {
           "path": "apps/office/src/sc/browser/controller/calc-reference-input.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/tabview2-protection.test.ts",
           "marker": "@fileoverview"
         }
       ]

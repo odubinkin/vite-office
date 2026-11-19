@@ -20,6 +20,20 @@ import { implIsWhitespace } from "../../o3tl/inc/string_view";
 import { RTL_STR_MIN_RADIX, RTL_STR_MAX_RADIX } from "../inc/rtl/string.h";
 import { SAL_MAX_INT32 } from "../inc/types";
 
+/** Original terminated byte/Unicode boolean template: accepts the leading 1 or case-insensitive true prefix, without whitespace or end checks. @param source - Actual terminated source. @returns Native boolean. */
+export function toBoolean(source: Uint8Array | Uint16Array | null): boolean {
+  if (source === null) throw new Error("assert(pStr)");
+  if (source[0] === 49) return true;
+  if (source[0] === 84 || source[0] === 116) {
+    if (source[1] === 82 || source[1] === 114) {
+      if (source[2] === 85 || source[2] === 117) {
+        if (source[3] === 69 || source[3] === 101) return true;
+      }
+    }
+  }
+  return false;
+}
+
 /** Adapts the original basic_string_view to the host's exact UTF16 search storage without normalization, termination scanning or code-point conversion. @param data - Borrowed original units, nullable for an empty view. @param length - Logical view length. @returns Same logical sequence of UTF16 units. */
 function stringView(data: Uint16Array | Uint8Array | null, length: number): string {
   let value = "";
@@ -84,9 +98,9 @@ export class CompareNormal {
 
 /** Original reverse traversal; the required static witness adapts the empty native Compare template parameter. @param pStr1 - First borrowed UTF16 buffer, nullable only with zero length. @param nStr1Len - Original signed32 length. @param pStr2 - Second borrowed buffer. @param nStr2Len - Original signed32 length. @param comparison - Original stateless comparator type witness. @returns Exact first reverse mismatch or original length difference. */
 export function reverseCompare_WithLengths(
-  pStr1: Uint16Array | null,
+  pStr1: Uint16Array | Uint8Array | null,
   nStr1Len: number,
-  pStr2: Uint16Array | null,
+  pStr2: Uint16Array | Uint8Array | null,
   nStr2Len: number,
   comparison: typeof CompareNormal,
 ): number {
@@ -104,12 +118,33 @@ export function reverseCompare_WithLengths(
     // Positive length and the original pointer guards prove both pointers non-null here.
     // Buffers must cover their declared lengths, as native callers must; no added bounds repair.
     const nRet = comparison.compare(
-      (pStr1 as Uint16Array)[pStr1Run] as number,
-      (pStr2 as Uint16Array)[pStr2Run] as number,
+      (pStr1 as Uint16Array | Uint8Array)[pStr1Run] as number,
+      (pStr2 as Uint16Array | Uint8Array)[pStr2Run] as number,
     );
     if (nRet !== 0) return nRet;
   }
   return nStr1Len - nStr2Len;
+}
+
+/** Original compare(with_length<sal_Unicode>, null_terminated<char>, CompareNormal, noShortening) specialization. Byte characters use their unsigned source value; embedded Unicode zeros remain ordinary counted units. @param unicode - Borrowed Unicode storage. @param length - Source signed32 length. @param ascii - Borrowed terminated bytes. @returns Original mismatch difference or exhausted-range sign. */
+export function compare_UnicodeWithLengthAndAscii(
+  unicode: Uint16Array | null,
+  length: number,
+  ascii: Uint8Array | null,
+): number {
+  length |= 0;
+  if (length < 0) throw new Error("assert(len >= 0)");
+  if (unicode === null && length !== 0) throw new Error("assert(pStr || len == 0)");
+  if (ascii === null) throw new Error("assert(pStr)");
+  for (let index = 0; ; ++index) {
+    if (ascii[index] === 0) return index === length ? 0 : 1;
+    if (index === length) return -1;
+    const difference = CompareNormal.compare(
+      (unicode as Uint16Array)[index] as number,
+      ascii[index] as number,
+    );
+    if (difference !== 0) return difference;
+  }
 }
 
 /** Original known-length specialization uses std::basic_string_view UTF16 lexical comparison. @param pStr1 - First borrowed storage. @param nStr1Len - First signed32 length. @param pStr2 - Second borrowed storage. @param nStr2Len - Second signed32 length. @returns Native selected UTF16 char_traits comparison sign. */
@@ -476,66 +511,77 @@ export function replaceChars(range: with_length, replacer: CaseReplace): void {
 }
 /** Original Unicode float valueOfFP specialization remains with the existing source arithmetic responsibility split. */
 export { valueOfFP } from "./strtmpl.math";
-/** Original buffer construction with16spare units and legacy null-source count reset. @param destination - Actual destination slot. @param source - Borrowed input or null. @param count - Native signed32 count. @returns Nothing. */
+/** Original buffer construction with16spare units and legacy null-source count reset. @param destination - Actual destination slot. @param source - Borrowed input or null. @param count - Native signed32 count. @param characterType - Erased native byte or UTF16 template declaration. @returns Nothing. */
 export function stringbuffer_newFromStr_WithLength(
-  destination: rtl_uStringSlot | null,
-  source: Uint16Array | null,
+  destination: rtl_uStringSlot | rtl_StringSlot | null,
+  source: Uint16Array | Uint8Array | null,
   count: number,
+  characterType: typeof Uint8Array | typeof Uint16Array = Uint16Array,
 ): void {
   if (destination === null) throw new Error("assert(ppThis)");
   if (count < 0) throw new Error("assert(count >= 0)");
   if (source === null) count = 0;
-  newFromStr_WithLength(destination, source, count, 16);
+  newFromStr_WithLength(destination, source, count, 16, characterType);
 }
-/** Original buffer copy with capacity bounded below by source length. @param destination - Destination slot. @param capacity - Requested native capacity. @param source - Actual source data. @returns Capacity actually selected. */
+/** Original buffer copy with capacity bounded below by source length. @param destination - Destination slot. @param capacity - Requested native capacity. @param source - Actual source data. @param characterType - Erased native byte or UTF16 template declaration. @returns Capacity actually selected. */
 export function stringbuffer_newFromStringBuffer(
-  destination: rtl_uStringSlot | null,
+  destination: rtl_uStringSlot | rtl_StringSlot | null,
   capacity: number,
-  source: rtl_uString | null,
+  source: rtl_uString | rtl_String | null,
+  characterType: typeof Uint8Array | typeof Uint16Array = Uint16Array,
 ): number {
   if (capacity < 0) throw new Error("assert(capacity >= 0)");
   if (source === null) throw new Error("assert(pStr)");
   if (capacity < source.length) capacity = source.length;
-  newFromStr_WithLength(destination, source.buffer, source.length, capacity - source.length);
+  newFromStr_WithLength(
+    destination,
+    source.buffer,
+    source.length,
+    capacity - source.length,
+    characterType,
+  );
   return capacity;
 }
-/** Original reserve grows from logical length rather than previous capacity;negative minimum is deliberately not asserted upstream. @param destination - Actual buffer slot. @param capacity - Native in/out capacity. @param minimum - Requested native minimum. @returns Nothing. */
+/** Original reserve grows from logical length rather than previous capacity;negative minimum is deliberately not asserted upstream. @param destination - Actual buffer slot. @param capacity - Native in/out capacity. @param minimum - Requested native minimum. @param characterType - Erased native byte or UTF16 template declaration. @returns Nothing. */
 export function stringbuffer_ensureCapacity(
-  destination: rtl_uStringSlot | null,
+  destination: rtl_uStringSlot | rtl_StringSlot | null,
   capacity: [number] | null,
   minimum: number,
+  characterType: typeof Uint8Array | typeof Uint16Array = Uint16Array,
 ): void {
   if (destination === null) throw new Error("assert(ppThis)");
   if (capacity === null || capacity[0] < 0) throw new Error("assert(capacity && *capacity >= 0)");
   if (minimum <= capacity[0]) return;
-  const data = destination[0] as rtl_uString;
+  const data = destination[0] as rtl_uString | rtl_String;
   const length = data.length;
   capacity[0] = (length + 1) * 2;
   if (minimum > capacity[0]) capacity[0] = minimum;
-  newFromStr_WithLength(destination, data.buffer, length, capacity[0] - length);
+  newFromStr_WithLength(destination, data.buffer, length, capacity[0] - length, characterType);
 }
-/** Original UTF16/ASCII insertion,including null-source gap retention and source assertion order. @param destination - Actual buffer slot. @param capacity - Native in/out capacity. @param offset - Original insertion position. @param source - Borrowed initialized units or null. @param length - Original insertion count. @returns Nothing. */
+/** Original UTF16/ASCII insertion,including null-source gap retention and source assertion order. @param destination - Actual buffer slot. @param capacity - Native in/out capacity. @param offset - Original insertion position. @param source - Borrowed initialized units or null. @param length - Original insertion count. @param characterType - Erased native byte or UTF16 template declaration. @returns Nothing. */
 export function stringbuffer_insert(
-  destination: rtl_uStringSlot | null,
+  destination: rtl_uStringSlot | rtl_StringSlot | null,
   capacity: [number] | null,
   offset: number,
   source: Uint16Array | Uint8Array | null,
   length: number,
+  characterType: typeof Uint8Array | typeof Uint16Array = Uint16Array,
 ): void {
   if (destination === null) throw new Error("assert(ppThis)");
   if (capacity === null || capacity[0] < 0) throw new Error("assert(capacity && *capacity >= 0)");
-  if (offset < 0 || offset > (destination[0] as rtl_uString).length)
+  if (offset < 0 || offset > (destination[0] as rtl_uString | rtl_String).length)
     throw new Error("assert(offset >= 0 && offset <= (*ppThis)->length)");
   if (length < 0) throw new Error("assert(len >= 0)");
   if (length === 0) return;
-  if (length > SAL_MAX_INT32 - (destination[0] as rtl_uString).length)
+  if (length > SAL_MAX_INT32 - (destination[0] as rtl_uString | rtl_String).length)
     throw new RangeError("std::bad_alloc");
   stringbuffer_ensureCapacity(
     destination,
     capacity,
-    (destination[0] as rtl_uString).length + length,
+    (destination[0] as rtl_uString | rtl_String).length + length,
+    characterType,
   );
-  const data = destination[0] as rtl_uString,
+  const data = destination[0] as rtl_uString | rtl_String,
     oldLength = data.length,
     buffer = data.buffer;
   const tail = oldLength - offset;
@@ -546,15 +592,15 @@ export function stringbuffer_insert(
 }
 /** Original removal clamps only the count and retains allocation/capacity. @param destination - Actual buffer slot. @param start - Original position. @param length - Original nonnegative count. @returns Nothing. */
 export function stringbuffer_remove(
-  destination: rtl_uStringSlot | null,
+  destination: rtl_uStringSlot | rtl_StringSlot | null,
   start: number,
   length: number,
 ): void {
   if (destination === null) throw new Error("assert(ppThis)");
-  if (start < 0 || start > (destination[0] as rtl_uString).length)
+  if (start < 0 || start > (destination[0] as rtl_uString | rtl_String).length)
     throw new Error("assert(start >= 0 && start <= (*ppThis)->length)");
   if (length < 0) throw new Error("assert(len >= 0)");
-  const data = destination[0] as rtl_uString;
+  const data = destination[0] as rtl_uString | rtl_String;
   if (length > data.length - start) length = data.length - start;
   if (length === 0) return;
   const buffer = data.buffer,
@@ -738,9 +784,9 @@ export function newConcat_Utf16(
 
 /** Original compare loop instantiated with CompareIgnoreAsciiCase and NoShortening. @param first - First storage. @param firstLength - First count. @param second - Second storage. @param secondLength - Second count. @returns Exact comparator result. */
 export function compare_IgnoreAsciiCaseWithLengths(
-  first: Uint16Array | null,
+  first: Uint16Array | Uint8Array | null,
   firstLength: number,
-  second: Uint16Array | null,
+  second: Uint16Array | Uint8Array | null,
   secondLength: number,
 ): number {
   firstLength |= 0;
@@ -750,8 +796,8 @@ export function compare_IgnoreAsciiCaseWithLengths(
     if (i === secondLength) return i === firstLength ? 0 : 1;
     if (i === firstLength) return -1;
     const result = compareIgnoreAsciiCase(
-      (first as Uint16Array)[i] as number,
-      (second as Uint16Array)[i] as number,
+      (first as Uint16Array | Uint8Array)[i] as number,
+      (second as Uint16Array | Uint8Array)[i] as number,
     );
     if (result !== 0) return result;
   }

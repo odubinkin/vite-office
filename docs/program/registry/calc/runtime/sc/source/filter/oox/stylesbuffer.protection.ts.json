@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/oox/stylesbuffer.protection.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-file-filter",
+    "capabilityIds": [
+      "CAP-1d1d48a3-5a10-4373-876c-fa5f18a62db9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/oox/stylesbuffer.protection.ts#Protection",
+        "vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx#Protection::importProtection",
+        "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts"
+      ],
+      "justification": "Decodes the original SpreadsheetML booleans and forms the two represented native Calc protection flags.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Protection",
+        "readProtection"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/filter/oox/stylesbuffer.cxx",
+      "upstreamSymbols": [
+        "Protection::importProtection",
+        "Protection::fillToItemSet"
+      ]
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/unotools/source/misc/mediadescriptor.uri.ts",
+    "status": "mapped",
+    "upstreamPath": "unotools/source/misc/mediadescriptor.cxx",
+    "localSymbols": [
+      "removeFragment"
+    ],
+    "upstreamSymbols": [
+      "removeFragment"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source responsibilities retain actual RTL/UNO owners and contracts. Explicit disposal, borrowed UTF16 views, pointer-address cells, compiler overload witnesses and realm-local execution bind the browser host; physical native ABI/thread guarantees remain unqualified."
+    },
+    "preservedResponsibilities": [
+      "Original mediadescriptor.cxx removeFragment helper through the real registered URI factory. URL trust, authentication and stream selection remain separate source responsibilities."
+    ],
+    "omittedResponsibilities": [
+      "Only original fragment removal is implemented here; SAL logging, trust/authentication/certificate and input-stream selection responsibilities remain unfinished, without replacing their security decisions.",
+      "Independent native compiled module differential, physical ABI/allocator/mutex/thread lifetime and runtime shutdown are unqualified.",
+      "Complete DOCX/XLSX model/filter/package/desktop/mobile UI import-export acceptance remains unfinished; existing browser open/save/autosave/recovery choices are retained."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/unotools/source/misc/mediadescriptor.uri.ts",
+          "marker": "removeFragment"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "unotools/source/misc/mediadescriptor.cxx",
+          "marker": "removeFragment"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/unotools/source/misc/mediadescriptor.uri.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The original header and implementation or inline responsibilities share a native basename. This explicit module boundary retains their distinct import identities and the same actual receiver/owner while the original source contracts stay mapped to the pinned translation unit."
+    }
+  }
+}

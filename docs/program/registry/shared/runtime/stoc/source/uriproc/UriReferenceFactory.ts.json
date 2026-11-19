@@ -16,21 +16,24 @@
       "defaultStatus": "unverified",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/stoc/source/uriproc/UriReferenceFactory.ts#UriReferenceFactory",
-        "vendor/libreoffice-reference/stoc/source/uriproc/UriReferenceFactory.cxx#parseGeneric"
+        "apps/office/src/stoc/source/uriproc/UriReferenceFactory.ts#Factory",
+        "vendor/libreoffice-reference/stoc/source/uriproc/UriReferenceFactory.cxx#Factory::parse",
+        "vendor/libreoffice-reference/stoc/source/uriproc/UriReferenceFactory.cxx#Factory::makeAbsolute",
+        "vendor/libreoffice-reference/stoc/source/uriproc/UriReferenceFactory.cxx#Factory::makeRelative",
+        "vendor/libreoffice-reference/stoc/source/uriproc/UriReferenceFactory.cxx#processSegments"
       ],
-      "justification": "Generic native parser and exact two-half segment algorithm with ERROR/RETAIN/REMOVE parent policies, additional-special-segment flag, absolute/relative/empty URI branches and query/fragment precedence. No browser URL normalization, escape decoding or excess-parent removal is substituted. Specialized scheme component service lookup, makeRelative and UNO service registration are omitted. Whole-module parity stays unverified and DOCX application/UI import/export is not yet established.",
+      "justification": "Prior checkpoint (superseded implementation): Generic native parser and exact two-half segment algorithm with ERROR/RETAIN/REMOVE parent policies, additional-special-segment flag, absolute/relative/empty URI branches and query/fragment precedence. No browser URL normalization, escape decoding or excess-parent removal is substituted. Specialized scheme component service lookup, makeRelative and UNO service registration are omitted. Whole-module parity stays unverified and DOCX application/UI import/export is not yet established. Current task202610251549-J0Z0KF / V4DQJW: Replaced the now-unused host-string factory kernel with the actual WeakImplHelper Factory, explicit context member, registered service construction, scheme parser dispatch/exception propagation and complete original absolute/relative algorithms. The former .component responsibility split now occupies the original upstream basename. Writer OOXMLStreamImpl now receives its root context explicitly and calls the real SDK factory; no global context fallback is added. Existing broad semantic/default/source-responsibility statuses remain unverified; physical ABI/mutex/allocation and complete DOCX/XLSX/UI acceptance remain unqualified.",
       "knownViolations": [],
       "localSymbols": [
-        "UriReferenceFactory",
-        "RelativeUriExcessParentSegments"
+        "Factory"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "stoc/source/uriproc/UriReferenceFactory.cxx",
       "upstreamSymbols": [
-        "parseGeneric",
-        "processSegments",
-        "Factory::makeAbsolute"
+        "Factory::parse",
+        "Factory::makeAbsolute",
+        "Factory::makeRelative",
+        "processSegments"
       ]
     }
   }

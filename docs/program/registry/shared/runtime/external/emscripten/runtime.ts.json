@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/emscripten/runtime.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-platform-runtime",
+    "capabilityIds": [
+      "CAP-50103a1f-6aa6-4b77-b0c4-bd8cf3c650f0",
+      "CAP-e9d543a6-8de7-45b1-9680-2a22cb7aad9b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/emscripten/runtime.ts",
+        "apps/office/src/external/emscripten/runtime.test.ts",
+        "third_party/libxml2-wasm/index.d.ts",
+        "third_party/libxml2-wasm/artifact.json"
+      ],
+      "justification": "Shared realm-local Emscripten runtime bootstrap now owns actual compiled libc/libxml2/MEMFS module identity and initialization Promise. Existing XML bootstrap/getter delegates to this owner while retaining its original uninitialized diagnostic, native XML exports and byte-marshalling/lifetime. The actual public Emscripten4.0.19 FS export supplies a real isolated MEMFS, not a JavaScript replacement file map or TempFile facade. Native C xmlCtxtReadFile consumes files written through this exact runtime filesystem, including Unicode names/content, independent descriptors, positional IO/truncate/unlink/open-inode lifetime and genuine errno errors. No host filesystem is mounted and no network or global-user-file access is introduced. This is only the platform runtime prerequisite: original OSL/SvFileStream/TempFileFastService/OStorage/backend/model/filter/UI remain unfinished; native filesystem/error/locking/large-offset/full source QA parity is unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "initializeRuntime",
+        "getRuntime",
+        "getFileSystem"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

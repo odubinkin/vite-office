@@ -1,4 +1,5 @@
 /** @fileoverview JavaScript exception ABI binding for cppuhelper/exc_hlp.hxx. Actual generated classes and shared UNO storage own all values; C++ machine-code/environment mapping is a distinct platform ABI. */
+import { initializeExceptionPointerAbi } from "./exception-ptr";
 import { bindExceptionAbi } from "../inc/exc_hlp";
 import { Any } from "../../cppu/inc/com/sun/star/uno/Any";
 import { Exception } from "../../cppu/inc/com/sun/star/uno/Exception";
@@ -152,4 +153,5 @@ export function getCaughtException(): Any {
 /** Installs the JavaScript execution ABI through the platform-neutral public contract. @returns Nothing. */
 export function initializeExceptionAbi(): void {
   bindExceptionAbi({ throwException, getCaughtException });
+  initializeExceptionPointerAbi();
 }

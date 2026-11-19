@@ -1,6 +1,7 @@
 /**
  * @fileoverview Verifies the source-shaped Writer ODF package and XML filter slice.
  */
+import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { compressedMimetypePackage } from "../../../../test/fixtures/zip";
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { getWriterNumFormatBullet } from "../../core/doc/number";
@@ -520,15 +521,20 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         '<text:list-style style:name="Image"><text:list-level-style-image text:level="1"/></text:list-style>',
         "Unsupported ODF list level style",
       ],
-      [
-        '<text:list-style style:name="Roman"><text:list-level-style-number text:level="1" style:num-format="i"/></text:list-style>',
-        "Unsupported ODF numbering format",
-      ],
     ] as const)
       expect(
         /** Imports an invalid list-style definition. @returns Invalid document. */ () =>
           importWithListStyle(fragment),
       ).toThrow(message);
+    expect(
+      importWithListStyle(
+        '<text:list-style style:name="Roman"><text:list-level-style-number text:level="1" style:num-format="i"/></text:list-style>',
+      )
+        .document.GetNumRuleTable()
+        .at(-1)
+        ?.Get(0)
+        .GetNumberingType(),
+    ).toBe(SvxNumType.SVX_NUM_ROMAN_LOWER);
     const independent = importWithListStyle(
       '<text:list-style style:name="Alias1" style:display-name="Shared"><text:list-level-style-bullet text:level="1" text:bullet-char="•"/></text:list-style><text:list-style style:name="Alias2" style:display-name="Shared"><text:list-level-style-bullet text:level="1" text:bullet-char="•"/></text:list-style><text:list-style style:name="Alias3" style:display-name="Shared"><text:list-level-style-number text:level="1" style:num-format="1"/></text:list-style>',
     ).document;

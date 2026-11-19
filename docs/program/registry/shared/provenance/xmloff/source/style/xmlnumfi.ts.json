@@ -1,0 +1,62 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/style/xmlnumfi.ts",
+    "localSymbols": [
+      "SvXMLNumFormatContext",
+      "SvXMLNumFmtElementContext"
+    ],
+    "upstreamPath": "xmloff/source/style/xmlnumfi.cxx",
+    "upstreamSymbols": [
+      "SvXMLNumFormatContext::CreateAndInsert",
+      "SvXMLNumFmtElementContext::AddEmbeddedElement",
+      "SvXMLNumFmtDefaults::GetDefaultDateFormat",
+      "NF_BOOLEAN"
+    ],
+    "preservedResponsibilities": [
+      "XML numeric declarations and positioned literals compile in the actual Calc number formatter, including styles referred to by the primary browser record.",
+      "The ODF date-style context selects original system short or long date keys for matching automatic language-derived date fields. Nonmatching and explicit styles use the normal scanner.",
+      "Resolves the unadorned ODF boolean-style to the original builtin logical format."
+    ],
+    "omittedResponsibilities": [
+      "Full conditional, localized and multi-section data-style import is open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/style/xmlnumfi.ts",
+          "marker": "SvXMLNumFormatContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "preserves built-in and custom numeric display"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/excrecds.test.ts",
+          "marker": "replays tdf165180"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/typed-date-cells.test.ts",
+          "marker": "reopens explicit date"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx",
+          "marker": "SvXMLNumFormatContext::CreateAndInsert"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx",
+          "marker": "SvXMLNumFmtDefaults::GetDefaultDateFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx",
+          "marker": "NF_BOOLEAN"
+        }
+      ]
+    }
+  }
+}

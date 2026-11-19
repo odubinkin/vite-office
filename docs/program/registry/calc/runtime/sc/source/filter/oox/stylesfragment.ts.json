@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/oox/stylesfragment.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-file-filter",
+    "capabilityIds": [
+      "CAP-1d1d48a3-5a10-4373-876c-fa5f18a62db9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/oox/stylesfragment.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+        "vendor/libreoffice-reference/sc/source/filter/oox/stylesfragment.cxx",
+        "apps/office/src/sc/source/filter/oox/excelfilter.borders.test.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts"
+      ],
+      "justification": "Workbook relationships resolve the style fragment and its original indexed font, fill, style XF and cell XF records. Theme and indexed colors, number formats, borders, named cell styles, and differential formats remain open. Shares the original FontContext between workbook font definitions and rPr child properties. Parses workbook indexed color declarations and shares source font color parsing with edit runs. Loads the original indexed border list, side records, colors and XF border flags from Strict and Transitional SpreadsheetML. Dispatches original XF alignment elements through the source alignment model. Admits the original protection child and applyProtection flag for cell and style XFs.",
+      "knownViolations": [],
+      "localSymbols": [
+        "StylesFragment",
+        "FontContext"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/oox/stylesfragment.cxx",
+      "upstreamSymbols": [
+        "StylesFragment::onCreateContext",
+        "FontContext::onCreateContext"
+      ]
+    }
+  }
+}

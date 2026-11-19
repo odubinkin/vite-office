@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/zippackage/ZipPackage.serialization.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-package-metadata-output",
+    "capabilityIds": [
+      "CAP-4f62077a-4c7c-483c-b17c-20e141f329ce"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/source/zippackage/ZipPackage.serialization.ts",
+        "apps/office/src/package/source/zippackage/ZipPackage.serialization.test.ts",
+        "vendor/libreoffice-reference/package/source/zippackage/ZipPackage.cxx"
+      ],
+      "justification": "Original native metadata entry writers retain actual package receiver/root/context, registered ManifestWriter/SAX Writer, generated property/pair sequences, ZipPackageBuffer, source CRC and ZipOutputEntry. Mimetype replacement/STORED/ASCII/error wrapping, native manifest rows and exact OFOPXML defaults/override selection are represented. Explicit aggregate value-initialization preserves std::make_unique semantics without changing default-initialized records. Full root commit/transfer/storage/factory/model/DOCX/XLSX UI acceptance and earlier owner coverage failures remain unfinished. Empty/legacy ManifestExport, native physical ABI/thread/allocation domains remain unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriteMimetypeMagicFile",
+        "WriteManifest",
+        "WriteContentTypes"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/zippackage/ZipPackage.cxx",
+      "upstreamSymbols": [
+        "WriteMimetypeMagicFile",
+        "WriteManifest",
+        "WriteContentTypes"
+      ]
+    }
+  }
+}

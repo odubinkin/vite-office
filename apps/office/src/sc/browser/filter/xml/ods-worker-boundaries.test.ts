@@ -88,7 +88,7 @@ it("round-trips browser XML and external ODS through default production worker c
   session.Close();
   const client = new OdsWorkerClient(),
     doc = model(),
-    xml = writeOdsXml(doc);
+    xml = await writeOdsXml(doc);
   const imported = client.Import(xml, {
     maxExpandedCells: 100,
     limits: DEFAULT_FAST_XML_LIMITS,
@@ -183,7 +183,7 @@ it("imports XML and exports default external bytes through the inline service", 
   const doc = model(),
     service = createInlineOdsFilterService();
   service.Cancel();
-  const copy = await service.Import(writeOdsXml(doc));
+  const copy = await service.Import(await writeOdsXml(doc));
   expect(await service.Export(copy)).toBeInstanceOf(Uint8Array);
   const restored = decodeCalcDocument(encodeCalcDocument(copy));
   expect(restored.GetTableCount()).toBe(1);

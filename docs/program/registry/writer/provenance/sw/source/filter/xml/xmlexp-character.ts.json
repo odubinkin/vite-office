@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlexp-character.ts",
+          "marker": "getCharacterProperties"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.styles.test.ts",
+          "marker": "round trips the pinned character style without flattening its Word style ID"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlexp.cxx",
+          "marker": "SwXMLExport::ExportContent_"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/filter/xml/xmlexp-character.ts",
+    "localSymbols": [
+      "getCharacterProperties"
+    ],
+    "omittedResponsibilities": [
+      "Unrepresented ODF text properties and named character style persistence remain open."
+    ],
+    "preservedResponsibilities": [
+      "Native Writer text export forwards Western, Asian and complex language items through the shared ODF text style mapping. Existing character item projection remains with the XML export owner.",
+      "Projects the native color item to resolved ODF RGB and ordered character theme metadata."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",
+    "upstreamSymbols": [
+      "SwXMLExport::ExportContent_"
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/xml/xmlexp-character.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The existing Writer projection is split at the authored-file size boundary, retaining native XML export ownership."
+    }
+  },
+  "legacyOrder": 243
+}

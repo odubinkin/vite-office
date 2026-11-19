@@ -1,5 +1,6 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
 import type { SwFormat } from "../attr/format";
+import type { Theme } from "../../../../docmodel/inc/theme/Theme";
 import type { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
 import { GetTextDirection, GetUniqueFrameName } from "./doclay";
 import { ClearFrameFormatIndices, DestroyFrameFormatTables } from "./docnew";
@@ -48,6 +49,7 @@ import { SwTableNode, type SwNode } from "../docnode/node";
 import { SwTextNode } from "../txtnode/ndtxt";
 import { type SwTable, type SwTableBox } from "../table/swtable";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxGrabBagItem } from "../../../../svl/inc/grabbagitem";
 import type { SwTabCols } from "../bastyp/tabcol";
 import type { SwTabFrame } from "../layout/tabfrm";
 import {
@@ -114,6 +116,7 @@ import { SwPaM, SwPosition, type SwNodeIndex } from "../crsr/pam";
 import type { SwAtomicModelHint } from "../../../inc/hints";
 import { UndoManager } from "../undo/docundo";
 import type { DefaultFontDevice } from "./default-font";
+import type { ThemeFontLanguages } from "../../../inc/doc";
 import { SetNumRuleMode, type SwDocOptions, type WriterEmbeddedFont } from "../../../inc/doc";
 export { SetNumRuleMode, type SwDocOptions, type WriterEmbeddedFont } from "../../../inc/doc";
 import {
@@ -124,6 +127,8 @@ import {
 import { SetAttrMode } from "../../../inc/swtypes";
 /** Final Writer document aggregate; notification and domain policies are composed managers. */
 export class SwDoc {
+  /** Document theme used by represented Writer text and format owners. */ theme?: Theme;
+  /** Original ThemeFontLangProps values. */ themeFontLanguages?: ThemeFontLanguages;
   private readonly layoutManager = new DocumentLayoutManager(this);
   /** Original document-owned layout access. @returns Actual native manager. */
   getIDocumentLayoutAccess(): DocumentLayoutManager {
@@ -284,6 +289,8 @@ export class SwDoc {
   private readonly mpOutlineRule: SwNumRule;
   private readonly listItemsManager = new DocumentListItemsManager();
   private readonly settingManager = new DocumentSettingManager();
+  /** Document model interoperability item shared across short-lived UNO wrappers. */ readonly interopGrabBag =
+    new SfxGrabBagItem();
   private readonly stateManager = new DocumentStateManager();
   private readonly stylePoolManager: DocumentStylePoolManager;
   private readonly undoManager = new UndoManager(this);
@@ -962,6 +969,7 @@ export class SwDoc {
   /** Disposes the document notification graph. @returns Nothing. */
   public Dispose(): void {
     this.mbDtor = true;
+    this.interopGrabBag.Dispose();
     unoCursor.NotifyUnoCursorsOnDocDestruction(this);
     this.undoManager.Dispose();
     ClearFrameFormatIndices(this);
@@ -981,12 +989,9 @@ export class SwDoc {
     this.stateManager.Dispose();
   }
 }
-
 /** Creates a Writer document with one canonical body text node. @returns New document. */
 export function createWriterDocument(): SwDoc {
   return new SwDoc();
 }
-
 import { SwModule } from "../../uibase/app/swmodule";
-
 import { SetNumRule, SetOutlineNumRule, PropagateOutlineRule, UpdateNumRule } from "./docnum";

@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/external/emscripten/runtime.ts",
+    "rationale": "Shared realm-local Emscripten runtime bootstrap now owns actual compiled libc/libxml2/MEMFS module identity and initialization Promise. Existing XML bootstrap/getter delegates to this owner while retaining its original uninitialized diagnostic, native XML exports and byte-marshalling/lifetime. The actual public Emscripten4.0.19 FS export supplies a real isolated MEMFS, not a JavaScript replacement file map or TempFile facade. Native C xmlCtxtReadFile consumes files written through this exact runtime filesystem, including Unicode names/content, independent descriptors, positional IO/truncate/unlink/open-inode lifetime and genuine errno errors. No host filesystem is mounted and no network or global-user-file access is introduced. This is only the platform runtime prerequisite: original OSL/SvFileStream/TempFileFastService/OStorage/backend/model/filter/UI remain unfinished; native filesystem/error/locking/large-offset/full source QA parity is unqualified.",
+    "responsibilities": [
+      "Shared realm-local Emscripten runtime bootstrap now owns actual compiled libc/libxml2/MEMFS module identity and initialization Promise. Existing XML bootstrap/getter delegates to this owner while retaining its original uninitialized diagnostic, native XML exports and byte-marshalling/lifetime. The actual public Emscripten4.0.19 FS export supplies a real isolated MEMFS, not a JavaScript replacement file map or TempFile facade. Native C xmlCtxtReadFile consumes files written through this exact runtime filesystem, including Unicode names/content, independent descriptors, positional IO/truncate/unlink/open-inode lifetime and genuine errno errors. No host filesystem is mounted and no network or global-user-file access is introduced. This is only the platform runtime prerequisite: original OSL/SvFileStream/TempFileFastService/OStorage/backend/model/filter/UI remain unfinished; native filesystem/error/locking/large-offset/full source QA parity is unqualified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native source algorithms execute unchanged in WASM; module initialization, pointer marshalling and delivery are browser-owned. Native threads/dynamic modules are disabled for the realm-local browser target."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/emscripten/runtime.ts",
+          "marker": "initializeRuntime"
+        },
+        {
+          "path": "apps/office/src/external/emscripten/runtime.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "third_party/libxml2-wasm/index.d.ts",
+          "marker": "EmscriptenFS"
+        }
+      ]
+    },
+    "localSymbols": [
+      "LibXml2",
+      "XmlNodePtr",
+      "XmlDocPtr",
+      "XmlNsPtr",
+      "initializeLibXml2",
+      "getLibXml2",
+      "withXmlBytes"
+    ]
+  }
+}

@@ -42,6 +42,8 @@ export class SvxXMLNumRuleExport {
       attributes.push(
         `style:num-format="${new SvXMLUnitConverter("mm100").convertNumFormat(type)}"`,
       );
+      const letterSync = SvXMLUnitConverter.convertNumLetterSync(type);
+      if (letterSync) attributes.push(`style:num-letter-sync="${letterSync}"`);
       const start = properties.startWith ?? 1;
       if (start !== 1) attributes.push(`text:start-value="${start}"`);
       const display = Math.min(properties.parentNumbering ?? 1, level + 1);

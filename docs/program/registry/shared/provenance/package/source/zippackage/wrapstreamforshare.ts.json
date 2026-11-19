@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/zippackage/wrapstreamforshare.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/zippackage/wrapstreamforshare.cxx",
+    "localSymbols": [
+      "WrapStreamForShare"
+    ],
+    "upstreamSymbols": [
+      "WrapStreamForShare",
+      "readBytes",
+      "available",
+      "skipBytes",
+      "closeInput"
+    ],
+    "preservedResponsibilities": [
+      "Original complete WrapStreamForShare constructor/UNO XInputStream+XSeekable/ByteReader, independent cursor, per-read reposition/delegation, original guard placement, source availability without reposition, release-only close and generated exception behavior. Actual native memory, sequence-only package buffer and four unchanged Strict/Transitional DOCX/XLSX native ZipFile part streams execute without fake providers. Native query errors and missing constructor refs are tested. Reads deliberately do not acquire the mutex; guarded methods use the real shared OSL mutex. Debug ByteReader assertion, raw null-pointer/ABI/thread-race/native allocator domains remain unqualified; no fallback ByteReader or thread guarantee is fabricated. ZipPackageStream, seekable-copy/tempfile and full package/storage/model/filter/UI binding remain unfinished."
+    ],
+    "omittedResponsibilities": [
+      "Native debug ByteReader assertions, invalid raw-pointer/ABI/allocator/multithread domains; complete seekable-copy/tempfile/package/storage/model/filter/UI acceptance."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zippackage/wrapstreamforshare.ts",
+          "marker": "WrapStreamForShare"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/wrapstreamforshare.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/zippackage/wrapstreamforshare.cxx",
+          "marker": "WrapStreamForShare::readBytes"
+        }
+      ]
+    }
+  }
+}

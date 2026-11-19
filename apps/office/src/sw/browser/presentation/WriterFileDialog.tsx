@@ -15,6 +15,7 @@ import {
   saveWriterAsBrowserCopy,
 } from "../workflows/writer-odt-io";
 import {
+  exportWriterDocxToPort,
   exportWriterMarkdownToPort,
   exportWriterRtfToPort,
   exportWriterTextToPort,
@@ -53,14 +54,14 @@ export function WriterFileDialog({
       modalAttributes={{ "data-writer-modal": "true" }}
       format={{
         accept:
-          ".odt,.txt,.rtf,.md,.markdown,application/vnd.oasis.opendocument.text,text/plain,application/rtf,text/markdown",
-        importDescription: "ODT, TXT, RTF and Markdown files are supported",
-        invalidFileMessage: "Choose an ODT, TXT, RTF or Markdown file.",
+          ".odt,.docx,.txt,.rtf,.md,.markdown,application/vnd.oasis.opendocument.text,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,application/rtf,text/markdown",
+        importDescription: "ODT, DOCX, TXT, RTF and Markdown files are supported",
+        invalidFileMessage: "Choose an ODT, DOCX, TXT, RTF or Markdown file.",
         documentLabel: "ODT document",
         accepts:
           /** Matches Writer's supported import extensions. @param file - Source. @returns Supported. */ (
             file,
-          ) => /\.(odt|txt|rtf|md|markdown)$/i.test(file.name),
+          ) => /\.(odt|docx|txt|rtf|md|markdown)$/i.test(file.name),
         importedTitle: getImportedWriterTitle,
       }}
       openImportedFile={
@@ -79,6 +80,18 @@ export function WriterFileDialog({
                 name: file.name,
                 filterId: "Rich Text Format",
                 mediaType: "application/rtf",
+                source: { kind: "external", reference: file },
+              },
+            );
+          else if (/\.docx$/i.test(file.name))
+            await docShell.OpenDocx(
+              bytes,
+              createDocument({ id: identity.id, suiteId: "writer", title: identity.title }),
+              {
+                kind: "input",
+                name: file.name,
+                filterId: "Office Open XML Text",
+                mediaType: SwDocShell.DOCX_MEDIA_TYPE,
                 source: { kind: "external", reference: file },
               },
             );
@@ -133,6 +146,17 @@ export function WriterFileDialog({
               docShell,
               services.documentExport,
               services.createDownloadFilename(docShell.GetTitle(), ".odt"),
+            ),
+        },
+        {
+          label: "DOCX",
+          description: "Word document",
+          appearance: "indigo",
+          download: /** Downloads a DOCX copy. @returns Completion. */ () =>
+            exportWriterDocxToPort(
+              docShell,
+              services.documentExport,
+              services.createDownloadFilename(docShell.GetTitle(), ".docx"),
             ),
         },
         {

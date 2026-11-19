@@ -1,4 +1,4 @@
-/** @fileoverview ScTabView sheet navigation/selection subset from tabview3.cxx and tabview2.cxx over canonical ScViewData. The current document slice has only visible sheets and unmerged local references;hidden-sheet,merged/fill/reference-dialog,VCL drawing and window services remain unported. */
+/** @fileoverview ScTabView sheet navigation/selection subset from tabview3.cxx and tabview2.cxx over canonical ScViewData. The browser binds geometry and cursor painting to native view state. */
 import { ScViewFunctionSet, ScHeaderFunctionSet } from "./select";
 import * as tabview2 from "./tabview2";
 import * as tabview4 from "./tabview4";
@@ -121,25 +121,40 @@ export class ScTabView {
   /** Selects the next/previous existing sheet with native wrapping and group extension. @param nDir - Signed movement;zero does nothing. @param bExtendSelection - Extend the sheet group. @returns Nothing. */
   SelectNextTab(nDir: number, bExtendSelection = false): void {
     if (!nDir) return;
-    const nTab = this.aViewData.GetTabNumber(),
-      nCount = this.aViewData.GetDocument().GetTableCount();
-    let nNextTab = nTab + (nDir < 0 ? -1 : 1);
-    if (nNextTab < 0 || nNextTab >= nCount) {
-      if (!this.wrapNextPrevSheetTab) return;
-      nNextTab = nDir < 0 ? nCount - 1 : 0;
-    }
+    const document = this.aViewData.GetDocument(),
+      nTab = this.aViewData.GetTabNumber(),
+      nCount = document.GetTableCount(),
+      step = nDir < 0 ? -1 : 1;
+    let nNextTab = nTab;
+    do {
+      nNextTab += step;
+      if (nNextTab < 0 || nNextTab >= nCount) {
+        if (!this.wrapNextPrevSheetTab) return;
+        nNextTab = step < 0 ? nCount - 1 : 0;
+      }
+      if (document.IsVisible(nNextTab)) break;
+    } while (nNextTab !== nTab && nCount > 0);
     if (nNextTab !== nTab) this.SetTabNo(nNextTab, false, bExtendSelection);
   }
   /** Switches actual per-sheet view data with native group retention/collapse rules. @param nTab - Existing sheet. @param bNew - Refresh same sheet when true. @param bExtendSelection - Requested group extension. @returns Nothing. */
   SetTabNo(nTab: number, bNew = false, bExtendSelection = false): void {
-    if (!ValidTab(nTab) || !this.aViewData.GetDocument().FetchTable(nTab)) return;
+    const document = this.aViewData.GetDocument();
+    if (!ValidTab(nTab) || !document.FetchTable(nTab)) return;
     if (!bNew && nTab === this.aViewData.GetTabNumber()) return;
     const rMark = this.aViewData.GetMarkData(),
-      nTabCount = this.aViewData.GetDocument().GetTableCount();
+      nTabCount = document.GetTableCount();
+    const requested = nTab;
+    while (nTab < nTabCount && !document.IsVisible(nTab)) ++nTab;
+    if (nTab === nTabCount) {
+      nTab = requested;
+      while (nTab > 0 && !document.IsVisible(nTab)) --nTab;
+      if (!document.IsVisible(nTab)) document.SetVisible(0, true);
+    }
     this.DoneBlockMode();
     this.aFunctionSet.SetAnchorFlag(false);
     rMark.ResetMark();
     this.aViewData.SetTabNo(nTab);
+    document.SetVisibleTab(nTab);
     let bAllSelected = true;
     for (let nSelTab = 0; nSelTab < nTabCount; ++nSelTab) {
       if (rMark.GetTableSelect(nSelTab)) {
@@ -209,47 +224,13 @@ export class ScTabView {
     this.InitBlockMode(firstCol[0], firstRow[0], tab);
     this.MarkCursor(lastCol[0], lastRow[0], tab);
   }
-  /** Original SkipCursorHorizontal hidden-column branch for the unprotected,unmerged cell slice. @param column - Proposed column. @param old - Original cursor. @param movement - Nonzero horizontal direction. @returns Source cursor after boundary reversal. */
-  SkipCursorHorizontal(column: number, old: number, movement: number): number {
-    const doc = this.aViewData.GetDocument(),
-      tab = this.aViewData.GetTabNumber(),
-      first: [number] = [0];
-    let maximum = doc.ColHidden(doc.MaxCol(), tab, first) ? first[0] + 1 : doc.MaxCol();
-    maximum = Math.max(
-      maximum,
-      Math.min(
-        (
-          doc.FetchTable(tab) as NonNullable<ReturnType<typeof doc.FetchTable>>
-        ).GetAllocatedColumnsCount() + 1,
-        doc.MaxCol(),
-      ),
-    );
-    let flipped = false;
-    while (doc.ColHidden(column, tab)) {
-      if (column <= 0 || column >= maximum) {
-        if (flipped) return old;
-        movement = -movement;
-        column += movement > 0 ? 1 : -1;
-        flipped = true;
-      } else column += movement > 0 ? 1 : -1;
-    }
-    return column;
-  }
-  /** Original SkipCursorVertical hidden-row branch;protected/merged cells remain outside this slice. @param row - Proposed row. @param old - Old cursor. @param movement - Direction. @returns Native cursor with boundary reversal. */
-  SkipCursorVertical(row: number, old: number, movement: number): number {
-    const doc = this.aViewData.GetDocument(),
-      tab = this.aViewData.GetTabNumber();
-    let flipped = false;
-    while (doc.RowHidden(row, tab)) {
-      if (row <= 0 || row >= doc.MaxRow()) {
-        if (flipped) return old;
-        movement = -movement;
-        flipped = true;
-      }
-      row += movement > 0 ? 1 : -1;
-    }
-    return row;
-  }
+  CanSelectCell = tabview2.CanSelectCell;
+  SkipCursorHorizontal = tabview2.SkipCursorHorizontal;
+  SkipCursorVertical = tabview2.SkipCursorVertical;
+  MoveCursorByProtection = tabview2.MoveCursorByProtection;
+  GetRelativeCursor = tabview2.GetRelativeCursor;
+  ExpandBlock = tabview2.ExpandBlock;
+  ExpandReference = tabview2.ExpandReference;
   /** Expands the simple selection to complete columns using original no-argument MarkColumns rules. Browser notifications stay with the owning controller;reference/window block services remain outside this slice. @returns Nothing. */
   MarkColumns(): void {
     const mark = this.aViewData.GetMarkData(),

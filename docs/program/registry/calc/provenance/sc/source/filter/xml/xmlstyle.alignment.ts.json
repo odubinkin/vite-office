@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmlstyle.alignment.ts",
+    "upstreamPath": "sc/source/filter/xml/xmlstyle.cxx",
+    "localSymbols": [
+      "importCellAlignment",
+      "exportCellAlignment"
+    ],
+    "upstreamSymbols": [
+      "XmlScPropHdl_RotateAngle",
+      "XmlScPropHdl_RotateReference",
+      "XmlScPropHdl_Orientation",
+      "XmlScPropHdl_JustifyMethod"
+    ],
+    "preservedResponsibilities": [
+      "Carries the actual Calc rotation, shrink, stacking and justify method over original ODF attributes and retains native integral export."
+    ],
+    "omittedResponsibilities": [
+      "This slice covers the XML format path. Other style families and broad full-source parity remain in progress."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlstyle.alignment.ts",
+          "marker": "importCellAlignment"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx",
+          "marker": "XmlScPropHdl_RotateAngle"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx",
+          "marker": "XmlScPropHdl_RotateReference"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx",
+          "marker": "XmlScPropHdl_Orientation"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx",
+          "marker": "XmlScPropHdl_JustifyMethod"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/xml/xmlstyle.alignment.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The bounded runtime keeps the original alignment responsibility in an adjacent source file beside the same upstream owner."
+    }
+  }
+}

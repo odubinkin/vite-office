@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/oox/stylesfragment.ts",
+    "localSymbols": [
+      "StylesFragment",
+      "FontContext"
+    ],
+    "upstreamPath": "sc/source/filter/oox/stylesfragment.cxx",
+    "upstreamSymbols": [
+      "StylesFragment::onCreateContext",
+      "FontContext::onCreateContext"
+    ],
+    "preservedResponsibilities": [
+      "Workbook relationships resolve the style fragment and its original indexed font, fill, style XF and cell XF records.",
+      "Shares the original FontContext between workbook font definitions and rPr child properties.",
+      "Parses workbook indexed color declarations and shares source font color parsing with edit runs.",
+      "Loads the original indexed border list, side records, colors and XF border flags from Strict and Transitional SpreadsheetML.",
+      "Dispatches original XF alignment elements through the source alignment model.",
+      "Admits the original protection child and applyProtection flag for cell and style XFs."
+    ],
+    "omittedResponsibilities": [
+      "Theme and indexed colors, number formats, borders, named cell styles, and differential formats remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/stylesfragment.ts",
+          "marker": "StylesFragment"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "round trips visual styles"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/stylesfragment.cxx",
+          "marker": "StylesFragment::onCreateContext"
+        },
+        {
+          "path": "sc/source/filter/oox/stylesfragment.cxx",
+          "marker": "FontContext::onCreateContext"
+        }
+      ]
+    }
+  }
+}

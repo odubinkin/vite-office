@@ -1,13 +1,72 @@
 /** @fileoverview Native detached formula relocation, reference ordering and token ownership contracts. */
-import { expect, it } from "vitest";
+import { assert, expect, it } from "vitest";
 import { ScAddress } from "../../../inc/address";
 import { ScDocument, ScDocumentMode } from "../../../inc/document";
 import { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
 import { SfxStyleFamily, SfxStyleSearchBits } from "../../../../svl/inc/style-values";
+import { SfxStyleSheet } from "../../../../svl/source/items/style-sheet";
 import { ScFormulaCell } from "../../../inc/formulacell";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { ScStyleSheet } from "./stlsheet";
+import { SvxFontHeightItem } from "../../../../editeng/source/items/textitem";
+import { ATTR_FONT_HEIGHT } from "../../../inc/scitems";
+
+it("copies the native Calc cell style without aliasing its direct attributes", /** Exercises the native cell factory and Sfx style copy operation. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  const name = unicode("Calc cell style");
+  const font = new SvxFontHeightItem(440, 100, ATTR_FONT_HEIGHT);
+  try {
+    const pool = doc.GetStyleSheetPool();
+    assert(pool);
+    const style = pool.Make(name, SfxStyleFamily.Para, SfxStyleSearchBits.UserDefined);
+    assert(style instanceof ScStyleSheet);
+    style.GetItemSet().Put(font);
+    const copy = new ScStyleSheet(style);
+    try {
+      expect(copy.GetItemSet().GetParent()).toBe(pool.GetDefaultStyle()?.GetItemSet());
+      expect(copy.GetItemSet()).not.toBe(style.GetItemSet());
+      style.GetItemSet().ClearItem(ATTR_FONT_HEIGHT);
+      expect((copy.GetItemSet().Get(ATTR_FONT_HEIGHT) as SvxFontHeightItem).GetHeight()).toBe(440);
+      pool.Add(copy);
+      expect(pool.Find(name, SfxStyleFamily.Para)).toBeInstanceOf(ScStyleSheet);
+    } finally {
+      copy.Dispose();
+    }
+  } finally {
+    font.Dispose();
+    name.dispose();
+    doc.Dispose();
+  }
+});
+
+it("rejects a shared base style and preserves the separate page-style boundary", /** Exercises the native Calc style class distinction and unported family. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  const name = unicode("Foreign style");
+  const pool = doc.GetStyleSheetPool();
+  assert(pool);
+  const foreign = new SfxStyleSheet(
+    name,
+    pool,
+    SfxStyleFamily.Para,
+    SfxStyleSearchBits.UserDefined,
+  );
+  try {
+    expect(
+      /** Tries to add a style of the wrong native class. @returns Nothing. */ () =>
+        pool.Add(foreign),
+    ).toThrow("Invalid Calc style class.");
+    expect(
+      /** Requests a page style outside the cell factory. @returns Style. */ () =>
+        pool.Make(name, SfxStyleFamily.Page, SfxStyleSearchBits.UserDefined),
+    ).toThrow("native Calc style family is not ported");
+  } finally {
+    foreign.Dispose();
+    name.dispose();
+    doc.Dispose();
+  }
+});
 
 it("relocates mixed relative and absolute references through tokens and adopts dependency listeners only on insertion", /** Original copy retains its cached value until the document inserts and dirties it. @returns Nothing. */ () => {
   const doc = new ScDocument();
@@ -116,14 +175,12 @@ it.each([
       expect(doc.GetValue(formulaPosition)).toBe(5);
       doc.SetValue(new ScAddress(), 7);
       expect(doc.GetValue(formulaPosition)).toBe(9);
-      expect(
-        /** Exercises the explicit Calc factory boundary. @returns No style. */ () =>
-          styles?.Make(
-            unicode("Unported Calc style"),
-            SfxStyleFamily.Para,
-            SfxStyleSearchBits.UserDefined,
-          ),
-      ).toThrow("native Calc style factory is not ported");
+      const cellStyle = styles?.Make(
+        unicode("Calc cell style"),
+        SfxStyleFamily.Para,
+        SfxStyleSearchBits.UserDefined,
+      );
+      expect(cellStyle?.GetItemSet().GetParent()).toBe(styles?.GetDefaultStyle()?.GetItemSet());
     } else {
       expect(pool).toBeNull();
       expect(styles).toBeNull();

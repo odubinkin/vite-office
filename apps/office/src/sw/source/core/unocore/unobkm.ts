@@ -1,10 +1,9 @@
-/** @fileoverview Consumed SwXBookmark descriptor/attachment/lifetime from pinned unobkm.cxx for the current collapsed-bookmark core. */
+/** @fileoverview Consumed SwXBookmark descriptor, range attachment and lifetime from unobkm.cxx. */
 import type { SwDoc } from "../doc/doc";
 import type { SwBookmark } from "../doc/docbm";
-import type { SwTextNode } from "../txtnode/ndtxt";
 import { SwPaM } from "../crsr/pam";
 import { SwXTextRange, type SwXTextOwner } from "./unoobj2";
-import { invalid, illegal } from "./unocrsrhelper";
+import { invalid } from "./unocrsrhelper";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { text, unicode } from "./unocrsrhelper";
 /** A detached descriptor owns a requested name; attachment transfers authority to DocumentMarkAccess. */
@@ -31,13 +30,9 @@ export class SwXBookmark {
   attach(range: SwXTextRange): void {
     if (this.mark) invalid("Bookmark is already attached");
     const p = range.GetPaM();
-    if (p.Start().compare(p.End()) !== 0)
-      illegal("Ranged bookmarks require the unported ranged-mark core");
     const doc = range.GetDoc(),
       base = this.name || "Bookmark";
-    this.mark = doc
-      .GetIDocumentMarkAccess()
-      .MakeMark(p.GetPoint().GetNode() as SwTextNode, p.GetPoint().GetContentIndex(), base);
+    this.mark = doc.GetIDocumentMarkAccess().MakeBookmark(p, base);
     this.doc = doc;
     this.parent = range.getText();
   }
@@ -48,7 +43,10 @@ export class SwXBookmark {
       (this.doc as SwDoc).GetIDocumentMarkAccess().FindMark(this.mark.GetName()) !== this.mark
     )
       invalid("Bookmark is disposed");
-    const p = new SwPaM(this.mark.GetMarkPos());
+    const p = new SwPaM(
+      this.mark.GetMarkStart(),
+      this.mark.IsExpanded() ? this.mark.GetMarkEnd() : undefined,
+    );
     try {
       return new SwXTextRange(p, this.parent as SwXTextOwner);
     } finally {

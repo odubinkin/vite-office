@@ -3,17 +3,21 @@ import { ScXMLImportContext } from "./importcontext";
 import { SvXMLImportContext, type FastAttributeList } from "../../../../xmloff/source/core/xmlimp";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import { Converter } from "../../../../sax/source/tools/converter";
-import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { ScAddress } from "../../../inc/address";
+import { CellType } from "../../../inc/global";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { ScXMLTableRowContext } from "./xmlrowi";
 import { repeatCount } from "./xmlrowi";
 import { ScXMLCellTextParaContext } from "./celltextparacontext";
+import { createCellEditText } from "./xmlcelli.edit";
+import type { CellTextParagraph } from "./xmlexprt.celltext";
 /** Cell state is a transient native XML context,not an imported cell model. */
 export class ScXMLTableRowCellContext extends ScXMLImportContext {
   private readonly style: import("../../../inc/patattr").ScPatternAttr | null;
-  private readonly paragraphs: string[] = [];
+  private readonly paragraphs: CellTextParagraph[] = [];
   private readonly repeat: number;
+  private readonly mergedColumns: number;
+  private readonly mergedRows: number;
   private readonly type: string | null;
   private readonly source: string | null;
   private readonly rawValue: string | null;
@@ -26,6 +30,8 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
   ) {
     super(row.table.owner);
     this.repeat = repeatCount(attributes, XMLToken.TABLE_NUMBER_COLUMNS_REPEATED);
+    this.mergedColumns = repeatCount(attributes, XMLToken.TABLE_NUMBER_COLUMNS_SPANNED);
+    this.mergedRows = repeatCount(attributes, XMLToken.TABLE_NUMBER_ROWS_SPANNED);
     this.type = attributes.get(XMLToken.TABLE_VALUE_TYPE);
     this.rawValue = attributes.get(XMLToken.OFFICE_VALUE);
     this.stringValue = attributes.get(XMLToken.OFFICE_STRING_VALUE);
@@ -33,11 +39,6 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
     this.source = !formula
       ? null
       : row.table.owner.ExtractFormulaNamespaceGrammar(formula, attributes);
-    if (
-      attributes.get(XMLToken.TABLE_NUMBER_COLUMNS_SPANNED) !== null ||
-      attributes.get(XMLToken.TABLE_NUMBER_ROWS_SPANNED) !== null
-    )
-      throw new Error("ODS merged cells are not implemented");
     const name = attributes.get(XMLToken.TABLE_STYLE_NAME);
     this.style = name === null ? null : row.table.owner.GetAutoStyle(name);
     if (this.type !== null && this.type !== "float" && this.type !== "string")
@@ -45,8 +46,8 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
     if (this.source !== null && (this.repeat > 1 || row.repeat > 1))
       throw new Error("ODS repeated formula services are not implemented");
   }
-  /** Appends native text paragraphs, preserving the EditEngine line boundary. @param value - Decoded paragraph. @returns Nothing. */
-  setParagraph(value: string): void {
+  /** Appends native text paragraphs, preserving the EditEngine line boundary. @param value - Decoded paragraph spans. @returns Nothing. */
+  setParagraph(value: CellTextParagraph): void {
     this.paragraphs.push(value);
   }
   /** Creates actual simple text child state. @param element - Token. @returns Context. */
@@ -60,9 +61,22 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
       doc = owner.GetDoc(),
       pos = new ScAddress(this.row.col, this.row.start, this.row.table.tab);
     this.row.col += this.repeat;
-    if (this.covered) return;
-    const value =
-      this.stringValue || (this.paragraphs.length ? this.paragraphs.join("\n") : undefined);
+    if (!this.covered && (this.mergedColumns > 1 || this.mergedRows > 1)) {
+      const lastColumn = pos.Col() + this.mergedColumns - 1;
+      const lastRow = pos.Row() + this.mergedRows - 1;
+      if (owner.GetDocument().ValidColRow(lastColumn, lastRow))
+        doc.setMergedCells(pos.Tab(), pos.Col(), pos.Row(), lastColumn, lastRow);
+    }
+    let text = "";
+    let styled = false;
+    for (const paragraph of this.paragraphs) {
+      for (const [span, style] of paragraph) {
+        text += span;
+        styled ||= !!style;
+      }
+      text += "\n";
+    }
+    const value = this.stringValue || (this.paragraphs.length ? text.slice(0, -1) : undefined);
     if (this.style !== null) {
       const endCol = Math.min(owner.GetDocument().MaxCol(), pos.Col() + this.repeat - 1),
         endRow = Math.min(owner.GetDocument().MaxRow(), pos.Row() + this.row.repeat - 1);
@@ -90,9 +104,12 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
       for (let col = 0; col < columns; col++)
         for (let row = 0; row < rows; row++) {
           const address = new ScAddress(pos.Col() + col, pos.Row() + row, pos.Tab());
-          if (this.source !== null)
-            doc.setFormulaCell(address, string, FormulaGrammar.Grammar.GRAM_ODFF);
+          if (this.covered && owner.GetDocument().GetCellType(address) !== CellType.CELLTYPE_NONE)
+            continue;
+          if (this.source !== null) owner.AddFormula(address, this.source);
           else if (this.type === "float") doc.setNumericCell(address, numeric[0]);
+          else if (styled && !this.stringValue)
+            doc.setEditCell(address, createCellEditText(owner, this.paragraphs));
           else if (this.paragraphs.length > 1 || (value !== undefined && /[\r\n]/.test(value))) {
             owner.GetDocument().SetTextCell(address, string);
             doc.invalidateBlockPositionSet(address.Tab());

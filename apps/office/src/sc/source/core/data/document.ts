@@ -5,7 +5,7 @@ import { HardRecalcState, ScDocumentMode } from "./document.modes";
 import { ScSetStringParam } from "../../../inc/stringutil";
 import { SetString as setDocumentString } from "./document.cell-input";
 import * as documentNames from "./document.sheet-names";
-
+import * as documentVisibility from "./document.sheet-visibility";
 import type { EditTextObject } from "../../../../editeng/inc/editobj";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { SvxBoxInfoItem, SvxBoxItem } from "../../../../editeng/source/items/frmitems";
@@ -23,24 +23,16 @@ import type { SvtListener } from "../../../../svl/source/notify/listener";
 import type { SfxListener } from "../../../../svl/source/notify/lstner";
 import type { SfxBroadcaster } from "../../../../svl/source/notify/SfxBroadcaster";
 import type { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
-import {
-  MAXCOL,
-  MAXROW,
-  MAXROWCOUNT,
-  ScAddress,
-  ScRange,
-  ValidCol,
-  ValidRow,
-  ValidTab,
-} from "../../../inc/address";
+import { MAXCOL, MAXROW, ScAddress, ScRange, ValidCol, ValidRow } from "../../../inc/address";
 import { ScHint } from "../../../inc/brdcst";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import type { ScChartListenerCollection } from "../../../inc/chartlis";
 import { ScClipParam } from "../../../inc/clipparam";
 import type { ScColumn } from "../../../inc/column";
 import { ScDocOptions, type ScDocOptionsConstReference } from "../../../inc/docoptio";
+import type { Theme } from "../../../../docmodel/inc/theme/Theme";
 import type { ScFormulaCell } from "../../../inc/formulacell";
-import { CellType, InsertDeleteFlags, ScGlobal, type HasAttrFlags } from "../../../inc/global";
+import { CellType, InsertDeleteFlags, ScGlobal } from "../../../inc/global";
 import { ScInterpreterContext } from "../../../inc/interpretercontext";
 import type { ScMarkData } from "../../../inc/markdata";
 import { CellAttributeHelper, CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
@@ -63,8 +55,17 @@ import { GetBreakIterator, GetStringScriptType } from "./documen6";
 import * as documen7 from "./documen7";
 import * as documen9 from "./documen9";
 import * as document10 from "./document10";
+import { ScRangeName } from "../tool/rangenam";
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  IsTabProtected = documen3.IsTabProtected;
+  GetTabProtection = documen3.GetTabProtection;
+  SetTabProtection = documen3.SetTabProtection;
+  private readonly pRangeName = new ScRangeName();
+  /** Looks up the owner of names in this scope. @param tab - Sheet scope or -1. @returns Native names. */
+  GetRangeName(tab = -1) {
+    return tab === -1 ? this.pRangeName : this.FetchTable(tab)?.GetRangeName();
+  }
   declare private pUnoBroadcaster: SfxBroadcaster | null;
   /** Original lazy document UNO observer registration. @param listener - Actual native listener. @returns Nothing. */
   AddUnoObject(listener: SfxListener): void {
@@ -246,10 +247,13 @@ export class ScDocument {
   GetClipStart(...args: Parameters<typeof document10.GetClipStart>): void {
     document10.GetClipStart.apply(this, args);
   }
-  /** Original coordinate merge envelope. @param args - Native parameters. @returns Whether changed or found. */
+  /** Extends the supplied coordinates to contain anchored merges. @param args - Native coordinates and outputs. @returns Whether a merge was found. */
   ExtendMerge(...args: Parameters<typeof document10.ExtendMerge>): boolean {
     return document10.ExtendMerge.apply(this, args);
   }
+  SkipOverlapped = document10.SkipOverlapped;
+  ExtendOverlapped = document10.ExtendOverlapped;
+  ExtendMergeRange = document10.ExtendMergeRange;
   /** Original selected-sheet format compatibility operation. @param args - Range,marks,pattern and category. @returns Nothing. */
   ApplyPatternIfNumberformatIncompatible(
     ...args: Parameters<typeof document10.ApplyPatternIfNumberformatIncompatible>
@@ -315,23 +319,19 @@ export class ScDocument {
   IsBlockEmpty(...args: Parameters<typeof document10.IsBlockEmpty>): boolean {
     return document10.IsBlockEmpty.apply(this, args);
   }
-  /** Original range overload delegates to actual sheet attribute owners. @param range - Area. @param mask - Native query. @returns Found. */
-  HasAttrib(range: ScRange, mask: HasAttrFlags): boolean {
-    return documen7.HasAttrib.call(this, range, mask);
-  }
+  HasAttrib = documen7.HasAttrib;
   private readonly pDocOptions = new ScDocOptions();
-  /** Original borrowed document options,including lazy search classification. @returns Actual options. */
-  GetDocOptions(): ScDocOptionsConstReference {
+  /** The represented document theme for the format filters. */ theme?: Theme;
+  /** Original borrowed document options,including lazy search classification. @returns Actual options. */ GetDocOptions(): ScDocOptionsConstReference {
     return this.pDocOptions;
   }
-  /** Assigns original options by value;the unported lazy formatter is never allocated in this profile. @param options - Source options. @returns Nothing. */
+  /** Assigns original options by value. @param options - Source options. @returns Nothing. */
   SetDocOptions(options: ScDocOptionsConstReference): void {
     this.pDocOptions.assign(options);
     this.mxPoolHelper?.SetFormTableOpt(options);
   }
   private readonly pViewOptions = new ScViewOptions();
-  /** Original documen3 borrowed view options. @returns Actual document-owned options. */
-  GetViewOptions(): ScViewOptions {
+  /** Original documen3 borrowed view options. @returns Actual document-owned options. */ GetViewOptions(): ScViewOptions {
     return this.pViewOptions;
   }
   /** Original value assignment preserves the borrowed owner identity. @param options - Source options. @returns Nothing. */
@@ -359,8 +359,7 @@ export class ScDocument {
   SetScriptType(position: ScAddress, type: SvtScriptType): void {
     this.FetchTable(position.Tab())?.SetScriptType(position.Col(), position.Row(), type);
   }
-  /** Original absent-sheet layout fallback. @param tab - Sheet. @returns Actual RTL flag or false. */
-  IsLayoutRTL(tab: number): boolean {
+  /** Sheet direction. @param tab - Sheet. @returns RTL. */ IsLayoutRTL(tab: number): boolean {
     return this.FetchTable(tab)?.IsLayoutRTL() ?? false;
   }
   /** Original represented table flag dispatch;drawing/visibility services remain unported. @param tab - Sheet. @param set - RTL state. @returns Nothing. */
@@ -383,7 +382,6 @@ export class ScDocument {
   ApplySelectionFrame(marks: ScMarkData, outer: SvxBoxItem, inner: SvxBoxInfoItem): void {
     documentFrame.ApplySelectionFrame.call(this, marks, outer, inner);
   }
-
   /** Original selected-sheet indentation with removed-tab boundary. @param increment - Direction. @param marks - Real marks. @returns Nothing. */
   ChangeSelectionIndent(increment: boolean, marks: ScMarkData): void {
     for (const tab of marks.GetSelectedTabs()) {
@@ -427,6 +425,7 @@ export class ScDocument {
   IsBlockEditable(...args: Parameters<typeof document10.IsBlockEditable>): boolean {
     return document10.IsBlockEditable.apply(this, args);
   }
+  IsSelectionEditable = document10.IsSelectionEditable;
   /** Original document filtered-span dispatch. @param args - Row bounds and sheet. @returns Any filtered row. */
   HasFilteredRows(...args: Parameters<typeof document10.HasFilteredRows>): boolean {
     return document10.HasFilteredRows.apply(this, args);
@@ -583,6 +582,7 @@ export class ScDocument {
   }
   private bAutoCalc: boolean;
   private readonly maTabs: (ScTable | null)[] = [];
+  private nVisibleTab = 0;
   private pBASM: ScBroadcastAreaSlotMachine | null = null;
   private eHardRecalcState = HardRecalcState.OFF;
   private mbTrackFormulasPending = false;
@@ -679,7 +679,6 @@ export class ScDocument {
   ApplyPatternAreaTab(...args: Parameters<typeof document10.ApplyPatternAreaTab>): boolean {
     return document10.ApplyPatternAreaTab.apply(this, args);
   }
-
   /** Original document.cxx simple-area or selected-cache dispatch over actual canonical pattern owners. @param delta - Source pattern. @param marks - Actual simple/multi selection. @returns Stored attribute change. */
   ApplySelectionPattern(delta: ScPatternAttr, marks: ScMarkData): boolean {
     return documen7.ApplySelectionPattern.call(this, delta, marks);
@@ -858,7 +857,7 @@ export class ScDocument {
   }
   /** Reports the full logical row domain of every column store. @returns Count. */
   GetMaxRowCount(): number {
-    return MAXROWCOUNT;
+    return this.mxSheetLimits.GetMaxRowCount();
   }
   /** Reads the native sheet-limit column count. @returns Count. */
   GetMaxColCount(): number {
@@ -880,22 +879,17 @@ export class ScDocument {
   ValidColRow(col: number, row: number): boolean {
     return ValidCol(col, MAXCOL) && this.ValidRow(row);
   }
-  /** Reports actual sheet ownership count. @returns Count. */
-  GetTableCount(): number {
-    return this.maTabs.length;
-  }
+  GetTableCount = documentVisibility.GetTableCount;
   /** Returns the source document's data-only sheet extent with zero outputs for a missing sheet. @param tab - Sheet. @param endCol - Last occupied column. @param endRow - Last occupied row. @returns Whether occupied. */
   GetCellArea(tab: number, endCol: [number], endRow: [number]): boolean {
     return document10.GetCellArea.call(this, tab, endCol, endRow);
   }
-  /** Borrows a real existing sheet or native null result. @param tab - Sheet. @returns Owner or null. */
-  FetchTable(tab: number): ScTable | null {
-    return ValidTab(tab) ? (this.maTabs[tab] ?? null) : null;
-  }
-  /** Copies the sheet name or clears the output for a missing sheet. @param tab - Sheet. @param output - Unicode target. @returns Found. */
-  GetName(tab: number, output: OUString): boolean {
-    return document10.GetName.call(this, tab, output);
-  }
+  FetchTable = documentVisibility.FetchTable;
+  IsVisible = documentVisibility.IsVisible;
+  SetVisible = documentVisibility.SetVisible;
+  GetVisibleTab = documentVisibility.GetVisibleTab;
+  SetVisibleTab = documentVisibility.SetVisibleTab;
+  GetName = document10.GetName;
   /** Applies native editable sheet-name character constraints without a fabricated length limit. @param name - Native Unicode name. @returns Validity. */
   static ValidTabName(name: OUStringConstReference): boolean {
     return documentNames.ValidTabName(name);
@@ -994,5 +988,3 @@ export class ScDocument {
     this.FetchTable(position.Tab())?.SetEmptyCell(position.Col(), position.Row());
   }
 }
-
-export { HardRecalcState, ScDocumentMode } from "./document.modes";

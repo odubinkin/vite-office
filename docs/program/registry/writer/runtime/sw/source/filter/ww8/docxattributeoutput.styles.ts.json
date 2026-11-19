@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.styles.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "docx-file-filter",
+    "capabilityIds": [
+      "CAP-d48ffd59-e673-4eda-aa2d-bcf1f13a5c84"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ww8/docxattributeoutput.styles.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.styles.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx",
+        "apps/office/src/sw/source/filter/ww8/docxexport.theme.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.theme-fonts.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.default-tabs.test.ts",
+        "apps/office/e2e/writer-docx-theme.spec.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.tabs.test.ts"
+      ],
+      "justification": "The DOCX attribute writer emits represented paragraph and character style definitions from shared native Word slots, including base and follow style references and direct native item properties. Document defaults, latent and linked styles, imported interoperability metadata and complete style-property output remain open. Writes the native character interoperability item in docDefaults and named styles when present. Serializes the native user default script fonts in DOCX run defaults. Records the effective default tab item during document-default style output and leaves it out of explicit style tabs. Writes custom document-default tabs in pPrDefault and routes ordinary standard tab positions to the settings part.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OutputStylesTable",
+        "OutputStyle"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/ww8/docxattributeoutput.cxx",
+      "upstreamSymbols": [
+        "DocxAttributeOutput::StartStyle",
+        "DocxAttributeOutput::StartStyleProperties",
+        "DocxAttributeOutput::EndStyleProperties"
+      ]
+    }
+  }
+}

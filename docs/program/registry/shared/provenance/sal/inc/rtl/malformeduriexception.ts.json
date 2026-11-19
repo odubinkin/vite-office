@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/inc/rtl/malformeduriexception.ts",
+    "status": "mapped",
+    "upstreamPath": "include/rtl/malformeduriexception.hxx",
+    "localSymbols": [
+      "MalformedUriException"
+    ],
+    "upstreamSymbols": [
+      "MalformedUriException",
+      "getMessage"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source responsibilities retain actual RTL/UNO owners and contracts. Explicit disposal, borrowed UTF16 views, pointer-address cells, compiler overload witnesses and realm-local execution bind the browser host; physical native ABI/thread guarantees remain unqualified."
+    },
+    "preservedResponsibilities": [
+      "Original standalone MalformedUriException value from rtl/malformeduriexception.hxx."
+    ],
+    "omittedResponsibilities": [
+      "Independent native compiled module differential, physical ABI/allocator/mutex/thread lifetime and runtime shutdown are unqualified.",
+      "Complete DOCX/XLSX model/filter/package/desktop/mobile UI import-export acceptance remains unfinished; existing browser open/save/autosave/recovery choices are retained."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/inc/rtl/malformeduriexception.ts",
+          "marker": "MalformedUriException"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/rtl/malformeduriexception.hxx",
+          "marker": "MalformedUriException"
+        },
+        {
+          "path": "include/rtl/malformeduriexception.hxx",
+          "marker": "getMessage"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/xml/xmlpageheaderfooter.ts",
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/text/XMLTextHeaderFooterContext.cxx",
+    "localSymbols": [
+      "XMLTextMasterPageContext",
+      "XMLTextHeaderFooterContext",
+      "getOdfPageStories"
+    ],
+    "upstreamSymbols": [
+      "XMLTextHeaderFooterContext",
+      "createFastChildContext",
+      "endFastElement"
+    ],
+    "preservedResponsibilities": [
+      "Imports original ODF master-page ordinary, even and first header/footer children into actual native Writer formats and text sections. Exports the same variants using the shared paragraph, table and automatic style owners."
+    ],
+    "omittedResponsibilities": [
+      "The current graph uses the existing Writer frame and page style owners. Desktop layout and unrepresented header/footer page-layout property families remain outside this filter path."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/xml/xmlpageheaderfooter.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The narrow Writer filter binding contains native master page variant decisions and actual section setup while generic SAX text handling remains in xmloff."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlpageheaderfooter.ts",
+          "marker": "XMLTextHeaderFooterContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-page-stories.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextHeaderFooterContext.cxx",
+          "marker": "XMLTextHeaderFooterContext::endFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextMasterPageContext.cxx",
+          "marker": "XMLTextMasterPageContext::createFastChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLTextMasterPageExport.cxx",
+          "marker": "exportHeaderFooterContent"
+        }
+      ]
+    }
+  }
+}

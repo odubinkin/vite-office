@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sax/source/fastparser/fastparser.normalize.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-fastparser-normalization",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sax/source/fastparser/fastparser.normalize.ts",
+        "apps/office/src/sax/source/fastparser/fastparser.normalize.test.ts",
+        "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx"
+      ],
+      "justification": "Original fastparser.cxx namespace alias functions operate on actual native OUString values and compiler-static RTL literals, preserving legacy SVG/FO/SMIL aliases, permissive XForms prefix/suffix normalization, OASIS TC/version index checks, Unicode subviews and original implicit concat temporary/move assignment. Independent source copy remains separate from xmloff as upstream. Whole original owner tests cover accepted/rejected aliases, exact boundaries, shared-input copy lifetime and nonnumeric/absent year behavior; real main/DOM-free Worker observes native alias results. Complete C callback producer/stream parser wiring and original full parser QA remain unfinished. Physical compiler/C++ allocation ABI and complete model/format/UI acceptance remain unqualified; this owner is not an alternate URI resolver or browser XML driver.",
+      "knownViolations": [],
+      "localSymbols": [
+        "NormalizeURI",
+        "NormalizeW3URI",
+        "NormalizeOasisURN"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sax/source/fastparser/fastparser.cxx",
+      "upstreamSymbols": [
+        "NormalizeURI",
+        "NormalizeW3URI",
+        "NormalizeOasisURN"
+      ]
+    }
+  }
+}

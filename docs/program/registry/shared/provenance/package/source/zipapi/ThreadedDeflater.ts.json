@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/zipapi/ThreadedDeflater.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/zipapi/ThreadedDeflater.cxx",
+    "localSymbols": [
+      "ThreadedDeflater"
+    ],
+    "upstreamSymbols": [
+      "ThreadedDeflater::deflateWrite",
+      "ThreadedDeflater::Task::doWork"
+    ],
+    "preservedResponsibilities": [
+      "Retains the source default-window raw DEFLATE, 128 KiB blocks, 32 KiB history, byte-aligned sync flush and final stream end. The synchronous browser binding executes one lane in input order and reports unsuccessful zlib work as an export error."
+    ],
+    "omittedResponsibilities": [
+      "The browser runs archive work in its current realm; shared physical worker scheduling, encryption and native ABI domains are unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zipapi/ThreadedDeflater.ts",
+          "marker": "ThreadedDeflater"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackageStream.save.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/xmlfilterbase.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/zipapi/ThreadedDeflater.cxx",
+          "marker": "ThreadedDeflater::deflateWrite"
+        },
+        {
+          "path": "package/source/zipapi/ThreadedDeflater.cxx",
+          "marker": "ThreadedDeflater::Task::doWork"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The synchronous runtime processes one lane per JavaScript realm with the source block format."
+    }
+  }
+}

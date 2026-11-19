@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/external/libcxx/set.ts",
+    "rationale": "Consumed std::set/__tree insert, red-black balancing, end/begin links, ordered iterator increment and recursive value destruction follow the pinned Emscripten SDK libc++ __tree source. Tree nodes are JS VM objects; actual DirectoryHelper string/pair specializations compare UTF16 lexicographically and copy/destroy real OUString values. No synthetic IO, allocator, native pointer or filesystem provider. This preserves consumed tree algorithms and value lifetime, not physical native node layout. Remaining STL APIs, insertion-result iterator binding, debug assertions, native ABI/OOM and whole document package/UI acceptance remain unbound or unqualified.",
+    "responsibilities": [
+      "Consumed std::set/__tree insert, red-black balancing, end/begin links, ordered iterator increment and recursive value destruction follow the pinned Emscripten SDK libc++ __tree source. Tree nodes are JS VM objects; actual DirectoryHelper string/pair specializations compare UTF16 lexicographically and copy/destroy real OUString values. No synthetic IO, allocator, native pointer or filesystem provider. This preserves consumed tree algorithms and value lifetime, not physical native node layout. Remaining STL APIs, insertion-result iterator binding, debug assertions, native ABI/OOM and whole document package/UI acceptance remain unbound or unqualified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Consumed std::set/__tree insert, red-black balancing, end/begin links, ordered iterator increment and recursive value destruction follow the pinned Emscripten SDK libc++ __tree source. Tree nodes are JS VM objects; actual DirectoryHelper string/pair specializations compare UTF16 lexicographically and copy/destroy real OUString values. No synthetic IO, allocator, native pointer or filesystem provider. This preserves consumed tree algorithms and value lifetime, not physical native node layout. Remaining STL APIs, insertion-result iterator binding, debug assertions, native ABI/OOM and whole document package/UI acceptance remain unbound or unqualified."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/libcxx/set.ts",
+          "marker": "Set"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/misc/directoryhelper.filesystem.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/comphelper/directoryhelper.hxx",
+          "marker": "std::set"
+        },
+        {
+          "path": "comphelper/source/misc/directoryhelper.cxx",
+          "marker": "scanDirsAndFiles"
+        }
+      ]
+    },
+    "localSymbols": [
+      "Set",
+      "SetValue"
+    ]
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-58a58349-5416-4763-ad55-0d73965ed511",
+    "capabilityId": "CAP-58a58349-5416-4763-ad55-0d73965ed511",
+    "suite": "shared",
+    "subsystem": "native-package-stream-commit",
+    "type": "model",
+    "maturity": "mapped",
+    "assertions": [
+      "First and repeated writes produce a reopenable archive from the actual destination."
+    ],
+    "capability": "Original package stream commit and transfer",
+    "gaps": [
+      "Direct empty-XStream writes and repeated writes through the actual TempFileFastService retain original archive entry order, dest seek/truncate/copy/flush and backup handling. Original key/KDF argument selection is represented without implementing encryption. Root branch coverage remains below 90, and URL/large threaded output, XStorage/SfxMedium and DOCX/XLSX UI remain pending."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "package/source/zippackage/ZipPackage.cxx",
+          "marker": "ZipPackage::commitChanges"
+        }
+      ],
+      "tests": [
+        {
+          "path": "package/qa/ofopxmlstorages/Test01.java",
+          "marker": "StorageFactory"
+        }
+      ],
+      "docs": [
+        {
+          "path": "package/inc/ZipPackage.hxx",
+          "marker": "enum InitialisationMode"
+        },
+        {
+          "path": "offapi/com/sun/star/embed/UseBackupException.idl",
+          "marker": "TemporaryFileURL"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.write.ts",
+          "marker": "writePackageContents"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.commit-state.test.ts",
+          "marker": "writes and updates an actual XStream"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-package-stream-commit.md",
+          "marker": "# Native package stream commit"
+        }
+      ]
+    },
+    "implemented": false,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Represented original fields and generated UNO/RTL/native mutex owners use existing host storage while native physical ABI/allocator/thread and full package/stream services remain unqualified."
+    },
+    "scopeLimitations": [
+      "Direct empty-XStream writes and repeated writes through the actual TempFileFastService retain original archive entry order, dest seek/truncate/copy/flush and backup handling. Original key/KDF argument selection is represented without implementing encryption. Root branch coverage remains below 90, and URL/large threaded output, XStorage/SfxMedium and DOCX/XLSX UI remain pending."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "package-stream-commit"
+  }
+}

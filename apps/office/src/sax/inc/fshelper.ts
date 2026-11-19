@@ -1,10 +1,10 @@
-/** @fileoverview Native FastSerializerHelper token/attribute and mark forwarding over the actual serializer; component-service acquisition is an explicit injected lexical handler binding. */
+/** @fileoverview Native FastSerializerHelper token/attribute and mark forwarding over the actual service-backed serializer and intrusive attribute-list references. */
+import { OUStringToOString, type OUStringConstReference } from "../../sal/inc/rtl/ustring";
+import type { OString } from "../../sal/inc/rtl/string";
+import { RTL_TEXTENCODING_UTF8 } from "../../sal/inc/rtl/textenc";
 import { FastAttributeList } from "../source/tools/fastattribs";
-import {
-  FastSaxSerializer,
-  TokenValue,
-  type FastTokenHandler,
-} from "../source/tools/fastserializer";
+import { Reference as RtlReference } from "../../sal/inc/rtl/ref";
+import { FastSaxSerializer, TokenValue } from "../source/tools/fastserializer";
 import type { OutputStream } from "../source/tools/CachedOutputStream";
 /** Original mark merge discriminants. */
 export enum MergeMarks {
@@ -17,19 +17,19 @@ export function FSNS(namespace: number, element: number): number {
   return (namespace << 16) | element;
 }
 /** Native variadic attribute/value pairs; null models a missing optional/char pointer. */
-type Attributes = readonly (number | string | Uint8Array | null)[];
+type Attributes = readonly (number | string | Uint8Array | OUStringConstReference | null)[];
 /** Native attribute-list overload or variadic pairs. */
-type ElementAttributes = Attributes | readonly [FastAttributeList];
+type ElementAttributes = Attributes | readonly [RtlReference<FastAttributeList>];
 /** Original convenience owner, with consumed text/byte overloads; native floating conversion remain separate responsibilities. */
 export class FastSerializerHelper {
   /** Original export-side factory supplies a null token handler. @returns Empty native attribute list. */
-  static createAttrList(): FastAttributeList {
-    return new FastAttributeList(null);
+  static createAttrList(): RtlReference<FastAttributeList> {
+    return new RtlReference(new FastAttributeList(null));
   }
   private mpSerializer: FastSaxSerializer | undefined;
-  /** Original header flag plus explicit binding of its acquired token service. @param output - Actual output stream. @param writeHeader - Original declaration flag. @param tokens - Actual native lexical handler. @returns Helper. */
-  constructor(output: OutputStream, writeHeader: boolean, tokens: FastTokenHandler) {
-    this.mpSerializer = new FastSaxSerializer(output, tokens);
+  /** Original header flag and actual serializer construction. @param output - Actual output stream. @param writeHeader - Original declaration flag. @returns Helper. */
+  constructor(output: OutputStream, writeHeader: boolean) {
+    this.mpSerializer = new FastSaxSerializer(output);
     if (writeHeader) this.startDocument();
   }
   /** Dereferencing the native moved/null owner violates the caller precondition. @returns Actual serializer. */ private serializer(): FastSaxSerializer {
@@ -64,29 +64,46 @@ export class FastSerializerHelper {
         ),
       );
   }
-  /** Compiler-erased native variadic calls preserve ordered pushes and optional-value omission. @param attributes - Alternating token/value arguments. @returns Nothing. */
-  private push(attributes: Attributes): void {
+  /** Compiler-erased native variadic calls preserve ordered pushes and optional-value omission. @param attributes - Alternating token/value arguments. @param temporaries - Native optional Unicode-to-UTF8 owners retained through emission. @returns Nothing. */
+  private push(attributes: Attributes, temporaries: OString[]): void {
     if (attributes.length % 2) throw Error("FastSerializerHelper attribute pairs are incomplete.");
     for (let index = 0; index < attributes.length; index += 2) {
       const attribute = attributes[index],
         value = attributes[index + 1];
       if (
         typeof attribute !== "number" ||
-        (value !== null && typeof value !== "string" && !ArrayBuffer.isView(value))
+        (value !== null &&
+          typeof value !== "string" &&
+          !ArrayBuffer.isView(value) &&
+          !(typeof value === "object" && "getStr" in value))
       )
         throw Error("FastSerializerHelper attribute argument type is invalid.");
-      if (value !== null) this.pushAttributeValue(attribute, value);
+      if (value !== null) {
+        if (typeof value === "object" && !ArrayBuffer.isView(value)) {
+          const encoded = OUStringToOString(
+            value.getStr().subarray(0, value.getLength()),
+            RTL_TEXTENCODING_UTF8,
+          );
+          temporaries.push(encoded);
+          this.pushAttributeValue(attribute, encoded.getStr().subarray(0, encoded.getLength()));
+        } else this.pushAttributeValue(attribute, value as string | Uint8Array);
+      }
     }
   }
   /** Original variadic start. @param token - Element token. @param attributes - Native pairs. @returns Nothing. */ startElement(
     token: number,
     ...attributes: ElementAttributes
   ): void {
-    if (attributes[0] instanceof FastAttributeList)
-      this.serializer().startFastElement(token, attributes[0]);
+    if (attributes[0] instanceof RtlReference)
+      this.serializer().startFastElement(token, attributes[0].get());
     else {
-      this.push(attributes as Attributes);
-      this.serializer().startFastElement(token);
+      const temporaries: OString[] = [];
+      try {
+        this.push(attributes as Attributes, temporaries);
+        this.serializer().startFastElement(token);
+      } finally {
+        for (let i = temporaries.length; i-- !== 0;) (temporaries[i] as OString).dispose();
+      }
     }
   }
   /** Original namespace start. @param namespace - Lexical namespace token. @param token - Local token. @param attributes - Native pairs. @returns Nothing. */ startElementNS(
@@ -100,11 +117,16 @@ export class FastSerializerHelper {
     token: number,
     ...attributes: ElementAttributes
   ): void {
-    if (attributes[0] instanceof FastAttributeList)
-      this.serializer().singleFastElement(token, attributes[0]);
+    if (attributes[0] instanceof RtlReference)
+      this.serializer().singleFastElement(token, attributes[0].get());
     else {
-      this.push(attributes as Attributes);
-      this.serializer().singleFastElement(token);
+      const temporaries: OString[] = [];
+      try {
+        this.push(attributes as Attributes, temporaries);
+        this.serializer().singleFastElement(token);
+      } finally {
+        for (let i = temporaries.length; i-- !== 0;) (temporaries[i] as OString).dispose();
+      }
     }
   }
   /** Original namespace empty element. @param namespace - Namespace token. @param token - Local token. @param attributes - Native pairs. @returns Nothing. */ singleElementNS(

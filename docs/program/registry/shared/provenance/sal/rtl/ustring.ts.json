@@ -59,7 +59,10 @@
       "rtl_uString_newReplaceStrAtUtf16L",
       "rtl_uString_newToAsciiLowerCase",
       "rtl_ustr_toUInt64",
-      "rtl_ustr_compareIgnoreAsciiCase_WithLength"
+      "rtl_ustr_compareIgnoreAsciiCase_WithLength",
+      "rtl_uString_newFromCodePoints",
+      "rtl_ustr_ascii_compare_WithLength",
+      "rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths"
     ],
     "upstreamSymbols": [
       "StrLifecycle",
@@ -102,7 +105,10 @@
       "rtl_convertStringToUString",
       "rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength",
       "rtl_uString_newReplaceAllFromIndexUtf16LUtf16L",
-      "rtl_uString_newToAsciiLowerCase"
+      "rtl_uString_newToAsciiLowerCase",
+      "rtl_uString_newFromCodePoints",
+      "rtl_ustr_ascii_compare_WithLength",
+      "rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths"
     ],
     "preservedResponsibilities": [
       "Original RTL Unicode data and intern-pool dependency closure, shared once by Calc and future Writer consumers. Original initialized identities, signed32 refcounts/flags, static C empty, logical UTF16 length/payload/terminators, allocation/free order and complete initialized free-callback fields, separate copies, selfassignment, source aliases, exact UTF16 forward comparison/hash, full pool slots, linear probing/wrap/reinsertion and2039-to8191 double-prime growth are compared against3336 genuine unchanged-body native calls. Thirteen complete pinned source/header blobs and29 unchanged scopes, including actual pthread recursive mutex functions, original compiler atomic macros and o3tl::make_unsigned assertion, compile under ASan/UBSan. Twenty original fail-fast guards are diagnosed. The complete initialized output is retained and SHA256-hashed; portable observation deltas are independently decoded and compared field-for-field with every complete native snapshot. Tuple pointer slots and Uint16Array adapt concrete storage; original allocator function-pointer slots use an ESM-writable carrier. Browser allocation/free releases owned buffer references for GC; physical malloc/free, uninitialized spare bytes, dead-pointer access, arbitrary exotic JS objects, OOM outside replaceable allocator failures, native ABI and concurrent cross-thread ownership are not certified. Synchronous realm-local hash removal cannot observe a separate thread acquire: original zero-count increment is necessarily1, with its native concurrent recursive branch explicitly outside certification. The64-bit allocation overflow guard is identically true for signed32 nonnegative lengths; active constructor assertions prove the original null-copy return unreachable. Native release-build behavior, alternate STL/platform comparison magnitudes, remaining RTL algorithms, actual C++ OUString/SharedString and Calc storage/document/UI owners remain unverified. Preserve native fast-path destination overwrite (CALC-032), no upstream repair.",
@@ -128,7 +134,9 @@
       "B8TCAE restores the independent original raw UTF16 newReplaceStrAt overload and rtl_uString_newReplaceStrAtUtf16L C boundary. The owning overload delegates after its own append/full-range sharing paths, matching pinned strtmpl.hxx1001/1055 and ustring.cxx1198. The previous flattened interior-only body made the raw full-range branch unreachable and omitted raw append admission. Independent unchanged original C++ observations cover2304 owned/raw calls, all legal removal spans, empty/null replacement, embedded nulls/surrogate units and independently acquired output aliases, comparing complete initialized data/terminators, sharing identities and refcounts. Native source/witness hashes and portable replay are retained; no allocator replacement, private counter writes, exclusions or threshold changes. Full ABI/OOM/threading behavior remains unverified.",
       "B8TCAE adds6 native allocation-failure observations using the original externally replaceable rtl_allocateString/rtl_freeString slots declared in strimp.hxx. Original initialized owners, concat, replacement and counted construction bodies are unchanged. NoThrow results and allocation/free events match; original assertion SIGABRT is recorded in isolated processes with core dumps disabled. The existing portable checked Error binding is explicitly distinguished from native termination and C++ exceptions. No private counter mutation or full ABI/threading/fault equivalence is claimed.",
       "Original ZipFile Checks modes retain exact duplicate rejection, ASCII-only case collisions and the first retained entry decision for TryCheckInsensitive, including empty mimetype AutoCorrect behavior after FAT-directory filtering. OOXML ZipStorage selects CheckInsensitive; Writer/Calc ODF byte entry points select TryCheckInsensitive, matching ZipPackage StorageFormat routing. The actual OUString lowercase path delegates to rtl_uString_newToAsciiLowerCase and original newReplaceChars allocation/assign/release logic with reused native CaseReplace and SAL character helpers. Unchanged strings alias data; conversions preserve UTF16/embedded-zero/non-ASCII units and release old destination after copying. No Unicode locale folding, path normalization or fake model/storage/service owner is introduced. Flat transport/resource/error boundaries and incomplete native package/storage/output/model/filter/Worker/UI acceptance remain explicit; physical pointer/ABI/allocator/thread guarantees remain unverified.",
-      "Original complete converter method switches, range/parsing helpers, service info and acquired component export use actual UNO values, interfaces, type descriptions and C sequence engine. TypeDescription preserves all declared constructor/value/ownership/completion methods. SAL dependencies preserve terminated unsigned64 parsing and counted ASCII-only equality. Genuine component tests port the available original Integer123-to-String QA and all OUString unsigned64 overflow values. No fake context, service manager, factory or type provider is installed. Actual service registration/default process graph, named enum completion, original TypeDescriptionManager-to-XSet QA, native floating-integral undefined overflow/ABI/thread behavior, full coverage90 and DOCX/XLSX/UI remain unqualified."
+      "Original complete converter method switches, range/parsing helpers, service info and acquired component export use actual UNO values, interfaces, type descriptions and C sequence engine. TypeDescription preserves all declared constructor/value/ownership/completion methods. SAL dependencies preserve terminated unsigned64 parsing and counted ASCII-only equality. Genuine component tests port the available original Integer123-to-String QA and all OUString unsigned64 overflow values. No fake context, service manager, factory or type provider is installed. Actual service registration/default process graph, named enum completion, original TypeDescriptionManager-to-XSet QA, native floating-integral undefined overflow/ABI/thread behavior, full coverage90 and DOCX/XLSX/UI remain unqualified.",
+      "Original codepoint C constructor releases prior native slot before count/allocation, retains signed32 overflow/NULL allocator outcome and splitSurrogates semantics. Original mixed ASCII C comparator delegates to the same SAL template specialization. Original createFromCodePoints QA all assertions ported; no fake allocation or invalid-pointer proof.",
+      "Original local hostname/FQDN uses actual selected libc gethostname and original host-address/canonical-name helpers over pinned SDK getaddrinfo/freeaddrinfo with its existing synthetic realm-local DNS table. Independent source static result caches assign real OUString output each time. Reverse file URL byte/Unicode templates preserve scheme/authority checks, exact local-host ASCII comparison, query/fragment and escaped slash/NUL rules, escaped arbitrary octets, internal output mutation order, Security-based tilde recursion and original RTL relative resolution. All active UNIX reverse path QA bodies, native hostname/real HOME, alias and malformed/Unicode/byte scenarios are tested. No socket creation/connection, host DNS/files or authentication are added. Other socket/file methods, native std::length_error translation/physical allocation/invalid lifetime and complete SvFileStream/TempFile/package/storage/model/filter/UI remain unfinished or unqualified."
     ],
     "omittedResponsibilities": [
       "Complete RTL/C++ value-owner/native ABI/thread/storage/document/UI responsibility remains unverified; no synthetic string/document owner substituted."
@@ -210,6 +218,10 @@
         {
           "path": "apps/office/src/sal/rtl/native-converter-string-dependencies.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring-codepoints.test.ts",
+          "marker": "createFromCodePoints"
         }
       ],
       "upstream": [
@@ -244,6 +256,14 @@
         {
           "path": "vendor/libreoffice-reference/sal/rtl/strtmpl.hxx",
           "marker": "valueOfFP"
+        },
+        {
+          "path": "sal/rtl/ustring.cxx",
+          "marker": "rtl_uString_newFromCodePoints"
+        },
+        {
+          "path": "sal/rtl/ustring.cxx",
+          "marker": "rtl_ustr_ascii_compare_WithLength"
         }
       ]
     },

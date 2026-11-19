@@ -1,6 +1,8 @@
 /** @fileoverview Original Calc merge, protection and boolean cell-format values over actual shared pool items; localization and XML diagnostic hooks remain unported. */
 
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
+import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
+
 import type { SfxItemPool } from "../../../../svl/source/items/itempool";
 import { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { ATTR_MERGE, ATTR_MERGE_FLAG, ATTR_PROTECTION } from "../../../inc/scitems";
@@ -349,3 +351,16 @@ export {
   SC_MID_PAGE_SCALETO_HEIGHT,
   type ScCondFormatIndexesConstReference,
 } from "./attrib.values";
+
+/** Original border priority uses scaled width and prefers a single line at equal width. @param line - First native line. @param other - Compared line. @returns Whether the first line has priority. */
+export function ScHasPriority(
+  line: Readonly<SvxBorderLine> | null,
+  other: Readonly<SvxBorderLine> | null,
+): boolean {
+  if (!line) return false;
+  if (!other) return true;
+  const size = line.GetScaledWidth();
+  const otherSize = other.GetScaledWidth();
+  if (size !== otherSize) return size > otherSize;
+  return line.GetInWidth() === 0 || other.GetInWidth() !== 0;
+}

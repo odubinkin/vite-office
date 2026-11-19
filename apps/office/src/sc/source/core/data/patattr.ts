@@ -1,4 +1,22 @@
-/** @fileoverview Native Calc cell-pattern itemsets,borrowed style inheritance and canonical holder lifecycle;Calc style-pool resolution,VCL/font/number caches and hash prefilters remain unported. */
+/** @fileoverview Native Calc cell-pattern itemsets,borrowed style inheritance and canonical holder lifecycle;Calc style-pool resolution,device/font/number caches and hash prefilters remain unported. */
+import {
+  SvxWeightItem,
+  SvxPostureItem,
+  SvxUnderlineItem,
+  SvxOverlineItem,
+  SvxWordLineModeItem,
+  SvxContourItem,
+  SvxShadowedItem,
+  SvxCharReliefItem,
+} from "../../../../editeng/source/items/textitem";
+import {
+  SvxCrossedOutItem,
+  SvxEmphasisMarkItem,
+} from "../../../../editeng/source/items/textitem.effects";
+import { Size } from "../../../../tools/inc/gen";
+import type { Font } from "../../../../vcl/source/font/font";
+import { SvtScriptType } from "../../../../svl/inc/languageoptions";
+import { ScDxfFont } from "../../../inc/fonthelper";
 import type { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
 import type { SfxStyleSheet } from "../../../../svl/inc/style";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
@@ -55,7 +73,7 @@ export interface ScPatternColorEnvironment {
   readonly systemTextColor: Readonly<Color>;
   readonly rawSystemTextColor: Readonly<Color>;
 }
-/** Original lcl_populateresult conditional/table/direct precedence. Native final Get returns a reference,so its pointer result cannot be null under the item-pool precondition. @param which - Source attribute identity. @param source - Actual base set. @param conditional - Optional conditional set. @param table - Optional table style. @returns Effective native item. */
+/** Original lcl_populateresult conditional/table/direct precedence. @param which - Native identity. @param source - Actual base. @param conditional - Optional conditional. @param table - Optional table style. @returns Effective original item. */
 function populateResult(
   which: number,
   source: SfxItemSet,
@@ -75,6 +93,34 @@ function populateResult(
     } else item = table.GetItemIfSet(which);
   }
   return item ?? source.Get(which);
+}
+/** Original exact ASIAN/COMPLEX matching; other script flags select Latin. @param script - Native flags. @returns Font, height, weight, posture and language identities. */
+function getFontIDsByScriptType(
+  script: SvtScriptType,
+): readonly [number, number, number, number, number] {
+  if (script === SvtScriptType.ASIAN)
+    return [
+      ATTR.ATTR_CJK_FONT,
+      ATTR.ATTR_CJK_FONT_HEIGHT,
+      ATTR.ATTR_CJK_FONT_WEIGHT,
+      ATTR.ATTR_CJK_FONT_POSTURE,
+      ATTR.ATTR_CJK_FONT_LANGUAGE,
+    ];
+  if (script === SvtScriptType.COMPLEX)
+    return [
+      ATTR.ATTR_CTL_FONT,
+      ATTR.ATTR_CTL_FONT_HEIGHT,
+      ATTR.ATTR_CTL_FONT_WEIGHT,
+      ATTR.ATTR_CTL_FONT_POSTURE,
+      ATTR.ATTR_CTL_FONT_LANGUAGE,
+    ];
+  return [
+    ATTR.ATTR_FONT,
+    ATTR.ATTR_FONT_HEIGHT,
+    ATTR.ATTR_FONT_WEIGHT,
+    ATTR.ATTR_FONT_POSTURE,
+    ATTR.ATTR_FONT_LANGUAGE,
+  ];
 }
 /** Original copied attributes. Table style participates only in color,family,height and weight;posture/effects/language retain source/conditional ownership. */
 const editCopyItems: readonly (readonly [number, number, boolean])[] = [
@@ -240,6 +286,127 @@ export class CellAttributeHelper {
 }
 /** Original cell-pattern owner over actual shared itemsets and borrowed native style operations;Calc style resolution and rendering services remain unported. */
 export class ScPatternAttr {
+  /** Original font-item conversion for the null OutputDevice path used by Excel export. Device map/scale conversion remains unported. @param font - Actual VCL destination. @param set - Actual source set. @param device - Native null device. @param scale - Optional borrowed scale, ignored without device as upstream. @param conditional - Conditional attributes. @param table - Table-style attributes. @param script - Native script flags. @returns Nothing. */
+  static fillFontOnly(
+    font: Font,
+    set: SfxItemSet,
+    device: null = null,
+    scale: readonly [number] | null = null,
+    conditional: SfxItemSet | null = null,
+    table: SfxItemSet | null = null,
+    script: SvtScriptType = SvtScriptType.NONE,
+  ): void {
+    void scale;
+    if (device !== null)
+      throw new Error("ScPatternAttr device-map font conversion is not implemented");
+    const [fontId, heightId, weightId, postureId, languageId] = getFontIDsByScriptType(script),
+      family = populateResult(
+        fontId,
+        set,
+        conditional ?? undefined,
+        table ?? undefined,
+      ) as SvxFontItem,
+      height = (
+        populateResult(
+          heightId,
+          set,
+          conditional ?? undefined,
+          table ?? undefined,
+        ) as SvxFontHeightItem
+      ).GetHeight(),
+      weight = (
+        populateResult(weightId, set, conditional ?? undefined, table ?? undefined) as SvxWeightItem
+      ).GetValue();
+    /** Original effects use conditional SET or source Get, without table styles. @param which - Native identity. @returns Actual item. */
+    function read(which: number): SfxPoolItem {
+      return conditional?.GetItemIfSet(which) ?? set.Get(which);
+    }
+    const italic = (read(postureId) as SvxPostureItem).GetValue(),
+      under = (read(ATTR.ATTR_FONT_UNDERLINE) as SvxUnderlineItem).GetValue(),
+      over = (read(ATTR.ATTR_FONT_OVERLINE) as SvxOverlineItem).GetValue(),
+      word = (read(ATTR.ATTR_FONT_WORDLINE) as SvxWordLineModeItem).GetValue(),
+      strike = (read(ATTR.ATTR_FONT_CROSSEDOUT) as SvxCrossedOutItem).GetValue(),
+      outline = (read(ATTR.ATTR_FONT_CONTOUR) as SvxContourItem).GetValue(),
+      shadow = (read(ATTR.ATTR_FONT_SHADOWED) as SvxShadowedItem).GetValue(),
+      emphasis = (read(ATTR.ATTR_FONT_EMPHASISMARK) as SvxEmphasisMarkItem).GetEmphasisMark(),
+      relief = (read(ATTR.ATTR_FONT_RELIEF) as SvxCharReliefItem).GetValue(),
+      language = (read(languageId) as SvxLanguageItem).GetLanguage();
+    if (font.GetFamilyName() !== family.GetFamilyName()) font.SetFamilyName(family.GetFamilyName());
+    if (font.GetStyleName() !== family.GetStyleName()) font.SetStyleName(family.GetStyleName());
+    font.SetFamily(family.GetFamily());
+    font.SetCharSet(family.GetCharSet());
+    font.SetPitch(family.GetPitch());
+    font.SetLanguage(language);
+    font.SetFontSize(new Size(0, height));
+    font.SetWeight(weight);
+    font.SetItalic(italic);
+    font.SetUnderline(under);
+    font.SetOverline(over);
+    font.SetWordLineMode(word);
+    font.SetStrikeout(strike);
+    font.SetOutline(outline);
+    font.SetShadow(shadow);
+    font.SetEmphasisMark(emphasis);
+    font.SetRelief(relief);
+    font.SetTransparent(true);
+  }
+  /** Original instance method delegates using the actual cell-pattern itemset. @param font - Actual destination. @param device - Native null device. @param scale - Optional scale. @param conditional - Conditional attributes. @param table - Table-style attributes. @param script - Native script flags. @returns Nothing. */
+  fillFontOnly(
+    font: Font,
+    device: null = null,
+    scale: readonly [number] | null = null,
+    conditional: SfxItemSet | null = null,
+    table: SfxItemSet | null = null,
+    script: SvtScriptType = SvtScriptType.NONE,
+  ): void {
+    ScPatternAttr.fillFontOnly(
+      font,
+      this.maLocalSfxItemSet,
+      device,
+      scale,
+      conditional,
+      table,
+      script,
+    );
+  }
+  /** Original differential font extraction returns only actual SET properties, including parent SET attributes. @param set - Actual set. @param script - Native script flags. @returns Optional font properties. */
+  static GetDxfFont(set: SfxItemSet, script: SvtScriptType): ScDxfFont {
+    const [fontId, heightId, weightId, postureId, languageId] = getFontIDsByScriptType(script),
+      result = new ScDxfFont();
+    const family = set.GetItemIfSet(fontId) as SvxFontItem | undefined;
+    if (family !== undefined) result.pFontAttr = family;
+    const height = set.GetItemIfSet(heightId) as SvxFontHeightItem | undefined;
+    if (height !== undefined) result.nFontHeight = height.GetHeight();
+    const weight = set.GetItemIfSet(weightId) as SvxWeightItem | undefined;
+    if (weight !== undefined) result.eWeight = weight.GetValue();
+    const italic = set.GetItemIfSet(postureId) as SvxPostureItem | undefined;
+    if (italic !== undefined) result.eItalic = italic.GetValue();
+    const under = set.GetItemIfSet(ATTR.ATTR_FONT_UNDERLINE) as SvxUnderlineItem | undefined;
+    if (under !== undefined)
+      result.eUnder = (set.Get(ATTR.ATTR_FONT_UNDERLINE) as SvxUnderlineItem).GetValue();
+    const over = set.GetItemIfSet(ATTR.ATTR_FONT_OVERLINE) as SvxOverlineItem | undefined;
+    if (over !== undefined) result.eOver = over.GetValue();
+    const word = set.GetItemIfSet(ATTR.ATTR_FONT_WORDLINE) as SvxWordLineModeItem | undefined;
+    if (word !== undefined) result.bWordLine = word.GetValue();
+    const strike = set.GetItemIfSet(ATTR.ATTR_FONT_CROSSEDOUT) as SvxCrossedOutItem | undefined;
+    if (strike !== undefined)
+      result.eStrike = (set.Get(ATTR.ATTR_FONT_CROSSEDOUT) as SvxCrossedOutItem).GetValue();
+    const outline = set.GetItemIfSet(ATTR.ATTR_FONT_CONTOUR) as SvxContourItem | undefined;
+    if (outline !== undefined) result.bOutline = outline.GetValue();
+    const shadow = set.GetItemIfSet(ATTR.ATTR_FONT_SHADOWED) as SvxShadowedItem | undefined;
+    if (shadow !== undefined)
+      result.bShadow = (set.Get(ATTR.ATTR_FONT_SHADOWED) as SvxShadowedItem).GetValue();
+    const emphasis = set.GetItemIfSet(ATTR.ATTR_FONT_EMPHASISMARK) as
+      SvxEmphasisMarkItem | undefined;
+    if (emphasis !== undefined) result.eEmphasis = emphasis.GetEmphasisMark();
+    const relief = set.GetItemIfSet(ATTR.ATTR_FONT_RELIEF) as SvxCharReliefItem | undefined;
+    if (relief !== undefined) result.eRelief = relief.GetValue();
+    const color = set.GetItemIfSet(ATTR.ATTR_FONT_COLOR) as SvxColorItem | undefined;
+    if (color !== undefined) result.aColor = new Color(color.GetValue());
+    const language = set.GetItemIfSet(languageId) as SvxLanguageItem | undefined;
+    if (language !== undefined) result.eLang = language.GetLanguage();
+    return result;
+  }
   /** Original fillColor value algorithm with explicit borrowed ambient read-site values. Conditional/table lookup and raw/print/display modes retain source ordering. @param result - Destination complex value. @param itemSet - Actual cell items. @param mode - Original color mode. @param conditional - Optional conditional items. @param table - Optional table-style items. @param backConfig - Optional cached document color. @param textConfig - Optional cached font color. @param environment - Borrowed native configuration/view values. @returns Nothing. */
   static fillColor(
     result: ComplexColor,
@@ -467,6 +634,17 @@ export class ScPatternAttr {
   ): void {
     if (edit !== null)
       ScPatternAttr.FillToEditItemSet(edit, this.maLocalSfxItemSet, conditional, table);
+  }
+  /** Maps explicit character properties of a text style to native EditEngine items. @param edit - Destination edit item set. @returns Nothing. */
+  FillDirectEditItemSet(edit: SfxItemSet): void {
+    for (const [which, target] of reverseEditItems) {
+      const item = this.maLocalSfxItemSet.GetItemIfSet(which, false);
+      if (!item) continue;
+      if (editHeightWhichs.has(which)) {
+        const height = Number(convertTwipToMm100(BigInt((item as SvxFontHeightItem).GetHeight())));
+        edit.Put(new SvxFontHeightItem(height, 100, target), true);
+      } else edit.PutAsTargetWhich(item, target);
+    }
   }
   /** Original direct-or-inherited SET reverse transfer;default and INVALID attributes do not become direct cell formatting. @param destination - Cell set. @param edit - EditEngine source. @returns Nothing. */
   static GetFromEditItemSet(destination: SfxItemSet, edit: SfxItemSet): void {

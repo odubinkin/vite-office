@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/osl/unx/file_stat.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-directory-item-metadata",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/osl/unx/file_stat.ts",
+        "apps/office/src/sal/osl/unx/file_stat.test.ts",
+        "apps/office/src/sal/osl/unx/file_stat.upstream.test.ts"
+      ],
+      "justification": "Original DirectoryItem_Impl and directory-item C/wrapper lifetime, get/status and inode-only identity are ported over genuine selected libc access/lstat/realpath. FileStatus preserves zero construction, source masks, cheap grouped fields, default/retained values, late partial errors and independently owned string/time getters. FileBase retains source RC aliases, URL wrappers and DirectoryItem inheritance. Shared path helper basename/dot/hidden mutation and OString length/pointer/reverse-byte equality use original RTL owners/templates. Native byte-path decoding and full64-bit size/inode fields are not replaced by host filesystem APIs or fake stat providers. The actual selected SDK dirent feature and header-derived sizeof72 are compiler-generated, with original XML enum values retained. Original UNIX QA root-dependent attribute expectations remain unmodified and two fail against real SDK geteuid0/access behavior; kernel semantics are preserved and documented. SvFileStream/TempFile/copy/remove, directory enumeration/remaining FileBase APIs, native ABI/OOM/debug/race/invalid lifetime, full upstream fixtures and complete package/storage/model/filter/UI remain unfinished or unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "is_stat_call_necessary",
+        "set_file_attributes",
+        "set_link_target_url",
+        "osl_getFileStatus",
+        "osl_identicalDirectoryItem"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/osl/unx/file_stat.cxx",
+      "upstreamSymbols": [
+        "is_stat_call_necessary",
+        "set_file_attributes",
+        "set_link_target_url",
+        "osl_getFileStatus",
+        "osl_identicalDirectoryItem"
+      ]
+    }
+  }
+}

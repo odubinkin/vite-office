@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/libcxx/exception.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "zip-background-entry-exception",
+    "capabilityIds": [
+      "CAP-4ddbda7f-f247-4986-8e38-1f88dea4ff29"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/libcxx/exception.ts",
+        "apps/office/src/cppuhelper/browser/exception-ptr.test.ts",
+        "docs/program/native-zip-background-task.md"
+      ],
+      "justification": "Actual pinned SDK exception_ptr value operations are exposed through a neutral external/libcxx facade: empty/copy/guarded assignment/opaque equality/nonempty rethrow/destruction. Real CppuHelper composition installs the compiler ABI beside the existing getCaughtException/throwException bridge. Its actual generated Any/exception payload retains derived fields and Context until the final shared pointer releases it; ordinary host objects are VM-owned. Package source imports only the neutral standard-library contract, never browser implementation. Native addresses/C++ heap object identity/cross-realm atomics/TLS/fatal/OOM/nonobject JS throws remain unqualified. Actual background ZIP task/temp-file/error/entry transfer works in source explicit ThreadPool(0) and main/DOM-free Worker, without replacing production worker selection. Source ZipOutputEntry whole-owner branch coverage remains below90; prior failing gates remain retained. Full worker scheduler/parallel ZIP/package/Medium/filter/UI remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ExceptionPtr",
+        "bindExceptionPointerAbi"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

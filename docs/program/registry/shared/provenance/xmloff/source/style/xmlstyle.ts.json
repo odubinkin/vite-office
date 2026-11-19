@@ -88,6 +88,10 @@
         {
           "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.default-tabs.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -193,7 +197,9 @@
       "Task0AGGG4 connects zero page-number offset admitted by original textflowpage.ui and unsigned16 Writer page descriptor to existing paragraph acceptance and ODT boundary;broader XML numeric handler semantics remain unverified.",
       "TaskFSR9QK connects represented native optional page-number Any/member and XML handler contracts to lossless browser records. XML_NUMBER16_AUTO signed16 saturation/void/signed export are preserved;full descriptor/style/native services remain unported.",
       "S3HW1E imports represented paragraph FillStyle/FillColor/FillTransparence fields through native exact enum/color/NEG_PERCENT16 behavior, retaining failure omission.",
-      "Dispatches the native graphic family properties used by a Writer text frame."
+      "Dispatches the native graphic family properties used by a Writer text frame.",
+      "Routes the named ODF theme and element-valued character color into the actual owner when available.",
+      "Resolves style:tab-stop-distance on the default paragraph style through the original ODF length conversion."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/style/xmlstyle.cxx",

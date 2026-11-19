@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/ww8/docxexport.headerfooter.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/filter/ww8/docxexport.cxx",
+    "localSymbols": [
+      "DocxHeaderFooterExport",
+      "WriteHeadersFooters"
+    ],
+    "upstreamSymbols": [
+      "DocxExport::WriteHeadersFooters",
+      "DocxExport::WriteHeaderFooter"
+    ],
+    "preservedResponsibilities": [
+      "Writes original separate header/footer parts, content types, scoped relationships and section references through Writer's existing DOCX text and table traversal."
+    ],
+    "omittedResponsibilities": [
+      "Page distances and layout-dependent section transitions remain unqualified. PAGE field instructions currently surface as cached text."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.headerfooter.ts",
+          "marker": "DocxHeaderFooterExport"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.page-stories.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/filter/ww8/docxexport.cxx",
+          "marker": "DocxExport::WriteHeadersFooters"
+        },
+        {
+          "path": "sw/source/filter/ww8/docxexport.cxx",
+          "marker": "DocxExport::WriteHeaderFooter"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/ww8/docxexport.headerfooter.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Writes original separate header/footer parts, content types, scoped relationships and section references through Writer's existing DOCX text and table traversal."
+    }
+  }
+}

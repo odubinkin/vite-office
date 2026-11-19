@@ -12,14 +12,21 @@ import { ScGlobal } from "../../../inc/global";
 import { SvNumFormatType } from "../../../../svl/inc/zforlist";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { ScRefCellValue } from "../../../inc/cellvalue";
-import { ScSingleRefToken, ScDoubleRefToken, ScEmptyCellToken } from "../../../inc/token";
+import {
+  ScSingleRefToken,
+  ScDoubleRefToken,
+  ScEmptyCellToken,
+  ScMatrixToken,
+  ScMatrixFormulaCellToken,
+} from "../../../inc/token";
+import { ScMatrix } from "./scmatrix";
 import type { ScSingleRefData } from "../../../inc/refdata";
 import { RangeColumnSpanSet } from "../../../inc/columnspanset";
 import { ScValueIterator } from "../../../inc/dociter";
 import { FuncSum } from "./interpr6";
 import { ScCompiler } from "../../../inc/compiler";
 import { CellType } from "../../../inc/global";
-import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
+import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import type { FormulaConstTokenRef } from "../../../../formula/inc/types";
 import { FormulaError, GetDoubleErrorValue } from "../../../../formula/inc/errorcodes";
 import { OpCode } from "../../../../formula/inc/opcode";
@@ -31,6 +38,11 @@ import { ScAddress, ScRange } from "../../../inc/address";
 import type { ScTokenArray } from "../../../inc/tokenarray";
 import type { ScInterpreterContext } from "../../../inc/interpretercontext";
 import { KahanSum } from "../../../inc/kahan";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { SAL_MAX_INT32 } from "../../../../sal/inc/types";
+import { GetString as GetEditString } from "./editutil";
+
+const kScInterpreterMaxStrLen = Math.trunc(SAL_MAX_INT32 / 8);
 /** Actual initialized numeric interpreter state, with token references owned by JS GC. */
 export class ScInterpreter {
   private static mpGlobalConfig: ScCalcConfig | null = null;
@@ -48,6 +60,7 @@ export class ScInterpreter {
   }
   private readonly maCalcConfig = new ScCalcConfig();
   private nCurFmtType: number = SvNumFormatType.ALL;
+  private nRetFmtType: SvNumFormatType = SvNumFormatType.NUMBER;
   private mnStringNoValueError: FormulaError = FormulaError.NoValue;
   /** Original implicit calculation-value teardown. @returns Nothing. */
   Dispose(): void {
@@ -145,6 +158,116 @@ export class ScInterpreter {
     if (!token) this.SetError(FormulaError.UnknownStackVariable);
     else if (token.GetType() === StackVar.svError)
       this.nGlobalError = (token as FormulaErrorToken).GetError();
+  }
+  /** Gets a scalar's input-line spelling in the original general number format. @param value - Numeric operand. @returns Text value. */
+  private GetStringFromDouble(value: number): string {
+    const key = this.mrContext
+      .GetFormatTable()
+      .GetStandardFormat(SvNumFormatType.NUMBER, ScGlobal.eLnge);
+    const spelling = this.mrContext.NFGetInputLineString(value, key);
+    try {
+      return text(spelling);
+    } finally {
+      spelling.dispose();
+    }
+  }
+  /** Reads the native text coercion of a referenced cell and propagates formula errors. @param cell - Actual cell. @returns Text value. */
+  private GetCellString(cell: ScRefCellValue): string {
+    if (this.nGlobalError !== FormulaError.NONE) return "";
+    const formula = cell.getFormula();
+    if (formula) {
+      this.SetError(formula.GetErrCode());
+      return formula.IsValue()
+        ? this.GetStringFromDouble(formula.GetValue())
+        : text(formula.GetString().getString());
+    }
+    if (cell.getType() === CellType.CELLTYPE_VALUE)
+      return this.GetStringFromDouble(cell.getDouble());
+    const shared = cell.getSharedString();
+    const edit = cell.getEditText();
+    const multiline = edit ? GetEditString(edit, this.mrDoc) : undefined;
+    try {
+      const spelling = shared ? text(shared.getString()) : multiline ? text(multiline) : "";
+      return this.mrDoc.GetDocOptions().IsIgnoreLineBreaks()
+        ? spelling.replace(/[\r\n]/gu, "")
+        : spelling;
+    } finally {
+      multiline?.dispose();
+    }
+  }
+  /** Pops a represented string operand using native empty, reference, and error rules. @returns Text value. */
+  private GetString(): string {
+    const token = this.pStack.at(-1);
+    switch (token?.GetType()) {
+      case StackVar.svSingleRef: {
+        const address = this.PopSingleRef();
+        return this.GetCellString(new ScRefCellValue(this.mrDoc, address));
+      }
+      case StackVar.svDoubleRef: {
+        const range = this.PopDoubleRef(),
+          address = new ScAddress();
+        return this.nGlobalError === FormulaError.NONE &&
+          this.DoubleRefToPosSingleRef(range, address)
+          ? this.GetCellString(new ScRefCellValue(this.mrDoc, address))
+          : "";
+      }
+      case StackVar.svDouble:
+        return this.GetStringFromDouble(this.GetDouble());
+      case StackVar.svString:
+        this.pStack.pop();
+        return text((token as FormulaStringToken).GetString().getString());
+      case StackVar.svError:
+      case StackVar.svMissing:
+      case StackVar.svEmptyCell:
+        this.PopError();
+        return "";
+      default:
+        this.PopError();
+        this.SetError(FormulaError.IllegalArgument);
+        return "";
+    }
+  }
+  /** Pushes the interned native text result or the existing interpreter error. @param value - Result text. @returns Nothing. */
+  private PushString(value: string): void {
+    if (this.nGlobalError !== FormulaError.NONE) {
+      this.PushWithoutError(new FormulaErrorToken(this.nGlobalError));
+      return;
+    }
+    const source = unicode(value);
+    try {
+      const shared = this.mrDoc.GetSharedStringPool().intern(source);
+      this.PushWithoutError(new FormulaStringToken(shared, SharedString.move));
+    } finally {
+      source.dispose();
+    }
+  }
+  /** Original string-result size check. @param length - Current UTF16 length. @param increase - Appended UTF16 length. @returns Whether the result fits. */
+  private CheckStringResultLen(length: number, increase: number): boolean {
+    if (increase <= kScInterpreterMaxStrLen - length) return true;
+    this.SetError(FormulaError.StringOverflow);
+    return false;
+  }
+  /** Native CONCATENATE visits arguments in source order. @param count - Number of source arguments. @returns Nothing. */
+  private ScConcat(count: number): void {
+    const start = this.pStack.length - count;
+    if (start < 0) {
+      this.SetError(FormulaError.UnknownStackVariable);
+      return;
+    }
+    this.pStack.push(...this.pStack.splice(start).reverse());
+    let result = "";
+    while (count-- > 0) {
+      const part = this.GetString();
+      if (!this.CheckStringResultLen(result.length, part.length)) break;
+      result += part;
+    }
+    this.PushString(result);
+  }
+  /** Original scalar ampersand reads its right operand first. @returns Nothing. */
+  private ScAmpersand(): void {
+    const right = this.GetString(),
+      left = this.GetString();
+    this.PushString(this.CheckStringResultLen(left.length, right.length) ? left + right : "");
   }
   /** Executes ordinary non-subtotal SUM/SUMSQ/PRODUCT/AVERAGE parameter iteration from interpr6. Matrix,range and reference-list branches require their native owners. @param op - Aggregate opcode. @param parameterCount - Native byte arity. @returns Nothing. */
   private IterateParameters(op: OpCode, parameterCount: number): void {
@@ -319,11 +442,7 @@ export class ScInterpreter {
       }
     }
     if (cell.hasString()) {
-      const string =
-        cell.getType() === CellType.CELLTYPE_FORMULA
-          ? (cell.getFormula() as ScFormulaCell).GetString()
-          : (cell.getSharedString() as SharedStringConstReference);
-      this.PushWithoutError(new FormulaStringToken(string));
+      this.PushString(this.GetCellString(cell));
       return;
     }
     this.PushDouble(this.GetCellValue(address, cell));
@@ -355,15 +474,55 @@ export class ScInterpreter {
       left = this.GetDouble();
     this.PushDouble(subtract ? approxSub(left, right) : approxAdd(left, right));
   }
+  /** Produces the original matrix result and its scalar upper-left projection. @param matrix - Matrix result. @returns Nothing. */
+  private QueryMatrixType(matrix: ScMatrix | null): void {
+    if (!matrix) {
+      this.SetError(FormulaError.UnknownStackVariable);
+      return;
+    }
+    const size = { row: 0, column: 0 };
+    matrix.GetDimensions(size);
+    const value = matrix.Get(0, 0);
+    try {
+      let upperLeft: FormulaToken;
+      if (ScMatrix.IsNonValueType(value.nType)) {
+        if (matrix.IsEmptyPath(0, 0)) {
+          upperLeft = new FormulaDoubleToken(0);
+          this.nRetFmtType = SvNumFormatType.LOGICAL;
+        } else if (matrix.IsEmpty(0, 0)) {
+          upperLeft = new ScEmptyCellToken(matrix.IsEmptyResult(0, 0), true);
+        } else {
+          upperLeft = new FormulaStringToken(value.GetString());
+          this.nRetFmtType = SvNumFormatType.TEXT;
+        }
+      } else {
+        const error = value.GetError();
+        upperLeft =
+          error === FormulaError.NONE
+            ? new FormulaDoubleToken(value.fVal)
+            : new FormulaErrorToken(error);
+        if (this.nRetFmtType !== SvNumFormatType.LOGICAL) this.nRetFmtType = SvNumFormatType.NUMBER;
+      }
+      this.PushWithoutError(new ScMatrixFormulaCellToken(size.column, size.row, matrix, upperLeft));
+    } finally {
+      value.dispose();
+    }
+  }
   /** Executes the represented arithmetic token stream, preserving native result/error cardinality. @returns Final type. */
   Interpret(): StackVar {
+    this.nRetFmtType = SvNumFormatType.NUMBER;
     for (const token of this.pArr.RPNTokens()) {
       const op = token.GetOpCode();
+      const logical = op === OpCode.ocTrue || op === OpCode.ocFalse;
+      if (op !== OpCode.ocPush && op !== OpCode.ocMissing)
+        this.nRetFmtType = logical ? SvNumFormatType.LOGICAL : SvNumFormatType.NUMBER;
       if (op === OpCode.ocPush) {
         if (token.GetType() === StackVar.svDouble)
           this.PushDouble((token as FormulaDoubleToken).GetDouble());
         else this.PushWithoutError(token);
       } else if (op === OpCode.ocMissing) this.PushWithoutError(token);
+      else if (op === OpCode.ocPi) this.PushDouble(Math.PI);
+      else if (logical) this.PushDouble(Number(op === OpCode.ocTrue));
       else if (
         op === OpCode.ocSum ||
         op === OpCode.ocSumSQ ||
@@ -371,6 +530,8 @@ export class ScInterpreter {
         op === OpCode.ocAverage
       )
         this.IterateParameters(op, (token as FormulaByteToken).GetByte());
+      else if (op === OpCode.ocConcat) this.ScConcat((token as FormulaByteToken).GetByte());
+      else if (op === OpCode.ocAmpersand) this.ScAmpersand();
       else if (op === OpCode.ocAdd || op === OpCode.ocSub)
         this.CalculateAddSub(op === OpCode.ocSub);
       else if (op === OpCode.ocNegSub) this.PushDouble(-this.GetDouble());
@@ -404,6 +565,15 @@ export class ScInterpreter {
       if (this.nGlobalError === FormulaError.NONE && this.DoubleRefToPosSingleRef(range, address))
         this.PushCellResultToken(address);
     }
+    const result = this.pStack[0];
+    if (
+      this.pStack.length === 1 &&
+      result instanceof ScMatrixToken &&
+      !result.IsMatrixRangeToken()
+    ) {
+      this.pStack.pop();
+      this.QueryMatrixType(result.GetMatrix());
+    }
     if (this.pStack.length !== 1)
       this.SetError(this.pStack.length > 1 ? FormulaError.OperatorExpected : FormulaError.NoCode);
     else if ((this.pStack[0] as FormulaToken).GetType() === StackVar.svError)
@@ -414,5 +584,10 @@ export class ScInterpreter {
         : (this.pStack.pop() as FormulaToken);
     this.pStack = [];
     return this.GetResultType();
+  }
+
+  /** Returns the outer expression's represented result format. @returns Native format flags. */
+  GetRetFormatType(): SvNumFormatType {
+    return this.nRetFmtType;
   }
 }

@@ -113,7 +113,10 @@
       "Original ZipFile Checks modes retain exact duplicate rejection, ASCII-only case collisions and the first retained entry decision for TryCheckInsensitive, including empty mimetype AutoCorrect behavior after FAT-directory filtering. OOXML ZipStorage selects CheckInsensitive; Writer/Calc ODF byte entry points select TryCheckInsensitive, matching ZipPackage StorageFormat routing. The actual OUString lowercase path delegates to rtl_uString_newToAsciiLowerCase and original newReplaceChars allocation/assign/release logic with reused native CaseReplace and SAL character helpers. Unchanged strings alias data; conversions preserve UTF16/embedded-zero/non-ASCII units and release old destination after copying. No Unicode locale folding, path normalization or fake model/storage/service owner is introduced. Flat transport/resource/error boundaries and incomplete native package/storage/output/model/filter/Worker/UI acceptance remain explicit; physical pointer/ABI/allocator/thread guarantees remain unverified.",
       "Existing bounded STORE/ZIP32 package output now emits admitted LOC/CEN/END field order through real ByteChucker, Sequence, UNOMemoryStream, native ZipEntry aggregate and SAL counted Unicode-to-OString ownership. The original aggregate scalar fields stay indeterminate until initialized; copy/move/assignment/destruction retain actual OUString member ownership. Original OString Unicode conversion constructor and internal OUStringToOString view helper delegate to the genuine C converter and preserve counted embedded zero. The old per-field DataView writer is removed; public flat bytes/putNextEntry/finish, deterministic caller timestamp, duplicate/count/size admission, ZIP32-only and no-recovery policies remain explicit. Header-only transport is not full ZipOutputStream constructor/threadpool/deflate/encryption/ZIP64/package/storage/model/filter/UI parity. Primitive allocator/pointer/ABI/thread guarantees remain unverified. Invalid fake private-entry/byte test values were removed; independent golden bytes, actual65535 public entries, value ownership and real package reopen cover this checkpoint.",
       "The original const OUStringLiteral assignment overload releases the old pointer before adopting exact static literal storage without acquisition. Content uses its original static constexpr command name. The original checkOUStringLiteral constructor/assignment assertions and a live retained-owner refcount case qualify this overload; the rest of that broad source QA remains unqualified.",
-      "Original complete converter method switches, range/parsing helpers, service info and acquired component export use actual UNO values, interfaces, type descriptions and C sequence engine. TypeDescription preserves all declared constructor/value/ownership/completion methods. SAL dependencies preserve terminated unsigned64 parsing and counted ASCII-only equality. Genuine component tests port the available original Integer123-to-String QA and all OUString unsigned64 overflow values. No fake context, service manager, factory or type provider is installed. Actual service registration/default process graph, named enum completion, original TypeDescriptionManager-to-XSet QA, native floating-integral undefined overflow/ABI/thread behavior, full coverage90 and DOCX/XLSX/UI remain unqualified."
+      "Original complete converter method switches, range/parsing helpers, service info and acquired component export use actual UNO values, interfaces, type descriptions and C sequence engine. TypeDescription preserves all declared constructor/value/ownership/completion methods. SAL dependencies preserve terminated unsigned64 parsing and counted ASCII-only equality. Genuine component tests port the available original Integer123-to-String QA and all OUString unsigned64 overflow values. No fake context, service manager, factory or type provider is installed. Actual service registration/default process graph, named enum completion, original TypeDescriptionManager-to-XSet QA, native floating-integral undefined overflow/ABI/thread behavior, full coverage90 and DOCX/XLSX/UI remain unqualified.",
+      "Original UInt32 codepoint constructor overload and compareToAscii delegate to actual C owners. Source permits Unicode codepoints including lone surrogates; no scalar repair or JS fromCodePoint substitute.",
+      "Original named temporary-file service is registered through the real component manager: selected default file-only TempFileNamed, source exclusive name loop/UniqueTokens/global native OSL mutex, original temporary-directory environment and createPath callbacks, source SvFileStream and original empty-name SvMemoryStream fallback. OTempFileService retains all represented UNO IO/seek/endpoint/property/type/ByteReader contracts, original first-use caches/defaults/exception order, UInt32 seek cast, duplicate XPropertySet types, release-profile assert-only listener bodies and ignored creation/close diagnostics. No fake TempFile/stream/provider/private counter injection, alternate host filesystem or manual JS allocator is introduced. Genuine deferred nonseekable copy now executes and cleans up real MEMFS files. Other TempFileNamed constructors/directory ownership/Fast services, Directory enumeration/instances, native ABI/thread/debug/OOM/full token-budget and complete DOCX/XLSX storage/model/filter/UI remain unbound or unqualified. Independent helper branch gaps remain recorded even when feature aggregate exceeds90.",
+      "Original DirectoryHelper fileExists/dirExists/scanDirsAndFiles/deleteDirRecursively now use actual File/Directory/DirectoryItem/FileStatus and native URI encoding. Consumed std::set string/pair values preserve copied RTL strings, uniqueness and UTF16/pair lexicographic iteration; the VM owns container storage. Scan accumulates existing sets, ignores source open/status errors and skips non-regular/non-directory items; it retains original splitAtLastToken and UricNoSlash/IgnoreEscapes UTF8 behavior. Recursive deletion attempts every child and accumulates true-on-error without short circuiting later IO. Original TempFileNamed first constructor now handles real optional parents and private directories, with original invalid-parent fallback, regular-file-parent acceptance/failure and recursive destructor; default file behavior remains. Public CreateTempName/CreateTempURL/SetTempNameBaseDirectory/GetTempNameBaseDirectory preserve keep/remove, private-child/base fallback, process cache and ignored-status semantics. Genuine collisions, readonly base, Unicode, symlinks, hidden/trailing-dot filenames, value-set duplication and directory lifetimes execute without fake status/provider/private counters. WRITER605..607/CALC668..670 record preserved source issues. Sequential/custom-name/move constructors, TempFileFast, DirectoryHelper::moveDirContent, STL iterator mutation/full STL API/ABI/OOM and complete DOCX/XLSX package/storage/model/filter/UI remain unbound or unqualified."
     ],
     "omittedResponsibilities": [
       "Complete OUString algorithms, original compile-time/const enforcement/native ABI/thread and downstream Calc storage/document/UI remain unverified; no fabricated replacement."
@@ -199,6 +202,18 @@
         {
           "path": "apps/office/src/sal/rtl/native-converter-string-dependencies.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring-codepoints.test.ts",
+          "marker": "createFromCodePoints"
+        },
+        {
+          "path": "apps/office/src/unotools/source/ucbhelper/xtempfile.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/misc/directoryhelper.filesystem.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -245,6 +260,10 @@
         {
           "path": "vendor/libreoffice-reference/sal/qa/rtl/strings/test_oustring_stringliterals.cxx",
           "marker": "checkOUStringLiteral"
+        },
+        {
+          "path": "include/rtl/ustring.hxx",
+          "marker": "OUString"
         }
       ]
     },

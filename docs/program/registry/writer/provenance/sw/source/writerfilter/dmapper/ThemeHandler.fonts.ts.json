@@ -1,0 +1,65 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/ThemeHandler.fonts.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source ownership and consumed native contracts are retained; host references, immutable XML/URI UTF16 fields and asynchronous ZIP transport bind browser execution around actual existing typed Any/OUString/PropertyValue owners."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/ThemeHandler.fonts.ts",
+          "marker": "resolveThemeFont"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.theme-fonts.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/dmapper/DomainMapper.cxx",
+          "marker": "LN_CT_Fonts_asciiTheme"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/DomainMapper.cxx",
+          "marker": "LN_CT_Fonts_hAnsiTheme"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/DomainMapper.cxx",
+          "marker": "LN_CT_Fonts_eastAsiaTheme"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/DomainMapper.cxx",
+          "marker": "LN_CT_Fonts_cstheme"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/writerfilter/dmapper/DomainMapper.cxx",
+    "localSymbols": [
+      "resolveThemeFont",
+      "readThemeFontProperty"
+    ],
+    "upstreamSymbols": [
+      "LN_CT_Fonts_asciiTheme",
+      "LN_CT_Fonts_hAnsiTheme",
+      "LN_CT_Fonts_eastAsiaTheme",
+      "LN_CT_Fonts_cstheme"
+    ],
+    "preservedResponsibilities": [
+      "Dispatches native run font theme attributes and preserves the original resolved names and identifiers in string-valued character interoperability properties."
+    ],
+    "omittedResponsibilities": [
+      "The consumed text scope uses the original typography owner. Shape text and unconsumed Word interop fields remain open."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/dmapper/ThemeHandler.fonts.ts",
+      "rationale": "Keeps cohesive theme font handling beside the native ThemeHandler at the enforced DomainMapper file-size boundary.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

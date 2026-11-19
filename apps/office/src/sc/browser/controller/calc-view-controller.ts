@@ -337,15 +337,16 @@ export class CalcViewController {
   }
   /** Projects native ErrorMessage through the existing browser error UI and actual pointer lifetime. @returns Nothing. */
   private BindViewErrorMessage(): void {
-    this.viewShell.SetErrorMessageHandler(
-      /** Replaces physical grid/header StopMarking and message presentation with the active browser controls. @param message - Native resolved resource. @returns Nothing. */ (
-        message,
-      ) => {
+    const report =
+      /** Ends pointer tracking and shows the resolved operation error. @param message - Native resource. @returns Nothing. */ (
+        message: string,
+      ): void => {
         this.EndPointer();
         this.error = message;
         this.Changed();
-      },
-    );
+      };
+    this.viewShell.SetErrorMessageHandler(report);
+    this.shell.SetErrorMessageHandler(report);
   }
   readonly GetSnapshot =
     /** Stable React external-store snapshot. @returns Revision. */ (): number => this.revision;
@@ -388,13 +389,15 @@ export class CalcViewController {
       ? cellInputText(this.shell.GetDocument(), this.Position())
       : this.inputText;
   }
-  /** Sets a canonical cursor/mark range; native callers clamp before assigning raw view fields. @param col - Requested column. @param row - Requested row. @param extend - Extend from anchor. @returns Whether accepted. */
-  Select(col: number, row: number, extend = false): boolean {
+  /** Sets a canonical cursor/mark range. @param col - Requested column. @param row - Requested row. @param extend - Extend from anchor. @param keepOld - Preserve a relative move's original merged-cell coordinates. @returns Whether accepted. */
+  Select(col: number, row: number, extend = false, keepOld = false): boolean {
     this.shell.EnsureOpen();
     const doc = this.shell.GetDocument();
     col = Math.max(0, Math.min(doc.MaxCol(), col));
     row = Math.max(0, Math.min(doc.MaxRow(), row));
     if (!this.Commit()) return false;
+    if (!this.viewShell.CanSelectCell(col, row)) return false;
+    if (!keepOld) this.viewData.ResetOldCursor();
     this.viewShell.DoneBlockMode();
     this.viewShell.GetFunctionSet().SetAnchorFlag(false);
     this.viewShell.GetHeaderFunctionSet().SetAnchorFlag(false);
@@ -413,18 +416,20 @@ export class CalcViewController {
     this.Changed();
     return true;
   }
-  /** Routes relative keyboard motion through native hidden-column skipping before actual cursor/mark selection. @param columns - Horizontal delta. @param rows - Vertical delta. @param extend - Extend the actual selection. @returns Accepted. */
+  /** Routes arrow keys to native relative cursor motion or expanded block selection. @param columns - Horizontal delta. @param rows - Vertical delta. @param extend - Extend the actual selection. @returns Accepted. */
   Navigate(columns: number, rows: number, extend = false): boolean {
-    const old = this.viewData.GetCurX(),
-      proposed = Math.max(0, Math.min(this.shell.GetDocument().MaxCol(), old + columns)),
-      column = columns ? this.viewShell.SkipCursorHorizontal(proposed, old, columns) : proposed;
-    const oldRow = this.viewData.GetCurY(),
-      proposedRow = Math.max(0, Math.min(this.shell.GetDocument().MaxRow(), oldRow + rows));
-    return this.Select(
-      column,
-      rows ? this.viewShell.SkipCursorVertical(proposedRow, oldRow, rows) : proposedRow,
-      extend,
+    if (extend) {
+      if (!this.Commit() || !this.viewShell.ExpandBlock(columns, rows)) return false;
+      this.Changed();
+      return true;
+    }
+    const [column, row] = this.viewShell.GetRelativeCursor(
+      this.viewData.GetCurX(),
+      this.viewData.GetCurY(),
+      columns,
+      rows,
     );
+    return this.Select(column, row, false, true);
   }
   /** Sends one row/column/all selection to the actual mark owner. @param kind - Header identity. @param index - Coordinate. @returns Nothing. */
   Header(kind: "all" | "column" | "row", index: number): void {
@@ -697,9 +702,11 @@ export class CalcViewController {
     this.StartInput(ScInputMode.SC_INPUT_TOP, value);
     return [start, end];
   }
-  /** Starts actual transient input,optionally replacing the cell text for direct typing. @param mode - Inline or formula-line editing. @param replacement - Optional initial direct input. @returns Nothing. */
-  StartInput(mode: Exclude<ScInputMode, ScInputMode.SC_INPUT_NONE>, replacement?: string): void {
+  /** Starts actual transient input,optionally replacing the cell text for direct typing. @param mode - Inline or formula-line editing. @param replacement - Optional initial direct input. @returns Whether the input was accepted. */
+  StartInput(mode: Exclude<ScInputMode, ScInputMode.SC_INPUT_NONE>, replacement?: string): boolean {
     this.shell.EnsureOpen();
+    if (!this.viewShell.CheckCellInput(this.viewData.GetCurX(), this.viewData.GetCurY()))
+      return false;
     const original = this.Input(),
       starting = !this.inputHandler.IsInputMode();
     this.inputText = replacement ?? original;
@@ -715,6 +722,7 @@ export class CalcViewController {
     if (replacement !== undefined) this.inputHandler.SetModified();
     this.error = "";
     this.Changed();
+    return true;
   }
   /** Executes native SID_SETINPUTMODE:TOP commits first;TABLE/TYPE toggle without losing the draft. @returns Whether accepted. */
   SetInputMode(): boolean {
@@ -722,6 +730,11 @@ export class CalcViewController {
     if ((!this.inputHandler.IsInputMode() || this.inputHandler.IsTopMode()) && !this.Commit())
       return false;
     const starting = !this.inputHandler.IsInputMode();
+    if (
+      starting &&
+      !this.viewShell.CheckCellInput(this.viewData.GetCurX(), this.viewData.GetCurY())
+    )
+      return false;
     this.inputText = this.Input();
     this.inputHandler.StartOrToggleEditMode();
     if (starting) referenceInput.BindReferenceInput.call(this);
@@ -759,7 +772,7 @@ export class CalcViewController {
   }
   /** Handles the source EnterString slot payload. @param value - Input string. @param dontCommit - Retain the input-handler draft. @returns Accepted. */
   EnterString(value: string, dontCommit = false): boolean {
-    this.StartInput(ScInputMode.SC_INPUT_TABLE, value);
+    if (!this.StartInput(ScInputMode.SC_INPUT_TABLE, value)) return false;
     return dontCommit || this.Commit();
   }
   /** Changes transient position text. @param value - Name-box draft. @returns Nothing. */
@@ -972,6 +985,7 @@ export class CalcViewController {
   }
   /** Releases shell/frame subscriber resources on workspace closure. @returns Nothing. */
   Close(): void {
+    this.shell.SetErrorMessageHandler();
     this.detachShell();
     this.listeners.clear();
     this.shell.Close();

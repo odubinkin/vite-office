@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "uno-property-sequence",
     "capabilityIds": [
-      "CAP-34803de3-61a5-4ecb-b79c-457948e23768"
+      "CAP-34803de3-61a5-4ecb-b79c-457948e23768",
+      "CAP-ee65d6a3-b01f-40d5-995f-99cdddd55605"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -18,15 +19,19 @@
       "evidence": [
         "apps/office/src/comphelper/source/misc/sequenceashashmap.ts",
         "apps/office/src/comphelper/source/misc/sequenceashashmap.test.ts",
-        "comphelper/source/misc/sequenceashashmap.cxx"
+        "comphelper/source/misc/sequenceashashmap.cxx",
+        "apps/office/src/comphelper/source/misc/sequenceashashmap-values.test.ts",
+        "apps/office/src/unotools/source/misc/mediadescriptor.stream.test.ts"
       ],
-      "justification": "Original default/copy and Any/typed-sequence constructors, caller-declared erased sequence overloads, VOID reset, typed-sequence clear, Any-sequence merge/VOID omission, exact IllegalArgumentException messages and earlier successful writes on failure are retained. Map values use actual Any ownership/equality and generated NamedValue/PropertyValue compounds. Output reallocates and assigns only Name/Value, preserving reused PropertyValue Handle/State. Native lookup copies, create-if-missing, subset match, update, key erase, size/empty/clear and signed32 unpack/default specialization retain source contracts. Original cached-hash/equality/hash functors use actual Unicode. Raw compound field assignment uses existing actual C RTL/UNO owners, without fake value/type/default providers. Host Map binds the original unspecified unordered lookup/iteration contract using exact UTF16 names, with real owned key strings/cached hashes and Any members. Native bucket layout/reserve/iteration order, allocation-failure traces, threading and physical ABI are unverified. Native end/erase(iterator), implicit map copy assignment and unconsumed getUnpackedValueOrDefault template specializations are not ported. JSON/reflection conversion in the original source is a separate header-owned API and remains unported. No native compiled SequenceAsHashMap differential capture or ported downstream QA is claimed. TablePositionHandler/TableManager/DomainMapperTableManager, full DOCX/XLSX model/export and production UI workflows remain incomplete. Broad parity/default/verified flags stay false.",
+      "justification": "Original default/copy and Any/typed-sequence constructors, caller-declared erased sequence overloads, VOID reset, typed-sequence clear, Any-sequence merge/VOID omission, exact IllegalArgumentException messages and earlier successful writes on failure are retained. Map values use actual Any ownership/equality and generated NamedValue/PropertyValue compounds. Output reallocates and assigns only Name/Value, preserving reused PropertyValue Handle/State. Native lookup copies, create-if-missing, subset match, update, key erase, size/empty/clear and signed32 unpack/default specialization retain source contracts. Original cached-hash/equality/hash functors use actual Unicode. Raw compound field assignment uses existing actual C RTL/UNO owners, without fake value/type/default providers. Host Map binds the original unspecified unordered lookup/iteration contract using exact UTF16 names, with real owned key strings/cached hashes and Any members. Native bucket layout/reserve/iteration order, allocation-failure traces, threading and physical ABI are unverified. Native end/erase(iterator), implicit map copy assignment and unconsumed getUnpackedValueOrDefault template specializations are not ported. JSON/reflection conversion in the original source is a separate header-owned API and remains unported. No native compiled SequenceAsHashMap differential capture or ported downstream QA is claimed. TablePositionHandler/TableManager/DomainMapperTableManager, full DOCX/XLSX model/export and production UI workflows remain incomplete. Broad parity/default/verified flags stay false.\nJ0Z0KF/V4DQJW descriptor-data checkpoint implements original bool and OUString getUnpackedValueOrDefault template instantiations through actual Any extraction. Missing/wrong-type values return copied defaults; explicit false and counted Unicode are preserved. The const-reference view exposes only original const operations and keeps actual map identity; copy/update/match traverse actual entries. No alternate map or template value factory is supplied. Other template types and native storage/filter/UI closure remain unported or unqualified. Original provided-InputStream presence fast path and invalid-source handling, ReadOnly/PostData/Stream precedence and actual Reference template extraction are represented with native UNO/RTL map/stream owners. Positive URL/POST/trust/interaction opening and non-file readonly/default environment remain explicitly unported. File Content inference and exception branches are source-represented but unqualified because the actual file Content provider is missing. Complete SfxMedium/storage/filter/model/DOCX/XLSX UI acceptance remains unfinished.",
       "knownViolations": [],
       "localSymbols": [
         "SequenceAsHashMap",
         "OUStringAndHashCode",
         "OUStringAndHashCodeEqual",
-        "OUStringAndHashCodeHash"
+        "OUStringAndHashCodeHash",
+        "getUnpackedValueOrDefault",
+        "ConstSequenceAsHashMap"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "comphelper/source/misc/sequenceashashmap.cxx",

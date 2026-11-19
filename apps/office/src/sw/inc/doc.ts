@@ -25,3 +25,10 @@ export interface WriterEmbeddedFont {
   readonly bytes?: Uint8Array;
   readonly canLoad?: boolean;
 }
+
+/** Original ThemeFontLangProps document interoperability values. */
+export interface ThemeFontLanguages {
+  readonly val?: string;
+  readonly eastAsia?: string;
+  readonly bidi?: string;
+}

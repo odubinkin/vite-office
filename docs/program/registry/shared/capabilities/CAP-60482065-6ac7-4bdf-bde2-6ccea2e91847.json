@@ -1,0 +1,86 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-60482065-6ac7-4bdf-bde2-6ccea2e91847",
+    "capabilityId": "CAP-60482065-6ac7-4bdf-bde2-6ccea2e91847",
+    "suite": "shared",
+    "subsystem": "package-plain-stream-save",
+    "type": "model",
+    "maturity": "mapped",
+    "assertions": [
+      "Actual package factory DATA streams and loaded ZIP members write through original ZIP output/compressor owners.",
+      "Original plain manifest, success/failure state, input closure, copied entry and signed offset transition remain represented."
+    ],
+    "capability": "Original plain package stream save prerequisites",
+    "gaps": [
+      "Actual ZipPackageStream plain DATA/member saving now uses original native ZipOutputStream/ZipOutputEntry owners, source three-slot manifest order, STORED CRC/size prepass, nonseekable optimization, raw member copy and small synchronous DEFLATE. Actual nullable parent pointer and owned ZipEntry assignment replace null-only output binding/copy duplication. Original failure/success ordering, closing, member transition, offset negation and format-specific manifest append are retained. Preserve WRITER625/CALC692 loaded-member compression-disable behavior and WRITER626/CALC693 minus-one Size snapshot. DETECT/encrypted raw parsing, encrypted output and source background/parallel branches above100000/1000000 bytes remain explicitly unported; no sequential fallback or complete commit is fabricated. Actual stream/model/ZIP/input/manifest owners and independent Node zlib/CRC outputs plus main/DOM-free Worker are tested. Complete ZipPackage coverage failure/classic Parser/XStorage/Medium/filter/UI and physical ABI/allocation/thread parity remain unqualified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "package/source/zippackage/ZipPackageStream.cxx",
+          "marker": "ZipPackageStream::saveChild"
+        },
+        {
+          "path": "package/source/zipapi/ZipOutputEntry.cxx",
+          "marker": "ZipOutputEntryBase::ZipOutputEntryBase"
+        }
+      ],
+      "tests": [
+        {
+          "path": "package/qa/cppunit/test_package.cxx",
+          "marker": "testThreadedStreams"
+        }
+      ],
+      "docs": [
+        {
+          "path": "package/inc/ZipPackageStream.hxx",
+          "marker": "successfullyWritten"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackageStream.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/ZipOutputEntry.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/inc/ZipEntry.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackageStream.save.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-package-stream-save.md",
+          "marker": "# Native plain package stream save prerequisites"
+        }
+      ]
+    },
+    "implemented": false,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Represented original fields and generated UNO/RTL/native mutex owners use existing host storage while native physical ABI/allocator/thread and full package/stream services remain unqualified."
+    },
+    "scopeLimitations": [
+      "Actual ZipPackageStream plain DATA/member saving now uses original native ZipOutputStream/ZipOutputEntry owners, source three-slot manifest order, STORED CRC/size prepass, nonseekable optimization, raw member copy and small synchronous DEFLATE. Actual nullable parent pointer and owned ZipEntry assignment replace null-only output binding/copy duplication. Original failure/success ordering, closing, member transition, offset negation and format-specific manifest append are retained. Preserve WRITER625/CALC692 loaded-member compression-disable behavior and WRITER626/CALC693 minus-one Size snapshot. DETECT/encrypted raw parsing, encrypted output and source background/parallel branches above100000/1000000 bytes remain explicitly unported; no sequential fallback or complete commit is fabricated. Actual stream/model/ZIP/input/manifest owners and independent Node zlib/CRC outputs plus main/DOM-free Worker are tested. Complete ZipPackage coverage failure/classic Parser/XStorage/Medium/filter/UI and physical ABI/allocation/thread parity remain unqualified."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "package-plain-stream-save"
+  }
+}

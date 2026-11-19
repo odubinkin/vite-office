@@ -1,16 +1,22 @@
 /** @fileoverview Original presence/default/token/numeric/boolean attribute contracts using actual FastTokenHandler, FastAttributeList and SAL/o3tl converters. */
-import { expect, it } from "vitest";
+import { Reference as RtlReference } from "../../../sal/inc/rtl/ref";
+import { own, releaseDomScope } from "../../../test/native-dom";
+import { afterEach, expect, it } from "vitest";
+import { Reference, UNO_QUERY_THROW } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import { XFastAttributeList } from "../../../offapi/com/sun/star/xml/sax/XFastAttributeList";
 import { AttributeList, AttributeConversion as C } from "./attributelist";
 import { FastTokenHandler } from "../core/fasttokenhandler";
 import { getTokenFromUtf8 as token, XML_TOKEN_INVALID } from "../token/tokenmap";
-import { FastAttributeList } from "../../../sax/source/tools/fastattribs";
+import { FastAttributeList, castToFastAttributeList } from "../../../sax/source/tools/fastattribs";
 import { toDouble } from "../../../o3tl/inc/string_view";
+afterEach(releaseDomScope);
 /** Creates an actual XML attribute owner and real token handler. @param value - Optional value; absence means missing. @returns Native owners. */
 function attributes(value?: string) {
-  const fast = new FastAttributeList(new FastTokenHandler());
+  const tokens = own(new Reference(new FastTokenHandler())),
+    fast = new FastAttributeList(tokens.operatorStar());
   fast.add(2, "preceding");
   if (value !== undefined) fast.add(1, value);
-  return { fast, list: new AttributeList(fast) };
+  return { fast, list: own(new AttributeList(own(new Reference(fast)))) };
 }
 /** Existing counted UTF16 view binding. @param value - Text. @returns Units. */
 function units(value: string): Uint16Array {
@@ -162,11 +168,51 @@ it("keeps real handler identity on copies/clones and first duplicate attribute l
   fast.add(1, "hidden");
   expect(list.getToken(1)).toBe(token("visible"));
   expect(list.getToken(1, 97)).toBe(token("visible"));
-  expect(fast.createClone().getValueTokenByIndex(1)).toBe(token("visible"));
+  const clone = fast.createClone(),
+    facet = new Reference<XFastAttributeList>(
+      clone,
+      UNO_QUERY_THROW,
+      XFastAttributeList.static_type,
+    );
+  try {
+    expect(castToFastAttributeList(facet).getValueTokenByIndex(1)).toBe(token("visible"));
+  } finally {
+    facet.dispose();
+    clone.dispose();
+  }
   const view: [Uint8Array] = [new Uint8Array()];
   expect(fast.getAsView(1, view)).toBe(true);
   expect(new TextDecoder().decode(view[0])).toBe("visible");
   const handler = new FastTokenHandler();
   expect(handler.getTokenDirect("hidden")).toBe(token("hidden"));
   expect(handler.getTokenDirect(new TextEncoder().encode("hidden"))).toBe(token("hidden"));
+});
+
+it("retains the original intrusive list after caller UNO release and returns the same const handle", /** Actual native references, shared mutable attributes and copied owners prove lifetime without a substitute list. @returns Nothing. */ () => {
+  const caller = own(new Reference(new FastAttributeList(null))),
+    list = new AttributeList(caller),
+    fast = caller.operatorStar();
+  fast.add(1, "retained");
+  const retained = own(new RtlReference(list.getFastAttributeList().get()));
+  try {
+    caller.clear();
+    expect(list.getFastAttributeList()).toBe(list.getFastAttributeList());
+    expect(list.getFastAttributeList().get()).toBe(fast);
+    fast.clear();
+    fast.add(1, "changed");
+    const value = list.getStringDefaulted(1);
+    try {
+      expect(value.getLength()).toBe(7);
+    } finally {
+      value.dispose();
+    }
+  } finally {
+    list.dispose();
+  }
+  const value = retained.operatorStar().getValueByIndex(0);
+  try {
+    expect(value.getLength()).toBe(7);
+  } finally {
+    value.dispose();
+  }
 });

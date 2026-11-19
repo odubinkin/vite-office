@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/libcxx/set.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "standard-ordered-set",
+    "capabilityIds": [
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/libcxx/set.ts",
+        "apps/office/src/comphelper/source/misc/directoryhelper.filesystem.test.ts"
+      ],
+      "justification": "Consumed std::set/__tree insert, red-black balancing, end/begin links, ordered iterator increment and recursive value destruction follow the pinned Emscripten SDK libc++ __tree source. Tree nodes are JS VM objects; actual DirectoryHelper string/pair specializations compare UTF16 lexicographically and copy/destroy real OUString values. No synthetic IO, allocator, native pointer or filesystem provider. This preserves consumed tree algorithms and value lifetime, not physical native node layout. Remaining STL APIs, insertion-result iterator binding, debug assertions, native ABI/OOM and whole document package/UI acceptance remain unbound or unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Set",
+        "SetValue"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

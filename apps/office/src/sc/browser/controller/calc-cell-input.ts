@@ -12,8 +12,9 @@ export function Commit(this: CalcViewController): boolean {
   try {
     if (this.inputHandler.IsModified()) {
       const doc = this.shell.GetDocument(),
-        pos = this.Position(),
-        content = parseCellInput(this.inputText),
+        pos = this.Position();
+      if (!this["viewShell"].CheckCellInput(pos.Col(), pos.Row())) return false;
+      const content = parseCellInput(this.inputText),
         manager = this.shell.GetUndoManager();
       const prepared: { position: ScAddress; value: ScCellValue }[] = [];
       try {

@@ -36,6 +36,7 @@ import { type SvNumberformatConstReference } from "./zformat";
 import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 
 import { GetFormatterOutputString } from "./zforlist.output";
+import { ImpSubstituteEntry } from "./zforlist.recognition";
 import { NfCurrencyEntry } from "./zforlist.currency-entry";
 import { SvNFLanguageData, SvNFFormatData, SvNFEngine } from "./zforlist";
 /** Original process-wide source currency tables: ordinary entries start with SYSTEM, legacy-only entries are separate. */
@@ -431,6 +432,17 @@ export class SvNumberFormatter {
   /** Original borrowed exact-entry lookup; absent ungenerated entries return null. @param key - Native key. @returns Actual parsed entry or null. */
   GetEntry(key: number): SvNumberformatConstReference | null {
     return this.m_aFormatData.GetFormatEntry(key);
+  }
+  /** Borrows the current system format for an entry marked as substituted. @param key - Original key. @param realKey - Effective key output. @returns Actual resolved entry or null. */
+  GetSubstitutedEntry(key: number, realKey: [number]): SvNumberformatConstReference | null {
+    return ImpSubstituteEntry(
+      this.m_aCurrentLanguage,
+      this.m_aFormatData,
+      this.GetNatNum(),
+      this.m_aRWPolicy,
+      this.m_aFormatData.GetFormatEntry(key),
+      realKey,
+    );
   }
   /** Original actual category query. @param key - Native key. @returns Native type. */
   GetType(key: number): number {

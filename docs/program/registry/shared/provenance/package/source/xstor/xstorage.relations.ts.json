@@ -1,0 +1,85 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/xstor/xstorage.relations.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/xstor/xstorage.cxx",
+    "localSymbols": [
+      "Relations",
+      "RelInfoStatus",
+      "setStorageRelations",
+      "removeStreamRelations",
+      "renameStreamRelations",
+      "commitStorageRelations",
+      "getRelInfoStreamForName",
+      "readRelInfoIfNecessary",
+      "wrongRelationsStream"
+    ],
+    "upstreamSymbols": [
+      "OStorage::setPropertyValue",
+      "OStorage_Impl::CommitRelInfo",
+      "OStorage_Impl::RemoveStreamRelInfo",
+      "OStorage_Impl::GetRelInfoStreamForName",
+      "OStorage_Impl::ReadRelInfoIfNecessary"
+    ],
+    "preservedResponsibilities": [
+      "Original OFOPXML root relationship sequence and seekable stream staging, relationship folder persistence and existing part relationship rename/removal are connected to the native package transaction.",
+      "Original catalog ordering follows WRITER632, WRITER633, CALC699 and CALC700.",
+      "Reads root relationships from the isolated native relationship child storage and invokes the registered OFOPXML stream parser. Staged seekable input is read from its current cursor and commit still copies from zero. Source success, retry and ChangedBroken behavior are preserved.",
+      "A relationship part now opens through the actual parent-backed ordinary read stream and returns its native XInputStream facet.",
+      "Root and per-member relationship XML streams are staged through the seekable RelationsInfoStream property and emitted by the native associated storage commit. The writable plain sequence property preserves the source status omission. Full native relationship interface exposure remains pending."
+    ],
+    "omittedResponsibilities": [
+      "Per-part relationship editing, the public OStorage and stream wrappers, and the full DOCX/XLSX filter paths remain pending."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Existing actual SAL/CPPU logical addresses, compiler specialization/interface casts and explicit scope destruction bind native C++ syntax. The actual pinned SDK libc++ mutex implements the original member and guard lifetimes; native pthread/physical C++ ABI remain unqualified."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.relations.ts",
+          "marker": "commitStorageRelations"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.impl.test.ts",
+          "marker": "writes the original relationship sequence and prunes the empty folder"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.relations.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/xmlfilterbase.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage_Impl::CommitRelInfo"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::setPropertyValue"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage_Impl::GetRelInfoStreamForName"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage_Impl::ReadRelInfoIfNecessary"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/package/source/xstor/xstorage.relations.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Relationship staging and commit are isolated from constructors and the catalog loop while using the same OStorage_Impl state."
+    }
+  }
+}

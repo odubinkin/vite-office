@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/oox/source/core/relations.native.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-oox-context",
+    "capabilityIds": [
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/oox/source/core/relations.native.ts",
+        "vendor/libreoffice-reference/oox/source/core/relations.cxx",
+        "apps/office/src/oox/source/core/relations.native.test.ts",
+        "apps/office/src/oox/source/core/contexthandler.test.ts"
+      ],
+      "justification": "Original native Relation fields/default false flag, exact copied/borrowed Unicode values, ordered native-key std::map contract, first-emplace behavior, full query/target/path/office fallback methods and actual shared filtered collection lifetime. Native UTF16 comparisons/hash-free sorted key binding supplies logical map behavior; physical tree layout/allocator complexity and iterator invalidation are unqualified. Original dot/empty/root/external handling and external first-match fallback short-circuit are preserved. No host string keys/values/URL normalizer or alternate relation provider in this owner. Older host relations.ts remains explicitly separate until native filter migration. Complete native filter/relations parsing/metadata/storage/model/package/UI DOCX/XLSX acceptance and full original Pipe/Expat/parser QA remain unfinished. Physical C++ ABI/atomic/allocator/control-block and independent compiled native differential remain unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Relation",
+        "Relations"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "oox/source/core/relations.cxx",
+      "upstreamSymbols": [
+        "Relations::Relations",
+        "Relations::getRelationFromRelId",
+        "Relations::getRelationFromFirstType",
+        "Relations::getRelationsFromTypeFromOfficeDoc",
+        "Relations::getFragmentPathFromRelation",
+        "Relations::getFragmentPathFromFirstTypeFromOfficeDoc"
+      ]
+    }
+  }
+}

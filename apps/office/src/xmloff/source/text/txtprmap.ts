@@ -29,12 +29,19 @@ import { XMLFontWeightPropHdl } from "../style/weighhdl";
 import { XMLNamedBoolPropertyHdl } from "../style/NamedBoolPropertyHdl";
 import { XMLBoolPropHdl } from "../style/xmlbahdl";
 import { XMLPosturePropHdl } from "../style/postuhdl";
+import { XMLKerningPropHdl } from "../style/kernihdl";
 import {
   XMLUnderlineStylePropHdl,
   XMLUnderlineTypePropHdl,
   XMLUnderlineWidthPropHdl,
 } from "../style/undlihdl";
+import { LanguageTag } from "../../../i18nlangtag/inc/languagetag";
+import { cppu_detail_getUnoType_Locale as localeType } from "../../../udkapi/com/sun/star/lang/Locale";
+import { XMLCharLocale, exportCharLocale } from "../style/chrlohdl";
 import type { OdfCharacterProperties } from "./txtparae.types";
+import { createOdfThemeColor } from "./XMLComplexColorContext";
+import { createXComplexColor } from "../../../docmodel/inc/uno/UnoComplexColor";
+import { XComplexColor } from "../../../offapi/com/sun/star/util/XComplexColor";
 /** Stateless original handlers and actual owning core unit. */
 const underlineColor = new XMLColorTransparentPropHdl("font-color"),
   underlineHasColor = new XMLIsTransparentPropHdl("font-color", false);
@@ -43,6 +50,8 @@ const escapement = new XMLEscapementPropHdl(),
 const weight = new XMLFontWeightPropHdl(),
   posture = new XMLPosturePropHdl(),
   converter = new SvXMLUnitConverter("twip");
+const kerning = new XMLKerningPropHdl();
+const kerningConverter = new SvXMLUnitConverter("mm100");
 /** Independent source CharWeight/CharPosture associations; floats and typed FontSlant are retained. */
 const scriptProperties = [
   [T.FO_FONT_WEIGHT, "fo:font-weight", "fontWeight", weight, "float"],
@@ -88,6 +97,36 @@ const boolProperties = [
   [T.STYLE_TEXT_LINE_THROUGH_MODE, "style:text-line-through-mode", "wordMode", wordMode],
   [T.STYLE_LETTER_KERNING, "style:letter-kerning", "autoKerning", autoKerning],
 ] as const;
+/** Source merged CharLocale mappings for the three independent script families. */
+const languageProperties = [
+  [
+    "",
+    [
+      [T.STYLE_RFC_LANGUAGE_TAG, "style:rfc-language-tag", "tag"],
+      [T.FO_LANGUAGE, "fo:language", "language"],
+      [T.FO_SCRIPT, "fo:script", "script"],
+      [T.FO_COUNTRY, "fo:country", "country"],
+    ],
+  ],
+  [
+    "Asian",
+    [
+      [T.STYLE_RFC_LANGUAGE_TAG_ASIAN, "style:rfc-language-tag-asian", "tag"],
+      [T.STYLE_LANGUAGE_ASIAN, "style:language-asian", "language"],
+      [T.STYLE_SCRIPT_ASIAN, "style:script-asian", "script"],
+      [T.STYLE_COUNTRY_ASIAN, "style:country-asian", "country"],
+    ],
+  ],
+  [
+    "Complex",
+    [
+      [T.STYLE_RFC_LANGUAGE_TAG_COMPLEX, "style:rfc-language-tag-complex", "tag"],
+      [T.STYLE_LANGUAGE_COMPLEX, "style:language-complex", "language"],
+      [T.STYLE_SCRIPT_COMPLEX, "style:script-complex", "script"],
+      [T.STYLE_COUNTRY_COMPLEX, "style:country-complex", "country"],
+    ],
+  ],
+] as const;
 /** Tokens consumed by this bounded source property map. */
 export const textCharacterPropertyTokens = [
   ...scriptProperties.map(
@@ -104,17 +143,51 @@ export const textCharacterPropertyTokens = [
   ),
   T.STYLE_TEXT_UNDERLINE_COLOR,
   T.STYLE_TEXT_POSITION,
+  T.FO_LETTER_SPACING,
   ...boolProperties.map(
     /** Reads original bool property tokens. @param entry - Entry. @returns Token. */ ([token]) =>
       token,
   ),
+  ...languageProperties.flatMap(
+    /** Collects each source locale attribute token. @param family - Script mapping. @returns Tokens. */ ([
+      ,
+      properties,
+    ]) =>
+      properties.map(
+        /** Selects the original token. @param entry - Attribute mapping. @returns Token. */ ([
+          token,
+        ]) => token,
+      ),
+  ),
 ];
+/** Collects all attributes of each native script locale in XML order. @param properties - Native text properties. @returns Qualified attribute/value pairs. */
+export function exportTextLanguageProperties(
+  properties: OdfCharacterProperties,
+): readonly (readonly [string, string])[] {
+  const result: [string, string][] = [];
+  for (const [suffix, attributes] of languageProperties) {
+    const language = properties[`language${suffix}`];
+    if (language === undefined) continue;
+    const parts = exportCharLocale(language);
+    for (const [, name, field] of attributes) {
+      const value = parts[field];
+      if (value !== undefined) result.push([name, value]);
+    }
+  }
+  return result;
+}
+
 /** Emits original handler output from native UNO scalar values. @param properties - Filter handoff. @returns Attribute fragment. */
 export function exportTextCharacterProperties(properties: OdfCharacterProperties): string {
   const value = new Any(),
     output: [string] = [""];
   let result = "";
   try {
+    if (properties.kerning !== undefined) {
+      value.insert([properties.kerning], "sal_Int16");
+      if (kerning.exportXML(output, value, kerningConverter))
+        result += ` fo:letter-spacing="${output[0]}"`;
+    }
     for (const [, name, key, handler] of boolProperties) {
       if (properties[key] !== undefined) {
         value.insert([properties[key]], "bool");
@@ -179,6 +252,14 @@ export function importTextCharacterProperties(
     crossedOut = new Any();
   try {
     for (const [token, text] of attributes) {
+      if (token === T.FO_LETTER_SPACING) {
+        if (kerning.importXML(text, value, kerningConverter)) {
+          const scalar: [number] = [0];
+          value.extract(scalar, "sal_Int16");
+          result.kerning = scalar[0];
+        }
+        continue;
+      }
       const boolean = boolProperties.find(
         /** Reads the original bool mapping. @param entry - Entry. @returns Match. */ ([item]) =>
           item === token,
@@ -246,6 +327,21 @@ export function importTextCharacterProperties(
         result.underlineHasColor = hasColor[0];
       }
     }
+    for (const [suffix, properties] of languageProperties) {
+      let locale: XMLCharLocale | undefined;
+      for (const [token, value] of attributes) {
+        const attribute = properties.find(
+          /** Finds the source locale member. @param entry - Native property mapping. @returns Match. */ ([
+            source,
+          ]) => source === token,
+        );
+        if (attribute) {
+          locale ??= new XMLCharLocale();
+          locale.importXML(attribute[2], value);
+        }
+      }
+      if (locale) result[`language${suffix}`] = locale.getLanguageType();
+    }
     return result as Partial<OdfCharacterProperties>;
   } finally {
     value.dispose();
@@ -281,7 +377,7 @@ interface TabStopAddress {
 }
 /** Original generated compound stride, consumed through the existing CPPU sequence owner. */
 const ImportTabStops = Sequence.specialize<TabStopAddress>(stopType, 12);
-/** Applies parsed XML properties as native API values, leaving canonical item construction to Writer. @param target - Actual property owner. @param character - Character deltas. @param paragraph - Paragraph deltas. @param alignment - Optional paragraph alignment. @param leftMargin - Optional text-left margin in twips. @returns Nothing.  @param autoFamily - Native operation input. */
+/** Applies parsed XML properties as native API values. @param target - Property owner. @param character - Character deltas. @param paragraph - Paragraph deltas. @param alignment - Optional alignment. @param leftMargin - Text-left margin in twips. @param autoFamily - Automatic style family. @param autoProperty - Destination property for the interned character style. @returns Nothing. */
 export function applyTextImportProperties(
   target: XMLPropertySet,
   character: Partial<OdfCharacterProperties> = {},
@@ -289,6 +385,7 @@ export function applyTextImportProperties(
   alignment?: OdfParagraphAlignment,
   leftMargin?: number,
   autoFamily?: XMLAutoStyleFamily,
+  autoProperty: "CharAutoStyleName" | "ListAutoFormat" = "CharAutoStyleName",
 ): void {
   const names: OUString[] = [],
     values: Any[] = [];
@@ -328,6 +425,16 @@ export function applyTextImportProperties(
         add(`CharFontPitch${suffix}`, character[`fontPitch${suffix}`] ?? 0, "sal_Int16");
         add(`CharFontCharSet${suffix}`, character[`fontCharSet${suffix}`] ?? 0, "sal_Int16");
       }
+      const language = character[`language${suffix}`];
+      if (language !== undefined) {
+        const locale = LanguageTag.convertToLocale(language, false);
+        try {
+          names.push(xmlTextString(`CharLocale${suffix}`));
+          values.push(new Any(locale, localeType));
+        } finally {
+          locale.dispose();
+        }
+      }
       const height = character[`fontSizeTwips${suffix}`];
       if (height !== undefined) add(`CharHeight${suffix}`, height / 20, "float");
       const weight = character[`fontWeight${suffix}`],
@@ -358,8 +465,18 @@ export function applyTextImportProperties(
       ["underlineHasColor", "CharUnderlineHasColor", "bool"],
       ["wordMode", "CharWordMode", "bool"],
       ["autoKerning", "CharAutoKerning", "bool"],
+      ["kerning", "CharKerning", "sal_Int16"],
     ] as const)
       if (character[key] !== undefined) add(name, character[key], type);
+    if (character.themeColor) {
+      const reference = createXComplexColor(createOdfThemeColor(character.themeColor));
+      try {
+        names.push(xmlTextString("CharComplexColor"));
+        values.push(new Any([reference.get()], XComplexColor.static_type));
+      } finally {
+        reference.dispose();
+      }
+    }
     if (alignment !== undefined)
       add(
         "ParaAdjust",
@@ -472,15 +589,17 @@ export function applyTextImportProperties(
         ) => new PropertyValue(name, -1, values[index] as Any, PropertyState.DIRECT_VALUE),
       );
       const key = xmlTextString("CharAutoStyleName");
+      const destination = autoProperty === "CharAutoStyleName" ? key : xmlTextString(autoProperty);
       try {
         const style = autoFamily.insertStyle(properties),
           value = style.getPropertyValue(key);
         try {
-          target.setPropertyValue(key, value);
+          target.setPropertyValue(destination, value);
         } finally {
           value.dispose();
         }
       } finally {
+        if (destination !== key) destination.dispose();
         key.dispose();
         for (const property of properties) {
           property.Name.dispose();

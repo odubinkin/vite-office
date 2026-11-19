@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/embed/UseBackupException.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-storage-sdk",
+    "capabilityIds": [
+      "CAP-971ab8a7-b7c2-45a8-90ed-1b854c9300d4"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/embed/UseBackupException.ts",
+        "apps/office/src/package/source/zippackage/ZipPackage.commit-state.test.ts",
+        "vendor/libreoffice-reference/offapi/com/sun/star/embed/UseBackupException.idl"
+      ],
+      "justification": "Normal generated UseBackupException derives from actual IOException and owns its original TemporaryFileURL with generated type/member copy/move/assignment/Any semantics. Real failed-transfer exceptions and actual compiler ABI use the binding. Physical C++ ABI/allocator/thread/fatal domains and whole storage/UI acceptance remain unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "UseBackupException",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "offapi/com/sun/star/embed/UseBackupException.idl",
+      "upstreamSymbols": [
+        "UseBackupException",
+        "TemporaryFileURL"
+      ]
+    }
+  }
+}

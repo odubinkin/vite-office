@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/docmodel/inc/theme/Theme.ts",
+    "upstreamPath": "include/docmodel/theme/Theme.hxx",
+    "localSymbols": [
+      "Theme",
+      "FontScheme"
+    ],
+    "upstreamSymbols": [
+      "Theme",
+      "FontScheme"
+    ],
+    "preservedResponsibilities": [
+      "Theme and font scheme carry the original theme name, color set, major/minor script entries, supplemental entries and default families."
+    ],
+    "omittedResponsibilities": [
+      "The complete drawing format scheme models and UNO service are outside this owner."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/docmodel/inc/theme/Theme.ts",
+          "marker": "Theme"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.theme.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-native-colors.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/docmodel/theme/Theme.hxx",
+          "marker": "Theme"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/docmodel/theme/Theme.hxx",
+          "marker": "FontScheme"
+        }
+      ]
+    }
+  }
+}

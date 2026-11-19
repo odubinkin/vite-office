@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/external/zlib/crc32.ts",
+    "rationale": "Browser ABI seed/result adapter reuses the byte-identical standalone Crc32 module from existing installed zip.js2.24.0. The complete original BSD notice is retained in third_party/zipjs-codecs/crc32.mjs and source.json records its exact package path/hash. Running register inversion bridges zlib finalized CRC seeds, including FFFFFFFF whose inverted zero cannot be passed through the library constructor || default. The public running register is initialized on the actual library class; no CRC algorithm or stand-in library provider is implemented. Node zlib independently checks results and actual upstream SAL CRC QA is ported. No download/new dependency or native/host-memory ownership emulator.",
+    "responsibilities": [
+      "Browser ABI seed/result adapter reuses the byte-identical standalone Crc32 module from existing installed zip.js2.24.0. The complete original BSD notice is retained in third_party/zipjs-codecs/crc32.mjs and source.json records its exact package path/hash. Running register inversion bridges zlib finalized CRC seeds, including FFFFFFFF whose inverted zero cannot be passed through the library constructor || default. The public running register is initialized on the actual library class; no CRC algorithm or stand-in library provider is implemented. Node zlib independently checks results and actual upstream SAL CRC QA is ported. No download/new dependency or native/host-memory ownership emulator."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser ABI seed/result adapter reuses the byte-identical standalone Crc32 module from existing installed zip.js2.24.0. The complete original BSD notice is retained in third_party/zipjs-codecs/crc32.mjs and source.json records its exact package path/hash. Running register inversion bridges zlib finalized CRC seeds, including FFFFFFFF whose inverted zero cannot be passed through the library constructor || default. The public running register is initialized on the actual library class; no CRC algorithm or stand-in library provider is implemented. Node zlib independently checks results and actual upstream SAL CRC QA is ported. No download/new dependency or native/host-memory ownership emulator."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/zlib/crc32.ts",
+          "marker": "crc32"
+        },
+        {
+          "path": "third_party/zipjs-codecs/crc32.mjs",
+          "marker": "class Crc32"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/native-entry-read.test.ts",
+          "marker": "@fileoverview"
+        }
+      ]
+    },
+    "localSymbols": [
+      "crc32"
+    ]
+  }
+}

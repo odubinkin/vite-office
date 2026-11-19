@@ -17,19 +17,23 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/sw/source/filter/ww8/rtf-paragraph-numbering.test.ts",
-        "vendor/libreoffice-reference/sw/source/filter/ww8/ww8atr.cxx#AttributeOutputBase::ParaNumRule"
+        "vendor/libreoffice-reference/sw/source/filter/ww8/ww8atr.cxx#AttributeOutputBase::ParaNumRule",
+        "apps/office/src/sw/source/filter/ww8/docxattributeoutput.numbering.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts"
       ],
-      "justification": "S3HW1E paragraph numbering: the actual RtfAttributeOutput now derives from AttributeOutputBase and consumes native empty/unknown/uncounted/style/restart ParaNumRule dispatch. Restart duplication occurs at Writer level before Word level8 clamping; RTF retains original-rule ls references (WRITER096). Actual character property cache feeds listtext with original outline/empty-label tab policy. Native non-RTL Out_SwTextNode numbering preparation copies actual paragraph items, handles inherited rule injection, legacy indents/tab correction and uncounted visual geometry; OutputItemSet numbering-first then ascending WhichID paragraph callback order lets explicit/copied margins override intermediate numbering margins. Genuine exporter node/item contexts are restored and temporary sets disposed. This is the represented RTF non-DOCX paragraph profile only: Writer frame-direction/layout owners, full script/bidi iteration, full native OutputFormat/buffer ABI, DOCX override-list branch, style importer and whole filter closure remain unverified.",
+      "justification": "S3HW1E paragraph numbering: the actual RtfAttributeOutput now derives from AttributeOutputBase and consumes native empty/unknown/uncounted/style/restart ParaNumRule dispatch. Restart duplication occurs at Writer level before Word level8 clamping; RTF retains original-rule ls references (WRITER096). Actual character property cache feeds listtext with original outline/empty-label tab policy. Native non-RTL Out_SwTextNode numbering preparation copies actual paragraph items, handles inherited rule injection, legacy indents/tab correction and uncounted visual geometry; OutputItemSet numbering-first then ascending WhichID paragraph callback order lets explicit/copied margins override intermediate numbering margins. Genuine exporter node/item contexts are restored and temporary sets disposed. This is the represented RTF non-DOCX paragraph profile only: Writer frame-direction/layout owners, full script/bidi iteration, full native OutputFormat/buffer ABI, DOCX override-list branch, style importer and whole filter closure remain unverified. DOCX numbering continuation uses the actual shared AttributeOutputBase with source void output; the existing RTF text-buffer adapter normalizes only the no-output return. Preserve native per-list abstract cache, distinct null override slots, unsigned16 IDs/counter/restart values, nested restart maps, rule/level export equivalence and original source paragraph dispatch before final Word-level clamping. Actual DocxAttributeOutput omits inherited outline numbering and emits numPr through real document/list/style owners. Native GetTextColl is bound to the existing equivalent GetTextFormatColl owner accessor. DOCX destruction now also destroys its actual base temporary tail; null placeholders own no SwNumRule. Source default unsupported override sink retains an explicit assertion diagnostic, not fabricated XML. Complete DOCX numbering-level/part orchestration, full main-text traversal and fixture/filter/mounted UI import/export remain unported or unqualified. Generic result typing and the RTF no-output normalization preserve the established browser formatting buffer, not a new native result contract. Existing RTF tests now initialize the actual already-shipped runtime before stream/locale use. DOCX and RTF use the same native signed size and multi-line conversion for paragraph spacing.",
       "knownViolations": [],
       "localSymbols": [
         "AttributeOutputBase",
-        "CorrectTabStopInSet"
+        "CorrectTabStopInSet",
+        "ParaLineSpacing"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/filter/ww8/ww8atr.cxx",
       "upstreamSymbols": [
         "AttributeOutputBase::ParaNumRule",
-        "MSWordExportBase::CorrectTabStopInSet"
+        "MSWordExportBase::CorrectTabStopInSet",
+        "AttributeOutputBase::ParaLineSpacing"
       ]
     }
   }

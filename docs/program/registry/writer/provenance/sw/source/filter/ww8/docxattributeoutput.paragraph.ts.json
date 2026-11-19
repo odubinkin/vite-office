@@ -1,0 +1,75 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.paragraph.ts",
+    "localSymbols": [
+      "OutputParagraphProperties",
+      "ParaAdjust",
+      "OutputStyleParagraphProperties",
+      "WriteParagraphMarkerProperties"
+    ],
+    "upstreamPath": "sw/source/filter/ww8/docxattributeoutput.cxx",
+    "upstreamSymbols": [
+      "DocxAttributeOutput::StartParagraphProperties",
+      "DocxAttributeOutput::ParaAdjust",
+      "DocxAttributeOutput::ParaLineSpacing_Impl",
+      "lcl_writeParagraphMarkerProperties",
+      "DocxAttributeOutput::EndParagraphProperties"
+    ],
+    "preservedResponsibilities": [
+      "Native paragraph controls, alignment, spacing, and twip indentation serialize in WordprocessingML schema order. The line-spacing path shares the Word conversion with RTF.",
+      "Named paragraph definitions share the native paragraph property serialization. Body paragraphs reference the style slot and emit direct attributes; list overrides remain evaluated on the actual paragraph.",
+      "Writes the selected native paragraph mark items inside rPr immediately before section properties. Shares western and East Asian size, weight and posture, keeps complex-script fields independent, and resolves terminal style hints. Redline marker markup remains outside the represented path.",
+      "Writes paragraph and named-style tab deltas in the original paragraph property position with the effective inherited item and the source relative-indent offset."
+    ],
+    "omittedResponsibilities": [
+      "Relative indentation units and full section output remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.paragraph.ts",
+          "marker": "OutputParagraphProperties"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts",
+          "marker": "round trips native paragraph spacing"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docx-paragraph-marker.test.ts",
+          "marker": "retains the original unocore marker-format regression"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.tabs.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx",
+          "marker": "DocxAttributeOutput::StartParagraphProperties"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx",
+          "marker": "DocxAttributeOutput::ParaLineSpacing_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx",
+          "marker": "lcl_writeParagraphMarkerProperties"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx",
+          "marker": "DocxAttributeOutput::EndParagraphProperties"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.paragraph.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "This split preserves the original responsibility and owner while keeping orchestration and its implementation tables within the size limit."
+    }
+  }
+}

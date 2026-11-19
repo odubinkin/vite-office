@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/oox/source/core/fragmenthandler.data.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-oox-context",
+    "capabilityIds": [
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/oox/source/core/fragmenthandler.data.ts",
+        "vendor/libreoffice-reference/oox/source/core/fragmenthandler.cxx",
+        "apps/office/src/oox/source/core/relations.native.test.ts",
+        "apps/office/src/oox/source/core/contexthandler.test.ts"
+      ],
+      "justification": "Original FragmentBaseData aggregate borrows actual XmlFilterBase, retains actual native OUString path, native UNO locator and source shared RelationsRef, with original reverse destruction. Shared field/member lifetimes use the explicit same-actual-value control block; no URI/filter/relation value is manufactured. Native fragment-data copy/parent lifetime tests and actual main/Worker route exercise real owners. Complete native filter/relations parsing/metadata/storage/model/package/UI DOCX/XLSX acceptance and full original Pipe/Expat/parser QA remain unfinished. Physical C++ ABI/atomic/allocator/control-block and independent compiled native differential remain unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FragmentBaseData"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "oox/source/core/fragmenthandler.cxx",
+      "upstreamSymbols": [
+        "FragmentBaseData::FragmentBaseData"
+      ]
+    }
+  }
+}

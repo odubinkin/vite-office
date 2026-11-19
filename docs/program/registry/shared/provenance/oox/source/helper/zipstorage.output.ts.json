@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/oox/source/helper/zipstorage.output.ts",
+    "status": "mapped",
+    "upstreamPath": "oox/source/helper/zipstorage.cxx",
+    "localSymbols": [
+      "commitZipStorage",
+      "writePart"
+    ],
+    "upstreamSymbols": [
+      "ZipStorage::implOpenOutputStream",
+      "ZipStorage::implCommit"
+    ],
+    "preservedResponsibilities": [
+      "The Writer DOCX and Calc XLSX export bridge commits filter fragments through registered OFOPXML storage using native media types, relationship streams and package-owned content types. It explicitly disposes successful native parts to surface buffered-write errors and commits children and root with transaction failure propagation."
+    ],
+    "omittedResponsibilities": [
+      "Full native ABI, unsupported stream modes, and all application filter roundtrips remain unqualified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Keeps the browser byte binding and realm initialization beside the synchronous ZipStorage component while preserving its original transaction and native stream interfaces."
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/oox/source/helper/zipstorage.output.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the browser byte binding and realm initialization beside the synchronous ZipStorage component while preserving its original transaction and native stream interfaces."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/helper/zipstorage.output.ts",
+          "marker": "commitZipStorage"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/xmlfilterbase.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/oox/source/helper/native-storage.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "oox/source/helper/zipstorage.cxx",
+          "marker": "ZipStorage::implOpenOutputStream"
+        },
+        {
+          "path": "oox/source/helper/zipstorage.cxx",
+          "marker": "ZipStorage::implCommit"
+        }
+      ]
+    }
+  }
+}

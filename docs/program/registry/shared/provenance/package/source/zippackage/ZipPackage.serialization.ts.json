@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/zippackage/ZipPackage.serialization.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/zippackage/ZipPackage.cxx",
+    "localSymbols": [
+      "WriteMimetypeMagicFile",
+      "WriteManifest",
+      "WriteContentTypes"
+    ],
+    "upstreamSymbols": [
+      "WriteMimetypeMagicFile",
+      "WriteManifest",
+      "WriteContentTypes"
+    ],
+    "preservedResponsibilities": [
+      "Original native metadata entry writers retain actual package receiver/root/context, registered ManifestWriter/SAX Writer, generated property/pair sequences, ZipPackageBuffer, source CRC and ZipOutputEntry. Mimetype replacement/STORED/ASCII/error wrapping, native manifest rows and exact OFOPXML defaults/override selection are represented. Explicit aggregate value-initialization preserves std::make_unique semantics without changing default-initialized records. Full root commit/transfer/storage/factory/model/DOCX/XLSX UI acceptance and earlier owner coverage failures remain unfinished. Empty/legacy ManifestExport, native physical ABI/thread/allocation domains remain unqualified."
+    ],
+    "omittedResponsibilities": [
+      "Root writeTempFile/commit/transfer/ConnectTo, full services/transactions/encryption/model/filter/UI and source full package QA remain unfinished. Empty/legacy manifest export, physical native ABI/allocator/thread/fatal domains remain unqualified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Existing actual SAL/CPPU logical addresses, compiler specialization/interface casts and explicit scope destruction bind native C++ syntax. The actual pinned SDK libc++ mutex implements the original member and guard lifetimes; native pthread/physical C++ ABI remain unqualified."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.serialization.ts",
+          "marker": "WriteManifest"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.serialization.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/zippackage/ZipPackage.cxx",
+          "marker": "ZipPackage::WriteContentTypes"
+        },
+        {
+          "path": "package/inc/ZipEntry.hxx",
+          "marker": "struct ZipEntry"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/package/source/zippackage/ZipPackage.serialization.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original ZipPackage.cxx combines tree/service ownership and three metadata-entry output responsibilities. Actual package methods delegate with their real receiver/root/context to this writer owner, retaining generated sequences and native ZIP/SAX components. The split preserves the1000-line source budget without a second package or replacement provider."
+    }
+  }
+}

@@ -69,26 +69,51 @@ export function SubstituteBullet(
   name.value = family.value;
 }
 
-/** Source common abstract-numbering traversal, currently bound to the actual RTF virtual output. The DOCX numbering output is not yet admitted. @param owner - Actual exporter. @returns Nothing. */
-export function AbstractNumberingDefinitions(owner: RtfExport): void {
+/** Routes the split DOCX numbering callbacks or the existing RTF attribute output. @param owner - Actual Word exporter. @returns Active numbering callbacks. */
+function AttrOutput(owner: RtfExport | DocxExport) {
+  return "GetNumberingOutput" in owner ? owner.GetNumberingOutput() : owner.AttrOutput();
+}
+
+/** Source common abstract-numbering traversal through the format's actual attribute output. @param owner - Actual exporter. @returns Nothing. */
+export function AbstractNumberingDefinitions(owner: RtfExport | DocxExport): void {
   if (owner.m_pUsedNumTable === undefined) return;
+  const output = AttrOutput(owner);
   const count = owner.m_pUsedNumTable.length & 0xffff;
   for (let index = 0; index < count; ++index) {
-    const rule = owner.m_pUsedNumTable[index] as SwNumRule;
-    owner.AttrOutput().StartAbstractNumbering((index + 1) & 0xffff);
+    const rule = owner.m_pUsedNumTable[index] as SwNumRule | null;
+    if (rule === null) continue;
+    output.StartAbstractNumbering((index + 1) & 0xffff);
     for (let level = 0; level < (rule.IsContinusNum() ? 1 : 9); ++level)
       NumberingLevel(owner, rule, level);
-    owner.AttrOutput().EndAbstractNumbering();
+    output.EndAbstractNumbering();
   }
 }
-/** Source common instance traversal; native override entries are unsupported by RTF and are never created by this owner. @param owner - Actual exporter. @returns Nothing. */
-export function NumberingDefinitions(owner: RtfExport): void {
+/** Source common instance traversal including original null slots; the current RTF base sink diagnoses unsupported override output. @param owner - Actual exporter. @returns Nothing. */
+export function NumberingDefinitions(owner: RtfExport | DocxExport): void {
   if (owner.m_pUsedNumTable === undefined) return;
+  const output = AttrOutput(owner);
   const count = owner.m_pUsedNumTable.length & 0xffff;
-  for (let index = 0; index < count; ++index)
-    owner
-      .AttrOutput()
-      .NumberingDefinition((index + 1) & 0xffff, owner.m_pUsedNumTable[index] as SwNumRule);
+  for (let index = 0; index < count; ++index) {
+    const rule = owner.m_pUsedNumTable[index];
+    if (rule != null) output.NumberingDefinition((index + 1) & 0xffff, rule);
+    else {
+      const mapping = owner.m_OverridingNums.get(index);
+      if (mapping === undefined) throw new Error("assert(numbering override mapping)");
+      const existing = owner.m_pUsedNumTable[mapping[0]];
+      if (existing == null) throw new Error("assert(existing numbering rule)");
+      let levels = owner.m_ListLevelOverrides.get(index);
+      if (levels === undefined) {
+        levels = new Map();
+        owner.m_ListLevelOverrides.set(index, levels);
+      }
+      output.OverrideNumberingDefinition(
+        existing,
+        (index + 1) & 0xffff,
+        (mapping[1] + 1) & 0xffff,
+        levels,
+      );
+    }
+  }
 }
 /** Native legacy Word first-line conversion, including right-aligned distance and signed16 overflow. @param format - Original level. @returns Signed16 offset. */
 export function GetWordFirstLineOffset(format: ConstSwNumFormat): number {
@@ -103,7 +128,11 @@ export function GetWordFirstLineOffset(format: ConstSwNumFormat): number {
   );
 }
 /** Original Word level preparation uses actual format/style owners and fixed nine-byte positions, retaining native separator suppression and scalar narrowing. @param owner - Actual exporter. @param rule - Original rule. @param level - Word level. @returns Nothing. */
-export function NumberingLevel(owner: RtfExport, rule: SwNumRule, level: number): void {
+export function NumberingLevel(
+  owner: RtfExport | DocxExport,
+  rule: SwNumRule,
+  level: number,
+): void {
   const positions = new Uint8Array(9);
   const format = rule.Get(level);
   const type = format.GetNumberingType();
@@ -184,28 +213,27 @@ export function NumberingLevel(owner: RtfExport, rule: SwNumRule, level: number)
       firstLine = (format.GetFirstLineIndent() << 16) >> 16;
       tab = format.GetLabelFollowedBy() === "listtab" ? (format.GetListtabPos() << 16) >> 16 : 0;
     }
-    owner
-      .AttrOutput()
-      .NumberingLevel(
-        level,
-        format.GetStart(),
-        type,
-        format.GetNumAdjust(),
-        positions,
-        follow,
-        font,
-        items,
-        indent,
-        firstLine,
-        tab,
-        text,
-        format.GetIsLegal(),
-      );
+    AttrOutput(owner).NumberingLevel(
+      level,
+      format.GetStart(),
+      type,
+      format.GetNumAdjust(),
+      positions,
+      follow,
+      font,
+      items,
+      indent,
+      firstLine,
+      tab,
+      text,
+      format.GetIsLegal(),
+    );
   } finally {
     set.Dispose();
   }
 }
 import type { RtfExport } from "./rtfexport";
+import type { DocxExport } from "./docxexport";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SvxAdjust } from "../../../../editeng/inc/svxenum";
 import {
@@ -234,6 +262,53 @@ export function DuplicateNumRuleImpl(owner: MSWordExportBase, rule: SwNumRule): 
   for (let level = 0; level < 10; ++level) copy.Set(level, rule.Get(level));
   return copy;
 }
+/** Original cache gives each nondefault SwList one abstract definition without merging IDs. @param owner - Actual export owner. @param listId - List identity. @param rule - Abstract rule. @returns Unsigned16 abstract ID. */
+export function DuplicateAbsNum(owner: MSWordExportBase, listId: string, rule: SwNumRule): number {
+  const existing = owner.m_Lists.get(listId);
+  if (existing !== undefined) return existing & 0xffff;
+  owner.DuplicateNumRuleImpl(rule);
+  const index = (owner.m_pUsedNumTable as (SwNumRule | null)[]).length - 1;
+  owner.m_Lists.set(listId, index);
+  return index & 0xffff;
+}
+/** Original override always appends a distinct null placeholder and increments the temporary-rule counter. @param owner - Actual export owner. @param rule - Existing rule. @param listId - Actual list identity. @param abstract - Abstract rule. @returns Unsigned16 instance ID. */
+export function OverrideNumRule(
+  owner: MSWordExportBase,
+  rule: SwNumRule,
+  listId: string,
+  abstract: SwNumRule,
+): number {
+  const definition = owner.GetNumberingId(rule),
+    abstractDefinition =
+      listId === abstract.GetDefaultListId()
+        ? owner.GetNumberingId(abstract)
+        : owner.DuplicateAbsNum(listId, abstract);
+  const table = owner.m_pUsedNumTable as (SwNumRule | null)[],
+    index = table.length;
+  if (!owner.m_OverridingNums.has(index))
+    owner.m_OverridingNums.set(index, [definition, abstractDefinition]);
+  table.push(null);
+  owner.m_nUniqueList = (owner.m_nUniqueList + 1) & 0xffff;
+  return index & 0xffff;
+}
+/** Original map subscript creates the nested owner; subsequent assignments replace the same level. @param owner - Actual export owner. @param id - Instance ID. @param level - Writer level. @param start - Restart value. @returns Nothing. */
+export function AddListLevelOverride(
+  owner: MSWordExportBase,
+  id: number,
+  level: number,
+  start: number,
+): void {
+  id &= 0xffff;
+  level &= 0xffff;
+  start &= 0xffff;
+  let overrides = owner.m_ListLevelOverrides.get(id);
+  if (overrides === undefined) {
+    overrides = new Map();
+    owner.m_ListLevelOverrides.set(id, overrides);
+  }
+  overrides.set(level, start);
+}
+
 /** Original restart copy uses a temporary SwNumFormat whose client registration is released after Set copies it. @param owner - Actual exporter. @param rule - Actual rule. @param level - Unsigned8 Writer level. @param start - Unsigned16 value. @returns Zero-based numbering ID. */
 export function DuplicateNumRule(
   owner: MSWordExportBase,

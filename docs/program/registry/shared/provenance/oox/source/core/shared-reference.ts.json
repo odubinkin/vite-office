@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "status": "local-only",
+    "localPath": "apps/office/src/oox/source/core/shared-reference.ts",
+    "rationale": "Compiler binding for consumed original std::shared_ptr control blocks of actual native Relations/FragmentBaseData, following existing explicit source-native shared-pointer lowering patterns. Callers supply actual new concrete values; no type/default/payload constructor/provider is generated. Empty/copy/move/assign/reset/get/use_count and last-owner actual destructor are explicit within one synchronous realm, with pointer replacement before last old-value destruction. Native atomic/control-block/weak/aliasing/raw-adoption-failure/physical ABI remain unqualified. Native actual relation/path retained copies and context sharing test concrete consumed values, not a fake destructor/provider.",
+    "responsibilities": [
+      "Compiler binding for consumed original std::shared_ptr control blocks of actual native Relations/FragmentBaseData, following existing explicit source-native shared-pointer lowering patterns. Callers supply actual new concrete values; no type/default/payload constructor/provider is generated. Empty/copy/move/assign/reset/get/use_count and last-owner actual destructor are explicit within one synchronous realm, with pointer replacement before last old-value destruction. Native atomic/control-block/weak/aliasing/raw-adoption-failure/physical ABI remain unqualified. Native actual relation/path retained copies and context sharing test concrete consumed values, not a fake destructor/provider."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Core standard-library ownership lowering requires explicit lifetime in TypeScript; no browser API, adapter or replacement platform ownership service is introduced."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/core/shared-reference.ts",
+          "marker": "SharedReference"
+        }
+      ]
+    }
+  }
+}

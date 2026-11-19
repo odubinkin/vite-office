@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/zipapi/ZipOutputStream.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-zip-output",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/source/zipapi/ZipOutputStream.ts",
+        "apps/office/src/package/source/zipapi/ZipOutputStream.test.ts",
+        "apps/office/src/oox/source/core/xmlfilterbase.test.ts"
+      ],
+      "justification": "Owns plain local and central headers, descriptors and ZIP64 extra fields. Retains the original entry task, temporary-file replay, package-member update and exception_ptr ownership. The browser explicitly selects the source no-worker pool, draining to the queue bound before adding the next task and preserving reverse final replay. Task failures are rethrown after the central directory and END.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ZipOutputStream",
+        "getTruncated"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/zipapi/ZipOutputStream.cxx",
+      "upstreamSymbols": [
+        "ZipOutputStream",
+        "writeLOC",
+        "writeCEN",
+        "getTruncated",
+        "ZipOutputStream::consumeScheduledThreadTaskEntry",
+        "ZipOutputStream::finish"
+      ]
+    }
+  }
+}

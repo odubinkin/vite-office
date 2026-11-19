@@ -1,0 +1,78 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-0bd8dbed-cf13-4f40-b485-2378f8fa865b",
+    "capabilityId": "CAP-0bd8dbed-cf13-4f40-b485-2378f8fa865b",
+    "suite": "shared",
+    "subsystem": "oox-filter-state",
+    "type": "model",
+    "maturity": "mapped",
+    "assertions": [
+      "Original represented filter state defaults, context admission and exact URL recursion guard are implemented over actual UNO/RTL/native mutex owners."
+    ],
+    "capability": "Original OOXML filter state and recursion guard prerequisites",
+    "gaps": [
+      "Complete model/factory admission, FilterBase component and helper/storage/media/filter/UI orchestration remain unfinished."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "oox/source/core/filterbase.cxx",
+          "marker": "DocumentOpenedGuard"
+        }
+      ],
+      "tests": [
+        {
+          "path": "oox/qa/unit/mathml.cxx",
+          "marker": "testImportMce"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/oox/core/filterbase.hxx",
+          "marker": "OoxmlVersion"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/oox/inc/core/filterbase.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/filterbase.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/oox/source/core/filterbase.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/oox-filter-state.md",
+          "marker": "# OOXML filter state prerequisites"
+        }
+      ]
+    },
+    "implemented": false,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Existing JS Map binds exact native set membership while actual RTL/UNO values and compiled native mutexes own represented state. Physical native layout/allocator/cross-realm thread domains and complete filter orchestration remain unqualified."
+    },
+    "scopeLimitations": [
+      "Complete model/factory admission, FilterBase component and helper/storage/media/filter/UI orchestration remain unfinished.",
+      "No direct original guard/PImpl test found in bounded source QA searches. testImportMce is unexecuted downstream filter context, not a direct test or original fixture replay."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "oox-filter-state-and-url-guard"
+  }
+}

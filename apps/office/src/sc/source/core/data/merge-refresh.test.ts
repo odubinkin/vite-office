@@ -2,7 +2,7 @@
 import { expect, it } from "vitest";
 import type { ScTable } from "../../../inc/table";
 import { ScDocument } from "../../../inc/document";
-import { ScAddress } from "../../../inc/address";
+import { ScAddress, ScRange } from "../../../inc/address";
 import { ScPatternAttr } from "../../../inc/patattr";
 import { ScMF, ScMergeAttr, ScMergeFlagAttr } from "../../../inc/attrib";
 import { ATTR_MERGE_FLAG } from "../../../inc/scitems";
@@ -94,4 +94,33 @@ it("refreshes horizontal vertical and rectangular merges and clears orphan filte
   expect(doc.ExtendMerge(-1, 0, [0], [0], 0, true)).toBe(false);
   pattern.Dispose();
   doc.Dispose();
+});
+
+it("expands overlap and merge bounds across different sheets without moving the sheet endpoints", /** Tests original x/y-only extension against real merge attributes and sparse sheet bounds. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  const firstName = unicode("First"),
+    secondName = unicode("Second");
+  try {
+    doc.InsertTab(0, firstName);
+    doc.InsertTab(1, secondName);
+    doc.FetchTable(0)?.SetMergedCells(1, 2, 3, 4);
+    doc.FetchTable(1)?.SetMergedCells(3, 3, 5, 6);
+    expect(doc.SkipOverlapped(3, 4, 0)).toEqual([1, 2]);
+    expect(doc.SkipOverlapped(3, 4, 1)).toEqual([3, 3]);
+    expect(doc.SkipOverlapped(3, 4, 2)).toEqual([3, 4]);
+
+    const invalid = new ScRange(-1, 4, 0);
+    doc.ExtendOverlapped(invalid);
+    expect(invalid.aStart.GetVars()).toEqual([-1, 4, 0]);
+    const range = new ScRange(3, 4, 1, 4, 5, 0);
+    doc.ExtendOverlapped(range);
+    expect(range.aStart.GetVars()).toEqual([1, 2, 1]);
+    expect(doc.ExtendMergeRange(range)).toBe(true);
+    expect(range.aEnd.GetVars()).toEqual([5, 6, 0]);
+    expect(doc.ExtendMergeRange(new ScRange(0, 0, 2))).toBe(false);
+  } finally {
+    firstName.dispose();
+    secondName.dispose();
+    doc.Dispose();
+  }
 });

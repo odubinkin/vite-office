@@ -1,4 +1,5 @@
 /** @fileoverview Implements the represented native SvxBorderLine value and width arithmetic. */
+import { ComplexColor } from "../../../docmodel/inc/color/ComplexColor";
 import { BorderLineStyle } from "../../../offapi/com/sun/star/table/BorderLineStyle";
 import { BorderWidthImpl } from "../../../svtools/source/control/ctrlbox";
 import { Color, ColorTransparency } from "../../../tools/inc/color";
@@ -106,6 +107,7 @@ export interface BorderLineRecord {
 /** Owns a native line independently of any CSS serialization. */
 export class SvxBorderLine {
   private readonly color = new Color();
+  private readonly complexColor = new ComplexColor();
   private scale = 1;
   private mirror = false;
   private useLeftTop = false;
@@ -164,6 +166,15 @@ export class SvxBorderLine {
   /** Changes final native color. @param color - Native color copied into this owner. @returns Nothing. */
   public SetColor(color: Readonly<Color>): void {
     this.color.assign(color);
+  }
+  /** Borrows the original complex color while synchronizing its final RGB. @returns Owned metadata. */
+  public getComplexColor(): Readonly<ComplexColor> {
+    this.complexColor.setFinalColor(this.color);
+    return this.complexColor;
+  }
+  /** Copies the original complex color metadata independently of resolved RGB. @param value - Native color. @returns Nothing. */
+  public setComplexColor(value: Readonly<ComplexColor>): void {
+    this.complexColor.assign(value);
   }
   /** Reads authored total width before metric scaling. @returns Twips. */
   public GetWidth(): number {
@@ -265,12 +276,14 @@ export class SvxBorderLine {
     line.mirror = this.mirror;
     line.useLeftTop = this.useLeftTop;
     line.implementation = this.implementation.Clone();
+    line.complexColor.assign(this.complexColor);
     return line;
   }
   /** Compares represented native fields; native equality does not compare scale. @param other - Candidate. @returns Whether equal. */
   public equals(other: SvxBorderLine): boolean {
     return (
       this.color.equals(other.color) &&
+      this.complexColor.equals(other.complexColor) &&
       this.width === other.width &&
       this.style === other.style &&
       this.mirror === other.mirror &&

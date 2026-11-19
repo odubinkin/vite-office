@@ -93,7 +93,7 @@ export abstract class WeakImplHelper extends OWeakObject implements XTypeProvide
 }
 
 /** Erased complete native BaseClass constructor; actual argument tuples are retained by specialize. */
-type InheritanceBase = new (...args: never[]) => OWeakObject & XTypeProvider;
+type InheritanceBase = abstract new (...args: never[]) => OWeakObject & XTypeProvider;
 /** Exact native BaseClass and ordered interface template arguments. */
 interface InheritanceSpecialization {
   readonly base: InheritanceBase;

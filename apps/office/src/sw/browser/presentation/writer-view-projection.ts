@@ -8,7 +8,8 @@ import {
 } from "../../source/core/attr/swatrset";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
 import { SvxEscapementItem } from "../../../editeng/inc/escapementitem";
-import { RES_CHRATR_ESCAPEMENT } from "../../inc/hintids";
+import { SvxKerningItem } from "../../../editeng/inc/kernitem";
+import { RES_CHRATR_ESCAPEMENT, RES_CHRATR_KERNING } from "../../inc/hintids";
 
 import { SvxCrossedOutItem } from "../../../editeng/inc/crossedoutitem";
 import { RES_CHRATR_CROSSEDOUT } from "../../inc/hintids";
@@ -145,6 +146,7 @@ export interface WriterTextPortion {
     fontFamily?: string;
     fontFamilyGeneric?: string;
     fontSizeTwips?: number;
+    kerningTwips?: number;
   }>;
   readonly hyperlink?: Readonly<{ url: string; targetFrame?: string }>;
   readonly startOffset: number;
@@ -748,6 +750,9 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
                   handler.ReadItem(RES_CHRATR_FONTSIZE) as SvxFontHeightItem
                 ).GetHeight(),
               }
+            : {}),
+          ...(authored(RES_CHRATR_KERNING)
+            ? { kerningTwips: (handler.ReadItem(RES_CHRATR_KERNING) as SvxKerningItem).GetValue() }
             : {}),
         }),
         ...(link === undefined

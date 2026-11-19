@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/inc/xlstring.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/inc/xlstring.hxx",
+    "localSymbols": [
+      "XclStrFlags",
+      "XclFormatRun",
+      "EXC_STR_MAXLEN"
+    ],
+    "upstreamSymbols": [
+      "XclStrFlags",
+      "XclFormatRun",
+      "EXC_STR_MAXLEN"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/inc/xlstring.ts",
+          "marker": "XclStrFlags"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xestring.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/inc/xlstring.hxx",
+          "marker": "XclStrFlags"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "J0Z0KF export-string checkpoint ports original XclExpString value construction/assignment/append, actual SAL byte conversion, UTF16 and byte limits, sticky Unicode/LF flags, formatting-run limits/deduplication, hashes/comparisons and memory header/buffer output. XclXmlUtils accepts the actual value and delegates to its Unicode vector, including original empty-vector behavior in byte mode. Actual ZIP/XML text emission is tested. Native record-stream Write/PrepareWrite and their NoHeader state, full XclExpXmlStream/root/font-rich output, diagnostics/invalid pointer domains and full XLSX workbook/UI acceptance remain unported or unqualified; no fake stream/font/global provider is supplied. CALC682 records original mixed-mode ordering assumptions. Existing Uint8Array UTF8 transport remains explicit; JS owns physical vectors."
+    ],
+    "omittedResponsibilities": [
+      "Native record/XML stream and font/root orchestration, whole workbook/filter/UI traversal, source diagnostics and invalid native pointer/index domains remain unported or unqualified."
+    ]
+  }
+}

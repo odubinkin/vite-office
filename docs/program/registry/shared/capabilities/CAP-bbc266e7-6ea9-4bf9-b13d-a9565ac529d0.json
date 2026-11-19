@@ -1,0 +1,82 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-bbc266e7-6ea9-4bf9-b13d-a9565ac529d0",
+    "capabilityId": "CAP-bbc266e7-6ea9-4bf9-b13d-a9565ac529d0",
+    "suite": "shared",
+    "subsystem": "native-writable-child-commit",
+    "type": "model",
+    "maturity": "mapped",
+    "assertions": [
+      "An inserted or replaced stream reaches the actual archive through the native package factory.",
+      "Revert restores the displaced persisted element."
+    ],
+    "capability": "Native writable child cache and storage commit",
+    "gaps": [
+      "Original nonencrypted truncate cache, property copying, factory replacement and flushed insertion are connected to the native storage catalog and actual package. Public writable wrappers, PACKAGE encryption, nontruncate materialization, relationships and document UI remain unfinished."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "package/source/xstor/owriteablestream.cxx",
+          "marker": "OWriteStream_Impl::Commit"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage_Impl::InsertStream"
+        }
+      ],
+      "tests": [
+        {
+          "path": "package/qa/ofopxmlstorages/Test01.java",
+          "marker": "StorageFactory"
+        }
+      ],
+      "docs": [
+        {
+          "path": "package/inc/ZipPackage.hxx",
+          "marker": "enum InitialisationMode"
+        },
+        {
+          "path": "offapi/com/sun/star/embed/UseBackupException.idl",
+          "marker": "TemporaryFileURL"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/package/source/xstor/owriteablestream.ts",
+          "marker": "OWriteStream_Impl"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.impl.test.ts",
+          "marker": "attaches newly written children"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-writable-child-commit.md",
+          "marker": "# Native writable child commit"
+        }
+      ]
+    },
+    "implemented": false,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Represented original fields and generated UNO/RTL/native mutex owners use existing host storage while native physical ABI/allocator/thread and full package/stream services remain unqualified."
+    },
+    "scopeLimitations": [
+      "Original nonencrypted truncate cache, property copying, factory replacement and flushed insertion are connected to the native storage catalog and actual package. Public writable wrappers, PACKAGE encryption, nontruncate materialization, relationships and document UI remain unfinished."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "writable-child-stream-commit"
+  }
+}

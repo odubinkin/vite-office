@@ -174,3 +174,30 @@ export function TrueFrameDirection(
 ): SvxFrameDirection {
   return GetFlyFrameDirection(format)?.GetValue() ?? owner.GetCurrentPageDirection();
 }
+import { RTL_TEXTENCODING_ASCII_US } from "../../../../sal/inc/rtl/textenc";
+import { DecodeMechanism, EncodeMechanism, Part } from "../../../../tools/inc/urlobj";
+import {
+  appendUCS4,
+  decode,
+  decodeUnambiguous,
+  getUTF32,
+} from "../../../../tools/source/fsys/urlobj";
+
+/** Original bookmark output URI encoding, with Unicode letters allowed. @param name - Writer bookmark. @returns Word spelling before length normalization. */
+export function EncodeBookmarkName(name: string): string {
+  const cursor = { text: name.replaceAll(" ", "_"), index: 0, end: name.length };
+  let encoded = "";
+  while (cursor.index < cursor.end)
+    encoded += appendUCS4(
+      getUTF32(cursor, EncodeMechanism.All, RTL_TEXTENCODING_ASCII_US),
+      Part.PART_REL_SEGMENT_EXTRA,
+      RTL_TEXTENCODING_ASCII_US,
+      false,
+    );
+  return decodeUnambiguous(encoded);
+}
+
+/** Original bookmark reference decoding uses the ASCII URI charset. @param name - Reference spelling. @returns Writer bookmark lookup value. */
+export function BookmarkToWriter(name: string): string {
+  return decode(name, DecodeMechanism.Unambiguous, RTL_TEXTENCODING_ASCII_US);
+}

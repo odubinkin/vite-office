@@ -20,9 +20,10 @@
         "apps/office/src/xmloff/source/core/DocumentSettingsContext.ts#XMLDocumentSettingsContext",
         "vendor/libreoffice-reference/xmloff/source/core/DocumentSettingsContext.cxx#XMLDocumentSettingsContext::createFastChildContext",
         "apps/office/src/sw/source/filter/xml/native-rtf-tab-settings-roundtrip.test.ts",
-        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx"
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+        "apps/office/src/xmloff/source/core/DocumentSettingsContext.test.ts"
       ],
-      "justification": "Resolves the original namespace-qualified ODF configuration set and converts represented boolean values through native PropertyValue. View and document-specific setting groups, nested maps and nonboolean values are unrepresented.",
+      "justification": "Resolves the original namespace-qualified configuration and view groups. The indexed Views property retains typed string entries in order, independently of boolean configuration properties. Document-specific settings, named maps, and additional property types remain outside the represented groups.",
       "knownViolations": [],
       "localSymbols": [
         "XMLDocumentSettingsContext"
@@ -30,7 +31,8 @@
       "sourceResponsibility": "unverified",
       "upstreamFile": "xmloff/source/core/DocumentSettingsContext.cxx",
       "upstreamSymbols": [
-        "XMLDocumentSettingsContext::createFastChildContext"
+        "XMLDocumentSettingsContext::createFastChildContext",
+        "XMLDocumentSettingsContext::endFastElement"
       ]
     }
   }

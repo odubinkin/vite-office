@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/style/XMLThemeContext.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "complex-color",
+    "capabilityIds": [
+      "CAP-ac5762ac-bc03-420d-9c26-d4581abbe2fa"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/xmloff/source/style/XMLThemeContext.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.theme.test.ts",
+        "apps/office/src/sc/source/filter/xml/ods-native-colors.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/style/XMLThemeContext.cxx",
+        "vendor/libreoffice-reference/xmloff/source/style/XMLThemeContext.cxx",
+        "vendor/libreoffice-reference/xmloff/source/core/xmlexp.cxx"
+      ],
+      "justification": "Reads and writes ODF names and indexed theme colors using actual document-model palettes and the shared ODF converter. The consumed format binding supplies the model install callback in place of the unported UNO theme property setter.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XMLThemeContext",
+        "ExportThemeElement"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "xmloff/source/style/XMLThemeContext.cxx",
+      "upstreamSymbols": [
+        "XMLThemeContext::createFastChildContext",
+        "XMLThemeColorsContext::createFastChildContext"
+      ]
+    }
+  }
+}

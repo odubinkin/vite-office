@@ -1,0 +1,78 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/TextEffectsHandler.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source ownership and consumed native contracts are retained; host references, immutable XML/URI UTF16 fields and asynchronous ZIP transport bind browser execution around actual existing typed Any/OUString/PropertyValue owners."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/TextEffectsHandler.ts",
+          "marker": "attribute"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.theme.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.typography.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/dmapper/TextEffectsHandler.cxx",
+          "marker": "lcl_attribute"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/TextEffectsHandler.cxx",
+          "marker": "getInteropGrabBag"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/TextEffectsHandler.cxx",
+          "marker": "getLigaturesString"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/TextEffectsHandler.cxx",
+          "marker": "getNumFormString"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/TextEffectsHandler.cxx",
+          "marker": "getNumSpacingString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TextEffectsHandler.cxx",
+          "marker": "LN_CT_StyleSet_id"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper.cxx",
+          "marker": "LN_cntxtAlts_cntxtAlts"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/writerfilter/dmapper/TextEffectsHandler.cxx",
+    "localSymbols": [
+      "attribute",
+      "getInteropGrabBag"
+    ],
+    "upstreamSymbols": [
+      "lcl_attribute",
+      "getInteropGrabBag",
+      "getLigaturesString",
+      "getNumFormString",
+      "getNumSpacingString"
+    ],
+    "preservedResponsibilities": [
+      "Consumes source-native ligature, number form and number spacing resources. Stores the nested UNO PropertyValue/Sequence in the original character interoperability item.",
+      "Carries the native ordered styleSet children with signed ID and string toggle attributes. Contextual alternatives use the original scalar SPRM fallback documented in WRITER-653."
+    ],
+    "omittedResponsibilities": [
+      "The consumed character typography uses the original three scalar effects. Other Word drawing effects and full Writer parity remain in progress."
+    ]
+  }
+}

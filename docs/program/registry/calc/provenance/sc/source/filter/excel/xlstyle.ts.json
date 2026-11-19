@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/excel/xlstyle.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/excel/xlstyle.cxx",
+    "localSymbols": [
+      "XclFontData",
+      "FillFromVclFont",
+      "FillFromSvxFont"
+    ],
+    "upstreamSymbols": [
+      "XclFontData::Clear",
+      "XclFontData::GetApiFamily",
+      "XclFontData::FillFromVclFont",
+      "XclFontData::FillFromSvxFont"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xlstyle.ts",
+          "marker": "XclFontData"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xlstyle.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xlstyle.fonts.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xlstyle.cxx",
+          "marker": "XclFontData::Clear"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "J0Z0KF font-data/export checkpoint ports actual XclFontData default/copy/reset, original scalar/native/API conversions, equality excluding style, charset/weight owners and complete consumed WriteFontData XML ordering. Source Windows/VCL API-family mismatch and retained complex-color state after Clear remain unchanged (CALC683/CALC684). Theme permutation and last-LumMod/LumOff tint conversion use genuine ComplexColor. OString number(double) uses the new original byte C facade over the existing actual formatter/SAL byte owners. Native VCL/SVX font extraction constructors, XclExpFont/FontBuffer/root integration and complete rich-string/workbook/filter/UI output remain unported; no replacement font/root provider is supplied.",
+      "J0Z0KF font extraction checkpoint implements both original VCL/SVX XclFontData constructors and FillFromVclFont/FillFromSvxFont over actual existing Font/SvxFont and ComplexColor owners. Source VCL Clear-before-fill and direct SVX construction, explicit erased base-reference selection, stored const font getters, style clearing, upper-capped twip height, complete complex-color copying and SVX escapement are preserved. XclTools::GetXclFontName uses actual GetSubsFontName ONLYONE|MS with original full-list fallback and owned return values. No placeholder font/locale/configuration provider or DTO is introduced. Genuine XclExpFont/FontBuffer/root and complete rich-string/workbook/filter/UI integration remain unfinished; underlying VCL rendering/ABI domains retain their existing unqualified boundaries."
+    ],
+    "omittedResponsibilities": [
+      "Full native font/root/workbook/filter/UI and physical native ABI/invalid-domain parity remain unported or unqualified."
+    ]
+  }
+}

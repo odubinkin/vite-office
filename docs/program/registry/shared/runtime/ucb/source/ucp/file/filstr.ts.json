@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/ucb/source/ucp/file/filstr.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-file-ucp-streams",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f",
+      "CAP-6ebb6661-ebeb-41ed-b8d6-04280a3b80b4"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/ucb/source/ucp/file/filstr.ts",
+        "apps/office/src/ucb/source/ucp/file/native-file-streams.test.ts",
+        "scripts/fixtures/native-ucb-file-stream-probe.ts"
+      ],
+      "justification": "Original complete XStream/XSeekable/XInputStream/XOutputStream/XTruncate/XAsyncOutputMonitor and ByteReader component. Actual pinned native std::mutex protects getter-call flags; same acquired self facets share file/cursor, final called facet closes, empty write and flush remain no-ops, completion syncs only while open. Allocation-failure close without changing m_nIsOpen and original exception text/context are retained; genuine OOM/failed-close/sync-error branches remain unqualified. Actual selected OSL/MEMFS owners and public UNO references are used; no file/broker/provider substitute or host filesystem mount is introduced. Native physical ABI/allocation/OOM/thread domains, complete file-UCP provider/broker and DOCX/XLSX package/storage/model/filter/UI acceptance remain unqualified or unfinished.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XStream_impl"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "ucb/source/ucp/file/filstr.cxx",
+      "upstreamSymbols": [
+        "XStream_impl",
+        "getInputStream",
+        "getOutputStream",
+        "truncate",
+        "waitForCompletion",
+        "closeStream"
+      ]
+    }
+  }
+}

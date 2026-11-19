@@ -2,7 +2,12 @@
 import { writerTextColorValue } from "../attr/swatrset";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
-import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
+import {
+  RES_CHRATR_ESCAPEMENT,
+  RES_PARATR_LIST_AUTOFMT,
+  RES_TXTATR_CHARFMT,
+} from "../../../inc/hintids";
+import { SwFormatAutoFormat, SwFormatCharFormat } from "../txtnode/fmtatr2";
 
 import { FontStrikeout, FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import {
@@ -40,7 +45,7 @@ export interface SwNumberPortionFont {
   readonly color: string;
 }
 
-/** Resolves the represented font-construction branch of SwTextFormatter::NewNumberPortion; paragraph-mark and redline overlays remain unrepresented. @param node - Original paragraph-property owner. @returns Immutable font values for a text number/bullet portion. */
+/** Resolves the represented font-construction branch of SwTextFormatter::NewNumberPortion. @param node - Original paragraph-property owner. @returns Immutable font values for a text number/bullet portion. */
 export function resolveSwNumberPortionFont(
   node: SwTextNode,
 ): Readonly<SwNumberPortionFont> | undefined {
@@ -50,19 +55,31 @@ export function resolveSwNumberPortionFont(
   const format = (node.GetNumRule() as SwNumRule).Get(level);
   if (format.GetNumberingType() === SvxNumType.SVX_NUM_BITMAP) return undefined;
   const bullet = format.GetNumberingType() === SvxNumType.SVX_NUM_CHAR_SPECIAL;
-  const reset = !node
-    .GetDoc()
-    .GetDocumentSettingManager()
-    .get("DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT");
+  const settings = node.GetDoc().GetDocumentSettingManager();
+  const reset = !settings.get("DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT");
   const style = format.GetCharFormat()?.GetAttrSet();
-  const font = (style?.GetItemIfSet(RES_CHRATR_FONT) ??
-    node.GetAttr(RES_CHRATR_FONT)) as SvxFontItem;
-  /** Native SetDiffFnt overlays explicit character-style items after paragraph resets. @param which - Native WhichId. @param resetItem - Optional reset value. @returns Effective item. */
-  const effective =
-    /** Evaluates the txtfld callback. @param which - which value. @param resetItem - resetItem value. @returns Callback result. */ (
-      which: number,
-      resetItem?: ReturnType<SwTextNode["GetAttr"]>,
-    ) => style?.GetItemIfSet(which) ?? resetItem ?? node.GetAttr(which);
+  const autoFormat = settings.get("APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING")
+    ? node.GetAttr(RES_PARATR_LIST_AUTOFMT)
+    : undefined;
+  const marker = autoFormat instanceof SwFormatAutoFormat ? autoFormat.GetStyleHandle() : undefined;
+  const markerStyle = marker?.GetItemIfSet(RES_TXTATR_CHARFMT, false);
+  const markerStyleItems =
+    markerStyle instanceof SwFormatCharFormat
+      ? markerStyle.GetCharFormat()?.GetAttrSet()
+      : undefined;
+  /** Uses the explicit numbering style before the paragraph mark, including the mark's referenced style. @param which - Native WhichId. @param resetItem - Optional reset value. @returns Effective item. */
+  function effective(which: number, resetItem?: ReturnType<SwTextNode["GetAttr"]>) {
+    const inherited = style?.GetItemIfSet(which);
+    if (inherited || which === RES_CHRATR_UNDERLINE || which === RES_CHRATR_ESCAPEMENT)
+      return inherited ?? resetItem ?? node.GetAttr(which);
+    return (
+      marker?.GetItemIfSet(which, false) ??
+      markerStyleItems?.GetItemIfSet(which) ??
+      resetItem ??
+      node.GetAttr(which)
+    );
+  }
+  const font = effective(RES_CHRATR_FONT) as SvxFontItem;
   const bulletFont = bullet ? format.GetBulletFont() : undefined;
   const generic = bulletFont === undefined ? getFontFamilyGeneric(font.GetFamily()) : undefined;
   return Object.freeze({

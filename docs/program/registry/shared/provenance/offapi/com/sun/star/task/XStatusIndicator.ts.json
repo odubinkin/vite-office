@@ -6,7 +6,9 @@
     "status": "mapped",
     "localPath": "apps/office/src/offapi/com/sun/star/task/XStatusIndicator.ts",
     "localSymbols": [
-      "XStatusIndicator"
+      "XStatusIndicator",
+      "cppu_detail_getUnoType",
+      "getCppuType"
     ],
     "upstreamPath": "offapi/com/sun/star/task/XStatusIndicator.idl",
     "upstreamSymbols": [
@@ -14,10 +16,10 @@
       "setValue"
     ],
     "preservedResponsibilities": [
-      "Task202610251549-V4DQJW ports original OOXMLFastContextHandlerTable and PropertyTable plus required Stream.table delivery, retaining original resource enums, pending-child collection order, table-vector cloning and property-table set cloning. Table forwarding requires forward-events and nonzero ID; PropertyTable callback remains unconditional and precedes endAction. EG_RPrBase is admitted through unchanged pinned generators with original IDs, yielding59 attributes/282 elements/304 resources/82 lists/25 actions. Real committed ZIP bytes, relationship-selected styles streams, actual OOXMLDocument note/target state, shared SAX, Strict/Transitional namespaces and MCE choices produce ordered style/default resource sets. Native status callback declaration and original zero-initialized note/progress owner fields are represented; no full OOXMLDocument.resolve, graphics/DOM/substream orchestration or model-statistics initialization is advertised. DomainMapper resource-table application, stylesheet finalization, section/table/list managers, document import/export dispatch and existing UI admission remain unported or unverified. No module/capability/default/parity or UI readiness promotion."
+      "Complete original XStatusIndicator declaration now inherits actual XInterface and includes normal generated type registration through existing CPPU. No concrete progress component or full filter/UI orchestration is supplied."
     ],
     "omittedResponsibilities": [
-      "Full document resolve, shape/DOM/substream/model-statistics ownership and runtime UNO service/type registration remain unported; the status file is only the native callback declaration."
+      "Concrete status indicator implementation and complete document/filter/UI orchestration remain unported."
     ],
     "evidence": {
       "local": [
@@ -27,6 +29,10 @@
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/task/XStatusIndicator.test.ts",
           "marker": "@fileoverview"
         }
       ],

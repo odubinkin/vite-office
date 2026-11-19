@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/unocore/SwXTextDefaults.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "writer-import-api",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/unocore/SwXTextDefaults.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.default-tabs.test.ts",
+        "apps/office/e2e/writer-docx-theme.spec.ts"
+      ],
+      "justification": "Reads and writes the consumed TabStopDistance member through the original text-default property schema and a cloned native pool item. Preserves the upstream PutValue result handling.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwXTextDefaults"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/core/unocore/SwXTextDefaults.cxx",
+      "upstreamSymbols": [
+        "SwXTextDefaults"
+      ]
+    }
+  }
+}

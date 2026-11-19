@@ -237,22 +237,28 @@ export class SwHistoryResetText extends SwHistoryHint {
   }
 }
 
-/** Native SwHistoryBookmark payload for the existing collapsed ordinary bookmark model. Expanded/typed marks and unrepresented metadata remain unsupported. */
+/** Native history payload for ordinary Writer bookmark endpoints. */
 export class SwHistoryBookmark extends SwHistoryHint {
   private readonly m_aName: string;
   private readonly m_nNode: number;
   private readonly m_nContent: number;
-  /** Saves original numeric/name identity rather than retaining a disposed mark or registered position. @param bookmark - Existing ordinary collapsed mark. @param m_bSavePos - Whether capture its position. @param saveOtherPos - Expanded-end capture, unsupported by the represented model. @returns History entry. */
+  private readonly other: Readonly<{ node: number; content: number }> | undefined;
+  private readonly hadOther: boolean;
+  /** Saves requested native endpoints without retaining registered positions. @param bookmark - Existing mark. @param m_bSavePos - Save primary position. @param saveOtherPos - Save second position. @returns History entry. */
   public constructor(
     bookmark: SwBookmark,
     private readonly m_bSavePos: boolean,
     saveOtherPos: boolean,
   ) {
     super(HISTORY_HINT.HSTRY_BOOKMARK);
-    if (saveOtherPos) throw new Error("Writer expanded bookmark history is not implemented.");
     this.m_aName = bookmark.GetName();
     this.m_nNode = m_bSavePos ? bookmark.GetMarkPos().GetNodeIndex() : 0;
     this.m_nContent = m_bSavePos ? bookmark.GetMarkPos().GetContentIndex() : 0;
+    this.hadOther = bookmark.IsExpanded();
+    if (saveOtherPos) {
+      const position = bookmark.GetOtherMarkPos();
+      this.other = { node: position.GetNodeIndex(), content: position.GetContentIndex() };
+    }
   }
   /** Original name/node/content comparison. @param bookmark - Current mark. @returns Whether the saved identity agrees. */
   public IsEqualBookmark(bookmark: SwBookmark): boolean {
@@ -282,9 +288,19 @@ export class SwHistoryBookmark extends SwHistoryHint {
         range = new SwPaM(position);
       position.Dispose();
       try {
+        if (this.other) {
+          const other = doc.GetNodes().at(this.other.node);
+          if (!(other instanceof SwTextNode)) return;
+          range.SetMark();
+          range.GetMark().Assign(other, this.other.content);
+        } else if (this.hadOther) {
+          if (!mark?.IsExpanded())
+            throw new Error("Writer unsaved bookmark end requires an existing range.");
+          range.SetMark();
+          range.GetMark().Assign(mark.GetOtherMarkPos());
+        }
         if (mark !== undefined) access.DeleteMark(this.m_aName);
-        const point = range.GetPoint();
-        access.MakeMark(point.GetNode() as SwTextNode, point.GetContentIndex(), this.m_aName);
+        access.MakeBookmark(range, this.m_aName);
       } finally {
         range.Dispose();
       }

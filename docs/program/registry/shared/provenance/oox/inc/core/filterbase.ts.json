@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/oox/inc/core/filterbase.ts",
+    "status": "mapped",
+    "upstreamPath": "include/oox/core/filterbase.hxx",
+    "localSymbols": [
+      "OoxmlVersion"
+    ],
+    "upstreamSymbols": [
+      "OoxmlVersion"
+    ],
+    "preservedResponsibilities": [
+      "Original two OoxmlVersion ordinals; full FilterBase declaration and component remain unported."
+    ],
+    "omittedResponsibilities": [
+      "Complete FilterBase services/model/factory/media/storage/helper orchestration and physical native thread/allocator/ABI remain unqualified or unfinished."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/inc/core/filterbase.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/filterbase.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/oox/core/filterbase.hxx",
+          "marker": "OoxmlVersion"
+        }
+      ]
+    }
+  }
+}

@@ -21,7 +21,13 @@ import { XMLTextFrameContext } from "./XMLTextFrameContext";
 import { XMLTextListBlockContext } from "./XMLTextListBlockContext";
 
 /** Native text import locations represented by the current body/table slice. */
-export type XMLTextType = "Body" | "Cell" | "TextBox";
+export type XMLTextType = "Body" | "Cell" | "TextBox" | "HeaderFooter";
+
+/** One native named style application and the direct properties from its enclosing span. */
+export interface XMLCharacterStyleLayer {
+  readonly name: string;
+  readonly precedingProperties: OdfCharacterProperties;
+}
 
 /** Original pending ranged character and link properties for the current text context. */
 interface TextImportHint {
@@ -29,6 +35,7 @@ interface TextImportHint {
   end: XMLTextRange;
   properties: OdfCharacterProperties;
   hyperlink?: OdfHyperlink;
+  characterStyles: readonly XMLCharacterStyleLayer[];
 }
 
 /** One native text import owner keeps processed list roots across body and every cell. */
@@ -46,7 +53,7 @@ export class XMLTextImportHelper {
   private hints: TextImportHint[] = [];
   private bookmarkStarts = new Map<string, XMLTextRange>();
   private readonly frameContexts: {
-    cursor: XMLTextCursor;
+    cursor: XMLTextCursor | undefined;
     start: XMLTextRange | undefined;
     applyParagraph: ((cursor: XMLTextCursor) => void) | undefined;
     hints: TextImportHint[];
@@ -56,7 +63,7 @@ export class XMLTextImportHelper {
   /** Saves the original cursor, enclosing paragraph ranges and list context for a nested text frame. @param cursor - Frame text cursor. @returns Nothing. */
   public PushTextFrameCursor(cursor: XMLTextCursor): void {
     this.frameContexts.push({
-      cursor: this.GetCursor(),
+      cursor: this.cursor,
       start: this.start,
       applyParagraph: this.applyParagraph,
       hints: this.hints,
@@ -112,7 +119,7 @@ export class XMLTextImportHelper {
     for (const start of this.bookmarkStarts.values()) start.dispose();
     this.bookmarkStarts.clear();
   }
-  /** Starts XMLParaContext's range and defers paragraph properties until after its terminating break. @param style - Resolved programmatic style. @param alignment - Direct alignment. @param left - Direct text-left margin. @param paragraph - Paragraph property map. @param properties - Direct character map. @param list - Active native list state. @param listGeometryWins - Legacy parser precedence, represented by native styles/items. @param forceListRule - Explicit automatic list declaration. @returns Nothing. */
+  /** Starts a paragraph and defers its native style application until after the break. @param style - Paragraph style. @param alignment - Direct alignment. @param left - Direct margin. @param paragraph - Paragraph properties. @param properties - Direct character map. @param list - Native list state. @param listGeometryWins - Legacy parser precedence. @param forceListRule - Explicit automatic list declaration. @param markerProperties - Direct text properties of the paragraph mark. @returns Nothing. */
   public BeginParagraph(
     style: string,
     alignment: OdfParagraphAlignment | undefined,
@@ -122,6 +129,7 @@ export class XMLTextImportHelper {
     list: XMLParagraphListState | undefined,
     _listGeometryWins: boolean,
     forceListRule = false,
+    markerProperties?: Partial<OdfCharacterProperties>,
   ): void {
     this.start = this.GetCursor().getStart();
     this.applyParagraph =
@@ -130,6 +138,23 @@ export class XMLTextImportHelper {
       ) => {
         this.SetStyleAndAttrs(cursor, style, list, forceListRule);
         applyTextImportProperties(cursor, properties, paragraph, alignment, left);
+        if (markerProperties) {
+          const name = xmlTextString("CharacterStyles");
+          try {
+            const family = this.model.getAutoStyles().getByName(name);
+            applyTextImportProperties(
+              cursor,
+              markerProperties,
+              {},
+              undefined,
+              undefined,
+              family,
+              "ListAutoFormat",
+            );
+          } finally {
+            name.dispose();
+          }
+        }
       };
   }
   /** Applies the original paragraph style/list API properties, preserving inherited numbering when already equal. @param cursor - Selected original paragraph. @param style - Native style identity. @param list - Active list state. @param forceListRule - Explicit automatic numbering. @returns Nothing. */
@@ -203,11 +228,12 @@ export class XMLTextImportHelper {
       string?.dispose();
     }
   }
-  /** Inserts SAX characters through XText and retains only native hint ranges, never another text model. @param characters - Parsed text. @param properties - Span property deltas. @param hyperlink - Link property deltas. @returns Nothing. */
+  /** Inserts SAX characters through XText and retains only native hint ranges, never another text model. @param characters - Parsed text. @param properties - Span property deltas. @param hyperlink - Link property deltas. @param characterStyles - Common style names in source nesting order. @returns Nothing. */
   public InsertString(
     characters: string,
     properties: OdfCharacterProperties = {},
     hyperlink?: OdfHyperlink,
+    characterStyles: readonly XMLCharacterStyleLayer[] = [],
   ): void {
     if (!characters.length) return;
     const cursor = this.GetCursor(),
@@ -215,11 +241,12 @@ export class XMLTextImportHelper {
       value = xmlTextString(characters);
     try {
       cursor.getText().insertString(cursor, value, false);
-      if (Object.keys(properties).length || hyperlink)
+      if (Object.keys(properties).length || hyperlink || characterStyles.length)
         this.hints.push({
           start,
           end: cursor.getStart(),
           properties,
+          characterStyles,
           ...(hyperlink ? { hyperlink } : {}),
         });
       else start.dispose();
@@ -232,7 +259,6 @@ export class XMLTextImportHelper {
   }
   /** Completes the paragraph through XSimpleText before applying style, automatic properties and character hints. @returns Nothing. */
   public EndParagraph(): void {
-    if (this.bookmarkStarts.size) throw new Error("ODF bookmark start has no end.");
     const cursor = this.GetCursor(),
       text = cursor.getText(),
       end = cursor.getStart(),
@@ -249,14 +275,19 @@ export class XMLTextImportHelper {
           range.gotoRange(hint.end, true);
           const familyName = xmlTextString("CharacterStyles");
           try {
-            applyTextImportProperties(
-              range,
-              hint.properties,
-              {},
-              undefined,
-              undefined,
-              this.model.getAutoStyles().getByName(familyName),
-            );
+            const family = this.model.getAutoStyles().getByName(familyName);
+            for (const style of hint.characterStyles) {
+              applyTextImportProperties(
+                range,
+                style.precedingProperties,
+                {},
+                undefined,
+                undefined,
+                family,
+              );
+              this.SetProperty(range, "CharStyleName", style.name);
+            }
+            applyTextImportProperties(range, hint.properties, {}, undefined, undefined, family);
           } finally {
             familyName.dispose();
           }
@@ -287,7 +318,11 @@ export class XMLTextImportHelper {
       this.applyParagraph = undefined;
     }
   }
-  /** Inserts the original named text-content service at a collapsed range. @param name - Bookmark name. @param range - Optional recorded collapsed start. @returns Nothing. */
+  /** Validates pending range marks after the whole text has been parsed. @returns Nothing. */
+  public FinishBookmarkRanges(): void {
+    if (this.bookmarkStarts.size) throw new Error("ODF bookmark start has no end.");
+  }
+  /** Attaches an original named text-content service. @param name - Bookmark name. @param range - Optional selected range. @returns Nothing. */
   public InsertBookmark(name: string, range: XMLTextRange = this.GetCursor()): void {
     const service = xmlTextString("com.sun.star.text.Bookmark"),
       key = xmlTextString(name);
@@ -305,20 +340,14 @@ export class XMLTextImportHelper {
     if (this.bookmarkStarts.has(name)) throw new Error(`ODF bookmark start is duplicated: ${name}`);
     this.bookmarkStarts.set(name, this.GetCursor().getStart());
   }
-  /** Completes the supported collapsed bookmark using the actual service attachment route. @param name - Bookmark name. @returns Nothing. */
+  /** Attaches an ODF bookmark to the completed live range. @param name - Bookmark name. @returns Nothing. */
   public EndBookmark(name: string): void {
     const start = this.bookmarkStarts.get(name);
     if (!start) throw new Error(`ODF bookmark end has no start: ${name}`);
     const range = this.GetCursor().getText().createTextCursorByRange(start);
     try {
       range.gotoRange(this.GetCursor(), true);
-      const value = range.getString();
-      try {
-        if (value.getLength()) throw new Error("ODF ranged bookmarks are unsupported.");
-      } finally {
-        value.dispose();
-      }
-      this.InsertBookmark(name, start);
+      this.InsertBookmark(name, range);
     } finally {
       range.dispose();
       start.dispose();

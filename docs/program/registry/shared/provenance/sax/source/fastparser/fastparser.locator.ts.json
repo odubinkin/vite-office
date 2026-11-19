@@ -1,0 +1,64 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sax/source/fastparser/fastparser.locator.ts",
+    "status": "mapped",
+    "upstreamPath": "sax/source/fastparser/fastparser.cxx",
+    "localSymbols": [
+      "FastLocatorImpl"
+    ],
+    "upstreamSymbols": [
+      "FastLocatorImpl::getColumnNumber",
+      "FastLocatorImpl::getLineNumber",
+      "FastLocatorImpl::getPublicId",
+      "FastLocatorImpl::getSystemId"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual RTL/UNO owners retain source contracts. Explicit scope destruction and counted views bind logical address storage; physical C++ ABI, native logging/mutex/allocator and complete application parity remain unqualified."
+    },
+    "preservedResponsibilities": [
+      "Original WeakImplHelper<XLocator>, raw parser borrow/invalidation/checkDispose and original getEntity/native xmlSAX2 location calls. Identifier results are actual owned OUString copies. Tests query the real UNO locator facet, parse real default C contexts, switch actual nested Entity source IDs and preserve disposed exceptions before native access. Browser main and DOM-free Worker observe real C positions and actual source identifier/string owners."
+    ],
+    "omittedResponsibilities": [
+      "Complete FastSaxParserImpl parseStream/service registration and normal document-callback handoff of its privately owned locator remain unfinished. Tests construct the actual public source locator separately and explicitly invalidate it; retained private-locator handoff is not yet runtime-qualified. Physical C++ ABI/mutex behavior and complete format/model/UI acceptance remain unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sax/source/fastparser/fastparser.locator.ts",
+          "marker": "FastLocatorImpl"
+        },
+        {
+          "path": "apps/office/src/sax/source/fastparser/fastparser.impl.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastLocatorImpl::getColumnNumber"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastLocatorImpl::getLineNumber"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastLocatorImpl::getPublicId"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastLocatorImpl::getSystemId"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sax/source/fastparser/fastparser.locator.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original private implementation/locator responsibility is split from fastparser.cxx while retaining the same actual source Entity, native string/reference owners and raw parser identity. Complete parser assembly remains unfinished."
+    }
+  }
+}

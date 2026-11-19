@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/excel/xename.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-file-filter",
+    "capabilityIds": [
+      "CAP-1d1d48a3-5a10-4373-876c-fa5f18a62db9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/excel/xename.ts",
+        "apps/office/src/sc/source/filter/excel/xename.test.ts",
+        "vendor/libreoffice-reference/sc/source/filter/excel/xename.cxx",
+        "apps/office/src/sc/source/filter/excel/print-ranges.test.ts"
+      ],
+      "justification": "The dedicated XLSX name writer emits native code and flags at the correct workbook sheet scope. External link names, binary records and specialized workbook function names remain open. Print settings generate sheet-scoped names, and matching native built-ins reuse those records with comma separators.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SaveXmlNames"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/excel/xename.cxx",
+      "upstreamSymbols": [
+        "XclExpNameManager::SaveXml"
+      ]
+    }
+  }
+}

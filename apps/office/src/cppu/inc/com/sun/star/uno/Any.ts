@@ -281,26 +281,13 @@ export class Any implements uno_Any {
         );
     }
   }
-  /** Original Any::get<T> consumed signed32 specialization uses default initialization, real extraction and the original failure diagnostic. @param argument - Compiler-erased declared type. @returns Extracted native signed32 value. */
+  /** Original Any::get<T> signed32 specialization. @param argument - Declared type. @returns Extracted signed32. */
   get(argument: "sal_Int32"): number {
-    const value: [number] = [0];
-    if (!Any.prototype.extract.call(this, value, argument)) {
-      const message = new OUString(
-          cppu_Any_extraction_failure_msg(
-            this,
-            getTypeFavourUnsigned(argument).getTypeLibType() as R,
-          ),
-          SAL_NO_ACQUIRE,
-        ),
-        context = new Reference();
-      try {
-        throw new RuntimeException(message, context);
-      } finally {
-        message.dispose();
-        context.dispose();
-      }
-    }
-    return value[0];
+    return getChecked(this, argument, 0);
+  }
+  /** Original Any::get<bool> specialization, explicitly named after compiler template erasure. @returns Extracted boolean. */
+  getBoolean(): boolean {
+    return getChecked(this, "bool", false);
   }
   /** Original internal Any::query<T> definition in Reference.hxx constructs the actual queried Reference. @param argument - Declared interface type. @returns Original owned reference. */
   query(argument: UnoTypeArgument = "XInterface"): Reference {
@@ -333,4 +320,30 @@ export function fromAny(source: Any, destination: unknown, argument: UnoTypeArgu
     return true;
   }
   return source.extract(destination, argument);
+}
+
+/** Original Any::get<T> default initialization/extraction/failure body, shared by consumed template instantiations. @param owner - Actual Any address. @param argument - Compiler-declared type. @param initial - Original T default. @returns Extracted scalar. */
+function getChecked<T extends number | boolean>(
+  owner: Any,
+  argument: "sal_Int32" | "bool",
+  initial: T,
+): T {
+  const value: [T] = [initial];
+  if (!Any.prototype.extract.call(owner, value, argument)) {
+    const message = new OUString(
+        cppu_Any_extraction_failure_msg(
+          owner,
+          getTypeFavourUnsigned(argument).getTypeLibType() as R,
+        ),
+        SAL_NO_ACQUIRE,
+      ),
+      context = new Reference();
+    try {
+      throw new RuntimeException(message, context);
+    } finally {
+      message.dispose();
+      context.dispose();
+    }
+  }
+  return value[0];
 }

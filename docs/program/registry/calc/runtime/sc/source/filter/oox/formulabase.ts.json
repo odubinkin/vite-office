@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/oox/formulabase.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-file-filter",
+    "capabilityIds": [
+      "CAP-1d1d48a3-5a10-4373-876c-fa5f18a62db9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "sourceResponsibility": "unverified",
+      "knownViolations": [],
+      "upstreamFile": "sc/source/filter/oox/formulabase.cxx",
+      "upstreamSymbols": [
+        "FormulaProcessorBase::extractCellRangeList",
+        "lclProcessRef"
+      ],
+      "localSymbols": [
+        "extractCellRangeList"
+      ],
+      "evidence": [
+        "apps/office/src/sc/source/filter/oox/formulabase.ts",
+        "apps/office/src/sc/source/filter/excel/print-ranges.test.ts",
+        "vendor/libreoffice-reference/sc/source/filter/oox/formulabase.cxx"
+      ],
+      "justification": "Calc print settings consume absolute same-sheet native reference tokens through the original reference-list states. General UNO conversion and external references remain open."
+    }
+  }
+}

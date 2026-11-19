@@ -1,5 +1,6 @@
-/** @fileoverview Original OInputSeekStream standalone constructor and seekable methods over the genuine readonly component and actual ImplInheritanceHelper. Parent storage and mutex graph remain unported. */
+/** @fileoverview Original OInputSeekStream constructors and seekable methods over the readonly component and shared parent mutex. */
 import { ImplInheritanceHelper } from "../../../cppuhelper/inc/implbase";
+import type { OWriteStream_Impl } from "./owriteablestream";
 import { OInputCompStream } from "./ocompinstream";
 import { Reference, UNO_QUERY } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import type { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
@@ -13,13 +14,14 @@ const OInputSeekStream_BASE = ImplInheritanceHelper.specialize(OInputCompStream,
 /** Original readonly seekable component; its identity owns the closed/disposed state. */
 export class OInputSeekStream extends OInputSeekStream_BASE implements XSeekable {
   private readonly m_xSeekable: Reference<XSeekable>;
-  /** Original standalone ctor queries the retained input; missing seek support is only asserted upstream, with method-time RuntimeException. @param stream - Genuine input/ByteReader. @param properties - Native properties. @param storageType - Original format. @returns Component. */
+  /** Original constructors query the retained input; missing seek support is only asserted upstream, with method-time RuntimeException. @param stream - Genuine input/ByteReader. @param properties - Native properties. @param storageType - Original format. @param parent - Attached owner, if present. @returns Component. */
   constructor(
     stream: Reference<XInputStream & ByteReader>,
     properties: Sequence<PropertyValue>,
     storageType: number,
+    parent: OWriteStream_Impl | null = null,
   ) {
-    super(stream, properties, storageType);
+    super(stream, properties, storageType, parent);
     this.m_xSeekable = new Reference<XSeekable>(this.m_xStream, UNO_QUERY, XSeekable.static_type);
   }
   /** Original disposed-before-missing-interface guard. @returns Borrowed seek interface. */
@@ -30,15 +32,30 @@ export class OInputSeekStream extends OInputSeekStream_BASE implements XSeekable
   }
   /** Original absolute seek delegates unchanged. @param location - Signed64 position. @returns Nothing. */
   seek(location: bigint): void {
-    this.seekable().seek(location);
+    const guard = this.lock();
+    try {
+      this.seekable().seek(location);
+    } finally {
+      guard?.dispose();
+    }
   }
   /** Original position query. @returns Signed64 position. */
   getPosition(): bigint {
-    return this.seekable().getPosition();
+    const guard = this.lock();
+    try {
+      return this.seekable().getPosition();
+    } finally {
+      guard?.dispose();
+    }
   }
   /** Original length query. @returns Signed64 length. */
   getLength(): bigint {
-    return this.seekable().getLength();
+    const guard = this.lock();
+    try {
+      return this.seekable().getLength();
+    } finally {
+      guard?.dispose();
+    }
   }
   /** Original member destruction precedes base destruction. @returns Nothing. */
   protected override destroy(): void {

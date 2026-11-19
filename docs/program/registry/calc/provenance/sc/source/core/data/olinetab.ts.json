@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/olinetab.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/olinetab.cxx",
+    "localSymbols": [
+      "ScOutlineEntry",
+      "ScOutlineArray",
+      "ScOutlineTable"
+    ],
+    "upstreamSymbols": [
+      "ScOutlineArray::Insert",
+      "ScOutlineArray::FindTouchedLevel",
+      "ScOutlineArray::finalizeImport"
+    ],
+    "preservedResponsibilities": [
+      "Native Calc group collections preserve ordered nesting, collapse, and independent row/column axis ownership."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed outline editing commands and full host integration remain outside this filter checkpoint."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/olinetab.ts",
+          "marker": "ScOutlineEntry"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/worksheethelper.test.ts",
+          "marker": "keeps the four outline levels and hidden widths from LibreOffice outline.ods"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/olinetab.cxx",
+          "marker": "ScOutlineArray::Insert"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/olinetab.cxx",
+          "marker": "ScOutlineArray::FindTouchedLevel"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/olinetab.cxx",
+          "marker": "ScOutlineArray::finalizeImport"
+        }
+      ]
+    }
+  }
+}

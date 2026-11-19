@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/inc/unonames.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/inc/unonames.hxx",
+    "localSymbols": [
+      "SC_SERVICENAME_VALBIND",
+      "SC_SERVICENAME_LISTCELLBIND",
+      "SC_SERVICENAME_LISTSOURCE",
+      "SC_SERVICENAME_CELLADDRESS",
+      "SC_SERVICENAME_RANGEADDRESS",
+      "SC_SERVICENAME_CHDATAPROV",
+      "SC_SERVICENAME_CHART_PIVOTTABLE_DATAPROVIDER",
+      "SC_SERVICENAME_FORMULAPARS",
+      "SC_SERVICENAME_OPCODEMAPPER"
+    ],
+    "upstreamSymbols": [
+      "SC_SERVICENAME_VALBIND",
+      "SC_SERVICENAME_OPCODEMAPPER"
+    ],
+    "preservedResponsibilities": [
+      "Nine original service-name constants retain source symbolic names and static RTL storage; other property constants remain unported."
+    ],
+    "omittedResponsibilities": [
+      "Full document XModel, MakeInstance/concrete services and XMultiServiceFactory/model/formatter/filter/storage/UI orchestration remain unported or unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/unonames.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/unoobj/servuno.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/unonames.hxx",
+          "marker": "SC_SERVICENAME_VALBIND"
+        }
+      ]
+    }
+  }
+}

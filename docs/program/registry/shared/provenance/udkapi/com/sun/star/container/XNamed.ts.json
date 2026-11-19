@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/udkapi/com/sun/star/container/XNamed.ts",
+    "status": "mapped",
+    "upstreamPath": "udkapi/com/sun/star/container/XNamed.idl",
+    "localSymbols": [
+      "XNamed"
+    ],
+    "upstreamSymbols": [
+      "XNamed",
+      "getName",
+      "setName"
+    ],
+    "preservedResponsibilities": [
+      "Complete original XNamed IDL methods and original normal generated cached interface binding over actual CPPU factories. Actual native folder/base UNO queries execute; no component implementation is supplied by this declaration. Full comprehensive reflection/native SDK ABI remain unqualified."
+    ],
+    "omittedResponsibilities": [
+      "Original stream/save bindings and complete native package/storage/model/filter/UI acceptance; physical allocator/thread/iterator/RTTI/ABI domains."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/container/XNamed.ts",
+          "marker": "XNamed"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackageFolder.native.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "udkapi/com/sun/star/container/XNamed.idl",
+          "marker": "XNamed"
+        }
+      ]
+    }
+  }
+}

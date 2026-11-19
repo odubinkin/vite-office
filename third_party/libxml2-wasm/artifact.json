@@ -1,8 +1,15 @@
 {
   "sourceSha256": "78262a6e7ac170d6528ebfe2efccdf220191a5af6a6cd61ea4a9a9a5042c7a07",
+  "fileBindingSha256": "586633247713cb14a34647feb3abd5d898d45c8fc771de58fa42b76733afc324",
+  "fileStatBindingSha256": "077599a5251a4bac08cdb5801219adf6ee9b2444bc0f17c6479db124dd022854",
+  "localeBindingSha256": "0f00b270fcde3d33bd142514575582f93ab20832b7a53355f47ff478b4fe55b3",
+  "securityBindingSha256": "1e116824af729eaf09bb21127f040b032d00c47d4b3b59cdd11176079ee68e93",
+  "socketBindingSha256": "22f11273b8c906da0bd1e20632b19dab5b997dd726d9cddc5c317e21eb45c22f",
+  "cppBindingSha256": "50ad1bd0b4f021e432cd3e2e31a39aff491dc0ea94e0085a35ac8082507b3cbb",
+  "emsdkCommit": "1693ce7359fc9694f198694f902a2cc061239b86",
   "compiler": "emcc (Emscripten gcc/clang-like replacement + linker emulating GNU ld) 4.0.19 (08e2de1031913e4ba7963b1c56f35f036a7d4d56)",
-  "exportCount": 144,
-  "enumConstantCount": 108,
+  "exportCount": 206,
+  "enumConstantCount": 853,
   "artifact": "third_party/libxml2-wasm/libxml2.mjs",
-  "artifactSha256": "8ec5697784549772261695b3565e558ba871040f8a5a5947923595cca93b5942"
+  "artifactSha256": "59854d39effd209fbf9b356a6940a5f127dcaf0fa5ef09ccae62242dee296a67"
 }

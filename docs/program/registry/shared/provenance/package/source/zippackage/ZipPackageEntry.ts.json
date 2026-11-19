@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/zippackage/ZipPackageEntry.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/zippackage/ZipPackageEntry.cxx",
+    "localSymbols": [
+      "ZipPackageEntry"
+    ],
+    "upstreamSymbols": [
+      "ZipPackageEntry",
+      "setName",
+      "setParent",
+      "doSetParent"
+    ],
+    "preservedResponsibilities": [
+      "Original abstract entry base, native name/media/context/ZIP record, non-owning parent and exact removal/validation/insertion order; empty property info and no-op listeners. Actual UNO/RTL types and real final folder are used. Compiler RTTI symbols identify declared final folder/stream classes; no stream component or successful save implementation is fabricated. Stream/save binding, debug disconnected-parent diagnostics, full ABI/native service/storage/model/filter/UI acceptance remain unfinished or unqualified.",
+      "Original abstract ZipPackageEntry::saveChild and folder saveChild/saveContents are now bound over actual ZipOutputStream and initialized UNO PropertyValue addresses. Empty folder records follow source PACKAGE/ZIP versus OFOPXML rules, folder manifest fields use exact slots, copied sequence ownership and descendant-before-parent order. Source RuntimeException translation is exercised using genuine invalid names and readonly SvMemoryStream output; no fake stream/component/folder callback is supplied. Root mimetype stream priority and child-false status branches await the actual ZipPackageStream class and remain uncovered. Native unordered iteration/ABI/OOM and complete package/storage/model/filter/UI/service QA remain unqualified or unfinished. Encryption parameters are forwarded unchanged; no encryption implementation or security-policy mutation is introduced."
+    ],
+    "omittedResponsibilities": [
+      "Original stream/save bindings and complete native package/storage/model/filter/UI acceptance; physical allocator/thread/iterator/RTTI/ABI domains."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackageEntry.ts",
+          "marker": "ZipPackageEntry"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackageFolder.native.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackageFolder.save.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/zippackage/ZipPackageEntry.cxx",
+          "marker": "ZipPackageEntry"
+        }
+      ]
+    }
+  }
+}

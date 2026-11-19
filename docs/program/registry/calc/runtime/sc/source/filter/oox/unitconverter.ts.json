@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/oox/unitconverter.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-file-filter",
+    "capabilityIds": [
+      "CAP-1d1d48a3-5a10-4373-876c-fa5f18a62db9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/oox/unitconverter.ts",
+        "apps/office/src/sc/source/filter/oox/worksheethelper.test.ts",
+        "vendor/libreoffice-reference/sc/source/filter/oox/unitconverter.cxx",
+        "apps/office/src/sc/source/filter/oox/typed-date-cells.test.ts",
+        "vendor/libreoffice-reference/sc/source/filter/oox/unitconverter.cxx#UnitConverter::finalizeNullDate",
+        "vendor/libreoffice-reference/sc/source/filter/oox/unitconverter.cxx#UnitConverter::calcSerialFromDateTime",
+        "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts"
+      ],
+      "justification": "Converts worksheet digit units with the actual Normal workbook font through a bound reference device and the original no-device metric defaults. Date serial and other UnitConverter responsibilities are tracked independently. Computes the original signed Gregorian serial from the selected workbook epoch and retains whole-second precision. Measures space using the original font metrics and one-millimetre import fallback.",
+      "knownViolations": [],
+      "localSymbols": [
+        "UnitConverter"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/oox/unitconverter.cxx",
+      "upstreamSymbols": [
+        "UnitConverter::finalizeImport",
+        "UnitConverter::finalizeNullDate",
+        "UnitConverter::calcSerialFromDateTime"
+      ]
+    }
+  }
+}

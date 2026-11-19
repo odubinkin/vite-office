@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/docmodel/browser/theme-codec.ts",
+    "rationale": "The browser Worker graph carries the actual native palette entries, explicit presence and transparency, primary and supplemental theme fonts with their represented fields. Reconstructs the native Theme and ColorSet via model owners.",
+    "responsibilities": [
+      "The browser Worker graph carries the actual native palette entries, explicit presence and transparency, primary and supplemental theme fonts with their represented fields. Reconstructs the native Theme and ColorSet via model owners."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The existing browser Worker graph requires structured-cloneable records instead of native in-process object references."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/docmodel/browser/theme-codec.ts",
+          "marker": "encodeTheme"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-theme-codec.test.ts",
+          "marker": "@fileoverview"
+        }
+      ]
+    }
+  }
+}

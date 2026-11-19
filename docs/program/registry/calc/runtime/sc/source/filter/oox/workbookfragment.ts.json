@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/oox/workbookfragment.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-file-filter",
+    "capabilityIds": [
+      "CAP-1d1d48a3-5a10-4373-876c-fa5f18a62db9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/oox/workbookfragment.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+        "vendor/libreoffice-reference/sc/source/filter/oox/workbookfragment.cxx"
+      ],
+      "justification": "XLSX open and download reach the native Calc workbook through the existing shell and dialogs. Worksheet relationships, shared strings, sparse cells and local/editable shared formulas are exercised. Styles, merged ranges, rich cell formatting, and formula conventions beyond the supported Calc compiler remain open. Shares the Strict and Transitional SpreadsheetML name check with worksheet and rich string callbacks.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WorkbookFragment",
+        "attribute",
+        "spreadsheetNamespace",
+        "strictSpreadsheetNamespace",
+        "isSpreadsheetTag"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/oox/workbookfragment.cxx",
+      "upstreamSymbols": [
+        "WorkbookFragment::onCreateContext"
+      ]
+    }
+  }
+}

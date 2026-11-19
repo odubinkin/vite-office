@@ -14,6 +14,8 @@ import {
 } from "../text/XMLLineNumberingImportContext";
 import { XMLTextFrameStyleContext, type XMLTextFrameStyle } from "../text/XMLTextFrameContext";
 import { XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
+import { XMLThemeContext } from "./XMLThemeContext";
+import type { Theme } from "../../../docmodel/inc/theme/Theme";
 import { XMLNumberWithAutoForVoidPropHdl } from "./xmlbahdl";
 import { SvxXMLListStyleContext, type XMLListStyleImportTarget } from "./xmlnumi";
 const ignoredStyleDefinitions = new Set([
@@ -24,6 +26,7 @@ const ignoredStyleDefinitions = new Set([
 
 /** Consumer of completed style definitions; Writer stores canonical results. */
 export interface XMLStyleImportTarget extends XMLListStyleImportTarget {
+  registerTheme?(theme: Theme): void;
   registerTableStyle(name: string, style: OdfTableStyle): void;
   registerTextFrameStyle?(name: string, style: XMLTextFrameStyle, parent?: string): void;
   registerLineNumbering(value: OdfLineNumberingConfiguration): void;
@@ -90,9 +93,9 @@ export class XMLStylesContext extends SvXMLImportContext {
         ),
     );
   }
-  /** Ignores only theme declaration attributes; numbering and layout remain diagnostic. @param element - Child token. @returns Whether metadata-only. */
+  /** Ignores theme attributes for consumers without the native theme property. @param element - Child token. @returns Whether metadata-only. */
   public override ignoreUnknownAttributesForChild(element: XMLToken): boolean {
-    return element === XMLToken.LOEXT_THEME;
+    return element === XMLToken.LOEXT_THEME && !this.target.registerTheme;
   }
   /** Creates one native named or automatic container. @param target - Writer property consumer. @param automatic - Whether automatic styles. @returns Context. */
   public constructor(
@@ -137,7 +140,10 @@ export class XMLStylesContext extends SvXMLImportContext {
         /** Registers document line-number settings. @param value - Imported value. @returns Nothing. */
         (value) => this.target.registerLineNumbering(value),
       );
-    if (element === XMLToken.LOEXT_THEME) return new SvXMLIgnoreContext(true);
+    if (element === XMLToken.LOEXT_THEME)
+      return this.target.registerTheme
+        ? new XMLThemeContext(attributes, this.target.registerTheme.bind(this.target))
+        : new SvXMLIgnoreContext(true);
     if (ignoredStyleDefinitions.has(element)) return new SvXMLIgnoreContext();
     return null;
   }
@@ -272,6 +278,13 @@ class XMLStyleContext extends SvXMLImportContext {
       this.alignment = importAlignment(attributes);
       this.leftMargin = importLeftMargin(attributes);
       this.paragraphProperties = importParagraphProperties(attributes);
+      if (this.isDefault)
+        this.defaultTabDistance = importOptionalLength(
+          attributes,
+          XMLToken.STYLE_TAB_STOP_DISTANCE,
+          false,
+          "default tab distance",
+        );
       return new XMLTextPropertySetContext(
         /** Retains the complete tab sequence in the paragraph property set. */
         /** Handles Writer formatting state. @param stops - Imported tabs. @returns Callback result. */ (
@@ -288,10 +301,18 @@ class XMLStyleContext extends SvXMLImportContext {
       if (this.properties !== undefined)
         throw new Error("ODF style has duplicate text-properties.");
       this.properties = importCharacterProperties(attributes, this.target);
-      return new XMLTextPropertySetContext();
+      return new XMLTextPropertySetContext(
+        undefined,
+        /** Retains the native complex color beside the resolved RGB attribute. @param color - Parsed theme color. @returns Nothing. */
+        (color) => {
+          this.properties = { ...this.properties, themeColor: color };
+        },
+      );
     }
     return null;
   }
+
+  private defaultTabDistance: number | undefined;
 
   /** Returns the source style name. @returns Name within this container. */
   public GetName(): string {
@@ -312,6 +333,9 @@ class XMLStyleContext extends SvXMLImportContext {
   public GetDefinition(): OdfStyleDefinition {
     return {
       ...this.definition,
+      ...(this.defaultTabDistance === undefined
+        ? {}
+        : { defaultTabDistance: this.defaultTabDistance }),
       ...(this.alignment === undefined ? {} : { alignment: this.alignment }),
       ...(this.leftMargin === undefined ? {} : { leftMargin: this.leftMargin }),
       ...(this.paragraphProperties === undefined && this.masterPageName === undefined

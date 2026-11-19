@@ -20,6 +20,10 @@ const nativeExports = [
   { module: "src/editeng/inc/contouritem.ts", names: ["SvxContourItem"] },
 
   { module: "src/i18nlangtag/source/isolang/isolang.tables.ts", names: ["unicode"] },
+  { module: "src/cppuhelper/browser/exception-abi.ts", names: ["initializeExceptionAbi"] },
+  { module: "src/desktop/browser/app/uno-components.ts", names: ["implementations"] },
+  { module: "src/desktop/source/app/appinit.ts", names: ["InitApplicationServiceManager"] },
+  { module: "src/external/libxml2/libxml2.ts", names: ["initializeLibXml2"] },
 ] as const;
 /** Actual source exports used by isolated browser and Worker acceptance. */
 type Runtime = typeof import("../../src/sc/source/filter/xml/xmlimprt") &
@@ -35,7 +39,11 @@ type Runtime = typeof import("../../src/sc/source/filter/xml/xmlimprt") &
   typeof import("../../src/sc/source/ui/view/formatsh") &
   typeof import("../../src/sc/source/ui/view/viewdata") &
   typeof import("../../src/editeng/inc/contouritem") &
-  typeof import("../../src/i18nlangtag/source/isolang/isolang.tables");
+  typeof import("../../src/i18nlangtag/source/isolang/isolang.tables") &
+  typeof import("../../src/cppuhelper/browser/exception-abi") &
+  typeof import("../../src/desktop/browser/app/uno-components") &
+  typeof import("../../src/desktop/source/app/appinit") &
+  typeof import("../../src/external/libxml2/libxml2");
 for (const width of [1280, 390]) {
   test(`native Outline menu and ODS reopen at ${width}px`, /** Uses production UI and actual native package storage. @param fixtures - Browser. @returns Completion. */ async ({
     page,
@@ -130,8 +138,11 @@ test("preserves native Outline item metadata,history and ODS in a DOM-free Worke
   const result = await page.evaluate(
     /** Executes source classes in both browser realms. @returns Observations. */ async () => {
       /** Performs native typed formatting,toggle,history and ODS operations. @returns Item observations. */ async function run() {
-        const n = (globalThis as unknown as { CalcOutlineFixture: Runtime }).CalcOutlineFixture,
-          shell = new n.ScDocShell(),
+        const n = (globalThis as unknown as { CalcOutlineFixture: Runtime }).CalcOutlineFixture;
+        n.initializeExceptionAbi();
+        n.InitApplicationServiceManager(n.implementations);
+        await n.initializeLibXml2();
+        const shell = new n.ScDocShell(),
           doc = shell.GetDocument(),
           view = new n.ScViewData(doc),
           format = new n.ScFormatShell(view, shell),
@@ -228,8 +239,11 @@ test("paints the native white center on colored background with independently co
   await installKernelFixture(page, "CalcOutlineFixture", nativeExports);
   await page.evaluate(
     /** Writes a genuine primary package from independent XML. @returns Completion. */ async () => {
-      const n = (globalThis as unknown as { CalcOutlineFixture: Runtime }).CalcOutlineFixture,
-        doc = new n.ScDocument();
+      const n = (globalThis as unknown as { CalcOutlineFixture: Runtime }).CalcOutlineFixture;
+      n.initializeExceptionAbi();
+      n.InitApplicationServiceManager(n.implementations);
+      await n.initializeLibXml2();
+      const doc = new n.ScDocument();
       try {
         new n.ScXMLImport(doc).importContent(
           `<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"><office:automatic-styles><style:style style:name="Outline" style:family="table-cell"><style:table-cell-properties fo:background-color="#ffff00"/><style:text-properties fo:font-size="10pt" fo:color="#0000ff" style:text-outline="true" style:text-underline-style="solid" style:text-underline-color="#ff0000" style:text-overline-style="solid" style:text-overline-color="#008000"/></style:style></office:automatic-styles><office:body><office:spreadsheet><table:table table:name="Sheet"><table:table-row><table:table-cell table:style-name="Outline" office:value-type="string"><text:p>OO</text:p></table:table-cell></table:table-row></table:table></office:spreadsheet></office:body></office:document-content>`,
@@ -238,7 +252,7 @@ test("paints the native white center on colored background with independently co
           id: "outline-paint",
           title: "Outline paint",
           version: 1,
-          content: n.writeOdsXml(doc),
+          content: await n.writeOdsXml(doc),
         });
       } finally {
         doc.DisposeAttributes();

@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/zipapi/MemoryByteGrabber.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-zip-binary-io",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/source/zipapi/MemoryByteGrabber.ts",
+        "apps/office/src/package/source/zipapi/byte-io.test.ts"
+      ],
+      "justification": "Original ByteGrabber/ByteChucker/MemoryByteGrabber ZIP binary IO now consumes actual UNO references, reusable native sequences/fixed8byte storage, explicit ByteReader RTTI and source integer/short-read/seek/borrow rules. Existing ByteReader/ByteWriter and real implementers accept both actual SAL Int8Array/Uint8Array pointers and CPPU byte cells, removing the earlier cells-only restriction without a replacement stream/provider. Pointer arithmetic uses actual backing allocation/byteOffset, source lifecycle remains GC-managed. Unchanged pinned Strict/Transitional DOCX/XLSX local headers prove archive byte IO only. Memory UInt8/UInt16 signed results and ByteChucker unguarded seek assumption retained. Native full directory/inflate/XStorage/filter/model/export/UI and actual non-ByteReader source fallback remain unqualified or unfinished; no source masks/private patches/fake success stream.",
+      "knownViolations": [],
+      "localSymbols": [
+        "MemoryByteGrabber",
+        "remainingSize",
+        "skipBytes",
+        "ReadUInt8",
+        "ReadUInt16",
+        "ReadUInt64"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/zipapi/MemoryByteGrabber.hxx",
+      "upstreamSymbols": [
+        "MemoryByteGrabber",
+        "remainingSize",
+        "skipBytes",
+        "ReadUInt8",
+        "ReadUInt16",
+        "ReadUInt64"
+      ]
+    }
+  }
+}

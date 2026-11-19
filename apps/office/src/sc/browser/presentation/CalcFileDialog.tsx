@@ -23,18 +23,19 @@ export function CalcFileDialog({
       onClose={onClose}
       store={workflows.store}
       format={{
-        accept: ".ods,.csv,application/vnd.oasis.opendocument.spreadsheet,text/csv",
-        importDescription: "ODS and CSV files are supported",
-        invalidFileMessage: "Choose an ODS or CSV file.",
+        accept:
+          ".ods,.xlsx,.csv,application/vnd.oasis.opendocument.spreadsheet,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv",
+        importDescription: "ODS, XLSX and CSV files are supported",
+        invalidFileMessage: "Choose an ODS, XLSX or CSV file.",
         documentLabel: "Calc document",
         accepts:
           /** Recognizes supported Calc input. @param file - Computer file. @returns Supported. */ (
             file,
-          ) => /\.(ods|csv)$/i.test(file.name),
+          ) => /\.(ods|xlsx|csv)$/i.test(file.name),
         importedTitle:
           /** Removes the source extension for the browser title. @param filename - Source name. @returns Title. */ (
             filename,
-          ) => filename.replace(/\.(ods|csv)$/i, "") || "Imported document",
+          ) => filename.replace(/\.(ods|xlsx|csv)$/i, "") || "Imported document",
       }}
       openImportedFile={
         /** Opens actual package bytes under the selected browser identity. @param file - Source. @param bytes - ODS. @param identity - Resolved identity. @returns Completion. */ (
@@ -59,6 +60,13 @@ export function CalcFileDialog({
           appearance: "indigo",
           download: /** Exports actual ODS bytes. @returns Completion. */ () =>
             workflows.Download(),
+        },
+        {
+          label: "XLSX",
+          description: "Excel workbook",
+          appearance: "indigo",
+          download: /** Exports actual XLSX bytes. @returns Completion. */ () =>
+            workflows.DownloadXlsx(),
         },
         {
           label: "CSV",

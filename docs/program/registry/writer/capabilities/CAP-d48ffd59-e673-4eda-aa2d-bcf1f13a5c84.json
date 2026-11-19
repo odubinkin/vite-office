@@ -1,0 +1,103 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-d48ffd59-e673-4eda-aa2d-bcf1f13a5c84",
+    "capabilityId": "CAP-d48ffd59-e673-4eda-aa2d-bcf1f13a5c84",
+    "suite": "writer",
+    "subsystem": "docx-file-filter",
+    "type": "model",
+    "maturity": "mapped",
+    "assertions": [
+      "Real fixture input installs the canonical document model.",
+      "The existing file dialog exports OOXML bytes and opens a copy.",
+      "Representative paragraph alignment, controls, indentation and line spacing survive a native DOCX round trip."
+    ],
+    "capability": "Writer DOCX file operations",
+    "gaps": [
+      "Nested and floating table conversion, full imported table styles, and complete export of paragraph styles, lists, links, bookmarks and page properties remain open."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sw/source/writerfilter/filter/WriterFilter.cxx",
+          "marker": "WriterFilter::filter"
+        },
+        {
+          "path": "sw/source/filter/ww8/docxattributeoutput.cxx",
+          "marker": "DocxAttributeOutput::StartParagraphProperties"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/extras/ooxmlexport/ooxmlexport11.cxx",
+          "marker": "testTdf82065_Ind_start_strict"
+        },
+        {
+          "path": "sw/qa/extras/ooxmlexport/ooxmlexport3.cxx",
+          "marker": "testcantSplit"
+        },
+        {
+          "path": "sw/qa/extras/ooxmlexport/ooxmlexport21.cxx",
+          "marker": "testTdf125469_singleSpacing"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/source/writerfilter/filter/WriterFilter.cxx",
+          "marker": "WriterFilter::filter"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/filter/WriterFilter.ts",
+          "marker": "importOOXML"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ranges.ts",
+          "marker": "DomainMapperTableRanges"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.paragraph.ts",
+          "marker": "OutputParagraphProperties"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts",
+          "marker": "round trips native table geometry"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/ooxml-file-filters.md",
+          "marker": "# DOCX and XLSX file filters"
+        }
+      ]
+    },
+    "implemented": false,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "scopeLimitations": [
+      "Nested and floating table conversion, full imported table styles, and complete export of paragraph styles, lists, links, bookmarks and page properties remain open."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The current browser shell uses the existing async package transport and browser primary storage."
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "docx-file-operations"
+  }
+}

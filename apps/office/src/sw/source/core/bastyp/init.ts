@@ -1,4 +1,5 @@
 /** @fileoverview Native module-global static Writer defaults from pinned bastyp/init.cxx, limited to represented item classes. */
+import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
 import * as CharacterWhich from "../../../inc/hintids";
 import {
   SvxCaseMapItem,
@@ -44,6 +45,7 @@ import {
 } from "../../../inc/hintids";
 import { XATTR_FILL_FIRST, XATTR_FILL_LAST } from "../../../../svx/inc/xdef";
 import { SwFormatContent } from "../../../inc/fmtcntnt";
+import { SwFormatFooter, SwFormatHeader } from "../../../inc/fmthdft";
 import { SwFormatAnchor } from "../../../inc/fmtanchr";
 import { SwFormatSurround } from "../../../inc/fmtsrnd";
 
@@ -233,6 +235,8 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SwFormatFillOrder());
     add(new SvxOpaqueItem(RES_OPAQUE));
     add(new SwFormatContent());
+    add(new SwFormatHeader());
+    add(new SwFormatFooter());
     add(new SwFormatAnchor());
     add(new SwFormatSurround());
     add(new SvxBoxItem(RES_BOX));
@@ -266,9 +270,11 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SvxRightMarginItem(RES_MARGIN_RIGHT));
     add(new SvxULSpaceItem(RES_UL_SPACE));
     add(new SvxLineSpacingItem(200, RES_PARATR_LINESPACING));
-    for (const which of [RES_PARATR_SPLIT, RES_KEEP, RES_LINENUMBER])
-      add(new SfxBoolItem(which, which === RES_LINENUMBER || which === RES_PARATR_SPLIT));
-    for (const which of [RES_PARATR_ORPHANS, RES_PARATR_WIDOWS]) add(new SfxInt16Item(which, 0));
+    add(new ParaItems.SvxFormatSplitItem(true, RES_PARATR_SPLIT));
+    for (const which of [RES_KEEP, RES_LINENUMBER])
+      add(new SfxBoolItem(which, which === RES_LINENUMBER));
+    add(new ParaItems.SvxOrphansItem(0, RES_PARATR_ORPHANS));
+    add(new ParaItems.SvxWidowsItem(0, RES_PARATR_WIDOWS));
     add(new SfxInt16Item(RES_BREAK, 0));
     add(new SwFormatPageDesc());
     add(new SwNumRuleItem());

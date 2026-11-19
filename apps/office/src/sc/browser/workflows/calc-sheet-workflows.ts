@@ -10,7 +10,7 @@ import type { SfxRequest } from "../../../sfx2/source/control/request";
 import { SfxUnoAnyItem } from "../../../sfx2/source/view/frame";
 import { SfxUInt16Item } from "../../../svl/source/items/intitem";
 import { OUString } from "../../../sal/inc/rtl/ustring";
-import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { calcGoToSheetCommand } from "../../sdi/scalc";
 import type { CalcViewController } from "../controller/calc-view-controller";
 /** Immutable native dialog initialization;names are copied only as dialog widget resources. */
@@ -104,6 +104,7 @@ export class CalcSheetWorkflows {
       name = new OUString(),
       names: string[] = [];
     for (let tab = 0; tab < doc.GetTableCount(); tab++) {
+      if (!doc.IsVisible(tab)) continue;
       doc.GetName(tab, name);
       names.push(text(name));
     }
@@ -138,12 +139,25 @@ export class CalcSheetWorkflows {
       return;
     }
     if (!this.controller.Commit()) return;
-    const names = this.Names(),
-      selectedName = names[this.controller.viewData.GetTabNumber()] as string;
-    const result = await this.dialogs.Request({ names, selectedName });
+    const document = this.controller.viewData.GetDocument();
+    const name = new OUString();
+    let selectedName: string;
+    try {
+      document.GetName(this.controller.viewData.GetTabNumber(), name);
+      selectedName = text(name);
+    } finally {
+      name.dispose();
+    }
+    const result = await this.dialogs.Request({ names: this.Names(), selectedName });
     if (result.kind === "accepted") {
-      const tab = this.Names().indexOf(result.result);
-      if (tab >= 0) this.controller.SelectTab(tab);
+      const target = unicode(result.result);
+      const tab: [number] = [0];
+      try {
+        if (this.controller.viewData.GetDocument().GetTable(target, tab))
+          this.controller.SelectTab(tab[0]);
+      } finally {
+        target.dispose();
+      }
     }
   }
   /** Original typed arguments execute immediately;no-argument commands wait for the actual metric dialog. @param request - Native request. @param width - Column versus row dimension. @returns Completion. */

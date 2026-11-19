@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/excel/xestyle.border.ts",
+    "localSymbols": [
+      "XclExpCellBorder",
+      "XclExpBorderBuffer"
+    ],
+    "upstreamPath": "sc/source/filter/excel/xestyle.cxx",
+    "upstreamSymbols": [
+      "XclExpCellBorder::FillFromItemSet",
+      "XclExpCellBorder::SaveXml",
+      "lclGetBorderLine"
+    ],
+    "preservedResponsibilities": [
+      "Projects native border style/width tuples to the original Excel vocabulary and writes indexed border records, logical side colors and shared diagonal priority."
+    ],
+    "omittedResponsibilities": [
+      "Binary formats and horizontal/vertical XLSX export are outside the consumed scope. Native OOXML code also omits the inner edge XML. CALC-730 records the diagonal color loss."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xestyle.border.ts",
+          "marker": "XclExpCellBorder"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.borders.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xestyle.cxx",
+          "marker": "XclExpCellBorder::FillFromItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xestyle.cxx",
+          "marker": "XclExpCellBorder::SaveXml"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xestyle.cxx",
+          "marker": "lclGetBorderLine"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/excel/xestyle.border.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the complete consumed border mapping next to the original XLSX styles mechanism without expanding the primary style owner."
+    }
+  }
+}

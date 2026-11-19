@@ -45,6 +45,9 @@ import {
   cppu_detail_getUnoType as unknownPropertyType,
 } from "../../../cppu/inc/com/sun/star/beans/UnknownPropertyException";
 import { cancelCommandExecution } from "../../inc/cancelcommandexecution";
+import { ActiveDataStreamer } from "./activedatastreamer";
+import { XActiveDataStreamer } from "../../../udkapi/com/sun/star/io/XActiveDataStreamer";
+import type { XStream } from "../../../udkapi/com/sun/star/io/XStream";
 import { ActiveDataSink } from "../../inc/activedatasink";
 import { XActiveDataSink } from "../../../udkapi/com/sun/star/io/XActiveDataSink";
 import type { XInputStream } from "../../../udkapi/com/sun/star/io/XInputStream";
@@ -692,7 +695,12 @@ export class Content {
     }
   }
   /** Original document stream opening through an actual ActiveDataSink and open command. @returns Acquired input stream or empty reference. */
-  openStream(): Reference<XInputStream> {
+  openStream(): Reference<XInputStream>;
+  /** Original active-data-sink overload. @param sink - Actual sink interface. @returns Whether the document open command was executed. */
+  openStream(sink: Reference<XActiveDataSink>): boolean;
+  /** Original overload dispatch retains the zero-argument stream owner and the sink command body. @param target - Optional declared sink overload. @returns Actual input reference or sink command status. */
+  openStream(target?: Reference<XActiveDataSink>): Reference<XInputStream> | boolean {
+    if (target !== undefined) return this.openStreamToSink(target);
     if (!this.isDocument()) return new Reference<XInputStream>();
     const sink = new Reference<XActiveDataSink>(new ActiveDataSink()),
       argument = new OpenCommandArgument2();
@@ -722,6 +730,139 @@ export class Content {
         command.dispose();
       }
       return sink.operatorStar().getInputStream();
+    } finally {
+      argument.dispose();
+      sink.dispose();
+    }
+  }
+  /** Original Content::openStream(XActiveDataSink) body; no result stream is synthesized. @param sink - Actual sink to receive the content stream. @returns False for non-document content, otherwise command success. */
+  private openStreamToSink(sink: Reference<XActiveDataSink>): boolean {
+    if (!this.isDocument()) return false;
+    const argument = new OpenCommandArgument2(),
+      command = new Command(),
+      properties = new Properties(0),
+      name = literal("open");
+    try {
+      argument.Mode = OpenMode.DOCUMENT;
+      argument.Priority = 0;
+      argument.Sink = sink;
+      argument.Properties = properties;
+      command.Name = name;
+      command.Handle = -1;
+      command.Argument.insert(argument, openArgumentType);
+      const result = this.m_xImpl.operatorStar().executeCommand(command);
+      result.dispose();
+      return true;
+    } finally {
+      name.dispose();
+      properties.dispose();
+      command.dispose();
+      argument.dispose();
+    }
+  }
+  /** Original document stream opening without locking through an actual ActiveDataSink and open command. @returns Acquired input stream or empty reference. */
+  openStreamNoLock(): Reference<XInputStream> {
+    if (!this.isDocument()) return new Reference<XInputStream>();
+    const sink = new Reference<XActiveDataSink>(new ActiveDataSink()),
+      argument = new OpenCommandArgument2();
+    try {
+      argument.Mode = OpenMode.DOCUMENT_SHARE_DENY_NONE;
+      argument.Priority = 0;
+      argument.Sink = sink;
+      const properties = new Properties(0);
+      try {
+        argument.Properties = properties;
+      } finally {
+        properties.dispose();
+      }
+      const command = new Command();
+      try {
+        const name = literal("open");
+        try {
+          command.Name = name;
+        } finally {
+          name.dispose();
+        }
+        command.Handle = -1;
+        command.Argument.insert(argument, openArgumentType);
+        const result = this.m_xImpl.operatorStar().executeCommand(command);
+        result.dispose();
+      } finally {
+        command.dispose();
+      }
+      return sink.operatorStar().getInputStream();
+    } finally {
+      argument.dispose();
+      sink.dispose();
+    }
+  }
+  /** Original writable document stream opening through the actual ActiveDataStreamer and open command. @returns Acquired bidirectional stream or empty reference. */
+  openWriteableStream(): Reference<XStream> {
+    if (!this.isDocument()) return new Reference<XStream>();
+    const sink = new Reference<XActiveDataStreamer>(new ActiveDataStreamer()),
+      argument = new OpenCommandArgument2();
+    try {
+      argument.Mode = OpenMode.DOCUMENT;
+      argument.Priority = 0;
+      argument.Sink = sink;
+      const properties = new Properties(0);
+      try {
+        argument.Properties = properties;
+      } finally {
+        properties.dispose();
+      }
+      const command = new Command();
+      try {
+        const name = literal("open");
+        try {
+          command.Name = name;
+        } finally {
+          name.dispose();
+        }
+        command.Handle = -1;
+        command.Argument.insert(argument, openArgumentType);
+        const result = this.m_xImpl.operatorStar().executeCommand(command);
+        result.dispose();
+      } finally {
+        command.dispose();
+      }
+      return sink.operatorStar().getStream();
+    } finally {
+      argument.dispose();
+      sink.dispose();
+    }
+  }
+  /** Original writable document stream opening without locking through the actual ActiveDataStreamer and open command. @returns Acquired bidirectional stream or empty reference. */
+  openWriteableStreamNoLock(): Reference<XStream> {
+    if (!this.isDocument()) return new Reference<XStream>();
+    const sink = new Reference<XActiveDataStreamer>(new ActiveDataStreamer()),
+      argument = new OpenCommandArgument2();
+    try {
+      argument.Mode = OpenMode.DOCUMENT_SHARE_DENY_NONE;
+      argument.Priority = 0;
+      argument.Sink = sink;
+      const properties = new Properties(0);
+      try {
+        argument.Properties = properties;
+      } finally {
+        properties.dispose();
+      }
+      const command = new Command();
+      try {
+        const name = literal("open");
+        try {
+          command.Name = name;
+        } finally {
+          name.dispose();
+        }
+        command.Handle = -1;
+        command.Argument.insert(argument, openArgumentType);
+        const result = this.m_xImpl.operatorStar().executeCommand(command);
+        result.dispose();
+      } finally {
+        command.dispose();
+      }
+      return sink.operatorStar().getStream();
     } finally {
       argument.dispose();
       sink.dispose();

@@ -13,6 +13,7 @@ import {
 import type { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import type { SvxOpaqueItem } from "../../../../editeng/inc/opaqitem";
 import type { SwFormatContent } from "../../../inc/fmtcntnt";
+import type { SwFormatFooter, SwFormatHeader } from "../../../inc/fmthdft";
 import type { SwFormatAnchor } from "../../../inc/fmtanchr";
 import type { SwFormatSurround } from "../../../inc/fmtsrnd";
 import type { SwFormatFillOrder } from "../../../inc/fmtfordr";
@@ -202,6 +203,14 @@ export class SwFormat extends BroadcastingModify {
   GetContent(searchInParent = true): SwFormatContent {
     return this.attributeSet.GetContent(searchInParent);
   }
+  /** Original page header lookup on the owned attribute set. @param searchInParent - Native inheritance flag. @returns Borrowed header item. */
+  GetHeader(searchInParent = true): SwFormatHeader {
+    return this.attributeSet.GetHeader(searchInParent);
+  }
+  /** Original page footer lookup on the owned attribute set. @param searchInParent - Native inheritance flag. @returns Borrowed footer item. */
+  GetFooter(searchInParent = true): SwFormatFooter {
+    return this.attributeSet.GetFooter(searchInParent);
+  }
   /** Original inline generic format anchor getter inherited by frame formats. @param searchInParent - Native inherited lookup. @returns Actual typed item. */
   public GetAnchor(searchInParent = true): SwFormatAnchor {
     return this.attributeSet.GetAnchor(searchInParent);
@@ -281,14 +290,18 @@ export class SwFormat extends BroadcastingModify {
   public SetFormatAttrSet(set: SfxItemSet): boolean {
     if (set.Count() === 0) return false;
     const source = set.Clone();
-    if (this.IsModifyLocked()) return this.attributeSet.PutSet(source);
-    const oldSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges()),
-      newSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges());
-    const changed = this.attributeSet.Put_BC(source, oldSet, newSet);
-    if (changed) {
-      ClientNotifyAttrChg(this, this.attributeSet, oldSet, newSet);
+    try {
+      if (this.IsModifyLocked()) return this.attributeSet.PutSet(source);
+      const oldSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges()),
+        newSet = new SwAttrSet(this.attributeSet.GetPool(), this.attributeSet.GetRanges());
+      const changed = this.attributeSet.Put_BC(source, oldSet, newSet);
+      if (changed) {
+        ClientNotifyAttrChg(this, this.attributeSet, oldSet, newSet);
+      }
+      return changed;
+    } finally {
+      source.Dispose();
     }
-    return changed;
   }
   /** Resets one identity or an inclusive native range. @param which - First WhichId. @param last - Optional last WhichId. @returns Whether removed. */
   public ResetFormatAttr(which: number, last = 0): boolean {
@@ -361,10 +374,17 @@ export class SwFormat extends BroadcastingModify {
       if (old !== undefined && next !== undefined && old.GetTheChgdSet() !== this.attributeSet) {
         const filteredNew = new SwAttrSetChg(next);
         filteredNew.GetChgSet().Differentiate(this.attributeSet);
-        if (filteredNew.Count() === 0) return;
+        if (filteredNew.Count() === 0) {
+          this.ReleaseAttrSetChanges(filteredNew.GetChgSet());
+          return;
+        }
         const filteredOld = new SwAttrSetChg(old);
         filteredOld.GetChgSet().Differentiate(this.attributeSet);
-        super.SwClientNotify(source, new AttrSetChangeHint(filteredOld, filteredNew));
+        try {
+          super.SwClientNotify(source, new AttrSetChangeHint(filteredOld, filteredNew));
+        } finally {
+          this.ReleaseAttrSetChanges(filteredOld.GetChgSet(), filteredNew.GetChgSet());
+        }
         return;
       }
     }

@@ -1,0 +1,149 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-1d1d48a3-5a10-4373-876c-fa5f18a62db9",
+    "capabilityId": "CAP-1d1d48a3-5a10-4373-876c-fa5f18a62db9",
+    "suite": "calc",
+    "subsystem": "xlsx-file-filter",
+    "type": "model",
+    "maturity": "mapped",
+    "assertions": [
+      "Real fixture input installs the canonical document model.",
+      "The existing file dialog exports OOXML bytes and opens a copy.",
+      "Native merge ranges survive the XLSX copy and reopening the primary ODS browser document.",
+      "Represented font, solid fill and alignment records survive worksheet cell and column XLSX round trips. The mounted browser ODS copy retains styles on populated and blank cells.",
+      "Built-in and custom formats compile natively, survive XLSX and primary ODS reopening, and preserve supported display semantics."
+    ],
+    "capability": "Calc XLSX file operations",
+    "gaps": [
+      "Localized and extended number formats, themed colors, rich cell formatting, and formula conventions beyond the supported Calc compiler remain open."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/source/filter/oox/excelfilter.cxx",
+          "marker": "ExcelFilter::importDocument"
+        },
+        {
+          "path": "sc/source/filter/excel/xecontent.cxx",
+          "marker": "XclExpMergedcells::SaveXml"
+        },
+        {
+          "path": "sc/source/filter/oox/stylesbuffer.cxx",
+          "marker": "Xf::createPattern"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/subsequent_filters_test.cxx",
+          "marker": "universal-content-strict.xlsx"
+        },
+        {
+          "path": "sc/qa/unit/subsequent_filters_test2.cxx",
+          "marker": "testColumnStyle2XLSX"
+        },
+        {
+          "path": "sc/qa/unit/subsequent_export_test2.cxx",
+          "marker": "testEscapeCharInNumberFormatXLSX"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/source/filter/oox/excelfilter.cxx",
+          "marker": "ExcelFilter::importDocument"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.ts",
+          "marker": "ExcelFilter"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xecontent.ts",
+          "marker": "XclExpMergedcells"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/stylesfragment.ts",
+          "marker": "StylesFragment"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/stylesbuffer.ts",
+          "marker": "StylesBuffer"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xestyle.xml.ts",
+          "marker": "XclExpXFBuffer"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/numberformatsbuffer.ts",
+          "marker": "NumberFormatsBuffer"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xestyle.numfmt.ts",
+          "marker": "XclExpNumFmtBuffer"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/xmlnumfe.ts",
+          "marker": "ExportNumberFormat"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/xmlnumfi.ts",
+          "marker": "SvXMLNumFormatContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/worksheethelper.ts",
+          "marker": "WorksheetGlobals"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/unitconverter.ts",
+          "marker": "UnitConverter"
+        },
+        {
+          "path": "apps/office/src/oox/source/docprop/docprophandler.ts",
+          "marker": "OOXMLDocPropHandler"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/browser/presentation/calc-files.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
+          "marker": "round-trips sparse merge anchors"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/worksheethelper.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/ooxml-file-filters.md",
+          "marker": "# DOCX and XLSX file filters"
+        }
+      ]
+    },
+    "implemented": false,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "scopeLimitations": [
+      "Localized and extended number formats, themed colors, rich cell formatting, and formula conventions beyond the supported Calc compiler remain open."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The current browser shell uses the existing async package transport and browser primary storage."
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "xlsx-file-operations"
+  }
+}

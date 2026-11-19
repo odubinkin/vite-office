@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/oox/richstringcontext.ts",
+    "localSymbols": [
+      "RichStringContext"
+    ],
+    "upstreamPath": "sc/source/filter/oox/richstringcontext.cxx",
+    "upstreamSymbols": [
+      "RichStringContext::onCreateContext",
+      "RichStringContext::onCharacters"
+    ],
+    "preservedResponsibilities": [
+      "Owns original root/text/run boundaries for shared and inline strings. Joins parser text deliveries within the active text element, then decodes each source portion independently. Passes native XML space attributes through AttributeList.",
+      "Routes rPr through the original FontContext; text callbacks remain independent of formatting child data.",
+      "The shared font context imports workbook colors for each explicitly formatted text portion."
+    ],
+    "omittedResponsibilities": [
+      "Phonetic conversion and unrepresented theme/script font resolution are outside this XML text scope."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/richstringcontext.ts",
+          "marker": "RichStringContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/filter/oox/richstringcontext.cxx",
+          "marker": "RichStringContext::onCreateContext"
+        },
+        {
+          "path": "sc/source/filter/oox/richstringcontext.cxx",
+          "marker": "RichStringContext::onCharacters"
+        }
+      ]
+    }
+  }
+}

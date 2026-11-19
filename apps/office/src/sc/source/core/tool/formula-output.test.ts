@@ -21,6 +21,7 @@ it("serializes actual code tokens and ODFF references without interpreting or re
     ["=1.2345678901234567", "=1.23456789012346"],
     ["=1e20", "=1E+020"],
     ["=1+(", "=1+()"],
+    ['=CONCATENATE("a";[.B1])&"b"', '=CONCATENATE("a";[.B1])&"b"'],
   ] as const) {
     doc.SetFormula(pos, unicode(source), grammar);
     const cell = doc.GetFormulaCell(pos);
@@ -49,15 +50,13 @@ it("serializes actual code tokens and ODFF references without interpreting or re
   expect(text(cell.GetFormula(grammar))).toBe("=[#REF!]+1");
   token.GetSingleRef().InitAddress(-1, 0, 0);
   expect(text(cell.GetFormula(grammar))).toBe("=[#REF!]+1");
+  doc.InsertTab(1, unicode("Other"));
   token.GetSingleRef().InitAddress(0, 0, 1);
-  expect(
-    /** Missing sheet convention rejects. @returns Formula. */ () => cell.GetFormula(grammar),
-  ).toThrow(/not implemented/);
+  token.GetSingleRef().SetFlag3D(true);
+  expect(text(cell.GetFormula(grammar))).toBe("=[$Other.$A$1]+1");
   token.GetSingleRef().InitAddress(0, 0, 0);
   token.GetSingleRef().SetFlag3D(true);
-  expect(
-    /** Missing 3D convention rejects. @returns Formula. */ () => cell.GetFormula(grammar),
-  ).toThrow(/not implemented/);
+  expect(text(cell.GetFormula(grammar))).toBe("=[$Data.$A$1]+1");
   expect(
     /** Missing localized grammar rejects. @returns Formula. */ () =>
       cell.GetFormula(FormulaGrammar.Grammar.GRAM_NATIVE_XL_A1),

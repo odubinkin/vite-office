@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/inc/osl/socket.h.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-file-url-hostname",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/inc/osl/socket.h.ts",
+        "apps/office/src/sal/osl/unx/socket.test.ts",
+        "apps/office/src/sal/osl/unx/file_url.reverse.test.ts"
+      ],
+      "justification": "Original local hostname/FQDN uses actual selected libc gethostname and original host-address/canonical-name helpers over pinned SDK getaddrinfo/freeaddrinfo with its existing synthetic realm-local DNS table. Independent source static result caches assign real OUString output each time. Reverse file URL byte/Unicode templates preserve scheme/authority checks, exact local-host ASCII comparison, query/fragment and escaped slash/NUL rules, escaped arbitrary octets, internal output mutation order, Security-based tilde recursion and original RTL relative resolution. All active UNIX reverse path QA bodies, native hostname/real HOME, alias and malformed/Unicode/byte scenarios are tested. No socket creation/connection, host DNS/files or authentication are added. Other socket/file methods, native std::length_error translation/physical allocation/invalid lifetime and complete SvFileStream/TempFile/package/storage/model/filter/UI remain unfinished or unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "oslSocketResult"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/osl/socket.h",
+      "upstreamSymbols": [
+        "oslSocketResult",
+        "osl_getLocalHostname"
+      ]
+    }
+  }
+}

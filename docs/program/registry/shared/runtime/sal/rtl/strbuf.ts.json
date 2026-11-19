@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/rtl/strbuf.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-metadata-uri-prerequisites",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/rtl/strbuf.ts#rtl_stringbuffer_newFromStr_WithLength",
+        "vendor/libreoffice-reference/sal/rtl/strbuf.cxx#rtl_stringbuffer_remove"
+      ],
+      "justification": "Task202610251549-J0Z0KF / V4DQJW native metadata/URI prerequisite continuation. Original byte-buffer C wrappers from sal/rtl/strbuf.cxx. Independent native compiled module differential, physical ABI/allocator/mutex/thread lifetime and runtime shutdown are unqualified. Complete DOCX/XLSX model/filter/package/desktop/mobile UI import-export acceptance remains unfinished; existing browser open/save/autosave/recovery choices are retained.",
+      "knownViolations": [],
+      "localSymbols": [
+        "rtl_stringbuffer_newFromStr_WithLength",
+        "rtl_stringbuffer_newFromStringBuffer",
+        "rtl_stringbuffer_ensureCapacity",
+        "rtl_stringbuffer_insert",
+        "rtl_stringbuffer_remove"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/rtl/strbuf.cxx",
+      "upstreamSymbols": [
+        "rtl_stringbuffer_insert",
+        "rtl_stringbuffer_remove"
+      ]
+    }
+  }
+}

@@ -11,6 +11,7 @@ import { TablePositionHandler } from "./TablePositionHandler";
 import { MeasureHandler } from "./MeasureHandler";
 import { convertTwipToMm100_LimitedRoundUp } from "./ConversionHelper";
 import { TablePropertiesHandler } from "./TablePropertiesHandler";
+import { stringAny, text } from "../../core/unocore/unocrsrhelper";
 
 /** Actual mapper property owners for the represented top-level table direction path. */
 export class DomainMapperTableManager {
@@ -59,6 +60,19 @@ export class DomainMapperTableManager {
   sprm(modifier: Sprm): boolean {
     const id = modifier.getId(),
       value = modifier.getValue()?.getInt() ?? 0;
+    if (id === N.LN_CT_TblPrBase_tblStyle) {
+      const native = modifier.getValue()?.getString();
+      if (native) {
+        const style = stringAny(text(native));
+        try {
+          this.m_aTmpTableProperties.Insert(P.META_PROP_TABLE_STYLE_NAME, style);
+        } finally {
+          style.dispose();
+          native.dispose();
+        }
+      }
+      return true;
+    }
     if (id === N.LN_CT_TblPrBase_tblW || id === N.LN_CT_TblPrBase_tblInd) {
       const handler = new MeasureHandler();
       try {

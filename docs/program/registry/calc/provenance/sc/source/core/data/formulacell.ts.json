@@ -10,7 +10,9 @@
       "ScFormulaCell",
       "SetNeedNumberFormat",
       "NeedsNumberFormat",
-      "GetResult"
+      "GetResult",
+      "IsValueNoError",
+      "IsValueNoErrorConst"
     ],
     "upstreamSymbols": [
       "ScFormulaCell::ScFormulaCell",
@@ -19,7 +21,8 @@
       "ScFormulaCell::IsEmptyDisplayedAsString",
       "ScFormulaCell::GetFormula",
       "ScFormulaCell::SetResultDouble",
-      "ScFormulaCell::GetResult"
+      "ScFormulaCell::GetResult",
+      "ScFormulaCell::IsValueNoError"
     ],
     "preservedResponsibilities": [
       "Task200 connects numeric ODFF source to real ScTokenArray/shared FormulaCompiler RPN, ScInterpreter and existing ScFormulaResult inside the actual document-sheet-column formula blocks. Native scalar arithmetic precedence, code/runtime error projection, lazy result state, default bracket completion, forced recalc and logical formula-block events are represented. ScSheetLimits, RTL parsing/cancellation, mdds and shared token/result owners are reused. Formula pointers use JS GC; no physical pointer deletion or reference counting is introduced. Source constructor/service subsets are explicit. References/functions, localized formatter/string conversion, groups/listening/recalc dependencies, serialization/ODS/UI, complete contexts/RNG/caches/vector/hash scheduling and broad parity remain unsupported. Native power fenv-only subnormal classifications reject explicitly. Formula block copy/clone is noncopyable and unavailable semantic equality throws instead of substituting identity. Broad parity/verification flags remain false.",
@@ -44,7 +47,8 @@
       "AQF9AG adds source SetResultDouble forwarding directly to ScFormulaResult::SetDouble without changing the formula dirty state, for the import cached-result overload.",
       "J0Z0KF connects the complete non-const ScFormulaCell::GetResult lazy/error-precedence method to existing ScFormulaResult/FormulaResultValue, and XclXmlUtils cached-result XML typing/spelling. Real SharedString temporaries, typed outputs, exact LOGICAL0/1 classification, Invalid inlineStr, SPILL-to-VALUE and complete Excel/core error-byte/NaN mappings are preserved. Native part-name, ARGB, UTF16-vector/range UTF8 and vector/ASCII Unicode conversions and raw WriteElement use actual shared owners/serializers. Static member objects erase deleted native utility constructors; existing ordinary Uint8Array UTF8 value transport does not claim a native OString or byte-buffer owner. Native encoded OUString construction and number(double) call actual SAL conversion/formatting with original flags, ownership and null guards. Request17 retains original formatter15-digit rounding; no host Number.toString substitute is used for numeric formula values. Full XclExpRoot/XclExpXmlStream, address-buffer/XclExpString overloads, font output, formula-expression serialization, workbook/model import/export and shell/UI acceptance remain unported or unverified.",
       "J0Z0KF native import-transfer checkpoint adds all4setFormulaCell overload paths over actual typed stores: numeric/string caches, owned token arrays and raw cells. Every non-null formula uses real document link inspection; raw overwrite unshares the actual old formula group, preserving the distinct source/token path. Rejected owned arrays release locally while raw cells remain caller-owned; release precedes the storage call. Numeric/string-only fillDown uses native cached column reads and existing vector/mdds range storage, preserving empty string, signed zero and error NaN bits. Raw append/count and direct origin-date options setup retain source editing/formatter boundaries. Actual formula defaults, clean empty construction and hybrid-string forwarding use existing owners. Initial native UI grammar resolves the real document convention as in SetGrammarAndRefConvention; full symbol maps and later unspecified transitions remain unported, and unsupported conventions still reject. Native const-token copy construction, style/Latin hints, matrix/data-table/visibility/merge import, outline/compute-cache finalization, full workbook/filter/UI and physical native ABI/lifetime parity remain unverified. CALC-521 is source-only; no null graph or fake provider/allocator is used.",
-      "J0Z0KF calculation-policy checkpoint: actual interpreter global ScCalcConfig lazy owner, document value construction/assignment and interpreter global-then-document merge feed original ScGlobal::ConvertStringToValue. Actual context forwards formatter recognition and null date. Literal operands and shared-string/string-formula references now convert with native policies. Production interpretation releases actual config string ownership even on exceptions. Normal-build mutation guards have no upstream release behavior; no fake debug/thread service is installed. The existing selected-line-style body moves unchanged into document.frame for file-size compliance. The original ucalc testFuncParam six-policy/five-string matrix is asserted through real compiled formula cells. Rich-edit ScEditUtil extraction, complete formatter/interpreter services, full WorkbookGlobals/model properties/filter/UI and compiled native differential parity remain unverified; historical broad confidence flags are not promoted."
+      "J0Z0KF calculation-policy checkpoint: actual interpreter global ScCalcConfig lazy owner, document value construction/assignment and interpreter global-then-document merge feed original ScGlobal::ConvertStringToValue. Actual context forwards formatter recognition and null date. Literal operands and shared-string/string-formula references now convert with native policies. Production interpretation releases actual config string ownership even on exceptions. Normal-build mutation guards have no upstream release behavior; no fake debug/thread service is installed. The existing selected-line-style body moves unchanged into document.frame for file-size compliance. The original ucalc testFuncParam six-policy/five-string matrix is asserted through real compiled formula cells. Rich-edit ScEditUtil extraction, complete formatter/interpreter services, full WorkbookGlobals/model properties/filter/UI and compiled native differential parity remain unverified; historical broad confidence flags are not promoted.",
+      "J0Z0KF attribute-import checkpoint: Original mutable and const IsValueNoError queries use the real result owner and code error. The const query preserves lazy interpretation: the current supported noniterative, non-table-operation scalar profile supplies the existing dirty/auto-calc/matrix condition. Iteration-cell/table-operation dirty dependencies and whole-formula parity remain unported. The importer invokes only the const query."
     ],
     "omittedResponsibilities": [
       "All services outside the explicitly represented numeric formula/arithmetic subset remain unsupported; no broad parity claim.",
@@ -130,6 +134,10 @@
         },
         {
           "path": "apps/office/src/sc/source/core/tool/calcconfig-document.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/documentimport.attributes.test.ts",
           "marker": "@fileoverview"
         }
       ],

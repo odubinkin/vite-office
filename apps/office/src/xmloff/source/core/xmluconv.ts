@@ -1,6 +1,25 @@
 /** @fileoverview Owns the bounded ODF-to-core length conversion responsibility from pinned xmloff/source/core/xmluconv.cxx. */
 
 import { Converter, type CoreMeasureUnit } from "../../../sax/source/tools/converter";
+import * as N from "../../../offapi/com/sun/star/style/NumberingType";
+import {
+  findNumberingType,
+  getNumberingIdentifier,
+} from "../../../i18npool/source/defaultnumberingprovider/defaultnumberingprovider";
+
+const standardNumberingTypes = new Map([
+  ["1", N.ARABIC],
+  ["a", N.CHARS_LOWER_LETTER],
+  ["A", N.CHARS_UPPER_LETTER],
+  ["i", N.ROMAN_LOWER],
+  ["I", N.ROMAN_UPPER],
+  ["", N.NUMBER_NONE],
+]);
+
+const standardNumberingFormats = new Map<number, string>();
+for (const [format, type] of standardNumberingTypes) standardNumberingFormats.set(type, format);
+standardNumberingFormats.set(N.CHARS_LOWER_LETTER_N, "a");
+standardNumberingFormats.set(N.CHARS_UPPER_LETTER_N, "A");
 
 /** Delegates configured XML core measurement conversion to the SAX converter. */
 export class SvXMLUnitConverter {
@@ -11,23 +30,39 @@ export class SvXMLUnitConverter {
   public convertNumFormat(type: number): string;
   /** Imports a represented XML numbering format with native NONE permission. @param type - Output native type. @param format - XML format. @param numberNone - Permit NUMBER_NONE. @returns Conversion success. */
   public convertNumFormat(type: { value: number }, format: string, numberNone?: boolean): boolean;
-  /** Converts the represented ARABIC/NONE subset without inventing unsupported families. @param type - Native type or output reference. @param format - Import format. @param numberNone - Permit empty import. @returns Format or conversion success. */
+  /** Imports the original ODF format and alphabetic repetition mode. @param type - Output native type. @param format - XML format. @param letterSync - Original style:num-letter-sync text. @param numberNone - Permit NUMBER_NONE. @returns Conversion success. */
+  public convertNumFormat(
+    type: { value: number },
+    format: string,
+    letterSync: string,
+    numberNone: boolean,
+  ): boolean;
+  /** Converts a standard native numbering format and its sibling letter-sync flag. @param type - Native type or output reference. @param format - Import format. @param letterSync - Source flag or earlier empty-format permission. @param numberNone - Permit empty import. @returns Format or conversion success. */
   public convertNumFormat(
     type: number | { value: number },
     format?: string,
+    letterSync: string | boolean = "",
     numberNone = false,
   ): string | boolean {
     if (typeof type === "number") {
-      if (type === 4) return "1";
-      if (type === 5) return "";
-      throw new Error(`Unsupported ODF numbering type: ${type}`);
+      const value = standardNumberingFormats.get(type);
+      if (value !== undefined) return value;
+      return getNumberingIdentifier(type);
     }
-    if (format === "") {
-      if (!numberNone) return false;
-      type.value = 5;
-    } else if (format === "1") type.value = 4;
-    else throw new Error(`Unsupported ODF numbering format: ${format}`);
+    if (format === "" && !(typeof letterSync === "boolean" ? letterSync : numberNone)) return false;
+    const value =
+      standardNumberingTypes.get(format ?? "") ?? findNumberingType(format ?? "") ?? N.ARABIC;
+    type.value = value;
+    if (letterSync === "true") {
+      if (value === N.CHARS_LOWER_LETTER) type.value = N.CHARS_LOWER_LETTER_N;
+      else if (value === N.CHARS_UPPER_LETTER) type.value = N.CHARS_UPPER_LETTER_N;
+    }
     return true;
+  }
+
+  /** Emits the native true flag only for repeated-letter numbering. @param type - Native numbering type. @returns XML flag or empty. */
+  public static convertNumLetterSync(type: number): string {
+    return type === N.CHARS_LOWER_LETTER_N || type === N.CHARS_UPPER_LETTER_N ? "true" : "";
   }
 
   /** Serializes through the configured native core unit to the supported CM XML unit. @param value - Core integer. @returns XML centimetre measure. */

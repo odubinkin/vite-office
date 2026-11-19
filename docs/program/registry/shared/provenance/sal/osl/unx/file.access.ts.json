@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/osl/unx/file.access.ts",
+    "status": "mapped",
+    "upstreamPath": "sal/osl/unx/file.cxx",
+    "localSymbols": [
+      "setAllowedPaths",
+      "isForbidden"
+    ],
+    "upstreamSymbols": [
+      "setAllowedPaths",
+      "isForbidden"
+    ],
+    "preservedResponsibilities": [
+      "Explicitly user-approved original setAllowedPaths/isForbidden and pre-open ACCES hook are ported with source read/write/execute lists, literal prefix matching, empty-read bypass, parent/realpath recursion, partial setup and abort environment order. Native openFilePath uses actual libc/MEMFS flags, open/stat/optional F_SETLK/cleanup and original handle state. Full active Forbidden::forbidden QA assertions and real create/truncate/exclusive/read-only/permissions/symlink/abort integration are exercised. Native pointer overread/OOM, SAL diagnostic/debug and other OS profiles remain unqualified; URL entry points, SvFileStream/TempFile/package/model/filter/UI acceptance remain unfinished."
+    ],
+    "omittedResponsibilities": [
+      "File URL entry points, SvFileStream/TempFile, complete package/storage/model/filter/UI; SAL diagnostics/debug and native invalid-pointer/OOM/other OS profiles."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/osl/unx/file.access.ts",
+          "marker": "setAllowedPaths"
+        },
+        {
+          "path": "apps/office/src/sal/osl/unx/file.access.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sal/osl/unx/file.cxx",
+          "marker": "setAllowedPaths"
+        },
+        {
+          "path": "sal/qa/osl/file/forbidden.cxx",
+          "marker": "void forbidden()"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/osl/unx/file.access.ts",
+      "rationale": "Original file.cxx access-list responsibility is split from native buffered IO/open implementation to keep source ownership and file-size boundaries. No stronger sandbox rule or alternative filesystem is substituted.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

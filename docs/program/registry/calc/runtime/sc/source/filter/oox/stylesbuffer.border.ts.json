@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/oox/stylesbuffer.border.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-file-filter",
+    "capabilityIds": [
+      "CAP-1d1d48a3-5a10-4373-876c-fa5f18a62db9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/oox/stylesbuffer.border.ts#Border",
+        "vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx#Border::importBorder",
+        "apps/office/src/sc/source/filter/oox/excelfilter.borders.test.ts"
+      ],
+      "justification": "Maps indexed SpreadsheetML border records and original width/style classes to outer and inner box items and diagonal line items, including the normal border defaults.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Border",
+        "BorderLineModel"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/filter/oox/stylesbuffer.cxx",
+      "upstreamSymbols": [
+        "Border::importBorder",
+        "Border::convertBorderLine",
+        "Border::fillToItemSet"
+      ]
+    }
+  }
+}

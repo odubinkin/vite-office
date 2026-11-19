@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ww8/ww8par.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "word-export-numbering",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ww8/ww8par.ts",
+        "apps/office/src/sw/source/filter/ww8/docxattributeoutput.numbering.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/ww8par.cxx"
+      ],
+      "justification": "Original export-only equivalence compares rule values first, continuous-numbering policy and only one/nine Word levels. Level comparison checks actual character-style item sets, copies actual SwNumFormat values, clears names/registrations and compares remaining native fields before destroying both temporary client registrations. Actual DOCX paragraph dispatch consumes these functions. Full binary importer, complete numbering/root/part/filter and fixture/model/UI roundtrip remain unported or unqualified; no status or whole-format parity promotion follows from these owner tests.",
+      "knownViolations": [],
+      "localSymbols": [
+        "AreListsDifferentForExport",
+        "AreListLevelsDifferentForExport"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/ww8/ww8par.cxx",
+      "upstreamSymbols": [
+        "AreListsDifferentForExport",
+        "AreListLevelsDifferentForExport"
+      ]
+    }
+  }
+}

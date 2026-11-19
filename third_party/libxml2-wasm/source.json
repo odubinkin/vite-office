@@ -24,9 +24,11 @@
     "xmlAddChild",
     "xmlCopyDoc",
     "xmlCopyNode",
+    "xmlCreatePushParserCtxt",
     "xmlCtxtGetLastError",
     "xmlCtxtReadFile",
     "xmlCtxtReadIO",
+    "xmlCtxtUseOptions",
     "xmlDocCopyNode",
     "xmlDocGetRootElement",
     "xmlDocSetRootElement",
@@ -38,6 +40,7 @@
     "xmlFreeParserCtxt",
     "xmlGetLastChild",
     "xmlGetNsProp",
+    "xmlGetPredefinedEntity",
     "xmlGetProp",
     "xmlHasNsProp",
     "xmlHasProp",
@@ -51,6 +54,7 @@
     "xmlNewDocProp",
     "xmlNewDocRawNode",
     "xmlNewDocText",
+    "xmlNewEntity",
     "xmlNewIOInputStream",
     "xmlNewNs",
     "xmlNewNsProp",
@@ -63,10 +67,13 @@
     "xmlNodeSetContent",
     "xmlNodeSetName",
     "xmlOutputBufferCreateIO",
+    "xmlParseChunk",
     "xmlParserInputBufferCreateIO",
     "xmlReadMemory",
     "xmlReconciliateNs",
     "xmlRemoveProp",
+    "xmlSAX2GetColumnNumber",
+    "xmlSAX2GetLineNumber",
     "xmlSaveFileTo",
     "xmlSearchNs",
     "xmlSearchNsByHref",
@@ -92,7 +99,8 @@
     "xmlXPathNewContext",
     "xmlXPathRegisterFuncLookup",
     "xmlXPathRegisterNs",
-    "xmlXPathRegisterVariableLookup"
+    "xmlXPathRegisterVariableLookup",
+    "strtoul"
   ],
   "headerEnumAnchors": [
     "XML_ELEMENT_NODE",
@@ -102,6 +110,84 @@
     "XML_ERR_NONE",
     "XML_INTERNAL_GENERAL_ENTITY",
     "XML_PARSER_SEVERITY_VALIDITY_WARNING",
-    "XML_CHAR_ENCODING_NONE"
-  ]
+    "XML_CHAR_ENCODING_NONE",
+    "XML_ERR_OK",
+    "OFFICE_SIZEOF_OSL_FILE_STATUS",
+    "OFFICE_DIRENT_HAVE_D_TYPE"
+  ],
+  "cppBindings": {
+    "source": "std-mutex.cxx",
+    "standard": "c++17",
+    "library": "Pinned Emscripten SDK libc++ std::mutex",
+    "functions": [
+      "office_std_mutex_create",
+      "office_std_mutex_destroy",
+      "office_std_mutex_lock",
+      "office_std_mutex_unlock"
+    ],
+    "note": "Same no-pthread realm-local profile; actual C++ constructor/destructor/lock/unlock, no JS lock registry. Native threads/OOM/system_error and invalid lifetime remain unqualified."
+  },
+  "localeBindings": {
+    "source": "osl-locale.c",
+    "library": "Pinned Emscripten SDK musl libc locale/environment and pthread ABI",
+    "functions": [
+      "getenv",
+      "setenv",
+      "unsetenv",
+      "office_locale_codeset",
+      "office_process_locale_lock",
+      "office_process_locale_unlock"
+    ],
+    "note": "Actual newlocale(LC_CTYPE_MASK), nl_langinfo_l(CODESET), source64-byte copy/freelocale and static PTHREAD_MUTEX_INITIALIZER. No host environment/locale provider or host filesystem mount. Current non-pthread profile only."
+  },
+  "fileBindings": {
+    "source": "osl-file.c",
+    "library": "Pinned Emscripten libc POSIX ABI",
+    "functions": [
+      "realpath",
+      "abort",
+      "close",
+      "office_file_path_max",
+      "office_file_errno",
+      "office_file_open",
+      "office_file_lock",
+      "office_file_set_overflow"
+    ],
+    "note": "Original selected Emscripten file-open OSL flag/mode mapping and actual open/fcntl whole-file write lock, realpath/errno/abort; no host filesystem mount. Path allowlist decisions remain in source-owned sal/osl/unx/file.access.ts and run before native open. Source file URL wrappers publish actual native EOVERFLOW through office_file_set_overflow."
+  },
+  "securityBindings": {
+    "source": "sal/osl/unx/security.cxx and sal/osl/unx/secimpl.hxx",
+    "profile": "Original __EMSCRIPTEN__ current-security fallback and byte home lookup only. No logon, credentials, host mount, external DNS or network. The actual SDK effective UID getter is exposed for the original UNIX QA branch; it does not read the host user identity.",
+    "exports": [
+      "osl_getCurrentSecurity",
+      "osl_freeSecurityHandle",
+      "office_security_home",
+      "geteuid"
+    ]
+  },
+  "localHostnameBindings": {
+    "source": "sal/osl/unx/socket.cxx local hostname and its original host-address helpers",
+    "exports": [
+      "office_local_hostname"
+    ],
+    "note": "User-approved local hostname/FQDN authority dependency only. Actual pinned libc gethostname and getaddrinfo/freeaddrinfo over the existing SDK synthetic DNS table; no socket creation, connection, external DNS or host network lookup."
+  },
+  "fileStatBindings": {
+    "source": "sal/osl/unx/file_stat.cxx, file_misc.cxx, file_impl.hxx and include/osl/file.h",
+    "exports": [
+      "office_file_status_size",
+      "office_file_access",
+      "office_file_lstat",
+      "office_file_dtype_type"
+    ],
+    "note": "Actual pinned SDK libc access/lstat and selected header layout/dirent type mapping. Native mode/size/time/inode fields are copied losslessly into source-owned JS records; no alternate stat provider, host mounts or filesystem access."
+  },
+  "fileCopyBinding": {
+    "source": "sal/osl/unx/file_misc.cxx and readwrite_helper.cxx",
+    "note": "Actual selected libc stat/rename/unlink/readlink/symlink/write/close plus exact O_WRONLY|O_CREAT destination flags. Only genuine SDK FS ErrnoError is published to native errno by the JS OSL owner. No host mount or replacement filesystem; public copy uses preserveMetadata=false."
+  },
+  "tempFilePrerequisites": {
+    "upstream": "sal/osl/all/mutexshared.cxx, include/osl/mutex.hxx, sal/osl/unx/file_misc.cxx and unotools/source/ucbhelper/tempfile.cxx",
+    "note": "Actual libc mkdir/rmdir/getpid and original native function-static OSL mutex owner/pointer-to-handle field. SDK environment and MEMFS only; no host mount/environment/process identity access. Global field storage/destructor remain native. Static facade borrows the actual pointer, no second owner."
+  }
 }

@@ -1,4 +1,29 @@
 /** @fileoverview Real native UNO document, parser callback, IO and live-list operations without a host DOM; the production registered DocumentBuilder shares the same realm-local native module. */
+import { probeNativeXlsxString } from "./native-xlsx-string-probe";
+import { probeNativeCalcAttributes } from "./native-calc-attributes-probe";
+import { probeNativeFastParserConsumer } from "./native-fastparser-consumer-probe";
+import { probeNativeFastParser } from "./native-fastparser-probe";
+import {
+  probeWriterPackage,
+  probeNativeTokenService,
+  probeNativeAttributes,
+} from "./native-ooxml-stream-probe";
+import { XVndSunStarExpandUrlReference } from "../../apps/office/src/udkapi/com/sun/star/uri/XVndSunStarExpandUrlReference";
+import { XVndSunStarScriptUrlReference } from "../../apps/office/src/udkapi/com/sun/star/uri/XVndSunStarScriptUrlReference";
+import { VndSunStarPkgUrlReferenceFactory } from "../../apps/office/src/udkapi/com/sun/star/uri/VndSunStarPkgUrlReferenceFactory";
+import { Uri } from "../../apps/office/src/sal/inc/rtl/uri";
+import {
+  rtl_UriCharClass,
+  rtl_UriEncodeMechanism,
+  rtl_UriDecodeMechanism,
+} from "../../apps/office/src/sal/inc/rtl/uri.h";
+import {
+  RTL_TEXTENCODING_UTF8,
+  RTL_TEXTENCODING_GB_18030,
+} from "../../apps/office/src/sal/inc/rtl/textenc";
+import { UriReferenceFactory } from "../../apps/office/src/udkapi/com/sun/star/uri/UriReferenceFactory";
+import { RelativeUriExcessParentSegments } from "../../apps/office/src/udkapi/com/sun/star/uri/RelativeUriExcessParentSegments";
+import { removeFragment } from "../../apps/office/src/unotools/source/misc/mediadescriptor.uri";
 import {
   createDOM,
   createUserDefined,
@@ -64,7 +89,11 @@ import { XPropertyState } from "../../apps/office/src/udkapi/com/sun/star/beans/
 import { Type } from "../../apps/office/src/cppu/inc/com/sun/star/uno/Type";
 import { initializeLibXml2 } from "../../apps/office/src/external/libxml2/libxml2";
 import { installParserCallbacks } from "../../apps/office/src/external/libxml2/parsercallbacks";
-import { Reference, UNO_QUERY } from "../../apps/office/src/cppu/inc/com/sun/star/uno/Reference";
+import {
+  Reference,
+  UNO_QUERY,
+  UNO_QUERY_THROW,
+} from "../../apps/office/src/cppu/inc/com/sun/star/uno/Reference";
 import {
   Sequence,
   type SequenceElements,
@@ -860,6 +889,77 @@ export async function runNativeDomWorkerProbe() {
       metadataValues,
       metadataIngestion,
       metadataServices,
+      writerPackage: await probeWriterPackage(processContext),
+      nativeTokenService: probeNativeTokenService(processContext),
+      nativeAttributes: probeNativeAttributes(processContext),
+      nativeXlsxString: await probeNativeXlsxString(),
+      nativeCalcAttributes: probeNativeCalcAttributes(),
+      nativeFastParser: probeNativeFastParser(),
+      nativeFastParserConsumer: await probeNativeFastParserConsumer(processContext),
+      nativeUriFactory: (
+        /** Exercises genuine registered URI services and the actual MediaDescriptor URI helper without DOM APIs. @returns Public scalar URI observations. */ () => {
+          const service = own(UriReferenceFactory.create(processContext)),
+            base = own(service.operatorStar().parse(u("file:///word/document.xml"))),
+            target = own(service.operatorStar().parse(u("../styles.xml"))),
+            absolute = own(
+              service
+                .operatorStar()
+                .makeAbsolute(base, target, true, RelativeUriExcessParentSegments.RETAIN),
+            ),
+            relative = own(service.operatorStar().makeRelative(base, absolute, false, false, true));
+          const packageFactory = own(VndSunStarPkgUrlReferenceFactory.create(processContext)),
+            packageUri = own(
+              packageFactory.operatorStar().createVndSunStarPkgUrlReference(absolute),
+            );
+          const scriptUri = own(service.operatorStar().parse(u("vnd.sun.star.script:Hello?a=old"))),
+            script = own(
+              new Reference<XVndSunStarScriptUrlReference>(
+                scriptUri,
+                UNO_QUERY_THROW,
+                XVndSunStarScriptUrlReference.static_type,
+              ),
+            );
+          script.operatorStar().setParameter(u("a"), u("ä&value"));
+          const expandUri = own(service.operatorStar().parse(u("vnd.sun.star.expand:/"))),
+            expand = own(
+              new Reference<XVndSunStarExpandUrlReference>(
+                expandUri,
+                UNO_QUERY_THROW,
+                XVndSunStarExpandUrlReference.static_type,
+              ),
+            ),
+            rejectedExpand = own(service.operatorStar().parse(u("vnd.sun.star.expand:%80")));
+          return {
+            packageUri: take(packageUri.operatorStar().getUriReference()),
+            expandPath: take(expand.operatorStar().getPath()),
+            rejectedExpand: rejectedExpand.is(),
+            scriptUri: take(script.operatorStar().getUriReference()),
+            scriptParameter: take(script.operatorStar().getParameter(u("a"))),
+            absolute: take(absolute.operatorStar().getUriReference()),
+            relative: take(relative.operatorStar().getUriReference()),
+            fragmentRemoved: take(removeFragment(u("file:///a%23b.xlsx#bookmark"))),
+            invalidFragmentPreserved: take(removeFragment(u("vnd.sun.star.script:#fragment"))),
+            rtlAbsolute: take(
+              Uri.convertRelToAbs(u("file:///word/document.xml"), u("../styles.xml")),
+            ),
+            rtlEncoded: take(
+              Uri.encode(
+                u("a b/ä"),
+                rtl_UriCharClass.rtl_UriCharClassRegName,
+                rtl_UriEncodeMechanism.rtl_UriEncodeStrict,
+                RTL_TEXTENCODING_UTF8,
+              ),
+            ),
+            rtlDecoded: take(
+              Uri.decode(
+                u("%810%B13"),
+                rtl_UriDecodeMechanism.rtl_UriDecodeStrict,
+                RTL_TEXTENCODING_GB_18030,
+              ),
+            ),
+          };
+        }
+      )(),
       documentBuilder,
       xpath: (
         /** Queries the actual registered native XPath service. @returns Scalar observations only. */ () => {

@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/ucb/source/ucp/file/filinpstr.ts",
+    "status": "mapped",
+    "upstreamPath": "ucb/source/ucp/file/filinpstr.cxx",
+    "localSymbols": [
+      "XInputStream_impl"
+    ],
+    "upstreamSymbols": [
+      "XInputStream_impl",
+      "readBytes",
+      "readSomeBytes",
+      "skipBytes",
+      "available",
+      "closeInput"
+    ],
+    "preservedResponsibilities": [
+      "Original complete input/seekable/ByteReader component: ctor failure metadata, READ/NOLOCK flags, exact Sequence resize/short-read shrink, pointer read, ignored skip result, signed available difference, negative-seek error and idempotent close/destructor semantics. Actual selected OSL/MEMFS owners and public UNO references are used; no file/broker/provider substitute or host filesystem mount is introduced. Native physical ABI/allocation/OOM/thread domains, complete file-UCP provider/broker and DOCX/XLSX package/storage/model/filter/UI acceptance remain unqualified or unfinished."
+    ],
+    "omittedResponsibilities": [
+      "Unqualified failure/physical ABI/OOM/thread profiles and complete original UCB/provider/storage/model/filter/UI acceptance."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/ucb/source/ucp/file/filinpstr.ts",
+          "marker": "XInputStream_impl"
+        },
+        {
+          "path": "apps/office/src/ucb/source/ucp/file/native-file-streams.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "ucb/source/ucp/file/filinpstr.cxx",
+          "marker": "XInputStream_impl"
+        }
+      ]
+    }
+  }
+}

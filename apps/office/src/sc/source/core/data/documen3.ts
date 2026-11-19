@@ -1,5 +1,6 @@
 /** @fileoverview Original documen3.cxx document grammar projection and copy-reference traversal;non-copy global/name/drawing/embedded services remain unported. */
 import type { ScDocument } from "../../../inc/document";
+import type { ScTableProtection } from "./tabprotection";
 import type { RefUpdateContext } from "../../../inc/refupdatecontext";
 import { UpdateRefMode } from "../../../inc/global";
 import { FormulaGrammar, type AddressConvention } from "../../../../formula/inc/grammar";
@@ -39,4 +40,26 @@ export function GetLanguage(this: ScDocument, latin: [number], cjk: [number], ct
   latin[0] = this["languageFields"].eLanguage;
   cjk[0] = this["languageFields"].eCjkLanguage;
   ctl[0] = this["languageFields"].eCtlLanguage;
+}
+
+/** Tests whether the given tab is protected. @param this - Workbook. @param tab - Sheet index. @returns Protection state. */
+export function IsTabProtected(this: ScDocument, tab: number): boolean {
+  return this.FetchTable(tab)?.IsProtected() ?? false;
+}
+
+/** Gets protection from the native sheet. @param this - Workbook. @param tab - Sheet index. @returns Borrowed protection. */
+export function GetTabProtection(
+  this: ScDocument,
+  tab: number,
+): Readonly<ScTableProtection> | undefined {
+  return this.FetchTable(tab)?.GetProtection();
+}
+
+/** Passes protection to the native sheet. @param this - Workbook. @param tab - Sheet index. @param protection - State to copy or clear. @returns Nothing. */
+export function SetTabProtection(
+  this: ScDocument,
+  tab: number,
+  protection?: ScTableProtection,
+): void {
+  this.FetchTable(tab)?.SetProtection(protection);
 }

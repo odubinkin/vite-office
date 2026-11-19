@@ -75,15 +75,20 @@ function exportTableVisualProperties(
   return output;
 }
 
-/** Renders table-owned styles and body elements while sharing paragraph automatic styles. */
-/** Processes one ODF table value. @param argument1 - Callback input. @param argument2 - Callback input. @param argument3 - Callback input. @returns Callback result. */ export function exportTableBlocks(
+/** Renders body and other text sections with shared automatic styles. @param blocks - Primary text blocks. @param renderParagraphs - Shared text exporter. @param isCancelled - Cooperative cancellation. @param sections - Additional text sections. @returns Rendered text and styles. */
+export function exportTableBlocks(
   blocks: Iterable<XMLTextExportBlock>,
   renderParagraphs: (
     paragraphs: Iterable<XMLTextParagraphSource>,
     renderFrame: (frame: XMLTextFrameExportSource) => string,
   ) => string,
   isCancelled: () => boolean,
-): { readonly body: string; readonly automaticStyles: string } {
+  sections?: Iterable<Iterable<XMLTextExportBlock>>,
+): {
+  readonly body: string;
+  readonly automaticStyles: string;
+  readonly sections?: readonly string[];
+} {
   let automaticStyles = "";
   let tableIndex = 0;
   let frameIndex = 0;
@@ -197,5 +202,10 @@ function exportTableVisualProperties(
     return body;
   }
   const body = renderBlocks(blocks);
-  return { body, automaticStyles };
+  const sectionBodies = sections === undefined ? undefined : Array.from(sections, renderBlocks);
+  return {
+    body,
+    automaticStyles,
+    ...(sectionBodies === undefined ? {} : { sections: sectionBodies }),
+  };
 }

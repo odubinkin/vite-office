@@ -82,3 +82,38 @@ it("retains original default-radix byte and Unicode scalar views", /** Public ov
   expect(toUInt32(new Uint8Array([50, 53, 53]))).toBe(255);
   expect(toUInt32(new Uint16Array([45, 49]))).toBe(0);
 });
+it("specializes both token-view overload sets for counted bytes without UTF16 conversion", /** Actual borrowed subviews preserve byte storage, empty fields and terminal indices. @returns Nothing. */ () => {
+  const source = Uint8Array.of(32, 65, 32, 32, 66, 32),
+    position: [number] = [0];
+  const tokens: Uint8Array[] = [];
+  while (position[0] !== -1) tokens.push(getToken(source, 32, position));
+  expect(
+    tokens.map(
+      /** Copies observed borrowed byte fields. @param value - Token view. @returns Scalar bytes. */ (
+        value,
+      ) => [...value],
+    ),
+  ).toEqual([[], [65], [], [66], []]);
+  expect(
+    tokens.every(
+      /** Observes shared backing storage. @param value - Token view. @returns Same source allocation. */ (
+        value,
+      ) => value.buffer === source.buffer,
+    ),
+  ).toBe(true);
+  source[1] = 90;
+  expect(tokens[1]?.[0]).toBe(90);
+  expect(
+    /** Invokes the original terminal-position assertion. @returns No valid token. */ () =>
+      getToken(source, 32, position),
+  ).toThrow("assert(position <= sv.size())");
+  const index: [number] = [0],
+    selected = getToken(source, 3, 32, index);
+  expect([...selected]).toEqual([66]);
+  expect(index[0]).toBe(6);
+  expect(selected.buffer).toBe(source.buffer);
+  expect([...getToken(source, 1, 32)]).toEqual([90]);
+  expect(getToken(source, -1, 32)).toBeInstanceOf(Uint8Array);
+  expect(getToken(source, 99, 32)).toHaveLength(0);
+  expect([...getToken(Uint8Array.of(65, 255, 66), -1, [0])]).toEqual([65]);
+});

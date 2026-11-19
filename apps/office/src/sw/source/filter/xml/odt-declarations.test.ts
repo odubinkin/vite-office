@@ -8,7 +8,7 @@ import {
   type OdfXmlDiagnostic,
 } from "../../../../xmloff/source/core/xmlimp";
 import { getXMLToken, ODF_NAMESPACES, XMLToken } from "../../../../xmloff/source/core/xmltoken";
-import { exportContentXml } from "./xmlexp";
+import { exportContentXml, exportStylesXml } from "./xmlexp";
 import { importWriterXml } from "./xmlimp";
 import { readOdtDocument } from "./swxml";
 import { RES_BREAK } from "../../../inc/hintids";
@@ -145,7 +145,10 @@ describe("ODT declaration import", /** Groups declaration policy assertions. @re
       { title: "fixture" },
     ).document;
     expect(imported.paragraphs[0]?.GetText()).toBe("Sample");
-    expect(exportContentXml(imported)).toContain('style:text-underline-color="#abcdef"');
+    expect(exportContentXml(imported)).toContain(
+      '<text:span text:style-name="T1">Sample</text:span>',
+    );
+    expect(exportStylesXml(imported)).toContain('style:text-underline-color="#abcdef"');
   });
 
   it("does not generalize metadata suppression to other ignored subtrees", /** Checks default ignore policy retains diagnostics. @returns Nothing. */ () => {

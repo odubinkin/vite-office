@@ -1,5 +1,7 @@
 /** @fileoverview Original source-backed runtime module edges, kept separate from the dependency scanner without changing their authority or contents. */
 export const allowedEdges = new Map([
+  // Original core Library_ucb1 uses SDK command/identifier declarations; file Library_ucpfile1 links comphelper/cppu/cppuhelper/sal and SDK interfaces; filstr.hxx also uses the actual pinned libc++ std::mutex.
+  ["ucb", new Set(["comphelper", "cppu", "cppuhelper", "external", "offapi", "sal", "udkapi"])],
   // Original Library_ucbhelper uses SDK interfaces and CPPU/cppuhelper; command, sink, request and identifier owners consume these exact modules.
   ["ucbhelper", new Set(["cppu", "cppuhelper", "offapi", "udkapi", "sal", "salhelper"])],
   // Native documentbuilder.cxx includes processfactory and Content; Library_unoxml.mk links comphelper/ucbhelper and libxml2.
@@ -19,12 +21,29 @@ export const allowedEdges = new Map([
   // Original comphelper extract.hxx and attributelist.hxx/cxx use UNO Any/TypeClass and OUString.
   // Original OFOPXMLHelper uses SAX; interfacecontainer3.hxx uses o3tl::cow_wrapper.
   // Original seqstream.hxx uses cppuhelper/implbase; Library_comphelper links cppuhelper.
-  ["comphelper", new Set(["cppu", "cppuhelper", "o3tl", "offapi", "sal", "sax", "udkapi"])],
+  // Original comphelper/refcountedmutex.hxx derives from salhelper::SimpleReferenceObject.
+  // Original comphelper/seekableinput.hxx uses std::mutex; external/libcxx binds the actual pinned SDK implementation.
+  [
+    "comphelper",
+    new Set([
+      "cppu",
+      "cppuhelper",
+      "external",
+      "o3tl",
+      "offapi",
+      "sal",
+      "salhelper",
+      "sax",
+      "udkapi",
+    ]),
+  ],
   // Original configuration nodes use SAL/UNO values and TypeClass IDL; shared SortedVector adapts config_map ordering.
   ["configmgr", new Set(["cppu", "o3tl", "sal", "udkapi"])],
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],
-  // Original cppuhelper uses UNO/SAL, o3tl/cow_wrapper and comphelper/sequence.
-  ["cppuhelper", new Set(["cppu", "o3tl", "sal", "udkapi"])],
+  // Original cppuhelper uses UNO/SAL and o3tl/cow_wrapper; weak.cxx/implbase_ex.cxx use standard-library atomic/mutex.
+  // Original exception rethrow and misc testgetCaughtException consume the compiler exception ABI/std::exception_ptr;
+  // its actual JavaScript host binding links the same pinned SDK standard-library facade under external/libcxx.
+  ["cppuhelper", new Set(["cppu", "external", "o3tl", "sal", "udkapi"])],
   ["cui", new Set(["editeng", "svl", "svx", "tools"])],
   // Desktop appinit.cxx uses the process factory and CPPU bootstrap; the browser binds linked constructors, including stocservices.component TypeConverter.
   [
@@ -35,6 +54,8 @@ export const allowedEdges = new Map([
       "cppuhelper",
       "i18npool",
       "lingucomponent",
+      // Library_oox registers FastTokenHandler in oox.component; Desktop binds the same service factory.
+      "oox",
       // Library_package2 registers package2 in services; Desktop binds its native ManifestWriter factory.
       "package",
       // Library_sax registers expwrap in services; Desktop bootstrap binds the same factory in the browser registry.
@@ -42,6 +63,8 @@ export const allowedEdges = new Map([
       "stoc",
       "udkapi",
       "unoxml",
+      // Library_utl registers utl.component; Desktop binds its original OTempFileService factory.
+      "unotools",
     ]),
   ],
   // Original justifyitem/frmitems use UNO values, table/style enums and Tools/o3tl units.
@@ -58,6 +81,8 @@ export const allowedEdges = new Map([
       // Original impedit2.cxx includes unicode/ubidi.h; Library_editeng links icuuc and icu_headers.
       "external",
       "i18nlangtag",
+      // SvxNumberType::GetNumStr instantiates the DefaultNumberingProvider UNO service.
+      "i18npool",
       // Original scripthintitem.hxx includes i18nutil/scriptchangescanner.hxx; Library_editeng links i18nutil.
       "i18nutil",
       // Original paraitem.cxx includes unotools/syslocale.hxx for numeric decimal defaults.
@@ -123,29 +148,73 @@ export const allowedEdges = new Map([
   // Original binary*stream headers include UNO Reference/Sequence and io XInputStream/XOutputStream/XSeekable.
   [
     "oox",
-    new Set(["comphelper", "cppu", "o3tl", "offapi", "package", "sal", "sax", "tools", "udkapi"]),
+    // fasttokenhandler.hxx derives ImplInheritanceHelper and uses cppuhelper service helpers; Library_oox links cppuhelper.
+    new Set([
+      // Original filterbase.cxx owns std::mutex; external/libcxx binds the pinned SDK implementation.
+      "external",
+      // Original ColorExportUtils.cxx includes docmodel ComplexColor; Library_oox.mk links docmodel.
+      "docmodel",
+      "comphelper",
+      "cppu",
+      "cppuhelper",
+      "o3tl",
+      "offapi",
+      "package",
+      "sal",
+      "sax",
+      "tools",
+      "udkapi",
+    ]),
   ],
   // Library_package2/Library_xstor link cppu/cppuhelper; native storage streams use embed SDK and actual component/value owners.
-  ["package", new Set(["comphelper", "cppu", "cppuhelper", "offapi", "sal", "sax", "udkapi"])],
-  ["sal", new Set(["o3tl"])],
+  // Original zipfileaccess.cxx includes ucbhelper/content.hxx; Library_package2 links ucbhelper.
+  // Original Library_package2 uses external zlib; InflateZlib delegates the same API through the installed native codec.
+  // switchpersistencestream.cxx includes unotools/tempfile.hxx; Library_package2.mk links utl for actual TempFileFastService.
+  // owriteablestream.cxx copies seekable parts through tools/stream.hxx; Library_package2 links tl.
+  [
+    "package",
+    new Set([
+      "comphelper",
+      "cppu",
+      "cppuhelper",
+      "external",
+      "offapi",
+      "sal",
+      "sax",
+      "tools",
+      "ucbhelper",
+      "udkapi",
+      "unotools",
+    ]),
+  ],
+  // Actual compiled OSL file/mutex calls bind the linked Emscripten runtime, rather than a JS filesystem or mutex emulator.
+  ["sal", new Set(["o3tl", "external"])],
   // Native SimpleReferenceObject uses SAL OSL interlocked operations;Library_salhelper links sal.
   ["salhelper", new Set(["sal"])],
   // Original saxwriter.cxx consumes SAL/OUString and published SAX IDL (Library_sax).
   // Native Library_sax links cppu/cppuhelper; FastSaxParser owns typed errors and a WeakImplHelper locator.
   // Original sax/fastattribs.hxx includes o3tl/string_view.hxx for zero-allocation typed value queries.
-  ["sax", new Set(["comphelper", "cppu", "cppuhelper", "o3tl", "offapi", "sal", "udkapi"])],
+  // fastparser.cxx includes libxml/parser.h; Library_sax.mk links the pinned libxml2 external.
+  [
+    "sax",
+    new Set(["comphelper", "cppu", "cppuhelper", "external", "o3tl", "offapi", "sal", "udkapi"]),
+  ],
   // Original stoc/source/typeconv/convert.cxx and Library_stocservices use CPPU values, helpers, SAL, o3tl and SDK script/lang declarations.
   ["stoc", new Set(["cppu", "cppuhelper", "sal", "o3tl", "udkapi"])],
 
   [
     "sc",
     new Set([
+      // Original xlstyle.hxx owns ComplexColor; Library_scfilt.mk links docmodel.
+      "docmodel",
       // Original scerrors.hxx includes comphelper/errcode.hxx; Library_sc links comphelper.
       "comphelper",
       // Native richstring.cxx includes oox/helper/attributelist.hxx; Library_scfilt.mk links oox.
       "oox",
       // Original Calc attrib.cxx exposes actual UNO Any member query/extraction.
       "cppu",
+      // Original docuno.cxx includes queryinterface.hxx/supportsservice.hxx; Library_sc.mk links cppuhelper.
+      "cppuhelper",
       "cui",
       "editeng",
       "external",
@@ -183,8 +252,14 @@ export const allowedEdges = new Map([
     "sfx2",
     new Set(["comphelper", "cppu", "cppuhelper", "offapi", "sal", "sax", "svl", "tools", "udkapi"])
       .add("i18nlangtag")
-      .add("o3tl"),
+      .add("o3tl")
+      // Native SfxDocumentMetaData uses SotStorage::GetVersion; Library_sfx links sot.
+      .add("sot")
+      // Original SfxDocumentMetaData.cxx includes unotools/mediadescriptor.hxx; Library_sfx links utl.
+      .add("unotools"),
   ],
+  // Native Library_sot links comphelper/cppu/sal and SDK API; exchange/storage use native MIME/flavor/property declarations.
+  ["sot", new Set(["comphelper", "cppu", "offapi", "sal", "udkapi"])],
   // Original enum items include comphelper/extract.hxx and UNO Any.hxx.
   // Original cintitem.cxx hashes unsigned values through o3tl/hash_combine.hxx.
   // Native grabbagitem.cxx consumes generated UDK beans PropertyValue.hpp.
@@ -336,7 +411,22 @@ export const allowedEdges = new Map([
   // CalendarWrapper owns a native DateTime epoch; Library_utl links tl.
   [
     "unotools",
-    new Set(["sal", "cppu", "udkapi", "i18npool", "i18nlangtag", "i18nutil", "offapi", "tools"]),
+    // Original mediadescriptor.cxx uses comphelper::getProcessComponentContext; Library_utl links comphelper.
+    // Original streamwrap.hxx derives actual wrappers from cppuhelper ImplHelper/WeakImplHelper.
+    new Set([
+      "sal",
+      "cppu",
+      "cppuhelper",
+      "comphelper",
+      "udkapi",
+      "i18npool",
+      "i18nlangtag",
+      "i18nutil",
+      "offapi",
+      "tools",
+      // tempfile.cxx includes unistd.h/getpid and XTempFile.hxx uses std::mutex; bindings execute the actual SDK runtime.
+      "external",
+    ]),
   ],
   // Original Tools/UnitConversion.hxx delegates to o3tl/unit_conversion.hxx.
   // Original tools/color.hxx owns Any color operators and includes com/sun/star/uno/Any.hxx.
@@ -347,9 +437,26 @@ export const allowedEdges = new Map([
   // Native XML border handlers use published UNO structs; item mapping belongs to Writer xmlimpit/xmlexpit.
   // Original xmloff/Library_xo.mk links cppu; text import consumes real UNO property/cursor values.
   // Native NamedBoolPropertyHdl.cxx includes comphelper/extract.hxx for cppu::any2bool; Library_xo links comphelper.
+  // Library_xo links i18nlangtag and svl for the native number-style import and export owners.
+  // Library_xo links docmodel for XMLThemeContext and XMLComplexColorContext.
+  // SvXMLUnitConverter obtains extended numbering identifiers from the DefaultNumberingProvider UNO service.
   [
     "xmloff",
-    new Set(["comphelper", "udkapi", "cppu", "o3tl", "offapi", "sal", "sax", "tools", "unotools"]),
+    new Set([
+      "comphelper",
+      "udkapi",
+      "cppu",
+      "docmodel",
+      "i18nlangtag",
+      "i18npool",
+      "o3tl",
+      "offapi",
+      "sal",
+      "sax",
+      "svl",
+      "tools",
+      "unotools",
+    ]),
   ],
   // Original xmlreader span.hxx/cxx exposes SAL strings and the generated UNO RuntimeException.
   ["xmlreader", new Set(["cppu", "sal"])],

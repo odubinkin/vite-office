@@ -163,6 +163,10 @@ function fillEvent(
 }
 /** Original C++ base helper flattened over the supplied actual root; source acquire/release and identity stay with that root. */
 export const OPropertySetHelper = {
+  /** Original static info factory is available without instantiating or specializing a helper root. @param helper - Actual property descriptions. @returns Acquired info. */
+  createPropertySetInfo(helper: IPropertyArrayHelper): Reference<XPropertySetInfo> {
+    return new Reference(new OPropertySetHelperInfo_Impl(helper));
+  },
   /** Compiler binding for one actual concrete multiple-inheritance base. Abstract native callbacks remain abstract and no owner is instantiated here. @param Base - Actual root constructor. @returns Stable abstract helper constructor. */
   specialize(Base: RootConstructor) {
     const Parent = Base;
@@ -232,7 +236,7 @@ export const OPropertySetHelper = {
       /** Original static info factory over the actual snapshot component. @param helper - Actual descriptions. @returns Acquired info. */ static createPropertySetInfo(
         helper: IPropertyArrayHelper,
       ): Reference<XPropertySetInfo> {
-        return new Reference(new OPropertySetHelperInfo_Impl(helper));
+        return OPropertySetHelper.createPropertySetInfo(helper);
       }
       /** Original disposal notifies named listener containers only; shared unnamed listeners belong to rBHelper's actual owner. @returns Nothing. */ disposing(): void {
         const source = new Reference(this),

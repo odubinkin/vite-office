@@ -1,5 +1,8 @@
 /** @fileoverview Additional native document regression cases. */
 /** @fileoverview RTF document import through native Writer paragraph and text hint owners. */
+import { beforeAll } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
+beforeAll(initializeRuntime);
 import { existsSync, readFileSync } from "node:fs";
 import { expect, it } from "vitest";
 

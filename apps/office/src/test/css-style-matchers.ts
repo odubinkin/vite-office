@@ -14,7 +14,12 @@ const originalStyleMatcher = jestDomToHaveStyle as unknown as StyleMatcher;
 
 /** Converts a JavaScript style key to its CSS property spelling. @param property - Style key. @returns CSS property name. */
 function cssPropertyName(property: string): string {
-  return property.replace(/[A-Z]/gu, (letter) => `-${letter.toLowerCase()}`);
+  return property.replace(
+    /[A-Z]/gu,
+    /** Converts an uppercase style-key character to a CSS fragment. @param letter - Uppercase character from the style key. @returns Lowercase fragment with a leading hyphen. */ (
+      letter,
+    ) => `-${letter.toLowerCase()}`,
+  );
 }
 
 /** Selects CSS serialization with an absolute value or a known current-font context. @param property - CSS property name. @param value - Expected CSS value. @returns Whether a computed reference value is safe to compare. */
@@ -72,7 +77,7 @@ function computedStyleExpectation(
   return normalized;
 }
 
-/** Keeps DOM validation, negation, cascade checks and diagnostics from jest-dom while normalizing equivalent absolute CSS values. @param element - Assertion subject. @param css - Expected declarations. @returns Original matcher result for the computed expectation. */
+/** Keeps DOM validation, negation, cascade checks and diagnostics from jest-dom while normalizing equivalent absolute CSS values. @param this - Vitest matcher state for this assertion. @param element - Assertion subject. @param css - Expected declarations. @returns Original matcher result for the computed expectation. */
 function toHaveStyle(
   this: MatcherState,
   element: unknown,

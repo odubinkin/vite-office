@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.tabs.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/filter/ww8/docxattributeoutput.cxx",
+    "localSymbols": [
+      "ParaTabStop"
+    ],
+    "upstreamSymbols": [
+      "DocxAttributeOutput::ParaTabStop"
+    ],
+    "preservedResponsibilities": [
+      "Writes Native DOCX clear and custom tab records in source order, inherits equal stops, preserves the per-list 64-record limit and directs the default position to settings."
+    ],
+    "omittedResponsibilities": [
+      "The caller provides the resolved native inherited item and absolute indent."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.tabs.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The original tab methods are partitioned into the tabs source file to retain the repository source-size bound while preserving the original mapper or exporter context."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.tabs.ts",
+          "marker": "ParaTabStop"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.tabs.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx",
+          "marker": "DocxAttributeOutput::ParaTabStop"
+        }
+      ]
+    }
+  }
+}

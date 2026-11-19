@@ -1,4 +1,4 @@
-/** @fileoverview Original normal-grid/header selection function sets after browser hit testing;fill,drag-transfer,split and protected-sheet services remain unported. */
+/** @fileoverview Original normal-grid and header selection function sets after browser hit testing. */
 import { ScAddress } from "../../../inc/address";
 import type { ScTabView } from "../inc/tabview";
 import type { ScModule } from "../../../inc/scmod";
@@ -57,7 +57,7 @@ export class ScViewFunctionSet {
     else this.view.DoneBlockMode();
     this.m_bAnchor = false;
   }
-  /** Original unprotected/unmerged SetCursorAtCell branch;the original cursor remains at the cell anchor during range dragging. Browser geometry reveals the endpoint separately and supplies false for the unported VCL device-scroll branch. @param col - Native column. @param row - Native row. @param scroll - Original device-scroll request. @returns Selection admitted. */
+  /** Checks native protection before moving the cursor or extending the current selection. Browser geometry reveals the endpoint with its own scroll path. @param col - Native column. @param row - Native row. @param scroll - Original device-scroll request. @returns Selection admitted. */
   SetCursorAtCell(col: number, row: number, scroll: boolean): boolean {
     if (scroll)
       throw new Error(
@@ -65,6 +65,7 @@ export class ScViewFunctionSet {
       );
     const data = this.view.GetViewData(),
       tab = data.GetTabNumber();
+    if (!this.view.CanSelectCell(col, row, tab)) return false;
     if (this.module?.IsFormulaMode()) {
       if (!this.m_bAnchor) {
         this.view.DoneRefMode(true);

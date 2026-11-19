@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18npool/source/defaultnumberingprovider/defaultnumberingprovider.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-format-input-output",
+    "capabilityIds": [
+      "CAP-5f0f5ed3-9c6d-4ac7-b9fb-250a1f2497ea"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/i18npool/source/defaultnumberingprovider/defaultnumberingprovider.ts",
+        "apps/office/src/sw/source/filter/xml/native-none-numbering.test.ts",
+        "i18npool/source/defaultnumberingprovider/defaultnumberingprovider.cxx"
+      ],
+      "justification": "Formats the original decimal-zero numbering types and resolves the original two- through five-digit numbering identifiers for ODF import and export. Locale-dependent numbering identifier families and unused UNO enumeration methods remain outside this slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "formatArabicZero",
+        "getNumberingIdentifier",
+        "findNumberingType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "i18npool/source/defaultnumberingprovider/defaultnumberingprovider.cxx",
+      "upstreamSymbols": [
+        "lcl_formatArabicZero",
+        "DefaultNumberingProvider::getNumberingIdentifier",
+        "DefaultNumberingProvider::getNumberingType"
+      ]
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/excel/xecontent.ts",
+    "localSymbols": [
+      "XclExpMergedcells",
+      "SaveXml",
+      "XclExpSst"
+    ],
+    "upstreamPath": "sc/source/filter/excel/xecontent.cxx",
+    "upstreamSymbols": [
+      "XclExpMergedcells::SaveXml",
+      "XclExpSstImpl::SaveXml"
+    ],
+    "preservedResponsibilities": [
+      "The native XLSX merged-cell record consumes Calc merge anchors, including sparse empty cells, and writes the original worksheet mergeCells and mergeCell records.",
+      "The OOXML SST owner counts every reference, deduplicates through XclExpString hashing and ordering, and emits xl/sharedStrings.xml with the original workbook relationship and numbered unique items.",
+      "Shared strings use the actual workbook font table to serialize indexed formatted runs."
+    ],
+    "omittedResponsibilities": [
+      "Legacy BIFF SST and EXTSST records and original rich-run font conversion remain unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xecontent.ts",
+          "marker": "XclExpMergedcells"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "mergeCell"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xecontent.cxx",
+          "marker": "XclExpMergedcells::SaveXml"
+        }
+      ]
+    }
+  }
+}

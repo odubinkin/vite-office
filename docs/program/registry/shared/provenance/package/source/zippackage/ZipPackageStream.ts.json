@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/zippackage/ZipPackageStream.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/zippackage/ZipPackageStream.cxx",
+    "localSymbols": [
+      "ZipPackageStream"
+    ],
+    "upstreamSymbols": [
+      "ZipPackageStream::ZipPackageStream",
+      "ZipPackageStream::getInputStream",
+      "ZipPackageStream::GetOwnSeekStream",
+      "ZipPackageStream::saveChild",
+      "ZipPackageStream::getRawData",
+      "ZipPackageStream::successfullyWritten"
+    ],
+    "preservedResponsibilities": [
+      "Binds plain DATA and raw package-member reads and saves to actual ZipFile and ZipOutputStream, with source manifest order, compression properties, media defaults and member-state transitions. Routes the original size estimates to ordinary compression, deferred temporary-file compression above 100000 bytes and dictionary-based block compression above 1000000 bytes. Deferred entries update their source stream only when replayed into the archive. Historical upstream stream discrepancies are retained."
+    ],
+    "omittedResponsibilities": [
+      "Encrypted raw and output domains and physical worker scheduling remain unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackageStream.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackageStream.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.members.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackageStream.save.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/package/source/zippackage/ZipPackageStream.cxx",
+          "marker": "ZipPackageStream::ZipPackageStream"
+        },
+        {
+          "path": "vendor/libreoffice-reference/package/inc/ZipPackageStream.hxx",
+          "marker": "PACKAGE_STREAM_NOTSET"
+        }
+      ]
+    }
+  }
+}

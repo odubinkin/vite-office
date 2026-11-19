@@ -1,0 +1,82 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-971ab8a7-b7c2-45a8-90ed-1b854c9300d4",
+    "capabilityId": "CAP-971ab8a7-b7c2-45a8-90ed-1b854c9300d4",
+    "suite": "shared",
+    "subsystem": "native-package-commit-state",
+    "type": "model",
+    "maturity": "mapped",
+    "assertions": [
+      "Real source modes and readonly typed commit error preserve receiver identity.",
+      "Actual temporary file properties/exception binding retain original failure detachment and ownership."
+    ],
+    "capability": "Original package initialization and failed-transfer state prerequisites",
+    "gaps": [
+      "Original initialization modes/NoFileSync state, actual XInitialization/XServiceInfo, guarded readonly commit and failed-transfer detachment/typed UseBackupException are represented with genuine UNO streams, TempFileService/MEMFS, actual property/exception ABI and source lifetime. Positive writeTempFile/transfer remains explicitly unavailable and no full package/XChangesBatch/property service is advertised. Pending key-selection/KDF and classic SAX approvals are not bypassed. Full storage/model/filter/DOCX/XLSX UI and prior coverage failures remain unfinished."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "package/source/zippackage/ZipPackage.cxx",
+          "marker": "DisconnectFromTargetAndThrowException_Impl"
+        }
+      ],
+      "tests": [
+        {
+          "path": "package/qa/ofopxmlstorages/Test01.java",
+          "marker": "StorageFactory"
+        }
+      ],
+      "docs": [
+        {
+          "path": "package/inc/ZipPackage.hxx",
+          "marker": "enum InitialisationMode"
+        },
+        {
+          "path": "offapi/com/sun/star/embed/UseBackupException.idl",
+          "marker": "TemporaryFileURL"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.ts",
+          "marker": "DisconnectFromTargetAndThrowException_Impl"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/embed/UseBackupException.ts",
+          "marker": "UseBackupException"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.commit-state.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-package-commit-state.md",
+          "marker": "# Native package commit state prerequisites"
+        }
+      ]
+    },
+    "implemented": false,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Represented original fields and generated UNO/RTL/native mutex owners use existing host storage while native physical ABI/allocator/thread and full package/stream services remain unqualified."
+    },
+    "scopeLimitations": [
+      "Original initialization modes/NoFileSync state, actual XInitialization/XServiceInfo, guarded readonly commit and failed-transfer detachment/typed UseBackupException are represented with genuine UNO streams, TempFileService/MEMFS, actual property/exception ABI and source lifetime. Positive writeTempFile/transfer remains explicitly unavailable and no full package/XChangesBatch/property service is advertised. Pending key-selection/KDF and classic SAX approvals are not bypassed. Full storage/model/filter/DOCX/XLSX UI and prior coverage failures remain unfinished."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "package-mode-transfer-failure"
+  }
+}

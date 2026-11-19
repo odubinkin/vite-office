@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/unotools/source/misc/mediadescriptor.ts",
+    "status": "mapped",
+    "upstreamPath": "unotools/source/misc/mediadescriptor.cxx",
+    "localSymbols": [
+      "getComponentDataEntry",
+      "setComponentDataEntry",
+      "clearComponentDataEntry",
+      "addInputStream",
+      "isStreamReadOnly"
+    ],
+    "upstreamSymbols": [
+      "getComponentDataEntry",
+      "setComponentDataEntry",
+      "clearComponentDataEntry",
+      "impl_addInputStream",
+      "isStreamReadOnly"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source responsibilities retain actual RTL/UNO owners and contracts. Explicit disposal, borrowed UTF16 views, pointer-address cells, compiler overload witnesses and realm-local execution bind the browser host; physical native ABI/thread guarantees remain unqualified."
+    },
+    "preservedResponsibilities": [
+      "Original ComponentData getter returns an acquired Any from the genuine NamedValueCollection temporary; setter retains NamedValue/PropertyValue sequence kind, VOID removes entries, clear removes the outer property only at emptiness. Invalid existing kinds retain source release no-mutation behavior. Real UNO Any/Sequence/SequenceAsHashMap owners are used, without a host descriptor DTO or replacement factory.",
+      "Original provided-InputStream presence fast path and invalid-source handling, ReadOnly/PostData/Stream precedence and actual Reference template extraction are represented with native UNO/RTL map/stream owners. Positive URL/POST/trust/interaction opening and non-file readonly/default environment remain explicitly unported. File Content inference and exception branches are source-represented but unqualified because the actual file Content provider is missing. Complete SfxMedium/storage/filter/model/DOCX/XLSX UI acceptance remains unfinished."
+    ],
+    "omittedResponsibilities": [
+      "Complete native stream/URL/locking/authentication/password and medium/storage/filter/model/DOCX/XLSX UI acceptance remain unfinished; no successful stand-ins are supplied.",
+      "OSL_ENSURE/SAL diagnostics, physical native ABI/thread/allocator domains and invalid/dangling pointers remain unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/unotools/source/misc/mediadescriptor.ts",
+          "marker": "getComponentDataEntry"
+        },
+        {
+          "path": "apps/office/src/unotools/source/misc/mediadescriptor.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unotools/source/misc/mediadescriptor.stream.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/unotools/source/misc/mediadescriptor.cxx",
+          "marker": "getComponentDataEntry"
+        }
+      ]
+    }
+  }
+}

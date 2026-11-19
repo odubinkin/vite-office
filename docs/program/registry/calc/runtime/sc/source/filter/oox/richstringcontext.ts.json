@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/oox/richstringcontext.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-file-filter",
+    "capabilityIds": [
+      "CAP-1d1d48a3-5a10-4373-876c-fa5f18a62db9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/oox/richstringcontext.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.test.ts"
+      ],
+      "justification": "Owns original root/text/run boundaries for shared and inline strings. Joins parser text deliveries within the active text element, then decodes each source portion independently. Passes native XML space attributes through AttributeList. Routes rPr through the original FontContext; text callbacks remain independent of formatting child data. The shared font context imports workbook colors for each explicitly formatted text portion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RichStringContext"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/oox/richstringcontext.cxx",
+      "upstreamSymbols": [
+        "RichStringContext::onCreateContext",
+        "RichStringContext::onCharacters"
+      ]
+    }
+  }
+}

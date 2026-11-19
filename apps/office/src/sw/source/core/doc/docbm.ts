@@ -1,6 +1,6 @@
-/** @fileoverview Owns collapsed Writer bookmarks and imported soft-page positions at the pinned `sw/source/core/doc/docbm.cxx` boundary. */
+/** @fileoverview Owns Writer bookmarks and imported soft-page positions at the pinned docbm.cxx boundary. */
 
-import { UnoMark } from "../crsr/bookmark";
+import { MarkBase, UnoMark } from "../crsr/bookmark";
 import { SwPaM } from "../crsr/pam";
 import { getUniqueBookmarkName } from "./bookmark-name";
 import { SwPosition } from "../crsr/pam";
@@ -10,32 +10,24 @@ import { SwContentNode, type SwNode } from "../docnode/node";
 import { SwNodes } from "../docnode/nodes";
 import { SwNodeIndex } from "../crsr/pam";
 
-/** One live, named Writer position. Its registered content index follows text edits. */
-export class SwBookmark {
-  /** Creates a collapsed bookmark. @param name - Unique document name. @param position - Registered Writer position. @returns Nothing. */
+/** Named bookmark with the native registered mark positions. */
+export class SwBookmark extends MarkBase {
+  /** Creates the document-owned bookmark. @param name - Unique document name. @param range - Native selection. @returns Nothing. */
   public constructor(
     private name: string,
-    private readonly position: SwPosition,
-  ) {}
+    range: SwPaM,
+  ) {
+    super(range);
+  }
 
   /** Returns the name. @returns Bookmark name. */
   public GetName(): string {
     return this.name;
   }
 
-  /** Returns its live model position. @returns Registered position. */
-  public GetMarkPos(): SwPosition {
-    return this.position;
-  }
-
   /** Renames the bookmark after document-level validation. @param name - New name. @returns Nothing. */
   public SetName(name: string): void {
     this.name = name;
-  }
-
-  /** Releases its registered position. @returns Nothing. */
-  public Dispose(): void {
-    this.position.Dispose();
   }
 }
 
@@ -45,7 +37,7 @@ export class DocumentMarkAccess {
   private readonly m_vAllMarks: (SwBookmark | UnoMark)[] = [];
   /** Original start-order comparator for represented collapsed and UNO marks; cross-reference marks are not in this core family. @param mark - Actual borrowed mark. @returns Native start position. */
   private static MarkStart(mark: SwBookmark | UnoMark): SwPosition {
-    return mark instanceof UnoMark ? mark.GetMarkStart() : mark.GetMarkPos();
+    return mark.GetMarkStart();
   }
   /** Original lower_bound insertion puts a new equal-start mark before existing ones. @param mark - Actual borrowed native mark. @returns Nothing. */
   private InsertMarkSorted(mark: SwBookmark | UnoMark): void {
@@ -91,16 +83,11 @@ export class DocumentMarkAccess {
     if (!mark) return;
     if (mark.GetMarkPos().GetNode().GetNodes() !== this.document.GetNodes())
       throw new Error("assert(mark belongs to document)");
-    if (mark instanceof UnoMark) {
-      const ordered = new SwPaM(range.Start(), range.HasMark() ? range.End() : undefined);
-      try {
-        mark.SetPositions(ordered);
-      } finally {
-        ordered.Dispose();
-      }
-    } else {
-      if (range.HasMark()) throw new Error("Expanded user bookmarks are not represented");
-      mark.GetMarkPos().Assign(range.GetPoint().GetNode(), range.GetPoint().GetContentIndex());
+    const ordered = new SwPaM(range.Start(), range.HasMark() ? range.End() : undefined);
+    try {
+      mark.SetPositions(ordered);
+    } finally {
+      ordered.Dispose();
     }
     this.GetAllMarks();
   }
@@ -122,7 +109,7 @@ export class DocumentMarkAccess {
     const deleted: (SwBookmark | UnoMark)[] = [];
     for (const mark of this.GetAllMarks()) {
       const point = mark.GetMarkPos(),
-        expanded = mark instanceof UnoMark && mark.IsExpanded(),
+        expanded = mark.IsExpanded(),
         other = expanded ? mark.GetOtherMarkPos() : point;
       let inside = lcl_GreaterThan(point, start, startContent) && lcl_Lower(point, end, endContent),
         otherInside =
@@ -144,7 +131,7 @@ export class DocumentMarkAccess {
           point.GetNode() !== start ||
           point.GetContentIndex() !== startContent;
         if (remove) deleted.push(mark);
-      } else if (inside !== otherInside && mark instanceof UnoMark) {
+      } else if (inside !== otherInside && expanded) {
         const position =
           endContent !== undefined
             ? new SwPosition(end, endContent)
@@ -188,9 +175,25 @@ export class DocumentMarkAccess {
   /** Binds the manager to one Writer graph. @param document - Owning document. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {}
 
-  /** Creates a unique collapsed bookmark. @param node - Text node. @param offset - UTF-16 position. @param name - ODF/user name. @returns New bookmark. */
+  /** Creates a collapsed bookmark. @param node - Text node. @param offset - UTF-16 position. @param name - Writer bookmark name. @returns New bookmark. */
   public MakeMark(node: SwTextNode, offset: number, name: string): SwBookmark {
     this.assertNode(node);
+    const point = new SwPosition(node, offset, "mark", "before");
+    const range = new SwPaM(point);
+    point.Dispose();
+    try {
+      return this.MakeBookmark(range, name);
+    } finally {
+      range.Dispose();
+    }
+  }
+
+  /** Creates the native bookmark from an ordered paragraph selection. @param source - Actual Writer selection. @param name - Writer bookmark name. @returns New bookmark. */
+  public MakeBookmark(source: SwPaM, name: string): SwBookmark {
+    const start = source.Start(),
+      end = source.End();
+    this.assertNode(start.GetNode() as SwTextNode);
+    this.assertNode(end.GetNode() as SwTextNode);
     this.assertName(name);
     const uniqueName = getUniqueBookmarkName(
       name,
@@ -200,7 +203,13 @@ export class DocumentMarkAccess {
       this.markBasenameUniqueOffsets,
       "%1 Copy ",
     );
-    const mark = new SwBookmark(uniqueName, new SwPosition(node, offset, "mark", "before"));
+    const range = new SwPaM(start, start.compare(end) !== 0 ? end : undefined);
+    let mark: SwBookmark;
+    try {
+      mark = new SwBookmark(uniqueName, range);
+    } finally {
+      range.Dispose();
+    }
     this.bookmarks.set(uniqueName, mark);
     this.InsertMarkSorted(mark);
     this.document.NotifyModelChange({ kind: "mark-changed" });
@@ -216,9 +225,7 @@ export class DocumentMarkAccess {
   public GetBookmarks(): readonly SwBookmark[] {
     return [...this.bookmarks.values()].sort(
       /** Orders positions as Writer's mark index does. @param left - Earlier candidate. @param right - Later candidate. @returns Signed order. */
-      (left, right) =>
-        left.GetMarkPos().GetNodeIndex() - right.GetMarkPos().GetNodeIndex() ||
-        left.GetMarkPos().GetContentIndex() - right.GetMarkPos().GetContentIndex(),
+      (left, right) => left.GetMarkStart().compare(right.GetMarkStart()),
     );
   }
 

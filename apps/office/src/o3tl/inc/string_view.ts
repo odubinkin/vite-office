@@ -41,6 +41,8 @@ export function iterateCodePoints(
 
 /** Original size_t-position UTF16 overload. @param str - Borrowed view. @param delimiter - Native char16 delimiter. @param position - In/out position0..length. @returns Borrowed token. */
 export function getToken(str: Uint16Array, delimiter: number, position: [number]): Uint16Array;
+/** Original size_t-position byte-view specialization. @param str - Borrowed byte view. @param delimiter - Native byte delimiter. @param position - In/out position. @returns Borrowed token. */
+export function getToken(str: Uint8Array, delimiter: number, position: [number]): Uint8Array;
 /** Original signed32 token-index overloads retain negative-index handling and an optional local index0. @param str - Borrowed view. @param token - Signed32 ordinal. @param delimiter - Native char16 delimiter. @param position - Optional in/out signed32 index. @returns Borrowed token or original empty view. */
 export function getToken(
   str: Uint16Array,
@@ -48,23 +50,30 @@ export function getToken(
   delimiter: number,
   position?: [number],
 ): Uint16Array;
+/** Original signed32 token-index byte-view specialization. @param str - Borrowed byte view. @param token - Signed32 ordinal. @param delimiter - Byte delimiter. @param position - In/out signed32 position. @returns Borrowed token or default empty view. */
+export function getToken(
+  str: Uint8Array,
+  token: number,
+  delimiter: number,
+  position?: [number],
+): Uint8Array;
 /** Original overload dispatch selects by erased position-reference versus delimiter argument, without changing either native algorithm. @param str - Borrowed view. @param first - Delimiter or ordinal. @param second - Position reference or delimiter. @param output - Optional signed32 index. @returns Original view. */
 export function getToken(
-  str: Uint16Array,
+  str: Uint16Array | Uint8Array,
   first: number,
   second: [number] | number,
   output?: [number],
-): Uint16Array {
+): Uint16Array | Uint8Array {
   if (typeof second !== "number") {
     if (second[0] < 0 || second[0] > str.length) throw new Error("assert(position <= sv.size())");
-    const next = str.indexOf(first & 0xffff, second[0]);
+    const next = str.indexOf(first & (str.BYTES_PER_ELEMENT === 1 ? 0xff : 0xffff), second[0]);
     const result = str.subarray(second[0], next < 0 ? str.length : next);
     second[0] = next < 0 ? -1 : next + 1;
     return result;
   }
   const position = output ?? [0],
     token = first | 0,
-    delimiter = second & 0xffff;
+    delimiter = second & (str.BYTES_PER_ELEMENT === 1 ? 0xff : 0xffff);
   if (position[0] > str.length)
     throw new Error("assert(o3tl::IntCmp(rnIndex) <= o3tl::IntCmp(pStr.size()))");
   if (position[0] >= 0 && token >= 0) {
@@ -87,7 +96,7 @@ export function getToken(
     }
   }
   position[0] = -1;
-  return new Uint16Array();
+  return str.BYTES_PER_ELEMENT === 1 ? new Uint8Array() : new Uint16Array();
 }
 
 /** Original UTF16 trim view using the shared native whitespace predicate. @param str - Borrowed view. @returns Trimmed borrowed view or default empty view. */

@@ -15,7 +15,7 @@ import {
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SfxInt16Item } from "../../../../svl/source/items/intitem";
+import { SfxByteItem } from "../../../../svl/source/items/intitem";
 
 it("provides the original metadata index/slot/flag table independently of represented default classes", /** Verifies provides the original metadata index/slot/flag table independently of represented default classes. @returns Nothing. */ () => {
   const owner = SwModule.get().getItemInfoPackageSwAttributes();
@@ -72,9 +72,9 @@ it("keeps InitNew's two-line orphan/widow overlay distinct from the zero global 
   const doc = new SwDoc();
   try {
     for (const which of [RES_PARATR_ORPHANS, RES_PARATR_WIDOWS]) {
-      const global = GetDfltAttr(which) as SfxInt16Item;
+      const global = GetDfltAttr(which) as SfxByteItem;
       expect(global.GetValue()).toBe(0);
-      expect((doc.GetDefault(which) as SfxInt16Item).GetValue()).toBe(2);
+      expect((doc.GetDefault(which) as SfxByteItem).GetValue()).toBe(2);
       doc.GetAttrPool().ResetUserDefaultItem(which);
       expect(doc.GetDefault(which)).toBe(global);
     }

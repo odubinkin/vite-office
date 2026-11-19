@@ -1,0 +1,66 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/oox/stylesbuffer.color.ts",
+    "upstreamPath": "sc/source/filter/oox/stylesbuffer.cxx",
+    "localSymbols": [
+      "XlsColor",
+      "ExcelGraphicHelper"
+    ],
+    "upstreamSymbols": [
+      "XlsColor::importColor",
+      "XlsColor::setTheme",
+      "ColorPalette::getColor",
+      "ExcelGraphicHelper::getSchemeColor"
+    ],
+    "preservedResponsibilities": [
+      "Resolves SpreadsheetML colors for fonts, solid fills and rich text with source precedence, palette overrides and ordered luminance metadata.",
+      "Uses the source-supplied automatic color and original window text palette default for border colors."
+    ],
+    "omittedResponsibilities": [
+      "The stylesbuffer color responsibilities are split from existing native pattern ownership. Non-solid fill, DXF and binary formats remain outside this owner."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/stylesbuffer.color.ts",
+          "marker": "XlsColor"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.theme.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-native-colors.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx",
+          "marker": "XlsColor::importColor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx",
+          "marker": "XlsColor::setTheme"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx",
+          "marker": "ColorPalette::getColor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx",
+          "marker": "ExcelGraphicHelper::getSchemeColor"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/oox/stylesbuffer.color.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps original SpreadsheetML palette resolution beside the native pattern and font owners without increasing the parent module size."
+    }
+  }
+}

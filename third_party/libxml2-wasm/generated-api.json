@@ -20,6 +20,10 @@
     "cType": "xmlNode *(xmlNode *, int)"
   },
   {
+    "name": "_xmlCreatePushParserCtxt",
+    "cType": "xmlParserCtxt *(xmlSAXHandler *, void *, const char *, int, const char *)"
+  },
+  {
     "name": "_xmlCtxtGetLastError",
     "cType": "const xmlError *(void *)"
   },
@@ -30,6 +34,10 @@
   {
     "name": "_xmlCtxtReadIO",
     "cType": "xmlDoc *(xmlParserCtxt *, xmlInputReadCallback, xmlInputCloseCallback, void *, const char *, const char *, int)"
+  },
+  {
+    "name": "_xmlCtxtUseOptions",
+    "cType": "int (xmlParserCtxt *, int)"
   },
   {
     "name": "_xmlDocCopyNode",
@@ -74,6 +82,10 @@
   {
     "name": "_xmlGetNsProp",
     "cType": "xmlChar *(const xmlNode *, const xmlChar *, const xmlChar *)"
+  },
+  {
+    "name": "_xmlGetPredefinedEntity",
+    "cType": "xmlEntity *(const xmlChar *)"
   },
   {
     "name": "_xmlGetProp",
@@ -128,6 +140,10 @@
     "cType": "xmlNode *(const xmlDoc *, const xmlChar *)"
   },
   {
+    "name": "_xmlNewEntity",
+    "cType": "xmlEntity *(xmlDoc *, const xmlChar *, int, const xmlChar *, const xmlChar *, const xmlChar *)"
+  },
+  {
     "name": "_xmlNewIOInputStream",
     "cType": "xmlParserInput *(xmlParserCtxt *, xmlParserInputBuffer *, xmlCharEncoding)"
   },
@@ -176,6 +192,10 @@
     "cType": "xmlOutputBuffer *(xmlOutputWriteCallback, xmlOutputCloseCallback, void *, xmlCharEncodingHandler *)"
   },
   {
+    "name": "_xmlParseChunk",
+    "cType": "int (xmlParserCtxt *, const char *, int, int)"
+  },
+  {
     "name": "_xmlParserInputBufferCreateIO",
     "cType": "xmlParserInputBuffer *(xmlInputReadCallback, xmlInputCloseCallback, void *, xmlCharEncoding)"
   },
@@ -190,6 +210,14 @@
   {
     "name": "_xmlRemoveProp",
     "cType": "int (xmlAttr *)"
+  },
+  {
+    "name": "_xmlSAX2GetColumnNumber",
+    "cType": "int (void *)"
+  },
+  {
+    "name": "_xmlSAX2GetLineNumber",
+    "cType": "int (void *)"
   },
   {
     "name": "_xmlSaveFileTo",
@@ -296,6 +324,10 @@
     "cType": "void (xmlXPathContext *, xmlXPathVariableLookupFunc, void *)"
   },
   {
+    "name": "_strtoul",
+    "cType": "unsigned long (const char *, char **, int)"
+  },
+  {
     "name": "_office_xmlVersion",
     "cType": "const char *(void)"
   },
@@ -318,6 +350,10 @@
   {
     "name": "_office_xmlXPathSetGenericError",
     "cType": "void (void (*)(const char *))"
+  },
+  {
+    "name": "_office_xmlFastParserCallbacks",
+    "cType": "xmlSAXHandlerPtr (startElementNsSAX2Func, endElementNsSAX2Func, charactersSAXFunc, processingInstructionSAXFunc, getEntitySAXFunc)"
   },
   {
     "name": "_office_node_type_get",
@@ -480,6 +516,14 @@
     "cType": "void (xmlDtd *, void *)"
   },
   {
+    "name": "_office_entity_content_get",
+    "cType": "xmlChar *(xmlEntity *)"
+  },
+  {
+    "name": "_office_entity_content_set",
+    "cType": "void (xmlEntity *, xmlChar *)"
+  },
+  {
     "name": "_office_entity_publicId_get",
     "cType": "const xmlChar *(xmlEntity *)"
   },
@@ -544,6 +588,14 @@
     "cType": "void (xmlParserCtxt *, xmlSAXHandlerPtr)"
   },
   {
+    "name": "_office_parser_doc_get",
+    "cType": "xmlDocPtr (xmlParserCtxt *)"
+  },
+  {
+    "name": "_office_parser_doc_set",
+    "cType": "void (xmlParserCtxt *, xmlDocPtr)"
+  },
+  {
     "name": "_office_error_message_get",
     "cType": "char *(xmlError *)"
   },
@@ -574,5 +626,201 @@
   {
     "name": "_office_error_level_set",
     "cType": "void (xmlError *, xmlErrorLevel)"
+  },
+  {
+    "name": "_osl_createMutex",
+    "cType": "oslMutex (void)"
+  },
+  {
+    "name": "_osl_destroyMutex",
+    "cType": "void (oslMutex)"
+  },
+  {
+    "name": "_osl_acquireMutex",
+    "cType": "sal_Bool (oslMutex)"
+  },
+  {
+    "name": "_osl_tryToAcquireMutex",
+    "cType": "sal_Bool (oslMutex)"
+  },
+  {
+    "name": "_osl_releaseMutex",
+    "cType": "sal_Bool (oslMutex)"
+  },
+  {
+    "name": "_osl_getGlobalMutex",
+    "cType": "void **(void)"
+  },
+  {
+    "name": "_office_std_mutex_create",
+    "cType": "void *(void)"
+  },
+  {
+    "name": "_office_std_mutex_destroy",
+    "cType": "void (void *)"
+  },
+  {
+    "name": "_office_std_mutex_lock",
+    "cType": "void (void *)"
+  },
+  {
+    "name": "_office_std_mutex_unlock",
+    "cType": "void (void *)"
+  },
+  {
+    "name": "_getenv",
+    "cType": "char *(const char *)"
+  },
+  {
+    "name": "_setenv",
+    "cType": "int (const char *, const char *, int)"
+  },
+  {
+    "name": "_unsetenv",
+    "cType": "int (const char *)"
+  },
+  {
+    "name": "_office_locale_codeset",
+    "cType": "int (const char *, char *, size_t)"
+  },
+  {
+    "name": "_office_process_locale_lock",
+    "cType": "void (void)"
+  },
+  {
+    "name": "_office_process_locale_unlock",
+    "cType": "void (void)"
+  },
+  {
+    "name": "_realpath",
+    "cType": "char *(const char *restrict, char *restrict)"
+  },
+  {
+    "name": "_abort",
+    "cType": "void (void) __attribute__((noreturn))"
+  },
+  {
+    "name": "_close",
+    "cType": "int (int)"
+  },
+  {
+    "name": "_office_file_path_max",
+    "cType": "int (void)"
+  },
+  {
+    "name": "_office_file_errno",
+    "cType": "int (void)"
+  },
+  {
+    "name": "_office_file_open",
+    "cType": "int (const char *, unsigned int, int)"
+  },
+  {
+    "name": "_office_file_lock",
+    "cType": "int (int)"
+  },
+  {
+    "name": "_office_file_set_overflow",
+    "cType": "void (void)"
+  },
+  {
+    "name": "_osl_getCurrentSecurity",
+    "cType": "void *(void)"
+  },
+  {
+    "name": "_osl_freeSecurityHandle",
+    "cType": "void (void *)"
+  },
+  {
+    "name": "_office_security_home",
+    "cType": "const char *(void *)"
+  },
+  {
+    "name": "_geteuid",
+    "cType": "uid_t (void)"
+  },
+  {
+    "name": "_office_local_hostname",
+    "cType": "int (int, char *)"
+  },
+  {
+    "name": "_office_file_status_size",
+    "cType": "unsigned int (void)"
+  },
+  {
+    "name": "_office_file_access",
+    "cType": "int (const char *, int)"
+  },
+  {
+    "name": "_office_file_lstat",
+    "cType": "int (const char *, uint32_t *)"
+  },
+  {
+    "name": "_office_file_dtype_type",
+    "cType": "int (unsigned char)"
+  },
+  {
+    "name": "_office_file_stat",
+    "cType": "int (const char *, uint32_t *)"
+  },
+  {
+    "name": "_office_file_copy_open",
+    "cType": "int (const char *, unsigned int)"
+  },
+  {
+    "name": "_office_file_set_errno",
+    "cType": "void (int)"
+  },
+  {
+    "name": "_rename",
+    "cType": "int (const char *, const char *)"
+  },
+  {
+    "name": "_unlink",
+    "cType": "int (const char *)"
+  },
+  {
+    "name": "_readlink",
+    "cType": "ssize_t (const char *restrict, char *restrict, size_t)"
+  },
+  {
+    "name": "_symlink",
+    "cType": "int (const char *, const char *)"
+  },
+  {
+    "name": "_write",
+    "cType": "ssize_t (int, const void *, size_t)"
+  },
+  {
+    "name": "_mkdir",
+    "cType": "int (const char *, mode_t)"
+  },
+  {
+    "name": "_rmdir",
+    "cType": "int (const char *)"
+  },
+  {
+    "name": "_getpid",
+    "cType": "pid_t (void)"
+  },
+  {
+    "name": "_opendir",
+    "cType": "DIR *(const char *)"
+  },
+  {
+    "name": "_closedir",
+    "cType": "int (DIR *)"
+  },
+  {
+    "name": "_readdir",
+    "cType": "struct dirent *(DIR *)"
+  },
+  {
+    "name": "_office_directory_name",
+    "cType": "const char *(const struct dirent *)"
+  },
+  {
+    "name": "_office_directory_type",
+    "cType": "unsigned int (const struct dirent *)"
   }
 ]

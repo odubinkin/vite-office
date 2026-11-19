@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/udkapi/com/sun/star/container/XHierarchicalNameAccess.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "package-hierarchical-access",
+    "capabilityIds": [
+      "CAP-239ef4b3-b450-4c31-bf96-03e76bffcac1"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/udkapi/com/sun/star/container/XHierarchicalNameAccess.ts",
+        "apps/office/src/package/source/zippackage/ZipPackage.members.test.ts",
+        "vendor/libreoffice-reference/udkapi/com/sun/star/container/XHierarchicalNameAccess.idl"
+      ],
+      "justification": "Original complete two-method IDL declaration and normal generated cached CPPU getters; actual root query and getter identity tests. Complete native ABI/reflection differential remains unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XHierarchicalNameAccess",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "udkapi/com/sun/star/container/XHierarchicalNameAccess.idl",
+      "upstreamSymbols": [
+        "XHierarchicalNameAccess",
+        "getByHierarchicalName",
+        "hasByHierarchicalName"
+      ]
+    }
+  }
+}

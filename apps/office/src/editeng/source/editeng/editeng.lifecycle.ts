@@ -89,6 +89,15 @@ export abstract class EditEngine {
   CreateSelection(selection: ESelection): EditSelection {
     return this.getImpl().CreateSel(selection);
   }
+  /** Original quick attribute assignment over a normalized selection. @param items - Native item set. @param selection - Public selection. @returns Nothing. */
+  QuickSetAttribs(items: SfxItemSet, selection: ESelection): void {
+    const engine = this.getImpl();
+    engine.SetAttribs(engine.CreateNormalizedSel(selection), items);
+  }
+  /** Returns the original empty set registered for the editor pool. @returns Borrowed empty item set. */
+  GetEmptyItemSet(): SfxItemSet {
+    return this.getImpl().GetEmptyItemSet();
+  }
   /** Original outer default-language assignment. @param language - Native language identifier. @returns Nothing. */
   SetDefaultLanguage(language: number): void {
     this.getImpl().SetDefaultLanguage(language);

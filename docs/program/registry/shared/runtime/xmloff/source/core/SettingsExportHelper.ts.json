@@ -20,17 +20,21 @@
         "apps/office/src/xmloff/source/core/SettingsExportHelper.ts#exportConfigurationSettings",
         "vendor/libreoffice-reference/xmloff/source/core/SettingsExportHelper.cxx#XMLSettingsExportHelper::exportBool",
         "apps/office/src/sw/source/filter/xml/native-rtf-tab-settings-roundtrip.test.ts",
-        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx"
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+        "apps/office/src/xmloff/source/core/DocumentSettingsContext.test.ts"
       ],
-      "justification": "Emits the original named boolean configuration item from the represented PropertyValue vector. Other UNO setting types and separate view/document settings are unrepresented.",
+      "justification": "Emits boolean configuration items and indexed view map entries containing the represented string properties. Other UNO settings value types, named maps, and additional document-specific groups remain outside the represented serialization.",
       "knownViolations": [],
       "localSymbols": [
-        "exportConfigurationSettings"
+        "exportConfigurationSettings",
+        "exportViewSettings"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "xmloff/source/core/SettingsExportHelper.cxx",
       "upstreamSymbols": [
-        "XMLSettingsExportHelper::exportBool"
+        "XMLSettingsExportHelper::exportBool",
+        "XMLSettingsExportHelper::exportString",
+        "XMLSettingsExportHelper::exportIndexAccess"
       ]
     }
   }

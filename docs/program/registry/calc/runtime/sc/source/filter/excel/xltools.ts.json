@@ -18,22 +18,25 @@
       "evidence": [
         "apps/office/src/sc/source/filter/excel/xltools.ts",
         "apps/office/src/sc/source/filter/excel/xestream.test.ts",
-        "vendor/libreoffice-reference/sc/source/filter/excel/xltools.cxx"
+        "vendor/libreoffice-reference/sc/source/filter/excel/xltools.cxx",
+        "apps/office/src/sc/source/filter/excel/xlstyle.fonts.test.ts"
       ],
-      "justification": "J0Z0KF connects the complete non-const ScFormulaCell::GetResult lazy/error-precedence method to existing ScFormulaResult/FormulaResultValue, and XclXmlUtils cached-result XML typing/spelling. Real SharedString temporaries, typed outputs, exact LOGICAL0/1 classification, Invalid inlineStr, SPILL-to-VALUE and complete Excel/core error-byte/NaN mappings are preserved. Native part-name, ARGB, UTF16-vector/range UTF8 and vector/ASCII Unicode conversions and raw WriteElement use actual shared owners/serializers. Static member objects erase deleted native utility constructors; existing ordinary Uint8Array UTF8 value transport does not claim a native OString or byte-buffer owner. Native encoded OUString construction and number(double) call actual SAL conversion/formatting with original flags, ownership and null guards. Request17 retains original formatter15-digit rounding; no host Number.toString substitute is used for numeric formula values. Full XclExpRoot/XclExpXmlStream, address-buffer/XclExpString overloads, font output, formula-expression serialization, workbook/model import/export and shell/UI acceptance remain unported or unverified.",
+      "justification": "J0Z0KF connects the complete non-const ScFormulaCell::GetResult lazy/error-precedence method to existing ScFormulaResult/FormulaResultValue, and XclXmlUtils cached-result XML typing/spelling. Real SharedString temporaries, typed outputs, exact LOGICAL0/1 classification, Invalid inlineStr, SPILL-to-VALUE and complete Excel/core error-byte/NaN mappings are preserved. Native part-name, ARGB, UTF16-vector/range UTF8 and vector/ASCII Unicode conversions and raw WriteElement use actual shared owners/serializers. Static member objects erase deleted native utility constructors; existing ordinary Uint8Array UTF8 value transport does not claim a native OString or byte-buffer owner. Native encoded OUString construction and number(double) call actual SAL conversion/formatting with original flags, ownership and null guards. Request17 retains original formatter15-digit rounding; no host Number.toString substitute is used for numeric formula values. Full XclExpRoot/XclExpXmlStream, address-buffer/XclExpString overloads, font output, formula-expression serialization, workbook/model import/export and shell/UI acceptance remain unported or unverified.\nJ0Z0KF font extraction checkpoint implements both original VCL/SVX XclFontData constructors and FillFromVclFont/FillFromSvxFont over actual existing Font/SvxFont and ComplexColor owners. Source VCL Clear-before-fill and direct SVX construction, explicit erased base-reference selection, stored const font getters, style clearing, upper-capped twip height, complete complex-color copying and SVX escapement are preserved. XclTools::GetXclFontName uses actual GetSubsFontName ONLYONE|MS with original full-list fallback and owned return values. No placeholder font/locale/configuration provider or DTO is introduced. Genuine XclExpFont/FontBuffer/root and complete rich-string/workbook/filter/UI integration remain unfinished; underlying VCL rendering/ABI domains retain their existing unqualified boundaries.",
       "knownViolations": [],
       "localSymbols": [
         "XclTools",
         "GetXclErrorCode",
         "GetScErrorCode",
-        "ErrorToDouble"
+        "ErrorToDouble",
+        "GetXclFontName"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/filter/excel/xltools.cxx",
       "upstreamSymbols": [
         "XclTools::GetXclErrorCode",
         "XclTools::GetScErrorCode",
-        "XclTools::ErrorToDouble"
+        "XclTools::ErrorToDouble",
+        "XclTools::GetXclFontName"
       ]
     }
   }

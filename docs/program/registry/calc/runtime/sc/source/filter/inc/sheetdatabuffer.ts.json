@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/inc/sheetdatabuffer.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-sheet-data-models",
+    "capabilityIds": [
+      "CAP-6b87be4e-6c34-408a-ae35-56088721171f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/inc/sheetdatabuffer.ts",
+        "vendor/libreoffice-reference/sc/source/filter/inc/sheetdatabuffer.hxx",
+        "apps/office/src/sc/source/filter/oox/sheetdatabuffer.test.ts"
+      ],
+      "justification": "Original public model declarations and internal range-value types resolve the single original source implementation. No WorksheetHelper or SheetDataBuffer service constructor is fabricated. Full worksheet/buffer declarations, original private/nested C++ visibility/ABI and complete import/export/UI remain unfinished or unqualified.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/inc/sheetdatabuffer.hxx",
+      "upstreamSymbols": [
+        "CellModel",
+        "CellFormulaModel",
+        "DataTableModel",
+        "XfIdRowRange",
+        "MergedRange"
+      ]
+    }
+  }
+}

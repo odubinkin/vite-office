@@ -1,9 +1,10 @@
 /** @fileoverview Native attribute chunk storage and full-list serializer overload regression tests. */
 import { expect, it } from "vitest";
-import { FastAttributeList } from "./fastattribs";
+import { Reference, UNO_QUERY_THROW } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import { XFastAttributeList } from "../../../offapi/com/sun/star/xml/sax/XFastAttributeList";
+import { FastAttributeList, castToFastAttributeList } from "./fastattribs";
 import { FastSerializerHelper, FSNS } from "../../inc/fshelper";
 import { FastSaxSerializer, TokenValue } from "./fastserializer";
-import { FastTokenHandler } from "../../../oox/source/core/fasttokenhandler";
 import { ZipFragmentStream } from "../../../oox/source/helper/zipstorage";
 import { getTokenFromUtf8 as token } from "../../../oox/source/token/tokenmap";
 it("retains native offset count, duplicate tokens, copied UTF8 values, capacity growth and independent clones", /** Native source behavior over actual owners. @returns Nothing. */ () => {
@@ -24,7 +25,13 @@ it("retains native offset count, duplicate tokens, copied UTF8 values, capacity 
   expect(list.hasAttribute(99)).toBe(false);
   expect(list.getAttributeIndex(7)).toBe(0);
   expect(list.getAttributeIndex(99)).toBe(-1);
-  const clone = list.createClone(),
+  const cloneOwner = list.createClone(),
+    cloneFacet = new Reference<XFastAttributeList>(
+      cloneOwner,
+      UNO_QUERY_THROW,
+      XFastAttributeList.static_type,
+    ),
+    clone = castToFastAttributeList(cloneFacet),
     copy = new FastAttributeList(list);
   list.clear();
   list.add(9, "new");
@@ -36,6 +43,8 @@ it("retains native offset count, duplicate tokens, copied UTF8 values, capacity 
       ) => (i === 0 ? 65 : x),
     ),
   );
+  cloneFacet.dispose();
+  cloneOwner.dispose();
   expect(copy.size()).toBe(5);
   expect(list.size()).toBe(2);
   for (const bad of [0, -1])
@@ -45,12 +54,12 @@ it("retains native offset count, duplicate tokens, copied UTF8 values, capacity 
 });
 it("preserves original full-list VML bypass, duplicates, embedded NUL and queued variadic values", /** Native source behavior over actual owners. @returns Nothing. */ () => {
   const stream = new ZipFragmentStream("test.xml", "application/xml"),
-    serializer = new FastSaxSerializer(stream, new FastTokenHandler()),
+    serializer = new FastSaxSerializer(stream),
     w = token("w"),
     attr = FSNS(w, token("val")),
     p = FSNS(w, token("p"));
   serializer.getTokenValueList().push(new TokenValue(attr, new TextEncoder().encode("queued")));
-  const list = new FastAttributeList();
+  const list = new FastAttributeList(null);
   for (const value of ['#_x0000_t202<&"', "_x0000_t75&", "_x0000_u<&", "", "a\0b"])
     list.add(attr, value);
   serializer.startFastElement(p, list);
@@ -66,16 +75,17 @@ it("preserves original full-list VML bypass, duplicates, embedded NUL and queued
 });
 it("forwards attribute lists through helper and namespace overloads", /** Native source behavior over actual owners. @returns Nothing. */ () => {
   const stream = new ZipFragmentStream("test.xml", "application/xml"),
-    helper = new FastSerializerHelper(stream, false, new FastTokenHandler()),
+    helper = new FastSerializerHelper(stream, false),
     list = FastSerializerHelper.createAttrList(),
     w = token("w"),
     p = token("p");
-  list.addNS(w, token("val"), "x");
+  list.operatorArrow().addNS(w, token("val"), "x");
   helper.startElementNS(w, p, list);
   helper.singleElement(FSNS(w, p), list);
   helper.singleElementNS(w, p, list);
   helper.endElementNS(w, p);
   helper.endDocument();
+  list.dispose();
   expect(new TextDecoder().decode(stream.getBytes())).toBe(
     '<w:p w:val="x"><w:p w:val="x"/><w:p w:val="x"/></w:p>',
   );

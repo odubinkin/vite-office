@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/inc/xerecord.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/inc/xerecord.hxx",
+    "localSymbols": [
+      "XclExpRecordList"
+    ],
+    "upstreamSymbols": [
+      "XclExpRecordBase",
+      "XclExpRecordList"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/inc/xerecord.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/inc/xerecord.hxx",
+          "marker": "XclExpRecordBase"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "Original public XML record/list exports bind the single implementation, preserving original declaration/source separation."
+    ],
+    "omittedResponsibilities": [
+      "Binary record classes and full native binary stream contracts remain unported."
+    ]
+  }
+}

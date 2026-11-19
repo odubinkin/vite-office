@@ -1,0 +1,72 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/comphelper/source/xml/ofopxmlhelper.handler.ts",
+    "status": "mapped",
+    "upstreamPath": "comphelper/source/xml/ofopxmlhelper.cxx",
+    "localSymbols": [
+      "RELATIONINFO_FORMAT",
+      "CONTENTTYPE_FORMAT",
+      "OFOPXMLHelper_Impl",
+      "ReadSequence_Impl",
+      "ReadRelationsInfoSequence",
+      "ReadContentTypeSequence"
+    ],
+    "upstreamSymbols": [
+      "RELATIONINFO_FORMAT",
+      "CONTENTTYPE_FORMAT",
+      "OFOPXMLHelper_Impl",
+      "ReadSequence_Impl",
+      "ReadRelationsInfoSequence",
+      "ReadContentTypeSequence"
+    ],
+    "preservedResponsibilities": [
+      "Original source-internal OFOPXMLHelper_Impl now implements the actual XDocumentHandler, native ordered StringPair/nested Sequence results, copied element stack, exact qualified-name/depth/attribute admission, source exception types and order, result const-reference/COW ownership, empty/no-reset document/text/locator callbacks and reverse member lifetime. Original stream/context reader functions validate real inputs, construct the actual Parser service/InputSource/handler and clear the document handler only after successful parsing. No ParserExpat or alias provider is registered: its missing real service still raises actual DeploymentException. Existing browser string/InputSource transport delegates schema admission to this class; it remains distinct from the complete original ParserExpat read path. Native physical ABI, allocator failures and the missing Parser service success path remain unqualified; full DOCX/XLSX package/storage/filter/model/UI acceptance is unfinished.",
+      "All102 related shared tests and28 Writer stream tests pass; four additional pinned Strict/Transitional DOCX/XLSX archives provide actual registered ZipFileAccess entry streams for metadata parsing. Browser main and DOM-free Worker read actual UTF8 InputSource values, preserving duplicate Id entries, Unicode targets and native MIME results. Complete handler/read shard coverage remains84.66 statements/94.73 branches/100 functions/83.7 lines because actual ParserExpat success and an invariant guard are unqualified; the facade is100 on all four metrics. No aggregate waiver, fake Parser service or private-state patch is used."
+    ],
+    "omittedResponsibilities": [
+      "ParserExpat implementation and successful native stream/context parsing; native ABI/OOM and complete package/storage/filter/model/UI acceptance."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.handler.ts",
+          "marker": "OFOPXMLHelper_Impl"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.handler.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.fixture.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "comphelper/source/xml/ofopxmlhelper.cxx",
+          "marker": "class OFOPXMLHelper_Impl"
+        },
+        {
+          "path": "comphelper/source/xml/ofopxmlhelper.cxx",
+          "marker": "ReadSequence_Impl"
+        },
+        {
+          "path": "include/comphelper/ofopxmlhelper.hxx",
+          "marker": "ReadRelationsInfoSequence"
+        },
+        {
+          "path": "qadevOOo/tests/java/ifc/xml/sax/_XDocumentHandler.java",
+          "marker": "public class _XDocumentHandler"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/comphelper/source/xml/ofopxmlhelper.handler.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The single upstream CXX includes the native SAX handler, stream/context reads and writers. Separate compiler shards preserve the file-size budget and keep native handler state and the real Parser service contract outside the existing browser string transport, without another parser/provider or metadata schema implementation."
+    }
+  }
+}

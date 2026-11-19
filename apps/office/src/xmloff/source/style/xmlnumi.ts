@@ -61,6 +61,7 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
   private cBullet: number;
   private readonly xmlImport: SvXMLImport;
   private readonly format: string;
+  private readonly letterSync: string;
   private readonly suffix: string;
   private readonly prefix: string;
   private readonly startWith: number;
@@ -81,6 +82,7 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
         XMLToken.TEXT_LEVEL,
         XMLToken.TEXT_BULLET_CHAR,
         XMLToken.STYLE_NUM_FORMAT,
+        XMLToken.STYLE_NUM_LETTER_SYNC,
         XMLToken.STYLE_NUM_SUFFIX,
         XMLToken.STYLE_NUM_PREFIX,
         XMLToken.TEXT_START_VALUE,
@@ -94,6 +96,7 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
     this.level = parsed === null ? -1 : parsed >= 1 ? parsed - 1 : 0;
     this.cBullet = attributes.get(XMLToken.TEXT_BULLET_CHAR)?.codePointAt(0) ?? 0;
     this.format = attributes.get(XMLToken.STYLE_NUM_FORMAT) ?? "1";
+    this.letterSync = attributes.get(XMLToken.STYLE_NUM_LETTER_SYNC) ?? "";
     this.suffix = attributes.get(XMLToken.STYLE_NUM_SUFFIX) ?? "";
     this.prefix = attributes.get(XMLToken.STYLE_NUM_PREFIX) ?? "";
     const start = attributes.getAsInteger(XMLToken.TEXT_START_VALUE) ?? 1;
@@ -143,7 +146,7 @@ export class SvxXMLListLevelStyleContext_Impl extends SvXMLImportContext {
       value: this.kind === "bullet" ? 6 : 4,
     };
     if (this.kind === "numbered")
-      new SvXMLUnitConverter("mm100").convertNumFormat(type, this.format, true);
+      new SvXMLUnitConverter("mm100").convertNumFormat(type, this.format, this.letterSync, true);
     if (this.listFormat === undefined) {
       this.listFormat = this.prefix;
       const display = Math.min(this.parentNumbering, this.level + 1);

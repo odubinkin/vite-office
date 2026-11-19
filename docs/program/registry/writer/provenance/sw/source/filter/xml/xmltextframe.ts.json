@@ -18,7 +18,8 @@
       "Uses the native Writer frame and cursor to bind ODF paragraph and character-anchored text frames, then projects the original format and section back to ODF.",
       "Uses the common native bound fly collection rather than a separate filter-only anchor registry.",
       "Preserves original split, flow, overlap, frame border and transparency values in ODF.",
-      "Retains the native fly frame writing direction and the distinct width and height percentage relations in ODF."
+      "Retains the native fly frame writing direction and the distinct width and height percentage relations in ODF.",
+      "Reuses the nested text-section paragraph iterator for master page content with tables."
     ],
     "omittedResponsibilities": [
       "Graphic and embedded objects, other anchor types, full UNO frame descriptors and physical layout are outside this text-frame slice."
@@ -55,6 +56,10 @@
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-page-stories.test.ts",
           "marker": "@fileoverview"
         }
       ],

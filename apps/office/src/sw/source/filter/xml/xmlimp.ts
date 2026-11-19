@@ -6,6 +6,7 @@ import type {
   XMLTextFrameStyle,
 } from "../../../../xmloff/source/text/XMLTextFrameContext";
 import type { XMLTextCursor } from "../../../../xmloff/inc/txtimp";
+import { XMLTextMasterPageContext } from "./xmlpageheaderfooter";
 import type { SwXTextCursor } from "../../core/unocore/unoobj";
 import { importTextFrame, endTextFrame } from "./xmltextframe";
 import { FillUnoNumRule } from "../../../../xmloff/source/style/xmlnumi";
@@ -21,6 +22,10 @@ import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 
 import { SwXNumberingRules } from "../../core/unocore/unosett";
 
+import {
+  applyNamedCharacterStyles,
+  commonCharacterStyleName,
+} from "../../../../xmloff/source/text/txtstyli";
 import { applyNamedParagraphStyles } from "../../../../xmloff/source/style/prstylei";
 
 import {
@@ -39,6 +44,7 @@ import {
   type OdfFontFaceMetadata,
 } from "../../../../xmloff/source/style/XMLFontStylesContext";
 import { XMLStylesContext, type OdfPageLayout } from "../../../../xmloff/source/style/xmlstyle";
+import type { Theme } from "../../../../docmodel/inc/theme/Theme";
 import type { XMLTableImportTarget } from "../../../../xmloff/source/table/XMLTableImport";
 import { SwXMLTableImport } from "./xmltbli";
 
@@ -131,6 +137,8 @@ export function importWriterXml(
     }),
   );
   xmlImport.document.SetInReading(true);
+  xmlImport.document.SetInXMLImport(true);
+  let complete = false;
   try {
     if (options.settingsXml !== undefined)
       xmlImport.parse(options.settingsXml, XMLToken.OFFICE_DOCUMENT_SETTINGS, options);
@@ -143,13 +151,16 @@ export function importWriterXml(
       xmlImport.finishContent();
     }
     if (metaXml !== undefined) xmlImport.parse(metaXml, XMLToken.OFFICE_DOCUMENT_META, options);
+    complete = true;
     return {
       document: xmlImport.document,
       title: xmlImport.title ?? metadata.title,
     };
   } finally {
     xmlImport.dispose();
+    xmlImport.document.SetInXMLImport(false);
     xmlImport.document.SetInReading(false);
+    if (!complete) xmlImport.document.Dispose();
   }
 }
 
@@ -195,6 +206,7 @@ class SwXMLImport
 
   /** Closes the original Writer text frame content section. @param cursor - Active frame text cursor. @returns Nothing. */
   public endTextFrame(cursor: XMLTextCursor): void {
+    this.GetTextImport().FinishBookmarkRanges();
     endTextFrame(cursor as SwXTextCursor);
   }
 
@@ -205,6 +217,7 @@ class SwXMLImport
   private styles: XMLStylesContext | undefined;
   private autoStyles: XMLStylesContext | undefined;
   private defaultParagraphStyle: OdfStyleDefinition | undefined;
+  private styleDefinitionsApplied = false;
   private readonly automaticListRules = new Map<string, XMLTextListRule>();
   private readonly listRules = new Map<string, XMLTextListRule>();
   private readonly fontFaces = new Map<string, string>();
@@ -243,6 +256,7 @@ class SwXMLImport
   /** Parses one expected package stream. @param xml - XML text. @param expectedRoot - Required root token. @param options - Parser controls. @returns Nothing. */
   public parse(xml: string, expectedRoot: XMLToken, options: OdfXmlParseOptions): void {
     this.expectedRoot = expectedRoot;
+    this.ResetTableStyles();
     const stream =
       expectedRoot === XMLToken.OFFICE_DOCUMENT_STYLES
         ? "styles.xml"
@@ -310,6 +324,11 @@ class SwXMLImport
     return context;
   }
 
+  /** Attaches the parsed ODF theme to the active Writer graph. @param theme - Actual document theme. @returns Nothing. */
+  public registerTheme(theme: Theme): void {
+    this.document.theme = theme;
+  }
+
   /** Resolves one imported font-face declaration. @param name - Face name. @returns Model family. */
   public getFontFace(name: string): string | undefined {
     return this.fontFaces.get(name);
@@ -357,6 +376,12 @@ class SwXMLImport
       (id === undefined ? undefined : this.document.FindTextFormatColl(id))?.id ??
       this.document.FindTextFormatColl(styleName)?.id
     );
+  }
+
+  /** Returns the native programmatic name for a declared common character style. @param name - Encoded ODF name. @returns Native name when present. */
+  public resolveNamedCharacterStyle(name: string): string | undefined {
+    const definition = this.getStyle("text", name);
+    return definition ? commonCharacterStyleName(name, definition) : undefined;
   }
 
   /** Resolves one document-owned list rule. @param styleName - ODF list style name. @returns Rule view. */
@@ -438,12 +463,23 @@ class SwXMLImport
   }
 
   /** Associates a named master page with its layout and optional follow style. @param name - Master-page name. @param pageLayoutName - Referenced layout. @param followName - Optional next master page. @returns Nothing. */
-  public registerMasterPage(name: string, pageLayoutName: string, followName?: string): void {
+  public registerMasterPage(
+    name: string,
+    pageLayoutName: string,
+    followName?: string,
+  ): XMLTextMasterPageContext {
     if (this.masterPages.has(name)) throw new Error(`Duplicate ODF master page: ${name}`);
     this.masterPages.set(name, {
       ...(followName === undefined ? {} : { followName }),
       pageLayoutName,
     });
+    const page = this.document.FindPageDesc(name) ?? this.document.MakePageDesc(name);
+    return new XMLTextMasterPageContext(
+      page,
+      this.GetTextImport(),
+      /** Finalizes preceding style declarations before using them in master text. @returns Nothing. */
+      () => this.finishStyleDefinitions(),
+    );
   }
 
   /** Registers one numbering definition in Writer. @param styleName - ODF style name. @param rule - Parsed rule. @returns Nothing.  @param automatic - Native operation input. */
@@ -527,9 +563,22 @@ class SwXMLImport
     this.titleSeen = true;
   }
 
-  /** Applies imported named style state. @returns Nothing. */
-  public finishNamedStyles(): void {
+  /** Finalizes declared styles before the first text attachment. @returns Nothing. */
+  private finishStyleDefinitions(): void {
+    if (this.styleDefinitionsApplied) return;
+    const distance = this.defaultParagraphStyle?.defaultTabDistance;
+    if (distance !== undefined) {
+      const name = xmlTextString("TabStopDistance");
+      const value = new Any([Number(convertTwipToMm100(BigInt(distance)))], "sal_Int32");
+      try {
+        this.model.createTextDefaults().setPropertyValue(name, value);
+      } finally {
+        value.dispose();
+        name.dispose();
+      }
+    }
     const paragraphs = this.styles?.GetStyleDefinitions("paragraph") ?? new Map();
+    applyNamedCharacterStyles(this.model, this.styles?.GetStyleDefinitions("text") ?? new Map());
     applyNamedParagraphStyles(
       this.model,
       paragraphs,
@@ -543,6 +592,12 @@ class SwXMLImport
         return id && getWriterMaterializedParagraphStyleDefinition(id) ? id : undefined;
       },
     );
+    this.styleDefinitionsApplied = true;
+  }
+
+  /** Applies imported named style state and the deferred master-page layout links. @returns Nothing. */
+  public finishNamedStyles(): void {
+    this.finishStyleDefinitions();
     const pages = this.model.getStyleFamilies().getByName(xmlTextString("PageStyles"));
     /** Applies original page geometry through PageStyles property owners. @param name - Master page name. @param layout - Imported physical geometry. @returns Nothing. */
     const applyPage =
@@ -610,6 +665,7 @@ class SwXMLImport
   public finishContent(): void {
     if (this.officeTextCount !== 1)
       throw new Error("ODF content must contain exactly one office:text.");
+    this.GetTextImport().FinishBookmarkRanges();
     const cursor =
         this.GetTextImport().GetCursor() as import("../../core/unocore/unoobj").SwXTextCursor,
       node = cursor.GetPaM().GetPoint().GetNode() as SwTextNode,
@@ -701,8 +757,7 @@ class XMLMasterStylesContext extends SvXMLImportContext {
       "master page layout name",
     );
     const followName = attributes.get(XMLToken.STYLE_NEXT_STYLE_NAME) ?? undefined;
-    this.xmlImport.registerMasterPage(name, pageLayoutName, followName);
-    return new SvXMLIgnoreContext();
+    return this.xmlImport.registerMasterPage(name, pageLayoutName, followName);
   }
 }
 

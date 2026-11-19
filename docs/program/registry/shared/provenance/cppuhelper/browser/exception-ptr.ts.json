@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/cppuhelper/browser/exception-ptr.ts",
+    "localSymbols": [
+      "initializeExceptionPointerAbi"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppuhelper/browser/exception-ptr.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/browser/exception-ptr.test.ts",
+          "marker": "@fileoverview"
+        }
+      ]
+    },
+    "rationale": "Actual pinned SDK exception_ptr value operations are exposed through a neutral external/libcxx facade: empty/copy/guarded assignment/opaque equality/nonempty rethrow/destruction. Real CppuHelper composition installs the compiler ABI beside the existing getCaughtException/throwException bridge. Its actual generated Any/exception payload retains derived fields and Context until the final shared pointer releases it; ordinary host objects are VM-owned. Package source imports only the neutral standard-library contract, never browser implementation. Native addresses/C++ heap object identity/cross-realm atomics/TLS/fatal/OOM/nonobject JS throws remain unqualified. Actual background ZIP task/temp-file/error/entry transfer works in source explicit ThreadPool(0) and main/DOM-free Worker, without replacing production worker selection. Source ZipOutputEntry whole-owner branch coverage remains below90; prior failing gates remain retained. Full worker scheduler/parallel ZIP/package/Medium/filter/UI remain pending.",
+    "responsibilities": [
+      "Actual pinned SDK exception_ptr value operations are exposed through a neutral external/libcxx facade: empty/copy/guarded assignment/opaque equality/nonempty rethrow/destruction. Real CppuHelper composition installs the compiler ABI beside the existing getCaughtException/throwException bridge. Its actual generated Any/exception payload retains derived fields and Context until the final shared pointer releases it; ordinary host objects are VM-owned. Package source imports only the neutral standard-library contract, never browser implementation. Native addresses/C++ heap object identity/cross-realm atomics/TLS/fatal/OOM/nonobject JS throws remain unqualified. Actual background ZIP task/temp-file/error/entry transfer works in source explicit ThreadPool(0) and main/DOM-free Worker, without replacing production worker selection. Source ZipOutputEntry whole-owner branch coverage remains below90; prior failing gates remain retained. Full worker scheduler/parallel ZIP/package/Medium/filter/UI remain pending."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Neutral standard-library value and real injected compiler ABI use existing genuine generated Any/exception values. Native C++ pointer/heap/atomic/TLS/fatal/OOM and nonobject JS throw domains remain unqualified."
+    }
+  }
+}

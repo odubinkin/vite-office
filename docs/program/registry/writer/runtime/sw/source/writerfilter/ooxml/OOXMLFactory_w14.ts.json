@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_w14.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_w14.ts#getInstance",
+        "vendor/libreoffice-reference/sw/source/writerfilter/ooxml/factoryimpl_ns.py#factoryGetInstance",
+        "apps/office/src/sw/source/filter/ww8/docxexport.theme.test.ts"
+      ],
+      "justification": "Provides the original Word 2010 namespace factory for the admitted text effects and routes the native Any child dispatch through its original generated definition and resource IDs.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getInstance"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/ooxml/factoryimpl_ns.py",
+      "upstreamSymbols": [
+        "factoryGetInstance",
+        "collectAttributeToResource"
+      ]
+    }
+  }
+}

@@ -16,7 +16,8 @@
     ],
     "preservedResponsibilities": [
       "Task77 adds normal unmerged local-reference mouse input using actual ScInputHandler selected UTF16 text,ScModule ordered dispatch,ScViewData reference start/end and ScTabView block/function-set owners. Browser formula pointing precedes Commit and preserves the edit origin;ordinary cell dragging retains the active anchor while headers move their native cursor endpoint. Shift extends;Ctrl adds/subtracts native ScMarkData/ScMultiSel selections. This is bounded source-backed foundation work,not full Calc parity. Merged cells,fill/transfer/move,protected/alternate/split views,reference dialogs,external/3D/matrix calculation,EditEngine and complete VCL painting remain unported.",
-      "ScViewFunctionSet.SetCursorAtCell retains the original boolean admission result and third device-scroll argument. The admitted normal browser path supplies false because real DOM/native geometry reveals the endpoint separately;requests for the unported VCL device branch reject explicitly. Mouse Shift is read from the native caller modifier lifetime rather than substituting a different meaning for that argument."
+      "ScViewFunctionSet.SetCursorAtCell retains the original boolean admission result and third device-scroll argument. The admitted normal browser path supplies false because real DOM/native geometry reveals the endpoint separately;requests for the unported VCL device branch reject explicitly. Mouse Shift is read from the native caller modifier lifetime rather than substituting a different meaning for that argument.",
+      "Checks direct cell selection before changing the native cursor, anchor or reference."
     ],
     "omittedResponsibilities": [
       "Complete owner implementations and the unsupported services listed in the bounded foundation note remain unported."
@@ -26,6 +27,10 @@
         {
           "path": "apps/office/src/sc/source/ui/view/select.ts",
           "marker": "ScViewFunctionSet"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/tabview2-protection.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

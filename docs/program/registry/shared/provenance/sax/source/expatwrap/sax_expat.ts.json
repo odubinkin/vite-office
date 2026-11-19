@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sax/source/expatwrap/sax_expat.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser XML admission rejects DTDs. The native Expat error numbering and byte-position locator, DTD/entity processing, and complete optional callback and ABI parity remain unverified."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sax/source/expatwrap/sax_expat.ts",
+          "marker": "SaxExpatParser"
+        },
+        {
+          "path": "apps/office/src/sax/source/expatwrap/sax_expat.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.fixture.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sax/source/expatwrap/sax_expat.cxx",
+          "marker": "SaxExpatParser::parseStream"
+        },
+        {
+          "path": "sax/source/expatwrap/expwrap.component",
+          "marker": "com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation"
+        }
+      ]
+    },
+    "upstreamPath": "sax/source/expatwrap/sax_expat.cxx",
+    "localSymbols": [
+      "SaxExpatParser",
+      "com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation"
+    ],
+    "upstreamSymbols": [
+      "SaxExpatParser::parseStream",
+      "SaxExpatParser::setDocumentHandler",
+      "SaxExpatParser::getSupportedServiceNames"
+    ],
+    "preservedResponsibilities": [
+      "ParserExpat registers the original UNO SAX service and uses the existing streaming Saxes backend and office XML byte converter. OFOP package metadata passes the native input stream and component context to this service. Original qualified names, namespace attributes, document events, per-document identifier, reusable attribute list and SAX error data are observed through actual UNO calls."
+    ],
+    "omittedResponsibilities": [
+      "Browser XML admission rejects DTDs. The native Expat error numbering and byte-position locator, DTD/entity processing, and complete optional callback and ABI parity remain unverified."
+    ]
+  }
+}

@@ -1,7 +1,12 @@
 /** @fileoverview Consumed native MSWordExportBase document/range and font ownership. Actual SwPaM binds the consumed base portion of the native SwUnoCursor; cursor overrides, traversal and the broader export context are not yet admitted. */
 import type { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
 import type { SwContentNode } from "../../core/docnode/node";
-import { GetCurrentPageDirection, GetDefaultFrameDirection, TrueFrameDirection } from "./wrtw8nds";
+import {
+  EncodeBookmarkName,
+  GetCurrentPageDirection,
+  GetDefaultFrameDirection,
+  TrueFrameDirection,
+} from "./wrtw8nds";
 import type { SwFrameFormat } from "../../core/layout/atrfrm";
 import type { SwPageDesc } from "../../core/layout/pagedesc";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
@@ -13,6 +18,9 @@ import {
   GetNumberingId,
   DuplicateNumRuleImpl,
   DuplicateNumRule,
+  DuplicateAbsNum,
+  OverrideNumRule,
+  AddListLevelOverride,
   GetNumberingLevelBulletStringAndFont,
   SubstituteBullet,
 } from "./wrtw8num";
@@ -23,6 +31,25 @@ import type {
 } from "../../../../filter/source/msfilter/util";
 /** Native common Word export owner for the currently consumed context. */
 export abstract class MSWordExportBase {
+  private readonly m_aBookmarkToWord = new Map<string, string>();
+  private readonly m_aWordBookmarks = new Set<string>();
+
+  /** Maps the Writer name to the original Word spelling and 40-unit ceiling. @param name - Writer bookmark. @returns Word name. */
+  BookmarkToWord(name: string): string {
+    const cached = this.m_aBookmarkToWord.get(name);
+    if (cached !== undefined) return cached;
+    let word = EncodeBookmarkName(name);
+    if (word.length > 40) {
+      word = word.slice(0, 40);
+      for (let index = 1; this.m_aWordBookmarks.has(word); ++index) {
+        const suffix = index.toString(36);
+        word = word.slice(0, 40 - suffix.length) + suffix;
+      }
+    }
+    this.m_aBookmarkToWord.set(name, word);
+    this.m_aWordBookmarks.add(word);
+    return word;
+  }
   /** Original static paragraph tab correction. @param set - Temporary item set. @param left - Absolute indent. @returns Nothing. */
   static CorrectTabStopInSet(set: SfxItemSet, left: number): void {
     CorrectTabStopInSet(set, left);
@@ -32,6 +59,17 @@ export abstract class MSWordExportBase {
   public m_pISet: SfxItemSet | undefined;
   protected m_pCurrentPageDesc: SwPageDesc | undefined;
   public m_bOutPageDescs = false;
+  public m_bStyDef = false;
+  public m_pCurrentStyle: SwFormat | undefined;
+  public m_bParaInlineHeading = false;
+  /** Original item-set-bound lookup translates Writer identities for actual EditEngine pools. The alternative native character iterator owner is not yet ported. @param which - Original Writer identity. @returns Borrowed actual item. */
+  GetItem(which: number): SfxPoolItem {
+    if (this.m_pISet === undefined)
+      throw new Error(
+        "MSWordExportBase::GetItem requires an actual item set; character iterator is not implemented",
+      );
+    return this.m_pISet.Get(GetSetWhichFromSwDocWhich(this.m_pISet, this.m_rDoc, which));
+  }
   /** Native default direction for the represented page, paragraph, and paragraph-style output contexts. @returns Resolved direction. */
   GetDefaultFrameDirection(): SvxFrameDirection {
     return GetDefaultFrameDirection(this);
@@ -47,7 +85,10 @@ export abstract class MSWordExportBase {
   /** Original exporter-kind virtual. @returns Actual output format. */
   abstract GetExportFormat(): MSWordExportFormat;
   readonly m_aFontHelper = new wwFontHelper();
-  public m_pUsedNumTable: SwNumRule[] | undefined;
+  public m_pUsedNumTable: (SwNumRule | null)[] | undefined;
+  public readonly m_OverridingNums = new Map<number, readonly [number, number]>();
+  public readonly m_Lists = new Map<string, number>();
+  public readonly m_ListLevelOverrides = new Map<number, Map<number, number>>();
   public m_bSubstituteBullets = true;
   public m_nUniqueList = 0;
   protected readonly m_nCurStart: number;
@@ -65,13 +106,25 @@ export abstract class MSWordExportBase {
   Dispose(): void {
     if (this.m_pUsedNumTable !== undefined) {
       this.m_pUsedNumTable.splice(0, this.m_pUsedNumTable.length - this.m_nUniqueList);
-      for (const rule of this.m_pUsedNumTable) rule.Dispose();
+      for (const rule of this.m_pUsedNumTable) rule?.Dispose();
       this.m_pUsedNumTable = undefined;
     }
   }
   /** Native temporary-rule copy, kept outside the document table. @param rule - Original rule. @returns Export-owned rule. */
   DuplicateNumRuleImpl(rule: SwNumRule): SwNumRule {
     return DuplicateNumRuleImpl(this, rule);
+  }
+  /** Original per-list abstract-numbering cache. @param listId - Actual list identity. @param rule - Original abstract rule. @returns Zero-based abstract ID. */
+  DuplicateAbsNum(listId: string, rule: SwNumRule): number {
+    return DuplicateAbsNum(this, listId, rule);
+  }
+  /** Original distinct numbering instance with a null entry in the shared table. @param rule - Existing rule. @param listId - Actual list identity. @param abstract - Abstract rule. @returns Zero-based instance ID. */
+  OverrideNumRule(rule: SwNumRule, listId: string, abstract: SwNumRule): number {
+    return OverrideNumRule(this, rule, listId, abstract);
+  }
+  /** Original unsigned16 override assignment. @param id - Instance ID. @param level - Writer level. @param start - Restart value. @returns Nothing. */
+  AddListLevelOverride(id: number, level: number, start: number): void {
+    AddListLevelOverride(this, id, level, start);
   }
   /** Native restart copy changes only the requested level's start. @param rule - Original rule. @param level - Writer level before Word clamping. @param start - Unsigned16 restart. @returns Zero-based table ID. */
   DuplicateNumRule(rule: SwNumRule, level: number, start: number): number {
@@ -132,3 +185,6 @@ import type { SwFormat } from "../../core/attr/format";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 
 import { CorrectTabStopInSet } from "./ww8atr";
+
+import { GetSetWhichFromSwDocWhich } from "./writerhelper";
+import type { SfxPoolItem } from "../../../../svl/inc/poolitem";

@@ -40,12 +40,14 @@ const moduleNames = [
   "sax",
   "sc",
   "sfx2",
+  "sot",
   "stoc",
   "svl",
   "svtools",
   "svx",
   "sw",
   "tools",
+  "ucb",
   "ucbhelper",
   "udkapi",
   "unotools",
@@ -60,13 +62,16 @@ import { allowedEdges } from "./module-boundaries/allowed-edges.mjs";
 export function isForbiddenModuleEdge(sourceModule, targetModule) {
   return !allowedEdges.get(sourceModule)?.has(targetModule);
 }
-/** Retains the core/browser VCL gate while admitting only the source-backed pure dependencies consumed by ScDocumentPool and ScChartListenerCollection. Other VCL and all browser imports remain forbidden from domain core. @param relativeSource - Source-root-relative caller. @param relativeTarget - Source-root-relative target. @returns Forbidden flag. */
-export function isForbiddenDomainVclImport(relativeSource, relativeTarget) {
+/** Retains the core/browser VCL gate and checks the source-backed value dependencies. @param relativeSource - Source-root-relative caller. @param relativeTarget - Source-root-relative target. @param typeOnly - Whether the import is erased from the runtime graph. @returns Forbidden flag. */
+export function isForbiddenDomainVclImport(relativeSource, relativeTarget, typeOnly = false) {
   const source = relativeSource.split(path.sep).join("/"),
     target = relativeTarget.split(path.sep).join("/").replace(/\.ts$/u, "");
   if (!source.includes("/source/core/") || !target.startsWith("vcl/")) return false;
   if (source === "sw/source/core/doc/number-bullet.ts" && target === "vcl/source/font/font")
     return false;
+  // ScPatternAttr::fillFontOnly in patattr.hxx receives a caller-owned vcl::Font reference.
+  if (source === "sc/source/core/data/patattr.ts" && target === "vcl/source/font/font")
+    return !typeOnly;
   if (source === "sc/source/core/data/global.ts" && target === "vcl/source/app/svapp") return false;
   // chartlis.hxx/cxx consume native Idle,TaskPriority and Application queued-input admission.
   // These kernel contracts use an explicitly bound platform;they never import browser adapters.
@@ -321,6 +326,8 @@ function findCycle(graph) {
 }
 
 const originalSalO3tlBindings = new Map([
+  // Original sal/osl/unx/file.cxx::setAllowedPaths calls o3tl::getToken.
+  ["sal/osl/unx/file.access.ts -> o3tl/inc/string_view.ts", ["getToken"]],
   // Original o3tl/string_view.hxx::iterateCodePoints calls exactly these rtl/character.hxx helpers.
   [
     "o3tl/inc/string_view.ts -> sal/inc/rtl/character.ts",
@@ -637,7 +644,13 @@ for (const sourceFile of runtimeSources) {
       );
       continue;
     }
-    if (isForbiddenDomainVclImport(relativeSource, relativeTarget)) {
+    if (
+      isForbiddenDomainVclImport(
+        relativeSource,
+        relativeTarget,
+        !runtimeImports.has(imported.fileName),
+      )
+    ) {
       failures.push(
         `${displayPath(sourceFile)}: domain core must receive browser adapters through an injected contract`,
       );

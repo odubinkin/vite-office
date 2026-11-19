@@ -1,0 +1,115 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sax/source/fastparser/fastparser.entity.ts",
+    "status": "mapped",
+    "upstreamPath": "sax/source/fastparser/fastparser.cxx",
+    "localSymbols": [
+      "CallbackType",
+      "Event",
+      "ParserData",
+      "SaxContext",
+      "Entity",
+      "NameWithToken",
+      "NamespaceDefine",
+      "lclGetErrorMessage"
+    ],
+    "upstreamSymbols": [
+      "ParserData::ParserData",
+      "Entity::Entity",
+      "Entity::startElement",
+      "Entity::characters",
+      "Entity::endElement",
+      "Entity::processingInstruction",
+      "Entity::saveException",
+      "Entity::hasException",
+      "Entity::throwException",
+      "lclGetErrorMessage"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual RTL/UNO owners retain source contracts. Explicit scope destruction and counted views bind logical address storage; physical C++ ABI, native logging/mutex/allocator and complete application parity remain unqualified."
+    },
+    "preservedResponsibilities": [
+      "Original ParserData cached native references, Event actual RTL/attribute owners, SaxContext token-dependent optional values and Entity callback/first-exception consumers. InputSource/converter/shared-event/raw parser-pointer/default thread fields now belong to this same real Entity; the older standalone input Entity is removed. Real registered Writer/token services and original legacy adapters exercise known/unknown/root/child/null/namespace/text/end/PI paths, copied cache lifetime and real closed-stream failures. Actual native UNO exception capture preserves first error and callback unwinding. No fake document handler/provider, private-state patch or arbitrary numeric-result injection. Source input/converter ownership is shared with the existing host reader, not mirrored in a second entity.",
+      " Added original NameWithToken/NamespaceDefine owned values and actual namespace/default stacks, valid-count stack and backing-definition vector fields to the same Entity; active-prefix fixtures initialize these public original aggregates explicitly. The new separate actual FastSaxParserImpl/locator owner is partial; four native C producers now populate these same fields; stream/custom-entity/service assembly remains unported.",
+      " Original Entity::throwException and lclGetErrorMessage now prepare actual source SAXParseException values from native C diagnostics, source ASCII_US decoding/fallback/prefix, native locator identifiers/positions and first caught Any through real CPPU assignment. Native Any operand copying flattens through the original shared copy owner; no invented nested wrapper. Actual nil-handler and real registered Writer/closed-stream failures are tested, including saved-exception equality. Fatal-handler callbacks preserve original typed Any, exception unwind and unconditional throw, but nonnull handler execution/native threaded-phase suppression/physical mutex behavior remain unqualified; no replacement positive handler is supplied."
+    ],
+    "omittedResponsibilities": [
+      "Full FastSaxParserImpl stream/custom-entity/service assembly, original parser QA, non-Emscripten queue/thread mechanisms and complete model/filter/UI acceptance remain unported. Actual native locator and partial parser configuration/stack/namespace registry are now separate ported source owners. Current Emscripten profile source disables internal threading. Source SAL logging, non-UNO host exception ABI and physical C++ ABI/mutex/allocation remain unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sax/source/fastparser/fastparser.entity.ts",
+          "marker": "CallbackType"
+        },
+        {
+          "path": "apps/office/src/sax/source/fastparser/fastparser.entity.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sax/source/fastparser/fastparser.errors.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "ParserData::ParserData"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "Entity::Entity"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "Entity::startElement"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "Entity::characters"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "Entity::endElement"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "Entity::processingInstruction"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "Entity::saveException"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "Entity::hasException"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "struct NameWithToken"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "struct NamespaceDefine"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "Entity::throwException"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "lclGetErrorMessage"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sax/source/fastparser/fastparser.entity.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original private value/context/adapter responsibilities are split from their pinned translation unit without changing actual receiver identity, ownership or introducing alternate parser state. The complete parser/service remains a separate unfinished responsibility."
+    }
+  }
+}

@@ -13,7 +13,7 @@ import {
   RES_CHRATR_CTL_FONTSIZE,
 } from "../../../inc/hintids";
 import type { SwFrameFormat } from "../layout/atrfrm";
-import { SwTableBoxStartNode, SwEndNode, type SwNode } from "./node";
+import { SwTableBoxStartNode, SwEndNode, SwTableNode, type SwNode, type SwStartNode } from "./node";
 import { SwTableLine, SwTableBox } from "../table/swtable";
 import { SwFormatFillOrder, SwFillOrder } from "../../../inc/fmtfordr";
 import { SwNodes } from "./nodes";
@@ -33,7 +33,6 @@ import { SwTabCols } from "../bastyp/tabcol";
 import { SwFrameSize, SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwPosition, type SwPaM } from "../crsr/pam";
 import { SwCursor, SwTableCursor } from "../crsr/swcrsr";
-import { SwTableNode } from "../docnode/node";
 import {
   SwUndoInsTable,
   SwUndoAttrTable,
@@ -422,11 +421,12 @@ export function InsertSwTableRows(
   );
 }
 
-/** Native whole-paragraph TextToTable wraps original nodes in canonical table and cell sections. @param this - Owning node array. @param rows - Inclusive cell node ranges. @param name - Unique table name. @returns Connected table. */
+/** Native whole-paragraph TextToTable wraps original nodes in canonical table and cell sections. @param this - Owning node array. @param rows - Inclusive cell node ranges. @param name - Unique table name. @param section - Actual owning text section. @returns Connected table. */
 export function TextToTableNodes(
   this: SwNodes,
-  rows: readonly (readonly (readonly SwTextNode[])[])[],
+  rows: readonly (readonly (readonly (SwTextNode | SwTableNode)[])[])[],
   name: string,
+  section: SwStartNode,
 ): SwTable {
   const all = rows.flat(2);
   if (
@@ -442,15 +442,17 @@ export function TextToTableNodes(
     )
   )
     throw new Error("Empty table range.");
-  const first = all[0] as SwTextNode,
-    body = this["endOfContent"].StartOfSectionNode();
-  for (let index = 0; index < all.length; index++)
+  const first = all[0] as SwTextNode | SwTableNode;
+  let expected = first.GetIndex();
+  for (const node of all) {
     if (
-      (all[index] as SwTextNode).GetNodes() !== this ||
-      (all[index] as SwTextNode).StartOfSectionNode() !== body ||
-      (all[index] as SwTextNode).GetIndex() !== first.GetIndex() + index
+      node.GetNodes() !== this ||
+      node.StartOfSectionNode() !== section ||
+      node.GetIndex() !== expected
     )
       throw new Error("Table ranges must be contiguous body text.");
+    expected = (node instanceof SwTableNode ? node.EndOfSectionIndex() : node.GetIndex()) + 1;
+  }
   return this.GetDoc().RunModelTransaction(
     /** Processes one ordered native value at this boundary. @returns The represented native operation result. */
     () => {
@@ -462,14 +464,30 @@ export function TextToTableNodes(
           const start = new SwTableBoxStartNode(this, tableNode),
             end = new SwEndNode(this, start);
           start.setEndOfSection(end);
-          for (const node of cell) this["nodeArray"].splice(node.GetIndex(), 1);
-          this["nodeArray"].splice(tableNode.EndOfSectionNode().GetIndex(), 0, start, ...cell, end);
+          const first = cell[0] as SwTextNode | SwTableNode;
+          const last = cell.at(-1) as SwTextNode | SwTableNode;
+          const firstIndex = first.GetIndex();
+          const endIndex = last instanceof SwTableNode ? last.EndOfSectionIndex() : last.GetIndex();
+          const content = this["nodeArray"].splice(firstIndex, endIndex - firstIndex + 1);
+          this["nodeArray"].splice(
+            tableNode.EndOfSectionNode().GetIndex(),
+            0,
+            start,
+            ...content,
+            end,
+          );
           for (const node of cell) node.SetStartOfSection(start);
           line.AddBox(new SwTableBox(this.GetDoc().MakeTableBoxFormat(), start));
         }
         table.AddLine(line);
       }
-      if (this.getTextNodes().length === 0) this.MakeTextNode();
+      if (
+        !this.GetSectionContent(section).some(
+          /** Finds a remaining direct paragraph in the original text owner. @param node - Direct section child. @returns Whether a text node. */
+          (node) => node.IsTextNode(),
+        )
+      )
+        this.MakeTextNode(section.EndOfSectionNode(), this.GetDoc().GetDfltTextFormatColl());
       this.GetDoc().NotifyModelChange({ kind: "node-inserted", index: tableNode.GetIndex() });
       return table;
     },

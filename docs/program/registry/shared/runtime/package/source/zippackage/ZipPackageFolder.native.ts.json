@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/zippackage/ZipPackageFolder.native.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-package-graph",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f",
+      "CAP-239ef4b3-b450-4c31-bf96-03e76bffcac1"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/source/zippackage/ZipPackageFolder.native.ts",
+        "apps/office/src/package/source/zippackage/ZipPackageFolder.native.test.ts",
+        "apps/office/src/package/source/zippackage/ZipPackageFolder.save.test.ts",
+        "apps/office/src/package/source/zippackage/ZipPackage.members.test.ts",
+        "scripts/fixtures/native-package-member-probe.ts"
+      ],
+      "justification": "Original live folder constructor/defaults, ContentHash named container, XWeak Any return, map keys, same-component parent transitions, property extraction and service metadata. Exact UTF16 Map keys lower std::unordered_map equality without claiming native bucket/hash/iteration order. Actual RTL references and original ZipContentInfo moved-temporary/destruction parent clearing are retained. Original folder saveChild/saveContents are bound; actual stream class and other traversal helpers remain unfinished. Native mutation invalidation/OOM/RTTI/ABI and complete package/storage/model/filter/UI acceptance remain unqualified. Original abstract ZipPackageEntry::saveChild and folder saveChild/saveContents are now bound over actual ZipOutputStream and initialized UNO PropertyValue addresses. Empty folder records follow source PACKAGE/ZIP versus OFOPXML rules, folder manifest fields use exact slots, copied sequence ownership and descendant-before-parent order. Source RuntimeException translation is exercised using genuine invalid names and readonly SvMemoryStream output; no fake stream/component/folder callback is supplied. Root mimetype stream priority and child-false status branches await the actual ZipPackageStream class and remain uncovered. Native unordered iteration/ABI/OOM and complete package/storage/model/filter/UI/service QA remain unqualified or unfinished. Encryption parameters are forwarded unchanged; no encryption implementation or security-policy mutation is introduced. Actual ZipPackage owns original stream-argument initialization, raw ZIP tree construction, hierarchical lookup/cache and real ZipFile member input. Folder extension matching and original OFOPXML metadata orchestration are transferred. Positive classic SAX metadata and DD encryption-property paths remain unqualified; no substitute parser or complete package service is registered. Original malformed package QA fixtures use the genuine stream argument overload without recovery; positive unchanged DOCX/XLSX/ZIP64 raw members have independent Python zipfile length/SHA256 witnesses. Actual main/DOM-free Worker reopens production committed bytes. Preserve trailing-slash parent-cache selection WRITER624/CALC691. Complete owner coverage remains below90; whole package interfaces, ODF manifest initialization, encryption/raw/save/commit/XStorage/SfxMedium and document filter/UI acceptance remain unfinished. No physical ABI/allocator/thread/unordered-layout parity is claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ZipPackageFolder"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/zippackage/ZipPackageFolder.cxx",
+      "upstreamSymbols": [
+        "ZipPackageFolder",
+        "insertByName",
+        "doInsertByName",
+        "getByName",
+        "setPropertyValue"
+      ]
+    }
+  }
+}

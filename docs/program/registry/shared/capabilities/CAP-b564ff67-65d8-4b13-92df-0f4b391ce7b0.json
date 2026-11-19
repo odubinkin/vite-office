@@ -1,0 +1,81 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-b564ff67-65d8-4b13-92df-0f4b391ce7b0",
+    "capabilityId": "CAP-b564ff67-65d8-4b13-92df-0f4b391ce7b0",
+    "suite": "shared",
+    "subsystem": "native-storage-package-transaction",
+    "type": "model",
+    "maturity": "mapped",
+    "assertions": [
+      "Original registered service and XChangesBatch persist root storage package members to the actual destination."
+    ],
+    "capability": "Original root storage package transaction",
+    "gaps": [
+      "The original ZIP package service, change batch and final root persistence phase are connected. Child and relationship synchronization, full storage wrappers and DOCX/XLSX UI remain pending."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "void OStorage_Impl::Commit()"
+        },
+        {
+          "path": "package/util/package2.component",
+          "marker": "package_ZipPackage_get_implementation"
+        }
+      ],
+      "tests": [
+        {
+          "path": "package/qa/ofopxmlstorages/Test01.java",
+          "marker": "StorageFactory"
+        }
+      ],
+      "docs": [
+        {
+          "path": "package/inc/ZipPackage.hxx",
+          "marker": "enum InitialisationMode"
+        },
+        {
+          "path": "offapi/com/sun/star/embed/UseBackupException.idl",
+          "marker": "TemporaryFileURL"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.impl.ts",
+          "marker": "CommitRootPackage"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.impl.test.ts",
+          "marker": "opens the original package service"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-storage-package-transaction.md",
+          "marker": "# Native storage package transaction"
+        }
+      ]
+    },
+    "implemented": false,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Represented original fields and generated UNO/RTL/native mutex owners use existing host storage while native physical ABI/allocator/thread and full package/stream services remain unqualified."
+    },
+    "scopeLimitations": [
+      "The original ZIP package service, change batch and final root persistence phase are connected. Child and relationship synchronization, full storage wrappers and DOCX/XLSX UI remain pending."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "root-storage-persistence"
+  }
+}

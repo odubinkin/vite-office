@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/ucb/source/core/identify.ts",
+    "status": "mapped",
+    "upstreamPath": "ucb/source/core/identify.cxx",
+    "localSymbols": [
+      "ContentIdentifier"
+    ],
+    "upstreamSymbols": [
+      "ContentIdentifier",
+      "getContentIdentifier",
+      "getContentProviderScheme"
+    ],
+    "preservedResponsibilities": [
+      "Original core identifier retains the entire input, including colonless text, and lazily caches its first-colon ASCII-lowercase scheme. Actual weak/UNO facet and independently owned getters are preserved; the separate ucbhelper owner is not substituted because its colonless behavior differs. Actual source-derived owner tests exercise defaults, nonvirtual copy/inequality, inherited live field projections and real UNO Any/Sequence/caught-exception transport. All10 new executable owners independently pass90; Chromium main/DOM-free Worker use real metadata/value owners. Native physical C++ ABI/allocation/thread promises and full UniversalContentBroker/provider/transfer/check-in/DOCX-XLSX core/UI remain unqualified or unfinished."
+    ],
+    "omittedResponsibilities": [
+      "Full UCB broker/provider/transfer/check-in, native physical ABI/allocation/thread domains and DOCX/XLSX package/storage/model/filter/UI acceptance."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/ucb/source/core/identify.ts",
+          "marker": "ContentIdentifier"
+        },
+        {
+          "path": "apps/office/src/ucb/source/core/native-command-info.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "ucb/source/core/identify.cxx",
+          "marker": "ContentIdentifier"
+        }
+      ]
+    }
+  }
+}

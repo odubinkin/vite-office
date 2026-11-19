@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/zipapi/ThreadedDeflater.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-zip-output",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/source/zipapi/ThreadedDeflater.ts",
+        "apps/office/src/package/source/zippackage/ZipPackageStream.save.test.ts",
+        "apps/office/src/oox/source/core/xmlfilterbase.test.ts"
+      ],
+      "justification": "Retains the source default-window raw DEFLATE, 128 KiB blocks, 32 KiB history, byte-aligned sync flush and final stream end. The synchronous browser binding executes one lane in input order and reports unsuccessful zlib work as an export error.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ThreadedDeflater"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/zipapi/ThreadedDeflater.cxx",
+      "upstreamSymbols": [
+        "ThreadedDeflater::deflateWrite",
+        "ThreadedDeflater::Task::doWork"
+      ]
+    }
+  }
+}

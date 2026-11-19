@@ -7,7 +7,10 @@ import { XML_TOKEN_INVALID } from "../../../../oox/source/token/tokenmap";
 import { namespaceTokens } from "../../../../oox/source/token/namespacemap";
 import type { FactoryAttributeHandler } from "./OOXMLFactory";
 import type { OOXMLValue } from "./OOXMLPropertySet";
-import type { OOXMLFastContextHandler } from "./OOXMLFastContextHandler";
+import {
+  type OOXMLFastContextHandler,
+  OOXMLFastContextHandlerStream,
+} from "./OOXMLFastContextHandler";
 
 /** Binds generated C++ NMSP/XML constants, including the exact numeric TOKEN_COUNT sentinel. @param qname - Canonical QName or generated native sentinel. @returns Native token, or DONTKNOW for invalid expressions. */
 export function nativeToken(qname: string | number): number {
@@ -21,18 +24,26 @@ export function nativeToken(qname: string | number): number {
     : namespace | local;
 }
 /** One original generated action row; phase distinguishes native token versus resource-ID guards. */
-export type FactoryAction = readonly [Id, string, string, Id, Id];
-/** Native generated namespace factory singleton and switch-table behavior. */
-export class OOXMLFactory_wml implements OOXMLFactory_ns {
-  private static instance: OOXMLFactory_wml | null = null;
+export type FactoryAction = readonly [Id, string, string, Id, Id, Id?, Id?];
+/** Native table shape shared by generated namespace factories. */
+export interface FactoryTables {
+  readonly attributes: readonly (readonly [Id, string | number, keyof typeof R, Id])[];
+  readonly elements: readonly (readonly [Id, string | number, keyof typeof R, Id])[];
+  readonly resources: readonly (readonly [Id, string | number, Id])[];
+  readonly lists: readonly (readonly [Id, string, Id])[];
+  readonly actions: readonly (readonly [Id, string, string, Id | string, Id, Id?, Id?])[];
+  readonly defines: Readonly<Record<number, string>>;
+}
+/** Shared representation of the original generated namespace switch tables. */
+export class GeneratedNamespaceFactory implements OOXMLFactory_ns {
   private readonly attributes = new Map<Id, AttributeInfo[]>();
   private readonly elements = new Map<Id, Map<number, readonly [R, Id]>>();
   private readonly resources = new Map<Id, Map<number, Id>>();
   private readonly lists = new Map<Id, Map<string, Id>>();
   private readonly actions: FactoryAction[] = [];
-  /** Builds native static lookup storage from generated records without renumbering identities. @returns Factory. */
-  private constructor() {
-    for (const [id, token, kind, ref] of tables.attributes) {
+  /** Builds native static lookup storage from generated records without renumbering identities. @param definitions - Source-generated namespace tables. @returns Factory. */
+  protected constructor(private readonly definitions: FactoryTables) {
+    for (const [id, token, kind, ref] of definitions.attributes) {
       let values = this.attributes.get(id);
       if (!values) {
         values = [];
@@ -40,7 +51,7 @@ export class OOXMLFactory_wml implements OOXMLFactory_ns {
       }
       values.push(new AttributeInfo(nativeToken(token), R[kind], ref));
     }
-    for (const [id, token, kind, ref] of tables.elements) {
+    for (const [id, token, kind, ref] of definitions.elements) {
       let values = this.elements.get(id);
       if (!values) {
         values = new Map();
@@ -48,7 +59,7 @@ export class OOXMLFactory_wml implements OOXMLFactory_ns {
       }
       values.set(nativeToken(token), [R[kind], ref]);
     }
-    for (const [id, token, resource] of tables.resources) {
+    for (const [id, token, resource] of definitions.resources) {
       let values = this.resources.get(id);
       if (!values) {
         values = new Map();
@@ -56,7 +67,7 @@ export class OOXMLFactory_wml implements OOXMLFactory_ns {
       }
       values.set(nativeToken(token), resource);
     }
-    for (const [id, value, token] of tables.lists) {
+    for (const [id, value, token] of definitions.lists) {
       let values = this.lists.get(id);
       if (!values) {
         values = new Map();
@@ -65,19 +76,15 @@ export class OOXMLFactory_wml implements OOXMLFactory_ns {
       // Generation retains the first native if/else spelling match.
       values.set(value, token);
     }
-    for (const [id, phase, action, guard, send] of tables.actions)
+    for (const [id, phase, action, guard, send, ...condition] of definitions.actions)
       this.actions.push([
         id,
         phase,
         action,
         typeof guard === "string" ? nativeToken(guard) : guard,
         send,
+        ...condition,
       ]);
-  }
-  /** Original lazily initialized namespace singleton. @returns Shared factory. */
-  static getInstance(): OOXMLFactory_wml {
-    if (!this.instance) this.instance = new OOXMLFactory_wml();
-    return this.instance;
   }
   /** Original list lookup leaves out untouched on unknown definition/spelling. @param id - Native definition. @param value - Lexical value. @param out - Native output cell. @returns Success. */
   getListValue(id: Id, value: string, out: [number]): boolean {
@@ -118,6 +125,7 @@ export class OOXMLFactory_wml implements OOXMLFactory_ns {
   ): void {
     for (const action of this.getActions(handler.getDefine(), phase)) {
       if (action[3] !== 0 && handler.getId() !== action[3]) continue;
+      if (action[5] !== undefined && handler.getPropertyInt(action[5]) !== action[6]) continue;
       switch (action[2]) {
         case "text":
           handler.text(text);
@@ -125,13 +133,16 @@ export class OOXMLFactory_wml implements OOXMLFactory_ns {
         case "sendPropertiesWithId":
           handler.sendPropertiesWithId(action[4]);
           break;
+        case "printproperty":
+          if (handler instanceof OOXMLFastContextHandlerStream) handler.sendProperty(action[4]);
+          break;
         default:
           // Generation rejects new action names/conditions until their native
           // owners are implemented; attribute setValue belongs to another phase.
           handler[
             action[2] as Exclude<
               (typeof tables.actions)[number][2],
-              "setValue" | "sendPropertiesWithId" | "text"
+              "setValue" | "sendPropertiesWithId" | "printproperty" | "text"
             >
           ]();
       }
@@ -146,6 +157,22 @@ export class OOXMLFactory_wml implements OOXMLFactory_ns {
   }
   /** The admitted native definition names provide no fallback for an unported parser context. @param id - Native definition. @returns Name or null. */
   getDefineName(id: Id): string | null {
-    return (tables.defines as Readonly<Record<number, string>>)[id] ?? null;
+    return this.definitions.defines[id] ?? null;
+  }
+}
+
+/** Original generated WordprocessingML namespace factory. */
+export class OOXMLFactory_wml extends GeneratedNamespaceFactory {
+  private static instance: OOXMLFactory_wml | null = null;
+
+  /** Binds the native WordprocessingML tables. @returns Factory. */
+  private constructor() {
+    super(tables);
+  }
+
+  /** Original lazily initialized namespace singleton. @returns Shared factory. */
+  static getInstance(): OOXMLFactory_wml {
+    if (!this.instance) this.instance = new OOXMLFactory_wml();
+    return this.instance;
   }
 }

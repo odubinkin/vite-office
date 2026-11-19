@@ -1,4 +1,4 @@
-/** @fileoverview Consumed native SectionPropertyMap page-style finalization and parity-copy methods; range attachment remains on the existing atomic import boundary. */
+/** @fileoverview Native SectionPropertyMap page-style finalization, parity copying and body attachment. */
 import { PageBreakType, SectionPropertyMap, type PropertyMap } from "./PropertyMap";
 import type { DomainMapper_Impl } from "./DomainMapper_Impl";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
@@ -6,14 +6,16 @@ import { PropertyIds as P } from "./PropertyIds";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";
 import { text, unicode, stringAny } from "../../core/unocore/unocrsrhelper";
+import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import {
   PageStyleLayout,
   cppu_detail_getUnoType_PageStyleLayout as layoutType,
 } from "../../../../offapi/com/sun/star/style/PageStyleLayout";
 import { WritingMode2 } from "../../../../offapi/com/sun/star/text/WritingMode2";
 import { convertTwipToMm100_Limited } from "./ConversionHelper";
+import { CompleteCopyHeaderFooter } from "./DomainMapper_Impl.headerfooter";
 
-/** Original write-only/header-content denylist retained even though this model has no header/footer content owner. */
+/** Original properties handled independently from direct page-style property copying. */
 const staticDenylist = new Set([
   "FooterBackGraphicURL",
   "BackGraphicURL",
@@ -117,6 +119,10 @@ export function CreateEvenOddPageStyleCopy(
         layout.dispose();
       }
     }
+    const doc = mapper.model.GetDoc();
+    const current = doc.FindPageDesc(text(this.GetPageStyleName()));
+    const copied = doc.FindPageDesc(text(name));
+    if (mapper.IsNewDoc() && current && copied) CompleteCopyHeaderFooter(current, copied);
     this["m_sPageStyleName"].assign(name);
   } finally {
     name.dispose();
@@ -169,7 +175,7 @@ function gridCharacterWidth(mapper: DomainMapper_Impl): number {
   }
   return width;
 }
-/** Consumed original no-header/no-column body section finalization. Content sections, header/footer text and frames have no current model owners; their services are not fabricated here. @param this - Actual section map. @param mapper - Actual mapper. @returns Nothing. */
+/** Completes the original page style for the consumed body section. @param this - Actual section map. @param mapper - Actual mapper. @returns Nothing. */
 export function CloseSectionGroup(this: SectionPropertyMap, mapper: DomainMapper_Impl): void {
   const previous = mapper.GetLastSectionContext();
   if (this["m_nBreakType"] === -1 || this["m_nBreakType"] === N.LN_Value_ST_SectionMark_nextColumn)
@@ -187,6 +193,7 @@ export function CloseSectionGroup(this: SectionPropertyMap, mapper: DomainMapper
     return;
   }
   const style = this.GetPageStyle(mapper);
+  this.SetHeaderFooterProperties(mapper);
   this.HandleMarginsHeaderFooter(mapper);
   if (mapper.GetSettingsTable().GetMirrorMarginSettings())
     insert(this, P.PROP_PAGE_STYLE_LAYOUT, new Any([PageStyleLayout.MIRRORED], layoutType));
@@ -227,6 +234,15 @@ export function CloseSectionGroup(this: SectionPropertyMap, mapper: DomainMapper
       this.CreateEvenOddPageStyleCopy(mapper, PageBreakType.Even);
     else if (this["m_nBreakType"] === N.LN_Value_ST_SectionMark_oddPage)
       this.CreateEvenOddPageStyleCopy(mapper, PageBreakType.Odd);
+    const first = this["m_pStartingNode"];
+    const pageStyle = text(this.GetPageStyleName());
+    const restart = this["m_nPageNumber"];
+    if (first && !(this.IsFirstSection() && pageStyle === "Standard" && restart < 0)) {
+      const item = new SwFormatPageDesc(pageStyle, restart < 0 ? undefined : restart & 0xffff);
+      const table = first.FindTableNode();
+      if (table) table.GetTable().GetFrameFormat().SetFormatAttr(item);
+      else first.SetAttr(item);
+    }
   } catch (error) {
     if (!(error instanceof Exception)) throw error;
     error.dispose();

@@ -1,0 +1,79 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/xstor/owritestream.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/xstor/owriteablestream.cxx",
+    "localSymbols": [
+      "OWriteStream",
+      "writeBytes",
+      "getPropertyValue",
+      "setPropertyValue",
+      "closeOutput",
+      "dispose"
+    ],
+    "upstreamSymbols": [
+      "OWriteStream::OWriteStream",
+      "OWriteStream::writeBytes",
+      "OWriteStream::getPropertyValue",
+      "OWriteStream::setPropertyValue",
+      "OWriteStream::closeOutput",
+      "OWriteStream::dispose"
+    ],
+    "preservedResponsibilities": [
+      "The plain ZIP/OFOPXML storage uses the real nontransacted OWriteStream component for new/truncated output. It exposes the writable data and property facets, commits the native cache and closes its attachment when both directions close. Transacted streams, nontruncate existing writes and encryption families remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Full native ABI, unsupported stream modes, and all application filter roundtrips remain unqualified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Separates the original public OWriteStream component facade from its cache and package persistence implementation in owriteablestream.ts."
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/package/source/xstor/owritestream.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Separates the original public OWriteStream component facade from its cache and package persistence implementation in owriteablestream.ts."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/xstor/owritestream.ts",
+          "marker": "OWriteStream"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xfactory.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/xstor/owriteablestream.cxx",
+          "marker": "OWriteStream::OWriteStream"
+        },
+        {
+          "path": "package/source/xstor/owriteablestream.cxx",
+          "marker": "OWriteStream::writeBytes"
+        },
+        {
+          "path": "package/source/xstor/owriteablestream.cxx",
+          "marker": "OWriteStream::getPropertyValue"
+        },
+        {
+          "path": "package/source/xstor/owriteablestream.cxx",
+          "marker": "OWriteStream::setPropertyValue"
+        },
+        {
+          "path": "package/source/xstor/owriteablestream.cxx",
+          "marker": "OWriteStream::closeOutput"
+        },
+        {
+          "path": "package/source/xstor/owriteablestream.cxx",
+          "marker": "OWriteStream::dispose"
+        }
+      ]
+    }
+  }
+}

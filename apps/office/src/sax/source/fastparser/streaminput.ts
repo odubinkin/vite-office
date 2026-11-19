@@ -1,9 +1,6 @@
 /** @fileoverview Original synchronous FastSaxParser InputSource read loop and existing host XML engine byte admission. The UNO/RTL converter owns native transport; the host decoder is a backend binding, not a native libxml2/service/ABI certificate. */
-import {
-  InputSource,
-  type InputSourceConstReference,
-} from "../../../offapi/com/sun/star/xml/sax/InputSource";
-import { XMLFile2UTFConverter } from "../expatwrap/xml2utf";
+import type { InputSourceConstReference } from "../../../offapi/com/sun/star/xml/sax/InputSource";
+import { Entity, ParserData } from "./fastparser.entity";
 import { Sequence, type SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import { OString } from "../../../sal/inc/rtl/string";
 import {
@@ -22,50 +19,54 @@ import { SAL_NO_ACQUIRE } from "../../../sal/inc/types";
 import * as C from "../../../sal/textenc/textcvt";
 import * as F from "../../../sal/inc/rtl/textcvt.h";
 const Bytes = Sequence.specialize<number>("sal_Int8", 1);
-/** Actual Entity source and converter owners; parsed model/service state is not manufactured here. */
-export class Entity {
-  readonly maStructSource: InputSource;
-  readonly maConverter = new XMLFile2UTFConverter();
-  /** Original source copy and converter setup before document callbacks. @param source - Actual source value. @returns Entity. */
-  constructor(source: InputSourceConstReference) {
-    this.maStructSource = new InputSource(source);
-    this.maConverter.setInputStream(this.maStructSource.aInputStream);
-    if (!this.maStructSource.sEncoding.isEmpty()) {
+/** Binds the existing host parser's source argument to the same actual Entity fields used by the native consumer. The original pushEntity performs these assignments before document callbacks; no parallel input-state owner remains. @param source - Actual source value. @returns Owned real Entity. */
+export function createInputEntity(source: InputSourceConstReference): Entity {
+  const data = new ParserData();
+  let entity: Entity;
+  try {
+    entity = new Entity(data);
+  } finally {
+    data.dispose();
+  }
+  try {
+    entity.maStructSource.assign(source);
+    entity.maConverter.setInputStream(entity.maStructSource.aInputStream);
+    if (!entity.maStructSource.sEncoding.isEmpty()) {
       const slot: rtl_StringSlot = [null];
       rtl_uString2String(
         slot,
-        this.maStructSource.sEncoding.getStr(),
-        this.maStructSource.sEncoding.getLength(),
+        entity.maStructSource.sEncoding.getStr(),
+        entity.maStructSource.sEncoding.getLength(),
         RTL_TEXTENCODING_ASCII_US,
         OUSTRING_TO_OSTRING_CVTFLAGS,
       );
       const encoding = new OString(slot[0] as rtl_String, SAL_NO_ACQUIRE);
       try {
-        this.maConverter.setEncoding(encoding);
+        entity.maConverter.setEncoding(encoding);
       } finally {
         encoding.dispose();
       }
     }
+    return entity;
+  } catch (error) {
+    entity.dispose();
+    throw error;
   }
-  /** Original BUFFER_SIZE read loop, stopping at nonpositive converted count and never closing input. @returns Converted native byte chunks. */
-  *chunks(): Generator<Uint8Array> {
-    const output = new Bytes(16 * 1024);
-    try {
-      for (;;) {
-        const nRead = this.maConverter.readAndConvert(output, 16 * 1024);
-        if (nRead <= 0) return;
-        const pointer = output.getConstArray() as SequenceElements,
-          bytes = new Uint8Array(nRead);
-        for (let i = 0; i < nRead; ++i) bytes[i] = (pointer.get(i) as [number])[0];
-        yield bytes;
-      }
-    } finally {
-      output.dispose();
+}
+/** Original BUFFER_SIZE read loop lowered to the existing host backend generator over the real Entity converter. Stops at nonpositive count and never closes caller input. @param entity - Borrowed actual Entity. @returns Converted native byte chunks. */
+function* convertedChunks(entity: Entity): Generator<Uint8Array> {
+  const output = new Bytes(16 * 1024);
+  try {
+    for (;;) {
+      const nRead = entity.maConverter.readAndConvert(output, 16 * 1024);
+      if (nRead <= 0) return;
+      const pointer = output.getConstArray() as SequenceElements,
+        bytes = new Uint8Array(nRead);
+      for (let i = 0; i < nRead; ++i) bytes[i] = (pointer.get(i) as [number])[0];
+      yield bytes;
     }
-  }
-  /** Original converter before Source member destruction. @returns Nothing. */ dispose(): void {
-    this.maConverter.dispose();
-    this.maStructSource.dispose();
+  } finally {
+    output.dispose();
   }
 }
 /** Joins backend-owned incomplete input, preserving raw byte values. @param prefix - Old bytes. @param bytes - New bytes. @returns Combined bytes. */
@@ -214,7 +215,7 @@ export function* decodedChunks(entity: Entity): Generator<string> {
   const decoder = new XmlByteDecoder();
   let received = false;
   try {
-    for (const bytes of entity.chunks()) {
+    for (const bytes of convertedChunks(entity)) {
       received = true;
       let text: string;
       try {

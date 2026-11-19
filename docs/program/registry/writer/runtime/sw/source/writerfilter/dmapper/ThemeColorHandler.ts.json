@@ -17,9 +17,10 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sw/source/writerfilter/dmapper/ThemeColorHandler.ts#ThemeColorHandler",
-        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/ThemeColorHandler.hxx#ThemeColorHandler"
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/ThemeColorHandler.hxx#ThemeColorHandler",
+        "apps/office/src/sw/source/filter/ww8/docxexport.theme.test.ts"
       ],
-      "justification": "Original separate color/index/tint/shade defaults and attribute receiver; modifier callback remains inert. Color-scheme/theme resolution belongs to the mapper and is still pending. Whole-module parity stays unverified and DOCX application/UI import/export is not yet established.",
+      "justification": "Original separate color/index/tint/shade defaults and attribute receiver; modifier callback remains inert. Color-scheme/theme resolution belongs to the mapper and is still pending. Whole-module parity stays unverified and DOCX application/UI import/export is not yet established. Converts native Word color values to independent RGB and XComplexColor properties, preserving tint-before-shade order and original theme usage.",
       "knownViolations": [],
       "localSymbols": [
         "ThemeColorHandler"

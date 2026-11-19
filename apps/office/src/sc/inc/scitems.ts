@@ -244,3 +244,5 @@ export const ATTR_ENDINDEX = ATTR_HIDDEN;
 
 /** Original typed WhichId of SfxUInt32Item number-format key. */
 export const ATTR_VALUE_FORMAT = 146;
+/** Original typed identity for the cell number-format language. */
+export const ATTR_LANGUAGE_FORMAT = 147;

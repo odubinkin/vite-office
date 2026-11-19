@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/excel/xestyle.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-export",
+    "capabilityIds": [
+      "CAP-3433dbbb-6122-4137-823f-fad19a8405ab"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/excel/xestyle.ts",
+        "vendor/libreoffice-reference/sc/source/filter/excel/xestyle.cxx",
+        "apps/office/src/sc/source/filter/excel/xestyle.values.test.ts"
+      ],
+      "justification": "Original palette-reduction value classes, RGB-only base-color protection, occurrence weighting, weighted distance, midpoint truncation, uint32 wrapping and endpoint-biased component merging. Fifty-two cases independently replay the unchanged compiled native merge function, including defined unsigned-overflow cases. Full XclExpPaletteImpl/default palette/root and font records/table/workbook/filter/UI integration, debug OSL_FAIL diagnostics, undefined zero-divisor and uninitialized primitive domains remain unported or unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "lclGetWeighting",
+        "lclGetColorDistance",
+        "lclGetMergedColorComp",
+        "lclSetMixedColor",
+        "XclListColor",
+        "XclColorIdData",
+        "XclPaletteColor",
+        "XclRemap",
+        "XclNearest"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/excel/xestyle.cxx",
+      "upstreamSymbols": [
+        "lclGetWeighting",
+        "lclGetMergedColorComp",
+        "XclListColor",
+        "XclColorIdData",
+        "XclPaletteColor",
+        "XclRemap",
+        "XclNearest"
+      ]
+    }
+  }
+}

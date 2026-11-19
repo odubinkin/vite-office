@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/inc/Deflater.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-zip-deflater",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/inc/Deflater.ts",
+        "apps/office/src/package/source/zipapi/Deflater.test.ts",
+        "apps/office/src/package/source/zipapi/ZipOutputStream.test.ts"
+      ],
+      "justification": "Actual pinned pako2.1.0 public low-level zlib implements deflateInit2, deflate, deflateReset and deflateEnd. The browser boundary marshals native Sequence bytes into library typed-array pointers; it neither reads private state nor injects counters nor synthesizes reset from destruction. Original level/window/memory/strategy/flush defaults, source Sequence retention, error return ordering and independent64-bit overflow accumulation remain in Deflater. Compression, reset/reuse, tiny output, native COW and real ZIP reopening are tested. Fatal allocation failures, invalid native pointer domains and actual greater-than4GiB rollover remain unqualified. Full package/storage/filter/model/UI acceptance is unfinished.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/package/Deflater.hxx",
+      "upstreamSymbols": [
+        "doDeflateSegment",
+        "setInputSegment"
+      ]
+    }
+  }
+}

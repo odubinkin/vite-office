@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/osl/unx/nlsupport.table.ts",
+    "status": "mapped",
+    "upstreamPath": "sal/osl/unx/nlsupport.cxx",
+    "localSymbols": [
+      "nl_language_list"
+    ],
+    "upstreamSymbols": [
+      "nl_language_list"
+    ],
+    "preservedResponsibilities": [
+      "Original Linux/Emscripten locale parser/composer,177-pair codeset table, process locale cache/native pthread mutex, lazy thread initialization/ASCII fallback and exchange setter. Genuine pinned SDK libc getenv/newlocale/nl_langinfo_l/freelocale execute through the existing runtime, without a host locale provider, fake successful service or manual JS allocator. Original ASCII alias omission and environment/composition interaction retained and documented. Process/thread profile is realm-local without pthreads; other process/thread operations, native ABI/OOM and complete file URL/TempFile/package/model/filter/UI acceptance remain unfinished or unqualified."
+    ],
+    "omittedResponsibilities": [
+      "Other process/thread operations; native ABI/OOM and pthread profiles; complete file URL/TempFile/package/model/filter/UI."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/osl/unx/nlsupport.table.ts",
+          "marker": "nl_language_list"
+        },
+        {
+          "path": "apps/office/src/sal/osl/unx/nlsupport.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sal/osl/unx/nlsupport.cxx",
+          "marker": "nl_language_list"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/osl/unx/nlsupport.table.ts",
+      "rationale": "Exact platform-selected177-pair table split from the source algorithm to retain the repository file-size boundary; original order and values unchanged.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

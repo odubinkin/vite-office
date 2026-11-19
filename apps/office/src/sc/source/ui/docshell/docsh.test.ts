@@ -1,7 +1,8 @@
 /** @fileoverview Atomic Calc ODS shell replacement,confirmed save generations and real undo boundaries. */
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { implementations } from "../../../../desktop/browser/app/uno-components";
 import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
-import { expect, it, vi } from "vitest";
+import { beforeAll, expect, it, vi } from "vitest";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import {
   RTL_TEXTENCODING_ASCII_US,
@@ -794,6 +795,8 @@ it.each([
 );
 
 import { ScAsciiOptions } from "../dbgui/asciiopt";
+
+beforeAll(initializeRuntime);
 it("imports a recognized ISO date and exports it through its actual date format", /** Original recognition, setAutoInput attributes, calendar producer and shell CSV output run together without a formatted-text cell. @returns Test completion. */ async () => {
   const shell = new ScDocShell(),
     bytes = new TextEncoder().encode("2024-02-29\n"),

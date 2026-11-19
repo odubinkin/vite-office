@@ -42,32 +42,22 @@ export const Converter = {
   convertDateTime,
   convertTimeOrDateTime,
   convertDuration,
-  /** Native UTF16 signed32 number conversion through the original length-bounded signed64 parser,clamp and complete-consumption test. Byte-string overloads remain unported. @param output - Always initialized scalar output. @param input - UTF16 view. @param min - Signed32 lower bound. @param max - Signed32 upper bound. @returns Native success. */
-  convertNumber(output: [number], input: string, min = -2147483648, max = 2147483647): boolean {
+  /** Original UTF16 signed32 conversion; the source destination is reset even when its signed64 parse fails. @param output - Actual scalar output. @param input - UTF16 source view or existing language binding. @param min - Signed32 lower bound. @param max - Signed32 upper bound. @returns Original complete-consumption result. */
+  convertNumber(
+    output: [number],
+    input: StringSource,
+    min = -2147483648,
+    max = 2147483647,
+  ): boolean {
     output[0] = 0;
-    let position = 0;
-    while (position < input.length && input.charCodeAt(position) <= 32) position++;
-    const start = position;
-    if (position < input.length && input[position] === "-") position++;
-    while (
-      position < input.length &&
-      input.charCodeAt(position) >= 48 &&
-      input.charCodeAt(position) <= 57
-    )
-      position++;
-    const units = new Uint16Array(position - start);
-    for (let index = 0; index < units.length; index++)
-      units[index] = input.charCodeAt(start + index);
-    let value = rtl_ustr_toInt64_WithLength(units, 10, units.length);
-    const lower = BigInt(min | 0),
-      upper = BigInt(max | 0);
-    if (value < lower) value = lower;
-    else if (value > upper) value = upper;
-    const valid = position === input.length && value >= lower && value <= upper;
-    if (valid) output[0] = Number(value) | 0;
+    const value: [bigint] = [0n];
+    const valid = convertNumber64(value, input, BigInt(min | 0), BigInt(max | 0));
+    if (valid) output[0] = Number(BigInt.asIntN(32, value[0]));
     return valid;
   },
+  convertNumber64,
   convertDouble,
+  convertAngle,
   /** Serializes a core integer to centimetres with the pinned SAX precision. @param value - Core measure. @param source - Native core unit. @returns XML centimetre measure. */
   convertMeasureToXML(value: number, source: CoreMeasureUnit): string {
     const absolute = Math.abs(value);
@@ -271,4 +261,46 @@ function convertDouble(
     if (rest) rest[0] = units.subarray(end[0]);
   }
   return status[0] === rtl_math_ConversionStatus.rtl_math_ConversionStatus_Ok;
+}
+
+/** Reads the source ODF degrees, radians or gradians and normalizes the angle. @param output - Degrees destination. @param input - ODF lexical angle. @returns Source conversion result. */
+function convertAngle(output: [number], input: string): boolean {
+  const rest: [string | Uint8Array] = [""];
+  if (!convertDouble(output, input, rest) || !Number.isFinite(output[0])) return false;
+  const unit = rest[0];
+  if (unit === "grad") output[0] *= 0.9;
+  else if (unit === "rad") output[0] *= 180 / Math.PI;
+  else if (unit !== "deg" && unit !== "") {
+    output[0] = 0;
+    return false;
+  }
+  if (output[0] < 0 || output[0] > 360) {
+    output[0] %= 360;
+    if (output[0] < 0) output[0] += 360;
+  }
+  return true;
+}
+
+/** Original UTF16 convertNumber64/lcl_convertNumber64, including clamped output on incomplete input. Byte-view specialization remains unported. @param output - Actual signed64 output. @param input - Source UTF16 view. @param min - Original signed64 lower bound. @param max - Original signed64 upper bound. @returns Source complete-consumption/range result. */
+function convertNumber64(
+  output: [bigint],
+  input: StringSource,
+  min = -9223372036854775808n,
+  max = 9223372036854775807n,
+): boolean {
+  const units = sourceView(input);
+  let position = 0;
+  while (position < units.length && (units[position] as number) <= 32) ++position;
+  const start = position;
+  if (position < units.length && units[position] === 45) ++position;
+  while (
+    position < units.length &&
+    (units[position] as number) >= 48 &&
+    (units[position] as number) <= 57
+  )
+    ++position;
+  output[0] = rtl_ustr_toInt64_WithLength(units.subarray(start), 10, position - start);
+  if (output[0] < min) output[0] = min;
+  else if (output[0] > max) output[0] = max;
+  return position === units.length && output[0] >= min && output[0] <= max;
 }

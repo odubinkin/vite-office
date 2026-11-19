@@ -1,6 +1,7 @@
 /** @fileoverview Checks native NONE XML/UNO rule ownership without upstream test dependencies. */
 import { expect, it } from "vitest";
 import { SvxNumType, SwNumFormat, createWriterNumFormat } from "../../core/doc/number";
+import { SvxNumberType } from "../../../../editeng/source/items/numitem";
 import { createWriterNumRule } from "../../core/doc/DocumentListsManager";
 import { SwDoc } from "../../core/doc/doc";
 import { SwPosition } from "../../core/crsr/pam";
@@ -41,7 +42,7 @@ function level(attributes: string, bullet = false) {
   return context.GetProperties();
 }
 
-it("converts represented number formats with native NONE permission and explicit unsupported scope", /** Verifies empty versus absent permission independently from XML callers. @returns Nothing. */ () => {
+it("converts numbering formats with native NONE permission and provider fallback", /** Verifies empty versus absent permission independently from XML callers. @returns Nothing. */ () => {
   const converter = new SvXMLUnitConverter("mm100"),
     type = { value: SvxNumType.SVX_NUM_CHAR_SPECIAL };
   expect(converter.convertNumFormat(type, "")).toBe(false);
@@ -52,16 +53,35 @@ it("converts represented number formats with native NONE permission and explicit
   expect(type.value).toBe(4);
   expect(converter.convertNumFormat(SvxNumType.SVX_NUM_ARABIC)).toBe("1");
   expect(converter.convertNumFormat(SvxNumType.SVX_NUM_NUMBER_NONE)).toBe("");
-  for (const unsupported of ["a", "A", "i", "I", "custom"])
-    expect(
-      /** Rejects an unrepresented family. @returns Nothing. */ () =>
-        converter.convertNumFormat(type, unsupported, true),
-    ).toThrow("Unsupported ODF numbering format");
+  for (const [format, value, synced] of [
+    ["a", SvxNumType.SVX_NUM_CHARS_LOWER_LETTER, SvxNumType.SVX_NUM_CHARS_LOWER_LETTER_N],
+    ["A", SvxNumType.SVX_NUM_CHARS_UPPER_LETTER, SvxNumType.SVX_NUM_CHARS_UPPER_LETTER_N],
+    ["i", SvxNumType.SVX_NUM_ROMAN_LOWER, SvxNumType.SVX_NUM_ROMAN_LOWER],
+    ["I", SvxNumType.SVX_NUM_ROMAN_UPPER, SvxNumType.SVX_NUM_ROMAN_UPPER],
+  ] as const) {
+    expect(converter.convertNumFormat(type, format, true)).toBe(true);
+    expect(type.value).toBe(value);
+    expect(converter.convertNumFormat(type, format, "true", true)).toBe(true);
+    expect(type.value).toBe(synced);
+    expect(converter.convertNumFormat(synced)).toBe(format);
+    expect(SvXMLUnitConverter.convertNumLetterSync(synced)).toBe(value === synced ? "" : "true");
+  }
+  expect(converter.convertNumFormat(type, "custom", true)).toBe(true);
+  expect(type.value).toBe(SvxNumType.SVX_NUM_ARABIC);
   for (const unsupported of [SvxNumType.SVX_NUM_CHAR_SPECIAL, SvxNumType.SVX_NUM_BITMAP])
-    expect(
-      /** Rejects nonnumeric conversion. @returns Nothing. */ () =>
-        converter.convertNumFormat(unsupported),
-    ).toThrow("Unsupported ODF numbering type");
+    expect(converter.convertNumFormat(unsupported)).toBe("");
+  for (const [format, nativeType, marker] of [
+    ["01, 02, 03, ...", SvxNumType.SVX_NUM_ARABIC_ZERO, "07"],
+    ["001, 002, 003, ...", SvxNumType.SVX_NUM_ARABIC_ZERO3, "007"],
+    ["0001, 0002, 0003, ...", SvxNumType.SVX_NUM_ARABIC_ZERO4, "0007"],
+    ["00001, 00002, 00003, ...", SvxNumType.SVX_NUM_ARABIC_ZERO5, "00007"],
+  ] as const) {
+    expect(converter.convertNumFormat(nativeType)).toBe(format);
+    expect(level(`style:num-format="${format}"`).numberingType).toBe(nativeType);
+    expect(new SvxNumberType(nativeType).GetNumStr(7)).toBe(marker);
+    expect(new SvxNumberType(nativeType).GetNumStr(123456)).toBe("123456");
+    expect(new SvxNumberType(nativeType).GetNumStr(7, "en-US", true)).toBe("7");
+  }
 });
 
 it("imports empty format as NONE while absent format and bullet defaults retain native types", /** Checks actual XML properties and unchanged pattern generation. @returns Nothing. */ () => {
@@ -74,10 +94,10 @@ it("imports empty format as NONE while absent format and bullet defaults retain 
     listFormat: "%1%.%2%.%3%",
   });
   expect(level('style:num-format=""', true).numberingType).toBe(6);
-  expect(
-    /** Rejects an unsupported XML family. @returns Properties. */ () =>
-      level('style:num-format="i"'),
-  ).toThrow("Unsupported ODF numbering format");
+  expect(level('style:num-format="i"').numberingType).toBe(SvxNumType.SVX_NUM_ROMAN_LOWER);
+  expect(level('style:num-format="a" style:num-letter-sync="true"').numberingType).toBe(
+    SvxNumType.SVX_NUM_CHARS_LOWER_LETTER_N,
+  );
 });
 
 it("exports actual NONE type with empty format and suppresses display levels while preserving start and affixes", /** Checks numeric property precedence over legacy kind input. @returns Nothing. */ () => {

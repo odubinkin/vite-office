@@ -1,4 +1,5 @@
 /** @fileoverview Pinned RTL decimal parsing,numeric formatting and arithmetic C responsibilities. */
+import type { rtl_StringSlot } from "../inc/rtl/string.h";
 import {
   rtl_math_ConversionStatus as Status,
   type rtl_math_StringFormat,
@@ -316,6 +317,34 @@ export function rtl_math_approxEqual(a: number, b: number): boolean {
   if (difference >= threshold) return false;
   if (a < 2 ** 53 && Number.isInteger(a) && b < 2 ** 53 && Number.isInteger(b)) return false;
   return true;
+}
+
+/** Original byte C facade over the same formatter and actual SAL string/buffer owners. @param result - Owning byte slot. @param capacity - Null for replacement or mutable buffer capacity. @param offset - Buffer insertion offset. @param value - Binary64. @param format - Original format. @param places - Decimal places/significance. @param decimal - Native char separator. @param groups - Zero-terminated grouping sizes. @param group - Native char grouping separator. @param erase - Erase fractional zeros. @returns Nothing. */
+export function rtl_math_doubleToString(
+  result: rtl_StringSlot | null,
+  capacity: [number] | null,
+  offset: number,
+  value: number,
+  format: rtl_math_StringFormat,
+  places: number,
+  decimal: number,
+  groups: readonly number[] | null,
+  group: number,
+  erase: boolean,
+): void {
+  const formatted = doubleToString(
+      value,
+      format,
+      places | 0,
+      decimal & 0xff,
+      groups,
+      group & 0xff,
+      erase,
+    ),
+    bytes = new Uint8Array(formatted.length);
+  for (let index = 0; index < formatted.length; ++index) bytes[index] = formatted.charCodeAt(index);
+  if (capacity === null) newFromStr_WithLength(result, bytes, bytes.length, 0, Uint8Array);
+  else stringbuffer_insert(result, capacity, offset | 0, bytes, bytes.length, Uint8Array);
 }
 
 /** Original Unicode C formatting facade; the native template's append branch uses actual shared string allocation or buffer insertion. @param result - Actual owning string slot. @param capacity - Null for replacement or actual mutable buffer capacity. @param offset - Insertion offset,ignored for replacement. @param value - Binary64. @param format - Original selector. @param places - Original signed decimal count/significance. @param decimal - sal_Unicode decimal unit. @param groups - Null or positive zero-terminated group sizes. @param group - sal_Unicode grouping unit. @param erase - Erase fractional zeroes. @returns Nothing. */

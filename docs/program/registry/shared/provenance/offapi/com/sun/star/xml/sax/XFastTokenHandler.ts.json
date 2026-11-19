@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/xml/sax/XFastTokenHandler.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/xml/sax/XFastTokenHandler.idl",
+    "localSymbols": [
+      "XFastTokenHandler"
+    ],
+    "upstreamSymbols": [
+      "XFastTokenHandler",
+      "getToken",
+      "getUTF8Identifier"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source responsibilities retain actual RTL/UNO owners and contracts. Explicit disposal, borrowed UTF16 views, pointer-address cells, compiler overload witnesses and realm-local execution bind the browser host; physical native ABI/thread guarantees remain unqualified."
+    },
+    "preservedResponsibilities": [
+      "Complete original XFastTokenHandler.idl methods and normal CPPUMaker static type binding; actual source components supply behavior. Original IDL declaration, native value owner or normal CPPUMaker service/type route is represented; generated widths/ownership are those of the actual local implementation, not inferred from arbitrary payload values.",
+      "Continuation uses type-only SequenceConstReference for original const Sequence<sal_Int8>& input; native getUTF8Identifier still returns owned Sequence. Runtime transpilation is byte-identical to the current WIP declaration before this const correction. Actual registered FastTokenHandler provides the interface; generated legacy type paths and independent compiled ABI remain unqualified."
+    ],
+    "omittedResponsibilities": [
+      "This generated declaration/value/service-helper record does not manufacture its concrete service provider or certify every exception/legacy type path; earlier actual owner coverage gaps remain open.",
+      "Independent native compiled module differential, physical ABI/allocator/mutex/thread lifetime and runtime shutdown are unqualified.",
+      "Complete DOCX/XLSX model/filter/package/desktop/mobile UI import-export acceptance remains unfinished; existing browser open/save/autosave/recovery choices are retained."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/XFastTokenHandler.ts",
+          "marker": "XFastTokenHandler"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/xml/sax/XFastTokenHandler.idl",
+          "marker": "XFastTokenHandler"
+        },
+        {
+          "path": "offapi/com/sun/star/xml/sax/XFastTokenHandler.idl",
+          "marker": "getToken"
+        },
+        {
+          "path": "offapi/com/sun/star/xml/sax/XFastTokenHandler.idl",
+          "marker": "getUTF8Identifier"
+        }
+      ]
+    }
+  }
+}

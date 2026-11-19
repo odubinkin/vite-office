@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/excel/xehelper.ts",
+    "localSymbols": [
+      "CreateString",
+      "getCellText"
+    ],
+    "upstreamPath": "sc/source/filter/excel/xehelper.cxx",
+    "upstreamSymbols": [
+      "XclExpStringHelper::CreateString",
+      "lclCreateFormattedString"
+    ],
+    "preservedResponsibilities": [
+      "Builds XLSX output strings from native scalar or EditTextObject cells. Native text sections supply ranges and actual character items. The workbook font owner records effective run properties and XclExpString retains format run boundaries."
+    ],
+    "omittedResponsibilities": [
+      "Original field and hyperlink-rich record handling, script selection, and full font derivation remain unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xehelper.ts",
+          "marker": "CreateString"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/filter/excel/xehelper.cxx",
+          "marker": "XclExpStringHelper::CreateString"
+        }
+      ]
+    }
+  }
+}

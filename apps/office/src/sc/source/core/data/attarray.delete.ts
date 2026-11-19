@@ -56,7 +56,7 @@ export function SetPatternAreaSafe(
   let row = index[0] > 0 ? (entries[index[0] - 1] as ScAttrEntry).nEndRow + 1 : 0;
   while (row <= last) {
     const old = entries[index[0]] as ScAttrEntry;
-    if (!CellAttributeHolder.areSame(old, wanted)) {
+    if (!CellAttributeHolder.areSame(old.getCellAttributeHolder(), wanted)) {
       if (row < first) row = first;
       const stop = Math.min((entries[index[0]] as ScAttrEntry).nEndRow, last),
         flag = (old.getScPatternAttr() as ScPatternAttr).GetItem(

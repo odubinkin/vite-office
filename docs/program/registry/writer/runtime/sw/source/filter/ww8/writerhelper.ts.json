@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ww8/writerhelper.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "word-export-numbering",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ww8/writerhelper.ts",
+        "apps/office/src/sw/source/filter/ww8/writerhelper.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/writerhelper.cxx"
+      ],
+      "justification": "Original unsigned16 slot validity, source GetSlotId to destination GetWhichIDFromSlotID translation, identity/zero fallback and strict first-range bound use actual shared pool/set/document owners. Tests register actual native item/default metadata in a real generic destination pool; complete EditEngine factory ownership is not fabricated. Frame/OLE/string helpers, full writerhelper module and export traversal/filter/model/UI closure remain unported or unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "IsValidSlotWhich",
+        "TransformWhichBetweenPools",
+        "GetSetWhichFromSwDocWhich"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/ww8/writerhelper.cxx",
+      "upstreamSymbols": [
+        "IsValidSlotWhich",
+        "TransformWhichBetweenPools",
+        "GetSetWhichFromSwDocWhich"
+      ]
+    }
+  }
+}

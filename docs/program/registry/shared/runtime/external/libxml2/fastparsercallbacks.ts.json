@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/libxml2/fastparsercallbacks.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-xml-runtime",
+    "capabilityIds": [
+      "CAP-50103a1f-6aa6-4b77-b0c4-bd8cf3c650f0"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/libxml2/fastparsercallbacks.ts",
+        "apps/office/src/external/libxml2/fastparsercallbacks.test.ts",
+        "third_party/libxml2-wasm/binding.c#office_xmlFastParserCallbacks",
+        "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx#call_callbackStartElement",
+        "docs/program/native-xml-document-builder.md"
+      ],
+      "justification": "Realm-local original FastParser SAX2 C function-pointer binding over actual pinned libxml2 push contexts. The compiled static handler retains source start/end/characters/processing-instruction/getEntity signatures and XML_SAX2_MAGIC, erasing only unused source callback operands. Actual opaque native void-pointer addresses bind real JavaScript receivers before C parser calls; maps do not own substitute XML state. Static table entries have native module lifetime; concurrent contexts retain independent scopes even with the same receiver object and after older-context destruction. Actual C push parsing, namespace/attribute pointer arrays, native temporary/predefined entities, Unicode and split UTF8 chunks pass in Node/Chromium main/DOM-free Worker. No xmlCtxtUseOptions, DTD/entity policy, resolver, service registration or application import route is enabled by this ABI layer. Full original FastParser component/QA/context/defaults/metadata/model/filter/UI acceptance, independent compiled whole component and physical C++ ABI/thread guarantees remain unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FastParserCallbacks",
+        "createFastParserCallbackBinding"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

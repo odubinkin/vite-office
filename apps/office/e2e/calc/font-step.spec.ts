@@ -19,6 +19,10 @@ const fontKernelExports = [
   { module: "src/sc/source/filter/xml/xmlimprt.ts", names: ["ScXMLImport"] },
   { module: "src/sc/browser/workflows/calc-ods-io.ts", names: ["createCalcDocumentStore"] },
   { module: "src/i18nlangtag/source/isolang/isolang.tables.ts", names: ["unicode"] },
+  { module: "src/cppuhelper/browser/exception-abi.ts", names: ["initializeExceptionAbi"] },
+  { module: "src/desktop/browser/app/uno-components.ts", names: ["implementations"] },
+  { module: "src/desktop/source/app/appinit.ts", names: ["InitApplicationServiceManager"] },
+  { module: "src/external/libxml2/libxml2.ts", names: ["initializeLibXml2"] },
 ] as const;
 /** Statically typed source bundle used in page and Worker. */
 type Runtime = typeof import("../../src/sc/source/ui/docshell/docsh") &
@@ -32,7 +36,11 @@ type Runtime = typeof import("../../src/sc/source/ui/docshell/docsh") &
   typeof import("../../src/sc/source/filter/xml/xmlwrap") &
   typeof import("../../src/sc/source/filter/xml/xmlimprt") &
   typeof import("../../src/sc/browser/workflows/calc-ods-io") &
-  typeof import("../../src/i18nlangtag/source/isolang/isolang.tables");
+  typeof import("../../src/i18nlangtag/source/isolang/isolang.tables") &
+  typeof import("../../src/cppuhelper/browser/exception-abi") &
+  typeof import("../../src/desktop/browser/app/uno-components") &
+  typeof import("../../src/desktop/source/app/appinit") &
+  typeof import("../../src/external/libxml2/libxml2");
 
 test("executes real script-height items,font stepping,history and ODS in page and DOM-free Worker", /** Native owners are bundled from repository sources. @param fixtures - Browser page. @returns Completion. */ async ({
   page,
@@ -43,8 +51,11 @@ test("executes real script-height items,font stepping,history and ODS in page an
     /** Executes native owners in the page realm. @returns Runtime observations. */ async () => {
       /** Uses the actual core classes and package wrapper in either runtime. @returns Native observations. */
       async function run() {
-        const n = (globalThis as unknown as { CalcFontStepFixture: Runtime }).CalcFontStepFixture,
-          shell = new n.ScDocShell(),
+        const n = (globalThis as unknown as { CalcFontStepFixture: Runtime }).CalcFontStepFixture;
+        n.initializeExceptionAbi();
+        n.InitApplicationServiceManager(n.implementations);
+        await n.initializeLibXml2();
+        const shell = new n.ScDocShell(),
           doc = shell.GetDocument(),
           view = new n.ScViewData(doc),
           format = new n.ScFormatShell(view, shell),
@@ -184,8 +195,11 @@ for (const width of [1280, 390])
     await installKernelFixture(page, "CalcFontStepFixture", fontKernelExports);
     await page.evaluate(
       /** Executes native owners in the page realm. @returns Runtime observations. */ async () => {
-        const n = (globalThis as unknown as { CalcFontStepFixture: Runtime }).CalcFontStepFixture,
-          doc = new n.ScDocument();
+        const n = (globalThis as unknown as { CalcFontStepFixture: Runtime }).CalcFontStepFixture;
+        n.initializeExceptionAbi();
+        n.InitApplicationServiceManager(n.implementations);
+        await n.initializeLibXml2();
+        const doc = new n.ScDocument();
         try {
           new n.ScXMLImport(doc).importContent(
             '<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"><office:automatic-styles><style:style style:name="Scripts" style:family="table-cell"><style:text-properties fo:font-size="12pt" style:font-size-asian="18pt" style:font-size-complex="24pt"/></style:style><style:style style:name="Tall" style:family="table-row"><style:table-row-properties style:row-height="48pt"/></style:style></office:automatic-styles><office:body><office:spreadsheet><table:table table:name="Data"><table:table-row table:style-name="Tall"><table:table-cell table:style-name="Scripts" office:value-type="string"><text:p>A漢ش</text:p></table:table-cell><table:table-cell table:style-name="Scripts" office:value-type="string"><text:p>Latin</text:p></table:table-cell></table:table-row></table:table></office:spreadsheet></office:body></office:document-content>',
@@ -194,7 +208,7 @@ for (const width of [1280, 390])
             id: "script-heights",
             title: "Script sizes",
             version: 1,
-            content: n.writeOdsXml(doc),
+            content: await n.writeOdsXml(doc),
           });
         } finally {
           doc.DisposeAttributes();

@@ -3,11 +3,13 @@ import type { Stream } from "../inc/dmapper/resourcemodel";
 import type { OOXMLDocument } from "../inc/ooxml/OOXMLDocument";
 import { OOXMLFastContextHandler } from "./OOXMLFastContextHandler";
 import { OOXMLFactory } from "./OOXMLFactory";
+import { nativeToken } from "./OOXMLFactory_wml";
 import type { FastDocument } from "../../../../sax/source/fastparser/fastparser";
 
 /** Native document SAX handler borrows its stream and document for one parse. */
 export class OOXMLFastDocumentHandler implements FastDocument {
   private mxContextHandler: OOXMLFastContextHandler | null = null;
+  private hasDocumentElement = false;
   /** Native context-service parameter is omitted from host transport; no UNO service is registered. @param mpStream - Stream or null for unknown root. @param mpDocument - Document or null. @param mnXNoteId - Current note identity. @returns Handler. */
   constructor(
     private readonly mpStream: Stream | null,
@@ -28,7 +30,12 @@ export class OOXMLFastDocumentHandler implements FastDocument {
   /** Original unknown-root handler refuses every child. @param token - Root fast token. @returns Root context or null. */
   createFastChildContext(token: number): OOXMLFastContextHandler | null {
     if (this.mpStream === null && this.mpDocument === null) return null;
+    if (token === nativeToken("doc:document")) this.hasDocumentElement = true;
     return OOXMLFactory.createFastChildContextFromStart(this.getContextHandler(), token);
+  }
+  /** Reports whether the parsed root belongs to a WordprocessingML document. @returns Root admission. */
+  sawDocumentElement(): boolean {
+    return this.hasDocumentElement;
   }
   /** Original unknown root gets a fresh inert document handler. @returns Handler. */ createUnknownChildContext(): OOXMLFastDocumentHandler {
     return new OOXMLFastDocumentHandler(null, null, 0);

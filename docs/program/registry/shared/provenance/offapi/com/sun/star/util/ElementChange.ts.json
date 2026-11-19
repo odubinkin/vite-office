@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/util/ElementChange.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/util/ElementChange.idl",
+    "localSymbols": [
+      "ElementChange",
+      "cppu_detail_getUnoType"
+    ],
+    "upstreamSymbols": [
+      "ElementChange",
+      "ReplacedElement"
+    ],
+    "preservedResponsibilities": [
+      "The original ZIP package service, change batch and final root persistence phase are connected. Child and relationship synchronization, full storage wrappers and DOCX/XLSX UI remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Complete storage and document format acceptance remains unfinished."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/util/ElementChange.ts",
+          "marker": "ElementChange"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.impl.test.ts",
+          "marker": "opens the original package service"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/util/ElementChange.idl",
+          "marker": "ReplacedElement"
+        }
+      ]
+    }
+  }
+}

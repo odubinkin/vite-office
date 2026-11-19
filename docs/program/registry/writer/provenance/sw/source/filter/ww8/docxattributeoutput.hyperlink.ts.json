@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.hyperlink.ts",
+    "localSymbols": [
+      "StartURL",
+      "EndURL",
+      "DocxBookmarks"
+    ],
+    "upstreamPath": "sw/source/filter/ww8/docxattributeoutput.cxx",
+    "upstreamSymbols": [
+      "DocxAttributeOutput::StartURL",
+      "DocxAttributeOutput::EndURL",
+      "DocxAttributeOutput::DoWriteBookmarkTagStart"
+    ],
+    "preservedResponsibilities": [
+      "DOCX exports native hyperlink ranges using relationship and field representations and emits the represented collapsed bookmark start and end positions.",
+      "DOCX serializes start and end as separate events using the same Word ID for overlapping and multi-paragraph bookmark ranges."
+    ],
+    "omittedResponsibilities": [
+      "Column bookmarks, implicit and TOX bookmarks, and desktop file base rewriting remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.hyperlink.ts",
+          "marker": "StartURL"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.hyperlink.test.ts",
+          "marker": "replays fdo69548"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docx-bookmarks.test.ts",
+          "marker": "retains overlapping bookmarks"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx",
+          "marker": "DocxAttributeOutput::StartURL"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.hyperlink.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the original implementation responsibility in a dedicated TypeScript module."
+    }
+  }
+}

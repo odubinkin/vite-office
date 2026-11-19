@@ -33,10 +33,13 @@ import {
   EE_FEATURE_FIELD,
   EE_CHAR_SCRIPT_HINT,
   EE_CHAR_LANGUAGE,
+  EE_CHAR_LANGUAGE_CJK,
+  EE_CHAR_LANGUAGE_CTL,
   EE_PARA_WRITINGDIR,
   EE_ITEMS_START,
   EE_ITEMS_END,
   EE_CHAR_END,
+  EE_PARA_END,
 } from "../../inc/eeitem";
 import type { EditCharAttribField } from "../../inc/editattr";
 import { SvxFrameDirectionItem } from "../../inc/frmdiritem";
@@ -853,6 +856,48 @@ export abstract class ImpEditEngine extends SfxListener implements StyleSheetUse
   /** Original paragraph-attribute mutation. @param paragraph - Native paragraph. @param items - Actual item set. @returns Nothing. */
   SetParaAttribs(paragraph: number, items: SfxItemSet): void {
     SetParaAttribs(this, paragraph, items);
+  }
+  /** Original default attribute assignment for the document import path, including language-range invalidation. @param selection - Internal selection. @param items - Native attributes. @returns Nothing. */
+  SetAttribs(selection: EditSelection, items: SfxItemSet): void {
+    selection.Adjust(this.maEditDoc);
+    const status = this.GetStatus();
+    if (this.IsUndoEnabled() && !this.IsInUndo() && status.DoUndoAttribs())
+      throw new Error("EditEngine selection attribute undo is not implemented");
+    const checkLanguage =
+      status.DoOnlineSpelling() &&
+      (items.GetItemIfSet(EE_CHAR_LANGUAGE) ||
+        items.GetItemIfSet(EE_CHAR_LANGUAGE_CJK) ||
+        items.GetItemIfSet(EE_CHAR_LANGUAGE_CTL));
+    const first = this.maEditDoc.GetPos(selection.Min().GetNode());
+    const last = this.maEditDoc.GetPos(selection.Max().GetNode());
+    for (let paragraph = first; paragraph <= last; ++paragraph) {
+      const portion = this.GetParaPortions().SafeGetObject(paragraph);
+      const node = this.maEditDoc.GetObject(paragraph);
+      if (!portion || !node) continue;
+      const start = paragraph === first ? selection.Min().GetIndex() : 0;
+      const end = paragraph === last ? selection.Max().GetIndex() : node.Len();
+      let paragraphChanged = false;
+      let characterChanged = false;
+      for (let which = EE_ITEMS_START; which <= EE_CHAR_END; ++which) {
+        const item = items.GetItemIfSet(which);
+        if (!item) continue;
+        if (which <= EE_PARA_END) {
+          node.GetContentAttribs().GetItems().Put(item);
+          paragraphChanged = true;
+        } else {
+          this.maEditDoc.InsertAttrib(node, start, end, item);
+          characterChanged = true;
+        }
+      }
+      if (paragraphChanged) this.ParaAttribsChanged(node);
+      else if (characterChanged) {
+        this.mbFormatted = false;
+        if (!node.Len() || start !== end) {
+          portion.MarkSelectionInvalid(start);
+          if (checkLanguage) node.GetWrongList()?.SetInvalidRange(BigInt(start), BigInt(end));
+        }
+      }
+    }
   }
   /** Original paragraph change order and conditional following-paragraph height recalculation. @param node - Actual paragraph. @param ignoreUndo - Source callback selection. @returns Nothing. */
   ParaAttribsChanged(node: ContentNode, ignoreUndo = false): void {

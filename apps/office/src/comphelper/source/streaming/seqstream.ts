@@ -30,11 +30,25 @@ export class MemoryInputStream
   ) {
     super();
   }
-  /** Primitive const sal_Int8 pointer read across actual typed storage or existing logical lvalues. @param offset - Source byte offset. @returns Signed byte. */
-  private byteAt(offset: number): number {
-    return this.m_pMemoryData instanceof Uint8Array || this.m_pMemoryData instanceof Int8Array
-      ? ((this.m_pMemoryData[offset] as number) << 24) >> 24
-      : (this.m_pMemoryData.get(offset) as [number])[0];
+  /** Compiler memcpy lowering reads actual borrowed bytes/cells and writes actual typed storage or native Sequence cells; views are formed once per operation. @param destination - Native destination. @param count - Defined count. @returns Nothing. */
+  private copyTo(destination: ByteElements, count: number): void {
+    const source = ArrayBuffer.isView(this.m_pMemoryData)
+      ? new Int8Array(this.m_pMemoryData.buffer, this.m_pMemoryData.byteOffset)
+      : null;
+    const target = ArrayBuffer.isView(destination)
+      ? new Int8Array(destination.buffer, destination.byteOffset)
+      : null;
+    if (source && target) {
+      target.set(source.subarray(this.m_nPos, this.m_nPos + count));
+      return;
+    }
+    for (let i = 0; i < count; ++i) {
+      const value = source
+        ? (source[this.m_nPos + i] as number)
+        : ((this.m_pMemoryData as SequenceElements).get(this.m_nPos + i) as [number])[0];
+      if (target) target[i] = value;
+      else ((destination as SequenceElements).get(i) as [number])[0] = value;
+    }
   }
   /** Original closed check and remaining-size calculation. @returns Signed32 availability. */
   private avail(): number {
@@ -66,13 +80,12 @@ export class MemoryInputStream
     if (nAvail < nBytesToRead) nBytesToRead = nAvail;
     aData.realloc(nBytesToRead);
     const destination = aData.getArray() as SequenceElements;
-    for (let i = 0; i < nBytesToRead; ++i)
-      (destination.get(i) as [number])[0] = this.byteAt(this.m_nPos + i);
+    this.copyTo(destination, nBytesToRead);
     this.m_nPos += nBytesToRead;
     return nBytesToRead;
   }
   /** Original overload binding uses the actual Sequence versus logical pointer representation. @param aData - Original declared destination. @param nBytesToRead - Signed32 count. @returns Read count. */
-  readSomeBytes(aData: Sequence<number> | SequenceElements, nBytesToRead: number): number {
+  readSomeBytes(aData: Sequence<number> | ByteElements, nBytesToRead: number): number {
     if (aData instanceof Sequence) return this.readBytes(aData, nBytesToRead);
     if (nBytesToRead < 0) {
       const message = new OUString(),
@@ -86,8 +99,7 @@ export class MemoryInputStream
     }
     const nAvail = this.avail();
     if (nAvail < nBytesToRead) nBytesToRead = nAvail;
-    for (let i = 0; i < nBytesToRead; ++i)
-      (aData.get(i) as [number])[0] = this.byteAt(this.m_nPos + i);
+    this.copyTo(aData, nBytesToRead);
     this.m_nPos += nBytesToRead;
     return nBytesToRead;
   }

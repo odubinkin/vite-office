@@ -84,6 +84,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-page-stories.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -176,7 +180,8 @@
       "Shares the original automatic-style naming context across text paragraphs and the regular nested tables in each cell.",
       "Writes the represented native background attributes and writes extension-only direction values in the cell style extension namespace.",
       "Shares one XML naming pass across regular text and tables in native frame sections.",
-      "Writes the original relative table and column measure properties."
+      "Writes the original relative table and column measure properties.",
+      "Shares the same table and frame automatic-style ownership across additional text sections in the styles export pass."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/table/XMLTableExport.cxx",

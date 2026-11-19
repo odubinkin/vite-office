@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/zipapi/XUnbufferedStream.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/zipapi/XUnbufferedStream.cxx",
+    "localSymbols": [
+      "XUnbufferedStream"
+    ],
+    "upstreamSymbols": [
+      "XUnbufferedStream",
+      "readBytes",
+      "maCRC"
+    ],
+    "preservedResponsibilities": [
+      "Original native nonencrypted XUnbufferedStream read/skip/available/close and copied ZipEntry use real OSL mutex/UNO streams, source inflater/error ordering and terminal CRC rules. ZipFile getInputStream/getDataStream/getRawData create actual source components and original eager XBufferedStream on the Emscripten profile. CRC32 delegates original RTL null/count/seed contract to an unchanged existing zip.js CRC library module. Real non-ByteReader entry input now exercises ByteGrabber and buffered Sequence fallback without fake streams, RTTI suppression or private field injection. Encryption/decrypted raw/header/recovery profiles, native ABI/OOM/undefined domains, package storage factories/models/export/UI and complete service QA remain unfinished or unqualified."
+    ],
+    "omittedResponsibilities": [
+      "Encryption/header/decrypted-size/recovery variants; native ABI/allocator/undefined domains; actual package storage factory/model/export/UI and complete service QA."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zipapi/XUnbufferedStream.ts",
+          "marker": "XUnbufferedStream"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/native-entry-read.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/zipapi/XUnbufferedStream.cxx",
+          "marker": "maCRC"
+        }
+      ]
+    }
+  }
+}

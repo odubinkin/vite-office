@@ -1,7 +1,11 @@
-/** @fileoverview Original AttributeConversion XString/numeric decoders and consumed AttributeList Unicode/token/numeric/boolean optional/defaulted queries over actual FastAttributeList and FastTokenHandler owners. Drawing/date/token-list APIs and full UNO ownership remain unported. */
+/** @fileoverview Original AttributeConversion XString/numeric decoders and consumed AttributeList Unicode/token/numeric/boolean optional/defaulted queries over actual FastAttributeList and FastTokenHandler owners. Original intrusive attribute ownership, DateTime and token-list queries are included; drawing-color queries remain unported. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
+import { DateTime } from "../../../offapi/com/sun/star/util/DateTime";
 import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
-import { FastAttributeList } from "../../../sax/source/tools/fastattribs";
+import { Reference as RtlReference } from "../../../sal/inc/rtl/ref";
+import type { ReferenceConstParameter } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import type { XFastAttributeList } from "../../../offapi/com/sun/star/xml/sax/XFastAttributeList";
+import { FastAttributeList, castToFastAttributeList } from "../../../sax/source/tools/fastattribs";
 import { sanitizeStringSurrogates } from "../../../comphelper/source/misc/string";
 import * as o3tl from "../../../o3tl/inc/string_view";
 import { getTokenFromUtf8, XML_TOKEN_INVALID } from "../token/tokenmap";
@@ -97,17 +101,27 @@ export const AttributeConversion = {
   decodeHyper,
   decodeIntegerHex,
 };
-/** Actual native wrapper borrows the existing attribute owner; optional absence is undefined, distinct from present empty. */
+/** Original native wrapper retains the intrusive attribute owner; optional absence is undefined, distinct from present empty. */
 export class AttributeList {
-  /** Retains the actual native-list owner. @param mxAttribs - Attribute list. @returns Wrapper. */
-  constructor(private readonly mxAttribs: FastAttributeList) {}
+  private readonly mxAttribs: RtlReference<FastAttributeList>;
+  /** Original checked native cast and intrusive retention. @param attributes - Actual UNO attribute reference. @returns Wrapper. */
+  constructor(attributes: ReferenceConstParameter<XFastAttributeList>) {
+    this.mxAttribs = new RtlReference(castToFastAttributeList(attributes));
+  }
+  /** Original implicit member destructor. @returns Nothing. */
+  dispose(): void {
+    this.mxAttribs.dispose();
+  }
   /** Borrows native list. @returns Same owner. */
-  getFastAttributeList(): FastAttributeList {
+  getFastAttributeList(): Pick<
+    RtlReference<FastAttributeList>,
+    "get" | "operatorArrow" | "operatorStar" | "is"
+  > {
     return this.mxAttribs;
   }
   /** Original delegated presence check. @param token - Attribute identity. @returns Presence. */
   hasAttribute(token: number): boolean {
-    return this.mxAttribs.hasAttribute(token);
+    return this.mxAttribs.operatorArrow().hasAttribute(token);
   }
   /** Original optional string query. @param token - Attribute identity. @returns Owned value or absence. */
   getString(token: number): OUString | undefined;
@@ -115,8 +129,8 @@ export class AttributeList {
   getString(token: number, fallback: OUStringConstReference): OUString;
   /** Original optional/default dispatch. @param token - Attribute identity. @param fallback - Optional default reference. @returns Owned value or absence. */
   getString(token: number, fallback?: OUStringConstReference): OUString | undefined {
-    const index = this.mxAttribs.getAttributeIndex(token);
-    if (index >= 0) return this.mxAttribs.getValueByIndex(index);
+    const index = this.mxAttribs.operatorArrow().getAttributeIndex(token);
+    if (index >= 0) return this.mxAttribs.operatorArrow().getValueByIndex(index);
     return fallback === undefined ? undefined : new OUString(fallback);
   }
   /** Original default-empty query. @param token - Attribute identity. @returns Actual Unicode value. */
@@ -129,9 +143,9 @@ export class AttributeList {
   getXString(token: number, fallback: OUStringConstReference): OUString;
   /** Original optional/defaulted dispatch. @param token - Attribute identity. @param fallback - Actual optional default. @returns Owned value or absence. */
   getXString(token: number, fallback?: OUStringConstReference): OUString | undefined {
-    const index = this.mxAttribs.getAttributeIndex(token);
+    const index = this.mxAttribs.operatorArrow().getAttributeIndex(token);
     if (index >= 0) {
-      const value = this.mxAttribs.getValueByIndex(index);
+      const value = this.mxAttribs.operatorArrow().getValueByIndex(index);
       try {
         return AttributeConversion.decodeXString(value);
       } finally {
@@ -143,7 +157,7 @@ export class AttributeList {
   /** Original empty-default borrowed byte view. @param token - Attribute identity. @returns Borrowed exact byte view or empty. */
   getView(token: number): Uint8Array {
     const value: [Uint8Array] = [new Uint8Array()];
-    this.mxAttribs.getAsView(token, value);
+    this.mxAttribs.operatorArrow().getAsView(token, value);
     return value[0];
   }
   /** Original optional token query. @param token - Attribute identity. @returns Known value token or absence. */
@@ -152,14 +166,16 @@ export class AttributeList {
   getToken(token: number, fallback: number): number;
   /** Original optional/default dispatch. @param token - Identity. @param fallback - Optional native default. @returns Token or optional absence. */
   getToken(token: number, fallback?: number): number | undefined {
-    const value = this.mxAttribs.getOptionalValueToken(token, fallback ?? XML_TOKEN_INVALID);
+    const value = this.mxAttribs
+      .operatorArrow()
+      .getOptionalValueToken(token, fallback ?? XML_TOKEN_INVALID);
     return fallback === undefined && value === XML_TOKEN_INVALID ? undefined : value;
   }
   /** Original exact fast spellings, token spellings and signed32 numeric fallback. @param token - Attribute identity. @returns Native bool or missing. */
   private getBoolOptional(token: number): boolean | undefined {
-    const index = this.mxAttribs.getAttributeIndex(token);
+    const index = this.mxAttribs.operatorArrow().getAttributeIndex(token);
     if (index === -1) return undefined;
-    const bytes = this.mxAttribs.getAsViewByIndex(index);
+    const bytes = this.mxAttribs.operatorArrow().getAsViewByIndex(index);
     if (
       bytes.length === 5 &&
       bytes[0] === 102 &&
@@ -177,7 +193,7 @@ export class AttributeList {
       bytes[3] === 101
     )
       return true;
-    const value = this.mxAttribs.getValueTokenByIndex(index);
+    const value = this.mxAttribs.operatorArrow().getValueTokenByIndex(index);
     switch (value) {
       case getTokenFromUtf8("t"):
       case getTokenFromUtf8("true"):
@@ -198,7 +214,9 @@ export class AttributeList {
   /** Original optional/default dispatch preserving present zero. @param token - Identity. @param fallback - Optional default. @returns Converted value/default/absence. */
   getInteger(token: number, fallback?: number): number | undefined {
     const output: [number] = [0];
-    const value = this.mxAttribs.getAsInteger(token, output) ? output[0] : undefined;
+    const value = this.mxAttribs.operatorArrow().getAsInteger(token, output)
+      ? output[0]
+      : undefined;
     return value ?? fallback;
   }
 
@@ -209,7 +227,7 @@ export class AttributeList {
   /** Original optional/default dispatch preserving present zero. @param token - Identity. @param fallback - Optional default. @returns Converted value/default/absence. */
   getDouble(token: number, fallback?: number): number | undefined {
     const output: [number] = [0];
-    const value = this.mxAttribs.getAsDouble(token, output) ? output[0] : undefined;
+    const value = this.mxAttribs.operatorArrow().getAsDouble(token, output) ? output[0] : undefined;
     return value ?? fallback;
   }
 
@@ -257,5 +275,38 @@ export class AttributeList {
   /** Original optional/default dispatch retains present false values. @param token - Attribute. @param fallback - Optional default. @returns Native bool/default/absence. */
   getBool(token: number, fallback?: boolean): boolean | undefined {
     return this.getBoolOptional(token) ?? fallback;
+  }
+  /** Original optional fixed-width date query. @param token - Attribute. @returns Native date value or absence. */
+  getDateTime(token: number): DateTime | undefined;
+  /** Original explicitly defaulted date query copies the selected value. @param token - Attribute. @param fallback - Borrowed default. @returns Independent native value. */
+  getDateTime(token: number, fallback: Readonly<DateTime>): DateTime;
+  /** Original separator/length checks and unsigned field casts; calendar validation and UTC inference are deliberately absent. @param token - Attribute. @param fallback - Optional native default. @returns Original converted date/default/absence. */
+  getDateTime(token: number, fallback?: Readonly<DateTime>): DateTime | undefined {
+    const value = this.getView(token);
+    const valid =
+      (value.length === 19 || (value.length === 20 && value[19] === 90)) &&
+      value[4] === 45 &&
+      value[7] === 45 &&
+      value[10] === 84 &&
+      value[13] === 58 &&
+      value[16] === 58;
+    if (!valid) return fallback === undefined ? undefined : new DateTime(fallback);
+    const result = new DateTime();
+    result.Year = o3tl.toInt32(value.subarray(0, 4)) & 0xffff;
+    result.Month = o3tl.toInt32(value.subarray(5, 7)) & 0xffff;
+    result.Day = o3tl.toInt32(value.subarray(8, 10)) & 0xffff;
+    result.Hours = o3tl.toInt32(value.subarray(11, 13)) & 0xffff;
+    result.Minutes = o3tl.toInt32(value.subarray(14, 16)) & 0xffff;
+    result.Seconds = o3tl.toInt32(value.subarray(17, 19)) & 0xffff;
+    return result;
+  }
+  /** Original space-delimited byte tokens include empty/unknown entries; tabs/newlines are not separators. @param token - Attribute. @returns Native token identities in source order. */
+  getTokenList(token: number): number[] {
+    const result: number[] = [],
+      value = this.getView(token);
+    if (value.length !== 0)
+      for (const position: [number] = [0]; position[0] !== -1;)
+        result.push(getTokenFromUtf8(o3tl.getToken(value, 32, position)));
+    return result;
   }
 }

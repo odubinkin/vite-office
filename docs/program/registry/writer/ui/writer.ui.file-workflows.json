@@ -5,6 +5,6 @@
     "id": "writer.ui.file-workflows",
     "capabilityId": "CAP-0121",
     "classification": "browser-adaptation",
-    "description": "Coordinates browser file selection, ODT open/save, and downloads."
+    "description": "Coordinates browser file selection, ODT primary storage, DOCX open and download, and other Writer exports."
   }
 }

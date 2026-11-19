@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/excel/xestyle.protection.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-file-filter",
+    "capabilityIds": [
+      "CAP-1d1d48a3-5a10-4373-876c-fa5f18a62db9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/excel/xestyle.protection.ts#XclExpCellProt",
+        "vendor/libreoffice-reference/sc/source/filter/excel/xestyle.cxx#XclExpCellProt::FillFromItemSet",
+        "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts"
+      ],
+      "justification": "Writes the original locked and hidden XF flags from the native protection item, including the original hidden-cell projection.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XclExpCellProt"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/excel/xestyle.cxx",
+      "upstreamSymbols": [
+        "XclExpCellProt::FillFromItemSet",
+        "XclExpCellProt::SaveXml"
+      ]
+    }
+  }
+}

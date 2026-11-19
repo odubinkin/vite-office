@@ -1,0 +1,201 @@
+{
+  "source": "vendor/libreoffice-reference/sal/qa/OStringBuffer/rtl_OStringBuffer.cxx",
+  "sourceSha256": "8dcde74cfc3778bfff83bb48b2a9c027761873c446cc4c8ce2065eaed668c5f6",
+  "headerSha256": "3b7273510ccd9fb49d58f53af40ef0afb44d149533cfecc97db3159e5246fa9e",
+  "qualification": "Literal source expectations; no implementation or runtime output is read.",
+  "values": {
+    "kTestStr1": [83, 117, 110, 32, 77, 105, 99, 114, 111, 115, 121, 115, 116, 101, 109, 115],
+    "kTestStr2": [
+      83, 117, 110, 32, 77, 105, 99, 114, 111, 115, 121, 115, 116, 101, 109, 115, 32, 74, 97, 118,
+      97, 32, 84, 101, 99, 104, 110, 111, 108, 111, 103, 121
+    ],
+    "kTestStr7": [83, 117, 110, 32],
+    "kTestStr17": [
+      32, 32, 32, 83, 117, 110, 32, 77, 105, 99, 114, 111, 115, 121, 115, 116, 101, 109, 115, 32,
+      32, 32
+    ],
+    "kTestStr23": [32, 74, 97, 118, 97, 32, 84, 101, 99, 104, 110, 111, 108, 111, 103, 121],
+    "kTestStr28": [40, 3, 5, 7, 9, 11, 13, 15, 115, 117, 110],
+    "kTestStr29": [40, 3, 5, 7, 9, 11, 13, 15, 115, 117, 110, 17, 19, 21, 23, 25, 27, 40],
+    "kTestStr31": [115, 117, 110, 32, 77, 105, 99, 114, 111, 115, 121, 115, 116, 101, 109, 115],
+    "kTestStr36": [
+      77, 105, 99, 114, 111, 115, 121, 115, 116, 101, 109, 115, 32, 74, 97, 118, 97, 32, 84, 101,
+      99, 104, 110, 111, 108, 111, 103, 121
+    ],
+    "kTestStr37": [
+      83, 117, 110, 32, 32, 74, 97, 118, 97, 32, 84, 101, 99, 104, 110, 111, 108, 111, 103, 121
+    ],
+    "kTestStr38": [17, 19, 21, 23, 25, 27, 40],
+    "kTestStr39": [
+      40, 3, 5, 7, 9, 11, 13, 15, 115, 117, 110, 32, 32, 32, 83, 117, 110, 32, 77, 105, 99, 114,
+      111, 115, 121, 115, 116, 101, 109, 115, 32, 32, 32
+    ],
+    "kTestStr40": [
+      40, 3, 5, 7, 9, 11, 13, 15, 115, 117, 110, 115, 117, 110, 32, 77, 105, 99, 114, 111, 115, 121,
+      115, 116, 101, 109, 115
+    ]
+  },
+  "initialValues": ["kTestStr7", null, null, null, "kTestStr28"],
+  "cases": [
+    {
+      "name": "append_003_001",
+      "initial": 0,
+      "input": "kTestStr36",
+      "count": 12,
+      "expected": "kTestStr1",
+      "bodySha256": "b85e8335b5c48cbd13103eaf9ec9a220cdeb7ffc1c3002dfa87cc1d9451a48ee"
+    },
+    {
+      "name": "append_003_002",
+      "initial": 0,
+      "input": "kTestStr36",
+      "count": 28,
+      "expected": "kTestStr2",
+      "bodySha256": "8c93f7be424b878e54c523d9a26b28aa3765a855bb528ffda742ca4481809920"
+    },
+    {
+      "name": "append_003_003",
+      "initial": 0,
+      "input": "kTestStr23",
+      "count": 16,
+      "expected": "kTestStr37",
+      "bodySha256": "321c920f033f9167087e2f399ae52cdd5230555195d1426fdd6d0858c770fa36"
+    },
+    {
+      "name": "append_003_004",
+      "initial": 0,
+      "input": "kTestStr2",
+      "count": 0,
+      "expected": "kTestStr7",
+      "bodySha256": "d43bfdbd134de7f3eb1a6621bde735c771313702e9c9fc43089649e2e66070d1"
+    },
+    {
+      "name": "append_003_006",
+      "initial": 1,
+      "input": "kTestStr2",
+      "count": 4,
+      "expected": "kTestStr7",
+      "bodySha256": "f54ab13658a5564bee4e3e1506ba84b763865a589d01663f45736721d0dca87f"
+    },
+    {
+      "name": "append_003_007",
+      "initial": 1,
+      "input": "kTestStr2",
+      "count": 32,
+      "expected": "kTestStr2",
+      "bodySha256": "07587397bf5dc3df741657bd9fa2b17ec41076f26abd2e297695b97b8706d679"
+    },
+    {
+      "name": "append_003_008",
+      "initial": 1,
+      "input": "kTestStr2",
+      "count": 16,
+      "expected": "kTestStr1",
+      "bodySha256": "f98219928a9a7568d8127f940820088373d1d242615b9a32a702fa3123cabcc2"
+    },
+    {
+      "name": "append_003_009",
+      "initial": 1,
+      "input": "kTestStr2",
+      "count": 0,
+      "expected": null,
+      "bodySha256": "47c9fcf07324c3c44413955220e70e40912f49fa95c156a3b5a8b7080205afba"
+    },
+    {
+      "name": "append_003_011",
+      "initial": 2,
+      "input": "kTestStr2",
+      "count": 4,
+      "expected": "kTestStr7",
+      "bodySha256": "87a20dbb8ca6380b0b38cdcce26219b38bb6f5e7d913da96e85097582c027630"
+    },
+    {
+      "name": "append_003_012",
+      "initial": 2,
+      "input": "kTestStr2",
+      "count": 32,
+      "expected": "kTestStr2",
+      "bodySha256": "85712b086bea31a244d3d65bf97407ba1063cf43033cb3efad5b083640c9d838"
+    },
+    {
+      "name": "append_003_013",
+      "initial": 2,
+      "input": "kTestStr2",
+      "count": 16,
+      "expected": "kTestStr1",
+      "bodySha256": "52c485df82b0c4796d2caf72eabc27c96ce27ef82568a456140b23cd7b18bc3f"
+    },
+    {
+      "name": "append_003_014",
+      "initial": 2,
+      "input": "kTestStr2",
+      "count": 0,
+      "expected": null,
+      "bodySha256": "af559433c7393ec809e1661a3f06e4eb3eb3197ac98ed1de2122175169cdfcc2"
+    },
+    {
+      "name": "append_003_016",
+      "initial": 3,
+      "input": "kTestStr2",
+      "count": 4,
+      "expected": "kTestStr7",
+      "bodySha256": "5dcc7d2d8fcadfa7e015fd533fa248bdb18b04771c04c836855c5d0c971940a4"
+    },
+    {
+      "name": "append_003_017",
+      "initial": 3,
+      "input": "kTestStr2",
+      "count": 32,
+      "expected": "kTestStr2",
+      "bodySha256": "f50220bd1f537fffe2fe749dd95a0c49bf4883cea76f81af319e9374cba7eab7"
+    },
+    {
+      "name": "append_003_018",
+      "initial": 3,
+      "input": "kTestStr2",
+      "count": 16,
+      "expected": "kTestStr1",
+      "bodySha256": "8972caf9c9912cf9da9a7974c7cb7f793378c1e041c2cfade1d79195e0f81011"
+    },
+    {
+      "name": "append_003_019",
+      "initial": 3,
+      "input": "kTestStr2",
+      "count": 0,
+      "expected": null,
+      "bodySha256": "1213313623732ffc13d913c933e0d4b76550b38ecc9c11132f5f50c47094e009"
+    },
+    {
+      "name": "append_003_021",
+      "initial": 4,
+      "input": "kTestStr38",
+      "count": 7,
+      "expected": "kTestStr29",
+      "bodySha256": "61bf79e18b11885bcde9dca5c1718b5ae6383953be638edab841accff41d8857"
+    },
+    {
+      "name": "append_003_022",
+      "initial": 4,
+      "input": "kTestStr17",
+      "count": 22,
+      "expected": "kTestStr39",
+      "bodySha256": "5e1ce88af2dd9b0a7835642497804413b627776a54fdf1841b8b4a919173aaed"
+    },
+    {
+      "name": "append_003_023",
+      "initial": 4,
+      "input": "kTestStr31",
+      "count": 16,
+      "expected": "kTestStr40",
+      "bodySha256": "168ecf2e919bc899b779efdb338725d6dd88b9f1fd0b2cfb37a0478d8861dd48"
+    },
+    {
+      "name": "append_003_024",
+      "initial": 4,
+      "input": "kTestStr2",
+      "count": 0,
+      "expected": "kTestStr28",
+      "bodySha256": "4df79386cf8d2334556ec4a11ecb9ecee636213624ad8acc15b7465aa2aae3b0"
+    }
+  ]
+}

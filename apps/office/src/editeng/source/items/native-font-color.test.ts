@@ -1,5 +1,13 @@
 /** @fileoverview Verifies original color-item value/default/copy/hash semantics with real shared owners. */
 import { expect, it } from "vitest";
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import {
+  createXComplexColor,
+  getFromXComplexColor,
+} from "../../../docmodel/inc/uno/UnoComplexColor";
+import { XComplexColor } from "../../../offapi/com/sun/star/util/XComplexColor";
+import { MID_COMPLEX_COLOR } from "../../inc/memberids";
 import { SvxColorItem, VERSION_USEAUTOCOLOR } from "../../inc/colritem";
 import { Color, ColorTransparency, COL_AUTO } from "../../../tools/inc/color";
 import { ComplexColor, ColorType } from "../../../docmodel/inc/color/ComplexColor";
@@ -88,4 +96,37 @@ it("compares actual color and complex values independently of Which and folds or
   hash_combine(seed, -1);
   hash_combine(seed, new ComplexColor().getHash());
   expect(a.hashCode()).toBe(seed[0]);
+});
+
+it("queries and sets independent RGB and native complex-color members", /** Exercises owned UNO references, invalid values and the source null contract. @returns Nothing. */ () => {
+  const item = new SvxColorItem(109);
+  const theme = ComplexColor.Theme(ThemeColorType.Accent4);
+  const reference = createXComplexColor(theme);
+  const input = new Any([reference.get()], XComplexColor.static_type);
+  const rgb = new Any([0x123456], "sal_Int32");
+  const nil = new Any([null], XComplexColor.static_type);
+  const output = new Any();
+  const result = new Reference<XComplexColor>();
+  try {
+    expect(item.QueryValue()).toBeUndefined();
+    expect(item.PutValue(0x123456)).toBe(false);
+    expect(item.PutValue(rgb)).toBe(true);
+    expect(item.PutValue(rgb, MID_COMPLEX_COLOR)).toBe(false);
+    expect(item.PutValue(input, MID_COMPLEX_COLOR)).toBe(true);
+    expect(item.PutValue(nil, MID_COMPLEX_COLOR)).toBe(true);
+    expect(item.GetValue().toUInt32()).toBe(0x123456);
+    expect(item.QueryValue(output, MID_COMPLEX_COLOR | 0x80)).toBe(true);
+    expect(output.extract(result.getAddress(), XComplexColor.static_type)).toBe(true);
+    expect(getFromXComplexColor(result).equals(theme)).toBe(true);
+    expect(item.QueryValue(output)).toBe(true);
+    expect(output.get("sal_Int32")).toBe(0x123456);
+  } finally {
+    result.dispose();
+    output.dispose();
+    nil.dispose();
+    rgb.dispose();
+    input.dispose();
+    reference.dispose();
+    item.Dispose();
+  }
 });

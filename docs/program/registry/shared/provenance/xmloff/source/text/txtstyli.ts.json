@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/xmloff/source/text/txtstyli.ts",
+    "status": "mapped",
+    "upstreamPath": "xmloff/source/text/txtstyli.cxx",
+    "localSymbols": [
+      "applyNamedCharacterStyles",
+      "commonCharacterStyleName"
+    ],
+    "upstreamSymbols": [
+      "XMLTextStyleContext::CreateAndInsert",
+      "XMLTextStyleContext::Finish"
+    ],
+    "preservedResponsibilities": [
+      "Common ODF character styles are materialized in the model XStyle family before linking parents and applying native properties. The ODF importer reserves the existing no-character-style identity when a file declares a common character style named Standard."
+    ],
+    "omittedResponsibilities": [
+      "ODF linked styles, tracked-format changes and unrepresented character property families remain outside the current file-filter slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/txtstyli.ts",
+          "marker": "applyNamedCharacterStyles"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-style-family-roundtrip.test.ts",
+          "marker": "keeps common style layers outside the automatic direct span"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtstyli.cxx",
+          "marker": "XMLTextStyleContext::CreateAndInsert"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtstyli.cxx",
+          "marker": "XMLTextStyleContext::Finish"
+        }
+      ]
+    }
+  }
+}

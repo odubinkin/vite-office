@@ -40,7 +40,8 @@
       "Original complete InitScriptTypes/GetItemScriptType algorithms now consume actual field display units, source BreakIterator script queries, hint traversal, direction/script scanners and actual cached vectors. Native missing-portion/empty-node handling, field representative selection, one-unit supplementary behavior, gapped-hint lookup, endpoint-only membership/caret bias and one final language fallback are preserved (CALC-424/441..443). Actual orientation/default-language/scaling/paper/ref-device getters, GetEmptyItemSet, GetParaAttrib, IsRightToLeft and signed-integral GetColumnWidth retain original pool/default precedence and defined-arithmetic domain. Original CreateTextObject overload dispatch now delegates its private body to the same actual owner in impedit4.textobject; public object returns keep the EditTextObject base contract. BreakIterator factory and raw InitWritingDirections remain mandatory abstract dependencies, not default services. Concrete constructor/undo/layout/view/application/ScFieldEditEngine/DocImport admission and NatNum12 remain pending.",
       "Original complete InitWritingDirections now replaces the prior mandatory abstract declaration. It clears the same actual paragraph vector, reads raw actual node text, uses real ICU openSized/setPara/countRuns/getLogicalRun/close and exact source 0/1 direction. Both original error resets, count-driven logical traversal, missing-portion return, fuzzing skip and final LTR fallback remain unchanged. The test fixture observes then calls this actual method instead of preparing direction output. No reuse of the direction scanner with its extra control-boundary behavior, direction heuristic or fixed LTR provider is introduced. The class remains abstract: constructor, process BreakIterator factory, full undo/layout/view/application services and ScFieldEditEngine/DocImport admission are still pending.",
       "The source owner now includes actual UNO BreakIterator acquisition, word selection with its original cursor locale, source paragraph height and the lazy edit undo recording/reset group. EditDoc's actual SetText remains the plain-text path.",
-      "Source layout switch and paragraph-attribute member dispatch now support the actual no-layout Calc document editor."
+      "Source layout switch and paragraph-attribute member dispatch now support the actual no-layout Calc document editor.",
+      "The document import SetAttribs branch writes paragraph items or character ranges through the actual EditDoc, retains invalidation and the original online-spelling language-range condition. Undo setup and nondefault SetAttribs modes remain unqualified."
     ],
     "omittedResponsibilities": [
       "Full layout, interactive selection-range editing and native device integration remain outside the document text-object slice."
@@ -74,6 +75,10 @@
         {
           "path": "apps/office/src/sc/source/ui/docshell/impex.admission.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -124,6 +129,10 @@
         {
           "path": "editeng/source/editeng/impedit5.cxx",
           "marker": "ImpEditEngine::SetParaAttribs"
+        },
+        {
+          "path": "editeng/source/editeng/impedit5.cxx",
+          "marker": "ImpEditEngine::SetAttribs"
         }
       ]
     },

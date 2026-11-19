@@ -17,9 +17,11 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/stoc/source/uriproc/UriReference.ts#UriReference",
-        "vendor/libreoffice-reference/stoc/source/uriproc/UriReference.cxx#UriReference::getUriReference"
+        "vendor/libreoffice-reference/stoc/source/uriproc/UriReference.cxx#UriReference",
+        "vendor/libreoffice-reference/stoc/source/uriproc/UriReference.cxx#getUriReference",
+        "vendor/libreoffice-reference/stoc/source/uriproc/UriReference.cxx#getSchemeSpecificPart"
       ],
-      "justification": "Consumed generic URI value operations preserve lexical UTF16 and absent versus empty authority/query/fragment. Component service identity, mutex/native lifetime and unused URI methods are omitted. Whole-module parity stays unverified and DOCX application/UI import/export is not yet established.",
+      "justification": "Prior checkpoint (superseded implementation): Consumed generic URI value operations preserve lexical UTF16 and absent versus empty authority/query/fragment. Component service identity, mutex/native lifetime and unused URI methods are omitted. Whole-module parity stays unverified and DOCX application/UI import/export is not yet established. Current task202610251549-J0Z0KF / V4DQJW: Replaced the now-unused immutable host-string URI kernel with the actual original native RTL value owner, owned string fields, const-reference/value returns, fragment presence, path segments and reverse destruction. The former .value responsibility split now occupies the original upstream basename. Existing broad semantic/default/source-responsibility statuses remain unverified; physical ABI/mutex/allocation and complete DOCX/XLSX/UI acceptance remain unqualified.",
       "knownViolations": [],
       "localSymbols": [
         "UriReference"
@@ -27,9 +29,9 @@
       "sourceResponsibility": "unverified",
       "upstreamFile": "stoc/source/uriproc/UriReference.cxx",
       "upstreamSymbols": [
-        "UriReference::getUriReference",
-        "UriReference::hasRelativePath",
-        "UriReference::getPath"
+        "UriReference",
+        "getUriReference",
+        "getSchemeSpecificPart"
       ]
     }
   }

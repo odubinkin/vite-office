@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/oox/excelfilter.ts",
+    "localSymbols": [
+      "ExcelFilter",
+      "importDocument"
+    ],
+    "upstreamPath": "sc/source/filter/oox/excelfilter.cxx",
+    "upstreamSymbols": [
+      "ExcelFilter::importDocument"
+    ],
+    "preservedResponsibilities": [
+      "XLSX open and download reach the native Calc workbook through the existing shell and dialogs. Worksheet relationships, shared strings, sparse cells and local/editable shared formulas are exercised.",
+      "The filter reads the related extended Application and establishes source producer rounding and Normal-font metric units before opening worksheets.",
+      "The shipped workbook import uses native ZipStorage input on the browser-admitted archive and releases the root after the filter completes.",
+      "Creates and releases the workbook shared-string owner and releases unfinished inline strings during parser failure.",
+      "Loads the relationship-owned theme before styles and shared strings so the actual workbook graphic helper can resolve the theme.",
+      "Installs the original reference-device space metric before XF finalization.",
+      "Applies the original XLSX line-break policy before importing cells or formulas."
+    ],
+    "omittedResponsibilities": [
+      "Styles, merged ranges, rich cell formatting, and formula conventions beyond the supported Calc compiler remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.ts",
+          "marker": "ExcelFilter"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/filter/oox/excelfilter.cxx",
+          "marker": "ExcelFilter::importDocument"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/excelfilter.cxx",
+          "marker": "aDocOpt.SetIgnoreLineBreaks(true)"
+        }
+      ]
+    }
+  }
+}

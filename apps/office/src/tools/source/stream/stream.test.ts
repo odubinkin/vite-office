@@ -1,5 +1,6 @@
 /** @fileoverview Consumed SvStream text-reader contracts used by Calc CSV import. */
-import { expect, it } from "vitest";
+import { initializeRuntime } from "../../../external/emscripten/runtime";
+import { beforeAll, expect, it } from "vitest";
 import {
   RTL_TEXTENCODING_DONTKNOW,
   RTL_TEXTENCODING_ISO_8859_1,
@@ -8,6 +9,8 @@ import {
   RTL_TEXTENCODING_UTF8,
 } from "../../../sal/inc/rtl/textenc";
 import { SvStream } from "./stream";
+
+beforeAll(initializeRuntime);
 
 it("consumes only permitted BOMs and keeps a second BOM as input text", /** Checks consumes only permitted BOMs and keeps a second BOM as input text. @returns Test completion or assertion result. */ () => {
   const bytes = new TextEncoder().encode("\uFEFF\uFEFFé\n");
@@ -158,3 +161,17 @@ it.each([
     expect(stream.ReadUniOrByteStringLine()).toBe("Name,Value");
   },
 );
+
+it("reads the same canonical memory bytes after text output overwrites or extends input", /** The old separate input/output backing allowed extraction to differ from subsequent reads. @returns Nothing. */ () => {
+  const original = Uint8Array.of(65, 66, 67),
+    stream = new SvStream(original, RTL_TEXTENCODING_UTF8);
+  stream.Seek(1);
+  stream.WriteBytes(Uint8Array.of(88, 89, 90));
+  stream.Seek(0);
+  const bytes = new Uint8Array(4);
+  expect(stream.ReadBytes(bytes)).toBe(4);
+  expect([...bytes]).toEqual([65, 88, 89, 90]);
+  stream.Seek(0);
+  expect(stream.ReadUniOrByteStringLine()).toBe("AXYZ");
+  expect([...original]).toEqual([65, 66, 67]);
+});

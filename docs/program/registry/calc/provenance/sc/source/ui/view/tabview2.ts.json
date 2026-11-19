@@ -21,7 +21,9 @@
       "IsMarking"
     ],
     "preservedResponsibilities": [
-      "Task77 adds normal unmerged local-reference mouse input using actual ScInputHandler selected UTF16 text,ScModule ordered dispatch,ScViewData reference start/end and ScTabView block/function-set owners. Browser formula pointing precedes Commit and preserves the edit origin;ordinary cell dragging retains the active anchor while headers move their native cursor endpoint. Shift extends;Ctrl adds/subtracts native ScMarkData/ScMultiSel selections. This is bounded source-backed foundation work,not full Calc parity. Merged cells,fill/transfer/move,protected/alternate/split views,reference dialogs,external/3D/matrix calculation,EditEngine and complete VCL painting remain unported."
+      "Task77 adds normal unmerged local-reference mouse input using actual ScInputHandler selected UTF16 text,ScModule ordered dispatch,ScViewData reference start/end and ScTabView block/function-set owners. Browser formula pointing precedes Commit and preserves the edit origin;ordinary cell dragging retains the active anchor while headers move their native cursor endpoint. Shift extends;Ctrl adds/subtracts native ScMarkData/ScMultiSel selections. This is bounded source-backed foundation work,not full Calc parity. Merged cells,fill/transfer/move,protected/alternate/split views,reference dialogs,external/3D/matrix calculation,EditEngine and complete VCL painting remain unported.",
+      "Evaluates the original sheet selection options against cell protection, skips hidden and merged spans with boundary reversal, and extends a protected keyboard block only up to an ineligible cell.",
+      "Expands and contracts native blocks around merged-cell geometry, includes complete merged ranges in MarkCursor, and runs the separate Shift formula-reference movement path."
     ],
     "omittedResponsibilities": [
       "Complete owner implementations and the unsupported services listed in the bounded foundation note remain unported."
@@ -31,6 +33,10 @@
         {
           "path": "apps/office/src/sc/source/ui/view/tabview2.ts",
           "marker": "InitBlockMode"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/tabview2-protection.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

@@ -27,6 +27,7 @@ import { InsertDeleteFlags, ScSizeMode } from "../../../inc/global";
 import { ScPatternAttr } from "../../../inc/patattr";
 import { ScMarkData } from "../../../inc/markdata";
 import { ScRange, ScAddress } from "../../../inc/address";
+import { ScEditableTester } from "../docshell/editable";
 import { ScUndoWidthOrHeight } from "../undo/undoblk2";
 import { ScRangeList } from "../../../inc/rangelst";
 import { OpCode } from "../../../../formula/inc/opcode";
@@ -137,6 +138,7 @@ export class ScViewFunc extends ScTabView {
   }
   /** Consumed ordinary-formula EnterData path,using native concrete formula operations and per-cell list history. Nonformula/rich-edit/matrix processing remains unported here. @param col - Column. @param row - Row. @param tab - Source sheet. @param source - Formula text. @returns Nothing. */
   EnterData(col: number, row: number, tab: number, source: OUStringConstReference): void {
+    if (!this.CheckCellInput(col, row)) return;
     if (!text(source).startsWith("="))
       throw new Error("Nonformula EnterData processing is not implemented");
     const doc = this.data.GetDocument(),
@@ -152,6 +154,19 @@ export class ScViewFunc extends ScTabView {
     } finally {
       manager.LeaveListAction();
     }
+  }
+  /** Applies the native selected-sheet input protection test before entering a cell. @param col - Cell column. @param row - Cell row. @returns Whether the write is allowed. */
+  CheckCellInput(col: number, row: number): boolean {
+    const tester = ScEditableTester.CreateAndTestSelectedBlock(
+      this.data.GetDocument(),
+      col,
+      row,
+      col,
+      row,
+      this.data.GetMarkData(),
+    );
+    if (!tester.IsEditable()) this.ErrorMessage(tester.GetMessageId());
+    return tester.IsEditable();
   }
   /** Original GetSelectionFrame consumes marked-frame query or cloned cursor items with non-table distance flags. @returns Actual outer and inner frame items. */
   GetSelectionFrame(): [SvxBoxItem, SvxBoxInfoItem] {

@@ -1,4 +1,5 @@
 /** @fileoverview Verifies upstream-mapped Writer color and paragraph compatibility properties through ODT. */
+import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
 import {
   writerTextColorValue,
   writerHighlightColorValue,
@@ -162,8 +163,8 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
       ).IsAutoFirst(),
     ).toBe(true);
     const inherited = writer.GetTextFormatColl("heading-1");
-    inherited.SetFormatAttr(new SfxInt16Item(RES_PARATR_ORPHANS, 3));
-    inherited.SetFormatAttr(new SfxBoolItem(RES_PARATR_SPLIT, false));
+    inherited.SetFormatAttr(new ParaItems.SvxOrphansItem(3, RES_PARATR_ORPHANS));
+    inherited.SetFormatAttr(new ParaItems.SvxFormatSplitItem(false, RES_PARATR_SPLIT));
     inherited.SetFormatAttr(
       (
         /** Authors the existing automatic first-line fixture through native setters. @returns Native item. */ () => {
@@ -177,7 +178,7 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     const paragraph = writer.paragraphs[0];
     if (paragraph === undefined) throw new Error("Writer paragraph is missing.");
     paragraph.ChgFormatColl(inherited);
-    paragraph.SetAttr(new SfxInt16Item(RES_PARATR_WIDOWS, 0));
+    paragraph.SetAttr(new ParaItems.SvxWidowsItem(0, RES_PARATR_WIDOWS));
     paragraph.SetAttr(new SfxInt16Item(RES_BREAK, 6));
     paragraph.SetAttr(new SwFormatPageDesc("Standard", 3));
     const after = writer.GetNodes().MakeTextNode();
@@ -185,8 +186,8 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     after.SetAttr(new SwFormatPageDesc(""));
     const automatic = writer.GetNodes().MakeTextNode();
     automatic.SetAttr(new SfxInt16Item(RES_BREAK, 0));
-    automatic.SetAttr(new SfxBoolItem(RES_PARATR_SPLIT, true));
-    automatic.SetAttr(new SfxInt16Item(RES_PARATR_ORPHANS, 0));
+    automatic.SetAttr(new ParaItems.SvxFormatSplitItem(true, RES_PARATR_SPLIT));
+    automatic.SetAttr(new ParaItems.SvxOrphansItem(0, RES_PARATR_ORPHANS));
     const bytes = await writeOdtDocument(writer, metadata);
     const content = await (await DocumentArchive.open(bytes)).readTextEntry("content.xml");
     const styles = await (await DocumentArchive.open(bytes)).readTextEntry("styles.xml");

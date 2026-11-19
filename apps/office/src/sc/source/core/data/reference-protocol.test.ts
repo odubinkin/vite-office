@@ -55,20 +55,25 @@ it("preserves local A1 details, absolute flags, bounds and unsupported parser fa
   }
   expect(a.Parse(unicode(""), doc, byAddress)).toBe(ScRefFlags.ZERO);
   for (const source of ["Sheet.A1", "A0", "XFE1", "A1048577"])
-    expect(
-      /** Refuses an unavailable native fallback. @returns Flags. */ () =>
-        a.Parse(unicode(source), doc, byAddress),
-    ).toThrow(/implemented/);
+    expect(a.Parse(unicode(source), doc, byAddress) & ScRefFlags.VALID).toBe(0);
+  const r1c1 = new ScAddress.Details(conv.CONV_XL_R1C1);
+  expect(a.Parse(unicode("A1"), doc, r1c1) & ScRefFlags.VALID).toBe(0);
   expect(
-    /** Refuses the missing R1C1 convention. @returns Flags. */ () =>
-      a.Parse(unicode("A1"), doc, new ScAddress.Details(conv.CONV_XL_R1C1)),
-  ).toThrow(/implemented/);
+    a.Parse(unicode("R2C3"), doc, r1c1) &
+      (ScRefFlags.VALID | ScRefFlags.ROW_ABS | ScRefFlags.COL_ABS),
+  ).toBe(ScRefFlags.VALID | ScRefFlags.ROW_ABS | ScRefFlags.COL_ABS);
+  expect(a.GetVars()).toEqual([2, 1, 0]);
   const compiler = new ScCompiler(doc, a, grammar);
-  for (const source of ["=[.A1", "=[Sheet.A1]", "=[.]", "=[Sheet.A1:.A2]"])
+  for (const [source, message] of [
+    ["=[.A1", "Expected a closing bracket for an ODF reference"],
+    ["=[Sheet.A1]", "Unknown formula sheet"],
+    ["=[.]", "Reference/name fallback is not implemented"],
+    ["=[Sheet.A1:.A2]", "Unknown formula sheet"],
+  ] as const)
     expect(
-      /** Refuses an unavailable scanner/reference family. @returns Code. */ () =>
+      /** Rejects a malformed or unavailable reference. @returns Code. */ () =>
         compiler.CompileString(unicode(source)),
-    ).toThrow(/implemented/);
+    ).toThrow(message);
   expect(compiler.CompileString(unicode("=+" + "1+".repeat(4095) + "[.A1]")).GetCodeError()).toBe(
     FormulaError.CodeOverflow,
   );

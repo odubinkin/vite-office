@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/docnode/ndcopy.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/docnode/ndcopy.cxx",
+    "localSymbols": [
+      "CopyNodes",
+      "MakeTableCopy"
+    ],
+    "upstreamSymbols": [
+      "SwTableNode::MakeCopy"
+    ],
+    "preservedResponsibilities": [
+      "Copies same-document linked page story paragraphs, flat table rows, cell content and native frame attributes without sharing model nodes."
+    ],
+    "omittedResponsibilities": [
+      "Copying floating shapes, note objects and complete legacy nested-row tables remains outside this native section-copy binding."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndcopy.ts",
+          "marker": "CopyNodes"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.page-stories.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/core/docnode/ndcopy.cxx",
+          "marker": "SwTableNode::MakeCopy"
+        },
+        {
+          "path": "sw/source/core/docnode/nodes.cxx",
+          "marker": "SwNodes::CopyNodes"
+        },
+        {
+          "path": "sw/source/core/unocore/unotext.cxx",
+          "marker": "SwXText::copyText"
+        }
+      ]
+    }
+  }
+}

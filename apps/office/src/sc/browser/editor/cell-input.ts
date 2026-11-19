@@ -114,7 +114,7 @@ export function cellInputText(doc: ScDocument, pos: ScAddress): string {
   if (/[\r\n]/u.test(value)) return value;
   return parseCellInput(value).kind !== "text" || value.startsWith("'") ? "'" + value : value;
 }
-/** Projects scalar/formula results without evaluating on the browser side. @param doc - Model. @param pos - Cell. @param showFormulas - Original formula-output mode. @returns Display value. */
+/** Projects grid display text through the native cell formatter. @param doc - Model. @param pos - Cell. @param showFormulas - Original formula-output mode. @returns Display value. */
 export function cellPresentation(
   doc: ScDocument,
   pos: ScAddress,
@@ -135,24 +135,10 @@ export function cellPresentation(
   if (error) return { text: errorText(error), alignment: "right" };
   const ref = doc.GetRefCellValue(pos);
   if (ref.hasEmptyValue()) return { text: "", alignment: "left" };
-  if (ref.hasString()) {
-    const formula = ref.getFormula();
-    if (formula) return { text: text(formula.GetString().getString()), alignment: "left" };
-    const edit = ref.getEditText();
-    if (edit) {
-      const value = ScCellFormat.GetOutputString(doc, pos, ref);
-      try {
-        return { text: text(value), alignment: "left" };
-      } finally {
-        value.dispose();
-      }
-    }
-    const value = doc.GetSharedString(pos);
-    try {
-      return { text: text(value.getString()), alignment: "left" };
-    } finally {
-      value.dispose();
-    }
+  const output = ScCellFormat.GetOutputString(doc, pos, ref);
+  try {
+    return { text: text(output), alignment: ref.hasString() ? "left" : "right" };
+  } finally {
+    output.dispose();
   }
-  return { text: doubleToString(doc.GetValue(pos)), alignment: "right" };
 }

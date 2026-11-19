@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/style/xmlnumfe.ts",
+    "localSymbols": [
+      "ExportNumberFormat"
+    ],
+    "upstreamPath": "xmloff/source/style/xmlnumfe.cxx",
+    "upstreamSymbols": [
+      "SvXMLNumFmtExport::ExportPart_Impl",
+      "SvXMLNumFmtExport::WriteEmbeddedEntries_Impl",
+      "SvXMLNumFmtExport::Export",
+      "WriteBooleanElement_Impl"
+    ],
+    "preservedResponsibilities": [
+      "Recognized native compiled sections emit standard ODF numeric, percentage, date, time and scientific declarations with positioned literals.",
+      "The ODF exporter resolves the real native system format while retaining the original style identity. It emits automatic-order and language source for the represented short and long date shapes.",
+      "Exports the builtin Boolean number format as the original boolean-style with a boolean element."
+    ],
+    "omittedResponsibilities": [
+      "Full conditional, localized and multi-section data-style export is open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/style/xmlnumfe.ts",
+          "marker": "ExportNumberFormat"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "preserves built-in and custom numeric display"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/excrecds.test.ts",
+          "marker": "replays tdf165180"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/typed-date-cells.test.ts",
+          "marker": "reopens explicit date"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumfe.cxx",
+          "marker": "SvXMLNumFmtExport::ExportPart_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumfe.cxx",
+          "marker": "SvXMLNumFmtExport::Export"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumfe.cxx",
+          "marker": "WriteBooleanElement_Impl"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/fonthelper.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-attributes",
+    "capabilityIds": [
+      "CAP-3433dbbb-6122-4137-823f-fad19a8405ab"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/inc/fonthelper.ts",
+        "apps/office/src/sc/source/core/data/patattr.font.test.ts",
+        "vendor/libreoffice-reference/sc/inc/fonthelper.hxx"
+      ],
+      "justification": "J0Z0KF font-item checkpoint ports original ScPatternAttr::fillFontOnly null-OutputDevice export path and GetDxfFont, exact script WhichId selection and the actual ScDxfFont optional aggregate. Real document pool, SfxItemSet conditional/table/direct precedence and VCL font setters are used. All effects/language are read before destination mutation; null-device scale is ignored as upstream, font color remains untouched and transparency is forced true. DXF defaults stay disengaged while explicit false/zero and parent SET attributes remain present; its font pointer is borrowed and Color copied. Seven original testFormats font assertions are replayed at the real pattern boundary, not claimed as full imported-workbook QA. Actual main/DOM-free Worker routes real cell items through the font, XclFontData and existing XML/ZIP export. Full OutputDevice mapping/metrics, root/default palette/font record/table/workbook/filter/UI integration remain unported or unqualified. The actual source owner remains in patattr.ts without an additional production shard.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScDxfFont"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/inc/fonthelper.hxx",
+      "upstreamSymbols": [
+        "ScDxfFont",
+        "isEmpty"
+      ]
+    }
+  }
+}

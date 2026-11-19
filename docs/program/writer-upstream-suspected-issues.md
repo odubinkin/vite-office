@@ -2174,6 +2174,8 @@ Pinned `sax/source/expatwrap/xml2utf.cxx#XMLFile2UTFConverter::readAndConvert` c
 
 Package-input follow-up: actual OOXML ZIP parts now pass through this converter. Empty input and short `<a/>`/`<root>` fragments consequently finish document callbacks without a parsed root and can return successful optional-fragment import. Tests preserve this behavior explicitly. Cancellation and malformed-input tests use recognized inputs to exercise their intended error paths independently of prefix loss.
 
+Native-service follow-up: the real registered FastParser over MemoryInputStream accepts the seven-byte malformed `<b></a>` as an empty converted stream; a recognized longer malformed input throws SAXParseException. This does not reproduce the original parser.cxx Pipe fixture: pinned io/source/stm/opipe.cxx::OPipeImpl::readSomeBytes returns0 on closed-output EOF without resizing its prior output Sequence, whereas MemoryInputStream empties it. Preserve both source boundaries. Pipe and the complete original QA fixture remain unported; no replacement Pipe provider or parser recovery is introduced.
+
 ### WRITER239 — Shared XML declaration quote selection prefers an absent single quote
 
 Pinned XMLFile2UTFConverter scanForEncoding/removeEncoding compare the single-quote index directly with the double-quote index, allowing -1 to win. A double-quoted encoding with no later single quote is not captured or removed. Preserve exact quote ordering, lexical matching and first-line scanning; see CALC-364. Tests use actual OString values and source byte owners.
@@ -3976,3 +3978,1085 @@ The previously recorded Calc/shared folder-overwrite suspicion is withdrawn: pin
 
 - Source: `sfx2/source/doc/SfxDocumentMetaData.cxx`, `SfxDocumentMetaData::getURLProperties`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC572.
 - Each HierarchicalDocumentName immediately adds StreamRelPath to the real PropertyBag. A duplicate raises PropertyExistException inside the catch covering the full descriptor loop and later BaseURI/StreamName additions. The exception is ignored and the partially populated property set is returned; even StreamName can be absent. Preserve source catch scope, first inserted value and failure timing. Genuine native-sequence/property-bag tests observe this without a replacement provider or synthetic exception.
+
+### WRITER508 — Initialized metadata can retain the user bag modified flag
+
+- Source: `sfx2/source/doc/SfxDocumentMetaData.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC573.
+- init clears m_isModified but populated user properties were added to the real PropertyBag, whose modified flag remains true. isModified combines both flags. Preserve this source state: actual TEST.odt initialization reports modified until setModified(false) clears the bag too. Native compiled differential, storage integration and full source QA remain unqualified.
+
+### WRITER509 — Compatibility clone discards the additional manager category and company values
+
+- Source: `sfx2/source/doc/SfxDocumentMetaData.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC574.
+- CompatWriterDocPropsImpl setters only update their own strings without changing metadata modified state. createMe constructs a fresh compatibility owner, while inherited createClone copies DOM only. Preserve the resulting empty extra strings in the clone, while standard metadata and interface identity remain intact. The actual ported source subclass test observes this; no corrective copy is inserted. Native compiled differential, storage integration and full source QA remain unqualified.
+
+### WRITER510 — OOXML stream URI resolution keeps the first successful component context
+
+- Source: `sw/source/writerfilter/ooxml/OOXMLStreamImpl.cxx`, `OOXMLStreamImpl::lcl_getTarget`, function-local `static Reference<XUriReferenceFactory> xFac = UriReferenceFactory::create(mxContext)`; `stoc/source/uriproc/UriReferenceFactory.cxx`, `Factory::m_context`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
+- The URI factory is initialized on the first successful call and retains that context. Later streams with another mxContext reuse the first factory and its scheme-parser service manager. This may be surprising for distinct component contexts, although the ordinary single-context desktop profile does not demonstrate a failure. Preserve the source successful-once cache, retry after failed initialization and first-context ownership when replacing the existing string-facing Writer URI binding; do not silently use a per-stream factory or the process-global context instead of the source mxContext.
+- Qualification: actual OOXMLStreamImpl now requires the root caller context and copies it through child constructors. A cold-module test uses genuine empty and bundled bootstrap contexts: initialization fails on the first missing service, succeeds when supplied the bundled context, and later succeeds with the empty context because the original successful factory is retained. No fake service/provider or private cache reset is used. Independent compiled native different-context observation, physical shutdown and complete filter/UI acceptance remain unqualified. No equivalent Calc caller has been established.
+
+### WRITER511 — Internal OOXML target resolution removes the first path unit unconditionally
+
+- Source: `sw/source/writerfilter/ooxml/OOXMLStreamImpl.cxx`, `OOXMLStreamImpl::lcl_getTarget`, `xFac->makeAbsolute(...)`, `xAbs->getPath()` and unconditional `copy(1)`; `stoc/source/uriproc/UriReferenceFactory.cxx`, `Factory::makeAbsolute`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
+- The stream resolver assumes the resolved URI path starts with a slash and removes its first UTF16 unit. However, makeAbsolute deliberately clones an already absolute URI, including an opaque URI with a relative path. For a malformed internal relationship target such as `scheme:abc`, that composition can turn the path `abc` into `bc`; an empty path also reaches copy(1)'s original producer precondition. Ordinary valid package part paths do not establish a failure. Preserve the original URI factory behavior and exact native copy/precondition when migrating this caller; do not add scheme rewriting, a leading-slash check or a forgiving host slice as a corrective replacement.
+- Qualification: original source analysis is now complemented by actual OOXMLStreamImpl/native URI service cases: opaque:abc opens the real package entry bc, and opaque: reaches the original SAL checked copy assertion. Context/URI ownership is supplied by real bootstrap, SDK and package components; no private-state or replacement-provider case is used. Independent compiled native observation, physical debug/release behavior and full document/filter/UI acceptance remain unqualified. No equivalent Calc caller has been established.
+
+### WRITER512 — Malformed URI exception assignment returns an owned value
+
+- Source: `include/rtl/malformeduriexception.hxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC575.
+- Unlike the usual reference-returning assignment contract, operator= returns MalformedUriException by value after assigning m_aMessage. Preserve the additional copied exception and its independent lifetime, including self-assignment. The port uses the actual OUString field owner and explicit copy/destruction; source-contract tests do not claim an independent compiled native differential.
+
+### WRITER513 — Strict URI UTF8 encoding accepts a non-scalar surrogate that strict decoding rejects
+
+- Source: `sal/rtl/uri.cxx`, writeEscapeChar and readUcs4, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC576.
+- The UTF8 encoder checks only isUnicodeCodePoint and manually emits three octets for a lone UTF16 surrogate even with UriEncodeStrict. The decoder checks isUnicodeScalarValue and UriDecodeStrict returns empty for those same bytes. Preserve this asymmetry instead of inserting a host Unicode replacement or scalar check. Actual native-owner tests retain U+D800 -> %ED%A0%80 -> empty; original surrogate QA remains unchanged. Physical ABI and compiled native differential remain unqualified.
+
+### WRITER514 — Script URL admission skips a malformed name delimiter without checking for a question mark
+
+- Source: `stoc/source/uriproc/UriSchemeParser_vndDOTsunDOTstarDOTscript.cxx`, parsePart and parseSchemeSpecificPart, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC577.
+- parsePart can return a nonempty name prefix while leaving its index on a malformed percent escape. parseSchemeSpecificPart then increments the index as though it had stopped at ? and validates parameters without checking that delimiter. Preserve admission of abc%key=value, decoded name abc and first parameter key=value; do not add stricter URI validation. Actual registered parser tests exercise this source behavior. Independent native compiled differential and physical mutex/ABI behavior remain unqualified.
+
+### WRITER515 — Fast serializer constructor failure bypasses the raw double-buffer destructor
+
+- Source: `sax/source/tools/fastserializer.cxx`, FastSaxSerializer constructor/destructor, and `sax/source/tools/fastserializer.hxx`, mpDoubleStr, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC578.
+- The constructor allocates mpDoubleStr before obtaining FastTokenHandler through the process component context. If context/service construction throws, C++ destroys constructed members but does not call the class destructor body containing rtl_string_release(mpDoubleStr). Preserve this ordering and the missing raw-buffer release rather than silently adding a new RAII owner or constructor cleanup. The port explicitly unwinds actual reference/cache members and keeps the source raw-buffer behavior. Source analysis only: no synthetic throwing service, private-state leak counter or independent compiled native allocation claim is used.
+
+### WRITER516 — Terminated RTL boolean conversion accepts trailing characters beyond its documented values
+
+- Source: `include/rtl/string.h`, rtl_str_toBoolean documentation; `sal/rtl/strtmpl.hxx`, rtl::str::toBoolean; `include/sax/fastattribs.hxx`, FastAttributeIter::toBoolean, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC579.
+- The header documents true for the strings 1 or true in any ASCII case, otherwise false. The implementation tests only the leading 1 or four true units, with no terminating-NUL check, so 1false and trueish also return true. The native SAX iterator directly uses that function, unlike a full lexical boolean check. Preserve the prefix behavior and lack of whitespace trimming; do not tighten validation in the port. Actual byte/Unicode template and iterator cases observe the ported behavior. Independent compiled native differential, physical pointer/ABI and complete document-format acceptance remain unqualified.
+
+### WRITER517 — Legacy namespace handler always returns an empty URI
+
+- Source: `sax/source/fastparser/legacyfastparser.cxx`, NamespaceHandler::registerNamespace/getNamespaceURI; `offapi/com/sun/star/xml/sax/XFastNamespaceHandler.idl`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC580.
+- The IDL describes retrieval of a namespace prefix URI, but this concrete legacy notification handler ignores its argument and always returns an empty OUString, even immediately after a matching declaration is queued. Preserve the empty result and separate declaration queue; do not implement an invented scope resolver. Actual ported owner tests observe it. This does not describe FastSaxParserImpl's separate namespace resolver, and no ordinary application failure or independent compiled native differential is claimed.
+
+### WRITER518 — Legacy tokenized QName conversion passes unshifted high bits to the token handler
+
+- Source: `sax/source/fastparser/legacyfastparser.cxx`, CallbackDocumentHandler::getNamespacePrefixFromToken/startFastElement/endFastElement, and `oox/source/core/fasttokenhandler.cxx`, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC581.
+- The adapter requests getUTF8Identifier(nToken & 0xffff0000), without shifting. With the actual oox handler and a combined lexical namespace/local token, the masked value exceeds the local-token table, returns empty and drops the prefix for element/attribute names. Preserve the exact mask and native empty result; no shift or replacement token provider is inserted. Actual ported Entity/adapter/registered Writer/token services observe this direct tokenized-contract case. The ordinary LegacyFastParser namespace registration profile is not established to reach this path; full parser/application failure and independent compiled native differential remain unqualified.
+
+### WRITER519 — FastParser namespace registration accepts the documented excluded boundary
+
+- Source: `offapi/com/sun/star/xml/sax/XFastParser.idl`, registerNamespace parameter documentation, and `sax/source/fastparser/fastparser.cxx`, FastSaxParserImpl::registerNamespace, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC582.
+- The IDL says NamespaceToken must be greater than FastToken::NAMESPACE, while the implementation rejects only values less than that constant and therefore accepts equality. Preserve the exact `<` comparison, including acceptance of the first generated namespace identity; do not add a greater-than or token-alignment requirement. Actual ported-owner tests cover equality, the immediately lower value and duplicate native Unicode keys. This is a documentation/implementation boundary discrepancy, not proof of document corruption or an independent compiled native differential.
+
+### WRITER520 — FastParser XForms normalization does not enforce its commented year grammar
+
+- Source: `sax/source/fastparser/fastparser.cxx`, NormalizeW3URI, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC583.
+- The comment describes a numeric year component, but the code checks only the W3 prefix and `/xforms` suffix. It rewrites `http://www.w3.org/not-a-year/xforms`, nested path components and even `http://www.w3.org/xforms`, where the prefix's final slash overlaps the suffix's first slash. Preserve these exact matches and the canonical 2002 URI rather than adding year/path validation. Actual native RTL-value tests observe the ported source behavior. This is a source-comment/implementation discrepancy; no independent compiled native differential or application corruption is claimed.
+
+### WRITER521 — FastParser decodes native diagnostic names as ASCII_US
+
+- Source: `sax/source/fastparser/fastparser.cxx`, lclGetErrorMessage, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC584.
+- The original helper explicitly constructs OUString from libxml2's message bytes with RTL_TEXTENCODING_ASCII_US. A genuine pinned libxml2 mismatched-tag diagnostic for a non-ASCII XML name contains that name in UTF8, but the source helper's conversion cannot preserve it. Keep the original ASCII decoder; source identifiers independently remain native Unicode. Actual C/RTL owner tests observe the raw UTF8 name and its loss in the converted message. This concerns diagnostics, not proof of document-content corruption or an independent compiled original C++ differential.
+
+### WRITER522 — An unknown prefixed element can replace the inherited default namespace
+
+- Source: `sax/source/fastparser/fastparser.cxx`, callbackStartElement and NameWithToken/maNamespaceStack, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC585.
+- The unknown-element fallback replaces sNamespace/nNamespaceToken with the prefixed element's URI/token, then pushes those values as the context inherited by unprefixed descendants. A prefixed element with an unknown local token can therefore cause an unprefixed child in a different declared default namespace to receive the prefixed namespace's known token. Preserve the source assignments/stack and resulting token; do not substitute libxml2's child URI or a corrected separate default context. Actual C callbacks, ported producers and the genuine OOX token handler reproduce this with an unknown Word-prefixed parent, default `urn:default` and an unprefixed `p` child classified with the Word namespace token. Complete application corruption and independent compiled original C++ differential remain unqualified.
+
+### WRITER523 — Character-map lookup can throw outside the callback exception-saving region
+
+- Source: `sax/source/fastparser/fastparser.cxx`, sendPendingCharacters and callbackStartElement/callbackEndElement/callbackProcessingInstruction; `udkapi/com/sun/star/container/XMap.idl`, get raises declarations, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC586.
+- Entity's source comment requires callback exceptions to be saved until outside the C parser, but sendPendingCharacters calls XMap::get for underscore-prefixed text. The start callback flushes pending text before its try block, and end/PI callbacks have no surrounding save-exception catch. A declared map lookup exception can consequently leave that saving region and skip clearing pending bytes. Preserve these original catch/clear boundaries rather than adding a new catch or reset. Source analysis only: a genuine nonnull map component is not supplied in this slice, and no fabricated throwing map, reproduced native allocation leak or application failure is claimed.
+
+### WRITER524 — FastParser decimal entity callback skips the first decimal digit
+
+- Source: `sax/source/fastparser/fastparser.cxx`, callbackGetEntity, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC587.
+- Both hexadecimal and decimal branches call strtoul at name+2. For the decimal callback input `#65`, that parses `5`, not `65`; the newly allocated entity contains U+0005. Preserve the offset and genuine libc conversion, including partial parsing and zero fallback. Actual native libc/RTL/entity owner tests observe this direct callback contract. Normal XML numeric character references are handled by libxml2 itself, so this is not a claim that an ordinary `&#65;` document imports incorrectly or an independent compiled original C++ differential.
+
+### WRITER525 — FastParser accepts an empty input without creating an XML parser
+
+- Source: `sax/source/fastparser/fastparser.cxx`, parse/parseStream, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC588.
+- If the converter first returns zero, mpParser remains null and the loop does not ask libxml2 to validate a document/root. parseStream still calls the document handler's start/end methods and returns successfully. Preserve the empty-stream acceptance instead of inserting a host root check. Actual native input/source loop/registered Writer tests observe completion with only the XML declaration. Whether callers intentionally rely on this shortcut is not established; no complete document-filter/application success or independent compiled original C++ differential is claimed.
+
+### WRITER526 — Unicode custom entity names are looked up as ASCII rather than decoded UTF8
+
+- Source: `sax/source/fastparser/fastparser.cxx`, setCustomEntityNames/ReplacementPair comparisons/callbackGetEntity, and `include/rtl/ustring.hxx`, compareToAscii, pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`; shared with CALC589.
+- Custom names are stored/sorted as Unicode strings, but lower_bound compares them to libxml2's UTF8 bytes with compareToAscii. A Greek `Ω` name supplied through the public string sequence is therefore not found for the same valid XML entity name, and parsing reports an undeclared entity. Preserve the mixed-width comparison rather than adding UTF8 decoding. Actual pinned C parser, real RTL comparison and native replacement-sequence tests observe this path. Independent compiled original C++ differential and complete application impact remain unqualified.
+
+
+### WRITER527 — LegacyFastParser ignores namespace Pair extraction failures
+
+- Source: pinned `sax/source/fastparser/legacyfastparser.cxx`, SaxLegacyFastParser::initialize; shared with CALC590.
+- The registerNamespaces branch default-constructs one Pair<string,long> outside the loop, ignores each Any extraction result, then calls registerNamespace with its current fields. An incompatible first argument therefore reaches the token0 minimum check. An incompatible argument after a valid Pair repeats that preceding URI/token and triggers duplicate registration; earlier successful registrations remain installed. Preserve the unchecked extraction and mutation order. Actual native Any/Pair/public service tests observe both failures and retained registration, without private field patches or a replacement provider. Independent compiled original C++ differential and full application consequences remain unqualified.
+
+
+### WRITER528 — AttributeList fixed-width dates ignore UTC suffix and calendar validity
+
+- Source: pinned `oox/source/helper/attributelist.cxx`, AttributeList::getDateTime; shared with CALC591.
+- The source accepts a 19-byte date or the same text with an uppercase Z suffix, but assigns only Year/Month/Day/Hours/Minutes/Seconds. IsUTC remains the generated DateTime default false even with Z. Its validity predicate checks only length and separators; out-of-range fields and partial/non-numeric components reach the original o3tl conversion and unsigned16 casts, followed by declared signed16 Year assignment. Preserve those checks/defaults/casts rather than adding ISO/calendar validation or setting UTC. Actual FastAttributeList/AttributeList/generated DateTime tests cover Z, malformed components, numeric prefixes, signed fields and copied defaults; real main/Worker owners cover the Z/default path. Independent compiled C++ differential and full document-model/UI consequences remain unqualified.
+
+
+### WRITER529 — ZipStorage opens existing substorages READ even for a writable parent
+
+- Source: pinned `oox/source/helper/zipstorage.cxx`, ZipStorage::implOpenSubStorage and child constructor; shared with CALC592.
+- The existing-element branch always calls openStorageElement(name, READ), including when bCreateMissing is true and the parent is writable. The child wrapper nevertheless inherits isReadOnly() from its parent. READWRITE is used only after NoSuchElementException when creation is requested. Preserve the original open mode, exception distinction and inherited wrapper flag. This is a source-observed possible mismatch between wrapper mode and backend access; actual positive XStorage write behavior/document impact and independently compiled C++ differential remain unverified. No positive backend/provider was invented to assert a write failure.
+
+
+### WRITER530 — SwitchablePersistenceStream Sequence partial-read delegates to full read
+
+- Source: pinned `package/source/xstor/switchpersistencestream.cxx`, Sequence and pointer readSomeBytes overloads; shared with CALC593.
+- The Sequence overload calls the retained input's readBytes rather than readSomeBytes. The pointer overload instead calls ByteReader::readSomeBytes, or XInputStream::readSomeBytes followed by memcpy. Preserve that overload distinction. It can matter for a source whose full read waits for a requested count while partial read returns currently available bytes. Actual memory-stream tests cover both consumed overloads but do not prove blocking behavior; a real such stream/backend and independently compiled original C++ differential remain unverified. No timed fake stream or fabricated count was used to assert the difference.
+
+
+### WRITER531 — TempFileFastService narrows seek offsets before validating the result
+
+- Source: pinned `unotools/source/ucbhelper/tempfile.cxx`, TempFileFastService::seek; shared with CALC594.
+- The method accepts sal_Int64 but passes static_cast<sal_uInt32>(nLocation) to SvStream::Seek, then compares the returned position with the original signed64 request. For a nonnegative request beyond uint32, a successful lower-width seek can therefore move the cursor before the method rejects the original request with IllegalArgumentException. Preserve this cast/call/compare order when porting the service; do not replace it with a preflight range rejection or a direct64-bit seek. The actual Emscripten filesystem supports a seek beyond uint32 without file growth, but TempFileFastService/SvFileStream are not ported yet, so service-level mutation behavior, compiled original C++ differential and document impact remain unverified. No replacement temporary stream or fabricated service result was used as evidence.
+
+
+### WRITER532 — SvMemoryStream shrinking excludes the last allocated byte from logical data
+
+- Source: pinned `tools/source/stream/stream.cxx`, SvMemoryStream::ReAllocateMemory/SetSize; shared with CALC595.
+- Shrinking a nonempty allocation sets nEndOfData to nNewSize-1 whenever the old logical end is at least the new size. If nPos equals nNewSize, the strict greater-than position guard does not reset it, leaving the backing cursor beyond logical end. GetData computes the remaining count as unsigned size_t subtraction; a subsequent read may reach an invalid native pointer domain. Preserve the shrink-minus-one, strict position comparison and unsigned arithmetic. Actual memory-owner tests observe the defined initialized-prefix result (resize3 yields logical size2); out-of-bounds reads/native undefined behavior and independently compiled C++ differential remain unqualified, without private state patches or fabricated read results.
+
+
+### WRITER533 — SvStream relative seek temporarily uses an absolute buffer-pointer offset
+
+- Source: pinned `tools/source/stream/stream.cxx`, SvStream::SeekRel; shared with CALC596.
+- After deriving an absolute stream position, the method assigns m_pBufPos = m_pRWBuf.get() + nActualPos before calling Seek, which establishes the final buffer-relative pointer. An absolute position can exceed the current read/write buffer allocation even when the subsequent seek is valid. Preserve the assignment and call order; the port keeps the corresponding logical pointer displacement, including this transient step. Native physical out-of-range pointer arithmetic/compiler effects are unqualified. Negative underflow keeps the old position; the positive overflow guard uses a strict comparison. No invalid physical pointer or synthetic position provider was used to claim a native differential.
+
+
+### WRITER534: FD constructor assumes writeable before actual descriptor access is known
+
+- Source: `sal/osl/unx/file.cxx`, `osl::detail::createFileHandleFromFD`, `FileHandle_Impl::writeFileAt`, `FileHandle_Impl::syncFile`.
+- Observation: The constructor unconditionally sets `State::Writeable`. With a genuine readonly regular descriptor, a small buffered `osl_writeFile` can return success and advance the logical cursor; only later writeback reports `osl_File_E_BADF`. `osl_closeFile` still closes the descriptor after that failed writeback and returns the original failure. This may surprise a caller expecting the first write to reject readonly access.
+- Fidelity: Preserve the explicit source assumption and original deferred-error/close behavior. Tests open an actual readonly descriptor in the linked Emscripten filesystem; no fake error source, private state mutation or descriptor permission emulation. Whether callers ever provide such descriptors upstream is not established.
+
+
+### WRITER535: ENXIO maps to generic IO despite a distinct NXIO enum
+
+- Source: `sal/osl/unx/file_error_transl.cxx`, `oslTranslateFileError`, and `include/osl/file.h`, `oslFileError`.
+- Observation: The `ENXIO` case returns `osl_File_E_IO`, although the public enum also defines `osl_File_E_NXIO`. Whether this is deliberate normalization is not established; the distinct native errno cannot round-trip through this switch.
+- Fidelity: Preserve `ENXIO -> IO` exactly. The direct conversion test uses pinned Emscripten libc ENXIO value60, independently of any fake filesystem error or provider. No mapping to NXIO is introduced.
+
+
+### WRITER536: seekable output wrapper narrows the requested position to32bits
+
+- Source: `unotools/source/streaming/streamwrap.cxx`, `OSeekableOutputStreamWrapper::seek`, compared with `OSeekableInputStreamWrapper::seek`.
+- Observation: Output converts signed64 `_nLocation` to `sal_uInt32` before `SvStream::Seek`; input instead converts it to `sal_uInt64`. An output seek to `0x100000002` therefore seeks to2. Whether this historical difference is intended is not established.
+- Fidelity: Preserve both casts; real memory streams verify output narrowing without a multi-gigabyte allocation or injected position. Native assertion/overflow/invalid-pointer domains are not simulated.
+
+
+### WRITER537: shared stream wrapper dereferences a cleared stream after input closure
+
+- Source: `unotools/source/streaming/streamwrap.cxx`, `OInputStreamWrapper::closeInput` and `OStreamWrapper::writeBytes`, `flush`, `truncate`.
+- Observation: Input close clears the shared `m_pSvStream`. Output methods and truncate subsequently dereference that pointer without `checkConnected`; previously acquired output facets retain the same component. Unlike input methods, these calls can therefore reach a native null-pointer domain.
+- Fidelity: Preserve the original missing guards; do not add a replacement NotConnected exception or claim JS TypeError as a native differential test. Tests verify shared facet identity and input disconnection, and avoid executing the undefined native domain.
+
+
+### WRITER538: direct pipe copy does not advance the source pointer before storing a remaining suffix
+
+- Source: `svl/source/misc/strmadpt.cxx`, `SvDataPipe_Impl::write`.
+- Observation: After bypass-copying a prefix into the attached read buffer, the code reduces `nRemain` but does not advance `pBuffer`. If input exceeds the attached destination's remaining capacity, the page suffix starts with the original input prefix. Source input adapter requests normally constrain the count; broader direct pipe callers are not established.
+- Fidelity: Preserve the missing advance. The actual pipe test attaches3bytes, writes `[1,2,3,4,5]`, reads `[1,2,3]` directly and then retained `[1,2]`. No fake pointer or private state mutation.
+
+### WRITER539: nonseekable forward seek reports requested position without checking actual skipped count
+
+- Source: `svl/source/misc/strmadpt.cxx`, `SvInputStream::SeekPos`.
+- Observation: The forward fallback calls `readBytes` but ignores its result and reports `nPos`. Seeking beyond physical EOF can therefore move logical position past the actual input position. It also narrows the displacement to signed32.
+- Fidelity: Preserve the report/narrowing; a genuine input-only wrapper over5bytes reaches physical5 while adapter seek reports9. Do not add an EOF/count correction.
+
+### WRITER540: output flush suppresses IOException without setting a stream error
+
+- Source: `svl/source/misc/strmadpt.cxx`, `SvOutputStream::FlushData`.
+- Observation: Missing output sets INVALIDDEVICE, but a genuine underlying IOException is caught and discarded without setting an error. A caller can consequently observe successful SvStream state after an underlying flush failure.
+- Fidelity: Preserve this source asymmetry. A real readonly memory stream/output wrapper produces the IOException; after resetting the adapter error, Flush leaves the adapter error unset. No injected failure or provider replacement.
+
+
+### WRITER541: memory ZIP UInt8/UInt16 methods return signed scalar types
+
+- Source: `package/source/zipapi/MemoryByteGrabber.hxx`, `ReadUInt8` and `ReadUInt16`.
+- Observation: Their declared return types are `sal_Int8` and `sal_Int16`, although local assembly uses unsigned values and names suggest unsigned reads. On the selected compiler profile high-bit values narrow to negative results; streaming ByteGrabber ReadUInt16 instead returns unsigned16. Whether callers depend on this historical mismatch is not established.
+- Fidelity: Preserve declared return casts; actual native sequence reads of FF/FFFF return-1 while ByteGrabber retains unsigned behavior. No caller correction, fake numeric provider or exception shim.
+
+
+### WRITER542: ZIP output position assumes the supplied stream supports seekability
+
+- Source: `package/source/zipapi/ByteChucker.cxx`, constructor and `GetPosition`, compared with ByteGrabber seek methods.
+- Observation: Construction queries XSeekable without throwing, but GetPosition dereferences the possibly empty reference without a guard. ByteGrabber explicitly throws IOException when XSeekable is absent. Nonseekable output can therefore reach a native null-pointer domain if position is requested.
+- Fidelity: Preserve the missing guard. Genuine seekable output is tested; no JS assertion is claimed as a native undefined-behavior differential, and no fallback position is invented.
+
+
+### WRITER543: OSL mutex destruction frees native storage even after pthread destroy reports failure
+
+- Source: `sal/osl/unx/mutex.cxx`, `osl_destroyMutex`.
+- Observation: A nonzero `pthread_mutex_destroy` result is logged, then the mutex allocation is freed unconditionally. On a platform that reports a busy/in-use mutex, this can release storage still associated with that mutex. Whether real callers reach the erroneous lifetime domain is not established.
+- Fidelity: Preserve the destroy/free order. The pinned non-pthread Emscripten libc uses real no-op pthread stubs and does not reproduce a busy failure; no fake mutex state or error injector is introduced. Native threaded/busy-lifetime/diagnostic behavior remains unqualified. Original acquire_002 single-thread assertions are retained, including its unbalanced recursion before scope destruction.
+
+
+### WRITER544: ZIP directory disk check uses the other disk field for its sentinel exception
+
+- Source: `package/source/zipapi/ZipFile.cxx`, `findCentralDirectory`.
+- Observation: The directory-disk condition is `nEndDirDisk != 0 && nEndDisk != 0xFFFF`; its second comparison uses `nEndDisk`, not `nEndDirDisk`. This can accept a nonzero directory disk when the first disk is FFFF, or reject the directory field sentinel when the first disk is zero. Intent is not established.
+- Fidelity: Retain the original field choice. The original directory reader now accepts an actual ZIP64 byte image with disk FFFF and directory disk 7 through genuine native UNO streams; the focused ZipFile test records this outcome. Native multi-disk/service acceptance is not claimed.
+
+### WRITER545: empty ZIP directory leaves an unallocated zero-length interval
+
+- Source: `package/source/zipapi/ZipFile.cxx`, `readCEN`.
+- Observation: `unallocated` starts with `[0,nCenPos]`. With zero entries and directory position zero, the loop does not remove `[0,0]`; the final nonempty-vector check rejects it as a hole. A conventional empty ZIP can therefore reach the hole rejection. No special empty interval exception appears in this body; intent is not established.
+- Fidelity: Preserve the initial interval and final rejection. The actual ZipFile reader rejects the conventional 22-byte empty ZIP with the original hole diagnostic through genuine native UNO streams. No replacement empty-package result is introduced.
+
+
+### WRITER546: ZIP eager ByteReader constructor has no zero-progress exit
+
+- Source: `package/source/zipapi/ZipFile.cxx`, anonymous `XBufferedStream`.
+- Observation: The fast constructor sizes the vector from available(), then loops while remaining>0 and subtracts the actual read count. A real provider returning zero before that advertised remainder is exhausted leaves this loop without progress; no zero-read break appears here, unlike the Sequence fallback.
+- Fidelity: Preserve the original loop. No artificial zero-read provider or fabricated hang test is used; genuine inputs return the advertised bytes. Threaded/misbehaving provider behavior remains unqualified.
+
+
+### WRITER547: ZIP buffered EOF leaves its output Sequence unchanged
+
+- Source: `package/source/zipapi/ZipFile.cxx`, anonymous `XBufferedStream`.
+- Observation: The initial hasBytes guard returns zero before rData.realloc. Existing output content/length therefore survives EOF, unlike other input owners that resize to zero. Whether callers always respect the returned count is not established.
+- Fidelity: Preserve the early return. Actual buffered input/Sequence tests verify unchanged previous output and original no-op closeInput.
+
+
+### WRITER548: ZIP buffered skip can move past end or wrap unsigned position
+
+- Source: `package/source/zipapi/ZipFile.cxx`, anonymous `XBufferedStream`.
+- Observation: skipBytes adds its signed count to size_t mnPos without bounding or validating it, provided the stream initially has bytes. Over-end positions remain observable and subsequent skips at EOF do nothing. Negative counts follow unsigned target arithmetic.
+- Fidelity: Preserve the source arithmetic. Actual input tests exercise over-end positions and the pinned wasm32 unsigned-wrap profile. Physical native pointer/iterator and other target-width behavior remain unqualified.
+
+
+### WRITER549: STORED getDataStream selects RAW and omits payload CRC
+
+- Source: package/source/zipapi/ZipFile.cxx and XUnbufferedStream.cxx.
+- Observation: ZipFile::getDataStream selects UNBUFF_STREAM_RAW for STORED. XUnbufferedStream final CRC block runs only for !mbRawStream || mbWrappedRaw, so a plain STORED entry bypasses it. Matching CEN/LOC CRC fields can therefore differ from real stored payload CRC and still be read by this path. Raw-byte extraction itself intentionally does not validate decompressed CRC; intent of the STORED data-path omission is not established.
+- Fidelity: Preserve mode selection and guards. A complete actual ZIP with both headers carrying the same wrong CRC rejects in DEFLATED mode and reads in STORED mode through original getDataStream. No stricter validation is inserted.
+
+
+### WRITER550: Empty eager data stream does not reach CRC validation
+
+- Source: package/source/zipapi/ZipFile.cxx and XUnbufferedStream.cxx.
+- Observation: XBufferedStream only reads while advertised available()>0; XUnbufferedStream CRC work also sits inside the nonzero-request block. A zero-length DEFLATED entry with nonzero header CRC can therefore produce an empty data stream without a payload CRC check.
+- Fidelity: Preserve zero-request/constructor guards. Actual ZIP construction/read verifies the outcome; no synthetic empty decode/CRC call or service success provider is added.
+
+
+### WRITER551: Declared-size output can be accepted without final DEFLATE completion
+
+- Source: package/source/zipapi/ZipFile.cxx and XUnbufferedStream.cxx.
+- Observation: XUnbufferedStream breaks immediately when a nonzero inflate result fills the request (or compressed physical end is reached), before checking finished/error. Final validation checks logical size and CRC but does not require inflater finished(). A real non-final stored DEFLATE block containing all advertised plaintext can omit its next/final block and still satisfy size/CRC.
+- Fidelity: Preserve this order. An actual incomplete DEFLATE byte image is rejected by independent strict Node inflateRawSync but accepted by the native stream with exact plaintext/CRC; an overstated size returns the decoded prefix and the next read fails on the remaining byte. No fake inflater status or private field forcing.
+
+
+### WRITER552: ZIP compressed remainder narrows to signed32 before chunk selection
+
+- Source: package/source/zipapi/XUnbufferedStream.cxx; include/comphelper/documentconstants.hxx; package/source/manifest/ManifestExport.cxx.
+- Observation: XUnbufferedStream keeps archive positions/end as signed64 but casts mnZipEnd-mnZipCurrent to sal_Int32 before checking <=0 and choosing a read chunk. A remainder of80000000 hex becomes negative before any source read.
+- Fidelity: Preserve the narrowing/order. A genuine input stream with a public declared compressed extent80000000 hex takes the original broken-stream branch before reading; this is not a physical multi-gigabyte file/ABI acceptance claim.
+
+
+### WRITER553: Report MIME constants named OASIS retain Sun XML literals
+
+- Source: package/source/zipapi/XUnbufferedStream.cxx; include/comphelper/documentconstants.hxx; package/source/manifest/ManifestExport.cxx.
+- Observation: include/comphelper/documentconstants.hxx defines MIMETYPE_OASIS_OPENDOCUMENT_REPORT and REPORT_CHART as application/vnd.sun.xml.report and application/vnd.sun.xml.report.chart. ManifestExport.cxx lists16 other OASIS MIME values and does not include these report constants in that branch. Macro names therefore do not reliably identify the MIME namespace.
+- Fidelity: Preserve literals and source exporter decisions. The OASIS manifest regression enumerates actual application/vnd.oasis.opendocument. values and asserts all16, preserving its original intended scope as legacy Sun XML constants are added. The missing legacy exporter path remains a separate admitted gap; no kernel MIME/manifest behavior is repaired here.
+
+
+### WRITER554: ZIP64 header and descriptor thresholds differ at FFFFFFFF
+
+- Source: package/source/zipapi/ZipOutputStream.cxx, getTruncated and writeDataDescriptor; ZipFile.cxx readLOC_Impl.
+- Observation: getTruncated sets the ZIP64 header flag for sizes >=FFFFFFFF, while descriptor widths switch only for sizes >=100000000. At the reserved32-bit sentinel boundary, LOC can contain ZIP64 extra fields but the descriptor still uses32-bit sizes. The reader selects64-bit descriptor sizes when the LOC extra is ZIP64. Intent of the differing predicates is not established.
+- Fidelity: Preserve both thresholds. Actual public metadata/byte-output calls verify the16/24-byte descriptor and32-byte extra-field images on either side; this is not physical multi-gigabyte payload/native ABI acceptance. No stricter producer or reader correction is added.
+
+### WRITER555: Package buffer growth uses logical end rather than write position
+
+- Source: package/source/zippackage/ZipPackageBuffer.cxx, writeBytes; package/inc/ZipPackageBuffer.hxx, realloc.
+- Observation: Capacity demand is computed as m_nEnd plus input length even when overwriting at an earlier cursor. A one-byte overwrite at position0 in a full32768-byte buffer doubles its allocation although logical data still fits. The public realloc method changes only the Sequence, without synchronizing capacity/end/cursor fields; shrinking below accessible data is therefore an unsafe native caller domain.
+- Fidelity: Preserve these calculations and public method behavior. Tests observe actual Sequence capacity growth and safe public realloc calls without forcing private state or invoking out-of-bounds accesses. No alternative memory allocator or manual JS buffer lifetime is introduced.
+
+### WRITER556: Parented rename removes container membership before validating the new name
+
+- Source: package/source/zippackage/ZipPackageEntry.cxx, setName; ZipPackageFolder.cxx, removeByName; ZipContentInfo destructor.
+- Observation: setName removes the old key first. Erasing ZipContentInfo calls clearParent, so a failed new-name validation leaves the old name detached; even a successful rename cannot reach the final parent insertion after that erase. replaceByName similarly removes the old value before validating its replacement.
+- Fidelity: Preserve this order without rollback. Actual folder/child tests verify detached failed/successful rename and failed replacement using real generated exceptions and native UNO objects.
+
+### WRITER557: Moved ZipContentInfo temporary retains its raw child pointer
+
+- Source: package/source/zippackage/ZipPackageFolder.cxx, doInsertByName and defaulted ZipContentInfo move constructor/destructor; ZipPackageEntry.cxx, doSetParent.
+- Observation: emplace receives a ZipContentInfo temporary. Its default move transfers the RTL reference but leaves bFolder and the raw folder/stream pointer intact; its destructor unconditionally clears that child's parent. doInsertByName(..., true) then restores the parent, but doSetParent inserting an absent key uses false and can finish with the key present and its child parent null. Duplicate-key emplace also destroys the temporary.
+- Fidelity: Preserve temporary destruction before the optional setParent call. Actual two-folder transitions and direct insertion tests cover present/absent keys and removal mode. Native hash iteration/ABI and invalid native pointer domains remain unqualified; no new parent rollback or dangling-pointer behavior is promised.
+
+### WRITER558: Shared-stream read methods omit the mutex used by other operations
+
+- Source: package/source/zippackage/wrapstreamforshare.cxx, readBytes and both readSomeBytes overloads.
+- Observation: Reads seek the shared source then delegate without acquiring m_xMutex, while skip/available/close/seek/position/length use MutexGuard. Concurrent native read calls could interleave their seek/read pairs despite having separate logical cursors.
+- Fidelity: Preserve guard placement. Actual synchronous interleaved readers are tested, but true native thread races are not simulated and no extra synchronization guarantee is claimed.
+
+### WRITER559: Shared-stream available reports the shared source cursor
+
+- Source: package/source/zippackage/wrapstreamforshare.cxx, available.
+- Observation: Unlike read and skip, available delegates without first seeking to m_nCurPos. The reported count can therefore reflect another wrapper's latest read/seek or an initial source EOF even though this wrapper starts at zero.
+- Fidelity: Preserve this delegation. Actual two-wrapper tests verify source EOF and differing positions; ordinary reads still reposition before delegation.
+
+### WRITER560: Shared-stream construction asserts a ByteReader even for otherwise valid seekable inputs
+
+- Source: package/source/zippackage/wrapstreamforshare.cxx constructor; ZipPackageStream.cxx GetOwnSeekStream/getInputStream; package/inc/ZipPackageBuffer.hxx.
+- Observation: GetOwnSeekStream only ensures XSeekable, but WrapStreamForShare additionally asserts a ByteReader crosscast. ZipPackageBuffer is a real XInputStream/XOutputStream/XSeekable implementation without ByteReader. In a release build, Sequence reads can work while the raw-pointer overload would dereference the null crosscast.
+- Fidelity: Preserve the original interfaces and crosscast; do not add ByteReader to ZipPackageBuffer or manufacture a fallback. Actual Sequence-only operation is tested as a release-profile domain. Native debug assertion and raw null-pointer access are unqualified, not executed or claimed safe.
+
+### WRITER561: Seekable-wrapper constructor exception retains a reference to the failing object
+
+- Source: comphelper/source/streaming/seekableinput.cxx, OSeekableInputWrapper constructor.
+- Observation: A null component context triggers IllegalArgumentException with *this as Context from inside the constructor. Native construction failure destroys members/base and releases allocation, while the exception may retain that interface reference. The exact native exception-unwind/self-reference lifetime requires independent SDK auditing; dereferencing a failed-constructor Context must not be treated as a supported object lifetime.
+- Fidelity: Preserve the original validation/message/Context/ArgumentPosition1 and native member cleanup. This invalid native lifetime domain is unqualified and not exercised through dangling-pointer access or fake state. Normal seekable identity with an absent context, and lazy wrapping with a real context, are tested.
+
+### WRITER562: Invalid file handles collapse into the general stream error
+
+- Source: include/comphelper/errcode.hxx, SVSTREAM_INVALID_HANDLE; tools/source/stream/strmunx.cxx, both GetSvError overloads.
+- Observation: SVSTREAM_INVALID_HANDLE aliases ERRCODE_IO_GENERAL. EBADF and osl_File_E_BADF therefore lose their distinct handle classification and return the same packed value as an unknown error. The displayed diagnostic cannot distinguish these cases from this code alone.
+- Fidelity: Preserve the macro alias and both tables. A real MEMFS invalid-descriptor failure and every source table vector retain the general code; no more specific diagnostic is invented.
+
+### WRITER563: File allowed-path matching is a literal prefix rather than a path-component boundary
+
+- Source: sal/osl/unx/file.cxx, isForbidden.
+- Observation: The source compares strncmp(resolvedPath, allowedPrefix, prefixLength) only. An allowed path prefix such as /tmp/allowed also matches a sibling /tmp/allowed-other; there is no following-slash/end check.
+- Fidelity: Preserve this original comparison when the requested security-hook port is approved. This is source review only: local security implementation/execution is pending explicit approval, and no stronger boundary rule or claimed sandbox guarantee is added.
+
+### WRITER564: An empty read allowlist disables all file-path checks
+
+- Source: sal/osl/unx/file.cxx, setAllowedPaths and isForbidden.
+- Observation: isForbidden returns false immediately when allowedPathsRead is empty, before choosing read/write/execute lists. An execute-only configuration therefore does not enforce its execute list. The setter also treats every one-character token as a mode, so a literal root / token is not registered as a path and can leave the read list empty.
+- Fidelity: Preserve the original default/parser/early-return behavior after explicit approval. No local security implementation or runtime proof is claimed at this checkpoint; the concrete proposal describes the exact upstream path and the existing realm-local MEMFS boundary.
+
+### WRITER565: Locale registration identifies records by XOR hash alone
+
+- Source: sal/rtl/locale.cxx, rtl_locale_register and rtl_locale_equals.
+- Observation: The table is keyed only by the XOR of Language, Country and Variant string hashes; a matching key returns the existing record without comparing fields. Swapping Country and Variant produces the same key, so a subsequent registration can return different fields than requested. Equality then reports true because the returned records have identical addresses.
+- Fidelity: Preserve the original hash-only lookup and identity equality. Tests exercise a real collision through the public registration API. JS garbage collection owns ordinary objects; existing RTL string reference operations retain the source observable lifecycle contract, without introducing a manual JS allocator.
+
+### WRITER566: Emscripten's native ASCII codeset has no alias in the selected locale table
+
+- Source: sal/osl/unx/nlsupport.cxx, compose_locale/osl_getTextEncodingFromLocale and Linux/Emscripten nl_language_list; sal/osl/unx/thread.cxx, getThreadTextEncodingForInitialization.
+- Observation: The pinned Emscripten libc reports CODESET ASCII for C/POSIX, but the selected LibreOffice table contains no ASCII entry. The locale query therefore returns DONTKNOW and thread initialization applies the original ASCII fallback. A one-character C language is also rejected by compose_locale, leaving an empty native locale name: native newlocale then consults its environment again. With no locale environment variables, the RTL process locale is C while the SDK libc defaults to C.UTF-8, producing UTF8 instead.
+- Fidelity: Preserve the selected table, two/three-character composition rule, empty native locale name and thread fallback. Tests use actual libc environment/locale calls for C and unset environment, without a replacement locale provider. Other platforms' tables are not substituted.
+
+### WRITER567: Path access fallback accepts an existing regular file as a parent
+
+- Source: sal/osl/unx/file.cxx, isForbidden.
+- Observation: If realpath fails for a path such as allowed/file/child, fallback resolves allowed/file and appends /child without checking that the resolved parent is a directory. The prefix decision may allow the path even though opening it fails.
+- Fidelity: Preserve the predicate's decision and let actual native open report its error. A real regular-file fixture exercises this result; the initial test expectation of rejection was corrected to match the source.
+
+### WRITER568: Allowed-path setup can return before refreshing the abort flag
+
+- Source: sal/osl/unx/file.cxx, setAllowedPaths.
+- Observation: A missing parent or length failure returns immediately after lists have already been cleared or partially populated. The assignment from SAL_ABORT_ON_FORBIDDEN is below the loop, so that return retains the previous abort flag rather than the current environment value.
+- Fidelity: Preserve partial list state and the original environment-publication order. Native abort is tested in an isolated real runtime; no caller resumes native operations after that test.
+
+### WRITER569: Missing relative names can form a pointer before the path buffer
+
+- Source: sal/osl/unx/file.cxx, setAllowedPaths/isForbidden/getParentFolder.
+- Observation: lastIndexOf('/') returns -1 for a missing relative basename. The fallback can then pass getStr()+n to strcat, forming a pointer before the string buffer. For a missing root-level path, getParentFolder's n<1 rule instead resolves dot rather than slash.
+- Fidelity: Preserve the source slash index, parent rule and valid-path fallback. The full active Forbidden::forbidden logical assertions are ported, including relative/empty inputs. Native physical out-of-bounds reads/compiler effects remain unqualified; passing logical assertions is not evidence for that undefined native domain.
+
+### WRITER570: File URL converters retain the first caller's thread encoding
+
+- Source: sal/osl/unx/file_url.cxx, UnicodeToTextConverter_Impl::getInstance and TextToUnicodeConverter_Impl::getInstance.
+- Observation: Each function-static converter captures osl_getThreadTextEncoding only in its constructor. Later thread-encoding changes do not rebuild it. The two directions initialize independently and can therefore use different encodings, despite conversion routines looking like current-thread helpers.
+- Fidelity: Preserve first-use capture, independent converter instances and source null contexts. Isolated real ASCII/UTF8 tests verify cached failure and opposite-direction initialization without injecting or resetting a converter. Native multi-thread first-initializer races and shutdown are unqualified.
+
+### WRITER571: OStringBuffer setLength does not initialize newly exposed bytes
+
+- Source: include/rtl/strbuf.hxx, OStringBuffer::setLength.
+- Observation: The documentation promises null characters when length increases, but the body only reserves capacity or writes the new terminator and then updates length. It does not initialize the newly exposed range; the reserve branch also leaves termination at the new logical end to existing storage contents.
+- Fidelity: Preserve the exact mutation/reserve order. Tests fill reserved bytes before observing them; JS zero-initialized allocations are not claimed as equivalent to native uninitialized storage. No extra zero-fill or repaired source default is added.
+
+### WRITER572: Emscripten security context retains mobile identity and home fallback
+
+- Source: sal/osl/unx/security.cxx, osl_getCurrentSecurity and osl_psz_getHomeDir.
+- Observation: The Emscripten branch shares the iOS-simulator fallback and explicitly stores mobile, Mobile User and /var/mobile, with native effective UID/GID. Home lookup prefers a matching current user's nonempty HOME only when access(HOME,0) succeeds; otherwise it returns the stored directory without checking that it exists. The hardcoded fallback can therefore name an absent directory in a browser runtime.
+- Fidelity: The approved selected-profile current-security and byte-home bodies now preserve these values and precedence in the actual WASM runtime. Tests exercise unset, empty and nonexistent HOME fallbacks and dynamic existing paths. Public URL conversion remains unfinished; no host user-directory access is added.
+
+
+### WRITER573: Empty-folder ZIP failures lose diagnostics and retain partial output
+
+- Source: package/source/zippackage/ZipPackageFolder.cxx, saveContents, pinned baseline 9bc445578031fecf56086729d8e4940c77e14d65; shared with CALC636.
+- Observation: Empty-subfolder serialization catches ZipException and IOException and throws a default RuntimeException without preserving the original message or cause. A failed write may already have transferred its entry to ZipOutputStream and emitted a partial local header; no rollback is attempted.
+- Fidelity: Preserve the original exception translation and mutation order. Tests use genuine invalid paths, a read-only stream and a bounded writable SvMemoryStream; the latter retains the first two ZIP signature bytes after failure. No synthetic output provider or injected error flag is used.
+
+
+### WRITER574: HOME existence check accepts a regular file
+
+- Source: sal/osl/unx/security.cxx, osl_psz_getHomeDir, pinned baseline 9bc445578031fecf56086729d8e4940c77e14d65; shared with CALC637.
+- Observation: For the current UID, a nonempty HOME is accepted when access(path,0) succeeds. The code does not require a directory or an absolute path. A regular file can therefore be returned as the home directory.
+- Fidelity: Preserve access-only admission. The native MEMFS test sets HOME to a real file and observes the exact unchanged path; no fabricated security record or access result is supplied. Public Unicode/URL home conversion remains unfinished.
+
+
+### WRITER575: Tilde expansion encodes escaped HOME characters again
+
+- Source: sal/osl/unx/file_url.cxx, osl_getFileURLFromSystemPath, pinned baseline 9bc445578031fecf56086729d8e4940c77e14d65; shared with CALC638.
+- Observation: Tilde expansion obtains an already encoded home URL, removes file:// and substitutes the remaining text before calling rtl_uriEncode with IgnoreEscapes. Percent escapes from HOME are encoded again: a real HOME `/tmp/home é` produces `file:///tmp/home%2520%25C3%25A9/child/name` for `~//child///name`.
+- Fidelity: Preserve the original calls, slash index adaptation and encoding order. A genuine MEMFS directory/native HOME test observes this result; no browser URL or alternative decoder is substituted.
+
+### WRITER576: Public home lookup ignores system-path conversion failure
+
+- Source: sal/osl/unx/security.cxx, osl_getHomeDir; shared with CALC639.
+- Observation: The function returns the byte-home lookup status after converting to Unicode, ignoring osl_getFileURLFromSystemPath's status. An accessible relative filename `file:public-home` supplied as native HOME yields true while leaving the output `file:public-home`, which the path conversion rejected.
+- Fidelity: Retain the original status and output order. The test creates the actual MEMFS file and uses the genuine current-security handle; authentication and host filesystem operations are not involved.
+
+
+### WRITER577: The FQDN helper can return the short native hostname
+
+- Source: sal/osl/unx/socket.cxx, getFullQualifiedDomainName and lcl_getLocalHostname; shared findings CALC640/CALC641/CALC642.
+- Observation: The helper accepts the canonical name returned by getaddrinfo without requiring a dot. The pinned Emscripten runtime returns `emscripten` for both the regular and FQDN paths. The file URL authority check therefore admits that exact short hostname (ignoring ASCII case), while still rejecting a final dot.
+- Fidelity: Preserve both actual libc lookup paths and independent static caches; do not invent a domain suffix or substitute browser location.hostname. Tests observe the real pinned SDK result. No socket connection or external DNS lookup is introduced.
+
+### WRITER578: Reverse URL home recognition checks only the second path character
+
+- Source: sal/osl/unx/file_url.cxx, getSystemPathFromFileUrl, pinned baseline 9bc445578031fecf56086729d8e4940c77e14d65.
+- Observation: Home recognition checks path[1] for tilde and the next separator, without requiring path[0] to be slash. Consequently the relative URL `a~/child` also resolves through HOME.
+- Fidelity: Retain the exact source predicate, URL-tail indexing and guarded recursion. A genuine MEMFS HOME test covers the relative spelling and expected resolved path.
+
+### WRITER579: The legacy CJK file URL QA literal contains UTF8 byte values as UTF16 units
+
+- Source: sal/qa/osl/file/osl_File_Const.h, aTmpName10/aSysPath5; osl_File.cxx getSystemPathFromFileURL_005.
+- Observation: The u-prefixed literal spells the UTF8 bytes of 未命名 using separate hexadecimal escapes, producing U+00E6, U+009C and further byte-valued UTF16 units instead of those three CJK codepoints. The fixture therefore does not itself verify the CJK text described in its comment.
+- Fidelity: Port the exact original UTF16 units and actual directory setup/cleanup. Separate Unicode tests cover real non-ASCII and supplementary scalars; the legacy vector is not silently corrected.
+
+
+### WRITER580: File URL open removes trailing separators before opening a regular file
+
+- Source: sal/osl/unx/file_url.cxx FileURLToPath, file_path_helper.cxx osl_systemPathRemoveSeparator and file.cxx openFile; shared with CALC643.
+- Observation: FileURLToPath removes trailing path separators before native open. Thus a URL ending in `/file///` can successfully open an existing regular file instead of preserving the native trailing-separator ENOTDIR distinction.
+- Fidelity: Preserve original separator removal, capacity-check order and native open delegation. An actual MEMFS regular-file create/write/close/reopen/read test uses the trailing-separator spelling and observes the same bytes.
+
+
+### WRITER581: Directory item identity compares inode without the device
+
+- Source: sal/osl/unx/file_stat.cxx, osl_identicalDirectoryItem; shared with CALC644.
+- Observation: After pointer and path equality fast paths, the UNIX implementation compares only st_ino, omitting st_dev. Equal inode numbers on different filesystems could therefore be treated as identical.
+- Fidelity: Preserve the inode-only predicate and original lstat ordering. Actual MEMFS alias/different-file identity is tested; no second filesystem, host mount or fabricated inode/device provider is introduced. The cross-filesystem collision is source review only.
+
+### WRITER582: Directory item identity does not resolve symlink targets as documented
+
+- Source: include/osl/file.hxx DirectoryItem::isIdenticalTo and sal/osl/unx/file_stat.cxx osl_identicalDirectoryItem; shared with CALC645.
+- Observation: The public comment describes resolving links to the target. The selected UNIX body uses lstat, so a symlink and its regular-file target have different inode identities. Same-pointer/path fast paths can also report identity after the pathname has been removed.
+- Fidelity: Preserve the body. Real MEMFS symlink/target, dot-path alias and deleted-path cases exercise these results without a replacement identity provider.
+
+### WRITER583: FileStatus scalar getters can return retained invalid values
+
+- Source: include/osl/file.hxx FileStatus getters and sal/osl/unx/file_stat.cxx osl_getFileStatus; shared with CALC646.
+- Observation: Status queries reset uValidFields but do not reset all stored values. Scalar getters return the stored attributes/size/time without checking validity. Reusing a status for a directory after a three-byte regular file leaves getFileSize()==3 with an invalid FileSize bit, contrary to the getter comment promising zero otherwise.
+- Fidelity: Preserve constructor zeroing, selective publication and scalar getters; string/type getters keep their original validity guards. The actual file-to-directory reuse and independent returned filename/time values are tested.
+
+### WRITER584: Legacy file time QA uses a one-sided time difference
+
+- Source: sal/qa/osl/file/osl_File.cxx, t_compareTime and FileStatus access/modify time tests; shared with CALC647.
+- Observation: t_compareTime returns signed(end-start milliseconds)<delta without an absolute-value or lower-bound check. Arbitrarily old timestamps can satisfy the comparison; these assertions alone do not establish closeness to current time.
+- Fidelity: Port the exact signed borrow/truncation and UNIX delta=2000 predicate for the original assertions. Additional native stat metadata tests do not turn these source QA results into a stronger clock certificate.
+
+### WRITER585: UNIX attribute QA root expectations conflict with selected Emscripten access semantics
+
+- Source: sal/qa/osl/file/osl_File.cxx getAttributes_001/_002; sal/osl/unx/file_stat.cxx set_file_access_rights; sal/osl/unx/uunxapi.cxx osl::access; pinned SDK libsyscall.js __syscall_faccessat. Shared with CALC648.
+- Observation: The source QA removes ReadOnly from its expectation when actual geteuid()==0. In the pinned Emscripten runtime geteuid() is zero, but access(W_OK) follows MEMFS node permissions without a root bypass. Modes0444 and0111 consequently produce ReadOnly: actual4673 versus expected4672 and actual9361 versus expected9360. Both unmodified source assertions currently fail.
+- Fidelity: Preserve kernel access calls, native SDK semantics and the original root-dependent QA expectations. Do not fake UID, disable permission checks, amend the original expected masks or skip these tests. Separate selected-profile critical fixtures assert the observed native metadata explicitly; the two original QA failures remain recorded. No host identity or filesystem access is involved.
+
+
+### WRITER586: Cheap stat publication marks attributes valid before access-right flags are computed
+
+- Source: sal/osl/unx/file_stat.cxx set_file_attributes/set_file_access_rights; shared with CALC649.
+- Observation: Every stat publishes hidden/mode attributes and marks Attributes valid, but ReadOnly and Executable are computed only when the requested mask includes Attributes. On the selected SDK, a real mode0444 file queried for Type alone has valid Attributes without ReadOnly; an explicit Attributes query supplies ReadOnly.
+- Fidelity: Preserve the source mask-dependent work and validity publication. Both actual metadata queries are tested; no permission/root bypass or extra eager access check is introduced.
+
+
+### WRITER587: The basename helper can mutate its const/shared input allocation
+
+- Source: sal/osl/unx/file_path_helper.cxx, osl_systemPathGetFileNameOrLastDirectoryPart; shared with CALC650.
+- Observation: The const rtl_String input is const-cast into a sharing OString, then passed to in-place separator removal without detaching. Calling the basename helper on `a///` changes the logical length/terminator observed by other owners of that same allocation.
+- Fidelity: Preserve original reference sharing, trim mutation and basename computation. A real OString copy observes the same trimmed length in the critical helper tests; no new defensive copy is substituted.
+
+### WRITER588: Public file copy uses a predictable destructive backup name
+
+- Source: sal/osl/unx/file_misc.cxx, oslDoCopy; shared with CALC651.
+- Observation: copying over an existing destination renames it to destination + `.osl-tmp`, without reserving a unique name. An existing regular backup-name file is replaced and later unlinked. A rename failure other than ENOENT is reported as fixed EXIST. Copying a file onto itself renames away its own source, fails opening it and restores it.
+- Preservation: retain source naming, error mapping and rollback ordering. Real MEMFS tests cover the collision, rename failure and same-path rollback. No host filesystem is mounted.
+
+### WRITER589: Public copy depends on global errno after higher-level stream failures
+
+- Source: sal/osl/unx/file_misc.cxx, oslDoCopyFile; readwrite_helper.cxx, safeWrite.
+- Observation: source-open failure returns current errno rather than translating the OSL return value; incomplete reads/writes use current errno or ENOSPC, and source-close errors are ignored. Destination open omits O_TRUNC/O_EXCL. The write loop retries EINTR and asserts a positive count after any nonnegative write.
+- Preservation: retain these contracts and publish only actual captured SDK syscall errno from the JS file owner. Real descriptor/error tests cover EBADF and the nontruncating raw open. SDK interruption, zero-progress native write, allocation failure and concurrent source-size changes remain unqualified; no injected error provider is used.
+
+### WRITER590: SvFileStream constructor stores a system path but internal locking expects a URL
+
+- Source: tools/source/stream/strmunx.cxx, filename constructor, Open and lockFile; shared Writer/Calc prerequisite.
+- Observation: The filename constructor converts a file URL to a system path, then Open stores that path unchanged. Internal lockFile passes GetFileName directly to DirectoryItem::get, whose URL conversion rejects the system path; failed lookup returns true without registering a lock. Public Open called with an actual file URL can reach the table.
+- Preservation: Keep original conversion/lookup order. Real two-stream tests distinguish constructor path bypass from direct URL Open denial; no lock provider or fake item is installed.
+
+### WRITER591: Read-lock numeric zero bypasses the source internal share table
+
+- Source: tools/source/stream/strmunx.cxx, SvFileStream::LockFile; selected SDK fcntl.h; shared Writer/Calc prerequisite.
+- Observation: Original nLockMode starts at zero and uses F_RDLCK for readonly DENYALL/DENYWRITE. The pinned selected SDK defines F_RDLCK=0 and F_WRLCK=1, so if(!nLockMode) returns true before the table. A stream without share denial likewise bypasses existing table entries. Readonly DENYREAD instead reports LOCKING_VIOLATION.
+- Preservation: Retain actual selected constants and source decisions, with real open/lock tests. No substituted nonzero read-lock flag.
+
+### WRITER592: Readonly retry retains create/truncate flags and original stream mode
+
+- Source: tools/source/stream/strmunx.cxx, SvFileStream::Open; shared Writer/Calc prerequisite.
+- Observation: On write-open failure only the OSL Write bit is removed; Create/Trunc remain. OSL Create still selects O_RDWR, so a readonly existing file can fail the retry when Create is present but open successfully when NOCREATE is supplied. The public stream mode keeps originally requested WRITE (and clears only TRUNC), even after actual readonly fallback.
+- Preservation: Preserve exact flags/mode publication. Real permission tests exercise both outcomes without simulating syscall failures.
+
+### WRITER593: Unsigned file-stream error sentinel advances the base cursor
+
+- Source: tools/source/stream/strmunx.cxx, GetData/PutData; tools/source/stream/stream.cxx, ReadBytes/WriteBytes; shared Writer/Calc prerequisite.
+- Observation: GetData/PutData return size_t(-1) on OSL errors. The unbuffered base stream adds the returned unsigned count to m_nBufFilePos. In wasm32 a real OSL ssize_t request overflow therefore returns 4294967295 and advances Tell by that count despite the packed error; GetSvError has no specific OVERFLOW mapping.
+- Preservation: Keep sentinel and base bookkeeping. Tests invoke actual OSL admission above SSIZE_MAX, before any buffer dereference, without huge allocation or fake errno.
+
+### WRITER594: ResetError comment promises seeking but implementation only clears flags
+
+- Source: tools/source/stream/strmunx.cxx, SvFileStream::ResetError; shared Writer/Calc prerequisite.
+- Observation: The source comment says set filepointer to beginning of file, but the body only calls ClearError. Position is unchanged.
+- Preservation: Preserve body and test EOF/error reset at end of the actual file without seeking.
+
+### WRITER595: COPY_ON_SYMLINK ignores copy failure after deleting the link
+
+- Source: tools/source/stream/strmunx.cxx, SvFileStream::Open COPY_ON_SYMLINK branch; shared Writer/Calc prerequisite.
+- Observation: After successful File::remove of a symbolic link, File::copy(target,url) status is ignored. The subsequent normal write/create open can create an empty replacement even when target copying failed.
+- Preservation: Preserve source order and ignored status. A genuine unreadable MEMFS target produces the original successful-open/empty-replacement outcome while target bytes remain unchanged; no injected failure provider or host mount.
+
+### WRITER596: Temp directory selection treats an empty variable as present
+
+- Source: sal/osl/unx/tempfile.cxx, osl_getTempDirURL; shared Writer/Calc prerequisite.
+- Observation: TMPDIR/TEMP/TMP fallback tests only null getenv results. An empty higher-priority variable prevents fallback and produces invalid URL conversion; trailing slashes are removed except the final root slash. The function does not validate directory existence or accessibility.
+- Preservation: Keep original precedence/default/conversion/output order. Real SDK environment tests cover empty, absent, root/trailing slash and normal access assertions.
+
+### WRITER597: Named TempFile can fall back to memory after filesystem creation fails
+
+- Source: unotools/source/ucbhelper/tempfile.cxx, getTempNameBase_Impl/ConstructTempDir_Impl/TempFileNamed::GetStream; xtempfile.cxx constructor; shared Writer/Calc prerequisite.
+- Observation: Directory creation status is ignored and a successfully converted base URL is cached. Failed exclusive naming yields an empty name, and GetStream then returns SvMemoryStream. OTempFileService checks optional owner presence rather than IsValid, so it can provide working IO with empty Uri/ResourceName after an actual creation failure.
+- Preservation: Preserve default file-only branch and original fallback. Actual denied creation and cold empty-TMPDIR/retry tests use the real manager/runtime; no fake tempfile or private cache reset. Other constructors/Fast/directory owners remain unbound.
+
+### WRITER598: TempFile seek validates64 bits then narrows position to32
+
+- Source: unotools/source/ucbhelper/xtempfile.cxx, OTempFileService::seek; shared Writer/Calc prerequisite.
+- Observation: The source compares signed64 nLocation with signed64 TellEnd, but calls Seek(static_cast<sal_uInt32>(nLocation)). A valid location beyond4GiB therefore narrows before seeking.
+- Preservation: Retain the UInt32 cast and source bounds/order. Ordinary real seek tests pass; the beyond4GiB observation is source review only, without huge MEMFS allocation or fabricated size/cursor.
+
+### WRITER599: TempFile type list contains XPropertySet twice
+
+- Source: unotools/source/ucbhelper/XTempFile.hxx and xtempfile.cxx, OTempFileBase/getTypes; shared Writer/Calc prerequisite.
+- Observation: OTempFileBase already declares XPropertySet, while OTempFileService::getTypes prepends the same type through OTypeCollection. The source collection does not deduplicate.
+- Preservation: Preserve the original base order and duplicate. The registered real component exposes two XPropertySet entries in its actual type sequence; physical native ABI/compiled C++ oracle remains unqualified.
+
+### WRITER600: TempFile listener methods only assert and have no release body
+
+- Source: unotools/source/ucbhelper/xtempfile.cxx, four property/veto listener methods; shared Writer/Calc prerequisite.
+- Observation: Each listener method contains assert(false) and no registration/removal logic. Unknown property getters/setters similarly assert before throwing UnknownPropertyException. A normal release profile exposes no-op listener calls, while native debug assertion termination differs.
+- Preservation: Bind post-assert release behavior and original UNO exceptions, without an invented listener registry. Source native debug assertion termination remains explicitly unqualified; tests use actual empty listener references and real property changes.
+
+### WRITER601: TempFile property table gives a sorted hint for unsorted entries
+
+- Source: unotools/source/ucbhelper/xtempfile.cxx, getPropertySetInfo; shared Writer/Calc prerequisite.
+- Observation: The source comment requires name sorting and supplies true to OPropertyArrayHelper, but initializes Uri, RemoveFile, ResourceName. The original helper diagnoses this ordering and still sorts it; getPropertyValues separately retains the original initializer order.
+- Preservation: Keep the initializer, true hint and actual original helper behavior. Real descriptor/property tests assert alphabetical metadata, original handle order1/2/3 and DEFAULT_VALUE states, without fake metadata providers.
+
+### WRITER602: Selected SDK mkdir passes mode without applying host umask
+
+- Source: sal/osl/unx/file_misc.cxx, directory mode helpers; pinned Emscripten4.0.19 src/lib/libsyscall.js __syscall_mkdirat; shared Writer/Calc prerequisite.
+- Observation: The selected SDK calls FS.mkdir(path,mode,0) directly. Its MEMFS observations retain0777/0222 as requested rather than host-style0755/0200 after an assumed022 mask. This is a selected runtime distinction, not a correction to LibreOffice mode calculation.
+- Preservation: Preserve original read/write/private mode derivation and actual native syscall behavior. Tests removed the unsupported host-umask assumption; no host filesystem is mounted and no synthetic permission policy is added.
+
+### WRITER603: Directory readdir null discards the distinction between EOF and read errors
+
+- Source: sal/osl/unx/file_misc.cxx, osl_getNextDirectoryItem and osl_readdir_impl_; shared Writer/Calc prerequisite.
+- Observation: Any null readdir result returns E_NOENT without checking errno. The C function leaves an existing output item intact on this path, while Directory::getNextItem releases and clears its item before calling it.
+- Preservation: Keep both original contracts. Actual native EOF and C/wrapper slot tests pass; native readdir error delivery remains unqualified rather than being injected through a fake provider.
+
+### WRITER604: Opening an already-open Directory overwrites its previous cursor
+
+- Source: include/osl/file.hxx Directory::open and sal/osl/unx/file_misc.cxx osl_openDirectory.
+- Observation: The wrapper forwards its existing output slot; successful open assigns a new DirectoryImpl without closing the previous handle. An unsuccessful open leaves the old slot intact. This can leak the original cursor on repeated successful open.
+- Preservation: Do not add an upstream-absent already-open guard or automatic close. Real failed-open preservation is tested; repeated-success leak behavior is source-reviewed and is not executed as a passing resource-lifetime fixture.
+
+### WRITER605: Recursive directory deletion skips links and leading-dot single-token files
+
+- Source: comphelper/source/misc/directoryhelper.cxx, scanDirsAndFiles/deleteDirRecursively; shared Writer/Calc prerequisite.
+- Observation: The scanner collects only directories and regular files. It skips symlinks, including dangling links. Splitting a regular filename like .hidden at its leading dot returns an empty basename, so that entry is also omitted. The subsequent parent removal fails while later siblings are still attempted.
+- Preservation: Keep the type filter, empty-basename guard and accumulated true-on-error result. Real MEMFS fixtures verify remaining skipped entries and successful removal of later siblings, without injected statuses or fake providers.
+
+### WRITER606: Recursive deletion reconstructs a trailing-dot filename without its dot
+
+- Source: comphelper/source/misc/directoryhelper.cxx, splitAtLastToken/scanDirsAndFiles/deleteDirRecursively.
+- Observation: For name., the fresh extension remains empty and the basename becomes name. Deletion appends a dot only for nonempty extensions, so it attempts name instead. If both files exist, their set pairs coincide; name is removed and name. remains. Literal percent and space names are separately encoded by the original IgnoreEscapes mechanism and are not conflated.
+- Preservation: Keep splitting, set equivalence and reconstruction unchanged. Actual scan/delete tests assert retained name. and error return; percent/space files are independently removed correctly.
+
+### WRITER607: Temporary parent validation accepts a regular file and may fail instead of falling back
+
+- Source: unotools/source/ucbhelper/tempfile.cxx, ConstructTempDir_Impl and TempFileNamed parent constructor.
+- Observation: An existing parent passes DirectoryItem::get without checking whether it is a directory. A regular-file parent is accepted, so creating its child fails and returns an empty name rather than selecting the default temporary directory. The original GetStream then uses its empty-name SvMemoryStream fallback.
+- Preservation: Retain existence-only validation and original fallback ordering. Real regular-file parent tests assert invalid names and the actual native memory-stream owner; directory creation failure is also exercised without a fake syscall or private-state injection.
+
+### WRITER608: ZipFileAccess excludes an extra code unit from interior wildcard searches
+
+- Source: package/source/zippackage/zipfileaccess.cxx, StringGoodForPattern_Impl.
+- Observation: The reverse search uses substr(0, nEndInd - 1), although nEndInd already marks the excluded suffix boundary. Consequently *ab*c rejects abc but accepts ab-c.
+- Preservation: Retain the shortened search prefix and exact UTF16 boundaries. Direct source-pattern tests cover both results without replacing the matcher with regular expressions.
+
+### WRITER609: ZipFileAccess distinguishes an empty pattern from a counted string beginning with NUL
+
+- Source: package/source/zippackage/zipfileaccess.cxx, GetPatternsFromString_Impl and StringGoodForPattern_Impl.
+- Observation: A truly empty string creates zero segments and matches nothing. A nonempty counted string beginning with NUL creates one empty segment because pointer parsing stops immediately; the matcher accepts every candidate. Embedded NUL also truncates the remaining pattern.
+- Preservation: Retain the counted empty guard, NUL-terminated parser and one-empty-segment match behavior. Test the actual native string/sequence owners rather than normalized host strings.
+
+### WRITER610: File-UCP available can return a negative byte count
+
+- Source: ucb/source/ucp/file/filinpstr.cxx and filstr.cxx, available.
+- Observation: The implementation subtracts getPosition from getLength and caps only the upper bound at SAL_MAX_INT32. A legal seek beyond EOF therefore gives a negative result; seeking to8 in a5-byte file returns minus3.
+- Preservation: Keep signed64 subtraction and signed32 return conversion without clamping to zero. Actual input and bidirectional file owners are tested over real MEMFS/OSL files.
+
+### WRITER611: File-UCP skipBytes silently ignores file errors
+
+- Source: ucb/source/ucp/file/filinpstr.cxx and filstr.cxx, skipBytes.
+- Observation: The method delegates the relative seek and discards its result. It does not check the open flag, so skipBytes after close returns without IOException while readBytes, seek and position queries fail. Negative displacements retain the original unsigned64 then signed64 call conversions.
+- Preservation: Keep the unchecked relative seek and source conversion order. Public closed-stream tests verify the no-throw skip beside failing reads and position queries; no syscall error injection is used.
+
+### WRITER612: UCB Regexp equality omits fields that affect matching and serialization
+
+- Source: ucb/source/inc/regexp.hxx, operator==; ucb/source/inc/regexpmap.hxx, add/find.
+- Observation: Equality compares only kind, prefix and infix. It ignores the empty-domain flag, translation flag and reverse prefix. Consequently domain patterns using star and plus compare equal despite different empty-domain matches; translated and untranslated patterns with identical prefix/infix also collide. RegexpMap retains the first value and treats later equal patterns as duplicates.
+- Preservation: Keep exact source equality, duplicate retention and lookup. Tests assert differing match results alongside equal patterns and actual native mapped value identity.
+
+### WRITER613: UCB serialization can omit a reverse-prefix literal required by its own parser
+
+- Source: ucb/source/regexp/regexp.cxx, getRegexp and parse.
+- Observation: Translated authority/domain patterns accept an explicitly quoted empty reverse prefix. Serialization omits that empty literal, but the corresponding parser branches require scanStringLiteral to succeed. The serialized form therefore fails to parse. Prefix translation allows the omitted literal and is unaffected.
+- Preservation: Retain both serializer omission and branch-specific parser requirements. Source-derived tests verify accepted original forms and rejected canonical output without normalizing either behavior.
+
+### WRITER614: Persistence replacement and completion query bypass the stream mutex
+
+- Source: package/source/xstor/switchpersistencestream.hxx and switchpersistencestream.cxx, SwitchPersistenceTo, CloseAll_Impl and waitForCompletion.
+- Observation: Public IO, seek and logical endpoint methods guard m_pStreamData with m_aMutex, but persistence replacement and the completion query access the same unique owner without that guard. Concurrent replacement/completion versus guarded IO could race unless callers serialize those operations externally. This is a suspected contract hazard, not a demonstrated race; the selected non-pthread runtime and current tests cannot establish native thread safety or whether all callers provide external serialization.
+- Preservation: Restore exactly the source guarded methods and retain unlocked replacement/completion/destructor paths. Do not add a broader lock or claim that main/Worker execution proves shared-memory race safety.
+
+### WRITER615: Fast temporary-service seek narrows before reporting an invalid offset
+
+- Source: unotools/source/ucbhelper/tempfile.cxx, TempFileFastService::seek.
+- Observation: The method casts a nonnegative signed64 location to UInt32, performs Seek, then compares the resulting position to the original location. Requesting 0x100000001 therefore seeks to1 and throws IllegalArgumentException afterward. A rejected seek can consequently change the stream position without requiring a file larger than4GiB.
+- Preservation: Keep original cast, seek, comparison and error-check order. Actual MEMFS/SvFileStream tests assert the exception and changed position; do not add a pre-seek upper bound or rollback.
+
+### WRITER616: Deflater reset retains accumulated counter overflow
+
+- Source: package/source/zipapi/Deflater.cxx, reset, doDeflateBytes and getTotalIn/getTotalOut.
+- Observation: reset clears zlib counters and current input offsets, but does not clear nTotalIn64/nTotalOut64. On a platform with32-bit zlib totals, reusing an owner after a counter rollover can therefore report previous-stream multiples of4GiB in the next stream. This is a source inspection finding; no greater-than4GiB execution or private counter injection is claimed.
+- Preservation: Keep the original accumulators across reset. Actual ordinary-size reset/reuse is tested through the real library API.
+
+### WRITER617: Retrying entry close after final output failure can commit unwritten totals
+
+- Source: package/source/zipapi/ZipOutputEntry.cxx, processDeflated, doDeflate, finishDeflater, write and closeEntry.
+- Observation: Deflate can report stream end before processDeflated writes its final compressed bytes. If that real output write throws, closeEntry exits before metadata/reset while the compressor remains finished. A later write silently skips input, and retrying closeEntry skips the failed output and updates entry totals/CRC before resetting. This is a suspected retry-contract hazard; normal ZipPackageStream catches the IOException and marks save unsuccessful rather than retrying, so this does not establish corrupted successful normal saves.
+- Preservation: Keep the original order and finished-state behavior, without rollback, retry or a new error latch. A real readonly SvMemoryStream/OOutputStreamWrapper test proves the failure, unchanged initial metadata, skipped later input and retry totals.
+
+### WRITER618: DOCX text fill writes transparency directly into the alpha value
+
+- Source: sw/source/filter/ww8/docxattributeoutput.cxx, CharColor and WriteCollectedRunProperties; sw/qa/extras/ooxmlexport/ooxmlexport14.cxx, the CharTransparence=75 assertion.
+- Observation: CharColor stores 255 minus Color.GetAlpha(). The writer converts that transparency to a rounded percentage and writes it as w14:alpha rather than its complement. Alpha64 therefore produces75000. The original QA explicitly expects the transparency percentage in this element, so this is a suspected source contract issue, not a failed local assertion or a demonstrated full-document rendering defect.
+- Preservation: Keep the subtraction, rounding and original alpha value. Actual item/exporter/serializer tests assert75000; full fixture import/export and external rendering remain pending.
+
+### WRITER619: DOCX complex-color transformation export multiplies stored values by1000
+
+- Source: sw/source/filter/ww8/docxattributeoutput.cxx, lclAddThemeValuesToCustomAttributes and WriteCollectedRunProperties; include/oox/drawingml/drawingmltypes.hxx, PER_PERCENT=1000.
+- Observation: The theme attribute helper interprets LumMod7500 as75percent, producing themeShade=bf. The accompanying solid-fill loop multiplies the same stored value by1000, producing w14:lumMod=7500000 rather than75000. This is a source-level unit inconsistency reproduced through the actual local value and serializer owners; full upstream fixture rendering has not been reproduced.
+- Preservation: Keep the original multiplication, signed32 result and transform order. Tests retain both themeShade=bf and lumMod=7500000 without silently rescaling the source behavior.
+
+### WRITER620: Iroha numbering export swaps fullwidth and halfwidth compared with import
+
+- Source: sw/source/filter/ww8/docxattributeoutput.cxx, lcl_ConvertNumberingType; sw/source/writerfilter/dmapper/ConversionHelper.cxx, ConvertNumberingType; offapi/com/sun/star/style/NumberingType.idl.
+- Observation: Import maps iroha to IROHA_HALFWIDTH_JA24 and irohaFullWidth to IROHA_FULLWIDTH_JA23. Export maps23 to iroha and24 to irohaFullWidth. Thus the two width variants exchange across these source conversion owners. Actual local conversion-owner tests reproduce this mismatch; complete source DOCX fixture load/save and rendering are not claimed reproduced.
+- Preservation: Retain both source mappings without swapping the export values to make the roundtrip symmetric. Page-numbering XML and direct conversion tests pin the original spellings.
+
+### WRITER621: Invalid escapement proportions can still feed explicit DOCX font sizing
+
+- Source: sw/source/filter/ww8/docxattributeoutput.cxx, CharEscapement; editeng/source/items/textitem.cxx, SvxEscapementItem value/PutValue contracts.
+- Observation: The branch detecting proportional heights outside1..100 only selects a preset vertical alignment when the offset matches a standard super/subscript value. A custom offset with proportion0 therefore reaches explicit position/size output: height240, offset17 and proportion0 produce position4 and size0. The raw item constructor/setter admits this value, while the UNO MID_ESC_HEIGHT setter rejects it. This is a malformed/raw-item contract hazard reproduced with actual value/export owners, not evidence of a normal UNO property operation creating invalid formatting.
+- Preservation: Keep the original branch, raw value admission, UNO rejection and explicit zero result. Do not clamp proportions or replace the source offset. Tests retain the zero font-size optional value and source rounding.
+
+
+### WRITER622: ValueRangeSet adjacency handling can invert the range order
+
+- Source: oox/source/helper/containerhelper.cxx, ValueRangeComp and ValueRangeSet::insert; include/oox/helper/containerhelper.hxx, ValueRange::intersects.
+- Observation: Inserting[4,5] after[1,3] finds the end iterator and then moves it to the adjacent previous range. Since intersects excludes adjacency, insertion takes the non-merge branch at that previous position, yielding[[4,5],[1,3]]. Reverse insertion leaves two separate ranges. This contradicts the class's ordered/consecutive-merge description and can invalidate a later lower_bound precondition. Twelve witnesses from the unchanged native declarations/function compiled with UBSan confirm the exact value results; no later search on the broken ordering, signed overflow or full document import failure is claimed.
+- Preservation: Retain the original lower-bound predicate, previous-adjacency step and intersection/insert order. Do not sort, expand intersection or silently repair adjacency. The local range-set tests match all twelve compiled native witnesses.
+
+### WRITER623: Text media types can override an explicit no-compression setting
+
+- Source: `package/source/zippackage/ZipPackageStream.cxx`, `ZipPackageStream::setPropertyValue`.
+- Observation: Setting `Compressed=false` records an explicit outside setting, but a later nonempty `MediaType` containing `text` or equal to `application/vnd.sun.star.oleobject` unconditionally sets compression back to true. Only the non-text fallback checks `m_bCompressedIsSetFromOutside`. This makes an explicit compression request depend on later metadata assignment order; no invalid package output or failed normal document save is established.
+- Preservation: Keep the exact branch order and flag updates. Actual package/stream property tests retain false-then-text enabling compression and true-then-image retaining compression. Whole native package commit is not claimed executed by those state tests.
+
+### WRITER624: A trailing-slash folder lookup can cache its parent under the folder path
+
+- Source: `package/source/zippackage/ZipPackage.cxx`, `ZipPackage::getByHierarchicalName`, trailing `bFolder` branch (`m_aRecent[sDirName] = pPrevious`).
+- Observation: A fresh tree containing `a.xml` and `dir/a.xml` returns the actual `dir` folder for `dir/`, but records its parent under `dir`. A subsequent `dir/a.xml` cache hit can select the outer `a.xml`. This witness uses ordinary public factory, name, parent and hierarchy operations. No claim is made about a failed complete document import, undefined null-cache domains or native unordered-map layout.
+- Preservation: Retain the original parent pointer and lookup/cache-validation order. The actual package-member tests pin the outer selection without injecting private cache state or replacing folder owners.
+
+### WRITER625: Disabling compression can leave a loaded DEFLATED member compressed
+
+- Source: `package/source/zippackage/ZipPackageStream.cxx`, `ZipPackageStream::saveChild`, raw-stream seek prepass, changed-format branch and JPEG special case.
+- Observation: The loaded member's raw input is nonseekable. With `Compressed=false`, the prepass does not call `ImplSetStoredData`, raw-copy selection fails for an originally DEFLATED entry, and the ordinary branch does not change its method to STORED. For non-JPEG media the entry is consequently deflated again, despite the explicit false property. A real member of the unchanged `hello.docx` fixture reproduces the DEFLATED output method. No complete native document save or universal byte-identical compression outcome is claimed.
+- Preservation: Retain the original seekability checks, method assignment and JPEG-only correction. Tests independently inflate the actual emitted output and retain method8 for this witness. Do not insert an unconditional STORED assignment.
+
+### WRITER626: A new plain stream can retain Size minus one after a successful write
+
+- Source: `package/source/zippackage/ZipPackageStream.cxx`, `saveChild`, `successfullyWritten` and `getPropertyValue`.
+- Observation: Before ordinary saving, `m_nOwnStreamOrigSize` is assigned the current entry size. For a new DATA-mode stream this is minus one. Writing corrects the output entry size and copies it back, but `successfullyWritten` does not update that separate property snapshot. Thus the stream's `Size` property remains minus one while its ZIP record and central-directory size contain the actual length. This is a state/property witness; no full package reload failure is established.
+- Preservation: Keep the snapshot and success update order unchanged. Actual empty and nonempty stream save tests assert the minus-one property alongside correct entry sizes and independently checked ZIP bytes.
+
+### WRITER627: A no-worker pool task can deadlock when it submits work to the same pool
+
+- Source: `comphelper/source/misc/threadpool.cxx`, `ThreadPool::waitUntilDone`, `shutdownLocked` and `pushTask`.
+- Observation: In the explicit no-worker branch, `waitUntilDone` retains `maMutex` while calling `ThreadTask::exec`; `shutdownLocked` also executes tasks under the caller's pool lock. A task that calls `pushTask` on that same pool attempts to acquire the same nonrecursive mutex. The ordinary worker implementation instead unlocks the pool mutex before executing work. This finding follows the original lock scopes; a hanging reentrant task is deliberately not executed by the local tests, and no normal document-operation deadlock is claimed.
+- Preservation: Retain the source lock order and no-worker execution scopes. Do not release the pool lock around the callback to repair the suspected issue. The explicit no-worker profile remains distinct from the still-unported shared optimal worker backend.
+
+### WRITER628: InputStream presence can report success without a usable stream
+
+- Source: `unotools/source/misc/mediadescriptor.cxx`, `impl_addInputStream`, initial map-presence branch.
+- Observation: The function returns true whenever the InputStream key exists, before checking its type or nonempty interface value. A VOID item or integer therefore reports success although later XInputStream extraction yields no usable input. Public map/function tests reproduce these two value profiles; no normal document import failure is claimed.
+- Preservation: Keep presence-only success and leave the descriptor untouched. Do not validate, replace or synthesize a stream in this branch. The actual-input test also retains the same interface and cursor.
+
+### WRITER629: A failed storage catalog read can suppress later validation
+
+- Source: `package/source/xstor/xstorage.cxx`, `OStorage_Impl::ReadContents`, assignment to `m_bListCreated` before the enumeration loop.
+- Observation: In OFOPXML mode a genuine package stream named `_rels` triggers the original IOException because relationships require a folder. The list-created flag is already true. A second ReadContents/HasChildren call returns the cached empty catalog without repeating that validation. Actual ZipPackage/ZipPackageFolder owners reproduce this internal storage witness; complete native document import failure is not claimed.
+- Preservation: Keep the original flag timing and exception. Do not reset or defer the list-created flag on failure. The same timing also retains previously enumerated rows on later errors.
+
+### WRITER630: A failed package transfer can report an empty backup URL
+
+- Source: `package/source/zippackage/ZipPackage.cxx`, `writeTempFile` and `DisconnectFromTargetAndThrowException_Impl`, and `include/unotools/tempfile.hxx`, `TempFileFastService_Base`.
+- Observation: The temporary save uses TempFileFastService, which lacks XPropertySet. On a failed final transfer the throwing query for Uri and RemoveFile is caught, so the subsequent UseBackupException can have an empty TemporaryFileURL even though the package has switched to the temporary stream.
+- Preservation: Keep the actual fast temporary stream and original property-query/error order. No backup URL is synthesized.
+
+### WRITER631: Renaming from a catalog row with tombstones can retain the old name
+
+- Source: `package/source/xstor/xstorage.cxx`, `OStorage::renameElement` and its by-value `rVec`.
+- Observation: With a removed destination followed by a staged rename into that destination, the destination row contains both the removed record and the renamed element. Renaming that live element again erases it from a copy of the row. Because the copy still contains the removed record, the old map entry remains and both names reach the same live element.
+- Preservation: Keep the original catalog decisions and test the aliased lookup before commit or revert. Native duplicate-pointer destruction is undefined. JavaScript teardown releases the actual element once.
+
+### WRITER632: A lazy catalog read can clear staged relationships on a truncated storage
+
+- Source: `package/source/xstor/xstorage.cxx`, `OStorage::setPropertyValue`, `OStorage_Impl::ReadContents` and `OStorage_Impl::Commit`.
+- Observation: Setting the `RelationsInfo` property before first opening a truncated storage's catalog succeeds and marks it modified. Commit reads the catalog and clears the staged relationship information. Setting the same property after the catalog has been read persists the relationship part.
+- Preservation: Keep the setter independent of catalog loading and retain the first-read TRUNCATE reset. The storage test verifies both orders against actual ZIP output.
+
+### WRITER633: Renaming a closed OFOPXML member can reopen it by the removed name
+
+- Source: `package/source/xstor/xstorage.cxx`, unchanged-member branch of `OStorage_Impl::Commit` and `OStorage_Impl::OpenSubStream`.
+- Observation: For a root or already committed folder, the unchanged-member branch removes the old package name and inserts the new one. It then opens the stream for relationship synchronization if no stream owner exists. The lookup still uses the old original name and raises `NoSuchElementException` before the catalog name is updated.
+- Preservation: Keep the source lookup and mutation order. The test closes the actual stream owner through Revert and verifies the exception and the intermediate package catalog.
+
+### WRITER634: A disjoint vertical merge continuation can use an earlier group
+
+- Source: `sw/source/core/unocore/unotext.cxx`, `lcl_ApplyCellProperties` and `lcl_MergeCells`.
+- Observation: A pending group stays open across an intervening cell without a VerticalMerge property. A new restart with a similar left edge closes the group. In a document with a restart, an ordinary intervening cell, and a later continuation at the same left edge, the latter can still be grouped with the restart.
+- Preservation: Retain the original group lifetime, two-unit edge tolerance and signed span assignment. The source ordering is useful for faithfully reading the represented malformed-input case.
+
+### WRITER635: Negative line spacing changes meaning when the same rule is explicit
+
+- Source: `sw/source/writerfilter/dmapper/DomainMapper.cxx`, `LN_CT_PPrBase_spacing`, and `DomainMapper_Impl::SetLineSpacing`.
+- Observation: With a negative line height, an explicit exact rule changes the effective mode to minimum. The same exact rule inherited from the paragraph style keeps the effective mode fixed. The declarations use the same height and describe the same exact line rule.
+- Preservation: Keep the source negative-height conversion and the explicit-versus-inherited flag. The existing `tdf125469_singleSpacing.docx` fixture exercises both paths.
+
+### WRITER636: Consecutive DOCX list overrides can repeat a level
+
+- Source: `sw/source/filter/ww8/docxattributeoutput.cxx`, `DocxAttributeOutput::OverrideNumberingDefinition`.
+- Observation: The cursor advances while emitting gap fillers. Emitting the requested override leaves that cursor at the current level. When a higher level also needs an override, filling the gap can write the previous level a second time using the ordinary level start.
+- Preservation: Keep the cursor updates and both output paths in their original order.
+
+### WRITER637: The terminal DOCX section margin assertion is disabled upstream
+
+- Source: `sw/qa/extras/ooxmlexport/ooxmlexport13.cxx`, `testendingSectionProps` and `testTdf124637_sectionMargin`.
+- Observation: The terminal-section regression keeps a commented assertion for `SectionLeftMargin` of 2540 mm100 and marks it as a regression associated with tdf124637. The separate tdf124637 fixture expects a zero left margin on its own text section. The disabled assertion leaves the terminal fixture's margin unverified.
+- Preservation: Retain native section margin handling. Replaying the disabled assertion requires the content-section model and terminal header/footer ownership.
+
+### WRITER638: DOCX hyperlink output omits a screen tip when a target frame is set
+
+- Source: `sw/source/filter/ww8/docxattributeoutput.cxx`, `DocxAttributeOutput::StartURL`.
+- Observation: The hyperlink element can contain both a target frame and a screen tip. The exporter writes the target frame first and writes the screen tip only when the frame is empty.
+- Preservation: Keep the original attribute precedence. The fragment-link test opens the actual exported XML and verifies that the target frame survives.
+
+### WRITER639: Paragraph-mark formatting participates in Word list labels
+
+- Source is [checkApplyParagraphMarkFormatToNumbering](../../vendor/libreoffice-reference/sw/source/core/text/txtfld.cxx).
+- Observation. The source notes an apparent discrepancy between the OOXML purpose of `w:pPr/w:rPr` and Word rendering. Word also applies these properties to the numbering label. LibreOffice gives list-level character formatting precedence and excludes the marker underline and escapement.
+- Preservation. Keep the native setting and the represented precedence. The original fixtures keep a red label or a green normal-weight label next to bold text after an ODT round trip. [Marker format regression tests](../../apps/office/src/sw/source/filter/ww8/docx-paragraph-marker.test.ts).
+
+
+### WRITER-640 — Relationship XML diagnostics repeat the storage directory
+
+Status: suspicious diagnostic identifier. Source expressions verified and the
+result reproduced through the registered SAX service.
+
+The upstream root storage reader passes `_rels/.rels` to the package helper.
+The stream storage reader likewise passes `_rels/*.rels`. The helper prepends
+`_rels/` before setting `InputSource.sSystemId`. A parse error in root
+relationship metadata therefore reports `_rels/_rels/.rels` while the
+actual ZIP entry is `_rels/.rels`. The string labels the parser input and the
+ZIP lookup uses its own path. The duplication may be intended as an internal
+diagnostic convention.
+
+The port preserves both diagnostic identifiers. A registered-service test
+asserts the root identifier on the resulting `SAXParseException`.
+
+- [Storage root caller](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/package/source/xstor/xstorage.cxx#L500)
+- [Per-stream caller](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/package/source/xstor/owriteablestream.cxx#L914)
+- [Package helper](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/comphelper/source/xml/ofopxmlhelper.cxx#L81)
+- [Registered parser regression](../../apps/office/src/sax/source/expatwrap/sax_expat.test.ts)
+
+
+### WRITER-641 — Malformed original relationship streams have different retry rules
+
+Status: suspicious distinction between storage and part relationships. Source
+behavior reproduced using malformed relationship parts in a real OOXML package.
+
+`OStorage_Impl::ReadRelInfoIfNecessary` leaves `RELINFO_NO_INIT` when parsing
+the original root relationship stream throws a UNO exception. Each later
+getter opens and parses the original stream again. `OWriteStream_Impl` marks
+the original part's stream `RELINFO_BROKEN` and retains that state. A malformed
+replacement root relationship stream instead becomes `RELINFO_CHANGED_BROKEN`,
+and its commit fails. All three getters report `Wrong relinfo stream!`.
+The part stream can be nonseekable, which may account for its different retry
+policy.
+
+The port retains the original transition and failure at each call site. Tests
+read the same malformed root and part twice, exercise failed commit of a staged
+malformed replacement, and verify that reverting a change permits reading again.
+
+- [Storage owner](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/package/source/xstor/xstorage.cxx#L487)
+- [Part stream owner](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/package/source/xstor/owriteablestream.cxx#L903)
+- [Native storage regression](../../apps/office/src/package/source/xstor/xstorage.relations.test.ts)
+
+
+### WRITER-642 — Custom document property stream getter prepends empty references
+
+Status: source observation. The importer stream getter is pending in the port.
+
+`DocumentPropertiesImport::getCustomPropertiesStreams` constructs a vector of
+size `N` before appending all `N` stream references. A package with one custom
+properties part therefore produces two entries, with an empty UNO reference
+first. The separate `importProperties` method iterates the original streams
+directly. Caller impact from the getter remains unverified.
+
+Preserve the leading empty references when porting the getter.
+
+- [Original stream getter](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/oox/source/docprop/ooxmldocpropimport.cxx#L205)
+- [Original import loop](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/oox/source/docprop/ooxmldocpropimport.cxx#L177)
+
+
+### WRITER-643 — Storage reports children after all visible entries are removed
+
+Status: source behavior reproduced using persisted entries staged for removal.
+
+`OStorage_Impl::HasChildren` checks whether the catalog map is empty.
+`OStorage_Impl::GetElementNames` skips removed entries. Removing every
+persisted element can therefore leave `OStorage::hasElements()` returning
+true while `getElementNames()` returns an empty sequence. The catalog keeps
+removed entries to apply those mutations during commit.
+
+The port retains this distinction and tests both internal results before commit.
+
+- [Original presence check](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/package/source/xstor/xstorage.cxx#L453)
+- [Original name enumeration](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/package/source/xstor/xstorage.cxx#L1457)
+
+
+### WRITER-644 — Seekable sibling readers share the cached part's position
+
+Status: source behavior reproduced over two attached seekable readers.
+
+`OWriteStream_Impl::GetTempFileAsInputStream` returns the same memory cache's
+input facet when present, and `OInputSeekStream` seeks that facet directly.
+Two seekable wrappers on one small part therefore share a position. A seek
+through one wrapper changes the other's next-read offset. The port retains
+the shared input identity and tests both directions.
+
+- [Original cache input selection](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/package/source/xstor/owriteablestream.cxx#L584)
+- [Original seekable input wrapper](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/package/source/xstor/oseekinstream.cxx)
+
+
+### WRITER-645 — StorageFactory distinguishes empty bytes from an empty ZIP
+
+Status: source admission difference reproduced through the registered factory.
+
+`CheckPackageSignature_Impl` accepts a zero-length stream for storage creation.
+A nonempty stream must begin with a local-file header. It therefore refuses an
+otherwise conventional empty ZIP containing only its end-of-central-directory
+record. This check runs before ZIP directory parsing, independently of that
+reader's separate empty-archive restriction.
+
+The port preserves the storage creation admission and local-header test.
+
+- [Original factory signature check](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/package/source/xstor/xfactory.cxx#L43)
+- [Factory regression](../../apps/office/src/package/source/xstor/xfactory.test.ts)
+
+### WRITER-646 — Private stream transfer can report success after a write fails
+
+Status: source result reproduced through the original medium descriptor and a
+caller-owned output stream.
+
+`SfxMedium::Transfer_Impl` catches and discards UNO exceptions while copying
+the temporary package to an `OutputStream` at a `private:stream` URL.
+`SfxMedium::Commit` then returns based on the retained medium error. If the
+copy fails with no previously reported error, `Commit` can return true even
+though the caller did not receive the complete package. A missing output
+stream takes a distinct branch that sets the general I/O error.
+
+- [Original transfer branch](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sfx2/source/doc/docfile.cxx#L2476-L2528)
+- [Medium regression](../../apps/office/src/sfx2/source/doc/docfile.storage.test.ts)
+
+### WRITER-647 — Lazy truncation can discard an already accepted root relationship stream
+
+Status: source ordering preserved. A filter export regression verifies the
+catalog is initialized before accepting the root relationship stream.
+
+A direct `RelationsInfoStream` assignment to a root opened with `TRUNCATE`
+sets the pending relationship stream. The initial `ReadContents` call
+unconditionally clears that value and changes the relationship status. If the
+caller assigns the property first, a later child open or commit can erase it.
+The export binding forces catalog initialization before assigning the property,
+as the relationship lookup in the source filter does before inserting a row.
+
+- [Original storage initialization](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/package/source/xstor/xstorage.cxx#L591-L600)
+- [Original root property setter](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/package/source/xstor/xstorage.cxx#L4361-L4382)
+- [Filter regression](../../apps/office/src/oox/source/core/xmlfilterbase.test.ts)
+
+### WRITER-648 — Writable stream RelationsInfo replaces rows without marking them changed
+
+Status: source property assignment preserved.
+
+`OWriteStream::setPropertyValue("RelationsInfo")` extracts into the pending
+relationship rows, but this branch does not change the relationship status.
+The commit reads that status to determine whether to produce a relationship
+member, so setting the property alone can leave the member unchanged. The
+seekable `RelationsInfoStream` property takes a distinct path that sets
+`RELINFO_CHANGED_STREAM`. The export binding uses that property.
+
+- [Original writable stream property setter](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/package/source/xstor/owriteablestream.cxx#L2715-L2737)
+- [Original per-part relationship commit](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/package/source/xstor/owriteablestream.cxx#L1419-L1499)
+
+### WRITER-649 — Raw STORED member reads bypass per-stream CRC
+
+Status: original native read mode retained. Browser admission regression
+checks payload CRC before passing the immutable package to native storage.
+
+`ZipFile::getInputStream` uses the raw stream mode for a STORED member.
+`XUnbufferedStream::readBytes` tests the CRC for decoded data and wrapped
+raw streams, so an ordinary raw STORED member can deliver bytes with a
+bad CRC. The browser importer keeps CRC verification at its package
+admission boundary before using the native ZIP reader.
+
+- [Original raw mode selection](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/package/source/zipapi/ZipFile.cxx#L833)
+- [Original CRC condition](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/package/source/zipapi/XUnbufferedStream.cxx#L295-L309)
+- [Browser admission regression](../../apps/office/src/package/source/zippackage/native-archive-admission.test.ts)
+
+### WRITER-650 — Storage relationship mutations leave the modification flag unchanged
+
+Status: source staging behavior retained.
+
+The `XRelationshipAccess` mutations on `OStorage` replace the relationship
+value and set its relationship status to changed. These methods do not set
+the storage's separate modification flag. A relationship-only change after a
+successful transaction can therefore be skipped by the early return in
+`OStorage_Impl::Commit` when no other operation dirties the storage. The
+`XPropertySet` relationship property has a distinct modification path.
+
+- [Original early return](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/package/source/xstor/xstorage.cxx#L938-L943)
+- [Original relationship mutation](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/package/source/xstor/xstorage.cxx#L4740-L4785)
+
+### WRITER-651 — ZipStorage discards transaction failures
+
+Status: original default retained. The browser export requests error propagation.
+
+`ZipStorage::implCommit` catches `uno::Exception` and emits a diagnostic without
+returning or throwing the error. A failed child transaction can therefore be
+followed by a root commit. The browser export requests propagation through the
+same child-first traversal so its Save or Download command receives the failure.
+
+- [Original commit](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/oox/source/helper/zipstorage.cxx#L189-L200)
+- [Disposed child regression](../../apps/office/src/oox/source/helper/native-storage.test.ts)
+
+### WRITER-652 — Block DEFLATE treats `available()` as end of input
+
+Status: source read and finish conditions retained.
+
+`ThreadedDeflater::deflateWrite` stops reading and marks its last block when
+`XInputStream::available()` reaches zero. The UNO interface reports the
+amount readable without blocking, so a nonseekable stream can temporarily
+return zero before EOF. Seekable package-part inputs report their remaining
+bytes and can use the block writer without that ambiguity.
+
+- [Original block loop](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/package/source/zipapi/ThreadedDeflater.cxx#L89-L113)
+- [Original `available()` contract](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/udkapi/com/sun/star/io/XInputStream.idl#L108-L116)
+
+### WRITER-653 — Contextual alternates lose their explicit value on DOCX export
+
+The Word 2010 `CT_OnOff` factory delivers `cntxtAlts` as a scalar SPRM.
+The domain mapper passes it through the nested-property handler, which
+pushes another `cntxtAlts` and returns when the scalar has no properties.
+Finalizing the native grab bag adds that empty child to its parent. The
+exporter consequently writes `<w14:cntxtAlts><w14:cntxtAlts/></w14:cntxtAlts>`
+even for an explicit `w14:val="0"`. Writer preserves the pinned source
+behavior.
+
+- [Original scalar factory](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/writerfilter/ooxml/model.xml#L5288-L5295)
+- [Original mapper fallback](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/writerfilter/dmapper/DomainMapper.cxx#L3758-L3763)
+- [Original nested-property handling](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/writerfilter/dmapper/TextEffectsHandler.cxx#L759-L790)
+- [Original grab bag closure](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/oox/source/helper/grabbagstack.cxx#L34-L43)
+- [Original recursive XML output](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/filter/ww8/docxattributeoutput.cxx#L3638-L3658)
+
+### WRITER-654 — Missing compatibility attributes inherit the preceding row
+
+The Word settings importer allocates three current property slots once.
+Attribute handlers replace only the slots present in the next
+`w:compatSetting`. The modifier handler copies the current sequence into the
+document data without clearing it. A following row with only `w:val="14"`
+therefore reuses the previous name and URI. Writer preserves this behavior
+when reading the same input.
+
+- [Original initial slot allocation](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/writerfilter/dmapper/SettingsTable.cxx#L110-L119)
+- [Original attribute assignment](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/writerfilter/dmapper/SettingsTable.cxx#L207-L221)
+- [Original row handling](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/writerfilter/dmapper/SettingsTable.cxx#L364-L374)
+
+### WRITER-655 — Compatibility export normalizes same-name rows from other URIs
+
+The compatibility mode reader considers only rows whose name is
+`compatibilityMode` and whose URI is `http://schemas.microsoft.com/office/word`.
+Once that mode is selected, the exporter replaces the value of every row
+named `compatibilityMode`, including rows with a different URI. The
+serializer retains the foreign URI with the overwritten value.
+
+- [Original mode selection](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/filter/ww8/docxexport.cxx#L2363-L2394)
+- [Original row output](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/filter/ww8/docxexport.cxx#L1631-L1657)
+
+### WRITER-656 — A rejected scalar text-default value still completes the setter
+
+`SwXTextDefaults::setPropertyValue` clones the existing item, calls
+`PutValue` and passes the clone to `SwDoc::SetDefault`. The return value
+from `PutValue` is ignored. For example, setting `TabStopDistance` to
+zero leaves the prior distance in place and returns normally. Writer
+retains the same call sequence for the tab-distance property.
+
+- [Original text defaults setter](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/core/unocore/SwXTextDefaults.cxx#L113-L120)
+
+### WRITER-657 — Equal custom tab entries can produce an empty DOCX tab list
+
+The exporter compares entire tab items and then compares their individual
+stops before writing the difference. The entire-item comparison includes
+the default-distance field, but the stop comparison does not. A direct
+tab item and its parent style can have identical custom positions and
+different default distances. The exporter opens and closes `w:tabs`
+without writing any children in that case. Writer keeps that behavior.
+
+- [Original item comparison](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/editeng/source/items/paraitem.cxx#L1185-L1200)
+- [Original tab export](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/filter/ww8/docxattributeoutput.cxx#L9520-L9595)
+
+### WRITER-658 — Import can turn on a header or footer exported as hidden
+
+The ODF exporter writes `style:display="false"` when an inactive header or
+footer still has text. The master-page importer ignores that attribute
+and turns the header or footer on when it encounters content. An empty
+first-page variant can also turn off an already imported ordinary
+header or footer. Writer retains both source decisions.
+
+- [Original hidden-header output](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/xmloff/source/text/XMLTextMasterPageExport.cxx#L147-L155)
+- [Original import and empty-variant handling](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/xmloff/source/text/XMLTextHeaderFooterContext.cxx#L117-L186)
+- [Writer regression](../../apps/office/src/sw/source/filter/xml/odt-page-stories.test.ts)

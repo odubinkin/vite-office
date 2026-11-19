@@ -18,15 +18,20 @@
       "queryInterface",
       "getAllRelationships",
       "getPropertyValue",
-      "InternalDispose"
+      "InternalDispose",
+      "OInputCompStream::OInputCompStream",
+      "OInputCompStream::InternalDispose",
+      "OInputCompStream::dispose"
     ],
     "preservedResponsibilities": [
       "Original OInputCompStream standalone constructor copies actual PropertyValue Sequence storage and owns a real input/ByteReader reference. All declared input/stream/component/property/readonly-relationship methods and custom query order use genuine WeakImplHelper/OWeakObject, Any/Sequence/StringPair/OUString and listener-container owners. Original empty output/property-info, first ordered match, missing/wrong RelationsInfo IOException, IsEncrypted alias, hidden RelationsInfo property, known-property veto, TODO property-listener no-ops, public close failure versus internal UNO-exception swallowing and destructor self-retention are preserved. Custom query bypasses XTypeProvider as source (CALC-495/WRITER426); OFOPXML alone exposes relationship identity. SDK XStream and XExtendedStorageStream retain original implicit root/two required bases; optional interfaces are not unconditional bases. StorageFormats values remain1/2/3. The parent-backed OWriteStream_Impl constructor, mutex scopes/cross-thread guarantees, physical casts/ABI/allocation failure and complete xstor hierarchy remain unported or unverified. ZipStorage READ snapshots now use this genuine component; parent-bound lifetime/disposal and complete hierarchical storage still remains unported. Full DOCX/XLSX model/filter/Worker/UI acceptance remains incomplete. Existing file/autosave/recovery policy is unchanged.",
       "Original standalone OInputSeekStream and ImplInheritanceHelper now provide actual seekable readonly components to Writer SEEKABLEREAD. Additional interface/type-provider query precedes qualified base fallback; type lists retain duplicates and per-specialization class data. Seek operations preserve disposed-before-missing-interface exceptions and native underlying bounds. Flat asynchronous ZIP snapshots bind only the consumed readonly hierarchical open signature; full XStorage/XHierarchicalStorageAccess, parent-bound OWriteStream_Impl/OHierarchyHolder graph, mutex/thread/physical ABI guarantees and complete DOCX/XLSX model/filter/Worker/UI acceptance remain unfinished. Existing browser open/save/autosave/recovery policy is unchanged.",
-      "Original OStorageHelper.CopyInputToOutput now preserves32000-byte raw ByteReader/ByteWriter and UNO Sequence transfer paths, short-read completion, final zero-byte writes, caller stream lifetime and propagated exceptions. Explicit non-UNO base symbols on actual implementing classes lower C++ RTTI crosscasts without method-name inference, UNO queries, implementation registries or fake providers; scoped primitive uninitialized lvalue cells lower the raw stack buffer. Flat seekable ZIP snapshots use this actual transfer into UNOMemoryStream. Complete published transaction interfaces retain the listener base and commited spelling. CALC-499/WRITER430 and CALC-500/WRITER431 document preserved short-read and spelling contracts. Native RTTI/vtable/stack/ABI/concurrency and full OWriteStream/parent storage/service/transaction/model/filter/Worker/UI acceptance remain unverified or unfinished. Browser persistence policy is unchanged."
+      "Original OStorageHelper.CopyInputToOutput now preserves32000-byte raw ByteReader/ByteWriter and UNO Sequence transfer paths, short-read completion, final zero-byte writes, caller stream lifetime and propagated exceptions. Explicit non-UNO base symbols on actual implementing classes lower C++ RTTI crosscasts without method-name inference, UNO queries, implementation registries or fake providers; scoped primitive uninitialized lvalue cells lower the raw stack buffer. Flat seekable ZIP snapshots use this actual transfer into UNOMemoryStream. Complete published transaction interfaces retain the listener base and commited spelling. CALC-499/WRITER430 and CALC-500/WRITER431 document preserved short-read and spelling contracts. Native RTTI/vtable/stack/ABI/concurrency and full OWriteStream/parent storage/service/transaction/model/filter/Worker/UI acceptance remain unverified or unfinished. Browser persistence policy is unchanged.",
+      "Original ByteGrabber/ByteChucker/MemoryByteGrabber ZIP binary IO now consumes actual UNO references, reusable native sequences/fixed8byte storage, explicit ByteReader RTTI and source integer/short-read/seek/borrow rules. Existing ByteReader/ByteWriter and real implementers accept both actual SAL Int8Array/Uint8Array pointers and CPPU byte cells, removing the earlier cells-only restriction without a replacement stream/provider. Pointer arithmetic uses actual backing allocation/byteOffset, source lifecycle remains GC-managed. Unchanged pinned Strict/Transitional DOCX/XLSX local headers prove archive byte IO only. Memory UInt8/UInt16 signed results and ByteChucker unguarded seek assumption retained. Native full directory/inflate/XStorage/filter/model/export/UI and actual non-ByteReader source fallback remain unqualified or unfinished; no source masks/private patches/fake success stream.",
+      "The parent-backed constructor borrows the real write-stream implementation, shares its acquired native mutex and detaches on successful public disposal. The parent invalidates active wrappers through InternalDispose. Standalone reader behavior and browser closure are preserved."
     ],
     "omittedResponsibilities": [
-      "Parent-bound constructor, mutex/native threading and physical ABI/casts/allocation guarantees, complete storage/relationship services and DOCX/XLSX application acceptance remain unverified or unported."
+      "Complete public OStorage and OWriteStream components, standalone native mutex parity and full DOCX/XLSX acceptance remain open."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -40,6 +45,10 @@
         },
         {
           "path": "apps/office/src/package/source/xstor/ocompinstream.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.relations.test.ts",
           "marker": "@fileoverview"
         }
       ],
@@ -63,6 +72,18 @@
         {
           "path": "package/source/xstor/ocompinstream.cxx",
           "marker": "InternalDispose"
+        },
+        {
+          "path": "package/source/xstor/ocompinstream.cxx",
+          "marker": "OInputCompStream::OInputCompStream"
+        },
+        {
+          "path": "package/source/xstor/ocompinstream.cxx",
+          "marker": "OInputCompStream::InternalDispose"
+        },
+        {
+          "path": "package/source/xstor/ocompinstream.cxx",
+          "marker": "OInputCompStream::dispose"
         }
       ]
     }

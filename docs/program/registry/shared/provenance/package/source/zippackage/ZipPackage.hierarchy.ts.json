@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/zippackage/ZipPackage.hierarchy.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/zippackage/ZipPackage.cxx",
+    "localSymbols": [
+      "ZipPackageHierarchy",
+      "getByHierarchicalName",
+      "hasByHierarchicalName"
+    ],
+    "upstreamSymbols": [
+      "ZipPackage::getByHierarchicalName",
+      "ZipPackage::hasByHierarchicalName"
+    ],
+    "preservedResponsibilities": [
+      "Moves existing native hierarchical lookup and the shared recent-folder cache together under the file-size limit, preserving borrowed root ownership, exact lookup order, exception translation and trailing-folder cache behavior."
+    ],
+    "omittedResponsibilities": [
+      "Native unordered-map iteration and physical pointer layout remain unqualified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The package owns the root folder and the JavaScript cache borrows its folder objects."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.hierarchy.ts",
+          "marker": "class ZipPackageHierarchy"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/zippackage/ZipPackage.cxx",
+          "marker": "ZipPackage::getByHierarchicalName"
+        },
+        {
+          "path": "package/source/zippackage/ZipPackage.cxx",
+          "marker": "ZipPackage::hasByHierarchicalName"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/package/source/zippackage/ZipPackage.hierarchy.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The repository file-size limit requires splitting the original ZipPackage implementation. The hierarchy module keeps the original lookup and cache operations together, with the root folder's lifetime managed by ZipPackage."
+    }
+  }
+}

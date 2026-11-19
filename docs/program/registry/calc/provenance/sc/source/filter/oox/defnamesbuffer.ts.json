@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/oox/defnamesbuffer.ts",
+    "localSymbols": [
+      "DefinedNamesBuffer"
+    ],
+    "upstreamPath": "sc/source/filter/oox/defnamesbuffer.cxx",
+    "upstreamSymbols": [
+      "DefinedNamesBuffer::finalizeImport",
+      "DefinedName::importDefinedName"
+    ],
+    "preservedResponsibilities": [
+      "XLSX reads workbook and sheet scope, hidden and recognized built-in flags, and creates native name objects before worksheet formulas.",
+      "Recognized XLSX built-ins use native Calc names. Print ranges and repeated title positions are applied to the owning sheet."
+    ],
+    "omittedResponsibilities": [
+      "External names, macro execution and application of filter databases remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/defnamesbuffer.ts",
+          "marker": "DefinedNamesBuffer"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xename.test.ts",
+          "marker": "preserves a forward name"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/print-ranges.test.ts",
+          "marker": "imports the Calc name and print area"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/defnamesbuffer.cxx",
+          "marker": "DefinedNamesBuffer::finalizeImport"
+        }
+      ]
+    }
+  }
+}

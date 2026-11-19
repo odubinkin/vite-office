@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/embed/UseBackupException.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/embed/UseBackupException.idl",
+    "localSymbols": [
+      "UseBackupException",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "UseBackupException",
+      "TemporaryFileURL"
+    ],
+    "preservedResponsibilities": [
+      "Normal generated exception type/base/member/value semantics reuse actual CPPU/RTL/typelib and JavaScript compiler exception ABI."
+    ],
+    "omittedResponsibilities": [
+      "Physical C++ ABI/allocator/thread/fatal domains and full storage/UI acceptance remain unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/embed/UseBackupException.ts",
+          "marker": "UseBackupException"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.commit-state.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/embed/UseBackupException.idl",
+          "marker": "TemporaryFileURL"
+        }
+      ]
+    }
+  }
+}

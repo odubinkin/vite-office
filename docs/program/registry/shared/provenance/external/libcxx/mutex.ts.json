@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/external/libcxx/mutex.ts",
+    "rationale": "Actual pinned Emscripten4.0.19 SDK libc++ std::mutex constructor/destructor/lock/unlock C ABI binding and consumed single-mutex scoped_lock. C++ implementation is compiled into the existing shared native runtime, no JS mutex/OSL replacement/lock registry or successful fake provider. Cold bootstrap and genuine native object/guard operations execute. JS byte arrays remain GC-managed. No-pthread realm-local profile; native races, system_error/OOM/invalid lifetime and full standard-library ABI remain unqualified.",
+    "responsibilities": [
+      "Actual pinned Emscripten4.0.19 SDK libc++ std::mutex constructor/destructor/lock/unlock C ABI binding and consumed single-mutex scoped_lock. C++ implementation is compiled into the existing shared native runtime, no JS mutex/OSL replacement/lock registry or successful fake provider. Cold bootstrap and genuine native object/guard operations execute. JS byte arrays remain GC-managed. No-pthread realm-local profile; native races, system_error/OOM/invalid lifetime and full standard-library ABI remain unqualified.",
+      "Original selected UNIX SvFileStream constructors/destructor, IO/error/unsigned sentinel, seek/resize/sync, URL/system-path conversion, stat/temporary mode, symlink replacement, readonly retry, internal share table and close/reset order are implemented over actual OSL/MEMFS and native std::mutex with consumed unique_lock. Source F_RDLCK=0, path-vs-URL lookup bypass, original requested mode after readonly retry, silent table denial, ignored copy failure and unsigned cursor advancement remain unchanged. JS owners/buffers stay GC-managed; UNO sequence bytes are marshalled at the native IO boundary, no stream/syscall provider or private-state injection. The canonical include/tools/stream.hxx boundary now exposes actual byte/memory/file owners; native wrappers consume that header. SvStream captures real thread encoding on construction and exposes original encoding/mode accessors. Full TempFile service/storage/package/model/filter/UI, native thread races, pointer ordering/ABI/OOM/invalid spans and downstream tools XPath/XmlWalker owner tests remain incomplete or unqualified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual pinned Emscripten4.0.19 SDK libc++ std::mutex constructor/destructor/lock/unlock C ABI binding and consumed single-mutex scoped_lock. C++ implementation is compiled into the existing shared native runtime, no JS mutex/OSL replacement/lock registry or successful fake provider. Cold bootstrap and genuine native object/guard operations execute. JS byte arrays remain GC-managed. No-pthread realm-local profile; native races, system_error/OOM/invalid lifetime and full standard-library ABI remain unqualified."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/libcxx/mutex.ts",
+          "marker": "ScopedLock"
+        },
+        {
+          "path": "third_party/libxml2-wasm/std-mutex.cxx",
+          "marker": "std::mutex"
+        },
+        {
+          "path": "apps/office/src/external/libcxx/mutex.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/tools/source/stream/strmunx.test.ts",
+          "marker": "@fileoverview"
+        }
+      ]
+    },
+    "localSymbols": [
+      "Mutex",
+      "ScopedLock"
+    ]
+  }
+}

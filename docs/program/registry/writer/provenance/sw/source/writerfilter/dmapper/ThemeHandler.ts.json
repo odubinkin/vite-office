@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/ThemeHandler.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source ownership and consumed native contracts are retained; host references, immutable XML/URI UTF16 fields and asynchronous ZIP transport bind browser execution around actual existing typed Any/OUString/PropertyValue owners."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/ThemeHandler.ts",
+          "marker": "ThemeHandler"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.theme-fonts.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/dmapper/ThemeHandler.cxx",
+          "marker": "ThemeHandler::getFontNameForTheme"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/ThemeHandler.cxx",
+          "marker": "ThemeHandler::getStringForTheme"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/ThemeHandler.cxx",
+          "marker": "fromLCIDToScriptTag"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/writerfilter/dmapper/ThemeHandler.cxx",
+    "localSymbols": [
+      "ThemeHandler",
+      "fromLocaleToScriptTag"
+    ],
+    "upstreamSymbols": [
+      "ThemeHandler::getFontNameForTheme",
+      "ThemeHandler::getStringForTheme",
+      "fromLCIDToScriptTag"
+    ],
+    "preservedResponsibilities": [
+      "Resolves the exact native LCID to script map, original theme tokens and supplemental-before-primary font precedence."
+    ],
+    "omittedResponsibilities": [
+      "The consumed text scope uses the original typography owner. Shape text and unconsumed Word interop fields remain open."
+    ]
+  }
+}

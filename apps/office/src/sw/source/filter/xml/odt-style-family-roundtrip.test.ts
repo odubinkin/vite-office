@@ -1,10 +1,17 @@
 /** @fileoverview Verifies pinned paragraph/text family identity through literal ODT definitions and Writer package cycles. */
 
-import { describe, expect, it } from "vitest";
+import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
+import { SvxPostureItem, SvxWeightItem } from "../../../../editeng/source/items/textitem";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { RES_CHRATR_POSTURE, RES_CHRATR_WEIGHT } from "../../../inc/hintids";
+import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
+import { SwTextCharFormat } from "../../core/txtnode/txtatr2";
+import { assert, describe, expect, it } from "vitest";
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { DocumentArchiveWriter } from "../../../../package/source/zippackage/document-archive";
 import { createWriterDocument } from "../../core/doc/doc";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
+import { importWriterXml } from "./xmlimp";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 
@@ -17,6 +24,7 @@ const commonDefinitions = [
   '<style:style style:name="Shared" style:family="text"><style:text-properties fo:font-style="italic"/></style:style>',
   '<style:style style:name="Standard" style:family="text"><style:text-properties fo:font-style="italic"/></style:style>',
   '<style:style style:name="Heading_20_1" style:family="text"><style:text-properties style:text-underline-style="solid"/></style:style>',
+  '<style:style style:name="Unitalic" style:family="text"><style:text-properties fo:font-style="normal"/></style:style>',
   '<style:style style:name="OnlyParagraph" style:family="paragraph"><style:text-properties fo:font-weight="bold"/></style:style>',
 ];
 const automaticDefinitions = [
@@ -135,6 +143,19 @@ describe("Writer ODT style family identity", /** Groups source-derived family-pl
         ],
       },
       {
+        name: "named formatting overrides a property from an enclosing automatic span",
+        body: '<text:p>A<text:span text:style-name="WrongParent">B<text:span text:style-name="Unitalic">C</text:span>D</text:span>E</text:p>',
+        alignment: "left",
+        margin: 0,
+        expected: [
+          ["A", false, false, false],
+          ["B", false, true, false],
+          ["C", false, false, false],
+          ["D", false, true, false],
+          ["E", false, false, false],
+        ],
+      },
+      {
         name: "wrong-family reference and parent do not leak properties",
         body: '<text:p>A<text:span text:style-name="OnlyParagraph">B</text:span><text:span text:style-name="WrongParent">C</text:span>D</text:p>',
         alignment: "left",
@@ -156,7 +177,10 @@ describe("Writer ODT style family identity", /** Groups source-derived family-pl
           await writeOdtDocument(imported.document, { title: testCase.name }),
           { title: testCase.name },
         );
-        for (const document of [imported.document, reopened.document]) {
+        for (const [phase, document] of [
+          ["imported", imported.document],
+          ["reopened", reopened.document],
+        ] as const) {
           expect(document.paragraphs, testCase.name).toHaveLength(1);
           const paragraph = document.paragraphs[0];
           expect(paragraph?.GetParagraphAlignment(), testCase.name).toBe(testCase.alignment);
@@ -171,10 +195,98 @@ describe("Writer ODT style family identity", /** Groups source-derived family-pl
                 run.attributes.underline,
               ],
             ),
-            testCase.name,
+            `${testCase.name}, ${phase}`,
           ).toEqual(testCase.expected);
         }
       }
     }
   });
+});
+
+it("keeps common style layers outside the automatic direct span", /** Checks the native CharStyleNames span ordering, escaped names and direct false override across ODT reload. @returns Completion. */ async () => {
+  const original = createWriterDocument();
+  const state = { title: "Layered styles" };
+  let reopened: ReturnType<typeof createWriterDocument> | undefined;
+  try {
+    original.MakeCharFormat("T1", original.GetDfltCharFormat());
+    const outer = original.MakeCharFormat("Outer & strong", original.GetDfltCharFormat());
+    outer.SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+    const base = original.MakeCharFormat("Inner parent", original.GetDfltCharFormat());
+    base.SetFormatAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_POSTURE));
+    const inner = original.MakeCharFormat("Inner child", base);
+    const node = original.paragraphs[0];
+    assert(node);
+    node.SetText("A BC");
+    original.SetInXMLImport(true);
+    node.InsertItem(new SwFormatCharFormat(outer), 0, node.Len());
+    node.InsertItem(new SwFormatCharFormat(inner), 0, node.Len());
+    original.SetInXMLImport(false);
+    const direct = new SfxItemSet(original.GetAttrPool(), [[RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT]]);
+    try {
+      direct.Put(new SvxWeightItem(FontWeight.WEIGHT_NORMAL, RES_CHRATR_WEIGHT));
+      node.SetAttr(direct, 1, 3);
+    } finally {
+      direct.Dispose();
+    }
+
+    const bytes = await writeOdtDocument(original, state);
+    const archive = await DocumentArchive.open(bytes);
+    expect(await archive.readTextEntry("styles.xml")).toContain(
+      'style:name="Inner_20_child" style:display-name="Inner child" style:family="text" style:parent-style-name="Inner_20_parent"',
+    );
+    expect(await archive.readTextEntry("content.xml")).toMatch(
+      /<text:span text:style-name="Outer_20__26__20_strong"><text:span text:style-name="Inner_20_child"><text:span text:style-name="T2">/u,
+    );
+    reopened = (await readOdtDocument(bytes, state)).document;
+    const loaded = reopened.paragraphs[0];
+    assert(loaded);
+    expect(reopened.FindCharFormatByName("Inner child")?.DerivedFrom()?.GetName()).toBe(
+      "Inner parent",
+    );
+    expect(
+      loaded
+        .GetpSwpHints()
+        ?.entries()
+        .filter(
+          /** Selects genuine style layers at a position also carrying direct formatting. @param hint - Source hint. @returns Whether the style applies. */
+          (hint): hint is SwTextCharFormat =>
+            hint instanceof SwTextCharFormat && hint.GetStart() <= 1 && 1 < hint.GetEnd(),
+        )
+        .map(
+          /** Reads native style identity and nesting order. @param hint - Native style hint. @returns Style and sort ordinal. */
+          (hint) => [hint.GetAttr().GetCharFormat()?.GetName(), hint.GetSortNumber()],
+        ),
+    ).toEqual([
+      ["Outer & strong", 0],
+      ["Inner child", 1],
+    ]);
+    expect(
+      projectWriterTextRuns(loaded).map(
+        /** Reports effective formatting after the styled and direct segments reload. @param run - Writer run. @returns Text and flags. */
+        (run) => [run.text, run.attributes.bold, run.attributes.italic],
+      ),
+    ).toEqual([
+      ["A", true, true],
+      [" B", false, true],
+      ["C", true, true],
+    ]);
+  } finally {
+    reopened?.Dispose();
+    original.Dispose();
+  }
+});
+
+it("leaves an unreferenced cyclic common style declaration usable", /** Exercises native parent rejection while retaining all declared styles. @returns Nothing. */ () => {
+  const styles =
+    '<office:document-styles xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"><office:styles><style:style style:name="First" style:family="text" style:parent-style-name="Second"/><style:style style:name="Second" style:family="text" style:parent-style-name="First"/></office:styles></office:document-styles>';
+  const { document } = importWriterXml(styles, undefined, { title: "Cyclic common styles" });
+  try {
+    const first = document.FindCharFormatByName("First");
+    const second = document.FindCharFormatByName("Second");
+    assert(first && second);
+    expect(first.DerivedFrom()).toBe(second);
+    expect(second.DerivedFrom()).toBe(document.GetDfltCharFormat());
+  } finally {
+    document.Dispose();
+  }
 });

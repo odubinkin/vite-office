@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/FieldContext.ts",
+    "localSymbols": [
+      "FieldContext",
+      "CurrentTextPosition",
+      "GetCommandParts",
+      "ParseHyperlinkInstruction"
+    ],
+    "upstreamPath": "sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+    "upstreamSymbols": [
+      "FieldContext::GetCommandParts",
+      "DomainMapper_Impl::PushFieldContext",
+      "DomainMapper_Impl::PopFieldContext"
+    ],
+    "preservedResponsibilities": [
+      "The native Writer field lifecycle interprets shared Word field instructions and applies hyperlink result ranges to actual Writer text hints."
+    ],
+    "omittedResponsibilities": [
+      "Only the HYPERLINK result is represented. General field services and their update behavior remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/FieldContext.ts",
+          "marker": "FieldContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.hyperlink.test.ts",
+          "marker": "replays fdo69548"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+          "marker": "FieldContext::GetCommandParts"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/dmapper/FieldContext.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the original implementation responsibility in a dedicated TypeScript module."
+    }
+  }
+}

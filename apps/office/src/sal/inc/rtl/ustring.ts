@@ -39,10 +39,14 @@ import { StringNumber, StringConcat, StringConcatMarker } from "./stringconcat";
 import type { UnicodeConcatOperand } from "./stringconcat";
 import {
   rtl_uString_alloc,
+  rtl_uString_newFromCodePoints,
+  rtl_ustr_ascii_compare_WithLength,
   rtl_ustr_valueOfInt32,
   rtl_ustr_valueOfInt64,
+  rtl_ustr_valueOfUInt64,
   RTL_USTR_MAX_VALUEOFINT32,
   RTL_USTR_MAX_VALUEOFINT64,
+  RTL_USTR_MAX_VALUEOFUINT64,
   RTL_USTR_MAX_VALUEOFDOUBLE,
   rtl_string2UString,
   rtl_convertStringToUString,
@@ -94,6 +98,7 @@ export type OUStringConstReference = Readonly<
     | "getLength"
     | "getStr"
     | "isEmpty"
+    | "endsWith"
     | "equals"
     | "equalsIgnoreAsciiCase"
     | "equalsAsciiL"
@@ -187,6 +192,7 @@ export class OUString {
         ]
       | [value: rtl_uString, noAcquire: __sal_NoAcquire]
       | [value: Uint16Array | null, length: number]
+      | [codePoints: Uint32Array, count: number]
       | [
           value: Uint8Array | null,
           length: number,
@@ -204,6 +210,9 @@ export class OUString {
         args[2] as rtl_TextEncoding,
         args[3] ?? OSTRING_TO_OUSTRING_CVTFLAGS,
       );
+      if (this.slot[0] === null) throw new Error("std::bad_alloc");
+    } else if (value instanceof Uint32Array) {
+      rtl_uString_newFromCodePoints(this.slot, value, argument as number);
       if (this.slot[0] === null) throw new Error("std::bad_alloc");
     } else if (value === undefined) this.pData = OUString.empty.str;
     else if (value instanceof StringConcat) {
@@ -260,6 +269,13 @@ export class OUString {
       ) === 0
     );
   }
+  /** Original consumed std::u16string_view endsWith overload. @param suffix - Counted source view. @returns Whether the suffix matches. */
+  endsWith(suffix: Uint16Array): boolean {
+    return (
+      suffix.length <= this.getLength() >>> 0 &&
+      this.match(suffix, this.getLength() - suffix.length)
+    );
+  }
   /** Original normal-build startsWith overloads preserve optional no-output and nonnull explicit-rest contracts. @param prefix - Native string/view. @param output - Optional existing output owner. @returns Whether matched. */
   startsWith(
     prefix: OUStringConstReference | Uint16Array,
@@ -292,6 +308,15 @@ export class OUString {
     return typeof value === "number"
       ? new StringNumber(RTL_USTR_MAX_VALUEOFINT32, rtl_ustr_valueOfInt32, value, radix)
       : new StringNumber(RTL_USTR_MAX_VALUEOFINT64, rtl_ustr_valueOfInt64, value, radix);
+  }
+  /** Original unsigned int/unsigned long long number overloads, named explicitly for the erased C++ signedness. @param value - Native sal_uInt32 or sal_uInt64. @param radix - Original radix. @returns Original lazy number representation. */
+  static numberUnsigned(value: number | bigint, radix = 10): StringNumber<bigint> {
+    return new StringNumber(
+      RTL_USTR_MAX_VALUEOFUINT64,
+      rtl_ustr_valueOfUInt64,
+      typeof value === "number" ? BigInt(value >>> 0) : value,
+      radix,
+    );
   }
   /** Original number(double) overload, explicitly named for the erased scalar type. Requests the original17 significant digits, G notation, dot and fractional-zero erasure; the formatter retains its own rounding policy. @param value - Native binary64. @returns Owned native string. */
   static numberDouble(value: number): OUString {
@@ -495,6 +520,10 @@ export class OUString {
     return this.getStr().subarray(beginIndex, beginIndex + count);
   }
 
+  /** Original terminated ASCII compare overload. @param ascii - Actual terminated char bytes. @returns Exact source signed difference or range-exhaustion sign. */
+  compareToAscii(ascii: Uint8Array): number {
+    return rtl_ustr_ascii_compare_WithLength(this.pData.buffer, this.pData.length, ascii);
+  }
   /** Original normal comparison with the implicit string-view conversion of a live OUString reference. @param other - Original source reference. @returns Selected native UTF16 lexical result. */
   compareTo(other: OUStringConstReference): number {
     return rtl_ustr_compare_WithLength(

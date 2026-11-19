@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/inc/servuno.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/inc/servuno.hxx",
+    "localSymbols": [
+      "ScServiceProviderType"
+    ],
+    "upstreamSymbols": [
+      "ScServiceProvider",
+      "INVALID"
+    ],
+    "preservedResponsibilities": [
+      "Original complete ScServiceProvider Type ordinal declaration and type-only provider boundary; executable provider imports come from the cxx counterpart, avoiding ESM initialization cycles."
+    ],
+    "omittedResponsibilities": [
+      "Full document XModel, MakeInstance/concrete services and XMultiServiceFactory/model/formatter/filter/storage/UI orchestration remain unported or unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/servuno.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/unoobj/servuno.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/servuno.hxx",
+          "marker": "ScServiceProvider"
+        }
+      ]
+    }
+  }
+}

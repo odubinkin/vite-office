@@ -1,6 +1,8 @@
 /** @fileoverview Consumed Writer cursor/paragraph/style property entries from pinned unomap.cxx/unomap1.cxx; unrepresented properties are not advertised. */
 import { cppu_detail_getUnoType_FillStyle as fillStyleType } from "../../../../offapi/com/sun/star/drawing/FillStyle";
 import { XATTR_FILLSTYLE, XATTR_FILLCOLOR, XATTR_FILLTRANSPARENCE } from "../../../../svx/inc/xdef";
+import { cppu_detail_getUnoType_PropertyValue as propertyType } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
+import { XComplexColor } from "../../../../offapi/com/sun/star/util/XComplexColor";
 import { UnoType, type UnoTypeArgument } from "../../../../cppu/inc/unotype";
 import { cppu_detail_getUnoType_BreakType as breakType } from "../../../../offapi/com/sun/star/style/BreakType";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
@@ -16,7 +18,7 @@ import { cppu_detail_getUnoType_LineSpacing as lineSpacingType } from "../../../
 import { cppu_detail_getUnoType_TabStop as tabStopType } from "../../../../offapi/com/sun/star/style/TabStop";
 import { cppu_detail_getUnoType_BorderLine as borderLineType } from "../../../../offapi/com/sun/star/table/BorderLine";
 import * as H from "../../../inc/hintids";
-import { WID_DOC_DEFAULT_PAGE_MODE } from "../../../inc/unomap";
+import { WID_DOC_DEFAULT_PAGE_MODE, WID_DOC_INTEROP_GRAB_BAG } from "../../../inc/unomap";
 import * as Grid from "../../../inc/unomid";
 import { MID_PAGEDESC_PAGEDESCNAME, MID_PAGEDESC_PAGENUMOFFSET } from "../../../inc/unomid";
 /** Native item member transport already provided by the bounded core item. */
@@ -46,6 +48,10 @@ export const SwUnoTextDocumentPropertyMap: ReadonlyMap<
   SwUnoPropertyEntry & { readonly type: UnoTypeArgument }
 > = new Map([
   ["DefaultPageMode", { which: WID_DOC_DEFAULT_PAGE_MODE, member: 0, kind: "bool", type: "bool" }],
+  [
+    "InteropGrabBag",
+    { which: WID_DOC_INTEROP_GRAB_BAG, member: 0, kind: "any", type: ["Sequence", propertyType] },
+  ],
 ]);
 /** Original page-style grid and direction entries from unomap1.cxx. */
 type PageStylePropertyEntry = SwUnoPropertyEntry & { readonly type: UnoTypeArgument };
@@ -340,6 +346,16 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
     { type: "bool", attributes: 1, which: H.RES_CHRATR_AUTOKERN, member: 0, kind: "bool" },
   ],
   [
+    "CharKerning",
+    {
+      type: "sal_Int16",
+      attributes: 1,
+      which: H.RES_CHRATR_KERNING,
+      member: CONVERT_TWIPS,
+      kind: "any",
+    },
+  ],
+  [
     "CharEscapement",
     { type: "sal_Int16", attributes: 1, which: H.RES_CHRATR_ESCAPEMENT, member: 0, kind: "any" },
   ],
@@ -362,6 +378,26 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
   [
     "CharColor",
     { type: "sal_Int32", attributes: 1, which: H.RES_CHRATR_COLOR, member: 0, kind: "color" },
+  ],
+  [
+    "CharInteropGrabBag",
+    {
+      type: ["Sequence", propertyType],
+      attributes: 0,
+      which: H.RES_CHRATR_GRABBAG,
+      member: 0,
+      kind: "any",
+    },
+  ],
+  [
+    "CharComplexColor",
+    {
+      type: XComplexColor.static_type,
+      attributes: 1,
+      which: H.RES_CHRATR_COLOR,
+      member: M.MID_COMPLEX_COLOR,
+      kind: "any",
+    },
   ],
   [
     "CharHighlight",
@@ -545,12 +581,15 @@ const paragraphStyleProperties = new Set([
   "CharStrikeout",
   "CharWordMode",
   "CharAutoKerning",
+  "CharKerning",
   "CharEscapement",
   "CharEscapementHeight",
   "FillStyle",
   "FillColor",
   "FillTransparence",
   "CharColor",
+  "CharComplexColor",
+  "CharInteropGrabBag",
   "CharHighlight",
   "WritingMode",
   "ParaAdjust",
@@ -741,9 +780,12 @@ const textDefaultProperties = new Set([
   "CharStrikeout",
   "CharWordMode",
   "CharAutoKerning",
+  "CharKerning",
   "CharEscapement",
   "CharEscapementHeight",
   "CharColor",
+  "CharComplexColor",
+  "CharInteropGrabBag",
   "CharHighlight",
   "WritingMode",
   "ParaAdjust",

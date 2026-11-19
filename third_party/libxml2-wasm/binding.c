@@ -8,7 +8,15 @@
 #include <libxml/xpathInternals.h>
 #include <libxml/xmlversion.h>
 #include <libxml/entities.h>
+#include <libxml/SAX2.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include "osl-mutex.c"
+#include "osl-locale.c"
+#include "osl-file.c"
+#include "osl-file-stat.c"
+#include "osl-security.c"
+#include "osl-socket.c"
 
 const char *office_xmlVersion(void) { return LIBXML_DOTTED_VERSION; }
 void office_xmlFree(void *value) { xmlFree(value); }
@@ -37,6 +45,7 @@ FIELD(xmlDtd, dtd_publicId, xmlChar *, ExternalID)
 FIELD(xmlDtd, dtd_systemId, xmlChar *, SystemID)
 FIELD(xmlDtd, dtd_entities, void *, entities)
 FIELD(xmlDtd, dtd_notations, void *, notations)
+FIELD(xmlEntity, entity_content, xmlChar *, content)
 FIELD(xmlEntity, entity_publicId, const xmlChar *, ExternalID)
 FIELD(xmlEntity, entity_systemId, const xmlChar *, SystemID)
 FIELD(xmlXPathContext, xpath_context_node, xmlNodePtr, node)
@@ -46,6 +55,7 @@ FIELD(xmlXPathObject, xpath_object_nodeset, xmlNodeSetPtr, nodesetval)
 
 FIELD(xmlParserCtxt, parser_private, void *, _private)
 FIELD(xmlParserCtxt, parser_sax, xmlSAXHandlerPtr, sax)
+FIELD(xmlParserCtxt, parser_doc, xmlDocPtr, myDoc)
 FIELD(xmlError, error_message, char *, message)
 FIELD(xmlError, error_line, int, line)
 FIELD(xmlError, error_column, int, int2)
@@ -80,6 +90,26 @@ void office_xmlParserInstallCallbacks(xmlParserCtxtPtr context,
     context->sax->resolveEntity = resolver;
 }
 
+/* FastSaxParserImpl::parse uses this exact static SAX2 callback aggregate.
+ * Only the compiler-owned C struct/function-pointer ABI is lowered here;
+ * parser options, entity policy, event/state ownership and errors stay with
+ * the original FastParser implementation. userData is forwarded unchanged.
+ */
+xmlSAXHandlerPtr office_xmlFastParserCallbacks(startElementNsSAX2Func start,
+                                              endElementNsSAX2Func end,
+                                              charactersSAXFunc characters,
+                                              processingInstructionSAXFunc instruction,
+                                              getEntitySAXFunc entity) {
+    static xmlSAXHandler callbacks;
+    callbacks.startElementNs = start;
+    callbacks.endElementNs = end;
+    callbacks.characters = characters;
+    callbacks.processingInstruction = instruction;
+    callbacks.getEntity = entity;
+    callbacks.initialized = XML_SAX2_MAGIC;
+    return &callbacks;
+}
+
 /* The upstream XPath helpers are macros, not exported C functions. */
 int office_xmlXPathNodeSetGetLength(xmlNodeSetPtr set) {
     return xmlXPathNodeSetGetLength(set);
@@ -106,3 +136,10 @@ void office_xmlXPathSetGenericError(void (*sink)(const char *)) {
     office_xpath_generic_sink = sink;
     xmlSetGenericErrorFunc(NULL, sink ? office_xpath_generic_trampoline : NULL);
 }
+
+/* C ABI declarations for the actual pinned SDK libc++ objects in std-mutex.cxx. */
+void **osl_getGlobalMutex(void);
+void *office_std_mutex_create(void);
+void office_std_mutex_destroy(void *mutex);
+void office_std_mutex_lock(void *mutex);
+void office_std_mutex_unlock(void *mutex);

@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/oox/source/helper/containerhelper.ts",
+    "status": "mapped",
+    "upstreamPath": "oox/source/helper/containerhelper.cxx",
+    "localSymbols": [
+      "ValueRangeSet"
+    ],
+    "upstreamSymbols": [
+      "ValueRangeSet::insert"
+    ],
+    "preservedResponsibilities": [
+      "Original ValueRangeSet lower-bound, previous-adjacency, intersection and vector insert/erase order are preserved. The suspected adjacency/order defect is retained and documented as WRITER622/CALC686. Twelve original unchanged C++ declaration/function witnesses compiled with UBSan match the actual local results; no source range algorithm, root or provider is replaced."
+    ],
+    "omittedResponsibilities": [
+      "Further lower_bound on the source-created unsorted vector, signed-overflow endpoints, other container helpers and complete document/filter/UI effects remain unqualified or unfinished."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/helper/containerhelper.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/oox/source/helper/containerhelper.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/oox/source/helper/containerhelper.cxx",
+          "marker": "ValueRangeSet::insert"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/oox/helper/containerhelper.hxx",
+          "marker": "ValueRange"
+        }
+      ]
+    }
+  }
+}

@@ -426,14 +426,19 @@ it("retains range endpoint flags,reversed axes,whole-axis sticky rules and untou
   expect(initial.Parse(unicode(":A1"), d, details)).toBe(ScRefFlags.ZERO);
   expect(initial.GetVars()).toEqual(before);
   expect(initial.Parse(unicode("A1:"), d, details)).toBe(ScRefFlags.ZERO);
-  expect(
-    /** Rejects the missing R1C1 parser service. @returns Flags. */ () =>
-      initial.Parse(
-        unicode("A1:B2"),
-        d,
-        new ScAddress.Details(FormulaGrammar.AddressConvention.CONV_XL_R1C1),
-      ),
-  ).toThrow(/not implemented/);
+  const r1c1 = new ScAddress.Details(FormulaGrammar.AddressConvention.CONV_XL_R1C1);
+  const excelRange = new ScRange(4, 5, 0, 6, 7, 0);
+  const a1Text = unicode("A1:B2"),
+    r1c1Text = unicode("R1C1:R2C2");
+  try {
+    expect(excelRange.Parse(a1Text, d, r1c1)).toBe(ScRefFlags.ZERO);
+    expect(excelRange.GetVars()).toEqual(before);
+    expect(excelRange.Parse(r1c1Text, d, r1c1) & ScRefFlags.VALID).toBe(ScRefFlags.VALID);
+    expect(excelRange.GetVars()).toEqual([0, 0, 0, 1, 1, 0]);
+  } finally {
+    r1c1Text.dispose();
+    a1Text.dispose();
+  }
   d.Dispose();
 });
 

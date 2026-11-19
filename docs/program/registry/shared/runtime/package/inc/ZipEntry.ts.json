@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/inc/ZipEntry.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-zip-directory-prerequisites",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f",
+      "CAP-60482065-6ac7-4bdf-bde2-6ccea2e91847",
+      "CAP-4f62077a-4c7c-483c-b17c-20e141f329ce"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/inc/ZipEntry.ts",
+        "apps/office/src/package/source/zipapi/native-directory-prerequisites.test.ts",
+        "apps/office/src/package/source/zippackage/ZipPackageStream.save.test.ts",
+        "docs/program/native-package-stream-save.md",
+        "scripts/fixtures/native-package-save-probe.ts",
+        "apps/office/src/package/source/zippackage/ZipPackage.serialization.test.ts"
+      ],
+      "justification": "Original consumed OSL mutex C bodies now execute in the actual linked Emscripten runtime, with real pthread attributes/recursive initialization/lock/try/unlock/destroy/free and original null/error statuses. Existing compiler non-pthread libc stubs supply the implementation; no JS lock state, fake native mutex or lifetime registry. Original osl::Mutex/Guard and comphelper RefCountedMutex reuse actual native handles and SimpleReferenceObject/rtl::Reference; original ZipEntry retains OUString/default/copy member behavior without zeroing unspecified scalar values. Native global mutex/other guard templates/thread contention/busy-error/OOM/diagnostics/physical ABI and complete ZipFile/directory/LOC/storage/model/UI remain unported or unqualified. Actual ZipPackageStream plain DATA/member saving now uses original native ZipOutputStream/ZipOutputEntry owners, source three-slot manifest order, STORED CRC/size prepass, nonseekable optimization, raw member copy and small synchronous DEFLATE. Actual nullable parent pointer and owned ZipEntry assignment replace null-only output binding/copy duplication. Original failure/success ordering, closing, member transition, offset negation and format-specific manifest append are retained. Preserve WRITER625/CALC692 loaded-member compression-disable behavior and WRITER626/CALC693 minus-one Size snapshot. DETECT/encrypted raw parsing, encrypted output and source background/parallel branches above100000/1000000 bytes remain explicitly unported; no sequential fallback or complete commit is fabricated. Actual stream/model/ZIP/input/manifest owners and independent Node zlib/CRC outputs plus main/DOM-free Worker are tested. Complete ZipPackage coverage failure/classic Parser/XStorage/Medium/filter/UI and physical ABI/allocation/thread parity remain unqualified. Original native metadata entry writers retain actual package receiver/root/context, registered ManifestWriter/SAX Writer, generated property/pair sequences, ZipPackageBuffer, source CRC and ZipOutputEntry. Mimetype replacement/STORED/ASCII/error wrapping, native manifest rows and exact OFOPXML defaults/override selection are represented. Explicit aggregate value-initialization preserves std::make_unique semantics without changing default-initialized records. Full root commit/transfer/storage/factory/model/DOCX/XLSX UI acceptance and earlier owner coverage failures remain unfinished. Empty/legacy ManifestExport, native physical ABI/thread/allocation domains remain unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ZipEntry"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/inc/ZipEntry.hxx",
+      "upstreamSymbols": [
+        "ZipEntry",
+        "sPath"
+      ]
+    }
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/xstor/xstorage.impl.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/xstor/xstorage.cxx",
+    "localSymbols": [
+      "OStorage_Impl",
+      "SotElement_Impl",
+      "CommitRootPackage",
+      "RemoveElement",
+      "RenameElement",
+      "Commit",
+      "Revert",
+      "OpenTruncatedStream",
+      "CreateRelStorage",
+      "SetRelationsInfo",
+      "OpenSubStream",
+      "OpenSubStorage",
+      "GetAllRelationshipsIfAny",
+      "OpenReadStream",
+      "GetElementNames"
+    ],
+    "upstreamSymbols": [
+      "OStorage_Impl",
+      "SotElement_Impl",
+      "OStorage_Impl::OpenSubStorage",
+      "OStorage_Impl::GetAllRelationshipsIfAny",
+      "OStorage_Impl::GetElementNames",
+      "OStorage::OpenStreamElement_Impl"
+    ],
+    "preservedResponsibilities": [
+      "Original internal storage input/stream/substorage constructors, persistence ownership, package-open argument assembly and child catalog use genuine UNO/RTL/OSL/ZipPackageFolder owners. Source TRUNCATE rows, list-created timing, actual enumeration/interface queries and PACKAGE property ordering remain. Full OStorage/weak wrapper disposal/relationships/writable stream/transaction/encryption/factory/package services remain incomplete; no XStorage component is advertised or registered. Positive root/package property paths and complete source StorageFactory QA are pending. Whole-owner coverage fails90; full DOCX/XLSX filter/model/storage/UI acceptance remains unfinished. Preserve WRITER629/CALC696.",
+      "Original PACKAGE property extraction passes the actual OUString object required by Any string extraction, correcting an invalid field-address call. Positive PACKAGE property acquisition remains unqualified because the actual package property service is unfinished.",
+      "Original registered package constructor and XChangesBatch connect OStorage_Impl root persistence to actual ZipPackage stream output. Full child and relationship synchronization, storage wrapper, PACKAGE property support and DOCX/XLSX UI acceptance remain unfinished.",
+      "The original ZIP package service, change batch and final root persistence phase are connected. Child and relationship synchronization, full storage wrappers and DOCX/XLSX UI remain pending.",
+      "Original internal closed-child remove/rename, deletion-before-rename and catalog revert feed the actual package transaction. Original temporary folder and OFOPXML no-relationship paths are represented. Full child wrapper/writable stream/relationship synchronization and document UI remain unfinished. WRITER631 and CALC698 record the preserved copied-row alias.",
+      "Original nonencrypted truncate cache, property copying, factory replacement and flushed insertion are connected to the native storage catalog and actual package. Public writable wrappers, PACKAGE encryption, nontruncate materialization, relationships and document UI remain unfinished.",
+      "Loads the OFOPXML relationship child outside the public member catalog and retains the staged relationship state.",
+      "Lazily opens existing child folders through the package XNameContainer and original OStorage_Impl. Original member opening hands the actual companion .rels stream to OWriteStream_Impl. The root getter returns native copied rows or reports the original invalid relationship error.",
+      "Existing children open through the original attached ordinary or seekable read wrapper. The catalog returns ordered visible keys while HasChildren retains source map-presence semantics.",
+      "The public OStorage wrapper now uses the real implementation and attaches readonly/mutable children. InsertStorage calls the original package-factory folder mode and publishes the child catalog state.",
+      "The plain ZIP/OFOPXML storage uses the real nontransacted OWriteStream component for new/truncated output. It exposes the writable data and property facets, commits the native cache and closes its attachment when both directions close. Transacted streams, nontruncate existing writes and encryption families remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Full OStorage wrapper/service, writable stream/transaction/encryption/package factory paths and original full storage QA remain unfinished. Physical native ABI, allocator, thread, fatal/OOM and invalid pointer domains remain unqualified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Existing actual SAL/CPPU logical addresses, compiler specialization/interface casts and explicit scope destruction bind native C++ syntax. The actual pinned SDK libc++ mutex implements the original member and guard lifetimes; native pthread/physical C++ ABI remain unqualified."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.impl.ts",
+          "marker": "OStorage_Impl"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.impl.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.serialization.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.relations.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xfactory.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xfactory.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage_Impl::ReadContents"
+        },
+        {
+          "path": "package/source/xstor/xstorage.hxx",
+          "marker": "struct OStorage_Impl"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage_Impl::OpenSubStorage"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage_Impl::GetAllRelationshipsIfAny"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage_Impl::GetElementNames"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::OpenStreamElement_Impl"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/package/source/xstor/xstorage.impl.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original xstorage.cxx has separate internal OStorage_Impl/SotElement_Impl state and public OStorage UNO wrapper owners. This module retains the actual internal owner, native package/persistence and catalog responsibilities; the public wrapper remains unported. The split reserves the original public wrapper boundary and the enforced1000-line limit without a second state object or replacement storage."
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/dmapper/SettingsTable.compat.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "domain-mapper",
+    "capabilityIds": [
+      "CAP-0121",
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/SettingsTable.compat.ts#FindWordCompatibilityMode",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/SettingsTable.cxx#SettingsTable::GetCompatSettings",
+        "apps/office/src/sw/source/filter/ww8/docxexport.compat.test.ts"
+      ],
+      "justification": "Owns the source CompatSettings projection into and out of typed UNO document interoperability values, preserving source row order and mode selection.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FindWordCompatibilityMode",
+        "SetCompatSettings",
+        "ReadCompatSettings"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/dmapper/SettingsTable.cxx",
+      "upstreamSymbols": [
+        "SettingsTable::GetCompatSettings",
+        "SettingsTable::GetWordCompatibilityMode"
+      ]
+    }
+  }
+}

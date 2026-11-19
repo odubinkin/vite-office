@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppuhelper/inc/implbase1.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-stream-uno-bridge",
+    "capabilityIds": [
+      "CAP-3c31bf0e-6112-4b9e-a7a2-5348ce481e06"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppuhelper/inc/implbase1.ts"
+      ],
+      "justification": "Original complete SvStream-to-UNO input/output/seekable/stream/truncate wrappers now retain actual byte streams, Sequence/reference/error owners, original weak/inheritance/non-reference-counting ImplHelper1 queries and facet identity. Source output seek narrows64to32; output close no-op, input shared close and unguarded output-after-close domain retained. JS GC owns byte storage. Actual C DocumentBuilder parses Unicode through the bridge and actual persistence consumes the same owner. Source file/temp/open/backend/model/UI and native pthread/physical ABI/undefined pointer domains remain unfinished; no fake provider or global lifetime registry.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ImplHelper1"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "include/cppuhelper/implbase1.hxx",
+      "upstreamSymbols": [
+        "ImplHelper1",
+        "ImplClassData1"
+      ]
+    }
+  }
+}

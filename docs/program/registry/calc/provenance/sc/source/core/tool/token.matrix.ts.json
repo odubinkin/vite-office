@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/token.matrix.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/token.cxx",
+    "localSymbols": [
+      "MergeArray"
+    ],
+    "upstreamSymbols": [
+      "ScTokenArray::MergeArray",
+      "checkArraySep"
+    ],
+    "preservedResponsibilities": [
+      "Validates the original literal array token suffix and populates the native ScMatrix with typed values before ScTokenArray replaces the suffix."
+    ],
+    "omittedResponsibilities": [
+      "General matrix formula evaluation, spill and array-capable functions remain outside the literal token merge."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.matrix.ts",
+          "marker": "MergeArray"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/token.matrix.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.named-arrays.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/core/tool/token.cxx",
+          "marker": "ScTokenArray::MergeArray"
+        },
+        {
+          "path": "sc/source/core/tool/token.cxx",
+          "marker": "checkArraySep"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/tool/token.matrix.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Splits the original ScTokenArray literal matrix population from the common token owner."
+    }
+  }
+}

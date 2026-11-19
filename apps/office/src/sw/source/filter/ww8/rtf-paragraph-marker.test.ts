@@ -1,5 +1,6 @@
 /** @fileoverview Native paragraph-marker item selection, ListAutoFormat ownership, RTF marker import/export and Worker transport. */
-import { afterEach, assert, expect, it } from "vitest";
+import { afterEach, assert, beforeAll, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { SwDoc } from "../../core/doc/doc";
 import {
   SwFormatAutoFormat,
@@ -38,6 +39,7 @@ import {
 } from "../../../browser/filter/xml/writer-document-codec";
 import * as H from "../../../inc/hintids";
 const docs: SwDoc[] = [];
+beforeAll(initializeRuntime);
 afterEach(
   /** Releases actual model owners. @returns Nothing. */ () => {
     for (const doc of docs.splice(0)) doc.Dispose();

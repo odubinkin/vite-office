@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/ww8/ww8par.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/filter/ww8/ww8par.cxx",
+    "localSymbols": [
+      "AreListsDifferentForExport",
+      "AreListLevelsDifferentForExport"
+    ],
+    "upstreamSymbols": [
+      "AreListsDifferentForExport",
+      "AreListLevelsDifferentForExport"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/ww8par.ts",
+          "marker": "AreListsDifferentForExport"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.numbering.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/filter/ww8/ww8par.cxx",
+          "marker": "AreListsDifferentForExport"
+        },
+        {
+          "path": "sw/source/filter/ww8/ww8par.cxx",
+          "marker": "AreListLevelsDifferentForExport"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "Original export-only equivalence compares rule values first, continuous-numbering policy and only one/nine Word levels. Level comparison checks actual character-style item sets, copies actual SwNumFormat values, clears names/registrations and compares remaining native fields before destroying both temporary client registrations. Actual DOCX paragraph dispatch consumes these functions. Full binary importer, complete numbering/root/part/filter and fixture/model/UI roundtrip remain unported or unqualified; no status or whole-format parity promotion follows from these owner tests."
+    ],
+    "omittedResponsibilities": [
+      "Binary importer and complete source module, filter/model and mounted UI format closure remain unported or unverified."
+    ]
+  }
+}

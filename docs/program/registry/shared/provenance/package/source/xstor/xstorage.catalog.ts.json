@@ -1,0 +1,83 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/xstor/xstorage.catalog.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/xstor/xstorage.cxx",
+    "localSymbols": [
+      "storageName",
+      "removeCatalogElement",
+      "renameCatalogElement",
+      "commitStorage",
+      "revertStorage",
+      "checkWritableStream",
+      "getStorageElementNames"
+    ],
+    "upstreamSymbols": [
+      "OStorage_Impl::Commit",
+      "OStorage_Impl::Revert",
+      "OStorage::renameElement",
+      "OStorage_Impl::RemoveElement",
+      "OStorage_Impl::GetElementNames"
+    ],
+    "preservedResponsibilities": [
+      "Original internal closed-child remove/rename, deletion-before-rename and catalog revert feed the actual package transaction. Original temporary folder and OFOPXML no-relationship paths are represented. Full child wrapper/writable stream/relationship synchronization and document UI remain unfinished. WRITER631 and CALC698 record the preserved copied-row alias.",
+      "Original nonencrypted truncate cache, property copying, factory replacement and flushed insertion are connected to the native storage catalog and actual package. Public writable wrappers, PACKAGE encryption, nontruncate materialization, relationships and document UI remain unfinished.",
+      "Commits associated relation members in original mutation order and reverts staged root relations.",
+      "Enumerates an acquired native string sequence in source key order, preserving duplicates and excluding removed elements. The removal guard refuses active input wrappers.",
+      "Root and per-member relationship XML streams are staged through the seekable RelationsInfoStream property and emitted by the native associated storage commit. The writable plain sequence property preserves the source status omission. Full native relationship interface exposure remains pending."
+    ],
+    "omittedResponsibilities": [
+      "Writable child streams, wrapper events, relationships and full app format UI remain unfinished."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Existing actual SAL/CPPU logical addresses, compiler specialization/interface casts and explicit scope destruction bind native C++ syntax. The actual pinned SDK libc++ mutex implements the original member and guard lifetimes; native pthread/physical C++ ABI remain unqualified."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.catalog.ts",
+          "marker": "commitStorage"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.impl.test.ts",
+          "marker": "removes persisted destinations before renaming"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.relations.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xfactory.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage_Impl::Commit"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::renameElement"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage_Impl::GetElementNames"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage_Impl::RemoveElement"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/package/source/xstor/xstorage.catalog.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The original storage catalog and commit phases remain over the same implementation receiver and are separated from the storage constructors and owner to preserve the file size limit."
+    }
+  }
+}

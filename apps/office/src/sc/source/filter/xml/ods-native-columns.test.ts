@@ -68,7 +68,6 @@ it("retains native repeat clamps and final-column overflow while diagnosing unpo
       "column style properties",
       "column default-cell-style inheritance",
       "column style",
-      "column outline group",
       "column parent style inheritance",
     ]),
   );

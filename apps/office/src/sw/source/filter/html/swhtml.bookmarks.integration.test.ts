@@ -6,6 +6,7 @@ import { SwHTMLParser } from "./swhtml";
 import { SvStream } from "../../../../tools/source/stream/stream";
 import { OUStringToOString } from "../../../../sal/rtl/ustring-convert";
 import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { SvParserState } from "../../../../svtools/inc/svparser";
 import { RtfExport } from "../ww8/rtfexport";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
@@ -139,7 +140,8 @@ it("clamps queued bookmark positions after native trailing-BR removal", /** SetA
   expect(marks(read('<p>A<br><a name="tail"></a></p>'))).toEqual([["tail", 0, 1]]);
 });
 
-it("exports imported HTML point marks through the existing native RTF path", /** Actual document marks must be consumed by the real RTF writer and reader. @returns Nothing. */ () => {
+it("exports imported HTML point marks through the existing native RTF path", /** Uses the real locale runtime and RTF writer and reader. @returns Completion. */ async () => {
+  await initializeRuntime();
   const doc = read('<p id="body">A<a name="point">B</a></p>');
   const restored = new RtfDocumentImpl().ResolveBytes(RtfExport.WriteDocument(doc));
   documents.push(restored);

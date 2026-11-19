@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/tool/token.matrix.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "formula-result",
+    "capabilityIds": [
+      "CAP-3ba27793-8c5e-49d2-b9ea-ebf3abae49b2",
+      "CAP-8580ff67-54ea-425d-84de-1ef15c033c98",
+      "CAP-503e376c-7b49-4dcf-8ce3-5a5f6651162f",
+      "CAP-553b5cad-56f6-4e1c-b863-8963b34cc509",
+      "CAP-36e7e849-b768-4866-ac7f-6237620d3151",
+      "CAP-bd12e687-0fd0-42a8-a799-4643b6bc4676",
+      "CAP-9a68597f-d3bc-45f6-a080-adea39f184b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d",
+      "CAP-1a127bda-0ad3-4ab0-84fc-1e8f22f87678"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/token.matrix.ts",
+        "apps/office/src/sc/source/core/tool/token.matrix.test.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.named-arrays.test.ts",
+        "sc/source/core/tool/token.cxx"
+      ],
+      "justification": "Validates the original literal array token suffix and populates the native ScMatrix with typed values before ScTokenArray replaces the suffix. General matrix formula evaluation, spill and array-capable functions remain outside the literal token merge.",
+      "knownViolations": [],
+      "localSymbols": [
+        "MergeArray"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/tool/token.cxx",
+      "upstreamSymbols": [
+        "ScTokenArray::MergeArray",
+        "checkArraySep"
+      ]
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/xml/xmlexprt.celltext.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "ods-content-filter",
+    "capabilityIds": [
+      "CAP-eec4dd5f-723f-4652-b275-5ad5817f761d",
+      "CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5",
+      "CAP-c13ec941-1af7-4a09-810f-df267da27388",
+      "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681",
+      "CAP-7206d1b8-82a8-4f0a-91c5-ae26cb0251d4",
+      "CAP-0bb796a3-9483-445d-aef3-1deeb40f990a",
+      "CAP-ef411d57-b025-407e-a0b7-fce8342cdeda"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/xml/xmlexprt.celltext.ts",
+        "apps/office/src/sc/source/filter/xml/ods.test.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+        "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx#ScXMLExport::ExportCellTextAutoStyles",
+        "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx#ScXMLExport::WriteEditCell"
+      ],
+      "justification": "Registers automatic styles from native EditTextObject character sections and emits the corresponding paragraph spans. Edit-engine field identity and properties outside the represented character-item mappings remain outside this responsibility. Encodes the native ODF complex-color child in each automatic character style.",
+      "localSymbols": [
+        "CellTextStylePool",
+        "writeCellParagraphs"
+      ],
+      "upstreamSymbols": [
+        "ScXMLExport::ExportCellTextAutoStyles",
+        "ScXMLExport::WriteEditCell"
+      ],
+      "upstreamFile": "sc/source/filter/xml/xmlexprt.cxx",
+      "sourceResponsibility": "divergent",
+      "knownViolations": []
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/oox/worksheetsettings.ts",
+    "upstreamPath": "sc/source/filter/oox/worksheetsettings.cxx",
+    "localSymbols": [
+      "WorksheetSettings",
+      "importSheetProtection",
+      "finalizeImport"
+    ],
+    "upstreamSymbols": [
+      "WorksheetSettings::importSheetProtection",
+      "WorksheetSettings::finalizeImport"
+    ],
+    "preservedResponsibilities": [
+      "Finalizes sheet-wide protection on the canonical document from the source boolean defaults and the two imported password-hash representations.",
+      "Imports enhanced protection descriptors, verifier hashes and sqref references into the native owner."
+    ],
+    "omittedResponsibilities": [
+      "Enhanced protection ranges, chart sheet and binary variants and unrelated worksheet settings remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/worksheetsettings.ts",
+          "marker": "WorksheetSettings"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.sheet-protection.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.enhanced-protection.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/worksheetsettings.cxx",
+          "marker": "WorksheetSettings::importSheetProtection"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/worksheetsettings.cxx",
+          "marker": "WorksheetSettings::finalizeImport"
+        }
+      ]
+    }
+  }
+}

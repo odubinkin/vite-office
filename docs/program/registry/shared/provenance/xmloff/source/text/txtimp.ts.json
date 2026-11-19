@@ -36,6 +36,14 @@
         {
           "path": "apps/office/src/xmloff/source/text/txtimp.ts",
           "marker": "PushTextFrameCursor"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docx-bookmarks.test.ts",
+          "marker": "closes a bookmark between paragraphs"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-page-stories.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -69,7 +77,10 @@
       "Task 202610231745-0YVMQG routes the represented ODT text, paragraph properties, common styles, numbering, bookmarks and cell text through shared XMLTextImportHelper and real Writer text/cursor/style/service owners. Removes SwXMLParagraphTarget and direct ordinary filter item construction. Native table structure and end-document node adjustment retain Writer-specific core responsibility. Character automatic styles use document-pooled handles and CharAutoStyleName; common versus automatic numbering retain separate ownership and export streams. Font scalar members, paragraph controls, page, line-number and consumed property contracts are exercised by focused API/ODT tests. Soft page break XML is ignored as in pinned XMLParaContext. Opaque automatic rule and style names are document-local identities. Full engine/UNO services, unrepresented style families/properties, layout and DOCX remain outside this slice; prior semantic statuses and registered I/O deviations are unchanged.",
       "Task SWRD7X follows native XMLParaContext::endFastElement APPEND_PARAGRAPH and XMLTextImportHelper::DeleteParagraph preferred paragraph-component deletion, rather than split/join cleanup that loses empty-cell character items. Actual cursor enumeration, SwXParagraph XComponent deletion and the bounded single-paragraph DelFullPara owner retain paragraph identity and direct formatting. Explicit host Release only releases borrowed API result positions. Tests cover cursor/mark identity, exhaustion, repeated disposal, last-paragraph refusal, populated/empty superscript cell ODT roundtrip and the original no-component deletion fallback. Broader enumeration, redline, fieldmark, undo, event-listener and document-disposal contracts remain outside this bounded integration repair; prior semantic statuses are unchanged.",
       "Accepts regular table children at the original Cell text location.",
-      "Switches the native cursor and list context for a text box and restores the enclosing paragraph's tracked ranges."
+      "Switches the native cursor and list context for a text box and restores the enclosing paragraph's tracked ranges.",
+      "Applies each named character layer and preceding automatic properties to registered text ranges through the UNO cursor, preserving native attribute precedence.",
+      "Ordinary ODF bookmarks use live registered selections that can extend to later paragraphs.",
+      "Allows the native HeaderFooter context to operate before the original body text cursor exists."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/text/txtimp.cxx",

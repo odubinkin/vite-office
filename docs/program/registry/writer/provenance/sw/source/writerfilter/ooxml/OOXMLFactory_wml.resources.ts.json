@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.resources.ts",
+    "localSymbols": [
+      "resources0"
+    ],
+    "upstreamPath": "sw/source/writerfilter/ooxml/factoryimpl_ns.py",
+    "upstreamSymbols": [
+      "factoryGetResourceId"
+    ],
+    "preservedResponsibilities": [
+      "DOCX open and download reach the native Writer graph through the existing shell and dialogs. Original package relationships, represented text/runs and style import are exercised.",
+      "Includes native definitions and resource rows for signed half-point, paragraph properties, table style overrides and conditional table formatting encountered in the original NumberedList document.",
+      "Admits the original CT_HdrFtr and CT_HdrFtrRef definitions and end-of-reference substream action from the pinned native generators."
+    ],
+    "omittedResponsibilities": [
+      "Table import and full export styles, numbered paragraphs, links, bookmarks, and page fidelity remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.resources.ts",
+          "marker": "resources0"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.numbered-list.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/ooxml/factoryimpl_ns.py",
+          "marker": "factoryGetResourceId"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.resources.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "This split preserves the original responsibility and owner while keeping orchestration and its implementation tables within the size limit."
+    }
+  }
+}

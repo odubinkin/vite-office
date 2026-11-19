@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sot/source/base/exchange.ts",
+    "status": "mapped",
+    "upstreamPath": "sot/source/base/exchange.cxx",
+    "localSymbols": [
+      "SotExchange"
+    ],
+    "upstreamSymbols": [
+      "RegisterFormat",
+      "GetFormatDataFlavor"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source responsibilities retain actual RTL/UNO owners and contracts. Explicit disposal, borrowed UTF16 views, pointer-address cells, compiler overload witnesses and realm-local execution bind the browser host; physical native ABI/thread guarantees remain unqualified."
+    },
+    "preservedResponsibilities": [
+      "Original exchange.cxx standard/dynamic format registry operations over native DataFlavor owners. The same151-entry table, source range order, chart remap and parameter-admission asymmetry are preserved. Global deinitialization/native locking and unrelated IsInternal class-ID logic remain unqualified."
+    ],
+    "omittedResponsibilities": [
+      "The native clipboard registry/helper slice does not implement the legacy compound storage engine or supply a positive native XStorage provider; its earlier scoped branch coverage gap remains open.",
+      "Independent native compiled module differential, physical ABI/allocator/mutex/thread lifetime and runtime shutdown are unqualified.",
+      "Complete DOCX/XLSX model/filter/package/desktop/mobile UI import-export acceptance remains unfinished; existing browser open/save/autosave/recovery choices are retained."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sot/source/base/exchange.ts",
+          "marker": "SotExchange"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sot/source/base/exchange.cxx",
+          "marker": "RegisterFormat"
+        },
+        {
+          "path": "sot/source/base/exchange.cxx",
+          "marker": "GetFormatDataFlavor"
+        }
+      ]
+    }
+  }
+}

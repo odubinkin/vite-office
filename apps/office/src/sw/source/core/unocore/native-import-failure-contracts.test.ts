@@ -274,14 +274,14 @@ it("rejects rename and anchor queries after the core bookmark owner is deleted",
     bookmark = new SwXBookmark();
   try {
     f.cursor.goRight(1, true);
-    expect(
-      failure(
-        /** The bounded collapsed-mark owner rejects unported ranged marks. @returns Nothing. */ () =>
-          bookmark.attach(f.cursor),
-      ),
-    ).toBeInstanceOf(IllegalArgumentException);
-    f.cursor.collapseToStart();
     bookmark.attach(f.cursor);
+    const anchor = bookmark.getAnchor();
+    try {
+      expect(anchor.GetPaM().Start().GetContentIndex()).toBe(0);
+      expect(anchor.GetPaM().End().GetContentIndex()).toBe(1);
+    } finally {
+      anchor.dispose();
+    }
     f.document.GetIDocumentMarkAccess().DeleteMark("Bookmark");
     expect(
       failure(

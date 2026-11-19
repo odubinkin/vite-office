@@ -1,7 +1,15 @@
-/** @fileoverview Original SvxColorItem value ownership from textitem.cxx; native Any, presentation and dump APIs remain unported. */
+/** @fileoverview Original SvxColorItem value and consumed UNO color members from textitem.cxx. */
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import { XComplexColor } from "../../../offapi/com/sun/star/util/XComplexColor";
+import {
+  createXComplexColor,
+  getFromXComplexColor,
+} from "../../../docmodel/inc/uno/UnoComplexColor";
+import { MID_COMPLEX_COLOR } from "../../inc/memberids";
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 import type { SfxItemPool } from "../../../svl/source/items/itempool";
-import { Color, COL_BLACK } from "../../../tools/inc/color";
+import { Color, COL_BLACK, extractColor, insertColor } from "../../../tools/inc/color";
 import { ComplexColor } from "../../../docmodel/inc/color/ComplexColor";
 import { hash_combine } from "../../../o3tl/inc/hash_combine";
 /** Original font-color item owns independent resolved and complex values. */
@@ -83,5 +91,38 @@ export class SvxColorItem extends SfxPoolItem {
   /** Original independent complete ComplexColor assignment. @param color - Actual value. @returns Nothing. */
   public setComplexColor(color: Readonly<ComplexColor>): void {
     this.maComplexColor.assign(color);
+  }
+
+  /** Retains the no-output binding. @returns No value. */
+  override QueryValue(): undefined;
+  /** Copies the consumed RGB or complex-color member into its original UNO value. @param value - Native output. @param member - Item member. @returns Success. */
+  override QueryValue(value: Any, member?: number): boolean;
+  /** Reads the original color when the caller supplies its UNO output. @param value - Native output. @param member - Item member. @returns Success or absence. */
+  override QueryValue(value?: Any, member = 0): boolean | undefined {
+    if (!value) return undefined;
+    if ((member & 0x7f) !== MID_COMPLEX_COLOR) insertColor(value, this.maColor);
+    else {
+      const reference = createXComplexColor(this.maComplexColor);
+      try {
+        value.insert([reference.get()], XComplexColor.static_type);
+      } finally {
+        reference.dispose();
+      }
+    }
+    return true;
+  }
+
+  /** Applies RGB or a non-null native complex color independently. @param value - UNO input. @param member - Item member. @returns Accepted type. */
+  override PutValue(value: unknown, member = 0): boolean {
+    if (!(value instanceof Any)) return false;
+    if ((member & 0x7f) !== MID_COMPLEX_COLOR) return extractColor(value, this.maColor);
+    const reference = new Reference<XComplexColor>();
+    try {
+      if (!value.extract(reference.getAddress(), XComplexColor.static_type)) return false;
+      if (reference.is()) this.setComplexColor(getFromXComplexColor(reference));
+      return true;
+    } finally {
+      reference.dispose();
+    }
   }
 }

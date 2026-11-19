@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/inc/sheetprotection.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/oox/worksheetsettings.cxx",
+    "localSymbols": [
+      "sheetProtectionOptions"
+    ],
+    "upstreamSymbols": [
+      "WorksheetSettings::importSheetProtection"
+    ],
+    "preservedResponsibilities": [
+      "Shares the original inverted protection-option mapping between XLSX read and write owners."
+    ],
+    "omittedResponsibilities": [
+      "Chart sheet and binary variants remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/inc/sheetprotection.ts",
+          "marker": "sheetProtectionOptions"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.sheet-protection.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/worksheetsettings.cxx",
+          "marker": "WorksheetSettings::importSheetProtection"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/inc/sheetprotection.ts",
+      "rationale": "Shares the original OOXML permission-name and default mapping between read and write mechanisms.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

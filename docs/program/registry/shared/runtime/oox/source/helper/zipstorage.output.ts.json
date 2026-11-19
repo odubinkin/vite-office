@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/oox/source/helper/zipstorage.output.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-oox-export-transport",
+    "capabilityIds": [
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708",
+      "CAP-49e7031a-e716-4127-b398-a34ff0f1f08d",
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/oox/source/helper/zipstorage.output.ts",
+        "apps/office/src/oox/source/core/xmlfilterbase.test.ts",
+        "vendor/libreoffice-reference/oox/source/helper/zipstorage.cxx",
+        "apps/office/src/oox/source/helper/native-storage.test.ts"
+      ],
+      "justification": "The Writer DOCX and Calc XLSX export bridge commits filter fragments through registered OFOPXML storage using native media types, relationship streams and package-owned content types. It explicitly disposes successful native parts to surface buffered-write errors and commits children and root with transaction failure propagation.",
+      "knownViolations": [],
+      "localSymbols": [
+        "commitZipStorage",
+        "writePart"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "oox/source/helper/zipstorage.cxx",
+      "upstreamSymbols": [
+        "ZipStorage::implOpenOutputStream",
+        "ZipStorage::implCommit"
+      ]
+    }
+  }
+}

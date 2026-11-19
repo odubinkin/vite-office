@@ -19,7 +19,7 @@ import {
 import { DisposedException } from "../../../cppu/inc/com/sun/star/lang/DisposedException";
 import { NotConnectedException } from "../../../cppu/inc/com/sun/star/io/NotConnectedException";
 import { FastSaxParser, FastSaxParseError, type FastDocument } from "./fastparser";
-import { Entity, decodedChunks } from "./streaminput";
+import { createInputEntity, decodedChunks } from "./streaminput";
 const Bytes = Sequence.specialize<number>("sal_Int8", 1);
 /** Actual UTF16 owner for source identifiers. @param text - Literal. @returns Owned string. */
 function string(text: string): OUString {
@@ -704,7 +704,7 @@ it("retains upstream UTF7 context-loss acceptance of an incomplete tail after a 
 
 it("retains a short decoded checkpoint and flushes its text at source EOF", /** The complete UTF7 representation of optional direct characters <> occupies8 source bytes but converts to only2 UTF8 bytes. Actual source/converter owners therefore exercise delayed byte-engine initialization without fabricated chunks. @returns Nothing. */ () => {
   const value = source(new TextEncoder().encode("+ADwAPg-"), 8, "UTF-7"),
-    entity = new Entity(value.input);
+    entity = createInputEntity(value.input);
   try {
     expect([...decodedChunks(entity)]).toEqual(["", "<>"]);
     expect(value.stream.closed).toBe(false);

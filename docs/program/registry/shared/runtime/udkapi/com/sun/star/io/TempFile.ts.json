@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/udkapi/com/sun/star/io/TempFile.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-seekable-input",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/udkapi/com/sun/star/io/TempFile.ts",
+        "apps/office/src/comphelper/source/streaming/seekableinput.test.ts"
+      ],
+      "justification": "Original generated default service constructor route, query and RuntimeException/DeploymentException behavior through actual service manager. Missing real OTempFileService remains a real error, not a substitute stream. Successful constructor/copy and whole helper scoped90 are unqualified/pending; private unimplemented-native constructor/ABI domains are not forced through fake providers.",
+      "knownViolations": [],
+      "localSymbols": [
+        "TempFile"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "udkapi/com/sun/star/io/TempFile.idl",
+      "upstreamSymbols": [
+        "TempFile",
+        "XTempFile"
+      ]
+    }
+  }
+}

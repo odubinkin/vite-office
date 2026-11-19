@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/xml/sax/FastToken.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/xml/sax/FastToken.idl",
+    "localSymbols": [
+      "DONTKNOW",
+      "NAMESPACE"
+    ],
+    "upstreamSymbols": [
+      "DONTKNOW",
+      "NAMESPACE"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual RTL/UNO owners retain source contracts. Explicit scope destruction and counted views bind logical address storage; physical C++ ABI, native logging/mutex/allocator and complete application parity remain unqualified."
+    },
+    "preservedResponsibilities": [
+      "Exact original two FastToken IDL constants, including unknown -1 and first namespace0x00010000. No payload inference, ordinal remapping, runtime type/default provider or generated implementation."
+    ],
+    "omittedResponsibilities": [
+      "This declaration does not certify any parser/service/model/filter/UI implementation or native binary ABI."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/FastToken.ts",
+          "marker": "DONTKNOW"
+        },
+        {
+          "path": "apps/office/src/sax/source/fastparser/fastparser.entity.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/xml/sax/FastToken.idl",
+          "marker": "DONTKNOW"
+        },
+        {
+          "path": "offapi/com/sun/star/xml/sax/FastToken.idl",
+          "marker": "NAMESPACE"
+        }
+      ]
+    }
+  }
+}

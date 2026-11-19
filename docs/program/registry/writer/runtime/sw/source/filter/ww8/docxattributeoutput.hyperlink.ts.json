@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.hyperlink.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "docx-file-filter",
+    "capabilityIds": [
+      "CAP-d48ffd59-e673-4eda-aa2d-bcf1f13a5c84"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ww8/docxattributeoutput.hyperlink.ts",
+        "apps/office/src/sw/source/filter/ww8/docxattributeoutput.hyperlink.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx",
+        "apps/office/src/sw/source/filter/ww8/docx-bookmarks.test.ts"
+      ],
+      "justification": "DOCX exports native hyperlink ranges using relationship and field representations and emits the represented collapsed bookmark start and end positions. Column bookmarks, implicit and TOX bookmarks, and desktop file base rewriting remain open. DOCX serializes start and end as separate events using the same Word ID for overlapping and multi-paragraph bookmark ranges.",
+      "knownViolations": [],
+      "localSymbols": [
+        "StartURL",
+        "EndURL",
+        "DocxBookmarks"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/ww8/docxattributeoutput.cxx",
+      "upstreamSymbols": [
+        "DocxAttributeOutput::StartURL",
+        "DocxAttributeOutput::EndURL",
+        "DocxAttributeOutput::DoWriteBookmarkTagStart"
+      ]
+    }
+  }
+}

@@ -2,7 +2,17 @@
  * @fileoverview Defines the bounded browser document-medium persistence contract at the LibreOffice `sfx2/source/doc/docfile.cxx` ownership boundary without selecting a browser persistence API.
  */
 
+import {
+  SequenceAsHashMap,
+  type ConstSequenceAsHashMap,
+} from "../../../comphelper/source/misc/sequenceashashmap";
+import { Sequence, type SequenceReference } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import type { XStorage } from "../../../offapi/com/sun/star/embed/XStorage";
+import type { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
+import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { ErrCodeMsg } from "../../../comphelper/inc/errcode";
+import { SfxMediumStorage } from "./docfile.storage";
 
 /** Identifies the storage-neutral medium role associated with a document shell. */
 export type SfxMediumKind = "export" | "input" | "primary" | "untitled";
@@ -80,13 +90,48 @@ export class SfxMedium {
   readonly filterId?: string;
   /** Native filter options carried by the medium item set. */
   readonly filterOptions?: string;
+  private readonly m_aArgs = new SequenceAsHashMap();
+  private readonly nativeStorage?: SfxMediumStorage;
+  /** Original SetArgs replaces the actual descriptor and removes both retained stream entries. @param args - Actual source property sequence. @returns Nothing. */
+  public SetArgs(args: SequenceReference<PropertyValue>): void {
+    this.m_aArgs.insert(args, "PropertyValue");
+    const stream = unicode("Stream"),
+      input = unicode("InputStream");
+    try {
+      this.m_aArgs.erase(stream);
+      this.m_aArgs.erase(input);
+    } finally {
+      input.dispose();
+      stream.dispose();
+    }
+  }
+  /** Original borrowed const map identity; callers must not mutate the returned owner. @returns Retained argument map. */
+  public GetArgs(): ConstSequenceAsHashMap {
+    return this.m_aArgs;
+  }
   private open = true;
   private m_eError = new ErrCodeMsg();
   private m_eWarningError = new ErrCodeMsg();
 
-  /** Creates one explicit medium identity. @param input - Validated medium route. @returns Nothing. */
-  public constructor(input: SfxMediumInput) {
-    assertNonBlank(input.name, "Medium name");
+  /** Creates one medium from the existing browser route or original UNO descriptor. @param input - Medium route or native property sequence. @returns Medium. */
+  public constructor(input: SfxMediumInput | Sequence<PropertyValue>) {
+    if (input instanceof Sequence) {
+      const native = new SfxMediumStorage(input);
+      try {
+        this.SetArgs(input);
+      } catch (error) {
+        native.dispose();
+        this.m_aArgs.dispose();
+        throw error;
+      }
+      this.nativeStorage = native;
+      let name = "";
+      for (let i = 0; i < native.url.getLength(); i++)
+        name += String.fromCharCode(native.url.charAt(i));
+      input = { kind: "export", name };
+    } else {
+      assertNonBlank(input.name, "Medium name");
+    }
     assertMediumInput(input);
     const defaults = getMediumDefaults(input.kind);
     const source = getMediumSource(input);
@@ -99,7 +144,7 @@ export class SfxMedium {
     );
     this.name = input.name;
     this.origin = input.kind === "primary" ? getPrimaryOrigin(source) : defaults.origin;
-    this.readOnly = defaults.readOnly;
+    this.readOnly = this.nativeStorage?.readOnly ?? defaults.readOnly;
     this.source = Object.freeze(source);
     if (input.filterId !== undefined) this.filterId = input.filterId;
     if (input.filterOptions !== undefined) this.filterOptions = input.filterOptions;
@@ -163,9 +208,32 @@ export class SfxMedium {
     });
   }
 
-  /** Marks the medium closed while retaining its stable identity for diagnostics. @returns Nothing. */
+  /** Acquires the storage for the native input descriptor. @returns Storage or an empty reference. */
+  public GetStorage(): Reference<XStorage> {
+    return (this.open && this.nativeStorage?.GetStorage()) || new Reference();
+  }
+
+  /** Acquires the native output storage after checking retained errors. @returns Storage or an empty reference. */
+  public GetOutputStorage(): Reference<XStorage> {
+    if (!this.open || this.GetErrorIgnoreWarning().IsSet()) return new Reference();
+    return this.nativeStorage?.GetOutputStorage() ?? new Reference();
+  }
+
+  /** Commits the storage and transfers its bytes if the medium has an output destination. @returns Whether an error was recorded. */
+  public Commit(): boolean {
+    if (!this.open || this.GetErrorIgnoreWarning().IsSet()) return false;
+    if (this.nativeStorage) this.SetError(this.nativeStorage.Commit());
+    return !this.GetErrorIgnoreWarning().IsSet();
+  }
+
+  /** Closes native storage while retaining the medium's diagnostic identity. @returns Nothing. */
   public Close(): void {
+    if (!this.open) return;
     this.open = false;
+    if (this.nativeStorage) {
+      this.nativeStorage.dispose();
+      this.m_aArgs.clear();
+    }
   }
 
   /** Reports whether the medium still accepts operations. @returns Whether open. */

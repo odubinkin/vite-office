@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/oox/sharedstringsfragment.ts",
+    "localSymbols": [
+      "SharedStringsFragment"
+    ],
+    "upstreamPath": "sc/source/filter/oox/sharedstringsfragment.cxx",
+    "upstreamSymbols": [
+      "SharedStringsFragment::onCreateContext"
+    ],
+    "preservedResponsibilities": [
+      "Selects the native SST root and allocates each string in the workbook buffer before delegating to its own text context for both SpreadsheetML namespaces.",
+      "Binds the same workbook GraphicHelper to parsed shared string runs."
+    ],
+    "omittedResponsibilities": [
+      "XLSB record dispatch is outside this SpreadsheetML XML scope."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/sharedstringsfragment.ts",
+          "marker": "SharedStringsFragment"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sc/source/filter/oox/sharedstringsfragment.cxx",
+          "marker": "SharedStringsFragment::onCreateContext"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/oox/stylesbuffer.ts",
+    "localSymbols": [
+      "Font",
+      "Xf",
+      "StylesBuffer"
+    ],
+    "upstreamPath": "sc/source/filter/oox/stylesbuffer.cxx",
+    "upstreamSymbols": [
+      "Font::importAttribs",
+      "Xf::importXf",
+      "Xf::createPattern",
+      "StylesBuffer::getCellXf",
+      "Font::fillToItemSet"
+    ],
+    "preservedResponsibilities": [
+      "Indexed fonts, solid literal fills and represented alignment map to native Calc patterns. Explicit cell styles override worksheet column defaults.",
+      "The native CellStyle Normal XF materializes in Calc Standard, and dependent cell patterns inherit its named style.",
+      "Font::fillToItemSet projects the represented SpreadsheetML font into native edit items, converts heights to hundredths of a millimetre and supplies signed escapement. The first run can use the current XF font when it requires rich storage.",
+      "Uses the workbook resolver for native font and solid fill display and complex-color metadata.",
+      "Resolves the original border XF ID and applies real line and box items on the Calc pattern.",
+      "Applies native alignment and rotation-reference items through XF ancestry.",
+      "Resolves the cell XF and its source style parent protection flags and installs the actual native protection item."
+    ],
+    "omittedResponsibilities": [
+      "The theme, format-code, border and differential-format families remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/stylesbuffer.ts",
+          "marker": "StylesBuffer"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "round trips visual styles"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx",
+          "marker": "StylesBuffer::getCellXf"
+        },
+        {
+          "path": "sc/source/filter/oox/stylesbuffer.cxx",
+          "marker": "Font::fillToItemSet"
+        }
+      ]
+    }
+  }
+}

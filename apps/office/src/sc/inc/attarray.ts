@@ -1,7 +1,7 @@
 /** @fileoverview Original attarray.hxx merge-state value and attribute-array boundary. */
 import { CellAttributeHolder } from "./patattr";
 import type { SfxItemSet } from "../../svl/inc/itemset";
-export { ScAttrArray } from "../source/core/data/attarray";
+export { ScAttrArray, ScAttrEntry } from "../source/core/data/attarray";
 
 /** Native selection merge accumulator retains two canonical pattern holders and optional merged items. */
 export class ScMergePatternState {

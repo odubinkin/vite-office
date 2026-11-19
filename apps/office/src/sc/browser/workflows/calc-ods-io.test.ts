@@ -1,5 +1,6 @@
 /** @fileoverview Real Calc ODS primary bytes,shared IndexedDB and autosave cadence/race integration. */
 import type { ScPatternAttr } from "../../inc/patattr";
+import { readFileSync } from "node:fs";
 import { ScInputMode } from "../../inc/global";
 import { afterEach, expect, it, vi } from "vitest";
 import { IDBFactory } from "fake-indexeddb";
@@ -9,6 +10,8 @@ import { CalcViewController } from "../controller/calc-view-controller";
 import { createCalcSession } from "../composition/calc-module";
 import { ScDocShell } from "../../source/ui/docshell/docsh";
 import { ScAddress } from "../../inc/address";
+import { ScPasswordHash } from "../../inc/tabprotection";
+import { ScTableProtection } from "../../source/core/data/tabprotection";
 import { readOdsDocument } from "../../source/filter/xml/xmlwrap";
 import {
   autosaveCalc,
@@ -32,6 +35,58 @@ afterEach(
 function store(): IndexedDbDocumentStore {
   return new IndexedDbDocumentStore(crypto.randomUUID(), new IDBFactory());
 }
+
+it("persists legacy Excel protection and preserves the active model when ODS requires retyping", /** Checks actual import, save and reopen against IndexedDB. @returns Completion. */ async () => {
+  const controller = new CalcViewController();
+  const shell = controller.shell;
+  const db = store();
+  const bytes = readFileSync(
+    "../../vendor/libreoffice-reference/sc/qa/unit/data/xlsx/ProtecteSheet1234Pass.xlsx",
+  );
+  try {
+    await shell.Open(
+      bytes,
+      createDocument({ id: "protected", suiteId: "calc", title: "Protected" }),
+      {
+        kind: "input",
+        name: "Protected.xlsx",
+        filterId: ScDocShell.XLSX_FILTER_NAME,
+        mediaType: ScDocShell.XLSX_MEDIA_TYPE,
+        source: {
+          kind: "external",
+          reference: new File([new Uint8Array(bytes)], "Protected.xlsx"),
+        },
+      },
+    );
+    expect(await autosaveCalc(shell, db, true)).toBe(true);
+    const stored = await db.load("protected");
+    expect(stored?.content.files["content.xml"]).toContain(
+      'table:protection-key="ibbcz2WONDGApdl1540bfATbEDc="',
+    );
+    expect(await openBrowserCalcDocument(shell, db, "protected")).toBe(true);
+    const active = shell.GetDocument();
+    expect(active.IsTabProtected(0)).toBe(true);
+    expect(active.GetTabProtection(0)?.getStoredPasswordHash()?.secondary).toBe(
+      ScPasswordHash.SHA1,
+    );
+
+    const modern = new ScTableProtection();
+    modern.setProtected(true);
+    modern.setOoxPasswordHash({
+      algorithmName: "SHA-512",
+      hashValue: "AQID",
+      saltValue: "BAUG",
+      spinCount: 100000,
+    });
+    active.SetTabProtection(0, modern);
+    expect(await autosaveCalc(shell, db, true)).toBe(false);
+    expect((await db.load("protected"))?.content).toEqual(stored?.content);
+    expect(shell.GetDocument()).toBe(active);
+    expect(active.GetTabProtection(0)?.getOoxPasswordHash()?.hashValue).toBe("AQID");
+  } finally {
+    controller.Close();
+  }
+});
 
 it("shares Writer naming/empty rules and stores actual ODS bytes before adopting primary identity", /** Uses real scalar owners and package filters. @returns Completion. */ async () => {
   const c = new CalcViewController(),

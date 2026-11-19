@@ -1,0 +1,81 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/oox/sheetdatabuffer.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/oox/sheetdatabuffer.cxx",
+    "localSymbols": [
+      "CellModel",
+      "CellFormulaModel",
+      "DataTableModel",
+      "XfIdRowRange",
+      "MergedRange",
+      "SheetDataBuffer"
+    ],
+    "upstreamSymbols": [
+      "CellModel::CellModel",
+      "CellFormulaModel::CellFormulaModel",
+      "DataTableModel::DataTableModel",
+      "SheetDataBuffer::XfIdRowRange::tryExpand",
+      "SheetDataBuffer::MergedRange::tryExpand",
+      "SheetDataBuffer::finalizeImport",
+      "SheetDataBuffer::setDateCell",
+      "SheetDataBuffer::setBooleanCell",
+      "SheetDataBuffer::setErrorCell",
+      "SheetDataBuffer::setStringCell"
+    ],
+    "preservedResponsibilities": [
+      "Original value defaults, copies and range predicates retain native ownership and adjacency checks (CALC687). The worksheet finalizer applies merge borders and the merged range to the actual Calc document after importing cell data.",
+      "Explicit dates retain the supplied XF and fall back to text on invalid input. Boolean and error scalars use the existing formula compiler and the native logical number format.",
+      "Plain shared strings set native text, while multiple portions and multiline text create the actual Calc EditTextObject. An unresolved shared string leaves the previously applied XF.",
+      "Routes the actual effective first-portion font and stores the native rich EditTextObject."
+    ],
+    "omittedResponsibilities": [
+      "Complete WorksheetHelper/WorkbookGlobals and SheetDataBuffer style, formula and cache orchestration remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/sheetdatabuffer.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/sheetdatabuffer.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "mergeCell"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/typed-date-cells.test.ts",
+          "marker": "reopens explicit date"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/sheetdatabuffer.cxx",
+          "marker": "CellModel::CellModel"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/inc/sheetdatabuffer.hxx",
+          "marker": "XfIdRowRange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/sheetdatabuffer.cxx",
+          "marker": "SheetDataBuffer::setDateCell"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/sheetdatabuffer.cxx",
+          "marker": "SheetDataBuffer::setBooleanCell"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/sheetdatabuffer.cxx",
+          "marker": "SheetDataBuffer::setErrorCell"
+        }
+      ]
+    }
+  }
+}

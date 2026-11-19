@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.section.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "docx-file-filter",
+    "capabilityIds": [
+      "CAP-d48ffd59-e673-4eda-aa2d-bcf1f13a5c84"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ww8/docxattributeoutput.section.ts",
+        "apps/office/src/sw/source/filter/ww8/docxattributeoutput.section.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx"
+      ],
+      "justification": "Body section output uses native page descriptors and page frames. The initial section uses the first block assignments, subsequent assignments close the preceding paragraph or use a structural paragraph after a table, and the final section is owned by the document body. Page size, physical margins, page parity, writing direction and the optional decimal restart use the represented native Word output. Full content sections, header/footer content, non-decimal page numbering, page-grid and mirrored/gutter round trips remain open.",
+      "knownViolations": [],
+      "localSymbols": [
+        "MSWordSections",
+        "SectionProperties"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/ww8/docxattributeoutput.cxx",
+      "upstreamSymbols": [
+        "DocxAttributeOutput::FormatFrameSize",
+        "DocxAttributeOutput::FormatLRSpace",
+        "DocxAttributeOutput::FormatFrameDirection"
+      ]
+    }
+  }
+}

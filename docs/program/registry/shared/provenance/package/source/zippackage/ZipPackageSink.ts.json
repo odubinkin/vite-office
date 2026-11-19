@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/zippackage/ZipPackageSink.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/zippackage/ZipPackageSink.cxx",
+    "localSymbols": [
+      "ZipPackageSink",
+      "setInputStream",
+      "getInputStream"
+    ],
+    "upstreamSymbols": [
+      "ZipPackageSink",
+      "setInputStream",
+      "getInputStream"
+    ],
+    "preservedResponsibilities": [
+      "Original active data sink retains, replaces and returns acquired native UNO input references; it does not close borrowed input streams."
+    ],
+    "omittedResponsibilities": [
+      "Physical C++ ABI/allocation/thread guarantees, URL-provider success and full package/storage/model/filter/UI DOCX/XLSX acceptance remain unqualified or unfinished."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackageSink.ts",
+          "marker": "ZipPackageSink"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/zipfileaccess.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/zippackage/ZipPackageSink.cxx",
+          "marker": "ZipPackageSink"
+        }
+      ]
+    }
+  }
+}

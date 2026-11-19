@@ -3,8 +3,9 @@ import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustr
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { uno_type_any_assign } from "../../../cppu/inc/uno/any2";
 import { cpp_acquire, cpp_release } from "../../../cppu/inc/com/sun/star/uno/genfunc";
-import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import { Sequence, type SequenceReference } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import type { UnoTypeArgument } from "../../../cppu/inc/unotype";
+import type { XInterface } from "../../../cppu/inc/com/sun/star/uno/XInterface";
 import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import { IllegalArgumentException } from "../../../cppu/inc/com/sun/star/lang/IllegalArgumentException";
 import {
@@ -22,9 +23,9 @@ const PropertyValues = Sequence.specialize<PropertyValue>(propertyType, 48);
 /** Original erased sequence overload selection is a caller-declared compiler witness, not inferred from values. */
 type Input =
   | [source: Any]
-  | [source: Sequence<Any>, kind: "Any"]
-  | [source: Sequence<PropertyValue>, kind: "PropertyValue"]
-  | [source: Sequence<NamedValue>, kind: "NamedValue"];
+  | [source: SequenceReference<Any>, kind: "Any"]
+  | [source: SequenceReference<PropertyValue>, kind: "PropertyValue"]
+  | [source: SequenceReference<NamedValue>, kind: "NamedValue"];
 /** Original cache-key owner. */
 export class OUStringAndHashCode {
   readonly maString: OUString;
@@ -55,6 +56,22 @@ export class OUStringAndHashCodeHash {
 }
 /** Original owned unordered pair; callers borrow it and must not destroy its members. */
 export type SequenceAsHashMapEntry = readonly [OUStringAndHashCode, Any];
+/** Erased native const-reference view: all operations read this owner, even when extracting into a caller destination. No separate map or provider is created. */
+export type ConstSequenceAsHashMap = Pick<
+  SequenceAsHashMap,
+  | "getAsConstPropertyValueList"
+  | "getAsConstNamedValueList"
+  | "getAsConstAny"
+  | "getValue"
+  | "getUnpackedValueOrDefault"
+  | "match"
+  | "find"
+  | "contains"
+  | "begin"
+  | "size"
+  | "empty"
+  | "extract"
+>;
 /** Host unordered lookup spelling preserves every UTF16 code unit, including embedded NUL and lone surrogates; original key ownership/hash remains in each pair. @param source - Native string. @returns Exact lookup key. */
 function keyString(source: OUStringConstReference): string {
   let result = "";
@@ -64,7 +81,7 @@ function keyString(source: OUStringConstReference): string {
 }
 /** Original generated struct fields viewed from an actual sequence address, without a serialized value projection. @param source - Actual sequence. @param index - Element index. @param offset - Declared Any member offset. @returns Borrowed original name and Any. */
 function fields(
-  source: Sequence<unknown>,
+  source: SequenceReference<unknown>,
   index: number,
   offset: number,
 ): readonly [OUStringConstReference, Any] {
@@ -86,7 +103,7 @@ function fail(text: string): never {
 export class SequenceAsHashMap {
   private readonly m_aMap = new Map<string, SequenceAsHashMapEntry>();
   /** Original default, copy and source overloads. @param args - Declared native source overload. @returns Map. */
-  constructor(...args: [] | [source: SequenceAsHashMap] | Input) {
+  constructor(...args: [] | [source: ConstSequenceAsHashMap] | Input) {
     if (args.length === 1 && args[0] instanceof SequenceAsHashMap) this.update(args[0]);
     else if (args.length) this.insert(...(args as Input));
   }
@@ -130,7 +147,7 @@ export class SequenceAsHashMap {
       fail("Any contains wrong type.");
     } else if (kind === "Any") {
       for (let i = 0; i < source.getLength(); ++i) {
-        const value = (source as Sequence<Any>).operatorIndex(i),
+        const value = (source as SequenceReference<Any>).operatorIndex(i),
           property = new PropertyValue();
         try {
           if (Any.prototype.extract.call(value, property, propertyType)) {
@@ -221,17 +238,58 @@ export class SequenceAsHashMap {
     const entry = this.find(key);
     return entry === undefined ? new Any() : new Any(entry[1]);
   }
-  /** Original signed32 getUnpackedValueOrDefault template instantiation: missing or failed extraction returns the supplied default, while the temporary starts at zero. Other template instantiations remain unported. @param key - Borrowed key. @param defaultValue - Original signed32 default. @param argument - Declared template specialization. @returns Extracted value or supplied default. */
+  /** Original signed32 template instantiation. @param key - Borrowed name. @param defaultValue - Original default. @param argument - Declared type. @returns Value or supplied default. */
   getUnpackedValueOrDefault(
     key: OUStringConstReference,
     defaultValue: number,
     argument: "sal_Int32",
-  ): number {
+  ): number;
+  /** Original bool template instantiation. @param key - Borrowed name. @param defaultValue - Original default. @param argument - Declared type. @returns Value or supplied default. */
+  getUnpackedValueOrDefault(
+    key: OUStringConstReference,
+    defaultValue: boolean,
+    argument: "bool",
+  ): boolean;
+  /** Original Unicode value template instantiation returns an independent acquired value. @param key - Borrowed name. @param defaultValue - Borrowed default. @param argument - Declared type. @returns Owned string. */
+  getUnpackedValueOrDefault(
+    key: OUStringConstReference,
+    defaultValue: OUStringConstReference,
+    argument: "OUString",
+  ): OUString;
+  /** Original Reference template instantiation, retaining actual default/returned interface ownership. @param key - Borrowed name. @param defaultValue - Actual default reference. @param argument - Declared native Reference specialization. @returns Owned reference. */
+  getUnpackedValueOrDefault<T extends XInterface>(
+    key: OUStringConstReference,
+    defaultValue: Reference<T>,
+    argument: readonly ["Reference", UnoTypeArgument],
+  ): Reference<T>;
+  /** Original initialized temporary, extraction and return-by-value fallback. Other template types remain unported. @param key - Borrowed name. @param defaultValue - Actual default. @param argument - Erased original template specialization. @returns Original result. */
+  getUnpackedValueOrDefault(
+    key: OUStringConstReference,
+    defaultValue: number | boolean | OUStringConstReference | Reference<XInterface>,
+    argument: "sal_Int32" | "bool" | "OUString" | readonly ["Reference", UnoTypeArgument],
+  ): number | boolean | OUString | Reference<XInterface> {
     const entry = this.find(key);
-    if (entry === undefined) return defaultValue;
+    if (defaultValue instanceof Reference) {
+      if (entry === undefined) return new Reference(defaultValue);
+      const value = new Reference<XInterface>();
+      if (entry[1].extract(value.getAddress(), argument)) return value;
+      value.dispose();
+      return new Reference(defaultValue);
+    }
+    if (argument === "OUString") {
+      if (entry === undefined) return new OUString(defaultValue as OUStringConstReference);
+      const value = new OUString();
+      if (entry[1].extract(value, argument)) return value;
+      value.dispose();
+      return new OUString(defaultValue as OUStringConstReference);
+    }
+    if (entry === undefined) return defaultValue as number | boolean;
+    if (argument === "bool") {
+      const value: [boolean] = [false];
+      return entry[1].extract(value, argument) ? value[0] : (defaultValue as boolean);
+    }
     const value: [number] = [0];
-    if (!entry[1].extract(value, argument)) return defaultValue;
-    return value[0];
+    return entry[1].extract(value, argument) ? value[0] : (defaultValue as number);
   }
   /** Original creates a typed item only if its name is absent. @param key - Borrowed name. @param value - Declared value address. @param argument - Native template witness. @returns Whether added. */
   createItemIfMissing(
@@ -249,17 +307,16 @@ export class SequenceAsHashMap {
     return true;
   }
   /** Original subset test compares both names and actual UNO Any equality. @param check - Borrowed search map. @returns Match. */
-  match(check: SequenceAsHashMap): boolean {
-    for (const [key, value] of check.m_aMap.values()) {
+  match(check: ConstSequenceAsHashMap): boolean {
+    for (const [key, value] of check.begin()) {
       const found = this.find(key.maString);
       if (found === undefined || found[1].operatorNotEquals(value)) return false;
     }
     return true;
   }
   /** Original update overwrites/creates but retains unspecified existing names. @param source - Borrowed source. @returns Nothing. */
-  update(source: SequenceAsHashMap): void {
-    for (const [key, value] of source.m_aMap.values())
-      this.operatorIndex(key.maString).assign(value);
+  update(source: ConstSequenceAsHashMap): void {
+    for (const [key, value] of source.begin()) this.operatorIndex(key.maString).assign(value);
   }
   /** Original lookup borrows the actual pair, with undefined representing end; physical iterator representation/invalidation is outside this host binding. @param key - Borrowed name or cached key. @returns Pair or end. */
   find(key: OUStringConstReference | OUStringAndHashCode): SequenceAsHashMapEntry | undefined {

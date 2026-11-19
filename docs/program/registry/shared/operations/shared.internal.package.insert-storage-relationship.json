@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.package.insert-storage-relationship",
+    "modulePath": "apps/office/src/package/source/xstor/xstorage.relationship-access.ts",
+    "symbol": "insertStorageRelationship",
+    "classification": "upstream-mechanism",
+    "capabilityId": "CAP-e9a3430f-1545-4e36-8849-bd900998ed83",
+    "description": "Inserts an OFOPXML relationship or replaces the last original ID match."
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/xstor/switchpersistencestream.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-package-input-component",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/source/xstor/switchpersistencestream.ts",
+        "apps/office/src/package/source/xstor/switchpersistencestream.test.ts",
+        "apps/office/src/oox/source/core/fastparser.test.ts",
+        "vendor/libreoffice-reference/package/source/xstor/switchpersistencestream.cxx"
+      ],
+      "justification": "Original SwitchablePersistenceStream/SPStreamData_Impl own actual native UNO persistence capabilities and explicit ByteReader RTTI, six real UNO interfaces, source equal-length/position/open-flag transfer, input-only IO rejection, native pointer/Sequence read distinction, logical side closure, actual seek/truncate/monitor forwarding and reverse member lifetime. Real UNOMemoryStream/SequenceInputStream and nested original persistence owners provide positive IO and monitoring/error propagation, not a replacement provider. Original m_aMutex and source scoped_lock boundaries now call the actual pinned libc++ std::mutex owner, including exception cleanup and constructor unwinding. SwitchPersistenceTo, CloseAll_Impl and waitForCompletion retain their source lack of locking; native pthread race behavior is not qualified. Original generic qadevOOo XInputStream and XOutputStream assertions execute over genuine persistence facets. CopyAndSwitchPersistenceTo/actual TempFileFastService and full OStorage/StorageFactory/backend/filter/model/UI graph remain unported; pointer fallback without ByteReader and private unreachable guards remain unqualified. Original ByteGrabber/ByteChucker/MemoryByteGrabber ZIP binary IO now consumes actual UNO references, reusable native sequences/fixed8byte storage, explicit ByteReader RTTI and source integer/short-read/seek/borrow rules. Existing ByteReader/ByteWriter and real implementers accept both actual SAL Int8Array/Uint8Array pointers and CPPU byte cells, removing the earlier cells-only restriction without a replacement stream/provider. Pointer arithmetic uses actual backing allocation/byteOffset, source lifecycle remains GC-managed. Unchanged pinned Strict/Transitional DOCX/XLSX local headers prove archive byte IO only. Memory UInt8/UInt16 signed results and ByteChucker unguarded seek assumption retained. Native full directory/inflate/XStorage/filter/model/export/UI and actual non-ByteReader source fallback remain unqualified or unfinished; no source masks/private patches/fake success stream. Actual Chromium main and DOM-free Worker exercise 64001-byte copy, equal-length persistence replacement, original position/open flags, Sequence/pointer reads and logical closure. Complete owner coverage still fails90 (87.74 statements/79.54 branches/100 functions/93.45 lines); unavailable-capability branches are not fabricated or excluded. Original CopyAndSwitchPersistenceTo is now implemented: supplied targets must be empty, absent targets create actual TempFileFastService, real capabilities are queried, original input seeks0/copies/flushes, saved position/open flags transfer, and old data releases before new SPStreamData installation. No mutex/rollback/disconnected guard is invented where source omits it. Actual32000-byte raw/Sequence copy paths and genuine readonly-target failures are tested without fake providers.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwitchablePersistenceStream",
+        "SPStreamData_Impl",
+        "SwitchPersistenceTo",
+        "CloseAll_Impl",
+        "readSomeBytes",
+        "waitForCompletion",
+        "CopyAndSwitchPersistenceTo"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/xstor/switchpersistencestream.cxx",
+      "upstreamSymbols": [
+        "SwitchablePersistenceStream",
+        "SPStreamData_Impl",
+        "SwitchPersistenceTo",
+        "CloseAll_Impl",
+        "readSomeBytes",
+        "waitForCompletion",
+        "CopyAndSwitchPersistenceTo"
+      ]
+    }
+  }
+}

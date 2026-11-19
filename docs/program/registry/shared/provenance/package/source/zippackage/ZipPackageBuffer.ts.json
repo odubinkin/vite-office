@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/zippackage/ZipPackageBuffer.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/zippackage/ZipPackageBuffer.cxx",
+    "localSymbols": [
+      "ZipPackageBuffer"
+    ],
+    "upstreamSymbols": [
+      "ZipPackageBuffer",
+      "readBytes",
+      "writeBytes",
+      "seek"
+    ],
+    "preservedResponsibilities": [
+      "Original ZipPackageBuffer lazy byte Sequence, end/current/capacity bookkeeping, doubling based on end plus input, shared input/output cursor, no-op close/flush, bounded read/skip/seek and generated exception Context/argument contracts. Actual UNO query and Sequence copy-on-write, native ZipOutputStream/ZipFile write/read integration are covered. JS backing memory remains GC-managed. Physical allocations/OOM, signed32 capacity overflow and native ABI are unqualified; package storage, compression, document model/filter/UI integration remains unfinished."
+    ],
+    "omittedResponsibilities": [
+      "Native allocator/OOM, signed32 capacity overflow, ABI; full package/storage/compression/model/filter/UI acceptance."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackageBuffer.ts",
+          "marker": "ZipPackageBuffer"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackageBuffer.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/zippackage/ZipPackageBuffer.cxx",
+          "marker": "ZipPackageBuffer::writeBytes"
+        }
+      ]
+    }
+  }
+}

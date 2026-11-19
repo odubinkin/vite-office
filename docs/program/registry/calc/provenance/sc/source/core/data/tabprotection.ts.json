@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/tabprotection.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/tabprotection.cxx",
+    "localSymbols": [
+      "ScTableProtection"
+    ],
+    "upstreamSymbols": [
+      "ScTableProtection::ScTableProtection",
+      "ScTableProtection::setPasswordHash"
+    ],
+    "preservedResponsibilities": [
+      "Preserves the original sheet flag, owned copy, permissions and the two imported Excel verifier representations.",
+      "Stores the native legacy and ODF verifier in the same primary/secondary format and checks native sheet-workbook hash compatibility.",
+      "Retains enhanced protection records and evaluates the original direct and union predicates for uncredentialed ranges.",
+      "Requires each enhanced protection range in the marked selection to pass the native block rule."
+    ],
+    "omittedResponsibilities": [
+      "Password verification, range updates and whole-document structure protection remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/tabprotection.ts",
+          "marker": "ScTableProtection"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.sheet-protection.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-sheet-protection.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.enhanced-protection.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/tabprotection.cxx",
+          "marker": "ScTableProtection::ScTableProtection"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/tabprotection.cxx",
+          "marker": "ScTableProtection::setPasswordHash"
+        }
+      ]
+    }
+  }
+}

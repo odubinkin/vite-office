@@ -1,4 +1,5 @@
 /** @fileoverview Original ServiceManager for bundled constructor-backed implementations and DefaultContext. */
+import type { ReferenceConstParameter } from "../../cppu/inc/com/sun/star/uno/Reference";
 import { PropertyVetoException } from "../../cppu/inc/com/sun/star/beans/PropertyVetoException";
 import { UnknownPropertyException } from "../../cppu/inc/com/sun/star/beans/UnknownPropertyException";
 import { XServiceInfo } from "../../cppu/inc/com/sun/star/lang/XServiceInfo";
@@ -36,6 +37,7 @@ export interface Implementation {
   readonly name: string;
   readonly services: readonly string[];
   readonly constructorFn: WrapperConstructorFn;
+  readonly singleInstance?: boolean;
 }
 
 /** Original named implementations and ordered service lists. */
@@ -107,6 +109,7 @@ export class ServiceManager
     XPropertySetInfo
 {
   private readonly data_: Data;
+  private readonly singletons = new Map<Implementation, Reference<XInterface>>();
   private readonly context_ = new Reference<XComponentContext>();
 
   /** Loads statically linked implementations before the default context is set. @param implementations - Bundled component records. @returns Service manager. */
@@ -116,7 +119,7 @@ export class ServiceManager
   }
 
   /** Original one-time default context assignment. @param context - Created context. @returns Nothing. */
-  setContext(context: Reference<XComponentContext>): void {
+  setContext(context: ReferenceConstParameter<XComponentContext>): void {
     if (!context.is() || this.context_.is()) throw new Error("invalid ServiceManager context");
     this.context_.assign(context);
   }
@@ -163,13 +166,17 @@ export class ServiceManager
   /** Original lookup precedes the constructor call with an empty Any sequence. @param service - Requested service. @param context - Caller context. @returns Owned reference. */
   createInstanceWithContext(
     service: OUStringConstReference,
-    context: Reference<XComponentContext>,
+    context: ReferenceConstParameter<XComponentContext>,
   ): Reference<XInterface> {
     const impl = this.findServiceImplementation(service);
     if (impl === undefined) return new Reference();
+    const cached = this.singletons.get(impl);
+    if (cached) return new Reference(cached);
     const args = new Arguments();
     try {
-      return new Reference(impl.constructorFn(context.get(), args), SAL_NO_ACQUIRE);
+      const result = new Reference(impl.constructorFn(context.get(), args), SAL_NO_ACQUIRE);
+      this.remember(impl, result);
+      return result;
     } finally {
       args.dispose();
     }
@@ -179,15 +186,18 @@ export class ServiceManager
   createInstanceWithArgumentsAndContext(
     service: OUStringConstReference,
     args: Sequence<Any>,
-    context: Reference<XComponentContext>,
+    context: ReferenceConstParameter<XComponentContext>,
   ): Reference<XInterface> {
     const impl = this.findServiceImplementation(service);
     if (impl === undefined) return new Reference();
+    const cached = this.singletons.get(impl);
+    if (cached) return new Reference(cached);
     const result = new Reference(impl.constructorFn(context.get(), args), SAL_NO_ACQUIRE);
     try {
       const init = new Reference<XInitialization>(result, UNO_QUERY, XInitialization.static_type);
       try {
         if (init.is()) init.operatorStar().initialize(args);
+        this.remember(impl, result);
         return result;
       } finally {
         init.dispose();
@@ -196,6 +206,18 @@ export class ServiceManager
       result.dispose();
       throw error;
     }
+  }
+
+  /** Retains the original single-instance implementation after construction succeeds. @param impl - Registered implementation. @param instance - Acquired component. @returns Nothing. */
+  private remember(impl: Implementation, instance: Reference<XInterface>): void {
+    if (impl.singleInstance && instance.is()) this.singletons.set(impl, new Reference(instance));
+  }
+
+  /** Releases the manager's single-instance storage. @returns Nothing. */
+  private clearSingletons(): void {
+    const instances = [...this.singletons.values()];
+    this.singletons.clear();
+    for (const instance of instances) instance.dispose();
   }
 
   /** Original service name takes precedence over implementation name. @param service - Requested name. @returns First resolved implementation. */
@@ -302,10 +324,12 @@ export class ServiceManager
   protected override disposingComponent(): void {
     this.data_.services.clear();
     this.data_.namedImplementations.clear();
+    this.clearSingletons();
   }
 
   /** Original default-context member is destroyed with the manager. @returns Nothing. */
   protected override destroy(): void {
+    this.clearSingletons();
     this.context_.dispose();
     super.destroy();
   }

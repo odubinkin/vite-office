@@ -1,4 +1,5 @@
 /** @fileoverview Original UNOMemoryStream component, service/query identity, shared cursor and input/output/truncate protocols. A signed typed-array backing lowers the primitive std::vector noinit allocation; physical allocation, indeterminate gap values and ABI remain unverified. */
+import type { ByteElements } from "../../../sal/inc/rtl/byteseq.h";
 import { WeakImplHelper } from "../../../cppuhelper/inc/implbase";
 import { supportsService } from "../../../cppuhelper/inc/supportsservice";
 import { XServiceInfo } from "../../../cppu/inc/com/sun/star/lang/XServiceInfo";
@@ -109,13 +110,17 @@ export class UNOMemoryStream
     return count;
   }
   /** Original memcpy and cursor update, sharing the source's pointer-read implementation. @param data - Initialized writable destination. @param count - Bounded read count. @returns Nothing. */
-  private copyRead(data: SequenceElements, count: number): void {
-    for (let i = 0; i < count; ++i)
-      (data.get(i) as [number])[0] = this.maData[this.mnCursor + i] as number;
+  private copyRead(data: ByteElements, count: number): void {
+    const target = ArrayBuffer.isView(data) ? new Int8Array(data.buffer, data.byteOffset) : null;
+    for (let i = 0; i < count; ++i) {
+      const value = this.maData[this.mnCursor + i] as number;
+      if (target) target[i] = value;
+      else ((data as SequenceElements).get(i) as [number])[0] = value;
+    }
     this.mnCursor += count;
   }
   /** Original sequence/pointer overloads retain the original bounds and exception message. @param data - Sequence or writable pointer. @param count - Signed32 count. @returns Read count. */
-  readSomeBytes(data: Sequence<number> | SequenceElements, count: number): number {
+  readSomeBytes(data: Sequence<number> | ByteElements, count: number): number {
     if (data instanceof Sequence) return this.readBytes(data, count);
     if (count < 0) this.invalidCount("nBytesToRead < 0");
     count = Math.min(count, this.available());
@@ -161,9 +166,9 @@ export class UNOMemoryStream
   /** Original sequence output forwarding. @param data - Actual native sequence. @returns Nothing. */
   writeBytes(data: Sequence<number>): void;
   /** Original ByteWriter counted pointer overload. @param data - Initialized pointer. @param count - Signed32 byte count. @returns Nothing. */
-  writeBytes(data: SequenceElements, count: number): void;
+  writeBytes(data: ByteElements, count: number): void;
   /** Original sequence/pointer output; a negative raw count violates the native assertion precondition. @param data - Actual native sequence or byte pointer. @param count - Required raw pointer count. @returns Nothing. */
-  writeBytes(data: Sequence<number> | SequenceElements, count?: number): void {
+  writeBytes(data: Sequence<number> | ByteElements, count?: number): void {
     if (data instanceof Sequence) {
       this.writeBytes(data.getConstArray() as SequenceElements, data.getLength());
       return;
@@ -182,7 +187,11 @@ export class UNOMemoryStream
       }
     }
     if (length > this.mnSize) this.resize(length);
-    for (let i = 0; i < size; ++i) this.maData[this.mnCursor + i] = (data.get(i) as [number])[0];
+    const source = ArrayBuffer.isView(data) ? new Int8Array(data.buffer, data.byteOffset) : null;
+    for (let i = 0; i < size; ++i)
+      this.maData[this.mnCursor + i] = source
+        ? (source[i] as number)
+        : ((data as SequenceElements).get(i) as [number])[0];
     this.mnCursor += size;
   }
   /** Original empty flush. @returns Nothing. */

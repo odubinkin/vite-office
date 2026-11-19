@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/core/tool/address.ooo.ts",
+    "localSymbols": [
+      "parseOOOA1",
+      "formatTab",
+      "findRangeSeparator"
+    ],
+    "upstreamPath": "sc/source/core/tool/address.cxx",
+    "upstreamSymbols": [
+      "lcl_ScAddress_Parse_OOo",
+      "lcl_ScRange_Parse_OOo",
+      "ScAddress::Format"
+    ],
+    "preservedResponsibilities": [
+      "Local A1 and internal sheet-qualified OOO/ODF addresses preserve sheet quoting and absolute flags for range attributes."
+    ],
+    "omittedResponsibilities": [
+      "External sheet references and full Excel header parsing remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/address.ooo.ts",
+          "marker": "parseOOOA1"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/print-ranges.test.ts",
+          "marker": "keeps quoted print areas"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/address.cxx",
+          "marker": "lcl_ScAddress_Parse_OOo"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/tool/address.ooo.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The native OOO reference scanner and sheet qualifier are separated from the numeric owners to keep address.ts within the authored size budget."
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/ucb/source/core/ucbcmds.info.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-ucb-command-contracts",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f",
+      "CAP-6ebb6661-ebeb-41ed-b8d6-04280a3b80b4"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/ucb/source/core/ucbcmds.info.ts",
+        "apps/office/src/ucb/source/core/native-command-info.test.ts",
+        "scripts/fixtures/native-ucb-command-probe.ts"
+      ],
+      "justification": "Original source-internal three-command metadata component preserves initializer-list native Sequence construction, void/legacy GlobalTransferCommandArgument/CheckinArgument types, exact-name and handle lookup, default UnsupportedCommandException and by-value descriptor/shared-sequence COW behavior. This is the real metadata component, not a partial broker; execution and transfer/check-in owners remain unbound. Actual source-derived owner tests exercise defaults, nonvirtual copy/inequality, inherited live field projections and real UNO Any/Sequence/caught-exception transport. All10 new executable owners independently pass90; Chromium main/DOM-free Worker use real metadata/value owners. Native physical C++ ABI/allocation/thread promises and full UniversalContentBroker/provider/transfer/check-in/DOCX-XLSX core/UI remain unqualified or unfinished.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CommandProcessorInfo"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "ucb/source/core/ucbcmds.cxx",
+      "upstreamSymbols": [
+        "CommandProcessorInfo",
+        "getCommands",
+        "getCommandInfoByName",
+        "getCommandInfoByHandle"
+      ]
+    }
+  }
+}

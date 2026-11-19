@@ -1,4 +1,6 @@
 /** @fileoverview Native settings scalar/default/nested resource contracts through actual DomainMapper ownership and unchanged upstream DOCX settings fixtures. */
+import { getProcessComponentContext } from "../../../../comphelper/inc/processfactory";
+
 import { expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -188,7 +190,10 @@ it.each([
         ),
       ),
     );
-    const stream = await OOXMLStreamImpl.createStream(await ZipStorage.open(bytes)),
+    const stream = await OOXMLStreamImpl.createStream(
+        getProcessComponentContext(),
+        await ZipStorage.open(bytes),
+      ),
       document = new OOXMLDocument(stream, null),
       s = session();
     /** Refuses body callbacks in a settings part. @returns Never. */ function unexpected(): never {

@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/oox/workbooksettings.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-file-filter",
+    "capabilityIds": [
+      "CAP-1d1d48a3-5a10-4373-876c-fa5f18a62db9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/oox/workbooksettings.ts#WorkbookSettings",
+        "apps/office/src/sc/source/filter/excel/excrecds.test.ts",
+        "apps/office/e2e/calc/xlsx-date-system.spec.ts",
+        "vendor/libreoffice-reference/sc/source/filter/oox/workbooksettings.cxx",
+        "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test2.cxx#testTdf165180_date1904_XLSX"
+      ],
+      "justification": "Imports the native date1904 flag, defaults to 30 December 1899, and applies the selected epoch through the document options and formatter before worksheet content. Other workbook and calculation settings and explicit ISO date-typed cell conversion remain outside this slice.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WorkbookSettings"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/filter/oox/workbooksettings.cxx",
+      "upstreamSymbols": [
+        "WorkbookSettings::importWorkbookPr",
+        "WorkbookSettings::finalizeImport",
+        "WorkbookSettings::getNullDate"
+      ]
+    }
+  }
+}

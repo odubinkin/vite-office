@@ -106,7 +106,11 @@
       "Original document facade exposes the edit-engine pool accessor through documen2.",
       "The document facade exposes its lazy native edit engine for literal text transfer and text-object creation.",
       "J0Z0KF sheet-name checkpoint: actual ScTable lazy uppercase owner and SetName invalidation, document global-cache lookup and counted-name validation, positional owned name copies and load-only rename now feed ScDocumentImport getSheetIndex/setSheetName. Editing RenameTab retains transliteration and stream invalidation. Original SetString body is only split for file size; no workbook facade or synthetic service is introduced. Full workbook/filter/UI and whole-module parity remain unverified.",
-      "J0Z0KF calculation-policy checkpoint: actual interpreter global ScCalcConfig lazy owner, document value construction/assignment and interpreter global-then-document merge feed original ScGlobal::ConvertStringToValue. Actual context forwards formatter recognition and null date. Literal operands and shared-string/string-formula references now convert with native policies. Production interpretation releases actual config string ownership even on exceptions. Normal-build mutation guards have no upstream release behavior; no fake debug/thread service is installed. The existing selected-line-style body moves unchanged into document.frame for file-size compliance. The original ucalc testFuncParam six-policy/five-string matrix is asserted through real compiled formula cells. Rich-edit ScEditUtil extraction, complete formatter/interpreter services, full WorkbookGlobals/model properties/filter/UI and compiled native differential parity remain unverified; historical broad confidence flags are not promoted."
+      "J0Z0KF calculation-policy checkpoint: actual interpreter global ScCalcConfig lazy owner, document value construction/assignment and interpreter global-then-document merge feed original ScGlobal::ConvertStringToValue. Actual context forwards formatter recognition and null date. Literal operands and shared-string/string-formula references now convert with native policies. Production interpretation releases actual config string ownership even on exceptions. Normal-build mutation guards have no upstream release behavior; no fake debug/thread service is installed. The existing selected-line-style body moves unchanged into document.frame for file-size compliance. The original ucalc testFuncParam six-policy/five-string matrix is asserted through real compiled formula cells. Rich-edit ScEditUtil extraction, complete formatter/interpreter services, full WorkbookGlobals/model properties/filter/UI and compiled native differential parity remain unverified; historical broad confidence flags are not promoted.",
+      "The document owns the actual imported theme used by XLSX, ODS and the Worker transfer.",
+      "Exposes sheet protection via the documen3 owner.",
+      "Exposes native document-level selection editability on the actual document.",
+      "Exposes native leading-overlap, trailing-merge and covered-anchor operations for view selection."
     ],
     "omittedResponsibilities": [
       "The browser document text-object slice only admits the consumed operations."
@@ -295,6 +299,18 @@
         },
         {
           "path": "apps/office/src/sc/source/core/tool/calcconfig-document.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.sheet-protection.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.enhanced-protection.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/tabview2-protection.test.ts",
           "marker": "@fileoverview"
         }
       ],

@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.resources.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/writerfilter/dmapper/DomainMapper.cxx",
+    "localSymbols": [
+      "underline",
+      "paragraphBorderIds",
+      "highlights"
+    ],
+    "upstreamSymbols": [
+      "LN_CT_Underline_val",
+      "LN_CT_PBdr_top",
+      "LN_Value_ST_HighlightColor_black"
+    ],
+    "preservedResponsibilities": [
+      "Keeps the existing resource mappings for underline, paragraph borders and highlight unchanged while moving them next to the consuming mapper."
+    ],
+    "omittedResponsibilities": [
+      "Other source resource handlers remain in the consuming mapper."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.resources.ts",
+          "marker": "underline"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.page-stories.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/dmapper/DomainMapper.cxx",
+          "marker": "LN_CT_Underline_val"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/DomainMapper.cxx",
+          "marker": "LN_CT_PBdr_top"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/DomainMapper.cxx",
+          "marker": "LN_Value_ST_HighlightColor_black"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.resources.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the existing resource mappings for underline, paragraph borders and highlight unchanged while moving them next to the consuming mapper."
+    }
+  }
+}

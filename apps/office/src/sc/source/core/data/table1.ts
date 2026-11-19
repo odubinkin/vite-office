@@ -5,8 +5,88 @@ import type { ScColumn } from "../../../inc/column";
 import type { ScTable } from "../../../inc/table";
 import type { ScDocument } from "../../../inc/document";
 import type { RefUpdateContext } from "../../../inc/refupdatecontext";
+import { ScRange } from "../../../inc/address";
 import { UpdateRefMode } from "../../../inc/global";
 import { CRFlags } from "../../../inc/global";
+
+/** Reports the native sheet visibility flag. @param this - Actual sheet. @returns Sheet visibility. */
+export function IsVisible(this: ScTable): boolean {
+  return this["bVisible"];
+}
+
+/** Changes visibility and invalidates the sheet stream when the flag changes. @param this - Actual sheet. @param visible - New visibility. @returns Nothing. */
+export function SetVisible(this: ScTable, visible: boolean): void {
+  if (this["bVisible"] !== visible) this.SetStreamValid(false);
+  this["bVisible"] = visible;
+}
+
+/** Borrows the ordered sheet areas for filter iteration. @param table - Native sheet. @returns Read-only area sequence. */
+export function GetPrintRanges(table: ScTable): readonly ScRange[] {
+  return table["aPrintRanges"];
+}
+
+/** Returns the original UInt16 count. @param this - Native sheet. @returns Area count. */
+export function GetPrintRangeCount(this: ScTable): number {
+  return this["aPrintRanges"].length;
+}
+
+/** Borrows the selected print area. @param this - Native sheet. @param index - Area index. @returns Area or undefined. */
+export function GetPrintRange(this: ScTable, index: number): Readonly<ScRange> | undefined {
+  return this["aPrintRanges"][index];
+}
+
+/** Tests whether the entire sheet is selected for printing. @param this - Native sheet. @returns Whole-sheet selection. */
+export function IsPrintEntireSheet(this: ScTable): boolean {
+  return this["bPrintEntireSheet"];
+}
+
+/** Copies the optional repeat interval on the original column axis. @param this - Native sheet. @returns Columns or undefined. */
+export function GetRepeatColRange(this: ScTable): ScRange | undefined {
+  return this["moRepeatColRange"] && new ScRange(this["moRepeatColRange"]);
+}
+
+/** Copies the optional repeat interval on the original row axis. @param this - Native sheet. @returns Rows or undefined. */
+export function GetRepeatRowRange(this: ScTable): ScRange | undefined {
+  return this["moRepeatRowRange"] && new ScRange(this["moRepeatRowRange"]);
+}
+
+/** Updates the original column title range and invalidates cached layout. @param this - Native sheet. @param range - Repeated columns, or undefined. @returns Nothing. */
+export function SetRepeatColRange(this: ScTable, range?: ScRange): void {
+  this["moRepeatColRange"] = range && new ScRange(range);
+  this.SetStreamValid(false);
+  this.InvalidatePageBreaks();
+}
+
+/** Updates the original row title range and invalidates cached layout. @param this - Native sheet. @param range - Repeated rows, or undefined. @returns Nothing. */
+export function SetRepeatRowRange(this: ScTable, range?: ScRange): void {
+  this["moRepeatRowRange"] = range && new ScRange(range);
+  this.SetStreamValid(false);
+  this.InvalidatePageBreaks();
+}
+
+/** Clears explicit and whole-sheet print selection. @param this - Native sheet. @returns Nothing. */
+export function ClearPrintRanges(this: ScTable): void {
+  this["aPrintRanges"].length = 0;
+  this["bPrintEntireSheet"] = false;
+  this.SetStreamValid(false);
+  this.InvalidatePageBreaks();
+}
+
+/** Enables the original exclusive whole-sheet print selection. @param this - Native sheet. @returns Nothing. */
+export function SetPrintEntireSheet(this: ScTable): void {
+  if (!this.IsPrintEntireSheet()) {
+    this.ClearPrintRanges();
+    this["bPrintEntireSheet"] = true;
+  }
+}
+
+/** Appends an explicit print area within the native UInt16 limit. @param this - Native sheet. @param range - Print area. @returns Nothing. */
+export function AddPrintRange(this: ScTable, range: ScRange): void {
+  this["bPrintEntireSheet"] = false;
+  if (this.GetPrintRangeCount() < 0xffff) this["aPrintRanges"].push(new ScRange(range));
+  this.SetStreamValid(false);
+  this.InvalidatePageBreaks();
+}
 /** Applies native grouping, manual/force flags and extra-height semantics. @param context - Shared calculation. @param apply - Actual sheet height mutation. @param flags - Row flags. @param first - First row. @param last - Last row. @param api - Allow interactive single-row shrinking. @returns Whether geometry changed. */
 export function SetOptimalHeightsToRows(
   context: RowHeightContext,
@@ -76,7 +156,7 @@ export function UpdateReference(
 }
 
 /** Original stream validity short circuit and lock/default ordering. @param this - Actual sheet. @param value - New state. @param ignoreLock - Resolved native argument. @returns Nothing. */
-export function SetStreamValid(this: ScTable, value: boolean, ignoreLock: boolean): void {
+export function SetStreamValid(this: ScTable, value: boolean, ignoreLock = false): void {
   if (!this["bStreamValid"] && !value) return;
   if (ignoreLock || !this["rDocument"].IsStreamValidLocked()) this["bStreamValid"] = value;
 }

@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/zlib/zlib.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-zip-codec",
+    "capabilityIds": [
+      "CAP-50103a1f-6aa6-4b77-b0c4-bd8cf3c650f0",
+      "CAP-e9d543a6-8de7-45b1-9680-2a22cb7aad9b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/zlib/zlib.ts",
+        "apps/office/src/package/source/zipapi/InflateZlib.test.ts",
+        "apps/office/src/package/source/xstor/xfactory.test.ts"
+      ],
+      "justification": "Browser ABI adapter reuses actual installed zip.js2.24.0 public dist/zip-module.wasm exports for synchronous zlib, original raw/wrapped initialization, Z_PARTIAL_FLUSH/status/consumption and native stream/allocator lifetime. The actual library has a bounded native heap and packs output counts into24bits;64KiB input/output windows marshal larger source requests. Initialization and pointer marshalling are browser-owned; the decoder is not reimplemented and no native status/provider is injected. Full zlib initialization-failure/OOM/ABI compatibility remains unqualified and external coverage failure is retained independently. No pako/new download or dependency mutation is needed.\nThe original installed zlib WASM artifact is inlined as a URL so realm-local initialization works in browser and Node test realms before native reads. The zlib ABI and optional direct test bytes are unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "initializeZlib",
+        "InflateState"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

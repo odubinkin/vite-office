@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ranges.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "docx-file-filter",
+    "capabilityIds": [
+      "CAP-d48ffd59-e673-4eda-aa2d-bcf1f13a5c84"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ranges.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts",
+        "apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+        "vendor/libreoffice-reference/sw/source/core/unocore/unotext.cxx",
+        "apps/office/src/sw/source/filter/ww8/docxexport.numbered-list.test.ts",
+        "apps/office/e2e/writer-docx-styles.spec.ts"
+      ],
+      "justification": "Original table, row and cell markers feed the actual property and Writer text range owners. Completed text spans convert through SwXText into the canonical table graph. The represented grid, row split/height, cell alignment and merge groups round trip. Nested and floating table conversion, full imported table styles and complete DOCX parity remain open. Keeps row, grid, cell and UNO endpoint state at each original nesting level, then converts each inner table before closing its parent cell.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DomainMapperTableRanges",
+        "endpoint",
+        "sprm",
+        "endCell",
+        "applyGridAndMerge"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx",
+      "upstreamSymbols": [
+        "DomainMapperTableHandler::endTable"
+      ]
+    }
+  }
+}

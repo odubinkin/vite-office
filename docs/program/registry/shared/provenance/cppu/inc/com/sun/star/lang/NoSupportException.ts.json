@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cppu/inc/com/sun/star/lang/NoSupportException.ts",
+    "status": "mapped",
+    "upstreamPath": "udkapi/com/sun/star/lang/NoSupportException.idl",
+    "localSymbols": [
+      "NoSupportException"
+    ],
+    "upstreamSymbols": [
+      "NoSupportException",
+      "com::sun::star::uno::Exception"
+    ],
+    "preservedResponsibilities": [
+      "Original generated NoSupportException empty/copy/message-context/move and shared Exception/typelib linkage. Actual invalid-parent calls throw this concrete value. Native ABI/allocation failures and complete SDK reflection remain unqualified."
+    ],
+    "omittedResponsibilities": [
+      "Original stream/save bindings and complete native package/storage/model/filter/UI acceptance; physical allocator/thread/iterator/RTTI/ABI domains."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/lang/NoSupportException.ts",
+          "marker": "NoSupportException"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackageFolder.native.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "udkapi/com/sun/star/lang/NoSupportException.idl",
+          "marker": "NoSupportException"
+        }
+      ]
+    }
+  }
+}

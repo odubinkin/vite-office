@@ -33,7 +33,8 @@
       "WZ8225 adds original byte toInt32 and byte/UTF16 toUInt32/toInt64 overloads via actual signed64 SAL C owners, preserving native32 clamp-to-zero and unsigned rejection of negative values. Existing UTF16 views/codepoint/whitespace behavior remains unchanged.",
       "Task202610251549-V4DQJW: Implements original sal_Int32 ordinal getToken overloads alongside the existing size_t-position overload. Negative token/index returns the native empty view and -1 sentinel, upper assertion order and borrowed subviews are retained; omitted signed index uses local0. The Word date parser uses the original four-argument overload without a substitute string splitter. Native table model redline creation, full TablePropertiesHandler/TblStylePrHandler and stylesheet application, document orchestration, complete DOCX/XLSX file and desktop/mobile UI workflows remain incomplete. Native component/ABI and whole-module parity remain unverified; no capability/default-status promotion.",
       "J0Z0KF connects original FastTokenHandlerBase direct lookup, borrowed handler/copy/clone propagation and actual FastTokenHandler to native FastAttributeList token/value/numeric/view queries. Optional/defaulted AttributeList token, integer/double/unsigned/hyper/hex/bool results delegate to these owners and existing real SAL/o3tl parsers. Original byte-view toDouble is added beside UTF16 without host parseFloat/Number replacement. Native missing output zeroing, untouched missing view, first duplicates, present unknown token retaining invalid despite default, present invalid/empty signed numeric zero, unsigned/hyper/hex empty absence, signed64-then-unsigned saturation, unsigned-hex signed cast and boolean exact/token/numeric fallbacks are retained. No fake token handler, injected result map, temporary parser facade, null-handler token-call witness or native null-pointer/ABI claim is introduced. Original FastTokenHandlerBase WeakImplHelper/XFastTokenHandler service registration, complete SAX/attribute APIs, independently compiled original numeric/attribute differential and complete workbook/filter/model/UI acceptance remain unported or unverified.",
-      "AQF9AG: Original UTF16 o3tl matchIgnoreAsciiCase delegates to the original shortened SAL C comparison. Native RTL probe covers the added bounded comparison; broad module parity remains unverified."
+      "AQF9AG: Original UTF16 o3tl matchIgnoreAsciiCase delegates to the original shortened SAL C comparison. Native RTL probe covers the added bounded comparison; broad module parity remains unverified.",
+      "Original getToken char byte-view template specializations now share the already ported size_t-position and signed32 ordinal algorithms with the UTF16 specialization, preserving borrowed storage, delimiter width, empty tokens, default empty result type and terminal position semantics. This enables actual OOXML AttributeList token lists without UTF16/string splitting or a second tokenizer."
     ],
     "omittedResponsibilities": [
       "Other original header algorithms/template overloads and full original QA remain unverified."
@@ -59,6 +60,14 @@
         {
           "path": "apps/office/src/oox/source/helper/attributelist-values.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/o3tl/inc/string_view-views.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/o3tl/inc/string_view-tokens-upstream.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -73,6 +82,10 @@
         {
           "path": "vendor/libreoffice-reference/include/o3tl/string_view.hxx",
           "marker": "toDouble"
+        },
+        {
+          "path": "vendor/libreoffice-reference/o3tl/qa/test-string_view.cxx",
+          "marker": "void testGetToken()"
         }
       ]
     },

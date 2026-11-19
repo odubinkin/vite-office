@@ -1,5 +1,9 @@
 /** @fileoverview Original SAL byte ownership, scalar C entry points and checked Unicode conversion. */
-import { toInt, getLength } from "./strtmpl";
+import { toInt, getLength, toBoolean, reverseCompare_WithLengths, CompareNormal } from "./strtmpl";
+/** Original byte specialization delegates to the shared terminated boolean template. @param data - Actual terminated bytes. @returns Native boolean. */
+export function rtl_str_toBoolean(data: Uint8Array | null): boolean {
+  return toBoolean(data);
+}
 /** Original terminated signed64 specialization. @param data - Native terminated bytes. @param radix - Signed16 radix. @returns Parsed signed64 prefix or zero on overflow. */
 export function rtl_str_toInt64(data: Uint8Array | null, radix: number): bigint {
   if (data === null) throw new Error("assert(pStr)");
@@ -249,4 +253,14 @@ export function rtl_str_indexOfStr_WithLength(
   needleLength: number,
 ): number {
   return indexOfStr_WithLength(source, length, needle, needleLength);
+}
+
+/** Original byte reverse comparison wrapper, instantiating the actual shared source template. @param first - Borrowed byte storage. @param firstLength - Signed32 count. @param second - Borrowed byte storage. @param secondLength - Signed32 count. @returns Original reverse mismatch or length difference. */
+export function rtl_str_reverseCompare_WithLength(
+  first: Uint8Array | null,
+  firstLength: number,
+  second: Uint8Array | null,
+  secondLength: number,
+): number {
+  return reverseCompare_WithLengths(first, firstLength, second, secondLength, CompareNormal);
 }

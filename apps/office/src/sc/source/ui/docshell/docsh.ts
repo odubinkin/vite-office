@@ -58,6 +58,9 @@ import { ScAsciiOptions } from "../dbgui/asciiopt";
 import { ScImportOptions } from "../dbgui/imoptdlg";
 import { ScDocFunc } from "./docfunc";
 import { ScImportExport } from "./impex";
+import { ExcelFilter } from "../../filter/oox/excelfilter";
+import { exportXlsx } from "../../filter/excel/xetable";
+import type { XlsxReferenceDevice } from "../../filter/oox/unitconverter";
 /** Confirmed write belongs to the generation captured before persistence begins. */
 export interface ScPrimarySaveEvidence {
   readonly generation: number;
@@ -130,6 +133,15 @@ function getTextSepPos(
 /** Real document shell with canonical model,medium and shared native action history. */
 export class ScDocShell extends SfxObjectShell {
   private readonly docFunc = new ScDocFunc(this);
+  private errorMessageHandler: ((message: string) => void) | undefined;
+  /** Binds the active document host for native operation errors. @param handler - Host presentation callback. @returns Nothing. */
+  SetErrorMessageHandler(handler?: (message: string) => void): void {
+    this.errorMessageHandler = handler;
+  }
+  /** Reports a resolved native resource through the document host. @param message - Resource text. @returns Nothing. */
+  ErrorMessage(message: string): void {
+    if (message) this.errorMessageHandler?.(message);
+  }
   /** Borrows the native document-function dispatcher. @returns Real owner. */
   GetDocFunc(): ScDocFunc {
     return this.docFunc;
@@ -137,12 +149,16 @@ export class ScDocShell extends SfxObjectShell {
   static readonly ODS_MEDIA_TYPE = ODS_MIMETYPE;
   static readonly CSV_FILTER_NAME = "Text - txt - csv (StarCalc)";
   static readonly CSV_MEDIA_TYPE = "text/csv";
+  static readonly XLSX_FILTER_NAME = "Calc MS Excel 2007 XML";
+  static readonly XLSX_MEDIA_TYPE =
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
   private readonly undo = new SfxUndoManager<ScDocShell>();
   private openRequest = 0;
-  /** Creates an untitled shell or adopts an existing model. @param document - Actual model. @param odsFilter - Asynchronous document filter. @returns Shell. */
+  /** Creates an untitled shell or adopts a model. @param document - Actual model. @param odsFilter - Asynchronous ODS filter. @param xlsxReferenceDevice - XLSX reference device. @returns Shell. */
   constructor(
     private document: ScDocument = new ScDocument(),
     private readonly odsFilter: OdsFilterService = createInlineOdsFilterService(),
+    private readonly xlsxReferenceDevice?: XlsxReferenceDevice,
   ) {
     super(
       createDocument({ id: crypto.randomUUID(), suiteId: "calc", title: "Untitled Calc Document" }),
@@ -287,6 +303,9 @@ export class ScDocShell extends SfxObjectShell {
           options.bIncludeBOM = true;
           updatedFilterOptions = options.WriteToString();
         }
+      } else if (medium?.filterId === ScDocShell.XLSX_FILTER_NAME) {
+        if (!ArrayBuffer.isView(bytes)) throw new Error("XLSX input requires a byte stream.");
+        candidate = await ExcelFilter.importDocument(bytes, this.xlsxReferenceDevice);
       } else
         candidate = await this.odsFilter.Import(bytes, {
           ...options,
@@ -695,6 +714,11 @@ export class ScDocShell extends SfxObjectShell {
   async SerializeOds(): Promise<Uint8Array> {
     this.EnsureOpen();
     return await writeOdsDocument(this.document);
+  }
+  /** Writes the current workbook through the SpreadsheetML filter. @returns XLSX bytes. */
+  SerializeXlsx(): Promise<Uint8Array> {
+    this.EnsureOpen();
+    return exportXlsx(this.document, this.xlsxReferenceDevice);
   }
   /** Serializes browser XML through the injected asynchronous filter. @returns XML streams. */
   SerializeXml(): Promise<XmlPackage> {

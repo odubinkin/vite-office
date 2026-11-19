@@ -18,7 +18,8 @@
       "ServiceManager::getPropertyByName"
     ],
     "preservedResponsibilities": [
-      "Original constructor-backed ServiceManager retains ordered service lists, implementation-name lookup, acquired constructor references, optional XInitialization and the DefaultContext property and listener behavior."
+      "Original constructor-backed ServiceManager retains ordered service lists, implementation-name lookup, acquired constructor references, optional XInitialization and the DefaultContext property and listener behavior.",
+      "Caches successfully acquired single-instance implementations by original implementation record across aliases and both factory entry points, with release at disposal."
     ],
     "omittedResponsibilities": [
       "Original dynamically loaded registries, external factory and singleton management, native threading and physical UNO ABI remain outside the bundled constructor slice."
@@ -32,6 +33,10 @@
         {
           "path": "apps/office/src/desktop/browser/app/uno-components.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xfactory.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

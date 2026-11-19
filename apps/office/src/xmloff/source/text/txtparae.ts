@@ -11,7 +11,8 @@ import { XMLNumberWithAutoForVoidPropHdl } from "../style/xmlbahdl";
 import { SvxXMLNumRuleExport, type XMLListLevelExport } from "../style/xmlnume";
 import { exportTableBlocks, type XMLTextExportBlock } from "../table/XMLTableExport";
 import type { FontFaceNameResolver, OdfCharacterProperties } from "./txtparae.types";
-import { exportTextCharacterProperties } from "./txtprmap";
+import { createOdfThemeColor, exportComplexColor } from "./XMLComplexColorContext";
+import { exportTextCharacterProperties, exportTextLanguageProperties } from "./txtprmap";
 import { XMLTextNumRuleInfo } from "./XMLTextNumRuleInfo";
 export { ODF_NAMESPACES } from "../core/xmltoken";
 
@@ -28,6 +29,7 @@ export interface OdfHyperlink {
 
 /** One model-owned text fragment exposed to the streaming exporter. */
 export interface XMLTextRunSource {
+  readonly characterStyles?: readonly string[];
   readonly hyperlink?: OdfHyperlink;
   readonly properties: OdfCharacterProperties;
   readonly text: string;
@@ -128,6 +130,7 @@ export interface XMLTextParagraphSource {
   /** Zero-width Writer marks and imported pagination hints in UTF-16 coordinates. */
   readonly markers?: readonly XMLTextParagraphMarker[];
   readonly paragraphProperties?: OdfParagraphProperties;
+  readonly markerProperties?: Partial<OdfCharacterProperties>;
   readonly properties?: Partial<OdfCharacterProperties>;
   readonly runs: readonly XMLTextRunSource[];
   readonly style: XMLParagraphStyle;
@@ -136,13 +139,19 @@ export interface XMLTextParagraphSource {
 
 /** Native zero-width paragraph contents in original text coordinates. */
 export type XMLTextParagraphMarker =
-  | Readonly<{ kind: "bookmark" | "soft-page-break"; name?: string; offset: number }>
+  | Readonly<{
+      kind: "bookmark" | "bookmark-start" | "bookmark-end" | "soft-page-break";
+      name?: string;
+      offset: number;
+    }>
   | Readonly<{ kind: "frame"; frame: XMLTextFrameExportSource; offset: number }>;
 
 /** Reiterable model-facing source; definitions are collected before body references. */
 export interface XMLTextExportSource {
+  readonly commonCharacterStyleNames?: readonly string[];
   paragraphs(): Iterable<XMLTextParagraphSource>;
   blocks?(): Iterable<XMLTextExportBlock>;
+  sections?(): Iterable<Iterable<XMLTextExportBlock>>;
 }
 
 /** Serialized automatic styles and paragraph body fragment. */
@@ -150,6 +159,7 @@ export interface OdfTextExport {
   readonly automaticStyles: string;
   readonly body: string;
   readonly namedStyles: string;
+  readonly sections?: readonly string[];
 }
 
 /** Bounded xmloff export context owning one complete text export pass. */
@@ -167,6 +177,17 @@ export class XMLTextParagraphExport {
     const { fontFaceName, isCancelled, source } = this;
     const paragraphStyleNames = new Map<string, string>();
     const characterStyleNames = new Map<string, string>();
+    const reservedCharacterStyleNames = new Set(source.commonCharacterStyleNames);
+    let nextCharacterStyle = 0;
+    /** Interns both ordinary spans and paragraph markers in the text auto-style family. @param properties - Direct text properties. @returns Nothing. */
+    function addTextStyle(properties: Partial<OdfCharacterProperties>): void {
+      const key = characterPropertiesKey(properties);
+      if (characterStyleNames.has(key)) return;
+      let name: string;
+      do name = `T${++nextCharacterStyle}`;
+      while (reservedCharacterStyleNames.has(name));
+      characterStyleNames.set(key, name);
+    }
     const listRules = new Map<string, XMLTextListRuleSource>();
     const numRuleExport = new SvxXMLNumRuleExport(escapeXml, this.existingFontFaceName);
     for (const paragraph of source.paragraphs()) {
@@ -207,15 +228,12 @@ export class XMLTextParagraphExport {
         if (!paragraphStyleNames.has(key))
           paragraphStyleNames.set(key, `P${paragraphStyleNames.size + 1}`);
       }
+      if (paragraph.markerProperties) addTextStyle(paragraph.markerProperties);
       paragraph.runs.forEach(
         /** Collects one used character style. @param run - Live text run. @returns Nothing. */
         (run) => {
           if (run.text.length === 0) throw new Error("ODF text runs must not be empty.");
-          if (!equalCharacterProperties(run.properties, paragraphInheritedProperties(paragraph))) {
-            const key = characterPropertiesKey(run.properties);
-            if (!characterStyleNames.has(key))
-              characterStyleNames.set(key, `T${characterStyleNames.size + 1}`);
-          }
+          if (hasAutomaticTextStyle(run, paragraph)) addTextStyle(run.properties);
         },
       );
     }
@@ -259,7 +277,7 @@ export class XMLTextParagraphExport {
         const textProperties =
           Object.keys(properties).length === 0
             ? ""
-            : `<style:text-properties${exportCharacterAttributes(properties, fontFaceName)}/>`;
+            : exportCharacterPropertyElement(properties, fontFaceName);
         if (listRule !== "") {
           const listStyle = listStyleNames.get(listRule);
           /* istanbul ignore next -- The collected paragraph and list-rule maps share one source pass. */
@@ -283,7 +301,7 @@ export class XMLTextParagraphExport {
       (entry) => {
         const [key, name] = entry;
         const properties = parseCharacterPropertiesKey(key);
-        return `<style:style style:name="${name}" style:family="text"><style:text-properties${exportCharacterAttributes(properties, fontFaceName)}/></style:style>`;
+        return `<style:style style:name="${name}" style:family="text">${exportCharacterPropertyElement(properties, fontFaceName)}</style:style>`;
       },
     );
     const listStyles = [...listRules.values()]
@@ -326,7 +344,7 @@ export class XMLTextParagraphExport {
     const rendered =
       source.blocks === undefined
         ? { body: renderParagraphs(source.paragraphs()), automaticStyles: "" }
-        : exportTableBlocks(source.blocks(), renderParagraphs, isCancelled);
+        : exportTableBlocks(source.blocks(), renderParagraphs, isCancelled, source.sections?.());
     return {
       automaticStyles: [
         ...paragraphStyles,
@@ -336,6 +354,9 @@ export class XMLTextParagraphExport {
       ].join(""),
       body: rendered.body,
       namedStyles: namedStyles.join(""),
+      ...("sections" in rendered && rendered.sections !== undefined
+        ? { sections: rendered.sections }
+        : {}),
     };
   }
 }
@@ -527,12 +548,13 @@ function exportParagraphElement(
     }
     const encoded = encodeWithMarkers(run.text, textOffset);
     textOffset += run.text.length;
-    if (equalCharacterProperties(run.properties, paragraphInheritedProperties(paragraph)))
-      content += encoded;
-    else {
+    for (const style of run.characterStyles ?? [])
+      content += `<text:span text:style-name="${escapeXml(style)}">`;
+    if (hasAutomaticTextStyle(run, paragraph)) {
       const name = characterStyleNames.get(characterPropertiesKey(run.properties)) as string;
       content += `<text:span text:style-name="${name}">${encoded}</text:span>`;
-    }
+    } else content += encoded;
+    content += "</text:span>".repeat(run.characterStyles?.length ?? 0);
   }
   if (activeHyperlink !== undefined) content += "</text:a>";
   while (markerIndex < markers.length) {
@@ -541,9 +563,13 @@ function exportParagraphElement(
     content += exportMarker(marker, renderFrame);
     markerIndex += 1;
   }
+  const markerStyle =
+    paragraph.markerProperties &&
+    characterStyleNames.get(characterPropertiesKey(paragraph.markerProperties));
+  const marker = markerStyle ? ` loext:marker-style-name="${markerStyle}"` : "";
   return paragraph.style === "heading-1"
-    ? `<text:h text:outline-level="1" text:style-name="${escapeXml(styleName)}">${content}</text:h>`
-    : `<text:p text:style-name="${escapeXml(styleName)}">${content}</text:p>`;
+    ? `<text:h text:outline-level="1" text:style-name="${escapeXml(styleName)}"${marker}>${content}</text:h>`
+    : `<text:p text:style-name="${escapeXml(styleName)}"${marker}>${content}</text:p>`;
 }
 
 /** Emits one zero-width Writer marker. @param marker - Canonical position. @param renderFrame - Native frame body exporter. @returns ODF element. */
@@ -558,7 +584,7 @@ function exportMarker(
   if (marker.kind === "soft-page-break") return "<text:soft-page-break/>";
   if (marker.name === undefined || marker.name.length === 0)
     throw new Error("ODF bookmark name is invalid.");
-  return `<text:bookmark text:name="${escapeXml(marker.name)}"/>`;
+  return `<text:${marker.kind} text:name="${escapeXml(marker.name)}"/>`;
 }
 
 /** Emits the supported upstream hyperlink attributes. @param hyperlink - Link metadata. @returns Opening text:a tag. */
@@ -784,6 +810,13 @@ function paragraphInheritedProperties(paragraph: XMLTextParagraphSource): OdfCha
   return paragraph.inheritedProperties ?? {};
 }
 
+/** Determines whether FindTextStyle needs a direct automatic span inside common named spans. @param run - Native run. @param paragraph - Native paragraph. @returns Whether direct properties must be serialized. */
+function hasAutomaticTextStyle(run: XMLTextRunSource, paragraph: XMLTextParagraphSource): boolean {
+  return run.characterStyles?.length
+    ? Object.keys(run.properties).length > 0
+    : !equalCharacterProperties(run.properties, paragraphInheritedProperties(paragraph));
+}
+
 /** Compares complete character properties. @param left - First properties. @param right - Second properties. @returns Whether equal. */
 function equalCharacterProperties(
   left: OdfCharacterProperties,
@@ -851,8 +884,28 @@ export function exportCharacterAttributes(
     properties.fontSizeTwipsComplex === undefined
       ? ""
       : ` style:font-size-complex="${properties.fontSizeTwipsComplex / 20}pt"`,
+    ...exportTextLanguageProperties(properties).map(
+      /** Escapes a locale attribute through the text property serializer. @param attribute - Qualified name and value. @returns XML attribute. */ ([
+        name,
+        value,
+      ]) => ` ${name}="${escapeXml(value)}"`,
+    ),
     exportTextCharacterProperties(properties),
   ].join("");
+}
+
+/** Writes the original text property group, with its element-valued character color when present. @param properties - Native direct properties. @param fontFaceName - Font face resolver. @returns Complete text-properties element. */
+export function exportCharacterPropertyElement(
+  properties: Partial<OdfCharacterProperties>,
+  fontFaceName?: FontFaceNameResolver,
+): string {
+  const attributes = exportCharacterAttributes(properties, fontFaceName);
+  const child = properties.themeColor
+    ? exportComplexColor(createOdfThemeColor(properties.themeColor), "char-complex-color")
+    : "";
+  return child
+    ? `<style:text-properties${attributes}>${child}</style:text-properties>`
+    : `<style:text-properties${attributes}/>`;
 }
 
 /** Rejects character colors outside the bounded upstream color mapping. @param value - Color value. @param special - Allowed Writer special value. @param label - Diagnostic label. @returns Nothing. */

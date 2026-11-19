@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/xstor/owritestream.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-writable-storage-stream",
+    "capabilityIds": [
+      "CAP-bbc266e7-6ea9-4bf9-b13d-a9565ac529d0",
+      "CAP-e9a3430f-1545-4e36-8849-bd900998ed83"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/source/xstor/owritestream.ts",
+        "apps/office/src/package/source/xstor/xfactory.test.ts",
+        "vendor/libreoffice-reference/package/source/xstor/owriteablestream.cxx"
+      ],
+      "justification": "The plain ZIP/OFOPXML storage uses the real nontransacted OWriteStream component for new/truncated output. It exposes the writable data and property facets, commits the native cache and closes its attachment when both directions close. Transacted streams, nontruncate existing writes and encryption families remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OWriteStream",
+        "writeBytes",
+        "getPropertyValue",
+        "setPropertyValue",
+        "closeOutput",
+        "dispose"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/xstor/owriteablestream.cxx",
+      "upstreamSymbols": [
+        "OWriteStream::OWriteStream",
+        "OWriteStream::writeBytes",
+        "OWriteStream::getPropertyValue",
+        "OWriteStream::setPropertyValue",
+        "OWriteStream::closeOutput",
+        "OWriteStream::dispose"
+      ]
+    }
+  }
+}

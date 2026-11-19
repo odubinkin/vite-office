@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/excel/xestyle.numfmt.ts",
+    "localSymbols": [
+      "XclExpNumFmtBuffer"
+    ],
+    "upstreamPath": "sc/source/filter/excel/xestyle.cxx",
+    "upstreamSymbols": [
+      "XclExpNumFmtBuffer::Insert",
+      "XclExpNumFmtBuffer::SaveXml"
+    ],
+    "preservedResponsibilities": [
+      "The native format table supplies deduplicated Excel FORMAT records, the compiled token spelling and the original FORMAT offset."
+    ],
+    "omittedResponsibilities": [
+      "Extended LCID, calendar and NatNum mapping and specialized logical string formats are open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xestyle.numfmt.ts",
+          "marker": "XclExpNumFmtBuffer"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "preserves built-in and custom numeric display"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xestyle.cxx",
+          "marker": "XclExpNumFmtBuffer::Insert"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/excel/xestyle.numfmt.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The responsibility split keeps the OOXML FORMAT buffer and its compiled token mapping separate from the existing palette and XF implementations while preserving their shared XLSX serializer and upstream owner."
+    }
+  }
+}

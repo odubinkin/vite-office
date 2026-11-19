@@ -1,0 +1,8 @@
+{
+  "package": "@zip.js/zip.js",
+  "version": "2.24.0",
+  "path": "lib/core/streams/codecs/crc32.js",
+  "sha256": "fa9df771f65cd371189a9d957f773d2c262340bbf24061e1d579390b9553b913",
+  "license": "BSD-3-Clause; original full license retained verbatim in crc32.mjs",
+  "modifications": "None. Exact standalone existing JS library module, not a rewrite."
+}

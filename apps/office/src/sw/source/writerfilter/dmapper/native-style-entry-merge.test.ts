@@ -7,7 +7,9 @@ import {
   StyleType,
 } from "./StyleSheetTable";
 import { PropertyMap, StyleSheetPropertyMap } from "./PropertyMap";
-import { TblStyleType as S } from "./TblStylePrHandler";
+import { TblStylePrHandler, TblStyleType as S } from "./TblStylePrHandler";
+import { NS_ooxml as N } from "../inc/ooxml/resourceids";
+import { OOXMLPropertySet, OOXMLPropertyType, OOXMLValue } from "../ooxml/OOXMLPropertySet";
 import { PropertyIds as P } from "./PropertyIds";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
@@ -64,6 +66,24 @@ function release(value: PropertyValue): void {
   value.Name.dispose();
   value.Value.dispose();
 }
+
+it("leaves table style distances absent for empty resources", /** Resolves source attribute and modifier events through the native style map. @returns Nothing. */ () => {
+  const map = new PropertyMap();
+  try {
+    const properties = new OOXMLPropertySet();
+    properties.add(N.LN_CT_TblWidth_w, OOXMLValue.createInteger(99), OOXMLPropertyType.ATTRIBUTE);
+    properties.add(N.LN_CT_TblPrBase_tblInd, new OOXMLValue(), OOXMLPropertyType.SPRM);
+    properties.add(
+      N.LN_CT_TblPrBase_tblCellMar,
+      OOXMLValue.createPropertySet(new OOXMLPropertySet()),
+      OOXMLPropertyType.SPRM,
+    );
+    properties.resolve(new TblStylePrHandler(map));
+    expect(map.GetPropertyValues()).toEqual([]);
+  } finally {
+    map.dispose();
+  }
+});
 
 it("owns the native stylesheet map and copies only the fields selected by the table-entry conversion constructor", /** Does not clone already accumulated properties or bags into a converted table style. @returns Nothing. */ () => {
   const original = new Entry();

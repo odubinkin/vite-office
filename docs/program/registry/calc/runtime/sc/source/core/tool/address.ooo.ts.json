@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/tool/address.ooo.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "coordinate-model",
+    "capabilityIds": [
+      "CAP-80646669-70d5-4641-9fe5-29b1639adab9",
+      "CAP-ba7bed4e-385b-4c42-9aa1-09a6adb60008",
+      "CAP-1a127bda-0ad3-4ab0-84fc-1e8f22f87678",
+      "CAP-71654b39-0e3c-4254-ba64-337faf420d55",
+      "CAP-8c058cea-f59a-47fe-b326-5806e7aba249"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "sourceResponsibility": "unverified",
+      "knownViolations": [],
+      "upstreamFile": "sc/source/core/tool/address.cxx",
+      "upstreamSymbols": [
+        "lcl_ScAddress_Parse_OOo",
+        "lcl_ScRange_Parse_OOo",
+        "ScAddress::Format"
+      ],
+      "localSymbols": [
+        "parseOOOA1",
+        "formatTab",
+        "findRangeSeparator"
+      ],
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/address.ooo.ts",
+        "apps/office/src/sc/source/filter/excel/print-ranges.test.ts",
+        "vendor/libreoffice-reference/sc/source/core/tool/address.cxx"
+      ],
+      "justification": "Local A1 and internal sheet-qualified OOO/ODF addresses preserve sheet quoting and absolute flags for range attributes. External sheet references and full Excel header parsing remain open."
+    }
+  }
+}

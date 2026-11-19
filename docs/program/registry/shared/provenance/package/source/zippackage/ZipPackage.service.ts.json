@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/zippackage/ZipPackage.service.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/zippackage/ZipPackage.cxx",
+    "localSymbols": [
+      "package_ZipPackage_get_implementation"
+    ],
+    "upstreamSymbols": [
+      "package_ZipPackage_get_implementation"
+    ],
+    "preservedResponsibilities": [
+      "The original ZIP package service, change batch and final root persistence phase are connected. Child and relationship synchronization, full storage wrappers and DOCX/XLSX UI remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Complete storage and document format acceptance remains unfinished."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Existing actual SAL/CPPU logical addresses, compiler specialization/interface casts and explicit scope destruction bind native C++ syntax. The actual pinned SDK libc++ mutex implements the original member and guard lifetimes; native pthread/physical C++ ABI remain unqualified."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.service.ts",
+          "marker": "package_ZipPackage_get_implementation"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.impl.test.ts",
+          "marker": "opens the original package service"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/zippackage/ZipPackage.cxx",
+          "marker": "package_ZipPackage_get_implementation"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/package/source/zippackage/ZipPackage.service.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The original acquired component constructor uses a separate module to keep ZipPackage below the file-line limit."
+    }
+  }
+}

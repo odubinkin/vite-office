@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ww8/docxexport.text.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "docx-file-filter",
+    "capabilityIds": [
+      "CAP-d48ffd59-e673-4eda-aa2d-bcf1f13a5c84"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ww8/docxexport.text.ts",
+        "apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8nds.cxx",
+        "apps/office/src/sw/source/filter/ww8/docxexport.theme.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.theme-fonts.test.ts"
+      ],
+      "justification": "Native Writer body traversal exports represented runs, paragraph properties and table structure. The existing file dialog uses the same graph. Nested and floating tables, links, bookmarks and page fidelity remain open. Exports native named paragraph and character style references and preserves direct run overrides. Routes the native character interoperability item through DOCX attribute output. Dispatches original Asian and complex-script fonts for run and style serialization.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriteText",
+        "Out_SwTextNode",
+        "Out_SwTableNode"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/ww8/wrtw8nds.cxx",
+      "upstreamSymbols": [
+        "MSWordExportBase::OutputTextNode"
+      ]
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/zipapi/ZipOutputStream.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/zipapi/ZipOutputStream.cxx",
+    "localSymbols": [
+      "ZipOutputStream",
+      "getTruncated"
+    ],
+    "upstreamSymbols": [
+      "ZipOutputStream",
+      "writeLOC",
+      "writeCEN",
+      "getTruncated",
+      "ZipOutputStream::consumeScheduledThreadTaskEntry",
+      "ZipOutputStream::finish"
+    ],
+    "preservedResponsibilities": [
+      "Owns plain local and central headers, descriptors and ZIP64 extra fields. Retains the original entry task, temporary-file replay, package-member update and exception_ptr ownership. The browser explicitly selects the source no-worker pool, draining to the queue bound before adding the next task and preserving reverse final replay. Task failures are rethrown after the central directory and END."
+    ],
+    "omittedResponsibilities": [
+      "The browser runs archive work in its current realm; shared physical worker scheduling, encryption and native ABI domains are unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zipapi/ZipOutputStream.ts",
+          "marker": "writeLOC"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/ZipOutputStream.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/xmlfilterbase.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/zipapi/ZipOutputStream.cxx",
+          "marker": "writeLOC"
+        }
+      ]
+    }
+  }
+}

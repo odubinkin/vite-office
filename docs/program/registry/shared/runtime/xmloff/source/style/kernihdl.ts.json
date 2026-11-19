@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/style/kernihdl.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-character",
+    "capabilityIds": [
+      "CAP-0109"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "sourceResponsibility": "aligned",
+      "justification": "Implements the original XMLKerningPropHdl signed-short conversion, normal token and typed success/failure rules using the consumed native XML unit converter.",
+      "evidence": [
+        "apps/office/src/xmloff/source/style/kernihdl.ts",
+        "apps/office/src/xmloff/source/text/txtprmap.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.kerning.test.ts"
+      ],
+      "knownViolations": [],
+      "localSymbols": [
+        "XMLKerningPropHdl",
+        "importXML",
+        "exportXML"
+      ],
+      "upstreamFile": "xmloff/source/style/kernihdl.cxx",
+      "upstreamSymbols": [
+        "XMLKerningPropHdl::importXML",
+        "XMLKerningPropHdl::exportXML"
+      ]
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/xstor/xstorage.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-storage-implementation",
+    "capabilityIds": [
+      "CAP-291a44b3-99d9-4f74-8429-a90ed52f8be5",
+      "CAP-4f62077a-4c7c-483c-b17c-20e141f329ce",
+      "CAP-b564ff67-65d8-4b13-92df-0f4b391ce7b0",
+      "CAP-4dad6563-a403-4cf1-ace9-7810e15d1658",
+      "CAP-bbc266e7-6ea9-4bf9-b13d-a9565ac529d0",
+      "CAP-e9a3430f-1545-4e36-8849-bd900998ed83"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/source/xstor/xstorage.ts#OStorage",
+        "apps/office/src/package/source/xstor/xfactory.test.ts",
+        "apps/office/src/sfx2/source/doc/docfile.storage.test.ts"
+      ],
+      "justification": "Exposes actual XStorage, transaction and listener interfaces over OStorage_Impl with original catalog name admission, acquired child stream and folder values, attached readonly disposal links and original transaction ordering. Bounded output supports new or explicitly truncated parts. The public writable stream wrapper, existing-stream nontruncate writes, copy/clone and encrypted facets, and the public root relationship/property adapters remain pending.\nThe registered storage exposes XPropertySet and XModifiable. Plain PACKAGE metadata uses the original shared properties and controlled values; OFOPXML accepts the root relationship stream through the same property contract and persists it during commit. Full package encryption state, XRelationshipAccess and the browser file paths remain pending.\nThe plain ZIP/OFOPXML storage uses the real nontransacted OWriteStream component for new/truncated output. It exposes the writable data and property facets, commits the native cache and closes its attachment when both directions close. Transacted streams, nontruncate existing writes and encryption families remain pending.\nThe OFOPXML storage publishes XRelationshipAccess and XHierarchicalStorageAccess for the source Writer input. Original root metadata and path reads now use the acquired storage identity. Writable hierarchy transactions and encrypted members remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OStorage",
+        "openStreamElement",
+        "openStorageElement",
+        "getByName",
+        "InternalDispose",
+        "commit",
+        "revert",
+        "getPropertyValue",
+        "setPropertyValue",
+        "isModified",
+        "setModified"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/xstor/xstorage.cxx",
+      "upstreamSymbols": [
+        "OStorage::OStorage",
+        "OStorage::openStreamElement",
+        "OStorage::openStorageElement",
+        "OStorage::getByName",
+        "OStorage::InternalDispose",
+        "OStorage::commit",
+        "OStorage::revert",
+        "OStorage::getPropertyValue",
+        "OStorage::setPropertyValue",
+        "OStorage::isModified",
+        "OStorage::setModified"
+      ]
+    }
+  }
+}

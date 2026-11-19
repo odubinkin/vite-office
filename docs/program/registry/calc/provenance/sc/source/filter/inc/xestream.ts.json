@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/inc/xestream.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/inc/xestream.hxx",
+    "localSymbols": [
+      "XclExpXmlStream",
+      "XclXmlUtils"
+    ],
+    "upstreamSymbols": [
+      "XclExpXmlStream",
+      "GetCurrentStream"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/inc/xestream.ts",
+          "marker": "XclExpXmlStream"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xestream.xml.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/inc/xestream.hxx",
+          "marker": "XclExpXmlStream"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "J0Z0KF XLSX part-stream checkpoint adds actual XclExpXmlStream stack/path-map/part creation, original relationship ID-before-open ordering, exact map replacement, raw/escaped attribute emission, export-only import false, original VBA/dynamic-array/diagram queries. Original constructor flags are retained together over the existing XmlFilterBase storage/ZipFragmentStream binding. XclExpString::WriteXml now owns source unformatted text emission (empty, Unicode/control, SeparateFormats and byte-mode Unicode-vector behavior). The rich-font branch explicitly rejects until actual XclExpRoot/font owners exist; no fake font/root or completed exportDocument is supplied. Nonempty stack, complete attribute pairs, native diagnostics/ABI/overflow and full workbook/filter/UI orchestration remain unqualified or unfinished. Main/DOM-free Worker use the real part/stack/string owners, parent relations and actual ZIP reopening."
+    ],
+    "omittedResponsibilities": [
+      "Binary stream, root/font/shape/VBA/document traversal and whole filter/model/UI orchestration remain unported; header only reexports actual existing owners."
+    ]
+  }
+}

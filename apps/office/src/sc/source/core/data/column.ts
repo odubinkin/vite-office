@@ -24,7 +24,7 @@ import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types.ts";
 import { celltextattr_block, element_type_celltextattr } from "../../../inc/mtvelements";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
-import type { ScLineFlags } from "../../../inc/attarray";
+import type { ScLineFlags, ScMergePatternState } from "../../../inc/attarray";
 import type { SvxBoxItem, SvxBoxInfoItem } from "../../../../editeng/source/items/frmitems";
 import {
   CellStoreType,
@@ -70,14 +70,13 @@ import { element_type_numeric, celltextattr_element_callbacks } from "../../../i
 import { CellTextAttr } from "../../../inc/celltextattr";
 import type { EditTextObject } from "../../../../editeng/inc/editobj";
 import type { ScDocument } from "../../../inc/document";
-import type { ScMergePatternState } from "../../../inc/attarray";
 import type { ScMarkData } from "../../../inc/markdata";
 import { ScItemPoolCache } from "../../../inc/poolcach";
 import { SV_COUNTRY_LANGUAGE_OFFSET } from "../../../../svl/inc/zforlist";
 import type { ScInterpreterContext } from "../../../inc/interpretercontext";
 import { CopyToDocContext } from "../../../inc/clipcontext";
 import { ScMultiSelIter } from "../../../inc/markmulti";
-import { ScAttrArray } from "./attarray";
+import { ScAttrArray, type ScAttrEntry } from "./attarray";
 import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
 /** Attribute portion of native ScColumnData, also used for the real default column. */
 export class ScColumnData {
@@ -171,6 +170,10 @@ export class ScColumnData {
   /** Original column.cxx itemset cache applies real canonical patterns and optional change output. @param first - First row. @param last - Last row. @param cache - Borrowed shared cache. @param changed - Original changed flag. @returns Nothing. */
   ApplyCacheArea(first: number, last: number, cache: ScItemPoolCache, changed?: [boolean]): void {
     this.pAttrArray.ApplyCacheArea(first, last, cache, changed);
+  }
+  /** Original column.hxx vector move forwarding to the actual attribute owner. @param entries - Owned original row runs. @returns Nothing. */
+  SetAttrEntries(entries: ScAttrEntry[]): void {
+    this.pAttrArray.SetAttrEntries(entries);
   }
   /** Original ApplyPatternArea owns one actual native itemset cache. @param start - First row. @param end - Last row. @param delta - Borrowed actual pattern. @returns Stored attribute change. */
   ApplyPatternArea(start: number, end: number, delta: ScPatternAttr): boolean {

@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/oox/inc/helper/containerhelper.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "oox-value-ranges",
+    "capabilityIds": [
+      "CAP-51a0ad89-10cd-4c20-9e2e-fcc42760f38d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/oox/inc/helper/containerhelper.ts",
+        "vendor/libreoffice-reference/include/oox/helper/containerhelper.hxx",
+        "apps/office/src/oox/source/helper/containerhelper.test.ts"
+      ],
+      "justification": "Original signed32 ValueRange scalar/single/implicit-copy construction, equality, containment and intersection retain inclusive unnormalized endpoints. Public ValueRangeSet export resolves the single implementation. Other Matrix/RefVector/ContainerHelper and native template/iterator/allocator ABI responsibilities remain unported or unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ValueRange"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/oox/helper/containerhelper.hxx",
+      "upstreamSymbols": [
+        "ValueRange",
+        "ValueRangeSet"
+      ]
+    }
+  }
+}

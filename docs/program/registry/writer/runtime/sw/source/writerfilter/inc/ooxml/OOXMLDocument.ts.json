@@ -17,9 +17,10 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sw/source/writerfilter/inc/ooxml/OOXMLDocument.ts#StreamType_t",
-        "vendor/libreoffice-reference/sw/source/writerfilter/inc/ooxml/OOXMLDocument.hxx#StreamType_t"
+        "vendor/libreoffice-reference/sw/source/writerfilter/inc/ooxml/OOXMLDocument.hxx#StreamType_t",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.test.ts"
       ],
-      "justification": "Original complete stream selector enum declaration order; document resolution and SAX context interfaces remain pending. Whole-module parity stays unverified and DOCX application/UI import/export is not yet established. Consumed native document setXNoteId/getXNoteId/getTarget declarations retain signed note identity and borrowed target ownership; immutable UTF16 host strings bind const OUString transport. Document resolution remains pending. Original OOXMLDocument interface adds the native incrementProgress callback used by endOfParagraph; no replacement document interface or model loader is introduced.",
+      "justification": "Original complete stream selector enum declaration order; document resolution and SAX context interfaces remain pending. Whole-module parity stays unverified and DOCX application/UI import/export is not yet established. Consumed native document setXNoteId/getXNoteId/getTarget declarations retain signed note identity and borrowed target ownership; immutable UTF16 host strings bind const OUString transport. Document resolution remains pending. Original OOXMLDocument interface adds the native incrementProgress callback used by endOfParagraph; no replacement document interface or model loader is introduced. Exposes the native header and footer part selection callbacks to parser state.",
       "knownViolations": [],
       "localSymbols": [
         "StreamType_t",

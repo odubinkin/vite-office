@@ -1,4 +1,5 @@
 /** @fileoverview Owns the supported SwTextShell execute/state handlers from textsh1.cxx. */
+import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
 import { SwBaseShell } from "./basesh";
 import { canChangeWriterFontSize, changeWriterFontSize } from "./txtattr-fontsize";
 import {
@@ -306,12 +307,12 @@ export class SwTextShell extends SwBaseShell {
     if (result.action === "navigate") {
       const mark = marks.FindMark(result.name);
       if (mark === undefined) return false;
-      return this.target.SetPaM(mark.GetMarkPos().clone());
+      const [start, end] = mark.GetMarkStartEnd();
+      return this.target.SetPaM(start, mark.IsExpanded() ? end : undefined);
     }
     if (result.action === "remove") return marks.DeleteMark(result.name);
     if (result.action === "rename") return marks.RenameMark(result.name, result.newName);
-    const point = this.target.GetCursor().GetPoint();
-    marks.MakeMark(point.GetNode() as SwTextNode, point.GetContentIndex(), result.name);
+    marks.MakeBookmark(this.target.GetCursor(), result.name);
     return true;
   }
   /** Inserts a hard page boundary through Writer paragraph structure. @returns Whether inserted. */
@@ -628,9 +629,9 @@ export class SwTextShell extends SwBaseShell {
         lineSpacing,
         ...(tabStopItems?.entries() ?? [this.CreateTabStops(positions, paragraph)]),
         new SfxBoolItem(RES_KEEP, value.keepWithNext),
-        new SfxBoolItem(RES_PARATR_SPLIT, !(value.keepTogether ?? false)),
-        new SfxInt16Item(RES_PARATR_ORPHANS, value.orphans ?? 2),
-        new SfxInt16Item(RES_PARATR_WIDOWS, value.widows ?? 2),
+        new ParaItems.SvxFormatSplitItem(!(value.keepTogether ?? false), RES_PARATR_SPLIT),
+        new ParaItems.SvxOrphansItem(value.orphans ?? 2, RES_PARATR_ORPHANS),
+        new ParaItems.SvxWidowsItem(value.widows ?? 2, RES_PARATR_WIDOWS),
         new SfxInt16Item(
           RES_BREAK,
           value.breakBefore === "page" && value.breakAfter === "page"

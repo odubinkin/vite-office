@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/inc/ZipOutputEntry.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-zip-output-entry",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f",
+      "CAP-4ddbda7f-f247-4986-8e38-1f88dea4ff29"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/inc/ZipOutputEntry.ts",
+        "apps/office/src/package/source/zipapi/ZipOutputEntry.test.ts",
+        "apps/office/src/package/source/zipapi/ZipOutputStream.test.ts",
+        "apps/office/src/package/source/zipapi/ZipOutputEntryInThread.test.ts",
+        "docs/program/native-zip-background-task.md"
+      ],
+      "justification": "Original ZipOutputEntryBase and normal synchronous ZipOutputEntry bind the valid nonencrypted constructor domain with a null ZipPackageStream pointer. Actual UNO output/context references, borrowed ZipEntry, original CRC32,32768-byte native Sequence and Deflater provide compression, finish/metadata/reset and readBytes loop behavior. No substitute package stream, cipher, digest, task, thread pool or compression provider is created. Unknown-bit3 entries acquire original totals/CRC; known entries retain size/CRC even on mismatch and correct only compressed size. Real readonly-output errors propagate before metadata/reset; subsequent finished-state behavior remains original. All parts of4 unchanged Strict/Transitional DOCX/XLSX source packages are compressed by this owner through native ZipOutputStream and independently extracted/byte-compared. Input/output closure and ownership are not invented. Non-null actual ZipPackageStream parent, encrypted/digest/finalization domains, task/background/parallel classes, native assertions/OOM/ABI and full package/storage/filter/model/UI acceptance remain unfinished or unqualified. Constructor signatures explicitly bind null/false; unsupported original domains are not exposed as successful implementations. Original ZipOutputEntryInThread constructor/owned ZipEntry/intrusive TempFileFastService/false finished default and nested task work now use actual native compression, file and UNO owners. Source success/error input release, output/file cleanup, UNO-only inner cleanup catch, exception_ptr retention and entry move/base borrow are retained. The neutral standard-library exception_ptr facade delegates to the actual CppuHelper compiler ABI installed at composition, reusing genuine Any/generated exceptions; package code imports no browser implementation. Copies retain actual derived fields/Context until last pointer release; host Error objects stay VM-owned. No native C++ heap/pointer/atomic/TLS/fatal/OOM/nonobject JS throw parity is claimed. Source explicit ThreadPool(0) executes real task work in QA; main/DOM-free Worker writes and reopens genuine compressed output and observes actual disconnected-input error. Production shared optimal workers, producer integration, parallel compression/deflateBound/encryption/complete package/Medium/filter/UI remain unfinished. Whole executable owner coverage branch gate remains failing; no fake provider/private setter/counter change used to qualify rare constructor/cleanup failures.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/inc/ZipOutputEntry.hxx",
+      "upstreamSymbols": [
+        "class ZipOutputEntryBase",
+        "class ZipOutputEntry : public ZipOutputEntryBase",
+        "ZipOutputEntryInThread"
+      ]
+    }
+  }
+}

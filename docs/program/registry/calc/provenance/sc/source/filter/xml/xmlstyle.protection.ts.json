@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmlstyle.protection.ts",
+    "upstreamPath": "sc/source/filter/xml/xmlstyle.cxx",
+    "localSymbols": [
+      "importCellProtection",
+      "exportCellProtection"
+    ],
+    "upstreamSymbols": [
+      "XmlScPropHdl_CellProtection::importXML",
+      "XmlScPropHdl_PrintContent::exportXML"
+    ],
+    "preservedResponsibilities": [
+      "Merges both source ODF cell properties into the original four-flag native item and serializes the source visibility and print spellings."
+    ],
+    "omittedResponsibilities": [
+      "This owner covers the represented cell-format property family."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlstyle.protection.ts",
+          "marker": "importCellProtection"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx",
+          "marker": "XmlScPropHdl_CellProtection::importXML"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx",
+          "marker": "XmlScPropHdl_PrintContent::exportXML"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/xml/xmlstyle.protection.ts",
+      "rationale": "Keeps the native cell protection value processing beside its original style owner and separates that bounded work from the other existing format families.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

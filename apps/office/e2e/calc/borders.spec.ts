@@ -70,6 +70,10 @@ const nativeExports = [
   { module: "src/editeng/source/items/frmitems.ts", names: ["SvxBoxItem", "SvxBoxInfoItem"] },
   { module: "src/editeng/source/items/borderline.ts", names: ["SvxBorderLine"] },
   { module: "src/sc/source/filter/xml/xmlwrap.ts", names: ["readOdsDocument", "writeOdsDocument"] },
+  { module: "src/cppuhelper/browser/exception-abi.ts", names: ["initializeExceptionAbi"] },
+  { module: "src/desktop/browser/app/uno-components.ts", names: ["implementations"] },
+  { module: "src/desktop/source/app/appinit.ts", names: ["InitApplicationServiceManager"] },
+  { module: "src/external/libxml2/libxml2.ts", names: ["initializeLibXml2"] },
 ] as const;
 /** Actual source exports used identically in main and Worker realms. */
 type Runtime = typeof import("../../src/sc/inc/patattr") &
@@ -79,7 +83,11 @@ type Runtime = typeof import("../../src/sc/inc/patattr") &
   typeof import("../../src/sc/inc/address") &
   typeof import("../../src/editeng/source/items/frmitems") &
   typeof import("../../src/editeng/source/items/borderline") &
-  typeof import("../../src/sc/source/filter/xml/xmlwrap");
+  typeof import("../../src/sc/source/filter/xml/xmlwrap") &
+  typeof import("../../src/cppuhelper/browser/exception-abi") &
+  typeof import("../../src/desktop/browser/app/uno-components") &
+  typeof import("../../src/desktop/source/app/appinit") &
+  typeof import("../../src/external/libxml2/libxml2");
 test("runs actual native border history and ODS reopens in a DOM-free Worker", /** Uses real compiled owners in both realms. @param fixtures - Browser. @returns Completion. */ async ({
   page,
 }) => {
@@ -89,8 +97,11 @@ test("runs actual native border history and ODS reopens in a DOM-free Worker", /
     /** Executes actual source kernel. @returns Observations. */ async () => {
       /** Runs the real view/document/history/filter sequence. @returns Native data. */
       async function run() {
-        const n = (globalThis as unknown as { CalcBorderFixture: Runtime }).CalcBorderFixture,
-          shell = new n.ScDocShell(),
+        const n = (globalThis as unknown as { CalcBorderFixture: Runtime }).CalcBorderFixture;
+        n.initializeExceptionAbi();
+        n.InitApplicationServiceManager(n.implementations);
+        await n.initializeLibXml2();
+        const shell = new n.ScDocShell(),
           doc = shell.GetDocument(),
           data = new n.ScViewData(doc),
           view = new n.ScViewFunc(data, shell),

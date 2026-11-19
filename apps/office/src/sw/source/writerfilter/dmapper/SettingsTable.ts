@@ -1,12 +1,22 @@
-/** @fileoverview Native SettingsTable scalar/format state, recursive resources and defaults. Full protection/compatibility grab bags and application to document/view/style owners remain unported. */
+/** @fileoverview Native SettingsTable scalar state, recursive settings resources and Word compatibility defaults. */
 import type { DomainMapper } from "./DomainMapper";
 import type { Id, Properties, Reference, Sprm, Table, Value } from "../inc/dmapper/resourcemodel";
+import { resolveReturnedReference } from "../inc/dmapper/resourcemodel";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { SvxZoomType } from "../../../../sfx2/inc/zoomitem";
 import { resolveSprmProps } from "./util";
 import { convertTwipToMm100_Limited } from "./ConversionHelper";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
-import { unicode } from "../../core/unocore/unocrsrhelper";
+import type { ThemeFontLanguages } from "../../../inc/doc";
+import { text, unicode } from "../../core/unocore/unocrsrhelper";
+import {
+  FindWordCompatibilityMode,
+  SetCompatSettings,
+  wordCompatibilityUri,
+  type CompatSetting,
+} from "./SettingsTable.compat";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import type { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 /** Original source zoom token conversion, with PERCENT for unknown identities. @param type - Native resource token. @returns Native zoom kind. */
 function lcl_GetZoomType(type: Id): number {
   switch (type) {
@@ -22,6 +32,10 @@ function lcl_GetZoomType(type: Id): number {
 }
 /** Native settings state for consumed scalar and nested-resource families; no complete settings service/application is advertised. */
 export class SettingsTable implements Properties, Table {
+  private themeFontLanguages: ThemeFontLanguages | undefined;
+  private readonly compatSettings: CompatSetting[] = [];
+  private readonly currentCompatSetting: CompatSetting = {};
+  private wordCompatibilityMode = -1;
   private m_nDefaultTabStop = 720;
   private m_nZoomFactor = 0;
   private m_nZoomType = 0;
@@ -74,6 +88,24 @@ export class SettingsTable implements Properties, Table {
         case N.LN_CT_Zoom_val:
           this.m_nZoomType = lcl_GetZoomType(integer);
           break;
+        case N.LN_CT_Language_val:
+          this.themeFontLanguages = { ...this.themeFontLanguages, val: text(string) };
+          break;
+        case N.LN_CT_Language_eastAsia:
+          this.themeFontLanguages = { ...this.themeFontLanguages, eastAsia: text(string) };
+          break;
+        case N.LN_CT_Language_bidi:
+          this.themeFontLanguages = { ...this.themeFontLanguages, bidi: text(string) };
+          break;
+        case N.LN_CT_CompatSetting_name:
+          this.currentCompatSetting.name = text(string);
+          break;
+        case N.LN_CT_CompatSetting_uri:
+          this.currentCompatSetting.uri = text(string);
+          break;
+        case N.LN_CT_CompatSetting_val:
+          this.currentCompatSetting.val = text(string);
+          break;
         case N.LN_CT_View_val:
           this.m_nView = integer >>> 0;
           break;
@@ -107,6 +139,14 @@ export class SettingsTable implements Properties, Table {
         case N.LN_CT_Settings_linkStyles:
           if (this.m_oLinkStyles === undefined) this.m_oLinkStyles = integer !== 0;
           break;
+        case N.LN_CT_Compat_compatSetting: {
+          const properties = modifier.getProps();
+          if (properties) {
+            resolveReturnedReference(properties, this);
+            this.compatSettings.push({ ...this.currentCompatSetting });
+          }
+          break;
+        }
         case N.LN_CT_Settings_defaultTabStop:
           this.m_nDefaultTabStop = integer;
           break;
@@ -183,6 +223,43 @@ export class SettingsTable implements Properties, Table {
     } finally {
       string.dispose();
     }
+  }
+  /** Returns the imported theme language attributes. @returns Source attributes when present. */
+  GetThemeFontLangProperties(): ThemeFontLanguages | undefined {
+    return this.themeFontLanguages;
+  }
+  /** Original lazy cache for the greatest supported input declaration. @returns Imported mode or -1 before defaults. */
+  GetWordCompatibilityMode(): number {
+    if (this.wordCompatibilityMode === -1)
+      this.wordCompatibilityMode = FindWordCompatibilityMode(this.compatSettings);
+    return this.wordCompatibilityMode;
+  }
+  /** Original import fallback is mode 12 when no recognized value was supplied. @returns Source-ordered document compatibility settings. */
+  GetCompatSettings(): readonly CompatSetting[] {
+    if (this.GetWordCompatibilityMode() === -1)
+      this.compatSettings.push({ name: "compatibilityMode", uri: wordCompatibilityUri, val: "12" });
+    return this.compatSettings;
+  }
+  /** Applies represented Word compatibility properties to the original UNO settings and interoperability owners. @param model - Actual Writer model. @returns Nothing. */
+  ApplyCompatProperties(model: SwXTextDocument): void {
+    const settings = model.createDocumentSettings();
+    const properties = [
+      ["AddParaTableSpacing", this.GetDoNotUseHTMLParagraphAutoSpacing()],
+      ["AddExternalLeading", this.GetNoLeading() ? false : undefined],
+      ["DoNotJustifyLinesWithManualBreak", this.GetDoNotExpandShiftReturn() ? true : undefined],
+    ] as const;
+    for (const [property, value] of properties) {
+      if (value === undefined) continue;
+      const name = unicode(property);
+      const member = new Any(value);
+      try {
+        settings.setPropertyValue(name, member);
+      } finally {
+        member.dispose();
+        name.dispose();
+      }
+    }
+    SetCompatSettings(model, this.GetCompatSettings());
   }
   /** Original default tab conversion to mm100, including the native legacy ceiling. @returns Distance. */
   GetDefaultTabStop(): number {

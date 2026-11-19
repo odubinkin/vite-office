@@ -10,7 +10,8 @@
       "ScXMLExport"
     ],
     "upstreamSymbols": [
-      "ScXMLExport"
+      "ScXMLExport",
+      "ScXMLExport::WriteCalculationSettings"
     ],
     "preservedResponsibilities": [
       "Task204 exports the same actual document through ScHorizontalCellIterator,ScFormulaCell.GetFormula(ODFF),common RTL decimal output and shared ODF inline text encoding. Empty row/cell spans compress without materializing a grid;numeric/string/formula source and supported lazy result getters are reused.",
@@ -23,10 +24,16 @@
       "TaskQMVA57 connects native 200-twip indentation,width caps,alignment coercion,filtered working marks and ScUndoIndent to the existing shared Writer toolbar. Actual row-height/manual flags and independent hidden/filtered segments drive native height/hide/show requests,geometry documents,keyboard skipping,compressed grid projection and ODS. The common ScMetricInputDlg accepts original dialog/current/default/unit/digits/range inputs for both axes. Shared XMLMeasurePropHdl preserves original signed scalar saturation,Any assignment and typed extraction;Calc indentation uses original signed16 HMM and UInt16 twip boundaries. Default-view unprotected/unmerged scalar cells only;optimal/device sizing,global undo enablement,UNO service/argument transform graphs,protection,drawing,outline,alternate views and complete native parity remain unverified. Existing primary save/open/no-recovery policies remain. Only related module tests run between all-app checkpoint40 and planned checkpoint50.",
       "Task71 ports equal effective automatic-style grouping for empty cell spans from ScXMLExport::WriteRowContent,retaining data-cell and format boundaries. Native attribute row-run ends bound reuse of the horizontal style projection,avoiding a rectangular traversal for every data row. A5000-row1024-column independent ODF fixture now persists through actual browser primary storage and reopens all10000scalars under unchanged byte ceilings. Full native validation,default-style index machinery and unsupported rich/object families remain unported;no broad parity promotion.",
       "Block75 document-mode work in progress now preserves DOCUMENT0,CLIP1,UNDO2,FUNCTIONACCESS3,source auto-calc defaults,independent string pools,normal/function-access-only ScPoolHelper and broadcast-area allocation,and nullable GetPool/GetStyleSheetPool contracts. Actual helper owns ScDocumentPool and ScStyleSheetPool on the existing shared style base. SourceDocumentGone clears the actual style-pool source pointer;managed references retain physical identity without a global reference-count simulator. CellAttributeHelper is allocated lazily and rejects unshared clipboard/undo access as native assertions require. Real document NoListening and formula change-track membership flags preserve native start/end subscription asymmetry after group teardown. Tests use genuine documents,resources and listeners. Existing normal-document shell/export/test consumers explicitly borrow the known owned pool at original dereference boundaries;nullable document API remains honest. Calc style creation/copy factories explicitly reject unsupported ScStyleSheet construction rather than creating the wrong shared style type. Standard-style population,formatter/edit-engine services,clipboard resource sharing/reset/paste belong outside this consumed allocation/lifetime slice. Full closure/raw100 and broad native parity remain pending.",
-      "The current ODF text-only edit cell export uses the shared engine's expanded paragraph text so native CSV tab features reach the XML text writer."
+      "The ODS named styles stream exports the actual Calc Default style and any represented independent document defaults.",
+      "ODF repeated geometry terminates at native row and column outline boundaries.",
+      "The primary ODS content writes the nondefault workbook null date before the sheets using the existing SAX date conversion.",
+      "Native edit cells write character spans and their deduplicated automatic text styles through the shared ODF text writer.",
+      "Writes ODF theme and native complex-color references through named and automatic styles.",
+      "Declares the original ODF css3t namespace for Calc horizontal justification method.",
+      "Writes native ODF protection attributes and options before sheet cell content."
     ],
     "omittedResponsibilities": [
-      "Full ODF field and character styling is outside this XML text boundary."
+      "Field identity and unimplemented character properties are outside this XML text boundary."
     ],
     "evidence": {
       "local": [
@@ -69,6 +76,14 @@
         {
           "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/excrecds.test.ts",
+          "marker": "replays tdf165180"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-sheet-protection.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -83,6 +98,10 @@
         {
           "path": "editeng/source/editeng/editeng.cxx",
           "marker": "EditEngine::GetText"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
+          "marker": "ScXMLExport::WriteCalculationSettings"
         }
       ]
     }

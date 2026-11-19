@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/oox/numberformatsbuffer.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-file-filter",
+    "capabilityIds": [
+      "CAP-1d1d48a3-5a10-4373-876c-fa5f18a62db9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/oox/numberformatsbuffer.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+        "vendor/libreoffice-reference/sc/source/filter/oox/numberformatsbuffer.cxx"
+      ],
+      "justification": "Workbook XF number format IDs resolve to real formatter entries. Custom code normalization retains escaped non-fraction literals and the source import fallback. Additional locale-specific built-in tables and extended formatCode16 are open.",
+      "knownViolations": [],
+      "localSymbols": [
+        "NumberFormatsBuffer",
+        "normalizeFormatCode"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/oox/numberformatsbuffer.cxx",
+      "upstreamSymbols": [
+        "NumberFormatsBuffer::importNumFmt",
+        "NumberFormat::setFormatCode"
+      ]
+    }
+  }
+}

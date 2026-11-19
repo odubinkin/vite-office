@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/ucb/source/core/ucbcmds.info.ts",
+    "status": "mapped",
+    "upstreamPath": "ucb/source/core/ucbcmds.cxx",
+    "localSymbols": [
+      "CommandProcessorInfo"
+    ],
+    "upstreamSymbols": [
+      "CommandProcessorInfo",
+      "getCommands",
+      "getCommandInfoByName",
+      "getCommandInfoByHandle"
+    ],
+    "preservedResponsibilities": [
+      "Original source-internal three-command metadata component preserves initializer-list native Sequence construction, void/legacy GlobalTransferCommandArgument/CheckinArgument types, exact-name and handle lookup, default UnsupportedCommandException and by-value descriptor/shared-sequence COW behavior. This is the real metadata component, not a partial broker; execution and transfer/check-in owners remain unbound. Actual source-derived owner tests exercise defaults, nonvirtual copy/inequality, inherited live field projections and real UNO Any/Sequence/caught-exception transport. All10 new executable owners independently pass90; Chromium main/DOM-free Worker use real metadata/value owners. Native physical C++ ABI/allocation/thread promises and full UniversalContentBroker/provider/transfer/check-in/DOCX-XLSX core/UI remain unqualified or unfinished."
+    ],
+    "omittedResponsibilities": [
+      "Full UCB broker/provider/transfer/check-in, native physical ABI/allocation/thread domains and DOCX/XLSX package/storage/model/filter/UI acceptance."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/ucb/source/core/ucbcmds.info.ts",
+          "marker": "CommandProcessorInfo"
+        },
+        {
+          "path": "apps/office/src/ucb/source/core/native-command-info.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "ucb/source/core/ucbcmds.cxx",
+          "marker": "CommandProcessorInfo"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/ucb/source/core/ucbcmds.info.ts",
+      "rationale": "Separates original source-internal CommandProcessorInfo from the large transfer/check-in implementation while preserving its real constructor and complete interface. Remaining original command execution is not represented by a placeholder broker.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

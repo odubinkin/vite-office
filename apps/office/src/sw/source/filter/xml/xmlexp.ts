@@ -1,29 +1,26 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
-import { getTextFrameExportParagraphs, projectAnchoredTextFrames } from "./xmltextframe";
+import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
+import {
+  getTextFrameExportParagraphs,
+  projectAnchoredTextFrames,
+  sectionParagraphs,
+} from "./xmltextframe";
+import { getOdfPageStories } from "./xmlpageheaderfooter";
 import { CollectTextFlyFrames, type BoundTextFrames } from "../../core/layout/flycnt";
 import type { XMLTextExportBlock } from "../../../../xmloff/source/table/XMLTableExport";
 import { getFillProperties, XML_FILL_WHICH_IDS } from "./xmlexp-fill";
-import { writerTextColorValue, writerHighlightColorValue } from "../../core/attr/swatrset";
-import { SvxColorItem } from "../../../../editeng/inc/colritem";
-import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
-import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
-import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
-import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
+import { RES_CHRATR_ESCAPEMENT, RES_CHRATR_KERNING } from "../../../inc/hintids";
 import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
 import { RES_CHRATR_WORDLINEMODE, RES_CHRATR_AUTOKERN } from "../../../inc/hintids";
-import { SvxWordLineModeItem } from "../../../../editeng/inc/wrlmitem";
-import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
 import {
-  SvxFontItem,
-  SvxFontHeightItem,
-  SvxWeightItem,
-  SvxPostureItem,
-  SvxUnderlineItem,
-} from "../../../../editeng/source/items/textitem";
-import { ConvertFontWeight, ConvertFontSlant } from "../../../../vcl/inc/unohelp";
-import { getFontFamilyGeneric } from "../../../../xmloff/source/style/fonthdl";
+  RES_CHRATR_LANGUAGE,
+  RES_CHRATR_CJK_LANGUAGE,
+  RES_CHRATR_CTL_LANGUAGE,
+} from "../../../inc/hintids";
+import { getCharacterProperties } from "./xmlexp-character";
+export { getCharacterProperties } from "./xmlexp-character";
 import { projectWriterLineSpacing } from "../../core/text/itrform2";
 import { SwXMLTableLines } from "./xmltble";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
@@ -53,7 +50,7 @@ import { exportParagraphStyleNumberingAttributes } from "../../../../xmloff/sour
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import {
   escapeXml,
-  exportCharacterAttributes,
+  exportCharacterPropertyElement,
   exportParagraphAttributes,
   exportParagraphPropertyChildren,
   exportTextParagraphs,
@@ -73,6 +70,7 @@ import {
   RES_BREAK,
   RES_PAGEDESC,
   RES_CHRATR_COLOR,
+  RES_CHRATR_GRABBAG,
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CJK_WEIGHT,
@@ -121,15 +119,24 @@ import type { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
 import { WRITER_MAX_LIST_LEVEL } from "../../core/doc/list";
 import { SwXNumberingRules } from "../../core/unocore/unosett";
 import type { SwDoc } from "../../core/doc/doc";
-import { SwTableNode } from "../../core/docnode/node";
+import { SwTableNode, type SwStartNode } from "../../core/docnode/node";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SwFormatAutoFormat } from "../../core/txtnode/txatbase";
+import { RES_PARATR_LIST_AUTOFMT } from "../../../inc/hintids";
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import { GetTextAttrMode } from "../../../inc/swtypes";
-import { getParagraphOdfStyleName, exportParagraphStyleNameAttributes } from "./xmlexp-style-names";
+import type { SwCharFormat } from "../../../inc/charfmt";
+import { SwTextCharFormat } from "../../core/txtnode/txtatr2";
+import {
+  getCharacterOdfStyleName,
+  exportCharacterStyleNameAttributes,
+  getParagraphOdfStyleName,
+  exportParagraphStyleNameAttributes,
+} from "./xmlexp-style-names";
 import { createWriterFontAutoStylePool, registerWriterFontFace } from "./xmlfonte";
 import { LineNumberPosition } from "../../../inc/lineinfo";
 import { exportLineNumberingConfiguration } from "../../../../xmloff/source/text/XMLLineNumberingExport";
+import { ExportThemeElement } from "../../../../xmloff/source/style/XMLThemeContext";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 const OFFICE_NAMESPACES = `xmlns:draw="${ODF_NAMESPACES.draw}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}" xmlns:loext="${ODF_NAMESPACES.loext}"`;
@@ -137,6 +144,19 @@ const OFFICE_NAMESPACES = `xmlns:draw="${ODF_NAMESPACES.draw}" xmlns:office="${O
 /** Serializes Writer named paragraph styles into styles.xml. @param document - Canonical SwDoc. @returns Complete XML. */
 export function exportStylesXml(document: SwDoc): string {
   const fonts = createWriterFontAutoStylePool(document);
+  const stories = Array.from(
+    { length: document.GetPageDescCnt() },
+    /** Selects native sections per page. @param _unused - Array placeholder. @param index - Page position. @returns Story list. */
+    (_unused, index) => getOdfPageStories(document.GetPageDesc(index)),
+  );
+  const sections = [
+    ...new Set(
+      stories.flat().map(
+        /** Shares the XML projection of each native text owner. @param story - Native page story. @returns Section. */
+        (story) => story.start,
+      ),
+    ),
+  ];
   const inheritedStyles = exportWriterText(
     document,
     /** Never cancels named style serialization. @returns False. */ () => false,
@@ -152,7 +172,8 @@ export function exportStylesXml(document: SwDoc): string {
         FontPitch.PITCH_DONTKNOW,
         RTL_TEXTENCODING_DONTKNOW,
       ) || undefined,
-  ).namedStyles;
+    sections.length ? sections : undefined,
+  );
   const namedRules = new Map(
     document
       .GetNumRuleTable()
@@ -227,7 +248,7 @@ export function exportStylesXml(document: SwDoc): string {
       const textProperties =
         characterProperties === undefined
           ? ""
-          : `<style:text-properties${exportCharacterAttributes(
+          : exportCharacterPropertyElement(
               characterProperties,
               /** Registers one used font. @param family - Model family. @param generic - ODF generic family. @param styleName - Font style. @param pitch - Native pitch. @param charSet - Native encoding. @returns Face name. */ (
                 family,
@@ -236,12 +257,38 @@ export function exportStylesXml(document: SwDoc): string {
                 pitch,
                 charSet,
               ) => registerWriterFontFace(fonts, family, generic, styleName, pitch, charSet),
-            )}/>`;
+            );
       const nextName = getParagraphOdfStyleName(document, collection.GetNextTextFormatColl().id);
       const next = nextName === name ? "" : ` style:next-style-name="${escapeXml(nextName)}"`;
       return `<style:style${exportParagraphStyleNameAttributes(collection)} style:family="paragraph"${next}${parent}${masterPage}${numberingAttributes}>${paragraphProperties}${textProperties}</style:style>`;
     },
   );
+  const characterStyles = document
+    .GetCharFormats()
+    .slice(1)
+    .map(
+      /** Emits a common character style even when it has no direct properties. @param format - Document-owned format. @returns ODF style definition. */
+      (format) => {
+        const set = format.GetAttrSet();
+        assertSupportedItems(set.entries(), `character style ${format.GetName()}`, false);
+        const parent = format.DerivedFrom() as SwCharFormat | undefined;
+        const basedOn =
+          parent && parent !== document.GetDfltCharFormat()
+            ? ` style:parent-style-name="${escapeXml(getCharacterOdfStyleName(parent))}"`
+            : "";
+        const properties = getCharacterProperties(set, false);
+        const text =
+          properties === undefined
+            ? ""
+            : exportCharacterPropertyElement(
+                properties,
+                /** Registers the style's native font with the styles stream. @param family - Font family. @param generic - Generic family. @param styleName - Font style. @param pitch - Native pitch. @param charSet - Native encoding. @returns Face name. */
+                (family, generic, styleName, pitch, charSet) =>
+                  registerWriterFontFace(fonts, family, generic, styleName, pitch, charSet),
+              );
+        return `<style:style${exportCharacterStyleNameAttributes(format)} style:family="text"${basedOn}>${text}</style:style>`;
+      },
+    );
   const pageLayouts: string[] = [];
   const masterPages: string[] = [];
   for (let index = 0; index < document.GetPageDescCnt(); index += 1) {
@@ -256,9 +303,15 @@ export function exportStylesXml(document: SwDoc): string {
       followName === descriptor.GetName()
         ? ""
         : ` style:next-style-name="${escapeXml(followName)}"`;
-    masterPages.push(
-      `<style:master-page style:name="${escapeXml(descriptor.GetName())}" style:page-layout-name="${layoutName}"${follow}/>`,
-    );
+    const children = stories[index]
+      ?.map(
+        /** Writes the original ODF page story element. @param story - Variant text. @returns Serialized element. */
+        ({ element, start, display }) =>
+          `<style:${element}${display ? "" : ' style:display="false"'}>${inheritedStyles.sections?.[sections.indexOf(start)] ?? ""}</style:${element}>`,
+      )
+      .join("");
+    const open = `<style:master-page style:name="${escapeXml(descriptor.GetName())}" style:page-layout-name="${layoutName}"${follow}`;
+    masterPages.push(children ? `${open}>${children}</style:master-page>` : `${open}/>`);
   }
   const exporter = new SvxXMLNumRuleExport(
     escapeXml,
@@ -296,7 +349,46 @@ export function exportStylesXml(document: SwDoc): string {
             ? "outside"
             : "left",
   });
-  return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:styles>${styles.join("")}${numberingStyles}${inheritedStyles}${lineNumbering}</office:styles><office:automatic-styles>${pageLayouts.join("")}</office:automatic-styles><office:master-styles>${masterPages.join("")}</office:master-styles></office:document-styles>`;
+  const defaults = exportDefaultParagraphStyle(document, fonts);
+  return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:styles>${defaults}${styles.join("")}${characterStyles.join("")}${numberingStyles}${inheritedStyles.namedStyles}${lineNumbering}${ExportThemeElement(document.theme)}</office:styles><office:automatic-styles>${pageLayouts.join("")}${sections.length ? inheritedStyles.automaticStyles : ""}</office:automatic-styles><office:master-styles>${masterPages.join("")}</office:master-styles></office:document-styles>`;
+}
+
+/** Writes the original ODF paragraph default-style tab distance and font properties from Writer's document pool. @param document - Writer document. @param fonts - Styles stream font-face pool. @returns ODF declaration. */
+function exportDefaultParagraphStyle(
+  document: SwDoc,
+  fonts: ReturnType<typeof createWriterFontAutoStylePool>,
+): string {
+  const pool = document.GetAttrPool();
+  const set = new SfxItemSet(pool, [
+    [RES_CHRATR_FONT, RES_CHRATR_FONT],
+    [RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT],
+    [RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT],
+  ]);
+  try {
+    for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT]) {
+      const item = pool.GetUserDefaultItem(which);
+      if (item) set.Put(item);
+    }
+    const properties = getCharacterProperties(set, false);
+    const tabs = pool.GetUserDefaultItem(RES_PARATR_TABSTOP) as SvxTabStopItem | undefined;
+    const distance = tabs?.Count() ? tabs.At(0).GetTabPos() : undefined;
+    const paragraph =
+      distance === undefined
+        ? ""
+        : `<style:paragraph-properties style:tab-stop-distance="${exportOdfLength(distance)}"/>`;
+    if (!properties && !paragraph) return "";
+    const element = properties
+      ? exportCharacterPropertyElement(
+          properties,
+          /** Resolves the native declared font. @param family - Family. @param generic - ODF family. @param style - Family style. @param pitch - Pitch. @param charset - Encoding. @returns Face name. */
+          (family, generic, style, pitch, charset) =>
+            registerWriterFontFace(fonts, family, generic, style, pitch, charset),
+        )
+      : "";
+    return `<style:default-style style:family="paragraph">${paragraph}${element}</style:default-style>`;
+  } finally {
+    set.Dispose();
+  }
 }
 
 /** Serializes body nodes and automatic styles into content.xml. @param document - Canonical SwDoc. @param isCancelled - Cooperative cancellation probe. @returns Complete XML. */
@@ -324,7 +416,7 @@ export function exportContentXml(
   return `<?xml version="1.0" encoding="UTF-8"?><office:document-content ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:automatic-styles>${exported.automaticStyles}</office:automatic-styles><office:body><office:text>${exported.body}</office:text></office:body></office:document-content>`;
 }
 
-/** Projects the same model source for both package streams. @param document - Writer model. @param isCancelled - Cancellation probe. @param fontFaceName - Font registry. @param existingFontFaceName - Existing face lookup. @returns Style/body fragments. */
+/** Projects the same model source for both package streams. @param document - Writer model. @param isCancelled - Cancellation probe. @param fontFaceName - Font registry. @param existingFontFaceName - Existing face lookup. @param sections - Master-page text owners in the styles stream. @returns Style/body fragments. */
 function exportWriterText(
   document: SwDoc,
   isCancelled: () => boolean,
@@ -336,19 +428,39 @@ function exportWriterText(
     charSet?: number,
   ) => string,
   existingFontFaceName: (family: string) => string | undefined,
+  sections?: readonly SwStartNode[],
 ): OdfTextExport {
   const anchored = CollectTextFlyFrames(document);
   return exportTextParagraphs(
     {
+      commonCharacterStyleNames: document.GetCharFormats().slice(1).map(getCharacterOdfStyleName),
       /** Iterates live Writer nodes without retaining a projection. @returns Paragraph source iterator. */
       *paragraphs(): Iterable<XMLTextParagraphSource> {
         for (const node of getTextFrameExportParagraphs(document, anchored))
           yield projectParagraph(node);
+        for (const section of sections ?? [])
+          for (const node of sectionParagraphs(document.nodes.GetSectionContent(section)))
+            yield projectParagraph(node);
       },
       /** Iterates ordered direct body blocks and projects table cells through the same text exporter. @returns Body blocks. */
       *blocks() {
         for (const block of document.nodes.getBodyContent()) yield projectBlock(block, anchored);
       },
+      ...(sections === undefined
+        ? {}
+        : {
+            /** Projects all master-page text under the shared automatic style owner. @returns Ordered sections. */
+            sections() {
+              return sections.map(
+                /** Projects one direct native text section. @param start - Section. @returns First-level XML blocks. */
+                (start) =>
+                  document.nodes.GetSectionContent(start).map(
+                    /** Connects paragraphs and tables to the existing exporter. @param block - Direct section block. @returns XML block source. */
+                    (block) => projectBlock(block, anchored),
+                  ),
+              );
+            },
+          }),
     },
     isCancelled,
     fontFaceName,
@@ -501,20 +613,23 @@ function projectParagraph(node: SwTextNode, anchored?: BoundTextFrames): XMLText
   const marks = node.GetDoc().GetIDocumentMarkAccess();
   const markers: XMLTextParagraphMarker[] = [
     ...projectAnchoredTextFrames(node, anchored, projectBlock),
-    ...marks
-      .GetBookmarks()
-      .filter(
-        /** Selects bookmarks on this paragraph. @param mark - Mark. @returns Whether owned. */
-        (mark) => mark.GetMarkPos().GetNode() === node,
-      )
-      .map(
-        /** Projects a bookmark to ODF. @param mark - Mark. @returns Neutral marker. */
-        (mark) => ({
-          kind: "bookmark" as const,
-          name: mark.GetName(),
-          offset: mark.GetMarkPos().GetContentIndex(),
-        }),
-      ),
+    ...marks.GetBookmarks().flatMap(
+      /** Projects bookmark endpoints on this paragraph. @param mark - Native bookmark. @returns Local ODF markers. */
+      (mark): XMLTextParagraphMarker[] => {
+        const [start, end] = mark.GetMarkStartEnd();
+        const name = mark.GetName();
+        const local: XMLTextParagraphMarker[] = [];
+        if (start.GetNode() === node)
+          local.push({
+            kind: start.compare(end) === 0 ? "bookmark" : "bookmark-start",
+            name,
+            offset: start.GetContentIndex(),
+          });
+        if (end.GetNode() === node && start.compare(end) !== 0)
+          local.push({ kind: "bookmark-end", name, offset: end.GetContentIndex() });
+        return local;
+      },
+    ),
     ...marks
       .GetSoftPageBreaks()
       .filter(
@@ -533,11 +648,17 @@ function projectParagraph(node: SwTextNode, anchored?: BoundTextFrames): XMLText
     (left, right) => left.offset - right.offset,
   );
   const directCharacterProperties = getCharacterProperties(node.GetpSwAttrSet(), false);
+  const marker = node.GetSwAttrSet().GetItemIfSet(RES_PARATR_LIST_AUTOFMT, true);
+  const markerProperties =
+    marker instanceof SwFormatAutoFormat
+      ? getCharacterProperties(marker.GetStyleHandle(), false)
+      : undefined;
   return {
     ...(alignment === undefined ? {} : { alignment }),
     ...(hasDirectLeftMargin ? { leftMargin: node.GetParagraphTextLeftMargin() } : {}),
     ...(paragraphProperties === undefined ? {} : { paragraphProperties }),
     ...(markers.length === 0 ? {} : { markers }),
+    ...(markerProperties === undefined ? {} : { markerProperties }),
     ...(rule !== undefined &&
     node.GetpSwAttrSet()?.GetItemIfSet(RES_PARATR_NUMRULE, false) !== undefined
       ? { directListRule: rule.GetName() }
@@ -592,6 +713,7 @@ function assertSupportedItems(
     ...XML_FILL_WHICH_IDS,
     RES_CHRATR_POSTURE,
     RES_CHRATR_COLOR,
+    RES_CHRATR_GRABBAG,
     RES_CHRATR_FONT,
     RES_CHRATR_FONTSIZE,
     RES_CHRATR_UNDERLINE,
@@ -600,6 +722,7 @@ function assertSupportedItems(
     RES_CHRATR_WEIGHT,
     RES_CHRATR_WORDLINEMODE,
     RES_CHRATR_AUTOKERN,
+    RES_CHRATR_KERNING,
     RES_CHRATR_CJK_POSTURE,
     RES_CHRATR_CJK_FONT,
     RES_CHRATR_CJK_FONTSIZE,
@@ -609,6 +732,9 @@ function assertSupportedItems(
     RES_CHRATR_CTL_FONTSIZE,
     RES_CHRATR_CTL_WEIGHT,
     RES_CHRATR_HIGHLIGHT,
+    RES_CHRATR_LANGUAGE,
+    RES_CHRATR_CJK_LANGUAGE,
+    RES_CHRATR_CTL_LANGUAGE,
     RES_PARATR_ADJUST,
     RES_PARATR_SPLIT,
     RES_PARATR_ORPHANS,
@@ -633,6 +759,7 @@ function assertSupportedItems(
       RES_PARATR_LIST_ISRESTART,
       RES_PARATR_LIST_LEVEL,
       RES_PARATR_LIST_RESTARTVALUE,
+      RES_PARATR_LIST_AUTOFMT,
       RES_PARATR_NUMRULE,
     ])
       supported.add(which);
@@ -672,9 +799,9 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
     (lineSpacing !== undefined && !(lineSpacing instanceof SvxLineSpacingItem)) ||
     (tabStop !== undefined && !(tabStop instanceof SvxTabStopItem)) ||
     (keep !== undefined && !(keep instanceof SfxBoolItem)) ||
-    (split !== undefined && !(split instanceof SfxBoolItem)) ||
-    (orphans !== undefined && !(orphans instanceof SfxInt16Item)) ||
-    (widows !== undefined && !(widows instanceof SfxInt16Item)) ||
+    (split !== undefined && !(split instanceof ParaItems.SvxFormatSplitItem)) ||
+    (orphans !== undefined && !(orphans instanceof ParaItems.SvxOrphansItem)) ||
+    (widows !== undefined && !(widows instanceof ParaItems.SvxWidowsItem)) ||
     (paragraphBreak !== undefined && !(paragraphBreak instanceof SfxInt16Item)) ||
     (pageDesc !== undefined && !(pageDesc instanceof SwFormatPageDesc)) ||
     (lineNumber !== undefined && !(lineNumber instanceof SfxBoolItem)) ||
@@ -741,9 +868,9 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
         }
       : {}),
     ...(keep instanceof SfxBoolItem ? { keepWithNext: keep.GetValue() } : {}),
-    ...(split instanceof SfxBoolItem ? { keepTogether: !split.GetValue() } : {}),
-    ...(orphans instanceof SfxInt16Item ? { orphans: orphans.GetValue() } : {}),
-    ...(widows instanceof SfxInt16Item ? { widows: widows.GetValue() } : {}),
+    ...(split instanceof ParaItems.SvxFormatSplitItem ? { keepTogether: !split.GetValue() } : {}),
+    ...(orphans instanceof ParaItems.SvxOrphansItem ? { orphans: orphans.GetValue() } : {}),
+    ...(widows instanceof ParaItems.SvxWidowsItem ? { widows: widows.GetValue() } : {}),
     ...(paragraphBreak instanceof SfxInt16Item
       ? {
           breakBefore:
@@ -805,7 +932,8 @@ function exportAlignment(alignment: OdfParagraphAlignment): string {
 /** Enumerates actual native hint boundaries without merging through browser booleans. @param node - Canonical text owner. @returns Source item-based XML runs. */
 function projectXmlTextRuns(node: SwTextNode): XMLTextParagraphSource["runs"] {
   const boundaries = new Set([0, node.Len()]);
-  for (const hint of node.GetpSwpHints()?.entries() ?? []) {
+  const hints = node.GetpSwpHints()?.entries() ?? [];
+  for (const hint of hints) {
     boundaries.add(hint.GetStart());
     boundaries.add(hint.end);
   }
@@ -821,174 +949,47 @@ function projectXmlTextRuns(node: SwTextNode): XMLTextParagraphSource["runs"] {
       index,
     ) => {
       const end = ordered[index + 1] as number;
-      const items = new SfxItemSet(node.GetSwAttrSet());
-      const auto = node.GetTextAttrAt(start, RES_TXTATR_AUTOFMT, GetTextAttrMode.Default);
-      if (auto?.format instanceof SwFormatAutoFormat) items.PutSet(auto.format.GetStyleHandle());
+      const styles = hints
+        .filter(
+          /** Finds fully covering native character portions. @param hint - Native text hint. @returns Matching style span. */
+          (hint): hint is SwTextCharFormat =>
+            hint instanceof SwTextCharFormat && hint.GetStart() <= start && end <= hint.GetEnd(),
+        )
+        .sort(
+          /** Uses the native CharStyleNames property order. @param a - First style. @param b - Second style. @returns Native order. */
+          (a, b) => a.GetSortNumber() - b.GetSortNumber(),
+        )
+        .flatMap(
+          /** Resolves the actual character format identity. @param hint - Style span. @returns Encoded style name if defined. */
+          (hint) => {
+            const format = hint.GetAttr().GetCharFormat();
+            return format ? [getCharacterOdfStyleName(format)] : [];
+          },
+        );
+      const auto = node.GetTextAttrAt(start, RES_TXTATR_AUTOFMT, GetTextAttrMode.Default)?.format;
+      const direct = auto instanceof SwFormatAutoFormat ? auto.GetStyleHandle() : undefined;
+      let properties: OdfCharacterProperties;
+      if (styles.length) properties = getCharacterProperties(direct, false) ?? {};
+      else if (direct === undefined)
+        properties = getCharacterProperties(node.GetSwAttrSet(), true) ?? {};
+      else {
+        const items = new SfxItemSet(node.GetSwAttrSet());
+        try {
+          items.PutSet(direct);
+          properties = getCharacterProperties(items, true) ?? {};
+        } finally {
+          items.Dispose();
+        }
+      }
       const link = node.GetTextAttrAt(start, RES_TXTATR_INETFMT, GetTextAttrMode.Default);
       return {
         text: node.GetText().slice(start, end),
-        properties: getCharacterProperties(items, true) as OdfCharacterProperties,
+        properties,
+        ...(styles.length ? { characterStyles: styles } : {}),
         ...(link?.format instanceof SwFormatINetFormat
           ? { hyperlink: link.format.GetHyperlink() }
           : {}),
       };
     },
   );
-}
-
-/** Projects independent native character items to ODF properties. @param set - Optional Writer item set. @param inherited - Whether parent sets participate. @returns Properties when at least one direct item exists. */
-export function getCharacterProperties(
-  set: SfxItemSet | undefined,
-  inherited: boolean,
-): Partial<OdfCharacterProperties> | undefined {
-  if (set === undefined) return undefined;
-  const weightIds = [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT];
-  const postureIds = [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE];
-  const directWeight = weightIds.some(
-    /** Detects a direct script weight. @param which - Weight WhichId. @returns Whether set. */
-    (which) => set.GetItemIfSet(which, false) !== undefined,
-  );
-  const directPosture = postureIds.some(
-    /** Detects a direct script posture. @param which - Posture WhichId. @returns Whether set. */
-    (which) => set.GetItemIfSet(which, false) !== undefined,
-  );
-  const escapement = set.GetItemIfSet(RES_CHRATR_ESCAPEMENT, inherited);
-  const crossedOut = set.GetItemIfSet(RES_CHRATR_CROSSEDOUT, inherited);
-  const wordMode = set.GetItemIfSet(RES_CHRATR_WORDLINEMODE, inherited),
-    autoKerning = set.GetItemIfSet(RES_CHRATR_AUTOKERN, inherited);
-  const directUnderline = set.GetItemIfSet(RES_CHRATR_UNDERLINE, false) !== undefined;
-  const color = set.GetItemIfSet(RES_CHRATR_COLOR, inherited);
-  const highlight = set.GetItemIfSet(RES_CHRATR_HIGHLIGHT, inherited);
-  const fontSizeIds = [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE];
-  const directFontSize = fontSizeIds.some(
-    /** Detects a direct script font size. @param which - Font-size WhichId. @returns Whether set. */ (
-      which,
-    ) => set.GetItemIfSet(which, false) !== undefined,
-  );
-  const font = set.GetItemIfSet(RES_CHRATR_FONT, inherited);
-  const asianFont = set.GetItemIfSet(RES_CHRATR_CJK_FONT, inherited);
-  const complexFont = set.GetItemIfSet(RES_CHRATR_CTL_FONT, inherited);
-  if (
-    !inherited &&
-    !directWeight &&
-    !directPosture &&
-    !directUnderline &&
-    crossedOut === undefined &&
-    escapement === undefined &&
-    !directFontSize &&
-    color === undefined &&
-    highlight === undefined &&
-    font === undefined &&
-    asianFont === undefined &&
-    complexFont === undefined &&
-    wordMode === undefined &&
-    autoKerning === undefined
-  )
-    return undefined;
-  const weight = set.Get(RES_CHRATR_WEIGHT, inherited);
-  const asianWeight = set.Get(RES_CHRATR_CJK_WEIGHT, inherited);
-  const complexWeight = set.Get(RES_CHRATR_CTL_WEIGHT, inherited);
-  const posture = set.Get(RES_CHRATR_POSTURE, inherited);
-  const asianPosture = set.Get(RES_CHRATR_CJK_POSTURE, inherited);
-  const complexPosture = set.Get(RES_CHRATR_CTL_POSTURE, inherited);
-  const underline = set.Get(RES_CHRATR_UNDERLINE, inherited);
-  const fontSize = set.Get(RES_CHRATR_FONTSIZE, inherited);
-  const asianFontSize = set.Get(RES_CHRATR_CJK_FONTSIZE, inherited);
-  const complexFontSize = set.Get(RES_CHRATR_CTL_FONTSIZE, inherited);
-  if (
-    !(weight instanceof SvxWeightItem) ||
-    !(asianWeight instanceof SvxWeightItem) ||
-    !(complexWeight instanceof SvxWeightItem) ||
-    !(posture instanceof SvxPostureItem) ||
-    !(asianPosture instanceof SvxPostureItem) ||
-    !(complexPosture instanceof SvxPostureItem) ||
-    !(underline instanceof SvxUnderlineItem) ||
-    (color !== undefined && !(color instanceof SvxColorItem)) ||
-    (highlight !== undefined && !(highlight instanceof SvxBrushItem)) ||
-    !(fontSize instanceof SvxFontHeightItem) ||
-    !(asianFontSize instanceof SvxFontHeightItem) ||
-    !(complexFontSize instanceof SvxFontHeightItem)
-  )
-    throw new Error("ODT character item is invalid.");
-  const fontFamilyGeneric =
-      font instanceof SvxFontItem ? getFontFamilyGeneric(font.GetFamily()) : undefined,
-    asianGeneric =
-      asianFont instanceof SvxFontItem ? getFontFamilyGeneric(asianFont.GetFamily()) : undefined,
-    complexGeneric =
-      complexFont instanceof SvxFontItem
-        ? getFontFamilyGeneric(complexFont.GetFamily())
-        : undefined;
-  return {
-    ...(color instanceof SvxColorItem ? { color: writerTextColorValue(color) } : {}),
-    ...(font instanceof SvxFontItem
-      ? {
-          fontFamily: font.GetFamilyName(),
-          fontStyleName: font.GetStyleName(),
-          fontPitch: font.GetPitch(),
-          fontCharSet: font.GetCharSet(),
-          ...(fontFamilyGeneric === undefined ? {} : { fontFamilyGeneric }),
-        }
-      : {}),
-    ...(asianFont instanceof SvxFontItem
-      ? {
-          fontFamilyAsian: asianFont.GetFamilyName(),
-          fontStyleNameAsian: asianFont.GetStyleName(),
-          fontPitchAsian: asianFont.GetPitch(),
-          fontCharSetAsian: asianFont.GetCharSet(),
-          ...(asianGeneric === undefined ? {} : { fontFamilyGenericAsian: asianGeneric }),
-        }
-      : {}),
-    ...(complexFont instanceof SvxFontItem
-      ? {
-          fontFamilyComplex: complexFont.GetFamilyName(),
-          fontStyleNameComplex: complexFont.GetStyleName(),
-          fontPitchComplex: complexFont.GetPitch(),
-          fontCharSetComplex: complexFont.GetCharSet(),
-          ...(complexGeneric === undefined ? {} : { fontFamilyGenericComplex: complexGeneric }),
-        }
-      : {}),
-    ...(set.GetItemIfSet(RES_CHRATR_FONTSIZE, inherited) !== undefined
-      ? { fontSizeTwips: fontSize.GetHeight() }
-      : {}),
-    ...(set.GetItemIfSet(RES_CHRATR_CJK_FONTSIZE, inherited) !== undefined
-      ? { fontSizeTwipsAsian: asianFontSize.GetHeight() }
-      : {}),
-    ...(set.GetItemIfSet(RES_CHRATR_CTL_FONTSIZE, inherited) !== undefined
-      ? { fontSizeTwipsComplex: complexFontSize.GetHeight() }
-      : {}),
-    ...(highlight instanceof SvxBrushItem
-      ? { highlight: writerHighlightColorValue(highlight) }
-      : {}),
-    ...(inherited || set.GetItemIfSet(RES_CHRATR_WEIGHT, false) !== undefined
-      ? { fontWeight: ConvertFontWeight(weight.GetValue(), "FontWeight") }
-      : {}),
-    ...(inherited || set.GetItemIfSet(RES_CHRATR_CJK_WEIGHT, false) !== undefined
-      ? { fontWeightAsian: ConvertFontWeight(asianWeight.GetValue(), "FontWeight") }
-      : {}),
-    ...(inherited || set.GetItemIfSet(RES_CHRATR_CTL_WEIGHT, false) !== undefined
-      ? { fontWeightComplex: ConvertFontWeight(complexWeight.GetValue(), "FontWeight") }
-      : {}),
-    ...(inherited || set.GetItemIfSet(RES_CHRATR_POSTURE, false) !== undefined
-      ? { fontPosture: ConvertFontSlant(posture.GetValue(), "FontItalic") }
-      : {}),
-    ...(inherited || set.GetItemIfSet(RES_CHRATR_CJK_POSTURE, false) !== undefined
-      ? { fontPostureAsian: ConvertFontSlant(asianPosture.GetValue(), "FontItalic") }
-      : {}),
-    ...(inherited || set.GetItemIfSet(RES_CHRATR_CTL_POSTURE, false) !== undefined
-      ? { fontPostureComplex: ConvertFontSlant(complexPosture.GetValue(), "FontItalic") }
-      : {}),
-    ...(escapement instanceof SvxEscapementItem
-      ? { escapement: escapement.GetEsc(), escapementHeight: escapement.GetProportionalHeight() }
-      : {}),
-    ...(crossedOut instanceof SvxCrossedOutItem ? { strikeout: crossedOut.GetStrikeout() } : {}),
-    ...(wordMode instanceof SvxWordLineModeItem ? { wordMode: wordMode.GetValue() } : {}),
-    ...(autoKerning instanceof SvxAutoKernItem ? { autoKerning: autoKerning.GetValue() } : {}),
-    ...(inherited || directUnderline
-      ? {
-          underlineStyle: underline.GetLineStyle(),
-          underlineColor: underline.GetColor().toUInt32() & 0xffffff,
-          underlineHasColor: underline.GetColor().GetAlpha() === 255,
-        }
-      : {}),
-  };
 }

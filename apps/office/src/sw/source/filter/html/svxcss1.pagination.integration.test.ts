@@ -5,7 +5,7 @@ import { SvxCSS1Parser, aItemIds } from "./svxcss1";
 import { SvxCSS1PageBreak as B, SvxCSS1PropertyInfo } from "./svxcss1.types";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { SfxInt16Item } from "../../../../svl/source/items/intitem";
+import { SfxByteItem } from "../../../../svl/source/items/intitem";
 import { RES_PARATR_SPLIT, RES_PARATR_WIDOWS, RES_PARATR_ORPHANS } from "../../../inc/hintids";
 import { MarkdownReader } from "../md/swmd";
 import { OUStringToOString } from "../../../../sal/rtl/ustring-convert";
@@ -33,11 +33,9 @@ function parse(style: string) {
     return {
       info,
       split: (items.GetItemIfSet(RES_PARATR_SPLIT, false) as SfxBoolItem | undefined)?.GetValue(),
-      widows: (
-        items.GetItemIfSet(RES_PARATR_WIDOWS, false) as SfxInt16Item | undefined
-      )?.GetValue(),
+      widows: (items.GetItemIfSet(RES_PARATR_WIDOWS, false) as SfxByteItem | undefined)?.GetValue(),
       orphans: (
-        items.GetItemIfSet(RES_PARATR_ORPHANS, false) as SfxInt16Item | undefined
+        items.GetItemIfSet(RES_PARATR_ORPHANS, false) as SfxByteItem | undefined
       )?.GetValue(),
     };
   } finally {
@@ -140,7 +138,7 @@ it("delivers pagination items from Markdown raw HTML through the existing Worker
     const paragraph = document.paragraphs[0];
     assert(paragraph);
     expect((paragraph.GetAttr(RES_PARATR_SPLIT) as SfxBoolItem).GetValue()).toBe(false);
-    expect((paragraph.GetAttr(RES_PARATR_WIDOWS) as SfxInt16Item).GetValue()).toBe(7);
-    expect((paragraph.GetAttr(RES_PARATR_ORPHANS) as SfxInt16Item).GetValue()).toBe(8);
+    expect((paragraph.GetAttr(RES_PARATR_WIDOWS) as SfxByteItem).GetValue()).toBe(7);
+    expect((paragraph.GetAttr(RES_PARATR_ORPHANS) as SfxByteItem).GetValue()).toBe(8);
   }
 });

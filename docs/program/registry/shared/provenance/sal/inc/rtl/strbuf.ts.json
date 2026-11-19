@@ -1,0 +1,78 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/inc/rtl/strbuf.ts",
+    "status": "mapped",
+    "upstreamPath": "include/rtl/strbuf.hxx",
+    "localSymbols": [
+      "OStringBuffer"
+    ],
+    "upstreamSymbols": [
+      "OStringBuffer"
+    ],
+    "preservedResponsibilities": [
+      "Original file_url.cxx first-use charset singleton conversion, strict decodeFromUtf8 escaped-octet handling, chunked conversion, native EOVERFLOW wrappers and convertPathnameToUrl over original RTL URI owners are ported. OStringBuffer consumed constructors/copy/view assignment/reservation/append/remove/direct length/value-clear semantics use existing SAL C buffer owners; physical JS storage remains GC-managed. Both modern test_ostringbuffer.cxx tests and real UTF8/ASCII/error/large-chunk scenarios execute. Full legacy OStringBuffer QA/scalar/lazy/move surface and complete URL/home/authority/open/temp/package/model/UI acceptance remain unfinished; native ABI/OOM/uninitialized/thread/shutdown and debug diagnostics are unqualified.",
+      "All6 legacy constructor cases, all8 makeStringAndClear cases and remove_001 are now ported from sal/qa/OStringBuffer/rtl_OStringBuffer.cxx, alongside both modern tests. Remaining legacy capacity/length/scalar/insert families are not claimed complete.",
+      "Complete legacy getLength8/getCapacity10/ensureCapacity12/setLength22/csuc2/getStr2 and counted-pointer append20 cases now execute original pinned expectations. The extractor reads only source CppUnit/header literals, verifies registration/case/assertion sets and SHA-256, never production code or test results. Original non-null pointer assertion before C insertion and explicit counted append overload are restored; appendUninitialized remains the reservation path. Other legacy scalar/lazy/move/append families and native ABI/uninitialized/OOM remain unfinished or unqualified."
+    ],
+    "omittedResponsibilities": [
+      "Complete legacy OStringBuffer surface/QA; complete public file URL/home/authority/open/temp/package/model/filter/UI; native ABI/OOM/uninitialized/thread/shutdown and debug diagnostics."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/inc/rtl/strbuf.ts",
+          "marker": "OStringBuffer"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ostringbuffer.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/osl/unx/file_url.encoding.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/osl/unx/file_url.encoding.ascii.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ostringbuffer.upstream.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ostringbuffer.basic-upstream.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ostringbuffer.counted-upstream.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/upstream-ostringbuffer-basic-cases.json",
+          "marker": "qualification"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/upstream-ostringbuffer-counted-append-cases.json",
+          "marker": "qualification"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/rtl/strbuf.hxx",
+          "marker": "OStringBuffer"
+        },
+        {
+          "path": "sal/qa/rtl/strings/test_ostringbuffer.cxx",
+          "marker": "testStringView"
+        },
+        {
+          "path": "sal/qa/OStringBuffer/rtl_OStringBuffer.cxx",
+          "marker": "void ctor_001()"
+        }
+      ]
+    }
+  }
+}

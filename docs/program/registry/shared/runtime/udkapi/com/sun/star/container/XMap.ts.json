@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/udkapi/com/sun/star/container/XMap.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-fastparser-map-contract",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/udkapi/com/sun/star/container/XMap.ts",
+        "vendor/libreoffice-reference/udkapi/com/sun/star/container/XMap.idl"
+      ],
+      "justification": "Complete original XMap method/readonly-attribute declarations and normal cppumaker direct-XElementAccess type getter reuse actual CPPU Type/Any/Reference owners. No map value/service implementation, fabricated lookup or namespace provider. Actual nonnull map implementation and translation remain unported/unqualified; no broad parser/component/format/UI parity or physical C++ ABI claim.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XMap",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "udkapi/com/sun/star/container/XMap.idl",
+      "upstreamSymbols": [
+        "XMap",
+        "XElementAccess",
+        "KeyType",
+        "ValueType",
+        "clear",
+        "containsKey",
+        "containsValue",
+        "get",
+        "put",
+        "remove"
+      ]
+    }
+  }
+}

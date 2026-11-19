@@ -20,9 +20,11 @@
         "apps/office/src/sc/source/ui/view/reference-input.test.ts",
         "apps/office/src/sc/browser/controller/formula-pointing.test.ts",
         "apps/office/src/sc/browser/controller/pointer-selection.test.ts",
-        "apps/office/src/sc/browser/presentation/calc-formula-pointing.test.tsx"
+        "apps/office/src/sc/browser/presentation/calc-formula-pointing.test.tsx",
+        "apps/office/src/sc/source/ui/view/tabview2-protection.test.ts",
+        "apps/office/e2e/calc/xlsx-alignment.spec.ts"
       ],
-      "justification": "Task77 adds normal unmerged local-reference mouse input using actual ScInputHandler selected UTF16 text,ScModule ordered dispatch,ScViewData reference start/end and ScTabView block/function-set owners. Browser formula pointing precedes Commit and preserves the edit origin;ordinary cell dragging retains the active anchor while headers move their native cursor endpoint. Shift extends;Ctrl adds/subtracts native ScMarkData/ScMultiSel selections. This is bounded source-backed foundation work,not full Calc parity. Merged cells,fill/transfer/move,protected/alternate/split views,reference dialogs,external/3D/matrix calculation,EditEngine and complete VCL painting remain unported.",
+      "justification": "Task77 adds normal unmerged local-reference mouse input using actual ScInputHandler selected UTF16 text,ScModule ordered dispatch,ScViewData reference start/end and ScTabView block/function-set owners. Browser formula pointing precedes Commit and preserves the edit origin;ordinary cell dragging retains the active anchor while headers move their native cursor endpoint. Shift extends;Ctrl adds/subtracts native ScMarkData/ScMultiSel selections. This is bounded source-backed foundation work,not full Calc parity. Merged cells,fill/transfer/move,protected/alternate/split views,reference dialogs,external/3D/matrix calculation,EditEngine and complete VCL painting remain unported. Evaluates the original sheet selection options against cell protection, skips hidden and merged spans with boundary reversal, and extends a protected keyboard block only up to an ineligible cell. Expands and contracts native blocks around merged-cell geometry, includes complete merged ranges in MarkCursor, and runs the separate Shift formula-reference movement path.",
       "knownViolations": [],
       "localSymbols": [
         "InitBlockMode",

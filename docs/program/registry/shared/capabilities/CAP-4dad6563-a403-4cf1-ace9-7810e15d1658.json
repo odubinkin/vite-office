@@ -1,0 +1,82 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-4dad6563-a403-4cf1-ace9-7810e15d1658",
+    "capabilityId": "CAP-4dad6563-a403-4cf1-ace9-7810e15d1658",
+    "suite": "shared",
+    "subsystem": "native-storage-catalog-commit",
+    "type": "model",
+    "maturity": "mapped",
+    "assertions": [
+      "Removed entries leave the package before persisted renames are applied.",
+      "Revert restores names and removed flags."
+    ],
+    "capability": "Storage catalog removal, rename, commit and revert",
+    "gaps": [
+      "Original internal closed-child remove/rename, deletion-before-rename and catalog revert feed the actual package transaction. Original temporary folder and OFOPXML no-relationship paths are represented. Full child wrapper/writable stream/relationship synchronization and document UI remain unfinished. WRITER631 and CALC698 record the preserved copied-row alias."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage_Impl::Commit"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::renameElement"
+        }
+      ],
+      "tests": [
+        {
+          "path": "package/qa/storages/Test06.java",
+          "marker": "renameElement"
+        }
+      ],
+      "docs": [
+        {
+          "path": "package/inc/ZipPackage.hxx",
+          "marker": "enum InitialisationMode"
+        },
+        {
+          "path": "offapi/com/sun/star/embed/UseBackupException.idl",
+          "marker": "TemporaryFileURL"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.catalog.ts",
+          "marker": "commitStorage"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.impl.test.ts",
+          "marker": "removes persisted destinations before renaming"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-storage-catalog-commit.md",
+          "marker": "# Native storage catalog commit"
+        }
+      ]
+    },
+    "implemented": false,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Represented original fields and generated UNO/RTL/native mutex owners use existing host storage while native physical ABI/allocator/thread and full package/stream services remain unqualified."
+    },
+    "scopeLimitations": [
+      "Original internal closed-child remove/rename, deletion-before-rename and catalog revert feed the actual package transaction. Original temporary folder and OFOPXML no-relationship paths are represented. Full child wrapper/writable stream/relationship synchronization and document UI remain unfinished. WRITER631 and CALC698 record the preserved copied-row alias."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "storage-catalog-commit"
+  }
+}

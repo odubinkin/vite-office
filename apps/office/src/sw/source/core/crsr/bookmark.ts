@@ -1,7 +1,7 @@
 /** @fileoverview Consumed sw::mark::UnoMark from pinned bookmark.cxx: document-managed UNO range positions remain distinct from editing cursors and user bookmarks. */
 import type { SwPaM, SwPosition } from "./pam";
-/** Internal UNO bookmark owns native mark positions without entering the user bookmark catalog. */
-export class UnoMark {
+/** Owns the two registered positions shared by ordinary and internal Writer marks. */
+export class MarkBase {
   private point!: SwPosition;
   private other: SwPosition | undefined;
   private valid = true;
@@ -15,7 +15,7 @@ export class UnoMark {
   }
   /** Implements the represented native GetOtherMarkPos operation. @returns The represented native operation result. */
   GetOtherMarkPos(): SwPosition {
-    if (!this.other) throw new Error("assert(UnoMark has an expanded other position)");
+    if (!this.other) throw new Error("assert(mark has an expanded other position)");
     return this.other;
   }
   /** Original MarkBase start query preserves the other endpoint's reference on an expanded equality tie. @returns Borrowed actual start position. */
@@ -69,3 +69,6 @@ export class UnoMark {
     }
   }
 }
+
+/** Internal UNO bookmark stays outside the user bookmark catalog. */
+export class UnoMark extends MarkBase {}

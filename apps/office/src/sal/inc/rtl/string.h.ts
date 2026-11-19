@@ -16,6 +16,7 @@ export const RTL_STR_MAX_VALUEOFFLOAT = 15;
 export const RTL_STR_MAX_VALUEOFDOUBLE = 25;
 
 export { rtl_str_toInt64, rtl_str_toInt64_WithLength, rtl_str_toUInt64 } from "../../rtl/string";
+export { rtl_str_toBoolean } from "../../rtl/string";
 
 /** Original flexible byte-string data; length excludes its trailing zero. */
 export interface _rtl_String {
@@ -53,3 +54,5 @@ export {
   rtl_str_indexOfChar_WithLength,
   rtl_str_indexOfStr_WithLength,
 } from "../../rtl/string";
+
+export { rtl_str_reverseCompare_WithLength } from "../../rtl/string";

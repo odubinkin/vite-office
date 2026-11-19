@@ -1,0 +1,14 @@
+{
+  "name": "@vite-office/zipjs-codecs",
+  "version": "2.24.0",
+  "private": true,
+  "type": "module",
+  "license": "BSD-3-Clause",
+  "description": "Byte-exact standalone CRC codec from installed @zip.js/zip.js2.24.0",
+  "exports": {
+    ".": {
+      "types": "./crc32.d.mts",
+      "import": "./crc32.mjs"
+    }
+  }
+}

@@ -1,4 +1,5 @@
 /** @fileoverview Numerical ScAddress/ScRange owners from pinned sc/inc/address.hxx and sc/source/core/tool/address.cxx. No browser or Writer state enters these owners. */
+
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { FormulaGrammar, type AddressConvention } from "../../../../formula/inc/grammar";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
@@ -11,6 +12,7 @@ import {
   applyStartToEndFlags,
 } from "../../../inc/address";
 import type { SCCOL, SCROW, SCTAB } from "../../../inc/types";
+import { formatTab, parseOOOA1, findRangeSeparator } from "./address.ooo";
 
 /** Structural view of the original ScDocument boundary used by address movement. */
 export interface ScAddressDocument {
@@ -20,6 +22,10 @@ export interface ScAddressDocument {
   MaxRow(): SCROW;
   /** Returns the native table count, used inclusively by upstream Move. @returns Table count. */
   GetTableCount(): SCTAB;
+  /** Returns the original sheet name, if exposed by this document boundary. @param tab - Sheet index. @param name - Output name. @returns Whether the sheet exists. */
+  GetName?(tab: SCTAB, name: OUString): boolean;
+  /** Resolves an internal sheet name when lookup is available. @param name - Original sheet name. @param tab - Output index. @returns Whether the sheet exists. */
+  GetTable?(name: OUStringConstReference, tab: [number]): boolean;
 }
 
 /** Native address parsing convention and base coordinate value. Document-derived convention selection remains unsupported. */
@@ -42,7 +48,7 @@ export class ScAddress {
   static readonly detailsOOOa1: Readonly<ScAddressDetails> = new ScAddressDetails(
     FormulaGrammar.AddressConvention.CONV_OOO,
   );
-  /** Original local OOO/Excel A1 Format, including absolute flags and partial-valid axes. Sheet-qualified and R1C1 conventions remain unported. @param flags - Native reference flags. @param doc - Optional document bounds. @param details - Output convention. @returns Owned UTF16 reference. */
+  /** Formats OOO and Excel A1 addresses and local R1C1, including partial-valid axes. @param flags - Native reference flags. @param doc - Optional sheet names and bounds. @param details - Output convention. @returns Owned UTF16 reference. */
   Format(
     flags: ScRefFlags,
     doc: ScAddressDocument | null = null,
@@ -51,20 +57,33 @@ export class ScAddress {
     if (
       (details.eConv !== FormulaGrammar.AddressConvention.CONV_OOO &&
         details.eConv !== FormulaGrammar.AddressConvention.CONV_XL_A1 &&
-        details.eConv !== FormulaGrammar.AddressConvention.CONV_XL_OOX) ||
-      flags & (ScRefFlags.TAB_3D | ScRefFlags.FORCE_DOC)
+        details.eConv !== FormulaGrammar.AddressConvention.CONV_XL_OOX &&
+        details.eConv !== FormulaGrammar.AddressConvention.CONV_XL_R1C1) ||
+      flags & ScRefFlags.FORCE_DOC
     )
       throw new Error("Nonlocal address formatting is not implemented");
     if (flags & ScRefFlags.VALID)
       flags |= ScRefFlags.ROW_VALID | ScRefFlags.COL_VALID | ScRefFlags.TAB_VALID;
     let output = "";
-    if (
-      doc &&
-      flags & ScRefFlags.TAB_VALID &&
-      (this.Tab() < 0 || this.Tab() >= doc.GetTableCount())
-    )
-      output = "#REF!";
-    else {
+    if (doc && flags & ScRefFlags.TAB_VALID) {
+      if (this.Tab() < 0 || this.Tab() >= doc.GetTableCount()) return unicode("#REF!");
+      if (flags & ScRefFlags.TAB_3D) {
+        const sheet = formatTab(
+          this.Tab(),
+          doc,
+          Boolean(flags & ScRefFlags.TAB_ABS),
+          details.eConv !== FormulaGrammar.AddressConvention.CONV_OOO,
+        );
+        if (!sheet) return unicode("#REF!");
+        output += sheet;
+      }
+    }
+    if (details.eConv === FormulaGrammar.AddressConvention.CONV_XL_R1C1) {
+      if (flags & ScRefFlags.ROW_VALID)
+        output += appendR1C1(this.Row(), Boolean(flags & ScRefFlags.ROW_ABS), details.nRow, "R");
+      if (flags & ScRefFlags.COL_VALID)
+        output += appendR1C1(this.Col(), Boolean(flags & ScRefFlags.COL_ABS), details.nCol, "C");
+    } else {
       if (flags & ScRefFlags.COL_VALID) {
         let letters = "",
           col = this.Col();
@@ -81,12 +100,18 @@ export class ScAddress {
     for (let index = 0; index < output.length; ++index) units[index] = output.charCodeAt(index);
     return new OUString(units, units.length);
   }
-  /** Native local Excel dispatch and existing OOO/ODF A1 subset. Sheet/external/name/error-token services remain explicit missing APIs. @param value - Unwrapped local A1 address. @param doc - Limits owner. @param details - Convention/base. @returns Native valid/absolute flags. */
+  /** Parses Excel local A1/R1C1 or OOO/ODF A1 with an optional internal sheet qualifier. @param value - Address spelling. @param doc - Workbook limits and sheet lookup. @param details - Convention/base. @returns Native valid/absolute flags. */
   Parse(
     value: OUStringConstReference,
     doc: ScAddressDocument,
     details: Readonly<ScAddressDetails>,
   ): ScRefFlags {
+    if (details.eConv === FormulaGrammar.AddressConvention.CONV_XL_R1C1) {
+      const range = new ScRange(this),
+        flags = parseLocalExcelR1C1(range, text(value), doc, details, true);
+      this.assign(range.aStart);
+      return flags;
+    }
     if (
       details.eConv === FormulaGrammar.AddressConvention.CONV_XL_A1 ||
       details.eConv === FormulaGrammar.AddressConvention.CONV_XL_OOX
@@ -101,24 +126,7 @@ export class ScAddress {
       details.eConv !== FormulaGrammar.AddressConvention.CONV_ODF
     )
       throw new Error("Only local A1 address parsing is implemented");
-    const input = text(value);
-    if (!input) return ScRefFlags.ZERO;
-    const match = /^(\$?)([A-Za-z]+)(\$?)([0-9]+)$/.exec(input);
-    if (!match)
-      throw new Error("Sheet, external, named and invalid address fallbacks are not implemented");
-    let column = 0;
-    for (const c of match[2] as string) column = column * 26 + c.toUpperCase().charCodeAt(0) - 64;
-    const row = Number(match[4]) - 1;
-    if (column < 1 || column > doc.MaxCol() + 1 || row < 0 || row > doc.MaxRow())
-      throw new Error("Out-of-bounds address/name fallback is not implemented");
-    this.SetCol(column - 1);
-    this.SetRow(row);
-    return (ScRefFlags.VALID |
-      ScRefFlags.COL_VALID |
-      ScRefFlags.ROW_VALID |
-      ScRefFlags.TAB_VALID |
-      (match[1] ? ScRefFlags.COL_ABS : 0) |
-      (match[3] ? ScRefFlags.ROW_ABS : 0)) as ScRefFlags;
+    return parseOOOA1(this, text(value), doc);
   }
   public static readonly INITIALIZE_INVALID = "INITIALIZE_INVALID";
   private nRow: SCROW;
@@ -241,6 +249,8 @@ export class ScRange {
     doc: ScAddressDocument,
     details: Readonly<ScAddressDetails>,
   ): ScRefFlags {
+    if (details.eConv === FormulaGrammar.AddressConvention.CONV_XL_R1C1)
+      return parseLocalExcelR1C1(this, text(value), doc, details, false);
     if (
       details.eConv === FormulaGrammar.AddressConvention.CONV_XL_A1 ||
       details.eConv === FormulaGrammar.AddressConvention.CONV_XL_OOX
@@ -251,9 +261,9 @@ export class ScRange {
       details.eConv !== FormulaGrammar.AddressConvention.CONV_ODF
     )
       throw new Error("Range parsing convention is not implemented");
-    const input = text(value),
-      colon = input.indexOf(":");
-    if (colon < 0) return ScRefFlags.ZERO;
+    const input = text(value);
+    const colon = findRangeSeparator(input);
+    if (colon === input.length) return ScRefFlags.ZERO;
     const columns = /^(\$?)([A-Za-z]+):(\$?)([A-Za-z]+)$/.exec(input),
       rows = /^(\$?)([1-9][0-9]*):(\$?)([1-9][0-9]*)$/.exec(input);
     const first = unicode(
@@ -353,7 +363,7 @@ export class ScRange {
   public readonly aStart: ScAddress;
   public readonly aEnd: ScAddress;
 
-  /** Original OOO and local Excel range Format retain endpoint flags and native whole-axis notation. @param doc - Document. @param flags - Native flags. @param details - Convention. @param fullAddressNotation - Original Excel flag suppressing whole-axis abbreviation. @returns Owned UTF16 reference. */
+  /** Original OOO and local Excel A1/R1C1 range Format retain endpoint flags and native whole-axis notation. @param doc - Document. @param flags - Native flags. @param details - Convention. @param fullAddressNotation - Original Excel flag suppressing whole-axis abbreviation. @returns Owned UTF16 reference. */
   Format(
     doc: ScAddressDocument,
     flags: ScRefFlags,
@@ -361,6 +371,8 @@ export class ScRange {
     fullAddressNotation = false,
   ): OUString {
     if (!(flags & ScRefFlags.VALID)) return new OUString(new Uint16Array([35, 82, 69, 70, 33]), 5);
+    if (details.eConv === FormulaGrammar.AddressConvention.CONV_XL_R1C1)
+      return unicode(formatLocalExcelR1C1(this, doc, flags, details, fullAddressNotation));
     if (
       details.eConv === FormulaGrammar.AddressConvention.CONV_XL_A1 ||
       details.eConv === FormulaGrammar.AddressConvention.CONV_XL_OOX
@@ -697,21 +709,10 @@ function row(
     ++pos;
   }
   const start = pos;
-  let negative = false;
-  if (input[pos] === "-") {
-    negative = true;
-    ++pos;
-  } else if (input[pos] === "+") ++pos;
-  let accum = 0n;
-  const cutoff = negative ? -9223372036854775808n / 10n : -(9223372036854775807n / 10n),
-    cutlim = negative ? -(-9223372036854775808n % 10n) : 9223372036854775807n % 10n;
-  while (input.charCodeAt(pos) >= 48 && input.charCodeAt(pos) <= 57) {
-    const digit = BigInt(input.charCodeAt(pos) - 48);
-    if (accum < cutoff || (accum === cutoff && digit > cutlim)) return null;
-    accum = accum * 10n - digit;
-    ++pos;
-  }
-  let value = negative ? accum : -accum;
+  const parsed = sal_Unicode_strtol(input, pos);
+  if (parsed === null) return null;
+  pos = parsed.end;
+  let value = parsed.value;
   if (pos === start || value < 1n) return null;
   --value;
   if (value > BigInt(doc.MaxRow())) return null;
@@ -794,4 +795,195 @@ function parseLocalExcelA1(
       flags[0] & ~(invalid | ScRefFlags.COL2_VALID | ScRefFlags.ROW2_VALID | ScRefFlags.TAB2_VALID)
     );
   return applyStartToEndFlags(flags[0], other[0]);
+}
+
+/** Original pointer/result projection of sal_Unicode_strtol. @param input - NUL-terminated source spelling. @param pos - Input pointer. @returns Parsed signed64 value and end pointer, or null on overflow. */
+function sal_Unicode_strtol(input: string, pos: number): { value: bigint; end: number } | null {
+  let negative = false;
+  if (input[pos] === "-") {
+    negative = true;
+    ++pos;
+  } else if (input[pos] === "+") ++pos;
+  let accum = 0n;
+  const cutoff = negative ? -9223372036854775808n / 10n : -(9223372036854775807n / 10n),
+    cutlim = negative ? -(-9223372036854775808n % 10n) : 9223372036854775807n % 10n;
+  while (input.charCodeAt(pos) >= 48 && input.charCodeAt(pos) <= 57) {
+    const digit = BigInt(input.charCodeAt(pos) - 48);
+    if (accum < cutoff || (accum === cutoff && digit > cutlim)) return null;
+    accum = accum * 10n - digit;
+    ++pos;
+  }
+  return { value: negative ? accum : -accum, end: pos };
+}
+/** Original lcl_r1c1_get_row/col control flow after compiler erasure of the selected axis. Checks retain original ABS side effects before failed bounds. @param doc - Actual document limits. @param input - Source spelling. @param pos - Axis letter pointer. @param details - Original base coordinate. @param address - Actual output owner. @param flags - Mutable source flags. @param row - Compiler-selected axis. @returns End pointer or null. */
+function axis(
+  doc: ScAddressDocument,
+  input: string,
+  pos: number,
+  details: Readonly<ScAddressDetails>,
+  address: ScAddress,
+  flags: [ScRefFlags],
+  row: boolean,
+): number | null {
+  if (pos === input.length) return null;
+  ++pos;
+  const relative = input[pos] === "[";
+  if (relative) ++pos;
+  const parsed = sal_Unicode_strtol(input, pos);
+  if (parsed === null) return null;
+  let value = parsed.value,
+    end = parsed.end;
+  const base = row ? details.nRow : details.nCol,
+    count = BigInt((row ? doc.MaxRow() : doc.MaxCol()) + 1);
+  if (pos === end) {
+    if (relative) return null;
+    value = BigInt(base);
+    if (value < 0n || value >= count) return null;
+  } else if (relative) {
+    if (input[end] !== "]") return null;
+    value += BigInt(base);
+    if (value < 0n || value >= count) return null;
+    ++end;
+  } else {
+    flags[0] |= row ? ScRefFlags.ROW_ABS : ScRefFlags.COL_ABS;
+    if (value <= 0n || value > count) return null;
+    --value;
+  }
+  if (row) address.SetRow(Number(value));
+  else address.SetCol(Number(value));
+  flags[0] |= row ? ScRefFlags.ROW_VALID : ScRefFlags.COL_VALID;
+  return end;
+}
+/** Original local-header lcl_ScRange_Parse_XL_R1C1, including whole-axis fallback, failed-parse mutations and address/range admission. Original qualified/external headers remain an explicit missing API. @param range - Actual recipient. @param source - Counted source. @param doc - Actual document. @param details - Original base. @param onlySingle - Native address call. @returns Source flags. */
+function parseLocalExcelR1C1(
+  range: ScRange,
+  source: string,
+  doc: ScAddressDocument,
+  details: Readonly<ScAddressDetails>,
+  onlySingle: boolean,
+): ScRefFlags {
+  const input = source.split("\0", 1)[0] as string;
+  if (input.includes("!") || input.includes("'"))
+    throw new Error("Excel sheet and external reference headers are not implemented");
+  const flags: [ScRefFlags] = [ScRefFlags.VALID | ScRefFlags.TAB_VALID],
+    other: [ScRefFlags] = [ScRefFlags.TAB_VALID];
+  let pos: number | null, next: number | null;
+  const clearAll =
+    ScRefFlags.VALID |
+    ScRefFlags.COL_VALID |
+    ScRefFlags.ROW_VALID |
+    ScRefFlags.TAB_VALID |
+    ScRefFlags.COL2_VALID |
+    ScRefFlags.ROW2_VALID |
+    ScRefFlags.TAB2_VALID;
+  if (input[0] === "R" || input[0] === "r") {
+    pos = axis(doc, input, 0, details, range.aStart, flags, true);
+    if (pos === null) return ScRefFlags.ZERO;
+    if (input[pos] !== "C" && input[pos] !== "c") {
+      next =
+        input[pos] === ":" && (input[pos + 1] === "R" || input[pos + 1] === "r")
+          ? axis(doc, input, pos + 1, details, range.aEnd, other, true)
+          : null;
+      if (next === null) {
+        flags[0] = applyStartToEndFlags(flags[0]);
+        range.aEnd.SetRow(range.aStart.Row());
+      } else {
+        flags[0] = applyStartToEndFlags(flags[0], other[0]);
+        pos = next;
+      }
+      if (pos !== input.length) return (flags[0] & ~clearAll) as ScRefFlags;
+      flags[0] |=
+        ScRefFlags.COL_VALID | ScRefFlags.COL2_VALID | ScRefFlags.COL_ABS | ScRefFlags.COL2_ABS;
+      range.aStart.SetCol(0);
+      range.aEnd.SetCol(doc.MaxCol());
+      return onlySingle ? ScRefFlags.ZERO : flags[0];
+    }
+    pos = axis(doc, input, pos, details, range.aStart, flags, false);
+    if (pos === null) return ScRefFlags.ZERO;
+    next =
+      input[pos] === ":" && (input[pos + 1] === "R" || input[pos + 1] === "r")
+        ? axis(doc, input, pos + 1, details, range.aEnd, other, true)
+        : null;
+    if (next !== null && (input[next] === "C" || input[next] === "c"))
+      next = axis(doc, input, next, details, range.aEnd, other, false);
+    else next = null;
+    if (next === null) {
+      if (pos !== input.length)
+        return (flags[0] &
+          ~(
+            ScRefFlags.VALID |
+            ScRefFlags.COL_VALID |
+            ScRefFlags.ROW_VALID |
+            ScRefFlags.TAB_VALID
+          )) as ScRefFlags;
+      return onlySingle ? flags[0] : ScRefFlags.ZERO;
+    }
+    pos = next;
+    if (pos !== input.length) return (flags[0] & ~clearAll) as ScRefFlags;
+    flags[0] = applyStartToEndFlags(flags[0], other[0]);
+    return onlySingle ? ScRefFlags.ZERO : flags[0];
+  }
+  if (input[0] === "C" || input[0] === "c") {
+    pos = axis(doc, input, 0, details, range.aStart, flags, false);
+    if (pos === null) return ScRefFlags.ZERO;
+    next =
+      input[pos] === ":" && (input[pos + 1] === "C" || input[pos + 1] === "c")
+        ? axis(doc, input, pos + 1, details, range.aEnd, other, false)
+        : null;
+    if (next === null) {
+      flags[0] = applyStartToEndFlags(flags[0]);
+      range.aEnd.SetCol(range.aStart.Col());
+    } else {
+      flags[0] = applyStartToEndFlags(flags[0], other[0]);
+      pos = next;
+    }
+    if (pos !== input.length) return (flags[0] & ~clearAll) as ScRefFlags;
+    flags[0] |=
+      ScRefFlags.ROW_VALID | ScRefFlags.ROW2_VALID | ScRefFlags.ROW_ABS | ScRefFlags.ROW2_ABS;
+    range.aStart.SetRow(0);
+    range.aEnd.SetRow(doc.MaxRow());
+    return onlySingle ? ScRefFlags.ZERO : flags[0];
+  }
+  return ScRefFlags.ZERO;
+}
+/** Original lcl_r1c1_append_r/c for actual value coordinates. Signed-overflow domains remain unqualified. @param value - Row/column. @param absolute - Original absolute flag. @param base - Original base. @param letter - Original axis. @returns Source spelling. */
+function appendR1C1(value: number, absolute: boolean, base: number, letter: "R" | "C"): string {
+  if (absolute) return letter + (value + 1);
+  const offset = value - base;
+  return letter + (offset === 0 ? "" : "[" + offset + "]");
+}
+/** Original local-header R1C1 range Format branch, including singleton entire-axis spelling. @param range - Actual range. @param doc - Actual bounds. @param flags - Native flags. @param details - Original base. @param full - Original abbreviation suppression. @returns Source spelling. */
+function formatLocalExcelR1C1(
+  range: ScRange,
+  doc: ScAddressDocument,
+  flags: ScRefFlags,
+  details: Readonly<ScAddressDetails>,
+  full: boolean,
+): string {
+  if (flags & ScRefFlags.TAB_3D)
+    throw new Error("Excel sheet and external reference headers are not implemented");
+  const wholeRows = range.aStart.Col() === 0 && range.aEnd.Col() >= doc.MaxCol() && !full,
+    wholeCols = !wholeRows && range.aStart.Row() === 0 && range.aEnd.Row() >= doc.MaxRow() && !full,
+    start = range.aStart,
+    end = range.aEnd;
+  let result = "";
+  if (!wholeCols)
+    result += appendR1C1(start.Row(), Boolean(flags & ScRefFlags.ROW_ABS), details.nRow, "R");
+  if (!wholeRows)
+    result += appendR1C1(start.Col(), Boolean(flags & ScRefFlags.COL_ABS), details.nCol, "C");
+  const different =
+    (!wholeCols &&
+      (start.Row() !== end.Row() ||
+        Boolean(flags & ScRefFlags.ROW_ABS) !== Boolean(flags & ScRefFlags.ROW2_ABS))) ||
+    (!wholeRows &&
+      (start.Col() !== end.Col() ||
+        Boolean(flags & ScRefFlags.COL_ABS) !== Boolean(flags & ScRefFlags.COL2_ABS)));
+  if (different) {
+    result += ":";
+    if (!wholeCols)
+      result += appendR1C1(end.Row(), Boolean(flags & ScRefFlags.ROW2_ABS), details.nRow, "R");
+    if (!wholeRows)
+      result += appendR1C1(end.Col(), Boolean(flags & ScRefFlags.COL2_ABS), details.nCol, "C");
+  }
+  return result;
 }

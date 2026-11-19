@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.comphelper.split-tokens",
+    "modulePath": "apps/office/src/comphelper/source/misc/string.ts",
+    "symbol": "split",
+    "classification": "upstream-mechanism",
+    "capabilityId": "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708",
+    "description": "Original comphelper string split over counted UTF16 views: o3tl token extraction and native whitespace trimming omit empty tokens and return owned OUString values; embedded NUL and isolated surrogate units remain counted."
+  }
+}

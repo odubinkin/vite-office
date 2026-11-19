@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sax/source/fastparser/fastparser.service.ts",
+    "status": "mapped",
+    "upstreamPath": "sax/source/fastparser/fastparser.cxx",
+    "localSymbols": [
+      "FastSaxParser",
+      "com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation"
+    ],
+    "upstreamSymbols": [
+      "FastSaxParser::initialize",
+      "FastSaxParser::parseStream",
+      "FastSaxParser::getNamespaceURL",
+      "FastSaxParser::getSupportedServiceNames",
+      "com_sun_star_comp_extensions_xml_sax_FastParser_get_implementation"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Logical native UNO/RTL ownership is retained with explicit destruction; physical C++ ABI is unqualified."
+    },
+    "preservedResponsibilities": [
+      "Original FastSaxParser public native wrapper now uses exact ordered WeakImplHelper<XInitialization,XFastParser,XServiceInfo>, unique implementation destruction, cached setters and original by-value namespace return, original sticky comma options/accepted DoSmeplease no-op and optional native XMap Any extraction. Original resolver/locale no-ops are preserved. Acquired source factory and CPPUMaker-normal SDK helper are registered in the actual browser service manager. Real registered Writer/token services, original legacy adapter owners and MemoryInputStream exercise public creation, Unicode custom entity expansion, accepted/unknown options, real malformed-input cleanup and reuse. Short MemoryInputStream prefix loss is preserved, separately from the original parser.cxx Pipe fixture (Pipe is not yet ported); no original full QA claim. Optional nonnull XMap, complete LegacyFastParser wrapper, original full parser QA, independent compiled C++ differential, physical mutex/allocator/exception ABI and full model/filter/UI acceptance remain unqualified."
+    ],
+    "omittedResponsibilities": [
+      "Full original QA, optional nonnull XMap, native compiled differential and complete model/filter/UI acceptance remain unfinished."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sax/source/fastparser/fastparser.service.ts",
+          "marker": "FastSaxParser"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParser::initialize"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sax/source/fastparser/fastparser.service.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original public FastSaxParser wrapper/factory is split from the private native implementation, locator and Entity in fastparser.cxx; the existing separately qualified host facade retains its original local path."
+    }
+  }
+}

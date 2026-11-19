@@ -1,0 +1,104 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-bdb8cfc9-d6a9-4826-a00f-3e124ba73374",
+    "capabilityId": "CAP-bdb8cfc9-d6a9-4826-a00f-3e124ba73374",
+    "suite": "calc",
+    "subsystem": "calc-model-services",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual ScModelObj queries original XServiceInfo and returns original document service identity and ordered names.",
+      "ScServiceProvider exact compatibility lookup/catalog matches unchanged compiled native source witnesses; CALC688 duplicate remains."
+    ],
+    "capability": "Original Calc document service identity and provider catalog prerequisites",
+    "gaps": [
+      "Complete XModel, MakeInstance and concrete service providers, XMultiServiceFactory, formatter aggregation, full model type list and filter/storage/UI orchestration remain unfinished."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/source/ui/unoobj/servuno.cxx",
+          "marker": "ScServiceProvider::GetProviderType"
+        },
+        {
+          "path": "sc/source/ui/unoobj/docuno.cxx",
+          "marker": "ScModelObj::getSupportedServiceNames"
+        }
+      ],
+      "tests": [
+        {
+          "path": "test/source/lang/xserviceinfo.cxx",
+          "marker": "testGetImplementationName"
+        },
+        {
+          "path": "sc/qa/extras/scmodelobj.cxx",
+          "marker": "ScModelObj"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/servuno.hxx",
+          "marker": "ScServiceProvider"
+        },
+        {
+          "path": "sc/inc/unonames.hxx",
+          "marker": "SC_SERVICENAME_VALBIND"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/inc/servuno.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/inc/unonames.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/unoobj/servuno.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/unoobj/docuno.ts",
+          "marker": "getSupportedServiceNames"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/ui/unoobj/servuno.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/unoobj/docuno-services.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-model-services.md",
+          "marker": "# Calc document model service prerequisites"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual UNO reference/string/sequence owners preserve represented declarations and synchronous service query/value methods. Native physical ABI/thread/aggregation/full-interface domains remain unqualified."
+    },
+    "scopeLimitations": [
+      "Complete XModel, MakeInstance and concrete service providers, XMultiServiceFactory, formatter aggregation, full model type list and filter/storage/UI orchestration remain unfinished.",
+      "Shared original apitest service assertions are ported; the full original ODS-loaded ScModelObj fixture suite is not claimed executed.",
+      "No dedicated upstream provider-catalog test found in bounded QA search; unchanged C++ lookup/table witnesses qualify only this catalog, not service creation."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "calc-model-service-identity-and-catalog"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/docmodel/inc/theme/ColorSet.ts",
+    "upstreamPath": "include/docmodel/theme/ColorSet.hxx",
+    "localSymbols": [
+      "ColorSet"
+    ],
+    "upstreamSymbols": [
+      "ColorSet",
+      "getColor"
+    ],
+    "preservedResponsibilities": [
+      "Native named workbook palette in the original ThemeColorType order with copied color values and the source black default."
+    ],
+    "omittedResponsibilities": [
+      "DrawingML presence lookup records only source slots independently of the model default. UNO theme service and full drawing theme are outside this owner."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/docmodel/inc/theme/ColorSet.ts",
+          "marker": "ColorSet"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.theme.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-native-colors.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/docmodel/theme/ColorSet.hxx",
+          "marker": "ColorSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/docmodel/theme/ColorSet.hxx",
+          "marker": "getColor"
+        }
+      ]
+    }
+  }
+}

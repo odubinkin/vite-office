@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/external/emscripten/locale.ts",
+    "rationale": "Original Linux/Emscripten locale parser/composer,177-pair codeset table, process locale cache/native pthread mutex, lazy thread initialization/ASCII fallback and exchange setter. Genuine pinned SDK libc getenv/newlocale/nl_langinfo_l/freelocale execute through the existing runtime, without a host locale provider, fake successful service or manual JS allocator. Original ASCII alias omission and environment/composition interaction retained and documented. Process/thread profile is realm-local without pthreads; other process/thread operations, native ABI/OOM and complete file URL/TempFile/package/model/filter/UI acceptance remain unfinished or unqualified.",
+    "responsibilities": [
+      "Actual pinned Emscripten4.0.19 SDK libc++ std::mutex constructor/destructor/lock/unlock C ABI binding and consumed single-mutex scoped_lock. C++ implementation is compiled into the existing shared native runtime, no JS mutex/OSL replacement/lock registry or successful fake provider. Cold bootstrap and genuine native object/guard operations execute. JS byte arrays remain GC-managed. No-pthread realm-local profile; native races, system_error/OOM/invalid lifetime and full standard-library ABI remain unqualified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original Linux/Emscripten locale parser/composer,177-pair codeset table, process locale cache/native pthread mutex, lazy thread initialization/ASCII fallback and exchange setter. Genuine pinned SDK libc getenv/newlocale/nl_langinfo_l/freelocale execute through the existing runtime, without a host locale provider, fake successful service or manual JS allocator. Original ASCII alias omission and environment/composition interaction retained and documented. Process/thread profile is realm-local without pthreads; other process/thread operations, native ABI/OOM and complete file URL/TempFile/package/model/filter/UI acceptance remain unfinished or unqualified."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/emscripten/locale.ts",
+          "marker": "getLocaleCodeset"
+        },
+        {
+          "path": "third_party/libxml2-wasm/osl-locale.c",
+          "marker": "office_locale_codeset"
+        },
+        {
+          "path": "apps/office/src/sal/osl/unx/nlsupport.test.ts",
+          "marker": "@fileoverview"
+        }
+      ]
+    },
+    "localSymbols": [
+      "getenv",
+      "getLocaleCodeset",
+      "lockProcessLocale",
+      "unlockProcessLocale"
+    ],
+    "preservedResponsibilities": [
+      "Original Linux/Emscripten locale parser/composer,177-pair codeset table, process locale cache/native pthread mutex, lazy thread initialization/ASCII fallback and exchange setter. Genuine pinned SDK libc getenv/newlocale/nl_langinfo_l/freelocale execute through the existing runtime, without a host locale provider, fake successful service or manual JS allocator. Original ASCII alias omission and environment/composition interaction retained and documented. Process/thread profile is realm-local without pthreads; other process/thread operations, native ABI/OOM and complete file URL/TempFile/package/model/filter/UI acceptance remain unfinished or unqualified."
+    ]
+  }
+}

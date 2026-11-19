@@ -10,7 +10,7 @@ import {
 import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
 import type { SwTable, SwTableLine } from "../../core/table/swtable";
 import { SwXTextTableCursor, SwXTextTableRow } from "../../core/unocore/unotbl";
-import { scalar, unicode } from "../../core/unocore/unocrsrhelper";
+import { scalar, stringValue, unicode } from "../../core/unocore/unocrsrhelper";
 import { Length, toTwips } from "../../../../o3tl/inc/unit_conversion";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
@@ -18,6 +18,51 @@ import { WritingMode2 } from "../../../../offapi/com/sun/star/text/WritingMode2"
 import { SizeType } from "../../../../offapi/com/sun/star/text/SizeType";
 import { PropertyIds as P } from "./PropertyIds";
 import { TablePropertyMapTarget as T, type TablePropertyMap } from "./PropertyMap";
+import type { StyleSheetTable } from "./StyleSheetTable";
+
+const DEF_BORDER_DIST = 190;
+
+/** Supplies the original Word default distances after style and direct properties. @param properties - Merged table properties. @returns Nothing. */
+export function ApplyOOXMLTableDefaults(properties: TablePropertyMap): void {
+  const current: [number] = [0];
+  for (const target of [T.CELL_MAR_LEFT, T.CELL_MAR_RIGHT])
+    if (!properties.getValue(target, current)) properties.setValue(target, DEF_BORDER_DIST);
+}
+
+/** Resolves inherited style geometry before applying direct table properties. @param properties - Direct table map. @param styles - Original stylesheet table. @returns Nothing. */
+export function ApplyTableStyle(properties: TablePropertyMap, styles: StyleSheetTable): void {
+  const style = properties.getProperty(P.META_PROP_TABLE_STYLE_NAME)?.[1];
+  if (!style) return;
+  properties.Erase(P.META_PROP_TABLE_STYLE_NAME);
+  const value: [number] = [0];
+  try {
+    const merged = styles
+      .FindStyleSheetByISTD(stringValue(style))
+      ?.GetMergedInheritedProperties(styles);
+    if (!merged) return;
+    try {
+      for (const [id, target] of [
+        [P.PROP_LEFT_MARGIN, T.LEFT_MARGIN],
+        [P.META_PROP_CELL_MAR_LEFT, T.CELL_MAR_LEFT],
+        [P.META_PROP_CELL_MAR_RIGHT, T.CELL_MAR_RIGHT],
+        [P.META_PROP_CELL_MAR_TOP, T.CELL_MAR_TOP],
+        [P.META_PROP_CELL_MAR_BOTTOM, T.CELL_MAR_BOTTOM],
+      ] as const) {
+        if (properties.getValue(target, value)) continue;
+        const property = merged.getProperty(id)?.[1];
+        try {
+          if (property?.extract(value, "sal_Int32")) properties.setValue(target, value[0]);
+        } finally {
+          property?.dispose();
+        }
+      }
+    } finally {
+      merged.dispose();
+    }
+  } finally {
+    style.dispose();
+  }
+}
 
 /** Applies the original row split default and native row properties. @param line - Connected Writer row. @param properties - Actual mapper row properties. @returns Nothing. */
 export function ApplyTableRowProperties(line: SwTableLine, properties: TablePropertyMap): void {
@@ -74,11 +119,13 @@ function CellBorderWidth(cell: TablePropertyMap | undefined, id: P): number {
   }
 }
 
-/** Applies the source end-of-table width and relative-width properties through the existing UNO table owner. @param table - Actual converted table. @param properties - Accumulated native table properties. @param firstCell - Resolved first cell. @returns Source horizontal correction for floating table placement in mm100. */
+/** Applies source table width and indentation through the existing UNO table owner. @param table - Actual converted table. @param properties - Accumulated native table properties. @param firstCell - Resolved first cell. @param nested - Whether the table resides in a parent cell. @param wordMode - Word compatibility mode for OOXML. @returns Horizontal correction for floating table placement in mm100. */
 export function ApplyTableMeasures(
   table: SwTable,
   properties: TablePropertyMap,
   firstCell?: TablePropertyMap,
+  nested = table.GetTableNode().FindTableBoxStartNode() !== null,
+  wordMode?: number,
 ): number {
   const width: [number] = [0],
     type: [number] = [SizeType.FIX],
@@ -114,10 +161,20 @@ export function ApplyTableMeasures(
     orientation.dispose();
   }
   const hasMargin = properties.getValue(T.LEFT_MARGIN, margin);
-  const nested = table.GetTableNode().FindTableBoxStartNode() !== null;
   const halfBorder = Math.trunc(CellBorderWidth(firstCell, P.PROP_LEFT_BORDER) / 2);
-  const adjusted = (nested ? Math.max(0, margin[0]) : margin[0]) + halfBorder;
-  if (hasMargin || adjusted) {
+  const cellMargin: [number] = [0];
+  properties.getValue(T.CELL_MAR_LEFT, cellMargin);
+  let adjusted = (nested ? Math.max(0, margin[0]) : margin[0]) + halfBorder;
+  if (!nested && wordMode !== undefined && wordMode < 15) {
+    const direct = firstCell?.getProperty(P.PROP_LEFT_BORDER_DISTANCE)?.[1];
+    try {
+      if (direct) direct.extract(cellMargin, "sal_Int32");
+    } finally {
+      direct?.dispose();
+    }
+    adjusted = margin[0] - (hasMargin ? Math.max(halfBorder, cellMargin[0]) : halfBorder);
+  }
+  if (hasMargin || adjusted || wordMode !== undefined) {
     const left = new Any([adjusted], "sal_Int32");
     try {
       properties.Insert(P.PROP_LEFT_MARGIN, left);
@@ -125,16 +182,15 @@ export function ApplyTableMeasures(
       left.dispose();
     }
   }
-  const cellMargin: [number] = [0];
-  properties.getValue(T.CELL_MAR_LEFT, cellMargin);
   return cellMargin[0] + (nested ? 0 : halfBorder);
 }
 
-/** Applies original default cell margins before the cell-specific UNO overrides. @param table - Actual converted table. @param properties - Accumulated native table properties. @param firstCell - Resolved first cell. @returns Nothing. */
+/** Applies default cell margins only where direct cell distances are absent. @param table - Actual converted table. @param properties - Accumulated native table properties. @param firstCell - Resolved first cell. @param cellProperties - Optional row and cell property lookup. @returns Nothing. */
 export function ApplyTableMargins(
   table: SwTable,
   properties: TablePropertyMap,
   firstCell?: TablePropertyMap,
+  cellProperties?: (row: number, column: number) => TablePropertyMap | undefined,
 ): void {
   const left: [number] = [0],
     right: [number] = [0],
@@ -149,10 +205,10 @@ export function ApplyTableMargins(
   const actualLeft = Math.max(halfLeft, left[0]);
   const actualRight = Math.max(actualLeft + halfRight, left[0] + right[0]) - actualLeft;
   const margins = [
-    [SvxBoxItemLine.LEFT, actualLeft],
-    [SvxBoxItemLine.RIGHT, actualRight],
-    [SvxBoxItemLine.TOP, top[0]],
-    [SvxBoxItemLine.BOTTOM, bottom[0]],
+    [SvxBoxItemLine.LEFT, actualLeft, P.PROP_LEFT_BORDER_DISTANCE],
+    [SvxBoxItemLine.RIGHT, actualRight, P.PROP_RIGHT_BORDER_DISTANCE],
+    [SvxBoxItemLine.TOP, top[0], P.PROP_TOP_BORDER_DISTANCE],
+    [SvxBoxItemLine.BOTTOM, bottom[0], P.PROP_BOTTOM_BORDER_DISTANCE],
   ] as const;
   const format = table.GetFrameFormat();
   const tableBox = format.GetBox().Clone();
@@ -163,12 +219,14 @@ export function ApplyTableMargins(
   } finally {
     tableBox.Dispose();
   }
-  for (const row of table.GetTabLines())
-    for (const cell of row.GetTabBoxes()) {
+  for (const [rowIndex, row] of table.GetTabLines().entries())
+    for (const [column, cell] of row.GetTabBoxes().entries()) {
       const box = cell.GetBox();
       try {
-        for (const [edge, width] of margins)
-          box.SetDistance(Number(toTwips(BigInt(width), Length.mm100)), edge);
+        const direct = cellProperties?.(rowIndex, column);
+        for (const [edge, width, id] of margins)
+          if (!direct?.isSet(id))
+            box.SetDistance(Number(toTwips(BigInt(width), Length.mm100)), edge);
         cell.ClaimFrameFormat().SetFormatAttr(box);
       } finally {
         box.Dispose();

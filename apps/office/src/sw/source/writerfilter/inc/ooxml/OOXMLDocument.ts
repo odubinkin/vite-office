@@ -25,11 +25,16 @@ export enum StreamType_t {
   VBADATA,
 }
 
+import type { Stream } from "../dmapper/resourcemodel";
+
 /** Native document callbacks consumed by shared parser state; UTF16 fields bind immutable host XML strings. */
 export interface OOXMLDocument {
   setXNoteId(id: number): void;
   getXNoteId(): number;
   getTarget(): string;
+  getTargetForId(id: string): string;
+  resolveHeader?(stream: Stream, type: number, id: string): void;
+  resolveFooter?(stream: Stream, type: number, id: string): void;
   /** Native progress callback consumed by paragraph-end context actions. */
   incrementProgress(): void;
 }

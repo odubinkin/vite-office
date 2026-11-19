@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/tool/rangenam.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-file-filter",
+    "capabilityIds": [
+      "CAP-1d1d48a3-5a10-4373-876c-fa5f18a62db9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/rangenam.ts",
+        "apps/office/src/sc/source/filter/excel/xename.test.ts",
+        "vendor/libreoffice-reference/sc/source/core/tool/rangenam.cxx"
+      ],
+      "justification": "Native name storage owns indexed token arrays and compiles all names after their scope indexes exist. Editing dialogs, structural name updates, and advanced formula types remain open.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScRangeData",
+        "ScRangeName",
+        "InsertRangeNames"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/core/tool/rangenam.cxx",
+      "upstreamSymbols": [
+        "ScRangeName::insert",
+        "ScRangeData::CompileRangeData"
+      ]
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-ece835f2-ed08-450e-93c3-cfc179e3dc9c",
+    "capabilityId": "CAP-ece835f2-ed08-450e-93c3-cfc179e3dc9c",
+    "suite": "shared",
+    "subsystem": "package-stream-state",
+    "type": "model",
+    "maturity": "mapped",
+    "assertions": [
+      "Actual native package owner creates original folders and streams, which retain represented ZIP-record and plain property state.",
+      "Actual own source streams use lazy seekability and independent original WrapStreamForShare readers."
+    ],
+    "capability": "Original package creation and own-stream state prerequisites",
+    "gaps": [
+      "Complete metadata/manifest initialization, stream saveChild, encryption/raw/imported algorithm paths, complete package interfaces/registration, XStorage/SfxMedium and full DOCX/XLSX filter/UI remain unfinished or unqualified. Raw ZIP initialization/member IO continues under CAP-239ef4b3-b450-4c31-bf96-03e76bffcac1; original state checkpoint remains historically bounded."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "package/source/zippackage/ZipPackage.cxx",
+          "marker": "ZipPackage::createInstanceWithArguments"
+        },
+        {
+          "path": "package/source/zippackage/ZipPackageStream.cxx",
+          "marker": "ZipPackageStream::getInputStream"
+        }
+      ],
+      "tests": [
+        {
+          "path": "package/qa/cppunit/test_package.cxx",
+          "marker": "testThreadedStreams"
+        }
+      ],
+      "docs": [
+        {
+          "path": "package/inc/ZipPackageStream.hxx",
+          "marker": "PACKAGE_STREAM_NOTSET"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackageStream.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.ts",
+          "marker": "export class ZipPackage"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackageStream.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-package-stream-state.md",
+          "marker": "# Native package and own-stream state prerequisites"
+        }
+      ]
+    },
+    "implemented": false,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Represented original fields and generated UNO/RTL/native mutex owners use existing host storage while native physical ABI/allocator/thread and full package/stream services remain unqualified."
+    },
+    "scopeLimitations": [
+      "Complete metadata/manifest initialization, stream saveChild, encryption/raw/imported algorithm paths, complete package interfaces/registration, XStorage/SfxMedium and full DOCX/XLSX filter/UI remain unfinished or unqualified. Raw ZIP initialization/member IO continues under CAP-239ef4b3-b450-4c31-bf96-03e76bffcac1; original state checkpoint remains historically bounded.",
+      "Upstream package QA is downstream context, not a directly ported package creation/own-stream suite or claimed executed native fixture. Bounded QA searches found no direct unit test for this represented state subset.",
+      "Explicit unported errors do not establish native exception parity; the encryption interface and complete package service are not advertised."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "package-stream-creation-state"
+  }
+}

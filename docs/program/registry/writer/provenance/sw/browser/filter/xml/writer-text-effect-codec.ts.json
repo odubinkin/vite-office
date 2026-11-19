@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-text-effect-codec.ts",
+    "status": "local-only",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-text-effect-codec.ts",
+          "marker": "encodeTextEffects"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-text-effect-codec.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.typography.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": []
+    },
+    "rationale": "Transfers bounded native character text effects and the optional document pool override between the background filter and the editor. Restores the same UNO tree and accepts earlier documents without this override.",
+    "responsibilities": [
+      "Transfers bounded native character text effects and the optional document pool override between the background filter and the editor. Restores the same UNO tree and accepts earlier documents without this override.",
+      "Transports the original string-valued theme font members of the character interoperability bag.",
+      "Transfers original typed styleSet children through the current Worker alongside earlier compact scalar snapshots."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Explicit browser graph/Worker/storage serialization around original native item owners."
+    }
+  }
+}

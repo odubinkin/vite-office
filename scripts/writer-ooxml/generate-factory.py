@@ -18,13 +18,22 @@ OUTPUT = ROOT / "apps/office/src/sw/source/writerfilter/ooxml"
 # This is the current consumed factory surface. References retain their complete
 # native IDs; omitted definitions never renumber admitted definitions or tokens.
 CONSUMED = (
-    "CT_Document CT_Body CT_P CT_R CT_Text CT_PPr CT_RPr CT_Style CT_Styles CT_Settings "
+    "CT_Document CT_Body CT_P CT_R CT_Text CT_PPr CT_RPr CT_ParaRPr CT_Style CT_Style_pPr CT_Style_tblStylePr CT_PPrBase CT_Styles CT_Settings "
+    "CT_HdrFtr CT_HdrFtrRef "
     "CT_DocDefaults CT_PPrDefault CT_RPrDefault CT_Fonts CT_Underline CT_Color "
-    "CT_Ind CT_Spacing CT_Jc CT_OnOff CT_HpsMeasure CT_DecimalNumber CT_String "
+    "CT_FontsList CT_Font CT_Charset CT_FontFamily CT_FontSig CT_Panose CT_Pitch "
+    "CT_SectPr CT_finalSectPr CT_PageSz CT_PageMar CT_PageNumber CT_TextDirection CT_SectType CT_Columns CT_Column CT_DocGrid "
+    "CT_Br CT_Br_OutOfOrder CT_Tab CT_Tabs CT_TabStop ST_TabJc ST_TabTlc CT_Cr CT_Empty "
+    "CT_Bookmark CT_BookmarkRange CT_MarkupRangeBookmark CT_MarkupRange "
+    "CT_Hyperlink CT_FldChar CT_instrText CT_SimpleField "
+    "CT_FtnDocProps CT_EdnDocProps CT_FtnEdnSepRef CT_FtnProps CT_EdnProps "
+    "CT_Numbering CT_AbstractNum CT_Num CT_NumLvl CT_Lvl CT_NumFmt CT_LevelText CT_LevelSuffix CT_LvlLegacy CT_MultiLevelType CT_NumPr "
+    "CT_Tbl CT_Row CT_Tc CT_TblGrid CT_TblGridCol CT_TblPr CT_TrPr CT_TcPr CT_TblLook CT_TblOverlap CT_TblLayoutType CT_VMerge CT_HMerge CT_VerticalJc "
+    "CT_Ind CT_Spacing CT_Jc CT_OnOff CT_HpsMeasure CT_SignedHpsMeasure CT_SignedTwipsMeasure CT_DecimalNumber CT_String "
     "CT_VerticalAlignRun CT_Highlight EG_RPrBase CT_TblWidth CT_Height "
-    "CT_Zoom CT_Proof CT_TwipsMeasure CT_CharacterSpacing CT_Compat CT_CompatSetting "
+    "CT_Zoom CT_Proof CT_WritingStyle CT_Rel CT_ShortHexNumber CT_TwipsMeasure CT_CharacterSpacing CT_StylePaneFilter CT_Compat CT_CompatSetting "
     "CT_DocRsids CT_LongHexNumber CT_Language CT_ShapeDefaults "
-    "CT_TblCellMar CT_TcMar CT_LatentStyles CT_LsdException CT_TblPrBase CT_TrPrBase CT_TcPrBase CT_Border CT_TblBorders CT_TcBorders CT_TrackChange CT_Markup CT_Shd CT_TblPPr"
+    "CT_TblCellMar CT_TcMar CT_LatentStyles CT_LsdException CT_TblPrBase CT_TrPrBase CT_TcPrBase CT_Border CT_TblBorders CT_TcBorders CT_TrackChange CT_Markup CT_Shd CT_TblPPr CT_PBdr CT_FramePr CT_Cnf"
 ).split()
 
 
@@ -33,7 +42,11 @@ def original(script, *arguments):
     return subprocess.check_output([sys.executable, str(script), *map(str, arguments)], text=True)
 
 
-def generate():
+TEXT_EFFECTS = ("ligatures", "numForm", "numSpacing")
+TYPOGRAPHY_STARTS = (*TEXT_EFFECTS, "stylisticSets", "cntxtAlts")
+
+
+def generate(namespace="wml", consumed=CONSUMED, included_starts=None):
     """Return native attribute/element/resource/list/action tables for the slice."""
     spec = importlib.util.spec_from_file_location("native_factoryimpl_ns", OOXML / "factoryimpl_ns.py")
     native = importlib.util.module_from_spec(spec)
@@ -61,7 +74,7 @@ def generate():
             namespace_ids[alias] = int(identifier)
     model_node = native.getChildByName(model, "model")
     namespaces = {n.getAttribute("name"): n for n in native.getChildrenByName(model_node, "namespace")}
-    wml = namespaces["wml"]
+    wml = namespaces[namespace]
     grammar = native.getChildByName(wml, "grammar")
     definitions = {d.getAttribute("name"): d for d in native.getChildrenByName(grammar, "define")}
     resources = {r.getAttribute("name"): r for r in native.getChildrenByName(wml, "resource")}
@@ -92,7 +105,7 @@ def generate():
     attributes, elements, resource_ids, actions, lists = [], [], [], [], []
     used_defines = {0: "start"}
     list_definitions = set()
-    for name in CONSUMED:
+    for name in consumed:
         definition = definitions[name]
         identifier = identity(native.idForDefine(wml, definition))
         used_defines[identifier] = name
@@ -115,19 +128,29 @@ def generate():
             resource_ids.append([identifier, qname(token), token_ids[value]])
         if resource is not None:
             for action in native.getChildrenByName(resource, "action"):
-                admitted_actions = {"startSectionGroup", "endCharacterGroup", "endParagraphGroup", "setLastSectionGroup", "endSectionGroup", "handleLastParagraphInSection", "startParagraphGroup", "setHandle", "sendTableDepth", "endOfParagraph", "startCharacterGroup", "sendPropertiesWithId", "text", "setDefaultBooleanValue", "setDefaultIntegerValue", "setDefaultHexValue", "setDefaultStringValue", "clearProps"}
-                if action.getAttribute("action") not in admitted_actions or native.getChildrenByName(action, "cond"):
+                admitted_actions = {"startSectionGroup", "endCharacterGroup", "endParagraphGroup", "setLastSectionGroup", "endSectionGroup", "handleLastParagraphInSection", "startParagraphGroup", "setHandle", "sendTableDepth", "endOfParagraph", "startCharacterGroup", "sendPropertiesWithId", "text", "setDefaultBooleanValue", "setDefaultIntegerValue", "setDefaultHexValue", "setDefaultStringValue", "clearProps", "setLastParagraphInSection", "handleBreak", "handleOutOfOrderBreak", "tab", "cr", "noBreakHyphen", "softHyphen"}
+                admitted_actions.update({"startCell", "endCell", "sendCellProperties", "startRow", "endRow", "sendRowProperties", "sendTableProperties", "propagateCellProperties", "propagateRowProperties", "propagateTableProperties"})
+                admitted_actions.update({"fieldstart", "fieldsep", "fieldend", "fieldlock", "handleHyperlink", "handleHdrFtr"})
+                admitted_actions.update({"printproperty", "fieldlock_simple"})
+                conditions = native.getChildrenByName(action, "cond")
+                if action.getAttribute("action") not in admitted_actions or (conditions and (name != "CT_FldChar" or len(conditions) != 1)):
                     raise ValueError("Unconsumed native event action or condition: " + action.toxml())
-                actions.append([identifier, action.getAttribute("name"), action.getAttribute("action"),
+                row = [identifier, action.getAttribute("name"), action.getAttribute("action"),
                                 token_ids[native.idToLabel(action.getAttribute("tokenid"))] if action.hasAttribute("tokenid") else 0,
-                                token_ids[native.idToLabel(action.getAttribute("sendtokenid"))] if action.hasAttribute("sendtokenid") else 0])
+                                token_ids[native.idToLabel(action.getAttribute("sendtokenid"))] if action.hasAttribute("sendtokenid") else 0]
+                for condition in conditions:
+                    row.extend(token_ids[native.idToLabel(condition.getAttribute(key))] for key in ("tokenid", "value"))
+                actions.append(row)
             for attribute in native.getChildrenByName(resource, "attribute"):
                 if attribute.hasAttribute("action"):
                     if attribute.getAttribute("action") != "setValue":
                         raise ValueError("Unconsumed native attribute action: " + attribute.getAttribute("action"))
                     actions.append([identifier, "attribute", attribute.getAttribute("action"), qname(native.fastToken(attribute)), 0])
     for start in native.getChildrenByName(wml, "start"):
-        definition = definitions[start.getAttribute("name")]
+        name = start.getAttribute("name")
+        if included_starts is not None and name not in included_starts:
+            continue
+        definition = definitions[name]
         for token, cpp in native.factoryCreateElementMapInner(namespaces, wml, definition).items():
             match = re.search(r"rOutResource = ResourceType::(\w+); rOutElement = ([^;]+);", cpp)
             elements.append([0, qname(token), match[1], identity(match[2])])
@@ -146,9 +169,26 @@ def generate():
                 continue
             seen.add(text)
             lists.append([identifier, text, token_ids[native.idToLabel(value.getAttribute("tokenid"))]])
-    return {"namespaces": {"NN_wml": ids["NN_wml"]}, "defines": used_defines, "attributes": attributes, "elements": elements,
+    result = {"namespaces": {"NN_" + namespace: ids["NN_" + namespace]}, "defines": used_defines, "attributes": attributes, "elements": elements,
             "resources": resource_ids, "lists": lists, "actions": actions,
             "streamNamespaces": [[uri, stream_namespaces[uri]] for uri in sorted(stream_namespaces)]}
+    if namespace == "w14":
+        result["effectIds"] = {
+            name: [token_ids[f"NS_ooxml::LN_{name}_{name}"],
+                   token_ids[f"NS_ooxml::LN_CT_{name[0].upper() + name[1:]}_val"],
+                   ids[f"NN_w14"] | ids[f"DEFINE_ST_{name[0].upper() + name[1:]}"]]
+            for name in TEXT_EFFECTS
+        }
+        result["effectIds"].update({
+            "stylisticSets": [token_ids["NS_ooxml::LN_stylisticSets_stylisticSets"]],
+            "cntxtAlts": [token_ids["NS_ooxml::LN_cntxtAlts_cntxtAlts"],
+                          token_ids["NS_ooxml::LN_CT_OnOff_val"],
+                          ids["NN_w14"] | ids["DEFINE_ST_OnOff"]],
+        })
+        result["styleSetIds"] = [token_ids[f"NS_ooxml::LN_{name}"] for name in (
+            "CT_StylisticSets_styleSet", "CT_StyleSet_id", "CT_StyleSet_val",
+        )]
+    return result
 
 
 def main():
@@ -165,21 +205,38 @@ def main():
         else:
             target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(source.read_bytes())
+    w14 = generate("w14", [definition for name in TEXT_EFFECTS
+                            for definition in (name, "CT_" + name[0].upper() + name[1:])] +
+                   ["stylisticSets", "CT_StylisticSets", "CT_StyleSet", "cntxtAlts", "CT_OnOff"],
+                   TYPOGRAPHY_STARTS)
+    w14.pop("streamNamespaces")
+    write_tables(OUTPUT / "OOXMLFactory_w14.tables.ts", w14, args.check)
     data = generate()
     write_tables(OUTPUT / "OOXMLFactory.tables.ts", {"streamNamespaces": data.pop("streamNamespaces")}, args.check)
     # Native getListValue has a distinct lexical dispatch table from the
     # attribute/element/resource context lookups. Keep that generated data
     # responsibility separate while retaining one native factory owner/API.
     write_tables(OUTPUT / "OOXMLFactory_wml.lists.ts", {"lists": data["lists"]}, args.check)
-    # factoryCreateElementMap is a distinct native lookup responsibility.
-    # Retain its exact records and the same factory API via a static re-export.
-    write_tables(OUTPUT / "OOXMLFactory_wml.elements.ts", {"elements": data["elements"]}, args.check)
-    context_data = {key: rows for key, rows in data.items() if key not in ("lists", "elements")}
-    write_tables(OUTPUT / "OOXMLFactory_wml.tables.ts", context_data, args.check, ("elements", "lists"))
-    print("Writer OOXML factory:", ", ".join(f"{key}={len(rows)}" for key, rows in data.items()))
+    write_tables(OUTPUT / "OOXMLFactory_wml.attributes.ts", {"attributes": data["attributes"]}, args.check)
+    # Each original lookup combines its ordered shards before the factory uses it.
+    sharded_maps = {}
+    for name in ("elements", "resources"):
+        rows = data[name]
+        shards = []
+        for index in range(0, len(rows), 800):
+            shard = f"{name}{index // 800}"
+            filename = name if index == 0 else shard
+            write_tables(OUTPUT / f"OOXMLFactory_wml.{filename}.ts", {shard: rows[index:index + 800]}, args.check)
+            shards.append((shard, filename))
+        sharded_maps[name] = shards
+    context_data = {key: rows for key, rows in data.items() if key not in ("attributes", "lists", "elements", "resources")}
+    write_tables(OUTPUT / "OOXMLFactory_wml.tables.ts", context_data, args.check, ("attributes", "lists"), sharded_maps)
+    for namespace, records in (("wml", data), ("w14", w14)):
+        print(f"Writer OOXML {namespace} factory:",
+              ", ".join(f"{key}={len(rows)}" for key, rows in records.items()))
 
 
-def write_tables(path, data, check, reexports=()):
+def write_tables(path, data, check, reexports=(), sharded_maps=None):
     """Write source-generated namespace/stream tables with their original owners."""
     text = "/** @fileoverview Consumed native factory tables generated through unchanged pinned namespaces/modelpreprocess/factoryinc/resourceids/factoryimpl_ns owners; do not edit by hand. */\n"
     # Native generated table rows are deliberately one record per line, keeping
@@ -192,6 +249,11 @@ def write_tables(path, data, check, reexports=()):
             text += "[\n" + "".join("  " + json.dumps(row, ensure_ascii=False) + ",\n" for row in rows) + "] as const;\n"
     for name in reexports:
         text += '\nexport { ' + name + ' } from "./OOXMLFactory_wml.' + name + '";\n'
+    for name, shards in (sharded_maps or {}).items():
+        for shard, filename in shards:
+            text += '\nimport { ' + shard + ' } from "./OOXMLFactory_wml.' + filename + '";\n'
+        entries = ", ".join("..." + shard for shard, _ in shards)
+        text += f"\n/** Native {name} table in original generation order. */\nexport const {name} = [{entries}] as const;\n"
     if check:
         if not path.exists() or path.read_text() != text:
             raise SystemExit("Writer OOXML native factory tables are stale.")

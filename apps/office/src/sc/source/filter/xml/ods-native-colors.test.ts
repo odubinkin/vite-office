@@ -9,6 +9,10 @@ import { ScDocument } from "../../../inc/document";
 import { ScXMLImport } from "./xmlimprt";
 import { readOdsDocument, writeOdsDocument } from "./xmlwrap";
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { ColorSet } from "../../../../docmodel/inc/theme/ColorSet";
+import { Theme } from "../../../../docmodel/inc/theme/Theme";
+import { ThemeColorType } from "../../../../docmodel/inc/theme/ThemeColorType";
+import { ScXMLExport } from "./xmlexprt";
 it("writes original text and table-cell color groups and retains RGB/automatic/transparent across reopens", /** Checks actual package bytes and item state. @returns Completion. */ async () => {
   const session = createCalcSession(),
     c = session.controller;
@@ -91,5 +95,60 @@ it("preserves source automatic-color precedence in both XML attribute orders and
     expect((pattern?.GetItem(148) as SvxBrushItem).GetColor().toUInt32()).toBe(0x102030);
     expect(diagnostics).toEqual([]);
     doc.DisposeAttributes();
+  }
+});
+
+it("imports ODF theme slots and transformation records with native optional values", /** Uses independently authored named styles alongside a blank ODF theme. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  const namedStyles =
+    'xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"';
+  const importer = new ScXMLImport(doc);
+  try {
+    importer.importStyles(
+      `<office:document-styles ${namedStyles}><office:styles><loext:theme><loext:color/><loext:theme-colors/></loext:theme></office:styles></office:document-styles>`,
+    );
+    expect(doc.theme).toBeUndefined();
+    importer.importStyles(
+      `<office:document-styles ${namedStyles}><office:styles><loext:theme><loext:theme-colors loext:name="Custom"><loext:theme/><loext:color loext:name="unknown" loext:color="#ffffff"/><loext:color loext:name="accent6"/></loext:theme-colors></loext:theme></office:styles></office:document-styles>`,
+    );
+    expect(doc.theme?.name).toBe("");
+    expect(doc.theme?.colorSet?.name).toBe("Custom");
+    importer.importStyles(
+      `<office:document-styles ${namedStyles}><office:automatic-styles><style:style style:name="custom" style:family="table-cell"><style:text-properties fo:color="#123456"><loext:char-complex-color loext:theme-type="accent6" loext:color-type="theme"><loext:color/><loext:transformation loext:type="shade" loext:value="5000"/><loext:transformation loext:value="bad"/></loext:char-complex-color></style:text-properties></style:style></office:automatic-styles></office:document-styles>`,
+    );
+    const item = importer.GetAutoStyle("custom")?.GetItem(109) as SvxColorItem;
+    expect(item.GetValue().toUInt32()).toBe(0x123456);
+    const transforms = item.getComplexColor().getTransformations();
+    expect(transforms).toHaveLength(2);
+    expect(transforms[0]?.mnValue).toBe(5000);
+    expect(transforms[1]?.mnValue).toBe(0);
+  } finally {
+    importer.DisposeStyles();
+    doc.Dispose();
+  }
+});
+
+it("matches the native ODF theme with an empty color-set name", /** Verifies the upstream omission rule and twelve-slot order. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  const restored = new ScDocument();
+  const importer = new ScXMLImport(restored);
+  try {
+    doc.theme = new Theme("Palette");
+    expect(new ScXMLExport(doc).exportStyles()).toContain('<loext:theme loext:name="Palette"/>');
+    const colors = new ColorSet("");
+    colors.add(ThemeColorType.Unknown, new Color(0xff0000));
+    expect(colors.getColor(ThemeColorType.Unknown).equals(COL_AUTO)).toBe(true);
+    colors.add(ThemeColorType.Accent5, new Color(0x999999));
+    doc.theme.colorSet = colors;
+    const styles = new ScXMLExport(doc).exportStyles();
+    expect(styles).toContain("<loext:theme-colors>");
+    expect(styles).toContain('<loext:color loext:name="accent5" loext:color="#999999"/>');
+    expect(styles.match(/<loext:color /g)).toHaveLength(12);
+    importer.importStyles(styles);
+    expect(restored.theme).toBeUndefined();
+  } finally {
+    importer.DisposeStyles();
+    restored.Dispose();
+    doc.Dispose();
   }
 });

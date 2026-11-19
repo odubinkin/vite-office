@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/ww8/docxexport.text.ts",
+    "localSymbols": [
+      "WriteText",
+      "Out_SwTextNode",
+      "Out_SwTableNode"
+    ],
+    "upstreamPath": "sw/source/filter/ww8/wrtw8nds.cxx",
+    "upstreamSymbols": [
+      "MSWordExportBase::OutputTextNode"
+    ],
+    "preservedResponsibilities": [
+      "Native Writer body traversal exports represented runs, paragraph properties and table structure. The existing file dialog uses the same graph.",
+      "Exports native named paragraph and character style references and preserves direct run overrides.",
+      "Routes the native character interoperability item through DOCX attribute output.",
+      "Dispatches original Asian and complex-script fonts for run and style serialization."
+    ],
+    "omittedResponsibilities": [
+      "Nested and floating tables, links, bookmarks and page fidelity remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.text.ts",
+          "marker": "WriteText"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/filter/ww8/wrtw8nds.cxx",
+          "marker": "MSWordExportBase::OutputTextNode"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/ww8/docxexport.text.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "This split preserves the original responsibility and owner while keeping orchestration and its implementation tables within the size limit."
+    }
+  }
+}

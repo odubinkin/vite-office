@@ -12,6 +12,20 @@ import {
 import { ODF_NAMESPACES, XMLToken } from "../../../xmloff/source/core/xmltoken";
 import { parseFastXmlStream } from "./fastparser";
 
+it("delivers actual closing qualified names without synthesizing an element stack", /** Native metadata handlers consume parser names while existing consumers may ignore the argument. @returns Nothing. */ () => {
+  const names: string[] = [];
+  parseFastXmlStream('<p:root xmlns:p="urn:test"><child/></p:root>', {
+    /** Leaves schema admission to the consumer. @returns Nothing. */ open() {},
+    /** Ignores text in this transport assertion. @returns Nothing. */ characters() {},
+    /** Observes the source parser's actual closing name. @param name - Qualified name. @returns Nothing. */ close(
+      name,
+    ) {
+      names.push(name);
+    },
+  });
+  expect(names).toEqual(["child", "p:root"]);
+});
+
 /** Context that records every delivered event. */
 class RecordingContext extends SvXMLImportContext {
   /** Creates a recorder. @param events - Shared event sink. @returns Context. */

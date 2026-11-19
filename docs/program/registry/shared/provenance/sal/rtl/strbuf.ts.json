@@ -1,0 +1,66 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/rtl/strbuf.ts",
+    "status": "mapped",
+    "upstreamPath": "sal/rtl/strbuf.cxx",
+    "localSymbols": [
+      "rtl_stringbuffer_newFromStr_WithLength",
+      "rtl_stringbuffer_newFromStringBuffer",
+      "rtl_stringbuffer_ensureCapacity",
+      "rtl_stringbuffer_insert",
+      "rtl_stringbuffer_remove"
+    ],
+    "upstreamSymbols": [
+      "rtl_stringbuffer_insert",
+      "rtl_stringbuffer_remove"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source responsibilities retain actual RTL/UNO owners and contracts. Explicit disposal, borrowed UTF16 views, pointer-address cells, compiler overload witnesses and realm-local execution bind the browser host; physical native ABI/thread guarantees remain unqualified."
+    },
+    "preservedResponsibilities": [
+      "Original byte-buffer C wrappers from sal/rtl/strbuf.cxx."
+    ],
+    "omittedResponsibilities": [
+      "Independent native compiled module differential, physical ABI/allocator/mutex/thread lifetime and runtime shutdown are unqualified.",
+      "Complete DOCX/XLSX model/filter/package/desktop/mobile UI import-export acceptance remains unfinished; existing browser open/save/autosave/recovery choices are retained."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/rtl/strbuf.ts",
+          "marker": "rtl_stringbuffer_newFromStr_WithLength"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/strbuf.ts",
+          "marker": "rtl_stringbuffer_newFromStringBuffer"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/strbuf.ts",
+          "marker": "rtl_stringbuffer_ensureCapacity"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/strbuf.ts",
+          "marker": "rtl_stringbuffer_insert"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/strbuf.ts",
+          "marker": "rtl_stringbuffer_remove"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sal/rtl/strbuf.cxx",
+          "marker": "rtl_stringbuffer_insert"
+        },
+        {
+          "path": "sal/rtl/strbuf.cxx",
+          "marker": "rtl_stringbuffer_remove"
+        }
+      ]
+    }
+  }
+}

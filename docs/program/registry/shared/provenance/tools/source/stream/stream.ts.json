@@ -23,7 +23,8 @@
       "Task AQF9AG adds source GetStreamEncoding and SetStreamEncoding state for CSV separator detection, plus the consumed UTF-16 BOM, encoded-text and single-character output calls used by AsciiSave.",
       "Adds native ReadChar, ReadUtf16, good and SeekRel operations consumed by SvParser, retaining signed byte references, current stream endianness, byte offsets and EOF only on unsuccessful read. The existing memory-stream binding has no device/pending I/O; generic native stream error/lifetime semantics are not claimed.",
       "Native WriteOString raw byte-view writes, WriteChar byte narrowing and the represented integer WriteNumberAsString instantiations support the RTF export stream. These byte writes preserve embedded NUL and high bytes without UTF8 recoding. Generic float formatting and full stream/device error services are not admitted by these integer/byte operations.",
-      "The original DetectEncoding resets to unknown, checks the BOM, samples at most 4096 bytes, restores the source position and installs a mapped charset and UTF-16 byte order."
+      "The original DetectEncoding resets to unknown, checks the BOM, samples at most 4096 bytes, restores the source position and installs a mapped charset and UTF-16 byte order.",
+      "Existing separate written byte backing is removed. The host text adapter snapshots initial input into the actual native SvMemoryStream on first output, delegates counted byte writes and byte position, and observes its initialized current bytes for all subsequent reads/extraction. Constructor input borrowing/immutability and existing host text/encoding behavior remain; numeric/string/complete native text ABI is not claimed. Actual write/overwrite/extension/readback regression and related CSV/other stream consumers cover the data-owner refactor. Native new byte core remains separately qualified, with no fabricated successful stream provider."
     ],
     "omittedResponsibilities": [
       "General file buffering and native device errors remain outside the consumed memory-stream operations."
@@ -49,6 +50,10 @@
         {
           "path": "apps/office/src/tools/source/stream/stream.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/tools/source/stream/stream.native.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

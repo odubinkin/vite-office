@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/oox/source/drawingml/themefragmenthandler.ts",
+    "upstreamPath": "oox/source/drawingml/themefragmenthandler.cxx",
+    "localSymbols": [
+      "ThemeFragmentHandler"
+    ],
+    "upstreamSymbols": [
+      "ThemeFragmentHandler::onCreateContext",
+      "ThemeFragmentHandler::onStartElement"
+    ],
+    "preservedResponsibilities": [
+      "Parses the relationship-owned Strict and Transitional DrawingML theme, named base color palette, font collections and supplemental fonts."
+    ],
+    "omittedResponsibilities": [
+      "Only literal RGB and system fallback colors are represented. Complex drawing color inputs, object defaults and format matrix import remain outside this owner."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/drawingml/themefragmenthandler.ts",
+          "marker": "ThemeFragmentHandler"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.theme.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-native-colors.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/oox/source/drawingml/themefragmenthandler.cxx",
+          "marker": "ThemeFragmentHandler::onCreateContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/oox/source/drawingml/themefragmenthandler.cxx",
+          "marker": "ThemeFragmentHandler::onStartElement"
+        }
+      ]
+    }
+  }
+}

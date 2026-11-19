@@ -8,9 +8,13 @@ import type { SwDoc } from "../../core/doc/doc";
 import { scalar, text, unicode, unknown } from "../../core/unocore/unocrsrhelper";
 
 const documentSettings = new Map<string, DocumentSettingId>([
+  ["ApplyParagraphMarkFormatToNumbering", "APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING"],
   ["IgnoreTabsAndBlanksForLineCalculation", "IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION"],
   ["TabsRelativeToIndent", "TABS_RELATIVE_TO_INDENT"],
   ["TabAtLeftIndentForParagraphsInList", "TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST"],
+  ["AddExternalLeading", "ADD_EXT_LEADING"],
+  ["DoNotJustifyLinesWithManualBreak", "DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK"],
+  ["AddParaTableSpacing", "PARA_SPACE_MAX"],
 ]);
 
 /** Represented SwXDocumentSettings property owner backed by the actual document manager. */

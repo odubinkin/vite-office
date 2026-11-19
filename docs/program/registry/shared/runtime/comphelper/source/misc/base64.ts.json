@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/comphelper/source/misc/base64.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "xlsx-text-strings",
+    "capabilityIds": [
+      "CAP-593638de-95f4-424a-bc1a-2ba50eb4ce10",
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/comphelper/source/misc/base64.ts#decodeBase64",
+        "vendor/libreoffice-reference/comphelper/source/misc/base64.cxx#Base64::decodeSomeChars",
+        "apps/office/src/comphelper/source/misc/base64.test.ts"
+      ],
+      "justification": "Uses the original complete-quartet table and padding behavior and the host-equivalent standard encoder for digest byte sequences. The offset and output-reallocation contracts of the lower-level streaming decoder are outside this consumed boundary.",
+      "knownViolations": [],
+      "localSymbols": [
+        "decodeBase64",
+        "encodeBase64"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "comphelper/source/misc/base64.cxx",
+      "upstreamSymbols": [
+        "Base64::decodeSomeChars",
+        "Base64::encode"
+      ]
+    }
+  }
+}

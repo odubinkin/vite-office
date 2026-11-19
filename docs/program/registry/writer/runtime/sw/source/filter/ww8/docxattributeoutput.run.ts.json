@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.run.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "writerfilter-docx",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ww8/docxattributeoutput.run.ts",
+        "apps/office/src/sw/source/filter/ww8/docxattributeoutput.text-properties.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx",
+        "apps/office/src/sw/source/filter/ww8/docxexport.theme.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.theme-fonts.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.typography.test.ts"
+      ],
+      "justification": "Original literal run-property order, UTF16 segment/symbol handling and highlight palette mapping move unchanged from the actual DocxAttributeOutput source. Existing public impl_WriteRunText reexport preserves consumers. Immutable literal strings bind original byte constants; no replacement emitter or font/provider DTO. This same-source responsibility split keeps the main owner under1000lines while actual missing native character callbacks are ported. Full native ABI/fields/paragraph/drawing/filter/model/UI closure remains unported or unqualified. Serializes represented character interoperability effects in native Word 2010 run schema order. Outputs native theme references only while the resolved concrete font still matches the source. Serializes the original ordered typographic children and typed attributes from the native Writer character interoperability bag.",
+      "knownViolations": [],
+      "localSymbols": [
+        "impl_WriteRunText",
+        "runOrder",
+        "TransHighlightColor"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/ww8/docxattributeoutput.cxx",
+      "upstreamSymbols": [
+        "impl_WriteRunText",
+        "DocxAttributeOutput::InitCollectedRunProperties",
+        "DocxAttributeOutput::TransHighlightColor"
+      ]
+    }
+  }
+}

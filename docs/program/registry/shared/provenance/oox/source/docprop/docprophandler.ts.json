@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/oox/source/docprop/docprophandler.ts",
+    "upstreamPath": "oox/source/docprop/docprophandler.cxx",
+    "localSymbols": [
+      "OOXMLDocPropHandler"
+    ],
+    "upstreamSymbols": [
+      "EXTPR_TOKEN( Application )"
+    ],
+    "preservedResponsibilities": [
+      "Reads the extended Application value for native Microsoft generator detection through the existing XML fragment relationship."
+    ],
+    "omittedResponsibilities": [
+      "The remaining OOXML metadata and OLE property set responsibilities are tracked independently."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/docprop/docprophandler.ts",
+          "marker": "OOXMLDocPropHandler"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/worksheethelper.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/oox/source/docprop/docprophandler.cxx",
+          "marker": "EXTPR_TOKEN( Application )"
+        }
+      ]
+    }
+  }
+}

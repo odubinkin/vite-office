@@ -1,0 +1,79 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-51a0ad89-10cd-4c20-9e2e-fcc42760f38d",
+    "capabilityId": "CAP-51a0ad89-10cd-4c20-9e2e-fcc42760f38d",
+    "suite": "shared",
+    "subsystem": "oox-value-ranges",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original signed32 range values, inclusive predicates and the original lower-bound/vector insertion order, including WRITER622/CALC686, are implemented. Twelve unchanged compiled native C++ witnesses match; source-created unsorted vectors are not passed to another lower_bound."
+    ],
+    "capability": "Original OOXML signed value ranges and native insertion behavior",
+    "gaps": [
+      "Other container helpers, signed-overflow and physical native iterator/allocator/ABI/thread domains, complete document/filter/UI behavior and independent whole-module parity remain unqualified or unfinished."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "oox/source/helper/containerhelper.cxx",
+          "marker": "ValueRangeSet::insert"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/subsequent_export_test2.cxx",
+          "marker": "testPivotCacheAfterExportXLSX"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/oox/helper/containerhelper.hxx",
+          "marker": "ValueRange"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/oox/inc/helper/containerhelper.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/oox/source/helper/containerhelper.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/oox/source/helper/containerhelper.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-oox-sheet-data-values.md",
+          "marker": "# OOXML sheet-data value prerequisites"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual original value owners use existing JavaScript vectors and RTL/Calc objects while physical C++ allocator/iterator/ABI and full filter/UI domains remain explicitly unqualified."
+    },
+    "scopeLimitations": [
+      "Other container helpers, signed-overflow and physical native iterator/allocator/ABI/thread domains, complete document/filter/UI behavior and independent whole-module parity remain unqualified or unfinished.",
+      "No dedicated original unit test for these value helpers was found in bounded source QA searches; source-derived critical cases and the explicit compiled-native range witnesses are not described as full upstream fixture replay.",
+      "The upstream pivot-cache QA reference is downstream context for the real PivotCache::maColSpans consumer of ValueRangeSet, not a direct unit test or a claimed executed fixture; pivot-cache import is outside this value checkpoint."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "oox-value-range-insertion"
+  }
+}

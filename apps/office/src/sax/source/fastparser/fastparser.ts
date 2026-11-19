@@ -11,7 +11,7 @@ import { WeakImplHelper } from "../../../cppuhelper/inc/implbase";
 import { DisposedException } from "../../../cppu/inc/com/sun/star/lang/DisposedException";
 import { SAXException } from "../../../cppu/inc/com/sun/star/xml/sax/SAXException";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
-import { Entity, decodedChunks, XmlByteError } from "./streaminput";
+import { createInputEntity, decodedChunks, XmlByteError } from "./streaminput";
 import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 /** Original UTF16 view binding for host diagnostics, without normalization. @param value - Borrowed actual string. @returns Same UTF16 units. */
 function stringView(value: OUStringConstReference): string {
@@ -50,7 +50,7 @@ export interface FastXmlHandler {
     resolvePrefix: (prefix: string) => string | undefined,
   ): void;
   characters(value: string): void;
-  close(): void;
+  close(name: string): void;
 }
 
 /** Drives SAX callbacks with bounded resources. @param xml - Decoded XML chunks or an actual native input source. @param handler - Import event receiver. @param options - Limits and cancellation. @param afterChunk - Optional native16KiB input checkpoint and current host locator. @param onParser - Active host lexical context binding. @param allowEmpty - Original byte-input empty-source behavior. @returns Nothing. */
@@ -63,7 +63,7 @@ export function parseFastXmlStream(
   allowEmpty = false,
 ): void {
   if (xml instanceof InputSource) {
-    const entity = new Entity(xml);
+    const entity = createInputEntity(xml);
     try {
       parseFastXmlStream(decodedChunks(entity), handler, options, afterChunk, onParser, true);
     } finally {
@@ -141,10 +141,12 @@ export function parseFastXmlStream(
   parser.on("processinginstruction", checkpoint);
   parser.on(
     "closetag",
-    /** Closes one element. @returns Nothing. */ () => {
+    /** Closes one element with the parser's actual qualified name. @param tag - Closed source tag. @returns Nothing. */ (
+      tag: SaxesTagNS,
+    ) => {
       checkpoint();
       depth--;
-      handler.close();
+      handler.close(tag.name);
     },
   );
   let readFailure = false;
@@ -337,7 +339,7 @@ export class FastSaxParser {
     const document = this.handler,
       tokenHandler = this.tokenHandler,
       namespaces = new Map(this.namespaces),
-      owned = xml instanceof InputSource ? new Entity(xml) : null;
+      owned = xml instanceof InputSource ? createInputEntity(xml) : null;
     const previous = this.entity;
     if (owned) this.entity = { source: owned.maStructSource, parser: null };
     const publicId = owned ? stringView(owned.maStructSource.sPublicId) : "",

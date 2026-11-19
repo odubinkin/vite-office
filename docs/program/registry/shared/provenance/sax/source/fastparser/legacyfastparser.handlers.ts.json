@@ -1,0 +1,91 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sax/source/fastparser/legacyfastparser.handlers.ts",
+    "status": "mapped",
+    "upstreamPath": "sax/source/fastparser/legacyfastparser.cxx",
+    "localSymbols": [
+      "NamespaceDefine",
+      "NamespaceHandler",
+      "CallbackDocumentHandler"
+    ],
+    "upstreamSymbols": [
+      "NamespaceHandler::registerNamespace",
+      "NamespaceHandler::getNamespaceURI",
+      "NamespaceHandler::addNSDeclAttributes",
+      "CallbackDocumentHandler::startFastElement",
+      "CallbackDocumentHandler::startUnknownElement",
+      "CallbackDocumentHandler::getNamespacePrefixFromToken",
+      "CallbackDocumentHandler::endFastElement",
+      "CallbackDocumentHandler::createFastChildContext",
+      "CallbackDocumentHandler::characters"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual RTL/UNO owners retain source contracts. Explicit scope destruction and counted views bind logical address storage; physical C++ ABI, native logging/mutex/allocator and complete application parity remain unqualified."
+    },
+    "preservedResponsibilities": [
+      "Original actual WeakImplHelper namespace queue and XFastDocumentHandler adapter with real acquired document/token/namespace owners, self child-context identities, declaration/known/unknown attribute order, Unicode names/values and nullable document guards. Namespace URI retrieval deliberately remains empty; namespace token high bits deliberately remain unshifted as original. CALC580/WRITER517 and CALC581/WRITER518 record these findings with scope qualification. Actual registered Writer/token/sequence stream and source Entity tests preserve behavior without replacement callbacks or fake providers."
+    ],
+    "omittedResponsibilities": [
+      "SaxLegacyFastParser wrapper/service construction and original FastParser/Expat service paths are separate and unfinished; no alias or bootstrap registration is manufactured. Positive high-bit-prefix conversion with another real token producer, complete parser QA/application failure and independent compiled native/physical ABI/thread differential remain unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sax/source/fastparser/legacyfastparser.handlers.ts",
+          "marker": "NamespaceDefine"
+        },
+        {
+          "path": "apps/office/src/sax/source/fastparser/fastparser.entity.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sax/source/fastparser/legacyfastparser.cxx",
+          "marker": "NamespaceHandler::registerNamespace"
+        },
+        {
+          "path": "sax/source/fastparser/legacyfastparser.cxx",
+          "marker": "NamespaceHandler::getNamespaceURI"
+        },
+        {
+          "path": "sax/source/fastparser/legacyfastparser.cxx",
+          "marker": "NamespaceHandler::addNSDeclAttributes"
+        },
+        {
+          "path": "sax/source/fastparser/legacyfastparser.cxx",
+          "marker": "CallbackDocumentHandler::startFastElement"
+        },
+        {
+          "path": "sax/source/fastparser/legacyfastparser.cxx",
+          "marker": "CallbackDocumentHandler::startUnknownElement"
+        },
+        {
+          "path": "sax/source/fastparser/legacyfastparser.cxx",
+          "marker": "CallbackDocumentHandler::getNamespacePrefixFromToken"
+        },
+        {
+          "path": "sax/source/fastparser/legacyfastparser.cxx",
+          "marker": "CallbackDocumentHandler::endFastElement"
+        },
+        {
+          "path": "sax/source/fastparser/legacyfastparser.cxx",
+          "marker": "CallbackDocumentHandler::createFastChildContext"
+        },
+        {
+          "path": "sax/source/fastparser/legacyfastparser.cxx",
+          "marker": "CallbackDocumentHandler::characters"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sax/source/fastparser/legacyfastparser.handlers.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original private value/context/adapter responsibilities are split from their pinned translation unit without changing actual receiver identity, ownership or introducing alternate parser state. The complete parser/service remains a separate unfinished responsibility."
+    }
+  }
+}

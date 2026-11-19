@@ -5,6 +5,7 @@ import { ScDirection } from "../../../inc/global";
 import { ScRange, type ScAddress } from "../../../inc/address";
 import { ScSheetLimits } from "../../../inc/sheetlimits";
 import type { ScSingleRefData } from "../../../inc/refdata";
+import { MergeArray } from "./token.matrix";
 import {
   ScSingleRefToken,
   ScDoubleRefToken,
@@ -483,9 +484,14 @@ const operators = new Set<OpCode>([
   OpCode.ocPercentSign,
   OpCode.ocStop,
   OpCode.ocSum,
+  OpCode.ocPi,
+  OpCode.ocTrue,
+  OpCode.ocFalse,
   OpCode.ocSumSQ,
   OpCode.ocProduct,
   OpCode.ocAverage,
+  OpCode.ocConcat,
+  OpCode.ocAmpersand,
   OpCode.ocRange,
 ]);
 /** Calc array retains document-independent sheet limits with ordinary JS references. */
@@ -829,9 +835,23 @@ export class ScTokenArray extends FormulaTokenArray {
   }
   /** Appends actual native separator/byte token classes for supported arithmetic opcodes. @param code - Opcode. @returns Appended token or null. */
   AddOpCode(code: OpCode): FormulaToken | null {
-    if (code === OpCode.ocOpen || code === OpCode.ocClose || code === OpCode.ocSep)
+    if (
+      code === OpCode.ocOpen ||
+      code === OpCode.ocClose ||
+      code === OpCode.ocSep ||
+      (code >= OpCode.ocArrayOpen && code <= OpCode.ocArrayColSep)
+    )
       return this.Add(new FormulaToken(StackVar.svSep, code));
     if (!operators.has(code)) throw new Error("Calc opcode construction is not implemented");
     return this.Add(new FormulaByteToken(code));
+  }
+
+  /** Replaces only a validated literal suffix with the actual matrix token. @returns Added matrix token or null. */
+  override MergeArray(): FormulaToken | null {
+    if (!this.pCode) return null;
+    const result = MergeArray(this.pCode, this.nLen);
+    if (!result) return null;
+    this.nLen = this.pCode.length = result.start;
+    return this.Add(new ScMatrixToken(result.matrix));
   }
 }

@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/comphelper/source/misc/base64.ts",
+    "status": "mapped",
+    "upstreamPath": "comphelper/source/misc/base64.cxx",
+    "localSymbols": [
+      "decodeBase64",
+      "encodeBase64"
+    ],
+    "upstreamSymbols": [
+      "Base64::decodeSomeChars",
+      "Base64::encode"
+    ],
+    "preservedResponsibilities": [
+      "Uses the original complete-quartet table and padding behavior and the host-equivalent standard encoder for digest byte sequences."
+    ],
+    "omittedResponsibilities": [
+      "The offset and output-reallocation contracts of the lower-level streaming decoder are outside this consumed boundary."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/comphelper/source/misc/base64.ts",
+          "marker": "decodeBase64"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/misc/base64.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/comphelper/source/misc/base64.cxx",
+          "marker": "Base64::decodeSomeChars"
+        },
+        {
+          "path": "vendor/libreoffice-reference/comphelper/source/misc/base64.cxx",
+          "marker": "Base64::encode"
+        }
+      ]
+    }
+  }
+}

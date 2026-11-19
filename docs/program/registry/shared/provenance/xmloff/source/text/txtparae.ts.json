@@ -168,6 +168,14 @@
         {
           "path": "apps/office/src/xmloff/source/text/txtparae.ts",
           "marker": "XMLTextParagraphMarker"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docx-paragraph-marker.test.ts",
+          "marker": "retains the original unocore marker-format regression"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-page-stories.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -278,6 +286,10 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx",
           "marker": "XMLTextParagraphExport::_exportTextFrame"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx",
+          "marker": "XMLTextParagraphExport::exportParagraph"
         }
       ]
     },
@@ -291,7 +303,8 @@
       "XMLTextExportSource",
       "exportTextParagraphs",
       "exportText",
-      "XMLTextParagraphMarker"
+      "XMLTextParagraphMarker",
+      "exportParagraphElement"
     ],
     "omittedResponsibilities": [
       "Display-name mappings, same-container duplicate selection, full document named-style ownership, cycles, global null-context handling and remaining defaults/contracts are individually unverified. The named export list-base bridge is validly container-scoped but is not a claim of complete native named-style architecture."
@@ -313,7 +326,11 @@
       "Task 202610231745-0YVMQG routes the represented ODT text, paragraph properties, common styles, numbering, bookmarks and cell text through shared XMLTextImportHelper and real Writer text/cursor/style/service owners. Removes SwXMLParagraphTarget and direct ordinary filter item construction. Native table structure and end-document node adjustment retain Writer-specific core responsibility. Character automatic styles use document-pooled handles and CharAutoStyleName; common versus automatic numbering retain separate ownership and export streams. Font scalar members, paragraph controls, page, line-number and consumed property contracts are exercised by focused API/ODT tests. Soft page break XML is ignored as in pinned XMLParaContext. Opaque automatic rule and style names are document-local identities. Full engine/UNO services, unrepresented style families/properties, layout and DOCX remain outside this slice; prior semantic statuses and registered I/O deviations are unchanged.",
       "TaskFSR9QK connects represented native optional page-number Any/member and XML handler contracts to lossless browser records. XML_NUMBER16_AUTO signed16 saturation/void/signed export are preserved;full descriptor/style/native services remain unported.",
       "S3HW1E adds represented paragraph drawing fill attributes using original fill-style/color/negative-percent conversion. Existing portable style identity serialization is split into txtparae-properties.ts and includes these direct fields.",
-      "Emits original paragraph and character-anchored frame portions within the text and list export pass."
+      "Emits original paragraph and character-anchored frame portions within the text and list export pass.",
+      "Writes named character spans outside the direct automatic span. The automatic text style pool reserves the native common names before allocating T-numbered style names.",
+      "Registers the paragraph marker as a text automatic style and emits the extended ODF marker-style-name independently of visible runs.",
+      "Emits the shared ODF character property element, retaining the source-native complex-color child in deduplicated text and paragraph styles.",
+      "Collects shared paragraph and character automatic styles for each additional master-page text section."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/text/txtparae.cxx",
@@ -321,7 +338,8 @@
       "HyperlinkData::HyperlinkData",
       "HyperlinkData::addHyperlinkAttributes",
       "HyperlinkData::exportEvents",
-      "BoundFrames::Fill"
+      "BoundFrames::Fill",
+      "XMLTextParagraphExport::exportParagraph"
     ],
     "rationale": " TaskDVQ9ES extends the consumed paragraph style path with editable raw-name acceptance, full pool-name lookup beyond displayed rows, actual document-shell UpdateStyle/MakeByExample, point-node FillByEx filtering, first selected text collection lookup, native grouped update and separate attribute/create/apply histories, Sfx ignored asynchronous naming and existing collection deletion/follow correction. Source quirks WRITER067/068 are preserved. Named-style references are XML-escaped during paragraph/list body export. The Style panel retains native command order; FormatPaintbrush and standalone Writer ResetAttributes remain disabled because their original execute paths are not implemented. This corrects the initial task assumption that ResetAttributes was already registered; the private style-application reset is a distinct owner. Wider style families/masks/hidden default table, complete style-box popup/completion/preview/clear/more/platform services and complete UI/core parity remain unverified. Existing save/open/autosave/no-recovery deviations and classification/default statuses are unchanged. TaskQZAHNT: TaskQZAHNT: Nonempty raw bookmark names,including whitespace-only names,are preserved at export instead of trimming validity. Native XMLTextMarkImportContext checks emptiness without trimming;real ODT round-trip verifies names and positions. No general ODF validation promotion."
   },

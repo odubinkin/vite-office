@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/oox/source/drawingml/color.ts",
+    "upstreamPath": "oox/source/drawingml/color.cxx",
+    "localSymbols": [
+      "applyExcelTint"
+    ],
+    "upstreamSymbols": [
+      "Color::addExcelTintTransformation",
+      "Color::toHsl",
+      "Color::toRgb"
+    ],
+    "preservedResponsibilities": [
+      "Applies the original DrawingML integer HSL conversion and Excel modulation and offset for the native numeric RGB result."
+    ],
+    "omittedResponsibilities": [
+      "Only the Excel luminance transform path is consumed. All other drawing color modes and transformation operators remain outside this owner."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/drawingml/color.ts",
+          "marker": "applyExcelTint"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.theme.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-native-colors.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/oox/source/drawingml/color.cxx",
+          "marker": "Color::addExcelTintTransformation"
+        },
+        {
+          "path": "vendor/libreoffice-reference/oox/source/drawingml/color.cxx",
+          "marker": "Color::toHsl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/oox/source/drawingml/color.cxx",
+          "marker": "Color::toRgb"
+        }
+      ]
+    }
+  }
+}

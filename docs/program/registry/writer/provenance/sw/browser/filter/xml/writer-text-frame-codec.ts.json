@@ -18,6 +18,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-page-story-codec.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": []
@@ -25,7 +29,8 @@
     "rationale": "Transports original HTML-created Writer text fly frames by live section content, original anchor and direct native item records. Reconstruction uses the existing native MakeFlySection path and reconnects bookmark text owners.",
     "responsibilities": [
       "Transports original HTML-created Writer text fly frames by live section content, original anchor and direct native item records. Reconstruction uses the existing native MakeFlySection path and reconnects bookmark text owners.",
-      "Uses the original admitted fly item ranges, including native drawing fill attributes."
+      "Uses the original admitted fly item ranges, including native drawing fill attributes.",
+      "Uses the common native section block transfer while preserving the existing text fly record and bookmark/anchor ordering."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

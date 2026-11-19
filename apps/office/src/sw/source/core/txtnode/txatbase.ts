@@ -11,6 +11,7 @@ import {
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { createWriterTextColorItem } from "../attr/swatrset";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
+import { SvxKerningItem } from "../../../../editeng/inc/kernitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
 
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
@@ -42,6 +43,7 @@ import {
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_CTL_WEIGHT,
   RES_CHRATR_HIGHLIGHT,
+  RES_CHRATR_KERNING,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WORDLINEMODE,
@@ -69,6 +71,8 @@ export interface WriterCharacterAttributes {
   readonly fontFamily?: string;
   /** Explicit font height in twips; absent means the paragraph style or document default. */
   readonly fontSizeTwips?: number;
+  /** Native signed character spacing in twips. */
+  readonly kerningTwips?: number;
   /** CSS-compatible explicit highlight color or Writer's transparent marker. */
   readonly highlight?: string;
   /** Whether the text uses a bold font weight. */
@@ -412,6 +416,8 @@ export function createSwFormatAutoFormat(
   )
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
       items.Put(new SvxFontHeightItem(attributes.fontSizeTwips, 100, which));
+  if (attributes.kerningTwips !== undefined && attributes.kerningTwips !== inherited.kerningTwips)
+    items.Put(new SvxKerningItem(attributes.kerningTwips, RES_CHRATR_KERNING));
   if (attributes.highlight !== inherited.highlight && attributes.highlight !== undefined)
     items.Put(createWriterHighlightItem(attributes.highlight));
   if (attributes.bold !== inherited.bold)
@@ -492,6 +498,9 @@ export function projectWriterCharacterAttributes(
   const fontSize =
     items.GetItemIfSet(RES_CHRATR_FONTSIZE, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_FONTSIZE, true);
+  const kerning =
+    items.GetItemIfSet(RES_CHRATR_KERNING, false) ??
+    inherited?.GetItemIfSet(RES_CHRATR_KERNING, true);
   const color =
     items.GetItemIfSet(RES_CHRATR_COLOR, false) ?? inherited?.GetItemIfSet(RES_CHRATR_COLOR, true);
   const highlight =
@@ -517,6 +526,7 @@ export function projectWriterCharacterAttributes(
     ...(color instanceof SvxColorItem ? { color: writerTextColorValue(color) } : {}),
     ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
     ...(fontSize instanceof SvxFontHeightItem ? { fontSizeTwips: fontSize.GetHeight() } : {}),
+    ...(kerning instanceof SvxKerningItem ? { kerningTwips: kerning.GetValue() } : {}),
     ...(highlight instanceof SvxBrushItem
       ? { highlight: writerHighlightColorValue(highlight) }
       : {}),

@@ -1,10 +1,16 @@
 /** @fileoverview Bounded native-value ODF character handoff for text export/import; independent UNO script scalars,underline properties and original font metadata are preserved. No browser boolean formatting model or substitute UNO provider. */
+import type { LanguageType } from "../../../i18nlangtag/inc/lang";
 import type { FontSlant } from "../../../offapi/com/sun/star/awt/FontSlant";
 import type { FontPitch } from "../../../tools/inc/fontenum";
 import type { rtl_TextEncoding } from "../../../sal/inc/rtl/textenc";
+import type { OdfThemeColor } from "./XMLComplexColorContext";
 /** Direct character properties supported by the bounded text exporter. */
 export interface OdfCharacterProperties {
   readonly color?: string;
+  readonly themeColor?: OdfThemeColor;
+  readonly language?: LanguageType;
+  readonly languageAsian?: LanguageType;
+  readonly languageComplex?: LanguageType;
   readonly fontFamily?: string;
   readonly fontFamilyGeneric?: string;
   readonly fontStyleName?: string;
@@ -44,6 +50,8 @@ export interface OdfCharacterProperties {
   /** Original shared line-decoration mode and automatic kerning bool properties. */
   readonly wordMode?: boolean;
   readonly autoKerning?: boolean;
+  /** Original signed UNO CharKerning in hundredths of a millimetre. */
+  readonly kerning?: number;
 }
 
 /** Resolves a complete font declaration to its document-local ODF name. */

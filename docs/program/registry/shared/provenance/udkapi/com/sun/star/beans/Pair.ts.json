@@ -8,7 +8,9 @@
     "upstreamPath": "udkapi/com/sun/star/beans/Pair.idl",
     "localSymbols": [
       "PairStringString",
-      "cppu_detail_getUnoType_PairStringString"
+      "cppu_detail_getUnoType_PairStringString",
+      "PairStringLong",
+      "cppu_detail_getUnoType_PairStringLong"
     ],
     "upstreamSymbols": [
       "Pair",
@@ -16,7 +18,8 @@
       "Second"
     ],
     "preservedResponsibilities": [
-      "Complete original SaxWriterHelper actual stream/1024-byte native Sequence cache, pointer/linefeed/delayed-tag/replacement state, original UTF16-to-UTF8 normalization and separate byte estimation, recursive byte overflow/flush, original tag/attribute/PI/CDATA/comment formatting, custom entity copy/sort/first-prefix matching, final shrink and same-stream pointer refresh are ported under normal NDEBUG/non-DBG_UTIL profile. Split functions bind the same original helper receiver and actual source members. Stream acquisition precedes sequence construction with source member unwind; real IOException is captured through the actual exception ABI into native SAXException. Consumed Pair<OUString,OUString> has the exact original instantiated UNO name, parameter flags, real stable RTL fields, Any/Sequence transport, move/copy/destruction and shared type registration. Tests use real registered platform exception execution, OSequenceOutputStream and AttributeList; actual helper output executes in Chromium main and DOM-free Worker. Source nontermination/exact-full replacement pointer quirks and estimation/marker behavior are retained, not repaired. Native ABI/allocator/physical pointer/debug assertions/equal-key std::sort/shared-memory and other Pair instantiations remain unqualified. Full SAXWriter component/SDK/service/legacy carrier replacement and original service-level testwriter functional/performance QA are pending, not advertised as a passing full port. Sfx metadata service and final DOCX/XLSX core/shell/UI acceptance remain incomplete; no fake Writer/provider/type/default/value generator or private-state patch is supplied."
+      "Complete original SaxWriterHelper actual stream/1024-byte native Sequence cache, pointer/linefeed/delayed-tag/replacement state, original UTF16-to-UTF8 normalization and separate byte estimation, recursive byte overflow/flush, original tag/attribute/PI/CDATA/comment formatting, custom entity copy/sort/first-prefix matching, final shrink and same-stream pointer refresh are ported under normal NDEBUG/non-DBG_UTIL profile. Split functions bind the same original helper receiver and actual source members. Stream acquisition precedes sequence construction with source member unwind; real IOException is captured through the actual exception ABI into native SAXException. Consumed Pair<OUString,OUString> has the exact original instantiated UNO name, parameter flags, real stable RTL fields, Any/Sequence transport, move/copy/destruction and shared type registration. Tests use real registered platform exception execution, OSequenceOutputStream and AttributeList; actual helper output executes in Chromium main and DOM-free Worker. Source nontermination/exact-full replacement pointer quirks and estimation/marker behavior are retained, not repaired. Native ABI/allocator/physical pointer/debug assertions/equal-key std::sort/shared-memory and other Pair instantiations remain unqualified. Full SAXWriter component/SDK/service/legacy carrier replacement and original service-level testwriter functional/performance QA are pending, not advertised as a passing full port. Sfx metadata service and final DOCX/XLSX core/shell/UI acceptance remain incomplete; no fake Writer/provider/type/default/value generator or private-state patch is supplied.",
+      "Consumed original Pair<OUString,sal_Int32> specialization now supplies normal Pair<string,long> typelib metadata/parameter flags, native RTL/signed32 addressed fields, borrowed aggregate view, constructors/equality/copy/move/destruction, actual Any extraction and Sequence COW copies. Memberwise string move assignment retains source RTL pointer swap; scalar source remains unchanged. Only these concrete instantiations are claimed, not arbitrary template generation or physical C++ ABI."
     ],
     "omittedResponsibilities": [
       "Full SAXWriter state machine/SDK/registration/original service QA and legacy carrier replacement remain pending.",
@@ -31,6 +34,10 @@
         },
         {
           "path": "apps/office/src/sax/source/expatwrap/saxwriter.helper.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/Pair.test.ts",
           "marker": "@fileoverview"
         }
       ],

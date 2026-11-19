@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/core/tool/rangenam.ts",
+    "localSymbols": [
+      "ScRangeData",
+      "ScRangeName",
+      "InsertRangeNames"
+    ],
+    "upstreamPath": "sc/source/core/tool/rangenam.cxx",
+    "upstreamSymbols": [
+      "ScRangeName::insert",
+      "ScRangeData::CompileRangeData"
+    ],
+    "preservedResponsibilities": [
+      "Native name storage owns indexed token arrays and compiles all names after their scope indexes exist."
+    ],
+    "omittedResponsibilities": [
+      "Editing dialogs, structural name updates, and advanced formula types remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/rangenam.ts",
+          "marker": "ScRangeData"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xename.test.ts",
+          "marker": "preserves a forward name"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/rangenam.cxx",
+          "marker": "ScRangeName::insert"
+        }
+      ]
+    }
+  }
+}

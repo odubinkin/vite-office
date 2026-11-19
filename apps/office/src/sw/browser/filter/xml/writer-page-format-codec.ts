@@ -4,14 +4,9 @@ import {
   validateWriterPageDescriptor,
 } from "../../../source/core/layout/pagedesc";
 import type { SwDoc } from "../../../source/core/doc/doc";
-import { RES_TEXTGRID } from "../../../inc/hintids";
+import { RES_FOOTER, RES_HEADER, RES_TEXTGRID } from "../../../inc/hintids";
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
-import {
-  encodeSfxItemSet,
-  encodeSfxPoolItem,
-  decodeSfxItemSet,
-  decodeSfxPoolItem,
-} from "./item-codec";
+import { encodeSfxPoolItem, decodeSfxItemSet, decodeSfxPoolItem } from "./item-codec";
 
 /** Page geometry/follow identity stays in its existing record; this record carries canonical item deltas and usage flags. */
 export interface WriterPageFormatRecord {
@@ -36,7 +31,13 @@ export function encodePageFormats(page: SwPageDesc): WriterPageFormatRecord {
     formats: [page.GetMaster(), page.GetLeft(), page.GetFirstMaster(), page.GetFirstLeft()].map(
       /** Serializes native direct items only. @param format - Frame. @returns Snapshots. */ (
         format,
-      ) => encodeSfxItemSet(format.GetAttrSet()),
+      ) => {
+        const items: SfxPoolItemSnapshot[] = [];
+        for (const item of format.GetAttrSet().entries())
+          if (item.Which() !== RES_HEADER && item.Which() !== RES_FOOTER)
+            items.push(encodeSfxPoolItem(item));
+        return items;
+      },
     ),
   };
 }
@@ -92,6 +93,8 @@ export function restorePageFormats(page: SwPageDesc, candidate: unknown): void {
         typeof item.which !== "number" ||
         !Number.isInteger(item.which) ||
         seen.has(item.which) ||
+        item.which === RES_HEADER ||
+        item.which === RES_FOOTER ||
         !frame
           .GetAttrSet()
           .GetRanges()

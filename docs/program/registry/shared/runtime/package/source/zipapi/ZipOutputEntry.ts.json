@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/zipapi/ZipOutputEntry.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-zip-output-entry",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f",
+      "CAP-60482065-6ac7-4bdf-bde2-6ccea2e91847",
+      "CAP-4ddbda7f-f247-4986-8e38-1f88dea4ff29"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/source/zipapi/ZipOutputEntry.ts",
+        "apps/office/src/package/source/zipapi/ZipOutputEntry.test.ts",
+        "apps/office/src/package/source/zipapi/ZipOutputStream.test.ts",
+        "apps/office/src/package/source/zippackage/ZipPackageStream.save.test.ts",
+        "docs/program/native-package-stream-save.md",
+        "scripts/fixtures/native-package-save-probe.ts",
+        "apps/office/src/package/source/zipapi/ZipOutputEntryInThread.test.ts",
+        "docs/program/native-zip-background-task.md"
+      ],
+      "justification": "Owns ordinary DEFLATE, the original temporary-file task and the blocking block-compression entry using actual UNO streams, CRC32 and ZipEntry. Retains input/output counts, CRC update order, known-size diagnostics, the source data-descriptor behavior and original exception handling and ownership in the entry task.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ZipOutputEntryBase",
+        "ZipOutputEntry",
+        "ZipOutputEntryInThread",
+        "ZipOutputEntryParallel"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/zipapi/ZipOutputEntry.cxx",
+      "upstreamSymbols": [
+        "ZipOutputEntryBase::closeEntry",
+        "ZipOutputEntry::writeStream",
+        "ZipOutputEntry::doDeflate",
+        "ZipOutputEntryInThread",
+        "ZipOutputEntryParallel::writeStream"
+      ]
+    }
+  }
+}

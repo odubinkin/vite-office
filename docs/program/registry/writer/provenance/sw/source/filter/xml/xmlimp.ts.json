@@ -224,6 +224,14 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/native-rtf-tab-settings-roundtrip.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.default-tabs.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-page-stories.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -414,7 +422,8 @@
       "getAutoStyle",
       "CreateStylesContext",
       "beginTextFrame",
-      "endTextFrame"
+      "endTextFrame",
+      "resolveNamedCharacterStyle"
     ],
     "omittedResponsibilities": [
       "Display-name mappings, same-container duplicate selection, full document named-style ownership, cycles, global null-context handling and remaining defaults/contracts are individually unverified. The named export list-base bridge is validly container-scoped but is not a claim of complete native named-style architecture.",
@@ -453,7 +462,11 @@
       "Task 202610231745-0YVMQG routes the represented ODT text, paragraph properties, common styles, numbering, bookmarks and cell text through shared XMLTextImportHelper and real Writer text/cursor/style/service owners. Removes SwXMLParagraphTarget and direct ordinary filter item construction. Native table structure and end-document node adjustment retain Writer-specific core responsibility. Character automatic styles use document-pooled handles and CharAutoStyleName; common versus automatic numbering retain separate ownership and export streams. Font scalar members, paragraph controls, page, line-number and consumed property contracts are exercised by focused API/ODT tests. Soft page break XML is ignored as in pinned XMLParaContext. Opaque automatic rule and style names are document-local identities. Full engine/UNO services, unrepresented style families/properties, layout and DOCX remain outside this slice; prior semantic statuses and registered I/O deviations are unchanged.",
       "Releases all saved nested table cursors when the shared XML import owner ends or fails.",
       "Resolves the original graphic style deltas and opens the actual Writer frame text owner at the SAX anchor.",
-      "Applies the namespace-qualified native configuration vector before styles and content."
+      "Applies the namespace-qualified native configuration vector before styles and content.",
+      "Finishes common character formats through XStyle before the text body and retains native XML import mode while applying the ordered named layers.",
+      "Attaches the real ODF named theme to the document graph.",
+      "Applies the ODF default style tab distance to the original Writer UNO text-default owner.",
+      "Applies named styles before master-page text and restores the normal cursor and page layout association."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmlimp.cxx",

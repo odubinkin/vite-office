@@ -16,6 +16,9 @@ export function StartPointer(
     doc = data.GetDocument(),
     marks = data.GetMarkData();
   if (this.inputHandler.IsFormulaMode()) {
+    if (kind === "cell" && !view.CanSelectCell(position.Col(), position.Row(), position.Tab()))
+      return false;
+    data.ResetOldCursor();
     const first = new ScAddress(
       kind === "row" ? 0 : position.Col(),
       kind === "column" ? 0 : position.Row(),
@@ -32,6 +35,9 @@ export function StartPointer(
       );
   } else {
     if (!this.Commit()) return false;
+    if (kind === "cell" && !view.CanSelectCell(position.Col(), position.Row(), position.Tab()))
+      return false;
+    data.ResetOldCursor();
     // Existing keyboard/command marks are adopted by the original Own block state.
     if (!view.IsBlockMode() && (marks.IsMarked() || marks.IsMultiMarked())) {
       const range = new ScRange();
@@ -75,6 +81,10 @@ export function StartPointer(
 export function MovePointer(this: CalcViewController, position: ScAddress): void {
   const kind = this["pointerKind"];
   if (!kind) return;
+  const view = this["viewShell"];
+  if (kind === "cell" && !view.CanSelectCell(position.Col(), position.Row(), position.Tab()))
+    return;
+  if (kind === "cell") this.viewData.ResetOldCursor();
   if (this.inputHandler.IsFormulaMode())
     this.DragReference(
       new ScAddress(
@@ -84,7 +94,6 @@ export function MovePointer(this: CalcViewController, position: ScAddress): void
       ),
     );
   else {
-    const view = this["viewShell"];
     if (kind === "cell") {
       view.GetFunctionSet().CreateAnchor();
       view.GetFunctionSet().SetCursorAtCell(position.Col(), position.Row(), false);

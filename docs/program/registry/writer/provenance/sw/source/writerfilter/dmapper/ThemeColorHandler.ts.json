@@ -41,7 +41,8 @@
       "lcl_sprm"
     ],
     "preservedResponsibilities": [
-      "Original separate color/index/tint/shade defaults and attribute receiver; modifier callback remains inert. Color-scheme/theme resolution belongs to the mapper and is still pending."
+      "Original separate color/index/tint/shade defaults and attribute receiver; modifier callback remains inert. Color-scheme/theme resolution belongs to the mapper and is still pending.",
+      "Converts native Word color values to independent RGB and XComplexColor properties, preserving tint-before-shade order and original theme usage."
     ],
     "omittedResponsibilities": [
       "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",

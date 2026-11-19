@@ -208,6 +208,14 @@
         {
           "path": "apps/office/src/sw/source/core/bastyp/native-character-defaults.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.text-properties.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/inc/fmthdft.native.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -340,7 +348,12 @@
       "CH_TXT_ATR_INPUTFIELDSTART",
       "RES_FLY_SPLIT",
       "RES_FOLLOW_TEXT_FLOW",
-      "RES_WRAP_INFLUENCE_ON_OBJPOS"
+      "RES_WRAP_INFLUENCE_ON_OBJPOS",
+      "RES_FLTRATTR_END",
+      "RES_TBX_DUMMY",
+      "HINT_END",
+      "INVALID_HINT",
+      "RES_WHICHHINT_END"
     ],
     "omittedResponsibilities": [
       "Upstream obligations outside RES_CHRATR_BEGIN, RES_CHRATR_POSTURE, RES_CHRATR_UNDERLINE, RES_CHRATR_WEIGHT and the bounded RES_CHRATR_BEGIN, RES_CHRATR_POSTURE, RES_CHRATR_UNDERLINE contract remain intentionally omitted.",
@@ -385,7 +398,10 @@
       "S3HW1E HTML68: all eight native frame-pool default-item switch branches are implemented over actual document-pooled SwFrameFormat/SwAttrSet and existing anchor/orientation/surround/size/protection items. Frame/HTML Frame, Graphics/OLE, Formula/Inline Heading, Marginalia, Watermark and Labels preserve original modes,85/114twip distances, integral mm conversion, explicit protected bits and independent auto-update-on-direct-format flag. The native aFrameFormatSetRange global lives in init.cxx responsibility and is consumed by general frame construction, replacing the previous table-sized/default fill-subset admission; explicit row/box ranges remain unchanged. Native SvxOpaqueItem supplies true default/copy/Clone bool payload, RES_OPAQUE109 static/default-pool registration and original typed SwAttrSet/SwFormat getters. It is a real shared item, not a generic bool or presentation/provider stand-in. Original Formula duplicate vertical Put is retained (WRITER349); Frame FillStyle clearing acts only on the fresh local set and does not erase an authored destination fill. This is the original default-switch responsibility, not completed GetFormatFromPool lookup/collection/factory/UndoGuard/modified-state restoration or localized style/resource creation. Opacity localized presentation, full generic format copy/assignment/ABI, MakeFlySection and recursive HTML first-cell/table production/materialization/layout, RTF direction and final fixed-current-slice filter/UI audit remain unported or unverified. Existing save/open/autosave/recovery deviations are unchanged; no fake modified-state, layout or result provider is added. Broad semantic/default/contract/sourceResponsibility remains unverified.",
       "Adds the original script-hint WhichId and input-field, form-element and field delimiter characters consumed by import-time measurement.",
       "Admits the original fly split, follow-text-flow and wrap influence identities.",
-      "Character-default checkpoint: all48 original Writer character identities now carry actual source concrete static default classes and original values/slots on the real module package and SwAttrPool. Adds actual hidden/no-hyphen bool item copy/Clone and unsigned32 SvxRsidItem Any conversion/empty presentation. ScriptHint document-pool registration was missing and is now present. Native unused3 stays SfxVoidItem despite its typed declaration (WRITER457). Actual document defaults feed DOCX attribute output; full filter/package/UI, complete Writer/Sdr packages and stylesheet/default services remain pending. No contiguous ranges or filler items are inferred, and broad semantic status remains unverified."
+      "Character-default checkpoint: all48 original Writer character identities now carry actual source concrete static default classes and original values/slots on the real module package and SwAttrPool. Adds actual hidden/no-hyphen bool item copy/Clone and unsigned32 SvxRsidItem Any conversion/empty presentation. ScriptHint document-pool registration was missing and is now present. Native unused3 stays SfxVoidItem despite its typed declaration (WRITER457). Actual document defaults feed DOCX attribute output; full filter/package/UI, complete Writer/Sdr packages and stylesheet/default services remain pending. No contiguous ranges or filler items are inferred, and broad semantic status remains unverified.",
+      "Original filter-private exclusive bound and final hint/Which sentinel aliases complete the range comparison required by native Writer/EditEngine pool translation. No pool defaults or serialized document items are invented by adding these source declarations.",
+      "Admits the existing original RES_CHRATR_GRABBAG to the represented paragraph and automatic text format ranges.",
+      "Uses native frame-attribute identities RES_HEADER106 and RES_FOOTER107."
     ],
     "status": "mapped",
     "upstreamPath": "sw/inc/hintids.hxx",
@@ -397,7 +413,12 @@
       "RES_HORI_ORIENT",
       "RES_LR_SPACE",
       "RES_CHRATR_WORDLINEMODE",
-      "RES_CHRATR_AUTOKERN"
+      "RES_CHRATR_AUTOKERN",
+      "RES_FLTRATTR_END",
+      "RES_TBX_DUMMY",
+      "HINT_END",
+      "INVALID_HINT",
+      "RES_WHICHHINT_END"
     ]
   },
   "legacyOrder": 137

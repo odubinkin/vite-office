@@ -6,7 +6,7 @@ import {
   StringPair,
   cppu_detail_getUnoType_StringPair as pairType,
 } from "../../../../udkapi/com/sun/star/beans/StringPair";
-import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 const Pairs = Sequence.specialize<StringPair>(pairType, 16);
 const Relations = Sequence.specialize<Sequence<StringPair>>(["Sequence", pairType], 8);
 /** Existing URI binding reads exact UTF16 units from a borrowed field. @param value - Native string. @returns Host URI text. */
@@ -20,18 +20,23 @@ import { ZipStorage } from "../../../../oox/source/helper/zipstorage";
 import { FastTokenHandler } from "../../../../oox/source/core/fasttokenhandler";
 import { FastSaxParser } from "../../../../sax/source/fastparser/fastparser";
 import { streamNamespaces } from "./OOXMLFactory.tables";
-import {
-  UriReferenceFactory,
-  RelativeUriExcessParentSegments as Excess,
-} from "../../../../stoc/source/uriproc/UriReferenceFactory";
+import { UriReferenceFactory } from "../../../../udkapi/com/sun/star/uri/UriReferenceFactory";
+import type { XUriReference } from "../../../../udkapi/com/sun/star/uri/XUriReference";
+import type { XUriReferenceFactory } from "../../../../udkapi/com/sun/star/uri/XUriReferenceFactory";
+import { RelativeUriExcessParentSegments as Excess } from "../../../../udkapi/com/sun/star/uri/RelativeUriExcessParentSegments";
+import type { XComponentContext } from "../../../../udkapi/com/sun/star/uno/XComponentContext";
+import { StringConcat } from "../../../../sal/inc/rtl/stringconcat";
 import { StreamType_t as T } from "../inc/ooxml/OOXMLDocument";
 
-import { Reference, UNO_QUERY_THROW } from "../../../../cppu/inc/com/sun/star/uno/Reference";
+import {
+  Reference,
+  UNO_QUERY_THROW,
+  type ReferenceConstParameter,
+} from "../../../../cppu/inc/com/sun/star/uno/Reference";
 import { XRelationshipAccess } from "../../../../offapi/com/sun/star/embed/XRelationshipAccess";
 import { SEEKABLEREAD } from "../../../../offapi/com/sun/star/embed/ElementModes";
 import { XStream } from "../../../../udkapi/com/sun/star/io/XStream";
 import type { XInputStream } from "../../../../udkapi/com/sun/star/io/XInputStream";
-import { InputSource } from "../../../../offapi/com/sun/star/xml/sax/InputSource";
 
 /** Original stream type suffixes; Microsoft extension relationships have identical strict variants. */
 const suffixes: Readonly<Record<number, string>> = {
@@ -57,7 +62,18 @@ const suffixes: Readonly<Record<number, string>> = {
 export const streamTargets = { customTarget: "", embeddingsTarget: "" };
 const transitional = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/";
 const strict = "http://purl.oclc.org/ooxml/officeDocument/relationships/";
-const uriFactory = new UriReferenceFactory();
+// Original function-local static retains the first successfully supplied context.
+let uriFactory: Reference<XUriReferenceFactory> | null = null;
+/** Exact UTF16 language binding for existing package path text, without host URL normalization. @param value - Package text. @returns Owned native string. */
+function native(value: string): OUString {
+  const units = Uint16Array.from(
+    value.split(""),
+    /** Converts a literal character to its code unit without normalization. @param c - Character from the literal. @returns Character code unit. */ (
+      c,
+    ) => c.charCodeAt(0),
+  );
+  return new OUString(units, units.length);
+}
 
 /** Native stream owns its external-relation cache and package-relative source directory. */
 export class OOXMLStreamImpl {
@@ -67,32 +83,49 @@ export class OOXMLStreamImpl {
   private readonly document = new Reference<XStream>();
   private fastTokenHandler: FastTokenHandler | null = null;
   private fastParser: FastSaxParser | null = null;
-  /** Borrows storage; createStream supplies async native constructor initialization. @param storage - Package. @returns Stream. */
-  private constructor(readonly storage: ZipStorage) {}
-  /** Original document/type/id constructor paths, including VBA data's project intermediate. @param source - Storage or parent stream. @param type - Stream type or relation ID. @returns Stream. */
+  private readonly mxContext: Reference<XComponentContext>;
+  /** Copies the original borrowed context into the stream member. @param context - Explicit root or copied parent context. @param storage - Existing package transport. @returns Stream. */
+  private constructor(
+    context: ReferenceConstParameter<XComponentContext>,
+    readonly storage: ZipStorage,
+  ) {
+    this.mxContext = new Reference(context);
+  }
+  /** Original root factory requires its caller's context. @param context - Actual source context. @param storage - Package input transport. @returns Root stream. */
+  static createStream(
+    context: ReferenceConstParameter<XComponentContext>,
+    storage: ZipStorage,
+  ): Promise<OOXMLStreamImpl>;
+  /** Original child factory copies the parent context. @param source - Actual parent stream. @param type - Source type or relation ID. @returns Child stream. */
+  static createStream(source: OOXMLStreamImpl, type?: T | string): Promise<OOXMLStreamImpl>;
+  /** Binds original root/type/id overloads and VBA project intermediate without a global context fallback. @param source - Explicit context or native parent. @param value - Root package or child selector. @returns Initialized stream. */
   static async createStream(
-    source: ZipStorage | OOXMLStreamImpl,
-    type: T | string = T.DOCUMENT,
+    source: ReferenceConstParameter<XComponentContext> | OOXMLStreamImpl,
+    value: ZipStorage | T | string = T.DOCUMENT,
   ): Promise<OOXMLStreamImpl> {
-    if (type === T.VBADATA && source instanceof OOXMLStreamImpl) {
+    if (!(source instanceof OOXMLStreamImpl))
+      return OOXMLStreamImpl.fromParent(source, value as ZipStorage, T.DOCUMENT);
+    const type = value as T | string;
+    if (type === T.VBADATA) {
       const project = await OOXMLStreamImpl.createStream(source, T.VBAPROJECT);
       try {
-        return await OOXMLStreamImpl.fromParent(project, type);
+        return await OOXMLStreamImpl.fromParent(project.mxContext, project, type);
       } finally {
         project.dispose();
       }
     }
-    return OOXMLStreamImpl.fromParent(source, type);
+    return OOXMLStreamImpl.fromParent(source.mxContext, source, type);
   }
-  /** Native constructor initialization follows one resolved part, then resets the cache for its own relationships. @param source - Storage or parent. @param type - Type or ID. @returns Initialized stream. */
+  /** Native constructor initialization follows one resolved part, then resets the cache for its own relationships. @param context - Copied root/parent context. @param source - Storage or parent. @param type - Type or ID. @returns Initialized stream. */
   private static async fromParent(
+    context: ReferenceConstParameter<XComponentContext>,
     source: ZipStorage | OOXMLStreamImpl,
     type: T | string,
   ): Promise<OOXMLStreamImpl> {
     const parent = source instanceof OOXMLStreamImpl ? source : null;
     if (parent && !parent.document.is())
       throw new Error("OOXML parent document stream is missing.");
-    const result = new OOXMLStreamImpl(parent ? parent.storage : (source as ZipStorage));
+    const result = new OOXMLStreamImpl(context, parent ? parent.storage : (source as ZipStorage));
     result.msPath = parent?.msPath ?? "";
     let relations: Sequence<Sequence<StringPair>> | undefined;
     try {
@@ -127,16 +160,17 @@ export class OOXMLStreamImpl {
     }
     return result;
   }
-  /** Root storage relationship binding until the complete XStorage component exists. Part relationships are obtained from the actual input component. @returns Ordered root relationship sequence. */
+  /** Reads root relationships from the native storage facet or an explicitly supplied fragment source. @returns Ordered root relationship sequence. */
   private async readRootRelationships(): Promise<Sequence<Sequence<StringPair>>> {
+    const relationships = this.storage.getNativeRootRelationships();
+    if (relationships) return relationships;
     const input = await this.storage.openInputStream("_rels/.rels");
-    const source = new InputSource();
+    const streamName = native("_rels/.rels");
     try {
       if (!input.is()) return new Relations();
-      source.aInputStream = input;
-      return ReadRelationsInfoSequence(source);
+      return ReadRelationsInfoSequence(input, streamName.subView(0), this.mxContext);
     } finally {
-      source.dispose();
+      streamName.dispose();
       input.dispose();
     }
   }
@@ -166,12 +200,50 @@ export class OOXMLStreamImpl {
   dispose(): void {
     this.fastParser?.dispose();
     this.document.dispose();
+    this.mxContext.dispose();
   }
   /** Original ID lookup is relative to the opened stream's relationships. @param id - Relationship ID. @returns Target or empty. */
   getTargetForId(id: string): string {
     const relations = this.getRelationships();
     try {
       return this.lcl_getTarget(relations, T.UNKNOWN, id) ?? "";
+    } finally {
+      relations.dispose();
+    }
+  }
+  /** Selects the package-local header and footer relationships needed by synchronous SAX callbacks. @returns Internal relationship IDs in package order. */
+  getHeaderFooterIds(): string[] {
+    const relations = this.getRelationships();
+    const ids = new Set<string>();
+    try {
+      for (let i = 0; i < relations.getLength(); ++i) {
+        const row = Sequence.unacquired(
+          Pairs,
+          (relations.getConstArray() as SequenceElements).get(i * 8) as [uno_Sequence | null],
+        );
+        let id = "",
+          type = "",
+          external = false;
+        for (let j = 0; j < row.getLength(); ++j) {
+          const pair = StringPair.unacquired(
+            (row.getConstArray() as SequenceElements).get(j * 16) as SequenceElements,
+          );
+          const key = text(pair.First);
+          if (key === "Id") id = text(pair.Second);
+          else if (key === "Type") type = text(pair.Second);
+          else if (key === "TargetMode") external = text(pair.Second) === "External";
+        }
+        if (
+          id &&
+          !external &&
+          (type === transitional + "header" ||
+            type === strict + "header" ||
+            type === transitional + "footer" ||
+            type === strict + "footer")
+        )
+          ids.add(id);
+      }
+      return [...ids];
     } finally {
       relations.dispose();
     }
@@ -219,61 +291,110 @@ export class OOXMLStreamImpl {
     }
     const cached = this.maIdCache.get(id);
     if (cached !== undefined) return cached;
-    const suffix = suffixes[type];
-    let typeName = suffix === undefined ? "" : transitional + suffix,
-      strictName = suffix === undefined ? "" : strict + suffix;
-    if (type === T.COMMENTS_EXTENDED)
-      typeName = strictName =
-        "http://schemas.microsoft.com/office/2011/relationships/commentsExtended";
-    else if (type === T.VBAPROJECT)
-      typeName = strictName = "http://schemas.microsoft.com/office/2006/relationships/vbaProject";
-    else if (type === T.VBADATA)
-      typeName = strictName = "http://schemas.microsoft.com/office/2006/relationships/wordVbaData";
-    let found = false;
-    for (let i = 0; i < relations.getLength(); ++i) {
-      const sequence = Sequence.unacquired(
-        Pairs,
-        (relations.getConstArray() as SequenceElements).get(i * 8) as [uno_Sequence | null],
+    if (uriFactory === null) uriFactory = UriReferenceFactory.create(this.mxContext);
+    const factory = uriFactory;
+    const path = native(this.msPath),
+      baseText = new OUString(
+        new StringConcat(
+          Uint8Array.from(
+            "file:///\0",
+            /** Converts a literal character to its code unit without normalization. @param c - Character from the literal. @returns Character code unit. */ (
+              c,
+            ) => c.charCodeAt(0),
+          ),
+          path,
+        ),
       );
-      let external = false,
-        target = "";
-      for (let j = 0; j < sequence.getLength(); ++j) {
-        const pair = StringPair.unacquired(
-          (sequence.getConstArray() as SequenceElements).get(j * 16) as SequenceElements,
-        );
-        const first = text(pair.First),
-          second = text(pair.Second);
-        if (first === "Type" && (second === typeName || second === strictName)) found = true;
-        else if (
-          first === "Type" &&
-          type === T.EMBEDDINGS &&
-          (second === transitional + "oleObject" || second === strict + "oleObject")
-        )
-          found = true;
-        else if (first === "Id" && second === id) found = true;
-        else if (first === "Target") {
-          if (
-            streamTargets.customTarget !== second &&
-            (type === T.CUSTOMXML || type === T.CHARTS || type === T.FOOTER || type === T.HEADER)
-          )
-            found = false;
-          else target = second;
-        } else if (first === "TargetMode" && second === "External") external = true;
-      }
-      if (found) {
-        if (external) return target;
-        const absolute = uriFactory.makeAbsolute(
-          uriFactory.parse("file:///" + this.msPath),
-          uriFactory.parse(target),
-          true,
-          Excess.RETAIN,
-        );
-        if (absolute === null) return null;
-        const resolved = absolute.getPath().slice(1);
-        if (type === T.EMBEDDINGS) streamTargets.embeddingsTarget = resolved;
-        return resolved;
-      }
+    let base: Reference<XUriReference>;
+    try {
+      base = factory.operatorStar().parse(baseText);
+    } finally {
+      baseText.dispose();
+      path.dispose();
     }
-    return null;
+    try {
+      const suffix = suffixes[type];
+      let typeName = suffix === undefined ? "" : transitional + suffix,
+        strictName = suffix === undefined ? "" : strict + suffix;
+      if (type === T.COMMENTS_EXTENDED)
+        typeName = strictName =
+          "http://schemas.microsoft.com/office/2011/relationships/commentsExtended";
+      else if (type === T.VBAPROJECT)
+        typeName = strictName = "http://schemas.microsoft.com/office/2006/relationships/vbaProject";
+      else if (type === T.VBADATA)
+        typeName = strictName =
+          "http://schemas.microsoft.com/office/2006/relationships/wordVbaData";
+      let found = false;
+      for (let i = 0; i < relations.getLength(); ++i) {
+        const sequence = Sequence.unacquired(
+          Pairs,
+          (relations.getConstArray() as SequenceElements).get(i * 8) as [uno_Sequence | null],
+        );
+        let external = false,
+          target = "";
+        for (let j = 0; j < sequence.getLength(); ++j) {
+          const pair = StringPair.unacquired(
+            (sequence.getConstArray() as SequenceElements).get(j * 16) as SequenceElements,
+          );
+          const first = text(pair.First),
+            second = text(pair.Second);
+          if (first === "Type" && (second === typeName || second === strictName)) found = true;
+          else if (
+            first === "Type" &&
+            type === T.EMBEDDINGS &&
+            (second === transitional + "oleObject" || second === strict + "oleObject")
+          )
+            found = true;
+          else if (first === "Id" && second === id) found = true;
+          else if (first === "Target") {
+            if (
+              streamTargets.customTarget !== second &&
+              (type === T.CUSTOMXML || type === T.CHARTS || type === T.FOOTER || type === T.HEADER)
+            )
+              found = false;
+            else target = second;
+          } else if (first === "TargetMode" && second === "External") external = true;
+        }
+        if (found) {
+          if (external) return target;
+          const targetText = native(target);
+          let parsed: Reference<XUriReference>;
+          try {
+            parsed = factory.operatorStar().parse(targetText);
+          } finally {
+            targetText.dispose();
+          }
+          try {
+            const absolute = factory.operatorStar().makeAbsolute(base, parsed, true, Excess.RETAIN);
+            try {
+              if (!absolute.is()) {
+                found = false;
+                break;
+              }
+              const fullPath = absolute.operatorStar().getPath();
+              try {
+                const packagePath = fullPath.copy(1);
+                try {
+                  const resolved = text(packagePath);
+                  if (type === T.EMBEDDINGS) streamTargets.embeddingsTarget = resolved;
+                  return resolved;
+                } finally {
+                  packagePath.dispose();
+                }
+              } finally {
+                fullPath.dispose();
+              }
+            } finally {
+              absolute.dispose();
+            }
+          } finally {
+            parsed.dispose();
+          }
+        }
+      }
+      return null;
+    } finally {
+      base.dispose();
+    }
   }
 }

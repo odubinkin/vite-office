@@ -1,0 +1,87 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/udkapi/com/sun/star/container/XMap.ts",
+    "status": "mapped",
+    "upstreamPath": "udkapi/com/sun/star/container/XMap.idl",
+    "localSymbols": [
+      "XMap",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "XMap",
+      "XElementAccess",
+      "KeyType",
+      "ValueType",
+      "clear",
+      "containsKey",
+      "containsValue",
+      "get",
+      "put",
+      "remove"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual RTL/UNO owners retain source contracts. Explicit scope destruction and counted views bind logical address storage; physical C++ ABI, native logging/mutex/allocator and complete application parity remain unqualified."
+    },
+    "preservedResponsibilities": [
+      "Complete original XMap method/readonly-attribute declarations and normal cppumaker direct-XElementAccess type getter reuse actual CPPU Type/Any/Reference owners. No map value/service implementation, fabricated lookup or namespace provider."
+    ],
+    "omittedResponsibilities": [
+      "Actual nonnull map implementation and translation remain unported/unqualified; no broad parser/component/format/UI parity or physical C++ ABI claim."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/container/XMap.ts",
+          "marker": "XMap"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "udkapi/com/sun/star/container/XMap.idl",
+          "marker": "XMap"
+        },
+        {
+          "path": "udkapi/com/sun/star/container/XMap.idl",
+          "marker": "XElementAccess"
+        },
+        {
+          "path": "udkapi/com/sun/star/container/XMap.idl",
+          "marker": "KeyType"
+        },
+        {
+          "path": "udkapi/com/sun/star/container/XMap.idl",
+          "marker": "ValueType"
+        },
+        {
+          "path": "udkapi/com/sun/star/container/XMap.idl",
+          "marker": "clear"
+        },
+        {
+          "path": "udkapi/com/sun/star/container/XMap.idl",
+          "marker": "containsKey"
+        },
+        {
+          "path": "udkapi/com/sun/star/container/XMap.idl",
+          "marker": "containsValue"
+        },
+        {
+          "path": "udkapi/com/sun/star/container/XMap.idl",
+          "marker": "get"
+        },
+        {
+          "path": "udkapi/com/sun/star/container/XMap.idl",
+          "marker": "put"
+        },
+        {
+          "path": "udkapi/com/sun/star/container/XMap.idl",
+          "marker": "remove"
+        }
+      ]
+    }
+  }
+}

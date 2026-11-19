@@ -108,7 +108,11 @@ function parsed(xml: string): Record<string, string>[] {
   return elements;
 }
 it("exports each original OASIS MIME including Calc ODS and template with caller-owned streams", /** No application stream names are hardcoded in shared export. @returns Nothing. */ () => {
+  let oasisCount = 0;
   for (const value of Object.values(mime)) {
+    // Legacy report constants have OASIS names but Sun XML MIME literals; select the actual OASIS namespace.
+    if (!value.startsWith("application/vnd.oasis.opendocument.")) continue;
+    ++oasisCount;
     const entries = sequence(value);
     entries.push([property("FullPath", "settings.xml"), property("MediaType", "text/xml")]);
     const nodes = parsed(createManifestXml(entries));
@@ -120,6 +124,7 @@ it("exports each original OASIS MIME including Calc ODS and template with caller
     expect(nodes[1]?.["manifest:version"]).toBe("1.3");
     expect(nodes.at(-1)?.["manifest:full-path"]).toBe("settings.xml");
   }
+  expect(oasisCount).toBe(16);
 });
 it("keeps original lexical document version decisions and omits empty entry versions", /** Old OASIS versions still have entry version attributes. @returns Nothing. */ () => {
   for (const version of ["", "1.0", "1.1", "1.10", "1.2", "1.3", "1.4"]) {

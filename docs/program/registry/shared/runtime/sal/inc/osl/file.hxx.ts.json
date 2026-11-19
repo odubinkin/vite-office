@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/inc/osl/file.hxx.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-directory-item-metadata",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/inc/osl/file.hxx.ts",
+        "apps/office/src/sal/osl/unx/file_stat.test.ts",
+        "apps/office/src/sal/osl/unx/file_stat.upstream.test.ts",
+        "apps/office/src/sal/osl/unx/file_misc.copy.test.ts",
+        "apps/office/src/unotools/source/ucbhelper/xtempfile.test.ts",
+        "apps/office/src/sal/osl/unx/directory.test.ts",
+        "apps/office/src/comphelper/source/misc/directoryhelper.filesystem.test.ts",
+        "apps/office/src/ucb/source/ucp/file/native-file-streams.test.ts"
+      ],
+      "justification": "Original DirectoryItem_Impl and directory-item C/wrapper lifetime, get/status and inode-only identity are ported over genuine selected libc access/lstat/realpath. FileStatus preserves zero construction, source masks, cheap grouped fields, default/retained values, late partial errors and independently owned string/time getters. FileBase retains source RC aliases, URL wrappers and DirectoryItem inheritance. Shared path helper basename/dot/hidden mutation and OString length/pointer/reverse-byte equality use original RTL owners/templates. Native byte-path decoding and full64-bit size/inode fields are not replaced by host filesystem APIs or fake stat providers. The actual selected SDK dirent feature and header-derived sizeof72 are compiler-generated, with original XML enum values retained. Original UNIX QA root-dependent attribute expectations remain unmodified and two fail against real SDK geteuid0/access behavior; kernel semantics are preserved and documented. SvFileStream/TempFile/copy/remove, directory enumeration/remaining FileBase APIs, native ABI/OOM/debug/race/invalid lifetime, full upstream fixtures and complete package/storage/model/filter/UI remain unfinished or unqualified. Original public osl_copyFile/osl_removeFile and consumed File wrapper are now ported: URL conversion and already approved read/create/write gates, source lstat/destination stat, wasm32 source size cast, .osl-tmp backup and ignored cleanup/rollback errors, source link-content copying and regular-file 0x7fff buffered copy with original errno/ENOSPC behavior. Exact native destination open omits TRUNC/EXCL. Genuine SDK FS errors publish native errno; no synthetic syscall provider, host filesystem mount, or metadata-preserving move branch is introduced. Active original File copy/remove QA assertions and actual descriptor/permissions/link/backup regression tests are present. Native EINTR, zero-progress write assertion, source races/OOM and full SvFileStream/TempFile/package/storage/model/filter/UI acceptance remain unqualified or unfinished. Coverage gaps are recorded without lowering90 thresholds. Original named temporary-file service is registered through the real component manager: selected default file-only TempFileNamed, source exclusive name loop/UniqueTokens/global native OSL mutex, original temporary-directory environment and createPath callbacks, source SvFileStream and original empty-name SvMemoryStream fallback. OTempFileService retains all represented UNO IO/seek/endpoint/property/type/ByteReader contracts, original first-use caches/defaults/exception order, UInt32 seek cast, duplicate XPropertySet types, release-profile assert-only listener bodies and ignored creation/close diagnostics. No fake TempFile/stream/provider/private counter injection, alternate host filesystem or manual JS allocator is introduced. Genuine deferred nonseekable copy now executes and cleans up real MEMFS files. Other TempFileNamed constructors/directory ownership/Fast services, Directory enumeration/instances, native ABI/thread/debug/OOM/full token-budget and complete DOCX/XLSX storage/model/filter/UI remain unbound or unqualified. Independent helper branch gaps remain recorded even when feature aggregate exceeds90. Original OSL directory enumeration is now bound to genuine selected libc opendir/readdir/closedir with compiler-selected dirent field accessors, not a JS cursor or host filesystem. DirectoryImpl remains in original file_misc owner. URL conversion, trailing separator removal and the already approved read gate precede native open; original C argument validation/output preservation, dot filtering, byte-path concatenation, d_type, item release/replacement, null-readdir NOENT and close-before-record destruction are retained. Original Directory header constructor/URL/open/isOpen/close/reset/getNextItem wrappers replace the previous static-only facet while retaining existing static creation APIs. C++ wrapper pre-clears its item whereas C preserves it on EOF. Original UNIX constructor/open/isOpen/close/reset/getNextItem assertions and actual Unicode/link/slot/lifetime tests pass; Chromium main/DOM-free Worker enumerate and reset an actual registered TempFile parent directory. Native OOM, invalid DIR pointers, readdir/closedir injected errors and repeated-open leak behavior remain unqualified. WRITER603..604/CALC666..667 document source concerns. Full native storage/package/model/filter/UI acceptance and older independent coverage gaps remain open. DirectoryHelper now calls the original FileStatus::isDirectory inline predicate, including Directory or Volume, rather than narrowing its contract to Directory alone. Actual selected UNIX directory and regular-file paths execute; a genuine Volume entry is not produced by this selected SDK profile and is not fabricated through private status fields. The original File read/write void-pointer surface now also accepts initialized VM-managed UNO byte lvalues and signed typed views. Mechanical typed-byte marshalling at the existing OSL boundary retains source bytes, unread tails, status/overflow/handle ordering and actual file operations; it does not create a stream, provider or filesystem.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FileBase",
+        "FileStatus",
+        "DirectoryItem",
+        "File",
+        "Directory"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/osl/file.hxx",
+      "upstreamSymbols": [
+        "FileBase",
+        "FileStatus",
+        "DirectoryItem",
+        "File"
+      ]
+    }
+  }
+}

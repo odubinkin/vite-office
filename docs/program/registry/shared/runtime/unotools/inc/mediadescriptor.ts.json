@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/unotools/inc/mediadescriptor.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-metadata-uri-prerequisites",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6",
+      "CAP-ee65d6a3-b01f-40d5-995f-99cdddd55605"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/unotools/inc/mediadescriptor.ts",
+        "apps/office/src/unotools/source/misc/mediadescriptor.test.ts",
+        "vendor/libreoffice-reference/include/unotools/mediadescriptor.hxx",
+        "apps/office/src/unotools/source/misc/mediadescriptor.stream.test.ts"
+      ],
+      "justification": "Original constexpr Unicode ComponentData property and public exports over the single original source implementation. Static RTL literal storage and a const string view preserve the consumed constant lifetime. Stream/URL/locking/authentication/password and native storage/medium/filter/UI responsibilities remain unported or unqualified. Original provided-InputStream presence fast path and invalid-source handling, ReadOnly/PostData/Stream precedence and actual Reference template extraction are represented with native UNO/RTL map/stream owners. Positive URL/POST/trust/interaction opening and non-file readonly/default environment remain explicitly unported. File Content inference and exception branches are source-represented but unqualified because the actual file Content provider is missing. Complete SfxMedium/storage/filter/model/DOCX/XLSX UI acceptance remains unfinished.",
+      "knownViolations": [],
+      "localSymbols": [
+        "PROP_COMPONENTDATA",
+        "PROP_INPUTSTREAM",
+        "PROP_POSTDATA",
+        "PROP_READONLY",
+        "PROP_STREAM",
+        "PROP_UCBCONTENT",
+        "PROP_URL"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/unotools/mediadescriptor.hxx",
+      "upstreamSymbols": [
+        "PROP_COMPONENTDATA",
+        "getComponentDataEntry",
+        "setComponentDataEntry",
+        "clearComponentDataEntry",
+        "PROP_INPUTSTREAM",
+        "PROP_POSTDATA",
+        "PROP_READONLY",
+        "PROP_STREAM",
+        "PROP_UCBCONTENT",
+        "PROP_URL"
+      ]
+    }
+  }
+}

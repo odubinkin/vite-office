@@ -20,7 +20,9 @@
     ],
     "preservedResponsibilities": [
       "The Calc document editor applies the actual edit language, field-marking control flags and original default-item and literal-text operations.",
-      "The Calc document editor expands rich text through the original owner and resolves supported field classes using native URL, date, sheet and shell values."
+      "The Calc document editor expands rich text through the original owner and resolves supported field classes using native URL, date, sheet and shell values.",
+      "Document-owned font conversion exposes its actual empty item set and the native QuickSetAttribs method; import runs on the no-view document engine with undo disabled.",
+      "Extracts multiline text and resolves fields through the document's existing field edit engine."
     ],
     "omittedResponsibilities": [
       "Extended-time field producers, document metadata outside the existing shell title and field colors remain outside this working slice."
@@ -38,6 +40,14 @@
         {
           "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/text-formula.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -56,6 +66,10 @@
         {
           "path": "sc/source/ui/docshell/docsh.cxx",
           "marker": "rEngine.SetText( *pObj)"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/editutil.cxx",
+          "marker": "ScEditUtil::GetString"
         }
       ]
     }

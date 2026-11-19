@@ -31,8 +31,18 @@ export interface Table {
   entry(position: number, properties: Reference<Properties>): void;
 }
 
-/** Consumed native Stream delivery surface for parser state and break handlers; other stream callbacks remain with their owning contexts. */
+/** Original byte controls on the writerfilter stream. */
+export enum FieldControl {
+  Lock = 0x08,
+  Start = 0x13,
+  Separator = 0x14,
+  End = 0x15,
+}
+
+/** Consumed native Stream delivery surface for parser state and break handlers. */
 export interface Stream {
+  /** Resolves a native part inside the corresponding text-append context, when implemented by the receiver. */
+  substream?(id: Id, stream: Reference<Stream>): void;
   props(properties: Reference<Properties>): void;
   /** Original resource-table callback; distinct from document table row/cell groups. */
   table(id: Id, table: Reference<Table>): void;

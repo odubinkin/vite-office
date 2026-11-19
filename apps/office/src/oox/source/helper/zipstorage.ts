@@ -1,25 +1,29 @@
-/** @fileoverview Ports consumed oox::ZipStorage stream and commit responsibilities over zip.js document archive transport; output content types remain owned by package/comphelper. */
+/** @fileoverview OOXML browser fragment and byte binding for package input and original OFOPXML output. */
 import {
   DocumentArchive,
   ArchiveChecks,
   assertSafeArchivePath,
   type ArchiveLimits,
 } from "../../../package/source/zippackage/document-archive";
-import { DocumentArchiveWriter } from "../../../package/source/zippackage/document-archive";
-import {
-  readPlainPackageContentTypes,
-  WriteContentTypes,
-} from "../../../package/source/zippackage/ZipPackage";
+import { readPlainPackageContentTypes } from "../../../package/source/zippackage/ZipPackage";
+import { commitZipStorage } from "./zipstorage.output";
+import { ZipStorage as NativeZipStorage } from "./zipstorage.native";
+import { initializeRuntime } from "../../../external/emscripten/runtime";
+import { initializeZlib } from "../../../external/zlib/zlib";
 import { createManifestProperty } from "../../../package/source/manifest/ManifestWriter";
 
-import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import { Reference, UNO_QUERY_THROW } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import { Sequence, type SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import { OInputSeekStream } from "../../../package/source/xstor/oseekinstream";
 import { READ, SEEKABLEREAD } from "../../../offapi/com/sun/star/embed/ElementModes";
 import type { XExtendedStorageStream } from "../../../offapi/com/sun/star/embed/XExtendedStorageStream";
+import { XHierarchicalStorageAccess } from "../../../offapi/com/sun/star/embed/XHierarchicalStorageAccess";
+import { XRelationshipAccess } from "../../../offapi/com/sun/star/embed/XRelationshipAccess";
+import type { XStorage } from "../../../offapi/com/sun/star/embed/XStorage";
 import { OInputCompStream } from "../../../package/source/xstor/ocompinstream";
 import { OFOPXML } from "../../../offapi/com/sun/star/embed/StorageFormats";
-import { InputSource } from "../../../offapi/com/sun/star/xml/sax/InputSource";
+import { getProcessComponentContext } from "../../../comphelper/inc/processfactory";
+import type { XComponentContext } from "../../../udkapi/com/sun/star/uno/XComponentContext";
 import { ReadRelationsInfoSequence } from "../../../comphelper/source/xml/ofopxmlhelper";
 import {
   PropertyValue,
@@ -142,13 +146,73 @@ export class ZipStorage {
     | Promise<{ readonly types: ReadonlyMap<string, string> } | { readonly failure: string }>
     | undefined;
   private readonly streams = new Map<string, ZipFragmentStream>();
-  /** Creates writable storage, or binds a validated input catalog. @param input - Validated archive. @returns Storage. */
-  constructor(private readonly input?: DocumentArchive) {}
+  private readonly relationships = new Map<ZipFragmentStream | undefined, Uint8Array>();
+  /** Creates writable storage or binds validated input. @param input - Validated archive. @param nativeInput - Owned oox storage for Calc. @param writerInput - Owned OFOPXML storage for Writer. @returns Storage. */
+  constructor(
+    private readonly input?: DocumentArchive,
+    private readonly nativeInput?: NativeZipStorage,
+    private readonly writerInput?: Reference<XStorage>,
+  ) {}
   /** Opens read-only OOXML storage asynchronously. @param bytes - Input ZIP. @param limits - Browser resource limits. @returns Storage. */
   static async open(bytes: Uint8Array, limits?: ArchiveLimits): Promise<ZipStorage> {
     return new ZipStorage(
       await DocumentArchive.open(bytes, limits, ArchiveChecks.CheckInsensitive),
     );
+  }
+  /** Opens the browser-validated snapshot using the format filter's original storage mode. @param bytes - Complete package. @param application - Original import filter. @param limits - Existing browser resource limits. @returns Owned native package reader. */
+  static async openForImport(
+    bytes: Uint8Array,
+    application: "calc" | "writer",
+    limits?: ArchiveLimits,
+  ): Promise<ZipStorage> {
+    const archive = await DocumentArchive.open(bytes, limits, ArchiveChecks.CheckInsensitive);
+    const input = await archive.openNativeInput();
+    try {
+      await Promise.all([initializeRuntime(), initializeZlib()]);
+      const context = new Reference<XComponentContext>(getProcessComponentContext().get());
+      try {
+        if (application === "writer") {
+          const format = native("OFOPXMLFormat");
+          try {
+            const storage = OStorageHelper.GetStorageOfFormatFromInputStream(
+              format,
+              input,
+              context,
+            );
+            return new ZipStorage(archive, undefined, storage);
+          } finally {
+            format.dispose();
+          }
+        }
+        const storage = new NativeZipStorage(context, input, false);
+        if (storage.isStorage()) return new ZipStorage(archive, storage);
+        storage.dispose();
+        throw new Error("Cannot open XLSX package.");
+      } finally {
+        context.dispose();
+      }
+    } finally {
+      input.dispose();
+    }
+  }
+  /** Releases the original storage and any cached child storages. @returns Nothing. */
+  dispose(): void {
+    this.nativeInput?.dispose();
+    this.writerInput?.dispose();
+  }
+  /** Reads the original root relationship facet when backed by Writer's OFOPXML storage. @returns Owned rows or absence for other sources. */
+  getNativeRootRelationships(): Sequence<Sequence<StringPair>> | null {
+    if (!this.writerInput) return null;
+    const relations = new Reference<XRelationshipAccess>(
+      this.writerInput,
+      UNO_QUERY_THROW,
+      XRelationshipAccess.static_type,
+    );
+    try {
+      return relations.operatorStar().getAllRelationships();
+    } finally {
+      relations.dispose();
+    }
   }
   /** Reports native storage mode. @returns Readonly input. */
   isReadOnly(): boolean {
@@ -197,39 +261,41 @@ export class ZipStorage {
   }
   /** Native parseContentType requires the metadata stream and applies explicit overrides after defaults. The promise binds asynchronous decompression, not a replacement storage service. @returns Stream MIME fields. */
   private async readContentTypes(): Promise<ReadonlyMap<string, string>> {
-    const bytes = await this.readBytes("[Content_Types].xml");
-    if (bytes === null) ioError("Wrong format!");
-    const input = inputBytes(bytes),
-      source = new InputSource();
+    const metadata = "[Content_Types].xml";
+    const input = this.nativeInput
+      ? this.openNativePart(metadata)
+      : inputBytes((await this.readBytes(metadata)) ?? new Uint8Array());
+    const context = new Reference<XComponentContext>(getProcessComponentContext());
     try {
-      source.aInputStream = input;
-      return readPlainPackageContentTypes(this.input as DocumentArchive, source);
+      if (!this.input?.hasEntry(metadata) || !input.is()) ioError("Wrong format!");
+      return readPlainPackageContentTypes(this.input as DocumentArchive, input, context);
     } catch (error) {
       if (error instanceof Exception) throw error;
       if (error instanceof Error) ioError("Wrong format!");
       throw error;
     } finally {
-      source.dispose();
+      context.dispose();
       input.dispose();
     }
   }
-  /** Original missing-relations empty value and malformed-relations refusal. Existing host parser diagnostics bind the source BROKEN/InsertOwnProps IOException path. @param path - Owning stream. @returns Owned relationship value. */
+  /** Original missing-relations empty value and malformed-relations refusal. UNO SAX failures bind the source BROKEN/InsertOwnProps IOException path. @param path - Owning stream. @returns Owned relationship value. */
   private async readRelationships(path: string): Promise<Sequence<Sequence<StringPair>>> {
     const slash = path.lastIndexOf("/"),
       relPath = path.slice(0, slash + 1) + "_rels/" + path.slice(slash + 1) + ".rels";
     const bytes = await this.readBytes(relPath);
     if (bytes === null) return new Relations();
     const input = inputBytes(bytes),
-      source = new InputSource();
+      context = new Reference<XComponentContext>(getProcessComponentContext()),
+      streamName = native("_rels/*.rels");
     try {
-      source.aInputStream = input;
-      return ReadRelationsInfoSequence(source);
+      return ReadRelationsInfoSequence(input, streamName.subView(0), context);
     } catch (error) {
       if (error instanceof Exception) error.dispose();
       else if (!(error instanceof Error)) throw error;
       ioError("Wrong relinfo stream!");
     } finally {
-      source.dispose();
+      streamName.dispose();
+      context.dispose();
       input.dispose();
     }
   }
@@ -276,11 +342,25 @@ export class ZipStorage {
       }
     }
   }
-  /** Existing flat ZIP transport binds the readonly hierarchical call consumed by Writer; it is not an XStorage/XHierarchicalStorageAccess service or parent ownership graph. Native failures propagate, unlike ZipStorage's READ convenience path. @param path - Exact stream path. @param mode - Supported readonly source mode. @returns Actual extended storage component. */
+  /** Opens Writer's part through XHierarchicalStorageAccess or a readonly fragment snapshot. @param path - Exact stream path. @param mode - Supported readonly source mode. @returns Actual extended storage component. */
   async openStreamElementByHierarchicalName(
     path: string,
     mode: typeof READ | typeof SEEKABLEREAD,
   ): Promise<Reference<XExtendedStorageStream>> {
+    if (this.writerInput) {
+      const hierarchy = new Reference<XHierarchicalStorageAccess>(
+        this.writerInput,
+        UNO_QUERY_THROW,
+        XHierarchicalStorageAccess.static_type,
+      );
+      const name = native(path);
+      try {
+        return hierarchy.operatorStar().openStreamElementByHierarchicalName(name, mode);
+      } finally {
+        name.dispose();
+        hierarchy.dispose();
+      }
+    }
     if (this.input) await this.typeMap();
     if ((this.input && path === "[Content_Types].xml") || path.endsWith("/")) ioError("");
     const bytes = await this.readBytes(path);
@@ -306,6 +386,12 @@ export class ZipStorage {
   /** Native ZipStorage READ convenience path catches native open failures and returns empty input. @param path - Exact stream path. @returns Owned native input. */
   async openInputStream(path: string): Promise<Reference<XInputStream>> {
     try {
+      if (this.nativeInput) {
+        await this.typeMap();
+        return path === "[Content_Types].xml" || path.endsWith("/") || !this.input?.hasEntry(path)
+          ? new Reference<XInputStream>()
+          : this.openNativePart(path);
+      }
       const stream = await this.openStreamElementByHierarchicalName(path, READ);
       try {
         return (stream.get() as XExtendedStorageStream).getInputStream();
@@ -318,6 +404,15 @@ export class ZipStorage {
       return new Reference<XInputStream>();
     }
   }
+  /** Reads an exact catalog path through the original native ZipStorage. @param path - Admitted path. @returns Owned native input. */
+  private openNativePart(path: string): Reference<XInputStream> {
+    const key = native(path);
+    try {
+      return this.nativeInput?.openInputStream(key) ?? new Reference();
+    } finally {
+      key.dispose();
+    }
+  }
   /** Opens/truncates a writable stream, retaining the owning stream's relationship counter. @param path - Safe archive path. @param mediaType - MIME property. @returns Stream. */
   openOutputStream(path: string, mediaType: string): ZipFragmentStream {
     if (this.isReadOnly()) throw new Error("OOXML storage is read-only.");
@@ -326,32 +421,14 @@ export class ZipStorage {
     this.streams.set(path, stream);
     return stream;
   }
+  /** Associates serialized relationships with their original owner. @param owner - Part or package root. @param bytes - XML from the native writer. @returns Nothing. */
+  setOutputRelationships(owner: ZipFragmentStream | undefined, bytes: Uint8Array): void {
+    if (this.isReadOnly()) throw new Error("OOXML storage is read-only.");
+    this.relationships.set(owner, bytes);
+  }
   /** Commits actual stream bytes and native package metadata. @returns ZIP package. */
   async commit(): Promise<Uint8Array> {
     if (this.isReadOnly()) throw new Error("OOXML storage is read-only.");
-    const output = new DocumentArchiveWriter(),
-      manifest = [];
-    try {
-      for (const [path, stream] of this.streams) {
-        if (path === "[Content_Types].xml") continue;
-        output.putNextEntry(path, stream.getBytes());
-        manifest.push([
-          createManifestProperty("FullPath", path),
-          createManifestProperty("Version", ""),
-          createManifestProperty("MediaType", stream.mediaType),
-        ]);
-      }
-      output.putNextEntry(
-        "[Content_Types].xml",
-        new TextEncoder().encode(WriteContentTypes(manifest)),
-      );
-      return await output.finish();
-    } finally {
-      for (const sequence of manifest)
-        for (const property of sequence) {
-          property.Name.dispose();
-          property.Value.dispose();
-        }
-    }
+    return commitZipStorage(this.streams, this.relationships);
   }
 }

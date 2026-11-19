@@ -1,4 +1,5 @@
 /** @fileoverview Native serializer byte escaping, cache boundaries and mark ordering over actual ZIP fragment streams and native OOXML token IDs. */
+import { OUString } from "../../../sal/inc/rtl/ustring";
 import { DocumentArchive } from "../../../package/source/zippackage/document-archive";
 import { readOwnedInput } from "../../../test/oox-input";
 import { expect, it, afterEach } from "vitest";
@@ -6,7 +7,6 @@ import { FastSerializerHelper, FSNS, MergeMarks as M } from "../../inc/fshelper"
 import { FastSaxSerializer, TokenValue, invalidChar } from "./fastserializer";
 import { ByteSequence } from "../../../sal/inc/rtl/byteseq";
 import { CachedOutputStream, ForMergeBase } from "./CachedOutputStream";
-import { FastTokenHandler } from "../../../oox/source/core/fasttokenhandler";
 import { XmlFilterBase } from "../../../oox/source/core/xmlfilterbase";
 import { ZipStorage } from "../../../oox/source/helper/zipstorage";
 import { ZipFragmentStream } from "../../../oox/source/helper/zipstorage";
@@ -15,7 +15,7 @@ const directSerializers: FastSaxSerializer[] = [],
   directCaches: CachedOutputStream[] = [];
 /** Tracks native direct serializer owners; helper-owned serializers destroy themselves. @param stream - Actual transport. @returns Serializer. */
 function directSerializer(stream: ZipFragmentStream): FastSaxSerializer {
-  const serializer = new FastSaxSerializer(stream, new FastTokenHandler());
+  const serializer = new FastSaxSerializer(stream);
   directSerializers.push(serializer);
   return serializer;
 }
@@ -52,7 +52,7 @@ function escaped(text: string | Uint8Array, allow = true): string {
 
 it("writes original document/header, lexical namespace tokens, ordered attributes and helper lifecycle", /** Actual OOXML names are used, without a private token catalog. @returns Nothing. */ () => {
   const stream = output(),
-    helper = new FastSerializerHelper(stream, true, new FastTokenHandler()),
+    helper = new FastSerializerHelper(stream, true),
     w = token("w"),
     p = token("p"),
     r = token("r"),
@@ -86,7 +86,7 @@ it("writes original document/header, lexical namespace tokens, ordered attribute
   expect(
     /** Original moved owner precondition. @returns Never. */ () => helper.endDocument(),
   ).toThrow("ended");
-  const unfinished = new FastSerializerHelper(output(), false, new FastTokenHandler());
+  const unfinished = new FastSerializerHelper(output(), false);
   unfinished.startDocument();
   unfinished.write(new Uint8Array([65]));
   unfinished.mark(8);
@@ -135,7 +135,7 @@ it("escapes XML10 bytes, XML punctuation and original literal/already-escaped x 
 
 it("retains append/prepend/postpone ordering, final merge mode irrelevance and native empty-stack no-op", /** Unsorted marks retain separate postponed bytes until their next merge. @returns Nothing. */ () => {
   const stream = output(),
-    helper = new FastSerializerHelper(stream, false, new FastTokenHandler());
+    helper = new FastSerializerHelper(stream, false);
   helper.mergeTopMarks(99);
   helper.mark(1);
   helper.write("B");
@@ -163,7 +163,7 @@ it("retains append/prepend/postpone ordering, final merge mode irrelevance and n
 
 it("sorts recognized buckets, retains sticky unknown tokens, drops pre-bucket bytes and treats sorted prepend as append", /** Uses real native OOXML local tokens and repeated schema order. @returns Nothing. */ () => {
   const stream = output(),
-    helper = new FastSerializerHelper(stream, false, new FastTokenHandler()),
+    helper = new FastSerializerHelper(stream, false),
     a = token("p"),
     b = token("r"),
     unknown = token("t"),
@@ -231,7 +231,7 @@ it("keeps exact 1MiB buffering, oversized direct writes and flush-before-switch 
 
 it("rejects malformed erased attribute calls before emitting a tag and consumes a helper owner before output failure", /** Native static/lifetime preconditions remain explicit host failures. @returns Nothing. */ () => {
   const stream = output(),
-    helper = new FastSerializerHelper(stream, false, new FastTokenHandler()),
+    helper = new FastSerializerHelper(stream, false),
     p = token("p");
   expect(
     /** Missing native value is invalid after variadic erasure. @returns Never. */ () =>
@@ -335,4 +335,26 @@ it("retains the native mark-stack/empty-flag inconsistency after initial output 
     /** Source end-document invariant still notices the retained mark. @returns Never. */ () =>
       serializer.endDocument(),
   ).toThrow("active marks");
+});
+
+it("retains native optional Unicode-to-UTF8 values through both recursive helper emission forms", /** Actual native Unicode owners and real output stream exercise the original optional OUString overloads. @returns Nothing. */ () => {
+  const stream = output(),
+    helper = new FastSerializerHelper(stream, false),
+    units = new Uint16Array([0x5b57, 38, 0xd83d, 0xde00, 34]),
+    value = new OUString(units, units.length),
+    empty = new OUString();
+  try {
+    helper.startElement(token("root"), token("val"), value, token("name"), empty);
+    helper.singleElement(token("r"), token("val"), value, token("name"), null);
+    helper.endElement(token("root"));
+    helper.endDocument();
+    expect(decoder.decode(stream.getBytes())).toBe(
+      '<root val="字&amp;😀&quot;" name=""><r val="字&amp;😀&quot;"/></root>',
+    );
+    expect([...value.getStr().subarray(0, value.getLength())]).toEqual([...units]);
+  } finally {
+    empty.dispose();
+    value.dispose();
+    helper.dispose();
+  }
 });

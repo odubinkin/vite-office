@@ -149,11 +149,15 @@ describe("Writer inline marker positions", /** Groups mark and pagination hint t
           '<text:p text:style-name="Standard"><text:bookmark-start text:name="wide"/>text<text:bookmark-end text:name="wide"/>',
         ),
     );
-    await expect(
-      readOdtDocument(ranged, metadata, undefined, {
-        onDiagnostic: /** Ignores unrelated diagnostics. @returns Nothing. */ () => undefined,
-      }),
-    ).rejects.toThrow("ranged bookmarks are unsupported");
+    const rangedDocument = (await readOdtDocument(ranged, metadata)).document;
+    try {
+      const mark = rangedDocument.GetIDocumentMarkAccess().FindMark("wide");
+      expect(mark?.IsExpanded()).toBe(true);
+      expect(mark?.GetMarkStart().GetContentIndex()).toBe(0);
+      expect(mark?.GetMarkEnd().GetContentIndex()).toBe(4);
+    } finally {
+      rangedDocument.Dispose();
+    }
     const strayEnd = await withContent(
       base,
       /** Inserts an unmatched end. @param xml - ODF content. @returns Modified content. */ (xml) =>

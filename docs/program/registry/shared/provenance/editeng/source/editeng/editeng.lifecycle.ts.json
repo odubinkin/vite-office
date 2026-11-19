@@ -26,7 +26,9 @@
       "EditEngine::SetUpdateLayout",
       "EditEngine::SetParaAttribs",
       "EditEngine::GetText",
-      "EditEngine::CalcFieldValue"
+      "EditEngine::CalcFieldValue",
+      "EditEngine::QuickSetAttribs",
+      "EditEngine::GetEmptyItemSet"
     ],
     "preservedResponsibilities": [
       "Original outer notification bodies allocate real EENotify values and delegate actual implementation callbacks; original empty ParaAttribsChanged virtual body is retained, not used to disguise an unported provider. Static CreatePool shares the existing actual factory with ESM namespace callers. Concrete constructor/full engine APIs remain unported and abstract getImpl is mandatory.",
@@ -34,7 +36,8 @@
       "Original public CreateSelection and three CreateTextObject overloads delegate to the same actual internal owner, preserve the paragraph-count default one, direct selection conversion and native EditTextObject base return contract. Actual creation does not admit an unported constructor, renderer or process service.",
       "Original outer text/default-language/control/paragraph-count/undo methods delegate to the actual internal owner. Undo comment dispatch uses the source English strings.",
       "Source SetText restores the original conditional layout call. Source SetUpdateLayout and paragraph-attribute wrappers delegate to the actual internal engine.",
-      "Original whole-text and paragraph getters expand actual document features and the base field virtual returns a single space."
+      "Original whole-text and paragraph getters expand actual document features and the base field virtual returns a single space.",
+      "QuickSetAttribs normalizes actual public selection endpoints and delegates to ImpEditEngine."
     ],
     "omittedResponsibilities": [
       "Interactive layout and application-specific field presentation remain outside the shared document text slice."
@@ -64,6 +67,10 @@
         {
           "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-export.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -94,6 +101,10 @@
         {
           "path": "editeng/source/editeng/impedit2.cxx",
           "marker": "UpdateFields"
+        },
+        {
+          "path": "editeng/source/editeng/editeng.cxx",
+          "marker": "EditEngine::QuickSetAttribs"
         }
       ]
     },

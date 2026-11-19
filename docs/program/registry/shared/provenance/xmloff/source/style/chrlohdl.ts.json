@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/style/chrlohdl.ts",
+    "localSymbols": [
+      "XMLCharLocale",
+      "exportCharLocale"
+    ],
+    "upstreamPath": "xmloff/source/style/chrlohdl.cxx",
+    "upstreamSymbols": [
+      "XMLCharLanguageHdl",
+      "XMLCharScriptHdl",
+      "XMLCharCountryHdl",
+      "XMLCharRfcLanguageTagHdl"
+    ],
+    "preservedResponsibilities": [
+      "Native ODF locale merging processes language, country, script and RFC tag attributes in source order, and uses the shared LanguageTag registry for the three independent Writer script families."
+    ],
+    "omittedResponsibilities": [
+      "Older ODF export-version gates are outside the current ODF 1.3 browser profile."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/style/chrlohdl.ts",
+          "marker": "XMLCharLocale"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/style/chrlohdl.test.ts",
+          "marker": "round trips ISO script families and the native absent-country spellings"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/chrlohdl.cxx",
+          "marker": "XMLCharLanguageHdl"
+        }
+      ]
+    }
+  }
+}

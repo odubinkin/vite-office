@@ -1,4 +1,5 @@
 /** @fileoverview ScDocumentImport block-position writes and post-import formula/text-attribute initialization. */
+import { ScAttrEntry } from "../../../inc/attarray";
 import { ScCellValue } from "../../../inc/cellvalue";
 import { CellType } from "../../../inc/global";
 import type { ScSetStringParam } from "../../../inc/stringutil";
@@ -34,14 +35,49 @@ import { ScTable } from "../../../inc/table";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import { delayed_delete_vector_iterator } from "../../../../external/mdds/include/mdds/multi_type_vector/delayed_delete_vector";
 
+/** Original per-column numeric-format hint, defaulting to no assumption. */
+class ColAttr {
+  mbLatinNumFmtOnly = false;
+}
+/** Original move-only import attribute vector; Dispose releases the actual registered patterns. */
+export class Attrs {
+  readonly mvData: ScAttrEntry[] = [];
+  mbLatinNumFmtOnly = false;
+  /** Original vector and flag equality. @param other - Borrowed value. @returns Equality. */
+  equals(other: Attrs): boolean {
+    return (
+      this.mbLatinNumFmtOnly === other.mbLatinNumFmtOnly &&
+      this.mvData.length === other.mvData.length &&
+      this.mvData.every(
+        /** Compares the actual entry. @param entry - Entry. @param index - Index. @returns Equality. */
+        (entry, index) => entry.equals(other.mvData[index] as ScAttrEntry),
+      )
+    );
+  }
+  /** Original vector destruction. @returns Nothing. */
+  Dispose(): void {
+    for (const entry of this.mvData) entry.Dispose();
+    this.mvData.length = 0;
+  }
+}
+
 /** Original represented ScDocumentImportImpl cache and listening state. */
 class ScDocumentImportImpl {
   readonly listenContext: StartListeningContext;
   readonly blockPositions: TableColumnBlockPositionSet[] = [];
+  readonly tabAttrs: ColAttr[][] = [];
   defaultScriptNumeric: SvtScriptType = SvtScriptType.UNKNOWN;
   /** Binds the actual import document. @param document - Document.  @returns Constructed instance. */
   constructor(readonly document: ScDocument) {
     this.listenContext = new StartListeningContext(document);
+  }
+  /** Original lazy column-hint cache. @param tab - Sheet. @param col - Column. @returns Hint or null outside the source domain. */
+  getColAttr(tab: number, col: number): ColAttr | null {
+    if (!ValidTab(tab) || !this.document.ValidCol(col)) return null;
+    while (this.tabAttrs.length <= tab) this.tabAttrs.push([]);
+    const columns = this.tabAttrs[tab] as ColAttr[];
+    while (columns.length <= col) columns.push(new ColAttr());
+    return columns[col] as ColAttr;
   }
   /** Source lazy per-sheet cache creation. @param tab - Sheet. @param col - Column. @returns Hint or null outside the source column/sheet domain. */
   getBlockPosition(tab: number, col: number): ColumnBlockPosition | null {
@@ -54,6 +90,7 @@ class ScDocumentImportImpl {
 
 /** Native document-bound importer; normal editing setters and broadcasts are bypassed until finalization. */
 export class ScDocumentImport {
+  static readonly Attrs = Attrs;
   private readonly impl: ScDocumentImportImpl;
   /** Binds the actual target. @param document - Document. @returns Importer. */
   constructor(document: ScDocument) {
@@ -65,6 +102,7 @@ export class ScDocumentImport {
   }
   /** Initializes existing sheet caches as in ScDocumentImportImpl::initForSheets. @returns Nothing. */
   initForSheets(): void {
+    while (this.impl.tabAttrs.length < this.getDoc().GetTableCount()) this.impl.tabAttrs.push([]);
     for (let tab = this.impl.blockPositions.length; tab < this.getDoc().GetTableCount(); tab++)
       this.impl.blockPositions.push(new TableColumnBlockPositionSet(this.getDoc(), tab));
   }
@@ -348,7 +386,21 @@ export class ScDocumentImport {
       }
     }
   }
-  /** Original initColumn regroups formulas, recreates text metadata and starts native group/individual listeners. Format-specific Latin hints, outline finalization and absent compute caches remain outside this slice. @param column - Stored column. @returns Nothing. */
+  /** Original whole-column attribute import; hints precede table admission, and the table consumes the vector. @param tab - Sheet. @param first - First column. @param last - Last column. @param attrs - Owned attributes. @returns Nothing. */
+  setAttrEntries(tab: number, first: number, last: number, attrs: Attrs): void {
+    const table = this.getDoc().FetchTable(tab);
+    if (!table) return;
+    for (let col = first; col <= last; ++col) {
+      const hint = this.impl.getColAttr(tab, col);
+      if (hint) hint.mbLatinNumFmtOnly = attrs.mbLatinNumFmtOnly;
+    }
+    table.SetAttrEntries(first, last, attrs.mvData);
+  }
+  /** Original import-only merge forwarding. @param tab - Sheet. @param col1 - Start column. @param row1 - Start row. @param col2 - End column. @param row2 - End row. @returns Nothing. */
+  setMergedCells(tab: number, col1: number, row1: number, col2: number, row2: number): void {
+    this.getDoc().FetchTable(tab)?.SetMergedCells(col1, row1, col2, row2);
+  }
+  /** Original initColumn regroups formulas, recreates text metadata and starts native group/individual listeners. Outline finalization and absent compute caches remain outside this slice. @param column - Stored column. @returns Nothing. */
   initColumn(column: ScColumn): void {
     column.RegroupFormulaCells();
     const attrs = new CellTextAttrStoreType(this.getDoc().GetMaxRowCount()),
@@ -362,7 +414,21 @@ export class ScDocumentImport {
       const node = iterator.get();
       if (node.type === element_type_empty) continue;
       const initial = new CellTextAttr();
-      if (node.type === element_type_numeric) initial.mnScriptType = this.impl.defaultScriptNumeric;
+      const latin = this.impl.getColAttr(column.GetTab(), column.GetCol())?.mbLatinNumFmtOnly;
+      if (node.type === element_type_numeric)
+        initial.mnScriptType = latin ? SvtScriptType.LATIN : this.impl.defaultScriptNumeric;
+      else if (node.type === element_type_formula && latin) {
+        const pointer = formula_block.begin(node.data as base_element_block),
+          last = formula_block.end(node.data as base_element_block);
+        let numericOnly = true;
+        for (; !pointer.equals(last); pointer.advance(1)) {
+          if (!(pointer.get() as ScFormulaCell).IsValueNoErrorConst()) {
+            numericOnly = false;
+            break;
+          }
+        }
+        if (numericOnly) initial.mnScriptType = SvtScriptType.LATIN;
+      }
       const defaults = celltextattr_block.create_block(node.size);
       try {
         const first = celltextattr_block.begin(defaults),

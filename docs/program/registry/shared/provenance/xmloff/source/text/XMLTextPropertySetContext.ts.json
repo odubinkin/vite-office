@@ -25,7 +25,8 @@
       "Text columns, complex colors, drop caps, and other element-valued properties without current Writer model owners remain intentionally omitted."
     ],
     "preservedResponsibilities": [
-      "Dispatches the implemented tab-stop element property to the native-named context in its separate style/xmltabi owner."
+      "Dispatches the implemented tab-stop element property to the native-named context in its separate style/xmltabi owner.",
+      "Reads the original char-complex-color when the owning text property group supports it."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/text/XMLTextPropertySetContext.cxx",

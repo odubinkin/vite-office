@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/oox/source/core/filterbase.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "oox-filter-state",
+    "capabilityIds": [
+      "CAP-0bd8dbed-cf13-4f40-b485-2378f8fa865b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/oox/source/core/filterbase.ts",
+        "apps/office/src/oox/source/core/filterbase.test.ts",
+        "docs/program/oox-filter-state.md",
+        "vendor/libreoffice-reference/oox/source/core/filterbase.cxx",
+        "scripts/fixtures/native-filter-state-probe.ts"
+      ],
+      "justification": "Original represented PImpl defaults/context admission and sequential model queries, with exact-URL recursion guard using actual native mutexes and owned RTL values. Full model/factory positive admission, storage, helpers and FilterBase orchestration remain unqualified or unfinished; native container/allocator/thread/teardown ABI is not certified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FilterBaseImpl",
+        "FilterDirection",
+        "DocumentOpenedGuard"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "oox/source/core/filterbase.cxx",
+      "upstreamSymbols": [
+        "FilterBaseImpl",
+        "FilterDirection",
+        "DocumentOpenedGuard"
+      ]
+    }
+  }
+}

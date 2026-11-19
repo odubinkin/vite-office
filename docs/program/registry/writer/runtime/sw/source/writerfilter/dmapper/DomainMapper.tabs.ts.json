@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.tabs.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.tabs.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.tabs.test.ts",
+        "apps/office/e2e/writer-docx-theme.spec.ts"
+      ],
+      "justification": "Resolves the original paragraph tab properties over an inherited UNO sequence, applies the native replace and clear positions, and retains the source fallback alignments and leader characters.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ResolveParagraphTabs"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/writerfilter/dmapper/DomainMapper.cxx",
+      "upstreamSymbols": [
+        "LN_CT_PPrBase_tabs"
+      ]
+    }
+  }
+}

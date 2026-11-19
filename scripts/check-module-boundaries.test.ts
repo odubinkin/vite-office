@@ -984,8 +984,8 @@ it("retains original SfxBaseModel UNO/SDK dependencies without reverse or browse
   ).toMatch(/browser adapters/u);
 });
 
-it("keeps native package Sequence dependencies below application owners", /** Library_package2 links cppu; reverse and application edges remain forbidden. @returns Nothing. */ () => {
-  for (const dependency of ["cppu", "cppuhelper", "offapi"])
+it("keeps native package value and stream dependencies below application owners", /** Library_package2 links cppu and tl; reverse and application edges remain forbidden. @returns Nothing. */ () => {
+  for (const dependency of ["cppu", "cppuhelper", "offapi", "tools"])
     expect(isForbiddenModuleEdge("package", dependency)).toBe(false);
   for (const dependency of ["sw", "sc", "vcl", "oox"])
     expect(isForbiddenModuleEdge("package", dependency)).toBe(true);

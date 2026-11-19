@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/stoc/source/uriproc/UriReferenceFactory.resolve.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-metadata-uri-prerequisites",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/stoc/source/uriproc/UriReferenceFactory.resolve.ts#makeAbsolute",
+        "vendor/libreoffice-reference/stoc/source/uriproc/UriReferenceFactory.cxx#Factory::makeRelative"
+      ],
+      "justification": "Task202610251549-J0Z0KF / V4DQJW native metadata/URI prerequisite continuation. Complete original UriReferenceFactory.cxx makeAbsolute/makeRelative algorithms, on the same native factory receiver. Source temporary/string-view ownership is explicit; no browser URL or string-facing URI model is used. Independent native compiled module differential, physical ABI/allocator/mutex/thread lifetime and runtime shutdown are unqualified. Complete DOCX/XLSX model/filter/package/desktop/mobile UI import-export acceptance remains unfinished; existing browser open/save/autosave/recovery choices are retained.",
+      "knownViolations": [],
+      "localSymbols": [
+        "makeAbsolute",
+        "makeRelative"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "stoc/source/uriproc/UriReferenceFactory.cxx",
+      "upstreamSymbols": [
+        "Factory::makeAbsolute",
+        "Factory::makeRelative"
+      ]
+    }
+  }
+}

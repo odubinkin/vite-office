@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/ucb/source/regexp/regexp.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-ucb-regexp",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f",
+      "CAP-6ebb6661-ebeb-41ed-b8d6-04280a3b80b4"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/ucb/source/regexp/regexp.ts",
+        "apps/office/src/ucb/source/regexp/regexp.test.ts",
+        "scripts/fixtures/native-ucb-regexp-probe.ts"
+      ],
+      "justification": "Original complete restricted Regexp parser, matching, serialization, value copy/destruction and equality/default predicates. Actual counted UTF16, ASCII-only folding, atomic failed scans, scheme shorthand, prefix/authority/domain boundaries, translation syntax and source equality/serialization omissions are preserved without host regular expressions or URL normalization. Source-derived49 tests include all18 actual pinned provider configuration templates; no dedicated Regexp/RegexpMap upstream QA was found in the local corpus. Per-owner90 coverage passes. Chromium main/DOM-free Worker execute actual RTL values and map precedence. Physical C++ ABI/allocation/vector invalidation and full UCB broker/provider/DOCX/XLSX storage/model/filter/UI acceptance remain unqualified or unfinished.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Regexp",
+        "Kind"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "ucb/source/regexp/regexp.cxx",
+      "upstreamSymbols": [
+        "Regexp",
+        "matchStringIgnoreCase",
+        "scanStringLiteral",
+        "isScheme"
+      ]
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/xstor/xstorage.impl.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-storage-implementation",
+    "capabilityIds": [
+      "CAP-291a44b3-99d9-4f74-8429-a90ed52f8be5",
+      "CAP-4f62077a-4c7c-483c-b17c-20e141f329ce",
+      "CAP-b564ff67-65d8-4b13-92df-0f4b391ce7b0",
+      "CAP-4dad6563-a403-4cf1-ace9-7810e15d1658",
+      "CAP-bbc266e7-6ea9-4bf9-b13d-a9565ac529d0",
+      "CAP-e9a3430f-1545-4e36-8849-bd900998ed83"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/source/xstor/xstorage.impl.ts",
+        "apps/office/src/package/source/xstor/xstorage.impl.test.ts",
+        "vendor/libreoffice-reference/package/source/xstor/xstorage.cxx",
+        "apps/office/src/package/source/zippackage/ZipPackage.serialization.test.ts",
+        "apps/office/src/package/source/xstor/xstorage.relations.test.ts",
+        "apps/office/src/package/source/xstor/xfactory.test.ts"
+      ],
+      "justification": "Original internal storage input/stream/substorage constructors, persistence ownership, package-open argument assembly and child catalog use genuine UNO/RTL/OSL/ZipPackageFolder owners. Source TRUNCATE rows, list-created timing, actual enumeration/interface queries and PACKAGE property ordering remain. Full OStorage/weak wrapper disposal/relationships/writable stream/transaction/encryption/factory/package services remain incomplete; no XStorage component is advertised or registered. Positive root/package property paths and complete source StorageFactory QA are pending. Whole-owner coverage fails90; full DOCX/XLSX filter/model/storage/UI acceptance remains unfinished. Preserve WRITER629/CALC696. Original PACKAGE property extraction passes the actual OUString object required by Any string extraction, correcting an invalid field-address call. Positive PACKAGE property acquisition remains unqualified because the actual package property service is unfinished. Original registered package constructor and XChangesBatch connect OStorage_Impl root persistence to actual ZipPackage stream output. Full child and relationship synchronization, storage wrapper, PACKAGE property support and DOCX/XLSX UI acceptance remain unfinished. Original internal closed-child remove/rename, deletion-before-rename and catalog revert feed the actual package transaction. Original temporary folder and OFOPXML no-relationship paths are represented. Full child wrapper/writable stream/relationship synchronization and document UI remain unfinished. WRITER631 and CALC698 record the preserved copied-row alias. Original nonencrypted truncate cache, property copying, factory replacement and flushed insertion are connected to the native storage catalog and actual package. Public writable wrappers, PACKAGE encryption, nontruncate materialization, relationships and document UI remain unfinished. Loads the OFOPXML relationship child outside the public member catalog and retains the staged relationship state. Lazily opens existing child folders through the package XNameContainer and original OStorage_Impl. Original member opening hands the actual companion .rels stream to OWriteStream_Impl. The root getter returns native copied rows or reports the original invalid relationship error. Existing children open through the original attached ordinary or seekable read wrapper. The catalog returns ordered visible keys while HasChildren retains source map-presence semantics. The public OStorage wrapper now uses the real implementation and attaches readonly/mutable children. InsertStorage calls the original package-factory folder mode and publishes the child catalog state.\nThe plain ZIP/OFOPXML storage uses the real nontransacted OWriteStream component for new/truncated output. It exposes the writable data and property facets, commits the native cache and closes its attachment when both directions close. Transacted streams, nontruncate existing writes and encryption families remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OStorage_Impl",
+        "SotElement_Impl",
+        "CommitRootPackage",
+        "RemoveElement",
+        "RenameElement",
+        "Commit",
+        "Revert",
+        "OpenTruncatedStream",
+        "CreateRelStorage",
+        "SetRelationsInfo",
+        "OpenSubStream",
+        "OpenSubStorage",
+        "GetAllRelationshipsIfAny",
+        "OpenReadStream",
+        "GetElementNames"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/xstor/xstorage.cxx",
+      "upstreamSymbols": [
+        "OStorage_Impl",
+        "SotElement_Impl",
+        "OStorage_Impl::OpenSubStorage",
+        "OStorage_Impl::GetAllRelationshipsIfAny",
+        "OStorage_Impl::GetElementNames",
+        "OStorage::OpenStreamElement_Impl"
+      ]
+    }
+  }
+}

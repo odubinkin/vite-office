@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/excel/xerecord.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/inc/xerecord.hxx",
+    "localSymbols": [
+      "XclExpRecordBase",
+      "XclExpDelegatingRecord",
+      "XclExpRecordList",
+      "XclExpXmlStartElementRecord",
+      "XclExpXmlEndElementRecord",
+      "XclExpXmlStartSingleElementRecord",
+      "XclExpXmlEndSingleElementRecord"
+    ],
+    "upstreamSymbols": [
+      "XclExpRecordBase",
+      "XclExpDelegatingRecord",
+      "XclExpRecordList"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xerecord.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/inc/xerecord.hxx",
+          "marker": "XclExpRecordBase"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xerecord.cxx",
+          "marker": "XclExpXmlStartElementRecord::SaveXml"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "Original XML virtual dispatch, element callbacks and intrusive-reference vector ownership, including borrowed delegation, aliasing, copy construction, invalidation and explicit compaction. XML operations call actual XclExpXmlStream/FastSerializerHelper and ZIP storage."
+    ],
+    "omittedResponsibilities": [
+      "Binary XclExpStream/Save, rvalue overload syntax, copy assignment, invalid native size_t domains, physical allocator ABI and complete font/palette/root/workbook/filter/UI integration remain unported or unqualified."
+    ]
+  }
+}

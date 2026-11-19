@@ -1,5 +1,6 @@
 /** @fileoverview Native CSV export contracts for sparse sheets, encoded quotes and formula output. */
-import { assert, expect, it } from "vitest";
+import { assert, beforeAll, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { implementations } from "../../../../desktop/browser/app/uno-components";
 import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
 import { CH_FEATURE } from "../../../../editeng/inc/editattr";
@@ -17,6 +18,7 @@ import { SvxHorJustifyItem } from "../../../../editeng/inc/justifyitem";
 import { SvxCellHorJustify } from "../../../../editeng/inc/svxenum";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import {
   RTL_TEXTENCODING_UNICODE,
   RTL_TEXTENCODING_JIS_X_0201,
@@ -27,10 +29,12 @@ import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import { MapUnit } from "../../../../tools/inc/mapunit";
 import { ATTR_HOR_JUSTIFY } from "../../../inc/scitems";
 import { ScPatternAttr } from "../../core/data/patattr";
+import { writeOdsDocument } from "../../filter/xml/xmlwrap";
 import { ScImportOptions } from "../dbgui/imoptdlg";
 import { ScDocShell } from "./docsh";
 
 InitApplicationServiceManager(implementations);
+beforeAll(initializeRuntime);
 
 it("retains empty fields between sparse cells and rows in separated output", /** Checks output positions through a complete export. @returns Nothing. */ () => {
   const shell = new ScDocShell();
@@ -89,7 +93,7 @@ it("exports actual multi-paragraph edit cells and releases their owned text on r
   }
 });
 
-it("expands native tab and field features before quoting an edit cell", /** Checks actual field evaluation and native feature expansion through ScDocShell::AsciiSave. @returns Nothing. */ () => {
+it("expands native tab and field features in CSV and ODS text exports", /** Checks field display and tab expansion through the real file writers. @returns Completion. */ async () => {
   const shell = new ScDocShell();
   const doc = shell.GetDocument();
   const edit = new EditTextObjectImpl(
@@ -126,6 +130,10 @@ it("expands native tab and field features before quoting an edit cell", /** Chec
     }
     doc.SetEditText(new ScAddress(), edit);
     expect(new TextDecoder().decode(shell.AsciiSave())).toBe('"A\tLink, labelSheet1Test title"\n');
+    const archive = await DocumentArchive.open(await writeOdsDocument(doc));
+    expect(await archive.readTextEntry("content.xml")).toContain(
+      "<text:p>A<text:tab/>Link,<text:s/>labelSheet1Test<text:s/>title</text:p>",
+    );
   } finally {
     tab.Dispose();
     representation.dispose();

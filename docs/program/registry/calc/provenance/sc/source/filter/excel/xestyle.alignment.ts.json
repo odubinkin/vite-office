@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/excel/xestyle.alignment.ts",
+    "localSymbols": [
+      "XclExpCellAlign"
+    ],
+    "upstreamPath": "sc/source/filter/excel/xestyle.cxx",
+    "upstreamSymbols": [
+      "XclExpCellAlign::FillFromItemSet",
+      "XclExpCellAlign::SaveXml"
+    ],
+    "preservedResponsibilities": [
+      "Writes original Excel XF alignment attributes from native items, with original rotation and source device fallback conversions."
+    ],
+    "omittedResponsibilities": [
+      "This slice covers the XML format path. Other style families and broad full-source parity remain in progress."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xestyle.alignment.ts",
+          "marker": "XclExpCellAlign"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xestyle.cxx",
+          "marker": "XclExpCellAlign::FillFromItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xestyle.cxx",
+          "marker": "XclExpCellAlign::SaveXml"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/excel/xestyle.alignment.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The bounded runtime keeps the original alignment responsibility in an adjacent source file beside the same upstream owner."
+    }
+  }
+}

@@ -1,4 +1,6 @@
-/** @fileoverview Complete original Excel/Calc formula-error conversion functions from xltools.cxx. The native static-only utility has no constructible instance in this binding. */
+/** @fileoverview Original Excel/Calc formula-error and MS font-name substitution functions from xltools.cxx. The native static-only utility has no constructible instance in this binding. */
+import { GetSubsFontName, SubsFontFlags } from "../../../../unotools/inc/fontdefs";
+import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { FormulaError, CreateDoubleError } from "../../../../formula/inc/errorcodes";
 import {
   EXC_ERR_NULL,
@@ -10,6 +12,16 @@ import {
   EXC_ERR_NA,
   EXC_ERR_SPILL,
 } from "../inc/xlconst";
+/** Original MS/ONLYONE substitution, returning an independent native value even when the original name is retained. @param name - Actual source family list. @returns Owned export family. */
+function GetXclFontName(name: OUStringConstReference): OUString {
+  const substituted = GetSubsFontName(
+    name.getStr().subarray(0, name.getLength()),
+    SubsFontFlags.ONLYONE | SubsFontFlags.MS,
+  );
+  if (!substituted.isEmpty()) return substituted;
+  substituted.dispose();
+  return new OUString(name);
+}
 /** Original XclTools static utility member group; no replacement workbook/error service. */
 
 /** Original many-to-one Calc error mapping, preserving unsupported-code fallback to NA. @param error - Native UInt16 error. @returns Excel error byte. */
@@ -75,4 +87,9 @@ function ErrorToDouble(error: number): number {
 }
 
 /** Original deleted-constructor utility exposed as its static member object. */
-export const XclTools = { GetXclErrorCode, GetScErrorCode, ErrorToDouble };
+export const XclTools = {
+  GetXclFontName,
+  GetXclErrorCode,
+  GetScErrorCode,
+  ErrorToDouble,
+};

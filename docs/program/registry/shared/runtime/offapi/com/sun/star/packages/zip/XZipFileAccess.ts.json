@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/packages/zip/XZipFileAccess.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-zip-access",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/packages/zip/XZipFileAccess.ts",
+        "apps/office/src/package/source/zippackage/zipfileaccess.test.ts",
+        "scripts/fixtures/native-zip-access-probe.ts"
+      ],
+      "justification": "Original complete XZipFileAccess IDL and normal cached CPPUMaker interface type getter with implicit XInterface base. Physical C++ ABI/allocation/thread guarantees, URL-provider success and full package/storage/model/filter/UI DOCX/XLSX acceptance remain unqualified or unfinished.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XZipFileAccess",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "offapi/com/sun/star/packages/zip/XZipFileAccess.idl",
+      "upstreamSymbols": [
+        "XZipFileAccess",
+        "getStreamByPattern"
+      ]
+    }
+  }
+}

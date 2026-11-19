@@ -191,7 +191,8 @@
       "lcl_SetNewDefTabStops",
       "CopyCharFormat",
       "FindFrameFormatByName",
-      "DelTextFormatColl"
+      "DelTextFormatColl",
+      "findCharacterStyle"
     ],
     "omittedResponsibilities": [
       "Native table and multiple-selection-ring layout operations are outside the implemented browser slice."

@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/offapi/com/sun/star/awt/FontFamily.ts",
+    "upstreamPath": "offapi/com/sun/star/awt/FontFamily.idl",
+    "localSymbols": [
+      "FontFamily"
+    ],
+    "upstreamSymbols": [
+      "FontFamily",
+      "DONTKNOW",
+      "SWISS"
+    ],
+    "preservedResponsibilities": [
+      "J0Z0KF font-data/export dependencies preserve original actual SAL byte formatting, theme/color and declared API constants. No new numeric algorithm or fake color/font service is supplied. Native physical ABI/allocation/assertion/invalid enum domains and full font/root/workbook/filter/UI orchestration remain unqualified or unported."
+    ],
+    "omittedResponsibilities": [
+      "Full native font/root/workbook/filter/UI and physical native ABI/invalid-domain parity remain unported or unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/awt/FontFamily.ts",
+          "marker": "FontFamily"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xlstyle.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/awt/FontFamily.idl",
+          "marker": "FontFamily"
+        }
+      ]
+    }
+  }
+}

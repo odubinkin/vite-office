@@ -24,7 +24,7 @@ export type SequenceEnd = readonly [storage: uno_Sequence["elements"], byteOffse
 /** Erased original overload argument lists; caller elements are initialized native logical addresses. */
 type SequenceArgs<E> =
   | []
-  | [source: SequenceReference<E>]
+  | [source: SequenceConstReference<E>]
   | [handle: uno_Sequence | null, noAcquire: SalNoAcquireArgument]
   | [elements: SequenceElements | null, length: number]
   | [length: number];
@@ -41,6 +41,11 @@ export interface SequenceConstructor<E> {
 }
 /** Native lvalue reference; its lifetime belongs to the enclosing initialized value. */
 export type SequenceReference<E> = Omit<Sequence<E>, "dispose">;
+/** Borrowed const surface of the represented original Sequence contract; the actual owner is passed without a proxy, acquire or additional pointer cell. */
+export type SequenceConstReference<E> = Pick<
+  Sequence<E>,
+  "get" | "getConstArray" | "getLength" | "hasElements"
+>;
 const references = new WeakMap<[uno_Sequence | null], Map<unknown, SequenceReference<unknown>>>();
 /** Compiler specialization identity only; contains no UNO reference or sequence data/default allocation. */
 const specializations = new Map<unknown, SequenceConstructor<unknown>>();

@@ -1,7 +1,6 @@
 /** @fileoverview Ports consumed XmlFilterBase XML-fragment import, cached relationship ownership, output fragment MIME and relation export; ZIP and SAX adaptation remains below this boundary. */
 import { StaticNamespaceMap } from "../token/namespacemap";
 import { FastSerializerHelper } from "../../../sax/inc/fshelper";
-import { FastTokenHandler } from "./fasttokenhandler";
 import type { SaxesTagNS } from "saxes";
 import {
   parseFastXmlStream,
@@ -14,11 +13,9 @@ import {
 import { ZipStorage, type ZipFragmentStream } from "../helper/zipstorage";
 import { type FragmentContext, type FragmentHandler } from "./fragmenthandler";
 import { OFFICE_DOCUMENT_RELATION, STRICT_OFFICE_DOCUMENT_RELATION, Relations } from "./relations";
-import { RelationsFragment, getRelationsPath } from "./relationshandler";
+import { RelationsFragment } from "./relationshandler";
 import { decodeToIUri } from "../../../tools/source/fsys/urlobj";
 
-import { ByteSequence } from "../../../sal/inc/rtl/byteseq";
-import { toUnoSequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
 import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import type { XInputStream } from "../../../udkapi/com/sun/star/io/XInputStream";
@@ -33,14 +30,24 @@ export class XmlFilterBase {
     { stream?: ZipFragmentStream; entries: StringPair[][] }
   >();
   private relId = 1;
+  private microsoft = false;
   /** Retains actual storage and cooperative SAX controls. @param storage - Package. @param options - Parser controls. @returns Filter. */
   constructor(
     protected readonly storage: ZipStorage,
     private readonly options: FastXmlParseOptions = {},
   ) {}
+  /** Classifies the current application's OOXML generator using the original ASCII prefix rule. @param generator - Extended Application value. @returns Nothing. */
+  checkDocumentProperties(generator: string): void {
+    this.microsoft = generator.slice(0, 9).toLowerCase() === "microsoft";
+  }
+  /** Returns the represented native product flag. @returns Whether Microsoft generated the document. */
+  isMSODocument(): boolean {
+    return this.microsoft;
+  }
   /** Original export query always uses the transitional namespace map and returns empty when absent. @param namespace - Native generated namespace identity. @returns Namespace URI or empty. */
-  getNamespaceURL(namespace: number): string {
-    return StaticNamespaceMap().maTransitionalNamespaceMap.get(namespace) ?? "";
+  getNamespaceURL(namespace: number): OUString {
+    const uri = StaticNamespaceMap().maTransitionalNamespaceMap.get(namespace);
+    return uri === undefined ? new OUString() : new OUString(uri);
   }
   /** Opens an exact input fragment without imposing ODF requirements. @param path - Fragment path. @returns Owned native input reference. */
   openInputStream(path: string): Promise<Reference<XInputStream>> {
@@ -181,30 +188,15 @@ export class XmlFilterBase {
     noHeader = false,
   ): FastSerializerHelper {
     const header = !noHeader && (!mediaType.includes("vml") || mediaType.includes("+xml"));
-    return new FastSerializerHelper(
-      this.openFragmentStream(name, mediaType),
-      header,
-      new FastTokenHandler(),
-    );
+    return new FastSerializerHelper(this.openFragmentStream(name, mediaType), header);
   }
   /** Commits original relationship streams before the storage transaction. @returns OOXML bytes. */
   async commitStorage(): Promise<Uint8Array> {
-    for (const [path, output] of this.outputRelations) {
-      const stream = this.storage.openOutputStream(
-        getRelationsPath(path),
-        "application/vnd.openxmlformats-package.relationships+xml",
+    for (const output of this.outputRelations.values())
+      this.storage.setOutputRelationships(
+        output.stream,
+        new TextEncoder().encode(writeRelationsInfoSequenceXml(output.entries)),
       );
-      const encoded = new TextEncoder().encode(writeRelationsInfoSequenceXml(output.entries)),
-        bytes = new ByteSequence(encoded, encoded.length),
-        data = toUnoSequence(bytes);
-      try {
-        stream.writeBytes(data);
-      } finally {
-        data.dispose();
-        bytes.dispose();
-      }
-      stream.closeOutput();
-    }
     return await this.storage.commit();
   }
 }

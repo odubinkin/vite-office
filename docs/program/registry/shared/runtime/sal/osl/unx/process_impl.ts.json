@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/osl/unx/process_impl.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-file-locale",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/osl/unx/process_impl.ts",
+        "apps/office/src/sal/osl/unx/nlsupport.test.ts"
+      ],
+      "justification": "Original Linux/Emscripten locale parser/composer,177-pair codeset table, process locale cache/native pthread mutex, lazy thread initialization/ASCII fallback and exchange setter. Genuine pinned SDK libc getenv/newlocale/nl_langinfo_l/freelocale execute through the existing runtime, without a host locale provider, fake successful service or manual JS allocator. Original ASCII alias omission and environment/composition interaction retained and documented. Process/thread profile is realm-local without pthreads; other process/thread operations, native ABI/OOM and complete file URL/TempFile/package/model/filter/UI acceptance remain unfinished or unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "osl_getProcessLocale",
+        "osl_setProcessLocale"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/osl/unx/process_impl.cxx",
+      "upstreamSymbols": [
+        "osl_getProcessLocale",
+        "osl_setProcessLocale"
+      ]
+    }
+  }
+}

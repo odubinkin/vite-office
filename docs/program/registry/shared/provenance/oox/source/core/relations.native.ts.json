@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/oox/source/core/relations.native.ts",
+    "status": "mapped",
+    "upstreamPath": "oox/source/core/relations.cxx",
+    "localSymbols": [
+      "Relation",
+      "Relations"
+    ],
+    "upstreamSymbols": [
+      "Relations::Relations",
+      "Relations::getRelationFromRelId",
+      "Relations::getRelationFromFirstType",
+      "Relations::getRelationsFromTypeFromOfficeDoc",
+      "Relations::getFragmentPathFromRelation",
+      "Relations::getFragmentPathFromFirstTypeFromOfficeDoc"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native logical RTL/UNO/source pointer ownership and explicit lifetime lowering are retained; C++ physical standard-library/atomic/ABI layout is not claimed."
+    },
+    "preservedResponsibilities": [
+      "Original native Relation fields/default false flag, exact copied/borrowed Unicode values, ordered native-key std::map contract, first-emplace behavior, full query/target/path/office fallback methods and actual shared filtered collection lifetime. Native UTF16 comparisons/hash-free sorted key binding supplies logical map behavior; physical tree layout/allocator complexity and iterator invalidation are unqualified. Original dot/empty/root/external handling and external first-match fallback short-circuit are preserved. No host string keys/values/URL normalizer or alternate relation provider in this owner. Older host relations.ts remains explicitly separate until native filter migration."
+    ],
+    "omittedResponsibilities": [
+      "Native filter orchestration/default fragment ctor/stream overload/binary record interface and complete format/model/UI acceptance remain unfinished; full original QA and independent physical C++ differential remain unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/core/relations.native.ts",
+          "marker": "Relation"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/oox/source/core/relations.cxx",
+          "marker": "Relations::Relations"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/oox/core/relations.hxx",
+          "marker": "struct Relation"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/oox/source/core/relations.native.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Native ownership and string/map/path responsibility is split from the existing explicitly qualified host package boundary; it is not an alias or wrapper over that old relation collection."
+    }
+  }
+}

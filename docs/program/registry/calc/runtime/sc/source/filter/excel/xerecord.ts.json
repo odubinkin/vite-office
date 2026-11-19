@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/excel/xerecord.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-export",
+    "capabilityIds": [
+      "CAP-3433dbbb-6122-4137-823f-fad19a8405ab"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/excel/xerecord.ts",
+        "vendor/libreoffice-reference/sc/source/filter/inc/xerecord.hxx",
+        "apps/office/src/sc/source/filter/excel/xerecord.test.ts"
+      ],
+      "justification": "Original XML virtual dispatch, element callbacks and intrusive-reference vector ownership, including borrowed delegation, aliasing, copy construction, invalidation and explicit compaction. XML operations call actual XclExpXmlStream/FastSerializerHelper and ZIP storage. Binary XclExpStream/Save, rvalue overload syntax, copy assignment, invalid native size_t domains, physical allocator ABI and complete font/palette/root/workbook/filter/UI integration remain unported or unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XclExpRecordBase",
+        "XclExpDelegatingRecord",
+        "XclExpRecordList",
+        "XclExpXmlStartElementRecord",
+        "XclExpXmlEndElementRecord",
+        "XclExpXmlStartSingleElementRecord",
+        "XclExpXmlEndSingleElementRecord"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/inc/xerecord.hxx",
+      "upstreamSymbols": [
+        "XclExpRecordBase",
+        "XclExpDelegatingRecord",
+        "XclExpRecordList"
+      ]
+    }
+  }
+}

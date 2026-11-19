@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/oox/source/export/ThemeExport.ts",
+    "upstreamPath": "oox/source/export/ThemeExport.cxx",
+    "localSymbols": [
+      "writeTheme"
+    ],
+    "upstreamSymbols": [
+      "ThemeExport::write",
+      "ThemeExport::writeColorSet",
+      "ThemeExport::writeFontScheme",
+      "ThemeExport::writeFormatScheme"
+    ],
+    "preservedResponsibilities": [
+      "Writes the named theme part, model-order RGB colors, major/minor and supplemental font entries, and the native defaults for an unpopulated format matrix."
+    ],
+    "omittedResponsibilities": [
+      "The imported drawing format matrix and advanced system/alpha color export remain outside this owner."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/export/ThemeExport.ts",
+          "marker": "writeTheme"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.theme.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-native-colors.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/oox/source/export/ThemeExport.cxx",
+          "marker": "ThemeExport::write"
+        },
+        {
+          "path": "vendor/libreoffice-reference/oox/source/export/ThemeExport.cxx",
+          "marker": "ThemeExport::writeColorSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/oox/source/export/ThemeExport.cxx",
+          "marker": "ThemeExport::writeFontScheme"
+        },
+        {
+          "path": "vendor/libreoffice-reference/oox/source/export/ThemeExport.cxx",
+          "marker": "ThemeExport::writeFormatScheme"
+        }
+      ]
+    }
+  }
+}

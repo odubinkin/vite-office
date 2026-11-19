@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/xml/xmlsubti.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "ods-content-filter",
+    "capabilityIds": [
+      "CAP-5ed786f7-f652-4f48-ac2a-86fafe2b8fa1"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/xml/xmlsubti.ts#readTableProtection",
+        "vendor/libreoffice-reference/sc/source/filter/xml/xmlsubti.cxx#ScXMLTabProtectionData::ScXMLTabProtectionData",
+        "apps/office/src/sc/source/filter/xml/ods-sheet-protection.test.ts"
+      ],
+      "justification": "Builds native ODF sheet-protection state from the original default URI, decoded hash and admitted permissions. Related table style, matrix and control import remain outside this owner.",
+      "knownViolations": [],
+      "localSymbols": [
+        "readTableProtection",
+        "readTableProtectionOptions"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/filter/xml/xmlsubti.cxx",
+      "upstreamSymbols": [
+        "ScXMLTabProtectionData::ScXMLTabProtectionData",
+        "ScMyTables::DeleteTable"
+      ]
+    }
+  }
+}

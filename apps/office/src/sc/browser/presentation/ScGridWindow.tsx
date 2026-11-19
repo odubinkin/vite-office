@@ -39,7 +39,9 @@ import {
 } from "../../../editeng/source/items/textitem";
 import { FontLineStyle } from "../../../tools/inc/fontenum";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
-import { ATTR_FONT_HEIGHT } from "../../inc/scitems";
+import { SvxFrameDirection as D } from "../../../editeng/inc/frmdir";
+import type { SvxFrameDirectionItem } from "../../../editeng/source/items/frmitems.direction";
+import { ATTR_FONT_HEIGHT, ATTR_WRITINGDIR } from "../../inc/scitems";
 import type { SvxFontItem } from "../../../editeng/inc/fontitem";
 import { ScCellText } from "./ScCellText";
 import type { SvxBrushItem } from "../../../editeng/inc/brushitem";
@@ -522,6 +524,15 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                           marks.IsMarkNegative() &&
                           marks.GetMarkArea().Contains(position)
                         ));
+                    const writing = (
+                      pattern.GetItem(ATTR_WRITINGDIR) as SvxFrameDirectionItem
+                    ).GetValue();
+                    const textDirection =
+                      writing === D.Horizontal_RL_TB
+                        ? "rtl"
+                        : writing === D.Horizontal_LR_TB
+                          ? "ltr"
+                          : undefined;
                     const cellStyle: CSSProperties = {
                       ...fontStyle,
                       whiteSpace: (pattern.GetItem(139) as ScLineBreakCell).GetValue()
@@ -636,7 +647,11 @@ export function ScGridWindow(props: ScGridWindowProps): React.JSX.Element {
                           />
                         )}
                         {editing && active ? null : (
-                          <div id={`${cellId}-text`} className="w-full shrink-0">
+                          <div
+                            id={`${cellId}-text`}
+                            className="w-full shrink-0"
+                            dir={textDirection}
+                          >
                             <SpecialText
                               enabled={outlined}
                               shadow={shadowed}

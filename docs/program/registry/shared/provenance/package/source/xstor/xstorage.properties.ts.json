@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/xstor/xstorage.properties.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/xstor/xstorage.cxx",
+    "localSymbols": [
+      "getStorageProperty",
+      "setStorageProperty"
+    ],
+    "upstreamSymbols": [
+      "OStorage::getPropertyValue",
+      "OStorage::setPropertyValue"
+    ],
+    "preservedResponsibilities": [
+      "Keeps the original package and OFOPXML property implementation together beside the public component while preserving its source property lock, error translation and owner."
+    ],
+    "omittedResponsibilities": [
+      "Writable hierarchy, encrypted storage and native physical ABI remain unqualified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Keeps the original package and OFOPXML property implementation together beside the public component while preserving its source property lock, error translation and owner."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.properties.ts",
+          "marker": "getStorageProperty"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xfactory.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::getPropertyValue"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::setPropertyValue"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/package/source/xstor/xstorage.properties.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the original package and OFOPXML property implementation together beside the public component while preserving its source property lock, error translation and owner."
+    }
+  }
+}

@@ -1,9 +1,32 @@
 /** @fileoverview Consumed cell text-property map from xmlstyle.cxx using actual native items,UNO Any and shared XML property handlers;remaining cell properties stay unported. */
 import {
   cellBorderTokens,
+  exportCellBorderColors,
   exportCellBorderProperties,
   importCellBorderProperties,
 } from "./xmlstyle.borders";
+import {
+  alignmentCellTokens,
+  exportCellAlignment,
+  exportJustifyMethod,
+  importCellAlignment,
+  importJustifyMethod,
+} from "./xmlstyle.alignment";
+import {
+  cellProtectionTokens,
+  exportCellProtection,
+  importCellProtection,
+} from "./xmlstyle.protection";
+import {
+  ATTR_HOR_JUSTIFY_METHOD,
+  ATTR_LINEBREAK,
+  ATTR_PROTECTION,
+  ATTR_ROTATE_MODE,
+  ATTR_ROTATE_VALUE,
+  ATTR_SHRINKTOFIT,
+  ATTR_STACKED,
+  ATTR_VER_JUSTIFY_METHOD,
+} from "../../../inc/scitems";
 import { ScIndentItem, ScLineBreakCell } from "../../../inc/attrib";
 import { XMLMeasurePropHdl } from "../../../../xmloff/source/style/xmlbahdl";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
@@ -27,7 +50,14 @@ import { Color, insertColor, extractColor } from "../../../../tools/inc/color";
 import { MID_BACK_COLOR, MID_GRAPHIC_TRANSPARENT } from "../../../../editeng/inc/memberids";
 import type { XMLFontAutoStylePool } from "../../../../xmloff/source/style/XMLFontAutoStylePool";
 import { escapeXml } from "../../../../xmloff/source/text/txtparae";
-import type { ScPatternAttr } from "../../../inc/patattr";
+import { exportComplexColor } from "../../../../xmloff/source/text/XMLComplexColorContext";
+import { ExportThemeElement } from "../../../../xmloff/source/style/XMLThemeContext";
+import { ATTR_BACKGROUND, ATTR_FONT_COLOR } from "../../../inc/scitems";
+import { ScPatternAttr } from "../../../inc/patattr";
+import type { ScDocument } from "../../../inc/document";
+import { ExportNumberFormat } from "../../../../xmloff/source/style/xmlnumfe";
+import { SC_STYLE_PROG_STANDARD } from "../../../inc/stylehelper";
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import {
   SvxWeightItem,
   SvxPostureItem,
@@ -134,9 +164,111 @@ const lineGroups = [
 ] as const;
 /** Consumed direct item identities for native automatic-style registration. */
 export const cellTextWhichIds = [
-  100, 111, 116, 101, 112, 117, 102, 113, 118, 103, 114, 119, 104, 105, 106, 107, 109, 129, 132,
-  148, 150, 141, 142, 108, 124, 139,
+  100,
+  111,
+  116,
+  101,
+  112,
+  117,
+  102,
+  113,
+  118,
+  103,
+  114,
+  119,
+  104,
+  105,
+  106,
+  107,
+  109,
+  129,
+  132,
+  148,
+  150,
+  141,
+  142,
+  108,
+  124,
+  139,
+  ATTR_HOR_JUSTIFY_METHOD,
+  ATTR_VER_JUSTIFY_METHOD,
+  ATTR_STACKED,
+  ATTR_ROTATE_VALUE,
+  ATTR_ROTATE_MODE,
+  ATTR_SHRINKTOFIT,
+  ATTR_PROTECTION,
 ] as const;
+
+/** Serializes the native Standard cell style and its represented data style. @param document - Workbook. @param fonts - ODF font declarations. @returns Named styles XML or an empty string. */
+export function exportDefaultCellStyle(document: ScDocument, fonts: XMLFontAutoStylePool): string {
+  const items = document.GetStyleSheetPool()?.GetDefaultStyle()?.GetItemSet();
+  const pattern = new ScPatternAttr(document.getCellAttributeHelper(), items);
+  try {
+    let named = "";
+    if (items?.Count()) {
+      const formatter = pattern.GetNumberFormatKey() ? document.GetFormatTable() : null;
+      const format = formatter
+        ? ExportNumberFormat(formatter, pattern.GetNumberFormat(formatter), "NDefault")
+        : null;
+      named = `${format ?? ""}<style:style style:name="${escapeXml(text(SC_STYLE_PROG_STANDARD))}" style:family="table-cell"${format ? ' style:data-style-name="NDefault"' : ""}>${exportDefaultCellProperties(pattern, fonts)}</style:style>`;
+    }
+    pattern.GetItemSetWritable().ClearItem();
+    const pool = document.GetPool();
+    for (const which of cellTextWhichIds) {
+      if (which === ATTR_LINEBREAK) continue;
+      const item = pool?.GetUserDefaultItem(which);
+      if (item) pattern.ItemSetPut(item);
+    }
+    if (document.GetDocOptions().IsIgnoreLineBreaks())
+      pattern.ItemSetPut(new ScLineBreakCell(true));
+    const defaults = exportDefaultCellProperties(pattern, fonts);
+    const theme = ExportThemeElement(document.theme);
+    if (!named && !defaults && !theme) return "";
+    return `<office:styles>${defaults ? `<style:default-style style:family="table-cell">${defaults}</style:default-style>` : ""}${named}${theme}</office:styles>`;
+  } finally {
+    pattern.Dispose();
+  }
+}
+
+/** Emits properties of a named style or the ODF document defaults in schema order. @param pattern - Direct native properties. @param fonts - Existing font declarations. @returns Property elements. */
+function exportDefaultCellProperties(pattern: ScPatternAttr, fonts: XMLFontAutoStylePool): string {
+  const chars = exportCellTextPropertyElement(pattern, fonts);
+  const cell = exportCellPropertyElement(pattern);
+  const paragraph = exportCellParagraphProperties(pattern);
+  return `${cell}${paragraph ? `<style:paragraph-properties${paragraph}/>` : ""}${chars}`;
+}
+
+/** Emits the character property element with the optional native complex-color child. @param pattern - Actual formatted cell or span. @param fonts - Font declarations. @param extra - Additional text attributes from the owning context. @returns Property element. */
+export function exportCellTextPropertyElement(
+  pattern: ScPatternAttr,
+  fonts: XMLFontAutoStylePool,
+  extra = "",
+): string {
+  const attrs = exportCellTextProperties(pattern, fonts) + extra;
+  const item = pattern.GetItemSet().GetItemIfSet(ATTR_FONT_COLOR, false) as
+    SvxColorItem | undefined;
+  const child = item ? exportComplexColor(item.getComplexColor(), "char-complex-color") : "";
+  return exportPropertyElement("text-properties", attrs, child);
+}
+
+/** Emits the native cell property element and its optional complex-color child. @param pattern - Actual cell pattern. @returns Property element. */
+export function exportCellPropertyElement(pattern: ScPatternAttr): string {
+  const attrs = exportCellProperties(pattern);
+  const item = pattern.GetItemSet().GetItemIfSet(ATTR_BACKGROUND, false) as
+    SvxBrushItem | undefined;
+  const child = item ? exportComplexColor(item.getComplexColor(), "background-complex-color") : "";
+  return exportPropertyElement(
+    "table-cell-properties",
+    attrs,
+    child + exportCellBorderColors(pattern),
+  );
+}
+
+/** Writes a property group only when nonempty. @param name - ODF property name. @param attrs - Serialized attributes. @param child - Optional represented extension. @returns Property group XML. */
+function exportPropertyElement(name: string, attrs: string, child: string): string {
+  if (child) return `<style:${name}${attrs}>${child}</style:${name}>`;
+  return attrs ? `<style:${name}${attrs}/>` : "";
+}
 /** Emits effective native text properties as a canonical automatic-style key and XML fragment. @param pattern - Actual pattern. @param fontPool - Original shared declaration pool. @returns XML attributes. */
 export function exportCellTextProperties(
   pattern: ScPatternAttr,
@@ -197,12 +329,13 @@ export function exportCellTextProperties(
     value.dispose();
   }
 }
-/** Imports directly into real items,with independent script values and source underline multi-property merge. @param pattern - Actual destination. @param attributes - Shared SAX attributes. @param unsupported - Actual importer diagnostic callback. @param findFont - Shared declaration lookup. @returns Nothing. */
+/** Imports directly into real items,with independent script values and source underline multi-property merge. @param pattern - Actual destination. @param attributes - Shared SAX attributes. @param unsupported - Actual importer diagnostic callback. @param findFont - Shared declaration lookup. @param textStyle - Whether the caller also handles text positioning. @returns Nothing. */
 export function importCellTextProperties(
   pattern: ScPatternAttr,
   attributes: FastAttributeList,
   unsupported: (name: string) => void,
   findFont: (name: string) => SvxFontItem | undefined,
+  textStyle = false,
 ): void {
   attributes.assertOnly(
     [
@@ -237,6 +370,7 @@ export function importCellTextProperties(
       XMLToken.STYLE_FONT_RELIEF,
       XMLToken.FO_COLOR,
       XMLToken.STYLE_USE_WINDOW_FONT_COLOR,
+      ...(textStyle ? [XMLToken.STYLE_TEXT_POSITION] : []),
     ],
     "Calc text properties",
   );
@@ -334,7 +468,10 @@ export function importCellTextProperties(
 
 /** Emits the original table-cell background property group. @param pattern - Native pattern. @returns Cell-property attributes. */
 export function exportCellProperties(pattern: ScPatternAttr): string {
-  let result = exportCellBorderProperties(pattern);
+  let result =
+    exportCellBorderProperties(pattern) +
+    exportCellAlignment(pattern) +
+    exportCellProtection(pattern);
   const alignmentValue = new Any(),
     alignmentOutput: [string] = [""];
   try {
@@ -383,6 +520,8 @@ export function importCellProperties(
   attributes.assertOnly(
     [
       ...cellBorderTokens,
+      ...alignmentCellTokens,
+      ...cellProtectionTokens,
       XMLToken.FO_BACKGROUND_COLOR,
       XMLToken.STYLE_TEXT_ALIGN_SOURCE,
       XMLToken.STYLE_REPEAT_CONTENT,
@@ -392,6 +531,8 @@ export function importCellProperties(
     "Calc cell properties",
   );
   importCellBorderProperties(pattern, attributes, unsupported);
+  importCellAlignment(pattern, attributes, unsupported);
+  importCellProtection(pattern, attributes, unsupported);
   for (const [token, source] of attributes) {
     if (token === XMLToken.FO_WRAP_OPTION) {
       const value = new Any();
@@ -626,7 +767,7 @@ export function exportCellParagraphProperties(pattern: ScPatternAttr): string {
     indentOutput: [string] = [""],
     measure = new XMLMeasurePropHdl(2),
     metric = new SvXMLUnitConverter("mm100");
-  let indent = "";
+  let indent = exportJustifyMethod(pattern, ATTR_HOR_JUSTIFY_METHOD, "css3t:text-justify");
   try {
     if (pattern.GetItemSet().GetItemState(131, false) === SfxItemState.SET) {
       const hmm = Number(
@@ -634,7 +775,7 @@ export function exportCellParagraphProperties(pattern: ScPatternAttr): string {
       );
       indentValue.insert([((hmm + 32768) & 0xffff) - 32768], "sal_Int16");
       if (measure.exportXML(indentOutput, indentValue, metric))
-        indent = ` fo:margin-left="${indentOutput[0]}"`;
+        indent += ` fo:margin-left="${indentOutput[0]}"`;
     }
   } finally {
     indentValue.dispose();
@@ -660,9 +801,11 @@ export function importCellParagraphProperties(
   unsupported: (name: string) => void,
 ): void {
   attributes.assertOnly(
-    [XMLToken.FO_TEXT_ALIGN, XMLToken.FO_MARGIN_LEFT],
+    [XMLToken.FO_TEXT_ALIGN, XMLToken.FO_MARGIN_LEFT, XMLToken.CSS3T_TEXT_JUSTIFY],
     "Calc paragraph properties",
   );
+  const method = attributes.get(XMLToken.CSS3T_TEXT_JUSTIFY);
+  if (method !== null) importJustifyMethod(pattern, method, ATTR_HOR_JUSTIFY_METHOD);
   const indent = attributes.get(XMLToken.FO_MARGIN_LEFT);
   if (indent !== null) {
     const value = new Any(),

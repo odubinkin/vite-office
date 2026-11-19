@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/zippackage/ZipPackage.hierarchy.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-package-hierarchy",
+    "capabilityIds": [
+      "CAP-58a58349-5416-4763-ad55-0d73965ed511"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/source/zippackage/ZipPackage.hierarchy.ts",
+        "apps/office/src/package/source/zippackage/ZipPackage.members.test.ts",
+        "vendor/libreoffice-reference/package/source/zippackage/ZipPackage.cxx"
+      ],
+      "justification": "Moves existing native hierarchical lookup and the shared recent-folder cache together under the file-size limit, preserving borrowed root ownership, exact lookup order, exception translation and trailing-folder cache behavior.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ZipPackageHierarchy",
+        "getByHierarchicalName",
+        "hasByHierarchicalName"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/zippackage/ZipPackage.cxx",
+      "upstreamSymbols": [
+        "ZipPackage::getByHierarchicalName",
+        "ZipPackage::hasByHierarchicalName"
+      ]
+    }
+  }
+}

@@ -1,4 +1,5 @@
 /** @fileoverview RtfDocumentImpl document implementation, called with the original native owner as this. */
+import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
 import { MakeTextAttr } from "../../core/txtnode/thints";
 import { SwTextINetFormat } from "../../core/txtnode/txtatr2";
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
@@ -365,9 +366,13 @@ export function ApplyStyleDefinition(
   if (controls.has("keepn"))
     collection.SetFormatAttr(new SfxBoolItem(RES_KEEP, paragraph.keepNext));
   if (controls.has("keep"))
-    collection.SetFormatAttr(new SfxBoolItem(RES_PARATR_SPLIT, !paragraph.keepTogether));
+    collection.SetFormatAttr(
+      new ParaItems.SvxFormatSplitItem(!paragraph.keepTogether, RES_PARATR_SPLIT),
+    );
   if (controls.has("widctlpar") || controls.has("nowidctlpar"))
-    collection.SetFormatAttr(new SfxInt16Item(RES_PARATR_WIDOWS, paragraph.widowControl ? 2 : 0));
+    collection.SetFormatAttr(
+      new ParaItems.SvxWidowsItem(paragraph.widowControl ? 2 : 0, RES_PARATR_WIDOWS),
+    );
   if (controls.has("tx")) collection.SetFormatAttr(createRtfTabStops(paragraph.tabStops));
   if (controls.has("sl") || controls.has("slmult"))
     collection.SetFormatAttr(createRtfLineSpacing(paragraph));
@@ -467,9 +472,11 @@ export function ApplyParagraph(
   if (paragraph.state.keepNextSet)
     node.SetAttr(new SfxBoolItem(RES_KEEP, paragraph.state.keepNext));
   if (paragraph.state.keepTogetherSet)
-    node.SetAttr(new SfxBoolItem(RES_PARATR_SPLIT, !paragraph.state.keepTogether));
+    node.SetAttr(new ParaItems.SvxFormatSplitItem(!paragraph.state.keepTogether, RES_PARATR_SPLIT));
   if (paragraph.state.widowControlSet)
-    node.SetAttr(new SfxInt16Item(RES_PARATR_WIDOWS, paragraph.state.widowControl ? 2 : 0));
+    node.SetAttr(
+      new ParaItems.SvxWidowsItem(paragraph.state.widowControl ? 2 : 0, RES_PARATR_WIDOWS),
+    );
   if (paragraph.state.tabStopsSet) node.SetAttr(createRtfTabStops(paragraph.state.tabStops));
   if (paragraph.state.pageBreakBeforeSet)
     node.SetAttr(new SfxInt16Item(RES_BREAK, paragraph.state.pageBreakBefore ? 4 : 0));

@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/osl/unx/file_url.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-file-url",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/osl/unx/file_url.ts",
+        "apps/office/src/sal/osl/unx/file_url.test.ts",
+        "apps/office/src/sal/osl/unx/file_url.reverse.test.ts",
+        "apps/office/src/sal/osl/unx/file_url.open.test.ts"
+      ],
+      "justification": "Original osl_getFileURLFromSystemPath uses RTL string slots, source-case file: rejection, original current-security/getHomeDir tilde recursion, repeated slash copy/index adaptation, IgnoreEscapes UTF8 encoding and absolute file:// prefix; input/output aliasing and early output preservation are retained. Public osl_getHomeDir converts native selected HOME bytes with source thread flags and ignores the subsequent path-conversion status exactly as upstream. Original Security current handle/home/getHandle/destructor wrapper is bound; other operations remain absent. All six active UNIX path-to-URL QA vectors and critical actual MEMFS HOME, alias, repeated slash/Unicode/percent/relative and ignored-status cases are tested. Reverse URL/authority/hostname, other file functions, physical native OOM/debug/invalid-lifetime and full TempFile/package/storage/model/filter/UI remain unimplemented or unqualified. Original local hostname/FQDN uses actual selected libc gethostname and original host-address/canonical-name helpers over pinned SDK getaddrinfo/freeaddrinfo with its existing synthetic realm-local DNS table. Independent source static result caches assign real OUString output each time. Reverse file URL byte/Unicode templates preserve scheme/authority checks, exact local-host ASCII comparison, query/fragment and escaped slash/NUL rules, escaped arbitrary octets, internal output mutation order, Security-based tilde recursion and original RTL relative resolution. All active UNIX reverse path QA bodies, native hostname/real HOME, alias and malformed/Unicode/byte scenarios are tested. No socket creation/connection, host DNS/files or authentication are added. Other socket/file methods, native std::length_error translation/physical allocation/invalid lifetime and complete SvFileStream/TempFile/package/storage/model/filter/UI remain unfinished or unqualified. Original FileURLToPath uses the byte template, rejects relative decoded paths, mutates trailing separators in the original RTL allocation, checks byte length against caller capacity and copies the terminator only on success. Original openFile/osl_openFile validate URL/output pointers, use actual PATH_MAX and delegate to the existing native openFilePath/security/flags/mode owner. Actual native descriptor create/write/close/reopen/read, Unicode URL conversion, live output retention, bounds, denied creation and source slash removal are tested; browser/DOM-free Worker exercise real public URL IO. Other path/File C++ APIs, native length_error/OOM/invalid lifetime and full SvFileStream/TempFile/package/storage/model/filter/UI remain unfinished or unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "osl_getFileURLFromSystemPath",
+        "equalsAscii",
+        "getSystemPathFromFileUrl",
+        "osl_getSystemPathFromFileURL",
+        "convertUrlToPathname",
+        "FileURLToPath"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/osl/unx/file_url.cxx",
+      "upstreamSymbols": [
+        "osl_getFileURLFromSystemPath",
+        "getSystemPathFromFileUrl",
+        "osl_getSystemPathFromFileURL",
+        "convertUrlToPathname",
+        "FileURLToPath"
+      ]
+    }
+  }
+}

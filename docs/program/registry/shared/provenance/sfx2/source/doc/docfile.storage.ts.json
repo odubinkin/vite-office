@@ -1,0 +1,69 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sfx2/source/doc/docfile.storage.ts",
+    "status": "mapped",
+    "upstreamPath": "sfx2/source/doc/docfile.cxx",
+    "localSymbols": [
+      "SfxMediumStorage",
+      "GetStorage",
+      "GetOutputStorage",
+      "Commit",
+      "Transfer_Impl"
+    ],
+    "upstreamSymbols": [
+      "SfxMedium::GetStorage",
+      "SfxMedium::GetOutputStorage",
+      "SfxMedium::Commit",
+      "SfxMedium::Transfer_Impl"
+    ],
+    "preservedResponsibilities": [
+      "The original descriptor owns stream arguments independently of the retained GetArgs map, takes native storage through the registered factory and commits an actual XTransactedObject. Temporary output is transferred through the caller-owned private:stream OutputStream with the source chunk length and exception behavior. The URL transfer path requires UCB providers and filesystem transaction support."
+    ],
+    "omittedResponsibilities": [
+      "Native URL transfer requires UCB providers and filesystem transaction support. Recovery remains disabled by the browser document lifecycle."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The browser medium binds the source temporary storage role to the existing UNO TempFileFastService in its isolated virtual filesystem and returns committed bytes to the descriptor stream."
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sfx2/source/doc/docfile.storage.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the source storage and transfer members together beside SfxMedium while keeping the browser-facing document lifecycle contract independent of native stream ownership."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sfx2/source/doc/docfile.storage.ts",
+          "marker": "class SfxMediumStorage"
+        },
+        {
+          "path": "apps/office/src/sfx2/source/doc/docfile.storage.test.ts",
+          "marker": "private:stream"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sfx2/source/doc/docfile.cxx",
+          "marker": "SfxMedium::GetStorage"
+        },
+        {
+          "path": "sfx2/source/doc/docfile.cxx",
+          "marker": "SfxMedium::GetOutputStorage"
+        },
+        {
+          "path": "sfx2/source/doc/docfile.cxx",
+          "marker": "SfxMedium::Commit"
+        },
+        {
+          "path": "sfx2/source/doc/docfile.cxx",
+          "marker": "SfxMedium::Transfer_Impl"
+        }
+      ]
+    }
+  },
+  "legacyOrder": 50
+}

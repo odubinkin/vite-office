@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/osl/unx/security.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-file-security-home",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/osl/unx/security.ts",
+        "apps/office/src/sal/osl/unx/security.test.ts",
+        "apps/office/src/sal/osl/unx/file_url.test.ts"
+      ],
+      "justification": "Original selected Emscripten current-security allocation and mobile passwd record, actual effective IDs, native HOME/access precedence and stored /var/mobile fallback execute in the existing WASM/MEMFS. Native handles are real allocations released by the original free boundary. The byte-home result is copied into original OString and null failure leaves output unchanged. Original ctors_001 and genuine environment/filesystem cases are ported. Public HOME URL conversion and consumed Security lifecycle/home methods are now bound below. Hostname/authority, other security APIs, native OOM/invalid-lifetime and complete TempFile/package/model/filter/UI remain unfinished or unqualified. Explicit user approval is recorded in J0Z0KF/evidence/file-url-home-authority-proposal.md. No host filesystem access or credentials/network operations. Original osl_getFileURLFromSystemPath uses RTL string slots, source-case file: rejection, original current-security/getHomeDir tilde recursion, repeated slash copy/index adaptation, IgnoreEscapes UTF8 encoding and absolute file:// prefix; input/output aliasing and early output preservation are retained. Public osl_getHomeDir converts native selected HOME bytes with source thread flags and ignores the subsequent path-conversion status exactly as upstream. Original Security current handle/home/getHandle/destructor wrapper is bound; other operations remain absent. All six active UNIX path-to-URL QA vectors and critical actual MEMFS HOME, alias, repeated slash/Unicode/percent/relative and ignored-status cases are tested. Reverse URL/authority/hostname, other file functions, physical native OOM/debug/invalid-lifetime and full TempFile/package/storage/model/filter/UI remain unimplemented or unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "osl_getCurrentSecurity",
+        "osl_freeSecurityHandle",
+        "osl_psz_getHomeDir",
+        "osl_getHomeDir"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/osl/unx/security.cxx",
+      "upstreamSymbols": [
+        "osl_getCurrentSecurity",
+        "osl_freeSecurityHandle",
+        "osl_psz_getHomeDir",
+        "osl_getHomeDir"
+      ]
+    }
+  }
+}

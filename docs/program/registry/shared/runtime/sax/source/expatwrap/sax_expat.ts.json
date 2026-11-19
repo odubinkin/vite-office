@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sax/source/expatwrap/sax_expat.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "ooxml-package",
+    "capabilityIds": [
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708",
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6",
+      "CAP-49e7031a-e716-4127-b398-a34ff0f1f08d",
+      "CAP-05210e3d-8cf9-4186-b90d-5269fe3ac5e0",
+      "CAP-4fda99cc-b74d-4196-b579-e6a74a093c98"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sax/source/expatwrap/sax_expat.ts#SaxExpatParser",
+        "apps/office/src/sax/source/expatwrap/sax_expat.test.ts",
+        "apps/office/src/comphelper/source/xml/ofopxmlhelper.fixture.test.ts"
+      ],
+      "justification": "ParserExpat registers the original UNO SAX service and uses the existing streaming Saxes backend and office XML byte converter. OFOP package metadata passes the native input stream and component context to this service. Original qualified names, namespace attributes, document events, per-document identifier, reusable attribute list and SAX error data are observed through actual UNO calls. Browser XML admission rejects DTDs. The native Expat error numbering and byte-position locator, DTD/entity processing, and complete optional callback and ABI parity remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SaxExpatParser",
+        "com_sun_star_comp_extensions_xml_sax_ParserExpat_get_implementation"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sax/source/expatwrap/sax_expat.cxx",
+      "upstreamSymbols": [
+        "SaxExpatParser::parseStream",
+        "SaxExpatParser::setDocumentHandler",
+        "SaxExpatParser::getSupportedServiceNames"
+      ]
+    }
+  }
+}

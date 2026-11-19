@@ -6,6 +6,7 @@ import type { SwTableBox } from "../table/swtable";
 import type { SwDoc } from "../doc/doc";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwStartNode } from "../docnode/node";
+import { CopyNodes } from "../docnode/ndcopy";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwXParagraph } from "./unoparagraph";
 import { IllegalArgumentException } from "../../../../cppu/inc/com/sun/star/lang/IllegalArgumentException";
@@ -28,6 +29,7 @@ import { UnknownPropertyException } from "../../../../cppu/inc/com/sun/star/bean
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import type { Sequence } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
 import type { SwTable } from "../table/swtable";
+import type { SwFrameFormat } from "../layout/atrfrm";
 import { convertTableToSwTextFrame } from "./unotext.frame";
 /** Parent text owner for body or a table cell; no text is stored in this API object. */
 export class SwXText implements SwXTextOwner {
@@ -44,6 +46,19 @@ export class SwXText implements SwXTextOwner {
   GetStartNode(): SwStartNode {
     return this.start;
   }
+  /** Copies the actual source text and tables at the start of this native text. @param source - Source text owner. @returns Nothing. */
+  copyText(source: SwXText): void {
+    const nodes = this.GetDoc().GetNodes();
+    source.GetDoc();
+    const target = this.GetStartNode();
+    const before = nodes.at(target.GetIndex() + 1);
+    const initiallyEmpty =
+      before instanceof SwTextNode &&
+      before.Len() === 0 &&
+      before.GetIndex() + 1 === target.EndOfSectionIndex();
+    if (CopyNodes(source.GetStartNode(), target, before) && initiallyEmpty)
+      nodes.removeTextNode(before);
+  }
   /** Converts the represented complete table range into the original Writer text fly. @param table - Original selected table. @param properties - Original UNO frame properties. @returns Native frame. */
   convertToSwTextFrame(table: SwTable, properties: Sequence<PropertyValue>) {
     return convertTableToSwTextFrame(this, table, properties);
@@ -55,14 +70,15 @@ export class SwXText implements SwXTextOwner {
   }
   /** Implements the represented native GetTextNodes operation. @returns The represented native operation result. */
   GetTextNodes(): readonly SwTextNode[] {
-    const doc = this.GetDoc();
+    const doc = this.GetDoc(),
+      start = this.GetStartNode();
     return doc
       .GetNodes()
       .entries()
       .filter(
         /** Processes one ordered native value at this boundary. @param node - Canonical text node. @returns The represented native operation result. */
         (node): node is SwTextNode =>
-          node instanceof SwTextNode && node.StartOfSectionNode() === this.start,
+          node instanceof SwTextNode && node.StartOfSectionNode() === start,
       );
   }
   /** Implements the represented native createTextCursor operation. @returns The represented native operation result. */
@@ -290,7 +306,7 @@ export class SwXText implements SwXTextOwner {
       direct = node.GetpSwAttrSet()?.Clone(),
       style = node.GetTextFormatColl(),
       fragment = node.CaptureTextFragment(0, node.Len());
-    const next = new SwTextNode(doc.GetNodes(), this.start, style.GetNextTextFormatColl());
+    const next = new SwTextNode(doc.GetNodes(), this.GetStartNode(), style.GetNextTextFormatColl());
     doc.GetNodes().insertTextNodeAfter(node, next);
     try {
       p.SetMark();
@@ -352,6 +368,49 @@ export class SwXText implements SwXTextOwner {
   /** Ends this API object lifetime and releases its owned resources. @returns Nothing. */
   dispose(): void {
     this.valid = false;
+  }
+}
+
+/** Native XText over the frame format's header or footer section. */
+export class SwXHeadFootText extends SwXText {
+  /** Reuses the original weak UNO object held by the frame. @param frame - Existing header or footer frame format. @returns Existing or materialized text owner. */
+  static CreateXHeadFootText(frame: SwFrameFormat): SwXHeadFootText {
+    if (frame.IsDisposed()) invalid("SwXHeadFootText: disposed or invalid");
+    const existing = frame.GetXObject();
+    if (existing instanceof SwXHeadFootText) return existing;
+    const start = frame.GetContent().GetContentIdx()?.GetNode();
+    if (!start?.IsStartNode()) invalid("SwXHeadFootText: disposed or invalid");
+    const text = new SwXHeadFootText(frame, start);
+    frame.SetXObject(text);
+    return text;
+  }
+
+  /** Binds the frame's original section to the common UNO text implementation. @param frame - Existing header/footer frame. @param start - Current section start. @returns Text owner. */
+  private constructor(
+    private readonly frame: SwFrameFormat,
+    start: SwStartNode,
+  ) {
+    super(frame.GetDoc(), start);
+  }
+
+  /** Validates the header/footer frame before entering the shared UNO text operations. @returns Owning document. */
+  override GetDoc(): SwDoc {
+    if (this.frame.IsDisposed()) invalid("SwXHeadFootText: disposed or invalid");
+    return super.GetDoc();
+  }
+
+  /** Reads the existing native frame content rather than keeping another node index. @returns Original header/footer section start. */
+  override GetStartNode(): SwStartNode {
+    this.GetDoc();
+    const start = this.frame.GetContent().GetContentIdx()?.GetNode();
+    if (!start?.IsStartNode()) invalid("SwXHeadFootText: disposed or invalid");
+    return start;
+  }
+
+  /** Ends this wrapper and clears its own frame reference slot. @returns Nothing. */
+  override dispose(): void {
+    if (this.frame.GetXObject() === this) this.frame.SetXObject(undefined);
+    super.dispose();
   }
 }
 

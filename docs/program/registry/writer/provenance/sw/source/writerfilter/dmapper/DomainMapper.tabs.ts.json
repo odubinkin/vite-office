@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.tabs.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/writerfilter/dmapper/DomainMapper.cxx",
+    "localSymbols": [
+      "ResolveParagraphTabs"
+    ],
+    "upstreamSymbols": [
+      "LN_CT_PPrBase_tabs"
+    ],
+    "preservedResponsibilities": [
+      "Resolves the original paragraph tab properties over an inherited UNO sequence, applies the native replace and clear positions, and retains the source fallback alignments and leader characters."
+    ],
+    "omittedResponsibilities": [
+      "No separate tab store is introduced. Layout and UI use the canonical paragraph item."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.tabs.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The original tab methods are partitioned into the tabs source file to retain the repository source-size bound while preserving the original mapper or exporter context."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.tabs.ts",
+          "marker": "ResolveParagraphTabs"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.tabs.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper.cxx",
+          "marker": "LN_CT_PPrBase_tabs"
+        }
+      ]
+    }
+  }
+}

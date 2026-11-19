@@ -10,7 +10,8 @@ import { DocumentArchive } from "../../../package/source/zippackage/document-arc
 import { DocumentArchiveWriter } from "../../../package/source/zippackage/document-archive";
 import { DEFAULT_ARCHIVE_LIMITS } from "../../../package/source/zippackage/document-archive";
 import { readContentTypes } from "../../../test/ofopxml-values";
-import { ZipStorage } from "../helper/zipstorage";
+import { ZipFragmentStream, ZipStorage } from "../helper/zipstorage";
+import { commitZipStorage } from "../helper/zipstorage.output";
 import { FragmentHandler, type FragmentContext } from "./fragmenthandler";
 import { XmlFilterBase } from "./xmlfilterbase";
 import {
@@ -242,6 +243,7 @@ it("exports a real package, independent native part counters, metadata and escap
     reopened = new XmlFilterBase(await ZipStorage.open(bytes));
   expect(archive.getEntryNames()).not.toContain("mimetype");
   expect(archive.getEntryNames()).not.toContain("META-INF/manifest.xml");
+  expect((await archive.readTextEntry("_rels/.rels")).trim()).toContain("word/document.xml");
   expect(await reopened.getFragmentPathFromFirstTypeFromOfficeDoc("officeDocument")).toBe(
     "word/document.xml",
   );
@@ -381,4 +383,66 @@ it("reads actual content-type input through the same native source path", /** Me
     source.dispose();
     input.dispose();
   }
+});
+
+it("round-trips large OOXML parts through the browser storage boundary", /** Exercises a drained queue, its trailing entries, and block compression in one package. @returns Completion. */ async () => {
+  const storage = new ZipStorage();
+  const parts = new Map<string, string>();
+  let seed = 12345;
+  for (let index = 0; index < 7; ++index) {
+    const path = `parts/part${index}.xml`;
+    const size = index === 6 ? 1010000 : 101000;
+    const bytes = new Uint8Array(size);
+    for (let offset = 0; offset < size; ++offset) {
+      seed ^= seed << 13;
+      seed ^= seed >>> 17;
+      seed ^= seed << 5;
+      bytes[offset] = 97 + ((seed >>> 0) % 26);
+    }
+    const xml = `<part>${new TextDecoder().decode(bytes)}</part>`;
+    parts.set(path, xml);
+    writeOutput(storage.openOutputStream(path, "application/xml"), new TextEncoder().encode(xml));
+  }
+  const bytes = await storage.commit();
+  const archive = await DocumentArchive.open(bytes);
+  const reopened = await ZipStorage.open(bytes);
+  for (const [path, xml] of parts) {
+    expect(await archive.readTextEntry(path)).toBe(xml);
+    expect(readOwnedXml(await reopened.openInputStream(path))).toBe(xml);
+  }
+}, 90000);
+
+it("binds serialized relationship parts to their native owners", /** Accepts existing relationship streams and rejects an actual orphan before committing. @returns Completion. */ async () => {
+  const fragments = new Map<string, ZipFragmentStream>();
+  const relation = rels(`<Relationship Id="rId1" Type="${O}styles" Target="style.xml"/>`);
+  const entries = [
+    ["document.xml", "application/xml", "<document/>"],
+    ["nested/document.xml", "application/xml", "<document/>"],
+    ["_rels/.rels", "application/vnd.openxmlformats-package.relationships+xml", relation],
+    [
+      "_rels/document.xml.rels",
+      "application/vnd.openxmlformats-package.relationships+xml",
+      relation,
+    ],
+    [
+      "nested/_rels/document.xml.rels",
+      "application/vnd.openxmlformats-package.relationships+xml",
+      relation,
+    ],
+  ] as const;
+  for (const [path, mime, content] of entries) {
+    const part = new ZipFragmentStream(path, mime);
+    writeOutput(part, new TextEncoder().encode(content));
+    fragments.set(path, part);
+  }
+
+  const archive = await DocumentArchive.open(await commitZipStorage(fragments, new Map()));
+  expect(await archive.readTextEntry("_rels/.rels")).toContain("style.xml");
+  expect(await archive.readTextEntry("_rels/document.xml.rels")).toContain("style.xml");
+  expect(await archive.readTextEntry("nested/_rels/document.xml.rels")).toContain("style.xml");
+
+  fragments.delete("nested/document.xml");
+  await expect(commitZipStorage(fragments, new Map())).rejects.toThrow(
+    "OOXML relationship owner is missing: nested/document.xml.",
+  );
 });

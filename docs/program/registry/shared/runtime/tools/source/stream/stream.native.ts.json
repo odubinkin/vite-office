@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/tools/source/stream/stream.native.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/tools/source/stream/stream.native.ts",
+        "apps/office/src/tools/source/stream/stream.native.test.ts",
+        "vendor/libreoffice-reference/tools/source/stream/stream.cxx",
+        "vendor/libreoffice-reference/tools/qa/cppunit/test_stream.cxx",
+        "apps/office/src/tools/source/stream/strmunx.errors.test.ts",
+        "apps/office/src/tools/source/stream/strmunx.test.ts"
+      ],
+      "justification": "Original SvStream byte buffering/directional state, pointer displacement, counted reads/writes, native ErrCode/EOF/warning rules, endian scalar template instantiations,32KiB copy overloads, seek/size/flush and original SvMemoryStream allocation/borrow/transfer/resize/read-only behavior are ported as actual concrete source values. Pointer/Sequence cells, primitive byte copies and DataView scalar layouts are compiler lowering, not replacement stream/provider/numeric-result factories. Original default crypto state0 is the bound profile; nonzero crypto/text/LockBytes APIs and native physical allocator/noinit/overflow/undefined-pointer domains remain unported or unqualified. Original tools QA stdstream/MakeReadOnly/self-write assertions run over actual owners; scalar byte images, real CPPU sequence cells and transferred actual allocations exercise native data/lifetime. Original shrink-minus-one and transient SeekRel absolute pointer displacement are retained. Existing host text adapter now delegates output ownership to this actual SvMemoryStream and reads current bytes after writing; host text/string API is not promoted as complete native SvStream. Actual SvFileStream/OSL/TempFile/OStorage/backend/source full QA/model/filter/UI remain unfinished. Clarification: Uint8Array storage is managed by JavaScript GC. Source bOwnsData/FreeMemory/SwitchBuffer preserve logical buffer replacement/resize/transfer contracts only; dispose drops references and does not free or invalidate external JS views. No C++ dangling-pointer or manual JS allocator behavior is simulated; actual WASM allocation remains a separate runtime concern. Original ByteGrabber/ByteChucker/MemoryByteGrabber ZIP binary IO now consumes actual UNO references, reusable native sequences/fixed8byte storage, explicit ByteReader RTTI and source integer/short-read/seek/borrow rules. Existing ByteReader/ByteWriter and real implementers accept both actual SAL Int8Array/Uint8Array pointers and CPPU byte cells, removing the earlier cells-only restriction without a replacement stream/provider. Pointer arithmetic uses actual backing allocation/byteOffset, source lifecycle remains GC-managed. Unchanged pinned Strict/Transitional DOCX/XLSX local headers prove archive byte IO only. Memory UInt8/UInt16 signed results and ByteChucker unguarded seek assumption retained. Native full directory/inflate/XStorage/filter/model/export/UI and actual non-ByteReader source fallback remain unqualified or unfinished; no source masks/private patches/fake success stream. Native file-error continuation replaces three local reconstructed SvStream diagnostic values with their original shared SVSTREAM_WRITE_ERROR/SVSTREAM_OUTOFMEMORY/ERRCODE_IO_PENDING header macros. Packed values, precedence, warning masking, buffering and EOF/PENDING behavior are unchanged; actual source table/error/stream integration and related native stream/CSV tests validate the path. Older independently failing stream coverage profiles remain unqualified. Original selected UNIX SvFileStream constructors/destructor, IO/error/unsigned sentinel, seek/resize/sync, URL/system-path conversion, stat/temporary mode, symlink replacement, readonly retry, internal share table and close/reset order are implemented over actual OSL/MEMFS and native std::mutex with consumed unique_lock. Source F_RDLCK=0, path-vs-URL lookup bypass, original requested mode after readonly retry, silent table denial, ignored copy failure and unsigned cursor advancement remain unchanged. JS owners/buffers stay GC-managed; UNO sequence bytes are marshalled at the native IO boundary, no stream/syscall provider or private-state injection. The canonical include/tools/stream.hxx boundary now exposes actual byte/memory/file owners; native wrappers consume that header. SvStream captures real thread encoding on construction and exposes original encoding/mode accessors. Full TempFile service/storage/package/model/filter/UI, native thread races, pointer ordering/ABI/OOM/invalid spans and downstream tools XPath/XmlWalker owner tests remain incomplete or unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvStream",
+        "SvMemoryStream",
+        "StreamMode",
+        "SvStreamEndian",
+        "STREAM_SEEK_TO_END",
+        "BytePointer"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "tools/source/stream/stream.cxx",
+      "upstreamSymbols": [
+        "SvStream",
+        "SvMemoryStream",
+        "ReadBytes",
+        "WriteBytes",
+        "ReAllocateMemory"
+      ]
+    }
+  }
+}

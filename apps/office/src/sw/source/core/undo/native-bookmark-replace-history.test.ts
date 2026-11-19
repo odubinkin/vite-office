@@ -1,4 +1,4 @@
-/** @fileoverview Source contracts for real collapsed-bookmark replacement history and partition ownership. Expanded/typed mark histories are not represented. */
+/** @fileoverview Source contracts for ordinary bookmark replacement history and partition ownership. */
 import { expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwDocShell } from "../../uibase/app/docsh";
@@ -270,10 +270,65 @@ it("recreates saved names at current numeric node slots and replaces same-name s
     expect(restored?.GetMarkPos().GetContentIndex()).toBe(2);
     expect(f.doc.GetUndoManager().DoesUndo()).toBe(true);
     expect(
-      /** Expanded mark payload has no represented manager owner. @returns History entry. */ () =>
+      /** A collapsed mark cannot supply another endpoint. @returns History entry. */ () =>
         new SwHistoryBookmark(restored as NonNullable<typeof restored>, true, true),
-    ).toThrow("expanded bookmark");
+    ).toThrow("expanded other position");
   } finally {
+    f.shell.Close();
+    f.docShell.Close();
+  }
+});
+
+it("restores both endpoints when the whole marked paragraph is deleted", /** Exercises the original complete-paragraph boundary exception. @returns Nothing. */ () => {
+  const f = fixture();
+  const access = f.doc.GetIDocumentMarkAccess();
+  const selected = range(f.node, 0, f.node.Len());
+  try {
+    access.MakeBookmark(selected, "Paragraph");
+    const history = new SaveContent().collect(selected);
+    expect(history?.Count()).toBe(1);
+    expect(access.FindMark("Paragraph")).toBeUndefined();
+    expect(history?.Rollback(f.doc)).toBe(true);
+    const restored = access.FindMark("Paragraph");
+    expect(restored?.GetMarkStart().GetContentIndex()).toBe(0);
+    expect(restored?.GetMarkEnd().GetContentIndex()).toBe(f.node.Len());
+  } finally {
+    selected.Dispose();
+    f.shell.Close();
+    f.docShell.Close();
+  }
+});
+
+it("restores either original bookmark boundary while respecting the surviving endpoint", /** Replays the tdf148389 partial position-history cases. @returns Nothing. */ () => {
+  const f = fixture();
+  const access = f.doc.GetIDocumentMarkAccess();
+  const bookmark = range(f.node, 1, 4);
+  const replaceStart = range(f.node, 1, 2);
+  const replaceEnd = range(f.node, 3, 4);
+  const movedStart = range(f.node, 2, 4);
+  const movedEnd = range(f.node, 1, 3);
+  try {
+    const original = access.MakeBookmark(bookmark, "Moving");
+    const first = new SaveContent().collect(
+      replaceStart,
+      DelContentType.Bkm | DelContentType.Replace,
+    );
+    expect(first?.Count()).toBe(1);
+    expect(access.FindMark("Moving")).toBe(original);
+    access.RepositionMark(original, movedStart);
+    expect(first?.Rollback(f.doc)).toBe(true);
+    const restored = access.FindMark("Moving");
+    expect(restored?.GetMarkStart().GetContentIndex()).toBe(1);
+    expect(restored?.GetMarkEnd().GetContentIndex()).toBe(4);
+
+    const last = new SaveContent().collect(replaceEnd, DelContentType.Bkm | DelContentType.Replace);
+    expect(last?.Count()).toBe(1);
+    access.RepositionMark(restored ?? null, movedEnd);
+    expect(last?.Rollback(f.doc)).toBe(true);
+    expect(access.FindMark("Moving")?.GetMarkEnd().GetContentIndex()).toBe(4);
+  } finally {
+    for (const selection of [bookmark, replaceStart, replaceEnd, movedStart, movedEnd])
+      selection.Dispose();
     f.shell.Close();
     f.docShell.Close();
   }

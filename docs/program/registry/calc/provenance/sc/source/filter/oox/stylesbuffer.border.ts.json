@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/oox/stylesbuffer.border.ts",
+    "upstreamPath": "sc/source/filter/oox/stylesbuffer.cxx",
+    "localSymbols": [
+      "Border",
+      "BorderLineModel"
+    ],
+    "upstreamSymbols": [
+      "Border::importBorder",
+      "Border::convertBorderLine",
+      "Border::fillToItemSet"
+    ],
+    "preservedResponsibilities": [
+      "Maps indexed SpreadsheetML border records and original width/style classes to outer and inner box items and diagonal line items, including the normal border defaults."
+    ],
+    "omittedResponsibilities": [
+      "Differential and binary formats are outside the current owner. Diagonal colors keep the native RGB-only behavior in CALC-730."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/stylesbuffer.border.ts",
+          "marker": "Border"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.borders.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx",
+          "marker": "Border::importBorder"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx",
+          "marker": "Border::convertBorderLine"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx",
+          "marker": "Border::fillToItemSet"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/oox/stylesbuffer.border.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the complete consumed border mapping next to the original XLSX styles mechanism without expanding the primary style owner."
+    }
+  }
+}

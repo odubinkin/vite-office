@@ -24,6 +24,28 @@ export async function saveWriterOdtToPort(
   );
 }
 
+/** Downloads a WordprocessingML copy of the live Writer document. @param docShell - Active shell. @param port - Browser download adapter. @param filename - Download filename. @returns Completion. */
+export function exportWriterDocxToPort(
+  docShell: SwDocShell,
+  port: DocumentExportPort,
+  filename: string,
+): Promise<void> {
+  return docShell.Export(
+    {
+      filterId: "Office Open XML Text",
+      kind: "export",
+      mediaType: SwDocShell.DOCX_MEDIA_TYPE,
+      name: filename,
+    },
+    /** Serializes the live graph and delivers the bytes to the browser port. @returns Completion. */ async () =>
+      port.export({
+        data: await docShell.SerializeDocx(),
+        mediaType: SwDocShell.DOCX_MEDIA_TYPE,
+        name: filename,
+      }),
+  );
+}
+
 /** Exports native Writer ASCII text through a browser download port. @param docShell - Active Writer shell. @param port - Browser download adapter. @param filename - Download filename. @returns Port completion. */
 export function exportWriterTextToPort(
   docShell: SwDocShell,

@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/external/zlib/deflate.ts",
+    "status": "local-only",
+    "localSymbols": [
+      "DeflateState"
+    ],
+    "rationale": "Uses the pinned pako low-level z_stream API for initialization, DEFLATE, reset, end and preset dictionary. Normal continuation, sync flush and stream finish use zlib flush values. Array and status bindings use public fields.",
+    "responsibilities": [
+      "Uses the pinned pako low-level z_stream API for initialization, DEFLATE, reset, end and preset dictionary. Normal continuation, sync flush and stream finish use zlib flush values. Array and status bindings use public fields."
+    ],
+    "preservedResponsibilities": [
+      "Uses the pinned pako low-level z_stream API for initialization, DEFLATE, reset, end and preset dictionary. Normal continuation, sync flush and stream finish use zlib flush values. Array and status bindings use public fields."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual pinned pako2.1.0 public low-level zlib implements deflateInit2, deflate, deflateReset and deflateEnd. The browser boundary marshals native Sequence bytes into library typed-array pointers; it neither reads private state nor injects counters nor synthesizes reset from destruction. Original level/window/memory/strategy/flush defaults, source Sequence retention, error return ordering and independent64-bit overflow accumulation remain in Deflater. Compression, reset/reuse, tiny output, native COW and real ZIP reopening are tested. Fatal allocation failures, invalid native pointer domains and actual greater-than4GiB rollover remain unqualified. Full package/storage/filter/model/UI acceptance is unfinished."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/zlib/deflate.ts",
+          "marker": "DeflateState"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackageStream.save.test.ts",
+          "marker": "@fileoverview"
+        }
+      ]
+    }
+  }
+}

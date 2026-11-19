@@ -15,11 +15,13 @@
       "m_pISet",
       "GetCurrentPageDirection",
       "GetDefaultFrameDirection",
-      "TrueFrameDirection"
+      "TrueFrameDirection",
+      "GetItem"
     ],
     "upstreamSymbols": [
       "MSWordExportBase::MSWordExportBase",
-      "MSWordExportBase::~MSWordExportBase"
+      "MSWordExportBase::~MSWordExportBase",
+      "MSWordExportBase::GetItem"
     ],
     "evidence": {
       "local": [
@@ -49,6 +51,14 @@
         },
         {
           "path": "apps/office/src/sw/source/filter/ww8/rtfexport.direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.numbering.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.text-properties.test.ts",
           "marker": "@fileoverview"
         }
       ],
@@ -83,7 +93,9 @@
       "S3HW1E Word style/cache integration: MSWordStyles now consumes the actual MSWordExportBase, appends non-default character formats before non-reserved paragraph formats and keeps source4091 limits, reserved heading slots, character self-next, identity lookup and builtin-first ASCII name disambiguation across both families. Native GetWWId and all91 original English names replace the partial paragraph-name map; consumed paragraph pool enum identities are admitted from the pinned header. Actual concrete exporters implement the native ExportFormat virtual. MSWordExportBase character GetId uses the actual initialized style table. Source GetSlot(null) selects the first empty reserved entry (WRITER201), not an invented missing sentinel. RTF style framing/colors/buffer flushing use native StartStyles/StartStyle/EndStyle/EndStyles, and InsStyle/GetStyle keep first-inserted property-only entries. Existing StyleDefinition string sinks bind EndStyle with explicit drained properties; full native OutputFormat/item-buffer contracts remain unverified. Full typed SwFormat auto-update state is not admitted; document export passes its represented native defaultfalse. The current core lacks native hidden default paragraph collection0, so the existing Standard-first logical paragraph table binding is retained and not certified as source ownership equivalence. Footnote materialization, list-style true branch, linked style graph, full OutColorTable collectors, character style importer and paragraph numbering dispatcher/restart integration remain explicit obligations. Unchanged compiled native style helpers plus original enums/operators match all65536 pool IDs,91 names and null slots1/10 under ASan/UBSan, with a scalar SwFormat/vector-entry carrier only; this is not complete Writer/style ABI or whole-module certification.",
       " The style table retains its actual m_rExport owner. Both format GetId overloads use original slot sentinels; text output now uses actual paragraph-format identity and Standard slot0 for a missing style rather than suppressing its style control.",
       "S3HW1E paragraph numbering: the actual RtfAttributeOutput now derives from AttributeOutputBase and consumes native empty/unknown/uncounted/style/restart ParaNumRule dispatch. Restart duplication occurs at Writer level before Word level8 clamping; RTF retains original-rule ls references (WRITER096). Actual character property cache feeds listtext with original outline/empty-label tab policy. Native non-RTL Out_SwTextNode numbering preparation copies actual paragraph items, handles inherited rule injection, legacy indents/tab correction and uncounted visual geometry; OutputItemSet numbering-first then ascending WhichID paragraph callback order lets explicit/copied margins override intermediate numbering margins. Genuine exporter node/item contexts are restored and temporary sets disposed. This is the represented RTF non-DOCX paragraph profile only: Writer frame-direction/layout owners, full script/bidi iteration, full native OutputFormat/buffer ABI, DOCX override-list branch, style importer and whole filter closure remain unverified.",
-      "S3HW1E HTML73: The common native export owner exposes the original direction operations and carries the current page context used by the actual RTF export path."
+      "S3HW1E HTML73: The common native export owner exposes the original direction operations and carries the current page context used by the actual RTF export path.",
+      "DOCX numbering continuation uses the actual shared AttributeOutputBase with source void output; the existing RTF text-buffer adapter normalizes only the no-output return. Preserve native per-list abstract cache, distinct null override slots, unsigned16 IDs/counter/restart values, nested restart maps, rule/level export equivalence and original source paragraph dispatch before final Word-level clamping. Actual DocxAttributeOutput omits inherited outline numbering and emits numPr through real document/list/style owners. Native GetTextColl is bound to the existing equivalent GetTextFormatColl owner accessor. DOCX destruction now also destroys its actual base temporary tail; null placeholders own no SwNumRule. Source default unsupported override sink retains an explicit assertion diagnostic, not fabricated XML. Complete DOCX numbering-level/part orchestration, full main-text traversal and fixture/filter/mounted UI import/export remain unported or unqualified. Generic result typing and the RTF no-output normalization preserve the established browser formatting buffer, not a new native result contract. Existing RTF tests now initialize the actual already-shipped runtime before stream/locale use.",
+      "Original current-item-set GetItem path translates Writer identities through actual registered SfxItemPool/SfxItemSet owners before reading inherited/default items. Original style-definition/current-style/inline-heading fields are retained for genuine formatting contexts. Alternative native SwWW8AttrIter lookup remains unimplemented and rejects explicitly rather than synthesizing a default or item provider. Actual generic destination-pool tests do not certify complete EditEngine ownership or full text/filter/UI export."
     ],
     "omittedResponsibilities": [
       "Only the explicitly admitted native responsibilities are ported; framework/ABI/full application export are not certified."

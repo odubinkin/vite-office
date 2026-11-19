@@ -4,7 +4,7 @@ import { Type } from "../uno/Type";
 import type { Reference } from "../uno/Reference";
 import { cppu_detail_getUnoType as runtimeExceptionType } from "../uno/RuntimeException";
 import { UnoType } from "../../../../unotype";
-import { OUString } from "../../../../../../sal/inc/rtl/ustring";
+import { OUString, type OUStringConstReference } from "../../../../../../sal/inc/rtl/ustring";
 import { typelib_TypeClass as C } from "../../../../typelib/typeclass";
 import type { TypeClass } from "../../../../../../udkapi/com/sun/star/uno/TypeClass";
 import type {
@@ -30,7 +30,7 @@ export interface XServiceInfo extends XInterface {
   /** Original owned implementation name. @returns Actual unique name. */
   getImplementationName(): OUString;
   /** Original case-sensitive service predicate. @param ServiceName - Borrowed name. @returns Actual implementation result. */
-  supportsService(ServiceName: OUString): boolean;
+  supportsService(ServiceName: OUStringConstReference): boolean;
   /** Original owned sequence of actual addressed OUString fields. @returns Actual service names. */
   getSupportedServiceNames(): Sequence<rtl_uStringSlot>;
 }

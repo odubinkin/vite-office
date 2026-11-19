@@ -1,4 +1,16 @@
 /** @fileoverview Internal canonical Writer graph codec used behind boundary-specific envelopes. */
+import { encodeTextEffectDefault, restoreTextEffectDefault } from "./writer-text-effect-codec";
+import {
+  ReadCompatSettings,
+  SetCompatSettings,
+  type CompatSetting,
+} from "../../../source/writerfilter/dmapper/SettingsTable.compat";
+import { SwXTextDocument } from "../../../source/uibase/uno/unotxdoc";
+import {
+  decodeTheme,
+  encodeTheme,
+  type ThemeRecord,
+} from "../../../../docmodel/browser/theme-codec";
 import {
   encodeCharacterStyles,
   restoreCharacterStyles,
@@ -7,6 +19,11 @@ import {
 } from "./writer-character-style-codec";
 import { encodeNumberFormat, type WriterNumberFormatRecord } from "./writer-number-format-codec";
 import { upgradeWriterWhichIds } from "./writer-which-id-migration";
+import {
+  decodePageStories,
+  encodePageStories,
+  type WriterPageStories,
+} from "./writer-page-story-codec";
 import { runCooperatively, runSynchronously } from "../../../../framework/browser/io/cooperative";
 import {
   encodePageFormats,
@@ -26,10 +43,20 @@ import {
   SwTextFormatColl,
   type WriterParagraphStyle,
 } from "../../../source/core/doc/fmtcol";
-import type { WriterParagraphStyleGroup } from "../../../inc/poolfmt";
-import { RES_PARATR_OUTLINELEVEL } from "../../../inc/hintids";
+import {
+  getWriterMaterializedParagraphStyleDefinition,
+  type WriterParagraphStyleGroup,
+} from "../../../inc/poolfmt";
+import {
+  RES_CHRATR_FONT,
+  RES_CHRATR_CJK_FONT,
+  RES_CHRATR_CTL_FONT,
+  RES_PARATR_TABSTOP,
+  RES_PARATR_OUTLINELEVEL,
+} from "../../../inc/hintids";
 import { SwTableNode } from "../../../source/core/docnode/node";
 import type { SwTextNode } from "../../../source/core/txtnode/ndtxt";
+import { SwPaM, SwPosition } from "../../../source/core/crsr/pam";
 import { SwDoc, type WriterEmbeddedFont } from "../../../source/core/doc/doc";
 import {
   sectionTextNodes,
@@ -50,7 +77,12 @@ import {
   getDefaultDocumentSettings,
   type DocumentSettingId,
 } from "../../../source/core/doc/DocumentSettingManager";
-import { decodeSfxItemSet, encodeSfxItemSet } from "./item-codec";
+import {
+  decodeSfxItemSet,
+  encodeSfxItemSet,
+  decodeSfxPoolItem,
+  encodeSfxPoolItem,
+} from "./item-codec";
 
 /** Native scalar rule state transported independently of copy-constructor policy. */
 interface WriterNumberRuleScalarState {
@@ -91,10 +123,16 @@ interface WriterStyleRecord {
 
 /** Internal graph record. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
+  readonly theme?: ThemeRecord;
   readonly bodyOrder?: readonly ("text" | "table")[];
   readonly tables?: readonly WriterTableRecord[];
   readonly textFrames?: readonly WriterTextFrameRecord[];
-  readonly bookmarks?: readonly Readonly<{ name: string; nodeIndex: number; offset: number }>[];
+  readonly bookmarks?: readonly Readonly<{
+    name: string;
+    nodeIndex: number;
+    offset: number;
+    end?: Readonly<{ nodeIndex: number; offset: number }>;
+  }>[];
   readonly embeddedFonts?: readonly WriterEmbeddedFont[];
   readonly documentSettings: Readonly<Record<DocumentSettingId, boolean>>;
   readonly lineNumberInfo?: SwLineNumberInfoValue;
@@ -108,6 +146,12 @@ export interface WriterDocumentRecord {
     value: WriterPageDescriptorValue;
     pageFormat?: WriterPageFormatRecord;
   }>[];
+  readonly pageStories?: WriterPageStories;
+  readonly themeFontLanguages?: SwDoc["themeFontLanguages"];
+  readonly compatSettings?: readonly CompatSetting[];
+  readonly fontDefaults?: readonly SfxPoolItemSnapshot[];
+  readonly tabStopDefault?: SfxPoolItemSnapshot;
+  readonly textEffectDefault?: SfxPoolItemSnapshot;
   readonly textGridDefault?: SfxPoolItemSnapshot;
   readonly swModelVersion: 17;
   readonly textFormatCollections: readonly WriterStyleRecord[];
@@ -125,20 +169,45 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
   for (const table of document.GetTables())
     tables.push(yield* encodeWriterTableSteps(document, table));
   const textOwners = sectionTextNodes(document.nodes.getBodyContent());
+  const pageStories = yield* encodePageStories(document, textOwners);
   const textFrames = yield* encodeTextFrames(document, textOwners);
+  const fontDefaults: SfxPoolItemSnapshot[] = [];
+  for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT]) {
+    const font = document.GetAttrPool().GetUserDefaultItem(which);
+    if (font) fontDefaults.push(encodeSfxPoolItem(font));
+  }
+  const tabStopDefault = document.GetAttrPool().GetUserDefaultItem(RES_PARATR_TABSTOP);
+  const textEffectDefault = encodeTextEffectDefault(document);
   const textGridDefault = encodeTextGridDefault(document);
+  const compatSettings = ReadCompatSettings(
+    document.interopGrabBag.GetGrabBag().get("CompatSettings"),
+  );
   return {
+    ...(document.theme ? { theme: encodeTheme(document.theme) } : {}),
+    ...(document.themeFontLanguages ? { themeFontLanguages: document.themeFontLanguages } : {}),
+    ...(compatSettings === undefined ? {} : { compatSettings }),
+    ...(fontDefaults.length ? { fontDefaults } : {}),
+    ...(tabStopDefault ? { tabStopDefault: encodeSfxPoolItem(tabStopDefault) } : {}),
     ...(textFrames.length ? { textFrames } : {}),
+    ...(pageStories === undefined ? {} : { pageStories }),
     embeddedFonts: document.GetEmbeddedFonts(),
     bookmarks: document
       .GetIDocumentMarkAccess()
       .GetBookmarks()
       .map(
-        /** Encodes one live collapsed Writer mark. @param mark - Mark. @returns Primitive position. */
+        /** Encodes both live endpoints of an expanded native bookmark. @param mark - Mark. @returns Transfer record. */
         (mark) => ({
           name: mark.GetName(),
-          nodeIndex: textOwners.indexOf(mark.GetMarkPos().GetNode() as SwTextNode),
-          offset: mark.GetMarkPos().GetContentIndex(),
+          nodeIndex: textOwners.indexOf(mark.GetMarkStart().GetNode() as SwTextNode),
+          offset: mark.GetMarkStart().GetContentIndex(),
+          ...(mark.IsExpanded()
+            ? {
+                end: {
+                  nodeIndex: textOwners.indexOf(mark.GetMarkEnd().GetNode() as SwTextNode),
+                  offset: mark.GetMarkEnd().GetContentIndex(),
+                },
+              }
+            : {}),
         }),
       ),
     documentSettings: document.GetDocumentSettingManager().GetValues(),
@@ -196,6 +265,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
       },
     ),
     swModelVersion: 17,
+    ...(textEffectDefault === undefined ? {} : { textEffectDefault }),
     ...(textGridDefault === undefined ? {} : { textGridDefault }),
     textFormatCollections: document.GetTextFormatColls().map(
       /** Encodes one paragraph collection. @param collection - Model collection. @returns Primitive style record. */ (
@@ -253,6 +323,61 @@ export function* decodeWriterDocumentSteps(
   });
   let complete = false;
   try {
+    if (record.theme !== undefined) document.theme = decodeTheme(record.theme);
+    if (record.compatSettings !== undefined) {
+      if (!Array.isArray(record.compatSettings))
+        throw new Error("Stored Writer compat settings are invalid.");
+      for (const row of record.compatSettings as readonly unknown[]) {
+        if (
+          !isRecord(row) ||
+          Object.entries(row).some(
+            /** Limits each transported row to the three native fields. @param entry - Candidate field. @returns Whether invalid. */
+            ([name, value]) =>
+              (name !== "name" && name !== "uri" && name !== "val") || typeof value !== "string",
+          )
+        )
+          throw new Error("Stored Writer compat settings are invalid.");
+      }
+      const model = new SwXTextDocument(document);
+      try {
+        SetCompatSettings(model, record.compatSettings);
+      } finally {
+        model.dispose();
+      }
+    }
+    if (record.themeFontLanguages !== undefined) {
+      const languages = record.themeFontLanguages;
+      if (
+        !isRecord(languages) ||
+        Object.values(languages).some(
+          /** Requires text-valued language attributes. @param value - Transferred field. @returns Whether invalid. */
+          (value) => typeof value !== "string",
+        )
+      )
+        throw new Error("Stored Writer theme font languages are invalid.");
+      document.themeFontLanguages = { ...languages };
+    }
+    if (record.fontDefaults !== undefined && !Array.isArray(record.fontDefaults))
+      throw new Error("Stored Writer font defaults are invalid.");
+    for (const font of (record.fontDefaults ?? []) as readonly SfxPoolItemSnapshot[]) {
+      if (
+        !isRecord(font) ||
+        !("value" in font) ||
+        (font.which !== RES_CHRATR_FONT &&
+          font.which !== RES_CHRATR_CJK_FONT &&
+          font.which !== RES_CHRATR_CTL_FONT)
+      )
+        throw new Error("Stored Writer font default is invalid.");
+      const pool = document.GetAttrPool();
+      pool.SetUserDefaultItem(decodeSfxPoolItem(pool, font));
+    }
+    if (record.tabStopDefault !== undefined) {
+      const tab = record.tabStopDefault;
+      if (!isRecord(tab) || tab.which !== RES_PARATR_TABSTOP || !("value" in tab))
+        throw new Error("Stored Writer tab stop default is invalid.");
+      const pool = document.GetAttrPool();
+      pool.SetUserDefaultItem(decodeSfxPoolItem(pool, tab as SfxPoolItemSnapshot));
+    }
     for (const font of record.embeddedFonts ?? []) {
       if (
         typeof font.path !== "string" ||
@@ -268,6 +393,7 @@ export function* decodeWriterDocumentSteps(
     }
     if (record.lineNumberInfo !== undefined)
       document.SetLineNumberInfo(SwLineNumberInfo.FromValue(record.lineNumberInfo));
+    restoreTextEffectDefault(document, record.textEffectDefault);
     restoreTextGridDefault(document, record.textGridDefault);
     const firstPageDescriptor = record.pageDescriptors[0];
     if (
@@ -298,11 +424,13 @@ export function* decodeWriterDocumentSteps(
       restorePageFormats(descriptor, descriptorRecord.pageFormat);
     }
     const settings = { ...record.documentSettings };
-    // Older browser graph records predate this represented native setting.
+    // Older browser graph records predate these represented native settings.
     // All prior fields retain the strict current-schema validation contract.
-    if (!Object.hasOwn(settings, "DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT"))
-      settings.DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT =
-        getDefaultDocumentSettings().DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT;
+    for (const id of [
+      "DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT",
+      "APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING",
+    ] as const)
+      if (!Object.hasOwn(settings, id)) settings[id] = getDefaultDocumentSettings()[id];
     document.GetDocumentSettingManager().SetValues(settings);
     restoreCharacterStyles(document, record.characterFormats);
     if (record.textFormatCollections[0]?.id !== "default")
@@ -310,8 +438,12 @@ export function* decodeWriterDocumentSteps(
     for (const style of record.textFormatCollections) {
       if (typeof style.id !== "string" || style.id.length === 0)
         throw new Error("Stored Writer style is invalid.");
-      if (!isWriterParagraphStyle(style.id))
-        document.MakeTextFormatColl(style.name, undefined, style.id);
+      if (!isWriterParagraphStyle(style.id)) {
+        const original = getWriterMaterializedParagraphStyleDefinition(style.id);
+        if (original?.poolId === style.poolId && original.group === style.group)
+          document.GetTextFormatColl(style.id);
+        else document.MakeTextFormatColl(style.name, undefined, style.id);
+      }
     }
     if (
       record.outlineRuleIndex !== undefined &&
@@ -508,13 +640,25 @@ export function* decodeWriterDocumentSteps(
     if (textIndex !== record.textNodes.length || tableIndex !== (record.tables?.length ?? 0))
       throw new Error("Stored Writer body order is invalid.");
     const textOwners = sectionTextNodes(document.nodes.getBodyContent());
+    yield* decodePageStories(document, record.pageStories, textOwners);
     yield* decodeTextFrames(document, record.textFrames, textOwners);
     if (record.bookmarks !== undefined) {
       if (!Array.isArray(record.bookmarks)) throw new Error("Stored Writer bookmarks are invalid.");
       for (const mark of record.bookmarks) {
-        const node = textOwners[mark.nodeIndex];
-        if (node === undefined) throw new Error("Stored Writer bookmark position is invalid.");
-        document.GetIDocumentMarkAccess().MakeMark(node, mark.offset, mark.name);
+        const start = decodeBookmarkPosition(textOwners, mark);
+        let end: SwPosition | undefined;
+        try {
+          end = mark.end === undefined ? undefined : decodeBookmarkPosition(textOwners, mark.end);
+          const range = new SwPaM(start, end);
+          try {
+            document.GetIDocumentMarkAccess().MakeBookmark(range, mark.name);
+          } finally {
+            range.Dispose();
+          }
+        } finally {
+          end?.Dispose();
+          start.Dispose();
+        }
       }
     }
     complete = true;
@@ -522,6 +666,22 @@ export function* decodeWriterDocumentSteps(
   } finally {
     if (!complete) document.Dispose();
   }
+}
+
+/** Rebinds a bookmark endpoint to its actual restored text owner. @param owners - Text nodes in transfer order. @param endpoint - Encoded node and offset. @returns Registered Writer position. */
+function decodeBookmarkPosition(
+  owners: readonly SwTextNode[],
+  endpoint: Readonly<{ nodeIndex: number; offset: number }>,
+): SwPosition {
+  const node = owners[endpoint.nodeIndex];
+  if (
+    !node ||
+    !Number.isInteger(endpoint.offset) ||
+    endpoint.offset < 0 ||
+    endpoint.offset > node.Len()
+  )
+    throw new Error("Stored Writer bookmark position is invalid.");
+  return new SwPosition(node, endpoint.offset);
 }
 
 /** Checks for a non-array object. @param value - Candidate. @returns Whether a record. */

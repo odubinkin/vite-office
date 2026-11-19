@@ -1,0 +1,64 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.styles.ts",
+    "localSymbols": [
+      "OutputStylesTable",
+      "OutputStyle"
+    ],
+    "upstreamPath": "sw/source/filter/ww8/docxattributeoutput.cxx",
+    "upstreamSymbols": [
+      "DocxAttributeOutput::StartStyle",
+      "DocxAttributeOutput::StartStyleProperties",
+      "DocxAttributeOutput::EndStyleProperties"
+    ],
+    "preservedResponsibilities": [
+      "The DOCX attribute writer emits represented paragraph and character style definitions from shared native Word slots, including base and follow style references and direct native item properties.",
+      "Writes the native character interoperability item in docDefaults and named styles when present.",
+      "Serializes the native user default script fonts in DOCX run defaults.",
+      "Records the effective default tab item during document-default style output and leaves it out of explicit style tabs.",
+      "Writes custom document-default tabs in pPrDefault and routes ordinary standard tab positions to the settings part."
+    ],
+    "omittedResponsibilities": [
+      "Document defaults, latent and linked styles, imported interoperability metadata and complete style-property output remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.styles.ts",
+          "marker": "OutputStylesTable"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.styles.test.ts",
+          "marker": "keeps named style properties and native inheritance through DOCX"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.default-tabs.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.tabs.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx",
+          "marker": "DocxAttributeOutput::StartStyle"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx",
+          "marker": "MSWordStyles::OutputStylesTable"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.styles.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "This split preserves the original responsibility and owner while keeping orchestration and its implementation tables within the size limit."
+    }
+  }
+}

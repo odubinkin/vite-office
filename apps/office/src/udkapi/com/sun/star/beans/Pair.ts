@@ -118,3 +118,105 @@ export class PairStringString implements PairStringStringConstReference {
     this.first.dispose();
   }
 }
+
+const long_type: [R | null] = [null];
+/** Original normal Pair<string,long> specialization metadata. @returns Borrowed native type. */
+export function cppu_detail_getUnoType_PairStringLong(): Type {
+  if (long_type[0] === null)
+    typelib_static_struct_type_init(
+      long_type,
+      new TextEncoder().encode("com.sun.star.beans.Pair<string,long>\0"),
+      null,
+      2,
+      [
+        UnoType.get("OUString").getTypeLibType() as R,
+        UnoType.get("sal_Int32").getTypeLibType() as R,
+      ],
+      [true, true],
+    );
+  return getTypeFromTypeDescriptionReference(long_type);
+}
+/** Original const Pair<OUString,sal_Int32> fields. */
+export interface PairStringLongConstReference {
+  readonly First: OUStringConstReference;
+  readonly Second: number;
+}
+const borrowedLong = new WeakMap<PairAddress, PairStringLongConstReference>();
+/** Generated consumed Pair<string,long> specialization uses the existing native string and signed32 cells. */
+export class PairStringLong implements PairStringLongConstReference {
+  private first = new OUString();
+  private second: [number] = [0];
+  /** Original default/copy/all-field constructors. @param args - Selected native operands. @returns Value. */
+  constructor(...args: [] | [PairStringLongConstReference] | [OUStringConstReference, number]) {
+    if (args.length === 1) this.assign(args[0]);
+    else if (args.length === 2) {
+      this.First = args[0];
+      this.Second = args[1];
+    }
+  }
+  /** Original first member. @returns Borrowed string owner. */
+  get First(): OUString {
+    return this.first;
+  }
+  /** Original first assignment. @param value - Borrowed string. @returns Nothing. */
+  set First(value: OUStringConstReference) {
+    this.first.assign(value);
+  }
+  /** Original signed32 member. @returns Field value. */
+  get Second(): number {
+    return this.second[0];
+  }
+  /** Original signed32 assignment. @param value - Source scalar. @returns Nothing. */
+  set Second(value: number) {
+    this.second[0] = value | 0;
+  }
+  /** Original field-ordered equality. @param other - Native operand. @returns Equal. */
+  equals(other: PairStringLongConstReference): boolean {
+    return this.First.equals(other.First) && this.Second === other.Second;
+  }
+  /** Original inequality. @param other - Native operand. @returns Different. */
+  notEquals(other: PairStringLongConstReference): boolean {
+    return !this.equals(other);
+  }
+  /** Original memberwise copy assignment. @param other - Native operand. @returns This owner. */
+  assign(other: PairStringLongConstReference): this {
+    this.First = other.First;
+    this.Second = other.Second;
+    return this;
+  }
+  /** Original memberwise move construction; scalar source remains unchanged. @param source - Native rvalue. @returns Moved value. */
+  static move(source: PairStringLong): PairStringLong {
+    const result = Object.create(PairStringLong.prototype) as PairStringLong;
+    result.first = OUString.move(source.first);
+    result.second = [source.second[0]];
+    return result;
+  }
+  /** Original memberwise move assignment; scalar source remains unchanged. @param source - Native rvalue. @returns This owner. */
+  moveAssign(source: PairStringLong): this {
+    this.first.moveAssign(source.first);
+    this.Second = source.Second;
+    return this;
+  }
+  /** Original addressed fields for CPPU native aggregate operations. @param offset - Declared field offset0/8. @returns Actual field cell. */
+  get(offset: number): rtl_uStringSlot | [number] {
+    return offset === 0 ? this.first.getDataAddress() : this.second;
+  }
+  /** Compiler const-reference binding over existing initialized field cells. @param address - Actual native aggregate. @returns Borrowed view. */
+  static unacquired(address: PairAddress): PairStringLongConstReference {
+    let view = borrowedLong.get(address);
+    if (view === undefined) {
+      view = Object.freeze({
+        First: OUString.unacquired(address.get(0) as rtl_uStringSlot),
+        /** Reads the original current scalar cell. @returns Signed32 value. */ get Second(): number {
+          return (address.get(8) as [number])[0];
+        },
+      });
+      borrowedLong.set(address, view);
+    }
+    return view;
+  }
+  /** Original member destruction. @returns Nothing. */
+  dispose(): void {
+    this.first.dispose();
+  }
+}

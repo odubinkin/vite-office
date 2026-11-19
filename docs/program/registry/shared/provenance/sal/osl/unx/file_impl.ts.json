@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/osl/unx/file_impl.ts",
+    "status": "mapped",
+    "upstreamPath": "sal/osl/unx/file_impl.hxx",
+    "localSymbols": [
+      "DirectoryItem_Impl"
+    ],
+    "upstreamSymbols": [
+      "DirectoryItem_Impl"
+    ],
+    "preservedResponsibilities": [
+      "Original DirectoryItem_Impl and directory-item C/wrapper lifetime, get/status and inode-only identity are ported over genuine selected libc access/lstat/realpath. FileStatus preserves zero construction, source masks, cheap grouped fields, default/retained values, late partial errors and independently owned string/time getters. FileBase retains source RC aliases, URL wrappers and DirectoryItem inheritance. Shared path helper basename/dot/hidden mutation and OString length/pointer/reverse-byte equality use original RTL owners/templates. Native byte-path decoding and full64-bit size/inode fields are not replaced by host filesystem APIs or fake stat providers. The actual selected SDK dirent feature and header-derived sizeof72 are compiler-generated, with original XML enum values retained. Original UNIX QA root-dependent attribute expectations remain unmodified and two fail against real SDK geteuid0/access behavior; kernel semantics are preserved and documented. SvFileStream/TempFile/copy/remove, directory enumeration/remaining FileBase APIs, native ABI/OOM/debug/race/invalid lifetime, full upstream fixtures and complete package/storage/model/filter/UI remain unfinished or unqualified."
+    ],
+    "omittedResponsibilities": [
+      "Complete directory enumeration/copy/remove/FileBase/File/SvFileStream/TempFile and package/storage/model/filter/UI; native ABI/OOM/debug/race/invalid lifetime; remaining exact upstream directory-enumeration fixture setup and two source QA root-profile failures."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/osl/unx/file_impl.ts",
+          "marker": "DirectoryItem_Impl"
+        },
+        {
+          "path": "apps/office/src/sal/osl/unx/file_stat.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/osl/unx/file_stat.upstream.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sal/osl/unx/file_impl.hxx",
+          "marker": "DirectoryItem_Impl"
+        },
+        {
+          "path": "sal/qa/osl/file/osl_File.cxx",
+          "marker": "namespace osl_FileStatus"
+        },
+        {
+          "path": "sal/osl/unx/file_misc.cxx",
+          "marker": "DirectoryItem_Impl::getFileType"
+        }
+      ]
+    }
+  }
+}

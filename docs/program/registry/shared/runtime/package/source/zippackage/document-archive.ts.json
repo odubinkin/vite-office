@@ -17,9 +17,11 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/package/source/zippackage/document-archive.ts#DocumentArchive",
-        "apps/office/src/package/source/zippackage/document-archive.ts#DocumentArchiveWriter"
+        "apps/office/src/package/source/zippackage/document-archive.ts#DocumentArchiveWriter",
+        "apps/office/src/package/source/zippackage/native-archive-output.test.ts",
+        "apps/office/src/package/source/zippackage/native-archive-admission.test.ts"
       ],
-      "justification": "Delegates document ZIP parsing, extraction, CRC validation and archive creation to @zip.js/zip.js; applies document path, case-collision and browser resource policies. This is local integration infrastructure and does not claim native ZIP implementation parity.",
+      "justification": "Document admission/extraction still uses actual zip.js with unchanged path, case-collision, size, ratio and encryption/codec admission policies. Existing DocumentArchiveWriter now marshals its unchanged STORED/level0 output choice into actual original ZipOutputStream, ZipEntry, CRC32, native Sequence and UNOMemoryStream rather than a second ZIP producer. CRC reads actual typed bytes; output uses original32768-byte chunks, preserving UTF16 names, input snapshots, entry order, first STORED mimetype and terminal state. The existing asynchronous ZipStorage.commit and ODF packXmlPackage callers retain their contracts and now execute the source ZIP output owner. This browser transport is not the native ZipPackage/StorageFactory service and does not claim full filter/model/UI DOCX/XLSX acceptance or original package compression-choice parity.\nThe browser validates the same immutable byte snapshot passed to native storage. Original limits and name policies remain enforced. STORED entries pass the existing byte-count and CRC sink before native raw reading, without retaining extracted copies.",
       "knownViolations": [],
       "localSymbols": [
         "DocumentArchive",

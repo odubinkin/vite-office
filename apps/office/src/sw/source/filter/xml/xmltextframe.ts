@@ -276,12 +276,14 @@ export function projectAnchoredTextFrames(
 }
 
 /** Enumerates the actual text paragraphs in one body or fly section. @param blocks - Direct section blocks. @returns Paragraphs used by the export pass. */
-function* sectionParagraphs(blocks: readonly (SwTextNode | SwTableNode)[]): Generator<SwTextNode> {
+export function* sectionParagraphs(
+  blocks: readonly (SwTextNode | SwTableNode)[],
+): Generator<SwTextNode> {
   for (const block of blocks) {
     if (!(block instanceof SwTableNode)) yield block;
     else
       for (const row of block.GetTable().GetTabLines())
-        for (const cell of row.GetTabBoxes()) yield* cell.GetParagraphs();
+        for (const cell of row.GetTabBoxes()) yield* sectionParagraphs(cell.GetContentNodes());
   }
 }
 

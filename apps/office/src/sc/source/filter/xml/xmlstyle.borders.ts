@@ -1,4 +1,7 @@
 /** @fileoverview Consumed Calc border property map, export ContextFilter and import finished merge from xmlstyle.cxx/xmlstyli.cxx; actual box/line items and shared XML handlers own values. */
+import type { ComplexColor } from "../../../../docmodel/inc/color/ComplexColor";
+import { exportComplexColor } from "../../../../xmloff/source/text/XMLComplexColorContext";
+import { ATTR_BORDER } from "../../../inc/scitems";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { SvxLineItem } from "../../../../editeng/inc/lineitem";
 import {
@@ -13,10 +16,38 @@ import { SfxItemState } from "../../../../svl/source/items/itemset";
 import type { ScPatternAttr } from "../../../inc/patattr";
 /** Native four side context order LEFT,RIGHT,TOP,BOTTOM and original box member ids. */
 const sides = [
-  ["left", XMLToken.FO_BORDER_LEFT, XMLToken.STYLE_BORDER_LINE_WIDTH_LEFT, 2, 1],
-  ["right", XMLToken.FO_BORDER_RIGHT, XMLToken.STYLE_BORDER_LINE_WIDTH_RIGHT, 3, 2],
-  ["top", XMLToken.FO_BORDER_TOP, XMLToken.STYLE_BORDER_LINE_WIDTH_TOP, 0, 3],
-  ["bottom", XMLToken.FO_BORDER_BOTTOM, XMLToken.STYLE_BORDER_LINE_WIDTH_BOTTOM, 1, 4],
+  [
+    "left",
+    XMLToken.FO_BORDER_LEFT,
+    XMLToken.STYLE_BORDER_LINE_WIDTH_LEFT,
+    2,
+    1,
+    XMLToken.LOEXT_BORDER_LEFT_COMPLEX_COLOR,
+  ],
+  [
+    "right",
+    XMLToken.FO_BORDER_RIGHT,
+    XMLToken.STYLE_BORDER_LINE_WIDTH_RIGHT,
+    3,
+    2,
+    XMLToken.LOEXT_BORDER_RIGHT_COMPLEX_COLOR,
+  ],
+  [
+    "top",
+    XMLToken.FO_BORDER_TOP,
+    XMLToken.STYLE_BORDER_LINE_WIDTH_TOP,
+    0,
+    3,
+    XMLToken.LOEXT_BORDER_TOP_COMPLEX_COLOR,
+  ],
+  [
+    "bottom",
+    XMLToken.FO_BORDER_BOTTOM,
+    XMLToken.STYLE_BORDER_LINE_WIDTH_BOTTOM,
+    1,
+    4,
+    XMLToken.LOEXT_BORDER_BOTTOM_COMPLEX_COLOR,
+  ],
 ] as const;
 /** Original independent diagonal property, deprecated width spelling and current widths spelling. */
 const diagonals = [
@@ -83,7 +114,7 @@ export function importCellBorderProperties(
 ): void {
   const all = parse(attributes.get(XMLToken.FO_BORDER), false, unsupported),
     allWidth = parse(attributes.get(XMLToken.STYLE_BORDER_LINE_WIDTH), true, unsupported),
-    box = (pattern.GetItem(150) as SvxBoxItem).Clone();
+    box = (pattern.GetItem(ATTR_BORDER) as SvxBoxItem).Clone();
   let changed = false;
   for (const [, token, widthToken, , member] of sides) {
     const value = parse(attributes.get(token), false, unsupported) ?? all,
@@ -124,8 +155,8 @@ function emit(name: string, widthName: string, line: BorderLine2): string {
 /** Native ContextFilter collapses equal side values and equal width values independently. @param pattern - Actual cell pattern. @returns Original cell-property attributes. */
 export function exportCellBorderProperties(pattern: ScPatternAttr): string {
   let result = "";
-  if (pattern.GetItemSet().GetItemState(150, false) === SfxItemState.SET) {
-    const box = pattern.GetItem(150) as SvxBoxItem,
+  if (pattern.GetItemSet().GetItemState(ATTR_BORDER, false) === SfxItemState.SET) {
+    const box = pattern.GetItem(ATTR_BORDER) as SvxBoxItem,
       lines = sides.map(
         /** Reads real native UNO edge value. @param side - Original map entry. @returns Published line. */ (
           side,
@@ -173,4 +204,37 @@ export function exportCellBorderProperties(pattern: ScPatternAttr): string {
     }
   }
   return result;
+}
+
+/** Connects the four original element-valued ODF properties to the existing pooled side lines. @param pattern - Destination cell style. @returns Native element handlers. */
+export function cellBorderColorHandlers(
+  pattern: ScPatternAttr,
+): Map<XMLToken, (color: ComplexColor) => void> {
+  const handlers = new Map<XMLToken, (color: ComplexColor) => void>();
+  for (const [, , , edge, , token] of sides) {
+    handlers.set(
+      token,
+      /** Applies the actual side color without replacing dimensions or RGB. @param color - Imported color metadata. @returns Nothing. */
+      (color) => {
+        const box = (pattern.GetItem(ATTR_BORDER) as SvxBoxItem).Clone();
+        const line = box.GetLine(edge);
+        if (!line) return;
+        line.setComplexColor(color);
+        pattern.ItemSetPut(box);
+      },
+    );
+  }
+  return handlers;
+}
+
+/** Emits native border color metadata next to the resolved ODF shorthand properties. @param pattern - Actual cell style. @returns ODF property children. */
+export function exportCellBorderColors(pattern: ScPatternAttr): string {
+  const box = pattern.GetItemSet().GetItemIfSet(ATTR_BORDER, false) as SvxBoxItem | undefined;
+  if (!box) return "";
+  let xml = "";
+  for (const [side, , , edge] of sides) {
+    const line = box.GetLine(edge);
+    if (line) xml += exportComplexColor(line.getComplexColor(), `border-${side}-complex-color`);
+  }
+  return xml;
 }

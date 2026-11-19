@@ -24,15 +24,17 @@ import {
   DFLT_ESC_AUTO_SUB,
 } from "../../../../editeng/inc/escapementitem";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { RTL_TEXTENCODING_MS_1252 } from "../../../../sal/inc/rtl/textenc";
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 import { stringAny, text, unicode } from "../../core/unocore/unocrsrhelper";
-import type { Id, Properties, Reference, Sprm, Value } from "../inc/dmapper/resourcemodel";
+import type { Id, Properties, Reference, Sprm, Stream, Value } from "../inc/dmapper/resourcemodel";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { PropertyIds as P } from "./PropertyIds";
 import { TypeClass } from "../../../../udkapi/com/sun/star/uno/TypeClass";
 import { getEnumAsINT32 } from "../../../../comphelper/source/misc/types";
 import { WritingMode2 } from "../../../../offapi/com/sun/star/text/WritingMode2";
 import { ParagraphPropertiesPropertyMap, PropertyMap, SectionPropertyMap } from "./PropertyMap";
+import { ResolveParagraphTabs } from "./DomainMapper.tabs";
 import { DomainMapper_Impl, ContextType as C, PageMarElement as M } from "./DomainMapper_Impl";
 import { convertTwipToMm100_Limited } from "./ConversionHelper";
 import { LanguageTag } from "../../../../i18nlangtag/inc/languagetag";
@@ -41,61 +43,38 @@ import {
   cppu_detail_getUnoType_Locale as localeType,
 } from "../../../../udkapi/com/sun/star/lang/Locale";
 import { CellColorHandler } from "./CellColorHandler";
+import { StyleSheetTableImport } from "./StyleSheetTable.import";
+import { DomainMapperTableRanges } from "./DomainMapperTableManager.ranges";
 import { ApplyFrameAttribute } from "./DomainMapper.frame";
-import { ThemeColorHandler } from "./ThemeColorHandler";
+import { resolveTextEffect } from "./TextEffectsHandler";
+import { resolveThemeFont } from "./ThemeHandler.fonts";
+import { resolveThemeColor } from "./ThemeColorHandler";
 import { BorderHandler } from "./BorderHandler";
 import { cppu_detail_getUnoType_BorderLine2 } from "../../../../offapi/com/sun/star/table/BorderLine2";
-
-/** Original underline token mapping, with unknown tokens retaining NONE. */
-const underline = new Map<number, number>([
-  [N.LN_Value_ST_Underline_none, U.NONE],
-  [N.LN_Value_ST_Underline_words, U.SINGLE],
-  [N.LN_Value_ST_Underline_single, U.SINGLE],
-  [N.LN_Value_ST_Underline_double, U.DOUBLE],
-  [N.LN_Value_ST_Underline_dotted, U.DOTTED],
-  [N.LN_Value_ST_Underline_dash, U.DASH],
-  [N.LN_Value_ST_Underline_dotDash, U.DASHDOT],
-  [N.LN_Value_ST_Underline_dotDotDash, U.DASHDOTDOT],
-  [N.LN_Value_ST_Underline_thick, U.BOLD],
-  [N.LN_Value_ST_Underline_wave, U.WAVE],
-  [N.LN_Value_ST_Underline_dottedHeavy, U.BOLDDOTTED],
-  [N.LN_Value_ST_Underline_dashedHeavy, U.BOLDDASH],
-  [N.LN_Value_ST_Underline_dashLong, U.LONGDASH],
-  [N.LN_Value_ST_Underline_dashLongHeavy, U.BOLDLONGDASH],
-  [N.LN_Value_ST_Underline_dashDotHeavy, U.BOLDDASHDOT],
-  [N.LN_Value_ST_Underline_dashDotDotHeavy, U.BOLDDASHDOTDOT],
-  [N.LN_Value_ST_Underline_wavyHeavy, U.BOLDWAVE],
-  [N.LN_Value_ST_Underline_wavyDouble, U.DOUBLEWAVE],
-]);
-/** Represented paragraph border properties in the source dmapper. */
-const paragraphBorderIds = new Map<number, readonly [P, P]>([
-  [N.LN_CT_PBdr_top, [P.PROP_TOP_BORDER, P.PROP_TOP_BORDER_DISTANCE]],
-  [N.LN_CT_PBdr_left, [P.PROP_LEFT_BORDER, P.PROP_LEFT_BORDER_DISTANCE]],
-  [N.LN_CT_PBdr_bottom, [P.PROP_BOTTOM_BORDER, P.PROP_BOTTOM_BORDER_DISTANCE]],
-  [N.LN_CT_PBdr_right, [P.PROP_RIGHT_BORDER, P.PROP_RIGHT_BORDER_DISTANCE]],
-]);
-
-/** Original highlight token order is contiguous in the generated resource model. */
-const highlights = [
-  0x000000, 0x0000ff, 0x00ffff, 0x00ff00, 0xff00ff, 0xff0000, 0xffff00, 0xffffff, 0x000080,
-  0x008080, 0x008000, 0x800080, 0x800000, 0x808000, 0x808080, 0xc0c0c0, -1,
-] as const;
-
+import { highlights, paragraphBorderIds, underline } from "./DomainMapper.resources";
+import { PushPageHeaderFooter } from "./DomainMapper_Impl.headerfooter";
 /** Receives native property sets and paragraph/run groups; lifecycle state remains on the shell, outside this model mapper. */
-export class DomainMapper implements Properties {
+export class DomainMapper implements Properties, Stream {
   readonly impl: DomainMapper_Impl;
+  private tableRanges: DomainMapperTableRanges;
   private readonly CT_PageSz = { w: 0, h: 0, orient: false };
+  private firstParagraphInSection = true;
+  private lastParagraphInSection = false;
+  private lastSectionGroup = false;
+  private deferredBreak: BreakType | undefined;
   /** Borrows the destination's actual UNO-facing document. @param model - Canonical model supplier. @param documentType - Original explicit source format. @param insertMode - Whether importing into an existing document. @returns Mapper. */
   constructor(
     readonly model: SwXTextDocument,
     documentType: SourceDocumentType,
     insertMode = false,
   ) {
-    this.impl = new DomainMapper_Impl(this, model, documentType);
+    this.impl = new DomainMapper_Impl(this, model, documentType, !insertMode);
+    this.tableRanges = new DomainMapperTableRanges(model.getText(), this.impl);
     if (!insertMode) {
       const settings = model.createDocumentSettings();
       for (const [property, flag] of [
         ["TabsRelativeToIndent", false],
+        ["ApplyParagraphMarkFormatToNumbering", true],
         ["TabAtLeftIndentForParagraphsInList", true],
         ["IgnoreTabsAndBlanksForLineCalculation", true],
       ] as const) {
@@ -130,13 +109,64 @@ export class DomainMapper implements Properties {
   IsStyleSheetImport(): boolean {
     return this.impl.IsStyleSheetImport();
   }
+  /** Begins the original section-owned property context. @returns Nothing. */
+  startSectionGroup(): void {
+    this.impl.PushProperties(C.CONTEXT_SECTION);
+    this.firstParagraphInSection = true;
+    this.lastParagraphInSection = false;
+  }
+  /** Applies the native section property map before relinquishing the context. @returns Nothing. */
+  endSectionGroup(): void {
+    if (this.firstParagraphInSection) {
+      this.startParagraphGroup();
+      this.startCharacterGroup();
+      this.utext(Uint16Array.of(13), 1);
+      this.endCharacterGroup();
+      this.endParagraphGroup();
+    }
+    const section = this.impl.GetTopContextOfType(C.CONTEXT_SECTION);
+    if (section instanceof SectionPropertyMap) section.CloseSectionGroup(this.impl);
+    this.impl.PopProperties(C.CONTEXT_SECTION);
+  }
+  /** Retains the original parser's section-boundary flag. @returns Nothing. */
+  markLastSectionGroup(): void {
+    this.lastSectionGroup = true;
+  }
+  /** Retains the final paragraph flag for section-boundary breaks. @returns Nothing. */
+  markLastParagraphInSection(): void {
+    this.lastParagraphInSection = true;
+  }
+  /** Original release-build diagnostic callback. @param _handle - Parser diagnostics handle. @returns Nothing. */
+  info(handle: string): void {
+    void handle;
+  }
+  /** Delivers native byte controls emitted by OOXMLBreakHandler. @param data - Original bytes. @param length - Counted span. @returns Nothing. */
+  text(data: Uint8Array, length: number): void {
+    const code = length === 1 ? data[0] : 0;
+    if (this.impl.HandleFieldControl(code)) return;
+    if (code === 0x0c || code === 0x0e) {
+      this.deferredBreak = code === 0x0c ? BreakType.PAGE_BEFORE : BreakType.COLUMN_BEFORE;
+    } else if (code !== 0x0a || !this.lastParagraphInSection) {
+      const value = new OUString(data.subarray(0, length), length, RTL_TEXTENCODING_MS_1252);
+      try {
+        this.impl.appendTextPortion(value, this.impl.GetTopContext());
+      } finally {
+        value.dispose();
+      }
+    }
+  }
   /** Original paragraph context starts with its document's default paragraph style. @returns Nothing. */
   startParagraphGroup(): void {
-    this.insert(
-      this.impl.PushProperties(C.CONTEXT_PARAGRAPH),
-      P.PROP_PARA_STYLE_NAME,
-      stringAny(this.impl.GetDefaultParaStyleName()),
-    );
+    this.firstParagraphInSection = false;
+    const context = this.impl.PushProperties(C.CONTEXT_PARAGRAPH);
+    this.insert(context, P.PROP_PARA_STYLE_NAME, stringAny(this.impl.GetDefaultParaStyleName()));
+    this.applyDeferredBreak(context);
+  }
+  /** Inserts an original native page or column break property at the next applicable paragraph context. @param context - Target paragraph context. @returns Nothing. */
+  private applyDeferredBreak(context: PropertyMap): void {
+    if (this.deferredBreak === undefined) return;
+    this.insert(context, P.PROP_BREAK_TYPE, new Any([this.deferredBreak], breakType));
+    this.deferredBreak = undefined;
   }
   /** Original end callback pops state; the parser's CR event owns paragraph creation. @returns Nothing. */
   endParagraphGroup(): void {
@@ -151,14 +181,62 @@ export class DomainMapper implements Properties {
   /** Original numbering resource-table callback retains native import flags and manager ownership. Other table producers remain with their existing owners. @param id - Table identity. @param table - Native reference. @returns Nothing. */
   table(id: Id, table: Reference<import("../inc/dmapper/resourcemodel").Table>): void {
     this.impl.SetAnyTableImport(true);
-    if (id === N.LN_settings_settings) table.resolve(this.impl.GetSettingsTable());
-    else if (id === N.LN_NUMBERING) {
-      this.impl.SetNumberingImport(true);
-      table.resolve(this.impl.GetListTable());
-      this.impl.GetListTable().CreateNumberingRules();
-      this.impl.SetNumberingImport(false);
+    try {
+      if (id === N.LN_settings_settings) {
+        const settings = this.impl.GetSettingsTable();
+        table.resolve(settings);
+        this.impl.ApplySettingsTable();
+        const languages = settings.GetThemeFontLangProperties();
+        if (languages) this.model.GetDoc().themeFontLanguages = languages;
+      } else if (id === N.LN_STYLESHEET) {
+        const receiver = new StyleSheetTableImport(this);
+        this.impl.SetStyleSheetImport(true);
+        try {
+          table.resolve(receiver);
+          receiver.ApplyStyleSheets();
+        } finally {
+          this.impl.SetStyleSheetImport(false);
+        }
+      } else if (id === N.LN_NUMBERING) {
+        this.impl.SetNumberingImport(true);
+        try {
+          table.resolve(this.impl.GetListTable());
+          this.impl.GetListTable().CreateNumberingRules();
+        } finally {
+          this.impl.SetNumberingImport(false);
+        }
+      }
+    } finally {
+      this.impl.SetAnyTableImport(false);
     }
-    this.impl.SetAnyTableImport(false);
+  }
+  /** Resolves one native header/footer source under its own table and text append owners. @param id - Substream variant. @param part - Original stream reference. @returns Nothing. */
+  substream(id: Id, part: Reference<Stream>): void {
+    if (!this.impl.IsNewDoc()) return;
+    const section = this.impl.GetTopContextOfType(C.CONTEXT_SECTION);
+    if (!(section instanceof SectionPropertyMap)) return;
+    const target = PushPageHeaderFooter(this.impl, section, id);
+    if (!target) return;
+    const savedTable = this.tableRanges;
+    const first = this.firstParagraphInSection;
+    const last = this.lastParagraphInSection;
+    const deferred = this.deferredBreak;
+    this.tableRanges = new DomainMapperTableRanges(target, this.impl);
+    this.deferredBreak = undefined;
+    this.lastParagraphInSection = false;
+    try {
+      this.impl.WithTextAppend(
+        target,
+        /** Reads the native story. @returns Nothing. */ () => part.resolve(this),
+      );
+    } finally {
+      this.tableRanges.dispose();
+      this.tableRanges = savedTable;
+      this.firstParagraphInSection = first;
+      this.lastParagraphInSection = last;
+      this.deferredBreak = deferred;
+      target.dispose();
+    }
   }
   /** Original property-set callback resolves against this mapper. @param properties - Reference. @returns Nothing. */ props(
     properties: Reference<Properties>,
@@ -171,7 +249,11 @@ export class DomainMapper implements Properties {
     try {
       if (length === 1 && (data[0] === 13 || data[0] === 7))
         this.impl.finishParagraph(this.impl.GetTopContextOfType(C.CONTEXT_PARAGRAPH));
-      else this.impl.appendTextPortion(value, this.impl.GetTopContext());
+      else {
+        const paragraph = this.impl.GetTopContextOfType(C.CONTEXT_PARAGRAPH);
+        if (paragraph && !this.lastSectionGroup) this.applyDeferredBreak(paragraph);
+        this.impl.appendTextPortion(value, this.impl.GetTopContext());
+      }
     } finally {
       value.dispose();
     }
@@ -179,8 +261,10 @@ export class DomainMapper implements Properties {
   /** Releases original import temporaries and removes only the body paragraph appended by XParagraphAppend. @returns Nothing. */
   finishDocument(): void {
     this.impl.RemoveLastParagraph();
+    if (this.IsOOXMLImport()) this.impl.GetSettingsTable().ApplyCompatProperties(this.model);
   }
   /** Explicit host binding for the native mapper destructor; the destination model is borrowed. @returns Nothing. */ dispose(): void {
+    this.tableRanges.dispose();
     this.impl.dispose();
   }
   /** Copies a temporary native Any into the map and releases its local owner. @param context - Map. @param id - Property. @param value - Owned Any. @param overwrite - Native mode. @returns Nothing. */
@@ -213,6 +297,7 @@ export class DomainMapper implements Properties {
   }
   /** Native consumed attribute handlers retain source ordering and positive legacy twip ceiling. @param id - Original resource ID. @param value - Attribute. @returns Nothing. */
   attribute(id: Id, value: Value): void {
+    if (this.impl.HandleBookmarkAttribute(id, value)) return;
     const context = this.impl.GetTopContext();
     if (!context) return;
     const n = value.getInt();
@@ -221,6 +306,7 @@ export class DomainMapper implements Properties {
       ApplyFrameAttribute(context.props(), id, n)
     )
       return;
+    if (resolveThemeFont(id, n, this.model.GetDoc(), context)) return;
     switch (id) {
       case N.LN_CT_LineNumber_countBy:
       case N.LN_CT_LineNumber_distance:
@@ -393,6 +479,10 @@ export class DomainMapper implements Properties {
           false,
         );
         break;
+      case N.LN_CT_Spacing_line:
+      case N.LN_CT_Spacing_lineRule:
+        this.impl.SetLineSpacing(id, n);
+        break;
     }
   }
   /** Original deferred stylesheet boundary. @returns Nothing. */
@@ -441,8 +531,9 @@ export class DomainMapper implements Properties {
   }
   /** Native consumed modifier handlers preserve script families and typed UNO values. @param modifier - Modifier. @returns Nothing. */
   sprm(modifier: Sprm): void {
+    if (this.tableRanges.sprm(modifier)) return;
     const context = this.impl.GetTopContext();
-    if (!context) return;
+    if (!context || resolveTextEffect(modifier, context)) return;
     const id = modifier.getId(),
       value = modifier.getValue();
     let n = value?.getInt() ?? 0;
@@ -462,6 +553,8 @@ export class DomainMapper implements Properties {
       if (toggle !== undefined) n = this.invertedStyleValue(toggle);
     }
     switch (id) {
+      case N.LN_CT_PPrBase_tabs:
+        return ResolveParagraphTabs(this.impl, context, modifier, this.IsRTFImport());
       case N.LN_CT_PrBase_pBdr:
         resolveReturnedReference(modifier.getProps(), this);
         break;
@@ -532,6 +625,8 @@ export class DomainMapper implements Properties {
         if (context instanceof ParagraphPropertiesPropertyMap) context.props().SetFrameMode();
         resolveReturnedReference(modifier.getProps(), this);
         break;
+      case N.LN_EG_SectPrContents_titlePg:
+        return this.impl.SetTitlePage(n > 0);
       case N.LN_EG_SectPrContents_type: {
         const section = this.impl.GetTopContextOfType(C.CONTEXT_SECTION);
         if (
@@ -595,6 +690,12 @@ export class DomainMapper implements Properties {
       case N.LN_EG_SectPrContents_pgNumType:
         resolveReturnedReference(modifier.getProps(), this);
         break;
+      case N.LN_EG_SectPrContents_bidi: {
+        const section = this.impl.GetTopContextOfType(C.CONTEXT_SECTION),
+          direction = n ? WritingMode2.RL_TB : WritingMode2.LR_TB;
+        if (section) this.insert(section, P.PROP_WRITING_MODE, new Any([direction], "sal_Int16"));
+        break;
+      }
       case N.LN_CT_PPrBase_bidi:
         // The original RTF path bypasses the OOXML/comment justification rewrite.
         // Those unrepresented source contexts are not simulated by this RTF handler.
@@ -717,6 +818,8 @@ export class DomainMapper implements Properties {
       case N.LN_EG_RPrBase_kern:
         this.insert(context, P.PROP_CHAR_AUTO_KERNING, new Any([n !== 0], "bool"));
         break;
+      case N.LN_EG_RPrBase_spacing:
+        return this.impl.SetCharacterKerning(context, n);
       case N.LN_EG_RPrBase_highlight: {
         if (
           this.impl.IsStyleSheetImport() &&
@@ -732,15 +835,9 @@ export class DomainMapper implements Properties {
           this.insert(context, P.PROP_CHAR_HIGHLIGHT, new Any([color], "sal_Int32"));
         break;
       }
-      case N.LN_EG_RPrBase_color: {
-        const properties = modifier.getProps();
-        if (properties) {
-          const handler = new ThemeColorHandler();
-          resolveReturnedReference(properties, handler);
-          this.insert(context, P.PROP_CHAR_COLOR, new Any([handler.mnColor], "sal_Int32"));
-        }
+      case N.LN_EG_RPrBase_color:
+        resolveThemeColor(modifier, context);
         break;
-      }
       case N.LN_CT_PPrBase_pStyle: {
         const name = value?.getString();
         if (!name) break;
@@ -874,7 +971,15 @@ export class DomainMapper implements Properties {
       case N.LN_EG_RPrBase_rFonts:
       case N.LN_EG_RPrBase_u:
       case N.LN_CT_PPrBase_ind:
+        resolveReturnedReference(modifier.getProps(), this);
+        break;
       case N.LN_CT_PPrBase_spacing:
+        this.impl.StartLineSpacing();
+        resolveReturnedReference(modifier.getProps(), this);
+        this.impl.FinishLineSpacing();
+        break;
+      case N.LN_CT_PPrDefault_pPr:
+      case N.LN_CT_RPrDefault_rPr:
       case N.LN_CT_Style_rPr:
       case N.LN_CT_Style_pPr:
       case N.LN_CT_PPr_rPr: {
@@ -884,18 +989,10 @@ export class DomainMapper implements Properties {
     }
   }
 }
-
 import { resolveReturnedReference } from "../inc/dmapper/resourcemodel";
-
 import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";
-
 import { StyleType } from "./StyleSheetTable";
-
-import { StyleSheetPropertyMap } from "./PropertyMap";
-
+import { ParagraphPropertyMap, StyleSheetPropertyMap } from "./PropertyMap";
 import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
-
-import { ParagraphPropertyMap } from "./PropertyMap";
-
 import { PaperInfo, Paper } from "../../../../i18nutil/inc/paper";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";

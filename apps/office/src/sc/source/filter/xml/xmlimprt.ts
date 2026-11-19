@@ -1,8 +1,10 @@
 /** @fileoverview Calc scalar,cell-font and row/column geometry import over shared fast XML contexts;advanced styles,device layout and objects remain unported. */
 import { Length, toTwips } from "../../../../o3tl/inc/unit_conversion";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import {
   XMLFontStylesContext,
   type OdfFontFaceMetadata,
@@ -11,6 +13,7 @@ import {
 import { getFontFamilyFromGeneric } from "../../../../xmloff/source/style/fonthdl";
 import type { ScTable } from "../../../inc/table";
 import { RowHeightContext } from "../../../inc/rowheightcontext";
+import { ScFlatBoolRowSegments } from "../../core/data/segmenttree";
 import { XMLTableStylesContext } from "./xmlstyli";
 import { CellAttributeHolder, type ScPatternAttr } from "../../../inc/patattr";
 import { ScXMLImportContext } from "./importcontext";
@@ -26,8 +29,14 @@ import {
 } from "../../../../xmloff/source/core/xmlimp";
 import { XMLToken, ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import { ScDocumentImport } from "../../../inc/documentimport";
+import type { ScAddress } from "../../../inc/address";
+import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { InsertRangeNames } from "../../core/tool/rangenam";
+import { GetNamedExpressionBase, type ScMyNamedExpression } from "./xmlnexpi";
 import type { ScDocument } from "../../../inc/document";
 import { ScXMLBodyContext } from "./xmlbodyi";
+import type { ScLineBreakCell } from "../../../inc/attrib";
+import { ScDocOptions } from "../../core/tool/docoptio";
 /** Browser parser ceilings bind native scalar import to bounded resources. */
 export interface ScXMLImportOptions extends OdfXmlParseOptions {
   readonly maxExpandedCells?: number;
@@ -35,6 +44,17 @@ export interface ScXMLImportOptions extends OdfXmlParseOptions {
 /** Actual import root/state for scalar content;no intermediate sheet/cell data model is retained. */
 export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   readonly docImport: ScDocumentImport;
+  private readonly namedExpressions: ScMyNamedExpression[] = [];
+  private readonly pendingFormulas: { address: ScAddress; source: string }[] = [];
+
+  /** Collects the named definition before resolution. @param expression - Original XML definition. @returns Nothing. */
+  AddNamedExpression(expression: ScMyNamedExpression): void {
+    this.namedExpressions.push(expression);
+  }
+  /** Defers a cell formula until global and local name indexes exist. @param address - Destination. @param source - Native ODFF formula. @returns Nothing. */
+  AddFormula(address: ScAddress, source: string): void {
+    this.pendingFormulas.push({ address, source });
+  }
   private cells = 0;
   private readonly fontFaces = new Map<string, SvxFontItem>();
   /** Registers original five-field font declarations through the common context. @param name - Reference name. @param family - Family names. @param generic - Family class. @param metadata - Native remaining fields. @returns Nothing. */
@@ -70,20 +90,42 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     return new XMLFontStylesContext(this, RTL_TEXTENCODING_UTF8);
   }
   private readonly autoStyles = new Map<string, CellAttributeHolder>();
-  private readonly columnStyles = new Map<string, number | null>();
-  /** Registers the native column width property in HMM. @param name - Automatic style. @param width - Signed32 HMM or absent property. @returns Nothing. */
-  AddColumnStyle(name: string, width: number | null): void {
-    this.columnStyles.set(name, width);
+  private readonly textStyles = new Map<string, SfxItemSet>();
+  private readonly pendingNumberStyles = new Map<
+    string,
+    { pattern: ScPatternAttr; reference: string }
+  >();
+  private readonly numberStyles = new Map<string, number>();
+  private readonly tableStyles = new Map<string, boolean>();
+  /** Records the native style's sheet display property. @param name - Automatic style. @param visible - Sheet display. @returns Nothing. */
+  AddTableStyle(name: string, visible: boolean): void {
+    this.tableStyles.set(name, visible);
+  }
+  /** Applies the sheet display property to its native owner. @param name - Automatic style. @param tab - Native sheet. @returns Nothing. */
+  ApplyTableStyle(name: string, tab: number): void {
+    const visible = this.tableStyles.get(name);
+    if (visible === undefined) this.unsupported("table:style-name");
+    else this.document.SetVisible(tab, visible);
+  }
+  private readonly columnStyles = new Map<string, { width: number | null; pageBreak: boolean }>();
+  /** Registers native column geometry and breaks. @param name - Automatic style. @param width - Signed32 HMM or absent property. @param pageBreak - Manual break before the column. @returns Nothing. */
+  AddColumnStyle(name: string, width: number | null, pageBreak: boolean): void {
+    this.columnStyles.set(name, { width, pageBreak });
   }
   /** Consumed CellWidth UNO property converts HMM then narrows to UInt16;zero does not replace stored width. @param name - Style. @param tab - Actual sheet. @param first - First column. @param last - Last column. @returns Nothing. */
   ApplyColumnStyle(name: string, tab: number, first: number, last: number): void {
-    if (!this.columnStyles.has(name)) {
+    const style = this.columnStyles.get(name);
+    if (!style) {
       this.unsupported("column style");
       return;
     }
-    const width = this.columnStyles.get(name) as number | null;
-    if (width === null) return;
-    const twips = Number(toTwips(BigInt(width), Length.mm100)) & 0xffff;
+    if (style.pageBreak) {
+      const table = this.document.FetchTable(tab) as ScTable;
+      for (let column = Math.max(1, first); column <= last; ++column)
+        table.SetColBreak(column, false, true);
+    }
+    if (style.width === null) return;
+    const twips = Number(toTwips(BigInt(style.width), Length.mm100)) & 0xffff;
     if (twips)
       for (let column = first; column <= last; column++)
         this.document.SetColWidthOnly(column, tab, twips);
@@ -91,22 +133,39 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   private body = false;
   private readonly rowStyles = new Map<
     string,
-    { height: number | null; optimal: boolean | null }
+    { height: number | null; optimal: boolean | null; pageBreak: boolean }
   >();
-  /** Registers consumed native row-style properties. @param name - Style. @param height - Twips. @param optimal - Automatic flag. @returns Nothing. */
-  AddRowStyle(name: string, height: number | null, optimal: boolean | null): void {
-    this.rowStyles.set(name, { height, optimal });
+  private readonly recalcRows = new Map<number, ScFlatBoolRowSegments>();
+  /** Registers consumed native row-style properties. @param name - Style. @param height - Twips. @param optimal - Automatic flag. @param pageBreak - Manual break before the row. @returns Nothing. */
+  AddRowStyle(
+    name: string,
+    height: number | null,
+    optimal: boolean | null,
+    pageBreak: boolean,
+  ): void {
+    this.rowStyles.set(name, { height, optimal, pageBreak });
   }
   /** Applies row style directly to actual sheet storage. @param name - Style. @param tab - Sheet. @param first - First row. @param last - Last row. @returns Nothing. */
-  ApplyRowStyle(name: string, tab: number, first: number, last: number): void {
-    const style = this.rowStyles.get(name);
-    if (!style) {
-      this.unsupported("row style");
-      return;
-    }
+  ApplyRowStyle(name: string | null, tab: number, first: number, last: number): void {
+    if (first > last) return;
+    const style = name === null ? undefined : this.rowStyles.get(name);
+    if (name !== null && !style) this.unsupported("row style");
     const table = this.document.FetchTable(tab) as ScTable;
-    if (style.height !== null) table.SetRowHeightOnly(first, last, style.height);
-    if (style.optimal !== null) table.SetManualHeight(first, last, !style.optimal);
+    if (style?.pageBreak)
+      for (let row = Math.max(1, first); row <= last; ++row) table.SetRowBreak(row, false, true);
+    const height = style?.height ?? null;
+    const optimal = style?.optimal ?? height === null;
+    if (height !== null) table.SetRowHeightOnly(first, last, height);
+    table.SetManualHeight(first, last, !optimal);
+    if (!optimal) return;
+    let ranges = this.recalcRows.get(tab);
+    if (!ranges) {
+      ranges = new ScFlatBoolRowSegments(this.document.MaxRow());
+      this.recalcRows.set(tab, ranges);
+    }
+    // The native row mapper supplies stored optimal heights directly. The row
+    // context still schedules early rows and rows lacking a saved optimum.
+    if (last <= 200 || height === null || height <= 0) ranges.setTrue(first, last);
   }
   /** Binds actual document and parser controls. @param document - Target. @param options - Controls. @returns Importer. */
   constructor(
@@ -116,13 +175,81 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     super();
     this.docImport = new ScDocumentImport(document);
   }
-  /** Transfers a parsed real automatic pattern into import lifetime ownership. @param name - Source name. @param pattern - Adopted source pattern. @returns Nothing. */
-  AddAutoStyle(name: string, pattern: ScPatternAttr): void {
+  /** Transfers a parsed real automatic pattern into import lifetime ownership. @param name - Source name. @param pattern - Adopted source pattern. @param reference - Optional ODF data style. @returns Nothing. */
+  AddAutoStyle(name: string, pattern: ScPatternAttr, reference: string | null = null): void {
+    this.pendingNumberStyles.get(name)?.pattern.Dispose();
+    this.pendingNumberStyles.delete(name);
     this.autoStyles.get(name)?.Dispose();
-    this.autoStyles.set(name, new CellAttributeHolder(pattern, true));
+    this.autoStyles.delete(name);
+    if (reference) this.pendingNumberStyles.set(name, { pattern, reference });
+    else this.autoStyles.set(name, new CellAttributeHolder(pattern, true));
+  }
+  /** Retains native edit items from an automatic text style. @param name - Source style. @param items - Adopted item set. @returns Nothing. */
+  AddTextStyle(name: string, items: SfxItemSet): void {
+    this.textStyles.get(name)?.Dispose();
+    this.textStyles.set(name, items);
+  }
+  /** Resolves a style referenced by an edit-cell span. @param name - Text style name. @returns Borrowed edit items. */
+  GetTextStyle(name: string): SfxItemSet | undefined {
+    return this.textStyles.get(name);
+  }
+  /** Registers one compiled ODF data style. @param name - ODF style name. @param key - Native format key or unsupported result. @returns Nothing. */
+  AddNumberStyle(name: string, key: number | undefined): void {
+    if (key === undefined) this.unsupported("number style");
+    else this.numberStyles.set(name, key);
+    if (name === this.defaultNumberStyle) this.ApplyDefaultNumberStyle();
+  }
+  private defaultNumberStyle: string | null = null;
+  /** Populates the original Default style from the named styles stream. @param pattern - Parsed direct properties. @param reference - Optional data-style reference. @returns Nothing. */
+  ApplyDefaultCellStyle(pattern: ScPatternAttr, reference: string | null): void {
+    this.document.GetStyleSheetPool()?.SetDefaultCellStyle(pattern.GetItemSet());
+    this.defaultNumberStyle = reference;
+    this.ApplyDefaultNumberStyle();
+  }
+  /** Applies ODF cell defaults through the native item pool and special wrap setting. @param pattern - Document default properties. @returns Nothing. */
+  ApplyDocumentDefaults(pattern: ScPatternAttr): void {
+    const pool = this.document.GetPool();
+    for (const item of pattern.GetItemSet().entries()) {
+      if (item.Which() !== ATTR_LINEBREAK) pool?.SetUserDefaultItem(item);
+      else if ((item as ScLineBreakCell).GetValue()) {
+        const options = new ScDocOptions(this.document.GetDocOptions());
+        options.SetIgnoreLineBreaks(true);
+        this.document.SetDocOptions(options);
+      }
+    }
+  }
+  /** Resolves the default data style before dependent cells use the Default item set. @returns Nothing. */
+  private ApplyDefaultNumberStyle(): void {
+    if (!this.defaultNumberStyle) return;
+    const key = this.numberStyles.get(this.defaultNumberStyle);
+    if (key === undefined) return;
+    const item = new SfxUInt32Item(ATTR_VALUE_FORMAT, key);
+    try {
+      const pool = this.document.GetStyleSheetPool();
+      pool?.GetDefaultStyle()?.GetItemSet().Put(item);
+      this.document.getCellAttributeHelper().getDefaultCellAttribute().InvalidateCaches();
+    } finally {
+      item.Dispose();
+    }
+    this.defaultNumberStyle = null;
   }
   /** Borrows actual automatic style data; missing references remain diagnosed. @param name - Style reference. @returns Pattern or null. */
   GetAutoStyle(name: string): ScPatternAttr | null {
+    const pending = this.pendingNumberStyles.get(name);
+    if (pending) {
+      const key = this.numberStyles.get(pending.reference);
+      if (key === undefined) this.unsupported("cell style/number format");
+      else {
+        const item = new SfxUInt32Item(ATTR_VALUE_FORMAT, key);
+        try {
+          pending.pattern.ItemSetPut(item);
+        } finally {
+          item.Dispose();
+        }
+      }
+      this.pendingNumberStyles.delete(name);
+      this.autoStyles.set(name, new CellAttributeHolder(pending.pattern, true));
+    }
     const pattern = this.autoStyles.get(name)?.getScPatternAttr() ?? null;
     if (pattern === null) this.unsupported("cell style/number format");
     return pattern;
@@ -207,14 +334,46 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     try {
       parseOdfXmlStream(xml, this, this.options);
       if (!this.body) throw new Error("ODS spreadsheet body is missing");
+      const grammar = FormulaGrammar.Grammar.GRAM_ODFF;
+      InsertRangeNames(
+        this.document,
+        this.namedExpressions.map(
+          /** Resolves the original position after sheet creation. @param name - Source definition. @returns Native admission record. */
+          (name) => ({ ...name, pos: GetNamedExpressionBase(this.document, name) }),
+        ),
+        grammar,
+      );
+      for (const { address, source } of this.pendingFormulas) {
+        const value = unicode(source);
+        try {
+          this.docImport.setFormulaCell(address, value, grammar);
+        } finally {
+          value.dispose();
+        }
+      }
       this.docImport.finalize();
-      for (let tab = 0; tab < this.document.GetTableCount(); tab++)
-        (this.document.FetchTable(tab) as ScTable).SetOptimalHeight(
-          new RowHeightContext(this.document.MaxRow(), 1 / 15, 1 / 15, 1, 1, null),
-          0,
-          this.document.MaxRow(),
-          true,
-        );
+      for (let tab = 0; tab < this.document.GetTableCount(); ++tab) {
+        const table = this.document.FetchTable(tab);
+        if (!table) continue;
+        table
+          .GetOutlineTable()
+          ?.GetRowArray()
+          .finalizeImport(
+            /** Resolves the source last hidden row in the native flat segment table. @param row - Group start. @returns Hidden extent or absence. */
+            (row) => {
+              const end: [number] = [row];
+              return table.RowHidden(row, undefined, end) ? end[0] : -1;
+            },
+          );
+      }
+      for (const [tab, ranges] of this.recalcRows) {
+        const table = this.document.FetchTable(tab) as ScTable;
+        const context = new RowHeightContext(this.document.MaxRow(), 1 / 15, 1 / 15, 1, 1, null);
+        const iterator = new ScFlatBoolRowSegments.RangeIterator(ranges);
+        const range = { mnRow1: 0, mnRow2: 0, mbValue: false };
+        for (let found = iterator.getFirst(range); found; found = iterator.getNext(range))
+          if (range.mbValue) table.SetOptimalHeight(context, range.mnRow1, range.mnRow2, true);
+      }
     } finally {
       this.document.SetAutoCalc(auto);
       this.DisposeStyles();
@@ -222,10 +381,16 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   }
   /** Releases temporary style holders after import or worker transfer. @returns Nothing. */
   DisposeStyles(): void {
+    for (const { pattern } of this.pendingNumberStyles.values()) pattern.Dispose();
+    this.pendingNumberStyles.clear();
+    this.numberStyles.clear();
     for (const holder of this.autoStyles.values()) holder.Dispose();
     this.autoStyles.clear();
+    for (const items of this.textStyles.values()) items.Dispose();
+    this.textStyles.clear();
     this.rowStyles.clear();
     this.columnStyles.clear();
+    this.tableStyles.clear();
     this.fontFaces.clear();
   }
   /** Marks the unique spreadsheet body. @returns Context. */
@@ -250,7 +415,8 @@ class ScXMLDocContext_Impl extends ScXMLImportContext {
     }
     if (element === XMLToken.OFFICE_AUTOMATIC_STYLES) return new XMLTableStylesContext(this.owner);
     if (element === XMLToken.OFFICE_FONT_FACE_DECLS) return this.owner.CreateFontDeclsContext();
-    if (element === XMLToken.OFFICE_STYLES || element === XMLToken.OFFICE_MASTER_STYLES) {
+    if (element === XMLToken.OFFICE_STYLES) return new XMLTableStylesContext(this.owner, true);
+    if (element === XMLToken.OFFICE_MASTER_STYLES) {
       this.owner.unsupported("named and master styles are not preserved");
       return new SvXMLIgnoreContext(true);
     }
@@ -269,3 +435,5 @@ class ScXMLBodyContext_Impl extends ScXMLImportContext {
     return this.owner.CreateBodyContext();
   }
 }
+import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
+import { ATTR_LINEBREAK, ATTR_VALUE_FORMAT } from "../../../inc/scitems";

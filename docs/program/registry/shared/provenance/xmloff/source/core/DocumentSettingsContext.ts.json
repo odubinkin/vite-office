@@ -10,13 +10,14 @@
       "XMLDocumentSettingsContext"
     ],
     "upstreamSymbols": [
-      "XMLDocumentSettingsContext::createFastChildContext"
+      "XMLDocumentSettingsContext::createFastChildContext",
+      "XMLDocumentSettingsContext::endFastElement"
     ],
     "preservedResponsibilities": [
-      "Resolves the original namespace-qualified ODF configuration set and converts represented boolean values through native PropertyValue."
+      "Resolves the original namespace-qualified configuration and view groups. The indexed Views property retains typed string entries in order, independently of boolean configuration properties."
     ],
     "omittedResponsibilities": [
-      "View and document-specific setting groups, nested maps and nonboolean values are unrepresented."
+      "Document-specific settings, named maps, and additional property types remain outside the represented groups."
     ],
     "evidence": {
       "local": [
@@ -27,12 +28,20 @@
         {
           "path": "apps/office/src/xmloff/source/core/DocumentSettingsContext.ts",
           "marker": "XMLDocumentSettingsContext"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/core/DocumentSettingsContext.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/xmloff/source/core/DocumentSettingsContext.cxx",
           "marker": "XMLDocumentSettingsContext::createFastChildContext"
+        },
+        {
+          "path": "xmloff/source/core/DocumentSettingsContext.cxx",
+          "marker": "XMLDocumentSettingsContext::endFastElement"
         }
       ]
     }

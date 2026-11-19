@@ -20,9 +20,10 @@
         "apps/office/src/xmloff/source/text/XMLTextPropertySetContext.ts#XMLTextPropertySetContext",
         "vendor/libreoffice-reference/xmloff/source/text/XMLTextPropertySetContext.cxx#XMLTextPropertySetContext::createFastChildContext",
         "apps/office/src/xmloff/source/style/xmltabi.ts#SvxXMLTabStopImportContext",
-        "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#Writer ODT mapped pooled properties"
+        "apps/office/src/sw/source/filter/xml/odt-property-roundtrip.test.ts#Writer ODT mapped pooled properties",
+        "apps/office/src/sw/source/filter/ww8/docxexport.theme.test.ts"
       ],
-      "justification": "Owns only the implemented element-property dispatch responsibility, creating the native-named SvxXMLTabStopImportContext from style/xmltabi.ts. Embedded tab parsing and shared conversion were extracted into their pinned source owners with unchanged implementation bodies; there is no compatibility re-export. Existing ODT assertions exercise dispatch. Unmodeled text columns, complex colors and drop caps are not claimed; broader dispatch contracts remain unverified.",
+      "justification": "Owns only the implemented element-property dispatch responsibility, creating the native-named SvxXMLTabStopImportContext from style/xmltabi.ts. Embedded tab parsing and shared conversion were extracted into their pinned source owners with unchanged implementation bodies; there is no compatibility re-export. Existing ODT assertions exercise dispatch. Unmodeled text columns, complex colors and drop caps are not claimed; broader dispatch contracts remain unverified. Reads the original char-complex-color when the owning text property group supports it.",
       "knownViolations": [],
       "localSymbols": [
         "XMLTextPropertySetContext"

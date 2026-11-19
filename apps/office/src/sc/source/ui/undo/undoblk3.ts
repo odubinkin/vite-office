@@ -114,22 +114,16 @@ export class ScUndoDeleteContents extends SfxUndoAction<ScDocShell> {
     this.range = new ScRange(range);
     if (!this.marks.IsMarked() && !this.marks.IsMultiMarked()) this.marks.SetMarkArea(this.range);
   }
-  /** Restores actual attribute snapshots on original selected sheets. @returns Nothing. */
+  /** Restores the original content and attribute snapshot on selected sheets. @returns Nothing. */
   override UndoWithContext(): void {
     const range = new ScRange(this.range);
     range.aStart.SetTab(0);
     range.aEnd.SetTab(this.shell.GetDocument().GetTableCount() - 1);
-    this.undo.CopyToDocument(
-      range,
-      InsertDeleteFlags.ATTRIB |
-        InsertDeleteFlags.NOCAPTIONS |
-        (this.flags & InsertDeleteFlags.EDITATTR
-          ? InsertDeleteFlags.STRING
-          : InsertDeleteFlags.NONE),
-      this.multi,
-      this.shell.GetDocument(),
-      this.marks,
-    );
+    let flags = InsertDeleteFlags.NOCAPTIONS;
+    if (this.flags & InsertDeleteFlags.CONTENTS) flags |= InsertDeleteFlags.CONTENTS;
+    if (this.flags & InsertDeleteFlags.ATTRIB) flags |= InsertDeleteFlags.ATTRIB;
+    if (this.flags & InsertDeleteFlags.EDITATTR) flags |= InsertDeleteFlags.STRING;
+    this.undo.CopyToDocument(range, flags, this.multi, this.shell.GetDocument(), this.marks);
     AdjustBlockHeight(
       this.shell.GetDocument(),
       this.marks,

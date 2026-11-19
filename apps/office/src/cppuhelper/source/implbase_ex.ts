@@ -198,3 +198,36 @@ export function ImplInhHelper_getTypes(
     throw error;
   }
 }
+
+/** Original non-weak helper selects the first declared facet for XInterface. @param type - Demanded type. @param data - Static class data. @param that - Compiler cast. @returns Acquired Any. */
+export function ImplHelper_query(type: Type, data: class_data, that: ImplementationPointer): Any {
+  checkInterface(type);
+  const demanded = type.getTypeLibType() as R;
+  const pointer = isXInterface(demanded.pTypeName)
+    ? that((data.m_typeEntries[0] as type_entry).m_offset)
+    : queryDeepNoXInterface(demanded, data, that);
+  return pointer ? new Any([pointer], demanded) : new Any();
+}
+/** Original declared types without an extra weak facet. @param data - Static class data. @returns Owned types. */
+export function ImplHelper_getTypes(data: class_data): Sequence<Type> {
+  const result = new (Sequence.specialize<Type>("Type", 8))(data.m_nTypes);
+  try {
+    const entries = getTypeEntries(data),
+      values =
+        result.getArray() as import("../../cppu/inc/com/sun/star/uno/Sequence").SequenceElements;
+    for (let index = data.m_nTypes; index--;)
+      typelib_typedescriptionreference_assign(
+        values.get(index * 8) as [R | null],
+        reference(entries[index] as type_entry),
+      );
+    return result;
+  } catch (error) {
+    result.dispose();
+    throw error;
+  }
+}
+/** Original obsolete implementation identifier is empty. @param _data - Ignored source parameter. @returns Owned empty bytes. */
+export function ImplHelper_getImplementationId(_data: class_data): Sequence<number> {
+  void _data;
+  return new (Sequence.specialize<number>("sal_Int8", 1))();
+}

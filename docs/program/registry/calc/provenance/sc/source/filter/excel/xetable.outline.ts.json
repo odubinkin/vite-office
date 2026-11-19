@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/excel/xetable.outline.ts",
+    "localSymbols": [
+      "XclExpOutlineBuffer"
+    ],
+    "upstreamPath": "sc/source/filter/excel/xetable.cxx",
+    "upstreamSymbols": [
+      "XclExpOutlineBuffer::UpdateColRow"
+    ],
+    "preservedResponsibilities": [
+      "Native XLSX closure and collapse rules use sparse runs over stored outline ranges."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed outline editing commands and full host integration remain outside this filter checkpoint."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xetable.outline.ts",
+          "marker": "XclExpOutlineBuffer"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/worksheethelper.test.ts",
+          "marker": "keeps the four outline levels and hidden widths from LibreOffice outline.ods"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xetable.cxx",
+          "marker": "XclExpOutlineBuffer::UpdateColRow"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/excel/xetable.outline.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Separates the original outline buffer to keep worksheet serialization within the authored module size budget."
+    }
+  }
+}

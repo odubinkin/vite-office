@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmlexprt.celltext.ts",
+    "upstreamPath": "sc/source/filter/xml/xmlexprt.cxx",
+    "localSymbols": [
+      "CellTextStylePool",
+      "writeCellParagraphs"
+    ],
+    "upstreamSymbols": [
+      "ScXMLExport::ExportCellTextAutoStyles",
+      "ScXMLExport::WriteEditCell"
+    ],
+    "preservedResponsibilities": [
+      "Registers automatic styles from native EditTextObject character sections and emits the corresponding paragraph spans.",
+      "Encodes the native ODF complex-color child in each automatic character style."
+    ],
+    "omittedResponsibilities": [
+      "Edit-engine field identity and properties outside the represented character-item mappings remain outside this responsibility."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlexprt.celltext.ts",
+          "marker": "CellTextStylePool"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
+          "marker": "ScXMLExport::ExportCellTextAutoStyles"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
+          "marker": "ScXMLExport::WriteEditCell"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/xml/xmlexprt.celltext.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps native edit-cell paragraph and character-style handling in a separate module beside the existing Calc XML filter owner."
+    }
+  }
+}

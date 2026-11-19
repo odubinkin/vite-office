@@ -1,4 +1,4 @@
-/** @fileoverview Original ChangeIndentOperation normal-document enabled-undo path;protection,alternate views and global undo enablement services remain unported. */
+/** @fileoverview Original ChangeIndentOperation selection checks and default-view history. */
 import { Operation, OperationType } from "./Operation";
 import type { ScDocShell } from "../docshell/docsh";
 import { ScMarkData } from "../../../inc/markdata";
@@ -6,6 +6,7 @@ import { ScDocument, ScDocumentMode } from "../../../inc/document";
 import { ScRange } from "../../../inc/address";
 import { InsertDeleteFlags } from "../../../inc/global";
 import { ScUndoIndent } from "../undo/undoblk";
+import { ScEditableTester } from "../docshell/editable";
 /** Original indentation document operation. */
 export class ChangeIndentOperation extends Operation {
   /** Borrows native operation inputs. @param shell - Shell. @param marks - Marks. @param increment - Direction. @param api - API. @returns Operation. */
@@ -20,8 +21,13 @@ export class ChangeIndentOperation extends Operation {
   /** Original default-view copy,snapshot,history and mutation order. @returns Success. */
   protected override runImplementation(): boolean {
     const doc = this.shell.GetDocument(),
-      marks = new ScMarkData(this.marks),
-      range = new ScRange(marks.GetMultiMarkArea()),
+      marks = new ScMarkData(this.marks);
+    const tester = ScEditableTester.CreateAndTestSelection(doc, marks);
+    if (!tester.IsEditable()) {
+      if (!this.mbApi) this.shell.ErrorMessage(tester.GetMessageId());
+      return false;
+    }
+    const range = new ScRange(marks.GetMultiMarkArea()),
       undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO),
       tab = range.aStart.Tab();
     undo.InitUndo(doc, tab, tab);

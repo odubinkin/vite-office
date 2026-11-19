@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/docmodel/browser/theme-codec.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-value-transfer",
+    "capabilityIds": [
+      "CAP-ac5762ac-bc03-420d-9c26-d4581abbe2fa"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/docmodel/browser/theme-codec.ts",
+        "apps/office/src/sw/browser/filter/xml/writer-theme-codec.test.ts"
+      ],
+      "justification": "The browser Worker graph carries the actual native palette entries, explicit presence and transparency, primary and supplemental theme fonts with their represented fields. Reconstructs the native Theme and ColorSet via model owners.",
+      "knownViolations": [],
+      "localSymbols": [
+        "encodeTheme",
+        "decodeTheme"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

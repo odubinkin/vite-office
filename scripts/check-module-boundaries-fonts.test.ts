@@ -1,6 +1,7 @@
 /** @fileoverview Protects original font-table library dependency directions. */
 import { expect, it } from "vitest";
 import {
+  isForbiddenDomainVclImport,
   isForbiddenModuleEdge,
   getRuntimeOwnershipLayer,
   getRuntimeOwnershipViolation,
@@ -45,4 +46,13 @@ it("admits the native MS symbol converter dependency without reverse application
   expect(isForbiddenModuleEdge("filter", "unotools")).toBe(false);
   expect(isForbiddenModuleEdge("unotools", "filter")).toBe(true);
   expect(isForbiddenModuleEdge("filter", "sw")).toBe(true);
+});
+
+it("admits Calc's type-only pattern font while keeping the runtime and browser boundaries", /** Covers the caller-owned vcl::Font contract from ScPatternAttr::fillFontOnly. @returns Nothing. */ () => {
+  const source = "sc/source/core/data/patattr.ts",
+    font = "vcl/source/font/font.ts";
+  expect(isForbiddenDomainVclImport(source, font, true)).toBe(false);
+  expect(isForbiddenDomainVclImport(source, font)).toBe(true);
+  expect(isForbiddenDomainVclImport(source, "vcl/browser/font-list.ts", true)).toBe(true);
+  expect(isForbiddenDomainVclImport("sc/source/core/data/document.ts", font, true)).toBe(true);
 });

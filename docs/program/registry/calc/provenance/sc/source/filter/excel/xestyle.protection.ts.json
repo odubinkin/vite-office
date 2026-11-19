@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/excel/xestyle.protection.ts",
+    "localSymbols": [
+      "XclExpCellProt"
+    ],
+    "upstreamPath": "sc/source/filter/excel/xestyle.cxx",
+    "upstreamSymbols": [
+      "XclExpCellProt::FillFromItemSet",
+      "XclExpCellProt::SaveXml"
+    ],
+    "preservedResponsibilities": [
+      "Writes the original locked and hidden XF flags from the native protection item, including the original hidden-cell projection."
+    ],
+    "omittedResponsibilities": [
+      "This owner covers the represented cell-format property family."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xestyle.protection.ts",
+          "marker": "XclExpCellProt"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xestyle.cxx",
+          "marker": "XclExpCellProt::FillFromItemSet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xestyle.cxx",
+          "marker": "XclExpCellProt::SaveXml"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/excel/xestyle.protection.ts",
+      "rationale": "Keeps the native cell protection value processing beside its original style owner and separates that bounded work from the other existing format families.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

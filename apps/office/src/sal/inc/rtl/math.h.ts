@@ -7,6 +7,7 @@ export {
 } from "./math-values";
 export {
   rtl_math_doubleToUString,
+  rtl_math_doubleToString,
   rtl_math_stringToDouble,
   rtl_math_uStringToDouble,
   rtl_math_approxEqual,

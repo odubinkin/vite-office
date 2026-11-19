@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/filter/xml/writer-text-effect-codec.ts",
+    "classification": "local-infrastructure",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/filter/xml/writer-text-effect-codec.ts",
+        "apps/office/src/sw/browser/filter/xml/writer-text-effect-codec.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.theme-fonts.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.typography.test.ts"
+      ],
+      "justification": "Transfers bounded native character text effects and the optional document pool override between the background filter and the editor. Restores the same UNO tree and accepts earlier documents without this override. Transports the original string-valued theme font members of the character interoperability bag. Transfers original typed styleSet children through the current Worker alongside earlier compact scalar snapshots.",
+      "knownViolations": [],
+      "localSymbols": [
+        "encodeTextEffects",
+        "decodeTextEffects",
+        "encodeTextEffectDefault",
+        "restoreTextEffectDefault"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

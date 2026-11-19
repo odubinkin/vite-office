@@ -1,5 +1,8 @@
 /** @fileoverview Additional native layout regression cases. */
 /** @fileoverview RTF writer round trips through the represented native reader and Writer hints. */
+import { beforeAll } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
+beforeAll(initializeRuntime);
 import { expect, it } from "vitest";
 
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";

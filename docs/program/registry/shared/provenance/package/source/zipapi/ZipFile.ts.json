@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/zipapi/ZipFile.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/zipapi/ZipFile.cxx",
+    "localSymbols": [
+      "ZipFile",
+      "Checks"
+    ],
+    "upstreamSymbols": [
+      "ZipFile",
+      "readCEN",
+      "findCentralDirectory",
+      "readLOC_Impl",
+      "readExtraFields"
+    ],
+    "preservedResponsibilities": [
+      "Original consumed ZipFile END/CEN/LOC/ZIP64/data-descriptor/extra-field validation over actual ByteGrabber/native UNO streams, original RTL hashes/OUString copies and native RefCountedMutex guards; occupied intervals, duplicate/case checks and source exception boundaries retained. EntryHash lowers the source native map with RTL hash/equality and independent key/value copies; ZipEnumeration returns actual mapped records. Recovery=false is the intentional approved browser profile. Original crypto, entry streams/inflation, ZIP writing, ZipPackage/OStorage factories, model/UI acceptance and physical C++ iterator/allocation ABI remain unfinished or unqualified.",
+      "Native entry-read continuation supersedes earlier non-ByteReader/entry-stream pending statements: original ZipFile nonencrypted entry creation, CRC and real XUnbufferedStream now drive native buffered/ByteGrabber fallback and original source exceptions; actual getDataStream/getInputStream/raw bytes are verified over upstream fixtures. Physical ABI/OOM/crypto/native storage factories/models/export/UI remain unqualified or unfinished."
+    ],
+    "omittedResponsibilities": [
+      "Recovery, crypto, entry streams/inflation, ZIP writing and full native package/storage/model/UI acceptance; native allocation/iterator/ABI undefined domains."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zipapi/ZipFile.ts",
+          "marker": "ZipFile"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/ZipFile.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/native-entry-read.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/zipapi/ZipFile.cxx",
+          "marker": "ZipFile"
+        }
+      ]
+    }
+  }
+}

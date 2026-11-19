@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/inc/spltitem.ts",
+    "upstreamPath": "include/editeng/spltitem.hxx",
+    "localSymbols": [
+      "SvxFormatSplitItem"
+    ],
+    "upstreamSymbols": [
+      "SvxFormatSplitItem",
+      "Clone"
+    ],
+    "preservedResponsibilities": [
+      "Original paragraph control concrete values replace generic Writer split and signed16 line-count items. Split preserves false factory versus true Writer pool default; widow/orphan preserve unsigned8 storage, signed8 Any projection and zero global/two-line document overlays. Concrete copy/Clone and vertical signed16 QueryValue/0..4 PutValue use actual Sfx/Any owners. Actual pool, snapshot reconstruction, CSS/RTF producers and paragraph UI commands use the correct concrete values. DOCX emits original split/widow boolean normalization, script-space/hanging/forbidden/grid booleans, vertical mapping, page-break spelling and outline clamp through the real exporter/serializer and native ZIP output. No fake exporter, direction/version provider or complete main-text/paragraph/style orchestration is introduced."
+    ],
+    "omittedResponsibilities": [
+      "Localized EditResId GetPresentation, original instance managers, native allocator/physical ABI and full DOCX text/model/filter/UI acceptance remain unported or unqualified. Current keep/line-number snapshot factories retain their existing separately bounded scalar domains; no full item-pool parity is claimed."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/inc/spltitem.ts",
+          "marker": "SvxFormatSplitItem"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/editeng/spltitem.hxx",
+          "marker": "SvxFormatSplitItem"
+        }
+      ]
+    }
+  }
+}

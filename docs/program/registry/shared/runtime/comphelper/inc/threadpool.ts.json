@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/comphelper/inc/threadpool.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "thread-pool-no-worker",
+    "capabilityIds": [
+      "CAP-09696bad-5e0a-4a9d-819c-2348a752d143"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/comphelper/inc/threadpool.ts",
+        "apps/office/src/comphelper/source/misc/threadpool.test.ts",
+        "docs/program/native-threadpool-prerequisites.md"
+      ],
+      "justification": "Original ThreadTask/ThreadTaskTag and explicit ThreadPool(0) FIFO/tag/wait/shutdown paths use actual native std::mutex, retained real task objects and source exception-catching/destruction order. Emscripten bJoin=false and signed32 worker count narrowing remain. Original testNoThreads eight-task sequence is ported, with realm/results observed outside catch-all exec rather than a synthetic native thread identifier. Main/DOM-free Worker tasks execute actual package save/reopen. No shared optimal/default zero-worker pool is substituted for ZIP threading. Positive ThreadWorker launch, pending condition-variable waits, native shared_ptr/atomic/thread ID/physical scheduler and complete document/ZIP integration remain unported or unqualified. Preserve WRITER627/CALC694 original no-worker reentrant pool lock order. Pako deflateBound dependency remains unresolved; no guessed buffer sizing or algorithm replacement.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/comphelper/threadpool.hxx",
+      "upstreamSymbols": [
+        "ThreadPool",
+        "ThreadTask"
+      ]
+    }
+  }
+}

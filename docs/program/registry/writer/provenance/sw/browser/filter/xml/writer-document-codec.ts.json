@@ -192,6 +192,22 @@
         {
           "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docx-bookmarks.test.ts",
+          "marker": "closes a bookmark between paragraphs"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.compat.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.default-tabs.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-page-story-codec.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -289,7 +305,14 @@
       "The existing worker record carries the signed native row span when nondefault and restores one for records without the field.",
       "Transfers the actual nested table order and direct text nodes while retaining the legacy flat-cell record representation.",
       "Transfers direct table, row and cell brush snapshots with existing native table ownership and legacy record ingress.",
-      "Transfers the optional connected native text-frame collection before binding bookmarks and delegates text/table sections to the shared Writer graph transport."
+      "Transfers the optional connected native text-frame collection before binding bookmarks and delegates text/table sections to the shared Writer graph transport.",
+      "The Worker stores an optional validated second bookmark endpoint with compatibility for previous point-only records.",
+      "Transfers the complete represented theme when present and accepts earlier records without it.",
+      "Transfers the optional native character interoperability override with the document worker graph.",
+      "Preserves document font defaults and optional raw theme settings through graph transfer.",
+      "Carries the represented document compatibility rows through Worker transfer and restores native UNO data.",
+      "Transports the native optional user-default tab stop item while maintaining the existing graph and older records.",
+      "Transfers optional canonical page story owners before text fly and bookmark restoration, and restores the materialized pool identities of internal header/footer paragraph styles."
     ]
   },
   "legacyOrder": 93

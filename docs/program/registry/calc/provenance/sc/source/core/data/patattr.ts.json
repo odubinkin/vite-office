@@ -17,13 +17,19 @@
       "GetNumberFormat",
       "InvalidateCaches",
       "InvalidateCacheFor",
-      "MigrateToDocument"
+      "MigrateToDocument",
+      "fillFontOnly",
+      "GetDxfFont",
+      "getFontIDsByScriptType"
     ],
     "upstreamSymbols": [
       "ScPatternAttr",
       "CellAttributeHelper",
       "CellAttributeHolder",
-      "ScPatternAttr::GetNumberFormat"
+      "ScPatternAttr::GetNumberFormat",
+      "ScPatternAttr::fillFontOnly",
+      "ScPatternAttr::GetDxfFont",
+      "getFontIDsByScriptType"
     ],
     "preservedResponsibilities": [
       "TaskSKT4XD ports actual ScPatternAttr fixed100..155 SfxItemSet ownership,INVALID copying,unbound style names,conditional SET precedence,equality,direct mutation,key and selection-delta helpers plus CellAttributeHelper canonical registration and CellAttributeHolder copy/move/destruction. Real shared pool/itemset/value classes are reused. Holder counts preserve canonical identity/lifetime;GC replaces physical deletion. Native hash-prefilter/cache optimization is omitted while full equality and source name-group/last-hit ownership remain. Default helper implements only native unnamed pre-ScGlobal-initialization branch;initialized Standard resources,ScDocumentPool,ScStyleSheet,column/attrarray/document integration,VCL font/number/visible caches and formatting execution are unported. No fake font default or browser format store is introduced.",
@@ -33,7 +39,9 @@
       "Task76: Native number-format key/language caches,copy-constructor cache values,threaded uncached reads,HasValidNumberFormat and original item/writable-set/style/edit/delta invalidation are represented. GetNumberFormat retains the native system-language built-in branch and null-formatter raw-key branch. Context language conversion,conditional number formatting,visibility/hash caches and result-format services remain explicitly unported.",
       "Task76 attribute-copy progress: Native MigrateToDocument now copies direct SET items into the real destination helper,skips INVALID/inherited fields and preserves the no-format-exchange branch. With no validation-list owner in this document slice,the original absent-list branch resets validation indices to0. Bound foreign style copying remains an explicit missing Calc style-pool factory;no style resolver,validation list or format map is faked. The actual stored style pointer type is exposed to consumed same-helper hard-attribute copying.",
       "Native default-content PasteFromClip/EnterBlock/EnterAutoSum now use one genuine clipboard formula,original context/store cloning,actual marks,CONTENT/ATTRIB/NOCAPTIONS normalization,real Undo documents,merge refresh,row-height and shared Sfx list/paste history. No repeated EnterData fill,formula reparse,alternate workbook or fake provider is used. Current active normal-sheet enabled-Undo profile preserves source defaults;cut,multi-range paste,positive matrix/merged-source unmerge,filtered paste,nondefault arithmetic/link/transpose/insert,rich input,drawings/UNO/OLE and dialog families remain explicit unavailable boundaries. Source single-cell multi-mark fallback is implemented. Native first-used-sheet HasClipFilteredRows uses actual compressed segments,including all-filtered one-cell ranges that dimension differences cannot detect. Numeric compatibility retains actual General formatter and canonical cached run application;native pure IsCompatible includes same-type equality,so the redundant side-effect-free caller equality test is erased without changing results. Pattern formatter/context overloads admit original default-language branch;nondefault language conversion stays unported. Native ErrorMessage uses pinned resolved English resources and the active browser host for real EndPointer/error presentation,including document replacement;no VCL/gettext service is simulated. Existing SetAllFormulasDirty/getCellAttributeHelper bodies partition unchanged for strict source-size gates. Native rectangular references,styles,Undo/Redo,ODS reopen,full-axis empty content and actual Chromium/Worker execution are tested. Task76 final verification and task74 visible availability/UI acceptance remain pending;no complete parity claim.",
-      "AQF9AG connects original ScPatternAttr::GetNumberFormat formatter/context overloads to builtin-language remapping, removing the former local custom-format exception. ScInterpreterContext forwards the native nonthreaded NFGetFormatForLanguageIfBuiltIn to the actual formatter; readonly threaded preparation remains unported. Actual styled CSV exports exercise custom-key preservation rather than replacing styles or bypassing GetNumberFormat."
+      "AQF9AG connects original ScPatternAttr::GetNumberFormat formatter/context overloads to builtin-language remapping, removing the former local custom-format exception. ScInterpreterContext forwards the native nonthreaded NFGetFormatForLanguageIfBuiltIn to the actual formatter; readonly threaded preparation remains unported. Actual styled CSV exports exercise custom-key preservation rather than replacing styles or bypassing GetNumberFormat.",
+      "J0Z0KF font-item checkpoint ports original ScPatternAttr::fillFontOnly null-OutputDevice export path and GetDxfFont, exact script WhichId selection and the actual ScDxfFont optional aggregate. Real document pool, SfxItemSet conditional/table/direct precedence and VCL font setters are used. All effects/language are read before destination mutation; null-device scale is ignored as upstream, font color remains untouched and transparency is forced true. DXF defaults stay disengaged while explicit false/zero and parent SET attributes remain present; its font pointer is borrowed and Color copied. Seven original testFormats font assertions are replayed at the real pattern boundary, not claimed as full imported-workbook QA. Actual main/DOM-free Worker routes real cell items through the font, XclFontData and existing XML/ZIP export. Full OutputDevice mapping/metrics, root/default palette/font record/table/workbook/filter/UI integration remain unported or unqualified. The actual source owner remains in patattr.ts without an additional production shard.",
+      "Sparse character-item transfer retains only explicitly present edit attributes for native imported text spans."
     ],
     "omittedResponsibilities": [
       "ScGlobal initialized style defaults,style resolution,document pool/attribute-array integration,font/number/rendering caches,hash optimization and complete Calc formatting remain unported."
@@ -83,6 +91,10 @@
         {
           "path": "apps/office/src/sc/source/ui/docshell/docsh.test.ts",
           "marker": "exports the original shown section"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/patattr.font.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -93,6 +105,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/patattr.cxx",
           "marker": "ScPatternAttr::GetNumberFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/fonthelper.hxx",
+          "marker": "ScDxfFont"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/helper/qahelper.cxx",
+          "marker": "ScModelTestBase::testFormats"
         }
       ]
     }

@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/rtl/uuid.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-package-temporary-stream",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/rtl/uuid.ts",
+        "vendor/libreoffice-reference/sal/rtl/uuid.cxx"
+      ],
+      "justification": "Original consumed v4 UUID generation, ignored historical predecessor/Ethernet arguments and exact -1/0/1 network lexical comparison. Existing browser UUID API replaces the platform RNG source; byte-pointer binding supports actual typed views and initialized logical cells. Fatal argument/platform failure retains the existing abort, not a generated-looking result. Named/MD5 UUID, native ABI/OOM and fatal platform failure qualification remain outside this consumed profile. The built-in crypto.randomUUID API is already used by production BrowserFileDialog, Calc document creation/ODS IO and Writer ODT IO; no application dependency or native generation wrapper was added. Actual Chromium main and DOM-free Worker generate source-format GUIDs and copy64001 bytes through original CopyAndSwitchPersistenceTo into real TempFileFastService, preserve position and open flags, accept subsequent writes and remove the actual temporary file. Original Guid QA and active SAL createUuid_001 pass without a random provider mock. Fatal platform/invalid-target abort and native physical ABI/OOM remain unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "rtl_createUuid",
+        "rtl_compareUuid"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/rtl/uuid.cxx",
+      "upstreamSymbols": [
+        "rtl_createUuid",
+        "rtl_compareUuid"
+      ]
+    }
+  }
+}

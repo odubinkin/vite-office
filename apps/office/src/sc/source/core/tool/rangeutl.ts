@@ -8,6 +8,28 @@ import type { AddressConvention } from "../../../../formula/inc/grammar";
 
 /** Original static token and reference conversion members; unconsumed naming/API/formatting members remain unported. */
 export const ScRangeStringConverter = {
+  /** Writes both endpoints with their respective sheet qualifiers, as the ODF print-range attribute requires. @param ranges - Sheet areas. @param doc - Actual workbook. @param convention - Original output convention. @returns Space-delimited range addresses. */
+  GetStringFromRangeList(
+    ranges: Iterable<ScRange>,
+    doc: ScDocument,
+    convention: AddressConvention,
+  ): string {
+    const parts: string[] = [];
+    const details = new ScAddress.Details(convention);
+    const flags = ScRefFlags.VALID | ScRefFlags.TAB_3D;
+    for (const range of ranges) {
+      if (!doc.FetchTable(range.aStart.Tab())) continue;
+      const start = range.aStart.Format(flags, doc, details);
+      const end = range.aEnd.Format(flags, doc, details);
+      try {
+        parts.push(text(start) + ":" + text(end));
+      } finally {
+        end.dispose();
+        start.dispose();
+      }
+    }
+    return parts.join(" ");
+  },
   /** Original append-only list conversion retains valid tokens even when another token fails. @param ranges - Actual output list. @param source - UTF16 view. @param doc - Actual document. @param convention - Requested convention. @param separator - Default space. @param quote - Default apostrophe. @returns Whether every encountered token parsed. */
   GetRangeListFromString(
     ranges: ScRangeList,

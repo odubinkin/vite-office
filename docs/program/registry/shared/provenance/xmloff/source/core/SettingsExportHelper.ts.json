@@ -7,16 +7,19 @@
     "localPath": "apps/office/src/xmloff/source/core/SettingsExportHelper.ts",
     "upstreamPath": "xmloff/source/core/SettingsExportHelper.cxx",
     "localSymbols": [
-      "exportConfigurationSettings"
+      "exportConfigurationSettings",
+      "exportViewSettings"
     ],
     "upstreamSymbols": [
-      "XMLSettingsExportHelper::exportBool"
+      "XMLSettingsExportHelper::exportBool",
+      "XMLSettingsExportHelper::exportString",
+      "XMLSettingsExportHelper::exportIndexAccess"
     ],
     "preservedResponsibilities": [
-      "Emits the original named boolean configuration item from the represented PropertyValue vector."
+      "Emits boolean configuration items and indexed view map entries containing the represented string properties."
     ],
     "omittedResponsibilities": [
-      "Other UNO setting types and separate view/document settings are unrepresented."
+      "Other UNO settings value types, named maps, and additional document-specific groups remain outside the represented serialization."
     ],
     "evidence": {
       "local": [
@@ -27,12 +30,24 @@
         {
           "path": "apps/office/src/xmloff/source/core/SettingsExportHelper.ts",
           "marker": "exportConfigurationSettings"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/core/DocumentSettingsContext.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/xmloff/source/core/SettingsExportHelper.cxx",
           "marker": "XMLSettingsExportHelper::exportBool"
+        },
+        {
+          "path": "xmloff/source/core/SettingsExportHelper.cxx",
+          "marker": "XMLSettingsExportHelper::exportString"
+        },
+        {
+          "path": "xmloff/source/core/SettingsExportHelper.cxx",
+          "marker": "XMLSettingsExportHelper::exportIndexAccess"
         }
       ]
     }

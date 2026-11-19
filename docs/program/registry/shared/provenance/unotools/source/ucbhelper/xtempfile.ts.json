@@ -1,0 +1,66 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/unotools/source/ucbhelper/xtempfile.ts",
+    "status": "mapped",
+    "upstreamPath": "unotools/source/ucbhelper/xtempfile.cxx",
+    "localSymbols": [
+      "OTempFileService",
+      "unotools_OTempFileService_get_implementation"
+    ],
+    "upstreamSymbols": [
+      "OTempFileService",
+      "unotools_OTempFileService_get_implementation"
+    ],
+    "preservedResponsibilities": [
+      "Original named temporary-file service is registered through the real component manager: selected default file-only TempFileNamed, source exclusive name loop/UniqueTokens/global native OSL mutex, original temporary-directory environment and createPath callbacks, source SvFileStream and original empty-name SvMemoryStream fallback. OTempFileService retains all represented UNO IO/seek/endpoint/property/type/ByteReader contracts, original first-use caches/defaults/exception order, UInt32 seek cast, duplicate XPropertySet types, release-profile assert-only listener bodies and ignored creation/close diagnostics. No fake TempFile/stream/provider/private counter injection, alternate host filesystem or manual JS allocator is introduced. Genuine deferred nonseekable copy now executes and cleans up real MEMFS files. Other TempFileNamed constructors/directory ownership/Fast services, Directory enumeration/instances, native ABI/thread/debug/OOM/full token-budget and complete DOCX/XLSX storage/model/filter/UI remain unbound or unqualified. Independent helper branch gaps remain recorded even when feature aggregate exceeds90."
+    ],
+    "omittedResponsibilities": [
+      "Other tempfile constructor/Fast/directory/Directory enumeration APIs, native ABI/thread/debug/OOM/full token-budget and complete package/storage/model/filter/UI acceptance."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/unotools/source/ucbhelper/xtempfile.ts",
+          "marker": "OTempFileService"
+        },
+        {
+          "path": "apps/office/src/unotools/source/ucbhelper/xtempfile.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unotools/source/ucbhelper/tempfile.failure.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/osl/unx/tempfile.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/streaming/seekableinput.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "unotools/source/ucbhelper/xtempfile.cxx",
+          "marker": "OTempFileService"
+        },
+        {
+          "path": "unotools/qa/python/test_tempfile.py",
+          "marker": "class TestTempFile"
+        },
+        {
+          "path": "sal/qa/osl/file/osl_File.cxx",
+          "marker": "class getTempDirURL"
+        },
+        {
+          "path": "unotools/source/ucbhelper/XTempFile.hxx",
+          "marker": "class OTempFileService"
+        }
+      ]
+    }
+  }
+}

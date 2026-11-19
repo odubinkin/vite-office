@@ -9,11 +9,14 @@ import {
   rtl_string_newFromStr_WithLength,
   rtl_string_newFromSubString,
   rtl_str_indexOfChar_WithLength,
+  rtl_str_reverseCompare_WithLength,
   rtl_str_indexOfStr_WithLength,
   type rtl_String,
   type rtl_StringSlot,
 } from "./string.h";
 import type { rtl_TextEncoding } from "./textenc";
+import { rtl_math_doubleToString, rtl_math_StringFormat } from "./math.h";
+import { RTL_STR_MAX_VALUEOFDOUBLE } from "./string.h";
 import { SAL_NO_ACQUIRE, type __sal_NoAcquire } from "../types";
 /** Original OStringLiteral str/more union over one static byte allocation. */
 export class OStringLiteral {
@@ -36,8 +39,26 @@ export class OStringLiteral {
 export type OStringConstReference = Readonly<
   Pick<OString, "pData" | "getLength" | "getStr" | "isEmpty" | "indexOf" | "copy">
 >;
-/** Original internal byte-string owner; numeric/concat/format and other conveniences remain unported. */
+/** Original internal byte-string owner; number(double) uses its original byte formatter; other numeric/concat/format conveniences remain unported. */
 export class OString {
+  /** Original number(double) overload uses the actual byte formatter with G17, dot and fractional-zero erasure. @param value - Binary64. @returns Owned byte string. */
+  static numberDouble(value: number): OString {
+    const result: rtl_StringSlot = [null];
+    rtl_math_doubleToString(
+      result,
+      null,
+      0,
+      value,
+      rtl_math_StringFormat.rtl_math_StringFormat_G,
+      RTL_STR_MAX_VALUEOFDOUBLE - 9 + 1,
+      46,
+      null,
+      0,
+      true,
+    );
+    if (result[0] === null) throw new Error("std::bad_alloc");
+    return new OString(result[0], SAL_NO_ACQUIRE);
+  }
   private static readonly empty = new OStringLiteral(Uint8Array.of(0));
   private readonly slot: rtl_StringSlot = [null];
   /** Original public data pointer. @returns Actual SAL data. */ get pData(): rtl_String {
@@ -75,7 +96,7 @@ export class OString {
       rtl_uString2String(this.slot, source, length, encoding, flags);
       if (this.slot[0] === null) throw new Error("std::bad_alloc");
     } else if (args.length === 0) this.pData = OString.empty.str;
-    else if (args.length === 2 && (args[0] === null || args[0] instanceof Uint8Array))
+    else if (args.length === 2 && (args[0] === null || ArrayBuffer.isView(args[0])))
       rtl_string_newFromStr_WithLength(this.slot, args[0] as Uint8Array | null, args[1]);
     else if (args[0] instanceof OStringLiteral) this.pData = args[0].str;
     else {
@@ -118,6 +139,19 @@ export class OString {
   }
   /** Original empty predicate. @returns Empty. */ isEmpty(): boolean {
     return this.pData.length === 0;
+  }
+  /** Original OString equality checks length, pointer identity and exact reverse byte comparison. @param other - Original const-reference. @returns Source equality. */
+  equals(other: OStringConstReference): boolean {
+    if (this.pData.length !== other.pData.length) return false;
+    if (this.pData === other.pData) return true;
+    return (
+      rtl_str_reverseCompare_WithLength(
+        this.pData.buffer,
+        this.pData.length,
+        other.pData.buffer,
+        other.pData.length,
+      ) === 0
+    );
   }
   /** Original character or counted-view index search. @param needle - Declared char or view. @param fromIndex - Original default0. @returns Offset or -1. */
   indexOf(needle: number | Uint8Array, fromIndex = 0): number {

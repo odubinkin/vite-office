@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/xml/xmlcelli.edit.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "ods-content-filter",
+    "capabilityIds": [
+      "CAP-5ed786f7-f652-4f48-ac2a-86fafe2b8fa1",
+      "CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/xml/xmlcelli.edit.ts",
+        "apps/office/src/sc/source/filter/xml/ods.test.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+        "vendor/libreoffice-reference/sc/source/filter/xml/xmlcelli.cxx#ScXMLTableRowCellContext::PushParagraphSpan",
+        "vendor/libreoffice-reference/sc/source/filter/xml/xmlcelli.cxx#ScXMLTableRowCellContext::PushParagraphEnd"
+      ],
+      "justification": "Constructs the native edit-cell paragraphs and applies their sparse style items through EditEngine selections. Unrepresented text properties and edit-engine field import remain outside this responsibility.",
+      "localSymbols": [
+        "importCellTextStyle",
+        "createCellEditText"
+      ],
+      "upstreamSymbols": [
+        "ScXMLTableRowCellContext::PushParagraphSpan",
+        "ScXMLTableRowCellContext::PushParagraphEnd"
+      ],
+      "upstreamFile": "sc/source/filter/xml/xmlcelli.cxx",
+      "sourceResponsibility": "divergent",
+      "knownViolations": []
+    }
+  }
+}

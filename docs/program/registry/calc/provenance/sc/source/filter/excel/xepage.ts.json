@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/excel/xepage.ts",
+    "localSymbols": [
+      "XclExpPageBreaks",
+      "SaveXmlPageBreaks"
+    ],
+    "upstreamPath": "sc/source/filter/excel/xepage.cxx",
+    "upstreamSymbols": [
+      "XclExpPageBreaks::SaveXml",
+      "XclExpPageSettings::XclExpPageSettings"
+    ],
+    "preservedResponsibilities": [
+      "Uses actual native manual page-break sets, sheet-part order, UInt16 position and range limits, and the practical XLSX ceiling of 1023 records per axis."
+    ],
+    "omittedResponsibilities": [
+      "BIFF, automatic page breaks and page layout settings remain outside this worksheet record."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xepage.ts",
+          "marker": "SaveXmlPageBreaks"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xepage.test.ts",
+          "marker": "ports the 1023 row-break cap"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xepage.cxx",
+          "marker": "XclExpPageBreaks::SaveXml"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test5.cxx",
+          "marker": "testTdf170963_row_breaks"
+        }
+      ]
+    }
+  }
+}

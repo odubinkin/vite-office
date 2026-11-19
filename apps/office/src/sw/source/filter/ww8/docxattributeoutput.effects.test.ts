@@ -8,7 +8,6 @@ import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { XmlFilterBase } from "../../../../oox/source/core/xmlfilterbase";
 import { ZipStorage, ZipFragmentStream } from "../../../../oox/source/helper/zipstorage";
 import { FastSerializerHelper } from "../../../../sax/inc/fshelper";
-import { FastTokenHandler } from "../../../../oox/source/core/fasttokenhandler";
 import { SvxCaseMapItem } from "../../../../editeng/inc/cmapitem";
 import { SvxCaseMap } from "../../../../editeng/inc/svxenum";
 import { SvxContourItem } from "../../../../editeng/inc/contouritem";
@@ -30,7 +29,7 @@ function emit(write: (output: DocxAttributeOutput, document: SwDoc) => void): st
     range = new SwPaM(position),
     exporter = new DocxExport(new XmlFilterBase(new ZipStorage()), doc, range, range, false, false),
     stream = new ZipFragmentStream("word/document.xml", "application/xml"),
-    serializer = new FastSerializerHelper(stream, false, new FastTokenHandler()),
+    serializer = new FastSerializerHelper(stream, false),
     output = exporter.DocxAttrOutput();
   try {
     output.SetSerializer(serializer);

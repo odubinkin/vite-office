@@ -7,21 +7,28 @@ import { InitApplicationServiceManager } from "../../../desktop/source/app/appin
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { IDBFactory } from "fake-indexeddb";
-import { assert, describe, expect, it, vi } from "vitest";
+import { assert, beforeAll, describe, expect, it, vi } from "vitest";
+import { initializeRuntime } from "../../../external/emscripten/runtime";
 
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { createWriterDocument, SwDoc } from "../../source/core/doc/doc";
+import { applyWriterParagraphList } from "../../source/core/doc/list";
 import type { SvxBrushItem } from "../../../editeng/source/items/frmitems.brush";
 import { SvxFrameDirection } from "../../../editeng/inc/frmdir";
-import { RES_BACKGROUND } from "../../inc/hintids";
+import { RES_BACKGROUND, RES_PARATR_ADJUST, RES_PARATR_LINESPACING } from "../../inc/hintids";
+import { SvxAdjustItem } from "../../../editeng/source/items/paraitem.adjust";
+import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
+import { SvxAdjust, SvxLineSpaceRule } from "../../../editeng/inc/svxenum";
 import { SwTableNode } from "../../source/core/docnode/node";
 import { SwDocShell } from "../../source/uibase/app/docsh";
 import { IndexedDbWriterOdtStore, type WriterOdtStore } from "../storage/writer-odt-store";
 import type { WriterSessionServices } from "../workflows/writer-workflows";
 import { openBrowserWriterDocument } from "../workflows/writer-odt-io";
 import { WriterFileDialog } from "./WriterFileDialog";
+import { DocumentArchive } from "../../../package/source/zippackage/document-archive";
 
 InitApplicationServiceManager(implementations);
+beforeAll(initializeRuntime);
 
 /** Creates a Writer shell for dialog behavior. @param measure - Supplies the device used by native HTML tables. @returns Active shell. */
 function shell(measure = false): SwDocShell {
@@ -86,7 +93,7 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
     expect(computerTab).toHaveAttribute("aria-selected", "true");
     expect(computerTab).toHaveFocus();
     const panel = screen.getByRole("tabpanel", { name: "On computer" });
-    expect(screen.getByText("ODT, TXT, RTF and Markdown files are supported")).toBeVisible();
+    expect(screen.getByText("ODT, DOCX, TXT, RTF and Markdown files are supported")).toBeVisible();
     fireEvent.dragEnter(panel);
     expect(panel).toHaveClass("border-indigo-500");
     fireEvent.dragLeave(panel);
@@ -116,12 +123,12 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
     expect(screen.getByRole("alert")).toHaveTextContent("Browser storage is unavailable.");
     fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
     fireEvent.change(screen.getByLabelText("Browse"), {
-      target: { files: [new File(["bad"], "unsupported.docx")] },
+      target: { files: [new File(["bad"], "unsupported.pdf")] },
     });
     await waitFor(
       /** Waits for the file validation error. @returns Nothing. */ () =>
         expect(screen.getByRole("alert")).toHaveTextContent(
-          "Choose an ODT, TXT, RTF or Markdown file.",
+          "Choose an ODT, DOCX, TXT, RTF or Markdown file.",
         ),
     );
     expect(close).not.toHaveBeenCalled();
@@ -217,6 +224,164 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
     expect(text).toContain("RTF body");
     expect(text).toContain(String.raw`{\info{\upr{\title Draft}{\*\ud{\title Draft}}}}`);
     documentShell.Close();
+  });
+
+  it("downloads the active Writer document as DOCX without changing its medium", /** Checks the real filter output through the existing download dialog. @returns Completion. */ async () => {
+    const documentShell = shell();
+    try {
+      const paragraph = documentShell.GetDoc().paragraphs[0];
+      assert(paragraph);
+      paragraph.SetText("Writer to Word");
+      applyWriterParagraphList(paragraph, { kind: "numbered", ruleName: "Export list" });
+      const medium = documentShell.GetMedium();
+      const modified = documentShell.IsModified();
+      const exported = vi.fn();
+      render(
+        <WriterFileDialog
+          docShell={documentShell}
+          kind="export"
+          onClose={vi.fn()}
+          services={services(undefined, exported)}
+        />,
+      );
+      fireEvent.click(screen.getByRole("button", { name: "Download DOCX" }));
+      await waitFor(
+        /** Waits for the actual OOXML bytes. @returns Nothing. */ () =>
+          expect(exported).toHaveBeenCalledOnce(),
+      );
+      const payload = exported.mock.calls[0]?.[0] as {
+        data: Uint8Array;
+        mediaType: string;
+        name: string;
+      };
+      expect([payload.mediaType, payload.name]).toEqual([SwDocShell.DOCX_MEDIA_TYPE, "Draft.docx"]);
+      const archive = await DocumentArchive.open(payload.data);
+      expect(await archive.readTextEntry("word/document.xml")).toContain(
+        "<w:t>Writer to Word</w:t>",
+      );
+      expect(await archive.readTextEntry("word/document.xml")).toContain("<w:numPr>");
+      expect(await archive.readTextEntry("word/numbering.xml")).toContain(
+        '<w:numFmt w:val="decimal"/>',
+      );
+      expect(await archive.readTextEntry("_rels/.rels")).toContain('Target="word/document.xml"');
+      expect(documentShell.GetMedium()).toBe(medium);
+      expect(documentShell.IsModified()).toBe(modified);
+    } finally {
+      documentShell.Close();
+    }
+  });
+
+  it("reopens a Writer DOCX copy through the computer tab and saves the browser identity", /** Exercises the actual Writer package filter and existing Open path. @returns Completion. */ async () => {
+    const documentShell = shell();
+    const store = new IndexedDbWriterOdtStore("dialog-docx-import", new IDBFactory());
+    try {
+      const document = documentShell.GetDoc();
+      const first = document.paragraphs[0];
+      assert(first);
+      first.SetText("Save and reopen Ω");
+      applyWriterParagraphList(first, { kind: "bullet", ruleName: "Import list" });
+      first.SetAttr(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));
+      const line = new SvxLineSpacingItem(360, RES_PARATR_LINESPACING);
+      line.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+      first.SetAttr(line);
+      const table = document.nodes.MakeTableNode("Example", {}, first);
+      document.nodes
+        .AppendTableRow(table, 2)
+        .GetTabBoxes()[1]
+        ?.GetParagraphs()[0]
+        ?.SetText("Cell Ω");
+      const bytes = await documentShell.SerializeDocx();
+      documentShell.GetDoc().paragraphs[0]?.SetText("Before open");
+      const close = vi.fn();
+      render(
+        <WriterFileDialog
+          docShell={documentShell}
+          kind="open"
+          onClose={close}
+          services={services(store)}
+        />,
+      );
+      fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
+      fireEvent.change(screen.getByLabelText("Browse"), {
+        target: { files: [new File([Uint8Array.from(bytes)], "Word copy.docx")] },
+      });
+      await waitFor(
+        /** Waits until Open and browser persistence finish. @returns Nothing. */ () =>
+          expect(close).toHaveBeenCalledOnce(),
+        { timeout: 5000 },
+      );
+      expect(documentShell.GetDoc().paragraphs[0]?.GetText()).toBe("Save and reopen Ω");
+      expect(documentShell.GetDoc().paragraphs[0]?.GetListKind()).toBe("bullet");
+      const imported = documentShell.GetDoc().GetNodes().getBodyContent()[1];
+      assert(imported instanceof SwTableNode);
+      expect(
+        imported.GetTable().GetTabLines()[0]?.GetTabBoxes()[1]?.GetParagraphs()[0]?.GetText(),
+      ).toBe("Cell Ω");
+      expect(documentShell.GetTitle()).toBe("Word copy");
+      const saved = (await store.list())[0];
+      assert(saved);
+      expect(saved.title).toBe("Word copy");
+      const browserCopy = shell();
+      try {
+        expect(await openBrowserWriterDocument(browserCopy, store, saved.id)).toBe(true);
+        const restored = browserCopy.GetDoc().paragraphs[0];
+        assert(restored);
+        expect(restored.GetListKind()).toBe("bullet");
+        expect((restored.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem).GetAdjust()).toBe(
+          SvxAdjust.Center,
+        );
+        const line = restored.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
+        expect([line.GetLineSpaceRule(), line.GetLineHeight()]).toEqual([
+          SvxLineSpaceRule.Fix,
+          360,
+        ]);
+        const table = browserCopy.GetDoc().GetNodes().getBodyContent()[1];
+        assert(table instanceof SwTableNode);
+        expect(
+          table.GetTable().GetTabLines()[0]?.GetTabBoxes()[1]?.GetParagraphs()[0]?.GetText(),
+        ).toBe("Cell Ω");
+      } finally {
+        browserCopy.Close();
+      }
+    } finally {
+      documentShell.Close();
+    }
+  });
+
+  it("keeps the active graph on a failed DOCX open and only installs the latest result", /** Exercises atomic replacement and cancellation through the real shell. @returns Completion. */ async () => {
+    const documentShell = shell();
+    try {
+      documentShell.GetDoc().paragraphs[0]?.SetText("Active Writer document");
+      const original = documentShell.GetDoc();
+      const previousMedium = documentShell.GetMedium();
+      const bytes = await documentShell.SerializeDocx();
+      const medium = {
+        kind: "input",
+        name: "Word copy.docx",
+        filterId: "Office Open XML Text",
+        source: { kind: "external", reference: bytes },
+      } as const;
+      const first = createDocument({ id: "first", suiteId: "writer", title: "First" });
+      const latest = createDocument({ id: "latest", suiteId: "writer", title: "Latest" });
+      await expect(documentShell.OpenDocx(Uint8Array.of(1, 2), first, medium)).rejects.toThrow();
+      expect(documentShell.GetDoc()).toBe(original);
+      expect(documentShell.GetMedium()).toBe(previousMedium);
+      const results = await Promise.allSettled([
+        documentShell.OpenDocx(bytes, first, medium),
+        documentShell.OpenDocx(bytes, latest, medium),
+      ]);
+      expect(
+        results.map(
+          /** Reads the actual request outcome. @param result - Settled request. @returns Result status. */ (
+            result,
+          ) => result.status,
+        ),
+      ).toEqual(["rejected", "fulfilled"]);
+      expect(documentShell.GetTitle()).toBe("Latest");
+      expect(documentShell.GetDoc().paragraphs[0]?.GetText()).toBe("Active Writer document");
+    } finally {
+      documentShell.Close();
+    }
   });
 
   it.each([

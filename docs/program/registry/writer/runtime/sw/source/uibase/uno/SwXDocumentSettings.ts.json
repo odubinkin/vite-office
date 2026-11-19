@@ -19,9 +19,10 @@
         "apps/office/src/sw/source/uibase/uno/SwXDocumentSettings.ts#SwXDocumentSettings",
         "vendor/libreoffice-reference/sw/source/uibase/uno/SwXDocumentSettings.cxx#SwXDocumentSettings::_setSingleValue",
         "apps/office/src/sw/source/filter/xml/native-rtf-tab-settings-roundtrip.test.ts",
-        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx"
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+        "apps/office/src/sw/source/filter/ww8/docxexport.compat.test.ts"
       ],
-      "justification": "Supplies the represented native boolean document compatibility properties and applies the canonical setting manager's values. Other document-settings service properties, UNO introspection and print/view settings are unrepresented.",
+      "justification": "Supplies the represented native boolean document compatibility properties and applies the canonical setting manager's values. Other document-settings service properties, UNO introspection and print/view settings are unrepresented. Admits the native AddExternalLeading, DoNotJustifyLinesWithManualBreak and AddParaTableSpacing settings for DOCX and ODT.",
       "knownViolations": [],
       "localSymbols": [
         "SwXDocumentSettings"

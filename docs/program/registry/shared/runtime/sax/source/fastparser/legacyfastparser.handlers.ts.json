@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sax/source/fastparser/legacyfastparser.handlers.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-fastparser-contexts",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sax/source/fastparser/legacyfastparser.handlers.ts",
+        "vendor/libreoffice-reference/sax/source/fastparser/legacyfastparser.cxx",
+        "apps/office/src/sax/source/fastparser/fastparser.entity.test.ts"
+      ],
+      "justification": "Original actual WeakImplHelper namespace queue and XFastDocumentHandler adapter with real acquired document/token/namespace owners, self child-context identities, declaration/known/unknown attribute order, Unicode names/values and nullable document guards. Namespace URI retrieval deliberately remains empty; namespace token high bits deliberately remain unshifted as original. CALC580/WRITER517 and CALC581/WRITER518 record these findings with scope qualification. Actual registered Writer/token/sequence stream and source Entity tests preserve behavior without replacement callbacks or fake providers. SaxLegacyFastParser wrapper/service construction and original FastParser/Expat service paths are separate and unfinished; no alias or bootstrap registration is manufactured. Positive high-bit-prefix conversion with another real token producer, complete parser QA/application failure and independent compiled native/physical ABI/thread differential remain unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "NamespaceDefine",
+        "NamespaceHandler",
+        "CallbackDocumentHandler"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sax/source/fastparser/legacyfastparser.cxx",
+      "upstreamSymbols": [
+        "NamespaceHandler::registerNamespace",
+        "NamespaceHandler::getNamespaceURI",
+        "NamespaceHandler::addNSDeclAttributes",
+        "CallbackDocumentHandler::startFastElement",
+        "CallbackDocumentHandler::startUnknownElement",
+        "CallbackDocumentHandler::getNamespacePrefixFromToken",
+        "CallbackDocumentHandler::endFastElement",
+        "CallbackDocumentHandler::createFastChildContext",
+        "CallbackDocumentHandler::characters"
+      ]
+    }
+  }
+}

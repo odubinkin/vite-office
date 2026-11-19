@@ -23,16 +23,12 @@ export interface ScTabControlProps {
 export function ScTabControl(props: ScTabControlProps): React.JSX.Element {
   const document = props.viewData.GetDocument(),
     name = new OUString();
-  const tabs = Array.from(
-    { length: document.GetTableCount() },
-    /** Projects a source sheet name without storing a second sheet inventory. @param unused - Unused entry. @param tab - Native sheet index. @returns Native identity/name. */ (
-      _,
-      tab,
-    ) => {
+  const tabs: { tab: number; name: string }[] = [];
+  for (let tab = 0; tab < document.GetTableCount(); ++tab)
+    if (document.IsVisible(tab)) {
       document.GetName(tab, name);
-      return { tab, name: text(name) };
-    },
-  );
+      tabs.push({ tab, name: text(name) });
+    }
   name.dispose();
   return (
     <div

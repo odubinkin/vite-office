@@ -69,6 +69,11 @@ export class SwXMLTableImport extends SvXMLImport {
     super();
   }
 
+  /** Starts a package XML stream with its own automatic table style names. @returns Nothing. */
+  protected ResetTableStyles(): void {
+    this.tableStyles.clear();
+  }
+
   /** Retains a referenced table style until SAX body import. */
   /** Projects one canonical Writer table value. @param argument1 - Callback input. @param argument2 - Callback input. @returns Callback result. */ public registerTableStyle(
     name: string,

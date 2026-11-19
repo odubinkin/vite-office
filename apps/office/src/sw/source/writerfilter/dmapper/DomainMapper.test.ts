@@ -1,5 +1,9 @@
 /** @fileoverview Consumed DomainMapper resource-to-model contracts through actual Writer native text, paragraph, style and pooled-item APIs. */
 import { assert, expect, it } from "vitest";
+import { RES_PARATR_TABSTOP } from "../../../inc/hintids";
+import { CONVERT_TWIPS } from "../../../../svl/inc/poolitem";
+import { MID_TABSTOPS } from "../../../../editeng/inc/memberids";
+import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { DomainMapper } from "./DomainMapper";
 import { ContextType as C } from "./DomainMapper_Impl";
 import { PropertyMap } from "./PropertyMap";
@@ -599,3 +603,42 @@ for (const [resource, property, input, expected] of [
       doc.Dispose();
     }
   });
+
+it("inherits default stops for OOXML and keeps RTF paragraph tab lists authoritative", /** Exercises the original format distinction through the actual mapper and property contexts. @returns Nothing. */ () => {
+  for (const format of [SourceDocumentType.OOXML, SourceDocumentType.RTF]) {
+    const doc = createWriterDocument();
+    const model = new SwXTextDocument(doc);
+    const mapper = new DomainMapper(model, format);
+    const inherited = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, RES_PARATR_TABSTOP);
+    inherited.Insert(new SvxTabStop(1440, SvxTabAdjust.Right));
+    const baseline = new Any();
+    inherited.QueryValue(baseline, MID_TABSTOPS | CONVERT_TWIPS);
+    try {
+      mapper.impl
+        .GetStyleSheetTable()
+        .GetDefaultParaProps()
+        .Insert(P.PROP_PARA_TAB_STOPS, baseline);
+      mapper.startParagraphGroup();
+      const list = new OOXMLPropertySet();
+      list.add(N.LN_CT_Tabs_tab, attrs([[N.LN_CT_TabStop_pos, V.createInteger(720)]]), T.SPRM);
+      mapper.sprm(sprm(N.LN_CT_PPrBase_tabs, V.createPropertySet(list)));
+      const value = mapper.impl.GetTopContext()?.getProperty(P.PROP_PARA_TAB_STOPS)?.[1];
+      assert(value);
+      const tabs = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, RES_PARATR_TABSTOP);
+      try {
+        expect(tabs.PutValue(value, MID_TABSTOPS | CONVERT_TWIPS)).toBe(true);
+        expect(tabs.Count()).toBe(format === SourceDocumentType.RTF ? 1 : 2);
+        expect(tabs.At(0).GetTabPos()).toBe(720);
+      } finally {
+        tabs.Dispose();
+        value.dispose();
+      }
+    } finally {
+      inherited.Dispose();
+      baseline.dispose();
+      mapper.dispose();
+      model.dispose();
+      doc.Dispose();
+    }
+  }
+});

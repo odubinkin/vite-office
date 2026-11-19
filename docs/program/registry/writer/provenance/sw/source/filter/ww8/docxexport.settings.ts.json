@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/ww8/docxexport.settings.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/filter/ww8/docxexport.cxx",
+    "localSymbols": [
+      "WriteCompat",
+      "WriteCompatSetting"
+    ],
+    "upstreamSymbols": [
+      "WriteCompat",
+      "DocxExport::getWordCompatibilityMode",
+      "DocxExport::WriteSettings"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.settings.ts",
+          "marker": "WriteCompat"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.compat.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxexport.cxx",
+          "marker": "WriteCompat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxexport.cxx",
+          "marker": "DocxExport::getWordCompatibilityMode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxexport.cxx",
+          "marker": "DocxExport::WriteSettings"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "Writes native OOXML compatibility records, represented flags and original mode restrictions from the document model."
+    ],
+    "omittedResponsibilities": [
+      "Only the currently represented Writer settings and format paths are used."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/ww8/docxexport.settings.ts",
+      "rationale": "Splits native compatibility sequence processing beside its original owner so that settings serialization remains bounded separately from layout and package orchestration.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

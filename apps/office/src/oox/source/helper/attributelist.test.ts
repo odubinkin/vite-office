@@ -1,9 +1,12 @@
 /** @fileoverview Original XString decoding, surrogate truncation and actual FastAttributeList optional/defaulted Unicode ownership. */
-import { assert, expect, it } from "vitest";
+import { own, releaseDomScope } from "../../../test/native-dom";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import { afterEach, assert, expect, it } from "vitest";
 import { AttributeConversion as C, AttributeList } from "./attributelist";
 import { sanitizeStringSurrogates } from "../../../comphelper/source/misc/string";
 import { FastAttributeList } from "../../../sax/source/tools/fastattribs";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+afterEach(releaseDomScope);
 it.each([
   ["", ""],
   ["short", "short"],
@@ -72,12 +75,12 @@ it.each([
   },
 );
 it("uses first duplicate, counted UTF8 values and distinct missing/empty/default semantics", /** Exercises real contiguous attribute storage and SAL ownership. @returns Nothing. */ () => {
-  const fast = new FastAttributeList();
+  const fast = new FastAttributeList(null);
   fast.add(1, "A\0😀");
   fast.add(1, "ignored");
   fast.add(2, "");
   fast.add(3, "_x0041_");
-  const attrs = new AttributeList(fast),
+  const attrs = own(new AttributeList(own(new Reference(fast)))),
     fallback = unicode("_x0042_");
   const first = attrs.getString(1),
     empty = attrs.getString(2),
@@ -90,7 +93,7 @@ it("uses first duplicate, counted UTF8 values and distinct missing/empty/default
     withDefault = attrs.getXString(3, fallback);
   assert(first !== undefined && empty !== undefined && decoded !== undefined);
   try {
-    expect(attrs.getFastAttributeList()).toBe(fast);
+    expect(attrs.getFastAttributeList().get()).toBe(fast);
     expect(attrs.hasAttribute(1)).toBe(true);
     expect(attrs.hasAttribute(4)).toBe(false);
     expect(attrs.getString(4)).toBeUndefined();

@@ -238,6 +238,8 @@ export class MSWordStyles {
   private readonly m_rExport: MSWordExportBase;
   private readonly styles: (SwFormat | undefined)[] = Array(WW8_RESERVED_SLOTS).fill(undefined);
   private readonly names = new Map<SwFormat, string>();
+  private readonly styleIds: string[] = [];
+  private readonly m_aHeadingParagraphStyles = new Uint16Array(10).fill(0xffff);
 
   /** Collects actual named formats through the native export context; this core has Standard at paragraph index0. @param owner - Actual exporter. @returns Nothing. */
   public constructor(owner: MSWordExportBase) {
@@ -262,6 +264,10 @@ export class MSWordStyles {
       if (reserved === 0x0fff && this.styles.length >= MSWORD_MAX_STYLES_LIMIT) continue;
       const slot = reserved === 0x0fff ? this.styles.length : reserved;
       this.styles[slot] = collection;
+      if (collection.IsAssignedToListLevelOfOutlineStyle()) {
+        const level = collection.GetAssignedOutlineStyleLevel();
+        if (level >= 0 && level < 10) this.m_aHeadingParagraphStyles[level] = slot;
+      }
     }
     const used = new Set<string>(["normal"]);
     const normal = this.styles[0];
@@ -291,6 +297,51 @@ export class MSWordStyles {
       if (collection === undefined || this.names.has(collection)) continue;
       this.names.set(collection, uniqueName(collection.GetName().replace(/ \(WW\)$/, "")));
     }
+    this.BuildStyleIds();
+  }
+
+  /** Original static style-ID conversion delegates to the shared native utility; immutable host text binds the existing export naming boundary. @param name - Counted UTF16 view. @returns Word ID. */
+  static CreateStyleId(name: Uint16Array): string {
+    const result = CreateDOCXStyleId(name);
+    try {
+      let text = "";
+      const units = result.getStr();
+      for (let index = 0; index < result.getLength(); ++index)
+        text += String.fromCharCode(units[index] as number);
+      return text;
+    } finally {
+      result.dispose();
+    }
+  }
+  /** Original slot-order case-insensitive allocation includes reserved empty slots and assigns nonempty IDs to every entry. @returns Nothing. */
+  BuildStyleIds(): void {
+    const used = new Set<string>();
+    this.styleIds.length = 0;
+    for (const style of this.styles) {
+      const name = style === undefined ? "" : (this.names.get(style) ?? ""),
+        units = new Uint16Array(name.length);
+      for (let index = 0; index < units.length; ++index) units[index] = name.charCodeAt(index);
+      let id = MSWordStyles.CreateStyleId(units);
+      if (id === "") id = "Style";
+      const lower = asciiLowerCase(id);
+      if (used.has(lower)) {
+        let free = 1;
+        while (used.has(lower + free)) ++free;
+        used.add(lower + free);
+        id += free;
+      } else used.add(lower);
+      this.styleIds.push(id);
+    }
+  }
+  /** Original nonempty stored-ID lookup; valid slot is the native caller precondition. @param slot - Unsigned16 slot. @returns Stable ID. */
+  GetStyleId(slot: number): string {
+    const value = this.styleIds[slot & 0xffff];
+    if (value === undefined || value === "") throw new Error("assert(nonempty style ID)");
+    return value;
+  }
+  /** Original heading lookup keeps the missing unsigned16 sentinel. @param level - Valid Writer level. @returns Style slot or65535. */
+  GetHeadingParagraphStyleId(level: number): number {
+    return this.m_aHeadingParagraphStyles[level & 0xffff] as number;
   }
 
   /** Original pool identity mapping for every builtin format family. @param rFormat - Actual format. @returns Word sti identity. */
@@ -481,3 +532,5 @@ export function BuildGetSlot(format: SwFormat): number {
     return id - SwPoolFormatId.COLL_HEADLINE1 + 1;
   return 0x0fff;
 }
+
+import { CreateDOCXStyleId } from "../../../../filter/source/msfilter/util";

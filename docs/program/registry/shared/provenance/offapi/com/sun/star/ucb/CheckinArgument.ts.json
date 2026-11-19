@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/ucb/CheckinArgument.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/ucb/CheckinArgument.idl",
+    "localSymbols": [
+      "CheckinArgument",
+      "cppu_detail_getUnoType"
+    ],
+    "upstreamSymbols": [
+      "CheckinArgument",
+      "MajorVersion",
+      "VersionComment",
+      "SourceURL",
+      "TargetURL",
+      "NewTitle",
+      "MimeType"
+    ],
+    "preservedResponsibilities": [
+      "Original complete IDL declaration and normal cached generated type/value binding, preserving declared field order/defaults, existing native owner addresses and source base relationships. Actual source-derived owner tests exercise defaults, nonvirtual copy/inequality, inherited live field projections and real UNO Any/Sequence/caught-exception transport. All10 new executable owners independently pass90; Chromium main/DOM-free Worker use real metadata/value owners. Native physical C++ ABI/allocation/thread promises and full UniversalContentBroker/provider/transfer/check-in/DOCX-XLSX core/UI remain unqualified or unfinished."
+    ],
+    "omittedResponsibilities": [
+      "Full UCB broker/provider/transfer/check-in, native physical ABI/allocation/thread domains and DOCX/XLSX package/storage/model/filter/UI acceptance."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/ucb/CheckinArgument.ts",
+          "marker": "CheckinArgument"
+        },
+        {
+          "path": "apps/office/src/ucb/source/core/native-command-info.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/ucb/CheckinArgument.idl",
+          "marker": "CheckinArgument"
+        },
+        {
+          "path": "codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "typelib_static_struct_type_init"
+        }
+      ]
+    }
+  }
+}

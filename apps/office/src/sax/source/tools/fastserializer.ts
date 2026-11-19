@@ -1,14 +1,21 @@
 /** @fileoverview Native FastSaxSerializer UTF8 escaping, token emission and mark/sort owners from fastserializer.cxx; JS byte arrays bind original value sequences and GC erases physical reference counts. */
 import { ByteSequence } from "../../../sal/inc/rtl/byteseq";
 import type { ByteElements } from "../../../sal/inc/rtl/byteseq.h";
-import type { SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import { FastTokenHandler as FastTokenHandlerService } from "../../../offapi/com/sun/star/xml/sax/FastTokenHandler";
+import { getProcessComponentContext } from "../../../comphelper/inc/processfactory";
+import {
+  rtl_string_new_WithLength,
+  rtl_string_release,
+  RTL_STR_MAX_VALUEOFDOUBLE,
+  type rtl_String,
+  type rtl_StringSlot,
+} from "../../../sal/inc/rtl/string.h";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import type { XFastTokenHandler } from "../../../offapi/com/sun/star/xml/sax/XFastTokenHandler";
+import type { Sequence, SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import { MergeMarks } from "../../inc/fshelper";
 import { CachedOutputStream, ForMergeBase, type OutputStream } from "./CachedOutputStream";
 import { FastAttributeList } from "./fastattribs";
-/** Native token-handler dependency is supplied by the actual caller in place of component-service construction. */
-export interface FastTokenHandler {
-  getUTF8Identifier(token: number): Uint8Array;
-}
 /** Original TokenValue retains a borrowed byte view, not a value snapshot. */
 export class TokenValue {
   /** Original scalar/view constructor; the caller owns the referenced input lifetime. @param nToken - Original identity. @param pValue - Borrowed UTF8 view. @returns Attribute entry. */
@@ -160,20 +167,35 @@ const entities = new Map([
 ]);
 /** Original serializer owns actual stream cache, token values and mark stack; debug structural stacks and physical RTL allocation are not simulated. */
 export class FastSaxSerializer {
-  private readonly maCachedOutputStream: CachedOutputStream;
+  private readonly maCachedOutputStream = new CachedOutputStream();
+  private readonly mpDoubleStr: rtl_StringSlot = [null];
+  private mnDoubleStrCapacity = RTL_STR_MAX_VALUEOFDOUBLE;
   private readonly maMarkStack: ForMerge[] = [];
   /** Native independent flag: fallible mark setup can leave it inconsistent with the stack; preserve WRITER138/CALC-304. */
   private mbMarkStackEmpty = true;
   private readonly maTokenValues: TokenValue[] = [];
   private mbXescape = true;
-  /** Binds actual stream/token service dependencies. @param output - Native output stream. @param mxFastTokenHandler - Actual lexical handler. @returns Serializer. */
-  constructor(
-    output: OutputStream,
-    private readonly mxFastTokenHandler: FastTokenHandler,
-  ) {
-    this.maCachedOutputStream = new CachedOutputStream();
-    this.maCachedOutputStream.setOutputStream(output);
+  private readonly mxFastTokenHandler = new Reference<XFastTokenHandler>();
+  /** Original constructor obtains its registered token service through the process context. Numeric conversion overloads remain a separate unported responsibility. @param output - Existing native/browser output transport. @returns Serializer. */
+  constructor(output: OutputStream) {
+    try {
+      rtl_string_new_WithLength(this.mpDoubleStr, this.mnDoubleStrCapacity);
+      const handler = FastTokenHandlerService.create(getProcessComponentContext());
+      try {
+        this.mxFastTokenHandler.moveAssign(handler);
+      } finally {
+        handler.dispose();
+      }
+      this.maCachedOutputStream.setOutputStream(output);
+    } catch (error) {
+      // Constructor failure destroys constructed members, not the destructor
+      // body owning the raw double buffer; preserve the original source leak.
+      this.mxFastTokenHandler.dispose();
+      this.maCachedOutputStream.dispose();
+      throw error;
+    }
   }
+
   /** Original exact declaration. @returns Nothing. */ startDocument(): void {
     this.write('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n');
   }
@@ -197,12 +219,36 @@ export class FastSaxSerializer {
     token: number,
   ): void {
     if ((token & 0xffff0000) !== 0) {
-      this.writeBytes(this.mxFastTokenHandler.getUTF8Identifier(token >> 16));
-      this.write(":");
-      token &= 0xffff;
+      const namespace = this.mxFastTokenHandler.operatorStar().getUTF8Identifier(token >> 16);
+      try {
+        if (!namespace.hasElements()) throw new Error("assert(Namespace.hasElements())");
+        this.writeSequence(namespace);
+        this.write(":");
+        const element = this.mxFastTokenHandler.operatorStar().getUTF8Identifier(token & 0xffff);
+        try {
+          if (!element.hasElements()) throw new Error("assert(Element.hasElements())");
+          this.writeSequence(element);
+        } finally {
+          element.dispose();
+        }
+      } finally {
+        namespace.dispose();
+      }
+    } else {
+      const element = this.mxFastTokenHandler.operatorStar().getUTF8Identifier(token);
+      try {
+        if (!element.hasElements()) throw new Error("assert(Element.hasElements())");
+        this.writeSequence(element);
+      } finally {
+        element.dispose();
+      }
     }
-    this.writeBytes(this.mxFastTokenHandler.getUTF8Identifier(token));
   }
+  /** Original Sequence pointer/length write without copying the token owner. @param bytes - Borrowed initialized sequence. @returns Nothing. */
+  private writeSequence(bytes: Sequence<number>): void {
+    this.maCachedOutputStream.writeBytes(bytes.getConstArray() as ByteElements, bytes.getLength());
+  }
+
   /** Original byte-string escaping with native literal x-escape exceptions. Strings are the existing host UTF16-to-UTF8 transport binding; raw byte inputs retain their exact byte values. @param input - Text or UTF8 bytes. @param escape - Escape text. @returns Nothing. */
   write(input: string | Uint8Array, escape = false): void {
     const bytes = typeof input === "string" ? encoder.encode(input) : input;
@@ -386,8 +432,10 @@ export class FastSaxSerializer {
   }
   /** Original native member destruction releases mark owners and the output cache without flushing. @returns Nothing. */
   dispose(): void {
+    rtl_string_release(this.mpDoubleStr[0] as rtl_String);
     for (const mark of this.maMarkStack) mark.release();
     this.maMarkStack.length = 0;
+    this.mxFastTokenHandler.dispose();
     this.maCachedOutputStream.dispose();
   }
 }

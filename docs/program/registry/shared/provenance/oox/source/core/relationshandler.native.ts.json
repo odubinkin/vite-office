@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/oox/source/core/relationshandler.native.ts",
+    "status": "mapped",
+    "upstreamPath": "oox/source/core/relationshandler.cxx",
+    "localSymbols": [
+      "RelationsFragment",
+      "lclGetRelationsPath"
+    ],
+    "upstreamSymbols": [
+      "RelationsFragment::RelationsFragment",
+      "RelationsFragment::createFastChildContext",
+      "lclGetRelationsPath"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native logical RTL/UNO/source pointer ownership and explicit lifetime lowering are retained; C++ physical standard-library/atomic/ABI layout is not claimed."
+    },
+    "preservedResponsibilities": [
+      "Original concrete native RelationsFragment derives from actual native FragmentHandler, constructs the original counted UTF16 lclGetRelationsPath, copies the same actual shared Relations owner, retains a real owning AttributeList over incoming native XFastAttributeList and dispatches exact PR_TOKEN Relationships/Relationship values. Defaulted unqualified Id/Type/Target strings, missing/empty rejection, native TargetMode token/missing-only Internal default, invalid-mode external assumption, first-emplace duplicate retention and partial insertions before later XML failure retain source logic. Real converted C SAX callbacks/native OOXML tokens/streams drive this positive original source handler, not a replacement observer/provider. Four pinned Transitional/Strict DOCX/XLSX root and main-part relationship streams from actual ZipStorage are parsed to the same native collection. Main/DOM-free Worker observes exact native parsed Unicode target, external target and relationship part path. SAL_WARN diagnostics are nonthrowing under the selected source profile; physical native allocator/ABI/fault unwind remain unqualified. Existing host filter relation/fragment route is explicitly not yet migrated; normal fragment ctor/stream/storage/model/UI and complete original parser QA remain unfinished."
+    ],
+    "omittedResponsibilities": [
+      "Native actual filter/default constructor/storage orchestration and full model/package/UI acceptance, original complete Pipe/Expat/parser QA and independent native physical ABI/allocator differential remain unfinished."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/core/relationshandler.native.ts",
+          "marker": "RelationsFragment"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/relationshandler.native.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/oox/source/core/relationshandler.cxx",
+          "marker": "RelationsFragment::createFastChildContext"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/oox/source/core/relationshandler.native.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Actual original native handler/ownership is split from the older explicitly qualified host expanded-name relation route until native filter migration. No host relation conversion or second graph in this owner."
+    }
+  }
+}

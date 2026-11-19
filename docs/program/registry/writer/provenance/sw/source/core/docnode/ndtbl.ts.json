@@ -164,6 +164,10 @@
         {
           "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
           "marker": "MergeTable"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.numbered-list.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -308,7 +312,8 @@
       "S3HW1E HTML61: real SwTableBox anonymous construction preserves a null start node and does not turn reserve capacities into child lines or dummy content. Original borrowed GetUpper/SetUpper pointers and owned nested GetTabLines vectors are represented, with explicit TypeScript vector mutation bridges binding actual owners. GetSttNd is nullable; existing required-leaf convenience boundaries assert an actual start rather than inventing one. The original tblrwcl predecessor algorithm now ascends through actual upper boxes/rows, descends last nested rows/boxes and preserves the source overTableLines flag, including its parent-ascent behavior when false and empty preceding-row recursion. Actual table/box member vectors and line destructor responsibilities own recursive model deletion; node deletion removes live frame clients separately and invokes each actual model destructor once. The existing table section-index graph query now visits actual descendants; native layout-first/sorted-content-box registry lookup is not certified. Core sorted-content registration/removal, complete default table/format lifetime, document destructor orchestration, native recursive HTML first-cell/grammar/materialization/layout and RTF direction remain unverified. Actual DeleteTable is used to test destruction; SwDoc.Dispose currently tears down the notification graph without routing all node-owned table destructors, so this checkpoint does not claim whole document teardown parity. Save/open/autosave/recovery exceptions are unchanged.",
       "S3HW1E HTML69 retains the existing document InsertRow/InsertCol optional arguments and true/true/count1 wrapper defaults through a shared type-only SwInsertRowsColsArgs declaration at the existing ndtbl argument-contract boundary. Native operations, history and notification bodies are unchanged; this frees source-owner space for actual mail-merge state without moving private fields or inventing a new state provider.",
       "Applies the same-row new-model branch, repositions the registered cursor before deletion and publishes modified state.",
-      "Delegates physical compound rectangles to the original new-table selection, preparation and deletion mechanisms."
+      "Delegates physical compound rectangles to the original new-table selection, preparation and deletion mechanisms.",
+      "TextToTable moves complete nested table sections into their final Writer cells while retaining every inner node and section identity."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/docnode/ndtbl.cxx",

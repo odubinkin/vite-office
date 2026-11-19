@@ -13,6 +13,7 @@ import { ScHorizontalCellIterator } from "../../inc/dociter";
 import { ScAddress } from "../../inc/address";
 import type { ScDocument } from "../../inc/document";
 import { cellPresentation } from "../editor/cell-input";
+import { needsOdfPasswordHashRegen } from "../../source/filter/xml/xmlexprt.protection";
 /** Creates the suite-specific database over the shared package store. @returns Primary store. */
 export function createCalcDocumentStore(): BrowserDocumentStore {
   return new IndexedDbDocumentStore("vite-office-calc-workbench");
@@ -86,6 +87,7 @@ export async function autosaveCalc(
 ): Promise<boolean> {
   const state = shell.GetDocumentState();
   if ((!state.isModified && !imported) || !hasCalcContent(shell.GetDocument())) return false;
+  if (needsOdfPasswordHashRegen(shell.GetDocument())) return false;
   if (!imported && shell.GetMedium().kind === "untitled") {
     const automatic = getAutomaticCalcTitle(shell.GetDocument());
     if (automatic === undefined) return false;

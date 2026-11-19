@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/xml/XMLCalculationSettingsContext.ts",
+    "localSymbols": [
+      "ScXMLCalculationSettingsContext"
+    ],
+    "upstreamPath": "sc/source/filter/xml/XMLCalculationSettingsContext.cxx",
+    "upstreamSymbols": [
+      "ScXMLCalculationSettingsContext::endFastElement",
+      "ScXMLNullDateContext::ScXMLNullDateContext"
+    ],
+    "preservedResponsibilities": [
+      "Imports the ODF null-date with the native SAX temporal converter, retaining 30 December 1899 for absent and malformed values, and applies the document option before subsequent cells."
+    ],
+    "omittedResponsibilities": [
+      "Other calculation-settings fields and iteration are outside this slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/XMLCalculationSettingsContext.ts",
+          "marker": "ScXMLCalculationSettingsContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/excrecds.test.ts",
+          "marker": "replays tdf165180"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLCalculationSettingsContext.cxx",
+          "marker": "ScXMLCalculationSettingsContext::endFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/XMLCalculationSettingsContext.cxx",
+          "marker": "ScXMLNullDateContext::ScXMLNullDateContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test2.cxx",
+          "marker": "testTdf165180_date1904_XLSX"
+        }
+      ]
+    }
+  }
+}

@@ -2,11 +2,13 @@
  * @fileoverview Source-derived paragraph-style defaults from pinned LibreOffice
  * `sw/source/core/doc/DocumentStylePoolManager.cxx`.
  */
+import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
 import type { SwFormat } from "../attr/format";
 import { createWriterTextColorItem, createWriterHighlightItem } from "../attr/swatrset";
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
-import { SvxTabStopItem, SvxTabStop } from "../../../../editeng/inc/tstpitem";
+import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
+import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import {
   SvxIndentValue,
@@ -28,7 +30,6 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import {
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,
@@ -206,6 +207,20 @@ export function getWriterParagraphStyleDefaults(
 
 /** Applies the direct defaults for one newly materialized pool style. @param collection - Target style. @returns Nothing. */
 export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl): void {
+  const poolId = collection.GetPoolFormatId();
+  if (poolId >= SwPoolFormatId.COLL_HEADERFOOTER && poolId <= SwPoolFormatId.COLL_FOOTERR) {
+    const page = collection.GetDoc().GetPageDesc(0).GetMaster();
+    const margins = page.GetLRSpace();
+    const width = page.GetFrameSize().GetWidth() - margins.ResolveLeft() - margins.ResolveRight();
+    const tabs = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, RES_PARATR_TABSTOP);
+    tabs.Insert(new SvxTabStop(Math.trunc(width / 2), SvxTabAdjust.Center));
+    tabs.Insert(new SvxTabStop(width, SvxTabAdjust.Right));
+    collection.SetFormatAttr(tabs);
+    collection.SetFormatAttr(new SfxBoolItem(RES_LINENUMBER, false));
+    if (poolId === SwPoolFormatId.COLL_HEADERR || poolId === SwPoolFormatId.COLL_FOOTERR)
+      collection.SetFormatAttr(new SvxAdjustItem(SvxAdjust.Right, RES_PARATR_ADJUST));
+    return;
+  }
   const defaults = getWriterParagraphStyleDefaults(
     collection.id,
     collection.GetAttrSet().GetDoc().GetDocumentSettingManager().get("HTML_MODE"),
@@ -257,9 +272,9 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
   if (defaults.lineNumber !== undefined)
     collection.SetFormatAttr(new SfxBoolItem(RES_LINENUMBER, defaults.lineNumber));
   if (defaults.orphans !== undefined)
-    collection.SetFormatAttr(new SfxInt16Item(RES_PARATR_ORPHANS, defaults.orphans));
+    collection.SetFormatAttr(new ParaItems.SvxOrphansItem(defaults.orphans, RES_PARATR_ORPHANS));
   if (defaults.widows !== undefined)
-    collection.SetFormatAttr(new SfxInt16Item(RES_PARATR_WIDOWS, defaults.widows));
+    collection.SetFormatAttr(new ParaItems.SvxWidowsItem(defaults.widows, RES_PARATR_WIDOWS));
   if (defaults.autoColor !== undefined) collection.SetFormatAttr(createWriterTextColorItem("auto"));
   if (defaults.transparentHighlight !== undefined)
     collection.SetFormatAttr(createWriterHighlightItem("transparent"));

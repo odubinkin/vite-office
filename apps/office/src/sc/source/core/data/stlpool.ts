@@ -1,10 +1,16 @@
-/** @fileoverview Native ScStyleSheetPool allocation and source-document binding from stlpool.cxx; Calc style factories and standard-style population remain unported. */
+/** @fileoverview Native ScStyleSheetPool source binding and cell-style factory. */
 import { SfxStyleSheetPool } from "../../../../svl/source/items/style-sheet";
 import type { SfxStyleSheetBase } from "../../../../svl/source/items/style-model";
 import type { SfxItemPool } from "../../../../svl/source/items/itempool";
-import type { SfxStyleFamily, SfxStyleSearchBits } from "../../../../svl/inc/style-values";
-import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import { SfxStyleFamily, SfxStyleSearchBits } from "../../../../svl/inc/style-values";
+import { type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import type { ScDocument } from "../../../inc/document";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { scStyleNameResourcesEnglish } from "../../../inc/globstr";
+import { ScStyleSheet } from "./stlsheet";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+
+const standard = scStyleNameResourcesEnglish.STR_STYLENAME_STANDARD;
 
 /** Actual shared style-pool base with the native Calc document pointer. */
 export class ScStyleSheetPool extends SfxStyleSheetPool {
@@ -23,7 +29,28 @@ export class ScStyleSheetPool extends SfxStyleSheetPool {
   GetDocument(): ScDocument | null {
     return this.pDoc;
   }
-  /** Calc factories must create ScStyleSheet, never the shared base type. @param args - Original factory arguments. @returns No style until the Calc factory is ported. */
+  /** Reads the original Standard cell style and creates its native shell when requested. @param create - Whether to create the built-in owner. @returns Cell style or null. */
+  GetDefaultStyle(create = false): SfxStyleSheetBase | null {
+    const name = unicode(standard);
+    try {
+      const style = this.Find(name, SfxStyleFamily.Para);
+      return !style && create
+        ? this.Make(name, SfxStyleFamily.Para, SfxStyleSearchBits.ScStandard)
+        : style;
+    } finally {
+      name.dispose();
+    }
+  }
+
+  /** Populates the native Standard style and binds the implicit cell pattern. @param items - Imported style attributes. @returns Nothing. */
+  SetDefaultCellStyle(items: SfxItemSet): void {
+    const style = this.GetDefaultStyle(true);
+    if (!style) throw new Error("Calc Standard style is missing.");
+    style.GetItemSet().PutSet(items, false);
+    this.pDoc?.getCellAttributeHelper().getDefaultCellAttribute().SetStyleSheet(style, false);
+  }
+
+  /** Creates native cell styles and supplies their default parent. @param args - Original factory arguments. @returns Calc style. */
   protected override Create(
     ...args:
       | [source: SfxStyleSheetBase]
@@ -34,7 +61,19 @@ export class ScStyleSheetPool extends SfxStyleSheetPool {
           parent: OUStringConstReference | undefined,
         ]
   ): SfxStyleSheetBase {
-    void args;
-    throw new Error("ScStyleSheetPool::Create: native Calc style factory is not ported");
+    if (args.length === 1) {
+      if (!(args[0] instanceof ScStyleSheet)) throw new Error("Invalid Calc style class.");
+      return new ScStyleSheet(args[0]);
+    }
+    const [name, family, mask, parent] = args;
+    if (family !== SfxStyleFamily.Para)
+      throw new Error("ScStyleSheetPool::Create: native Calc style family is not ported");
+    const style = new ScStyleSheet(name, this, family, mask, parent);
+    const defaultStyle = text(name) === standard ? null : this.GetDefaultStyle(true);
+    if (defaultStyle) {
+      style.SetParent(defaultStyle.GetName());
+      style.GetItemSet().SetParent(defaultStyle.GetItemSet());
+    }
+    return style;
   }
 }

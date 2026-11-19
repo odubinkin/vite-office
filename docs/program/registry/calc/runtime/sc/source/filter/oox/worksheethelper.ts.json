@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/oox/worksheethelper.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-file-filter",
+    "capabilityIds": [
+      "CAP-1d1d48a3-5a10-4373-876c-fa5f18a62db9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/oox/worksheethelper.ts",
+        "apps/office/src/sc/source/filter/oox/worksheethelper.test.ts",
+        "vendor/libreoffice-reference/sc/source/filter/oox/worksheethelper.cxx"
+      ],
+      "justification": "Applies explicit and default worksheet row and column spans in native twips and retains hidden and manual size state. Outline grouping and database-filter row visibility remain open. Converts XLSX outline levels as adjacent spans, closing the deepest open group first and using the source hide-detail range.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WorksheetGlobals"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/oox/worksheethelper.cxx",
+      "upstreamSymbols": [
+        "WorksheetGlobals::convertRows"
+      ]
+    }
+  }
+}

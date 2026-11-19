@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.package.remove-catalog-element",
+    "modulePath": "apps/office/src/package/source/xstor/xstorage.catalog.ts",
+    "symbol": "removeCatalogElement",
+    "classification": "upstream-mechanism",
+    "capabilityId": "CAP-4dad6563-a403-4cf1-ace9-7810e15d1658",
+    "description": "Stages a removal of a closed storage element in the original child catalog, retaining an existing record until commit and removing an inserted record immediately."
+  }
+}

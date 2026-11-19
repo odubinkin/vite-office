@@ -1,5 +1,6 @@
 /** @fileoverview Native section property scopes, original mapper geometry normalization and section paragraph lifetimes on actual Writer owners. */
-import { afterEach, assert, expect, it } from "vitest";
+import { afterEach, assert, beforeAll, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
 import { SwDoc } from "../../core/doc/doc";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
@@ -10,6 +11,7 @@ import {
   decodeWriterDocument,
   encodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
+beforeAll(initializeRuntime);
 const docs: SwDoc[] = [];
 afterEach(
   /** Releases document-owned page and item graphs. @returns Nothing. */ () => {

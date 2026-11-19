@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/unoobj/servuno.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "calc-model-services",
+    "capabilityIds": [
+      "CAP-bdb8cfc9-d6a9-4826-a00f-3e124ba73374"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/unoobj/servuno.ts",
+        "apps/office/src/sc/source/ui/unoobj/servuno.test.ts",
+        "docs/program/calc-model-services.md",
+        "vendor/libreoffice-reference/sc/source/ui/unoobj/servuno.cxx",
+        "apps/office/src/sc/source/ui/unoobj/servuno.native.json"
+      ],
+      "justification": "Original modern-first exact name lookup, old release compatibility names and ordered actual UNO string sequence retain all60 modern rows and ten old rows including CALC688. Unchanged compiled native tables/enum/lookup witness match. MakeInstance and actual service owners remain unported; physical ABI/allocator/thread domains remain unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScServiceProvider"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/ui/unoobj/servuno.cxx",
+      "upstreamSymbols": [
+        "ScServiceProvider::GetProviderType",
+        "ScServiceProvider::GetAllServiceNames"
+      ]
+    }
+  }
+}

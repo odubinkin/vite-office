@@ -18,18 +18,22 @@
       "evidence": [
         "apps/office/src/sw/source/writerfilter/dmapper/TblStylePrHandler.ts",
         "apps/office/src/sw/source/writerfilter/dmapper/native-property-map-owners.test.ts",
-        "apps/office/src/sw/source/writerfilter/dmapper/native-style-entry-merge.test.ts"
+        "apps/office/src/sw/source/writerfilter/dmapper/native-style-entry-merge.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.numbered-list.test.ts",
+        "sw/source/writerfilter/dmapper/TblStylePrHandler.cxx"
       ],
-      "justification": "Task202610251549-V4DQJW replaces generic PropertyMap stand-ins in actual paragraph contexts and stylesheet entries with native ParagraphPropertyMap/StyleSheetPropertyMap. ParagraphProperties owns original frame/drop-cap/wrap/list fields, signed-width setters, x/y validity, stable actual Unicode members and actual Writer range identities; ResetFrameProperties deliberately retains names/list/ranges. StyleSheetPropertyMap retains signed16 list/outline levels and upper-only outline guard. TablePropertyMap keeps eight independent zero/invalid slots and original validity/overwrite merging even when ordinary properties are empty. StyleSheetEntry owns copied generated interop values and recursive parent-property merging with only the original direct-self guard. TableStyleSheetEntry preserves selected-field conversion, exact conditional masks/order, borrowed source-map mutation, separate ordinary results and insertion-versus-merge column-border asymmetry. All original statuses and source/default/capability claims remain unverified. Full stylesheet XML handlers/application, table/section/list/settings orchestration, native SvRef/UNO interface lifetime/type registration and production DOCX/XLSX UI admission remain unported or unverified; no fake table handler, document projection, cycle repair or border normalization is introduced.",
+      "justification": "Resolves the represented table style indentation and cell distances into the existing style property map. Conditional table-style XML forwarding and full interop grab bag capture remain outside this geometry path.",
       "knownViolations": [],
       "localSymbols": [
-        "TblStyleType"
+        "TblStyleType",
+        "TblStylePrHandler"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/writerfilter/dmapper/TblStylePrHandler.hxx",
       "upstreamSymbols": [
         "TblStyleType",
-        "Band1Horz"
+        "Band1Horz",
+        "lcl_sprm"
       ]
     }
   }

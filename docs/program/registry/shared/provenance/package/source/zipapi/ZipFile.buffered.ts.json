@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/zipapi/ZipFile.buffered.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/zipapi/ZipFile.cxx",
+    "localSymbols": [
+      "XBufferedStream"
+    ],
+    "upstreamSymbols": [
+      "XBufferedStream",
+      "remainingSize",
+      "hasBytes"
+    ],
+    "preservedResponsibilities": [
+      "Original consumed XBufferedStream eager source ByteReader/native Sequence paths, one byte vector/position and original EOF/seek/unchecked skip; original Inflater/InflateZlib Sequence input/COW, segment guards, status/error/offset bookkeeping and end flags. Actual installed zip.js public WASM exports supply zlib computation, with bounded ABI windows and no replacement stream/decoder. Native allocation/ABI/OOM/undefined domains, non-ByteReader constructor execution, XUnbufferedStream/CRC/package storage/model/filter/UI and complete original package-service QA remain unfinished or unqualified. Failed whole buffered/external adapter coverages are retained independently, not diluted by core inflater coverage.",
+      "Native entry-read continuation supersedes earlier non-ByteReader/entry-stream pending statements: original ZipFile nonencrypted entry creation, CRC and real XUnbufferedStream now drive native buffered/ByteGrabber fallback and original source exceptions; actual getDataStream/getInputStream/raw bytes are verified over upstream fixtures. Physical ABI/OOM/crypto/native storage factories/models/export/UI remain unqualified or unfinished."
+    ],
+    "omittedResponsibilities": [
+      "Non-ByteReader real source construction, native allocation/ABI/thread domains and complete CRC/unbuffered/package/storage/model/UI acceptance."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zipapi/ZipFile.buffered.ts",
+          "marker": "XBufferedStream"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/ZipFile.buffered.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/native-entry-read.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/zipapi/ZipFile.cxx",
+          "marker": "XBufferedStream"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/package/source/zipapi/ZipFile.buffered.ts",
+      "rationale": "The source-internal anonymous XBufferedStream class remains part of the ZipFile implementation; its compiler shard exposes the same actual native class for consumption and focused whole-owner QA, with no alternate stream graph or provider. Original source is package/source/zipapi/ZipFile.cxx.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

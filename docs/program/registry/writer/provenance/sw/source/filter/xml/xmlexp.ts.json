@@ -290,7 +290,7 @@
           "marker": "SwXText"
         },
         {
-          "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+          "path": "apps/office/src/sw/source/filter/xml/xmlexp-character.ts",
           "marker": "getCharacterProperties"
         },
         {
@@ -323,6 +323,14 @@
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-table-direction.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.default-tabs.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/odt-page-stories.test.ts",
           "marker": "@fileoverview"
         }
       ],
@@ -562,7 +570,6 @@
       "exportStylesXml",
       "exportContentXml",
       "exportMetaXml",
-      "getCharacterProperties",
       "projectXmlTextRuns",
       "projectBlock"
     ],
@@ -618,7 +625,14 @@
       "Collects original text fly formats and automatic styles, then exports paragraphs and text-box tables through the connected native block export.",
       "Shares the native text-fly collection with browser projection and retains anchored section output.",
       "Projects native percentage table widths and headless relative column references.",
-      "Native name-boundary checkpoint resolves browser paragraph references through actual SwXStyle::getName, scopes its native OUString/wrapper, and uses existing XML name encoding before XMLStyleExport name/display-name emission. Current names, including custom renames and UI/programmatic collisions, replace stale graph IDs at the external XML boundary; internal current-document graph identities remain unchanged. Header, parent, follow and body references share the same actual owner lookup. This is a cohesive naming responsibility split of SwXMLExport, whose main bridge is994 lines, not a new style owner/catalog or a fake UNO query provider. The actual upstream getName/conditional display-name source chain is retained for this slice; full SwXMLExport/UNO/component/filter ABI remains incomplete."
+      "Native name-boundary checkpoint resolves browser paragraph references through actual SwXStyle::getName, scopes its native OUString/wrapper, and uses existing XML name encoding before XMLStyleExport name/display-name emission. Current names, including custom renames and UI/programmatic collisions, replace stale graph IDs at the external XML boundary; internal current-document graph identities remain unchanged. Header, parent, follow and body references share the same actual owner lookup. This is a cohesive naming responsibility split of SwXMLExport, whose main bridge is994 lines, not a new style owner/catalog or a fake UNO query provider. The actual upstream getName/conditional display-name source chain is retained for this slice; full SwXMLExport/UNO/component/filter ABI remains incomplete.",
+      "Paragraph split and widow/orphan values now retain actual concrete original items; native byte UNO access forwards QueryValue/PutValue on the real item instead of signed16 scalar substitution. Existing ODF paragraph emission validates and reads those concrete items. Defaults and browser IO behavior remain unchanged; full DOCX filter/model/UI acceptance remains unfinished.",
+      "Collects actual SwTextCharFormat portions in native order, emits common character definitions and keeps ranged automatic properties separate.",
+      "Writes ODT palette and named-style character theme values in the source-native extension elements.",
+      "Admits the native interoperability item at the ODF export boundary; the ODF property mapper has no Word-specific typography entry.",
+      "Projects document-pool fonts to original ODF paragraph default-style declarations.",
+      "Writes a user tab distance as the ODF paragraph default-style property alongside existing font defaults.",
+      "Writes native ODF master-page header/footer text and section-owned auto styles in styles.xml."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",

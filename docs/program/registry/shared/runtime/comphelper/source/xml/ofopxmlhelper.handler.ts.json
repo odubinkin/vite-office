@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.handler.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "ooxml-package",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/comphelper/source/xml/ofopxmlhelper.handler.ts",
+        "apps/office/src/comphelper/source/xml/ofopxmlhelper.handler.test.ts",
+        "vendor/libreoffice-reference/comphelper/source/xml/ofopxmlhelper.cxx",
+        "apps/office/src/comphelper/source/xml/ofopxmlhelper.fixture.test.ts"
+      ],
+      "justification": "Original source-internal OFOPXMLHelper_Impl now implements the actual XDocumentHandler, native ordered StringPair/nested Sequence results, copied element stack, exact qualified-name/depth/attribute admission, source exception types and order, result const-reference/COW ownership, empty/no-reset document/text/locator callbacks and reverse member lifetime. Original stream/context reader functions validate real inputs, construct the actual Parser service/InputSource/handler and clear the document handler only after successful parsing. No ParserExpat or alias provider is registered: its missing real service still raises actual DeploymentException. Existing browser string/InputSource transport delegates schema admission to this class; it remains distinct from the complete original ParserExpat read path. Native physical ABI, allocator failures and the missing Parser service success path remain unqualified; full DOCX/XLSX package/storage/filter/model/UI acceptance is unfinished. All102 related shared tests and28 Writer stream tests pass; four additional pinned Strict/Transitional DOCX/XLSX archives provide actual registered ZipFileAccess entry streams for metadata parsing. Browser main and DOM-free Worker read actual UTF8 InputSource values, preserving duplicate Id entries, Unicode targets and native MIME results. Complete handler/read shard coverage remains84.66 statements/94.73 branches/100 functions/83.7 lines because actual ParserExpat success and an invariant guard are unqualified; the facade is100 on all four metrics. No aggregate waiver, fake Parser service or private-state patch is used.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RELATIONINFO_FORMAT",
+        "CONTENTTYPE_FORMAT",
+        "OFOPXMLHelper_Impl",
+        "ReadSequence_Impl",
+        "ReadRelationsInfoSequence",
+        "ReadContentTypeSequence"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "comphelper/source/xml/ofopxmlhelper.cxx",
+      "upstreamSymbols": [
+        "RELATIONINFO_FORMAT",
+        "CONTENTTYPE_FORMAT",
+        "OFOPXMLHelper_Impl",
+        "ReadSequence_Impl",
+        "ReadRelationsInfoSequence",
+        "ReadContentTypeSequence"
+      ]
+    }
+  }
+}

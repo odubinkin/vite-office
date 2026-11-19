@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/unocore/SwXTextDefaults.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/unocore/SwXTextDefaults.cxx",
+    "localSymbols": [
+      "SwXTextDefaults",
+      "getPropertyValue",
+      "setPropertyValue"
+    ],
+    "upstreamSymbols": [
+      "SwXTextDefaults",
+      "SwXTextDefaults::getPropertyValue",
+      "SwXTextDefaults::setPropertyValue"
+    ],
+    "preservedResponsibilities": [
+      "Reads and writes the consumed TabStopDistance member through the original text-default property schema and a cloned native pool item. Preserves the upstream PutValue result handling."
+    ],
+    "omittedResponsibilities": [
+      "Only the native tab-distance member is consumed. Other properties, UNO listener hooks, XPropertyState and full service metadata remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/unocore/SwXTextDefaults.ts",
+          "marker": "SwXTextDefaults"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.default-tabs.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/SwXTextDefaults.cxx",
+          "marker": "SwXTextDefaults::setPropertyValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/ooxmlexport2.cxx",
+          "marker": "defaultTabStopNotInStyles"
+        }
+      ]
+    }
+  }
+}

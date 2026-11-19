@@ -20,3 +20,6 @@ third_party/libxml2-wasm/libxml2.mjs
 third_party/libxml2-wasm/index.d.ts
 third_party/libxml2-wasm/constants.mjs
 third_party/libxml2-wasm/constants.d.ts
+
+# Byte-exact existing zip.js CRC library module; validated against the pinned source hash.
+third_party/zipjs-codecs/crc32.mjs

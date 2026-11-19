@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/udkapi/com/sun/star/io/XAsyncOutputMonitor.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-package-input-component",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/udkapi/com/sun/star/io/XAsyncOutputMonitor.ts",
+        "apps/office/src/package/source/xstor/switchpersistencestream.test.ts",
+        "vendor/libreoffice-reference/udkapi/com/sun/star/io/XAsyncOutputMonitor.idl"
+      ],
+      "justification": "Original XAsyncOutputMonitor IDL contract and CPPUMaker normal implicit-XInterface type/static/deprecated getter binding, with actual native query/Any roundtrip/retained interface dispatch over real SwitchablePersistenceStream. No asynchronous completion provider is manufactured; source owner delegates only when the actual retained output supports this interface. Physical C++ ABI/full storage backend/model/UI remain unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XAsyncOutputMonitor",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "udkapi/com/sun/star/io/XAsyncOutputMonitor.idl",
+      "upstreamSymbols": [
+        "XAsyncOutputMonitor",
+        "waitForCompletion"
+      ]
+    }
+  }
+}

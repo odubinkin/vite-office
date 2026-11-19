@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/emscripten/locale.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-libc-locale",
+    "capabilityIds": [
+      "CAP-50103a1f-6aa6-4b77-b0c4-bd8cf3c650f0",
+      "CAP-e9d543a6-8de7-45b1-9680-2a22cb7aad9b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/emscripten/locale.ts",
+        "third_party/libxml2-wasm/osl-locale.c",
+        "apps/office/src/sal/osl/unx/nlsupport.test.ts"
+      ],
+      "justification": "Original Linux/Emscripten locale parser/composer,177-pair codeset table, process locale cache/native pthread mutex, lazy thread initialization/ASCII fallback and exchange setter. Genuine pinned SDK libc getenv/newlocale/nl_langinfo_l/freelocale execute through the existing runtime, without a host locale provider, fake successful service or manual JS allocator. Original ASCII alias omission and environment/composition interaction retained and documented. Process/thread profile is realm-local without pthreads; other process/thread operations, native ABI/OOM and complete file URL/TempFile/package/model/filter/UI acceptance remain unfinished or unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getenv",
+        "getLocaleCodeset",
+        "lockProcessLocale",
+        "unlockProcessLocale"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

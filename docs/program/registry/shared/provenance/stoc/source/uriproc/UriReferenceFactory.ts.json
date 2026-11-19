@@ -13,40 +13,46 @@
       "local": [
         {
           "path": "apps/office/src/stoc/source/uriproc/UriReferenceFactory.ts",
-          "marker": "UriReferenceFactory"
+          "marker": "Factory"
         }
       ],
       "upstream": [
         {
           "path": "stoc/source/uriproc/UriReferenceFactory.cxx",
-          "marker": "parseGeneric"
-        },
-        {
-          "path": "stoc/source/uriproc/UriReferenceFactory.cxx",
-          "marker": "processSegments"
+          "marker": "Factory::parse"
         },
         {
           "path": "stoc/source/uriproc/UriReferenceFactory.cxx",
           "marker": "Factory::makeAbsolute"
+        },
+        {
+          "path": "stoc/source/uriproc/UriReferenceFactory.cxx",
+          "marker": "Factory::makeRelative"
+        },
+        {
+          "path": "stoc/source/uriproc/UriReferenceFactory.cxx",
+          "marker": "processSegments"
         }
       ]
     },
     "upstreamPath": "stoc/source/uriproc/UriReferenceFactory.cxx",
     "localSymbols": [
-      "UriReferenceFactory",
-      "RelativeUriExcessParentSegments"
+      "Factory"
     ],
     "upstreamSymbols": [
-      "parseGeneric",
-      "processSegments",
-      "Factory::makeAbsolute"
+      "Factory::parse",
+      "Factory::makeAbsolute",
+      "Factory::makeRelative",
+      "processSegments"
     ],
     "preservedResponsibilities": [
-      "Generic native parser and exact two-half segment algorithm with ERROR/RETAIN/REMOVE parent policies, additional-special-segment flag, absolute/relative/empty URI branches and query/fragment precedence. No browser URL normalization, escape decoding or excess-parent removal is substituted. Specialized scheme component service lookup, makeRelative and UNO service registration are omitted."
+      "Prior checkpoint (superseded implementation): Generic native parser and exact two-half segment algorithm with ERROR/RETAIN/REMOVE parent policies, additional-special-segment flag, absolute/relative/empty URI branches and query/fragment precedence. No browser URL normalization, escape decoding or excess-parent removal is substituted. Specialized scheme component service lookup, makeRelative and UNO service registration are omitted.",
+      "Replaced the now-unused host-string factory kernel with the actual WeakImplHelper Factory, explicit context member, registered service construction, scheme parser dispatch/exception propagation and complete original absolute/relative algorithms. The former .component responsibility split now occupies the original upstream basename. Writer OOXMLStreamImpl now receives its root context explicitly and calls the real SDK factory; no global context fallback is added."
     ],
     "omittedResponsibilities": [
-      "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",
-      "DOCX full model import/export, shell and UI integration remain in progress in V4DQJW."
+      "Independent native compiled differential, physical native mutex/ABI/allocator and full runtime shutdown remain unqualified.",
+      "Shared bootstrap macro expansion/external translator and native metadata/storage prerequisites remain unfinished.",
+      "Full DOCX/XLSX model/filter/package/UI acceptance remains unfinished; no broad semantic or default status is promoted."
     ]
   }
 }

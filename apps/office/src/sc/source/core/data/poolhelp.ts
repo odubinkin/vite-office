@@ -81,6 +81,7 @@ export class ScPoolHelper extends SimpleReferenceObject {
     this.mpEditEnginePool = null;
     this.pFormTable?.dispose();
     this.pFormTable = null;
+    this.mxStylePool.Dispose();
     super.destroy();
   }
 }

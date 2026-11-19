@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/comphelper/inc/refcountedmutex.ts",
+    "status": "mapped",
+    "upstreamPath": "include/comphelper/refcountedmutex.hxx",
+    "localSymbols": [
+      "RefCountedMutex",
+      "GetMutex"
+    ],
+    "upstreamSymbols": [
+      "RefCountedMutex",
+      "GetMutex"
+    ],
+    "preservedResponsibilities": [
+      "Original consumed OSL mutex C bodies now execute in the actual linked Emscripten runtime, with real pthread attributes/recursive initialization/lock/try/unlock/destroy/free and original null/error statuses. Existing compiler non-pthread libc stubs supply the implementation; no JS lock state, fake native mutex or lifetime registry. Original osl::Mutex/Guard and comphelper RefCountedMutex reuse actual native handles and SimpleReferenceObject/rtl::Reference; original ZipEntry retains OUString/default/copy member behavior without zeroing unspecified scalar values. Native global mutex/other guard templates/thread contention/busy-error/OOM/diagnostics/physical ABI and complete ZipFile/directory/LOC/storage/model/UI remain unported or unqualified."
+    ],
+    "omittedResponsibilities": [
+      "Original global mutex/other guard templates/native threaded/busy/OOM/diagnostic/ABI and full ZipFile/backend/model/UI acceptance unfinished."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/comphelper/inc/refcountedmutex.ts",
+          "marker": "RefCountedMutex"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/native-directory-prerequisites.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/comphelper/refcountedmutex.hxx",
+          "marker": "GetMutex"
+        }
+      ]
+    }
+  }
+}

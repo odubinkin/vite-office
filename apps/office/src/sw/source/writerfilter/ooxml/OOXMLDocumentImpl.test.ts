@@ -1,4 +1,6 @@
 /** @fileoverview Original document fast-substream and relationship-input paths over real ZIP streams, generated SAX tables and DomainMapper settings. */
+import { getProcessComponentContext } from "../../../../comphelper/inc/processfactory";
+
 import { writeRelationsInfoSequenceXml } from "../../../../comphelper/source/xml/ofopxmlhelper.string";
 
 import { expect, it } from "vitest";
@@ -18,6 +20,7 @@ import { readOwnedInput } from "../../../../test/oox-input";
 import { type StringPair } from "../../../../comphelper/source/xml/ofopxmlhelper.string";
 import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";
 import { FastSaxParseError } from "../../../../sax/source/fastparser/fastparser";
+import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 
 const rel = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/";
 const wml = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
@@ -53,15 +56,17 @@ async function packageOf(xml: string | null, relationNamespace = rel): Promise<U
     ]),
   );
   put(storage, "word/assets/data.bin", "main payload");
-  if (xml !== null) put(storage, "settings/settings.xml", xml);
-  put(
-    storage,
-    "settings/_rels/settings.xml.rels",
-    writeRelationsInfoSequenceXml([
-      relation("payload", relationNamespace + "image", "assets/data.bin"),
-      relation("again", relationNamespace + "settings", "broken.xml"),
-    ]),
-  );
+  if (xml !== null) {
+    put(storage, "settings/settings.xml", xml);
+    put(
+      storage,
+      "settings/_rels/settings.xml.rels",
+      writeRelationsInfoSequenceXml([
+        relation("payload", relationNamespace + "image", "assets/data.bin"),
+        relation("again", relationNamespace + "settings", "broken.xml"),
+      ]),
+    );
+  }
   put(storage, "settings/assets/data.bin", "part payload");
   put(storage, "settings/broken.xml", "<broken>");
   return await storage.commit();
@@ -93,7 +98,10 @@ function receiver(mapper: DomainMapper): Stream {
 }
 /** Actual model/mapper/document/stream ownership chain. @param bytes - ZIP bytes. @returns Session. */
 async function session(bytes: Uint8Array) {
-  const stream = await OOXMLStreamImpl.createStream(await ZipStorage.open(bytes));
+  const stream = await OOXMLStreamImpl.createStream(
+    getProcessComponentContext(),
+    await ZipStorage.open(bytes),
+  );
   const model = new SwXTextDocument(createWriterDocument());
   const mapper = new DomainMapper(model, SourceDocumentType.OOXML);
   const document = new OOXMLDocument(stream, null);
@@ -121,6 +129,147 @@ async function saxFailure(action: Promise<void>): Promise<void> {
     if (!(error instanceof FastSaxParseError)) throw error;
   }
 }
+
+const variants = [
+  ["header", "even", N.LN_headerl],
+  ["header", "default", N.LN_headerr],
+  ["header", "first", N.LN_headerf],
+  ["footer", "even", N.LN_footerl],
+  ["footer", "default", N.LN_footerr],
+  ["footer", "first", N.LN_footerf],
+] as const;
+const numberedList =
+  "../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/NumberedList.docx";
+
+it("associates all Strict page variants with the original package part IDs", /** Uses real ZIP relationships, including omitted and external parts. @returns Completion. */ async () => {
+  const storage = new ZipStorage();
+  const namespace = "http://purl.oclc.org/ooxml/wordprocessingml/main";
+  const relations = "http://purl.oclc.org/ooxml/officeDocument/relationships/";
+  const parts = variants.map(
+    /** Makes a native relationship row. @param variant - Original element and page type. @returns Relationship. */
+    ([kind, type]) => relation(kind + type, relations + kind, "../pages/" + kind + type + ".xml"),
+  );
+  const references = variants.map(
+    /** Makes the original reference element for a page variant. @param variant - Element and page type. @returns XML. */
+    ([kind, type]) => `<w:${kind}Reference w:type="${type}" r:id="${kind}${type}"/>`,
+  );
+  const external = relation("external", relations + "header", "https://example.invalid/header.xml");
+  external.push({ First: "TargetMode", Second: "External" });
+  put(
+    storage,
+    "_rels/.rels",
+    writeRelationsInfoSequenceXml([
+      relation("main", relations + "officeDocument", "word/document.xml"),
+    ]),
+  );
+  put(
+    storage,
+    "word/_rels/document.xml.rels",
+    writeRelationsInfoSequenceXml([
+      ...parts,
+      external,
+      relation("missing", relations + "footer", "missing.xml"),
+    ]),
+  );
+  put(
+    storage,
+    "word/document.xml",
+    `<w:document xmlns:w="${namespace}" xmlns:r="${relations.slice(0, -1)}"><w:body><w:p/><w:sectPr>${references.join("")}<w:headerReference w:type="default" r:id="external"/><w:footerReference r:id="missing"/></w:sectPr></w:body></w:document>`,
+  );
+  for (const [kind, type] of variants) {
+    const root = kind === "header" ? "hdr" : "ftr";
+    put(storage, "pages/" + kind + type + ".xml", `<w:${root} xmlns:w="${namespace}"/>`);
+  }
+  const s = await session(await storage.commit());
+  const seen: number[] = [];
+  try {
+    expect(s.stream.getHeaderFooterIds()).toEqual([
+      ...variants.map(
+        /** Matches the input ID sequence. @param variant - Element and page type. @returns ID. */
+        ([kind, type]) => kind + type,
+      ),
+      "missing",
+    ]);
+    await s.document.resolve(
+      Object.assign(s.mapper, {
+        /** Resolves an empty story in its original parser context. @param kind - Native page variant. @param part - Part reference. @returns Nothing. */
+        substream(kind: number, part: Parameters<NonNullable<Stream["substream"]>>[1]) {
+          seen.push(kind);
+          part.resolve(s.receiver);
+        },
+      }),
+    );
+    expect(seen).toEqual(
+      variants.map(
+        /** Retains native left, right and first ID selection. @param variant - Original expected variant. @returns Native resource ID. */
+        ([, , id]) => id,
+      ),
+    );
+  } finally {
+    s.dispose();
+  }
+});
+
+it("resolves the original NumberedList footer through the native nested SAX stream", /** Uses the actual LibreOffice package and records the original part callbacks. @returns Completion. */ async () => {
+  const s = await session(new Uint8Array(readFileSync(numberedList)));
+  const values: string[] = [];
+  const kinds: number[] = [];
+  try {
+    const substream: Stream = {
+      ...s.receiver,
+      /** Header/footer properties are observed without mutating the body. @returns Nothing. */
+      props() {},
+      /** Field controls have a dedicated byte channel. @returns Nothing. */
+      text() {},
+      /** Native paragraph handle diagnostics do not mutate the document. @returns Nothing. */
+      info() {},
+      /** No body section is opened within a native substream. @returns Nothing. */
+      startParagraphGroup() {},
+      /** Paragraph ends are deliberately kept separate from section ends. @returns Nothing. */
+      endParagraphGroup() {},
+      /** Accepts run boundaries in the footer body. @returns Nothing. */
+      startCharacterGroup() {},
+      /** Accepts the closing run boundary. @returns Nothing. */
+      endCharacterGroup() {},
+      /** Captures the part's actual UTF16 stream. @param data - UTF16 text. @param length - Original count. @returns Nothing. */
+      utext(data, length) {
+        values.push(String.fromCharCode(...data.subarray(0, length)));
+      },
+    };
+    await s.document.resolve(
+      Object.assign(s.mapper, {
+        /** Resolves the same package part twice using the original resource contract. @param kind - Native page variant. @param part - Relationship-selected part. @returns Nothing. */
+        substream(kind: number, part: Parameters<NonNullable<Stream["substream"]>>[1]) {
+          kinds.push(kind);
+          part.resolve(substream);
+          part.resolve(substream);
+        },
+      }),
+    );
+    expect(kinds).toEqual([N.LN_footerr]);
+    expect(
+      values.filter(
+        /** Matches the original visible footer page number. @param value - Parsed text. @returns Whether it is the result. */
+        (value) => value === "1",
+      ),
+    ).toHaveLength(2);
+    expect(s.document.getTarget()).toBe("word/document.xml");
+  } finally {
+    s.dispose();
+  }
+});
+
+it("fails visibly on a real footer when the receiver cannot own its content", /** Prevents a successful import from dropping content in an unsupported receiver. @returns Completion. */ async () => {
+  const s = await session(new Uint8Array(readFileSync(numberedList)));
+  try {
+    Object.defineProperty(s.mapper, "substream", { value: undefined });
+    await expect(s.document.resolve(s.mapper)).rejects.toMatchObject({
+      cause: { message: "The Writer receiver does not support header/footer content." },
+    });
+  } finally {
+    s.dispose();
+  }
+});
 
 it.each([
   [wml, rel],
@@ -187,7 +336,7 @@ it("keeps source missing-part behavior and only swallows genuine UNO opening exc
   } finally {
     s.dispose();
   }
-  const stream = await OOXMLStreamImpl.createStream(new ZipStorage());
+  const stream = await OOXMLStreamImpl.createStream(getProcessComponentContext(), new ZipStorage());
   const document = new OOXMLDocument(stream, null);
   const model = new SwXTextDocument(createWriterDocument());
   const mapper = new DomainMapper(model, SourceDocumentType.OOXML);

@@ -1,5 +1,6 @@
 /** @fileoverview Original CSV encoding and absent-versus-empty options through ScDocShell. */
-import { expect, it } from "vitest";
+import { beforeAll, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import {
   RTL_TEXTENCODING_BIG5,
@@ -10,6 +11,8 @@ import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { ScAddress } from "../../../inc/address";
 import { ScImportOptions } from "../dbgui/imoptdlg";
 import { ScDocShell } from "./docsh";
+
+beforeAll(initializeRuntime);
 
 /** Creates the browser identity around an actual source filter request. @param title - Imported name. @returns New document identity. */
 function state(title: string): ReturnType<typeof createDocument> {

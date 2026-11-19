@@ -33,6 +33,8 @@ import { SwDoc } from "../../core/doc/doc";
 import { SwASCWriter } from "../../filter/ascii/wrtasc";
 import { RtfExport } from "../../filter/ww8/rtfexport";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
+import { DocxExport } from "../../filter/ww8/docxexport";
+import { importOOXML } from "../../writerfilter/filter/WriterFilter";
 import { MarkdownReader } from "../../filter/md/swmd";
 import { SwMDWriter } from "../../filter/md/wrtmd";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
@@ -50,8 +52,11 @@ import {
 export class SwDocShell extends SfxObjectShell {
   /** MIME type used by Writer's OpenDocument Text filter. */
   public static readonly ODT_MEDIA_TYPE = ODT_MIMETYPE;
+  /** MIME type of a non-macro Writer OOXML document. */
+  public static readonly DOCX_MEDIA_TYPE =
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
-  private odtRequestGeneration = 0;
+  private openRequestGeneration = 0;
   private importModel: SwXTextDocument | undefined;
   private readonly modelClient: SwClient;
   private readonly notifications = new SwModify();
@@ -103,6 +108,12 @@ export class SwDocShell extends SfxObjectShell {
   public SerializeRtf(): Uint8Array {
     this.EnsureOpen();
     return RtfExport.WriteDocument(this.document, this.GetTitle());
+  }
+
+  /** Serializes the live Writer document through its OOXML export filter. @returns DOCX bytes. */
+  public SerializeDocx(): Promise<Uint8Array> {
+    this.EnsureOpen();
+    return DocxExport.WriteDocument(this.document);
   }
 
   /** Serializes the live Writer model through the native Markdown writer. @returns UTF-8 Markdown bytes. */
@@ -164,6 +175,44 @@ export class SwDocShell extends SfxObjectShell {
       state,
       setMediumOperation(acquireSfxMedium(medium), "open", "succeeded", state.contentGeneration),
     );
+  }
+
+  /** Parses WordprocessingML in a separate graph and installs only the current result. @param bytes - Complete DOCX bytes. @param metadata - Replacement identity. @param medium - Source medium. @returns Installed graph. */
+  public async OpenDocx(
+    bytes: Uint8Array,
+    metadata: SfxObjectShellState,
+    medium: SfxMediumInput,
+  ): Promise<SwDoc> {
+    this.EnsureOpen();
+    this.odtFilter.Cancel();
+    const requestGeneration = ++this.openRequestGeneration;
+    const contentGeneration = this.GetContentGeneration();
+    const graph = await importOOXML(bytes, {
+      ...(this.defaultFontDevice === undefined
+        ? {}
+        : { defaultFontDevice: this.defaultFontDevice }),
+      locale: this.defaultLocale,
+    });
+    try {
+      if (
+        this.openRequestGeneration !== requestGeneration ||
+        this.GetContentGeneration() !== contentGeneration
+      )
+        throw new Error("DOCX open result is stale.");
+      const state: SfxObjectShellState = Object.freeze({
+        ...metadata,
+        isModified: false,
+        lifecycle: "saved",
+        recoveryGeneration: null,
+      });
+      return this.ReplaceDocument(
+        graph,
+        state,
+        setMediumOperation(acquireSfxMedium(medium), "open", "succeeded", state.contentGeneration),
+      );
+    } finally {
+      if (this.document !== graph) graph.Dispose();
+    }
   }
 
   /** Associates the current Writer view like native SwDocShell::SetView. @param view - Active view or no view. @returns Nothing. */
@@ -325,7 +374,7 @@ export class SwDocShell extends SfxObjectShell {
     if (document === this.document)
       throw new Error("Replacement document must be a new Writer graph.");
     const replacementState = this.PrepareObjectStateReplacement(documentState, medium);
-    this.odtRequestGeneration += 1;
+    this.openRequestGeneration += 1;
     this.odtFilter.Cancel();
     const previous = this.document;
     this.modelClient.Dispose();
@@ -367,7 +416,7 @@ export class SwDocShell extends SfxObjectShell {
   ): Promise<SwDoc> {
     this.EnsureOpen();
     this.odtFilter.Cancel();
-    const requestGeneration = ++this.odtRequestGeneration;
+    const requestGeneration = ++this.openRequestGeneration;
     const transfer = await this.odtFilter.Import(
       bytes,
       {
@@ -381,7 +430,7 @@ export class SwDocShell extends SfxObjectShell {
           : { defaultFontDevice: this.defaultFontDevice }),
       },
     );
-    if (requestGeneration !== this.odtRequestGeneration)
+    if (requestGeneration !== this.openRequestGeneration)
       throw new OdtFilterError("stale", "ODT open result is stale.");
     const loaded = restoreOdtFilterDocument(transfer);
     const loadedState: SfxObjectShellState = Object.freeze({
@@ -506,7 +555,7 @@ export class SwDocShell extends SfxObjectShell {
   public Close(): void {
     if (this.GetDocumentState().lifecycle === "closed") return;
     this.SetView(undefined);
-    this.odtRequestGeneration += 1;
+    this.openRequestGeneration += 1;
     this.odtFilter.Close();
     this.notifications.RunNotificationTransaction(
       /** Publishes the terminal lifecycle transaction. @returns Nothing. */ () => {

@@ -1,4 +1,7 @@
 /** @fileoverview ScTable scalar/local-reference,cell-attribute and standard row-height operations over lazy contiguous columns. Device layout and full sheet services remain unported. */
+import { ScOutlineTable } from "./olinetab";
+import type { ScTableProtection } from "./tabprotection";
+import { ScRangeName } from "../tool/rangenam";
 import { SetAllFormulasDirty as dirtyFormulas } from "./table.formula-admission";
 import type { EditTextObject } from "../../../../editeng/inc/editobj";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
@@ -12,7 +15,7 @@ import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import type { SvtListener } from "../../../../svl/source/notify/listener";
-import { INITIALCOLCOUNT, ScAddress } from "../../../inc/address";
+import { INITIALCOLCOUNT, ScAddress, ScRange } from "../../../inc/address";
 import type { ScLineFlags, ScMergePatternState } from "../../../inc/attarray";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import { ScColumn, ScColumnData } from "../../../inc/column";
@@ -51,7 +54,7 @@ import {
   GetErrCode as getFormulaError,
   SetFormula as SetFormulaFragment,
 } from "./table.formula-admission";
-import { GetDataArea, SetOptimalHeightsToRows, SetStreamValid, UpdateReference } from "./table1";
+import * as table1 from "./table1";
 import * as table2 from "./table2";
 import * as table5 from "./table5";
 import * as table7 from "./table7";
@@ -59,11 +62,44 @@ import * as table7 from "./table7";
 type ColumnDataApply = (column: ScColumnData, first: number, last: number) => void;
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
+  private readonly aPrintRanges: ScRange[] = [];
+  private bPrintEntireSheet = true;
+  private moRepeatColRange: ScRange | undefined;
+  private moRepeatRowRange: ScRange | undefined;
+  GetPrintRangeCount = table1.GetPrintRangeCount;
+  GetPrintRange = table1.GetPrintRange;
+  IsPrintEntireSheet = table1.IsPrintEntireSheet;
+  GetRepeatColRange = table1.GetRepeatColRange;
+  GetRepeatRowRange = table1.GetRepeatRowRange;
+  AddPrintRange = table1.AddPrintRange;
+  ClearPrintRanges = table1.ClearPrintRanges;
+  SetPrintEntireSheet = table1.SetPrintEntireSheet;
+  SetRepeatColRange = table1.SetRepeatColRange;
+  SetRepeatRowRange = table1.SetRepeatRowRange;
+  private readonly pRangeName = new ScRangeName();
+  /** Returns the sheet-local name owner. @returns Names. */
+  GetRangeName(): ScRangeName {
+    return this.pRangeName;
+  }
+  declare private pTabProtection: ScTableProtection | undefined;
+  IsProtected = table5.IsProtected;
+  GetProtection = table5.GetProtection;
+  SetProtection = table5.SetProtection;
+  private pOutlineTable: ScOutlineTable | undefined;
+  /** Borrows the native sheet outline, when allocated. @returns Outline table. */
+  GetOutlineTable(): ScOutlineTable | undefined {
+    return this.pOutlineTable;
+  }
+  /** Lazily allocates the original sheet outline owner. @returns Outline table. */
+  StartOutlineTable(): ScOutlineTable {
+    return (this.pOutlineTable ??= new ScOutlineTable());
+  }
   /** Original pagination-cache bit,visible to native out-of-class friend definitions. */
   mbPageBreaksValid = false;
   private bStreamValid = false;
-  private maRowManualBreaks = new Set<number>();
-  private maColManualBreaks = new Set<number>();
+  private bVisible = true;
+  declare private maRowManualBreaks: Set<number>;
+  declare private maColManualBreaks: Set<number>;
   private readonly maRowPageBreaks = new Set<number>();
   private readonly maColPageBreaks = new Set<number>();
   /** Original validated page-break query. @param row - Native index. @returns Membership. */
@@ -74,22 +110,15 @@ export class ScTable {
   HasColPageBreak(col: number): boolean {
     return this.rDocument.ValidCol(col) && this.maColPageBreaks.has(col);
   }
-  /** Original validated manual-break query. @param row - Native index. @returns Membership. */
-  HasRowManualBreak(row: number): boolean {
-    return this.rDocument.ValidRow(row) && this.maRowManualBreaks.has(row);
-  }
-  /** Original validated manual-break query. @param col - Native index. @returns Membership. */
-  HasColManualBreak(col: number): boolean {
-    return this.rDocument.ValidCol(col) && this.maColManualBreaks.has(col);
-  }
+  HasRowManualBreak = table5.HasRowManualBreak;
+  HasColManualBreak = table5.HasColManualBreak;
   /** Original stream validity query. @returns Whether valid. */
   IsStreamValid(): boolean {
     return this.bStreamValid;
   }
-  /** Original stream state assignment respects the document lock. @param value - New state. @param ignoreLock - Native default false. @returns Nothing. */
-  SetStreamValid(value: boolean, ignoreLock = false): void {
-    SetStreamValid.call(this, value, ignoreLock);
-  }
+  SetStreamValid = table1.SetStreamValid;
+  IsVisible = table1.IsVisible;
+  SetVisible = table1.SetVisible;
   /** Original page-break cache invalidation. @returns Nothing. */
   InvalidatePageBreaks(): void {
     this.mbPageBreaksValid = false;
@@ -130,7 +159,6 @@ export class ScTable {
   SetColBreak(...args: Parameters<typeof table5.SetColBreak>): void {
     return table5.SetColBreak.apply(this, args);
   }
-
   private mpCondFormatList: ScConditionalFormatList | null = new ScConditionalFormatList();
   /** Original table1 mutable getter creates an absent owned list. @returns Actual owner. */
   GetCondFormList(): ScConditionalFormatList {
@@ -147,7 +175,6 @@ export class ScTable {
   DeleteConditionalFormat(index: number): void {
     (this.mpCondFormatList as ScConditionalFormatList).erase(index);
   }
-
   /** Original single-source-row repetition on this actual sheet. @param args - Native context,bounds and source geometry. @returns Nothing. */
   CopyOneCellFromClip(...args: Parameters<typeof table7.CopyOneCellFromClip>): void {
     table7.CopyOneCellFromClip.apply(this, args);
@@ -163,8 +190,8 @@ export class ScTable {
       : this.GetOptimalMinRowHeight();
   }
   /** Original table1 reference operation on this actual sheet. @param args - Native context and defaults. @returns Nothing. */
-  UpdateReference(...args: Parameters<typeof UpdateReference>): void {
-    UpdateReference.apply(this, args);
+  UpdateReference(...args: Parameters<typeof table1.UpdateReference>): void {
+    table1.UpdateReference.apply(this, args);
   }
   /** Original table2 conditional-index removal forwarding. @param args - Ranges and key. @returns Nothing. */
   RemoveCondFormatData(...args: Parameters<typeof table2.RemoveCondFormatData>): void {
@@ -230,6 +257,14 @@ export class ScTable {
     if (this.rDocument.ValidCol(col)) (this.aCol[col] as ScColumn).SetScriptType(row, type);
   }
 
+  /** Original table2 attribute vector import forwarding. @param args - Original column bounds and owned vector. @returns Nothing. */
+  SetAttrEntries(...args: Parameters<typeof table2.SetAttrEntries>): void {
+    table2.SetAttrEntries.apply(this, args);
+  }
+  /** Original table2 merge import forwarding. @param args - Original rectangle. @returns Nothing. */
+  SetMergedCells(...args: Parameters<typeof table2.SetMergedCells>): void {
+    table2.SetMergedCells.apply(this, args);
+  }
   /** Original table2.cxx cursor delta validates coordinates before allocating its actual column. @param col - Column. @param row - Row. @param pattern - Borrowed delta. @returns Nothing. */
   ApplyPattern(col: number, row: number, pattern: ScPatternAttr): void {
     if (this.rDocument.ValidColRow(col, row))
@@ -411,6 +446,7 @@ export class ScTable {
   IsBlockEditable(...args: Parameters<typeof table2.IsBlockEditable>): boolean {
     return table2.IsBlockEditable.apply(this, args);
   }
+  IsSelectionEditable = table2.IsSelectionEditable;
   /** Original matrix-fragment dispatch over actual stored cells. @param args - Native bounds and matrix policy. @returns Actual admitted fragment result. */
   HasBlockMatrixFragment(...args: Parameters<typeof table2.HasBlockMatrixFragment>): boolean {
     return table2.HasBlockMatrixFragment.apply(this, args);
@@ -450,7 +486,7 @@ export class ScTable {
     includeOld: boolean,
     onlyDown: boolean,
   ): void {
-    GetDataArea.call(this, firstCol, firstRow, lastCol, lastRow, includeOld, onlyDown);
+    table1.GetDataArea.call(this, firstCol, firstRow, lastCol, lastRow, includeOld, onlyDown);
   }
   /** Original bounded last-data-row aggregation. @param first - First allocated column. @param last - Final valid column. @param row - Inclusive row bound. @returns Row or native invalid-column sentinel. */
   GetLastDataRow(first: number, last: number, row: number): number {
@@ -540,6 +576,8 @@ export class ScTable {
     this.pRowFlags = rowInfo
       ? new ScBitMaskCompressedArray(rDocument.MaxRow(), CRFlags.NONE, 32)
       : null;
+    this.maRowManualBreaks = new Set<number>();
+    this.maColManualBreaks = new Set<number>();
     this.aDefaultColData = new ScColumnData(rDocument);
     this.aDefaultColData.Init(-1, nTab);
     this.CreateColumnIfNotExists(INITIALCOLCOUNT - 1);
@@ -707,7 +745,7 @@ export class ScTable {
         row = stop + 1;
       }
     }
-    return SetOptimalHeightsToRows(
+    return table1.SetOptimalHeightsToRows(
       context,
       /** Mutates actual sheet geometry. @param startRow - First. @param endRow - Last. @param height - Twips. @param fromApi - Shrink policy. @returns Changed. */
       (startRow, endRow, height, fromApi) =>
@@ -756,6 +794,7 @@ export class ScTable {
   }
   /** Releases represented members in native reverse declaration order after document-level conditional listeners are cleared. @returns Nothing. */
   Dispose(): void {
+    this.pRangeName.clear();
     this.aDefaultColData.DisposeAttributes();
     this.mpCondFormatList?.Dispose();
     for (const column of this.aCol) column.Dispose();

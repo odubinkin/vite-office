@@ -1,5 +1,5 @@
 /** @fileoverview Native text/property/value/resource-table contexts, inherited xml:space, MCE choices and source-ordered callbacks; drawings, document tables and notes remain separate owners. */
-import type { Id, Stream } from "../inc/dmapper/resourcemodel";
+import { FieldControl, type Id, type Stream } from "../inc/dmapper/resourcemodel";
 import type { OOXMLDocument } from "../inc/ooxml/OOXMLDocument";
 import { OOXMLFactory, type FastAttribute } from "./OOXMLFactory";
 import { nativeToken } from "./OOXMLFactory_wml";
@@ -13,6 +13,7 @@ import {
 } from "./OOXMLPropertySet";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { OOXMLBreakHandler, OOXMLHeaderFooterHandler, OOXMLHyperlinkHandler } from "./Handler";
 
 /** Original resource enum declaration order; independent of schema ResourceType. */
 export enum ResourceEnum_t {
@@ -227,6 +228,66 @@ export class OOXMLFastContextHandler {
   /** Native generated end dispatch. @returns Nothing. */ endAction(): void {
     OOXMLFactory.endAction(this);
   }
+  /** Reads a native integer property used in a generated action condition. @param id - Property ID. @returns Value or zero. */
+  getPropertyInt(id: Id): number {
+    let value = 0;
+    for (const entry of this.getPropertySet() ?? [])
+      if (entry.getId() === id) value = entry.getValue()?.getInt() ?? 0;
+    return value;
+  }
+  /** Resolves a relationship against this part. @param id - Native relationship ID. @returns Target or empty. */
+  getTargetForId(id: string): string {
+    return this.mpParserState.getDocument()?.getTargetForId(id) ?? "";
+  }
+  /** Sends the native field start byte. @returns Nothing. */
+  fieldstart(): void {
+    this.fieldControl(FieldControl.Start);
+  }
+  /** Sends the native field result delimiter. @returns Nothing. */
+  fieldsep(): void {
+    this.fieldControl(FieldControl.Separator);
+  }
+  /** Sends the native field end byte. @returns Nothing. */
+  fieldend(): void {
+    this.fieldControl(FieldControl.End);
+  }
+  /** Sends the original lock byte for a locked complex field. @returns Nothing. */
+  fieldlock(): void {
+    if (this.getPropertyInt(N.LN_CT_FldChar_fldLock)) this.fieldControl(FieldControl.Lock);
+  }
+  /** Sends the original lock byte for a locked simple field. @returns Nothing. */
+  fieldlock_simple(): void {
+    if (this.getPropertyInt(N.LN_CT_SimpleField_fldLock)) this.fieldControl(FieldControl.Lock);
+  }
+  /** Delivers an original field control inside a character group. @param control - Native byte. @returns Nothing. */
+  private fieldControl(control: FieldControl): void {
+    this.startCharacterGroup();
+    if (this.isForwardEvents()) this.stream().text(Uint8Array.of(control), 1);
+    this.endCharacterGroup();
+  }
+  /** Resolves this hyperlink's attribute set into a field command. @returns Nothing. */
+  handleHyperlink(): void {
+    const handler = new OOXMLHyperlinkHandler(this);
+    this.getPropertySet()?.resolve(handler);
+    handler.writetext();
+  }
+  /** Resolves the original header/footer reference action at element end. @returns Nothing. */
+  handleHdrFtr(): void {
+    if (!this.isForwardEvents()) return;
+    const document = this.mpParserState.getDocument();
+    const resolve =
+      this.mnToken === nativeToken("doc:headerReference")
+        ? document?.resolveHeader
+        : document?.resolveFooter;
+    if (!resolve) return;
+    const receiver = this.stream();
+    const handler = new OOXMLHeaderFooterHandler(
+      /** Resolves the reference against the current native document part. @param type - Page type. @param id - Relationship ID. @returns Nothing. */
+      (type, id) => resolve.call(document, receiver, type, id),
+    );
+    this.getPropertySet()?.resolve(handler);
+    handler.finalize();
+  }
   /** Copies shared context count to handle before info emission. @returns Nothing. */ setHandle(): void {
     this.mpParserState.setHandle();
     this.stream().info(this.mpParserState.getHandle());
@@ -238,6 +299,54 @@ export class OOXMLFastContextHandler {
     properties.add(N.LN_tblDepth, V.createInteger(this.mnTableDepth), T.SPRM);
     properties.add(N.LN_inTbl, V.createInteger(1), T.SPRM);
     this.stream().props(properties);
+  }
+  /** Carries the original table resource marker to the mapper. @param id - Native modifier. @param value - Current table depth or marker. @returns Nothing. */
+  protected sendTableMarker(id: Id, value: number): void {
+    if (!this.isForwardEvents()) return;
+    const properties = new OOXMLPropertySet();
+    properties.add(id, V.createInteger(value), T.SPRM);
+    this.stream().props(properties);
+  }
+  /** Opens a cell in original table order. @returns Nothing. */
+  startCell(): void {
+    this.sendTableMarker(N.LN_tcStart, this.mnTableDepth);
+  }
+  /** Closes a cell and preserves its native group marker. @returns Nothing. */
+  endCell(): void {
+    this.sendTableDepth();
+    this.sendTableMarker(N.LN_tblCell, 1);
+    this.sendTableMarker(N.LN_tcEnd, this.mnTableDepth);
+  }
+  /** Original row start has no callback. @returns Nothing. */
+  startRow(): void {}
+  /** Resolves the completed row marker after its properties. @returns Nothing. */
+  endRow(): void {
+    this.sendTableDepth();
+    this.sendTableMarker(N.LN_tblRow, 1);
+  }
+  /** Routes the generated cell properties to parser state. @returns Nothing. */
+  propagateCellProperties(): void {
+    if (this.isForwardEvents()) this.mpParserState.setCellProperties(this.getPropertySet());
+  }
+  /** Routes the generated row properties to parser state. @returns Nothing. */
+  propagateRowProperties(): void {
+    if (this.isForwardEvents()) this.mpParserState.setRowProperties(this.getPropertySet());
+  }
+  /** Routes the generated table and grid properties to parser state. @returns Nothing. */
+  propagateTableProperties(): void {
+    if (this.isForwardEvents()) this.mpParserState.setTableProperties(this.getPropertySet());
+  }
+  /** Delivers collected properties at the native cell boundary. @returns Nothing. */
+  sendCellProperties(): void {
+    if (this.isForwardEvents()) this.mpParserState.resolveCellProperties(this.stream());
+  }
+  /** Delivers collected properties at the native row boundary. @returns Nothing. */
+  sendRowProperties(): void {
+    if (this.isForwardEvents()) this.mpParserState.resolveRowProperties(this.stream());
+  }
+  /** Delivers table properties for each row. @returns Nothing. */
+  sendTableProperties(): void {
+    if (this.isForwardEvents()) this.mpParserState.resolveTableProperties(this.stream());
   }
   /** Native group opening closes an existing run and establishes paragraph/section state first. @returns Nothing. */
   startCharacterGroup(): void {
@@ -343,6 +452,45 @@ export class OOXMLFastContextHandler {
   /** Native last-section notification. @returns Nothing. */ setLastSectionGroup(): void {
     this.stream().markLastSectionGroup();
   }
+  /** Notifies both parser and stream of the original closing paragraph. @returns Nothing. */
+  setLastParagraphInSection(): void {
+    this.mpParserState.setLastParagraphInSection(true);
+    this.stream().markLastParagraphInSection();
+  }
+  /** Sends an inline tab as the original UTF16 control. @returns Nothing. */
+  tab(): void {
+    if (this.isForwardEvents()) this.stream().utext(Uint16Array.of(9), 1);
+  }
+  /** Sends the original paragraph control. @returns Nothing. */
+  cr(): void {
+    if (this.isForwardEvents()) this.stream().utext(Uint16Array.of(13), 1);
+  }
+  /** Sends the original nonbreaking hyphen. @returns Nothing. */
+  noBreakHyphen(): void {
+    if (this.isForwardEvents()) this.stream().utext(Uint16Array.of(0x2011), 1);
+  }
+  /** Sends the original soft hyphen. @returns Nothing. */
+  softHyphen(): void {
+    if (this.isForwardEvents()) this.stream().utext(Uint16Array.of(0x00ad), 1);
+  }
+  /** Resolves an inline break before releasing the source context properties. @returns Nothing. */
+  handleBreak(): void {
+    if (!this.isForwardEvents() || !(this instanceof OOXMLFastContextHandlerProperties)) return;
+    const properties = this.getPropertySet();
+    if (!properties) return;
+    const handler = new OOXMLBreakHandler(this, this.stream());
+    try {
+      properties.resolve(handler);
+    } finally {
+      handler.dispose();
+    }
+  }
+  /** Retains a block-level break until the first character group. @returns Nothing. */
+  handleOutOfOrderBreak(): void {
+    if (!this.isForwardEvents()) return;
+    const properties = this.getPropertySet();
+    if (properties) this.mpParserState.setPostponedBreak(properties);
+  }
   /** Original deferred section boundary is applied before the next paragraph. @returns Nothing. */ handleLastParagraphInSection(): void {
     if (this.mpParserState.isLastParagraphInSection()) {
       this.mpParserState.setLastParagraphInSection(false);
@@ -406,6 +554,42 @@ export class OOXMLFastContextHandlerStream extends OOXMLFastContextHandler {
   }
   /** Native stream property-set getter. @returns Set. */ override getPropertySet(): OOXMLPropertySet {
     return this.mpPropertySetAttrs;
+  }
+  /** Emits an attribute's original UTF-16 value through this stream. @param id - Native property ID. @returns Nothing. */
+  sendProperty(id: Id): void {
+    for (const property of this.mpPropertySetAttrs) {
+      if (property.getId() !== id) continue;
+      const value = property.getValue()?.getString();
+      if (!value) break;
+      try {
+        this.stream().utext(value.getStr(), value.getLength());
+      } finally {
+        value.dispose();
+      }
+      return;
+    }
+    this.stream().utext(new Uint16Array(), 0);
+  }
+}
+
+/** Owns the native parser state for a table and its row/cell contexts. */
+export class OOXMLFastContextHandlerTextTable extends OOXMLFastContextHandler {
+  /** Pushes the table parser state before exposing its body. @returns Nothing. */
+  protected override lcl_startFastElement(): void {
+    this.mpParserState.startTable();
+    this.mnTableDepth++;
+    this.sendTableMarker(N.LN_tblStart, this.mnTableDepth);
+    this.startAction();
+  }
+  /** Closes the corresponding mapper table before restoring parser state. @returns Nothing. */
+  protected override lcl_endFastElement(): void {
+    try {
+      this.endAction();
+      this.sendTableMarker(N.LN_tblEnd, this.mnTableDepth);
+    } finally {
+      this.mnTableDepth--;
+      this.mpParserState.endTable();
+    }
   }
 }
 

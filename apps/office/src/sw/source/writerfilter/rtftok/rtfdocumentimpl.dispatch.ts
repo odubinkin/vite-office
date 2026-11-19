@@ -1,4 +1,5 @@
 /** @fileoverview RtfDocumentImpl dispatch implementation, called with the original native owner as this. */
+import { ParseHyperlinkInstruction } from "../dmapper/FieldContext";
 import { SvxTabAdjust, SvxTabStop } from "../../../../editeng/inc/tstpitem";
 import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import { RTF_CHARSET_CODEPAGE } from "./rtfcharsets";
@@ -7,7 +8,6 @@ import {
   CHARACTER_PROPERTY_CONTROLS,
   DEFAULT_CHARACTER,
   DEFAULT_PARAGRAPH,
-  parseRtfHyperlinkInstruction,
   RTF_UNDERLINE_STYLES,
   RTFColorTableEntry,
   SKIPPED_DESTINATIONS,
@@ -196,7 +196,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
         FinishListLevelGroup.call(this, previous);
       }
       if (previous?.destination === "fldinst" && previous.field !== undefined) {
-        const hyperlink = parseRtfHyperlinkInstruction(previous.field.instruction);
+        const hyperlink = ParseHyperlinkInstruction(previous.field.instruction);
         if (hyperlink !== undefined) previous.field.hyperlink = hyperlink;
       }
     } finally {

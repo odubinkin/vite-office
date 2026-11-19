@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/attr/swatrset.paragraph.ts",
+    "classification": "local-infrastructure",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "native-paragraph-controls",
+    "capabilityIds": [
+      "CAP-0112",
+      "CAP-cc323b2a-6d0c-47a7-b6e4-da6ba021593d",
+      "CAP-667c907c-e2ec-4609-bfdf-ddea20cf2c19",
+      "CAP-d593215d-5903-4959-83c6-72b5f58c8467",
+      "CAP-4a9d2c31-fc36-4a82-acaa-0d56bfeb4d07",
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/core/attr/swatrset.paragraph.ts",
+        "apps/office/src/editeng/source/items/paraitem.controls.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxattributeoutput.paragraph.test.ts",
+        "apps/office/src/sw/source/core/attr/paragraph-controls-native.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.theme.test.ts"
+      ],
+      "justification": "VM snapshot reconstruction is local infrastructure rather than an upstream native function or a browser environment API. This shard lowers the existing persisted scalar/Which representation into actual original item constructors in every realm. It stays beside SwAttrPool restore registration to separate transport reconstruction from the size-bounded core owner; it owns no model, service or native type substitute. Original paragraph control concrete values replace generic Writer split and signed16 line-count items. Split preserves false factory versus true Writer pool default; widow/orphan preserve unsigned8 storage, signed8 Any projection and zero global/two-line document overlays. Concrete copy/Clone and vertical signed16 QueryValue/0..4 PutValue use actual Sfx/Any owners. Actual pool, snapshot reconstruction, CSS/RTF producers and paragraph UI commands use the correct concrete values. DOCX emits original split/widow boolean normalization, script-space/hanging/forbidden/grid booleans, vertical mapping, page-break spelling and outline clamp through the real exporter/serializer and native ZIP output. No fake exporter, direction/version provider or complete main-text/paragraph/style orchestration is introduced. Localized EditResId GetPresentation, original instance managers, native allocator/physical ABI and full DOCX text/model/filter/UI acceptance remain unported or unqualified. Current keep/line-number snapshot factories retain their existing separately bounded scalar domains; no full item-pool parity is claimed. Keeps primitive color reconstruction in the adjoining attribute-transport module and re-exports the existing public function identity through SwAttrSet; color and item semantics are unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "restoreParagraphControlItem"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

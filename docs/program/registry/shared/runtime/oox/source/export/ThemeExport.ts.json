@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/oox/source/export/ThemeExport.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "complex-color",
+    "capabilityIds": [
+      "CAP-ac5762ac-bc03-420d-9c26-d4581abbe2fa"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/oox/source/export/ThemeExport.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.theme.test.ts",
+        "apps/office/src/sc/source/filter/xml/ods-native-colors.test.ts",
+        "vendor/libreoffice-reference/oox/source/export/ThemeExport.cxx",
+        "vendor/libreoffice-reference/oox/source/export/ThemeExport.cxx",
+        "vendor/libreoffice-reference/oox/source/export/ThemeExport.cxx",
+        "vendor/libreoffice-reference/oox/source/export/ThemeExport.cxx"
+      ],
+      "justification": "Writes the named theme part, model-order RGB colors, major/minor and supplemental font entries, and the native defaults for an unpopulated format matrix. The imported drawing format matrix and advanced system/alpha color export remain outside this owner.",
+      "knownViolations": [],
+      "localSymbols": [
+        "writeTheme"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "oox/source/export/ThemeExport.cxx",
+      "upstreamSymbols": [
+        "ThemeExport::write",
+        "ThemeExport::writeColorSet",
+        "ThemeExport::writeFontScheme",
+        "ThemeExport::writeFormatScheme"
+      ]
+    }
+  }
+}

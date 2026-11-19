@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/excel/xestyle.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/excel/xestyle.cxx",
+    "localSymbols": [
+      "lclGetWeighting",
+      "lclGetColorDistance",
+      "lclGetMergedColorComp",
+      "lclSetMixedColor",
+      "XclListColor",
+      "XclColorIdData",
+      "XclPaletteColor",
+      "XclRemap",
+      "XclNearest"
+    ],
+    "upstreamSymbols": [
+      "lclGetWeighting",
+      "lclGetMergedColorComp",
+      "XclListColor",
+      "XclColorIdData",
+      "XclPaletteColor",
+      "XclRemap",
+      "XclNearest"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xestyle.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xestyle.cxx",
+          "marker": "lclGetWeighting"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "Original palette-reduction value classes, RGB-only base-color protection, occurrence weighting, weighted distance, midpoint truncation, uint32 wrapping and endpoint-biased component merging. Fifty-two cases independently replay the unchanged compiled native merge function, including defined unsigned-overflow cases."
+    ],
+    "omittedResponsibilities": [
+      "Full XclExpPaletteImpl/default palette/root and font records/table/workbook/filter/UI integration, debug OSL_FAIL diagnostics, undefined zero-divisor and uninitialized primitive domains remain unported or unqualified."
+    ]
+  }
+}

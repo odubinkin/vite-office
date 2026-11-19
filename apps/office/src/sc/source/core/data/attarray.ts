@@ -11,14 +11,19 @@ import {
   SvxBoxItemLine as Edge,
   SvxBoxInfoItemValidFlags as Valid,
 } from "../../../../editeng/source/items/frmitems";
-import { ScMF, ScMergeFlagAttr } from "../../../inc/attrib";
+import { ScMF, ScMergeFlagAttr, type ScProtectionAttr } from "../../../inc/attrib";
 import { ScMergeAttr } from "../../../inc/attrib";
 import { ATTR_BORDER } from "../../../inc/scitems";
 import { ScIndentItem } from "../../../inc/attrib";
 import { SvxHorJustifyItem } from "../../../../editeng/inc/justifyitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { ScCondFormatItem, ScCondFormatIndexes, ScRotateValueItem } from "../../../inc/attrib";
-import { ATTR_LINEBREAK, ATTR_CONDITIONAL, ATTR_ROTATE_VALUE } from "../../../inc/scitems";
+import {
+  ATTR_LINEBREAK,
+  ATTR_CONDITIONAL,
+  ATTR_ROTATE_VALUE,
+  ATTR_PROTECTION,
+} from "../../../inc/scitems";
 import { SvxCellHorJustify, SvxCellOrientation } from "../../../../editeng/inc/svxenum";
 import { SC_INDENT_STEP, HasAttrFlags } from "../../../inc/global";
 import { ATTR_INDENT, ATTR_HOR_JUSTIFY } from "../../../inc/scitems";
@@ -115,9 +120,43 @@ function lcl_MergeToFrame(
     inner.SetLine(result[0], InnerEdge.VERT);
 }
 /** Original end-row entry with actual canonical holder ownership. */
-export class ScAttrEntry extends CellAttributeHolder {
+export class ScAttrEntry {
+  private readonly aPattern: CellAttributeHolder;
   nEndRow = 0;
+  /** Original default and implicit-copy construction, including the row endpoint. @param source - Optional actual entry. @returns Entry. */
+  constructor(source?: Readonly<ScAttrEntry>) {
+    this.aPattern = new CellAttributeHolder(source?.getScPatternAttr() ?? null);
+    if (source) this.nEndRow = source.nEndRow;
+  }
+  /** Original member destruction. @returns Nothing. */
+  Dispose(): void {
+    this.aPattern.Dispose();
+  }
+  /** Original borrowed pattern holder; C++ const qualification is erased at this existing holder boundary. @returns Same member. */
+  getCellAttributeHolder(): CellAttributeHolder {
+    return this.aPattern;
+  }
+  /** Original holder copy assignment, including its original self-assignment order. @param source - Borrowed holder. @returns Nothing. */
+  setCellAttributeHolder(source: CellAttributeHolder): void {
+    this.aPattern.assign(source);
+  }
+  /** Original canonical pattern borrow. @returns Pattern or null. */
+  getScPatternAttr(): ScPatternAttr | null {
+    return this.aPattern.getScPatternAttr();
+  }
+  /** Original registration/adoption forwarding. @param pattern - Actual pattern. @param passingOwnership - Native adoption flag. @returns Nothing. */
+  setScPatternAttr(pattern: ScPatternAttr | null, passingOwnership = false): void {
+    this.aPattern.setScPatternAttr(pattern, passingOwnership);
+  }
+  /** Original complete entry equality includes endpoint and canonical holder identity. @param other - Actual entry. @returns Equality. */
+  equals(other: Readonly<ScAttrEntry>): boolean {
+    return (
+      this.nEndRow === other.nEndRow &&
+      CellAttributeHolder.areSame(this.aPattern, other.getCellAttributeHolder())
+    );
+  }
 }
+
 /** Original column attribute interval owner; rows without cell contents retain real patterns. */
 export class ScAttrArray {
   /** Original merged-anchor query uses stored runs or the document's actual default attribute. @param row - Queried row. @returns Whether either merge span exceeds one. */
@@ -143,8 +182,14 @@ export class ScAttrArray {
   RemoveFlags(first: number, last: number, flags: ScMF): boolean {
     return deletion.RemoveFlags.call(this, first, last, flags);
   }
-  /** Original NeedHeight and deletion merge-flag branches over genuine pattern values;other masks remain unported. @param pattern - Actual pattern. @param mask - Admitted native mask. @returns Requested attribute found. */
+  /** Original NeedHeight, protection and merge branches over genuine pattern values;other masks remain unported. @param pattern - Actual pattern. @param mask - Admitted native mask. @returns Requested attribute found. */
   private HasAttrib_Impl(pattern: ScPatternAttr, mask: HasAttrFlags): boolean {
+    if (mask === HasAttrFlags.Merged)
+      return (pattern.GetItem(ATTR_MERGE) as ScMergeAttr).IsMerged();
+    if (mask === HasAttrFlags.Protected) {
+      const protection = pattern.GetItem(ATTR_PROTECTION) as ScProtectionAttr;
+      return protection.GetProtection() || protection.GetHideCell();
+    }
     if (mask !== HasAttrFlags.NeedHeight) {
       const flags = pattern.GetItem(ATTR_MERGE_FLAG) as ScMergeFlagAttr;
       return Boolean(
@@ -163,13 +208,17 @@ export class ScAttrArray {
       return true;
     return (pattern.GetItem(ATTR_ROTATE_VALUE) as ScRotateValueItem).GetValue() !== 0;
   }
-  /** Original range search and early found termination for the consumed NeedHeight/deletion merge-flag masks. @param first - First row. @param last - Last row. @param mask - Source mask. @returns Attribute found. */
+  /** Original range search and early found termination for the consumed attribute masks. @param first - First row. @param last - Last row. @param mask - Source mask. @returns Attribute found. */
   HasAttrib(first: number, last: number, mask: HasAttrFlags): boolean {
     if (
       mask !== HasAttrFlags.NeedHeight &&
+      mask !== HasAttrFlags.Protected &&
+      mask !== HasAttrFlags.Merged &&
       mask !== (HasAttrFlags.Overlapped | HasAttrFlags.AutoFilter)
     )
-      throw new Error("Only NeedHeight and deletion merge-flag attribute queries are implemented");
+      throw new Error(
+        "Only NeedHeight, Protected, Merged and deletion merge-flag attribute queries are implemented",
+      );
     if (this.mvData.length === 0)
       return this.HasAttrib_Impl(
         this.rDocument.getCellAttributeHelper().getDefaultCellAttribute() as ScPatternAttr,
@@ -189,6 +238,14 @@ export class ScAttrArray {
     return found;
   }
   private readonly mvData: ScAttrEntry[] = [];
+  /** Original vector move assignment without normalization or cache invalidation. The caller vector loses its entries; their actual holders are transferred, not copied. @param entries - Owned source vector. @returns Nothing. */
+  SetAttrEntries(entries: ScAttrEntry[]): void {
+    for (const entry of this.mvData) entry.Dispose();
+    this.mvData.length = 0;
+    for (const entry of entries) this.mvData.push(entry);
+    entries.length = 0;
+  }
+
   /** Original Concat joins canonical neighboring runs after an in-place pattern change. @param position - Changed entry index. @returns Whether joined. */
   private Concat(position: number): boolean {
     let changed = false;
@@ -309,8 +366,8 @@ export class ScAttrArray {
     if (!this.Search(first, position)) return;
     do {
       const old = this.mvData[position[0]] as ScAttrEntry,
-        next = cache.ApplyTo(old);
-      if (!CellAttributeHolder.areSame(next, old)) {
+        next = cache.ApplyTo(old.getCellAttributeHolder());
+      if (!CellAttributeHolder.areSame(next, old.getCellAttributeHolder())) {
         if (changed) changed[0] = true;
         let from = start,
           to = old.nEndRow;
@@ -321,7 +378,7 @@ export class ScAttrArray {
           this.SetPatternArea(from, to, next);
           this.Search(start, position);
         } else {
-          old.assign(next);
+          old.setCellAttributeHolder(next);
           if (this.Concat(position[0])) this.Search(start, position);
           else ++position[0];
         }
@@ -681,9 +738,8 @@ export class ScAttrArray {
   /** Creates the native full-height default run lazily. @returns Nothing. */
   private SetDefaultIfNotInit(): void {
     if (this.mvData.length) return;
-    const entry = new ScAttrEntry(
-      this.rDocument.getCellAttributeHelper().getDefaultCellAttribute() as ScPatternAttr,
-    );
+    const entry = new ScAttrEntry();
+    entry.setScPatternAttr(this.rDocument.getCellAttributeHelper().getDefaultCellAttribute());
     entry.nEndRow = this.rDocument.MaxRow();
     this.mvData.push(entry);
   }
@@ -738,7 +794,8 @@ export class ScAttrArray {
     const value = pattern.getScPatternAttr();
     if (value === null) return;
     this.Dispose();
-    const entry = new ScAttrEntry(value);
+    const entry = new ScAttrEntry();
+    entry.setScPatternAttr(value);
     entry.nEndRow = this.rDocument.MaxRow();
     this.mvData.push(entry);
   }

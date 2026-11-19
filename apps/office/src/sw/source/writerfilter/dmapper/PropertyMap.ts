@@ -13,7 +13,9 @@ import {
 } from "../../../../offapi/com/sun/star/style/PageStyleLayout";
 import type { SwXPageStyle } from "../../core/unocore/unostyle";
 import type { DomainMapper_Impl } from "./DomainMapper_Impl";
+import { SetHeaderFooterProperties } from "./DomainMapper_Impl.headerfooter";
 import { text } from "../../core/unocore/unocrsrhelper";
+import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { Sequence } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
 import {
@@ -70,7 +72,7 @@ function release(values: readonly PropertyValue[]): void {
   }
 }
 /** Copies one original sequence element's generated fields, without a second serialized representation. @param sequence - Actual sequence. @param index - Element index. @returns Value copy. */
-function propertyAt(sequence: Sequence<PropertyValue>, index: number): PropertyValue {
+export function propertyAt(sequence: Sequence<PropertyValue>, index: number): PropertyValue {
   const address = sequence.operatorIndex(index) as unknown as { get(offset: number): unknown };
   const name = new OUString((address.get(0) as [rtl_uString])[0]),
     value = new Any(address.get(16) as Any);
@@ -329,7 +331,17 @@ export enum PageBreakType {
 /** Native section property owner. The current admission supplies page defaults, actual style attachment and property application; section finalization is ported on this same owner. */
 export class SectionPropertyMap extends PropertyMap {
   private readonly m_sPageStyleName = new OUString();
+  protected m_pStartingNode: SwTextNode | null = null;
   private m_aPageStyle: SwXPageStyle | null = null;
+  private m_bTitlePage = false;
+  /** Retains the original section title-page switch. @param title - Whether the first page is distinct. @returns Nothing. */
+  SetTitlePage(title: boolean): void {
+    this.m_bTitlePage = title;
+  }
+  /** Applies the source section's header/footer variant selection. @param mapper - Active mapper. @returns Nothing. */
+  SetHeaderFooterProperties(mapper: DomainMapper_Impl): void {
+    SetHeaderFooterProperties(mapper, this, this.m_bTitlePage);
+  }
   private m_nLeftMargin = Number(convert(1n, Length.in, Length.mm100));
   private m_nRightMargin = Number(convert(1n, Length.in, Length.mm100));
   private m_nTopMargin = Number(convert(1n, Length.in, Length.mm100));
@@ -339,6 +351,10 @@ export class SectionPropertyMap extends PropertyMap {
   protected m_nLnnMod = 0;
   protected m_nLnc: number = NS_ooxml.LN_Value_ST_LineNumberRestart_newPage;
   protected m_ndxaLnn = 0;
+  /** Retains the first native body paragraph in the section. @param node - Finished paragraph. @returns Nothing. */
+  SetStartingNode(node: SwTextNode | null): void {
+    this.m_pStartingNode ??= node;
+  }
   /** Stores the original section line interval. @param value - Native interval. @returns Nothing. */
   SetLnnMod(value: number): void {
     this.m_nLnnMod = value;
@@ -364,6 +380,7 @@ export class SectionPropertyMap extends PropertyMap {
     else {
       this.HandleMarginsHeaderFooter(mapper);
       this.GetPageStyle(mapper);
+      this.SetHeaderFooterProperties(mapper);
       this.ApplyProperties_(this.m_aPageStyle);
     }
   }
@@ -371,7 +388,7 @@ export class SectionPropertyMap extends PropertyMap {
   CreateEvenOddPageStyleCopy(mapper: DomainMapper_Impl, type: PageBreakType): void {
     CreateEvenOddPageStyleCopy.call(this, mapper, type);
   }
-  /** Original consumed one-column/no-header section finalization, with atomic range attachment owned by the importer. @param mapper - Actual mapper. @returns Nothing. */
+  /** Finalizes the represented section and applies its style to the starting native body node. @param mapper - Actual mapper. @returns Nothing. */
   CloseSectionGroup(mapper: DomainMapper_Impl): void {
     CloseSectionGroup.call(this, mapper);
   }
@@ -395,7 +412,7 @@ export class SectionPropertyMap extends PropertyMap {
   SetBottomMargin(value: number): void {
     this.m_nBottomMargin = Math.abs(value);
   }
-  /** Original consumed no-header/no-footer margin phase. This model has no header/footer content owners. @param mapper - Original mapper parameter. @returns Nothing. */
+  /** Applies the represented section margin phase. @param mapper - Original mapper parameter. @returns Nothing. */
   HandleMarginsHeaderFooter(mapper: DomainMapper_Impl): void {
     void mapper;
     for (const [id, value] of [

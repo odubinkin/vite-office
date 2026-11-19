@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/oox/source/core/filterbase.ts",
+    "status": "mapped",
+    "upstreamPath": "oox/source/core/filterbase.cxx",
+    "localSymbols": [
+      "FilterBaseImpl",
+      "FilterDirection",
+      "DocumentOpenedGuard"
+    ],
+    "upstreamSymbols": [
+      "FilterBaseImpl",
+      "FilterDirection",
+      "DocumentOpenedGuard"
+    ],
+    "preservedResponsibilities": [
+      "Original represented PImpl defaults/context admission and sequential model queries, with exact-URL recursion guard using actual native mutexes and owned RTL values. Full model/factory positive admission, storage, helpers and FilterBase orchestration remain unqualified or unfinished; native container/allocator/thread/teardown ABI is not certified."
+    ],
+    "omittedResponsibilities": [
+      "Complete FilterBase services/model/factory/media/storage/helper orchestration and physical native thread/allocator/ABI remain unqualified or unfinished."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/core/filterbase.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/filterbase.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/oox/source/core/filterbase.cxx",
+          "marker": "FilterBaseImpl"
+        }
+      ]
+    }
+  }
+}

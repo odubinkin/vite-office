@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/zippackage/zipfileaccess.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/zippackage/zipfileaccess.cxx",
+    "localSymbols": [
+      "OZipFileAccess",
+      "package_OZipFileAccess_get_implementation"
+    ],
+    "upstreamSymbols": [
+      "OZipFileAccess",
+      "initialize",
+      "getByName",
+      "getElementNames",
+      "getStreamByPattern",
+      "dispose",
+      "package_OZipFileAccess_get_implementation"
+    ],
+    "preservedResponsibilities": [
+      "Original registered OZipFileAccess factory and complete service methods over actual native ZipFile, RefCountedMutex, UNO Any/Sequence and stream references. Initialization categories, borrowed versus URL-owned input, source exception wrapping, service aliases, event ordering and non-idempotent disposal are retained. Registered stream-input ZIP64 and all26 original a2z payload rows pass; Chromium main and DOM-free Worker use the actual factory. URL branches call the original UCB Content sink overload; a real registered UCB file provider remains unavailable and URL success/owned-close are unqualified."
+    ],
+    "omittedResponsibilities": [
+      "Physical C++ ABI/allocation/thread guarantees, URL-provider success and full package/storage/model/filter/UI DOCX/XLSX acceptance remain unqualified or unfinished."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zippackage/zipfileaccess.ts",
+          "marker": "OZipFileAccess"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/zipfileaccess.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/zippackage/zipfileaccess.cxx",
+          "marker": "OZipFileAccess"
+        }
+      ]
+    }
+  }
+}

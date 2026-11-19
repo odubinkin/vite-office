@@ -255,9 +255,13 @@ export class SwNodes {
     this.document.NotifyModelChange({ index, kind: "node-removed" });
   }
 
-  /** Wraps imported text using the native ndtbl owner. @param rows - Validated cell nodes. @param name - Table identity. @returns Canonical table. */
-  public TextToTable(rows: readonly (readonly (readonly SwTextNode[])[])[], name: string): SwTable {
-    return TextToTableNodes.call(this, rows, name);
+  /** Wraps imported text using the native ndtbl owner. @param rows - Validated cell nodes. @param name - Table identity. @param section - Original owning text section. @returns Canonical table. */
+  public TextToTable(
+    rows: readonly (readonly (readonly (SwTextNode | SwTableNode)[])[])[],
+    name: string,
+    section = this.endOfContent.StartOfSectionNode(),
+  ): SwTable {
+    return TextToTableNodes.call(this, rows, name, section);
   }
 
   /** Appends one row and its cell sections to a table. @param table - Owning table. @param columnCount - Number of cells. @param lineFormat - Row geometry. @param boxFormats - Cell geometry by column. @returns New row. */

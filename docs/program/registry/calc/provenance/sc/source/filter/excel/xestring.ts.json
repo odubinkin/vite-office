@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/excel/xestring.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/excel/xestring.cxx",
+    "localSymbols": [
+      "XclExpString",
+      "lclCompareVectors",
+      "lclHashVector",
+      "WriteXml"
+    ],
+    "upstreamSymbols": [
+      "XclExpString::Assign",
+      "XclExpString::AppendFormat",
+      "XclExpString::WriteToMem",
+      "lclCompareVectors",
+      "lclHashVector",
+      "XclExpString::WriteXml"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xestring.ts",
+          "marker": "XclExpString"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xestring.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xestream.xml.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xestring.cxx",
+          "marker": "XclExpString::Assign"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "Retains Unicode and byte buffers, native format run comparison and clipping. WriteXml emits inline run properties using the workbook font table and shared XclXmlUtils::WriteFontData. SeparateFormats and the original no-font text path remain in use."
+    ],
+    "omittedResponsibilities": [
+      "Legacy record export and unsupported edit features and scripts remain unqualified."
+    ]
+  }
+}

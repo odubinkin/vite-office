@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/text/XMLComplexColorContext.ts",
+    "upstreamPath": "xmloff/source/text/XMLComplexColorContext.cxx",
+    "localSymbols": [
+      "XMLComplexColorContext",
+      "exportComplexColor"
+    ],
+    "upstreamSymbols": [
+      "XMLComplexColorContext",
+      "XMLComplexColorImport::handleTransformContext"
+    ],
+    "preservedResponsibilities": [
+      "Reads and writes the ODF complex-color extension and its four original ordered property transformations.",
+      "Projects and reconstructs the ordered theme fields for actual ODF character style keys without shared mutable graph objects."
+    ],
+    "omittedResponsibilities": [
+      "The native property mapper supplies the item callback at the actual Calc style boundary. Other consumer-specific UNO property mappers remain outside this owner."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/XMLComplexColorContext.ts",
+          "marker": "XMLComplexColorContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.theme.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-native-colors.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLComplexColorContext.cxx",
+          "marker": "XMLComplexColorContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLComplexColorContext.cxx",
+          "marker": "XMLComplexColorImport::handleTransformContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/XMLComplexColorExport.cxx",
+          "marker": "XMLComplexColorExport::doExport"
+        }
+      ]
+    }
+  }
+}

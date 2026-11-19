@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/zlib/deflate.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-zip-deflater",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/zlib/deflate.ts",
+        "apps/office/src/package/source/zipapi/Deflater.test.ts",
+        "apps/office/src/package/source/zipapi/ZipOutputStream.test.ts",
+        "apps/office/src/package/source/zippackage/ZipPackageStream.save.test.ts"
+      ],
+      "justification": "Uses the pinned pako low-level z_stream API for initialization, DEFLATE, reset, end and preset dictionary. Normal continuation, sync flush and stream finish use zlib flush values. Array and status bindings use public fields.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DeflateState"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

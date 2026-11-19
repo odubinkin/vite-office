@@ -1,8 +1,33 @@
-/** @fileoverview Native DocxAttributeOutput untracked text/run-property emission. The actual DocxExport owns this attribute output; redlines, fields, drawings, font embedding and paragraph orchestration are not yet admitted. */
+/** @fileoverview Native DocxAttributeOutput untracked text, language, underline and color emission. The actual DocxExport owns this attribute output; redlines, fields, drawings, font embedding and paragraph orchestration are not yet admitted. */
+import type {
+  SvxFormatSplitItem,
+  SvxWidowsItem,
+  SvxParaGridItem,
+  SvxParaVertAlignItem,
+} from "../../../../editeng/source/items/paraitem.controls";
+import type { SfxBoolItem } from "../../../../svl/inc/eitem";
+import type { SfxUInt16Item } from "../../../../svl/source/items/intitem";
+import type { SvxColorItem } from "../../../../editeng/inc/colritem";
+import type { SfxGrabBagItem } from "../../../../svl/inc/grabbagitem";
+import { ComplexColor as OwnedComplexColor } from "../../../../docmodel/inc/color/ComplexColor";
+import type { SvxUnderlineItem } from "../../../../editeng/inc/udlnitem";
+import type { SvxLanguageItem } from "../../../../editeng/inc/langitem";
+import { LanguageTag } from "../../../../i18nlangtag/inc/languagetag";
+import { FontLineStyle } from "../../../../tools/inc/fontenum";
+import { ThemeColorType, ThemeColorUsage } from "../../../../docmodel/inc/theme/ThemeColorType";
+import type { ComplexColor } from "../../../../docmodel/inc/color/ComplexColor";
+import { TransformationType as T } from "../../../../docmodel/inc/color/Transformation";
+import { ConvertColorOU } from "../../../../filter/source/msfilter/util";
 import type { DocxExport } from "./docxexport";
+import { OutputParagraphProperties } from "./docxattributeoutput.paragraph";
+import { Reference as RtlReference } from "../../../../sal/inc/rtl/ref";
+/** Original file-local move helper empties its source without acquiring the body. @param source - Actual intrusive handle. @returns Owned previous value. */
+function detachFrom(source: RtlReference<FastAttributeList>): RtlReference<FastAttributeList> {
+  return RtlReference.move(source);
+}
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { FastSerializerHelper, FSNS, MergeMarks } from "../../../../sax/inc/fshelper";
-import { FastAttributeList } from "../../../../sax/source/tools/fastattribs";
+import type { FastAttributeList } from "../../../../sax/source/tools/fastattribs";
 import { getTokenFromUtf8 as token } from "../../../../oox/source/token/tokenmap";
 import type { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
 import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
@@ -29,114 +54,131 @@ import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
 import type { rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
 import { FontItalic, FontWeight, FontStrikeout } from "../../../../tools/inc/fontenum";
 import {
+  RES_CHRATR_LANGUAGE,
+  RES_CHRATR_CJK_LANGUAGE,
+  RES_CHRATR_CTL_LANGUAGE,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CTL_FONTSIZE,
 } from "../../../inc/hintids";
 const w = token("w"),
   val = FSNS(w, token("val"));
-const runOrder = [
-  FSNS(token("w"), token("del")),
-  FSNS(token("w"), token("ins")),
-  FSNS(token("w"), token("moveFrom")),
-  FSNS(token("w"), token("moveTo")),
-  FSNS(token("w"), token("rStyle")),
-  FSNS(token("w"), token("rFonts")),
-  FSNS(token("w"), token("b")),
-  FSNS(token("w"), token("bCs")),
-  FSNS(token("w"), token("i")),
-  FSNS(token("w"), token("iCs")),
-  FSNS(token("w"), token("caps")),
-  FSNS(token("w"), token("smallCaps")),
-  FSNS(token("w"), token("strike")),
-  FSNS(token("w"), token("dstrike")),
-  FSNS(token("w"), token("outline")),
-  FSNS(token("w"), token("shadow")),
-  FSNS(token("w"), token("emboss")),
-  FSNS(token("w"), token("imprint")),
-  FSNS(token("w"), token("noProof")),
-  FSNS(token("w"), token("snapToGrid")),
-  FSNS(token("w"), token("vanish")),
-  FSNS(token("w"), token("webHidden")),
-  FSNS(token("w"), token("color")),
-  FSNS(token("w"), token("spacing")),
-  FSNS(token("w"), token("w")),
-  FSNS(token("w"), token("kern")),
-  FSNS(token("w"), token("position")),
-  FSNS(token("w"), token("sz")),
-  FSNS(token("w"), token("szCs")),
-  FSNS(token("w"), token("highlight")),
-  FSNS(token("w"), token("u")),
-  FSNS(token("w"), token("effect")),
-  FSNS(token("w"), token("bdr")),
-  FSNS(token("w"), token("shd")),
-  FSNS(token("w"), token("fitText")),
-  FSNS(token("w"), token("vertAlign")),
-  FSNS(token("w"), token("rtl")),
-  FSNS(token("w"), token("cs")),
-  FSNS(token("w"), token("em")),
-  FSNS(token("w"), token("lang")),
-  FSNS(token("w"), token("eastAsianLayout")),
-  FSNS(token("w"), token("specVanish")),
-  FSNS(token("w"), token("oMath")),
-  FSNS(token("w"), token("rPrChange")),
-  FSNS(token("w14"), token("glow")),
-  FSNS(token("w14"), token("shadow")),
-  FSNS(token("w14"), token("reflection")),
-  FSNS(token("w14"), token("textOutline")),
-  FSNS(token("w14"), token("textFill")),
-  FSNS(token("w14"), token("scene3d")),
-  FSNS(token("w14"), token("props3d")),
-  FSNS(token("w14"), token("ligatures")),
-  FSNS(token("w14"), token("numForm")),
-  FSNS(token("w14"), token("numSpacing")),
-  FSNS(token("w14"), token("stylisticSets")),
-  FSNS(token("w14"), token("cntxtAlts")),
-];
-/** Native file-local UTF16 segment writer; begin is the erased pointer-reference binding. @param serializer - Actual serializer. @param textToken - Native text token. @param text - UTF16 buffer. @param begin - Mutable pointer index. @param end - End pointer index. @param move - Advance past delimiter. @param symbolFont - Original final-segment symbol font. @returns Whether a nonempty segment was written. */
-export function impl_WriteRunText(
-  serializer: FastSerializerHelper,
-  textToken: number,
-  text: string,
-  begin: [number],
-  end: number,
-  move = true,
-  symbolFont = "",
-): boolean {
-  const start = begin[0];
-  if (move) begin[0] = end + 1;
-  if (start >= end) return false;
-  if (symbolFont) {
-    for (let index = start; index < end; ++index)
-      serializer.singleElementNS(
-        w,
-        token("sym"),
-        FSNS(w, token("font")),
-        symbolFont,
-        FSNS(w, token("char")),
-        text.charCodeAt(index).toString(16).padStart(4, "0"),
-      );
-  } else {
-    if (text.charCodeAt(start) === 32 || text.charCodeAt(end - 1) === 32)
-      serializer.startElementNS(w, textToken, FSNS(token("xml"), token("space")), "preserve");
-    else serializer.startElementNS(w, textToken);
-    serializer.writeEscaped(text.slice(start, end));
-    serializer.endElementNS(w, textToken);
+/** Original theme/scheme token selection including text and background usage overrides. @param color - Actual complex color. @param theme - Word theme versus DrawingML scheme spelling. @returns Native token text. */
+function lclGetThemeOrSchemeType(color: Readonly<ComplexColor>, theme = true): string {
+  const names = [
+    ["dark1", "dk1"],
+    ["light1", "lt1"],
+    ["dark2", "dk2"],
+    ["light2", "lt2"],
+    ["accent1", "accent1"],
+    ["accent2", "accent2"],
+    ["accent3", "accent3"],
+    ["accent4", "accent4"],
+    ["accent5", "accent5"],
+    ["accent6", "accent6"],
+    ["hyperlink", "hlink"],
+    ["followedHyperlink", "folHlink"],
+  ];
+  const type = color.getThemeColorType(),
+    usage = color.getThemeColorUsage();
+  let name = (names[type] as string[])[theme ? 0 : 1] as string;
+  if (usage === ThemeColorUsage.Text) {
+    if (type === ThemeColorType.Dark1) name = theme ? "text1" : "tx1";
+    else if (type === ThemeColorType.Dark2) name = theme ? "text2" : "tx2";
+  } else if (usage === ThemeColorUsage.Background) {
+    if (type === ThemeColorType.Light1) name = theme ? "background1" : "bg1";
+    else if (type === ThemeColorType.Light2) name = theme ? "background2" : "bg2";
   }
-  return true;
+  return name;
+}
+/** Original theme attributes, last transform wins and luminance takes precedence over tint/shade. @param attributes - Actual intrusive list. @param color - Actual complex color. @param theme - Theme attribute token. @param tint - Tint attribute token. @param shade - Shade attribute token. @returns Nothing. */
+function lclAddThemeValuesToCustomAttributes(
+  attributes: RtlReference<FastAttributeList>,
+  color: Readonly<ComplexColor>,
+  theme: number,
+  tint: number,
+  shade: number,
+): void {
+  if (!color.isValidThemeType()) return;
+  DocxAttributeOutput.AddToAttrList(attributes, FSNS(w, theme), lclGetThemeOrSchemeType(color));
+  let modulation = 10000,
+    offset = 0,
+    tintValue = 0,
+    shadeValue = 0;
+  for (const transform of color.getTransformations()) {
+    const value = (transform.mnValue << 16) >> 16;
+    if (transform.meType === T.LumMod) modulation = value;
+    if (transform.meType === T.LumOff) offset = value;
+    if (transform.meType === T.Tint) tintValue = value;
+    if (transform.meType === T.Shade) shadeValue = value;
+  }
+  let attribute: number | undefined,
+    amount = 0;
+  if (modulation === 10000 && offset === 0) {
+    if (tintValue !== 0) {
+      attribute = tint;
+      amount = tintValue;
+    } else if (shadeValue !== 0) {
+      attribute = shade;
+      amount = shadeValue;
+    }
+  } else {
+    const percentage = offset > 0 ? offset / 100 : (-10000 + modulation) / 100;
+    amount = Math.abs(percentage) * 100;
+    if (percentage > 0) attribute = tint;
+    else if (percentage < 0) attribute = shade;
+  }
+  if (attribute !== undefined) {
+    const number = 255 - (amount / 10000) * 255;
+    const rounded = Math.sign(number) * Math.floor(Math.abs(number) + 0.5);
+    DocxAttributeOutput.AddToAttrList(
+      attributes,
+      FSNS(w, attribute),
+      ((rounded << 16) >> 16).toString(16),
+    );
+  }
+}
+/** Original color-specific attribute IDs. @param attributes - Actual list. @param color - Actual complex color. @returns Nothing. */
+function lclAddThemeColorAttributes(
+  attributes: RtlReference<FastAttributeList>,
+  color: Readonly<ComplexColor>,
+): void {
+  lclAddThemeValuesToCustomAttributes(
+    attributes,
+    color,
+    token("themeColor"),
+    token("themeTint"),
+    token("themeShade"),
+  );
 }
 /** Native owner for the admitted untracked text and collected character properties. */
-export class DocxAttributeOutput {
-  private m_pFontsAttrList: FastAttributeList | null = null;
-  private m_pEastAsianLayoutAttrList: FastAttributeList | null = null;
+export class DocxAttributeOutput extends AttributeOutputBase {
+  private readonly m_pFontsAttrList = new RtlReference<FastAttributeList>();
+  private readonly m_pColorAttrList = new RtlReference<FastAttributeList>();
+  private readonly m_aComplexColor = new OwnedComplexColor();
+  private m_nCharTransparence = 0;
+  private readonly m_pCharLangAttrList = new RtlReference<FastAttributeList>();
+  private readonly m_pEastAsianLayoutAttrList = new RtlReference<FastAttributeList>();
   private m_oFontSize: number | undefined;
   private m_bCharPostureWritten = false;
+  private m_bOpenedParaPr = false;
   private m_sRawText = "";
   /** Consumed native constructor binds the real exporter and serializer. DrawingML/base/table-style owners remain unported. @param m_rExport - Actual exporter. @param m_pSerializer - Actual fragment serializer. @returns Attribute output. */
   constructor(
     private readonly m_rExport: DocxExport,
     private m_pSerializer: FastSerializerHelper,
-  ) {}
+  ) {
+    super();
+  }
+  /** Original empty destructor body followed by destruction of the currently ported intrusive members. Other original drawing/table owners remain unported. @returns Nothing. */
+  dispose(): void {
+    this.m_pCharLangAttrList.dispose();
+    this.m_pColorAttrList.dispose();
+    this.m_pEastAsianLayoutAttrList.dispose();
+    this.m_pFontsAttrList.dispose();
+  }
+  /** Original header template creates the intrusive owner once and forwards source arguments. @param attributes - Actual mutable handle. @param args - Original add overload arguments. @returns Nothing. */
+  static readonly AddToAttrList = AddToAttrList;
   /** Original exporter getter. @returns Actual exporter. */
   GetExport(): DocxExport {
     return this.m_rExport;
@@ -149,20 +191,109 @@ export class DocxAttributeOutput {
   SetSerializer(serializer: FastSerializerHelper): void {
     this.m_pSerializer = serializer;
   }
+  /** Writes native paragraph properties before the paragraph runs. @param node - Native text node. @param section - Section at paragraph end. @returns Nothing. */
+  OutputParagraphProperties(node: SwTextNode, section?: WW8SepInfo): void {
+    OutputParagraphProperties(this, node, section);
+  }
+  /** Original inverted split-to-keepLines serialization. @param item - Actual split item. @returns Nothing. */
+  ParaSplit(item: SvxFormatSplitItem): void {
+    if (item.GetValue()) this.m_pSerializer.singleElementNS(w, token("keepLines"), val, "false");
+    else this.m_pSerializer.singleElementNS(w, token("keepLines"));
+  }
+  /** Original any nonzero line count enables one OOXML boolean. @param item - Actual widow item. @returns Nothing. */
+  ParaWidows(item: SvxWidowsItem): void {
+    if (item.GetValue()) this.m_pSerializer.singleElementNS(w, token("widowControl"));
+    else this.m_pSerializer.singleElementNS(w, token("widowControl"), val, "false");
+  }
+  /** Original script-space flag uses original OString boolean spelling. @param item - Actual flag. @returns Nothing. */
+  ParaScriptSpace(item: SfxBoolItem): void {
+    this.m_pSerializer.singleElementNS(
+      w,
+      token("autoSpaceDE"),
+      val,
+      item.GetValue() ? "true" : "false",
+    );
+  }
+  /** Original hanging-punctuation flag. @param item - Actual flag. @returns Nothing. */
+  ParaHangingPunctuation(item: SfxBoolItem): void {
+    this.m_pSerializer.singleElementNS(
+      w,
+      token("overflowPunct"),
+      val,
+      item.GetValue() ? "true" : "false",
+    );
+  }
+  /** Original forbidden-character flag. @param item - Actual flag. @returns Nothing. */
+  ParaForbiddenRules(item: SfxBoolItem): void {
+    this.m_pSerializer.singleElementNS(
+      w,
+      token("kinsoku"),
+      val,
+      item.GetValue() ? "true" : "false",
+    );
+  }
+  /** Original paragraph text alignment with no output for unsupported values. @param item - Actual alignment item. @returns Nothing. */
+  ParaVerticalAlign(item: SvxParaVertAlignItem): void {
+    let text: string;
+    switch (item.GetValue()) {
+      case 1:
+        text = "baseline";
+        break;
+      case 2:
+        text = "top";
+        break;
+      case 3:
+        text = "center";
+        break;
+      case 4:
+        text = "bottom";
+        break;
+      case 0:
+        text = "auto";
+        break;
+      default:
+        return;
+    }
+    this.m_pSerializer.singleElementNS(w, token("textAlignment"), val, text);
+  }
+  /** Original grid flag. @param item - Actual grid item. @returns Nothing. */
+  ParaSnapToGrid(item: SvxParaGridItem): void {
+    this.m_pSerializer.singleElementNS(
+      w,
+      token("snapToGrid"),
+      val,
+      item.GetValue() ? "true" : "false",
+    );
+  }
+  /** Original body9 and clamped heading-level mapping. @param item - Actual outline item. @returns Nothing. */
+  ParaOutlineLevel(item: SfxUInt16Item): void {
+    let level = Math.min(item.GetValue(), 9);
+    level = level ? level - 1 : 9;
+    this.m_pSerializer.singleElementNS(w, token("outlineLvl"), val, String(level));
+  }
+  /** Original explicit break-before true/false representation. @param value - Break flag. @returns Nothing. */
+  PageBreakBefore(value: boolean): void {
+    if (value) this.m_pSerializer.singleElementNS(w, token("pageBreakBefore"));
+    else this.m_pSerializer.singleElementNS(w, token("pageBreakBefore"), val, "false");
+  }
   /** Native font registration precedes empty-name and duplicate guards. @param font - Actual shared font item. @returns Nothing. */
   CharFont(font: SvxFontItem): void {
     this.GetExport().GetId(font);
     const name = font.GetFamilyName();
     if (!name) return;
     if (
-      this.m_pFontsAttrList &&
-      (this.m_pFontsAttrList.hasAttribute(FSNS(w, token("ascii"))) ||
-        this.m_pFontsAttrList.hasAttribute(FSNS(w, token("hAnsi"))))
+      this.m_pFontsAttrList.is() &&
+      (this.m_pFontsAttrList.operatorArrow().hasAttribute(FSNS(w, token("ascii"))) ||
+        this.m_pFontsAttrList.operatorArrow().hasAttribute(FSNS(w, token("hAnsi"))))
     )
       return;
-    this.m_pFontsAttrList ??= FastSerializerHelper.createAttrList();
-    this.m_pFontsAttrList.addNS(w, token("ascii"), name);
-    this.m_pFontsAttrList.addNS(w, token("hAnsi"), name);
+    DocxAttributeOutput.AddToAttrList(this.m_pFontsAttrList, FSNS(w, token("ascii")), name);
+    DocxAttributeOutput.AddToAttrList(this.m_pFontsAttrList, FSNS(w, token("hAnsi")), name);
+  }
+  /** Restores native theme font attributes and Word text effects. @param item - Character interoperability bag. @returns Nothing. */
+  CharGrabBag(item: SfxGrabBagItem): void {
+    ExportThemeFonts(this.m_pFontsAttrList, item, DocxAttributeOutput.AddToAttrList);
+    CharGrabBag(this.m_pSerializer, item);
   }
   /** Original font element open. @param name - Native family name. @returns Nothing. */
   StartFont(name: string): void {
@@ -227,6 +358,214 @@ export class DocxAttributeOutput {
     this.m_pSerializer.singleElementNS(w, token("pitch"), val, name);
   }
 
+  /** Original color collection and duplicate-value guard. Text-fill grab bags remain outside the admitted untracked property path. @param item - Actual color item. @returns Nothing. */
+  CharColor(item: SvxColorItem): void {
+    const color = item.getColor(),
+      text = ConvertColorOU(color);
+    try {
+      if (this.m_pColorAttrList.is() && this.m_pColorAttrList.operatorArrow().hasAttribute(val))
+        return;
+      lclAddThemeColorAttributes(this.m_pColorAttrList, item.getComplexColor());
+      DocxAttributeOutput.AddToAttrList(this.m_pColorAttrList, val, text);
+      this.m_nCharTransparence = 255 - color.GetAlpha();
+      this.m_aComplexColor.assign(item.getComplexColor());
+    } finally {
+      text.dispose();
+    }
+  }
+  /** Original page numbering sink. @param type - Native numbering type. @param restart - Optional restart, including0. @returns Nothing. */
+  SectionPageNumbering(type: number, restart: number | undefined): void {
+    SectionPageNumbering(this, type, restart);
+  }
+  /** Original section-break sink. @param code - Native unsigned8 break code. @returns Nothing. */
+  SectionType(code: number): void {
+    SectionType(this, code);
+  }
+  /** Original DOCX numbering properties omit numbering inherited from an outline-assigned paragraph style. @param node - Actual paragraph or native null. @param level - Clamped Word level. @param id - One-based instance ID. @returns Nothing. */
+  ParaNumRule_Impl(node: SwTextNode | undefined, level: number, id: number): void {
+    if (id === 0xffff) return;
+    const table = this.m_rExport.m_pUsedNumTable,
+      rule = id > 0 && id <= (table?.length ?? 0) ? table?.[id - 1] : undefined,
+      style = node?.GetTextFormatColl();
+    if (
+      style?.IsAssignedToListLevelOfOutlineStyle() &&
+      level === style.GetAssignedOutlineStyleLevel() &&
+      rule?.IsOutlineRule()
+    )
+      return;
+    this.m_pSerializer.startElementNS(w, token("numPr"));
+    this.m_pSerializer.singleElementNS(w, token("ilvl"), val, String(level));
+    this.m_pSerializer.singleElementNS(w, token("numId"), val, String(id));
+    this.m_pSerializer.endElementNS(w, token("numPr"));
+  }
+  /** Original palette token conversion. @param index - Native palette index. @returns Token or empty text. */
+  TransHighlightColor(index: number): string {
+    return TransHighlightColor(index);
+  }
+  /** Original fixed pct15 shading or actual source brush color; no theme inference. @param brush - Actual native brush. @returns Nothing. */
+  CharBackground(brush: SvxBrushItem): void {
+    if (brush.GetShadingValue() === ShadingPattern.PCT15) {
+      this.m_pSerializer.singleElementNS(
+        w,
+        token("shd"),
+        val,
+        "pct15",
+        FSNS(w, token("color")),
+        "auto",
+        FSNS(w, token("fill")),
+        "FFFFFF",
+      );
+    } else {
+      const color = ConvertColorOU(brush.GetColor());
+      try {
+        this.m_pSerializer.singleElementNS(
+          w,
+          token("shd"),
+          FSNS(w, token("fill")),
+          color,
+          val,
+          "clear",
+        );
+      } finally {
+        color.dispose();
+      }
+    }
+  }
+  /** Original highlight uses the actual Word palette utility. @param brush - Actual highlight. @returns Nothing. */
+  CharHighlight(brush: SvxBrushItem): void {
+    const color = this.TransHighlightColor(TransColToIco(brush.GetColor()));
+    if (color !== "") this.m_pSerializer.singleElementNS(w, token("highlight"), val, color);
+  }
+  /** Original hidden flag and inline-heading reset; the positive paragraph-property orchestration remains unbound. @param hidden - Actual hidden item. @returns Nothing. */
+  CharHidden(hidden: SvxCharHiddenItem): void {
+    if (hidden.GetValue()) {
+      this.m_pSerializer.singleElementNS(w, token("vanish"));
+      if (this.m_bOpenedParaPr && this.m_rExport.m_bParaInlineHeading) {
+        this.m_pSerializer.singleElementNS(w, token("specVanish"));
+        this.m_rExport.m_bParaInlineHeading = false;
+      }
+    } else this.m_pSerializer.singleElementNS(w, token("vanish"), val, "false");
+  }
+  /** Original font-script hint collection; other modes leave prior attributes unchanged. @param hint - Actual script hint. @returns Nothing. */
+  CharScriptHint(hint: SvxScriptHintItem): void {
+    switch (hint.GetValue()) {
+      case ScriptHintType.Asian:
+        DocxAttributeOutput.AddToAttrList(
+          this.m_pFontsAttrList,
+          FSNS(w, token("hint")),
+          "eastAsia",
+        );
+        break;
+      case ScriptHintType.Complex:
+        DocxAttributeOutput.AddToAttrList(this.m_pFontsAttrList, FSNS(w, token("hint")), "cs");
+        break;
+    }
+  }
+  /** Original Word has no optical-sizing equivalent. @param item - Actual original item. @returns Nothing. */
+  CharOpticalSizing(item: SvxOpticalSizingItem): void {
+    void item;
+  }
+  /** Original Word has no font-variation equivalent. @param item - Actual original item. @returns Nothing. */
+  CharFontVariations(item: SvxFontVariationsItem): void {
+    void item;
+  }
+  /** Original escapement simplification, signed-short arithmetic and binary32 font-height position/size calculations. @param item - Actual native escapement. @returns Nothing. */
+  CharEscapement(item: SvxEscapementItem): void {
+    let mode = "",
+      escape = item.GetEsc(),
+      proportion = item.GetProportionalHeight();
+    const paragraphStyle =
+      this.m_rExport.m_bStyDef && this.m_rExport.m_pCurrentStyle?.Which() === RES_TXTFMTCOLL;
+    if (this.m_rExport.m_bStyDef && escape !== 0 && !(paragraphStyle && escape < 0)) {
+      proportion = DFLT_ESC_PROP;
+      escape = escape > 0 ? DFLT_ESC_AUTO_SUPER : DFLT_ESC_AUTO_SUB;
+    }
+    if (escape === 0) {
+      mode = "baseline";
+      escape = 0;
+      proportion = 100;
+    } else if (proportion === DFLT_ESC_PROP || proportion < 1 || proportion > 100) {
+      if (escape === DFLT_ESC_SUB || escape === DFLT_ESC_AUTO_SUB) mode = "subscript";
+      else if (escape === DFLT_ESC_SUPER || escape === DFLT_ESC_AUTO_SUPER) mode = "superscript";
+    } else if (escape === DFLT_ESC_AUTO_SUPER) escape = Math.trunc(0.8 * (100 - proportion));
+    else if (escape === DFLT_ESC_AUTO_SUB) escape = Math.trunc(0.2 * -(100 - proportion));
+    if (mode !== "") this.m_pSerializer.singleElementNS(w, token("vertAlign"), val, mode);
+    if (mode !== "" && mode !== "baseline") return;
+    const height = Math.fround(
+      (this.m_rExport.GetItem(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight(),
+    );
+    const position = Math.fround(Math.fround(height * escape) / 1000);
+    this.m_pSerializer.singleElementNS(
+      w,
+      token("position"),
+      val,
+      String(Math.sign(position) * Math.floor(Math.abs(position) + 0.5)),
+    );
+    if ((proportion !== 100 || mode === "baseline") && this.m_oFontSize === undefined) {
+      const size = Math.fround(Math.fround(height * proportion) / 1000);
+      this.m_oFontSize = Math.sign(size) * Math.floor(Math.abs(size) + 0.5);
+    }
+  }
+  /** Original three-script language collection uses the shared MS BCP47 conversion. @param language - Actual pooled language. @returns Nothing. */
+  CharLanguage(language: SvxLanguageItem): void {
+    const code = new LanguageTag(language.GetLanguage()).getBcp47MS();
+    try {
+      switch (language.Which()) {
+        case RES_CHRATR_LANGUAGE:
+          DocxAttributeOutput.AddToAttrList(this.m_pCharLangAttrList, val, code);
+          break;
+        case RES_CHRATR_CJK_LANGUAGE:
+          DocxAttributeOutput.AddToAttrList(
+            this.m_pCharLangAttrList,
+            FSNS(w, token("eastAsia")),
+            code,
+          );
+          break;
+        case RES_CHRATR_CTL_LANGUAGE:
+          DocxAttributeOutput.AddToAttrList(this.m_pCharLangAttrList, FSNS(w, token("bidi")), code);
+          break;
+      }
+    } finally {
+      code.dispose();
+    }
+  }
+  /** Original underline mapping, including shared long-dash spelling and native transparent-color omission. @param underline - Actual underline value. @returns Nothing. */
+  CharUnderline(underline: SvxUnderlineItem): void {
+    const styles = new Map([
+      [FontLineStyle.LINESTYLE_SINGLE, "single"],
+      [FontLineStyle.LINESTYLE_BOLD, "thick"],
+      [FontLineStyle.LINESTYLE_DOUBLE, "double"],
+      [FontLineStyle.LINESTYLE_DOTTED, "dotted"],
+      [FontLineStyle.LINESTYLE_DASH, "dash"],
+      [FontLineStyle.LINESTYLE_DASHDOT, "dotDash"],
+      [FontLineStyle.LINESTYLE_DASHDOTDOT, "dotDotDash"],
+      [FontLineStyle.LINESTYLE_WAVE, "wave"],
+      [FontLineStyle.LINESTYLE_BOLDDOTTED, "dottedHeavy"],
+      [FontLineStyle.LINESTYLE_BOLDDASH, "dashedHeavy"],
+      [FontLineStyle.LINESTYLE_LONGDASH, "dashLongHeavy"],
+      [FontLineStyle.LINESTYLE_BOLDLONGDASH, "dashLongHeavy"],
+      [FontLineStyle.LINESTYLE_BOLDDASHDOT, "dashDotHeavy"],
+      [FontLineStyle.LINESTYLE_BOLDDASHDOTDOT, "dashDotDotHeavy"],
+      [FontLineStyle.LINESTYLE_BOLDWAVE, "wavyHeavy"],
+      [FontLineStyle.LINESTYLE_DOUBLEWAVE, "wavyDouble"],
+    ]);
+    const style = styles.get(underline.GetLineStyle()) ?? "none",
+      color = underline.GetColor();
+    if (!color.IsTransparent()) {
+      const attributes = FastSerializerHelper.createAttrList(),
+        text = ConvertColorOU(color);
+      try {
+        attributes.operatorArrow().add(val, style);
+        attributes.operatorArrow().add(FSNS(w, token("color")), text);
+        lclAddThemeColorAttributes(attributes, underline.getComplexColor());
+        this.m_pSerializer.singleElementNS(w, token("u"), attributes);
+      } finally {
+        text.dispose();
+        attributes.dispose();
+      }
+    } else this.m_pSerializer.singleElementNS(w, token("u"), val, style);
+  }
+
   /** Native deferred run marks for untracked text without fields/SDTs. @param redline - Only native null is admitted. @param position - Original position. @param singleEmptyRun - Original flag. @returns Nothing. */
   StartRun(redline: null, position: number, singleEmptyRun = false): void {
     void redline;
@@ -244,32 +583,116 @@ export class DocxAttributeOutput {
   }
   /** Original per-run resets and schema order. @returns Nothing. */
   InitCollectedRunProperties(): void {
-    this.m_pFontsAttrList = null;
-    this.m_pEastAsianLayoutAttrList = null;
+    this.m_pFontsAttrList.clear();
+    this.m_pEastAsianLayoutAttrList.clear();
+    this.m_pCharLangAttrList.clear();
     this.m_oFontSize = undefined;
     this.m_bCharPostureWritten = false;
     this.m_pSerializer.mark(11, runOrder);
   }
-  /** Original collected font/height and East Asian layout flush with detach/reset ownership; color/language remain unported. @returns Nothing. */
+  /** Original collected font/height and East Asian layout flush with detach/reset ownership; color retains its list through text-fill emission; language uses the native detached list. @returns Nothing. */
   WriteCollectedRunProperties(): void {
-    if (this.m_pFontsAttrList) {
-      const fonts = this.m_pFontsAttrList;
-      this.m_pFontsAttrList = null;
-      this.m_pSerializer.singleElementNS(w, token("rFonts"), fonts);
+    if (this.m_pFontsAttrList.is()) {
+      const fonts = detachFrom(this.m_pFontsAttrList);
+      try {
+        this.m_pSerializer.singleElementNS(w, token("rFonts"), fonts);
+      } finally {
+        fonts.dispose();
+      }
     }
     if (this.m_oFontSize !== undefined) {
       this.m_pSerializer.singleElementNS(w, token("sz"), val, String(this.m_oFontSize));
       this.m_oFontSize = undefined;
     }
-    if (this.m_pEastAsianLayoutAttrList) {
-      const layout = this.m_pEastAsianLayoutAttrList;
-      this.m_pEastAsianLayoutAttrList = null;
-      this.m_pSerializer.singleElementNS(w, token("eastAsianLayout"), layout);
+    if (this.m_pColorAttrList.is())
+      this.m_pSerializer.singleElementNS(w, token("color"), this.m_pColorAttrList);
+    if (this.m_pEastAsianLayoutAttrList.is()) {
+      const layout = detachFrom(this.m_pEastAsianLayoutAttrList);
+      try {
+        this.m_pSerializer.singleElementNS(w, token("eastAsianLayout"), layout);
+      } finally {
+        layout.dispose();
+      }
     }
+    if (this.m_pCharLangAttrList.is()) {
+      const languages = detachFrom(this.m_pCharLangAttrList);
+      try {
+        this.m_pSerializer.singleElementNS(w, token("lang"), languages);
+      } finally {
+        languages.dispose();
+      }
+    }
+    const transforms = this.m_aComplexColor.getTransformations();
+    if (
+      (this.m_nCharTransparence !== 0 ||
+        transforms.some(
+          /** Tests the original non-tint/shade predicate. @param value - Actual transformation. @returns Whether solid-fill output is needed. */ (
+            value,
+          ) => value.meType !== T.Shade && value.meType !== T.Tint,
+        )) &&
+      this.m_pColorAttrList.is()
+    ) {
+      const value: [Uint8Array] = [new Uint8Array()];
+      this.m_pColorAttrList.operatorArrow().getAsView(val, value);
+      const color = value[0];
+      if (
+        color.length !== 0 &&
+        !(
+          color.length === 4 &&
+          color[0] === 97 &&
+          color[1] === 117 &&
+          color[2] === 116 &&
+          color[3] === 111
+        )
+      ) {
+        const namespace = token("w14"),
+          theme = this.m_aComplexColor.isValidThemeType(),
+          kind = token(theme ? "schemeClr" : "srgbClr");
+        this.m_pSerializer.startElementNS(namespace, token("textFill"));
+        this.m_pSerializer.startElementNS(namespace, token("solidFill"));
+        this.m_pSerializer.startElementNS(
+          namespace,
+          kind,
+          FSNS(namespace, token("val")),
+          theme ? lclGetThemeOrSchemeType(this.m_aComplexColor, false) : color,
+        );
+        if (this.m_nCharTransparence !== 0)
+          this.m_pSerializer.singleElementNS(
+            namespace,
+            token("alpha"),
+            FSNS(namespace, token("val")),
+            String(Math.round((this.m_nCharTransparence / 255) * 100) * 1000),
+          );
+        const tokens = new Map([
+          [T.Tint, "tint"],
+          [T.Shade, "shade"],
+          [T.Sat, "sat"],
+          [T.SatOff, "satOff"],
+          [T.SatMod, "satMod"],
+          [T.Lum, "lum"],
+          [T.LumOff, "lumOff"],
+          [T.LumMod, "lumMod"],
+        ]);
+        for (const transform of transforms) {
+          const name = tokens.get(transform.meType);
+          if (name !== undefined)
+            this.m_pSerializer.singleElementNS(
+              namespace,
+              token(name),
+              FSNS(namespace, token("val")),
+              String((transform.mnValue * 1000) | 0),
+            );
+        }
+        this.m_pSerializer.endElementNS(namespace, kind);
+        this.m_pSerializer.endElementNS(namespace, token("solidFill"));
+        this.m_pSerializer.endElementNS(namespace, token("textFill"));
+        this.m_nCharTransparence = 0;
+      }
+    }
+    this.m_pColorAttrList.clear();
   }
   /** Native untracked-property completion prepends properties before pending text. @returns Nothing. */
   EndRunProperties(): void {
-    this.WriteCollectedRunProperties();
     this.WriteCollectedRunProperties();
     this.m_pSerializer.mergeTopMarks(11);
     this.m_pSerializer.endElementNS(w, token("rPr"));
@@ -397,16 +820,16 @@ export class DocxAttributeOutput {
   /** Original duplicate font attribute guard; empty names are retained. @param item - Actual shared font. @returns Nothing. */
   CharFontCJK(item: SvxFontItem): void {
     const attribute = FSNS(w, token("eastAsia"));
-    if (this.m_pFontsAttrList?.hasAttribute(attribute)) return;
-    this.m_pFontsAttrList ??= FastSerializerHelper.createAttrList();
-    this.m_pFontsAttrList.add(attribute, item.GetFamilyName());
+    if (this.m_pFontsAttrList.is() && this.m_pFontsAttrList.operatorArrow().hasAttribute(attribute))
+      return;
+    DocxAttributeOutput.AddToAttrList(this.m_pFontsAttrList, attribute, item.GetFamilyName());
   }
   /** Original duplicate font attribute guard; empty names are retained. @param item - Actual shared font. @returns Nothing. */
   CharFontCTL(item: SvxFontItem): void {
     const attribute = FSNS(w, token("cs"));
-    if (this.m_pFontsAttrList?.hasAttribute(attribute)) return;
-    this.m_pFontsAttrList ??= FastSerializerHelper.createAttrList();
-    this.m_pFontsAttrList.add(attribute, item.GetFamilyName());
+    if (this.m_pFontsAttrList.is() && this.m_pFontsAttrList.operatorArrow().hasAttribute(attribute))
+      return;
+    DocxAttributeOutput.AddToAttrList(this.m_pFontsAttrList, attribute, item.GetFamilyName());
   }
   /** Original Word minimum kerning size conversion. @param item - Actual shared flag. @returns Nothing. */
   CharAutoKern(item: SvxAutoKernItem): void {
@@ -471,9 +894,17 @@ export class DocxAttributeOutput {
   /** Original nonzero rotation contributes collected vertical flags without selecting a rotation angle. @param item - Actual rotation item. @returns Nothing. */
   CharRotate(item: SvxCharRotateItem): void {
     if (!item.GetValue()) return;
-    this.m_pEastAsianLayoutAttrList ??= FastSerializerHelper.createAttrList();
-    this.m_pEastAsianLayoutAttrList.addNS(w, token("vert"), "true");
-    if (item.IsFitToLine()) this.m_pEastAsianLayoutAttrList.addNS(w, token("vertCompress"), "true");
+    DocxAttributeOutput.AddToAttrList(
+      this.m_pEastAsianLayoutAttrList,
+      FSNS(w, token("vert")),
+      "true",
+    );
+    if (item.IsFitToLine())
+      DocxAttributeOutput.AddToAttrList(
+        this.m_pEastAsianLayoutAttrList,
+        FSNS(w, token("vertCompress")),
+        "true",
+      );
   }
   /** Original exact emphasis flag combinations, with all remaining values mapped to none. @param item - Actual emphasis item. @returns Nothing. */
   CharEmphasisMark(item: SvxEmphasisMarkItem): void {
@@ -490,8 +921,11 @@ export class DocxAttributeOutput {
   /** Original two-line enable and bracket priority; disabled input does not clear previously collected flags. @param item - Actual two-line item. @returns Nothing. */
   CharTwoLines(item: SvxTwoLinesItem): void {
     if (!item.GetValue()) return;
-    this.m_pEastAsianLayoutAttrList ??= FastSerializerHelper.createAttrList();
-    this.m_pEastAsianLayoutAttrList.addNS(w, token("combine"), "true");
+    DocxAttributeOutput.AddToAttrList(
+      this.m_pEastAsianLayoutAttrList,
+      FSNS(w, token("combine")),
+      "true",
+    );
     const start = item.GetStartBracket(),
       end = item.GetEndBracket();
     if (!start && !end) return;
@@ -500,7 +934,11 @@ export class DocxAttributeOutput {
     else if (start === 60 || end === 62) bracket = "angle";
     else if (start === 91 || end === 93) bracket = "square";
     else bracket = "round";
-    this.m_pEastAsianLayoutAttrList.addNS(w, token("combineBrackets"), bracket);
+    DocxAttributeOutput.AddToAttrList(
+      this.m_pEastAsianLayoutAttrList,
+      FSNS(w, token("combineBrackets")),
+      bracket,
+    );
   }
   /** Original explicit signed16 min/max template arguments precede OOXML width clamping. @param item - Actual unsigned16 width item. @returns Nothing. */
   CharScaleWidth(item: SvxCharScaleWidthItem): void {
@@ -522,3 +960,32 @@ export class DocxAttributeOutput {
     }
   }
 }
+import { AttributeOutputBase } from "./attributeoutputbase";
+import { SectionPageNumbering, SectionType } from "./docxattributeoutput.numbering";
+import type { WW8SepInfo } from "./docxattributeoutput.section";
+import {
+  AddToAttrList,
+  CharGrabBag,
+  ExportThemeFonts,
+  runOrder,
+  impl_WriteRunText,
+} from "./docxattributeoutput.run";
+export { impl_WriteRunText } from "./docxattributeoutput.run";
+import type { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
+import {
+  DFLT_ESC_PROP,
+  DFLT_ESC_SUB,
+  DFLT_ESC_SUPER,
+  DFLT_ESC_AUTO_SUB,
+  DFLT_ESC_AUTO_SUPER,
+} from "../../../../editeng/inc/escapementitem";
+import type { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import type { SvxCharHiddenItem } from "../../../../editeng/inc/charhiddenitem";
+import type { SvxScriptHintItem } from "../../../../editeng/inc/scripthintitem";
+import type { SvxOpticalSizingItem } from "../../../../editeng/inc/opticalsizingitem";
+import type { SvxFontVariationsItem } from "../../../../editeng/inc/fontvariationsitem";
+import { ScriptHintType } from "../../../../i18nutil/inc/scriptchangescanner";
+import { ShadingPattern } from "../../../../offapi/com/sun/star/drawing/ShadingPattern";
+import { RES_TXTFMTCOLL } from "../../../inc/hintids";
+import { TransColToIco } from "../../../../filter/source/msfilter/util";
+import { TransHighlightColor } from "./docxattributeoutput.run";

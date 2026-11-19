@@ -1,0 +1,81 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-8c058cea-f59a-47fe-b326-5806e7aba249",
+    "capabilityId": "CAP-8c058cea-f59a-47fe-b326-5806e7aba249",
+    "suite": "calc",
+    "subsystem": "r1c1-address-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual ScAddress/ScRange local R1C1 parsing and formatting retain native flags, mutations, bases and whole-axis behavior.",
+      "The common signed64 scanner matches unchanged compiled C++ witnesses; CALC689 is retained."
+    ],
+    "capability": "Original local R1C1 address parsing and formatting prerequisites",
+    "gaps": [
+      "Qualified/external/name/error-token and signed-overflow/native ABI domains, complete address-conversion services/model/factory/filter/storage/UI remain unfinished or unqualified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/source/core/tool/address.cxx",
+          "marker": "lcl_ScRange_Parse_XL_R1C1"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc.cxx",
+          "marker": "testToggleRefFlag"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/address.hxx",
+          "marker": "Details"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/address.ts",
+          "marker": "parseLocalExcelR1C1"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/address.r1c1.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/address.ooo-regression.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-r1c1-addresses.md",
+          "marker": "# Local R1C1 address prerequisites"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Host pointer/result and string-builder spelling retains original represented numeric control flow on actual RTL/ScAddress/ScRange/ScDocument owners; complete native header/ABI/overflow and document filter/UI domains remain unqualified."
+    },
+    "scopeLimitations": [
+      "Qualified/external/name/error-token and signed-overflow/native ABI domains, complete address-conversion services/model/factory/filter/storage/UI remain unfinished or unqualified.",
+      "The local spelling assertions from testToggleRefFlag are ported at their scalar owner; full original ScRefFinder/editor orchestration is not claimed executed.",
+      "The native scanner oracle executes only the unmodified primitive; no complete native address-header differential qualification is claimed.",
+      "Earlier OOO regex parsing remains a known partial implementation and is not promoted to full native parity by related value regressions."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "local-r1c1-reference-parse-format"
+  }
+}

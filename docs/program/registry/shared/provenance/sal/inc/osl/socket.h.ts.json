@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/inc/osl/socket.h.ts",
+    "status": "mapped",
+    "upstreamPath": "include/osl/socket.h",
+    "localSymbols": [
+      "oslSocketResult"
+    ],
+    "upstreamSymbols": [
+      "oslSocketResult",
+      "osl_getLocalHostname"
+    ],
+    "preservedResponsibilities": [
+      "Original local hostname/FQDN uses actual selected libc gethostname and original host-address/canonical-name helpers over pinned SDK getaddrinfo/freeaddrinfo with its existing synthetic realm-local DNS table. Independent source static result caches assign real OUString output each time. Reverse file URL byte/Unicode templates preserve scheme/authority checks, exact local-host ASCII comparison, query/fragment and escaped slash/NUL rules, escaped arbitrary octets, internal output mutation order, Security-based tilde recursion and original RTL relative resolution. All active UNIX reverse path QA bodies, native hostname/real HOME, alias and malformed/Unicode/byte scenarios are tested. No socket creation/connection, host DNS/files or authentication are added. Other socket/file methods, native std::length_error translation/physical allocation/invalid lifetime and complete SvFileStream/TempFile/package/storage/model/filter/UI remain unfinished or unqualified."
+    ],
+    "omittedResponsibilities": [
+      "Other file/socket APIs and complete SvFileStream/TempFile/package/storage/model/filter/UI; native length_error/physical OOM/debug/invalid lifetime and other OS/pthread/network profiles."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/inc/osl/socket.h.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/osl/unx/socket.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/osl/socket.h",
+          "marker": "osl_getLocalHostname"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/inc/osl/socket.h.ts",
+      "stackNecessity": "module-resolution",
+      "rationale": "Original include/osl/socket.h C enum/entry-point contract and socket.hxx C++ wrappers are separate headers with the same stem. Keep the .h module discriminator to preserve their distinct browser module identities, as other original C/C++ header pairs do. Networking and C++ socket wrappers remain unbound."
+    }
+  }
+}

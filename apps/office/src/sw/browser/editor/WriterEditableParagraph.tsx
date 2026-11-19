@@ -356,6 +356,10 @@ export function WriterTextPortionProjection({
     content = <span style={{ textDecoration: "underline" }}>{content}</span>;
   if (run.attributes.fontSizeTwips !== undefined)
     content = <span style={{ fontSize: `${run.attributes.fontSizeTwips / 20}pt` }}>{content}</span>;
+  if (run.attributes.kerningTwips !== undefined)
+    content = (
+      <span style={{ letterSpacing: `${run.attributes.kerningTwips / 20}pt` }}>{content}</span>
+    );
   const runFamily = run.attributes.fontFamily ?? inheritedFontFamily;
   if (run.attributes.fontFamily !== undefined)
     content = (
@@ -384,5 +388,5 @@ export function WriterTextPortionProjection({
 /** Builds a deterministic view-only key from the projected run boundary and semantic state. @param paragraphId - Stable text-node identity. @param run - Projected run. @returns Stable projection key. */
 function getWriterPortionProjectionKey(paragraphId: string, run: WriterTextPortion): string {
   const attributes = run.attributes;
-  return `${paragraphId}:${run.startOffset}:${attributes.bold ? 1 : 0}${attributes.italic ? 1 : 0}${attributes.underline ? 1 : 0}:${attributes.strikeout ?? 0}:${attributes.escapement?.offset ?? 0}/${attributes.escapement?.height ?? 100}:${attributes.color ?? ""}:${attributes.highlight ?? ""}:${attributes.fontFamily ?? ""}:${attributes.fontFamilyGeneric ?? ""}:${attributes.fontSizeTwips ?? ""}:${run.hyperlink?.url ?? ""}:${run.hyperlink?.targetFrame ?? ""}`;
+  return `${paragraphId}:${run.startOffset}:${attributes.bold ? 1 : 0}${attributes.italic ? 1 : 0}${attributes.underline ? 1 : 0}:${attributes.strikeout ?? 0}:${attributes.escapement?.offset ?? 0}/${attributes.escapement?.height ?? 100}:${attributes.color ?? ""}:${attributes.highlight ?? ""}:${attributes.fontFamily ?? ""}:${attributes.fontFamilyGeneric ?? ""}:${attributes.fontSizeTwips ?? ""}:${attributes.kerningTwips ?? ""}:${run.hyperlink?.url ?? ""}:${run.hyperlink?.targetFrame ?? ""}`;
 }

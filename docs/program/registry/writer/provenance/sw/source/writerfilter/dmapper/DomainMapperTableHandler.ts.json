@@ -27,7 +27,8 @@
       "Uses actual typed native frame properties and represented legacy padding and first-cell border corrections before conversion.",
       "Applies native table and cell widths, margins, orientation and the source horizontal border-distance adjustment.",
       "Finalizes the original repeating header count, all-header and single-row split behavior, and row split default.",
-      "Applies the resolved first-cell border width to native table spacing, indent and original floating placement."
+      "Applies the resolved first-cell border width to native table spacing, indent and original floating placement.",
+      "Applies the original nested table indent rule using the mapper's source depth before the enclosing cell section is built."
     ],
     "omittedResponsibilities": [
       "Complete mapper table handler, OOXML grid-before/after, overlapping/nested rows, default styles and desktop table ABI remain unverified."
@@ -56,6 +57,10 @@
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.numbered-list.test.ts",
           "marker": "@fileoverview"
         }
       ],

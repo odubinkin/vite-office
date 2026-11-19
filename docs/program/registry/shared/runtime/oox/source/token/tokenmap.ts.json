@@ -18,15 +18,19 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/oox/source/token/tokenmap.ts#getTokenFromUtf8",
-        "vendor/libreoffice-reference/oox/source/token/tokenmap.cxx#TokenMap::getTokenFromUtf8"
+        "vendor/libreoffice-reference/oox/source/token/tokenmap.cxx#TokenMap::getTokenFromUtf8",
+        "vendor/libreoffice-reference/include/oox/token/tokenmap.hxx#getUnicodeTokenName",
+        "vendor/libreoffice-reference/oox/qa/token/tokenmap-test.cxx#test_roundTripUnicode"
       ],
-      "justification": "Complete6079 native local token IDs retain unchanged tokens.txt/generate-tokens.py input order, exact UTF8/case-sensitive lookup, invalid -1 and bounds/empty output. UTF8 names initialize lazily, and owned byte transport protects cached names. Native gperf lookup binds a host Map; generated Sequence sharing, Unicode inline overloads, diagnostic logging and native performance/ABI are not claimed. Whole-module semantic parity remains unverified; DOCX full document/model/export/UI acceptance is pending.",
+      "justification": "Complete6079 native local token IDs retain unchanged tokens.txt/generate-tokens.py input order, exact UTF8/case-sensitive lookup, invalid -1 and bounds/empty output. UTF8 names initialize lazily, and owned byte transport protects cached names. Native gperf lookup binds a host Map; generated Sequence sharing, Unicode inline overloads, diagnostic logging and native performance/ABI are not claimed. Whole-module semantic parity remains unverified; DOCX full document/model/export/UI acceptance is pending. Continuation superseding the earlier host byte-return binding: getUtf8TokenName now exposes the original function-local static native sal_Int8 Sequence owner and getUTF8Identifier copies it with native COW. Counted signed-byte lookup preserves exact raw bytes. Both original oox/qa/token/tokenmap-test.cxx round-trip methods cover all6079 tokens, including actual native Unicode/string temporaries. The generated gperf lookup is still a host map; physical aliasing at the SAL counted-byte conversion boundary and independent compiled original differential remain unqualified.",
       "knownViolations": [],
       "localSymbols": [
         "getTokenFromUtf8",
         "getUtf8TokenName",
         "XML_TOKEN_INVALID",
-        "XML_TOKEN_COUNT"
+        "XML_TOKEN_COUNT",
+        "getUnicodeTokenName",
+        "getTokenFromUnicode"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "oox/source/token/tokenmap.cxx",

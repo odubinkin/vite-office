@@ -78,7 +78,8 @@
         "lcl_SetNewDefTabStops",
         "CopyCharFormat",
         "FindFrameFormatByName",
-        "DelTextFormatColl"
+        "DelTextFormatColl",
+        "findCharacterStyle"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/core/doc/docfmt.cxx",

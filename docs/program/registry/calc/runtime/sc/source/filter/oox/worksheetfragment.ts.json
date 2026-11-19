@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/oox/worksheetfragment.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-file-filter",
+    "capabilityIds": [
+      "CAP-1d1d48a3-5a10-4373-876c-fa5f18a62db9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/oox/worksheetfragment.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+        "vendor/libreoffice-reference/sc/source/filter/oox/worksheetfragment.cxx",
+        "apps/office/src/sc/source/filter/oox/worksheethelper.test.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.sheet-protection.test.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.enhanced-protection.test.ts"
+      ],
+      "justification": "XLSX open and download reach the native Calc workbook through the existing shell and dialogs. Worksheet relationships, shared strings, sparse cells, merged ranges, visual cell and column styles and local/editable shared formulas are exercised. Number formats, themed and rich formatting, and formula conventions beyond the supported Calc compiler remain open. Worksheet callbacks collect the source row, column and default geometry before applying native bounded ranges. Reads outlineLevel and collapsed into the original row and column models. Inline strings open the original RichStringContext. Indexed strings query the workbook owner, preserve native integer conversion and leave styled blanks on an unresolved index. Passes the source XF font to the rich-cell owner when resolving shared and inline text. Binds the workbook GraphicHelper to inline string runs. Dispatches sheetProtection to WorksheetSettings and finalizes it on the native sheet. Admits the original protectedRanges container and dispatches its entries to WorksheetSettings.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WorksheetFragment"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/oox/worksheetfragment.cxx",
+      "upstreamSymbols": [
+        "WorksheetFragment::onCreateContext"
+      ]
+    }
+  }
+}

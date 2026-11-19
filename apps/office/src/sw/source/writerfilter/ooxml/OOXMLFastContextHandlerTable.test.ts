@@ -1,4 +1,6 @@
 /** @fileoverview Native resource-table and property-table contexts through real DOCX ZIP input, SAX factories, value tables and ordered reference callbacks. */
+import { getProcessComponentContext } from "../../../../comphelper/inc/processfactory";
+
 import { writeOutput } from "../../../../test/oox-output";
 import { InputSource } from "../../../../offapi/com/sun/star/xml/sax/InputSource";
 import { BorderHandler } from "../dmapper/BorderHandler";
@@ -188,7 +190,10 @@ it.each([
       "styles/data.xml",
       `<w:styles xmlns:w="${namespace}" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"><w:docDefaults><w:rPrDefault><w:rPr><w:b/></w:rPr></w:rPrDefault></w:docDefaults><w:style w:styleId="Normal" w:default="1" w:type="paragraph"><w:name w:val="Normal"/><w:rPr><w:sz w:val="24"/></w:rPr></w:style><w:style w:type="character" w:styleId="Strong"><w:name w:val="Strong"/><w:rPr><w:b/></w:rPr></w:style><mc:AlternateContent><mc:Choice Requires="w14"><w:style w:styleId="Chosen"><w:name w:val="Chosen"/></w:style></mc:Choice><mc:Fallback><w:style w:styleId="Skipped"><w:name w:val="Skipped"/></w:style></mc:Fallback></mc:AlternateContent><w:latentStyles w:defLockedState="0" w:defUIPriority="99" w:defSemiHidden="1" w:defUnhideWhenUsed="1" w:defQFormat="0" w:count="276"><w:lsdException w:name="Заголовок😀" w:locked="false" w:uiPriority="9" w:semiHidden="0" w:unhideWhenUsed="1" w:qFormat="true"/></w:latentStyles><w:style w:type="table" w:styleId="Grid"><w:name w:val="Grid"/><w:tblPr><w:tblpPr w:horzAnchor="page" w:vertAnchor="text" w:tblpXSpec="outside" w:tblpYSpec="bottom" w:tblpX="1440" w:tblpY="-720" w:leftFromText="120" w:rightFromText="240" w:topFromText="-120" w:bottomFromText="360"/><w:tblInd w:w="1440" w:type="dxa"/><w:tblBorders><w:top w:val="single" w:sz="8" w:color="123456"/><w:bottom w:val="double" w:sz="8" w:color="auto"/></w:tblBorders><w:tblCellMar><w:top w:w="120" w:type="dxa"/><w:start w:w="240" w:type="dxa"/><w:bottom w:w="-120" w:type="dxa"/><w:end w:w="360" w:type="dxa"/></w:tblCellMar></w:tblPr><w:trPr><w:trHeight w:val="720" w:hRule="exact"/></w:trPr><w:tcPr><w:shd w:val="pct25" w:color="auto" w:fill="4070A0" w:themeFill="accent2" w:themeFillTint="80"/><w:tcBorders><w:left w:val="dotted" w:sz="16" w:color="ABCDEF"/><w:right w:val="single" w:sz="8"/></w:tcBorders><w:tcMar><w:left w:w="480" w:type="dxa"/><w:right w:w="600" w:type="dxa"/></w:tcMar></w:tcPr></w:style></w:styles>`,
     );
-    const main = await OOXMLStreamImpl.createStream(await ZipStorage.open(await storage.commit())),
+    const main = await OOXMLStreamImpl.createStream(
+        getProcessComponentContext(),
+        await ZipStorage.open(await storage.commit()),
+      ),
       part = await OOXMLStreamImpl.createStream(main, StreamType_t.STYLES),
       output = receiver(),
       parser = part.getFastParser();
@@ -368,7 +373,10 @@ it.each([
 
 it("emits an empty cloned table and preserves nonzero-ID/forwarding guards", /** Uses actual factory-assigned style resource identity and public context flags. @returns Nothing. */ async () => {
   const output = receiver(),
-    document = new OOXMLDocument(await OOXMLStreamImpl.createStream(new ZipStorage()), null),
+    document = new OOXMLDocument(
+      await OOXMLStreamImpl.createStream(getProcessComponentContext(), new ZipStorage()),
+      null,
+    ),
     handler = new OOXMLFastDocumentHandler(output.stream, document, 0),
     context = handler.createFastChildContext(token("doc:styles"));
   expect(context).toBeInstanceOf(TableContext);
@@ -388,7 +396,10 @@ it("emits an empty cloned table and preserves nonzero-ID/forwarding guards", /**
 
 it("retains native current-child state and clones only the table vector at each delivery", /** Repeated closure deliberately collects the last child again, as in upstream. @returns Nothing. */ async () => {
   const output = receiver(),
-    document = new OOXMLDocument(await OOXMLStreamImpl.createStream(new ZipStorage()), null),
+    document = new OOXMLDocument(
+      await OOXMLStreamImpl.createStream(getProcessComponentContext(), new ZipStorage()),
+      null,
+    ),
     handler = new OOXMLFastDocumentHandler(output.stream, document, 0),
     table = handler.createFastChildContext(token("doc:styles")) as TableContext;
   const child = table.createFastChildContext(token("doc:style")) as Base;
@@ -463,7 +474,10 @@ it("retains original send-before-clear actions and virtual property-set replacem
     ) => {
       delivered.push(properties);
     };
-  const document = new OOXMLDocument(await OOXMLStreamImpl.createStream(new ZipStorage()), null),
+  const document = new OOXMLDocument(
+      await OOXMLStreamImpl.createStream(getProcessComponentContext(), new ZipStorage()),
+      null,
+    ),
     root = new OOXMLFastDocumentHandler(output.stream, document, 0).getContextHandler(),
     context = new PropertiesContext(root);
   const definition = Object.entries(defines).find(

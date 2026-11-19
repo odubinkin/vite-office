@@ -1,0 +1,83 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-ee65d6a3-b01f-40d5-995f-99cdddd55605",
+    "capabilityId": "CAP-ee65d6a3-b01f-40d5-995f-99cdddd55605",
+    "suite": "shared",
+    "subsystem": "media-descriptor-stream-prerequisites",
+    "type": "model",
+    "maturity": "mapped",
+    "assertions": [
+      "Original supplied input is retained without opening or seeking.",
+      "Original property precedence and real Reference template defaults/extraction retain source behavior."
+    ],
+    "capability": "Original provided-input and readonly media descriptor prerequisites",
+    "gaps": [
+      "Original provided-InputStream presence fast path and invalid-source handling, ReadOnly/PostData/Stream precedence and actual Reference template extraction are represented with native UNO/RTL map/stream owners. Positive URL/POST/trust/interaction opening and non-file readonly/default environment remain explicitly unported. File Content inference and exception branches are source-represented but unqualified because the actual file Content provider is missing. Complete SfxMedium/storage/filter/model/DOCX/XLSX UI acceptance remains unfinished."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "unotools/source/misc/mediadescriptor.cxx",
+          "marker": "impl_addInputStream"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sfx2/qa/cppunit/test_misc.cxx",
+          "marker": "loadFromMedium"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/unotools/mediadescriptor.hxx",
+          "marker": "isStreamReadOnly"
+        },
+        {
+          "path": "include/comphelper/sequenceashashmap.hxx",
+          "marker": "getUnpackedValueOrDefault"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/unotools/source/misc/mediadescriptor.ts",
+          "marker": "addInputStream"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/misc/sequenceashashmap.ts",
+          "marker": "getUnpackedValueOrDefault"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/unotools/source/misc/mediadescriptor.stream.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-media-descriptor-streams.md",
+          "marker": "# Native media descriptor stream prerequisites"
+        }
+      ]
+    },
+    "implemented": false,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Represented original fields and generated UNO/RTL/native mutex owners use existing host storage while native physical ABI/allocator/thread and full package/stream services remain unqualified."
+    },
+    "scopeLimitations": [
+      "Original provided-InputStream presence fast path and invalid-source handling, ReadOnly/PostData/Stream precedence and actual Reference template extraction are represented with native UNO/RTL map/stream owners. Positive URL/POST/trust/interaction opening and non-file readonly/default environment remain explicitly unported. File Content inference and exception branches are source-represented but unqualified because the actual file Content provider is missing. Complete SfxMedium/storage/filter/model/DOCX/XLSX UI acceptance remains unfinished.",
+      "The source SfxDocumentMetaData medium tests in test_misc.cxx require actual file opening, storage and full metadata orchestration. They remain pending; no complete downstream QA port is claimed."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "media-descriptor-input-readonly"
+  }
+}

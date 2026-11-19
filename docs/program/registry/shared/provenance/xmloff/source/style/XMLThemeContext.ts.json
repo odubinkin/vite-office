@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/style/XMLThemeContext.ts",
+    "upstreamPath": "xmloff/source/style/XMLThemeContext.cxx",
+    "localSymbols": [
+      "XMLThemeContext",
+      "ExportThemeElement"
+    ],
+    "upstreamSymbols": [
+      "XMLThemeContext::createFastChildContext",
+      "XMLThemeColorsContext::createFastChildContext"
+    ],
+    "preservedResponsibilities": [
+      "Reads and writes ODF names and indexed theme colors using actual document-model palettes and the shared ODF converter."
+    ],
+    "omittedResponsibilities": [
+      "The consumed format binding supplies the model install callback in place of the unported UNO theme property setter."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/style/XMLThemeContext.ts",
+          "marker": "XMLThemeContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.theme.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods-native-colors.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/XMLThemeContext.cxx",
+          "marker": "XMLThemeContext::createFastChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/XMLThemeContext.cxx",
+          "marker": "XMLThemeColorsContext::createFastChildContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/core/xmlexp.cxx",
+          "marker": "SvXMLExport::ExportThemeElement"
+        }
+      ]
+    }
+  }
+}

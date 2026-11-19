@@ -1,12 +1,17 @@
-/** @fileoverview Document package policies around zip.js archive I/O. ZIP records, codecs and CRC validation belong to zip.js. */
-import {
-  ZipReader,
-  ZipWriter,
-  Uint8ArrayReader,
-  Uint8ArrayWriter,
-  type Entry,
-} from "@zip.js/zip.js";
+/** @fileoverview Document package admission over zip.js and external STORED output through the original native ZIP writer. Browser policies remain at this boundary. */
+import { ZipReader, Uint8ArrayReader, type Entry } from "@zip.js/zip.js";
 import { OStorageHelper } from "../../../comphelper/inc/storagehelper";
+import { initializeRuntime } from "../../../external/emscripten/runtime";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import { Sequence, type SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import { UNOMemoryStream } from "../../../comphelper/source/streaming/memorystream";
+import { MemoryInputStream } from "../../../comphelper/source/streaming/seqstream";
+import type { XInputStream } from "../../../udkapi/com/sun/star/io/XInputStream";
+import { OUString } from "../../../sal/inc/rtl/ustring";
+import { CRC32 } from "../zipapi/CRC32";
+import { ZipEntry } from "../../inc/ZipEntry";
+import { n_ConstBufferSize } from "../../inc/PackageConstants";
+import { ZipOutputStream } from "../zipapi/ZipOutputStream";
 
 /** Document-format filename collision policies. */
 export enum ArchiveChecks {
@@ -43,8 +48,11 @@ export const DEFAULT_ARCHIVE_LIMITS: ArchiveLimits = {
 
 /** Validated document catalog backed entirely by zip.js entries. */
 export class DocumentArchive {
-  /** Retains the validated catalog. @param entries - Library entries. @returns Archive. */
-  private constructor(private readonly entries: ReadonlyMap<string, Entry>) {}
+  /** Retains the validated catalog and its owned byte source. @param entries - Library entries. @param bytes - Immutable snapshot. @returns Archive. */
+  private constructor(
+    private readonly entries: ReadonlyMap<string, Entry>,
+    private readonly bytes: Uint8Array,
+  ) {}
 
   /** Opens a package and applies document resource and filename policies. @param bytes - Complete ZIP. @param limits - Resource ceilings. @param checks - Format collision policy. @returns Validated catalog. */
   static async open(
@@ -66,7 +74,8 @@ export class DocumentArchive {
     )
       throw new Error("ZIP resource limits are invalid.");
     if (bytes.length > limits.maxArchiveBytes) throw new Error("ZIP archive exceeds size limit.");
-    const reader = new ZipReader(new Uint8ArrayReader(bytes.slice()), {
+    const snapshot = bytes.slice();
+    const reader = new ZipReader(new Uint8ArrayReader(snapshot), {
       useWebWorkers: false,
       strictness: "strict",
       // Native document paths permit internal empty segments; the application helper validates them below.
@@ -119,7 +128,7 @@ export class DocumentArchive {
         insensitive.add(folded);
         entries.set(name, entry);
       }
-      return new DocumentArchive(entries);
+      return new DocumentArchive(entries, snapshot);
     } finally {
       // Uint8ArrayReader owns no open stream; entries remain readable after catalog enumeration.
       await reader.close();
@@ -138,6 +147,17 @@ export class DocumentArchive {
   getEntryMethod(name: string): number {
     return this.entry(name).compressionMethod;
   }
+  /** Admits the checked snapshot to native storage. Native raw STORED reads bypass CRC, so the browser verifies those entries here. @returns Owned seekable input. */
+  async openNativeInput(): Promise<Reference<XInputStream>> {
+    for (const [name, entry] of this.entries)
+      if (entry.compressionMethod === 0 && !entry.directory)
+        await this.extractEntry(
+          name,
+          /** Allows the checksum sink to consume bytes without retaining another copy. @returns Nothing. */ () => {},
+        );
+    const data = new Int8Array(this.bytes.buffer, this.bytes.byteOffset, this.bytes.length);
+    return new Reference<XInputStream>(new MemoryInputStream(data, data.length));
+  }
   /** Finds a required entry. @param name - Path. @returns Library entry. */
   private entry(name: string): Entry {
     const entry = this.entries.get(name);
@@ -146,22 +166,15 @@ export class DocumentArchive {
   }
   /** Extracts through zip.js into a bounded byte sink. @param name - Path. @returns Verified bytes. */
   async readEntry(name: string): Promise<Uint8Array> {
-    const entry = this.entry(name);
-    if (entry.directory) return new Uint8Array();
     const chunks: Uint8Array[] = [];
-    let size = 0;
-    await entry.getData(
-      new WritableStream<Uint8Array>({
-        /** Bounds actual output independently of declared metadata. @param chunk - Extracted bytes. @returns Nothing. */
-        write(chunk) {
-          size += chunk.length;
-          if (size > entry.uncompressedSize)
-            throw new Error(`ZIP entry exceeds declared size: ${name}`);
-          chunks.push(chunk.slice());
-        },
-      }),
+    const size = await this.extractEntry(
+      name,
+      /** Retains a copy of a verified fragment. @param chunk - Extracted bytes. @returns Nothing. */ (
+        chunk,
+      ) => {
+        chunks.push(chunk.slice());
+      },
     );
-    if (size !== entry.uncompressedSize) throw new Error(`ZIP entry size mismatch: ${name}`);
     const bytes = new Uint8Array(size);
     let offset = 0;
     for (const chunk of chunks) {
@@ -170,13 +183,32 @@ export class DocumentArchive {
     }
     return bytes;
   }
+  /** Extracts with actual size and checksum validation. @param name - Path. @param consume - Destination for each chunk. @returns Verified byte count. */
+  private async extractEntry(name: string, consume: (chunk: Uint8Array) => void): Promise<number> {
+    const entry = this.entry(name);
+    if (entry.directory) return 0;
+    let size = 0;
+    await entry.getData(
+      new WritableStream<Uint8Array>({
+        /** Bounds actual output independently of declared metadata. @param chunk - Extracted bytes. @returns Nothing. */
+        write(chunk) {
+          size += chunk.length;
+          if (size > entry.uncompressedSize)
+            throw new Error(`ZIP entry exceeds declared size: ${name}`);
+          consume(chunk);
+        },
+      }),
+    );
+    if (size !== entry.uncompressedSize) throw new Error(`ZIP entry size mismatch: ${name}`);
+    return size;
+  }
   /** Decodes verified UTF-8 content. @param name - Path. @returns Text. */
   async readTextEntry(name: string): Promise<string> {
     return new TextDecoder("utf-8", { fatal: true }).decode(await this.readEntry(name));
   }
 }
 
-/** Collects document streams and delegates archive creation to zip.js. */
+/** Collects browser document streams and delegates unchanged STORED output policy to the actual core ZIP writer. */
 export class DocumentArchiveWriter {
   private readonly entries = new Map<string, Uint8Array>();
   private finished = false;
@@ -191,14 +223,59 @@ export class DocumentArchiveWriter {
   async finish(): Promise<Uint8Array> {
     if (this.finished) throw new Error("ZIP output stream is already finished.");
     this.finished = true;
-    const writer = new ZipWriter(new Uint8ArrayWriter(), {
-      useWebWorkers: false,
-      level: 0,
-      dataDescriptor: false,
-    });
-    for (const [name, bytes] of this.entries)
-      await writer.add(name, new Uint8ArrayReader(bytes), { extendedTimestamp: false });
-    return writer.close();
+    await initializeRuntime();
+    const memory = new Reference(new UNOMemoryStream()),
+      writer = new ZipOutputStream(memory),
+      Bytes = Sequence.specialize<number>("sal_Int8", 1);
+    try {
+      for (const [name, bytes] of this.entries) {
+        const data = new Bytes(),
+          path = new OUString(
+            Uint16Array.from(
+              name.split(""),
+              /** Preserve each original UTF16 name unit. @param c - Name unit. @returns Code unit. */ (
+                c,
+              ) => c.charCodeAt(0),
+            ),
+            name.length,
+          ),
+          entry = new ZipEntry(),
+          crc = new CRC32();
+        try {
+          crc.updateSegment(bytes, bytes.length);
+          entry.sPath.assign(path);
+          entry.nMethod = 0;
+          entry.nTime = -1;
+          entry.nCrc = crc.getValue();
+          entry.nSize = entry.nCompressedSize = BigInt(bytes.length);
+          entry.nOffset = -1n;
+          entry.nPathLen = entry.nExtraLen = -1;
+          ZipOutputStream.setEntry(entry);
+          // Original writeLOC takes ownership before validation; writer owns this record from here.
+          writer.writeLOC(entry);
+          for (let offset = 0; offset < bytes.length; offset += n_ConstBufferSize) {
+            const count = Math.min(n_ConstBufferSize, bytes.length - offset);
+            data.realloc(count);
+            const cells = data.getArray() as SequenceElements;
+            for (let index = 0; index < count; ++index)
+              (cells.get(index) as [number])[0] = ((bytes[offset + index] as number) << 24) >> 24;
+            writer.rawWrite(data);
+          }
+          writer.rawCloseEntry();
+        } finally {
+          path.dispose();
+          data.dispose();
+        }
+      }
+      writer.finish();
+      const result = new Uint8Array(Number(memory.operatorStar().getLength()));
+      memory.operatorStar().seek(0n);
+      memory.operatorStar().readSomeBytes(result, result.length);
+      return result;
+    } finally {
+      writer.dispose();
+      memory.dispose();
+    }
   }
 }
 

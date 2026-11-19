@@ -90,6 +90,18 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/native-rtf-tab-settings-roundtrip.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.compat.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.default-tabs.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.tabs.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -166,7 +178,13 @@
       "Resolves original line-number section attributes and publishes the shared document settings.",
       "Resolves paragraph shading into live drawing fill through the original CellColorHandler.",
       "Resolves the ordered native paragraph edge resources using BorderHandler and native UNO properties.",
-      "Applies the source new-document tab compatibility defaults at the mapper boundary."
+      "Applies the source new-document tab compatibility defaults at the mapper boundary.",
+      "Routes WordprocessingML run-color properties to the native ThemeColorHandler, retaining an existing higher-priority complex value.",
+      "Routes the three represented Word typographic modifiers to their original character grab bag.",
+      "Uses source theme run attributes to apply actual font families and original interoperability identifiers.",
+      "Applies source Word compatibility flags and publishes the typed document interop sequence on successful DOCX load.",
+      "Applies resolved text defaults during the original settings-table callback.",
+      "Routes paragraph tab lists and paragraph-default resources through their original property callbacks."
     ],
     "omittedResponsibilities": [
       "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",

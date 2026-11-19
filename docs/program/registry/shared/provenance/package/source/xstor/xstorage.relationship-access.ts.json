@@ -1,0 +1,85 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/xstor/xstorage.relationship-access.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/xstor/xstorage.cxx",
+    "localSymbols": [
+      "getAllStorageRelationships",
+      "getStorageRelationshipByID",
+      "getStorageRelationshipsByType",
+      "insertStorageRelationship",
+      "insertStorageRelationships",
+      "removeStorageRelationship",
+      "clearStorageRelationships"
+    ],
+    "upstreamSymbols": [
+      "OStorage::getAllRelationships",
+      "OStorage::getRelationshipByID",
+      "OStorage::getRelationshipsByType",
+      "OStorage::insertRelationshipByID",
+      "OStorage::insertRelationships",
+      "OStorage::removeRelationshipByID",
+      "OStorage::clearRelationships"
+    ],
+    "preservedResponsibilities": [
+      "Splits the original root storage relationship dispatch from the public component to preserve the source ownership of native StringPair sequences and meet the repository file-size limit."
+    ],
+    "omittedResponsibilities": [
+      "Writable hierarchy, encrypted storage and native physical ABI remain unqualified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Splits the original root storage relationship dispatch from the public component to preserve the source ownership of native StringPair sequences and meet the repository file-size limit."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/xstor/xstorage.relationship-access.ts",
+          "marker": "getAllStorageRelationships"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xfactory.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::getAllRelationships"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::getRelationshipByID"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::getRelationshipsByType"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::insertRelationshipByID"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::insertRelationships"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::removeRelationshipByID"
+        },
+        {
+          "path": "package/source/xstor/xstorage.cxx",
+          "marker": "OStorage::clearRelationships"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/package/source/xstor/xstorage.relationship-access.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Splits the original root storage relationship dispatch from the public component to preserve the source ownership of native StringPair sequences and meet the repository file-size limit."
+    }
+  }
+}

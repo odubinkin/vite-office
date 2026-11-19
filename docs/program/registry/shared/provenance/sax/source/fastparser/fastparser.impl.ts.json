@@ -1,0 +1,186 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sax/source/fastparser/fastparser.impl.ts",
+    "status": "mapped",
+    "upstreamPath": "sax/source/fastparser/fastparser.cxx",
+    "localSymbols": [
+      "FastSaxParserImpl",
+      "ReplacementPair"
+    ],
+    "upstreamSymbols": [
+      "FastSaxParserImpl::FastSaxParserImpl",
+      "FastSaxParserImpl::~FastSaxParserImpl",
+      "FastSaxParserImpl::setFastDocumentHandler",
+      "FastSaxParserImpl::setTokenHandler",
+      "FastSaxParserImpl::setErrorHandler",
+      "FastSaxParserImpl::setNamespaceHandler",
+      "FastSaxParserImpl::registerNamespace",
+      "FastSaxParserImpl::GetNamespaceToken",
+      "FastSaxParserImpl::GetNamespaceURL",
+      "FastSaxParserImpl::getNamespaceURL",
+      "FastSaxParserImpl::pushEntity",
+      "FastSaxParserImpl::popEntity",
+      "FastSaxParserImpl::DefineNamespace",
+      "FastSaxParserImpl::GetToken",
+      "FastSaxParserImpl::GetTokenWithPrefix",
+      "FastSaxParserImpl::GetTokenWithContextNamespace",
+      "FastSaxParserImpl::callbackStartElement",
+      "FastSaxParserImpl::callbackEndElement",
+      "FastSaxParserImpl::callbackCharacters",
+      "FastSaxParserImpl::sendPendingCharacters",
+      "FastSaxParserImpl::callbackProcessingInstruction",
+      "FastSaxParserImpl::addUnknownElementWithPrefix",
+      "FastSaxParserImpl::setCustomEntityNames",
+      "FastSaxParserImpl::callbackGetEntity",
+      "FastSaxParserImpl::parse",
+      "FastSaxParserImpl::parseStream"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual RTL/UNO owners retain source contracts. Explicit scope destruction and counted views bind logical address storage; physical C++ ABI, native logging/mutex/allocator and complete application parity remain unqualified."
+    },
+    "preservedResponsibilities": [
+      "Original parser default flags, actual locator/raw current-Entity pointer, configuration references, source input validation/copy/converter setup, nested entity push/pop, native Unicode-key namespace registration/minimum/duplicate behavior and reverse live-prefix lookup. Actual RTL strings/hash/equality and native References retain ownership; hash buckets bind the source unordered_map without a second native namespace provider. Public aggregate fixture setup is explicit and does not claim producer execution. Actual native streams, registered token/legacy handler owners and weak references exercise retained-cache lifetimes; genuine C parser contexts supply native locator positions.",
+      "Original four C SAX2 start/end/characters/PI producers now connect the same Entity/RTL/attribute owners to genuine native legacy handlers and registered Writer. Definitions grow64 at a time; namespaces precede attributes/tokens; default/unknown scope effects and byte coalescing/XMap translation retain source logic. This target follows original Emscripten parseStream mbEnableThreads=false: direct maSharedEvent access is exactly getEvent(single-thread), which does not assign maType. No non-Emscripten queue/thread implementation is claimed. Real C-produced records and separately qualified nullable direct-native callback inputs use real native services, with no fake parser/handler or private state patch.",
+      "Original custom replacement copy/sort/lower_bound and fifth callback now use real Pair sequence fields, native RTL owners, actual pinned libc strtoul and xmlNewEntity; source +2 decimal offset and non-ASCII/ASCII comparison mismatch preserved. Parser destructor frees actual temporal entities. Original converted-input16KiB parse/parseStream/cleanup execute all5 C callbacks, approved XML_PARSE_NOENT|XML_PARSE_HUGE call, native EOF/callback error polling and original empty-stream acceptance. One lazy native opaque this binding lives through all context cleanup and parser teardown. Real streams/Writer and caller-closed streams supply actual positive/failure paths; no fake entity/stream/allocator/parser provider.",
+      "Public native FastSaxParser wrapper/factory and SDK route are now implemented separately in fastparser.service.ts, tested through the real registered service. Previous missing FastSaxParser wrapper notes are superseded; full original QA and LegacyFastParser wrapper remain unfinished."
+    ],
+    "omittedResponsibilities": [
+      "Full original parser QA, actual FastSaxParser/LegacyFastParser UNO wrapper/service and complete model/filter/UI acceptance remain unfinished. Nonnull optional map component/execution, non-Emscripten event queues/threads, physical C++ mutex/allocator/exception ABI and independent compiled original C++ component differential remain unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sax/source/fastparser/fastparser.impl.ts",
+          "marker": "FastSaxParserImpl"
+        },
+        {
+          "path": "apps/office/src/sax/source/fastparser/fastparser.impl.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sax/source/fastparser/fastparser.producer.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sax/source/fastparser/fastparser.stream.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::FastSaxParserImpl"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::~FastSaxParserImpl"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::setFastDocumentHandler"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::setTokenHandler"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::setErrorHandler"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::setNamespaceHandler"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::registerNamespace"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::GetNamespaceToken"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::GetNamespaceURL"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::getNamespaceURL"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::pushEntity"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::popEntity"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::DefineNamespace"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::GetToken"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::GetTokenWithPrefix"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::GetTokenWithContextNamespace"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::callbackStartElement"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::callbackEndElement"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::callbackCharacters"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::sendPendingCharacters"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::callbackProcessingInstruction"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::addUnknownElementWithPrefix"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::setCustomEntityNames"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::callbackGetEntity"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::parse"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl::parseStream"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sax/source/fastparser/fastparser.impl.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original private implementation/locator responsibility is split from fastparser.cxx while retaining the same actual source Entity, native string/reference owners and raw parser identity. Complete parser assembly remains unfinished."
+    }
+  }
+}

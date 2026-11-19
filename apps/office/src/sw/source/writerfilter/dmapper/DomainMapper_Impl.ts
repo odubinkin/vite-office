@@ -10,6 +10,7 @@ import { toInt32 } from "../../../../o3tl/inc/string_view";
 import type { SwXStyleFamily } from "../../core/unocore/unostyle";
 import type { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 import type { SwXText } from "../../core/unocore/unotext";
+import { StreamState } from "./DomainMapper_Impl.stream";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SwXParagraph } from "../../core/unocore/unoparagraph";
 import { PropertyMap, SectionPropertyMap, ParagraphPropertyMap } from "./PropertyMap";
@@ -28,6 +29,16 @@ import { StyleSheetTable, type StyleSheetEntry } from "./StyleSheetTable";
 import { NS_ooxml } from "../inc/ooxml/resourceids";
 import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";
 import { LineNumberPosition } from "../../../inc/lineinfo";
+import {
+  LineSpacing,
+  cppu_detail_getUnoType_LineSpacing as lineSpacingType,
+} from "../../../../offapi/com/sun/star/style/LineSpacing";
+import * as LineSpacingMode from "../../../../offapi/com/sun/star/style/LineSpacingMode";
+import { FieldControl, type Value } from "../inc/dmapper/resourcemodel";
+import { CurrentTextPosition, FieldContext } from "./FieldContext";
+import { SwPaM } from "../../core/crsr/pam";
+import { SwXBookmark } from "../../core/unocore/unobkm";
+import { SwXTextRange } from "../../core/unocore/unoobj2";
 
 /** Original ContextType declaration order. */
 export enum ContextType {
@@ -79,6 +90,17 @@ export class DomainMapper_Impl {
   GetSettingsTable(): SettingsTable {
     return (this.m_pSettingsTable ??= new SettingsTable(this.m_rDMapper));
   }
+  /** Applies the native text defaults when the settings table has been resolved. @returns Nothing. */
+  ApplySettingsTable(): void {
+    const name = unicode("TabStopDistance");
+    const value = new Any([this.GetSettingsTable().GetDefaultTabStop()], "sal_Int32");
+    try {
+      this.model.createTextDefaults().setPropertyValue(name, value);
+    } finally {
+      value.dispose();
+      name.dispose();
+    }
+  }
   private readonly m_pLastSectionContext = new SvRef<SectionPropertyMap>();
   private m_bParaSectpr = false;
   /** Borrows the original last top-level section context. @returns Previous section or null. */
@@ -101,6 +123,20 @@ export class DomainMapper_Impl {
   /** Original borrowed margin values. @returns Actual current fields. */
   GetPageMargins(): Readonly<PageMar> {
     return this.m_aPageMargins;
+  }
+  /** Updates the active section's first-page layout flag. @param value - Title page enabled. @returns Nothing. */
+  SetTitlePage(value: boolean): void {
+    const section = this.GetTopContextOfType(ContextType.CONTEXT_SECTION);
+    if (section instanceof SectionPropertyMap) section.SetTitlePage(value);
+  }
+  /** Applies Word's signed twip spacing to the original signed short UNO property. @param context - Active character or style properties. @param twips - Word character spacing. @returns Nothing. */
+  SetCharacterKerning(context: PropertyMap, twips: number): void {
+    const spacing = new Any([(convertTwipToMm100_Limited(twips) << 16) >> 16], "sal_Int16");
+    try {
+      context.Insert(P.PROP_CHAR_CHAR_KERNING, spacing);
+    } finally {
+      spacing.dispose();
+    }
   }
   /** Original limited twip conversion and selected margin assignment. @param element - Native field selector. @param value - Twips. @returns Nothing. */
   SetPageMarginTwip(element: PageMarElement, value: number): void {
@@ -203,15 +239,134 @@ export class DomainMapper_Impl {
   private m_xPageStyles: SwXStyleFamily | undefined;
   private m_xNextUnusedPageStyleNo: number | undefined;
   private readonly contexts: Context[] = [];
-  private readonly body: SwXText;
-  private appendedParagraph = false;
+  private readonly m_StreamStateStack: StreamState[] = [];
+  /** Borrows the original active substream. @returns Current native stream state. */
+  private GetStreamState(): StreamState {
+    const state = this.m_StreamStateStack.at(-1);
+    if (!state) throw new Error("assert(!m_StreamStateStack.empty())");
+    return state;
+  }
+  /** Original active XTextAppend owner. @returns Current destination text. */
+  get body(): SwXText {
+    return this.GetStreamState().text;
+  }
+  /** Resolves resource callbacks with a fresh native text/stream state. @param text - Actual destination. @param resolve - Nested SAX dispatch. @returns Nothing. */
+  WithTextAppend(text: SwXText, resolve: () => void): void {
+    const state = new StreamState(text);
+    this.m_StreamStateStack.push(state);
+    try {
+      resolve();
+      this.RemoveLastParagraph();
+    } finally {
+      this.m_StreamStateStack.pop();
+      state.dispose();
+    }
+  }
+
+  /** Receives the native bookmark name and the paired range ID. @param id - Source attribute ID. @param value - Source value. @returns Whether consumed. */
+  HandleBookmarkAttribute(id: number, value: Value): boolean {
+    if (id !== NS_ooxml.LN_CT_Bookmark_name && id !== NS_ooxml.LN_CT_MarkupRangeBookmark_id)
+      return false;
+    const name = value.getString();
+    try {
+      if (id === NS_ooxml.LN_CT_Bookmark_name) {
+        const entry = this.GetStreamState().bookmarks.get(this.GetStreamState().currentBookmarkId);
+        if (entry) entry.name = text(name);
+        else this.GetStreamState().currentBookmarkName = text(name);
+      } else this.StartOrEndBookmark(text(name));
+    } finally {
+      name.dispose();
+    }
+    return true;
+  }
+
+  /** Pairs the Word marker ID and inserts the resulting native selection as a bookmark. @param id - Word range ID. @returns Nothing. */
+  private StartOrEndBookmark(id: string): void {
+    const position = CurrentTextPosition(this.body);
+    if (!position) return;
+    const opening = this.GetStreamState().bookmarks.get(id);
+    if (!opening) {
+      this.GetStreamState().currentBookmarkId = id;
+      this.GetStreamState().bookmarks.set(id, {
+        name: this.GetStreamState().currentBookmarkName,
+        position,
+      });
+      this.GetStreamState().currentBookmarkName = "";
+      return;
+    }
+    this.GetStreamState().bookmarks.delete(id);
+    this.GetStreamState().currentBookmarkId = "";
+    try {
+      if (
+        this.m_StreamStateStack.at(-1)?.bIsOutsideAParagraph &&
+        position.GetContentIndex() === 0
+      ) {
+        const previous = this.body.GetTextNodes().at(-2);
+        if (
+          previous &&
+          position.GetNode().FindTableBoxStartNode() === previous.FindTableBoxStartNode()
+        )
+          position.Assign(previous, previous.Len());
+      }
+      const expanded = opening.position.compare(position) !== 0;
+      const bookmark = new SwXBookmark();
+      const name = unicode(opening.name);
+      const selection = new SwPaM(position, expanded ? opening.position : undefined);
+      const range = new SwXTextRange(selection, this.body);
+      try {
+        bookmark.setName(name);
+        this.body.insertTextContent(range, bookmark, expanded);
+      } finally {
+        range.dispose();
+        selection.Dispose();
+        name.dispose();
+      }
+    } finally {
+      opening.position.Dispose();
+      position.Dispose();
+    }
+  }
+
+  /** Handles native field delimiters and keeps the display text of unknown fields. @param control - Byte control. @returns Whether consumed. */
+  HandleFieldControl(control: number | undefined): boolean {
+    const field = this.GetStreamState().fields.at(-1);
+    switch (control) {
+      case FieldControl.Start: {
+        const next = CurrentTextPosition(this.body);
+        if (next) this.GetStreamState().fields.push(new FieldContext(next));
+        return true;
+      }
+      case FieldControl.Separator:
+        if (field) field.completed = true;
+        return true;
+      case FieldControl.Lock:
+        return true;
+      case FieldControl.End:
+        if (field) {
+          this.GetStreamState().fields.pop();
+          try {
+            if (field.completed) field.ApplyResult(this.body);
+          } finally {
+            field.dispose();
+          }
+        }
+        return true;
+      default:
+        return false;
+    }
+  }
+  private spacingHadLine = false;
+  private spacingHadLineRule = false;
   private readonly styleSheetTable = new StyleSheetTable(this);
   private defaultParaStyleName = "";
   private currentParaStyleName = "";
   private inStyleSheetImport = false;
   private m_bInDocDefaultsImport = false;
-  /** Represented body stream; substream producers extend the original stack when consumed. */
-  private readonly m_StreamStateStack = [{ deferredCharacterProperties: new Map<number, Any>() }];
+  /** Retains the source stream boundary independently of property-stack lifetime. @param value - Whether paragraph content has ended. @returns Nothing. */
+  private SetIsOutsideAParagraph(value: boolean): void {
+    const stream = this.m_StreamStateStack.at(-1);
+    if (stream) stream.bIsOutsideAParagraph = value;
+  }
   private readonly m_aRtfParagraphs = new Map<SwStartNode, SwTextNode>();
   private m_pRtfPreviousParagraph: SwTextNode | undefined;
 
@@ -244,13 +399,14 @@ export class DomainMapper_Impl {
       paragraph.Release();
     }
   }
-  /** Borrows actual Writer model/text interfaces. @param m_rDMapper - Original mapper callback owner. @param model - Destination model. @param m_eDocumentType - Original immutable source-format field. @returns Mapper state. */
+  /** Borrows actual Writer model/text interfaces. @param m_rDMapper - Original mapper callback owner. @param model - Destination model. @param m_eDocumentType - Original immutable source-format field. @param m_bIsNewDoc - Whether the filter owns a new document. @returns Mapper state. */
   constructor(
     private readonly m_rDMapper: DomainMapper,
     readonly model: SwXTextDocument,
     private readonly m_eDocumentType: SourceDocumentType,
+    private readonly m_bIsNewDoc: boolean,
   ) {
-    this.body = model.getText();
+    this.m_StreamStateStack.push(new StreamState(model.getText()));
   }
   /** Original document-default phase. @param value - Import phase. @returns Nothing. */
   SetDocDefaultsImport(value: boolean): void {
@@ -359,6 +515,10 @@ export class DomainMapper_Impl {
   IsOOXMLImport(): boolean {
     return this.m_eDocumentType === SourceDocumentType.OOXML;
   }
+  /** Original insertion-mode guard used by page-story import. @returns Whether this is a new document. */
+  IsNewDoc(): boolean {
+    return this.m_bIsNewDoc;
+  }
   /** Original stylesheet phase query. @returns Whether importing a style. */
   IsStyleSheetImport(): boolean {
     return this.inStyleSheetImport;
@@ -430,6 +590,7 @@ export class DomainMapper_Impl {
           ? new ParagraphPropertyMap()
           : new PropertyMap();
     if (type === ContextType.CONTEXT_SECTION) this.m_bIsFirstSection = false;
+    if (type === ContextType.CONTEXT_PARAGRAPH) this.SetIsOutsideAParagraph(false);
     this.contexts.push({
       type,
       properties,
@@ -462,6 +623,7 @@ export class DomainMapper_Impl {
       this.m_pLastSectionContext.assign(current.properties);
     }
     this.contexts.pop();
+    if (type === ContextType.CONTEXT_PARAGRAPH) this.SetIsOutsideAParagraph(true);
     if (current.sectionReference) current.sectionReference.clear();
     else if (current.owned) current.properties.dispose();
   }
@@ -558,6 +720,92 @@ export class DomainMapper_Impl {
     if (isDocDefault) isDocDefault[0] = false;
     return new Any();
   }
+  /** Clears the source line-attribute flags before resolving the current spacing property. @returns Nothing. */
+  StartLineSpacing(): void {
+    this.spacingHadLine = false;
+    this.spacingHadLineRule = false;
+  }
+  /** Applies one source spacing attribute to the current native UNO LineSpacing property. @param id - Attribute identity. @param value - Native integer or rule token. @param negativeFlip - Source flag for inherited exact spacing. @returns Nothing. */
+  SetLineSpacing(id: number, value: number, negativeFlip = true): void {
+    const n = NS_ooxml,
+      single = 240,
+      singleMm100 = convertTwipToMm100_Limited(single),
+      spacing = new LineSpacing(LineSpacingMode.FIX, singleMm100),
+      context = this.GetTopContext();
+    const current = context?.getProperty(P.PROP_PARA_LINE_SPACING)?.[1];
+    try {
+      current?.extract(spacing, lineSpacingType);
+    } finally {
+      current?.dispose();
+    }
+    if (id === n.LN_CT_Spacing_line) {
+      this.spacingHadLine = true;
+      const amount =
+        spacing.Mode === LineSpacingMode.PROP
+          ? Math.sign(value) * Math.round(Math.abs((value * 100) / single))
+          : convertTwipToMm100_Limited(value);
+      spacing.Height = (amount << 16) >> 16;
+    } else {
+      this.spacingHadLineRule = true;
+      if (value === n.LN_Value_doc_ST_LineSpacingRule_auto) {
+        if (spacing.Mode !== LineSpacingMode.PROP) {
+          if (spacing.Height >= 0) {
+            spacing.Mode = LineSpacingMode.PROP;
+            spacing.Height = (Math.round((spacing.Height * 100) / singleMm100) << 16) >> 16;
+          } else {
+            spacing.Mode = LineSpacingMode.FIX;
+            spacing.Height = -spacing.Height;
+          }
+        }
+      } else if (value === n.LN_Value_doc_ST_LineSpacingRule_atLeast) {
+        spacing.Mode = spacing.Height < 0 ? LineSpacingMode.FIX : LineSpacingMode.MINIMUM;
+        spacing.Height = Math.abs(spacing.Height);
+      } else if (spacing.Height < 0) {
+        if (negativeFlip) spacing.Mode = LineSpacingMode.MINIMUM;
+        spacing.Height = -spacing.Height;
+      } else spacing.Mode = LineSpacingMode.FIX;
+    }
+    if (context) {
+      const item = new Any(spacing, lineSpacingType);
+      try {
+        context.Insert(P.PROP_PARA_LINE_SPACING, item);
+      } finally {
+        item.dispose();
+      }
+    }
+  }
+  /** Reinterprets line-only values using the inherited rule or Word's automatic default. @returns Nothing. */
+  FinishLineSpacing(): void {
+    if (!this.spacingHadLine || this.spacingHadLineRule) return;
+    const currentStyle = this.styleSheetTable.GetCurrentEntry();
+    const entry = this.inStyleSheetImport
+      ? this.styleSheetTable.FindStyleSheetByISTD(currentStyle?.m_sBaseStyleIdentifier ?? "")
+      : this.styleSheetTable.FindStyleSheetByConvertedStyleName(this.GetCurrentParaStyleName());
+    const spacing = new LineSpacing();
+    const inherited = this.GetPropertyFromStyleSheet(
+      P.PROP_PARA_LINE_SPACING,
+      entry,
+      !this.IsDocDefaultsImport(),
+      true,
+    );
+    const n = NS_ooxml;
+    try {
+      inherited.extract(spacing, lineSpacingType);
+    } finally {
+      inherited.dispose();
+    }
+    const rule =
+      spacing.Mode === LineSpacingMode.FIX
+        ? n.LN_Value_doc_ST_LineSpacingRule_exact
+        : spacing.Mode === LineSpacingMode.MINIMUM
+          ? n.LN_Value_doc_ST_LineSpacingRule_atLeast
+          : n.LN_Value_doc_ST_LineSpacingRule_auto;
+    this.SetLineSpacing(
+      n.LN_CT_Spacing_lineRule,
+      rule,
+      rule !== n.LN_Value_doc_ST_LineSpacingRule_exact,
+    );
+  }
   /** Original style toggle lookup uses the imported current entry or the current paragraph's converted-name entry. @param id - Property. @returns Owned Any. */
   GetPropertyFromParaStyleSheet(id: P): Any {
     const entry = this.inStyleSheetImport
@@ -599,6 +847,11 @@ export class DomainMapper_Impl {
   }
   /** Appends through the canonical NOHINTEXPAND import API. @param value - Native text. @param properties - Current character map. @returns Nothing. */
   appendTextPortion(value: OUStringConstReference, properties: PropertyMap | null): void {
+    const field = this.GetStreamState().fields.at(-1);
+    if (field && !field.completed) {
+      field.command += text(value);
+      return;
+    }
     if (value.getLength()) this.processDeferredCharacterProperties();
     const range = this.body.appendTextPortion(value, properties?.GetPropertyValues() ?? []);
     range.dispose();
@@ -667,11 +920,17 @@ export class DomainMapper_Impl {
     try {
       const paragraph = this.body.finishParagraph(values);
       try {
+        if (this.IsOOXMLImport() && this.m_StreamStateStack.length === 1) {
+          const section = this.GetTopContextOfType(ContextType.CONTEXT_SECTION);
+          if (section instanceof SectionPropertyMap)
+            section.SetStartingNode(paragraph.GetPaM().Start().GetNode().GetTextNode());
+        }
         this.FinishParagraphNumbering(paragraph, context, numbering);
       } finally {
         paragraph.Release();
       }
-      this.appendedParagraph = true;
+      this.GetStreamState().appendedParagraph = true;
+      this.SetIsOutsideAParagraph(true);
     } finally {
       for (const value of values) {
         value.Value.dispose();
@@ -681,7 +940,7 @@ export class DomainMapper_Impl {
   }
   /** Original body trailing-paragraph deletion uses XComponent paragraph disposal rather than merging formatting into its predecessor. @returns Nothing. */
   RemoveLastParagraph(): void {
-    if (!this.appendedParagraph) return;
+    if (!this.GetStreamState().appendedParagraph) return;
     const nodes = this.body.GetTextNodes(),
       last = nodes.at(-1);
     if (last && nodes.length > 1 && last.GetText() === "") {
@@ -689,7 +948,7 @@ export class DomainMapper_Impl {
       paragraph.dispose();
       paragraph.Release();
     }
-    this.appendedParagraph = false;
+    this.GetStreamState().appendedParagraph = false;
   }
   /** Releases only filter-owned temporary maps; model lifetime remains external. @returns Nothing. */
   dispose(): void {
@@ -698,9 +957,7 @@ export class DomainMapper_Impl {
       if (context.sectionReference) context.sectionReference.clear();
       else if (context.owned) context.properties.dispose();
     }
-    for (const stream of this.m_StreamStateStack)
-      for (const value of stream.deferredCharacterProperties.values()) value.dispose();
-    this.m_StreamStateStack.length = 0;
+    for (const stream of this.m_StreamStateStack.splice(0)) stream.dispose();
     this.m_aRtfParagraphs.clear();
     this.m_pRtfPreviousParagraph = undefined;
     this.m_pLastSectionContext.clear();

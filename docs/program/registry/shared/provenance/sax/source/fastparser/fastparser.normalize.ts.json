@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sax/source/fastparser/fastparser.normalize.ts",
+    "status": "mapped",
+    "upstreamPath": "sax/source/fastparser/fastparser.cxx",
+    "localSymbols": [
+      "NormalizeURI",
+      "NormalizeW3URI",
+      "NormalizeOasisURN"
+    ],
+    "upstreamSymbols": [
+      "NormalizeURI",
+      "NormalizeW3URI",
+      "NormalizeOasisURN"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual RTL/UNO owners retain source contracts. Explicit scope destruction and counted views bind logical address storage; physical C++ ABI, native logging/mutex/allocator and complete application parity remain unqualified."
+    },
+    "preservedResponsibilities": [
+      "Original fastparser.cxx namespace alias functions operate on actual native OUString values and compiler-static RTL literals, preserving legacy SVG/FO/SMIL aliases, permissive XForms prefix/suffix normalization, OASIS TC/version index checks, Unicode subviews and original implicit concat temporary/move assignment. Independent source copy remains separate from xmloff as upstream. Whole original owner tests cover accepted/rejected aliases, exact boundaries, shared-input copy lifetime and nonnumeric/absent year behavior; real main/DOM-free Worker observes native alias results."
+    ],
+    "omittedResponsibilities": [
+      "Complete C callback producer/stream parser wiring and original full parser QA remain unfinished. Physical compiler/C++ allocation ABI and complete model/format/UI acceptance remain unqualified; this owner is not an alternate URI resolver or browser XML driver."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sax/source/fastparser/fastparser.normalize.ts",
+          "marker": "NormalizeURI"
+        },
+        {
+          "path": "apps/office/src/sax/source/fastparser/fastparser.normalize.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "NormalizeURI"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "NormalizeW3URI"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "NormalizeOasisURN"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sax/source/fastparser/fastparser.normalize.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The original same-translation-unit namespace normalization copy is a responsibility split for the native parser. Actual source values/indexes and temporary ownership remain unchanged; no reverse xmloff dependency or shared alternate resolver is introduced."
+    }
+  }
+}

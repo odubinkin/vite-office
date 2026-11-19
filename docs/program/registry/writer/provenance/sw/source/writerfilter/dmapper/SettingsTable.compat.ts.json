@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/SettingsTable.compat.ts",
+    "upstreamPath": "sw/source/writerfilter/dmapper/SettingsTable.cxx",
+    "localSymbols": [
+      "FindWordCompatibilityMode",
+      "SetCompatSettings",
+      "ReadCompatSettings"
+    ],
+    "upstreamSymbols": [
+      "SettingsTable::GetCompatSettings",
+      "SettingsTable::GetWordCompatibilityMode"
+    ],
+    "preservedResponsibilities": [
+      "Owns the source CompatSettings projection into and out of typed UNO document interoperability values, preserving source row order and mode selection."
+    ],
+    "omittedResponsibilities": [
+      "Only the currently represented Writer settings and format paths are used."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/SettingsTable.compat.ts",
+          "marker": "FindWordCompatibilityMode"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.compat.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/SettingsTable.cxx",
+          "marker": "SettingsTable::GetCompatSettings"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/SettingsTable.cxx",
+          "marker": "SettingsTable::GetWordCompatibilityMode"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/dmapper/SettingsTable.compat.ts",
+      "rationale": "Splits native compatibility sequence processing beside its original owner so that settings serialization remains bounded separately from layout and package orchestration.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

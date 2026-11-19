@@ -416,6 +416,14 @@ export class SvNumberformat {
     }
     return info.sStrArray[position] as OUString;
   }
+  /** Source compiled token type lookup. @param section - Native subformat index. @param position - Token offset or 0xffff for last. @returns Native token or zero. */
+  GetNumForType(section: number, position: number): number {
+    const part = this.NumFor[section];
+    if (!part) return 0;
+    const count = part.GetCount();
+    const index = position === 0xffff ? count - 1 : position;
+    return index < count ? (part.Info().nTypeArray[index] ?? 0) : 0;
+  }
   /** Source literal-token count excludes numeric and modifier tokens. @param subformat - Native section. @returns Count. */
   private ImpGetNumForStringElementCount(subformat: number): number {
     const section = this.NumFor[subformat] as ImpSvNumFor,
@@ -862,6 +870,7 @@ export type SvNumberformatConstReference = Pick<
   | "GetFormatstring"
   | "GetOutputString"
   | "GetNumForString"
+  | "GetNumForType"
   | "IsSecondSubformatRealNegative"
   | "IsNegativeWithoutSign"
   | "IsNumForStringElementCountEqual"

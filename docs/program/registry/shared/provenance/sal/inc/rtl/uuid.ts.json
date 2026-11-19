@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/inc/rtl/uuid.ts",
+    "upstreamPath": "include/rtl/uuid.h",
+    "localSymbols": [
+      "rtl_createUuid",
+      "rtl_compareUuid"
+    ],
+    "upstreamSymbols": [
+      "rtl_createUuid",
+      "rtl_compareUuid"
+    ],
+    "preservedResponsibilities": [
+      "Original consumed UUID C declarations forward to the actual RTL owner; no alternate implementation or named-UUID placeholder is installed."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/inc/rtl/uuid.ts",
+          "marker": "rtl_createUuid"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/rtl/uuid.h",
+          "marker": "rtl_createUuid"
+        }
+      ]
+    },
+    "omittedResponsibilities": [
+      "Unconsumed APIs, other platform profiles, native physical ABI/thread/OOM/fatal failure and full package/storage/filter/model/UI acceptance remain unbound or unqualified."
+    ]
+  }
+}

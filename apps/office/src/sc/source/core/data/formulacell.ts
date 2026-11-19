@@ -35,7 +35,7 @@ import { FormulaResultValue } from "../../../inc/formularesult";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScFormulaCellGroup } from "./formulacellgroup";
-import { SvNumFormatType } from "../../../../svl/inc/zforlist";
+import { NfIndexTableOffset, SvNumFormatType } from "../../../../svl/inc/zforlist";
 import { OpCode } from "../../../../formula/inc/opcode";
 import { SC_LISTENER_QUERY_FORMULA_GROUP_POS } from "../../../inc/listenerqueryids";
 import { RefQueryFormulaGroup } from "../../../inc/listenerquery";
@@ -602,6 +602,17 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
     }
     return invariant ? CompareState.EqualInvariant : CompareState.EqualRelativeRef;
   }
+  /** Original mutable numeric/no-error query runs lazy interpretation first. @returns Numeric result without a code error. */
+  IsValueNoError(): boolean {
+    this.MaybeInterpret();
+    return this.pCode.GetCodeError() === FormulaError.NONE && this.aResult.IsValueNoError();
+  }
+  /** Original const overload never interprets. NeedsInterpret uses the existing noniterative, non-table-operation cell profile; those broader owners remain unported. @returns Cached numeric result when interpretation is not needed. */
+  IsValueNoErrorConst(): boolean {
+    if (this.bDirty && (this.rDocument.GetAutoCalc() || this.cMatrixFlag !== ScMatrixMode.NONE))
+      return false;
+    return this.pCode.GetCodeError() === FormulaError.NONE && this.aResult.IsValueNoError();
+  }
   /** Reports lazy calculation state. @returns Dirty. */
   GetDirty(): boolean {
     return this.bDirty;
@@ -633,6 +644,16 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
         try {
           interpreter.Interpret();
           this.aResult.SetToken(interpreter.GetResultToken());
+          const format = interpreter.GetRetFormatType();
+          if (format === SvNumFormatType.LOGICAL && this.mbNeedsNumberFormat) {
+            const index = this.rDocument
+              .GetFormatTable()
+              .GetFormatIndex(NfIndexTableOffset.NF_BOOLEAN);
+            this.rDocument.SetNumberFormat(this.aPos, index);
+            this.mbNeedsNumberFormat = false;
+          }
+          if (format === SvNumFormatType.LOGICAL || this.nFormatType === SvNumFormatType.LOGICAL)
+            this.nFormatType = format;
         } finally {
           interpreter.Dispose();
         }

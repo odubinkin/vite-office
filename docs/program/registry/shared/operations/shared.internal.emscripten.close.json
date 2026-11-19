@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.emscripten.close",
+    "modulePath": "apps/office/src/external/emscripten/file.ts",
+    "symbol": "close",
+    "classification": "browser-adaptation",
+    "capabilityId": "CAP-50103a1f-6aa6-4b77-b0c4-bd8cf3c650f0",
+    "description": "Actual pinned libc close for source native file-open failure cleanup, ignoring the native close status as upstream does. No alternate resource registry or filesystem."
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-4ddbda7f-f247-4986-8e38-1f88dea4ff29",
+    "capabilityId": "CAP-4ddbda7f-f247-4986-8e38-1f88dea4ff29",
+    "suite": "shared",
+    "subsystem": "zip-background-entry-task",
+    "type": "model",
+    "maturity": "mapped",
+    "assertions": [
+      "Actual source background entry task writes original compressed bytes to native TempFileFastService and exposes genuine input/entry ownership.",
+      "Actual errors retain typed UNO fields/Context through the neutral exception ABI until the final pointer release."
+    ],
+    "capability": "Original background ZIP entry work and temporary-file error retention prerequisites",
+    "gaps": [
+      "Original ZipOutputEntryInThread constructor/owned ZipEntry/intrusive TempFileFastService/false finished default and nested task work now use actual native compression, file and UNO owners. Source success/error input release, output/file cleanup, UNO-only inner cleanup catch, exception_ptr retention and entry move/base borrow are retained. The neutral standard-library exception_ptr facade delegates to the actual CppuHelper compiler ABI installed at composition, reusing genuine Any/generated exceptions; package code imports no browser implementation. Copies retain actual derived fields/Context until last pointer release; host Error objects stay VM-owned. No native C++ heap/pointer/atomic/TLS/fatal/OOM/nonobject JS throw parity is claimed. Source explicit ThreadPool(0) executes real task work in QA; main/DOM-free Worker writes and reopens genuine compressed output and observes actual disconnected-input error. Production shared optimal workers, producer integration, parallel compression/deflateBound/encryption/complete package/Medium/filter/UI remain unfinished. Whole executable owner coverage branch gate remains failing; no fake provider/private setter/counter change used to qualify rare constructor/cleanup failures.",
+      "Actual pinned SDK exception_ptr value operations are exposed through a neutral external/libcxx facade: empty/copy/guarded assignment/opaque equality/nonempty rethrow/destruction. Real CppuHelper composition installs the compiler ABI beside the existing getCaughtException/throwException bridge. Its actual generated Any/exception payload retains derived fields and Context until the final shared pointer releases it; ordinary host objects are VM-owned. Package source imports only the neutral standard-library contract, never browser implementation. Native addresses/C++ heap object identity/cross-realm atomics/TLS/fatal/OOM/nonobject JS throws remain unqualified. Actual background ZIP task/temp-file/error/entry transfer works in source explicit ThreadPool(0) and main/DOM-free Worker, without replacing production worker selection. Source ZipOutputEntry whole-owner branch coverage remains below90; prior failing gates remain retained. Full worker scheduler/parallel ZIP/package/Medium/filter/UI remain pending."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "package/source/zipapi/ZipOutputEntry.cxx",
+          "marker": "ZipOutputEntryInThread::createBufferFile"
+        }
+      ],
+      "tests": [
+        {
+          "path": "package/qa/cppunit/test_package.cxx",
+          "marker": "testThreadedStreams"
+        }
+      ],
+      "docs": [
+        {
+          "path": "package/inc/ZipOutputEntry.hxx",
+          "marker": "class ZipOutputEntryInThread final"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/package/source/zipapi/ZipOutputEntry.ts",
+          "marker": "ZipOutputEntryInThread"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/browser/exception-ptr.ts",
+          "marker": "initializeExceptionPointerAbi"
+        },
+        {
+          "path": "apps/office/src/external/libcxx/exception.ts",
+          "marker": "ExceptionPtr"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/package/source/zipapi/ZipOutputEntryInThread.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/browser/exception-ptr.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-zip-background-task.md",
+          "marker": "# Native background ZIP entry work prerequisites"
+        }
+      ]
+    },
+    "implemented": false,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Represented original fields and generated UNO/RTL/native mutex owners use existing host storage while native physical ABI/allocator/thread and full package/stream services remain unqualified."
+    },
+    "scopeLimitations": [
+      "Original ZipOutputEntryInThread constructor/owned ZipEntry/intrusive TempFileFastService/false finished default and nested task work now use actual native compression, file and UNO owners. Source success/error input release, output/file cleanup, UNO-only inner cleanup catch, exception_ptr retention and entry move/base borrow are retained. The neutral standard-library exception_ptr facade delegates to the actual CppuHelper compiler ABI installed at composition, reusing genuine Any/generated exceptions; package code imports no browser implementation. Copies retain actual derived fields/Context until last pointer release; host Error objects stay VM-owned. No native C++ heap/pointer/atomic/TLS/fatal/OOM/nonobject JS throw parity is claimed. Source explicit ThreadPool(0) executes real task work in QA; main/DOM-free Worker writes and reopens genuine compressed output and observes actual disconnected-input error. Production shared optimal workers, producer integration, parallel compression/deflateBound/encryption/complete package/Medium/filter/UI remain unfinished. Whole executable owner coverage branch gate remains failing; no fake provider/private setter/counter change used to qualify rare constructor/cleanup failures.",
+      "Actual pinned SDK exception_ptr value operations are exposed through a neutral external/libcxx facade: empty/copy/guarded assignment/opaque equality/nonempty rethrow/destruction. Real CppuHelper composition installs the compiler ABI beside the existing getCaughtException/throwException bridge. Its actual generated Any/exception payload retains derived fields and Context until the final shared pointer releases it; ordinary host objects are VM-owned. Package source imports only the neutral standard-library contract, never browser implementation. Native addresses/C++ heap object identity/cross-realm atomics/TLS/fatal/OOM/nonobject JS throws remain unqualified. Actual background ZIP task/temp-file/error/entry transfer works in source explicit ThreadPool(0) and main/DOM-free Worker, without replacing production worker selection. Source ZipOutputEntry whole-owner branch coverage remains below90; prior failing gates remain retained. Full worker scheduler/parallel ZIP/package/Medium/filter/UI remain pending."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "zip-background-entry-work"
+  }
+}

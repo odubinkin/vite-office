@@ -1,5 +1,6 @@
 /** @fileoverview Generated from the pinned C headers and binding AST by scripts/build-libxml2-wasm.py; do not edit. */
 export interface LibXml2 {
+  FS: EmscriptenFS;
   HEAPU8: Uint8Array;
   HEAP32: Int32Array;
   _malloc(arg0: number): number;
@@ -7,9 +8,11 @@ export interface LibXml2 {
   _xmlAddChild(parent: number, cur: number): number;
   _xmlCopyDoc(doc: number, recursive: number): number;
   _xmlCopyNode(node: number, recursive: number): number;
+  _xmlCreatePushParserCtxt(sax: number, user_data: number, chunk: number, size: number, filename: number): number;
   _xmlCtxtGetLastError(ctx: number): number;
   _xmlCtxtReadFile(ctxt: number, filename: number, encoding: number, options: number): number;
   _xmlCtxtReadIO(ctxt: number, ioread: number, ioclose: number, ioctx: number, URL: number, encoding: number, options: number): number;
+  _xmlCtxtUseOptions(ctxt: number, options: number): number;
   _xmlDocCopyNode(node: number, doc: number, recursive: number): number;
   _xmlDocGetRootElement(doc: number): number;
   _xmlDocSetRootElement(doc: number, root: number): number;
@@ -21,6 +24,7 @@ export interface LibXml2 {
   _xmlFreeParserCtxt(ctxt: number): void;
   _xmlGetLastChild(parent: number): number;
   _xmlGetNsProp(node: number, name: number, nameSpace: number): number;
+  _xmlGetPredefinedEntity(name: number): number;
   _xmlGetProp(node: number, name: number): number;
   _xmlHasNsProp(node: number, name: number, nameSpace: number): number;
   _xmlHasProp(node: number, name: number): number;
@@ -34,6 +38,7 @@ export interface LibXml2 {
   _xmlNewDocProp(doc: number, name: number, value: number): number;
   _xmlNewDocRawNode(doc: number, ns: number, name: number, content: number): number;
   _xmlNewDocText(doc: number, content: number): number;
+  _xmlNewEntity(doc: number, name: number, type: number, publicId: number, systemId: number, content: number): number;
   _xmlNewIOInputStream(ctxt: number, input: number, enc: number): number;
   _xmlNewNs(node: number, href: number, prefix: number): number;
   _xmlNewNsProp(node: number, ns: number, name: number, value: number): number;
@@ -46,10 +51,13 @@ export interface LibXml2 {
   _xmlNodeSetContent(cur: number, content: number): number;
   _xmlNodeSetName(cur: number, name: number): void;
   _xmlOutputBufferCreateIO(iowrite: number, ioclose: number, ioctx: number, encoder: number): number;
+  _xmlParseChunk(ctxt: number, chunk: number, size: number, terminate: number): number;
   _xmlParserInputBufferCreateIO(ioread: number, ioclose: number, ioctx: number, enc: number): number;
   _xmlReadMemory(buffer: number, size: number, URL: number, encoding: number, options: number): number;
   _xmlReconciliateNs(doc: number, tree: number): number;
   _xmlRemoveProp(cur: number): number;
+  _xmlSAX2GetColumnNumber(ctx: number): number;
+  _xmlSAX2GetLineNumber(ctx: number): number;
   _xmlSaveFileTo(buf: number, cur: number, encoding: number): number;
   _xmlSearchNs(doc: number, node: number, nameSpace: number): number;
   _xmlSearchNsByHref(doc: number, node: number, href: number): number;
@@ -76,12 +84,14 @@ export interface LibXml2 {
   _xmlXPathRegisterFuncLookup(ctxt: number, f: number, funcCtxt: number): void;
   _xmlXPathRegisterNs(ctxt: number, prefix: number, ns_uri: number): number;
   _xmlXPathRegisterVariableLookup(ctxt: number, f: number, data: number): void;
+  _strtoul(arg0: number, arg1: number, arg2: number): number;
   _office_xmlVersion(): number;
   _office_xmlFree(value: number): void;
   _office_xmlXPathNodeSetGetLength(set: number): number;
   _office_xmlXPathNodeSetItem(set: number, index: number): number;
   _office_xmlParserInstallCallbacks(context: number, error: number, warning: number, resolver: number): void;
   _office_xmlXPathSetGenericError(sink: number): void;
+  _office_xmlFastParserCallbacks(start: number, end: number, characters: number, instruction: number, entity: number): number;
   _office_node_type_get(p: number): number;
   _office_node_type_set(p: number, value: number): void;
   _office_node_name_get(p: number): number;
@@ -122,6 +132,8 @@ export interface LibXml2 {
   _office_dtd_entities_set(p: number, value: number): void;
   _office_dtd_notations_get(p: number): number;
   _office_dtd_notations_set(p: number, value: number): void;
+  _office_entity_content_get(p: number): number;
+  _office_entity_content_set(p: number, value: number): void;
   _office_entity_publicId_get(p: number): number;
   _office_entity_publicId_set(p: number, value: number): void;
   _office_entity_systemId_get(p: number): number;
@@ -138,6 +150,8 @@ export interface LibXml2 {
   _office_parser_private_set(p: number, value: number): void;
   _office_parser_sax_get(p: number): number;
   _office_parser_sax_set(p: number, value: number): void;
+  _office_parser_doc_get(p: number): number;
+  _office_parser_doc_set(p: number, value: number): void;
   _office_error_message_get(p: number): number;
   _office_error_message_set(p: number, value: number): void;
   _office_error_line_get(p: number): number;
@@ -146,6 +160,55 @@ export interface LibXml2 {
   _office_error_column_set(p: number, value: number): void;
   _office_error_level_get(p: number): number;
   _office_error_level_set(p: number, value: number): void;
+  _osl_createMutex(): number;
+  _osl_destroyMutex(pointer: number): void;
+  _osl_acquireMutex(pointer: number): number;
+  _osl_tryToAcquireMutex(pointer: number): number;
+  _osl_releaseMutex(pointer: number): number;
+  _osl_getGlobalMutex(): number;
+  _office_std_mutex_create(): number;
+  _office_std_mutex_destroy(mutex: number): void;
+  _office_std_mutex_lock(mutex: number): void;
+  _office_std_mutex_unlock(mutex: number): void;
+  _getenv(arg0: number): number;
+  _setenv(arg0: number, arg1: number, arg2: number): number;
+  _unsetenv(arg0: number): number;
+  _office_locale_codeset(name: number, buffer: number, capacity: number): number;
+  _office_process_locale_lock(): void;
+  _office_process_locale_unlock(): void;
+  _realpath(arg0: number, arg1: number): number;
+  _abort(): void;
+  _close(arg0: number): number;
+  _office_file_path_max(): number;
+  _office_file_errno(): number;
+  _office_file_open(path: number, flags: number, mode: number): number;
+  _office_file_lock(fd: number): number;
+  _office_file_set_overflow(): void;
+  _osl_getCurrentSecurity(): number;
+  _osl_freeSecurityHandle(security: number): void;
+  _office_security_home(security: number): number;
+  _geteuid(): number;
+  _office_local_hostname(useFQDN: number, output: number): number;
+  _office_file_status_size(): number;
+  _office_file_access(path: number, mode: number): number;
+  _office_file_lstat(path: number, fields: number): number;
+  _office_file_dtype_type(dtype: number): number;
+  _office_file_stat(path: number, fields: number): number;
+  _office_file_copy_open(path: number, mode: number): number;
+  _office_file_set_errno(value: number): void;
+  _rename(arg0: number, arg1: number): number;
+  _unlink(arg0: number): number;
+  _readlink(arg0: number, arg1: number, arg2: number): number;
+  _symlink(arg0: number, arg1: number): number;
+  _write(arg0: number, arg1: number, arg2: number): number;
+  _mkdir(arg0: number, arg1: number): number;
+  _rmdir(arg0: number): number;
+  _getpid(): number;
+  _opendir(arg0: number): number;
+  _closedir(arg0: number): number;
+  _readdir(arg0: number): number;
+  _office_directory_name(entry: number): number;
+  _office_directory_type(entry: number): number;
   UTF8ToString(pointer: number, maxBytesToRead?: number): string;
   lengthBytesUTF8(value: string): number;
   stringToUTF8(value: string, pointer: number, maxBytes: number): void;
@@ -153,5 +216,27 @@ export interface LibXml2 {
   setValue(pointer: number, value: number, type: string): void;
   addFunction(callback: (...args: number[]) => number | void, signature: string): number;
   removeFunction(pointer: number): void;
+}
+/** Actual public Emscripten4.0.19 FS API subset; opaque stream handles are returned by the runtime, never manufactured. */
+export interface EmscriptenFSStream { readonly fd: number; readonly path: string; readonly position: number; readonly stream_ops: { fsync?: (stream: EmscriptenFSStream) => number }; }
+export interface EmscriptenFSStat { readonly size: number; readonly mode: number; }
+export interface EmscriptenFS {
+  open(path: string, flags: string | number, mode?: number): EmscriptenFSStream;
+  close(stream: EmscriptenFSStream): void;
+  read(stream: EmscriptenFSStream, buffer: Uint8Array, offset: number, length: number, position?: number): number;
+  write(stream: EmscriptenFSStream, buffer: Uint8Array, offset: number, length: number, position?: number): number;
+  llseek(stream: EmscriptenFSStream, offset: number, whence: number): number;
+  getStreamChecked(fd: number): EmscriptenFSStream;
+  fstat(fd: number): EmscriptenFSStat;
+  stat(path: string): EmscriptenFSStat;
+  lstat(path: string): EmscriptenFSStat;
+  chmod(path: string, mode: number): void;
+  readlink(path: string): string;
+  ftruncate(fd: number, length: number): void;
+  mkdir(path: string, mode?: number): void;
+  unlink(path: string): void;
+  rmdir(path: string): void;
+  symlink(oldpath: string, newpath: string): void;
+  readdir(path: string): string[];
 }
 export default function createLibXml2(options?: Record<string, unknown>): Promise<LibXml2>;

@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/oox/source/helper/storagebase.ts",
+    "status": "mapped",
+    "upstreamPath": "oox/source/helper/storagebase.cxx",
+    "localSymbols": [
+      "StorageBase",
+      "StorageRef",
+      "lclSplitFirstElement"
+    ],
+    "upstreamSymbols": [
+      "StorageBase::StorageBase",
+      "StorageBase::openInputStream",
+      "StorageBase::openOutputStream",
+      "StorageBase::getSubStorage",
+      "StorageBase::copyToStorage",
+      "StorageBase::commit"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native logical RTL/UNO/source pointer ownership and explicit lifetime lowering are retained; C++ physical standard-library/atomic/ABI layout is not claimed."
+    },
+    "preservedResponsibilities": [
+      "Preserves cached stream and child storage traversal, child-first storage commit, native references and the default diagnostic-only transaction behavior. The browser export can request transaction error propagation through the same children."
+    ],
+    "omittedResponsibilities": [
+      "Positive actual storage backend/substorage/copy/commit and full DOCX/XLSX core/model/export/UI acceptance; physical C++ standard-library/ABI/differential remain unfinished."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/helper/storagebase.ts",
+          "marker": "StorageBase"
+        },
+        {
+          "path": "apps/office/src/oox/source/helper/native-storage.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/oox/source/helper/storagebase.cxx",
+          "marker": "StorageBase::StorageBase"
+        }
+      ]
+    }
+  }
+}

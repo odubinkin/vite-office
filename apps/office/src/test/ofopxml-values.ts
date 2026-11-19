@@ -13,8 +13,15 @@ import {
   cppu_detail_getUnoType_StringPair as pairType,
 } from "../udkapi/com/sun/star/beans/StringPair";
 import { OUString, type OUStringConstReference } from "../sal/inc/rtl/ustring";
-import { ReadContentTypeSequence } from "../comphelper/source/xml/ofopxmlhelper";
+import {
+  ReadContentTypeSequence,
+  ReadRelationsInfoSequence,
+} from "../comphelper/source/xml/ofopxmlhelper";
+import { getProcessComponentContext } from "../comphelper/inc/processfactory";
+import { Reference } from "../cppu/inc/com/sun/star/uno/Reference";
 import type { InputSource } from "../offapi/com/sun/star/xml/sax/InputSource";
+import type { XComponentContext } from "../udkapi/com/sun/star/uno/XComponentContext";
+import { inputFromBytes } from "./oox-input";
 /** Pure caller fixture, never an initialized UNO aggregate. */
 export interface PairInput {
   readonly First: string;
@@ -118,9 +125,40 @@ export function observePairRows(rows: SequenceReference<Sequence<StringPair>>): 
     );
   return result;
 }
+/** Reads fixture content types using the real stream service. @param xml - XML text or fixture stream. @returns Owned content types. */
+export function readContentTypeFixture(
+  xml: string | InputSource,
+): ReturnType<typeof ReadContentTypeSequence> {
+  const input =
+    typeof xml === "string"
+      ? inputFromBytes(new TextEncoder().encode(xml))
+      : new Reference(xml.aInputStream);
+  const context = new Reference<XComponentContext>(getProcessComponentContext());
+  try {
+    return ReadContentTypeSequence(input, context);
+  } finally {
+    context.dispose();
+    input.dispose();
+  }
+}
+
+/** Reads fixture relationships using the real stream service. @param xml - XML text. @returns Owned relationships. */
+export function readRelationsFixture(xml: string): ReturnType<typeof ReadRelationsInfoSequence> {
+  const input = inputFromBytes(new TextEncoder().encode(xml)),
+    name = nativeString(".rels"),
+    context = new Reference<XComponentContext>(getProcessComponentContext());
+  try {
+    return ReadRelationsInfoSequence(input, name.subView(0), context);
+  } finally {
+    context.dispose();
+    name.dispose();
+    input.dispose();
+  }
+}
+
 /** Owns the actual returned content type result during observation. @param xml - Input. @returns Assertion records. */
 export function readContentTypes(xml: string | InputSource): PairInput[][] {
-  const result = ReadContentTypeSequence(xml);
+  const result = readContentTypeFixture(xml);
   try {
     return observePairRows(result);
   } finally {

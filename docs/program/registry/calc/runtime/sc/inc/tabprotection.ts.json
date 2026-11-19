@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/tabprotection.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "range-list",
+    "capabilityIds": [
+      "CAP-a5dc82db-3863-42b0-a6b2-12710e031292",
+      "CAP-94d5fea0-8828-433a-bfbd-cc403666ea0d",
+      "CAP-e45dec6f-9f01-4928-ab52-11d7683c09bf"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sc/inc/tabprotection.ts#ScTableProtectionOption",
+        "vendor/libreoffice-reference/sc/inc/tabprotection.hxx#class SC_DLLPUBLIC ScTableProtection",
+        "apps/office/src/sc/source/filter/oox/excelfilter.sheet-protection.test.ts",
+        "apps/office/src/sc/source/filter/xml/ods-sheet-protection.test.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.enhanced-protection.test.ts"
+      ],
+      "justification": "Preserves the original option enum ordering and the imported OOXML hash record shape. Enhanced protection and the shared password-verifier contracts remain pending. Declares the original native digest families and stored verifier bytes. Defines the enhanced protection record's native range list and OOXML descriptor and verifier metadata.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScTableProtectionOption",
+        "ScOoxPasswordHash"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sc/inc/tabprotection.hxx",
+      "upstreamSymbols": [
+        "class SC_DLLPUBLIC ScTableProtection",
+        "struct ScOoxPasswordHash"
+      ]
+    }
+  }
+}

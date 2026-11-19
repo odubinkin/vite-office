@@ -1,4 +1,5 @@
-/** @fileoverview Original ordinary formula reference Init/Update/Done orchestration;VCL overlays,merged,embedded and fill services remain unported. */
+/** @fileoverview Original ordinary formula reference Init/Update/Done orchestration;VCL overlays,embedded and fill services remain unported. */
+import { HasAttrFlags } from "../../../inc/global";
 import { ScRange } from "../../../inc/address";
 import type { ScTabView } from "../inc/tabview";
 import { ScRefType } from "../inc/viewdata";
@@ -29,10 +30,29 @@ export function UpdateRef(this: ScTabView, col: number, row: number, tab: number
     this.InitRefMode(col, row, tab, ScRefType.SC_REFTYPE_REF);
   }
   if (col === data.GetRefEndX() && row === data.GetRefEndY() && tab === data.GetRefEndZ()) return;
-  data.SetRefEnd(col, row, tab);
+  const doc = data.GetDocument();
+  const startCol = data.GetRefStartX(),
+    startRow = data.GetRefStartY();
+  const endCol: [number] = [col],
+    endRow: [number] = [row];
+  if (doc.HasAttrib(new ScRange(col, row, tab), HasAttrFlags.Merged))
+    doc.ExtendMerge(startCol, startRow, endCol, endRow, tab);
+
+  data.SetRefEnd(endCol[0], endRow[0], tab);
+  const currentTab = data.CurrentTabForData();
+  if (startCol === endCol[0] && startRow === endRow[0])
+    doc.ExtendMerge(startCol, startRow, endCol, endRow, currentTab);
+  const firstCol: [number] = [startCol],
+    firstRow: [number] = [startRow];
+  if (
+    (startCol > endCol[0] || startRow > endRow[0]) &&
+    doc.HasAttrib(new ScRange(startCol, startRow, currentTab), HasAttrFlags.Merged)
+  )
+    doc.ExtendMerge(startCol, startRow, firstCol, firstRow, currentTab);
+
   module?.SetReference(
-    new ScRange(data.GetRefStartX(), data.GetRefStartY(), data.GetRefStartZ(), col, row, tab),
-    data.GetDocument(),
+    new ScRange(firstCol[0], firstRow[0], data.GetRefStartZ(), endCol[0], endRow[0], tab),
+    doc,
   );
 }
 /** Original completion optionally starts another native argument before clearing the drag lifetime. @param this - Actual view. @param continued - Add another reference argument. @returns Nothing. */

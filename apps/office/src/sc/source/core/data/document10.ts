@@ -5,10 +5,11 @@ import type { OUString, OUStringConstReference } from "../../../../sal/inc/rtl/u
 import { SfxHintId } from "../../../../svl/inc/hint";
 import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import { MAXTAB, SC_TAB_APPEND, ValidTab } from "../../../inc/address";
-import { ScMF } from "../../../inc/attrib";
+import { ScMF, type ScMergeFlagAttr } from "../../../inc/attrib";
 import { ScHorizontalCellIterator } from "../../../inc/dociter";
 import { InsertDeleteFlags, UpdateRefMode } from "../../../inc/global";
 import type { ScPatternAttr } from "../../../inc/patattr";
+import { ATTR_MERGE_FLAG } from "../../../inc/scitems";
 import { ScRangeList } from "../../../inc/rangelst";
 import { RefUpdateContext, SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
 import { AutoCalcSwitch } from "../../../inc/scopetools";
@@ -262,6 +263,83 @@ export function ExtendMerge(
   if (refresh) this.RefreshAutoFilter(col, row, endCol[0], endRow[0], tab);
   return found;
 }
+/** Reads a cell's native merge flags. @param this - Document. @param col - Column. @param row - Row. @param tab - Sheet. @returns The effective merge flags. */
+export function GetMergeFlags(
+  this: ScDocument,
+  col: number,
+  row: number,
+  tab: number,
+): ScMergeFlagAttr | undefined {
+  return this.FetchTable(tab)?.GetPattern(col, row)?.GetItem(ATTR_MERGE_FLAG) as
+    ScMergeFlagAttr | undefined;
+}
+
+/** Walks backwards from a covered cell to the original merge anchor. @param this - Document. @param col - Column. @param row - Row. @param tab - Sheet. @returns Anchor coordinates. */
+export function SkipOverlapped(
+  this: ScDocument,
+  col: number,
+  row: number,
+  tab: number,
+): [number, number] {
+  while (GetMergeFlags.call(this, col, row, tab)?.IsHorOverlapped()) --col;
+  while (GetMergeFlags.call(this, col, row, tab)?.IsVerOverlapped()) --row;
+  return [col, row];
+}
+
+/** Extends the leading edges to include merge anchors on every sheet in the range. @param this - Document. @param range - Ordered cell coordinates with either sheet direction. @returns Nothing. */
+export function ExtendOverlapped(this: ScDocument, range: ScRange): void {
+  const oldCol = range.aStart.Col(),
+    oldRow = range.aStart.Row();
+  const endCol = range.aEnd.Col(),
+    endRow = range.aEnd.Row();
+  if (!this.ValidColRow(oldCol, oldRow) || !this.ValidColRow(endCol, endRow)) return;
+  const firstTab = Math.min(range.aStart.Tab(), range.aEnd.Tab());
+  const lastTab = Math.max(range.aStart.Tab(), range.aEnd.Tab());
+  for (let tab = firstTab; tab <= lastTab && tab < this.GetTableCount(); ++tab) {
+    const table = this.FetchTable(tab);
+    if (!table) continue;
+    let startRow = oldRow;
+    for (let col = oldCol; col <= endCol; ++col)
+      while (GetMergeFlags.call(this, col, startRow, tab)?.IsVerOverlapped()) --startRow;
+    range.aStart.SetRow(Math.min(range.aStart.Row(), startRow));
+
+    const column = table.GetColumnData(oldCol);
+    for (let row = oldRow; row <= endRow;) {
+      const first: [number] = [row],
+        last: [number] = [this.MaxRow()];
+      const flags = column.GetPatternRange(first, last, row)?.GetItem(ATTR_MERGE_FLAG) as
+        ScMergeFlagAttr | undefined;
+      if (flags?.IsHorOverlapped()) {
+        for (let coveredRow = row; coveredRow <= Math.min(last[0], endRow); ++coveredRow) {
+          let startCol = oldCol;
+          while (GetMergeFlags.call(this, startCol, coveredRow, tab)?.IsHorOverlapped()) --startCol;
+          range.aStart.SetCol(Math.min(range.aStart.Col(), startCol));
+        }
+      }
+      row = last[0] + 1;
+    }
+  }
+}
+
+/** Extends the trailing edges to include all merged cells anchored inside the range. @param this - Document. @param range - Cell coordinates across selected sheets. @param refresh - Refresh merge flags. @returns Whether a merge was found. */
+export function ExtendMergeRange(this: ScDocument, range: ScRange, refresh = false): boolean {
+  const endCol = range.aEnd.Col(),
+    endRow = range.aEnd.Row();
+  const firstTab = Math.min(range.aStart.Tab(), range.aEnd.Tab());
+  const lastTab = Math.max(range.aStart.Tab(), range.aEnd.Tab());
+  let found = false;
+  for (let tab = firstTab; tab <= lastTab && tab < this.GetTableCount(); ++tab) {
+    const col: [number] = [endCol],
+      row: [number] = [endRow];
+    if (this.ExtendMerge(range.aStart.Col(), range.aStart.Row(), col, row, tab, refresh)) {
+      found = true;
+      range.aEnd.SetCol(Math.max(range.aEnd.Col(), col[0]));
+      range.aEnd.SetRow(Math.max(range.aEnd.Row(), row[0]));
+    }
+  }
+  return found;
+}
+
 /** Original nested formatter-merge scope on the actual document. Only the genuine same-formatter branch is admitted;foreign formatter merging has no dummy exchange map. */
 class NumFmtMergeHandler {
   /** Runs original formatter queries before their identity check. @param doc - Actual destination. @param source - Clipboard source. @returns Scope. */
@@ -883,4 +961,34 @@ export function ApplyPatternAreaTab(
   delta: import("../../../inc/patattr").ScPatternAttr,
 ): boolean {
   return this.FetchTable(tab)?.ApplyPatternArea(startCol, startRow, endCol, endRow, delta) ?? false;
+}
+
+/** Checks the simple and multi-mark portions on every selected sheet. @param this - Workbook. @param marks - Native mark data. @param onlyMatrix - Optional matrix-only failure result. @returns Whether the selection is editable. */
+export function IsSelectionEditable(
+  this: ScDocument,
+  marks: ScMarkData,
+  onlyMatrix: [boolean] | null = null,
+): boolean {
+  const { aStart, aEnd } = marks.GetMarkArea();
+  let editable = true;
+  let matrix = onlyMatrix !== null;
+  for (const tab of marks) {
+    if (tab >= this.GetTableCount()) break;
+    const sheet = this.FetchTable(tab);
+    if (!sheet) continue;
+    if (
+      marks.IsMarked() &&
+      !sheet.IsBlockEditable(aStart.Col(), aStart.Row(), aEnd.Col(), aEnd.Row(), onlyMatrix)
+    ) {
+      editable = false;
+      if (onlyMatrix) matrix = onlyMatrix[0];
+    }
+    if (marks.IsMultiMarked() && !sheet.IsSelectionEditable(marks, onlyMatrix)) {
+      editable = false;
+      if (onlyMatrix) matrix = onlyMatrix[0];
+    }
+    if (!editable && !matrix) break;
+  }
+  if (onlyMatrix) onlyMatrix[0] = !editable && matrix;
+  return editable;
 }

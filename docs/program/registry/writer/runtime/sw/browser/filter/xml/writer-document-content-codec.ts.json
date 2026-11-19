@@ -18,9 +18,10 @@
       "evidence": [
         "apps/office/src/sw/browser/filter/xml/writer-document-content-codec.ts#encodeWriterTableSteps",
         "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
-        "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts"
+        "apps/office/src/sw/source/filter/xml/odt-table-roundtrip.test.ts",
+        "apps/office/src/sw/browser/filter/xml/writer-page-story-codec.test.ts"
       ],
-      "justification": "Transports original Writer text and table sections through existing item and numbering owners. The same section codec serves body tables, nested cell tables and anchored frame tables.",
+      "justification": "Transports original Writer text and table sections through existing item and numbering owners. The same section codec serves body tables, nested cell tables and anchored frame tables. Shares the existing recursive paragraph and table codec for ordered actual text-frame and page story sections.",
       "knownViolations": [],
       "localSymbols": [
         "encodeWriterTableSteps",

@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/misc/strmadpt.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-uno-stream-adapters",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/misc/strmadpt.ts",
+        "apps/office/src/svl/source/misc/strmadpt.test.ts"
+      ],
+      "justification": "Original SvInputStream/SvOutputStream UNO-to-SvStream adapters and complete consumed SvDataPipe_Impl ring/page protocol retain actual references/Sequence/IOException, lazy seekability, end sentinel restoration, source1000byte pages/minimum100page recycling and byte pointer displacements. Original direct bypass missing source advance, unchecked nonseekable forward seek count and swallowed output flush IOException are preserved and tested with actual source objects. JS GC manages storage; original marks remain private/unmodified (source exposes no mutator). Native allocator/OOM/invalid-pointer/overflow/ABI/thread domains, whole-owner90, file/temp/backend/model/UI and broader original QA remain unfinished. No fake source stream/seek/provider or injected private state.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvInputStream",
+        "SvOutputStream",
+        "SvDataPipe_Impl"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "svl/source/misc/strmadpt.cxx",
+      "upstreamSymbols": [
+        "SvInputStream",
+        "SvOutputStream",
+        "SvDataPipe_Impl"
+      ]
+    }
+  }
+}

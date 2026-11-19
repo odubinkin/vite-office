@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/xstor/xfactory.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/xstor/xfactory.cxx",
+    "localSymbols": [
+      "OStorageFactory",
+      "CheckPackageSignature_Impl",
+      "package_OStorageFactory_get_implementation"
+    ],
+    "upstreamSymbols": [
+      "OStorageFactory::createInstance",
+      "OStorageFactory::createInstanceWithArguments",
+      "CheckPackageSignature_Impl",
+      "package_OStorageFactory_get_implementation"
+    ],
+    "preservedResponsibilities": [
+      "Registers the original two StorageFactory names as a single component. Genuine Any values dispatch source, open mode and media descriptor. Signature checks and cursor reset, typed errors, original default temporary PACKAGE storage and synchronous ZIP/OFOPXML input/output are exercised through actual service-manager calls."
+    ],
+    "omittedResponsibilities": [
+      "URL routing depends on the genuine SimpleFileAccess service. The browser currently uses supplied streams. Complete OStorage and PACKAGE/ODF feature parity remain open."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "URL routing depends on the genuine SimpleFileAccess service. The browser currently uses supplied streams. Complete OStorage and PACKAGE/ODF feature parity remain open."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/xstor/xfactory.ts",
+          "marker": "OStorageFactory"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xfactory.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/xstor/xfactory.cxx",
+          "marker": "OStorageFactory::createInstance"
+        },
+        {
+          "path": "package/source/xstor/xfactory.cxx",
+          "marker": "OStorageFactory::createInstanceWithArguments"
+        },
+        {
+          "path": "package/source/xstor/xfactory.cxx",
+          "marker": "CheckPackageSignature_Impl"
+        },
+        {
+          "path": "package/source/xstor/xfactory.cxx",
+          "marker": "package_OStorageFactory_get_implementation"
+        }
+      ]
+    }
+  }
+}

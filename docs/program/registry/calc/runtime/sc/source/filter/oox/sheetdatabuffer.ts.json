@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/oox/sheetdatabuffer.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-sheet-data-models",
+    "capabilityIds": [
+      "CAP-6b87be4e-6c34-408a-ae35-56088721171f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/oox/sheetdatabuffer.ts",
+        "vendor/libreoffice-reference/sc/source/filter/oox/sheetdatabuffer.cxx",
+        "apps/office/src/sc/source/filter/oox/sheetdatabuffer.test.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+        "apps/office/src/sc/source/filter/oox/typed-date-cells.test.ts",
+        "vendor/libreoffice-reference/sc/source/filter/oox/sheetdatabuffer.cxx#SheetDataBuffer::setDateCell",
+        "vendor/libreoffice-reference/sc/source/filter/oox/sheetdatabuffer.cxx#SheetDataBuffer::setBooleanCell",
+        "vendor/libreoffice-reference/sc/source/filter/oox/sheetdatabuffer.cxx#SheetDataBuffer::setErrorCell"
+      ],
+      "justification": "Original value defaults, copies and range predicates retain native ownership and adjacency checks (CALC687). The worksheet finalizer applies merge borders and the merged range to the actual Calc document after importing cell data. Complete WorksheetHelper/WorkbookGlobals and SheetDataBuffer style, formula and cache orchestration remain open. Explicit dates retain the supplied XF and fall back to text on invalid input. Boolean and error scalars use the existing formula compiler and the native logical number format. Plain shared strings set native text, while multiple portions and multiline text create the actual Calc EditTextObject. An unresolved shared string leaves the previously applied XF. Routes the actual effective first-portion font and stores the native rich EditTextObject.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CellModel",
+        "CellFormulaModel",
+        "DataTableModel",
+        "XfIdRowRange",
+        "MergedRange",
+        "SheetDataBuffer"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/oox/sheetdatabuffer.cxx",
+      "upstreamSymbols": [
+        "CellModel::CellModel",
+        "CellFormulaModel::CellFormulaModel",
+        "DataTableModel::DataTableModel",
+        "SheetDataBuffer::XfIdRowRange::tryExpand",
+        "SheetDataBuffer::MergedRange::tryExpand",
+        "SheetDataBuffer::finalizeImport",
+        "SheetDataBuffer::setDateCell",
+        "SheetDataBuffer::setBooleanCell",
+        "SheetDataBuffer::setErrorCell",
+        "SheetDataBuffer::setStringCell"
+      ]
+    }
+  }
+}

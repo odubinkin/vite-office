@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.emscripten.closeDirectory",
+    "modulePath": "apps/office/src/external/emscripten/file.ts",
+    "symbol": "closeDirectory",
+    "classification": "browser-adaptation",
+    "capabilityId": "CAP-50103a1f-6aa6-4b77-b0c4-bd8cf3c650f0",
+    "description": "Actual pinned libc closedir with captured native status/errno for original OSL directory cursor cleanup. DIR storage remains owned by libc; no alternate resource registry or host filesystem."
+  }
+}

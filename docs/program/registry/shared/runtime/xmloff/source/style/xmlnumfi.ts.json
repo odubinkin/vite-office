@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/style/xmlnumfi.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-a5afdcf9-2789-4ea8-823e-7bb6a5bed84f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/xmloff/source/style/xmlnumfi.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx",
+        "apps/office/src/sc/source/filter/excel/excrecds.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx#SvXMLNumFmtDefaults::GetDefaultDateFormat",
+        "apps/office/src/sc/source/filter/oox/typed-date-cells.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx#NF_BOOLEAN"
+      ],
+      "justification": "XML numeric declarations and positioned literals compile in the actual Calc number formatter, including styles referred to by the primary browser record. Full conditional, localized and multi-section data-style import is open. The ODF date-style context selects original system short or long date keys for matching automatic language-derived date fields. Nonmatching and explicit styles use the normal scanner. Resolves the unadorned ODF boolean-style to the original builtin logical format.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvXMLNumFormatContext",
+        "SvXMLNumFmtElementContext"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/style/xmlnumfi.cxx",
+      "upstreamSymbols": [
+        "SvXMLNumFormatContext::CreateAndInsert",
+        "SvXMLNumFmtElementContext::AddEmbeddedElement",
+        "SvXMLNumFmtDefaults::GetDefaultDateFormat",
+        "NF_BOOLEAN"
+      ]
+    }
+  }
+}

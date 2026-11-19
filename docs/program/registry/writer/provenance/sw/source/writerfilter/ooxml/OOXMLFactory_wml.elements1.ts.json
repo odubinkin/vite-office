@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements1.ts",
+    "localSymbols": [
+      "elements1"
+    ],
+    "upstreamPath": "sw/source/writerfilter/ooxml/factoryimpl_ns.py",
+    "upstreamSymbols": [
+      "factoryCreateElementMap",
+      "factoryCreateElementMapInner"
+    ],
+    "preservedResponsibilities": [
+      "Reassembles the ordered, unchanged factoryCreateElementMap output from two generated source files under one factory lookup."
+    ],
+    "omittedResponsibilities": [
+      "Only the representation of generated element lookup data is covered."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements1.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Reassembles the ordered, unchanged factoryCreateElementMap output from two generated source files under one factory lookup."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements1.ts",
+          "marker": "elements1"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/ooxml/factoryimpl_ns.py",
+          "marker": "factoryCreateElementMapInner"
+        }
+      ]
+    }
+  }
+}

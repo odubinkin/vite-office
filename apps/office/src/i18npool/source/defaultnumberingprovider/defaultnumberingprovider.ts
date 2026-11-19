@@ -1,0 +1,37 @@
+/** @fileoverview Decimal-zero identifiers and formatting from LibreOffice's DefaultNumberingProvider. */
+
+import * as N from "../../../offapi/com/sun/star/style/NumberingType";
+
+const decimalZeroWidths = new Map<number, number>([
+  [N.ARABIC_ZERO, 2],
+  [N.ARABIC_ZERO3, 3],
+  [N.ARABIC_ZERO4, 4],
+  [N.ARABIC_ZERO5, 5],
+]);
+
+/** Formats a decimal-zero type using its native minimum width. @param type - UNO numbering type. @param value - Positive numbering value. @returns Marker or undefined for other families. */
+export function formatArabicZero(type: number, value: number): string | undefined {
+  const width = decimalZeroWidths.get(type);
+  return width === undefined ? undefined : String(value).padStart(width, "0");
+}
+
+const supportedTypes = new Map<string, number>();
+for (const type of decimalZeroWidths.keys()) {
+  const samples = [1, 2, 3].map(
+    /** Formats one number in the source identifier. @param value - Sample value. @returns Decimal marker. */
+    (value) => formatArabicZero(type, value),
+  );
+  const identifier = samples.join(", ") + ", ...";
+  supportedTypes.set(identifier, type);
+}
+
+/** Returns the provider identifier for a supported extended numbering type. @param type - UNO numbering type. @returns Identifier or an empty string. */
+export function getNumberingIdentifier(type: number): string {
+  for (const [identifier, candidate] of supportedTypes) if (candidate === type) return identifier;
+  return "";
+}
+
+/** Looks up an extended numbering identifier. @param identifier - Provider identifier. @returns UNO type when supported. */
+export function findNumberingType(identifier: string): number | undefined {
+  return supportedTypes.get(identifier);
+}

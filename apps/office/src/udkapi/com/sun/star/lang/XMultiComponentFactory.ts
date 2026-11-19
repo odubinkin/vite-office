@@ -1,5 +1,8 @@
 /** @fileoverview Original XMultiComponentFactory.idl contract and cppumaker-normal type binding; concrete behavior stays with component owners. */
-import type { Reference } from "../../../../../cppu/inc/com/sun/star/uno/Reference";
+import type {
+  Reference,
+  ReferenceConstParameter,
+} from "../../../../../cppu/inc/com/sun/star/uno/Reference";
 import type { Type } from "../../../../../cppu/inc/com/sun/star/uno/Type";
 import { UnoType, getTypeFromTypeDescriptionReference } from "../../../../../cppu/inc/unotype";
 import {
@@ -17,13 +20,13 @@ export interface XMultiComponentFactory extends XInterface {
   /** Original contextual creation. @param service - Exact service name. @param context - Actual context. @returns Owned instance reference. */
   createInstanceWithContext(
     service: OUStringConstReference,
-    context: Reference<XComponentContext>,
+    context: ReferenceConstParameter<XComponentContext>,
   ): Reference<XInterface>;
   /** Original contextual creation with initialization arguments. @param service - Exact service name. @param arguments_ - Original Any arguments. @param context - Actual context. @returns Owned instance reference. */
   createInstanceWithArgumentsAndContext(
     service: OUStringConstReference,
     arguments_: Sequence<Any>,
-    context: Reference<XComponentContext>,
+    context: ReferenceConstParameter<XComponentContext>,
   ): Reference<XInterface>;
   /** Original sequence of addressed Unicode names. @returns Owned sequence. */
   getAvailableServiceNames(): Sequence<rtl_uStringSlot>;

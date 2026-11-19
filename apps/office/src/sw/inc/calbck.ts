@@ -12,6 +12,7 @@ import {
 } from "./hints";
 import type { SfxPoolItem } from "../../svl/source/items/poolitem";
 import type { SwAttrSet } from "../source/core/attr/swatrset";
+import { RES_CNTNT, RES_FOOTER, RES_HEADER } from "./hintids";
 
 /** Native registration change borrows the surviving modify or an absent root parent. */
 export class ModifyChangedHint {
@@ -126,6 +127,7 @@ export class SwModify extends SwClient {
   private disposed = false;
   private notificationDepth = 0;
   private pendingHints: SwAtomicModelHint[] = [];
+  private pendingAttrSetChanges: SwAttrSet[] = [];
   /** Queries the original live Writer-listener chain, preserving native order and early termination. @param info - Borrowed nearest-node query. @returns False when a listener stops the traversal. */
   public override GetInfo(info: SwFindNearestNode): boolean {
     if (!this.m_pWriterListeners) return true;
@@ -257,13 +259,26 @@ export class SwModify extends SwClient {
     } finally {
       if (!this.IsDisposed()) {
         this.notificationDepth -= 1;
-        if (this.notificationDepth === 0 && this.pendingHints.length > 0) {
+        if (this.notificationDepth === 0) {
           const hints = Object.freeze(this.pendingHints.slice());
+          const sets = this.pendingAttrSetChanges;
           this.pendingHints = [];
-          this.DeliverWriterNotification(Object.freeze({ hints, kind: "model-transaction" }));
+          this.pendingAttrSetChanges = [];
+          try {
+            if (hints.length > 0)
+              this.DeliverWriterNotification(Object.freeze({ hints, kind: "model-transaction" }));
+          } finally {
+            for (const set of sets) releaseSectionItems(set);
+          }
         }
       }
     }
+  }
+
+  /** Releases original section items when the borrowed notification deltas leave scope. @param sets - Private attribute change deltas. @returns Nothing. */
+  ReleaseAttrSetChanges(...sets: SwAttrSet[]): void {
+    if (this.notificationDepth > 0) this.pendingAttrSetChanges.push(...sets);
+    else for (const set of sets) releaseSectionItems(set);
   }
 
   /** Detaches parent and clients safely. @returns Nothing. */
@@ -276,6 +291,8 @@ export class SwModify extends SwClient {
     this.EndListeningAll();
     this.disposed = true;
     this.pendingHints = [];
+    for (const set of this.pendingAttrSetChanges) releaseSectionItems(set);
+    this.pendingAttrSetChanges = [];
     this.notificationDepth = 0;
   }
 }
@@ -330,10 +347,19 @@ export function ClientNotifyAttrChg(
   oldSet: SwAttrSet,
   newSet: SwAttrSet,
 ): void {
-  modify.SwClientNotify(
-    modify,
-    new AttrSetChangeHint(new SwAttrSetChg(set, oldSet), new SwAttrSetChg(set, newSet)),
-  );
+  try {
+    modify.SwClientNotify(
+      modify,
+      new AttrSetChangeHint(new SwAttrSetChg(set, oldSet), new SwAttrSetChg(set, newSet)),
+    );
+  } finally {
+    modify.ReleaseAttrSetChanges(oldSet, newSet);
+  }
+}
+
+/** Releases section registration at the original stack delta lifetime boundary. Other retained notification values are plain item snapshots. @param set - Owned delta. @returns Nothing. */
+function releaseSectionItems(set: SwAttrSet): void {
+  for (const which of [RES_HEADER, RES_FOOTER, RES_CNTNT]) set.ClearItem(which);
 }
 
 /** Erased original friend access to the owner's anchor and native iterator relationships. */

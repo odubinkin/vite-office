@@ -23,7 +23,8 @@
       "ERRCODE_NONE"
     ],
     "preservedResponsibilities": [
-      "The original packed error code retains area, class and low code, independent warning bit, unsigned projection and the code-only message behavior used by file filters."
+      "The original packed error code retains area, class and low code, independent warning bit, unsigned projection and the code-only message behavior used by file filters.",
+      "Native file-error continuation adds every original ERRCODE_IO packed macro and SVSTREAM alias, validated directly against the pinned header and through native file diagnostics/SvStream warning and first-error behavior. No diagnostic numeric value, warning mask, formatter or source-location/dialog profile is changed."
     ],
     "omittedResponsibilities": [
       "Native source-location and dialog argument overloads are outside this code-only slice."
@@ -37,6 +38,10 @@
         {
           "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-diagnostic.test.ts",
           "marker": "packed warning"
+        },
+        {
+          "path": "apps/office/src/tools/source/stream/strmunx.errors.test.ts",
+          "marker": "original I/O packed macro"
         }
       ],
       "upstream": [

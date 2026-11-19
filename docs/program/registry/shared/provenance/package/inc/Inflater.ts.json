@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/inc/Inflater.ts",
+    "status": "mapped",
+    "upstreamPath": "include/package/Inflater.hxx",
+    "localSymbols": [
+      "Inflater"
+    ],
+    "upstreamSymbols": [
+      "Inflater",
+      "doInflateSegment"
+    ],
+    "preservedResponsibilities": [
+      "Original consumed XBufferedStream eager source ByteReader/native Sequence paths, one byte vector/position and original EOF/seek/unchecked skip; original Inflater/InflateZlib Sequence input/COW, segment guards, status/error/offset bookkeeping and end flags. Actual installed zip.js public WASM exports supply zlib computation, with bounded ABI windows and no replacement stream/decoder. Native allocation/ABI/OOM/undefined domains, non-ByteReader constructor execution, XUnbufferedStream/CRC/package storage/model/filter/UI and complete original package-service QA remain unfinished or unqualified. Failed whole buffered/external adapter coverages are retained independently, not diluted by core inflater coverage."
+    ],
+    "omittedResponsibilities": [
+      "Non-ByteReader real source construction, native allocation/ABI/thread domains and complete CRC/unbuffered/package/storage/model/UI acceptance."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/inc/Inflater.ts",
+          "marker": "Inflater"
+        },
+        {
+          "path": "apps/office/src/package/source/zipapi/InflateZlib.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/package/Inflater.hxx",
+          "marker": "Inflater"
+        }
+      ]
+    }
+  }
+}

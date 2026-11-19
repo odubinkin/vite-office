@@ -1,0 +1,62 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/oox/source/helper/zipstorage.native.ts",
+    "status": "mapped",
+    "upstreamPath": "oox/source/helper/zipstorage.cxx",
+    "localSymbols": [
+      "ZipStorage",
+      "literal"
+    ],
+    "upstreamSymbols": [
+      "ZipStorage::ZipStorage",
+      "ZipStorage::implOpenSubStorage",
+      "ZipStorage::implOpenInputStream",
+      "ZipStorage::implOpenOutputStream",
+      "ZipStorage::implCommit"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native logical RTL/UNO/source pointer ownership and explicit lifetime lowering are retained; C++ physical standard-library/atomic/ABI layout is not claimed."
+    },
+    "preservedResponsibilities": [
+      "Binds native storage create/open, properties and transaction operations. Original default behavior catches UNO commit errors; the caller can opt into propagation on browser export."
+    ],
+    "omittedResponsibilities": [
+      "Positive actual storage backend/substorage/copy/commit and full DOCX/XLSX core/model/export/UI acceptance; physical C++ standard-library/ABI/differential remain unfinished."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/helper/zipstorage.native.ts",
+          "marker": "ZipStorage"
+        },
+        {
+          "path": "apps/office/src/oox/source/helper/native-storage.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/package/source/xstor/xfactory.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/xmlfilterbase.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/oox/source/helper/zipstorage.cxx",
+          "marker": "ZipStorage::ZipStorage"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/oox/source/helper/zipstorage.native.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original synchronous native storage is distinct from the older asynchronous browser ZipStorage transport until the real XStorage/backend route is implemented; no hidden alias or cache substitute."
+    }
+  }
+}

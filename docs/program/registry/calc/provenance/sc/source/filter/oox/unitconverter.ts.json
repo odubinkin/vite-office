@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/oox/unitconverter.ts",
+    "upstreamPath": "sc/source/filter/oox/unitconverter.cxx",
+    "localSymbols": [
+      "UnitConverter"
+    ],
+    "upstreamSymbols": [
+      "UnitConverter::finalizeImport",
+      "UnitConverter::finalizeNullDate",
+      "UnitConverter::calcSerialFromDateTime"
+    ],
+    "preservedResponsibilities": [
+      "Converts worksheet digit units with the actual Normal workbook font through a bound reference device and the original no-device metric defaults.",
+      "Computes the original signed Gregorian serial from the selected workbook epoch and retains whole-second precision.",
+      "Measures space using the original font metrics and one-millimetre import fallback."
+    ],
+    "omittedResponsibilities": [
+      "Date serial and other UnitConverter responsibilities are tracked independently."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/unitconverter.ts",
+          "marker": "UnitConverter"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/worksheethelper.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/typed-date-cells.test.ts",
+          "marker": "reopens explicit date"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/unitconverter.cxx",
+          "marker": "UnitConverter::finalizeImport"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/unitconverter.cxx",
+          "marker": "UnitConverter::finalizeNullDate"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/unitconverter.cxx",
+          "marker": "UnitConverter::calcSerialFromDateTime"
+        }
+      ]
+    }
+  }
+}

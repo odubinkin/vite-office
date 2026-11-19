@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/comphelper/source/streaming/seekableinput.ts",
+    "status": "mapped",
+    "upstreamPath": "comphelper/source/streaming/seekableinput.cxx",
+    "localSymbols": [
+      "OSeekableInputWrapper"
+    ],
+    "upstreamSymbols": [
+      "OSeekableInputWrapper",
+      "CheckSeekableCanWrap",
+      "PrepareCopy_Impl",
+      "copyInputToOutput_Impl"
+    ],
+    "preservedResponsibilities": [
+      "Original complete seekable wrapper source body, lazy32000-byte TempFile copy, shared original/copy input lifecycle, exact no-copy identity path, native std::mutex/scoped_lock and actual UNO query/error/close contracts. Generated TempFile.create follows the actual production service manager and registered original OTempFileService; the real32000-byte copy path now passes full multi-block byte/lifetime assertions. No alternate memory-copy provider is installed. Full wrapper coverage and other unqualified error/lifetime domains are not marked closed by this continuation. Native constructor-self exception lifetime/debug ByteReader/OOM/threads/ABI and full package/storage/model/filter/UI remain unqualified or unfinished.",
+      "Original named temporary-file service is registered through the real component manager: selected default file-only TempFileNamed, source exclusive name loop/UniqueTokens/global native OSL mutex, original temporary-directory environment and createPath callbacks, source SvFileStream and original empty-name SvMemoryStream fallback. OTempFileService retains all represented UNO IO/seek/endpoint/property/type/ByteReader contracts, original first-use caches/defaults/exception order, UInt32 seek cast, duplicate XPropertySet types, release-profile assert-only listener bodies and ignored creation/close diagnostics. No fake TempFile/stream/provider/private counter injection, alternate host filesystem or manual JS allocator is introduced. Genuine deferred nonseekable copy now executes and cleans up real MEMFS files. Other TempFileNamed constructors/directory ownership/Fast services, Directory enumeration/instances, native ABI/thread/debug/OOM/full token-budget and complete DOCX/XLSX storage/model/filter/UI remain unbound or unqualified. Independent helper branch gaps remain recorded even when feature aggregate exceeds90."
+    ],
+    "omittedResponsibilities": [
+      "Whole-owner scoped90 where failing, native invalid-lifetime/OOM/thread/ABI and full package/storage/model/filter/UI acceptance. Original Python TempFile behavior is covered with OSL direct file reads; SimpleFileAccess helper service remains unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/comphelper/source/streaming/seekableinput.ts",
+          "marker": "OSeekableInputWrapper"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/streaming/seekableinput.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/unotools/source/ucbhelper/xtempfile.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "comphelper/source/streaming/seekableinput.cxx",
+          "marker": "OSeekableInputWrapper"
+        }
+      ]
+    }
+  }
+}

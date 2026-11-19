@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/zippackage/wrapstreamforshare.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-package-stream",
+    "capabilityIds": [
+      "CAP-c1a3b347-bcf1-4e47-a897-2c3de34d7b8f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/source/zippackage/wrapstreamforshare.ts",
+        "apps/office/src/package/source/zippackage/wrapstreamforshare.test.ts"
+      ],
+      "justification": "Original complete WrapStreamForShare constructor/UNO XInputStream+XSeekable/ByteReader, independent cursor, per-read reposition/delegation, original guard placement, source availability without reposition, release-only close and generated exception behavior. Actual native memory, sequence-only package buffer and four unchanged Strict/Transitional DOCX/XLSX native ZipFile part streams execute without fake providers. Native query errors and missing constructor refs are tested. Reads deliberately do not acquire the mutex; guarded methods use the real shared OSL mutex. Debug ByteReader assertion, raw null-pointer/ABI/thread-race/native allocator domains remain unqualified; no fallback ByteReader or thread guarantee is fabricated. ZipPackageStream, seekable-copy/tempfile and full package/storage/model/filter/UI binding remain unfinished.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WrapStreamForShare"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/zippackage/wrapstreamforshare.cxx",
+      "upstreamSymbols": [
+        "WrapStreamForShare",
+        "readBytes",
+        "available",
+        "skipBytes",
+        "closeInput"
+      ]
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_w14.tables.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source ownership and consumed native contracts are retained; host references, immutable XML/URI UTF16 fields and asynchronous ZIP transport bind browser execution around actual existing typed Any/OUString/PropertyValue owners."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_w14.tables.ts",
+          "marker": "effectIds"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.theme.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.typography.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/ooxml/model.xml",
+          "marker": "ST_Ligatures"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/model.xml",
+          "marker": "CT_NumForm"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/model.xml",
+          "marker": "CT_NumSpacing"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/ooxml/model.xml",
+          "marker": "CT_StylisticSets"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/writerfilter/ooxml/model.xml",
+    "localSymbols": [
+      "effectIds",
+      "lists"
+    ],
+    "upstreamSymbols": [
+      "ST_Ligatures",
+      "CT_NumForm",
+      "CT_NumSpacing"
+    ],
+    "preservedResponsibilities": [
+      "The pinned native model and generator yield the original root, definition, attribute, resource and enumeration IDs for the consumed Word 2010 ligature and number format elements.",
+      "Generated native Word 2010 tables also select CT_StylisticSets, CT_StyleSet and the original scalar CT_OnOff with its attribute and start actions."
+    ],
+    "omittedResponsibilities": [
+      "The consumed character typography uses the original three scalar effects. Other Word drawing effects and full Writer parity remain in progress."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_w14.tables.ts",
+      "rationale": "Native Word 2010 factory data is emitted separately from its namespace singleton using the source-native model and generator.",
+      "stackNecessity": "generated-resource-boundary"
+    }
+  }
+}

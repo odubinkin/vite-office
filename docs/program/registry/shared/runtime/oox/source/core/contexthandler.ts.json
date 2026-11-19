@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/oox/source/core/contexthandler.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-oox-context",
+    "capabilityIds": [
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/oox/source/core/contexthandler.ts",
+        "vendor/libreoffice-reference/oox/source/core/contexthandler.cxx",
+        "apps/office/src/oox/source/core/relations.native.test.ts",
+        "apps/office/src/oox/source/core/contexthandler.test.ts"
+      ],
+      "justification": "Original WeakImplHelper<XFastContextHandler>, source dummy weak-base parent copy creating distinct identity, shared same FragmentBaseData, borrowed filter/const Relations/const path and actual relation path forwarding. Original inert XML callbacks/nil native child references are retained, not fabricated positive handler behavior. Locator assignment retains actual UNO reference in shared data. Protected helper constructor static access is compiler-erased, without private state forcing. Native binary SequenceInputStream record API remains unfinished. Complete native filter/relations parsing/metadata/storage/model/package/UI DOCX/XLSX acceptance and full original Pipe/Expat/parser QA remain unfinished. Physical C++ ABI/atomic/allocator/control-block and independent compiled native differential remain unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ContextHandler"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "oox/source/core/contexthandler.cxx",
+      "upstreamSymbols": [
+        "ContextHandler::ContextHandler",
+        "ContextHandler::getFilter",
+        "ContextHandler::getRelations",
+        "ContextHandler::getFragmentPath",
+        "ContextHandler::getFragmentPathFromRelation",
+        "ContextHandler::getFragmentPathFromRelId",
+        "ContextHandler::getFragmentPathFromFirstType",
+        "ContextHandler::getFragmentPathFromFirstTypeFromOfficeDoc",
+        "ContextHandler::implSetLocator",
+        "ContextHandler::createFastChildContext",
+        "ContextHandler::createUnknownChildContext"
+      ]
+    }
+  }
+}

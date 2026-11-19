@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sax/source/fastparser/fastparser.locator.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-fastparser-owner",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sax/source/fastparser/fastparser.locator.ts",
+        "vendor/libreoffice-reference/sax/source/fastparser/fastparser.cxx",
+        "apps/office/src/sax/source/fastparser/fastparser.impl.test.ts"
+      ],
+      "justification": "Original WeakImplHelper<XLocator>, raw parser borrow/invalidation/checkDispose and original getEntity/native xmlSAX2 location calls. Identifier results are actual owned OUString copies. Tests query the real UNO locator facet, parse real default C contexts, switch actual nested Entity source IDs and preserve disposed exceptions before native access. Browser main and DOM-free Worker observe real C positions and actual source identifier/string owners. Complete FastSaxParserImpl parseStream/service registration and normal document-callback handoff of its privately owned locator remain unfinished. Tests construct the actual public source locator separately and explicitly invalidate it; retained private-locator handoff is not yet runtime-qualified. Physical C++ ABI/mutex behavior and complete format/model/UI acceptance remain unqualified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FastLocatorImpl"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sax/source/fastparser/fastparser.cxx",
+      "upstreamSymbols": [
+        "FastLocatorImpl::getColumnNumber",
+        "FastLocatorImpl::getLineNumber",
+        "FastLocatorImpl::getPublicId",
+        "FastLocatorImpl::getSystemId"
+      ]
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/external/libxml2/fastparsercallbacks.ts",
+    "rationale": "Realm-local original FastParser SAX2 C function-pointer binding over actual pinned libxml2 push contexts. The compiled static handler retains source start/end/characters/processing-instruction/getEntity signatures and XML_SAX2_MAGIC, erasing only unused source callback operands. Actual opaque native void-pointer addresses bind real JavaScript receivers before C parser calls; maps do not own substitute XML state. Static table entries have native module lifetime; concurrent contexts retain independent scopes even with the same receiver object and after older-context destruction. Actual C push parsing, namespace/attribute pointer arrays, native temporary/predefined entities, Unicode and split UTF8 chunks pass in Node/Chromium main/DOM-free Worker. No xmlCtxtUseOptions, DTD/entity policy, resolver, service registration or application import route is enabled by this ABI layer. Full original FastParser component/QA/context/defaults/metadata/model/filter/UI acceptance, independent compiled whole component and physical C++ ABI/thread guarantees remain unqualified.",
+    "responsibilities": [
+      "Realm-local original FastParser SAX2 C function-pointer binding over actual pinned libxml2 push contexts. The compiled static handler retains source start/end/characters/processing-instruction/getEntity signatures and XML_SAX2_MAGIC, erasing only unused source callback operands. Actual opaque native void-pointer addresses bind real JavaScript receivers before C parser calls; maps do not own substitute XML state. Static table entries have native module lifetime; concurrent contexts retain independent scopes even with the same receiver object and after older-context destruction. Actual C push parsing, namespace/attribute pointer arrays, native temporary/predefined entities, Unicode and split UTF8 chunks pass in Node/Chromium main/DOM-free Worker. No xmlCtxtUseOptions, DTD/entity policy, resolver, service registration or application import route is enabled by this ABI layer. Full original FastParser component/QA/context/defaults/metadata/model/filter/UI acceptance, independent compiled whole component and physical C++ ABI/thread guarantees remain unqualified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "WASM table signatures and actual opaque void-pointer addresses lower the original C function-pointer/this ABI; parser options and event/error/namespace owners stay outside this browser-owned layer."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/libxml2/fastparsercallbacks.ts",
+          "marker": "createFastParserCallbackBinding"
+        },
+        {
+          "path": "apps/office/src/external/libxml2/fastparsercallbacks.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "third_party/libxml2-wasm/binding.c",
+          "marker": "office_xmlFastParserCallbacks"
+        }
+      ]
+    },
+    "localSymbols": [
+      "FastParserCallbacks",
+      "createFastParserCallbackBinding"
+    ]
+  }
+}

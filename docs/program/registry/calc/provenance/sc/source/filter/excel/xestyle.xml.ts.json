@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/excel/xestyle.xml.ts",
+    "localSymbols": [
+      "XclExpFontBuffer",
+      "XclExpXFBuffer"
+    ],
+    "upstreamPath": "sc/source/filter/excel/xestyle.cxx",
+    "upstreamSymbols": [
+      "XclExpFontBuffer::SaveXml",
+      "XclExpXFBuffer::SaveXml",
+      "XclExpFontBuffer::GetFont"
+    ],
+    "preservedResponsibilities": [
+      "Native Calc patterns populate the original font, fill and XF buffers. The export writes the styles relationship and normal style in OOXML schema order.",
+      "Registers native EditEngine run fonts in the workbook font buffer from effective cell style plus direct text attributes and signed escapement.",
+      "Resolves the original themed foreground and tint for solid fill export and keeps same-RGB different-theme records independent.",
+      "Registers actual cell borders when building XLSX XFs and writes the indexed border list in original styles order.",
+      "Indexes full native XLSX alignments from actual patterns before serializing used XF data.",
+      "Includes native protection values and direct-state identity in XLSX XF indexing and export."
+    ],
+    "omittedResponsibilities": [
+      "Number formats, borders, additional named styles, and non-solid fills remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xestyle.xml.ts",
+          "marker": "XclExpXFBuffer"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "round trips visual styles"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xestyle.cxx",
+          "marker": "XclExpXFBuffer::SaveXml"
+        },
+        {
+          "path": "sc/source/filter/excel/xestyle.cxx",
+          "marker": "XclExpFontBuffer::GetFont"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/excel/xestyle.xml.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The XLSX buffer and serializer section is separated from the original palette value implementation."
+    }
+  }
+}

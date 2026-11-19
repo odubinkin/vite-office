@@ -644,8 +644,8 @@ export function CalcWorkbench({
               pos,
             ) => {
               if (controller.inputHandler.IsFormulaMode()) return;
-              controller.Select(pos.Col(), pos.Row());
-              controller.StartInput(ScInputMode.SC_INPUT_TABLE);
+              if (controller.Select(pos.Col(), pos.Row()))
+                controller.StartInput(ScInputMode.SC_INPUT_TABLE);
             }
           }
           onKeyDown={key}

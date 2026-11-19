@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/package/source/zippackage/ZipPackage.write.ts",
+    "status": "mapped",
+    "upstreamPath": "package/source/zippackage/ZipPackage.cxx",
+    "localSymbols": [
+      "writePackageContents",
+      "transferToStream",
+      "flushPackageOutput",
+      "wrapCommitError"
+    ],
+    "upstreamSymbols": [
+      "ZipPackage::writeTempFile",
+      "ZipPackage::commitChanges"
+    ],
+    "preservedResponsibilities": [
+      "Direct empty-XStream writes and repeated writes through the actual TempFileFastService retain original archive entry order, dest seek/truncate/copy/flush and backup handling. Original key/KDF argument selection is represented without implementing encryption. Root branch coverage remains below 90, and URL/large threaded output, XStorage/SfxMedium and DOCX/XLSX UI remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Full encryption, URL transfer and complete storage/format UI are unfinished."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Existing actual SAL/CPPU logical addresses, compiler specialization/interface casts and explicit scope destruction bind native C++ syntax. The actual pinned SDK libc++ mutex implements the original member and guard lifetimes; native pthread/physical C++ ABI remain unqualified."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.write.ts",
+          "marker": "writePackageContents"
+        },
+        {
+          "path": "apps/office/src/package/source/zippackage/ZipPackage.commit-state.test.ts",
+          "marker": "writes and updates an actual XStream"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "package/source/zippackage/ZipPackage.cxx",
+          "marker": "ZipPackage::writeTempFile"
+        },
+        {
+          "path": "package/source/zippackage/ZipPackage.cxx",
+          "marker": "ZipPackage::commitChanges"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/package/source/zippackage/ZipPackage.write.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Separates source archive-body and stream-transfer responsibilities under the 1000-line limit while retaining the same package receiver and owners."
+    }
+  }
+}

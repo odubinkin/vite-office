@@ -69,12 +69,19 @@ export enum SwPoolFormatId {
   COLL_ENVELOPE_ADDRESS = 6160,
   /** Original paragraph pool identity consumed by Word style mapping. */
   COLL_FOOTER = 6148,
+  /** Original right footer style pool identity. */
+  COLL_FOOTERR = 6150,
   /** Original paragraph pool identity consumed by Word style mapping. */
   COLL_FOOTNOTE = 6159,
   /** Original paragraph pool identity consumed by Word style mapping. */
   COLL_GREETING = 2053,
   /** Original paragraph pool identity consumed by Word style mapping. */
   COLL_HEADER = 6145,
+  /** Original common header and footer paragraph style. */
+  COLL_HEADERFOOTER = 6144,
+  /** Original left and right header style pool identities. */
+  COLL_HEADERL = 6146,
+  COLL_HEADERR = 6147,
   /** Native HTML quotation paragraph style. */
   COLL_HTML_BLOCKQUOTE = 12288,
   /** Native HTML preformatted paragraph style. */
@@ -478,7 +485,7 @@ export function getWriterAvailableParagraphStyleDefinition(
   );
 }
 
-/** Resolves exposed pool styles and source-backed internal table/frame/sender collections. @param id - Pool style identity. @returns Materializable definition. */
+/** Resolves exposed pool styles and source-backed internal collections. @param id - Pool style identity. @returns Materializable definition. */
 export function getWriterMaterializedParagraphStyleDefinition(
   id: string,
 ): WriterParagraphStyleDefinition | undefined {
@@ -489,7 +496,14 @@ export function getWriterMaterializedParagraphStyleDefinition(
     id === "frame-contents" ||
     id === "sender" ||
     id === "list-contents" ||
-    id === "list-heading"
+    id === "list-heading" ||
+    id === "header-and-footer" ||
+    id === "header" ||
+    id === "header-left" ||
+    id === "header-right" ||
+    id === "footer" ||
+    id === "footer-left" ||
+    id === "footer-right"
       ? getWriterParagraphStyleDefinition(id)
       : undefined)
   );

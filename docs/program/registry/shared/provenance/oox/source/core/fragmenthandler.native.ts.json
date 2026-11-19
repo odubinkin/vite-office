@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/oox/source/core/fragmenthandler.native.ts",
+    "status": "mapped",
+    "upstreamPath": "oox/source/core/fragmenthandler.cxx",
+    "localSymbols": [
+      "FragmentHandler"
+    ],
+    "upstreamSymbols": [
+      "FragmentHandler::FragmentHandler",
+      "FragmentHandler::setDocumentLocator",
+      "FragmentHandler::startDocument",
+      "FragmentHandler::endDocument",
+      "FragmentHandler::processingInstruction",
+      "FragmentHandler::getRecordInfos"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native logical RTL/UNO/source pointer ownership and explicit lifetime lowering are retained; C++ physical standard-library/atomic/ABI layout is not claimed."
+    },
+    "preservedResponsibilities": [
+      "Original ImplInheritanceHelper<ContextHandler,XFastDocumentHandler>, explicit-relations protected constructor overload, actual shared base aggregate, acquired ContextHandler interface return, original inert document/XML behavior, native locator handoff and original null binary record descriptor default. The normal implicit importRelations constructor and openFragmentStream overload are deliberately still unported until native filter/storage orchestration exists; no async relation promise or fake stream is substituted. Tests run this original base fragment against actual native OOXML parser, not as proof of business/model import."
+    ],
+    "omittedResponsibilities": [
+      "Native filter orchestration/default fragment ctor/stream overload/binary record interface and complete format/model/UI acceptance remain unfinished; full original QA and independent physical C++ differential remain unqualified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/core/fragmenthandler.native.ts",
+          "marker": "FragmentHandler"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/oox/source/core/fragmenthandler.cxx",
+          "marker": "FragmentHandler::FragmentHandler"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/oox/source/core/fragmenthandler.native.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original explicit native fragment interface/ownership is split from the old host expanded-name FragmentHandler during the pending actual filter migration."
+    }
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/filter/WriterFilter.ts",
+    "localSymbols": [
+      "importOOXML"
+    ],
+    "upstreamPath": "sw/source/writerfilter/filter/WriterFilter.cxx",
+    "upstreamSymbols": [
+      "WriterFilter::filter"
+    ],
+    "preservedResponsibilities": [
+      "DOCX open and download reach the native Writer graph through the existing shell and dialogs. Original package relationships, represented text/runs and style import are exercised.",
+      "The shipped Writer filter owns the actual OFOPXML storage for the lifetime of the imported stream and releases its references on both success and failure.",
+      "Installs the native theme on the import candidate before the style and body context runs.",
+      "Captures the source theme language property default after successful import."
+    ],
+    "omittedResponsibilities": [
+      "Table import and full export styles, numbered paragraphs, links, bookmarks, and page fidelity remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/filter/WriterFilter.ts",
+          "marker": "importOOXML"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docx-bookmarks.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/filter/WriterFilter.cxx",
+          "marker": "WriterFilter::filter"
+        }
+      ]
+    }
+  }
+}

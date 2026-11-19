@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/oox/stylesbuffer.alignment.ts",
+    "upstreamPath": "sc/source/filter/oox/stylesbuffer.cxx",
+    "localSymbols": [
+      "Alignment"
+    ],
+    "upstreamSymbols": [
+      "Alignment::importAlignment",
+      "Alignment::finalizeImport",
+      "Alignment::fillToItemSet"
+    ],
+    "preservedResponsibilities": [
+      "Converts native SpreadsheetML alignment defaults, rotations, direction, indentation, stacking, wrap, shrink and justification on the actual Calc item set."
+    ],
+    "omittedResponsibilities": [
+      "This slice covers the XML format path. Other style families and broad full-source parity remain in progress."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/stylesbuffer.alignment.ts",
+          "marker": "Alignment"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx",
+          "marker": "Alignment::importAlignment"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx",
+          "marker": "Alignment::finalizeImport"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx",
+          "marker": "Alignment::fillToItemSet"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/oox/stylesbuffer.alignment.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The bounded runtime keeps the original alignment responsibility in an adjacent source file beside the same upstream owner."
+    }
+  }
+}

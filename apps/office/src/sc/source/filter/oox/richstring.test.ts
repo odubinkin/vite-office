@@ -1,4 +1,5 @@
 /** @fileoverview Original XML rich-string text ownership and attribute conversion into actual Calc model values; full shared-string filter/context/font/phonetic acceptance remains pending. */
+import { Reference } from "../../../../cppu/inc/com/sun/star/uno/Reference";
 import { implementations } from "../../../../desktop/browser/app/uno-components";
 import { InitApplicationServiceManager } from "../../../../desktop/source/app/appinit";
 import { assert, expect, it } from "vitest";
@@ -31,8 +32,9 @@ it("owns decoded portion values independently of inputs and borrowed output refe
 });
 it("retains ordered text/run portions, empty content and native preserve-space attributes", /** The real model stores concatenated native content; no whole XLSX filter claim. @returns Nothing. */ () => {
   const rich = new RichString(),
-    fast = new FastAttributeList(),
-    attrs = new AttributeList(fast),
+    fast = new FastAttributeList(null),
+    fastOwner = new Reference(fast),
+    attrs = new AttributeList(fastOwner),
     space = (namespaceTokens.get("xml") as number) | getTokenFromUtf8("space"),
     doc = new ScDocument(),
     sheet = unicode("Sheet1");
@@ -76,6 +78,8 @@ it("retains ordered text/run portions, empty content and native preserve-space a
       lastText.dispose();
     }
   } finally {
+    attrs.dispose();
+    fastOwner.dispose();
     result.dispose();
     sheet.dispose();
     rich.dispose();

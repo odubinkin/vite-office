@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/udkapi/com/sun/star/io/XTempFile.ts",
+    "status": "mapped",
+    "upstreamPath": "udkapi/com/sun/star/io/XTempFile.idl",
+    "localSymbols": [
+      "XTempFile"
+    ],
+    "upstreamSymbols": [
+      "XTempFile",
+      "XStream",
+      "XSeekable",
+      "RemoveFile",
+      "ResourceName"
+    ],
+    "preservedResponsibilities": [
+      "Original complete XTempFile two-base IDL declaration and attributes with normal cached generated type binding. Actual CPPU factories and existing XStream/XSeekable metadata are reused. This is not a TempFile provider; comprehensive reflection/native SDK ABI and concrete service acceptance remain unqualified."
+    ],
+    "omittedResponsibilities": [
+      "Concrete OTempFileService/complete copy/service QA, whole-owner scoped90 where failing, native invalid-lifetime/OOM/thread/ABI and full package/storage/model/filter/UI acceptance."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/io/XTempFile.ts",
+          "marker": "XTempFile"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/streaming/seekableinput.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "udkapi/com/sun/star/io/XTempFile.idl",
+          "marker": "XTempFile"
+        }
+      ]
+    }
+  }
+}

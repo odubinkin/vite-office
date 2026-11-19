@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/package/source/xstor/xfactory.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-storage-implementation",
+    "capabilityIds": [
+      "CAP-291a44b3-99d9-4f74-8429-a90ed52f8be5",
+      "CAP-4f62077a-4c7c-483c-b17c-20e141f329ce",
+      "CAP-b564ff67-65d8-4b13-92df-0f4b391ce7b0",
+      "CAP-4dad6563-a403-4cf1-ace9-7810e15d1658",
+      "CAP-bbc266e7-6ea9-4bf9-b13d-a9565ac529d0",
+      "CAP-e9a3430f-1545-4e36-8849-bd900998ed83"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/package/source/xstor/xfactory.ts#OStorageFactory",
+        "apps/office/src/package/source/xstor/xfactory.test.ts"
+      ],
+      "justification": "Registers the original two StorageFactory names as a single component. Genuine Any values dispatch source, open mode and media descriptor. Signature checks and cursor reset, typed errors, original default temporary PACKAGE storage and synchronous ZIP/OFOPXML input/output are exercised through actual service-manager calls. URL routing depends on the genuine SimpleFileAccess service. The browser currently uses supplied streams. Complete OStorage and PACKAGE/ODF feature parity remain open.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OStorageFactory",
+        "CheckPackageSignature_Impl",
+        "package_OStorageFactory_get_implementation"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "package/source/xstor/xfactory.cxx",
+      "upstreamSymbols": [
+        "OStorageFactory::createInstance",
+        "OStorageFactory::createInstanceWithArguments",
+        "CheckPackageSignature_Impl",
+        "package_OStorageFactory_get_implementation"
+      ]
+    }
+  }
+}

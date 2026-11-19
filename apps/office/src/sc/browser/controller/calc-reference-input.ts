@@ -76,22 +76,17 @@ export function NavigateReference(
   extend: boolean,
 ): void {
   const data = this.viewData,
-    doc = data.GetDocument(),
-    view = this["viewShell"],
-    active = data.IsRefMode();
+    view = this["viewShell"];
+  if (extend) {
+    view.ExpandReference(dx, dy);
+    this["Changed"]();
+    return;
+  }
+  const active = data.IsRefMode();
   const oldCol = active ? data.GetRefEndX() : data.GetCurX(),
     oldRow = active ? data.GetRefEndY() : data.GetCurY();
   if ((dx < 0 && oldCol === 0 && dy === 0) || (dy < 0 && oldRow === 0 && dx === 0)) return;
-  const proposedCol = oldCol + dx,
-    proposedRow = oldRow + dy,
-    valid = doc.ValidCol(proposedCol) && doc.ValidRow(proposedRow);
-  const col =
-    valid && dx
-      ? view.SkipCursorHorizontal(proposedCol, oldCol, dx)
-      : Math.max(0, Math.min(doc.MaxCol(), proposedCol));
-  const row =
-    valid && dy
-      ? view.SkipCursorVertical(proposedRow, oldRow, dy)
-      : Math.max(0, Math.min(doc.MaxRow(), proposedRow));
-  this.PointReference(new ScAddress(col, row, data.GetTabNumber()), extend, false);
+  const [col, row] = view.GetRelativeCursor(oldCol, oldRow, dx, dy);
+  if (view.CanSelectCell(col, row))
+    this.PointReference(new ScAddress(col, row, data.GetTabNumber()), false, false);
 }

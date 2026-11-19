@@ -1,4 +1,5 @@
 /** @fileoverview Original Unicode C reverse comparator delegates to the SAL string template owner. */
+import { splitSurrogates } from "../inc/rtl/character";
 import { iterateCodePoints } from "../../o3tl/inc/string_view";
 import { CompareNormal, reverseCompare_WithLengths } from "./strtmpl";
 import * as str from "./strtmpl";
@@ -541,6 +542,15 @@ export function rtl_uString_newConcatUtf16L(
   str.newConcat_Utf16(destination, left, right, length);
 }
 
+/** Original counted Unicode/ASCII ignore-case comparison through the same strtmpl ranges and functor. @param first - Borrowed Unicode units. @param firstLength - Signed32 count. @param second - Borrowed ASCII bytes. @param secondLength - Signed32 count. @returns Original lexicographic difference. */
+export function rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+  first: Uint16Array | null,
+  firstLength: number,
+  second: Uint8Array | null,
+  secondLength: number,
+): number {
+  return str.compare_IgnoreAsciiCaseWithLengths(first, firstLength, second, secondLength);
+}
 /** Original counted UTF16 ASCII-insensitive comparison, instantiating the source compare loop with NoShortening. @param first - First storage. @param firstLength - First count. @param second - Second storage. @param secondLength - Second count. @returns Original comparison result. */
 export function rtl_ustr_compareIgnoreAsciiCase_WithLength(
   first: Uint16Array | null,
@@ -584,4 +594,46 @@ export function rtl_uString_newReplaceAllFromIndexUtf16LUtf16L(
 /** Original C ASCII lowercase value operation delegates to the common replacement template. @param slot - Actual owned output slot. @param source - Borrowed source. @returns Nothing. */
 export function rtl_uString_newToAsciiLowerCase(slot: rtl_uStringSlot, source: rtl_uString): void {
   str.newReplaceChars(slot, source, str.toAsciiLower);
+}
+
+/** Original mixed-width C comparison delegates to the same SAL generic comparison specialization. @param unicode - Borrowed counted units. @param length - Native signed32 length. @param ascii - Borrowed terminated bytes. @returns Source comparison result. */
+export function rtl_ustr_ascii_compare_WithLength(
+  unicode: Uint16Array | null,
+  length: number,
+  ascii: Uint8Array | null,
+): number {
+  return str.compare_UnicodeWithLengthAndAscii(unicode, length, ascii);
+}
+/** Original Unicode-codepoint constructor releases the previous owner before counting/allocation, preserves signed32 overflow and original splitSurrogates (including non-scalar Unicode codepoints). @param target - Actual inout pointer slot. @param codePoints - Borrowed UInt32 values, null only for zero count. @param count - Original signed32 count. @returns Nothing. */
+export function rtl_uString_newFromCodePoints(
+  target: rtl_uStringSlot | null,
+  codePoints: Uint32Array | null,
+  count: number,
+): void {
+  count |= 0;
+  if (target === null) throw new Error("assert(newString != nullptr)");
+  if ((codePoints === null && count !== 0) || count < 0)
+    throw new Error(
+      "assert((codePoints != nullptr || codePointCount == 0) && codePointCount >= 0)",
+    );
+  if (count === 0) {
+    rtl_uString_new(target);
+    return;
+  }
+  if (target[0] !== null) rtl_uString_release(target[0]);
+  let length = count;
+  for (let index = 0; index < count; ++index)
+    if (((codePoints as Uint32Array)[index] as number) >= 0x10000) length = (length + 1) | 0;
+  if (length < 0) {
+    target[0] = null;
+    return;
+  }
+  target[0] = rtl_uString_ImplAlloc(length);
+  if (target[0] === null) return;
+  let position = 0;
+  for (let index = 0; index < count; ++index)
+    position += splitSurrogates(
+      (codePoints as Uint32Array)[index] as number,
+      target[0].buffer.subarray(position),
+    );
 }

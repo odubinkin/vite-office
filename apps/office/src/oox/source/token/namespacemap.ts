@@ -1,7 +1,12 @@
-/** @fileoverview Original NamespaceMap transitional/strict maps and generated namespace identities from unchanged native namespace inputs; UTF16 XML URI strings bind the SAX namespace boundary. */
+/** @fileoverview Original NamespaceMap transitional/strict maps and generated namespace identities from unchanged native namespace inputs; actual owned OUString map values bind the native SAX namespace boundary. */
+import { OUString } from "../../../sal/inc/rtl/ustring";
 import transitional from "./namespaces.txt?raw";
 import strict from "./namespaces-strict.txt?raw";
 
+/** Original compiler-known namespace literal byte. @param character - Source ASCII unit. @returns Byte. */
+function ascii(character: string): number {
+  return character.charCodeAt(0);
+}
 /** Reads the original namespace generator's comment/blank/alias rules. @param text - Pinned namespace input. @returns Last declaration for each alias. */
 function parse(text: string): Map<string, string> {
   const result = new Map<string, string>();
@@ -29,14 +34,25 @@ export const namespaceTokens: ReadonlyMap<string, number> = new Map(
 
 /** Original public namespace maps; each instance owns its maps as in the native struct. */
 export class NamespaceMap {
-  readonly maTransitionalNamespaceMap = new Map<number, string>();
-  readonly maStrictNamespaceMap = new Map<number, string>();
+  readonly maTransitionalNamespaceMap = new Map<number, OUString>();
+  readonly maStrictNamespaceMap = new Map<number, OUString>();
   /** Populates generated native namespace IDs and exact URI spellings. @returns Map owner. */
   constructor() {
     for (const [alias, id] of namespaceTokens) {
-      this.maTransitionalNamespaceMap.set(id, transitionalNames.get(alias) as string);
-      this.maStrictNamespaceMap.set(id, strictNames.get(alias) as string);
+      this.maTransitionalNamespaceMap.set(
+        id,
+        new OUString(Uint8Array.from((transitionalNames.get(alias) as string) + "\0", ascii)),
+      );
+      this.maStrictNamespaceMap.set(
+        id,
+        new OUString(Uint8Array.from((strictNames.get(alias) as string) + "\0", ascii)),
+      );
     }
+  }
+  /** Original implicit map value destruction; static instance remains realm-owned. @returns Nothing. */
+  dispose(): void {
+    for (const value of this.maStrictNamespaceMap.values()) value.dispose();
+    for (const value of this.maTransitionalNamespaceMap.values()) value.dispose();
   }
 }
 let singleton: NamespaceMap | null = null;

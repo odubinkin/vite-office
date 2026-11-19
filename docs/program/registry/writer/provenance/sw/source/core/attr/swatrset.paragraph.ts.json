@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/source/core/attr/swatrset.paragraph.ts",
+    "localSymbols": [
+      "restoreParagraphControlItem"
+    ],
+    "rationale": "VM snapshot scalar/Which reconstruction is local infrastructure used in every realm, not an upstream native function or browser API. It constructs real original paragraph item types and separates existing SwAttrPool transport registration from the bounded source owner without a substitute pool or service.",
+    "responsibilities": [
+      "Original paragraph control concrete values replace generic Writer split and signed16 line-count items. Split preserves false factory versus true Writer pool default; widow/orphan preserve unsigned8 storage, signed8 Any projection and zero global/two-line document overlays. Concrete copy/Clone and vertical signed16 QueryValue/0..4 PutValue use actual Sfx/Any owners. Actual pool, snapshot reconstruction, CSS/RTF producers and paragraph UI commands use the correct concrete values. DOCX emits original split/widow boolean normalization, script-space/hanging/forbidden/grid booleans, vertical mapping, page-break spelling and outline clamp through the real exporter/serializer and native ZIP output. No fake exporter, direction/version provider or complete main-text/paragraph/style orchestration is introduced.",
+      "Keeps primitive color reconstruction in the adjoining attribute-transport module and re-exports the existing public function identity through SwAttrSet; color and item semantics are unchanged."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Snapshot scalar/Which transport is browser-owned; returned items use actual original value classes."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/attr/swatrset.paragraph.ts",
+          "marker": "restoreParagraphControlItem"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.theme.test.ts",
+          "marker": "@fileoverview"
+        }
+      ]
+    }
+  }
+}

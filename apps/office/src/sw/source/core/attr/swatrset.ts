@@ -6,23 +6,26 @@ import { getSvxBrushItemFromSourceSet } from "../../../../svx/source/unodraw/uno
 import { SwFormatFlySplit } from "../../../inc/formatflysplit";
 import { SwFormatFollowTextFlow } from "../../../inc/fmtfollowtextflow";
 import {
+  RES_ANCHOR,
+  RES_CNTNT,
+  RES_FILL_ORDER,
   RES_FLY_SPLIT,
   RES_FOLLOW_TEXT_FLOW,
+  RES_FOOTER,
+  RES_FRAMEDIR,
+  RES_HEADER,
+  RES_OPAQUE,
+  RES_SURROUND,
   RES_WRAP_INFLUENCE_ON_OBJPOS,
 } from "../../../inc/hintids";
 import type { SvxOpaqueItem } from "../../../../editeng/inc/opaqitem";
-import { RES_OPAQUE } from "../../../inc/hintids";
 import type { SwFormatContent } from "../../../inc/fmtcntnt";
-import { RES_CNTNT } from "../../../inc/hintids";
+import type { SwFormatFooter, SwFormatHeader } from "../../../inc/fmthdft";
 import type { SwFormatAnchor } from "../../../inc/fmtanchr";
 import type { SwFormatSurround } from "../../../inc/fmtsrnd";
-import { RES_ANCHOR, RES_SURROUND } from "../../../inc/hintids";
-
 import { SwFormatFillOrder } from "../../../inc/fmtfordr";
-import { RES_FILL_ORDER } from "../../../inc/hintids";
 import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
-import { RES_FRAMEDIR } from "../../../inc/hintids";
 import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
 import { LanguageType } from "../../../../i18nlangtag/inc/lang";
 
@@ -33,6 +36,7 @@ import {
 } from "../../../inc/hintids";
 import { SdrItemPool } from "../../../../svx/source/svdraw/svdattr";
 import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
+import { SvxKerningItem } from "../../../../editeng/inc/kernitem";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 
@@ -40,7 +44,7 @@ import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { SvxInterLineSpaceRule, SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { SvxWordLineModeItem } from "../../../../editeng/inc/wrlmitem";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
-import { COL_AUTO, COL_TRANSPARENT, Color, ColorTransparency } from "../../../../tools/inc/color";
+import { COL_AUTO, Color, ColorTransparency } from "../../../../tools/inc/color";
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
 import { RES_CHRATR_CROSSEDOUT, RES_CHRATR_ESCAPEMENT, RES_PROTECT } from "../../../inc/hintids";
 
@@ -68,6 +72,8 @@ import {
 } from "../../../../editeng/source/items/textitem";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { restoreParagraphControlItem, writerColorFromPrimitive } from "./swatrset.paragraph";
+export { writerColorFromPrimitive } from "./swatrset.paragraph";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxItemPool } from "../../../../svl/source/items/itempool";
 import { SfxItemSet, type WhichRangesContainer } from "../../../../svl/source/items/itemset";
@@ -156,7 +162,6 @@ export class SwAttrPool extends SfxItemPool {
       WriterWhich.RES_CHRATR_CASEMAP,
       WriterWhich.RES_CHRATR_CHARSETCOLOR,
       WriterWhich.RES_CHRATR_CONTOUR,
-      WriterWhich.RES_CHRATR_KERNING,
       WriterWhich.RES_CHRATR_UNUSED1,
       WriterWhich.RES_CHRATR_SHADOWED,
       WriterWhich.RES_CHRATR_BLINK,
@@ -179,12 +184,14 @@ export class SwAttrPool extends SfxItemPool {
       WriterWhich.RES_CHRATR_OPTICAL_SIZING,
       WriterWhich.RES_CHRATR_FONT_VARIATIONS,
       WriterWhich.RES_CHRATR_SCRIPT_HINT,
+      RES_OPAQUE,
+      RES_CNTNT,
+      RES_HEADER,
+      RES_FOOTER,
+      RES_ANCHOR,
+      RES_SURROUND,
     ])
       register(which);
-    register(RES_OPAQUE);
-    register(RES_CNTNT);
-    register(RES_ANCHOR);
-    register(RES_SURROUND);
     register(
       RES_FLY_SPLIT,
       /** Restores the original boolean fly split item. @param value - Native wire value. @returns Actual item. */
@@ -487,6 +494,11 @@ export class SwAttrPool extends SfxItemPool {
       ) => new SvxAutoKernItem(Boolean(value), RES_CHRATR_AUTOKERN),
     );
     register(
+      WriterWhich.RES_CHRATR_KERNING,
+      /** Restores the native signed-twip item. @param value - Snapshot value. @returns Character spacing item. */
+      (value) => new SvxKerningItem(Number(value), WriterWhich.RES_CHRATR_KERNING),
+    );
+    register(
       RES_CHRATR_CROSSEDOUT,
       /** Applies register to value. @param value - value value. @returns Callback result. */ (
         value,
@@ -691,16 +703,16 @@ export class SwAttrPool extends SfxItemPool {
         which,
         /** Applies register to value. @param value - value value. @returns Callback result. */ (
           value,
-        ) => new SfxBoolItem(which, Boolean(value)),
+        ) => restoreParagraphControlItem(which, value),
       );
     for (const which of [RES_PARATR_ORPHANS, RES_PARATR_WIDOWS]) {
       register(
         which,
         /** Applies register to value. @param value - value value. @returns Callback result. */ (
           value,
-        ) => new SfxInt16Item(which, Number(value)),
+        ) => restoreParagraphControlItem(which, value),
       );
-      this.SetUserDefaultItem(new SfxInt16Item(which, 2));
+      this.SetUserDefaultItem(restoreParagraphControlItem(which, 2));
     }
     register(
       RES_BREAK,
@@ -772,6 +784,14 @@ export class SwAttrSet extends SfxItemSet {
   /** Original inline content getter from fmtcntnt.hxx. @param searchInParent - Native inherited lookup. @returns Actual content item. */
   GetContent(searchInParent = true): SwFormatContent {
     return this.Get(RES_CNTNT, searchInParent) as SwFormatContent;
+  }
+  /** Original inline page header item query. @param searchInParent - Native inherited lookup. @returns Borrowed header item. */
+  GetHeader(searchInParent = true): SwFormatHeader {
+    return this.Get(RES_HEADER, searchInParent) as SwFormatHeader;
+  }
+  /** Original inline page footer item query. @param searchInParent - Native inherited lookup. @returns Borrowed footer item. */
+  GetFooter(searchInParent = true): SwFormatFooter {
+    return this.Get(RES_FOOTER, searchInParent) as SwFormatFooter;
   }
   /** Original typed anchor getter from fmtanchr.hxx. @param searchInParent - Native inherited lookup. @returns Actual anchor item. */
   public GetAnchor(searchInParent = true): SwFormatAnchor {
@@ -938,38 +958,6 @@ export function writerColorValue(color: Readonly<Color>, automatic = "auto"): st
 /** Converts the Writer highlight request or full packed worker color to its native brush item. @param value - Requested or persisted color. @returns Native highlight item. */
 export function createWriterHighlightItem(value: unknown): SvxBrushItem {
   return new SvxBrushItem(writerColorFromPrimitive(value, "transparent"), RES_CHRATR_HIGHLIGHT);
-}
-
-/** Decodes the existing Writer request and worker color forms to one native value. @param value - Primitive boundary value. @param automatic - Applicable automatic marker. @returns Full native color. */
-export function writerColorFromPrimitive(value: unknown, automatic: "auto" | "transparent"): Color {
-  if (typeof value === "number" && Number.isInteger(value) && value >= 0 && value <= 0xffffffff)
-    return new Color(ColorTransparency, value, "ColorTransparencyTag");
-  if (value === automatic) return new Color(automatic === "auto" ? COL_AUTO : COL_TRANSPARENT);
-  if (typeof value === "string" && /^#[0-9a-f]{6}$/iu.test(value))
-    return new Color(Number.parseInt(value.slice(1), 16));
-  if (typeof value === "string") {
-    const rgba = /^rgba\((\d{1,3}), (\d{1,3}), (\d{1,3}), (\d*\.?\d+)\)$/u.exec(value);
-    if (rgba !== null) {
-      const red = Number(rgba[1]),
-        green = Number(rgba[2]),
-        blue = Number(rgba[3]);
-      const alpha = Number(rgba[4]);
-      if (
-        [red, green, blue].every(
-          /** Computes the channel result. @param channel - Channel. @returns The computed result. */ (
-            channel,
-          ) => Number.isInteger(channel) && channel <= 255,
-        ) &&
-        alpha >= 0 &&
-        alpha <= 1
-      ) {
-        const color = new Color(red, green, blue);
-        color.SetAlpha(Math.round(alpha * 255));
-        return color;
-      }
-    }
-  }
-  throw new Error(`Writer ${automatic === "auto" ? "text" : "highlight"} color value is invalid.`);
 }
 
 /** Projects a native highlight brush to the Writer text/worker/DOM boundary. @param item - Actual highlight item. @returns Primitive color. */

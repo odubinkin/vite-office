@@ -73,6 +73,12 @@ export type ReferenceConstReference<T extends InterfacePointer = InterfacePointe
   "get" | "is" | "getAddress" | "operatorArrow" | "operatorStar"
 > &
   BaseReference;
+/** Original const Reference parameter surface without exposing a mutable pointer-cell address. The object remains the same actual Reference owner; no acquisition or wrapper state is created. */
+export type ReferenceConstParameter<T extends InterfacePointer = InterfacePointer> = Pick<
+  Reference<T>,
+  "get" | "operatorArrow" | "operatorStar"
+> &
+  BaseReference;
 /** Original one-pointer base with its direct borrowed pointer and null predicates. Identity queries use actual returned Any owners; no pointer ordering or identity conversion algorithm is invented. */
 export class BaseReference {
   protected _pInterface!: InterfacePointer | null;
@@ -187,14 +193,18 @@ export class Reference<T extends InterfacePointer = InterfacePointer> extends Ba
   constructor(
     ...args:
       | []
-      | [value: Reference<T> | T | null]
+      | [value: ReferenceConstParameter<T> | T | null]
       | [value: T | null, noAcquire: __sal_NoAcquire | UnoReference_NoAcquire]
       | [
           value: BaseReference | Any | XInterface | null,
           tag: UnoReference_Query | UnoReference_QueryThrow,
           argument?: UnoTypeArgument,
         ]
-      | [value: Reference<T> | T | null, tag: UnoReference_SetThrow, argument?: UnoTypeArgument]
+      | [
+          value: ReferenceConstParameter<T> | T | null,
+          tag: UnoReference_SetThrow,
+          argument?: UnoTypeArgument,
+        ]
   ) {
     super();
     if (args.length === 0) this._pInterface = null;
@@ -282,7 +292,10 @@ export class Reference<T extends InterfacePointer = InterfacePointer> extends Ba
     }
   }
   /** Original direct and query set return Boolean; queryThrow/setThrow overloads return void. Query/acquisition completes before publishing or releasing the prior pointer, so an exception preserves it. @param value - Original selected source. @param tag - Declared source tag. @param argument - Original interface template spelling. @returns Original selected result. */
-  set(value: Reference<T> | T | null, tag?: __sal_NoAcquire | UnoReference_NoAcquire): boolean;
+  set(
+    value: ReferenceConstParameter<T> | T | null,
+    tag?: __sal_NoAcquire | UnoReference_NoAcquire,
+  ): boolean;
   /** Original querying set declaration. @param value - Selected source. @param tag - Native query tag. @param argument - Declared interface. @returns Non-null result. */
   set(
     value: BaseReference | Any | T | null,
@@ -296,7 +309,11 @@ export class Reference<T extends InterfacePointer = InterfacePointer> extends Ba
     argument?: UnoTypeArgument,
   ): void;
   /** Original throwing direct assignment declaration. @param value - Same typed reference or pointer. @param tag - Native throwing set. @param argument - Declared interface. @returns Nothing. */
-  set(value: Reference<T> | T | null, tag: UnoReference_SetThrow, argument?: UnoTypeArgument): void;
+  set(
+    value: ReferenceConstParameter<T> | T | null,
+    tag: UnoReference_SetThrow,
+    argument?: UnoTypeArgument,
+  ): void;
   /** Original selected set bodies. @param value - Actual source. @param tag - Original overload tag. @param argument - Declared interface. @returns Original bool or void result. */
   set(
     value: BaseReference | Any | T | null,
@@ -362,7 +379,7 @@ export class Reference<T extends InterfacePointer = InterfacePointer> extends Ba
     return this.get() as T;
   }
   /** Original copy assignment uses set even for the same owner/pointer. @param value - Right side. @returns This same owner. */
-  assign(value: Reference<T> | T | null): this {
+  assign(value: ReferenceConstParameter<T> | T | null): this {
     this.set(value);
     return this;
   }

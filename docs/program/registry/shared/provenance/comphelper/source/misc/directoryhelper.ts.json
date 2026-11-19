@@ -7,13 +7,18 @@
     "status": "mapped",
     "upstreamPath": "comphelper/source/misc/directoryhelper.cxx",
     "localSymbols": [
-      "splitAtLastToken"
+      "splitAtLastToken",
+      "fileExists",
+      "dirExists",
+      "scanDirsAndFiles",
+      "deleteDirRecursively"
     ],
     "upstreamSymbols": [
       "DirectoryHelper::splitAtLastToken"
     ],
     "preservedResponsibilities": [
-      "Content-type reading now returns actual nested initialized Sequence<StringPair> rows; original root growth, append/default assignment, ordered duplicate retention and owned MIME lookup reuse genuine SAL/CPPU owners. WriteContentSequence consumes actual borrowed StringPair fields through AttributeList/SAX events without host pair reconstruction. ZipPackage WriteContentTypes uses original fixed FullPath0/Version1/MediaType2 slots, five actual default pairs, manifest-sized overrides followed by final shrink, original exact comparison and DirectoryHelper split semantics. ZipStorage supplies the original three-slot stream manifest including empty Version. CALC-494/WRITER425 preserve unchanged right output at leading/trailing token boundaries. Native parser short-prefix EOF result is tested through genuine InputSource; direct host XML text does not pass through the byte converter. Actual XStorage/XRelationshipAccess/XWriter services, host relationship output and complete DOCX/XLSX model/filter/Worker/UI acceptance remain pending. Native physical ABI/allocation/thread behavior is not certified; file/autosave/recovery choices are unchanged."
+      "Content-type reading now returns actual nested initialized Sequence<StringPair> rows; original root growth, append/default assignment, ordered duplicate retention and owned MIME lookup reuse genuine SAL/CPPU owners. WriteContentSequence consumes actual borrowed StringPair fields through AttributeList/SAX events without host pair reconstruction. ZipPackage WriteContentTypes uses original fixed FullPath0/Version1/MediaType2 slots, five actual default pairs, manifest-sized overrides followed by final shrink, original exact comparison and DirectoryHelper split semantics. ZipStorage supplies the original three-slot stream manifest including empty Version. CALC-494/WRITER425 preserve unchanged right output at leading/trailing token boundaries. Native parser short-prefix EOF result is tested through genuine InputSource; direct host XML text does not pass through the byte converter. Actual XStorage/XRelationshipAccess/XWriter services, host relationship output and complete DOCX/XLSX model/filter/Worker/UI acceptance remain pending. Native physical ABI/allocation/thread behavior is not certified; file/autosave/recovery choices are unchanged.",
+      "Original DirectoryHelper fileExists/dirExists/scanDirsAndFiles/deleteDirRecursively now use actual File/Directory/DirectoryItem/FileStatus and native URI encoding. Consumed std::set string/pair values preserve copied RTL strings, uniqueness and UTF16/pair lexicographic iteration; the VM owns container storage. Scan accumulates existing sets, ignores source open/status errors and skips non-regular/non-directory items; it retains original splitAtLastToken and UricNoSlash/IgnoreEscapes UTF8 behavior. Recursive deletion attempts every child and accumulates true-on-error without short circuiting later IO. Original TempFileNamed first constructor now handles real optional parents and private directories, with original invalid-parent fallback, regular-file-parent acceptance/failure and recursive destructor; default file behavior remains. Public CreateTempName/CreateTempURL/SetTempNameBaseDirectory/GetTempNameBaseDirectory preserve keep/remove, private-child/base fallback, process cache and ignored-status semantics. Genuine collisions, readonly base, Unicode, symlinks, hidden/trailing-dot filenames, value-set duplication and directory lifetimes execute without fake status/provider/private counters. WRITER605..607/CALC668..670 record preserved source issues. Sequential/custom-name/move constructors, TempFileFast, DirectoryHelper::moveDirContent, STL iterator mutation/full STL API/ABI/OOM and complete DOCX/XLSX package/storage/model/filter/UI remain unbound or unqualified."
     ],
     "omittedResponsibilities": [
       "Filesystem operations, physical view pointers/ABI, allocation failure, thread behavior and complete package/application service paths are unported or unverified."
@@ -31,6 +36,10 @@
         {
           "path": "apps/office/src/comphelper/source/misc/directoryhelper.test.ts",
           "marker": "splitAtLastToken"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/misc/directoryhelper.filesystem.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

@@ -1,7 +1,7 @@
 /** @fileoverview Native table name lookup, range admission and property failure isolation across Writer import owners. */
 import { assert, expect, it, vi } from "vitest";
 import { SwDoc } from "../doc/doc";
-import { SwTextNode } from "../txtnode/ndtxt";
+import type { SwNode } from "../docnode/node";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 import { SwXTextRange } from "./unoobj2";
@@ -33,7 +33,7 @@ function fixture() {
       return value;
     },
     /** Owns a native endpoint over the actual supplied node. @param node - Canonical node. @param index - UTF16 offset. @returns Live endpoint. */
-    range(node: SwTextNode, index: number) {
+    range(node: SwNode, index: number) {
       const position = new SwPosition(node, index),
         pam = new SwPaM(position);
       try {
@@ -188,7 +188,7 @@ it("validates conversion dimensions, endpoint ordering, document ownership and c
     try {
       expect(
         failure(
-          /** Structural table nodes cannot be admitted as text endpoints. @returns Table. */ () =>
+          /** A table start alone omits the rest of its section. @returns Table. */ () =>
             f.body.convertToTable([[[nontext, nontext]]], [], [], []),
         ),
       ).toBeInstanceOf(IllegalArgumentException);
@@ -200,6 +200,41 @@ it("validates conversion dimensions, endpoint ordering, document ownership and c
     expect(f.document.paragraphs).toEqual([a, b, c]);
   } finally {
     foreign.close();
+    f.close();
+  }
+});
+
+it("uses a complete nested table section as an inclusive cell range", /** Verifies native structural endpoints and the next adjacent body paragraph. @returns Nothing. */ () => {
+  const f = fixture();
+  const [first, second] = f.document.paragraphs;
+  assert(first);
+  assert(second);
+  try {
+    expect(
+      /** Rejects a row containing an empty node range. @returns Native conversion. */ () =>
+        f.document.GetNodes().TextToTable([[[]]], "Empty"),
+    ).toThrow("Empty table range.");
+    const inner = f.body.convertToTable([[[f.range(first, 0), f.range(first, 4)]]], [], [], []);
+    assert(inner);
+    const node = inner.table.GetTableNode();
+    const outer = f.body.convertToTable(
+      [
+        [
+          [f.range(node, 0), f.range(node.EndOfSectionNode(), 0)],
+          [f.range(second, 0), f.range(second, 4)],
+        ],
+      ],
+      [],
+      [],
+      [],
+    );
+    assert(outer);
+    const [firstBox, secondBox] = outer.table.GetTabLines()[0]?.GetTabBoxes() ?? [];
+    expect(firstBox?.GetContentNodes()).toEqual([node]);
+    expect(node.StartOfSectionNode()).toBe(firstBox?.GetStartNode());
+    expect(secondBox?.GetContentNodes()).toEqual([second]);
+    expect(first.FindTableNode()).toBe(node);
+  } finally {
     f.close();
   }
 });

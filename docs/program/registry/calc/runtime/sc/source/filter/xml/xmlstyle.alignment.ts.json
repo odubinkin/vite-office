@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/xml/xmlstyle.alignment.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "native-border-properties",
+    "capabilityIds": [
+      "CAP-211b5dc6-a580-4baf-a71e-d3af2e1c746f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/xml/xmlstyle.alignment.ts#importCellAlignment",
+        "vendor/libreoffice-reference/sc/source/filter/xml/xmlstyle.cxx#XmlScPropHdl_RotateAngle",
+        "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts"
+      ],
+      "justification": "Carries the actual Calc rotation, shrink, stacking and justify method over original ODF attributes and retains native integral export.",
+      "knownViolations": [],
+      "localSymbols": [
+        "importCellAlignment",
+        "exportCellAlignment"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/filter/xml/xmlstyle.cxx",
+      "upstreamSymbols": [
+        "XmlScPropHdl_RotateAngle",
+        "XmlScPropHdl_RotateReference",
+        "XmlScPropHdl_Orientation",
+        "XmlScPropHdl_JustifyMethod"
+      ]
+    }
+  }
+}
