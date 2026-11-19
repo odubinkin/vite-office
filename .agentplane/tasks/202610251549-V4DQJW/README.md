@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 411
+revision: 412
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "needs_rework"
-  updated_at: "2026-11-19T21:07:03.048Z"
+  updated_at: "2026-11-19T22:49:43.614Z"
   updated_by: "CODER"
-  note: "Inline raster import, Worker and ODT persistence, browser paint, and DOCX export passed 150 focused Writer tests and three Chromium regressions. The DOCX task remains in implementation for inline copy and undo and remaining DrawingML behavior."
-  attempts: 2
+  note: "DOCX table flow passed upstream fixture checks, 94.02% table-export branch coverage, 37 targeted Writer rechecks, 17 shared token/parser cases, and production Chromium file workflows. Wider DOCX acceptance remains open."
+  attempts: 3
 commit: null
 comments:
   -
@@ -2042,8 +2042,14 @@ events:
     author: "CODER"
     state: "needs_rework"
     note: "Inline raster import, Worker and ODT persistence, browser paint, and DOCX export passed 150 focused Writer tests and three Chromium regressions. The DOCX task remains in implementation for inline copy and undo and remaining DrawingML behavior."
+  -
+    type: "verify"
+    at: "2026-11-19T22:49:43.614Z"
+    author: "CODER"
+    state: "needs_rework"
+    note: "DOCX table flow passed upstream fixture checks, 94.02% table-export branch coverage, 37 targeted Writer rechecks, 17 shared token/parser cases, and production Chromium file workflows. Wider DOCX acceptance remains open."
 doc_version: 3
-doc_updated_at: "2026-11-19T21:07:03.256Z"
+doc_updated_at: "2026-11-19T22:49:43.838Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -6048,6 +6054,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-19T22:49:43.614Z — VERIFY — needs_rework
+
+    By: CODER
+
+    Note: DOCX table flow passed upstream fixture checks, 94.02% table-export branch coverage, 37 targeted Writer rechecks, 17 shared token/parser cases, and production Chromium file workflows. Wider DOCX acceptance remains open.
+    Attempts: 3
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T21:07:03.256Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -6765,6 +6801,10 @@ sections:
     - Result: pass for the represented table geometry and existing UI route. The DOCX/XLSX parent scope remains in rework.
     - Evidence: 78 Writer tests across 10 files and two Chromium scenarios passed. Table export branch coverage was 94.87 percent. The table-style handler reached 100 percent in the measured metrics. The pinned Word sample retained the two 360-twip indents and the nested 3841/4050 grid after direct import, Worker transfer, ODT and DOCX reopen.
     - Scope: inherited table indentation and cell distances, explicit overrides, fixed grid scale, table width and alignment serialization. Complete conditional table styles, table borders and realized layout for percentage grids remain open. No full suite was due.
+
+    - Observation: Repeating table header rows, supported table and cell direction, row height and split emulation now export from the native Writer model. The related test run exposed stale factory test counts and a first-import token initialization failure.
+      Impact: The existing Writer Open and Export workflow preserves these supported items. The table-flow export leaves the active browser document format unchanged.
+      Resolution: Implementation b93307e159a9 and follow-ups c4d1e4ad6 and 9084201c53a5; see evidence/docx-table-flow.json. Conditional table-style header inheritance and prior whole-suite and registry gaps remain open.
 id_source: "generated"
 ---
 ## Summary
@@ -10780,6 +10820,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-19T22:49:43.614Z — VERIFY — needs_rework
+
+By: CODER
+
+Note: DOCX table flow passed upstream fixture checks, 94.02% table-export branch coverage, 37 targeted Writer rechecks, 17 shared token/parser cases, and production Chromium file workflows. Wider DOCX acceptance remains open.
+Attempts: 3
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T21:07:03.256Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -11502,3 +11572,7 @@ Evidence: `evidence/docx-native-ranged-bookmarks.json`.
 - Result: pass for the represented table geometry and existing UI route. The DOCX/XLSX parent scope remains in rework.
 - Evidence: 78 Writer tests across 10 files and two Chromium scenarios passed. Table export branch coverage was 94.87 percent. The table-style handler reached 100 percent in the measured metrics. The pinned Word sample retained the two 360-twip indents and the nested 3841/4050 grid after direct import, Worker transfer, ODT and DOCX reopen.
 - Scope: inherited table indentation and cell distances, explicit overrides, fixed grid scale, table width and alignment serialization. Complete conditional table styles, table borders and realized layout for percentage grids remain open. No full suite was due.
+
+- Observation: Repeating table header rows, supported table and cell direction, row height and split emulation now export from the native Writer model. The related test run exposed stale factory test counts and a first-import token initialization failure.
+  Impact: The existing Writer Open and Export workflow preserves these supported items. The table-flow export leaves the active browser document format unchanged.
+  Resolution: Implementation b93307e159a9 and follow-ups c4d1e4ad6 and 9084201c53a5; see evidence/docx-table-flow.json. Conditional table-style header inheritance and prior whole-suite and registry gaps remain open.
