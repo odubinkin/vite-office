@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/tool/interpr1.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "numeric-formula-editing",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/interpr1.ts",
+        "apps/office/src/sc/source/core/tool/lookup-formula.test.ts",
+        "apps/office/src/sc/source/filter/xml/xmlexternaltabi.test.ts",
+        "vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx#ScInterpreter::CalculateLookup"
+      ],
+      "justification": "Calc's common matrix lookup handles ordered and exact VLOOKUP and HLOOKUP over external cache matrices and inline arrays with the original type ordering, first and last match behavior, default sorted argument and scalar result rules. Worksheet-range query iterators and matrix array execution outside the represented scalar path remain pending. The original matrix search ignores wildcard and regular-expression expansion. Locale comparison uses the browser Intl collator with the configured Calc language and case-insensitive sensitivity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CalculateMatrixLookup"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/tool/interpr1.cxx",
+      "upstreamSymbols": [
+        "ScInterpreter::CalculateLookup"
+      ]
+    }
+  }
+}

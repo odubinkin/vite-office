@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/core/tool/interpr1.ts",
+    "upstreamPath": "sc/source/core/tool/interpr1.cxx",
+    "localSymbols": [
+      "CalculateMatrixLookup"
+    ],
+    "upstreamSymbols": [
+      "ScInterpreter::CalculateLookup"
+    ],
+    "preservedResponsibilities": [
+      "Calc's common matrix lookup handles ordered and exact VLOOKUP and HLOOKUP over external cache matrices and inline arrays with the original type ordering, first and last match behavior, default sorted argument and scalar result rules."
+    ],
+    "omittedResponsibilities": [
+      "Worksheet-range query iterators and matrix array execution outside the represented scalar path remain pending. The original matrix search ignores wildcard and regular-expression expansion. Locale comparison uses the browser Intl collator with the configured Calc language and case-insensitive sensitivity."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/interpr1.ts",
+          "marker": "CalculateMatrixLookup"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/lookup-formula.test.ts",
+          "marker": "native matrix lookup ordering"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlexternaltabi.test.ts",
+          "marker": "replays LibreOffice testExternalRefCacheODS"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::CalculateLookup"
+        }
+      ]
+    }
+  }
+}

@@ -11,6 +11,7 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { ODF_NAMESPACES } from "../../../../xmloff/source/core/xmltoken";
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { ScDocument } from "../../../inc/document";
+import { ScAddress } from "../../../inc/address";
 import { ScXMLImport } from "./xmlimprt";
 import { ODS_MIMETYPE, readOdsDocument, writeOdsXml } from "./xmlwrap";
 import { createExternalRefTable } from "./xmlexternaltabi";
@@ -48,6 +49,33 @@ it("imports the original cache table from external-ref-cache.ods without a visib
     expect(text((word as FormulaStringToken).GetString().getString())).toBe("text");
     expect(cache?.getCell(2, 1)).toEqual(new FormulaDoubleToken(1));
   } finally {
+    doc.Dispose();
+  }
+});
+
+it("replays LibreOffice testExternalRefCacheODS on the original workbook", /** Verifies both lookup results and registration of the original formula cells. @returns Completion. */ async () => {
+  const bytes = readFileSync(
+    "../../vendor/libreoffice-reference/sc/qa/unit/data/ods/external-ref-cache.ods",
+  );
+  const doc = await readOdsDocument(new Uint8Array(bytes));
+  let reopened: ScDocument | undefined;
+  try {
+    reopened = await readOdsDocument(await writeOdsXml(doc));
+    for (const candidate of [doc, reopened]) {
+      expect(candidate.GetTableCount()).toBe(1);
+      for (const row of [1, 2, 3]) {
+        const formula = candidate.GetFormulaCell(new ScAddress(1, row, 0));
+        assert(formula);
+        expect(text(formula.GetString().getString())).toBe("text");
+      }
+      for (const row of [5, 6]) {
+        const position = new ScAddress(0, row, 0);
+        expect(candidate.GetErrCode(position)).toBe(FormulaError.NONE);
+        expect(candidate.GetExternalRefManager().hasCellExternalReference(position)).toBe(true);
+      }
+    }
+  } finally {
+    reopened?.Dispose();
     doc.Dispose();
   }
 });

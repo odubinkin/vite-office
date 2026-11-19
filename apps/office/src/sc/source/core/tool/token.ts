@@ -491,6 +491,8 @@ const operators = new Set<OpCode>([
   OpCode.ocProduct,
   OpCode.ocAverage,
   OpCode.ocConcat,
+  OpCode.ocVLookup,
+  OpCode.ocHLookup,
   OpCode.ocAmpersand,
   OpCode.ocRange,
 ]);

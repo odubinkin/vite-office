@@ -48,6 +48,8 @@ const arithmetic = new Set<OpCode>([
   OpCode.ocProduct,
   OpCode.ocAverage,
   OpCode.ocConcat,
+  OpCode.ocVLookup,
+  OpCode.ocHLookup,
   OpCode.ocAmpersand,
 ]);
 
@@ -373,7 +375,9 @@ export class FormulaCompiler {
       op === OpCode.ocSumSQ ||
       op === OpCode.ocProduct ||
       op === OpCode.ocAverage ||
-      op === OpCode.ocConcat
+      op === OpCode.ocConcat ||
+      op === OpCode.ocVLookup ||
+      op === OpCode.ocHLookup
     ) {
       const functionToken = this.mpToken as FormulaByteToken;
       let terminal = this.NextToken(),

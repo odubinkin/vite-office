@@ -221,6 +221,11 @@ test("Calc opens the pinned XLSX with external names and exports its caches", /*
   await page.keyboard.type("='file:///bad(1).xlsx'#$Referens.$A$7");
   await page.keyboard.press("Enter");
   await expect(cell).toHaveText("Alla fakturor ska i detta flöde");
+  const lookup = page.getByRole("gridcell", { name: /^B1(?:\s|$)/u });
+  await lookup.click();
+  await page.keyboard.type(`=VLOOKUP("referens";'file:///bad(1).xlsx'#$Referens.$A$1:.$A$7;1;0)`);
+  await page.keyboard.press("Enter");
+  await expect(lookup).toHaveText("Referens");
   await page.getByRole("menuitem", { name: "File" }).click();
   await page.getByRole("menuitem", { name: "Save As…" }).click();
   await page.getByRole("textbox", { name: "New copy name" }).fill("External cache copy");
@@ -233,6 +238,7 @@ test("Calc opens the pinned XLSX with external names and exports its caches", /*
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(tabs.getByRole("tab")).toHaveCount(1);
   await expect(cell).toHaveText("Alla fakturor ska i detta flöde");
+  await expect(lookup).toHaveText("Referens");
 
   const pending = page.waitForEvent("download");
   await page.getByRole("menuitem", { name: "File" }).click();
@@ -243,9 +249,9 @@ test("Calc opens the pinned XLSX with external names and exports its caches", /*
   const buffer = await readFile(path);
   const workbook = await DocumentArchive.open(buffer);
   expect(await workbook.readTextEntry("xl/workbook.xml")).toContain("[1]Referens!$A$1:$A$7");
-  expect(await workbook.readTextEntry("xl/worksheets/sheet1.xml")).toContain(
-    "<f>[1]Referens!$A$7</f>",
-  );
+  const sheetXml = await workbook.readTextEntry("xl/worksheets/sheet1.xml");
+  expect(sheetXml).toContain("<f>[1]Referens!$A$7</f>");
+  expect(sheetXml).toMatch(/<f>VLOOKUP\([^<]+,\[1\]Referens!\$A\$1:\$A\$7,1,0\)<\/f>/u);
   expect(await workbook.readTextEntry("xl/externalLinks/externalLink1.xml")).toContain(
     '<cell r="A7" t="str"><v>Alla fakturor ska i detta flöde</v></cell>',
   );
@@ -261,6 +267,7 @@ test("Calc opens the pinned XLSX with external names and exports its caches", /*
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(page.getByText("External names reopened", { exact: true })).toBeVisible();
   await expect(cell).toHaveText("Alla fakturor ska i detta flöde");
+  await expect(lookup).toHaveText("Referens");
   await expect(tabs.getByRole("tab", { name: "Sheet 1", exact: true })).toHaveAttribute(
     "aria-current",
     "page",

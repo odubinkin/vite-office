@@ -32,7 +32,7 @@ import { SharedString, type SharedStringConstReference } from "../../../../svl/i
 import type { FormulaConstTokenRef } from "../../../../formula/inc/types";
 import { FormulaError, GetDoubleErrorValue } from "../../../../formula/inc/errorcodes";
 import { OpCode } from "../../../../formula/inc/opcode";
-import { approxAdd, approxSub } from "../../../../sal/inc/rtl/math";
+import { approxAdd, approxFloor, approxSub } from "../../../../sal/inc/rtl/math";
 import { div, power } from "../../../inc/math";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import type { ScDocument } from "../../../inc/document";
@@ -45,6 +45,7 @@ import { SAL_MAX_INT32 } from "../../../../sal/inc/types";
 import { GetString as GetEditString } from "./editutil";
 import { ScMatValType } from "../../../inc/types";
 import type { ScExternalCacheToken } from "../../ui/docshell/externalrefmgr";
+import { CalculateMatrixLookup, type MatrixLookupKey } from "./interpr1";
 
 const kScInterpreterMaxStrLen = Math.trunc(SAL_MAX_INT32 / 8);
 /** Actual initialized numeric interpreter state, with token references owned by JS GC. */
@@ -538,6 +539,113 @@ export class ScInterpreter {
     return undefined;
   }
 
+  /** Resolves the original matrix operand types consumed by the matrix lookup path. @returns Matrix or argument error. */
+  private GetLookupMatrix(): ScMatrix | undefined {
+    const token = this.pStack.at(-1);
+    if (token instanceof ScExternalDoubleRefToken) return this.PopExternalDoubleRef();
+    if (token instanceof ScExternalSingleRefToken) {
+      const value = this.PopExternalSingleRef();
+      if (!value) return undefined;
+      const matrix = new ScMatrix(1, 1);
+      if (value instanceof FormulaDoubleToken) matrix.PutDouble(value.GetDouble(), 0, 0);
+      else if (value instanceof FormulaStringToken) matrix.PutString(value.GetString(), 0, 0);
+      return matrix;
+    }
+    if (token instanceof ScMatrixToken) {
+      this.pStack.pop();
+      const matrix = token.GetMatrix();
+      if (matrix) return matrix;
+    }
+    if (token instanceof ScSingleRefToken || token instanceof ScDoubleRefToken)
+      throw new Error("Lookup with a worksheet range requires Calc query iterators");
+    this.SetError(FormulaError.IllegalParameter);
+    return undefined;
+  }
+
+  /** Reads the lookup key with native cell and matrix type selection, without numeric text coercion. @returns Lookup key or absence following an error. */
+  private FillLookupEntry(): MatrixLookupKey | undefined {
+    let key: number | string;
+    const token = this.pStack.at(-1);
+    if (token instanceof FormulaDoubleToken) return this.GetDouble();
+    if (token instanceof FormulaStringToken) key = this.GetString();
+    else if (token instanceof ScSingleRefToken || token instanceof ScDoubleRefToken) {
+      let address: ScAddress;
+      if (token instanceof ScSingleRefToken) address = this.PopSingleRef();
+      else {
+        const range = this.PopDoubleRef();
+        address = new ScAddress();
+        if (
+          this.nGlobalError !== FormulaError.NONE ||
+          !this.DoubleRefToPosSingleRef(range, address)
+        )
+          return undefined;
+      }
+      const cell = new ScRefCellValue(this.mrDoc, address);
+      if (cell.hasNumeric()) return this.GetCellValue(address, cell);
+      key = this.GetCellString(cell);
+    } else {
+      const matrix = this.GetLookupMatrix();
+      if (!matrix) return undefined;
+      const value = matrix.Get(0, 0);
+      try {
+        if (ScMatrix.IsValueType(value.nType)) {
+          this.SetError(value.GetError());
+          return value.fVal;
+        }
+        key = text(value.GetString().getString());
+      } finally {
+        value.dispose();
+      }
+    }
+    const native = unicode(key);
+    const interned = this.mrDoc.GetSharedStringPool().intern(native);
+    try {
+      return { text: key, ignoreCase: text(interned.getIgnoreCaseString()) };
+    } finally {
+      interned.dispose();
+      native.dispose();
+    }
+  }
+
+  /** Runs the common native lookup stack and matrix result rules. @param count - Token argument count. @param horizontal - Whether to search across the first row. @returns Nothing. */
+  private CalculateLookup(count: number, horizontal: boolean): void {
+    if (count < 3 || count > 4) {
+      this.SetError(count < 3 ? FormulaError.ParameterExpected : FormulaError.IllegalParameter);
+      return;
+    }
+    const sorted = count === 3 || this.GetDouble() !== 0;
+    const index = approxFloor(this.GetDouble()) - 1;
+    if (this.nGlobalError !== FormulaError.NONE) return;
+    const matrix = this.GetLookupMatrix();
+    if (!matrix) return;
+    const dimensions = { column: 0, row: 0 };
+    matrix.GetDimensions(dimensions);
+    if (index < 0 || index >= (horizontal ? dimensions.row : dimensions.column)) {
+      this.SetError(FormulaError.IllegalArgument);
+      return;
+    }
+    const key = this.FillLookupEntry();
+    if (key === undefined || this.nGlobalError !== FormulaError.NONE) return;
+    const found = CalculateMatrixLookup(
+      matrix,
+      horizontal ? dimensions.column : dimensions.row,
+      index,
+      horizontal,
+      sorted,
+      key,
+    );
+    if (!found) {
+      this.SetError(FormulaError.NotAvailable);
+      return;
+    }
+    try {
+      if (ScMatrix.IsValueType(found.nType)) this.PushDouble(found.fVal);
+      else this.PushString(text(found.GetString().getString()));
+    } finally {
+      found.dispose();
+    }
+  }
+
   /** Creates native final numeric/empty/text results from a real referenced cell. @param address - Absolute reference. @returns Nothing. */
   private PushCellResultToken(address: ScAddress): void {
     const cell = new ScRefCellValue(this.mrDoc, address);
@@ -644,6 +752,8 @@ export class ScInterpreter {
       )
         this.IterateParameters(op, (token as FormulaByteToken).GetByte());
       else if (op === OpCode.ocConcat) this.ScConcat((token as FormulaByteToken).GetByte());
+      else if (op === OpCode.ocVLookup || op === OpCode.ocHLookup)
+        this.CalculateLookup((token as FormulaByteToken).GetByte(), op === OpCode.ocHLookup);
       else if (op === OpCode.ocAmpersand) this.ScAmpersand();
       else if (op === OpCode.ocAdd || op === OpCode.ocSub)
         this.CalculateAddSub(op === OpCode.ocSub);

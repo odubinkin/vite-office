@@ -35,7 +35,8 @@
       "Evaluates native scalar CONCATENATE and ampersand, uses the standard formatter for numbers, and applies the original line-break policy for actual string/edit cell references.",
       "Converts a returned literal matrix into the original matrix result token and upper-left cell projection.",
       "The scalar aggregate interpreter takes actual ScMatrixToken operands, handles a missing matrix with UnknownVariable and delegates the supported aggregate branch to IterateMatrix.",
-      "Scalar numeric and text operands, ordinary aggregates and final results now resolve external single-sheet references through their original token types and document cache. External rectangular references reuse the native ScMatrix owner."
+      "Scalar numeric and text operands, ordinary aggregates and final results now resolve external single-sheet references through their original token types and document cache. External rectangular references reuse the native ScMatrix owner.",
+      "Dispatches native VLOOKUP and HLOOKUP opcodes and projects typed lookup keys and results through the existing interpreter stack and external cache."
     ],
     "omittedResponsibilities": [
       "All services outside the explicitly represented numeric formula/arithmetic subset remain unsupported; no broad parity claim."
@@ -89,6 +90,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/external-reference-formula.test.ts",
           "marker": "uses source values, known blanks and unavailable cells"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/lookup-formula.test.ts",
+          "marker": "native matrix lookup ordering"
         }
       ],
       "upstream": [

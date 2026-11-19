@@ -7055,3 +7055,15 @@ text. Calc retains this distinction.
 - [Native external string operands](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/core/tool/interpr4.cxx#L2436-L2483)
 - [Native matrix string access](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/core/tool/scmatrix.cxx#L694-L724)
 - [Calc regression](../../apps/office/src/sc/source/core/tool/external-reference-formula.test.ts)
+
+### CALC-749 — Exact horizontal and vertical matrix lookups treat blank keys differently
+
+In exact mode, the horizontal string search compares both string cells and
+blank matrix cells. The vertical search uses `MatchStringInColumns`, which
+compares only string blocks. An empty search string can match an unfilled
+horizontal cell, while the same blank candidate is skipped by vertical lookup.
+Calc retains both paths for external cache matrices.
+
+- [Native matrix lookup](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/core/tool/interpr1.cxx#L7698-L7721)
+- [Native vertical string matcher](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/core/tool/scmatrix.cxx#L1473-L1501)
+- [Calc regression](../../apps/office/src/sc/source/core/tool/lookup-formula.test.ts)
