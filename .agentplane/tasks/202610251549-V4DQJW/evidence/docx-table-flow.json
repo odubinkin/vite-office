@@ -1,0 +1,81 @@
+{
+  "checkpoint": "Writer DOCX table headers, directions and row flow",
+  "implementation": "b93307e159a9",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    "sw/source/filter/ww8/docxattributeoutput.cxx#DocxAttributeOutput::StartTableRow",
+    "sw/source/filter/ww8/docxtableexport.cxx#DocxAttributeOutput::TableHeight",
+    "sw/source/filter/ww8/docxtableexport.cxx#DocxAttributeOutput::TableCanSplit",
+    "sw/source/filter/ww8/docxtableexport.cxx#DocxAttributeOutput::TableBidi",
+    "sw/source/filter/ww8/docxtableexport.cxx#DocxAttributeOutput::TableVerticalCell",
+    "sw/source/filter/ww8/wrtw8nds.cxx#MSWordExportBase::OutputTextNode"
+  ],
+  "fixtures": {
+    "2_table_doc.docx": "06ef510c600a2ded4058f843afac1f30c04133641a8e018c46a7d08260b51533",
+    "tdf101589_dontSplitTable.odt": "a82d911e1d02beca56f3772ff8cdbe4dccbeb59cab50ce86a8270af07fe2cdcd",
+    "tdf64264.docx": "728c8f1703e5bbd89dff02113e15801d5ce2cf6eaf9567572cb14b7fb2506395",
+    "tdf58944-repeating-table-header.docx": "7afb8b3540a3ffe6f77ec8a3e403ae6d0fdcd2286f2865d6d1925d68c8a241b7",
+    "tdf138020_all_rows_tblHeader.docx": "2b87cc976f95a2ece203a128489a9ce5d797afff0501c24ba726f2fd69d63d97",
+    "rtl-table.docx": "bf8f329792bd885c25d15c91a969ffd9624a3d0911f30d84fcd109cc018ce7ec"
+  },
+  "verification": {
+    "chromium": {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" npm exec -- playwright test --config .git/calc-panes-browser.config.mts --project writer --workers=1 --timeout=90000 writer-docx-table-flow.spec.ts writer-docx-styles.spec.ts",
+      "result": "pass",
+      "evidence": "Five production scenarios, including the pinned tdf64264 fixture. The existing Open UI shows the repeating header, the automatic ODT copy retains it after reload, the actual downloaded DOCX contains exactly one tblHeader, and mobile reopen restores the heading. After the shared token fix, the nested-table, header-picture and repeating-header cases also passed against a fresh production build."
+    },
+    "static": {
+      "commands": [
+        "npm run typecheck",
+        "npm run test:static",
+        "npm run check:dependencies",
+        "npm run check:docs",
+        "npm run check:file-size",
+        "npm run check:source-tree",
+        "npm run check:writer-resources",
+        "npm run check:writer-hintids",
+        "node .agentplane/policy/check-routing.mjs",
+        "ap doctor",
+        "git diff --check"
+      ],
+      "result": "pass",
+      "evidence": "Scoped ESLint and Prettier and provenance for all eight touched production files passed."
+    },
+    "global_registry": {
+      "commands": [
+        "npm run check:source-provenance",
+        "npm run inventory:invariants",
+        "npm run inventory:parity"
+      ],
+      "result": "fail",
+      "evidence": "Same pre-existing missing framework records OfficeTooltips.tsx and available-menu-items.ts."
+    },
+    "table_coverage": {
+      "command": "npm run test:coverage:writer -- docxexport.table-flow docxexport.fonts docxexport.page-stories docxattributeoutput.section --maxWorkers=2 --testTimeout=90000 --coverage.include='src/sw/source/filter/ww8/docxtableexport.ts' --coverage.reportsDirectory=coverage/docx-table-flow-final --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.perFile=true --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "41 tests in four files. The complete measured table output module has 78/78 statements, 63/67 branches, 7/7 functions and 74/74 lines. The ECMA right-aligned and bottom-cell variant closes the initial 88.05% branch result without changing the threshold or scope."
+    },
+    "initial_related_writer": {
+      "command": "npm run test:writer -- docxexport.table-flow docxexport.fonts docxattributeoutput.section docxexport.page-stories WriterFilter native-table-flow-controls native-row-split-item-transport --maxWorkers=2 --testTimeout=90000",
+      "result": "fail",
+      "evidence": "1113 tests passed before the follow-ups. OOXMLFactory had stale expected source-generator counts. TextEffectsHandler failed at module initialization because static picture tokens crossed the generated Writer factory dependency cycle. The unchanged generator check still regenerates exact tables. Correction refreshes the expected totals and moves the unchanged numeric token resolution to the shared namespace module. Both failed suites were rechecked together."
+    },
+    "shared_token": {
+      "command": "npm run test:shared -- src/oox/source/token/tokenmap.test.ts src/oox/source/core/fastparser.test.ts",
+      "result": "pass",
+      "evidence": "17 token and OOXML SAX cases passed in two files."
+    },
+    "related_writer_recheck": {
+      "command": "npm run test:writer -- src/sw/source/writerfilter/dmapper/TextEffectsHandler.test.ts src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.test.ts src/sw/source/writerfilter/filter/WriterFilter.test.ts src/sw/source/filter/ww8/docxexport.table-flow.test.ts --maxWorkers=2 --testTimeout=90000",
+      "result": "pass",
+      "evidence": "37 tests in 5 files passed after the two recovery changes. The factory and text effects failures from the first related run are both resolved. The final run also covers the existing DOCX filter and all table flow cases."
+    }
+  },
+  "suspected_upstream": [
+    "WRITER-669 retains the fixed ten-header-row cutoff and records the geometry-independent behavior.",
+    "WRITER-670 records that upstream temporarily computes the one-row cantSplit result through an assignment to the connected row format. The same DOCX projection in this browser filter keeps the active Writer row and paragraph items intact."
+  ],
+  "residual": "The wider DOCX task remains open. Conditional Word table-style header inheritance and style export from tdf81100, all conditional fill/style assertions, and native pagination assertions beyond the represented model and Chromium scenario remain open. Full suites remain on the agreed ten-task cadence.",
+  "test_followup": "c4d1e4ad6",
+  "factory_initialization_fix": "9084201c53a5"
+}
