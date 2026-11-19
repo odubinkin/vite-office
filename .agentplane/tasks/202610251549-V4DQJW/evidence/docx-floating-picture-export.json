@@ -1,0 +1,12 @@
+{
+  "scope": "Export native floating PNG and JPEG pictures at their Writer text anchor, with WordprocessingDrawing placement and a relationship owned by the actual body or page story part.",
+  "implementation": "7a8c627ac0e1",
+  "writer_unit_regressions": { "files": 5, "passed": 36, "log": "pic-export-writer.log" },
+  "floating_picture_export_coverage": { "tests": 6, "statements": 98.43, "branches": 92.85, "functions": 100, "lines": 99.19, "log": "pic-export-coverage-final.log" },
+  "production_chromium": { "passed": 3, "logs": ["pic-export-browser-private.log", "pic-export-browser-regressions.log"] },
+  "private_input": "The supplied DOCX opened through the production Open dialog. The production DOCX download preserved the original JPEG bytes and its header-local relationship and reopened through the same dialog. The input and local probe are excluded from the repository.",
+  "native_scope": ["Writer frames retain their paragraph offset", "The same encoded image in two stories uses a single media part and distinct part-local relationships", "Line-relative position inversion and the native one-twip Word offset correction are preserved"],
+  "checks_passed": ["typecheck", "production build", "scoped ESLint and Prettier", "JSDoc", "file size", "module boundaries", "Agentplane routing", "git diff check"],
+  "registry_check_failure": "Previously added OfficeTooltips.tsx and available-menu-items.ts still lack runtime records.",
+  "pending": ["Render the picture in the Writer page story", "Keep embedded pictures through the primary ODT save and reopen path", "Implement remaining inline pictures, wrap modes, and shape and effect ownership"]
+}
