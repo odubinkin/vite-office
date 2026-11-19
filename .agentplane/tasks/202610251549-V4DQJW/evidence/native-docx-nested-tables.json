@@ -1,0 +1,311 @@
+{
+  "checkpoint": "Native Writer DOCX nested table endpoints, body import and Worker round-trip",
+  "task": "202610251549-V4DQJW",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "createdAt": "2026-11-19T03:42:03.265Z",
+  "upstream": [
+    "sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx#startLevel",
+    "sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx#endLevel",
+    "sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx#nNestLevel",
+    "sw/source/core/unocore/unotext.cxx#ConvertCell",
+    "sw/source/core/docnode/ndtbl.cxx#ExpandRangeForTableBox",
+    "sw/source/writerfilter/ooxml/model.xml#CT_PPrBase",
+    "sw/qa/extras/ooxmlexport/data/tdf131260.docx",
+    "sw/qa/extras/ooxmlexport/ooxmlexport5.cxx#testNumberedList"
+  ],
+  "results": {
+    "writer": {
+      "files": 9,
+      "tests": 106
+    },
+    "chromium": {
+      "suite": 11,
+      "nestedOnFinalBuild": 1
+    },
+    "scoped90": "not met by every owner",
+    "coverage": {
+      "apps/office/src/sw/source/core/docnode/ndtbl.ts": {
+        "TextToTableNodes": {
+          "statements": {
+            "covered": 34,
+            "total": 35,
+            "pct": 97.14
+          },
+          "branches": {
+            "covered": 16,
+            "total": 17,
+            "pct": 94.11
+          },
+          "functions": {
+            "covered": 4,
+            "total": 4,
+            "pct": 100
+          },
+          "lines": {
+            "covered": 32,
+            "total": 33,
+            "pct": 96.96
+          }
+        }
+      },
+      "apps/office/src/sw/source/core/unocore/unotbl.ts": {
+        "convertToTable": {
+          "statements": {
+            "covered": 106,
+            "total": 106,
+            "pct": 100
+          },
+          "branches": {
+            "covered": 53,
+            "total": 53,
+            "pct": 100
+          },
+          "functions": {
+            "covered": 7,
+            "total": 7,
+            "pct": 100
+          },
+          "lines": {
+            "covered": 88,
+            "total": 88,
+            "pct": 100
+          }
+        }
+      },
+      "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ranges.ts": {
+        "DomainMapperTableRanges": {
+          "statements": {
+            "covered": 17,
+            "total": 18,
+            "pct": 94.44
+          },
+          "branches": {
+            "covered": 7,
+            "total": 8,
+            "pct": 87.5
+          },
+          "functions": {
+            "covered": 3,
+            "total": 3,
+            "pct": 100
+          },
+          "lines": {
+            "covered": 14,
+            "total": 14,
+            "pct": 100
+          }
+        },
+        "TableLevel": {
+          "statements": {
+            "covered": 91,
+            "total": 122,
+            "pct": 74.59
+          },
+          "branches": {
+            "covered": 27,
+            "total": 60,
+            "pct": 45
+          },
+          "functions": {
+            "covered": 16,
+            "total": 16,
+            "pct": 100
+          },
+          "lines": {
+            "covered": 86,
+            "total": 108,
+            "pct": 79.62
+          }
+        }
+      }
+    }
+  },
+  "verified": [
+    "The original tdf131260 fixture opens with three native tables and retains three after DOCX export and reopen.",
+    "The fixture variant that starts a cell with a nested table retains the native parent identity through Worker transfer, primary ODT and DOCX reopen.",
+    "An inner negative table indent is clamped using the source import level, even before the parent cell is assembled.",
+    "Native UNO conversion accepts a full nested table as a cell endpoint and rejects an incomplete structural range.",
+    "The NumberedList body retains its two tables and both NumberedList1 references after removing only the footer reference in the test harness. The verified grid is 3841 and 4049 twips.",
+    "Production Writer Chromium opens and downloads the unchanged three-table DOCX, then reopens it at a 390px viewport."
+  ],
+  "remaining": [
+    "The unchanged NumberedList source package requires the native footer relationship, header/footer page-format and text-owner path. Its full LibreOffice QA also expects the second grid width 4050 and both table indents 360, which this checkpoint does not verify.",
+    "The unchanged tdf119760 positional fixture uses CT_TblLayoutType, which requires the source table layout mode and width-vector behavior.",
+    "Separate related runs found a Strict themed-font ODT assertion, an erased UNO exception member equality failure, and RTF tests reaching uninitialized Emscripten locale. All new DOCX nesting and UNO boundary tests passed.",
+    "The complete route and level owners remain below scoped90 in branch coverage. Full DOCX and XLSX task acceptance remains open."
+  ],
+  "commands": [
+    "vitest run --config vitest.writer.config.ts --coverage docxexport.numbered-list native-import-table-errors native-text-import-api pam-selection DomainMapperTableManager OOXMLFastContextHandler native-content-box-registry odt-property-roundtrip WriterFileDialog --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ranges.ts --coverage.include=src/sw/source/core/unocore/unotbl.ts --coverage.include=src/sw/source/core/docnode/ndtbl.ts --coverage.thresholds.lines=0 --coverage.thresholds.functions=0 --coverage.thresholds.statements=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=text --coverage.reportsDirectory=coverage/numbered-list-final-scoped",
+    "vitest run --config vitest.writer.config.ts --coverage docxexport native-import-table-errors native-text-import-api pam-selection DomainMapperTableManager OOXMLFastContextHandler native-content-box-registry odt-property-roundtrip WriterFileDialog --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ranges.ts --coverage.include=src/sw/source/core/unocore/unotbl.ts --coverage.include=src/sw/source/core/docnode/ndtbl.ts --coverage.thresholds.lines=0 --coverage.thresholds.functions=0 --coverage.thresholds.statements=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=text --coverage.reportsDirectory=coverage/numbered-list-final",
+    "vitest run --config vitest.writer.config.ts docxexport.numbered-list native-import-table-errors rtf-table-direction rtf-floating-table --maxWorkers=2 --testTimeout=90000",
+    "vitest run --config vitest.writer.config.ts native-import-core-lifetimes -t retains generated unknown-property messages",
+    "vitest run --config vitest.writer.config.ts docxexport.theme-fonts -t resolves Strict themed fonts --testTimeout=90000",
+    "npm run typecheck",
+    "npm run test:static",
+    "./node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1",
+    "./node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1 -g 'downloads and reopens nested DOCX tables'",
+    "python3 scripts/writer-ooxml/generate-factory.py --check",
+    "npm run check:dependencies",
+    "npm run check:docs",
+    "npm run check:file-size",
+    "npm run check:source-tree",
+    "npm run check:writer-resources",
+    "npm run check:writer-hintids",
+    "npm run inventory:registry:build",
+    "npm run check:source-provenance",
+    "npm run inventory:invariants",
+    "npm run inventory:parity",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor"
+  ],
+  "files": [
+    {
+      "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+      "sha256": "b9fe4d514e91f8bd63f19c53f791e0e3fe508602c61967ae04ff315c47d53d9a"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/docnode/ndtbl.ts.json",
+      "sha256": "8cef98f5760c60aaa1ac15c72156802e5d27e3a72fa5d474a6834259c812e554"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/docnode/ndtbl.ts.json",
+      "sha256": "6104ad59ce9c7c327f2c87cfa6f5c6fa77e9e3aa891ece1091a25d0c92011d80"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "sha256": "a6f6714baedb09ded023710ddfa71c96e634a91ecb540c95eab831d1ea1cdc8d"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/docnode/nodes.ts.json",
+      "sha256": "eed8894f25807b3a5587cabb9ad4a042f4d4960af042c98a07cd9b5489219749"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/docnode/nodes.ts.json",
+      "sha256": "6654f88656530870cad878c9f8b4767d528f29402c76baf41c3d18ad2a2b6b89"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/unocore/unotbl.ts",
+      "sha256": "9cd2346b7a4983745013d5aaee7dcb96a1db45cce464744af76b013ce49f30f2"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/unocore/unotbl.ts.json",
+      "sha256": "b64c68e2bec12825b13240029113008bfbaa0c0b5c6acbb7c5dd5a0ca39dfcd6"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/unocore/unotbl.ts.json",
+      "sha256": "ecb17f1e07416a3b550492ab4aa63f5f4a90d9e72b5246b5d5c8204ce043a3ba"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableHandler.ts",
+      "sha256": "204c365fe8a5fb47c011b3095dbefd1f3a196fd5d5c0fd14f63711468e63f761"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/DomainMapperTableHandler.ts.json",
+      "sha256": "9b9c2c607e9e41c2d9ffa798909676ce1c368de8788d564f5b22cf8a22047eba"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/DomainMapperTableHandler.ts.json",
+      "sha256": "8a0170188a595d2e9ad90f09d852f106d8716486ddaa0a95883a7aab1472aed3"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ranges.ts",
+      "sha256": "43d9c3a06fc4f25119bf6ea683df9568b342c530a1185aba262aa0674d583b6a"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/DomainMapperTableManager.ranges.ts.json",
+      "sha256": "81d203bde413ad71f2a980599033082119312ed5232abea651e2599b29c775c6"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/DomainMapperTableManager.ranges.ts.json",
+      "sha256": "bc4c8ea467a529b27f9a70126d346fd7bddeb766ca6a163b6bb0c5d091f1ae25"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.attributes.ts",
+      "sha256": "4ea500e268ccac49396d4c16acaf92b36439404b72102fdea0998f1b104fd990"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.attributes.ts.json",
+      "sha256": "58307743e41cafdbbc55fe848e597dce02d83e24abffad29c5a4e095a67a4bc2"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.attributes.ts.json",
+      "sha256": "8ad21428ec704607a0b9272c6a9672a12507b352c141cab5387873087dd4121f"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements.ts",
+      "sha256": "7fe9ebff02d8de41200cd55a7572c5f2dc7fe083170bf055a89f80e7657cb23b"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements.ts.json",
+      "sha256": "d9be2560ca8dc141707194e08ad06c1351b45cc2a27c44985f6d38bbda14bc12"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements.ts.json",
+      "sha256": "5d4856c42b939397d077ec5d4cb69f57a8ad3a1727b8d8598821e53ae83fcc36"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.lists.ts",
+      "sha256": "117b570cd3b0c0f0dab1a5913f23337dd547b2a4042c20e16d1365800be9e090"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.lists.ts.json",
+      "sha256": "0fd4fd7dde2d716ebbc9cc7ee777ce4e34e15e2c0d9289b35aa979b8ac8ed5e5"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.lists.ts.json",
+      "sha256": "6a236c409d03d8dd7adc35acf713996a164220424eca76dad2c04015ac0283d8"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.resources.ts",
+      "sha256": "9454e9455fb70133b65e6a48a6ff6ca05c3006018649ccedcb0e4edefce11d2e"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.resources.ts.json",
+      "sha256": "21aac58d72ad75aa56fffd66f67f5f4e90f7e48f7b3d6e052afda263ba45c3b2"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.resources.ts.json",
+      "sha256": "296c119a9906b7abe40432539d3b8a1cb1f355db37aae2dff268512eb64112d0"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.resources1.ts",
+      "sha256": "086069ef377998ba2e622a2a60eec4e4bdf0e8aa16319a254a099fbac3153fe8"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.resources1.ts.json",
+      "sha256": "f0fd0979f85ef9bb2f50083724f26c282c804ef300432cd244f1c6afd408d63e"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.resources1.ts.json",
+      "sha256": "1bc8352a1aaf60dec951f82b52aa9c2097f62f62c26cbf52ce99dc636320344a"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts",
+      "sha256": "86fbb314d72de427db7211953c3f0e136923d6980a566c73b22c5f1673936c4e"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts.json",
+      "sha256": "8bacf6373b8d7945d7284477e0e064b753aee1e161a274485f272d1d28b33698"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts.json",
+      "sha256": "296871f6cadf4a2954657a19926559df87a1c8e97b6543363cbe0ce5e9dc0598"
+    },
+    {
+      "path": "scripts/writer-ooxml/generate-factory.py",
+      "sha256": "cb62970f4905e109c8c0e93eadcf706dadf5f2048a492415d6f470a3ff658b4c"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxexport.numbered-list.test.ts",
+      "sha256": "f1360bf0734da6763f2c9c5ded17a381af81709e6e90cc7541f3b82f05adf200"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/unocore/native-import-table-errors.test.ts",
+      "sha256": "b5aa7b44d506a26e742399ca6c3361a402d8eae60ede02239942d0f4be3beff4"
+    },
+    {
+      "path": "apps/office/e2e/writer-docx-styles.spec.ts",
+      "sha256": "f6c18fe033d10d25073ea94ffd58b44255adf9521983e5b843619afa1bd3eed8"
+    }
+  ]
+}
