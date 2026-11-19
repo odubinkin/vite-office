@@ -18,9 +18,12 @@
       "evidence": [
         "apps/office/src/sw/source/filter/ww8/docxsdrexport.ts",
         "vendor/libreoffice-reference/sw/source/filter/ww8/docxsdrexport.cxx",
-        "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts"
+        "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
+        "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/tdf134114_allowOverlap.docx",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/docxsdrexport.cxx#DocxSdrExport::startDMLAnchorInline",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/docxsdrexport.cxx#XML_wrapSquare"
       ],
-      "justification": "Writes native floating raster pictures at their actual paragraph offsets in the active body or story serializer. Inline graphics, other wrapping modes and full shape and effect export remain pending.",
+      "justification": "Writes native floating raster pictures at their actual paragraph offsets in the active body or story serializer. Inline graphics, other wrapping modes and full shape and effect export remain pending. Writes all four native rectangular wrapper side values and preserves frame distances and the overlap setting in the anchored drawing attributes.",
       "knownViolations": [],
       "localSymbols": [
         "DocxSdrExport"

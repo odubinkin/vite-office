@@ -7,13 +7,18 @@
     "localPath": "apps/office/src/sw/source/writerfilter/dmapper/GraphicImport.ts",
     "upstreamPath": "sw/source/writerfilter/dmapper/GraphicImport.cxx",
     "localSymbols": [
-      "ImportGraphic"
+      "ImportGraphic",
+      "handleWrapTextValue"
     ],
     "upstreamSymbols": [
-      "GraphicImport::createGraphicObject"
+      "GraphicImport::createGraphicObject",
+      "GraphicImport::handleWrapTextValue",
+      "GraphicImport::ProcessShapeOptions",
+      "GraphicImport::lcl_adjustMarginsAndOrientation"
     ],
     "preservedResponsibilities": [
-      "Attaches the actual raster node and floating format to the current Writer text position and sets its original graphic anchor, size, alignment, opacity and represented wrap items."
+      "Attaches the actual raster node and floating format to the current Writer text position and sets its original graphic anchor, size, alignment, opacity and represented wrap items.",
+      "Maps rectangular wrap sides, anchor distances and overlap to the actual native frame items. Applies the original margin removal for aligned objects and compatibility handling for column-relative positioning."
     ],
     "omittedResponsibilities": [
       "Inline images, other wrap modes, drawing effects and complete UNO shape services remain pending."
@@ -27,12 +32,28 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
+          "marker": "opens the unchanged tdf134114 pictures"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/GraphicImport.cxx",
           "marker": "GraphicImport::createGraphicObject"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/GraphicImport.cxx",
+          "marker": "GraphicImport::handleWrapTextValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/GraphicImport.cxx",
+          "marker": "GraphicImport::ProcessShapeOptions"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/GraphicImport.cxx",
+          "marker": "GraphicImport::lcl_adjustMarginsAndOrientation"
         }
       ]
     }

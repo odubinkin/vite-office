@@ -1,6 +1,6 @@
 /** @fileoverview Native text/property/value/resource-table contexts, inherited xml:space, MCE choices and source-ordered callbacks; drawings, document tables and notes remain separate owners. */
 import { FieldControl, type Id, type Stream } from "../inc/dmapper/resourcemodel";
-import type { DrawingAnchor } from "../dmapper/GraphicImport";
+import { handleWrapTextValue, type DrawingAnchor } from "../dmapper/GraphicImport";
 import { WrapTextMode } from "../../../../offapi/com/sun/star/text/WrapTextMode";
 import type { OOXMLDocument } from "../inc/ooxml/OOXMLDocument";
 import { OOXMLFactory, type FastAttribute } from "./OOXMLFactory";
@@ -762,8 +762,8 @@ const drawingAlign = nativeToken("dmlWordDr:align");
 const drawingSimplePos = nativeToken("dmlWordDr:simplePos");
 const drawingWrapTopAndBottom = nativeToken("dmlWordDr:wrapTopAndBottom");
 const drawingWrapNone = nativeToken("dmlWordDr:wrapNone");
+const drawingWrapSquare = nativeToken("dmlWordDr:wrapSquare");
 const unsupportedDrawingWrap = new Set([
-  nativeToken("dmlWordDr:wrapSquare"),
   nativeToken("dmlWordDr:wrapTight"),
   nativeToken("dmlWordDr:wrapThrough"),
 ]);
@@ -771,6 +771,8 @@ const drawingPicture = nativeToken("dmlPicture:pic");
 const drawingBlipFill = nativeToken("dmlPicture:blipFill");
 const drawingBlip = nativeToken("dml:blip");
 const drawingRoot = nativeToken("doc:drawing");
+// GraphicImport's default horizontal distance of 319 hundredths of a millimetre.
+const defaultHorizontalDistance = 319 * 360;
 
 const drawingChildren = new Map<number, readonly number[]>([
   [drawingRoot, [drawingAnchor]],
@@ -783,6 +785,7 @@ const drawingChildren = new Map<number, readonly number[]>([
       drawingPositionV,
       drawingSimplePos,
       drawingWrapNone,
+      drawingWrapSquare,
       drawingWrapTopAndBottom,
     ],
   ],
@@ -800,6 +803,7 @@ interface PictureState extends DrawingAnchor {
   height: number;
   behindDocument: boolean;
   wrap: WrapTextMode;
+  allowOverlap: boolean;
   relationship: string;
   anchored: boolean;
   simplePosition: boolean;
@@ -816,6 +820,16 @@ function drawingAttribute(attributes: readonly FastAttribute[], name: string): s
   );
 }
 
+/** Reads the DrawingML anchor distance in EMUs with the original absent-attribute default. @param attributes - Fast attributes. @param name - Original qualified name. @param fallback - Default EMUs. @returns Source distance. */
+function drawingDistance(
+  attributes: readonly FastAttribute[],
+  name: string,
+  fallback: number,
+): number {
+  const value = Number.parseInt(drawingAttribute(attributes, name), 10);
+  return Number.isSafeInteger(value) ? value : fallback;
+}
+
 /** Native drawing property container with a shape context for an embedded floating raster picture. */
 export class OOXMLFastContextHandlerDrawing extends OOXMLFastContextHandlerProperties {
   private readonly picture: PictureState = {
@@ -825,6 +839,13 @@ export class OOXMLFastContextHandlerDrawing extends OOXMLFastContextHandlerPrope
     vertical: { relativeFrom: "", align: "", offset: 0 },
     behindDocument: false,
     wrap: WrapTextMode.NONE,
+    allowOverlap: true,
+    distances: {
+      left: defaultHorizontalDistance,
+      right: defaultHorizontalDistance,
+      top: 0,
+      bottom: 0,
+    },
     relationship: "",
     anchored: false,
     simplePosition: false,
@@ -878,6 +899,13 @@ class OOXMLFastContextHandlerShape extends OOXMLFastContextHandler {
         picture.anchored = true;
         const behind = drawingAttribute(attributes, ":behindDoc");
         picture.behindDocument = behind === "1" || behind === "true";
+        const overlap = drawingAttribute(attributes, ":allowOverlap");
+        picture.allowOverlap = overlap !== "0" && overlap !== "false";
+        const { distances } = picture;
+        distances.left = drawingDistance(attributes, ":distL", distances.left);
+        distances.right = drawingDistance(attributes, ":distR", distances.right);
+        distances.top = drawingDistance(attributes, ":distT", distances.top);
+        distances.bottom = drawingDistance(attributes, ":distB", distances.bottom);
         break;
       }
       case drawingExtent:
@@ -905,6 +933,10 @@ class OOXMLFastContextHandlerShape extends OOXMLFastContextHandler {
         break;
       case drawingWrapNone:
         picture.wrap = WrapTextMode.THROUGH;
+        break;
+      case drawingWrapSquare:
+        picture.wrap =
+          handleWrapTextValue(drawingAttribute(attributes, ":wrapText")) ?? picture.wrap;
         break;
       case drawingBlip:
         picture.relationship = drawingAttribute(attributes, "officeRel:embed");

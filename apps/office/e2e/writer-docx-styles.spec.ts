@@ -168,3 +168,53 @@ test("Writer paints a floating DOCX header picture after opening and restoring i
   await page.getByRole("button", { name: "floating-header", exact: true }).click();
   await expectPicture();
 });
+
+test("Writer opens and downloads the original tdf134114 square-wrapped pictures", /** Exercises the unchanged input, browser storage, real DOCX download and mobile reopen. @param fixtures - Browser fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
+  page,
+}) => {
+  const fixture = fileURLToPath(
+    new URL(
+      "../../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/tdf134114_allowOverlap.docx",
+      import.meta.url,
+    ),
+  );
+  const open = page.getByRole("button", { name: "Open", exact: true });
+  const pictures = page.locator("[data-writer-graphic-fly] img");
+  await page.goto("/writer");
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles(fixture);
+  await expect(pictures).toHaveCount(2);
+  await expect(page.getByRole("status", { name: "Writer status bar" })).toContainText(
+    "Saved locally in this browser.",
+  );
+
+  await page.reload();
+  await open.click();
+  await page.getByRole("tab", { name: "In browser" }).click();
+  await page.getByRole("button", { name: "tdf134114_allowOverlap", exact: true }).click();
+  await expect(pictures).toHaveCount(2);
+
+  const pending = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download DOCX" }).click();
+  const path = await (await pending).path();
+  if (path === null) throw new Error("Missing DOCX download.");
+  const buffer = await readFile(path);
+  const archive = await DocumentArchive.open(buffer);
+  const xml = await archive.readTextEntry("word/document.xml");
+  expect(xml.match(/<wp:wrapSquare wrapText="bothSides"\/>/gu)).toHaveLength(2);
+  expect(xml.match(/allowOverlap="[01]"/gu)).toEqual(['allowOverlap="1"', 'allowOverlap="0"']);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer,
+    mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    name: "square-wrap-reopened.docx",
+  });
+  await expect(page.getByText("square-wrap-reopened", { exact: true })).toBeVisible();
+  await expect(pictures).toHaveCount(2);
+});

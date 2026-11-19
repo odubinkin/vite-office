@@ -76,6 +76,8 @@ function expectHeaderGraphic(doc: SwDoc, image: Uint8Array): void {
   expect(format.GetFrameSize().GetWidth()).toBe(1000);
   expect(format.GetFrameSize().GetHeight()).toBe(500);
   expect(format.GetSurround().GetSurround()).toBe(WrapTextMode.THROUGH);
+  expect(format.GetLRSpace().ResolveLeft()).toBe(0);
+  expect(format.GetLRSpace().ResolveRight()).toBe(0);
   expect(format.GetOpaque().GetValue()).toBe(false);
   const fly = format.GetContent().GetContentIdx()?.GetNode();
   assert(fly);
@@ -146,6 +148,8 @@ it("gives the anchor's simple position priority over relative axis values", /** 
     expect(format.GetVertOrient().GetRelationOrient()).toBe(RelOrientation.PAGE_FRAME);
     expect(format.GetVertOrient().GetPos()).toBe(300);
     expect(format.GetSurround().GetSurround()).toBe(WrapTextMode.NONE);
+    expect(format.GetLRSpace().ResolveLeft()).toBe(181);
+    expect(format.GetLRSpace().ResolveRight()).toBe(181);
   } finally {
     doc.Dispose();
   }
@@ -297,9 +301,12 @@ it("writes mirrored alignment and the native zero-offset correction for a top-an
     const mirrored = await second.readTextEntry("word/header1.xml");
     expect(mirrored).toContain('<wp:positionH relativeFrom="page"><wp:align>outside</wp:align>');
     expect(mirrored).toContain('<wp:positionV relativeFrom="line"><wp:align>top</wp:align>');
-    format.SetFormatAttr(new SwFormatSurround(WrapTextMode.PARALLEL));
+    const surround = new SwFormatSurround(WrapTextMode.PARALLEL);
+    surround.SetContour(true);
+    format.SetFormatAttr(surround);
+    surround.Dispose();
     await expect(DocxExport.WriteDocument(doc)).rejects.toThrow(
-      "Writer cannot export this DOCX picture wrapping mode.",
+      "Writer cannot export this DOCX picture wrapping contour.",
     );
   } finally {
     doc.Dispose();
@@ -341,3 +348,229 @@ it("retains the header picture in the local ODT and across a subsequent DOCX exp
     doc.Dispose();
   }
 });
+
+it("opens the unchanged tdf134114 pictures and preserves their overlap policy through ODT and DOCX", /** Ports the original AllowOverlap assertion over the Writer frame graph and both file formats. @returns Completion. */ async () => {
+  const bytes = new Uint8Array(
+    readFileSync(
+      "../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/tdf134114_allowOverlap.docx",
+    ),
+  );
+  const opened: SwDoc[] = [];
+  try {
+    const document = await importOOXML(bytes, {});
+    opened.push(document);
+    const local = (
+      await readOdtDocument(await writeOdtDocument(document, { title: "Allow overlap" }), {
+        title: "Allow overlap",
+      })
+    ).document;
+    opened.push(local);
+    const docx = await DocxExport.WriteDocument(local);
+    const archive = await DocumentArchive.open(docx);
+    const xml = await archive.readTextEntry("word/document.xml");
+    expect(xml.match(/<wp:wrapSquare wrapText="bothSides"\/>/gu)).toHaveLength(2);
+    expect(xml.match(/allowOverlap="[01]"/gu)).toEqual(['allowOverlap="1"', 'allowOverlap="0"']);
+    opened.push(await importOOXML(docx, {}));
+    for (const source of opened) {
+      const [marginPicture, columnPicture] = [...source.GetSpzFrameFormats()];
+      assert(marginPicture && columnPicture);
+      expect(marginPicture.GetWrapInfluenceOnObjPos().GetAllowOverlap()).toBe(true);
+      expect(columnPicture.GetWrapInfluenceOnObjPos().GetAllowOverlap()).toBe(false);
+      expect(marginPicture.GetSurround().GetSurround()).toBe(WrapTextMode.PARALLEL);
+      expect(columnPicture.GetSurround().GetSurround()).toBe(WrapTextMode.PARALLEL);
+      expect(marginPicture.GetLRSpace().ResolveLeft()).toBe(0);
+      expect(columnPicture.GetLRSpace().ResolveLeft()).toBe(180);
+      expect(columnPicture.GetLRSpace().ResolveRight()).toBe(180);
+    }
+  } finally {
+    for (const document of opened) document.Dispose();
+  }
+});
+
+it.each([
+  ["left", WrapTextMode.LEFT],
+  ["right", WrapTextMode.RIGHT],
+  ["largest", WrapTextMode.DYNAMIC],
+])(
+  "preserves a square picture wrapping on %s",
+  /** Writes the original geometry and checks the source wrap mode across the Worker and primary ODT. @param side - DrawingML side. @param expected - Native mode. @returns Completion. */ async (
+    side,
+    expected,
+  ) => {
+    const { bytes } = await headerPicture();
+    const square = await rewriteHeader(
+      bytes,
+      /** Replaces the prior through mode with a side and explicit distances. @param header - Source header. @returns Modified XML. */
+      (header) =>
+        header
+          .replace("<wp:wrapNone/>", '<wp:wrapSquare wrapText="' + side + '"/>')
+          .replace(' behindDoc="1"', ' distL="114300" distR="63500" distT="31750" distB="12700"'),
+    );
+    const documents: SwDoc[] = [];
+    try {
+      const doc = await importOOXML(square, {});
+      documents.push(doc);
+      const worker = decodeWriterDocument(structuredClone(encodeWriterDocument(doc)));
+      documents.push(worker);
+      const primary = (
+        await readOdtDocument(await writeOdtDocument(worker, { title: "Picture" }), {
+          title: "Picture",
+        })
+      ).document;
+      documents.push(primary);
+      const docx = await DocxExport.WriteDocument(primary);
+      const output = await DocumentArchive.open(docx);
+      const header = await output.readTextEntry("word/header1.xml");
+      expect(header).toContain('<wp:wrapSquare wrapText="' + side + '"/>');
+      expect(header).toContain('distT="31750" distB="12700" distL="114300" distR="63500"');
+      documents.push(await importOOXML(docx, {}));
+      for (const model of documents) {
+        const [frame] = [...model.GetSpzFrameFormats()];
+        assert(frame);
+        expect(frame.GetSurround().GetSurround()).toBe(expected);
+        expect(frame.GetLRSpace().ResolveLeft()).toBe(180);
+        expect(frame.GetLRSpace().ResolveRight()).toBe(100);
+        expect(frame.GetULSpace().GetUpper()).toBe(50);
+        expect(frame.GetULSpace().GetLower()).toBe(20);
+      }
+    } finally {
+      for (const document of documents) document.Dispose();
+    }
+  },
+);
+
+/** Updates the represented header XML and preserves its original package parts. @param bytes - Source DOCX. @param change - Header substitution. @returns Modified document. */
+async function rewriteHeader(
+  bytes: Uint8Array,
+  change: (header: string) => string,
+): Promise<Uint8Array> {
+  const archive = await DocumentArchive.open(bytes);
+  const output = new DocumentArchiveWriter();
+  for (const path of archive.getEntryNames()) {
+    const value =
+      path === "word/header1.xml"
+        ? new TextEncoder().encode(change(await archive.readTextEntry(path)))
+        : await archive.readEntry(path);
+    output.putNextEntry(path, value);
+  }
+  return output.finish();
+}
+
+it.each([
+  [
+    "column",
+    "left",
+    "paragraph",
+    "top",
+    RelOrientation.PRINT_AREA,
+    HoriOrientation.LEFT,
+    false,
+    [0, 100, 50, 20],
+  ],
+  [
+    "page",
+    "right",
+    "margin",
+    "bottom",
+    RelOrientation.PAGE_FRAME,
+    HoriOrientation.RIGHT,
+    false,
+    [180, 0, 50, 0],
+  ],
+  [
+    "margin",
+    "inside",
+    "page",
+    "top",
+    RelOrientation.PAGE_PRINT_AREA,
+    HoriOrientation.LEFT,
+    true,
+    [0, 0, 0, 20],
+  ],
+  [
+    "page",
+    "outside",
+    "page",
+    "bottom",
+    RelOrientation.PAGE_FRAME,
+    HoriOrientation.RIGHT,
+    true,
+    [0, 0, 50, 0],
+  ],
+  [
+    "character",
+    "left",
+    "paragraph",
+    "top",
+    RelOrientation.CHAR,
+    HoriOrientation.LEFT,
+    false,
+    [180, 100, 50, 20],
+  ],
+  [
+    "rightMargin",
+    "left",
+    "paragraph",
+    "top",
+    RelOrientation.PAGE_RIGHT,
+    HoriOrientation.LEFT,
+    false,
+    [180, 100, 50, 20],
+  ],
+  [
+    "leftMargin",
+    "right",
+    "paragraph",
+    "top",
+    RelOrientation.PAGE_LEFT,
+    HoriOrientation.RIGHT,
+    false,
+    [180, 100, 50, 20],
+  ],
+] as const)(
+  "applies the source spacing for %s-relative %s placement",
+  /** Tests Writer's one-sided gap and mirrored margin rules. @param hRelation - Source horizontal reference. @param hAlign - Source horizontal alignment. @param vRelation - Source vertical reference. @param vAlign - Source vertical alignment. @param relation - Native horizontal reference. @param align - Native horizontal orientation. @param toggle - Mirrored position flag. @param distances - Native left, right, top and bottom twips. @returns Completion. */ async (
+    hRelation,
+    hAlign,
+    vRelation,
+    vAlign,
+    relation,
+    align,
+    toggle,
+    distances,
+  ) => {
+    const { bytes } = await headerPicture();
+    const square = await rewriteHeader(
+      bytes,
+      /** Writes a square picture with lexical distances before the native alignment adjustments. @param header - Source header. @returns Modified XML. */
+      (header) =>
+        header
+          .replace(
+            /<wp:positionH.*?<\/wp:positionH>/u,
+            `<wp:positionH relativeFrom="${hRelation}"><wp:align>${hAlign}</wp:align></wp:positionH>`,
+          )
+          .replace(
+            /<wp:positionV.*?<\/wp:positionV>/u,
+            `<wp:positionV relativeFrom="${vRelation}"><wp:align>${vAlign}</wp:align></wp:positionV>`,
+          )
+          .replace("<wp:wrapNone/>", '<wp:wrapSquare wrapText="bothSides"/>')
+          .replace(' behindDoc="1"', ' distL="114300" distR="63500" distT="31750" distB="12700"'),
+    );
+    const doc = await importOOXML(square, {});
+    try {
+      const frame = doc.GetSpzFrameFormats().GetFormat(0);
+      const horizontal = frame.GetHoriOrient();
+      expect(horizontal.GetRelationOrient()).toBe(relation);
+      expect(horizontal.GetHoriOrient()).toBe(align);
+      expect(horizontal.IsPosToggle()).toBe(toggle);
+      expect([
+        frame.GetLRSpace().ResolveLeft(),
+        frame.GetLRSpace().ResolveRight(),
+        frame.GetULSpace().GetUpper(),
+        frame.GetULSpace().GetLower(),
+      ]).toEqual(distances);
+    } finally {
+      doc.Dispose();
+    }
+  },
+);

@@ -14,7 +14,8 @@
       "DocxSdrExport::writeDMLDrawing"
     ],
     "preservedResponsibilities": [
-      "Writes native floating raster pictures at their actual paragraph offsets in the active body or story serializer."
+      "Writes native floating raster pictures at their actual paragraph offsets in the active body or story serializer.",
+      "Writes all four native rectangular wrapper side values and preserves frame distances and the overlap setting in the anchored drawing attributes."
     ],
     "omittedResponsibilities": [
       "Inline graphics, other wrapping modes and full shape and effect export remain pending."
@@ -28,6 +29,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
+          "marker": "opens the unchanged tdf134114 pictures"
         }
       ],
       "upstream": [
@@ -38,6 +43,14 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxsdrexport.cxx",
           "marker": "DocxSdrExport::writeDMLDrawing"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxsdrexport.cxx",
+          "marker": "DocxSdrExport::startDMLAnchorInline"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxsdrexport.cxx",
+          "marker": "XML_wrapSquare"
         }
       ]
     }

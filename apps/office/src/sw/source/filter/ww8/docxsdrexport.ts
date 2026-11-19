@@ -51,6 +51,11 @@ const verticalAlignments: ReadonlyMap<number, string> = new Map([
   [V.CHAR_CENTER, "center"],
   [V.LINE_CENTER, "center"],
 ]);
+const squareWrapTypes: ReadonlyMap<WrapTextMode, string> = new Map([
+  [WrapTextMode.DYNAMIC, "largest"],
+  [WrapTextMode.LEFT, "left"],
+  [WrapTextMode.RIGHT, "right"],
+]);
 
 /** Owns the package-scoped raster exporter and the native paragraph anchor lookup. */
 export class DocxSdrExport {
@@ -86,8 +91,12 @@ export class DocxSdrExport {
     const { format, graphic } = entry;
     const image = graphic.GetGraphic();
     const mode = format.GetSurround().GetSurround();
-    if (mode !== WrapTextMode.THROUGH && mode !== WrapTextMode.NONE)
-      throw new Error("Writer cannot export this DOCX picture wrapping mode.");
+    if (
+      format.GetSurround().IsContour() &&
+      mode !== WrapTextMode.THROUGH &&
+      mode !== WrapTextMode.NONE
+    )
+      throw new Error("Writer cannot export this DOCX picture wrapping contour.");
     const relationship = this.images.writeToStorage(
       serializer.getOutputStream() as ZipFragmentStream,
       image.GetNativeData(),
@@ -169,10 +178,18 @@ export class DocxSdrExport {
       token("b"),
       "0",
     );
-    serializer.singleElementNS(
-      wp,
-      token(mode === WrapTextMode.THROUGH ? "wrapNone" : "wrapTopAndBottom"),
-    );
+    if (mode === WrapTextMode.THROUGH || mode === WrapTextMode.NONE)
+      serializer.singleElementNS(
+        wp,
+        token(mode === WrapTextMode.THROUGH ? "wrapNone" : "wrapTopAndBottom"),
+      );
+    else
+      serializer.singleElementNS(
+        wp,
+        token("wrapSquare"),
+        token("wrapText"),
+        squareWrapTypes.get(mode) ?? "bothSides",
+      );
     serializer.singleElementNS(
       wp,
       token("docPr"),

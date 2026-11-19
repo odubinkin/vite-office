@@ -18,17 +18,25 @@
       "evidence": [
         "apps/office/src/sw/source/writerfilter/dmapper/GraphicImport.ts",
         "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/GraphicImport.cxx",
-        "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts"
+        "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
+        "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/tdf134114_allowOverlap.docx",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/GraphicImport.cxx#GraphicImport::handleWrapTextValue",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/GraphicImport.cxx#GraphicImport::ProcessShapeOptions",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/GraphicImport.cxx#GraphicImport::lcl_adjustMarginsAndOrientation"
       ],
-      "justification": "Attaches the actual raster node and floating format to the current Writer text position and sets its original graphic anchor, size, alignment, opacity and represented wrap items. Inline images, other wrap modes, drawing effects and complete UNO shape services remain pending.",
+      "justification": "Attaches the actual raster node and floating format to the current Writer text position and sets its original graphic anchor, size, alignment, opacity and represented wrap items. Inline images, other wrap modes, drawing effects and complete UNO shape services remain pending. Maps rectangular wrap sides, anchor distances and overlap to the actual native frame items. Applies the original margin removal for aligned objects and compatibility handling for column-relative positioning.",
       "knownViolations": [],
       "localSymbols": [
-        "ImportGraphic"
+        "ImportGraphic",
+        "handleWrapTextValue"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/writerfilter/dmapper/GraphicImport.cxx",
       "upstreamSymbols": [
-        "GraphicImport::createGraphicObject"
+        "GraphicImport::createGraphicObject",
+        "GraphicImport::handleWrapTextValue",
+        "GraphicImport::ProcessShapeOptions",
+        "GraphicImport::lcl_adjustMarginsAndOrientation"
       ]
     }
   }
