@@ -111,9 +111,11 @@ it.each([
     for (const [uri, token] of streamNamespaces) parser.registerNamespace(uri, token);
     try {
       parser.parseStream(
-        `<w:settings xmlns:w="${namespace}"><w:zoom w:val="bestFit" w:percent="120"/><w:proofState w:spelling="dirty" w:grammar="clean"/><w:defaultTabStop w:val="720"/><w:characterSpacingControl w:val="doNotCompress"/><w:compat><w:compatSetting w:name="compatibilityMode" w:uri="urn:word" w:val="15"/></w:compat><w:rsids><w:rsidRoot/><w:rsid w:val="FFFFFFFF"/><w:rsid w:val="00000002"/></w:rsids><w:themeFontLang w:val="ru-RU" w:eastAsia="ja-JP" w:bidi="ar-SA"/></w:settings>`,
+        `<w:settings xmlns:w="${namespace}"><w:view w:val="print"/><w:zoom w:val="bestFit" w:percent="120"/><w:proofState w:spelling="dirty" w:grammar="clean"/><w:defaultTabStop w:val="720"/><w:characterSpacingControl w:val="doNotCompress"/><w:compat><w:compatSetting w:name="compatibilityMode" w:uri="urn:word" w:val="15"/></w:compat><w:rsids><w:rsidRoot/><w:rsid w:val="FFFFFFFF"/><w:rsid w:val="00000002"/></w:rsids><w:themeFontLang w:val="ru-RU" w:eastAsia="ja-JP" w:bidi="ar-SA"/></w:settings>`,
       );
       const zoom = nested(get(delivered, N.LN_CT_Settings_zoom));
+      const view = nested(get(delivered, N.LN_CT_Settings_view));
+      expect(get(view, N.LN_CT_View_val).getInt()).toBe(92008);
       expect(get(zoom, N.LN_CT_Zoom_val).getInt()).toBe(N.LN_Value_doc_ST_Zoom_bestFit);
       expect(get(zoom, N.LN_CT_Zoom_percent).getInt()).toBe(120);
       const proof = nested(get(delivered, N.LN_CT_Settings_proofState));

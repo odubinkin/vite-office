@@ -8,11 +8,63 @@ import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwTableNode } from "../../core/docnode/node";
-import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import {
+  DocumentArchive,
+  DocumentArchiveWriter,
+} from "../../../../package/source/zippackage/document-archive";
 import { DocxExport } from "../../filter/ww8/docxexport";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { RES_PARATR_LINESPACING } from "../../../inc/hintids";
+
+it("opens editable text after view settings, text effects and table row exceptions", /** Replays the factory paths of an ordinary Word package using independent synthetic content. @returns Completion. */ async () => {
+  const source = await DocumentArchive.open(
+    new Uint8Array(
+      readFileSync(
+        "../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/2_table_doc.docx",
+      ),
+    ),
+  );
+  const writer = new DocumentArchiveWriter();
+  const xml = 'xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"';
+  const effects = 'xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"';
+  const settings = `<w:settings ${xml}><w:view w:val="print"/><w:revisionView w:markup="true"/><w:noLineBreaksBefore w:lang="ja-JP" w:val="。"/><w:noLineBreaksAfter w:lang="ja-JP" w:val="「"/></w:settings>`;
+  const body = `<w:document ${xml} ${effects}><w:body>
+    <w:p><w:r><w:rPr><w:w w:val="99"/><w14:textOutline><w14:noFill/></w14:textOutline><w14:textFill><w14:solidFill><w14:srgbClr w14:val="112233"/></w14:solidFill></w14:textFill></w:rPr><w:t>Before the table</w:t></w:r></w:p>
+    <w:tbl><w:tblPr/><w:tblGrid><w:gridCol w:w="1200"/></w:tblGrid><w:tr><w:tblPrEx><w:tblW w:w="1200" w:type="dxa"/></w:tblPrEx><w:tc><w:p><w:r><w:t>Table cell</w:t></w:r></w:p></w:tc></w:tr></w:tbl>
+    <w:p><w:r><w:t>After the table</w:t></w:r></w:p>
+  </w:body></w:document>`;
+  const replacements = new Map([
+    ["word/settings.xml", settings],
+    ["word/document.xml", body],
+  ]);
+  for (const part of source.getEntryNames()) {
+    const replacement = replacements.get(part);
+    writer.putNextEntry(
+      part,
+      replacement === undefined
+        ? await source.readEntry(part)
+        : new TextEncoder().encode(replacement),
+    );
+  }
+  const document = await importOOXML(await writer.finish(), {});
+  try {
+    expect(
+      document.paragraphs.map(
+        /** Reads text owned by the Writer nodes. @param node - Writer node. @returns Text. */ (
+          node,
+        ) => node.GetText(),
+      ),
+    ).toEqual(["Before the table", "After the table"]);
+    expect(
+      document.GetTables()[0]?.GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0]?.GetText(),
+    ).toBe("Table cell");
+    const exported = await DocumentArchive.open(await DocxExport.WriteDocument(document));
+    expect(await exported.readTextEntry("word/document.xml")).toContain("After the table");
+  } finally {
+    document.Dispose();
+  }
+});
 
 it.each([
   ["hello.docx", "hello"],

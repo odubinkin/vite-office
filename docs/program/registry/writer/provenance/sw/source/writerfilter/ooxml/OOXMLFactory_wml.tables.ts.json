@@ -42,6 +42,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.numbered-list.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts",
+          "marker": "opens editable text after view settings, text effects and table row exceptions"
         }
       ],
       "upstream": [
@@ -64,6 +68,30 @@
         {
           "path": "sw/source/writerfilter/ooxml/factoryimpl_ns.py",
           "marker": "factoryActions"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/model.xml",
+          "marker": "CT_View"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/model.xml",
+          "marker": "CT_TrackChangesView"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/model.xml",
+          "marker": "CT_Kinsoku"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/model.xml",
+          "marker": "CT_ColorSchemeMapping"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/model.xml",
+          "marker": "CT_TextScale"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/model.xml",
+          "marker": "CT_TblPrEx"
         }
       ]
     },
@@ -96,7 +124,8 @@
       "The pinned character-style fixture consumes generated CT_ParaRPr, CT_PageNumber and CT_TextDirection definitions.",
       "Includes the original writing style, link identity and short hexadecimal definitions used by the NumberedList settings.",
       "Includes native definitions and resource rows for signed half-point, paragraph properties, table style overrides and conditional table formatting encountered in the original NumberedList document.",
-      "Admits the original CT_HdrFtr and CT_HdrFtrRef definitions and end-of-reference substream action from the pinned native generators."
+      "Admits the original CT_HdrFtr and CT_HdrFtrRef definitions and end-of-reference substream action from the pinned native generators.",
+      "The pinned factory definitions for view, revision display, line-break restrictions, color mapping, text scale and row table-property exceptions are present at their generated native IDs."
     ],
     "omittedResponsibilities": [
       "Unconsumed native interfaces, component services, C++ ABI and native memory/thread/performance contracts remain outside this consumed binding.",

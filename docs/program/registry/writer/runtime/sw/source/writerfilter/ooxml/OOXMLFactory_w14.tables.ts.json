@@ -19,9 +19,10 @@
         "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_w14.tables.ts#effectIds",
         "vendor/libreoffice-reference/sw/source/writerfilter/ooxml/model.xml#ST_Ligatures",
         "apps/office/src/sw/source/filter/ww8/docxexport.theme.test.ts",
-        "apps/office/src/sw/source/filter/ww8/docxexport.typography.test.ts"
+        "apps/office/src/sw/source/filter/ww8/docxexport.typography.test.ts",
+        "apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts"
       ],
-      "justification": "The pinned native model and generator yield the original root, definition, attribute, resource and enumeration IDs for the consumed Word 2010 ligature and number format elements. Generated native Word 2010 tables also select CT_StylisticSets, CT_StyleSet and the original scalar CT_OnOff with its attribute and start actions.",
+      "justification": "The pinned native model and generator yield the original root, definition, attribute, resource and enumeration IDs for the consumed Word 2010 ligature and number format elements. Generated native Word 2010 tables also select CT_StylisticSets, CT_StyleSet and the original scalar CT_OnOff with its attribute and start actions. The generated Word 2010 factory recognizes text fill and outline and their native referenced definitions. The importer continues through their typed property contexts without requiring a drawing renderer.",
       "knownViolations": [],
       "localSymbols": [
         "effectIds",

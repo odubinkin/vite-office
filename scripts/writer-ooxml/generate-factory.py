@@ -30,10 +30,11 @@ CONSUMED = (
     "CT_Numbering CT_AbstractNum CT_Num CT_NumLvl CT_Lvl CT_NumFmt CT_LevelText CT_LevelSuffix CT_LvlLegacy CT_MultiLevelType CT_NumPr "
     "CT_Tbl CT_Row CT_Tc CT_TblGrid CT_TblGridCol CT_TblPr CT_TrPr CT_TcPr CT_TblLook CT_TblOverlap CT_TblLayoutType CT_VMerge CT_HMerge CT_VerticalJc "
     "CT_Ind CT_Spacing CT_Jc CT_OnOff CT_HpsMeasure CT_SignedHpsMeasure CT_SignedTwipsMeasure CT_DecimalNumber CT_String "
-    "CT_VerticalAlignRun CT_Highlight EG_RPrBase CT_TblWidth CT_Height "
-    "CT_Zoom CT_Proof CT_WritingStyle CT_Rel CT_ShortHexNumber CT_TwipsMeasure CT_CharacterSpacing CT_StylePaneFilter CT_Compat CT_CompatSetting "
+    "CT_VerticalAlignRun CT_Highlight CT_TextScale EG_RPrBase CT_TblWidth CT_Height "
+    "CT_View CT_Zoom CT_Proof CT_WritingStyle CT_Rel CT_ShortHexNumber CT_TwipsMeasure CT_CharacterSpacing CT_StylePaneFilter CT_Compat CT_CompatSetting "
+    "CT_TrackChangesView CT_Kinsoku CT_ColorSchemeMapping "
     "CT_DocRsids CT_LongHexNumber CT_Language CT_ShapeDefaults "
-    "CT_TblCellMar CT_TcMar CT_LatentStyles CT_LsdException CT_TblPrBase CT_TrPrBase CT_TcPrBase CT_Border CT_TblBorders CT_TcBorders CT_TrackChange CT_Markup CT_Shd CT_TblPPr CT_PBdr CT_FramePr CT_Cnf"
+    "CT_TblCellMar CT_TcMar CT_LatentStyles CT_LsdException CT_TblPrBase CT_TblPrEx CT_TblPrExBase CT_TrPrBase CT_TcPrBase CT_Border CT_TblBorders CT_TcBorders CT_TrackChange CT_Markup CT_Shd CT_TblPPr CT_PBdr CT_FramePr CT_Cnf"
 ).split()
 
 
@@ -43,7 +44,8 @@ def original(script, *arguments):
 
 
 TEXT_EFFECTS = ("ligatures", "numForm", "numSpacing")
-TYPOGRAPHY_STARTS = (*TEXT_EFFECTS, "stylisticSets", "cntxtAlts")
+DRAWING_TEXT_EFFECTS = ("textFill", "textOutline")
+TYPOGRAPHY_STARTS = (*TEXT_EFFECTS, "stylisticSets", "cntxtAlts", *DRAWING_TEXT_EFFECTS)
 
 
 def generate(namespace="wml", consumed=CONSUMED, included_starts=None):
@@ -78,6 +80,13 @@ def generate(namespace="wml", consumed=CONSUMED, included_starts=None):
     grammar = native.getChildByName(wml, "grammar")
     definitions = {d.getAttribute("name"): d for d in native.getChildrenByName(grammar, "define")}
     resources = {r.getAttribute("name"): r for r in native.getChildrenByName(wml, "resource")}
+    if namespace == "w14":
+        consumed = list(dict.fromkeys([*consumed, *DRAWING_TEXT_EFFECTS]))
+        for name in consumed:
+            for ref in definitions[name].getElementsByTagName("ref"):
+                target = ref.getAttribute("name")
+                if target in definitions and target not in consumed:
+                    consumed.append(target)
     includes = original(OOXML / "factoryinc.py", OOXML / "model.xml")
     ids = {"NN_" + k: int(v) << 16 for k, v in re.findall(r"const Id NN_(\w+) = (\d+) << 16;", includes)}
     ids.update({"DEFINE_" + k: int(v) for k, v in re.findall(r"const Id DEFINE_(\w+) = (\d+);", includes)})
