@@ -16,6 +16,7 @@ import { UnitConverter, type XlsxReferenceDevice } from "./unitconverter";
 import { ThemeFragmentHandler } from "../../../../oox/source/drawingml/themefragmenthandler";
 import { ExcelGraphicHelper } from "./stylesbuffer.color";
 import { ViewSettings } from "./viewsettings";
+import { importExternalLinkFragments } from "./externallinkfragment";
 
 /** Original Excel import filter selects the workbook and worksheet parts through package relationships. */
 export class ExcelFilter extends XmlFilterBase {
@@ -86,7 +87,8 @@ export class ExcelFilter extends XmlFilterBase {
           name.dispose();
         }
       }
-      workbook.definedNames.finalizeImport(document);
+      await importExternalLinkFragments(this, relations, workbook.externalLinks);
+      workbook.definedNames.finalizeImport(document, workbook.externalLinks);
       const views = new ViewSettings();
       for (const [tab, sheet] of workbook.sheets.entries()) {
         const path = worksheetRelations.getFragmentPathFromRelId(sheet.relationshipId);

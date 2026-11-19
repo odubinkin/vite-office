@@ -9,6 +9,7 @@ import {
 } from "../../core/tool/rangenam";
 import { readStyleBool, styleIndex } from "./stylesbuffer";
 import { extractCellRangeList } from "./formulabase";
+import type { ExternalLinkBuffer } from "./externallinkbuffer";
 
 /** Original model flags used by the represented name importer. */
 interface DefinedNameModel {
@@ -48,12 +49,13 @@ export class DefinedNamesBuffer {
     this.current = undefined;
   }
 
-  /** Installs each represented native name before any worksheet formula compiles. @param document - Destination workbook. @returns Nothing. */
-  finalizeImport(document: ScDocument): void {
+  /** Installs each represented native name before any worksheet formula compiles. @param document - Destination workbook. @param links - Source external workbook relationship list. @returns Nothing. */
+  finalizeImport(document: ScDocument, links: ExternalLinkBuffer): void {
     const definitions: RangeNameDefinition[] = [];
     for (const model of this.names) {
       if (!model.name || model.unsupported || model.sheet >= document.GetTableCount()) continue;
       const symbol = model.formula.trim();
+      if (!links.isValidDefinedName(symbol)) continue;
       let type = model.hidden ? RangeDataType.Hidden : RangeDataType.Name;
       const builtin = builtinNames.get(model.name.toUpperCase());
       if (builtin && model.sheet >= 0) type |= builtin[1];

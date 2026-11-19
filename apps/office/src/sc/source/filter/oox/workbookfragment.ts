@@ -1,6 +1,7 @@
 /** @fileoverview WorkbookFragment worksheet order and relationship IDs from the SpreadsheetML workbook part. */
 import type { SaxesAttributeNS, SaxesTagNS } from "saxes";
 import { DefinedNamesBuffer } from "./defnamesbuffer";
+import { ExternalLinkBuffer } from "./externallinkbuffer";
 import { WorkbookSettings } from "./workbooksettings";
 import { FragmentHandler } from "../../../../oox/source/core/fragmenthandler";
 import { toInt32 } from "../../../../o3tl/inc/string_view";
@@ -23,10 +24,23 @@ export function attribute(attributes: readonly SaxesAttributeNS[], name: string)
   return "";
 }
 
+/** Retrieves a strict or transitional relationship ID. @param attributes - SpreadsheetML attributes. @returns Relation identifier. */
+export function relationshipId(attributes: readonly SaxesAttributeNS[]): string {
+  for (const item of attributes)
+    if (
+      item.local === "id" &&
+      (item.uri + "/" === OFFICE_DOCUMENT_RELATION ||
+        item.uri + "/" === STRICT_OFFICE_DOCUMENT_RELATION)
+    )
+      return item.value;
+  return "";
+}
+
 /** Original workbook sheet model carries its name and resolved relationship identity. */
 export class WorkbookFragment extends FragmentHandler {
   readonly sheets: { name: string; relationshipId: string; state: string }[] = [];
   readonly definedNames = new DefinedNamesBuffer();
+  readonly externalLinks = new ExternalLinkBuffer();
   readonly settings = new WorkbookSettings();
   private readonly elementStack: string[] = [];
   private activeTab: number | undefined;
@@ -47,6 +61,8 @@ export class WorkbookFragment extends FragmentHandler {
       (parent === "bookViews" && tag.local === "workbookView") ||
       (parent === "workbook" && tag.local === "workbookPr") ||
       (parent === "workbook" && tag.local === "definedNames") ||
+      (parent === "workbook" && tag.local === "externalReferences") ||
+      (parent === "externalReferences" && tag.local === "externalReference") ||
       (parent === "definedNames" && tag.local === "definedName") ||
       (parent === "sheets" && tag.local === "sheet")
       ? this
@@ -69,22 +85,16 @@ export class WorkbookFragment extends FragmentHandler {
         /** Reads an admitted workbook attribute. @param name - XML name. @returns Lexical value. */
         (name) => attribute(attributes, name),
       );
+    if (tag.local === "externalReference")
+      this.externalLinks.importExternalReference(relationshipId(attributes));
     if (tag.local !== "sheet") return;
-    for (const item of attributes) {
-      if (
-        item.local === "id" &&
-        (item.uri + "/" === OFFICE_DOCUMENT_RELATION ||
-          item.uri + "/" === STRICT_OFFICE_DOCUMENT_RELATION)
-      ) {
-        this.sheets.push({
-          name: attribute(attributes, "name"),
-          relationshipId: item.value,
-          state: attribute(attributes, "state") || "visible",
-        });
-        return;
-      }
-    }
-    throw new Error("Workbook sheet relationship is missing.");
+    const id = relationshipId(attributes);
+    if (!id) throw new Error("Workbook sheet relationship is missing.");
+    this.sheets.push({
+      name: attribute(attributes, "name"),
+      relationshipId: id,
+      state: attribute(attributes, "state") || "visible",
+    });
   }
   /** Releases the current workbook context. @returns Nothing. */
   override endFastElement(): void {

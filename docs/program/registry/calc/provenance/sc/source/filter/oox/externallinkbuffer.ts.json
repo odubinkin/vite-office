@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/oox/externallinkbuffer.ts",
+    "upstreamPath": "sc/source/filter/oox/externallinkbuffer.cxx",
+    "localSymbols": [
+      "ExternalLink",
+      "ExternalLinkBuffer",
+      "isValidDefinedName"
+    ],
+    "upstreamSymbols": [
+      "ExternalLink::parseExternalReference",
+      "ExternalLinkBuffer::importExternalReference",
+      "ExternalLinkBuffer::getExternalLink"
+    ],
+    "preservedResponsibilities": [
+      "Preserves ordered workbook external link metadata, classifies external workbook relationship types, and admits only resolvable numeric external qualifiers before allocating a defined name."
+    ],
+    "omittedResponsibilities": [
+      "External reference token compilation, URL resolution against a source medium, external sheet cache values, refresh and external export are pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/externallinkbuffer.ts",
+          "marker": "ExternalLink"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/externallinkbuffer.test.ts",
+          "marker": "tdf130959.xlsx"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/externallinkbuffer.cxx",
+          "marker": "ExternalLink::parseExternalReference"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/externallinkbuffer.cxx",
+          "marker": "ExternalLinkBuffer::importExternalReference"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/externallinkbuffer.cxx",
+          "marker": "ExternalLinkBuffer::getExternalLink"
+        }
+      ]
+    }
+  }
+}
