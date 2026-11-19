@@ -1,0 +1,56 @@
+{
+  "checkpoint": "Calc unsplit worksheet origins through the live view, browser storage and XLSX",
+  "implementation": "e605dbefa054",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    "sc/source/ui/inc/viewdata.hxx#ScHSplitPos",
+    "sc/source/ui/inc/viewdata.hxx#ScVSplitPos",
+    "sc/source/ui/view/viewdata.cxx#ScViewData::GetPosX",
+    "sc/source/ui/view/viewdata.cxx#ScViewData::GetPosY",
+    "sc/source/ui/view/viewdata.cxx#ScViewData::WriteExtOptions",
+    "sc/source/ui/view/viewdata.cxx#ScViewDataTable::ReadUserDataSequence",
+    "sc/source/ui/view/viewdata.cxx#ScViewDataTable::WriteUserDataSequence"
+  ],
+  "verification": {
+    "calc_viewport": {
+      "command": "npm run test:coverage:calc -- calc-view-controller.test calc-workbench.test row-visibility column-geometry calc-pointer-selection viewdata.settings --maxWorkers=3 --testTimeout=90000 --coverage.include=src/sc/browser/controller/calc-viewport.ts --coverage.reportsDirectory=coverage/calc-scroll-viewport-final --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "36 tests across six files. CalcViewport coverage reached 98.36% statements, 93.87% branches, 100% functions and 100% lines. An earlier run had 87.75% branches until the reset-to-A1 restoration case was exercised."
+    },
+    "calc_formats": {
+      "command": "npm run test:calc -- excelfilter.test ods-worker-boundaries calc-files docsh.csv-export --maxWorkers=3 --testTimeout=90000",
+      "result": "pass",
+      "evidence": "36 related filter, Worker, desktop file controls and CSV tests across four files."
+    },
+    "chromium": {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" npm exec -- playwright test --config .git/calc-panes-browser.config.mts --project calc --workers=1 apps/office/e2e/calc/xlsx-active-view.spec.ts --grep 'unsplit XLSX'",
+      "result": "pass",
+      "evidence": "The edited pinned sheet-names.xlsx fixture has initial origins B19 and E31. On the fifth sheet the cursor is A1 while the first rendered cell is E31. Scrolling the first sheet leaves the fifth origin intact. Both origins survive local ODS Save As and reopen, and appear in the downloaded XLSX. Mobile-width XLSX reopen preserves the first sheet's new origin and its earlier cursor. The two unchanged neighboring Chromium scenarios passed separately against the same production build. The original empty fixture triggered the existing Save As restriction; the regression workbook now carries a numeric cell. The browser config inherits the production config with local preview URL and report paths overridden for a free port."
+    },
+    "static": {
+      "commands": [
+        "npm run typecheck",
+        "npm run test:static",
+        "npm run check:docs",
+        "npm run check:dependencies",
+        "npm run check:source-tree",
+        "npm run check:calc-resources",
+        "npm run check:file-size",
+        "node .agentplane/policy/check-routing.mjs",
+        "ap doctor",
+        "git diff --check"
+      ],
+      "result": "pass",
+      "evidence": "Scoped ESLint, Prettier and registry validation for five runtime paths passed. Doctor retained the existing shim warning."
+    },
+    "global_provenance_and_registry": {
+      "commands": ["npm run check:source-provenance", "npm run inventory:registry:check"],
+      "result": "fail",
+      "evidence": "Missing runtime registry entries from the unchanged OfficeTooltips.tsx and available-menu-items.ts framework paths. The global invariants and parity scripts use the same registry checker."
+    }
+  },
+  "residual": [
+    "Frozen and normal split geometry still round-trip through the file controls. Their separate grid windows, viewport movement and hit testing remain open.",
+    "Complete XLSX acceptance remains open under the existing task. Full suites remain on the approved ten-task cadence."
+  ]
+}
