@@ -11,6 +11,7 @@ import { OOXMLFastDocumentHandler } from "./OOXMLFastDocumentHandler";
 import { OOXMLFactory } from "./OOXMLFactory";
 import { nativeToken as token } from "./OOXMLFactory_wml";
 import { defines } from "./OOXMLFactory_wml.tables";
+import { defines as w14Defines } from "./OOXMLFactory_w14.tables";
 import { streamNamespaces } from "./OOXMLFactory.tables";
 import { FastSaxParser } from "../../../../sax/source/fastparser/fastparser";
 import { FastTokenHandler } from "../../../../oox/source/core/fasttokenhandler";
@@ -30,9 +31,9 @@ const transitional = "http://schemas.openxmlformats.org/wordprocessingml/2006/ma
 const strict = "http://purl.oclc.org/ooxml/wordprocessingml/main";
 const mce = "http://schemas.openxmlformats.org/markup-compatibility/2006";
 
-/** Reads original generated definition identities. @param name - Native schema name. @returns Identity. */
-function define(name: string): number {
-  const entry = Object.entries(defines).find(
+/** Reads original generated definition identities. @param name - Native schema name. @param definitions - Generated namespace definitions. @returns Identity. */
+function define(name: string, definitions: Readonly<Record<string, string>> = defines): number {
+  const entry = Object.entries(definitions).find(
     /** Finds the exact native schema name. @param entry - Declaration. @returns Match. */ (
       entry,
     ) => entry[1] === name,
@@ -385,10 +386,10 @@ it("retains scalar defaults, property ownership and failure boundaries for unpor
     define("CT_Hyperlink"),
   );
   base.setDefine(define("CT_RPr"));
-  expect(
-    /** Cross-namespace Any requires its native w14 owner. @returns Never. */ () =>
-      base.createFastChildContext(token("w14:glow")),
-  ).toThrow("start namespace factory is not implemented");
+  const glow = base.createFastChildContext(token("w14:glow"));
+  expect(glow).toBeInstanceOf(PropsContext);
+  expect(glow?.getDefine()).toBe(define("CT_Glow", w14Defines));
+  expect(glow?.getId()).toBe(N.LN_glow_glow);
 });
 
 /** Native derived contexts own table depth and can forward nested property resources through protected hooks. */

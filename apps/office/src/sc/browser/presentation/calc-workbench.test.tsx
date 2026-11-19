@@ -98,7 +98,7 @@ it("keeps canonical selection,sheet ownership,failed drafts and physical scrolli
   fireEvent(window, new Event("resize"));
   fireEvent.change(name, { target: { value: "bad" } });
   fireEvent.keyDown(name, { key: "Enter" });
-  expect(screen.getByRole("alert")).toHaveTextContent(/invalid address/i);
+  expect(screen.getByRole("alert")).toHaveTextContent("Invalid cell address.");
   fireEvent.keyDown(name, { key: "Escape" });
   expect(name).toHaveValue("AA1000");
   fireEvent.keyDown(name, { key: "a" });

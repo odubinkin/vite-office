@@ -417,7 +417,8 @@ export class ScRange {
         second.dispose();
       }
     }
-    if (this.aStart.Tab() !== this.aEnd.Tab()) flags |= ScRefFlags.TAB_3D;
+    const oneTab = this.aStart.Tab() === this.aEnd.Tab();
+    if (!oneTab) flags |= ScRefFlags.TAB_3D;
     const first = this.aStart.Format(flags, doc, details);
     if (
       this.aStart.equals(this.aEnd) &&
@@ -426,8 +427,10 @@ export class ScRange {
     )
       return first;
     const second = this.aEnd.Format(
-        (ScRefFlags.VALID | ((flags >> 4) & ScRefFlags.BITS)) as ScRefFlags,
-        null,
+        (ScRefFlags.VALID |
+          ((flags >> 4) & ScRefFlags.BITS) |
+          (oneTab ? 0 : ScRefFlags.TAB_3D)) as ScRefFlags,
+        oneTab ? null : doc,
         details,
       ),
       units = new Uint16Array(first.getLength() + 1 + second.getLength());

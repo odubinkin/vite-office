@@ -1,5 +1,6 @@
 /** @fileoverview Source RTF paragraph/cell border ownership, metric loss, style inheritance and group restoration. */
-import { expect, it } from "vitest";
+import { beforeAll, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { SvxBoxItem, SvxBoxItemLine as Edge } from "../../../../editeng/source/items/frmitems";
 import { BorderLineStyle as Style } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
@@ -13,6 +14,8 @@ import {
 import { createWriterDocument, type SwDoc } from "../../core/doc/doc";
 import { RtfExport } from "../../filter/ww8/rtfexport";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
+
+beforeAll(initializeRuntime);
 
 /** Imports a standalone source fixture. @param text - RTF text. @returns Owned document. */
 function read(text: string): SwDoc {

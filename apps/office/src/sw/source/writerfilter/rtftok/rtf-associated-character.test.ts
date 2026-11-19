@@ -1,5 +1,6 @@
 /** @fileoverview Actual RTF associated controls select native script items, preserve decoding, defaults and document ownership. */
-import { afterEach, assert, expect, it } from "vitest";
+import { beforeAll, afterEach, assert, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
 import { RtfExport } from "../../filter/ww8/rtfexport";
 import type { SwDoc } from "../../core/doc/doc";
@@ -15,6 +16,8 @@ import {
   encodeWriterDocument,
   decodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
+
+beforeAll(initializeRuntime);
 const documents: SwDoc[] = [];
 afterEach(
   /** Disposes actual document owners. @returns Nothing. */ () => {

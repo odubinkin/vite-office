@@ -1,5 +1,6 @@
 /** @fileoverview Native concrete RTF list overrides, sparse definition merge, original character-merge direction and typed resource-table delivery. */
-import { afterEach, assert, expect, it } from "vitest";
+import { beforeAll, afterEach, assert, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
 import type { SwDoc } from "../../core/doc/doc";
 import { SvxAdjust } from "../../../../editeng/inc/svxenum";
@@ -22,6 +23,8 @@ import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { PropertyIds as P } from "../dmapper/PropertyIds";
 import { text } from "../../core/unocore/unocrsrhelper";
+
+beforeAll(initializeRuntime);
 const documents: SwDoc[] = [];
 afterEach(
   /** Releases actual document graphs. @returns Nothing. */ () => {

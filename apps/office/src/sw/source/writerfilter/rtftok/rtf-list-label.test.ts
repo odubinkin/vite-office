@@ -1,5 +1,6 @@
 /** @fileoverview Native list-level character context, actual ListLabel styles, numbering UNO assignment and Worker/RTF label transport. */
-import { afterEach, assert, expect, it } from "vitest";
+import { beforeAll, afterEach, assert, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
 import { RtfExport } from "../../filter/ww8/rtfexport";
 import { Font } from "../../../../vcl/source/font/font";
@@ -39,6 +40,8 @@ import {
   decodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
 import * as H from "../../../inc/hintids";
+
+beforeAll(initializeRuntime);
 const docs: SwDoc[] = [];
 afterEach(
   /** Destroys actual document graphs. @returns Nothing. */ () => {

@@ -1,5 +1,5 @@
 /** @fileoverview Source DOCX paragraph controls emitted by the actual exporter, native items and production ZIP output. */
-import { assert, expect, it } from "vitest";
+import { assert, expect, it, vi } from "vitest";
 import { SwDoc } from "../../core/doc/doc";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { XmlFilterBase } from "../../../../oox/source/core/xmlfilterbase";
@@ -20,6 +20,9 @@ import {
   SvxParaVertAlignItem,
 } from "../../../../editeng/source/items/paraitem.controls";
 import { DocxExport } from "./docxexport";
+
+// These fixtures unpack and reopen native document packages under coverage.
+vi.setConfig({ testTimeout: 120_000 });
 /** Real export context with actual document/range lifetime. @returns Owners. */
 function setup() {
   const doc = new SwDoc(),

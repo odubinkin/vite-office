@@ -12,6 +12,9 @@ import {
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
 
+// These fixtures unpack and reopen native document packages under coverage.
+vi.setConfig({ testTimeout: 120_000 });
+
 /** Independently specified native paragraph state. */
 interface Row {
   text: string;

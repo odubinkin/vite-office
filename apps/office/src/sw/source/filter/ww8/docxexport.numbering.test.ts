@@ -1,6 +1,6 @@
 /** @fileoverview Native Writer lists through DOCX import, package export and reopen. */
 import { readFileSync } from "node:fs";
-import { assert, expect, it } from "vitest";
+import { assert, expect, it, vi } from "vitest";
 import { SvxAdjust, SvxNumType } from "../../../../editeng/inc/svxenum";
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { SwDoc } from "../../core/doc/doc";
@@ -10,6 +10,9 @@ import { importOOXML } from "../../writerfilter/filter/WriterFilter";
 import { readOdtDocument } from "../xml/swxml";
 import { writeOdtDocument } from "../xml/wrtxml";
 import { DocxExport } from "./docxexport";
+
+// These fixtures unpack and reopen native document packages under coverage.
+vi.setConfig({ testTimeout: 120_000 });
 
 it("preserves the direct list over the inherited style in numbering1.docx", /** Exercises the upstream testNumbering1 input and actual body and numbering part references. @returns Completion. */ async () => {
   const fixture = readFileSync(

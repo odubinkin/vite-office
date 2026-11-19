@@ -44,6 +44,9 @@ import { readOdtDocument } from "../xml/swxml";
 import { writeOdtDocument } from "../xml/wrtxml";
 import { DocxExport } from "./docxexport";
 
+// These fixtures unpack and reopen native document packages under coverage.
+vi.setConfig({ testTimeout: 120_000 });
+
 const corpus = "../../vendor/libreoffice-reference/sw/qa/";
 /** Reads the original fixture without rebuilding its relationship parts. @param path - Relative native fixture. @returns OOXML archive. */
 function fixture(path: string): Uint8Array {

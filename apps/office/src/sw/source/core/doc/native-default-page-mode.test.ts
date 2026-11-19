@@ -171,7 +171,7 @@ it("preserves UNO page-mode false fallback on failed bool extraction and exposes
       descriptors(metadata(model.getPropertySetInfo())).map(
         /** Reads actual metadata. @param item - Entry. @returns Name. */ (item) => text(item.Name),
       ),
-    ).toEqual(["DefaultPageMode"]);
+    ).toEqual(["DefaultPageMode", "InteropGrabBag"]);
     const current = model.getPropertyValue(key);
     expect(current.hasValue()).toBe(true);
     current.dispose();

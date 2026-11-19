@@ -158,5 +158,5 @@ export function SetHeaderFooterProperties(
   }
   page.ChgHeaderShare(!even);
   page.ChgFooterShare(!even);
-  page.ChgFirstShare(!titlePage);
+  if (storyFormat(master, true) || storyFormat(master, false)) page.ChgFirstShare(!titlePage);
 }

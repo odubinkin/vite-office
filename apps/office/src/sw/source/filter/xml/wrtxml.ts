@@ -43,7 +43,7 @@ export class SwXMLWriter {
     return bytes;
   }
 
-  /** Produces a deterministic ODT byte stream. @param document - Canonical Writer document. @param metadata - Filter metadata supplied by the shell. @param control - Cooperative progress/cancellation controls. @returns ODT bytes. */
+  /** Produces the repeatable ODT XML and resource content. @param document - Canonical Writer document. @param metadata - Filter metadata supplied by the shell. @param control - Cooperative progress/cancellation controls. @returns ODT bytes. */
   public WriteXml(
     document: SwDoc,
     metadata: Readonly<{ title: string }>,
@@ -94,7 +94,7 @@ export class SwXMLWriter {
   }
 }
 
-/** Convenience ODT export boundary. @param document - Canonical Writer document. @param metadata - Filter metadata supplied by the shell. @param control - Cooperative progress/cancellation controls. @returns Deterministic ODT bytes. */
+/** Convenience ODT export boundary. @param document - Canonical Writer document. @param metadata - Filter metadata supplied by the shell. @param control - Cooperative progress/cancellation controls. @returns ODT bytes. */
 export async function writeOdtDocument(
   document: SwDoc,
   metadata: Readonly<{ title: string }>,

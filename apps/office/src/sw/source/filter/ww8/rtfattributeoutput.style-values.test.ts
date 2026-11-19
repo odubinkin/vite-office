@@ -1,5 +1,6 @@
 /** @fileoverview Actual Writer style items reach the RTF paragraph-value serializer through the genuine exporter and selection owners, without replacement font/color callbacks. */
-import { assert, expect, it } from "vitest";
+import { beforeAll, assert, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { createWriterDocument, type SwDoc } from "../../core/doc/doc";
 import { SwNumFormat } from "../../core/doc/number";
 import { SwNumRuleItem } from "../../core/para/paratr";
@@ -35,6 +36,8 @@ import {
   RES_BREAK,
   RES_PARATR_LINESPACING,
 } from "../../../inc/hintids";
+
+beforeAll(initializeRuntime);
 
 /** Owns a genuine exporter with its actual document tables and range bindings. @param check - Observes public attribute output. @returns Nothing. */
 function withOutput(

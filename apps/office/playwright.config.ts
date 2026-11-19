@@ -3,12 +3,18 @@
  */
 
 import { defineConfig, devices } from "@playwright/test";
+import "./e2e/node-vite-assets";
 import { FieldUnit } from "./src/tools/inc/fldunit";
 import { WRITER_LAYOUT_PREFERENCES_KEY } from "./src/sw/browser/storage/writer-layout-preferences-store";
 
+// Playwright loads this configuration in each Node worker before the native fixture modules.
+const { initializeOfficeServices } = await import("./src/test/native-office-services");
+initializeOfficeServices();
+
 export default defineConfig({
   expect: {
-    timeout: 5_000,
+    // A fresh production page may load an application bundle and a native filter worker.
+    timeout: 15_000,
   },
   fullyParallel: false,
   outputDir: "../../test-results/e2e",

@@ -1,7 +1,8 @@
 /** @fileoverview Verifies Writer composition ownership in alternate browser environments. */
 
 import { render } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { beforeAll, afterEach, describe, expect, it, vi } from "vitest";
+import { initializeRuntime } from "../../../external/emscripten/runtime";
 import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
 import { RES_PARATR_LINESPACING } from "../../inc/hintids";
 
@@ -11,6 +12,8 @@ import {
   createWriterModuleFactory,
   prepareWriterBrowserFonts,
 } from "./writer-module";
+
+beforeAll(initializeRuntime);
 
 afterEach(
   /** Runs the test callback. @returns Test callback result. */ () => vi.unstubAllGlobals(),

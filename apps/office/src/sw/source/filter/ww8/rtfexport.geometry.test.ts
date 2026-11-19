@@ -1,5 +1,6 @@
 /** @fileoverview Native RTF geometry boundaries for optional defaults and wide Word table coordinates. */
-import { assert, expect, it } from "vitest";
+import { beforeAll, assert, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { SvxTabAdjust, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
@@ -14,6 +15,8 @@ import { createWriterDocument } from "../../core/doc/doc";
 import { SwTableNode } from "../../core/docnode/node";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
 import { RtfExport } from "./rtfexport";
+
+beforeAll(initializeRuntime);
 
 it("omits zero margins and an absent default tab stop from the RTF header", /** Checks actual pool defaults and native page geometry at export. @returns Nothing. */ () => {
   const doc = createWriterDocument();

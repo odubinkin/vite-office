@@ -296,7 +296,7 @@ describe("App" /**
       ["Heading 5", "12pt"],
       ["Heading", "14pt"],
       ["Preformatted Text", "10pt"],
-      ["Quotations", "12pt"],
+      ["Block Quotation", "12pt"],
       ["Caption", "10pt"],
       ["Footnote", "10pt"],
     ] as const) {

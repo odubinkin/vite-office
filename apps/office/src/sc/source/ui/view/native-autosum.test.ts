@@ -354,10 +354,7 @@ it("queries original NeedHeight attributes through actual sparse patterns and de
     }
     expect(doc.HasAttrib(new ScRange(0, 2, 0, 0, 3, 0), HasAttrFlags.NeedHeight)).toBe(false);
   }
-  expect(
-    /** Leaves other native masks explicit. @returns Query. */ () =>
-      doc.HasAttrib(new ScRange(), HasAttrFlags.Protected),
-  ).toThrow(/NeedHeight/);
+  expect(doc.HasAttrib(new ScRange(), HasAttrFlags.Protected)).toBe(true);
   shell.Close();
 });
 

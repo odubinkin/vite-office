@@ -226,7 +226,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     }
   });
 
-  it("writes deterministic ODF 1.3 packages and restores canonical formatting" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, async () => {
+  it("writes repeatable ODF 1.3 package content and restores canonical formatting" /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */, async () => {
     const writer = createWriterDocument();
     const bodyStyle = writer.MakeTextFormatColl("Body < text", writer.GetDfltTextFormatColl());
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
@@ -306,8 +306,13 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
 
     const documentState = metadata("Round & Trip");
     const bytes = await writeTargetOdt(writer, documentState);
-    expect(await new SwXMLWriter().Write(writer, documentState)).toEqual(bytes);
+    const repeated = await DocumentArchive.open(
+      await new SwXMLWriter().Write(writer, documentState),
+    );
     const archive = await DocumentArchive.open(bytes);
+    expect(repeated.getEntryNames()).toEqual(archive.getEntryNames());
+    for (const name of archive.getEntryNames())
+      expect(await repeated.readEntry(name)).toEqual(await archive.readEntry(name));
     expect(archive.getEntryNames()).toEqual([
       "mimetype",
       "META-INF/manifest.xml",

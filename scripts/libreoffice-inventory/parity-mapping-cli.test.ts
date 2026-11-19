@@ -94,17 +94,17 @@ describe("parity mapping CLI" /**
     );
     expect(JSON.parse(output)).toMatchObject({
       baselineCommit: "9bc445578031fecf56086729d8e4940c77e14d65",
-      behaviorParityCount: 43,
-      classifiedDivergenceCount: 107,
-      contractParityCount: 43,
-      defaultParityCount: 43,
-      differentialParityCount: 43,
+      behaviorParityCount: 38,
+      classifiedDivergenceCount: 92,
+      contractParityCount: 38,
+      defaultParityCount: 38,
+      differentialParityCount: 38,
       exceptionCount: 2,
-      gapCount: 17,
+      gapCount: 23,
       implementedCount: 50,
-      ownershipParityCount: 43,
+      ownershipParityCount: 38,
       parityReady: false,
-      recordCount: 53,
+      recordCount: 54,
       runtime: {
         commandCount: 62,
         placeholderSuiteCount: runtimeDeclaration.placeholderSuites.length,
@@ -112,11 +112,11 @@ describe("parity mapping CLI" /**
         semanticViolationCount: 0,
       },
       schemaVersion: 6,
-      scopeLimitationCount: 90,
-      serializationParityCount: 43,
+      scopeLimitationCount: 92,
+      serializationParityCount: 38,
       unclassifiedDivergenceCount: 0,
-      unresolvedParityCount: 7,
-      verifiedCount: 43,
+      unresolvedParityCount: 12,
+      verifiedCount: 38,
     });
     expect(JSON.parse(output).runtime.modules).toContainEqual(
       expect.objectContaining({
@@ -173,10 +173,10 @@ describe("parity mapping CLI" /**
     ).rejects.toThrow(/^apps\/office\/src\/.* references unknown capability CAP-/u);
   }, 30_000);
 
-  it("closes the umbrella ODT compatibility record with pinned fixture evidence" /**
-   * Prevents a package checksum assertion from standing in for the complete bounded ODT round trip.
+  it("retains pinned ODT fixture evidence and the ZIP parity gap in the umbrella record" /**
+   * Checks that bounded semantic fixtures remain linked beside the open mechanism-level gap.
    * @returns A promise resolving after the production manifest is inspected.
-   */, async function rejectsUmbrellaOdtVerification(): Promise<void> {
+   */, async function checksUmbrellaOdtEvidence(): Promise<void> {
     const manifest = JSON.parse(
       await readUtf8File("docs/program/parity/writer-command-slice.json"),
     ) as Readonly<{ records: readonly Record<string, unknown>[] }>;
@@ -186,22 +186,22 @@ describe("parity mapping CLI" /**
       ) => record.id === "LO-WRITER-0130",
     );
     expect(umbrella).toMatchObject({
-      assertionEvidence: [
-        {
-          local: {
+      local: {
+        tests: expect.arrayContaining([
+          {
             marker: "pinned LibreOffice ODT feature fixtures",
             path: "scripts/libreoffice-inventory/odt-upstream-fixtures.test.ts",
           },
-        },
-      ],
-      behaviorParity: true,
-      contractParity: true,
-      defaultParity: true,
-      maturity: "verified",
-      verified: true,
+        ]),
+      },
+      gaps: expect.arrayContaining([expect.stringContaining("ZIP")]),
+      behaviorParity: false,
+      contractParity: false,
+      defaultParity: false,
+      implemented: true,
+      maturity: "implemented",
+      verified: false,
     });
-    expect(umbrella).toHaveProperty("closure");
-    expect(umbrella).toHaveProperty("verification");
   });
 });
 

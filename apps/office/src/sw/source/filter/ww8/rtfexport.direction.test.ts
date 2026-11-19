@@ -1,5 +1,6 @@
 /** @fileoverview RTF direction export through the actual Writer model, format owners, and byte stream. */
-import { afterEach, assert, expect, it } from "vitest";
+import { beforeAll, afterEach, assert, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { SvxFrameDirection as Direction } from "../../../../editeng/inc/frmdir";
 import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import { RES_FRAMEDIR } from "../../../inc/hintids";
@@ -16,6 +17,8 @@ import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
 import { GetPseudoCharRuns } from "./writerwordglue";
 import { RtfExport } from "./rtfexport";
+
+beforeAll(initializeRuntime);
 
 const documents: SwDoc[] = [];
 afterEach(

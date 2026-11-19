@@ -1,6 +1,6 @@
 /** @fileoverview Named Word styles through the actual Writer graph, OOXML archive, and import. */
 import { readFileSync } from "node:fs";
-import { assert, expect, it } from "vitest";
+import { assert, expect, it, vi } from "vitest";
 import { SvxAdjust } from "../../../../editeng/inc/svxenum";
 import { SvxAdjustItem } from "../../../../editeng/source/items/paraitem.adjust";
 import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
@@ -19,6 +19,9 @@ import {
   RES_CHRATR_CTL_LANGUAGE,
 } from "../../../inc/hintids";
 import { DocxExport } from "./docxexport";
+
+// These fixtures unpack and reopen native document packages under coverage.
+vi.setConfig({ testTimeout: 120_000 });
 
 it("keeps named style properties and native inheritance through DOCX", /** Exercises paragraph and character definitions, next-style relationships and direct run overrides. @returns Completion. */ async () => {
   const original = new SwDoc();

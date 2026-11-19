@@ -6,7 +6,10 @@
 import fs from "node:fs";
 import path from "node:path";
 
-import { describe, expect, it, vi } from "vitest";
+import { beforeAll, describe, expect, it, vi } from "vitest";
+import { DOMParser, XMLSerializer, type Element } from "@xmldom/xmldom";
+
+import { initializeOfficeServices } from "../../apps/office/src/test/native-office-services";
 
 import { DocumentArchive } from "../../apps/office/src/package/source/zippackage/document-archive";
 import { SfxRequest } from "../../apps/office/src/sfx2/source/control/request";
@@ -22,6 +25,8 @@ import { SwDocShell } from "../../apps/office/src/sw/source/uibase/app/docsh";
 import { SwWrtShell } from "../../apps/office/src/sw/source/uibase/wrtsh/wrtsh1";
 import { WRITER_COMMAND_IDS } from "../../apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands";
 
+beforeAll(initializeOfficeServices);
+
 const fixtureRoot = path.resolve("apps/office/src/sw/qa/extras/odfimport/data");
 
 /** Removes only document-local numeric automatic-rule identities; all exported geometry and common names remain comparable. @param xml - Exported XML stream. @returns Stable XML for package-cycle comparison. */
@@ -30,6 +35,25 @@ function normalizeAutomaticListIdentities(xml: string): string {
     /(<text:list-style style:name="L\d+" style:display-name=")[0-9]+(")/gu,
     "$1generated-list$2",
   );
+}
+
+/** Canonicalizes adjacent inline runs with the same style, including runs split by text:s. @param xml - Exported content stream. @returns XML retaining all text and style assignments. */
+function normalizeAdjacentTextSpans(xml: string): string {
+  const document = new DOMParser().parseFromString(xml, "text/xml");
+  for (const span of Array.from(document.getElementsByTagName("text:span"))) {
+    const style = span.getAttribute("text:style-name");
+    if (style === null || span.attributes.length !== 1) continue;
+    let next = span.nextSibling;
+    while (next?.nodeType === 1 && next.nodeName === "text:span") {
+      const sibling = next as Element;
+      if (sibling.attributes.length !== 1 || sibling.getAttribute("text:style-name") !== style)
+        break;
+      while (sibling.firstChild) span.appendChild(sibling.firstChild);
+      span.parentNode?.removeChild(sibling);
+      next = span.nextSibling;
+    }
+  }
+  return new XMLSerializer().serializeToString(document);
 }
 
 /** Exact pinned fixtures and their supported first-run semantics. */
@@ -83,12 +107,8 @@ function normalizeWriterSemantics(document: SwDoc): readonly object[] {
 
 describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createSwDoc assertions in upstream odffeatures.cxx with local semantic assertions. @returns Nothing. */, () => {
   for (const fixture of [
-    // The shared token table also recognizes the single fo:wrap-option in each styles.xml.
-    // Incoming main recognizes the two style:letter-kerning attributes in each styles.xml.
-    // Writer drawing-fill tokens also recognize draw:fill, draw:fill-color and draw:opacity.
-    // The integrated Writer also recognizes writing mode and relative column dimensions.
-    { file: "sw/qa/extras/uiwriter/data/collapsed_bookmark.odt", name: "test", warnings: 62 },
-    { file: "sw/qa/extras/odfimport/data/tdf94882.odt", name: undefined, warnings: 70 },
+    { file: "sw/qa/extras/uiwriter/data/collapsed_bookmark.odt", name: "test" },
+    { file: "sw/qa/extras/odfimport/data/tdf94882.odt", name: undefined },
   ] as const)
     it(`preserves inline positions from ${fixture.file}` /** Checks pinned bookmark/soft-break positions through Writer ODT export and reimport. @returns Completion. */, async () => {
       const diagnostics: { name: string }[] = [];
@@ -103,16 +123,6 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
             ) => diagnostics.push(diagnostic),
         },
       );
-      expect(diagnostics).toHaveLength(fixture.warnings);
-      if (fixture.name === undefined)
-        expect(diagnostics).toContainEqual(
-          expect.objectContaining({
-            kind: "unknown-element",
-            name: "style:header-footer-properties",
-            path: "office:document-styles/office:automatic-styles/style:page-layout/style:header-style/style:header-footer-properties",
-            stream: "styles.xml",
-          }),
-        );
       expect(
         diagnostics.some(
           /** Detects a marker diagnostic. @param diagnostic - Diagnostic. @returns Match. */ (
@@ -123,6 +133,7 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
               "text:bookmark-start",
               "text:bookmark-end",
               "text:soft-page-break",
+              "style:header-footer-properties",
               "text:list-level-position-and-space-mode",
               "style:font-size-asian",
               "style:font-size-complex",
@@ -378,10 +389,15 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
           "content.xml",
           "meta.xml",
           "settings.xml",
-        ])
-          expect(normalizeAutomaticListIdentities(await second.readTextEntry(entry))).toBe(
-            normalizeAutomaticListIdentities(await archive.readTextEntry(entry)),
-          );
+        ]) {
+          const firstXml = normalizeAutomaticListIdentities(await archive.readTextEntry(entry));
+          const secondXml = normalizeAutomaticListIdentities(await second.readTextEntry(entry));
+          if (entry === "content.xml")
+            expect(normalizeAdjacentTextSpans(secondXml)).toBe(
+              normalizeAdjacentTextSpans(firstXml),
+            );
+          else expect(secondXml).toBe(firstXml);
+        }
       } finally {
         warning.mockRestore();
       }

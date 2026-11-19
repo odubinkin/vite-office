@@ -61,6 +61,8 @@ for (const width of [1280, 390])
     });
     const copies = page.getByRole("textbox", { name: "Row 1 column 1 paragraph 1", exact: true });
     await expect(copies).toHaveCount(3);
+    await expect(page.getByRole("dialog", { name: "Open" })).toHaveCount(0);
+    await copies.first().click();
     await page.evaluate(
       /** Selects original distinct cell sections. @returns Nothing. */ () => {
         /** Requires an actual fixture owner. @param value - Resolved owner. @returns Connected owner. */
@@ -196,6 +198,8 @@ test("Writer native cross-cell bold formats the selected original rectangle and 
   });
   const copies = page.getByRole("textbox", { name: "Row 1 column 1 paragraph 1", exact: true });
   await expect(copies).toHaveCount(3);
+  await expect(page.getByRole("dialog", { name: "Open" })).toHaveCount(0);
+  await copies.first().click();
   await page.evaluate(
     /** Sets original rectangle before real formatting. @returns Nothing. */ () => {
       const a = document.querySelector(

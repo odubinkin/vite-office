@@ -1,5 +1,6 @@
 /** @fileoverview Original RTF language control routing, group state, paragraph emission and native Locale/item round-trip. */
-import { afterEach, assert, expect, it } from "vitest";
+import { beforeAll, afterEach, assert, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
 import { RtfExport } from "../../filter/ww8/rtfexport";
 import { RunType, type RtfState } from "./rtfdocumentimpl.context";
@@ -9,6 +10,8 @@ import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { SwDoc } from "../../core/doc/doc";
 import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
 import * as H from "../../../inc/hintids";
+
+beforeAll(initializeRuntime);
 const docs: SwDoc[] = [];
 afterEach(
   /** Releases actual imported models. @returns Nothing. */ () => {

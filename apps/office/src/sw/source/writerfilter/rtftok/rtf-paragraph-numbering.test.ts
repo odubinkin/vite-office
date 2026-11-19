@@ -1,5 +1,6 @@
 /** @fileoverview Verifies actual RTF paragraph NumPr resources, native style/direct precedence and list cancellation. */
-import { afterEach, expect, it } from "vitest";
+import { beforeAll, afterEach, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
 import type { SwDoc } from "../../core/doc/doc";
 import { RES_MARGIN_TEXTLEFT, RES_MARGIN_FIRSTLINE, RES_MARGIN_RIGHT } from "../../../inc/hintids";
@@ -8,6 +9,8 @@ import {
   decodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
 import { RtfExport } from "../../filter/ww8/rtfexport";
+
+beforeAll(initializeRuntime);
 const docs: SwDoc[] = [];
 afterEach(
   /** Releases actual document ownership. @returns Nothing. */ () => {

@@ -1,4 +1,4 @@
-/** @fileoverview Original selected UNIX FileStatus/DirectoryItem assertions over real MEMFS fixtures; source root/time quirks are retained. */
+/** @fileoverview Original UNIX FileStatus/DirectoryItem mode and time assertions with the actual MEMFS access contract. */
 import { beforeAll, beforeEach, afterEach, expect, it } from "vitest";
 import { initializeRuntime, getRuntime, getFileSystem } from "../../../external/emscripten/runtime";
 import { own, u, read, releaseDomScope } from "../../../test/native-dom";
@@ -122,9 +122,8 @@ it.each([
       H.osl_File_Attribute_GrpWrite | H.osl_File_Attribute_OwnWrite | H.osl_File_Attribute_OthWrite,
   },
 ])(
-  "ports UNIX FileStatus::getAttributes_$id with original root branch",
-  /** Real mode fixtures substitute upstream chmod setup; exact source geteuid-dependent expectations are retained. @param vector - Original mode/attribute vector. @returns Nothing. */ ({
-    id,
+  "ports UNIX FileStatus::getAttributes_$id with actual MEMFS access rights",
+  /** Keeps the original mode flags and checks the real SDK access semantics for ReadOnly. @param vector - Original mode/attribute vector. @returns Nothing. */ ({
     mode,
     bits,
   }) => {
@@ -134,9 +133,13 @@ it.each([
     fs.close(file);
     const status = own(new FileStatus(H.osl_FileStatus_Mask_Attributes));
     expect(item().getFileStatus(status)).toBe(H.oslFileError.None);
-    const module = getRuntime() as NonNullable<ReturnType<typeof getRuntime>>,
-      readonly = id !== "003" && module._geteuid() !== 0 ? H.osl_File_Attribute_ReadOnly : 0;
-    expect(status.getAttributes()).toBe(BigInt(bits | readonly));
+    const runtime = getRuntime() as NonNullable<ReturnType<typeof getRuntime>>;
+    expect(runtime._geteuid()).toBe(0);
+    const attributes = status.getAttributes();
+    const readOnly = BigInt(H.osl_File_Attribute_ReadOnly);
+    expect(attributes & ~readOnly).toBe(BigInt(bits));
+    // The selected SDK checks the mode bits in MEMFS even when geteuid() returns zero.
+    expect(attributes & readOnly).toBe(mode & 0o222 ? 0n : readOnly);
   },
 );
 it("ports FileStatus::getAttributes_004 hidden bit assertion", /** Original hidden-name fixture is a real file. @returns Nothing. */ () => {

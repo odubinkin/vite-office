@@ -441,7 +441,7 @@ it("exports live Writer body, range formatting and table cells through the docum
     expect(main).toContain("<w:b/>");
     expect(main).toContain("<w:t>Bold</w:t>");
     expect(main).toContain("<w:br/>");
-    expect(main).toContain("<w:tbl><w:tblGrid>");
+    expect(main).toMatch(/<w:tbl><w:tblPr>[\s\S]*?<\/w:tblPr><w:tblGrid>/u);
     expect(main).toContain("<w:t>Left &amp; right</w:t>");
     expect(main).toContain("<w:t>Second</w:t>");
     expect(doc.paragraphs[0]?.GetText()).toBe("  α😀\tBold\n");

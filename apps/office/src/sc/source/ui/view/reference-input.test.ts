@@ -8,7 +8,7 @@ import { ScTabView } from "../inc/tabview";
 import { ScRefType } from "../inc/viewdata";
 import { ScInputMode } from "../../../inc/global";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
-import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 it("formats native local address flags and full-axis endpoint ranges", /** Uses actual owned UTF16 results and rejects unported qualified conventions. @returns Nothing. */ () => {
   const c = new CalcViewController(),
     doc = c.shell.GetDocument();
@@ -42,22 +42,34 @@ it("formats native local address flags and full-axis endpoint ranges", /** Uses 
     expect(text(s)).toBe(expected);
     s.dispose();
   }
-  expect(
-    /** Verifies explicit unsupported boundary rejection. @returns Actual guarded result. */ () =>
-      new ScAddress().Format(ScRefFlags.TAB_3D),
-  ).toThrow(/Nonlocal/);
-  expect(
-    /** Verifies explicit unsupported boundary rejection. @returns Actual guarded result. */ () =>
-      new ScAddress().Format(
-        ScRefFlags.VALID,
-        null,
-        new ScAddress.Details(FormulaGrammar.AddressConvention.CONV_XL_R1C1),
-      ),
-  ).toThrow(/Nonlocal/);
-  expect(
-    /** Verifies explicit unsupported boundary rejection. @returns Actual guarded result. */ () =>
-      new ScRange(0, 0, 0, 0, 0, 1).Format(doc, ScRefFlags.VALID),
-  ).toThrow(/Nonlocal/);
+  const firstTab = unicode("First"),
+    secondTab = unicode("Second");
+  try {
+    expect(doc.RenameTab(0, firstTab)).toBe(true);
+    expect(doc.InsertTab(1, secondTab)).toBe(true);
+  } finally {
+    firstTab.dispose();
+    secondTab.dispose();
+  }
+  const tabOnly = new ScAddress().Format(ScRefFlags.TAB_3D);
+  const r1c1 = new ScAddress().Format(
+    ScRefFlags.VALID,
+    null,
+    new ScAddress.Details(FormulaGrammar.AddressConvention.CONV_XL_R1C1),
+  );
+  const multiSheet = new ScRange(0, 0, 0, 0, 0, 1).Format(
+    doc,
+    ScRefFlags.VALID | ScRefFlags.TAB2_ABS,
+  );
+  try {
+    expect(text(tabOnly)).toBe("");
+    expect(text(r1c1)).toBe("RC");
+    expect(text(multiSheet)).toBe("First.A1:$Second.A1");
+  } finally {
+    tabOnly.dispose();
+    r1c1.dispose();
+    multiSheet.dispose();
+  }
   c.Close();
 });
 it("retains absent input receivers and source reference-handler precedence", /** Actual ScModule receiver ownership dispatches ordered ranges only to the chosen input handler. @returns Nothing. */ () => {

@@ -1,5 +1,6 @@
 /** @fileoverview Native RTF table, list and inline attribute round trips. */
-import { expect, it } from "vitest";
+import { beforeAll, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import {
   DFLT_ESC_AUTO_SUPER,
@@ -29,6 +30,8 @@ import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
 import { RtfTokenizer } from "../../writerfilter/rtftok/rtftokenizer";
 import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { RtfExport } from "./rtfexport";
+
+beforeAll(initializeRuntime);
 
 it("round trips table rows and cell paragraph order", /** Checks native RTF row and cell controls against table owners. @returns Nothing. */ () => {
   const source = createWriterDocument();

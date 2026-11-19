@@ -1,6 +1,6 @@
 /** @fileoverview Source DOCX and ODF character spacing and simple-field footer results. */
 import { readFileSync } from "node:fs";
-import { assert, expect, it } from "vitest";
+import { assert, expect, it, vi } from "vitest";
 import {
   DocumentArchive,
   DocumentArchiveWriter,
@@ -18,6 +18,9 @@ import {
 import { DocxExport } from "./docxexport";
 import { readOdtDocument } from "../xml/swxml";
 import { writeOdtDocument } from "../xml/wrtxml";
+
+// These fixtures unpack and reopen native document packages under coverage.
+vi.setConfig({ testTimeout: 120_000 });
 
 it("retains spacing in named styles and opens a locked simple field in its footer", /** Exercises original OOXML attributes, Writer style owners and primary ODT persistence. @returns Completion. */ async () => {
   const source = await DocumentArchive.open(

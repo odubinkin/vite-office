@@ -955,10 +955,22 @@ describe("Writer ODT mapped pooled properties", /** Groups symmetric property te
     );
 
     heading.SetFormatAttr(createWriterTextColorItem(0x80123456));
-    await expect(
-      /** Exports an invalid bounded color. @returns Bytes. */ async () =>
-        await writeOdtDocument(writer, metadata),
-    ).rejects.toThrow("Unsupported ODF font color");
+    const translucent = await writeOdtDocument(writer, metadata);
+    const translucentStyles = await (
+      await DocumentArchive.open(translucent)
+    ).readTextEntry("styles.xml");
+    expect(translucentStyles).toContain('fo:color="#123456"');
+    expect(translucentStyles).toContain('loext:opacity="50%"');
+    const imported = (await readOdtDocument(translucent, metadata)).document;
+    try {
+      const restoredColor = imported
+        .GetTextFormatColl("heading-1")
+        .GetAttrSet()
+        .Get(RES_CHRATR_COLOR) as SvxColorItem;
+      expect(restoredColor.GetValue().toUInt32()).toBe(0x80123456);
+    } finally {
+      imported.Dispose();
+    }
   });
 });
 

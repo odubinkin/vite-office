@@ -323,7 +323,7 @@ it("round trips represented paragraph styles through the RTF stylesheet", /** Ch
           node,
         ) => node.GetParagraphStyle(),
       ),
-    ).toEqual(["heading-2", "quotations"]);
+    ).toEqual(["heading-2", "block-quotation"]);
   } finally {
     imported?.Dispose();
     source.Dispose();

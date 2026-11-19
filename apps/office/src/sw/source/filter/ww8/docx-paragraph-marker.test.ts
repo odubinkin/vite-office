@@ -1,6 +1,6 @@
 /** @fileoverview Native paragraph mark formatting through DOCX and ODF automatic text styles. */
 import { readFileSync } from "node:fs";
-import { assert, expect, it } from "vitest";
+import { assert, expect, it, vi } from "vitest";
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
@@ -25,6 +25,9 @@ import { importWriterXml } from "../xml/xmlimp";
 import { readOdtDocument } from "../xml/swxml";
 import { writeOdtDocument } from "../xml/wrtxml";
 import { DocxExport } from "./docxexport";
+
+// These fixtures unpack and reopen native document packages under coverage.
+vi.setConfig({ testTimeout: 120_000 });
 
 /** Reads the first paragraph's actual ListAutoFormat set. @param document - Model. @returns Borrowed marker formatting. */
 function marker(document: SwDoc) {

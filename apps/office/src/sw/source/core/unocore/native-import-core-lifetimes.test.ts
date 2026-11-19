@@ -79,7 +79,8 @@ it("retains generated unknown-property messages across default copy move and era
     expect(text(original.Message)).toBe("Missing native property");
     expect(text(moved.Message)).toBe("Missing native property");
     expect(original.get(0)).toEqual(original.Message.getDataAddress());
-    expect(original.get(8)).toEqual([null]);
+    expect(original.get(8)).toBe(original.Context.getAddress());
+    expect(original.Context.get()).toBeNull();
     expect(getCppuType()).toBe(cppu_detail_getUnoType());
     message.dispose();
     expect(text(moved.Message)).toBe("Missing native property");

@@ -1,5 +1,6 @@
 /** @fileoverview Named RTF character-style identity, native style-default policy, direct formatting precedence and group restoration on real Writer owners. */
-import { afterEach, assert, expect, it } from "vitest";
+import { beforeAll, afterEach, assert, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
 import { RtfExport } from "../../filter/ww8/rtfexport";
 import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
@@ -9,6 +10,8 @@ import { SvxWeightItem } from "../../../../editeng/inc/wghtitem";
 import { FontWeight } from "../../../../tools/inc/fontenum";
 import { RES_CHRATR_WEIGHT } from "../../../inc/hintids";
 import native from "./rtf-style-defaults-native.json";
+
+beforeAll(initializeRuntime);
 const docs: SwDoc[] = [];
 afterEach(
   /** Releases real imported documents after every case. @returns Nothing. */ () => {

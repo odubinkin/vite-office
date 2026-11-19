@@ -6,7 +6,8 @@ import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { existsSync, readFileSync } from "node:fs";
-import { afterEach, assert, expect, it } from "vitest";
+import { beforeAll, afterEach, assert, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { SvxFrameDirection as Direction } from "../../../../editeng/inc/frmdir";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { COL_AUTO, Color } from "../../../../tools/inc/color";
@@ -24,6 +25,8 @@ import {
   decodeWriterDocument,
   encodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
+
+beforeAll(initializeRuntime);
 
 const documents: SwDoc[] = [];
 afterEach(

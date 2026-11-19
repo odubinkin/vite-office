@@ -1,5 +1,6 @@
 /** @fileoverview Native HTML HREF, item insertion, A-tag style ownership and actual Markdown/Worker/RTF link integration. */
-import { afterEach, assert, expect, it } from "vitest";
+import { beforeAll, afterEach, assert, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { SwDoc } from "../../core/doc/doc";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { SwTextINetFormat } from "../../core/txtnode/txtatr2";
@@ -23,6 +24,8 @@ import {
 } from "../../../browser/filter/xml/writer-document-codec";
 import { RtfExport } from "../ww8/rtfexport";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
+
+beforeAll(initializeRuntime);
 const documents: SwDoc[] = [];
 afterEach(
   /** Releases actual model owners. @returns Nothing. */ () => {

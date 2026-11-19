@@ -82,14 +82,14 @@ for (const width of [1280, 390])
       .locator("[data-writer-paragraph-id]")
       .filter({ hasText: "UntouchedNamedProof" });
     await expect(paragraph).toHaveText("NamedHistoryProof");
-    await expect(paragraph).toHaveAttribute("data-style", "OwnedChild");
+    await expect(paragraph).toHaveAttribute("data-style", "Owned_20_child");
     await expect(untouched).toHaveAttribute("data-style", "default");
     const untouchedStyle = await untouched.getAttribute("style");
     const checkLayout =
       /** Checks raw manual rendering and exact style ownership. @param points - First-line offset. @returns Completion. */ async (
         points: number,
       ) => {
-        await expect(paragraph).toHaveAttribute("data-style", "OwnedChild");
+        await expect(paragraph).toHaveAttribute("data-style", "Owned_20_child");
         await expect(paragraph).toHaveCSS("margin-left", "40px");
         await expect(paragraph).toHaveCSS("text-indent", `${(points * 4) / 3}px`);
         const offset = await paragraph.evaluate(

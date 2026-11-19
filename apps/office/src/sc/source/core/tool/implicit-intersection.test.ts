@@ -281,7 +281,7 @@ it("binds explicit scanning-constructor II switches to the original working toke
   }
   doc.Dispose();
 });
-it("rejects actual matrix operands at the explicit unported compilation boundary without changing source owners", /** Real matrix tokens carry native ForceArrayReturn;the current scalar compiler rejects this context instead of claiming native matrix compilation. @returns Nothing. */ () => {
+it("compiles a literal matrix beside a range without changing lexical owners", /** Retains the literal matrix and the other operand's source-specific implicit intersection. @returns Nothing. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Data"));
   const position = new ScAddress(1, 1, 0),
@@ -300,11 +300,18 @@ it("rejects actual matrix operands at the explicit unported compilation boundary
     code.AddToken(new FormulaByteToken(OpCode.ocAdd));
     code.AddToken(matrixFirst ? reference : matrixToken);
     const lexical = Array.from(code.Tokens());
-    expect(
-      /** Requests the genuine currently unported array compilation context. @returns Subtotal flag or explicit unsupported error. */ () =>
-        new ScCompiler(doc, position, code, doc.GetGrammar(), true).CompileTokenArray(),
-    ).toThrow("Formula opcode or array context is not implemented by scalar compilation");
-    expect(code.GetCodeLen()).toBe(0);
+    const compiler = new ScCompiler(doc, position, code, doc.GetGrammar(), true);
+    expect(compiler.CompileTokenArray()).toBe(false);
+    expect(code.GetCodeError()).toBe(FormulaError.NONE);
+    const rpn = Array.from(code.RPNTokens());
+    expect(rpn).toHaveLength(3);
+    expect(rpn[2]?.GetOpCode()).toBe(OpCode.ocAdd);
+    const compiledMatrix = rpn[matrixFirst ? 0 : 1];
+    assert(compiledMatrix instanceof ScMatrixToken);
+    expect(compiledMatrix.GetMatrix()).toBe(matrix);
+    const intersected = rpn[matrixFirst ? 1 : 0];
+    assert(intersected instanceof ScSingleRefToken);
+    expect(intersected.GetSingleRef().toAbs(doc, position)).toEqual(new ScAddress(0, 1, 0));
     for (let index = 0; index < lexical.length; index++)
       expect(code.TokenAt(index)).toBe(lexical[index]);
     expect((lexical[matrixFirst ? 0 : 2] as ScMatrixToken).GetMatrix()).toBe(matrix);

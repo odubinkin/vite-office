@@ -1,5 +1,6 @@
 /** @fileoverview Source RTF border and numbering control contracts at the serialized document boundary. */
-import { assert, expect, it } from "vitest";
+import { beforeAll, assert, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { SvxUnderlineItem } from "../../../../editeng/source/items/textitem";
@@ -19,6 +20,8 @@ import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
 import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { RtfExport } from "./rtfexport";
+
+beforeAll(initializeRuntime);
 
 it("indexes named-style colors and escapes soft lines, tabs and end bookmarks", /** Checks actual style collection and paragraph output rather than the exporter's private helpers. @returns Nothing. */ () => {
   const document = createWriterDocument();

@@ -1,5 +1,6 @@
 /** @fileoverview Native first-page sharing and actual frame-item admission for RTF first/follow sections. */
-import { afterEach, expect, it } from "vitest";
+import { beforeAll, afterEach, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { SwDoc, createWriterDocument } from "../../core/doc/doc";
 import { SwPageDesc, UseOnPage } from "../../core/layout/pagedesc";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
@@ -8,6 +9,8 @@ import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
 import { RtfExport } from "./rtfexport";
+
+beforeAll(initializeRuntime);
 const docs: SwDoc[] = [];
 afterEach(
   /** Releases native owners. @returns Nothing. */ () => {

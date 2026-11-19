@@ -6,7 +6,7 @@ import { WriterWorkbench } from "./writer-view";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
 import { SvxULSpaceItem } from "../../../editeng/source/items/frmitems";
 import { exportContentXml } from "../../source/filter/xml/xmlexp";
-import { writeOdtDocument } from "../../source/filter/xml/wrtxml";
+import { SwXMLWriter, writeOdtDocument } from "../../source/filter/xml/wrtxml";
 import { readOdtDocument } from "../../source/filter/xml/swxml";
 /** Requires a concrete original owner or parsed XML field. @param value - Candidate. @returns Present value. */
 function required<T>(value: T | undefined | null): T {
@@ -48,25 +48,27 @@ it("mounted direct items paint, export and reopen across native Undo and Redo", 
         marginTop: "8px",
         marginBottom: "16px",
       });
+      const metadata = { title: "History" };
       const projection = vi.spyOn(table, "GetFormat");
       try {
-        expect(exportContentXml(doc)).toContain('fo:margin-top="0.2117cm"');
-        const reopened = required(
-          (
-            await readOdtDocument(await writeOdtDocument(doc, { title: "History" }), {
-              title: "History",
-            })
-          ).document.GetTables()[0],
-        );
+        const xml = new SwXMLWriter().WriteXml(doc, metadata);
+        expect(xml.files["content.xml"]).toContain('fo:margin-top="0.2117cm"');
+        expect(projection).not.toHaveBeenCalled();
+      } finally {
+        projection.mockRestore();
+      }
+      const copy = (await readOdtDocument(await writeOdtDocument(doc, metadata), metadata))
+        .document;
+      try {
+        const reopened = required(copy.GetTables()[0]);
         expect(reopened.GetFrameFormat().GetULSpace().GetUpper()).toBe(120);
         expect(
           required(
             required(required(reopened.GetTabLines()[0]).GetTabBoxes()[0]).GetParagraphs()[0],
           ).GetText(),
         ).toBe("Original export history");
-        expect(projection).not.toHaveBeenCalled();
       } finally {
-        projection.mockRestore();
+        copy.Dispose();
       }
       act(
         /** Restores absent original item. @returns Nothing. */ () => {

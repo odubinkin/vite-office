@@ -1,9 +1,12 @@
 /** @fileoverview RTF document import through native Writer paragraph and text hint owners. */
-import { expect, it } from "vitest";
+import { beforeAll, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { FontLineStyle } from "../../../../tools/inc/fontenum";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { RtfExport } from "../../filter/ww8/rtfexport";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
+
+beforeAll(initializeRuntime);
 
 /** Imports one RTF fixture. @param input - RTF source. @returns Writer document. */
 function read(input: string) {

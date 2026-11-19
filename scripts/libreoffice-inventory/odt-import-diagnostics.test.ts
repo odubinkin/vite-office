@@ -1,9 +1,9 @@
 /** @fileoverview Tests structural diagnostics against pinned upstream ODT and synthetic XML. */
 
 import fs from "node:fs";
+import { Uint8ArrayReader, Uint8ArrayWriter, ZipWriter } from "@zip.js/zip.js";
 import { describe, expect, it } from "vitest";
 import { DocumentArchive } from "../../apps/office/src/package/source/zippackage/document-archive";
-import { DocumentArchiveWriter } from "../../apps/office/src/package/source/zippackage/document-archive";
 import {
   ODT_XML_STREAM_BYTE_LIMIT,
   readOdtDocument,
@@ -22,10 +22,12 @@ const fixture = new Uint8Array(
 /** Repackages the pinned fixture with one synthetic stream replacement. @param name - Entry to replace. @param replacement - New entry bytes. @returns Package bytes. */
 async function replaceFixtureEntry(name: string, replacement: Uint8Array): Promise<Uint8Array> {
   const archive = await DocumentArchive.open(fixture);
-  const output = new DocumentArchiveWriter();
-  for (const entry of archive.getEntryNames())
-    output.putNextEntry(entry, entry === name ? replacement : await archive.readEntry(entry));
-  return await output.finish();
+  const output = new ZipWriter(new Uint8ArrayWriter(), { useWebWorkers: false, level: 0 });
+  for (const entry of archive.getEntryNames()) {
+    const bytes = entry === name ? replacement : await archive.readEntry(entry);
+    await output.add(entry, new Uint8ArrayReader(bytes));
+  }
+  return await output.close();
 }
 
 describe("privacy-safe ODT import diagnostics", /** Groups package diagnostic assertions. @returns Nothing. */ () => {

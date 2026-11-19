@@ -4,7 +4,7 @@ import { afterEach, expect, it } from "vitest";
 import { createCalcSession } from "../composition/calc-module";
 import { CalcWorkbench } from "./calc-workbench";
 import { ScInputMode } from "../../inc/global";
-import { ScAddress } from "../../inc/address";
+import { ScAddress, ScRange } from "../../inc/address";
 afterEach(/** Releases rendered owners. @returns Nothing. */ () => cleanup());
 /** Mounts the actual session and all real input/model owners. @returns Active session. */
 function fixture() {
@@ -90,12 +90,23 @@ it("routes scalar TYPE arrows to cell movement while modifiers and TABLE retain 
         c.StartInput(ScInputMode.SC_INPUT_TYPE, "13");
       },
     );
-    fireEvent.keyDown(screen.getByRole("textbox", { name: "Edit cell C3" }), {
-      key,
-      shiftKey: true,
-    });
+    fireEvent.keyDown(screen.getByRole("textbox", { name: "Edit cell C3" }), { key });
     expect([c.viewData.GetCurX(), c.viewData.GetCurY()]).toEqual([col, row]);
+    expect(c.shell.GetDocument().GetValue(new ScAddress(2, 2, 0))).toBe(13);
   }
+  act(
+    /** Starts a new scalar draft from the anchor of the extended selection. @returns Nothing. */ () => {
+      c.Select(2, 2);
+      c.StartInput(ScInputMode.SC_INPUT_TYPE, "14");
+    },
+  );
+  fireEvent.keyDown(screen.getByRole("textbox", { name: "Edit cell C3" }), {
+    key: "ArrowRight",
+    shiftKey: true,
+  });
+  expect(c.Address()).toBe("C3");
+  expect(c.viewData.GetMarkData().GetMarkArea()).toEqual(new ScRange(2, 2, 0, 3, 2, 0));
+  expect(c.shell.GetDocument().GetValue(new ScAddress(2, 2, 0))).toBe(14);
   act(
     /** Keeps unsupported input pending in the active real cell. @returns Nothing. */ () => {
       c.Select(2, 2);

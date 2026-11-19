@@ -37,8 +37,8 @@ for (const width of [1280, 390])
         /** Establishes actual text caret away from beginning. @param element - Current paragraph. @returns Nothing. */ (
           element,
         ) => {
-          const node = element.firstChild;
-          if (node === null) throw Error("Missing text");
+          const node = document.createTreeWalker(element, NodeFilter.SHOW_TEXT).nextNode();
+          if (!(node instanceof Text) || node.length < 2) throw Error("Missing text");
           window.getSelection()?.setBaseAndExtent(node, 2, node, 2);
           document.dispatchEvent(new Event("selectionchange"));
         },

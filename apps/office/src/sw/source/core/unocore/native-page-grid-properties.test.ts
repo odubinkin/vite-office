@@ -65,12 +65,28 @@ it("publishes original typed page-only grid properties and routes cloned items t
     style = standard(model),
     descriptor = new SwXStyle(doc, "PageStyles");
   try {
-    expect(SwUnoPageStylePropertyMap.size).toBe(12);
-    for (const [name, entry] of SwUnoPageStylePropertyMap) {
-      expect(entry.which).toBe(name === "WritingMode" ? RES_FRAMEDIR : RES_TEXTGRID);
+    const names = [
+      "WritingMode",
+      "GridColor",
+      "GridLines",
+      "GridBaseHeight",
+      "GridRubyHeight",
+      "GridMode",
+      "RubyBelow",
+      "GridPrint",
+      "GridDisplay",
+      "GridBaseWidth",
+      "GridSnapToChars",
+      "StandardPageMode",
+    ];
+    const info = metadata(style.getPropertySetInfo());
+    for (const name of names) {
+      const entry = SwUnoPageStylePropertyMap.get(name);
+      expect(entry).toBeDefined();
+      expect(entry?.which).toBe(name === "WritingMode" ? RES_FRAMEDIR : RES_TEXTGRID);
       const key = unicode(name);
       try {
-        expect(metadata(style.getPropertySetInfo()).hasPropertyByName(key)).toBe(true);
+        expect(info.hasPropertyByName(key)).toBe(true);
         expect(style.getPropertyState(key)).toBe(PropertyState.DEFAULT_VALUE);
       } finally {
         key.dispose();

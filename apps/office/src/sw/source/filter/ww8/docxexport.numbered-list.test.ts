@@ -1,6 +1,6 @@
 /** @fileoverview Nested DOCX table conversion through native Writer nodes and filters. */
 import { readFileSync } from "node:fs";
-import { assert, expect, it } from "vitest";
+import { assert, expect, it, vi } from "vitest";
 import {
   DocumentArchive,
   DocumentArchiveWriter,
@@ -17,6 +17,9 @@ import { importOOXML } from "../../writerfilter/filter/WriterFilter";
 import { DocxExport } from "./docxexport";
 import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { OoxmlVersion } from "../../../../oox/inc/core/filterbase";
+
+// These fixtures unpack and reopen native document packages under coverage.
+vi.setConfig({ testTimeout: 120_000 });
 
 const upstream = "../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/";
 

@@ -1,5 +1,6 @@
 /** @fileoverview Actual HTML LANG to LanguageTag fallback, script-specific native hints and Markdown/Worker transport. */
-import { afterEach, assert, expect, it } from "vitest";
+import { beforeAll, afterEach, assert, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { SwDoc } from "../../core/doc/doc";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { SwHTMLParser } from "./swhtml";
@@ -18,6 +19,8 @@ import {
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
 import { RtfExport } from "../ww8/rtfexport";
 import * as H from "../../../inc/hintids";
+
+beforeAll(initializeRuntime);
 const documents: SwDoc[] = [];
 afterEach(
   /** Releases original document owners. @returns Nothing. */ () => {

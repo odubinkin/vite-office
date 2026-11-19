@@ -1,6 +1,6 @@
 /** @fileoverview Original DOCX compatibility settings through Writer UNO, Worker and export. */
 import { readFileSync } from "node:fs";
-import { expect, it } from "vitest";
+import { expect, it, vi } from "vitest";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { SequenceAsHashMap } from "../../../../comphelper/source/misc/sequenceashashmap";
 import { OoxmlVersion } from "../../../../oox/inc/core/filterbase";
@@ -24,6 +24,9 @@ import { importOOXML } from "../../writerfilter/filter/WriterFilter";
 import { readOdtDocument } from "../xml/swxml";
 import { writeOdtDocument } from "../xml/wrtxml";
 import { DocxExport } from "./docxexport";
+
+// These fixtures unpack and reopen native document packages under coverage.
+vi.setConfig({ testTimeout: 120_000 });
 
 const fixture =
   "../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/TextEffects_StylisticSets_CntxtAlts.docx";

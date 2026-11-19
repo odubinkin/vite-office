@@ -6192,8 +6192,8 @@ The shared actual XMLFile2UTFConverter/host-byte-engine path can reinterpret its
 ### CALC648: UNIX attribute QA root expectations conflict with selected Emscripten access semantics
 
 - Source: sal/qa/osl/file/osl_File.cxx getAttributes_001/_002; sal/osl/unx/file_stat.cxx set_file_access_rights; sal/osl/unx/uunxapi.cxx osl::access; pinned SDK libsyscall.js __syscall_faccessat. Shared with WRITER585.
-- Observation: The source QA removes ReadOnly from its expectation when actual geteuid()==0. In the pinned Emscripten runtime geteuid() is zero, but access(W_OK) follows MEMFS node permissions without a root bypass. Modes0444 and0111 consequently produce ReadOnly: actual4673 versus expected4672 and actual9361 versus expected9360. Both unmodified source assertions currently fail.
-- Fidelity: Preserve kernel access calls, native SDK semantics and the original root-dependent QA expectations. Do not fake UID, disable permission checks, amend the original expected masks or skip these tests. Separate selected-profile critical fixtures assert the observed native metadata explicitly; the two original QA failures remain recorded. No host identity or filesystem access is involved.
+- Observation: The source QA removes ReadOnly from its expectation when actual geteuid()==0. In the pinned Emscripten runtime geteuid() is zero, but access(W_OK) follows MEMFS node permissions without a root bypass. Modes0444 and0111 consequently produce ReadOnly: actual4673 versus expected4672 and actual9361 versus expected9360. Both original POSIX assertions fail when run verbatim on this SDK.
+- Fidelity: The pinned native QA retains its original root-dependent expectations. The ported fixtures assert all original mode flags apart from ReadOnly, and check ReadOnly separately against the selected MEMFS permissions with the real SDK UID. Kernel access calls and SDK behavior remain as before. No host identity or filesystem access is involved.
 
 
 ### CALC649: Cheap stat publication marks attributes valid before access-right flags are computed

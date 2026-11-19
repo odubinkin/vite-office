@@ -1,12 +1,15 @@
 /** @fileoverview Native RTF line number controls through the mapper and Writer document service. */
 import { existsSync, readFileSync } from "node:fs";
-import { assert, expect, it } from "vitest";
+import { beforeAll, assert, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { RES_LINENUMBER } from "../../../inc/hintids";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { SwDoc } from "../../core/doc/doc";
 import { RtfExport } from "../../filter/ww8/rtfexport";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
+
+beforeAll(initializeRuntime);
 
 /** Reads a complete native RTF byte stream. @param source - Original source text. @returns Connected Writer document. */
 function read(source: string): SwDoc {

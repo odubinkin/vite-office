@@ -1,6 +1,7 @@
 /** @fileoverview Native RTF paragraph shading and browser document transport. */
 import { existsSync, readFileSync } from "node:fs";
-import { assert, expect, it } from "vitest";
+import { beforeAll, assert, expect, it } from "vitest";
+import { initializeRuntime } from "../../../../external/emscripten/runtime";
 import {
   decodeWriterDocument,
   encodeWriterDocument,
@@ -12,6 +13,8 @@ import { RtfExport } from "../../filter/ww8/rtfexport";
 import { readOdtDocument } from "../../filter/xml/swxml";
 import { writeOdtDocument } from "../../filter/xml/wrtxml";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
+
+beforeAll(initializeRuntime);
 
 /** Imports an actual RTF stream. @param source - Original text. @returns Native document. */
 function read(source: string): SwDoc {
