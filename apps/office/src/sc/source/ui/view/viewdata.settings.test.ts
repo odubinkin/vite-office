@@ -126,7 +126,7 @@ it("reads the original ODF TableSelected property and keeps the native ODF write
     expect([...view.GetMarkData().GetSelectedTabs()]).toEqual([0, 4]);
     const ods = await writeOdsXml(source);
     const xml = ods.files["settings.xml"];
-    assert(xml);
+    assert(typeof xml === "string");
     expect(xml).not.toContain("TableSelected");
     const withSelection = xml.replace(
       /<config:config-item-map-entry config:name="(?:S&amp;P|C&gt;D)">/gu,
