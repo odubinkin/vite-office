@@ -18,11 +18,16 @@ import { importExternalLinkFragments } from "./externallinkfragment";
 import { WorkbookFragment } from "./workbookfragment";
 import { ExcelFilter } from "./excelfilter";
 import { exportXlsx } from "../excel/xetable";
+import { ScDocument } from "../../../inc/document";
+import { FormulaDoubleToken, FormulaStringToken } from "../../../../formula/inc/token";
+import { FormulaError, GetDoubleErrorValue } from "../../../../formula/inc/errorcodes";
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 
 const data = "../../vendor/libreoffice-reference/sc/qa/unit/data/xlsx/";
 
-it("loads the pinned external workbook relationships and sheet keys in original reference order", /** Exercises OPC traversal on the unchanged workbook from the upstream import regression. @returns Completion. */ async () => {
-  const storage = await ZipStorage.openForImport(readFileSync(data + "tdf130959.xlsx"), "calc");
+/** Reads package metadata and fills the native cache. @param bytes - Workbook package. @param document - Calc graph. @returns Original link model. */
+async function readLinks(bytes: Uint8Array, document: ScDocument) {
+  const storage = await ZipStorage.openForImport(bytes, "calc");
   try {
     const filter = new XmlFilterBase(storage);
     const main = await filter.getFragmentPathFromFirstTypeFromOfficeDoc("officeDocument");
@@ -32,8 +37,19 @@ it("loads the pinned external workbook relationships and sheet keys in original 
       filter,
       await workbook.getRelations(),
       workbook.externalLinks,
+      document,
     );
-    const [first, second] = workbook.externalLinks;
+    return workbook.externalLinks;
+  } finally {
+    storage.dispose();
+  }
+}
+
+it("loads the pinned external workbook relationships and sheet caches in original reference order", /** Exercises OPC traversal on the unchanged workbook from the upstream import regression. @returns Completion. */ async () => {
+  const document = new ScDocument();
+  try {
+    const links = await readLinks(readFileSync(data + "tdf130959.xlsx"), document);
+    const [first, second] = links;
     expect(first?.relationshipId).toBe("rId2");
     expect(first?.getType()).toBe("document");
     expect(first?.getTarget()).toBe("bad(1).xlsx");
@@ -45,13 +61,79 @@ it("loads the pinned external workbook relationships and sheet keys in original 
     expect(second?.relationshipId).toBe("rId3");
     expect(second?.getType()).toBe("document");
     expect(second?.getSheetNames()).toContain("Grunduppgifter - Client info");
-    expect(workbook.externalLinks.isValidDefinedName("[1]Referens!$A$1")).toBe(true);
-    expect(
-      workbook.externalLinks.isValidDefinedName("'[2]Grunduppgifter - Client info'!$A$1"),
-    ).toBe(true);
-    expect(workbook.externalLinks.isValidDefinedName("[3]Referens!$A$1")).toBe(false);
+    expect(links.isValidDefinedName("[1]Referens!$A$1")).toBe(true);
+    expect(links.isValidDefinedName("'[2]Grunduppgifter - Client info'!$A$1")).toBe(true);
+    expect(links.isValidDefinedName("[3]Referens!$A$1")).toBe(false);
+    const manager = document.GetExternalRefManager();
+    expect(manager.getExternalFileName(0)).toBe("bad(1).xlsx");
+    const reference = manager.getCacheTable(0, "referens");
+    const token = reference?.getCell(0, 6);
+    expect(token).toBeInstanceOf(FormulaStringToken);
+    expect(text((token as FormulaStringToken).GetString().getString())).toBe(
+      "Alla fakturor ska i detta flöde",
+    );
+    expect(reference?.getCell(1, 6)).toBeUndefined();
   } finally {
-    storage.dispose();
+    document.Dispose();
+  }
+});
+
+it("populates native external-cache tokens from XLSX value callbacks", /** Verifies scalar types, sheet indices, first-write precedence and error payloads. @returns Completion. */ async () => {
+  const source = await DocumentArchive.open(readFileSync(data + "tdf130959.xlsx"));
+  const writer = new DocumentArchiveWriter();
+  for (const path of source.getEntryNames()) {
+    if (path === "xl/externalLinks/externalLink1.xml") {
+      const external = `<externalLink xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="${OFFICE_DOCUMENT_RELATION.slice(0, -1)}">
+        <externalBook r:id="rId1"><sheetNames><sheetName val="Data"/></sheetNames>
+          <sheetDataSet>
+            <sheetData><row><cell r="B1"><v>77</v></cell></row></sheetData>
+            <sheetData sheetId="8"><row><cell r="B1"><v>99</v></cell></row></sheetData>
+            <sheetData sheetId="0"><row>
+              <cell r="A1"><v>1.5</v></cell><cell r="A1"><v>2.5</v></cell>
+              <cell r="B1" t="b"><v>1</v></cell>
+              <cell r="C1" t="e"><v>#DIV/0!</v></cell>
+              <cell r="D1" t="e"><v>#SPILL!</v></cell>
+              <cell r="E1" t="e"><v>#UNKNOWN!</v></cell>
+              <cell r="F1" t="str"><v>A<![CDATA[B]]>C</v></cell>
+              <cell r="G1" t="unsupported"><v>8</v></cell>
+              <cell r="XFE1" t="n"><v>11</v></cell>
+            </row></sheetData>
+          </sheetDataSet>
+        </externalBook>
+      </externalLink>`;
+      writer.putNextEntry(path, new TextEncoder().encode(external));
+    } else if (path === "xl/externalLinks/externalLink2.xml") {
+      const xml = (await source.readTextEntry(path)).replace('r:id="rId1"', 'r:id="missing"');
+      writer.putNextEntry(path, new TextEncoder().encode(xml));
+    } else writer.putNextEntry(path, await source.readEntry(path));
+  }
+  const document = new ScDocument();
+  try {
+    await readLinks(await writer.finish(), document);
+    const manager = document.GetExternalRefManager();
+    expect(manager.getExternalFileId("bad(1).xlsx")).toBe(0);
+    expect(manager.getExternalFileName(1)).toBeUndefined();
+    expect(manager.getCacheTable(1, "Data")).toBeUndefined();
+    expect(manager.getCacheTable(99, "Data")).toBeUndefined();
+    const cache = manager.getCacheTable(0, "Data");
+    /** Reads the native double token, including encoded errors. @param col - Source column. @returns Scalar value or undefined. */
+    function numberAt(col: number): number | undefined {
+      const token = cache?.getCell(col, 0);
+      return token instanceof FormulaDoubleToken ? token.GetDouble() : undefined;
+    }
+    expect(cache?.getCell(0, 0)).toBeInstanceOf(FormulaDoubleToken);
+    expect(numberAt(0)).toBe(1.5);
+    expect(numberAt(1)).toBe(1);
+    expect(GetDoubleErrorValue(numberAt(2) ?? 0)).toBe(FormulaError.DivisionByZero);
+    expect(GetDoubleErrorValue(numberAt(3) ?? 0)).toBe(FormulaError.NotAvailable);
+    expect(GetDoubleErrorValue(numberAt(4) ?? 0)).toBe(FormulaError.NotAvailable);
+    const split = cache?.getCell(5, 0);
+    expect(split).toBeInstanceOf(FormulaStringToken);
+    expect(text((split as FormulaStringToken).GetString().getString())).toBe("A");
+    expect(cache?.getCell(6, 0)).toBeUndefined();
+    expect(cache?.getCell(0, 1)).toBeUndefined();
+  } finally {
+    document.Dispose();
   }
 });
 

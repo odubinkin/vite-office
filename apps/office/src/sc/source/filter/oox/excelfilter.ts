@@ -87,7 +87,7 @@ export class ExcelFilter extends XmlFilterBase {
           name.dispose();
         }
       }
-      await importExternalLinkFragments(this, relations, workbook.externalLinks);
+      await importExternalLinkFragments(this, relations, workbook.externalLinks, document);
       workbook.definedNames.finalizeImport(document, workbook.externalLinks);
       const views = new ViewSettings();
       for (const [tab, sheet] of workbook.sheets.entries()) {

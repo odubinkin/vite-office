@@ -41,6 +41,7 @@ import { ScSheetLimits } from "../../../inc/sheetlimits";
 import type { ScStyleSheetPool } from "../../../inc/stlpool";
 import type { ScTable } from "../../../inc/table";
 import { ScViewOptions } from "../../../inc/viewopti";
+import { ScExternalRefManager } from "../../ui/docshell/externalrefmgr";
 import type { ScBroadcastAreaSlotMachine } from "../inc/bcaslot";
 import type { SfxObjectShell } from "../../../../sfx2/source/doc/objsh";
 import type { DocumentEditEngine, ScFieldEditEngine } from "../tool/editutil";
@@ -582,8 +583,12 @@ export class ScDocument {
   }
   private bAutoCalc: boolean;
   private readonly maTabs: (ScTable | null)[] = [];
-  private nVisibleTab = 0;
-  private readonly maSheetsWithoutGrid = new WeakSet<ScTable>();
+  protected nVisibleTab = 0;
+  private externalReferences: ScExternalRefManager | undefined;
+  /** Borrows the document's external reference owner. @returns External link manager. */
+  GetExternalRefManager = (): ScExternalRefManager =>
+    (this.externalReferences ??= new ScExternalRefManager());
+  protected readonly maSheetsWithoutGrid = new WeakSet<ScTable>();
   private pBASM: ScBroadcastAreaSlotMachine | null = null;
   private eHardRecalcState = HardRecalcState.OFF;
   private mbTrackFormulasPending = false;

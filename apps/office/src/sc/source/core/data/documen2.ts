@@ -17,6 +17,8 @@ import { OUString, OUStringLiteral } from "../../../../sal/inc/rtl/ustring";
 /** Releases consumed native document observer lifetime,starting with area destruction before formula-cell destruction as in documen2. GC owns physical stores. @param this - Actual document instance. @returns Nothing. */
 export function Dispose(this: ScDocument): void {
   this["bInDtorClear"] = true;
+  this["externalReferences"]?.clear();
+  this["externalReferences"] = undefined;
   const charts = this["pChartListenerCollection"];
   this["pChartListenerCollection"] = null;
   charts?.Dispose();

@@ -6999,3 +6999,34 @@ Formulas command can set. Calc retains this asymmetry.
 - [Calc view data reader](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/ui/view/viewdata.cxx#L4032-L4231)
 - [XLSX view export](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/excel/xeview.cxx#L297-L301)
 - [Calc regression](../../apps/office/src/sc/source/ui/view/viewdata.settings.test.ts)
+
+### CALC-744 — Duplicate external cache coordinates keep the first value
+
+`ScExternalRefCache::Table::setCell` describes overwriting an existing
+coordinate, but it calls `emplace` on the row map. An existing coordinate
+therefore keeps the first token. Calc preserves first insertion when reading
+duplicate cached cells from an XLSX external link part.
+
+- [Native cache insertion](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/ui/docshell/externalrefmgr.cxx#L274-L298)
+- [Calc regression](../../apps/office/src/sc/source/filter/oox/externallinkbuffer.test.ts)
+
+### CALC-745 — External XLSX cache values consume a single text callback
+
+`ExternalSheetDataContext::onCharacters` writes the first character callback
+for a cached value and then resets the cell type. If the parser delivers
+separate character callbacks within one value element, the later chunks are
+discarded. Calc follows the same callback boundary.
+
+- [Native cache value callback](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/oox/externallinkfragment.cxx#L65-L86)
+- [Calc regression](../../apps/office/src/sc/source/filter/oox/externallinkbuffer.test.ts)
+
+### CALC-746 — Cached external `#SPILL!` uses the `#N/A` numeric payload
+
+The SpreadsheetML error converter recognizes `#SPILL!`, while
+`BiffHelper::calcDoubleFromError` has no corresponding case. The encoded
+double retains its initial `#N/A` payload. Calc preserves this mapping
+for external link cache values.
+
+- [Native SpreadsheetML error mapping](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/oox/unitconverter.cxx#L103-L110)
+- [Native numeric error encoding](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/oox/biffhelper.cxx#L59-L75)
+- [Calc regression](../../apps/office/src/sc/source/filter/oox/externallinkbuffer.test.ts)

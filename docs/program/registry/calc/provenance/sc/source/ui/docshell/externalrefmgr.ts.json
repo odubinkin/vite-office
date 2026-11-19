@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/ui/docshell/externalrefmgr.ts",
+    "upstreamPath": "sc/source/ui/docshell/externalrefmgr.cxx",
+    "localSymbols": [
+      "ScExternalRefManager",
+      "ScExternalRefCacheTable",
+      "getExternalFileId",
+      "getCacheTable"
+    ],
+    "upstreamSymbols": [
+      "ScExternalRefManager::getExternalFileId",
+      "ScExternalRefCache::Table::setCell",
+      "ScExternalRefCache::Table::getCell"
+    ],
+    "preservedResponsibilities": [
+      "Registers stable imported source workbook IDs, creates case-insensitive table caches, and retains the first native scalar token at each coordinate until document disposal."
+    ],
+    "omittedResponsibilities": [
+      "External refresh, range cache reconstruction, source-medium URL resolution, compiler lookup and external export remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/externalrefmgr.ts",
+          "marker": "ScExternalRefManager"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/externallinkbuffer.test.ts",
+          "marker": "populates native external-cache tokens"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/externalrefmgr.cxx",
+          "marker": "ScExternalRefManager::getExternalFileId"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/externalrefmgr.cxx",
+          "marker": "ScExternalRefCache::Table::setCell"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/externalrefmgr.cxx",
+          "marker": "ScExternalRefCache::Table::getCell"
+        }
+      ]
+    }
+  }
+}
