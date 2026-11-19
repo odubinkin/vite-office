@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 398
+revision: 400
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T09:35:13.725Z"
+  updated_at: "2026-11-19T10:06:02.984Z"
   updated_by: "CODER"
-  note: "Word drawing effect run and style persistence passed focused coverage and production DOCX UI checks. Broader DOCX acceptance remains open."
-  attempts: 121
+  note: "DOCX page borders code fbda05bfa. Scoped Writer and shared coverage, final ODT regression, two production Chrome cases and static gates passed. Refine page painting and header/footer margin geometry in the active task."
+  attempts: 122
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1944,8 +1947,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T10:06:02.984Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "DOCX page borders code fbda05bfa. Scoped Writer and shared coverage, final ODT regression, two production Chrome cases and static gates passed. Refine page painting and header/footer margin geometry in the active task."
+  -
+    type: "status"
+    at: "2026-11-19T10:06:10.486Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T09:35:22.068Z"
+doc_updated_at: "2026-11-19T10:06:10.486Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -5640,6 +5656,50 @@ sections:
     - Commands: python3 scripts/writer-ooxml/generate-factory.py --check; npm run typecheck; npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:writer-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
       Result: pass. Evidence: 77 pinned Word 2010 definitions, four production JS bundles, source provenance for 2,825 runtime modules, 5,754 JSDoc sources and zero registry semantic violations.
     - Remaining acceptance: browser rendering of these Word-specific effect geometries, primary ODT preservation of Word drawing properties, group-shape effects and broader DOCX revision and drawing paths remain open. Full regression suite was outside the ten-task cadence.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-19T10:06:02.984Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: DOCX page borders code fbda05bfa. Scoped Writer and shared coverage, final ODT regression, two production Chrome cases and static gates passed. Refine page painting and header/footer margin geometry in the active task.
+    Attempts: 122
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T09:35:22.068Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    The Writer page style owns the physical border lines, signed padding, shadow, and gutter in its native box, shadow, and LR/UL spacing items. DOCX imports the generated section resources through PageBordersHandler and SectionPropertyMap. DOCX export reads the same items using the native Word distance and width calculations. Worker snapshots and ODT page-layout/settings XML retain the represented state. WRITER-661 through WRITER-663 document retained upstream behavior.
+
+    - Command: npm run test:coverage:writer -- docxattributeoutput.borders.test.ts docxattributeoutput.section.test.ts docxexport.page-stories.test.ts OOXMLFactory.test.ts rtf-section-properties.test.ts odt-page-stories.test.ts native-import-style-contracts.test.ts writer-boundaries.test.ts pagedesc.test.ts --maxWorkers=2 --testTimeout=120000 --coverage.include=src/sw/source/filter/ww8/docxattributeoutput.borders.ts --coverage.include=src/sw/source/writerfilter/dmapper/PageBordersHandler.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/docx-page-borders-final
+      Result: pass. Evidence: 94 tests across nine files. Branch coverage 95% for DOCX output and 100% for the border handler. Both reach 100% for statements, functions, and lines. Scope: pinned testPageBorderShadow, testPageBorderSpacingExportCase2, testNegativePageBorder, source display and shadow quirks, top and left gutters, Writer UNO page styles and RTF/ODT/page-story regressions.
+    - Command: npm run test:coverage:shared -- shadwhdl.test.ts --coverage.include=src/xmloff/source/style/shadwhdl.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/odf-page-shadow
+      Result: pass. Evidence: five tests and 97.61% branches, 100% statements/functions/lines. Scope: ODF shadow directions, color, offsets, width and source lexical edge cases.
+    - Command: npm run test:writer -- docxattributeoutput.borders.test.ts native-cell-box-roundtrip.test.ts odt-page-stories.test.ts --maxWorkers=2
+      Result: pass. Evidence: 44 tests across three files. Scope: final Writer and ODT regression, including invalid page-layout declarations with valid shorthand fallback and unchanged strict table cell ingress.
+    - Command: node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1 --timeout=90000 --grep 'page borders and shadow|themed text across primary'
+      Result: pass. Scope: Chrome desktop open and autosave, mobile ODT reopen, DOCX download assertions and DOCX reopen. The blank original shadow fixture supplies the exact border data and has a text paragraph inserted for the browser autosave scenario. The original package remains unchanged in the core test.
+    - Commands: python3 scripts/writer-ooxml/generate-factory.py --check; npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:writer-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:writer-hintids; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; npm run inventory:invariants; npm run inventory:parity; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+      Result: pass. Evidence: 182 pinned Word definitions, four static JS bundles, no module boundary or registry semantic violations. Agentplane doctor reports an older hook shim as a warning with no errors.
+    - Remaining acceptance: page-border paint and header/footer-relative margin geometry, the broader DOCX/XLSX slice and deployment-specific reproduction remain open. Full regression was outside the ten-task cadence.
 
     BlueprintSnapshotRef:
     - state: current
@@ -10082,6 +10142,50 @@ Implementation 2e26c1580 preserves Word 2010 glow, shadow, reflection, scene3d a
 - Commands: python3 scripts/writer-ooxml/generate-factory.py --check; npm run typecheck; npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:writer-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
   Result: pass. Evidence: 77 pinned Word 2010 definitions, four production JS bundles, source provenance for 2,825 runtime modules, 5,754 JSDoc sources and zero registry semantic violations.
 - Remaining acceptance: browser rendering of these Word-specific effect geometries, primary ODT preservation of Word drawing properties, group-shape effects and broader DOCX revision and drawing paths remain open. Full regression suite was outside the ten-task cadence.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-19T10:06:02.984Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: DOCX page borders code fbda05bfa. Scoped Writer and shared coverage, final ODT regression, two production Chrome cases and static gates passed. Refine page painting and header/footer margin geometry in the active task.
+Attempts: 122
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T09:35:22.068Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+The Writer page style owns the physical border lines, signed padding, shadow, and gutter in its native box, shadow, and LR/UL spacing items. DOCX imports the generated section resources through PageBordersHandler and SectionPropertyMap. DOCX export reads the same items using the native Word distance and width calculations. Worker snapshots and ODT page-layout/settings XML retain the represented state. WRITER-661 through WRITER-663 document retained upstream behavior.
+
+- Command: npm run test:coverage:writer -- docxattributeoutput.borders.test.ts docxattributeoutput.section.test.ts docxexport.page-stories.test.ts OOXMLFactory.test.ts rtf-section-properties.test.ts odt-page-stories.test.ts native-import-style-contracts.test.ts writer-boundaries.test.ts pagedesc.test.ts --maxWorkers=2 --testTimeout=120000 --coverage.include=src/sw/source/filter/ww8/docxattributeoutput.borders.ts --coverage.include=src/sw/source/writerfilter/dmapper/PageBordersHandler.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/docx-page-borders-final
+  Result: pass. Evidence: 94 tests across nine files. Branch coverage 95% for DOCX output and 100% for the border handler. Both reach 100% for statements, functions, and lines. Scope: pinned testPageBorderShadow, testPageBorderSpacingExportCase2, testNegativePageBorder, source display and shadow quirks, top and left gutters, Writer UNO page styles and RTF/ODT/page-story regressions.
+- Command: npm run test:coverage:shared -- shadwhdl.test.ts --coverage.include=src/xmloff/source/style/shadwhdl.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/odf-page-shadow
+  Result: pass. Evidence: five tests and 97.61% branches, 100% statements/functions/lines. Scope: ODF shadow directions, color, offsets, width and source lexical edge cases.
+- Command: npm run test:writer -- docxattributeoutput.borders.test.ts native-cell-box-roundtrip.test.ts odt-page-stories.test.ts --maxWorkers=2
+  Result: pass. Evidence: 44 tests across three files. Scope: final Writer and ODT regression, including invalid page-layout declarations with valid shorthand fallback and unchanged strict table cell ingress.
+- Command: node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1 --timeout=90000 --grep 'page borders and shadow|themed text across primary'
+  Result: pass. Scope: Chrome desktop open and autosave, mobile ODT reopen, DOCX download assertions and DOCX reopen. The blank original shadow fixture supplies the exact border data and has a text paragraph inserted for the browser autosave scenario. The original package remains unchanged in the core test.
+- Commands: python3 scripts/writer-ooxml/generate-factory.py --check; npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:writer-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:writer-hintids; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; npm run inventory:invariants; npm run inventory:parity; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+  Result: pass. Evidence: 182 pinned Word definitions, four static JS bundles, no module boundary or registry semantic violations. Agentplane doctor reports an older hook shim as a warning with no errors.
+- Remaining acceptance: page-border paint and header/footer-relative margin geometry, the broader DOCX/XLSX slice and deployment-specific reproduction remain open. Full regression was outside the ten-task cadence.
 
 BlueprintSnapshotRef:
 - state: current
