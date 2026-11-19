@@ -1,10 +1,11 @@
 ---
 id: "202611191658-DF16KS"
 title: "Polish Writer and Calc browser controls and document opening"
-status: "DOING"
+result_summary: "verified-202611191658-DF16KS"
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-19T17:19:03.011Z"
+  updated_at: "2026-11-19T17:19:24.990Z"
   updated_by: "CODER"
   note: "verified-202611191658-DF16KS"
   attempts: 0
@@ -40,11 +41,16 @@ quality_review:
   findings:
     - "Registered Calc commands remain visible through temporary disabled states; disconnected controls and empty menu branches are pruned in the presentation."
     - "Real browser runs confirmed stable font geometry, immediate tooltips, separated menu checkmarks, and rendered progress during file import and browser-storage reopen."
-commit: null
+commit:
+  hash: "4ecfa8e44cb3f3951efc6c48818d462832b3a8c0"
+  message: "🧩 DF16KS task: record browser quality review"
 comments:
   -
     author: "CODER"
     body: "Start: Refine shared Writer and Calc browser controls and show progress while opening documents."
+  -
+    author: "CODER"
+    body: "Verified: verified-202611191658-DF16KS. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -65,8 +71,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202611191658-DF16KS"
+  -
+    type: "verify"
+    at: "2026-11-19T17:19:24.990Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202611191658-DF16KS"
+  -
+    type: "status"
+    at: "2026-11-19T17:19:25.121Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202611191658-DF16KS. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-19T17:19:03.060Z"
+doc_updated_at: "2026-11-19T17:19:25.121Z"
 doc_updated_by: "CODER"
 description: "Remove unavailable launcher controls, stabilize font lists, tighten toolbar spacing, hide unavailable commands, improve menu checkmark spacing, show immediate tooltips and indicate document-opening progress in Writer and Calc."
 sections:
@@ -166,9 +185,43 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-19T17:19:24.990Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202611191658-DF16KS
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T17:19:03.060Z, excerpt_hash=sha256:2d02ab6385c92bd9e218c46a2fec2a57e00dc48761f55bded9784b017a7ca536
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611191658-DF16KS/blueprint/resolved-snapshot.json
+    - old_digest: 223bf989e8cfce945c0e3da8bb8985c625929e1ad4da62d71e1a10dff2647a54
+    - current_digest: 223bf989e8cfce945c0e3da8bb8985c625929e1ad4da62d71e1a10dff2647a54
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611191658-DF16KS
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611191658-DF16KS --result verified-202611191658-DF16KS --commit 4ecfa8e44cb3f3951efc6c48818d462832b3a8c0
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert the implementation commit to restore the original browser presentation and opening flow."
   Findings: "None at intake."
+extensions:
+  implementation_commit:
+    hash: "f471af7bfa3eb306e3477e5f73823d4aca10e092"
+    message: "🧩 DF16KS code: polish browser controls and opening progress"
 id_source: "generated"
 ---
 ## Summary
@@ -271,6 +324,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202611191658-DF16KS --result verified-202611191658-DF16KS --commit f471af7bfa3eb306e3477e5f73823d4aca10e092
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-19T17:19:24.990Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202611191658-DF16KS
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T17:19:03.060Z, excerpt_hash=sha256:2d02ab6385c92bd9e218c46a2fec2a57e00dc48761f55bded9784b017a7ca536
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611191658-DF16KS/blueprint/resolved-snapshot.json
+- old_digest: 223bf989e8cfce945c0e3da8bb8985c625929e1ad4da62d71e1a10dff2647a54
+- current_digest: 223bf989e8cfce945c0e3da8bb8985c625929e1ad4da62d71e1a10dff2647a54
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611191658-DF16KS
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611191658-DF16KS --result verified-202611191658-DF16KS --commit 4ecfa8e44cb3f3951efc6c48818d462832b3a8c0
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
