@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 408
+revision: 409
 origin:
   system: "manual"
 depends_on:
@@ -20,11 +20,11 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "blocked_external"
-  updated_at: "2026-11-19T11:02:51.001Z"
+  state: "ok"
+  updated_at: "2026-11-19T20:45:10.145Z"
   updated_by: "CODER"
-  note: "Embedded graphic node checkpoint 05ba9086e passed scoped Owner, Worker and text-fly regression checks. OOXML drawing and graphic persistence integration remain open."
-  attempts: 126
+  note: "The Writer inline fly ownership checkpoint passed 9,773 focused scenarios at 91.35% scoped branch coverage and three production Chromium regressions. Native format copying, point undo and the DOCX inline filter and layout hookup remain in the active task."
+  attempts: 0
 commit: null
 comments:
   -
@@ -2024,8 +2024,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T20:45:10.145Z"
+    author: "CODER"
+    state: "ok"
+    note: "The Writer inline fly ownership checkpoint passed 9,773 focused scenarios at 91.35% scoped branch coverage and three production Chromium regressions. Native format copying, point undo and the DOCX inline filter and layout hookup remain in the active task."
 doc_version: 3
-doc_updated_at: "2026-11-19T11:02:57.882Z"
+doc_updated_at: "2026-11-19T20:45:10.357Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -5938,6 +5944,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-19T20:45:10.145Z — VERIFY — ok
+
+    By: CODER
+
+    Note: The Writer inline fly ownership checkpoint passed 9,773 focused scenarios at 91.35% scoped branch coverage and three production Chromium regressions. Native format copying, point undo and the DOCX inline filter and layout hookup remain in the active task.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T11:02:57.882Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -10580,6 +10616,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-19T20:45:10.145Z — VERIFY — ok
+
+By: CODER
+
+Note: The Writer inline fly ownership checkpoint passed 9,773 focused scenarios at 91.35% scoped branch coverage and three production Chromium regressions. Native format copying, point undo and the DOCX inline filter and layout hookup remain in the active task.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T11:02:57.882Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->

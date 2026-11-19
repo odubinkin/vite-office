@@ -1,0 +1,55 @@
+{
+  "checkpoint": "Writer native ownership of text-anchored inline graphics",
+  "implementation": "e912335364fa6ce9929fc920e2363f56276cdf2f",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "source": [
+    "sw/source/core/txtnode/thints.cxx#SwTextNode::InsertHint",
+    "sw/source/core/txtnode/thints.cxx#SwTextNode::DestroyAttr",
+    "sw/source/core/txtnode/thints.cxx#SwTextNode::ClearSwpHintsArr",
+    "sw/source/core/txtnode/ndhints.cxx#SwpHints::Insert",
+    "sw/source/core/txtnode/ndtxt.cxx#SwTextNode::Update",
+    "sw/source/core/txtnode/ndtxt.cxx#SwTextNode::EraseText",
+    "sw/source/core/txtnode/ndtxt.cxx#SwTextNode::CutImpl",
+    "sw/source/core/txtnode/ndtxt.cxx#SwTextNode::SplitContentNode",
+    "sw/source/core/doc/DocumentLayoutManager.cxx#DocumentLayoutManager::DelLayoutFormat"
+  ],
+  "verified_behavior": [
+    "The same inline hint is indexed across start, end and Which maps with its original document fly and a single UTF-16 dummy character.",
+    "The marker and frame anchor track edits without losing their relationship to character style spans, and format-only clearing retains the fly.",
+    "Same-document split, join and fragment transfer retain the actual point and embedded graphic section.",
+    "Erasure and replacement remove the affected fly and owned section while remaining anchors follow surviving markers."
+  ],
+  "verification": {
+    "writer_coverage": {
+      "command": "npm run test:coverage:writer --workspace @vite-office/office -- src/sw/source/core/txtnode src/sw/source/core/text/itratr src/sw/source/core/doc/text-hint-copy.test.ts src/sw/source/core/doc/native-global-absolute-correction.test.ts src/sw/inc/fmthdft.native.test.ts src/sw/source/core/undo/native-delete-history.test.ts src/sw/source/core/undo/native-split-history.test.ts src/sw/source/uibase/wrtsh/native-cross-node-deletion.test.ts src/sw/source/uibase/wrtsh/native-selected-insertion.test.ts src/sw/source/core/graphic/ndgrf.test.ts --maxWorkers=3 --coverage.include=src/sw/source/core/txtnode/thints-insert.ts --coverage.include=src/sw/source/core/txtnode/ndtxt-hint-update.ts --coverage.include=src/sw/source/core/txtnode/ndhints.ts --coverage.include=src/sw/source/core/doc/DocumentLayoutManager.ts --coverage.reportsDirectory=coverage/inline-fly-hints-final --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "files": 60,
+      "tests": 9773,
+      "threshold": 90,
+      "statements": "506/538",
+      "branches": "391/428",
+      "functions": "96/99",
+      "lines": "452/473",
+      "log": "inline-resume-coverage-final.log"
+    },
+    "inline_insertion_function": {
+      "statements": "19/20",
+      "branches": "24/25",
+      "unreached": "The native maximum-hint-count branch cannot be induced through a JavaScript array alone."
+    },
+    "browser": {
+      "command": "npm exec -- playwright test --config apps/office/coverage/odt-story.playwright.config.ts --workers=1 --timeout=90000 -g 'floating picture in the header|tdf134114|retains ODT page stories'",
+      "tests": 3,
+      "log": "inline-resume-browser-final.log"
+    },
+    "other_passed": [
+      "Typecheck, production build and static smoke.",
+      "Scoped ESLint and Prettier, JSDoc, file-size, Writer resources and Which identities, module boundaries and source tree.",
+      "Fourteen scoped source-provenance records, Agentplane doctor and routing, and git diff check."
+    ]
+  },
+  "remaining": [
+    "Wire FLY_AS_CHAR through native frame creation, the DOCX and ODT codecs, Worker transfer, and browser layout.",
+    "Native layout format copying, point-specific undo, and the low-level ReplaceText dummy deletion path remain open.",
+    "Global provenance, invariants and parity are still blocked by the existing registry discovery omissions for OfficeTooltips.tsx and available-menu-items.ts."
+  ]
+}
