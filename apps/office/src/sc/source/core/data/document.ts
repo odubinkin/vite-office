@@ -20,7 +20,6 @@ import { SharedString } from "../../../../svl/inc/sharedstring";
 import type { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
 import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import type { SvtListener } from "../../../../svl/source/notify/listener";
-import type { SfxListener } from "../../../../svl/source/notify/lstner";
 import type { SfxBroadcaster } from "../../../../svl/source/notify/SfxBroadcaster";
 import type { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
 import { MAXCOL, MAXROW, ScAddress, ScRange, ValidCol, ValidRow } from "../../../inc/address";
@@ -60,6 +59,9 @@ import { ScRangeName } from "../tool/rangenam";
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
   IsTabProtected = documen3.IsTabProtected;
+  GetTabBgColor = documen3.GetTabBgColor;
+  SetTabBgColor = documen3.SetTabBgColor;
+  IsDefaultTabBgColor = documen3.IsDefaultTabBgColor;
   GetTabProtection = documen3.GetTabProtection;
   SetTabProtection = documen3.SetTabProtection;
   private readonly pRangeName = new ScRangeName();
@@ -68,14 +70,8 @@ export class ScDocument {
     return tab === -1 ? this.pRangeName : this.FetchTable(tab)?.GetRangeName();
   }
   declare private pUnoBroadcaster: SfxBroadcaster | null;
-  /** Original lazy document UNO observer registration. @param listener - Actual native listener. @returns Nothing. */
-  AddUnoObject(listener: SfxListener): void {
-    documen3.AddUnoObject.call(this, listener);
-  }
-  /** Original represented serial observer removal. Cross-thread finalizer waiting and BroadcastUno deferred calls remain unported. @param listener - Actual listener. @returns Nothing. */
-  RemoveUnoObject(listener: SfxListener): void {
-    documen3.RemoveUnoObject.call(this, listener);
-  }
+  AddUnoObject = documen3.AddUnoObject;
+  RemoveUnoObject = documen3.RemoveUnoObject;
   private mbStreamValidLocked = false;
   /** Original stream-validity lock query. @returns Lock state. */
   IsStreamValidLocked(): boolean {

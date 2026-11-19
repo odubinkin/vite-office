@@ -142,6 +142,11 @@ export class XlsColor {
     return color;
   }
 
+  /** Tests the original placeholder source. @returns Whether this color is automatic. */
+  isAuto(): boolean {
+    return this.source[0] === "auto";
+  }
+
   /** Sets the native indexed color used for automatic border text. @param value - Palette index. @returns Nothing. */
   setIndexed(value: number): void {
     this.source = ["indexed", value];

@@ -30,7 +30,8 @@
       "Native edit cells write character spans and their deduplicated automatic text styles through the shared ODF text writer.",
       "Writes ODF theme and native complex-color references through named and automatic styles.",
       "Declares the original ODF css3t namespace for Calc horizontal justification method.",
-      "Writes native ODF protection attributes and options before sheet cell content."
+      "Writes native ODF protection attributes and options before sheet cell content.",
+      "Writes ODF 1.3 table-family tab colors and preserves display and color in a single automatic table style."
     ],
     "omittedResponsibilities": [
       "Field identity and unimplemented character properties are outside this XML text boundary."

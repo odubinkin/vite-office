@@ -1,4 +1,5 @@
 /** @fileoverview Native SetOptimalHeightsToRows reducer over actual compressed row flags and calculated heights; drawing services remain unported. */
+import { Color } from "../../../../tools/inc/color";
 import type { RowHeightContext } from "../../../inc/rowheightcontext";
 import type { ScBitMaskCompressedArray } from "../../../inc/compressedarray";
 import type { ScColumn } from "../../../inc/column";
@@ -18,6 +19,18 @@ export function IsVisible(this: ScTable): boolean {
 export function SetVisible(this: ScTable, visible: boolean): void {
   if (this["bVisible"] !== visible) this.SetStreamValid(false);
   this["bVisible"] = visible;
+}
+
+/** Returns the original sheet color by value. @param this - Actual sheet. @returns Independent color. */
+export function GetTabBgColor(this: ScTable): Color {
+  return new Color(this["aTabBgColor"]);
+}
+
+/** Updates the original tab color and invalidates the sheet stream when it changes. @param this - Actual sheet. @param color - Tab color or automatic. @returns Nothing. */
+export function SetTabBgColor(this: ScTable, color: Readonly<Color>): void {
+  if (this["aTabBgColor"].equals(color)) return;
+  this["aTabBgColor"] = new Color(color);
+  this.SetStreamValid(false);
 }
 
 /** Borrows the ordered sheet areas for filter iteration. @param table - Native sheet. @returns Read-only area sequence. */

@@ -330,7 +330,8 @@
       "Recognizes original ODF style cell-protect and print-content attribute tokens.",
       "Recognizes original sheet-protection attributes and extension namespace aliases.",
       "Recognizes the source ODF tab-stop-distance attribute.",
-      "Recognizes original ODF style and LibreOffice compatibility namespaces for first/left/master header and footer children."
+      "Recognizes original ODF style and LibreOffice compatibility namespaces for first/left/master header and footer children.",
+      "Registers both ODF table tab-color namespaces without renumbering existing portable tokens."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/core/xmltoken.cxx",

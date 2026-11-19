@@ -18,7 +18,8 @@
     ],
     "preservedResponsibilities": [
       "Resolves SpreadsheetML colors for fonts, solid fills and rich text with source precedence, palette overrides and ordered luminance metadata.",
-      "Uses the source-supplied automatic color and original window text palette default for border colors."
+      "Uses the source-supplied automatic color and original window text palette default for border colors.",
+      "Exposes the original XlsColor placeholder test to worksheet settings."
     ],
     "omittedResponsibilities": [
       "The stylesbuffer color responsibilities are split from existing native pattern ownership. Non-solid fill, DXF and binary formats remain outside this owner."

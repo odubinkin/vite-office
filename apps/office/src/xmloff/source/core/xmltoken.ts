@@ -16,6 +16,7 @@ export const ODF_NAMESPACES = {
   officeExt: "http://openoffice.org/2009/office",
   style: "urn:oasis:names:tc:opendocument:xmlns:style:1.0",
   table: "urn:oasis:names:tc:opendocument:xmlns:table:1.0",
+  tableExt: "http://openoffice.org/2009/table",
   svg: "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0",
   text: "urn:oasis:names:tc:opendocument:xmlns:text:1.0",
   xml: "http://www.w3.org/XML/1998/namespace",
@@ -436,6 +437,8 @@ export enum XMLToken {
   FO_MARGIN,
   DRAW_IMAGE,
   STYLE_RUN_THROUGH,
+  TABLE_TAB_COLOR,
+  TABLE_EXT_TAB_COLOR,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -728,6 +731,8 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.table, "table-rows", XMLToken.TABLE_TABLE_ROWS],
   [ODF_NAMESPACES.table, "table-row-group", XMLToken.TABLE_TABLE_ROW_GROUP],
   [ODF_NAMESPACES.table, "display", XMLToken.TABLE_DISPLAY],
+  [ODF_NAMESPACES.table, "tab-color", XMLToken.TABLE_TAB_COLOR],
+  [ODF_NAMESPACES.tableExt, "tab-color", XMLToken.TABLE_EXT_TAB_COLOR],
   [ODF_NAMESPACES.style, "width", XMLToken.STYLE_WIDTH],
   [ODF_NAMESPACES.style, "rel-width", XMLToken.STYLE_REL_WIDTH],
   [ODF_NAMESPACES.style, "min-row-height", XMLToken.STYLE_MIN_ROW_HEIGHT],

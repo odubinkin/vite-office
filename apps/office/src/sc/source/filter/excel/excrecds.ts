@@ -1,6 +1,7 @@
 /** @fileoverview XML records exported by the original excrecds.cxx owner. */
 import { getTokenFromUtf8 as token } from "../../../../oox/source/token/tokenmap";
-import type { XclExpXmlStream } from "./xestream";
+import { XclXmlUtils, type XclExpXmlStream } from "./xestream";
+import { COL_AUTO, type Color } from "../../../../tools/inc/color";
 import type { ScTableProtection } from "../../core/data/tabprotection";
 import { sheetProtectionOptions } from "../inc/sheetprotection";
 import type { ScDocument } from "../../../inc/document";
@@ -19,6 +20,21 @@ function formatRange(document: ScDocument, range: ScRange): string {
     return text(value);
   } finally {
     value.dispose();
+  }
+}
+
+/** Writes the represented worksheet properties in native SpreadsheetML order. */
+export class XclExpXmlSheetPr {
+  /** Binds the sheet color. @param tabColor - Canonical sheet color. @returns Worksheet record. */
+  constructor(private readonly tabColor: Color) {}
+
+  /** Writes a custom color before the other worksheet records. @param stream - Worksheet XML stream. @returns Nothing. */
+  SaveXml(stream: XclExpXmlStream): void {
+    if (this.tabColor.equals(COL_AUTO)) return;
+    const writer = stream.GetCurrentStream();
+    writer.startElement(token("sheetPr"));
+    writer.singleElement(token("tabColor"), token("rgb"), XclXmlUtils.ToOString(this.tabColor));
+    writer.endElement(token("sheetPr"));
   }
 }
 

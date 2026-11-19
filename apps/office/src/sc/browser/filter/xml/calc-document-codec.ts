@@ -1,4 +1,5 @@
 /** @fileoverview Bounded Calc worker transfer of supported native cells, sparse attributes and geometry; XML remains the durable format. */
+import { Color, ColorTransparency, COL_AUTO } from "../../../../tools/inc/color";
 import { GetPrintRanges } from "../../../source/core/data/table1";
 import {
   getSheetCursor,
@@ -141,6 +142,7 @@ function isOoxPasswordHash(hash: ScOoxPasswordHash | undefined): boolean {
 /** Native sparse sheet transfer record. */
 interface Sheet {
   readonly visible?: boolean;
+  readonly tabColor?: number;
   readonly protection?: {
     readonly enabled: boolean;
     readonly options: boolean[];
@@ -261,7 +263,9 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     const cursor = getSheetCursor(document, tab);
     const tabSelected = getSheetTabSelected(document, tab);
     const panes = getSheetPaneLayout(document, tab);
+    const tabColor = table.GetTabBgColor();
     const sheet: Sheet = {
+      ...(tabColor.equals(COL_AUTO) ? {} : { tabColor: tabColor.toUInt32() }),
       ...(table.IsVisible() ? {} : { visible: false }),
       ...(protection
         ? {
@@ -555,6 +559,13 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       try {
         if (!document.InsertTab(tab, name)) throw new Error("Calc worker sheet is invalid.");
         if (sheet.visible === false) document.SetVisible(tab, false);
+        if (sheet.tabColor !== undefined) {
+          if (sheet.tabColor !== sheet.tabColor >>> 0) throw new Error("Invalid Calc sheet color.");
+          document.SetTabBgColor(
+            tab,
+            new Color(ColorTransparency, sheet.tabColor, "ColorTransparencyTag"),
+          );
+        }
         if (typeof sheet.showGrid === "boolean") document.SetSheetShowGrid(tab, sheet.showGrid);
         if (typeof sheet.tabSelected === "boolean")
           setSheetTabSelected(document, tab, sheet.tabSelected);

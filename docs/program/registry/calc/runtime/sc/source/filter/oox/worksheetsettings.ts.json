@@ -21,7 +21,7 @@
         "apps/office/src/sc/source/filter/oox/excelfilter.sheet-protection.test.ts",
         "apps/office/src/sc/source/filter/oox/excelfilter.enhanced-protection.test.ts"
       ],
-      "justification": "Finalizes sheet-wide protection on the canonical document from the source boolean defaults and the two imported password-hash representations. Enhanced protection ranges, chart sheet and binary variants and unrelated worksheet settings remain pending. Imports enhanced protection descriptors, verifier hashes and sqref references into the native owner.",
+      "justification": "Finalizes sheet-wide protection on the canonical document from the source boolean defaults and the two imported password-hash representations. Enhanced protection ranges, chart sheet and binary variants and unrelated worksheet settings remain pending. Imports enhanced protection descriptors, verifier hashes and sqref references into the native owner. Resolves the original sheet tab color source through the workbook graphic helper during finalization.",
       "knownViolations": [],
       "localSymbols": [
         "WorksheetSettings",

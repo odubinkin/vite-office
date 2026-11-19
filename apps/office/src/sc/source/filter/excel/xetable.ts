@@ -20,7 +20,7 @@ import type { ScTable } from "../../../inc/table";
 import { spreadsheetNamespace } from "../oox/workbookfragment";
 import { getMaxDigitWidth, type XlsxReferenceDevice } from "../oox/unitconverter";
 import { XclExpXmlStream, XclXmlUtils } from "./xestream";
-import { XclExpSheetProtection } from "./excrecds";
+import { XclExpSheetProtection, XclExpXmlSheetPr } from "./excrecds";
 import { XclExpMergedcells, XclExpSst } from "./xecontent";
 import { CreateString } from "./xehelper";
 import { SaveXmlPageBreaks } from "./xepage";
@@ -353,6 +353,7 @@ function SaveXmlSheet(
   const serializer = stream.GetCurrentStream();
   const row = token("row");
   serializer.startElement(token("worksheet"), token("xmlns"), spreadsheetNamespace);
+  new XclExpXmlSheetPr(document.GetTabBgColor(tab)).SaveXml(stream);
   SaveXmlTabViewSettings(stream, document, tab, selected, view);
   const table = document.FetchTable(tab);
   if (!table) throw new Error("Worksheet table is missing.");

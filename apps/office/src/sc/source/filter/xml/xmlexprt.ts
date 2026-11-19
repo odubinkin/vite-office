@@ -30,6 +30,7 @@ import { escapeXml, exportText } from "../../../../xmloff/source/text/txtparae";
 import { StackVar } from "../../../../formula/inc/token";
 import { RangeDataType } from "../../core/tool/rangenam";
 import { doubleToString } from "../../../../sal/rtl/strtmpl.math";
+import { COL_AUTO } from "../../../../tools/inc/color";
 import { Converter } from "../../../../sax/source/tools/converter";
 import { DateTime } from "../../../../offapi/com/sun/star/util/DateTime";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
@@ -223,7 +224,7 @@ export class ScXMLExport {
       ? escapeXml(text(SC_STYLE_PROG_STANDARD))
       : "";
     let body = this.WriteCalculationSettings();
-    let hasHiddenSheet = false;
+    const tableStyles = new Map<string, string>();
     for (let tab = 0; tab < this.document.GetTableCount(); tab++) {
       const table = this.document.FetchTable(tab) as ScTable,
         name = new OUString();
@@ -255,9 +256,20 @@ export class ScXMLExport {
         name.dispose();
         throw new Error("Sheet protection changed during ODS export.");
       }
-      const hidden = !table.IsVisible();
-      hasHiddenSheet ||= hidden;
-      body += `<table:table table:name="${escapeXml(text(name))}"${hidden ? ' table:style-name="ta1"' : ""}${protectionAttributes}${print}>`;
+      let tableProperties = table.IsVisible() ? "" : ' table:display="false"';
+      const color = table.GetTabBgColor();
+      if (!color.equals(COL_AUTO)) {
+        const rgb: [string] = [""];
+        Converter.convertColor(rgb, color.toUInt32());
+        tableProperties += ` table:tab-color="${rgb[0]}"`;
+      }
+      let styleAttribute = "";
+      if (tableProperties) {
+        const style = tableStyles.get(tableProperties) ?? `ta${tableStyles.size + 1}`;
+        tableStyles.set(tableProperties, style);
+        styleAttribute = ` table:style-name="${style}"`;
+      }
+      body += `<table:table table:name="${escapeXml(text(name))}"${styleAttribute}${protectionAttributes}${print}>`;
       name.dispose();
       if (protection?.isProtected()) body += writeTableProtectionOptions(protection);
       const outline = table.GetOutlineTable();
@@ -406,9 +418,8 @@ export class ScXMLExport {
     const external = WriteExternalRefCaches(this.document);
     body += external + this.WriteNamedRange(-1);
     let automatic = this.textStyles.exportStyles() + (external ? externalRefCacheStyle : "");
-    if (hasHiddenSheet)
-      automatic +=
-        '<style:style style:name="ta1" style:family="table"><style:table-properties table:display="false"/></style:style>';
+    for (const [properties, name] of tableStyles)
+      automatic += `<style:style style:name="${name}" style:family="table"><style:table-properties${properties}/></style:style>`;
     for (const style of this.numberStyles.values()) if (style) automatic += style.xml;
     for (const { name, dataStyle, properties } of this.styles.values()) {
       automatic += `<style:style style:name="${name}" style:family="table-cell"${defaultName ? ` style:parent-style-name="${defaultName}"` : ""}${dataStyle ? ` style:data-style-name="${dataStyle}"` : ""}>${properties}</style:style>`;

@@ -17,7 +17,8 @@
     ],
     "preservedResponsibilities": [
       "Finalizes sheet-wide protection on the canonical document from the source boolean defaults and the two imported password-hash representations.",
-      "Imports enhanced protection descriptors, verifier hashes and sqref references into the native owner."
+      "Imports enhanced protection descriptors, verifier hashes and sqref references into the native owner.",
+      "Resolves the original sheet tab color source through the workbook graphic helper during finalization."
     ],
     "omittedResponsibilities": [
       "Enhanced protection ranges, chart sheet and binary variants and unrelated worksheet settings remain pending."

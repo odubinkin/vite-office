@@ -1,9 +1,25 @@
 /** @fileoverview Original documen3.cxx document grammar projection and copy-reference traversal;non-copy global/name/drawing/embedded services remain unported. */
+import { Color, COL_AUTO } from "../../../../tools/inc/color";
 import type { ScDocument } from "../../../inc/document";
 import type { ScTableProtection } from "./tabprotection";
 import type { RefUpdateContext } from "../../../inc/refupdatecontext";
 import { UpdateRefMode } from "../../../inc/global";
 import { FormulaGrammar, type AddressConvention } from "../../../../formula/inc/grammar";
+/** Returns the native sheet color with the original missing-sheet default. @param this - Workbook. @param tab - Sheet index. @returns Tab color. */
+export function GetTabBgColor(this: ScDocument, tab: number): Color {
+  return this.FetchTable(tab)?.GetTabBgColor() ?? new Color(COL_AUTO);
+}
+
+/** Dispatches tab color to its sheet. @param this - Workbook. @param tab - Sheet index. @param color - Tab color. @returns Nothing. */
+export function SetTabBgColor(this: ScDocument, tab: number, color: Readonly<Color>): void {
+  this.FetchTable(tab)?.SetTabBgColor(color);
+}
+
+/** Checks whether the sheet has the original automatic color. @param this - Workbook. @param tab - Sheet index. @returns Whether the tab uses the default. */
+export function IsDefaultTabBgColor(this: ScDocument, tab: number): boolean {
+  return this.GetTabBgColor(tab).equals(COL_AUTO);
+}
+
 /** Original document grammar-to-reference-convention projection. @param this - Actual document owner. @returns Stored grammar's reference convention. */
 export function GetAddressConvention(this: ScDocument): AddressConvention {
   return FormulaGrammar.extractRefConvention(this.GetGrammar()) as AddressConvention;

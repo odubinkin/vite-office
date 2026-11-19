@@ -16,6 +16,7 @@ import { getFontFamilyFromGeneric } from "../../../../xmloff/source/style/fonthd
 import type { ScTable } from "../../../inc/table";
 import { RowHeightContext } from "../../../inc/rowheightcontext";
 import { ScFlatBoolRowSegments } from "../../core/data/segmenttree";
+import type { Color } from "../../../../tools/inc/color";
 import { XMLTableStylesContext } from "./xmlstyli";
 import { CellAttributeHolder, type ScPatternAttr } from "../../../inc/patattr";
 import { ScXMLImportContext } from "./importcontext";
@@ -98,16 +99,19 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     { pattern: ScPatternAttr; reference: string }
   >();
   private readonly numberStyles = new Map<string, SvXMLNumFormatContext>();
-  private readonly tableStyles = new Map<string, boolean>();
-  /** Records the native style's sheet display property. @param name - Automatic style. @param visible - Sheet display. @returns Nothing. */
-  AddTableStyle(name: string, visible: boolean): void {
-    this.tableStyles.set(name, visible);
+  private readonly tableStyles = new Map<string, { visible: boolean; tabColor: Readonly<Color> }>();
+  /** Registers properties of the native table-family style. @param name - Automatic style. @param visible - Sheet display. @param tabColor - Sheet tab color. @returns Nothing. */
+  AddTableStyle(name: string, visible: boolean, tabColor: Readonly<Color>): void {
+    this.tableStyles.set(name, { visible, tabColor });
   }
-  /** Applies the sheet display property to its native owner. @param name - Automatic style. @param tab - Native sheet. @returns Nothing. */
+  /** Applies the sheet style to its native owner. @param name - Automatic style. @param tab - Native sheet. @returns Nothing. */
   ApplyTableStyle(name: string, tab: number): void {
-    const visible = this.tableStyles.get(name);
-    if (visible === undefined) this.unsupported("table:style-name");
-    else this.document.SetVisible(tab, visible);
+    const style = this.tableStyles.get(name);
+    if (!style) this.unsupported("table:style-name");
+    else {
+      this.document.SetVisible(tab, style.visible);
+      this.document.SetTabBgColor(tab, style.tabColor);
+    }
   }
   private readonly columnStyles = new Map<string, { width: number | null; pageBreak: boolean }>();
   /** Registers native column geometry and breaks. @param name - Automatic style. @param width - Signed32 HMM or absent property. @param pageBreak - Manual break before the column. @returns Nothing. */

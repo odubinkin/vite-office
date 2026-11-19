@@ -1,5 +1,6 @@
 /** @fileoverview ScTable scalar/local-reference,cell-attribute and standard row-height operations over lazy contiguous columns. Device layout and full sheet services remain unported. */
 import { ScOutlineTable } from "./olinetab";
+import { Color, COL_AUTO } from "../../../../tools/inc/color";
 import type { ScTableProtection } from "./tabprotection";
 import { ScRangeName } from "../tool/rangenam";
 import { SetAllFormulasDirty as dirtyFormulas } from "./table.formula-admission";
@@ -98,6 +99,7 @@ export class ScTable {
   mbPageBreaksValid = false;
   private bStreamValid = false;
   private bVisible = true;
+  private aTabBgColor = new Color(COL_AUTO);
   declare private maRowManualBreaks: Set<number>;
   declare private maColManualBreaks: Set<number>;
   private readonly maRowPageBreaks = new Set<number>();
@@ -119,18 +121,14 @@ export class ScTable {
   SetStreamValid = table1.SetStreamValid;
   IsVisible = table1.IsVisible;
   SetVisible = table1.SetVisible;
+  SetTabBgColor = table1.SetTabBgColor;
+  GetTabBgColor = table1.GetTabBgColor;
   /** Original page-break cache invalidation. @returns Nothing. */
   InvalidatePageBreaks(): void {
     this.mbPageBreaksValid = false;
   }
-  /** Original sheet Undo dispatch on the same actual table. @param args - Context,rectangle,flags,mark and destination. @returns Nothing. */
-  UndoToTable(...args: Parameters<typeof table2.UndoToTable>): void {
-    table2.UndoToTable.apply(this, args);
-  }
-  /** Original table5 clears manual breaks. @param args - Native arguments. @returns Native result. */
-  RemoveManualBreaks(...args: Parameters<typeof table5.RemoveManualBreaks>): void {
-    return table5.RemoveManualBreaks.apply(this, args);
-  }
+  UndoToTable = table2.UndoToTable;
+  RemoveManualBreaks = table5.RemoveManualBreaks;
   /** Original table5 queries manual breaks. @param args - Native arguments. @returns Native result. */
   HasManualBreaks(...args: Parameters<typeof table5.HasManualBreaks>): boolean {
     return table5.HasManualBreaks.apply(this, args);

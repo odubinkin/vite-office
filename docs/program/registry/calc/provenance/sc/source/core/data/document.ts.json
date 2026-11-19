@@ -110,7 +110,8 @@
       "The document owns the actual imported theme used by XLSX, ODS and the Worker transfer.",
       "Exposes sheet protection via the documen3 owner.",
       "Exposes native document-level selection editability on the actual document.",
-      "Exposes native leading-overlap, trailing-merge and covered-anchor operations for view selection."
+      "Exposes native leading-overlap, trailing-merge and covered-anchor operations for view selection.",
+      "Exposes the original document tab color operations from the documen3 owner."
     ],
     "omittedResponsibilities": [
       "The browser document text-object slice only admits the consumed operations."

@@ -30,6 +30,7 @@ import { attribute, isSpreadsheetTag } from "./workbookfragment";
 const sheetElements: Readonly<Record<string, readonly string[]>> = {
   "": ["worksheet"],
   worksheet: [
+    "sheetPr",
     "sheetViews",
     "sheetFormatPr",
     "cols",
@@ -40,6 +41,7 @@ const sheetElements: Readonly<Record<string, readonly string[]>> = {
     "rowBreaks",
     "colBreaks",
   ],
+  sheetPr: ["tabColor"],
   sheetViews: ["sheetView"],
   sheetView: ["pane", "selection"],
   cols: ["col"],
@@ -127,6 +129,9 @@ export class WorksheetFragment extends FragmentHandler {
           );
         break;
       }
+      case "tabColor":
+        this.settings.importTabColor(attributes);
+        break;
       case "sheetView":
         this.readAttributes(
           attributes,
@@ -339,7 +344,7 @@ export class WorksheetFragment extends FragmentHandler {
     }
     this.sheetData.finalizeImport();
     this.geometry.finalizeImport();
-    this.settings.finalizeImport(this.document, this.tab);
+    this.settings.finalizeImport(this.document, this.tab, this.styles.graphicHelper);
     this.views.finalizeImport(this.document, this.tab, this.workbookViews);
   }
   /** Native cell type dispatch and explicit OOXML formula grammar. @returns Nothing. */

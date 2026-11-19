@@ -1,10 +1,12 @@
 /** @fileoverview Browser ScTabControl presenter over actual document sheet names and view-owned active/selected sheets. */
-import type { KeyboardEvent, MouseEvent } from "react";
+import type { CSSProperties, KeyboardEvent, MouseEvent } from "react";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, Plus } from "lucide-react";
 import { officeToolbarButtonClassName } from "../../../framework/browser/presentation/office-control-styles";
 import type { ScViewData } from "../../source/ui/inc/viewdata";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { browserColor } from "../../../vcl/browser/color";
+import { COL_AUTO } from "../../../tools/inc/color";
 /** Sheet-tab controller bindings; the presenter never inserts or changes a sheet itself. */
 export interface ScTabControlProps {
   readonly viewData: ScViewData;
@@ -23,11 +25,45 @@ export interface ScTabControlProps {
 export function ScTabControl(props: ScTabControlProps): React.JSX.Element {
   const document = props.viewData.GetDocument(),
     name = new OUString();
-  const tabs: { tab: number; name: string }[] = [];
+  const tabs: {
+    tab: number;
+    name: string;
+    current: boolean;
+    selected: boolean;
+    appearance: string;
+    style: CSSProperties | undefined;
+  }[] = [];
   for (let tab = 0; tab < document.GetTableCount(); ++tab)
     if (document.IsVisible(tab)) {
       document.GetName(tab, name);
-      tabs.push({ tab, name: text(name) });
+      const color = document.GetTabBgColor(tab);
+      const custom = !color.equals(COL_AUTO);
+      const current = props.viewData.GetTabNumber() === tab;
+      const selected = props.viewData.GetMarkData().GetTableSelect(tab);
+      const appearance = current
+        ? "border-indigo-700 bg-indigo-50 font-semibold text-indigo-800"
+        : selected
+          ? "border-indigo-400 bg-indigo-50 text-indigo-800"
+          : custom
+            ? "border-slate-300 bg-[var(--sc-tab-color)] text-[color:var(--sc-tab-text-color)]"
+            : "border-slate-300 bg-white hover:border-indigo-400 hover:text-indigo-800";
+      const line =
+        custom && (selected || current)
+          ? " [box-shadow:inset_0_-3px_var(--sc-tab-color)] forced-colors:[box-shadow:none]"
+          : "";
+      tabs.push({
+        tab,
+        name: text(name),
+        current,
+        selected,
+        appearance: appearance + line,
+        style: custom
+          ? ({
+              "--sc-tab-color": browserColor(color),
+              "--sc-tab-text-color": color.GetLuminance() <= 128 ? "white" : "black",
+            } as CSSProperties)
+          : undefined,
+      });
     }
   name.dispose();
   return (
@@ -95,14 +131,19 @@ export function ScTabControl(props: ScTabControlProps): React.JSX.Element {
           /** Renders one native sheet identity, preserving separate active and selected markers. @param entry - Actual sheet name/index. @returns Sheet tab. */ ({
             tab,
             name: label,
+            current,
+            selected,
+            appearance,
+            style,
           }) => (
             <button
               key={tab}
               type="button"
               role="tab"
-              aria-selected={props.viewData.GetMarkData().GetTableSelect(tab)}
-              aria-current={props.viewData.GetTabNumber() === tab ? "page" : undefined}
-              tabIndex={props.viewData.GetTabNumber() === tab ? 0 : -1}
+              aria-selected={selected}
+              aria-current={current ? "page" : undefined}
+              tabIndex={current ? 0 : -1}
+              style={style}
               onContextMenu={
                 /** Suppresses browser chrome and forwards the original sheet pointer target. @param event - Actual context event. @returns Nothing. */ (
                   event,
@@ -146,7 +187,7 @@ export function ScTabControl(props: ScTabControlProps): React.JSX.Element {
                   event,
                 ) => props.onSelect(tab, event)
               }
-              className={`shrink-0 rounded-md border px-4 ${props.viewData.GetTabNumber() === tab ? "border-indigo-700 bg-indigo-50 font-semibold text-indigo-800" : props.viewData.GetMarkData().GetTableSelect(tab) ? "border-indigo-400 bg-indigo-50 text-indigo-800" : "border-slate-300 bg-white hover:border-indigo-400 hover:text-indigo-800"}`}
+              className={`shrink-0 rounded-md border px-4 ${appearance}`}
             >
               {label}
             </button>

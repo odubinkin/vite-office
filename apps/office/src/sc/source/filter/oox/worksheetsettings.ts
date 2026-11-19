@@ -1,4 +1,6 @@
-/** @fileoverview WorksheetSettings import of sheet-wide SpreadsheetML protection. */
+/** @fileoverview WorksheetSettings import of sheet-wide SpreadsheetML settings. */
+import type { SaxesAttributeNS } from "saxes";
+import { XlsColor, type ExcelGraphicHelper } from "./stylesbuffer.color";
 import type { ScDocument } from "../../../inc/document";
 import { ScTableProtection } from "../../core/data/tabprotection";
 import type { AttributeList } from "../../../../oox/source/helper/attributelist";
@@ -32,8 +34,14 @@ function readPasswordHash(attributes: AttributeList): ScOoxPasswordHash {
 
 /** Retains worksheet settings until the fragment has finished reading. */
 export class WorksheetSettings {
+  private tabColor = new XlsColor();
   private sheetProtection: ScTableProtection | undefined;
   private readonly enhancedProtection: ScEnhancedProtection[] = [];
+
+  /** Reads the native color source before resolving its theme and tint. @param attributes - SpreadsheetML color attributes. @returns Nothing. */
+  importTabColor(attributes: readonly SaxesAttributeNS[]): void {
+    this.tabColor = XlsColor.importColor(attributes);
+  }
 
   /** Reads the original sheet flag, permissions and both password hash representations. @param attributes - SpreadsheetML attributes. @returns Nothing. */
   importSheetProtection(attributes: AttributeList): void {
@@ -66,11 +74,12 @@ export class WorksheetSettings {
     });
   }
 
-  /** Sets protection on the real Calc document after the worksheet import. @param document - Workbook. @param tab - Destination sheet. @returns Nothing. */
-  finalizeImport(document: ScDocument, tab: number): void {
+  /** Applies sheet settings after the worksheet import. @param document - Workbook. @param tab - Destination sheet. @param graphics - Color resolver. @returns Nothing. */
+  finalizeImport(document: ScDocument, tab: number, graphics: ExcelGraphicHelper): void {
     if (this.sheetProtection) {
       this.sheetProtection.setEnhancedProtection(this.enhancedProtection);
       document.SetTabProtection(tab, this.sheetProtection);
     }
+    if (!this.tabColor.isAuto()) document.SetTabBgColor(tab, this.tabColor.getColor(graphics));
   }
 }

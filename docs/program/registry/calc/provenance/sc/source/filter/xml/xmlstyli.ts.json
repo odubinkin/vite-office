@@ -26,7 +26,8 @@
       "Document defaults are applied to the item pool, and the recognized named Default style is applied to the native Calc style pool.",
       "Automatic text-family styles are directed to the native edit-cell text style context.",
       "Installs ODF theme and complex-color children on actual document and style items.",
-      "Applies the original typed ODF table-cell border color children after shorthand geometry."
+      "Applies the original typed ODF table-cell border color children after shorthand geometry.",
+      "Reads standard and legacy ODF table-family tab colors via the native SAX color conversion."
     ],
     "omittedResponsibilities": [
       "Only the consumed responsibilities are represented; full original constructors, UNO/property-map graph, VCL/device/layout and native dialogs remain unverified."

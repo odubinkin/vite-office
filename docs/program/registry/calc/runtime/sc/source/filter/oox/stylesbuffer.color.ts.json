@@ -25,7 +25,7 @@
         "vendor/libreoffice-reference/sc/source/filter/oox/stylesbuffer.cxx",
         "apps/office/src/sc/source/filter/oox/excelfilter.borders.test.ts"
       ],
-      "justification": "Resolves SpreadsheetML colors for fonts, solid fills and rich text with source precedence, palette overrides and ordered luminance metadata. The stylesbuffer color responsibilities are split from existing native pattern ownership. Non-solid fill, DXF and binary formats remain outside this owner. Uses the source-supplied automatic color and original window text palette default for border colors.",
+      "justification": "Resolves SpreadsheetML colors for fonts, solid fills and rich text with source precedence, palette overrides and ordered luminance metadata. The stylesbuffer color responsibilities are split from existing native pattern ownership. Non-solid fill, DXF and binary formats remain outside this owner. Uses the source-supplied automatic color and original window text palette default for border colors. Exposes the original XlsColor placeholder test to worksheet settings.",
       "knownViolations": [],
       "localSymbols": [
         "XlsColor",
