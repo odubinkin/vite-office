@@ -24,6 +24,7 @@ import { CreateString } from "./xehelper";
 import { SaveXmlPageBreaks } from "./xepage";
 import { SaveXmlNames } from "./xename";
 import { SaveXmlTabViewSettings } from "./xeview";
+import { SaveXmlExternalLinks } from "./xelink";
 import { XclExpOutlineBuffer } from "./xetable.outline";
 import { XclExpXFBuffer, type XclExpFontBuffer } from "./xestyle.xml";
 
@@ -546,6 +547,7 @@ export async function exportXlsx(
     styles.Dispose();
   }
   workbook.endElement(token("sheets"));
+  SaveXmlExternalLinks(output, workbook, document);
   SaveXmlNames(workbook, document);
   workbook.endElement(token("workbook"));
   workbook.endDocument();

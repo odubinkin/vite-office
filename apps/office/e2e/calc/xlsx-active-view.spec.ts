@@ -195,3 +195,53 @@ test("Calc imports and exports XLSX with row and column headers hidden", /** Che
   await expect(rowHeaders).toHaveCount(0);
   await expect(columnHeaders).toHaveCount(0);
 });
+
+test("Calc opens the pinned XLSX with external names and exports its caches", /** Exercises the original testTdf130959 workbook through production file controls. @param fixtures - Browser state. @param fixtures.page - Chromium page. @returns Completion. */ async ({
+  page,
+}) => {
+  const fixture = fileURLToPath(
+    new URL(
+      "../../../../vendor/libreoffice-reference/sc/qa/unit/data/xlsx/tdf130959.xlsx",
+      import.meta.url,
+    ),
+  );
+  const open = page.getByRole("button", { name: "Open", exact: true });
+  await page.goto("/calc");
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles(fixture);
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  const tabs = page.getByRole("tablist", { name: "Sheets" });
+  await expect(tabs.getByRole("tab", { name: "Sheet 1", exact: true })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+
+  const pending = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download XLSX" }).click();
+  const path = await (await pending).path();
+  if (!path) throw new Error("Missing XLSX download.");
+  const buffer = await readFile(path);
+  const workbook = await DocumentArchive.open(buffer);
+  expect(await workbook.readTextEntry("xl/workbook.xml")).toContain("[1]Referens!$A$1:$A$7");
+  expect(await workbook.readTextEntry("xl/externalLinks/externalLink1.xml")).toContain(
+    '<cell r="A7" t="str"><v>Alla fakturor ska i detta flöde</v></cell>',
+  );
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer,
+    name: "External names reopened.xlsx",
+    mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page.getByText("External names reopened", { exact: true })).toBeVisible();
+  await expect(tabs.getByRole("tab", { name: "Sheet 1", exact: true })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+});

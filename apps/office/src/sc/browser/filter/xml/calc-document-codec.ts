@@ -48,6 +48,21 @@ import {
   type CellTextParagraph,
 } from "../../../source/filter/xml/xmlexprt.celltext";
 import { createCellEditText } from "../../../source/filter/xml/xmlcelli.edit";
+import { FormulaDoubleToken, FormulaStringToken } from "../../../../formula/inc/token";
+import {
+  CreateDoubleError,
+  FormulaError,
+  GetDoubleErrorValue,
+} from "../../../../formula/inc/errorcodes";
+/** Cloneable external cache cell with an explicit error discriminator for NaN payloads. */
+type ExternalCell =
+  | readonly [col: number, row: number, kind: "double" | "error", value: number]
+  | readonly [col: number, row: number, kind: "string", value: string];
+/** External sources in file-ID order, with the real sheet names and sparse data. */
+type ExternalFile = readonly [
+  name: string,
+  sheets: readonly (readonly [name: string, cells: readonly ExternalCell[]])[],
+];
 /** Compact native scalar alternative, with formula source rather than result text. */
 type Cell =
   | readonly [col: number, row: number, kind: "number", value: number]
@@ -149,6 +164,7 @@ export interface CalcDocumentRecord {
   readonly version: 1;
   readonly styles: string;
   readonly sheets: Sheet[];
+  readonly externalFiles?: readonly ExternalFile[];
   readonly visibleTab?: number;
   readonly showGrid?: boolean;
   readonly showFormulas?: boolean;
@@ -408,9 +424,35 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
       yield;
     }
   const view = document.GetViewOptions();
+  const externalFiles: ExternalFile[] = [];
+  for (const file of document.GetExternalRefManager().getExternalFiles()) {
+    const sheets: [string, ExternalCell[]][] = [];
+    for (const sheet of file.tables.values()) {
+      const cached: ExternalCell[] = [];
+      for (const [row, cells] of sheet.cache.entries()) {
+        for (const [col, token] of cells) {
+          if (token instanceof FormulaStringToken)
+            cached.push([col, row, "string", text(token.GetString().getString())]);
+          else {
+            const number = token.GetDouble();
+            const error = GetDoubleErrorValue(number);
+            cached.push(
+              error === FormulaError.NONE
+                ? [col, row, "double", number]
+                : [col, row, "error", error],
+            );
+          }
+          yield;
+        }
+      }
+      sheets.push([sheet.name, cached]);
+    }
+    externalFiles.push([file.name, sheets]);
+  }
   return {
     version: 1,
     sheets,
+    ...(externalFiles.length ? { externalFiles } : {}),
     ...(document.GetVisibleTab() ? { visibleTab: document.GetVisibleTab() } : {}),
     ...(view.GetOption(ViewOption.GRID) ? {} : { showGrid: false }),
     ...(view.GetOption(ViewOption.FORMULAS) ? { showFormulas: true } : {}),
@@ -495,6 +537,40 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       view.SetOption(ViewOption.HEADER, record.showHeaders);
     if (typeof record.showZeros === "boolean")
       view.SetOption(ViewOption.NULLVALS, record.showZeros);
+    for (const [name, sheets] of record.externalFiles ?? []) {
+      const manager = document.GetExternalRefManager();
+      const file = manager.getExternalFileId(name);
+      for (const [sheet, cells] of sheets) {
+        const cache = manager.getCacheTable(file, sheet, true);
+        if (!cache) throw new Error("Calc worker external sheet is invalid.");
+        for (const [col, row, kind, value] of cells) {
+          if (!Number.isInteger(col) || !Number.isInteger(row) || !document.ValidColRow(col, row))
+            throw new Error("Calc worker external cell address is invalid.");
+          if (kind === "string" && typeof value === "string") {
+            const lexical = unicode(value);
+            try {
+              const shared = document.GetSharedStringPool().intern(lexical);
+              try {
+                cache.setCell(col, row, new FormulaStringToken(shared));
+              } finally {
+                shared.dispose();
+              }
+            } finally {
+              lexical.dispose();
+            }
+          } else if (kind === "double" && Number.isFinite(value))
+            cache.setCell(col, row, new FormulaDoubleToken(value));
+          else if (kind === "error" && Number.isInteger(value) && value > 0 && value <= 0xffff)
+            cache.setCell(
+              col,
+              row,
+              new FormulaDoubleToken(CreateDoubleError(value as FormulaError)),
+            );
+          else throw new Error("Calc worker external cell value is invalid.");
+          yield;
+        }
+      }
+    }
     InsertRangeNames(
       document,
       (record.names ?? []).map(

@@ -21,9 +21,59 @@ import { exportXlsx } from "../excel/xetable";
 import { ScDocument } from "../../../inc/document";
 import { FormulaDoubleToken, FormulaStringToken } from "../../../../formula/inc/token";
 import { FormulaError, GetDoubleErrorValue } from "../../../../formula/inc/errorcodes";
-import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { ScExternalDoubleRefToken } from "../../../inc/token";
+import {
+  decodeCalcDocument,
+  encodeCalcDocument,
+} from "../../../browser/filter/xml/calc-document-codec";
+import { readOdsDocument, writeOdsXml } from "../xml/xmlwrap";
 
 const data = "../../vendor/libreoffice-reference/sc/qa/unit/data/xlsx/";
+
+it("opens and re-exports the original external named ranges and caches from tdf130959", /** Ports testTdf130959 and extends it through the production Worker graph and the XLSX output. @returns Completion. */ async () => {
+  const source = await ExcelFilter.importDocument(readFileSync(data + "tdf130959.xlsx"));
+  let worker: ScDocument | undefined;
+  let reopened: ScDocument | undefined;
+  try {
+    worker = decodeCalcDocument(structuredClone(encodeCalcDocument(source)));
+    const bytes = await exportXlsx(worker);
+    const archive = await DocumentArchive.open(bytes);
+    const workbook = await archive.readTextEntry("xl/workbook.xml");
+    expect(workbook).toContain("<externalReferences>");
+    expect(workbook).toContain("[1]Referens!$A$1:$A$7");
+    expect(workbook).toContain("&apos;[2]Grunduppgifter - Client info&apos;!$A$46:$A$48");
+    expect(await archive.readTextEntry("xl/externalLinks/externalLink1.xml")).toContain(
+      '<cell r="A7" t="str"><v>Alla fakturor ska i detta flöde</v></cell>',
+    );
+    reopened = await ExcelFilter.importDocument(bytes);
+    for (const doc of [source, worker, reopened]) {
+      expect(doc.GetTableCount()).toBe(1);
+      const entry = doc.GetRangeName()?.findByUpperName("NYDIM");
+      expect(entry?.GetCode().FirstToken()).toBeInstanceOf(ScExternalDoubleRefToken);
+      expect(entry?.GetSymbol(FormulaGrammar.Grammar.GRAM_OOXML)).toBe("[1]Referens!$A$1:$A$7");
+      const cache = doc.GetExternalRefManager().getCacheTable(0, "Referens");
+      const cell = cache?.getCell(0, 6);
+      expect(cell).toBeInstanceOf(FormulaStringToken);
+      expect(text((cell as FormulaStringToken).GetString().getString())).toBe(
+        "Alla fakturor ska i detta flöde",
+      );
+    }
+    const primary = await readOdsDocument(await writeOdsXml(worker));
+    try {
+      const entry = primary.GetRangeName()?.findByUpperName("NYDIM");
+      expect(entry?.GetCode().FirstToken()).toBeInstanceOf(ScExternalDoubleRefToken);
+      expect(entry?.GetSymbol(FormulaGrammar.Grammar.GRAM_ODFF)).toContain("Referens.$A$1:.$A$7");
+    } finally {
+      primary.Dispose();
+    }
+  } finally {
+    reopened?.Dispose();
+    worker?.Dispose();
+    source.Dispose();
+  }
+});
 
 /** Reads package metadata and fills the native cache. @param bytes - Workbook package. @param document - Calc graph. @returns Original link model. */
 async function readLinks(bytes: Uint8Array, document: ScDocument) {
@@ -132,6 +182,22 @@ it("populates native external-cache tokens from XLSX value callbacks", /** Verif
     expect(text((split as FormulaStringToken).GetString().getString())).toBe("A");
     expect(cache?.getCell(6, 0)).toBeUndefined();
     expect(cache?.getCell(0, 1)).toBeUndefined();
+    const sheet = unicode("Workbook");
+    try {
+      expect(document.InsertTab(0, sheet)).toBe(true);
+    } finally {
+      sheet.dispose();
+    }
+    const cloned = decodeCalcDocument(structuredClone(encodeCalcDocument(document)));
+    try {
+      const archive = await DocumentArchive.open(await exportXlsx(cloned));
+      const xml = await archive.readTextEntry("xl/externalLinks/externalLink1.xml");
+      expect(xml).toContain('<cell r="A1" t="n"><v>1.5</v></cell>');
+      expect(xml).toContain('<cell r="C1" t="e"><v>#DIV/0!</v></cell>');
+      expect(xml).toContain('<cell r="D1" t="e"><v>#N/A</v></cell>');
+    } finally {
+      cloned.Dispose();
+    }
   } finally {
     document.Dispose();
   }

@@ -30,6 +30,8 @@ import {
 import {
   ScSingleRefToken,
   ScDoubleRefToken,
+  ScExternalDoubleRefToken,
+  ScExternalSingleRefToken,
   ScMatrixToken,
   extendRangeReference,
 } from "../../../inc/token";
@@ -37,6 +39,7 @@ import type { FormulaToken } from "../../../../formula/inc/token";
 import type { ScMatrix } from "./scmatrix";
 import { doubleToString } from "../../../../sal/rtl/strtmpl.math";
 import { QuoteTabName } from "./address.ooo";
+import { parseExternalReference } from "./compiler.external";
 
 /** Selects lexical symbols from the native language resource. @param resource - Actual symbols. @returns Token lookup. */
 function createSymbolMap(resource: ReadonlyMap<OpCode, string>): Readonly<Record<string, OpCode>> {
@@ -319,6 +322,8 @@ export class ScCompiler extends FormulaCompiler {
 
   /** Writes symbolic names and typed inline matrices from the actual lexical tokens. @param token - Source token. @returns Formula spelling. */
   protected override CreateStringFromToken(token: FormulaToken): string {
+    if (token instanceof ScExternalSingleRefToken || token instanceof ScExternalDoubleRefToken)
+      return this.CreateStringFromExternal(token);
     if (token instanceof ScMatrixToken)
       return this.CreateStringFromMatrix(token.GetMatrix() as ScMatrix);
     if (!(token instanceof FormulaIndexToken) || token.GetOpCode() !== OpCode.ocName)
@@ -330,6 +335,33 @@ export class ScCompiler extends FormulaCompiler {
       (tab !== -1 && tab !== this.aPos.Tab() ? this.FormatSheet(tab, false, false) : "") +
       range.name
     );
+  }
+  /** Writes an external single-sheet operand in the active formula convention. @param token - External reference. @returns Serialized reference. */
+  private CreateStringFromExternal(
+    token: ScExternalSingleRefToken | ScExternalDoubleRefToken,
+  ): string {
+    const file = this.rDoc.GetExternalRefManager().getExternalFileName(token.GetFileId());
+    if (file === undefined) return "";
+    const sheet = QuoteTabName(text(token.GetTableName().getString()));
+    const odf =
+      FormulaGrammar.extractRefConvention(this.meGrammar) ===
+      FormulaGrammar.AddressConvention.CONV_ODF;
+    const first = this.MakeOneRefStrImpl(token.GetSingleRef(), false, 0, true);
+    const second =
+      token instanceof ScExternalDoubleRefToken
+        ? (odf ? ":." : ":") + this.MakeOneRefStrImpl(token.GetDoubleRef().Ref2, false, 0, true)
+        : "";
+    if (this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML) {
+      const index = `[${token.GetFileId() + 1}]`;
+      return (
+        (sheet.startsWith("'") ? "'" + index + sheet.slice(1) : index + sheet) +
+        "!" +
+        first +
+        second
+      );
+    }
+    const source = "'" + file.replaceAll("'", "''") + "'#$" + sheet + "." + first + second;
+    return odf ? "[" + source + "]" : source;
   }
   /** Emits an inline matrix using the source grammar and the original typed values. @param matrix - Original matrix. @returns Formula source. */
   private CreateStringFromMatrix(matrix: ScMatrix): string {
@@ -632,6 +664,16 @@ export class ScCompiler extends FormulaCompiler {
       const odf =
         FormulaGrammar.extractRefConvention(this.meGrammar) ===
         FormulaGrammar.AddressConvention.CONV_ODF;
+      const external = parseExternalReference(remaining, this.meGrammar, this.rDoc, this.aPos);
+      if (external) {
+        if (!array.AddToken(external[1])) {
+          this.SetError(FormulaError.CodeOverflow);
+          break;
+        }
+        index += external[0];
+        last = OpCode.ocPush;
+        continue;
+      }
       const qualifier = (
         this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML ? excelSheet : odfSheet
       ).exec(remaining);

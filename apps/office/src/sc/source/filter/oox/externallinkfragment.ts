@@ -184,11 +184,15 @@ export async function importExternalLinkFragments(
   document: ScDocument,
 ): Promise<void> {
   const relations = workbookRelations.getRelationsFromTypeFromOfficeDoc("externalLink");
+  let index = 0;
   for (const link of links) {
+    ++index;
     const path = relations.getFragmentPathFromRelId(link.relationshipId);
     if (!path) continue;
     await filter.importFragment(
       new ExternalLinkFragment(filter, path, await filter.importRelations(path), link, document),
     );
+    if (link.getType() === "document" || link.getType() === "missingDocument")
+      document.GetExternalRefManager().setWorkbookLink(index, link.getTarget());
   }
 }
