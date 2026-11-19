@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-sdt-item-codec.ts",
+    "status": "local-only",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-sdt-item-codec.ts",
+          "marker": "encodeParagraphSdt"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.page-stories.test.ts",
+          "marker": "round-trips building blocks"
+        }
+      ],
+      "upstream": []
+    },
+    "rationale": "Transfers the original paragraph SdtPr and ParaSdtEndBefore values between the Worker and editor.",
+    "responsibilities": [
+      "Transfers the original paragraph SdtPr and ParaSdtEndBefore values between the Worker and editor."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Explicit browser graph/Worker/storage serialization around original native item owners."
+    }
+  }
+}

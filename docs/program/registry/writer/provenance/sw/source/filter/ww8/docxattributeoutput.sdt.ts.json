@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.sdt.ts",
+    "localSymbols": [
+      "SdtBlockHelper",
+      "StartParagraph",
+      "EndSdtBlock"
+    ],
+    "upstreamPath": "sw/source/filter/ww8/docxattributeoutput.cxx",
+    "upstreamSymbols": [
+      "SdtBlockHelper::WriteSdtBlock",
+      "SdtBlockHelper::GetSdtParamsFromGrabBag"
+    ],
+    "preservedResponsibilities": [
+      "Writes building-block SDT parameters from original paragraph interoperability entries and closes the block at its deferred end marker."
+    ],
+    "omittedResponsibilities": [
+      "Other content-control types and the position-dependent native layout cases remain outside the supported block slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.sdt.ts",
+          "marker": "SdtBlockHelper"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.page-stories.test.ts",
+          "marker": "round-trips building blocks"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx",
+          "marker": "SdtBlockHelper::WriteSdtBlock"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx",
+          "marker": "SdtBlockHelper::GetSdtParamsFromGrabBag"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.sdt.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The native block SDT serializer is separate from the general DOCX attribute output module."
+    }
+  }
+}

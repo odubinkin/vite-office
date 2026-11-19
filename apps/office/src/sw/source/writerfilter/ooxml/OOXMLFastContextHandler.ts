@@ -430,6 +430,23 @@ export class OOXMLFastContextHandler {
       }
     }
   }
+  /** Sends the original block content marker to the mapper. @returns Nothing. */
+  startSdt(): void {
+    this.sendSdtMarker(N.LN_CT_SdtBlock_sdtContent);
+  }
+
+  /** Sends the original end marker after the content is complete. @returns Nothing. */
+  endSdt(): void {
+    this.sendSdtMarker(N.LN_CT_SdtBlock_sdtEndContent);
+  }
+
+  /** Wraps the marker as an original resource attribute. @param resource - Generated resource ID. @returns Nothing. */
+  private sendSdtMarker(resource: Id): void {
+    const values = new OOXMLPropertySet();
+    values.add(resource, V.createInteger(1), T.ATTRIBUTE);
+    this.stream().props(values);
+  }
+
   /** Native section starts only after closing a prior section. @returns Nothing. */ startSectionGroup(): void {
     if (this.isForwardEvents()) {
       if (this.mpParserState.isInSectionGroup()) this.endSectionGroup();

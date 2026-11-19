@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/SdtHelper.ts",
+    "localSymbols": [
+      "SdtHelper",
+      "makeDocPartSdt",
+      "readDocPartSdt"
+    ],
+    "upstreamPath": "sw/source/writerfilter/dmapper/SdtHelper.cxx",
+    "upstreamSymbols": [
+      "SdtHelper::getInteropGrabBagAndClear"
+    ],
+    "preservedResponsibilities": [
+      "Collects the original building-block properties and emits their native paragraph interoperability entries at paragraph boundaries."
+    ],
+    "omittedResponsibilities": [
+      "Live content controls and additional SdtPr metadata remain outside the supported block slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/SdtHelper.ts",
+          "marker": "SdtHelper"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.page-stories.test.ts",
+          "marker": "round-trips building blocks"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/SdtHelper.cxx",
+          "marker": "SdtHelper::getInteropGrabBagAndClear"
+        }
+      ]
+    }
+  }
+}

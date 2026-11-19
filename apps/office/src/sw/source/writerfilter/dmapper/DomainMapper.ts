@@ -54,10 +54,12 @@ import { BorderHandler } from "./BorderHandler";
 import { cppu_detail_getUnoType_BorderLine2 } from "../../../../offapi/com/sun/star/table/BorderLine2";
 import { highlights, paragraphBorderIds, underline } from "./DomainMapper.resources";
 import { PushPageHeaderFooter } from "./DomainMapper_Impl.headerfooter";
+import { SdtHelper } from "./SdtHelper";
 /** Receives native property sets and paragraph/run groups; lifecycle state remains on the shell, outside this model mapper. */
 export class DomainMapper implements Properties, Stream {
   readonly impl: DomainMapper_Impl;
   private tableRanges: DomainMapperTableRanges;
+  private sdt = new SdtHelper();
   private readonly CT_PageSz = { w: 0, h: 0, orient: false };
   private firstParagraphInSection = true;
   private lastParagraphInSection = false;
@@ -219,11 +221,12 @@ export class DomainMapper implements Properties, Stream {
     if (!(section instanceof SectionPropertyMap)) return;
     const target = PushPageHeaderFooter(this.impl, section, id);
     if (!target) return;
-    const savedTable = this.tableRanges;
+    const [savedTable, savedSdt] = [this.tableRanges, this.sdt];
     const first = this.firstParagraphInSection;
     const last = this.lastParagraphInSection;
     const deferred = this.deferredBreak;
     this.tableRanges = new DomainMapperTableRanges(target, this.impl);
+    this.sdt = new SdtHelper();
     this.deferredBreak = undefined;
     this.lastParagraphInSection = false;
     try {
@@ -234,6 +237,7 @@ export class DomainMapper implements Properties, Stream {
     } finally {
       this.tableRanges.dispose();
       this.tableRanges = savedTable;
+      this.sdt = savedSdt;
       this.firstParagraphInSection = first;
       this.lastParagraphInSection = last;
       this.deferredBreak = deferred;
@@ -249,10 +253,11 @@ export class DomainMapper implements Properties, Stream {
   utext(data: Uint16Array, length = data.length): void {
     const value = new OUString(data, length);
     try {
-      if (length === 1 && (data[0] === 13 || data[0] === 7))
-        this.impl.finishParagraph(this.impl.GetTopContextOfType(C.CONTEXT_PARAGRAPH));
-      else {
-        const paragraph = this.impl.GetTopContextOfType(C.CONTEXT_PARAGRAPH);
+      const paragraph = this.impl.GetTopContextOfType(C.CONTEXT_PARAGRAPH);
+      if (length === 1 && (data[0] === 13 || data[0] === 7)) {
+        this.sdt.FinishParagraph(paragraph);
+        this.impl.finishParagraph(paragraph);
+      } else {
         if (paragraph && !this.lastSectionGroup) this.applyDeferredBreak(paragraph);
         this.impl.appendTextPortion(value, this.impl.GetTopContext());
       }
@@ -299,7 +304,7 @@ export class DomainMapper implements Properties, Stream {
   }
   /** Native consumed attribute handlers retain source ordering and positive legacy twip ceiling. @param id - Original resource ID. @param value - Attribute. @returns Nothing. */
   attribute(id: Id, value: Value): void {
-    if (this.impl.HandleBookmarkAttribute(id, value)) return;
+    if (this.sdt.attribute(id) || this.impl.HandleBookmarkAttribute(id, value)) return;
     const context = this.impl.GetTopContext();
     if (!context) return;
     const n = value.getInt();
@@ -533,7 +538,7 @@ export class DomainMapper implements Properties, Stream {
   }
   /** Native consumed modifier handlers preserve script families and typed UNO values. @param modifier - Modifier. @returns Nothing. */
   sprm(modifier: Sprm): void {
-    if (this.tableRanges.sprm(modifier)) return;
+    if (this.sdt.sprm(modifier) || this.tableRanges.sprm(modifier)) return;
     const context = this.impl.GetTopContext();
     if (!context || resolveTextEffect(modifier, context)) return;
     const id = modifier.getId(),

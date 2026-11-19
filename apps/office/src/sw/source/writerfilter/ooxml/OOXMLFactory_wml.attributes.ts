@@ -20,6 +20,7 @@ export const attributes = [
   [1770070, "doc:type", "List", 1770401],
   [1769738, "doc:type", "List", 1770280],
   [1769738, "officeRel:id", "String", 1770385],
+  [1769784, "doc:val", "String", 0],
   [1769685, "doc:hint", "List", 1770288],
   [1769685, "doc:ascii", "String", 1770385],
   [1769685, "doc:hAnsi", "String", 1770385],

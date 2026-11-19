@@ -38,7 +38,6 @@ import {
   type SvxLRSpaceItem,
   SvxBoxItem,
 } from "../../../../editeng/source/items/frmitems";
-
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
@@ -88,6 +87,7 @@ import {
   RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_ADJUST,
+  RES_PARATR_GRABBAG,
   RES_PARATR_SPLIT,
   RES_PARATR_ORPHANS,
   RES_PARATR_WIDOWS,
@@ -713,6 +713,7 @@ function assertSupportedItems(
 ): void {
   const supported = new Set<number>([
     ...XML_FILL_WHICH_IDS,
+    RES_PARATR_GRABBAG,
     RES_CHRATR_POSTURE,
     RES_CHRATR_COLOR,
     RES_CHRATR_GRABBAG,

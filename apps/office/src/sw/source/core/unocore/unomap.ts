@@ -8,7 +8,6 @@ import { cppu_detail_getUnoType_BreakType as breakType } from "../../../../offap
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { SfxItemPropertySet } from "../../../../svl/source/items/itemprop";
 import { SfxItemPropertyMapEntry } from "../../../../svl/inc/itemprop";
-
 import { cppu_detail_getUnoType_Locale as localeType } from "../../../../udkapi/com/sun/star/lang/Locale";
 import { FN_UNO_PARA_NUM_AUTO_FORMAT } from "../../../inc/cmdid";
 import { cppu_detail_getUnoType_NamedValue as namedValueType } from "../../../../udkapi/com/sun/star/beans/NamedValue";
@@ -411,6 +410,7 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
       kind: "any",
     },
   ],
+  ["ParaInteropGrabBag", row(H.RES_PARATR_GRABBAG, ["Sequence", propertyType])],
   [
     "CharInteropGrabBag",
     {

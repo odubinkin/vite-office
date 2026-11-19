@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/dmapper/SdtHelper.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "docx-file-filter",
+    "capabilityIds": [
+      "CAP-d48ffd59-e673-4eda-aa2d-bcf1f13a5c84"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/SdtHelper.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.page-stories.test.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/SdtHelper.cxx"
+      ],
+      "justification": "Collects the original building-block properties and emits their native paragraph interoperability entries at paragraph boundaries.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SdtHelper",
+        "makeDocPartSdt",
+        "readDocPartSdt"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/dmapper/SdtHelper.cxx",
+      "upstreamSymbols": [
+        "SdtHelper::getInteropGrabBagAndClear"
+      ]
+    }
+  }
+}

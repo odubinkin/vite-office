@@ -3,7 +3,8 @@
  * Core items expose values and equality only; JSON type discrimination lives here.
  */
 import { SfxGrabBagItem } from "../../../../svl/inc/grabbagitem";
-import { RES_CHRATR_GRABBAG } from "../../../inc/hintids";
+import { decodeParagraphSdt, encodeParagraphSdt } from "./writer-sdt-item-codec";
+import { RES_CHRATR_GRABBAG, RES_PARATR_GRABBAG } from "../../../inc/hintids";
 import { encodeTextEffects, decodeTextEffects } from "./writer-text-effect-codec";
 import { encodeFillItem, decodeFillItem } from "../../../../svx/browser/fill-item-codec";
 import {
@@ -158,6 +159,8 @@ export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot;
 export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
   if (item instanceof SfxGrabBagItem && item.Which() === RES_CHRATR_GRABBAG)
     return encodeTextEffects(item);
+  if (item instanceof SfxGrabBagItem && item.Which() === RES_PARATR_GRABBAG)
+    return encodeParagraphSdt(item);
   if (item instanceof SwFormatAutoFormat) {
     const handle = item.GetStyleHandle();
     return {
@@ -416,6 +419,7 @@ export function decodeSfxPoolItem(pool: SfxItemPool, snapshot: SfxPoolItemSnapsh
   if (fill !== null) return fill;
   const color = decodeNativeColorItem(pool, snapshot);
   if (color !== null) return color;
+  if (snapshot.which === RES_PARATR_GRABBAG) return decodeParagraphSdt(snapshot.value);
   const frame = decodeWriterFrameItem(snapshot);
   if (frame !== null) return frame;
   return (

@@ -27,6 +27,15 @@ import type { SwFrameFormat } from "../../core/layout/atrfrm";
 import { FieldContext } from "../../writerfilter/dmapper/FieldContext";
 import { StreamState } from "../../writerfilter/dmapper/DomainMapper_Impl.stream";
 import { DomainMapper } from "../../writerfilter/dmapper/DomainMapper";
+import { SdtHelper } from "../../writerfilter/dmapper/SdtHelper";
+import { PropertyMap } from "../../writerfilter/dmapper/PropertyMap";
+import { PropertyIds } from "../../writerfilter/dmapper/PropertyIds";
+import { NS_ooxml } from "../../writerfilter/inc/ooxml/resourceids";
+import {
+  OOXMLProperty,
+  OOXMLPropertyType,
+  OOXMLValue,
+} from "../../writerfilter/ooxml/OOXMLPropertySet";
 import { SourceDocumentType } from "../../writerfilter/inc/dmapper/DomainMapperFactory";
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 import { importOOXML } from "../../writerfilter/filter/WriterFilter";
@@ -57,6 +66,88 @@ async function numberedListWith(
 }
 const footerTable =
   '<w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:tbl><w:tblGrid><w:gridCol w:w="2400"/></w:tblGrid><w:tr><w:tc><w:p><w:r><w:t>Cell</w:t></w:r></w:p></w:tc></w:tr></w:tbl><w:p><w:r><w:t>Footer</w:t></w:r></w:p></w:ftr>';
+
+it("keeps a deferred building-block end until there is a paragraph context", /** Exercises source paragraph interoperability after a boundary without a paragraph. @returns Nothing. */ () => {
+  const sdt = new SdtHelper();
+  const first = new PropertyMap();
+  const next = new PropertyMap();
+  try {
+    sdt.attribute(NS_ooxml.LN_CT_SdtBlock_sdtContent);
+    sdt.sprm(
+      new OOXMLProperty(NS_ooxml.LN_CT_SdtPr_docPartObj, new OOXMLValue(), OOXMLPropertyType.SPRM),
+    );
+    sdt.FinishParagraph(first);
+    sdt.attribute(NS_ooxml.LN_CT_SdtBlock_sdtEndContent);
+    sdt.FinishParagraph(null);
+    sdt.FinishParagraph(next);
+    expect(first.isSet(PropertyIds.PROP_SDTPR)).toBe(true);
+    expect(first.isSet(PropertyIds.PROP_PARA_SDT_END_BEFORE)).toBe(false);
+    expect(next.isSet(PropertyIds.PROP_SDTPR)).toBe(false);
+    const end = next.getProperty(PropertyIds.PROP_PARA_SDT_END_BEFORE)?.[1];
+    try {
+      assert(end);
+      const value: [boolean] = [false];
+      expect(end.extract(value, "bool")).toBe(true);
+      expect(value[0]).toBe(true);
+    } finally {
+      end?.dispose();
+    }
+  } finally {
+    first.dispose();
+    next.dispose();
+  }
+});
+
+it("round-trips building blocks around their original paragraphs", /** Tests multiple paragraphs, deferred closing and native lexical defaults. @returns Completion. */ async () => {
+  const main =
+    '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>' +
+    '<w:sdt><w:sdtPr><w:alias w:val="Example"/><w:tag w:val="Block"/><w:id w:val="42"/><w:lock w:val="sdtLocked"/>' +
+    '<w:docPartList><w:docPartGallery w:val="Custom"/><w:docPartCategory w:val="Samples"/><w:docPartUnique w:val="0"/></w:docPartList></w:sdtPr>' +
+    "<w:sdtContent><w:p><w:r><w:t>First block</w:t></w:r></w:p><w:p><w:r><w:t>Still in block</w:t></w:r></w:p></w:sdtContent></w:sdt>" +
+    "<w:p><w:r><w:t>Outside</w:t></w:r></w:p>" +
+    '<w:sdt><w:sdtPr><w:id w:val="0"/><w:docPartObj/></w:sdtPr><w:sdtContent><w:p><w:r><w:t>Last block</w:t></w:r></w:p></w:sdtContent></w:sdt>' +
+    "</w:body></w:document>";
+  const doc = await importOOXML(await numberedListWith({ "word/document.xml": main }), {});
+  let worker: SwDoc | undefined;
+  let reopened: SwDoc | undefined;
+  try {
+    worker = decodeWriterDocument(structuredClone(encodeWriterDocument(doc)));
+    const exported = await DocxExport.WriteDocument(worker);
+    const archive = await DocumentArchive.open(exported);
+    const xml = await archive.readTextEntry("word/document.xml");
+    const [first, last] = [...xml.matchAll(/<w:sdt>.*?<\/w:sdt>/gsu)].map(
+      /** Extracts one complete content control. @param match - XML fragment match. @returns Serialized block. */
+      (match) => match[0],
+    );
+    assert(first);
+    assert(last);
+    expect(first).toContain(
+      '<w:alias w:val="Example"/><w:tag w:val="Block"/><w:id w:val="42"/><w:lock w:val="sdtLocked"/>',
+    );
+    expect(first).toContain(
+      '<w:docPartList><w:docPartGallery w:val="Custom"/><w:docPartCategory w:val="Samples"/><w:docPartUnique w:val="true"/></w:docPartList>',
+    );
+    expect(first).toContain("First block");
+    expect(first).toContain("Still in block");
+    expect(first).not.toContain("Outside");
+    expect(last).toContain("<w:sdtPr><w:docPartObj");
+    expect(last).toContain("Last block");
+    expect(last).not.toContain("Outside");
+    reopened = await importOOXML(exported, {});
+    expect(
+      reopened.paragraphs
+        .map(
+          /** Reads actual Writer paragraph text in order. @param paragraph - Writer text node. @returns Paragraph text. */
+          (paragraph) => paragraph.GetText(),
+        )
+        .filter(Boolean),
+    ).toEqual(["First block", "Still in block", "Outside", "Last block"]);
+  } finally {
+    reopened?.Dispose();
+    worker?.Dispose();
+    doc.Dispose();
+  }
+});
 /** Returns the direct content of the actual bound frame. @param frame - Native header/footer. @returns Actual content. */
 function content(frame: SwFrameFormat | null) {
   const start = frame?.GetContent().GetContentIdx()?.GetNode();
@@ -381,19 +472,14 @@ it("keeps page story flags untouched during insertion into an existing document"
   }
 });
 
-/** Projects the pinned QA files to the currently represented story markup, preserving the original body, relationships and section properties. @param file - Original sample name. @returns Geometry fixture. */
+/** Removes the VML picture for the pinned geometry test, preserving the original body, relationships and section properties. @param file - Original sample name. @returns Geometry fixture. */
 async function geometryFixture(file: string): Promise<Uint8Array> {
   const source = await DocumentArchive.open(fixture("extras/ooxmlexport/data/" + file));
   const output = new DocumentArchiveWriter();
   for (const name of source.getEntryNames()) {
     if (/^word\/(?:header|footer)\d+\.xml$/u.test(name)) {
       const original = await source.readTextEntry(name);
-      const projected = original
-        .replace(
-          /<w:sdt\b[^>]*>[\s\S]*?<w:sdtContent\b[^>]*>([\s\S]*?)<\/w:sdtContent>[\s\S]*?<\/w:sdt>/gu,
-          "$1",
-        )
-        .replace(/<w:pict\b[^>]*>[\s\S]*?<\/w:pict>/gu, "");
+      const projected = original.replace(/<w:pict\b[^>]*>[\s\S]*?<\/w:pict>/gu, "");
       output.putNextEntry(name, new TextEncoder().encode(projected));
     } else output.putNextEntry(name, await source.readEntry(name));
   }
@@ -417,13 +503,17 @@ function geometryProperty(
 }
 
 it("ports testHeaderBorder with the pinned header-relative section geometry", /** Checks the original margin and offset through DOCX, Worker and primary ODT. @returns Completion. */ async () => {
-  const doc = await importOOXML(await geometryFixture("header-border.docx"), {});
+  const doc = await importOOXML(fixture("extras/ooxmlexport/data/header-border.docx"), {});
   let worker: SwDoc | undefined;
   let stored: SwDoc | undefined;
   let reopened: SwDoc | undefined;
   try {
     const metadata = { title: "Header border" };
     worker = decodeWriterDocument(structuredClone(encodeWriterDocument(doc)));
+    const docx = await DocumentArchive.open(await DocxExport.WriteDocument(worker));
+    expect(await docx.readTextEntry("word/footer1.xml")).toMatch(
+      /<w:sdt><w:sdtPr>[\s\S]*?<w:docPartObj><w:docPartGallery w:val="Page Numbers \(Bottom of Page\)"\/><w:docPartUnique w:val="true"\/><\/w:docPartObj>[\s\S]*?<w:sdtContent>/u,
+    );
     const odt = await writeOdtDocument(worker, metadata);
     const styles = await (await DocumentArchive.open(odt)).readTextEntry("styles.xml");
     expect(styles).toMatch(

@@ -1,4 +1,5 @@
 /** @fileoverview DOCX body traversal over Writer's actual text and table nodes and native run serializers. */
+import { SdtBlockHelper } from "./docxattributeoutput.sdt";
 import type { SfxGrabBagItem } from "../../../../svl/inc/grabbagitem";
 import type { SvxLanguageItem } from "../../../../editeng/inc/langitem";
 import type { SvxBrushItem } from "../../../../editeng/inc/brushitem";
@@ -318,11 +319,13 @@ export function WriteText(
   bookmarks: DocxBookmarks,
   sections?: MSWordSections,
 ): void {
+  const sdt = new SdtBlockHelper(output.GetSerializer());
   for (const [index, node] of content.entries()) {
     const section = sections?.Advance(content[index + 1]);
     if (node instanceof SwTableNode) {
       Out_SwTableNode(output, node, bookmarks);
       if (section) {
+        sdt.EndSdtBlock();
         const serializer = output.GetSerializer();
         serializer.startElementNS(w, token("p"));
         serializer.startElementNS(w, token("pPr"));
@@ -330,6 +333,11 @@ export function WriteText(
         serializer.endElementNS(w, token("pPr"));
         serializer.endElementNS(w, token("p"));
       }
-    } else Out_SwTextNode(output, node, bookmarks, section);
+    } else {
+      sdt.StartParagraph(node);
+      Out_SwTextNode(output, node, bookmarks, section);
+      if (section) sdt.EndSdtBlock();
+    }
   }
+  sdt.EndSdtBlock();
 }

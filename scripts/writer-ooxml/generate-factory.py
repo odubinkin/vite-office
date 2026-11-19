@@ -19,7 +19,7 @@ OUTPUT = ROOT / "apps/office/src/sw/source/writerfilter/ooxml"
 # native IDs; omitted definitions never renumber admitted definitions or tokens.
 CONSUMED = (
     "CT_Document CT_Body CT_P CT_R CT_Text CT_PPr CT_RPr CT_ParaRPr CT_Style CT_Style_pPr CT_Style_tblStylePr CT_PPrBase CT_Styles CT_Settings "
-    "CT_HdrFtr CT_HdrFtrRef "
+    "CT_HdrFtr CT_HdrFtrRef CT_SdtBlock CT_SdtContentBlock CT_SdtPr CT_SdtEndPr CT_SdtDocPart CT_Lock "
     "CT_DocDefaults CT_PPrDefault CT_RPrDefault CT_Fonts CT_Underline CT_Color "
     "CT_FontsList CT_Font CT_Charset CT_FontFamily CT_FontSig CT_Panose CT_Pitch "
     "CT_SectPr CT_finalSectPr CT_PageSz CT_PageMar CT_PageBorders CT_PageNumber CT_TextDirection CT_SectType CT_Columns CT_Column CT_DocGrid "
@@ -140,7 +140,7 @@ def generate(namespace="wml", consumed=CONSUMED, included_starts=None):
                 admitted_actions = {"startSectionGroup", "endCharacterGroup", "endParagraphGroup", "setLastSectionGroup", "endSectionGroup", "handleLastParagraphInSection", "startParagraphGroup", "setHandle", "sendTableDepth", "endOfParagraph", "startCharacterGroup", "sendPropertiesWithId", "text", "setDefaultBooleanValue", "setDefaultIntegerValue", "setDefaultHexValue", "setDefaultStringValue", "clearProps", "setLastParagraphInSection", "handleBreak", "handleOutOfOrderBreak", "tab", "cr", "noBreakHyphen", "softHyphen"}
                 admitted_actions.update({"startCell", "endCell", "sendCellProperties", "startRow", "endRow", "sendRowProperties", "sendTableProperties", "propagateCellProperties", "propagateRowProperties", "propagateTableProperties"})
                 admitted_actions.update({"fieldstart", "fieldsep", "fieldend", "fieldlock", "handleHyperlink", "handleHdrFtr"})
-                admitted_actions.update({"printproperty", "fieldlock_simple"})
+                admitted_actions.update({"printproperty", "fieldlock_simple", "startSdt", "endSdt"})
                 conditions = native.getChildrenByName(action, "cond")
                 if action.getAttribute("action") not in admitted_actions or (conditions and (name != "CT_FldChar" or len(conditions) != 1)):
                     raise ValueError("Unconsumed native event action or condition: " + action.toxml())

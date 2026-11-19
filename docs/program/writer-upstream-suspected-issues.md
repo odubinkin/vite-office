@@ -5140,3 +5140,16 @@ the source distinction.
 - [Original nested setter](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/core/unocore/unostyle.cxx#L2983-L3050)
 - [Original reset implementation](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/core/unocore/unostyle.cxx#L2732-L2784)
 - [Writer regression](../../apps/office/src/sw/source/filter/ww8/docxexport.page-stories.test.ts)
+
+### WRITER-666 — A false Word building-block uniqueness flag is exported as true
+
+The OOXML importer represents `w:docPartUnique` as a boolean. The domain
+mapper asks the corresponding value for a string, which is empty for a boolean.
+When it reads the interoperability record, the Word exporter converts the
+empty string to `true`. Writer retains this behavior when round-tripping
+an explicit `w:docPartUnique w:val="0"`.
+
+- [Original Word building-block property mapping](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/writerfilter/dmapper/DomainMapper.cxx#L3674-L3688)
+- [Original OOXML value string conversion](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/writerfilter/ooxml/OOXMLPropertySet.cxx#L133-L141)
+- [Original Word output normalization](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/filter/ww8/docxattributeoutput.cxx#L1090-L1097)
+- [Writer regression](../../apps/office/src/sw/source/filter/ww8/docxexport.page-stories.test.ts)
