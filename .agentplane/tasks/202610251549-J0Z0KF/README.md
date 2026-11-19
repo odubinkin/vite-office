@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 661
+revision: 663
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T08:08:59.141Z"
+  updated_at: "2026-11-19T08:20:45.101Z"
   updated_by: "CODER"
-  note: "Checkpoint 043f4eb297e4: external link metadata and missing-slot names verified; valid external reference compilation remains open."
-  attempts: 213
+  note: "Checkpoint d3348101ff5e: document-owned XLSX external caches verified; external formula lookup and file transport remain open."
+  attempts: 214
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3416,8 +3419,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T08:20:45.101Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Checkpoint d3348101ff5e: document-owned XLSX external caches verified; external formula lookup and file transport remain open."
+  -
+    type: "status"
+    at: "2026-11-19T08:20:59.282Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T08:09:11.109Z"
+doc_updated_at: "2026-11-19T08:20:59.282Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -9855,6 +9871,44 @@ sections:
     - node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=120000 --grep 'active sheet when'. Pass: real production open, edit, primary ODS and XLSX download and mobile reopen.
     - Production build with application typecheck, static smoke, scoped ESLint and Prettier, JSDoc, dependency boundaries, file size and source tree, source provenance, registry check (zero semantic violations), Agentplane doctor/routing and Git diff checks pass.
     - Scope remaining: tdf130959's valid external defined names require source compiler tokens, external reference manager, cache and file-ID formatting. The upstream testTdf130959 full document open and testExternalDefinedNameXLSX are pending. There is no external value refresh or export in this checkpoint. Full suite outside the ten-task cadence.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-19T08:20:45.101Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Checkpoint d3348101ff5e: document-owned XLSX external caches verified; external formula lookup and file transport remain open.
+    Attempts: 214
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T08:09:11.109Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    Implementation d3348101ff5e imports sheetDataSet from internal XLSX external book parts into a Calc document-owned ScExternalRefManager. The fragment creates the original per-sheet ExternalSheetDataContext and consumes addressed scalar values into the sparse cache as native FormulaDoubleToken or FormulaStringToken owners. Source workbook identities are zero-based in the manager and workbook reference slots remain one-based. Cache table keys follow native case-insensitive lookup. Embedded numbers, booleans-as-numbers, shared strings, absent coordinates and NaN-encoded errors are represented. The manager releases its cache tokens in the native document disposal path.
+
+    - npm run test:coverage:calc -- externallinkbuffer excelfilter.test viewdata.settings --maxWorkers=2 --testTimeout=120000 with per-file 90 percent and the two fragment/cache owners. Pass: 23 tests in three files. The fragment clears 93.1 percent branches, 97.36 percent statements and 100 percent functions and lines. The manager clears the four 90 percent gates. The test uses the original tdf130959.xlsx package to inspect its actual cached strings, then separately exercises native first-write, missing sheet IDs, invalid addresses, cached scalar and error types, and split XML characters.
+    - node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=120000 --grep 'active sheet when'. Pass: existing production XLSX input, edit, primary storage, export and mobile-open regression.
+    - Typecheck, production static smoke, scoped ESLint and Prettier, JSDoc, file size and source tree, dependency boundaries, source provenance, registry validation (zero semantic violations), doctor/routing and Git diff checks pass.
+    - CALC-744 records first insertion despite the native overwrite comment. CALC-745 records the native one-character-callback admission. CALC-746 records mapping of cached #SPILL! to #N/A in the numeric BIFF helper.
+    - Formula compilation and evaluation from valid external cached references, source-medium URL resolution, Worker/ODS transport and XLSX export of these caches remain open. The original testTdf130959 full import and testExternalDefinedNameXLSX round trip are still pending. Full suite outside the ten-task cadence.
 
     BlueprintSnapshotRef:
     - state: current
@@ -17401,6 +17455,44 @@ Implementation 043f4eb297e4 reads the workbook's one-based external reference sl
 - node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=120000 --grep 'active sheet when'. Pass: real production open, edit, primary ODS and XLSX download and mobile reopen.
 - Production build with application typecheck, static smoke, scoped ESLint and Prettier, JSDoc, dependency boundaries, file size and source tree, source provenance, registry check (zero semantic violations), Agentplane doctor/routing and Git diff checks pass.
 - Scope remaining: tdf130959's valid external defined names require source compiler tokens, external reference manager, cache and file-ID formatting. The upstream testTdf130959 full document open and testExternalDefinedNameXLSX are pending. There is no external value refresh or export in this checkpoint. Full suite outside the ten-task cadence.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-19T08:20:45.101Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Checkpoint d3348101ff5e: document-owned XLSX external caches verified; external formula lookup and file transport remain open.
+Attempts: 214
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T08:09:11.109Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+Implementation d3348101ff5e imports sheetDataSet from internal XLSX external book parts into a Calc document-owned ScExternalRefManager. The fragment creates the original per-sheet ExternalSheetDataContext and consumes addressed scalar values into the sparse cache as native FormulaDoubleToken or FormulaStringToken owners. Source workbook identities are zero-based in the manager and workbook reference slots remain one-based. Cache table keys follow native case-insensitive lookup. Embedded numbers, booleans-as-numbers, shared strings, absent coordinates and NaN-encoded errors are represented. The manager releases its cache tokens in the native document disposal path.
+
+- npm run test:coverage:calc -- externallinkbuffer excelfilter.test viewdata.settings --maxWorkers=2 --testTimeout=120000 with per-file 90 percent and the two fragment/cache owners. Pass: 23 tests in three files. The fragment clears 93.1 percent branches, 97.36 percent statements and 100 percent functions and lines. The manager clears the four 90 percent gates. The test uses the original tdf130959.xlsx package to inspect its actual cached strings, then separately exercises native first-write, missing sheet IDs, invalid addresses, cached scalar and error types, and split XML characters.
+- node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=120000 --grep 'active sheet when'. Pass: existing production XLSX input, edit, primary storage, export and mobile-open regression.
+- Typecheck, production static smoke, scoped ESLint and Prettier, JSDoc, file size and source tree, dependency boundaries, source provenance, registry validation (zero semantic violations), doctor/routing and Git diff checks pass.
+- CALC-744 records first insertion despite the native overwrite comment. CALC-745 records the native one-character-callback admission. CALC-746 records mapping of cached #SPILL! to #N/A in the numeric BIFF helper.
+- Formula compilation and evaluation from valid external cached references, source-medium URL resolution, Worker/ODS transport and XLSX export of these caches remain open. The original testTdf130959 full import and testExternalDefinedNameXLSX round trip are still pending. Full suite outside the ten-task cadence.
 
 BlueprintSnapshotRef:
 - state: current
