@@ -176,6 +176,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-page-stories.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
+          "marker": "n783638"
         }
       ],
       "upstream": [
@@ -330,7 +334,8 @@
       "Writes named character spans outside the direct automatic span. The automatic text style pool reserves the native common names before allocating T-numbered style names.",
       "Registers the paragraph marker as a text automatic style and emits the extended ODF marker-style-name independently of visible runs.",
       "Emits the shared ODF character property element, retaining the source-native complex-color child in deduplicated text and paragraph styles.",
-      "Collects shared paragraph and character automatic styles for each additional master-page text section."
+      "Collects shared paragraph and character automatic styles for each additional master-page text section.",
+      "V4DQJW as-character graphic checkpoint. An as-char frame occupies one text position in the run and the original control marker is omitted from XML."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/text/txtparae.cxx",

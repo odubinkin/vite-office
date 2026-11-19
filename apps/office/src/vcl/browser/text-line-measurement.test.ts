@@ -75,3 +75,34 @@ it("returns source-owned fallback geometry for empty or unavailable browser line
       });
   }
 });
+
+it("uses the physical box of an object that occupies one text position", /** Verifies a mixed line using an actual DOM text node and an atomic rectangle override. @returns Nothing. */ () => {
+  const element = document.createElement("div");
+  const marker = document.createTextNode("\u0001");
+  element.append(document.createTextNode("A"), marker, document.createTextNode("B"));
+  const original = Object.getOwnPropertyDescriptor(Range.prototype, "getClientRects");
+  const textBounds = new DOMRect(0, 30, 8, 12);
+  Object.defineProperty(Range.prototype, "getClientRects", {
+    configurable: true,
+    value:
+      /** Returns a normal glyph rectangle and no native glyph for the atomic marker. @param this - Current DOM range. @returns Device rectangles. */
+      function (this: Range) {
+        return this.startContainer === marker ? [] : [textBounds];
+      },
+  });
+  try {
+    expect(
+      measureBrowserTextLines(
+        element,
+        "A\u0001B",
+        180,
+        7,
+        /** Maps only the occupied marker to the tall inline box. @param text - Text node. @returns Actual box or absence. */
+        (text) => (text === marker ? new DOMRect(8, 2, 24, 38) : undefined),
+      ),
+    ).toEqual([{ start: 7, end: 10, height: 570 }]);
+  } finally {
+    if (original === undefined) Reflect.deleteProperty(Range.prototype, "getClientRects");
+    else Object.defineProperty(Range.prototype, "getClientRects", original);
+  }
+});

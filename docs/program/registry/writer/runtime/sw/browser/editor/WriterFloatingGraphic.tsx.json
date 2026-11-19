@@ -17,12 +17,14 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sw/browser/editor/WriterFloatingGraphic.tsx#WriterFloatingGraphic",
-        "apps/office/e2e/writer-docx-styles.spec.ts"
+        "apps/office/e2e/writer-docx-styles.spec.ts",
+        "apps/office/e2e/writer-odt-page-stories.spec.ts"
       ],
-      "justification": "Binds embedded native raster bytes to a browser image resource and paints it at the actual mounted Writer fly anchor.",
+      "justification": "Binds embedded native raster bytes to a browser image resource and paints it at the actual mounted Writer fly anchor. V4DQJW as-character graphic checkpoint. WriterInlineGraphic shares the object URL lifecycle with floating raster paint and retains the text unit for the existing selection surface.",
       "knownViolations": [],
       "localSymbols": [
-        "WriterFloatingGraphic"
+        "WriterFloatingGraphic",
+        "WriterInlineGraphic"
       ],
       "sourceResponsibility": "browser-owned",
       "upstreamFile": null,

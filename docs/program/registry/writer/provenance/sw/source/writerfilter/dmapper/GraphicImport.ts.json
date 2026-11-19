@@ -18,7 +18,8 @@
     ],
     "preservedResponsibilities": [
       "Attaches the actual raster node and floating format to the current Writer text position and sets its original graphic anchor, size, alignment, opacity and represented wrap items.",
-      "Maps rectangular wrap sides, anchor distances and overlap to the actual native frame items. Applies the original margin removal for aligned objects and compatibility handling for column-relative positioning."
+      "Maps rectangular wrap sides, anchor distances and overlap to the actual native frame items. Applies the original margin removal for aligned objects and compatibility handling for column-relative positioning.",
+      "V4DQJW as-character graphic checkpoint. The detected inline branch assigns the native as-character anchor and represented inline distances through the existing native graphic insertion."
     ],
     "omittedResponsibilities": [
       "Inline images, other wrap modes, drawing effects and complete UNO shape services remain pending."
@@ -36,6 +37,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
           "marker": "opens the unchanged tdf134114 pictures"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
+          "marker": "n783638"
         }
       ],
       "upstream": [

@@ -26,7 +26,8 @@
       "Task SWRD7X follows native XMLParaContext::endFastElement APPEND_PARAGRAPH and XMLTextImportHelper::DeleteParagraph preferred paragraph-component deletion, rather than split/join cleanup that loses empty-cell character items. Actual cursor enumeration, SwXParagraph XComponent deletion and the bounded single-paragraph DelFullPara owner retain paragraph identity and direct formatting. Explicit host Release only releases borrowed API result positions. Tests cover cursor/mark identity, exhaustion, repeated disposal, last-paragraph refusal, populated/empty superscript cell ODT roundtrip and the original no-component deletion fallback. Broader enumeration, redline, fieldmark, undo, event-listener and document-disposal contracts remain outside this bounded integration repair; prior semantic statuses are unchanged.",
       "Uses the original strict left-position tolerance, restart/continue group opening, signed count and covered numbering property (WRITER388).",
       "Connects the original native Writer XText operation to move a complete table into its actual fly section.",
-      "Uses the existing frame's weak UNO identity and registered section index for the SwXHeadFootText owner, invalidated on frame destruction."
+      "Uses the existing frame's weak UNO identity and registered section index for the SwXHeadFootText owner, invalidated on frame destruction.",
+      "V4DQJW as-character graphic checkpoint. The paragraph append property rollback snapshots only ranged hints. Point-owned pictures remain attached while the importer appends surrounding text or completes its paragraph."
     ],
     "omittedResponsibilities": [
       "Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
@@ -68,6 +69,10 @@
         {
           "path": "apps/office/src/sw/inc/fmthdft.native.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
+          "marker": "n783638"
         }
       ],
       "upstream": [

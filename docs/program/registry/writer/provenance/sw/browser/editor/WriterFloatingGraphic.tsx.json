@@ -7,7 +7,8 @@
     "localPath": "apps/office/src/sw/browser/editor/WriterFloatingGraphic.tsx",
     "rationale": "Binds embedded native raster bytes to a browser image resource and paints it at the actual mounted Writer fly anchor.",
     "responsibilities": [
-      "Binds embedded native raster bytes to a browser image resource and paints it at the actual mounted Writer fly anchor."
+      "Binds embedded native raster bytes to a browser image resource and paints it at the actual mounted Writer fly anchor.",
+      "V4DQJW as-character graphic checkpoint. WriterInlineGraphic shares the object URL lifecycle with floating raster paint and retains the text unit for the existing selection surface."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -22,6 +23,10 @@
         {
           "path": "apps/office/e2e/writer-docx-styles.spec.ts",
           "marker": "Writer paints a floating DOCX header picture"
+        },
+        {
+          "path": "apps/office/e2e/writer-odt-page-stories.spec.ts",
+          "marker": "n783638"
         }
       ],
       "upstream": []

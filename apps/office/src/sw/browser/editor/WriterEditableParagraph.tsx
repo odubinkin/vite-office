@@ -1,4 +1,5 @@
 /** @fileoverview Projects one canonical Writer paragraph inside the browser editing host. */
+import { WriterInlineGraphic } from "./WriterFloatingGraphic";
 import { EscapementText } from "./EscapementText";
 
 import { FontItalic, FontWeight } from "../../../tools/inc/fontenum";
@@ -330,9 +331,13 @@ export function WriterTextPortionProjection({
   inheritedBold: boolean;
   inheritedFontFamily: string | undefined;
   inheritedItalic: boolean;
-  run: Pick<WriterTextPortion, "text" | "attributes" | "hyperlink">;
+  run: Pick<WriterTextPortion, "text" | "attributes" | "hyperlink" | "inlineGraphic">;
 }>): React.ReactNode {
-  let content: React.ReactNode = run.text;
+  let content: React.ReactNode = run.inlineGraphic ? (
+    <WriterInlineGraphic value={run.inlineGraphic} marker={run.text} />
+  ) : (
+    run.text
+  );
   if (run.attributes.strikeout !== undefined)
     content = <StrikeoutText value={run.attributes.strikeout}>{content}</StrikeoutText>;
   if (run.attributes.escapement !== undefined)

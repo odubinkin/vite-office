@@ -24,7 +24,7 @@
         "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/GraphicImport.cxx#GraphicImport::ProcessShapeOptions",
         "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/GraphicImport.cxx#GraphicImport::lcl_adjustMarginsAndOrientation"
       ],
-      "justification": "Attaches the actual raster node and floating format to the current Writer text position and sets its original graphic anchor, size, alignment, opacity and represented wrap items. Inline images, other wrap modes, drawing effects and complete UNO shape services remain pending. Maps rectangular wrap sides, anchor distances and overlap to the actual native frame items. Applies the original margin removal for aligned objects and compatibility handling for column-relative positioning.",
+      "justification": "Attaches the actual raster node and floating format to the current Writer text position and sets its original graphic anchor, size, alignment, opacity and represented wrap items. Inline images, other wrap modes, drawing effects and complete UNO shape services remain pending. Maps rectangular wrap sides, anchor distances and overlap to the actual native frame items. Applies the original margin removal for aligned objects and compatibility handling for column-relative positioning. V4DQJW as-character graphic checkpoint. The detected inline branch assigns the native as-character anchor and represented inline distances through the existing native graphic insertion.",
       "knownViolations": [],
       "localSymbols": [
         "ImportGraphic",

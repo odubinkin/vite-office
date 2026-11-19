@@ -54,9 +54,10 @@ export type BoundGraphicFrame = Readonly<{
   graphic: SwGrfNode;
 }>;
 
-/** Collects floating raster frames by their actual text anchor, including page stories. @param document - Native document. @returns Graphic frames by anchor paragraph. */
+/** Collects represented raster frames by their actual text anchor, including page stories. @param document - Native document. @param includeInline - Include as-character anchors. @returns Graphic frames by anchor paragraph. */
 export function CollectGraphicFlyFrames(
   document: SwDoc,
+  includeInline = false,
 ): ReadonlyMap<SwTextNode, readonly BoundGraphicFrame[]> {
   const anchored = new Map<SwTextNode, BoundGraphicFrame[]>();
   for (const format of document.GetSpzFrameFormats()) {
@@ -68,7 +69,8 @@ export function CollectGraphicFlyFrames(
       !node ||
       !start?.IsStartNode() ||
       (anchor.GetAnchorId() !== RndStdIds.FLY_AT_PARA &&
-        anchor.GetAnchorId() !== RndStdIds.FLY_AT_CHAR)
+        anchor.GetAnchorId() !== RndStdIds.FLY_AT_CHAR &&
+        !(includeInline && anchor.GetAnchorId() === RndStdIds.FLY_AS_CHAR))
     )
       continue;
     const graphic = document.nodes.at(start.GetIndex() + 1).GetGrfNode();

@@ -20,9 +20,10 @@
         "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
         "apps/office/src/sw/source/writerfilter/rtftok/rtf-floating-table.test.ts",
         "apps/office/src/sw/browser/filter/xml/writer-page-story-codec.test.ts",
-        "apps/office/src/sw/source/core/graphic/ndgrf.test.ts"
+        "apps/office/src/sw/source/core/graphic/ndgrf.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts"
       ],
-      "justification": "Transports original HTML-created Writer text fly frames by live section content, original anchor and direct native item records. Reconstruction uses the existing native MakeFlySection path and reconnects bookmark text owners. RTF101. Uses the original admitted fly item ranges, including native drawing fill attributes. Uses the common native section block transfer while preserving the existing text fly record and bookmark/anchor ordering. The same ordered fly-frame transport restores embedded graphic bytes, dimensions and separate native content items on the original anchor.",
+      "justification": "Transports original HTML-created Writer text fly frames by live section content, original anchor and direct native item records. Reconstruction uses the existing native MakeFlySection path and reconnects bookmark text owners. RTF101. Uses the original admitted fly item ranges, including native drawing fill attributes. Uses the common native section block transfer while preserving the existing text fly record and bookmark/anchor ordering. The same ordered fly-frame transport restores embedded graphic bytes, dimensions and separate native content items on the original anchor. V4DQJW as-character graphic checkpoint. The Worker reattaches an as-character fly to the existing raw text marker only after validating its offset and uniqueness.",
       "knownViolations": [],
       "localSymbols": [
         "encodeTextFrames",

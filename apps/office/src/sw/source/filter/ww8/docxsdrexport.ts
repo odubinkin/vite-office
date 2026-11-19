@@ -1,4 +1,4 @@
-/** @fileoverview Native WordprocessingDrawing serialization of Writer's embedded floating graphic formats. */
+/** @fileoverview Native WordprocessingDrawing serialization of Writer's embedded inline and floating graphic formats. */
 import { GraphicExport } from "../../../../oox/source/export/drawingml";
 import type { XmlFilterBase } from "../../../../oox/source/core/xmlfilterbase";
 import type { ZipFragmentStream } from "../../../../oox/source/helper/zipstorage";
@@ -9,6 +9,8 @@ import { VertOrientation as V } from "../../../../offapi/com/sun/star/text/VertO
 import { WrapTextMode } from "../../../../offapi/com/sun/star/text/WrapTextMode";
 import { FSNS, type FastSerializerHelper } from "../../../../sax/inc/fshelper";
 import { SAL_MAX_INT32, SAL_MIN_INT32 } from "../../../../sal/inc/types";
+import { RndStdIds } from "../../../../svx/inc/swframetypes";
+import type { SwFlyFrameFormat } from "../../core/layout/atrfrm";
 import type { SwDoc } from "../../core/doc/doc";
 import { CollectGraphicFlyFrames, type BoundGraphicFrame } from "../../core/layout/flycnt";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
@@ -66,7 +68,7 @@ export class DocxSdrExport {
   /** Binds the current Writer graph and active package. @param document - Source Writer model. @param filter - Actual OPC filter. @returns Drawing exporter. */
   constructor(document: SwDoc, filter: XmlFilterBase) {
     this.images = new GraphicExport(filter, "word");
-    this.frames = CollectGraphicFlyFrames(document);
+    this.frames = CollectGraphicFlyFrames(document, true);
   }
 
   /** Reports native character positions where the text run writer must split. @param node - Current story paragraph. @returns Anchor offsets. */
@@ -86,12 +88,14 @@ export class DocxSdrExport {
         this.WritePicture(serializer, entry);
   }
 
-  /** Writes a complete floating picture run in the XML part that owns the anchor. @param serializer - Active story. @param entry - Native frame and its graphic node. @returns Nothing. */
+  /** Writes a complete embedded picture run in the XML part that owns the anchor. @param serializer - Active story. @param entry - Native frame and its graphic node. @returns Nothing. */
   private WritePicture(serializer: FastSerializerHelper, entry: BoundGraphicFrame): void {
     const { format, graphic } = entry;
+    const inline = format.GetAnchor().GetAnchorId() === RndStdIds.FLY_AS_CHAR;
     const image = graphic.GetGraphic();
     const mode = format.GetSurround().GetSurround();
     if (
+      !inline &&
       format.GetSurround().IsContour() &&
       mode !== WrapTextMode.THROUGH &&
       mode !== WrapTextMode.NONE
@@ -104,67 +108,25 @@ export class DocxSdrExport {
     );
     const id = String(this.nextId++);
     const size = format.GetFrameSize();
-    const width = emu(size.GetWidth()),
-      height = emu(size.GetHeight());
-    const lr = format.GetLRSpace(),
-      ul = format.GetULSpace();
+    const width = String(Math.min(Math.max(0, emu(size.GetWidth())), SAL_MAX_INT32)),
+      height = String(Math.min(Math.max(0, emu(size.GetHeight())), SAL_MAX_INT32));
 
     serializer.startElementNS(w, token("r"));
     serializer.startElementNS(w, token("drawing"));
-    serializer.startElementNS(
-      wp,
-      token("anchor"),
-      token("distT"),
-      distance(ul.GetUpper()),
-      token("distB"),
-      distance(ul.GetLower()),
-      token("distL"),
-      distance(lr.ResolveLeft()),
-      token("distR"),
-      distance(lr.ResolveRight()),
-      token("simplePos"),
-      "0",
-      token("relativeHeight"),
-      "0",
-      token("behindDoc"),
-      format.GetOpaque().GetValue() ? "0" : "1",
-      token("locked"),
-      "0",
-      token("layoutInCell"),
-      "1",
-      token("allowOverlap"),
-      format.GetWrapInfluenceOnObjPos().GetAllowOverlap() ? "1" : "0",
-    );
-    serializer.singleElementNS(wp, token("simplePos"), token("x"), "0", token("y"), "0");
-    const horizontal = format.GetHoriOrient();
-    const hAlign = horizontal.GetHoriOrient();
-    let alignH = horizontalAlignments.get(hAlign);
-    if (horizontal.IsPosToggle()) {
-      if (hAlign === H.LEFT) alignH = "inside";
-      else if (hAlign === H.RIGHT) alignH = "outside";
-    }
-    position(
-      serializer,
-      "positionH",
-      horizontalRelations.get(horizontal.GetRelationOrient()) ?? "column",
-      alignH,
-      horizontal.GetPos(),
-    );
-    const vertical = format.GetVertOrient();
-    const vRel = verticalRelations.get(vertical.GetRelationOrient()) ?? "line";
-    const line = vertical.GetRelationOrient() === R.TEXT_LINE;
-    let alignV = verticalAlignments.get(vertical.GetVertOrient());
-    if (line) {
-      if (alignV === "top") alignV = "bottom";
-      else if (alignV === "bottom") alignV = "top";
-    }
-    let offsetV = line ? -vertical.GetPos() : vertical.GetPos();
-    // Preserve the original Word layout correction for zero top-relative positions.
-    if (!offsetV && (vRel === "line" || vRel === "paragraph") && (!alignV || alignV === "top")) {
-      alignV = undefined;
-      offsetV = 1;
-    }
-    position(serializer, "positionV", vRel, alignV, offsetV);
+    if (inline)
+      serializer.startElementNS(
+        wp,
+        token("inline"),
+        token("distT"),
+        "0",
+        token("distB"),
+        "0",
+        token("distL"),
+        "0",
+        token("distR"),
+        "0",
+      );
+    else startFloatingAnchor(serializer, format);
     serializer.singleElementNS(wp, token("extent"), token("cx"), width, token("cy"), height);
     serializer.singleElementNS(
       wp,
@@ -178,12 +140,12 @@ export class DocxSdrExport {
       token("b"),
       "0",
     );
-    if (mode === WrapTextMode.THROUGH || mode === WrapTextMode.NONE)
+    if (!inline && (mode === WrapTextMode.THROUGH || mode === WrapTextMode.NONE))
       serializer.singleElementNS(
         wp,
         token(mode === WrapTextMode.THROUGH ? "wrapNone" : "wrapTopAndBottom"),
       );
-    else
+    else if (!inline)
       serializer.singleElementNS(
         wp,
         token("wrapSquare"),
@@ -199,20 +161,80 @@ export class DocxSdrExport {
       format.GetName(),
     );
     writePicture(serializer, relationship, format.GetName(), width, height);
-    serializer.endElementNS(wp, token("anchor"));
+    serializer.endElementNS(wp, token(inline ? "inline" : "anchor"));
     serializer.endElementNS(w, token("drawing"));
     serializer.endElementNS(w, token("r"));
   }
 }
 
+/** Emits the anchor-only placement fields before the shared size and picture. @param serializer - Active part. @param format - Writer frame. @returns Nothing. */
+function startFloatingAnchor(serializer: FastSerializerHelper, format: SwFlyFrameFormat): void {
+  const lr = format.GetLRSpace(),
+    ul = format.GetULSpace();
+  serializer.startElementNS(
+    wp,
+    token("anchor"),
+    token("distT"),
+    distance(ul.GetUpper()),
+    token("distB"),
+    distance(ul.GetLower()),
+    token("distL"),
+    distance(lr.ResolveLeft()),
+    token("distR"),
+    distance(lr.ResolveRight()),
+    token("simplePos"),
+    "0",
+    token("relativeHeight"),
+    "0",
+    token("behindDoc"),
+    format.GetOpaque().GetValue() ? "0" : "1",
+    token("locked"),
+    "0",
+    token("layoutInCell"),
+    "1",
+    token("allowOverlap"),
+    format.GetWrapInfluenceOnObjPos().GetAllowOverlap() ? "1" : "0",
+  );
+  serializer.singleElementNS(wp, token("simplePos"), token("x"), "0", token("y"), "0");
+  const horizontal = format.GetHoriOrient();
+  const hAlign = horizontal.GetHoriOrient();
+  let alignH = horizontalAlignments.get(hAlign);
+  if (horizontal.IsPosToggle()) {
+    if (hAlign === H.LEFT) alignH = "inside";
+    else if (hAlign === H.RIGHT) alignH = "outside";
+  }
+  position(
+    serializer,
+    "positionH",
+    horizontalRelations.get(horizontal.GetRelationOrient()) ?? "column",
+    alignH,
+    horizontal.GetPos(),
+  );
+  const vertical = format.GetVertOrient();
+  const vRel = verticalRelations.get(vertical.GetRelationOrient()) ?? "line";
+  const line = vertical.GetRelationOrient() === R.TEXT_LINE;
+  let alignV = verticalAlignments.get(vertical.GetVertOrient());
+  if (line) {
+    if (alignV === "top") alignV = "bottom";
+    else if (alignV === "bottom") alignV = "top";
+  }
+  let offsetV = line ? -vertical.GetPos() : vertical.GetPos();
+  // Preserve the original Word layout correction for zero top-relative positions.
+  if (!offsetV && (vRel === "line" || vRel === "paragraph") && (!alignV || alignV === "top")) {
+    alignV = undefined;
+    offsetV = 1;
+  }
+  position(serializer, "positionV", vRel, alignV, offsetV);
+}
+
 /** Converts Writer's integer twips to the original serialized EMU unit. @param twips - Source length. @returns Lexical EMUs. */
-function emu(twips: number): string {
-  return String(twips * 635);
+function emu(twips: number): number {
+  return twips * 635;
 }
 
 /** Applies the unsigned bound for through-frame wrap distances. @param twips - Frame spacing. @returns Nonnegative EMUs. */
 function distance(twips: number): string {
-  return emu(Math.max(0, twips));
+  return String(emu(Math.max(0, twips)));
 }
 
 /** Emits one anchored axis with the schema's signed-32-bit coordinate bounds. @param serializer - Active part serializer. @param element - Source axis. @param reference - Relative frame. @param align - Optional alignment. @param offset - Writer twips. @returns Nothing. */

@@ -22,7 +22,7 @@
         "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
         "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts"
       ],
-      "justification": "Collects actual native fly sections and resolves paragraph master or character-containing follow ownership. Full fly frame formatting, contact registration and fly layout notification remain outside the represented projection. Floating graphic fly formats expose their real graphic nodes and paragraph owner to the export traversal.",
+      "justification": "Collects actual native fly sections and resolves paragraph master or character-containing follow ownership. Full fly frame formatting, contact registration and fly layout notification remain outside the represented projection. Floating graphic fly formats expose their real graphic nodes and paragraph owner to the export traversal. V4DQJW as-character graphic checkpoint. Format collection can include as-character fly formats at their existing point attachments for package export.",
       "knownViolations": [],
       "localSymbols": [
         "CollectTextFlyFrames",

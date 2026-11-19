@@ -1,5 +1,6 @@
 /** @fileoverview Native text/property/value/resource-table contexts, inherited xml:space, MCE choices and source-ordered callbacks; drawings, document tables and notes remain separate owners. */
 import { FieldControl, type Id, type Stream } from "../inc/dmapper/resourcemodel";
+import { convert, Length } from "../../../../o3tl/inc/unit_conversion";
 import { handleWrapTextValue, type DrawingAnchor } from "../dmapper/GraphicImport";
 import { WrapTextMode } from "../../../../offapi/com/sun/star/text/WrapTextMode";
 import type { OOXMLDocument } from "../inc/ooxml/OOXMLDocument";
@@ -752,6 +753,8 @@ export class OOXMLFastContextHandlerValue extends OOXMLFastContextHandler {
 }
 
 const drawingAnchor = nativeToken("dmlWordDr:anchor");
+const drawingInline = nativeToken("dmlWordDr:inline");
+const drawingEffectExtent = nativeToken("dmlWordDr:effectExtent");
 const drawingExtent = nativeToken("dmlWordDr:extent");
 const drawingGraphic = nativeToken("dml:graphic");
 const drawingGraphicData = nativeToken("dml:graphicData");
@@ -775,7 +778,8 @@ const drawingRoot = nativeToken("doc:drawing");
 const defaultHorizontalDistance = 319 * 360;
 
 const drawingChildren = new Map<number, readonly number[]>([
-  [drawingRoot, [drawingAnchor]],
+  [drawingRoot, [drawingAnchor, drawingInline]],
+  [drawingInline, [drawingExtent, drawingEffectExtent, drawingGraphic]],
   [
     drawingAnchor,
     [
@@ -798,14 +802,14 @@ const drawingChildren = new Map<number, readonly number[]>([
 ]);
 
 /** Holds state shared by represented descendants of one source anchor. */
-interface PictureState extends DrawingAnchor {
+interface PictureState extends Omit<DrawingAnchor, "inline"> {
   width: number;
   height: number;
   behindDocument: boolean;
   wrap: WrapTextMode;
   allowOverlap: boolean;
   relationship: string;
-  anchored: boolean;
+  placement: "inline" | "anchor" | undefined;
   simplePosition: boolean;
 }
 
@@ -830,7 +834,7 @@ function drawingDistance(
   return Number.isSafeInteger(value) ? value : fallback;
 }
 
-/** Native drawing property container with a shape context for an embedded floating raster picture. */
+/** Native drawing property container with a shape context for an embedded raster picture. */
 export class OOXMLFastContextHandlerDrawing extends OOXMLFastContextHandlerProperties {
   private readonly picture: PictureState = {
     width: 0,
@@ -847,7 +851,7 @@ export class OOXMLFastContextHandlerDrawing extends OOXMLFastContextHandlerPrope
       bottom: 0,
     },
     relationship: "",
-    anchored: false,
+    placement: undefined,
     simplePosition: false,
   };
 
@@ -861,11 +865,15 @@ export class OOXMLFastContextHandlerDrawing extends OOXMLFastContextHandlerPrope
   resolvePicture(): void {
     if (!this.isForwardEvents()) return;
     const picture = this.picture;
-    if (!picture.anchored || !picture.relationship || !(picture.width > 0 && picture.height > 0))
+    if (
+      picture.placement === undefined ||
+      !picture.relationship ||
+      !(picture.width > 0 && picture.height > 0)
+    )
       throw new Error("Writer does not support this DrawingML drawing.");
     const graphic = this.mpParserState.getDocument()?.getEmbeddedGraphic?.(picture.relationship);
     if (!graphic) throw new Error("Writer could not resolve the embedded DrawingML picture.");
-    this.stream().picture?.(graphic, picture);
+    this.stream().picture?.(graphic, { ...picture, inline: picture.placement === "inline" });
   }
 }
 
@@ -896,7 +904,7 @@ class OOXMLFastContextHandlerShape extends OOXMLFastContextHandler {
       case drawingAnchor: {
         const simple = drawingAttribute(attributes, ":simplePos");
         picture.simplePosition = simple === "1" || simple === "true";
-        picture.anchored = true;
+        picture.placement = "anchor";
         const behind = drawingAttribute(attributes, ":behindDoc");
         picture.behindDocument = behind === "1" || behind === "true";
         const overlap = drawingAttribute(attributes, ":allowOverlap");
@@ -906,6 +914,26 @@ class OOXMLFastContextHandlerShape extends OOXMLFastContextHandler {
         distances.right = drawingDistance(attributes, ":distR", distances.right);
         distances.top = drawingDistance(attributes, ":distT", distances.top);
         distances.bottom = drawingDistance(attributes, ":distB", distances.bottom);
+        break;
+      }
+      case drawingInline: {
+        picture.placement = "inline";
+        const { distances } = picture;
+        if (drawingAttribute(attributes, ":distL")) distances.left = 0;
+        if (drawingAttribute(attributes, ":distR")) distances.right = 0;
+        break;
+      }
+      case drawingEffectExtent: {
+        const { distances } = picture;
+        for (const [side, token] of [
+          ["left", ":l"],
+          ["right", ":r"],
+          ["top", ":t"],
+          ["bottom", ":b"],
+        ] as const) {
+          const emu = drawingDistance(attributes, token, 0);
+          distances[side] += Number(convert(BigInt(emu), Length.emu, Length.mm100)) * 360;
+        }
         break;
       }
       case drawingExtent:

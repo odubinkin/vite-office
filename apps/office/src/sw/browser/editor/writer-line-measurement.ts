@@ -30,7 +30,7 @@ export function measureWriterTextLines(
   element: HTMLParagraphElement,
 ): readonly SwTextLine[] {
   const height = paragraph.computedStyle.fontSizePt * paragraph.computedStyle.lineHeight * 20;
-  return measureBrowserTextLines(element, paragraph.text, height, 0);
+  return measureBrowserTextLines(element, paragraph.text, height, 0, measureInlineGraphic);
 }
 
 /** Measures a mounted master/follow paragraph for native cursor movement. @param element - Actual editing projection. @returns UTF16 device lines in source-node coordinates. */
@@ -42,5 +42,11 @@ export function measureWriterCursorTextLines(element: HTMLParagraphElement): rea
     element.textContent ?? "",
     height,
     Number(element.dataset.writerFragmentStart ?? 0),
+    measureInlineGraphic,
   );
+}
+
+/** Measures the device portion represented by the native dummy character. @param marker - Rendered text node for the source position. @returns Actual inline box, if any. */
+function measureInlineGraphic(marker: Text): DOMRect | undefined {
+  return marker.parentElement?.closest("[data-writer-inline-graphic]")?.getBoundingClientRect();
 }

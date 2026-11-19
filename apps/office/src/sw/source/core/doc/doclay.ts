@@ -19,7 +19,9 @@ import { SwStartNodeType } from "../../../inc/ndtyp";
 import { SwFormatContent } from "../../../inc/fmtcntnt";
 import { SwFormatAnchor } from "../../../inc/fmtanchr";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
-import { MINFLY } from "../../../inc/swtypes";
+import { MINFLY, SetAttrMode } from "../../../inc/swtypes";
+import { SwFormatFlyCnt } from "../../../inc/fmtflcnt";
+import { SwTextFlyCnt } from "../../../inc/txtflcnt";
 import { SfxItemState, type SfxItemSet } from "../../../../svl/source/items/itemset";
 import { toInt32 } from "../../../../o3tl/inc/string_view";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
@@ -69,12 +71,13 @@ function lcl_GetUniqueFlyName(document: SwDoc, name: string): string {
   return name + String(number + 1);
 }
 
-/** Creates the original text fly section for the HTML import caller with an actual anchor and item set. @param doc - Actual document. @param type - Requested native anchor. @param position - Actual tracked anchor. @param items - Borrowed native frame attributes. @returns Registered native fly format. */
+/** Creates the original text fly section for the HTML import caller with an actual anchor and item set. @param doc - Actual document. @param type - Requested native anchor. @param position - Actual tracked anchor. @param items - Borrowed native frame attributes. @param mode - Native point insertion mode. @returns Registered native fly format. */
 export function MakeFlySection(
   doc: SwDoc,
   type: RndStdIds,
   position: SwPosition,
   items: SfxItemSet,
+  mode = SetAttrMode.DEFAULT,
 ) {
   const parent = doc.getIDocumentStylePoolAccess().GetFrameFormatFromPool(SwPoolFormatId.FRM_FRAME);
   if (!parent) throw new Error("assert(Writer pooled Frame style)");
@@ -82,17 +85,20 @@ export function MakeFlySection(
   const end = nodes.GetEndOfAutotext();
   const style = doc.GetDocumentSettingManager().get("HTML_MODE") ? "text-body" : "frame-contents";
   const text = nodes.MakeTextNode(end, doc.GetTextFormatColl(style));
-  return MakeFlySection_(position, text, type, items, parent);
+  const format = MakeFlySection_(position, text, type, items, parent, mode);
+  if (!format) throw new Error("Writer could not insert the text fly frame.");
+  return format;
 }
 
-/** Connects an existing autotext content node to the real fly section and format. @param position - Actual native anchor position. @param node - Inserted content node. @param type - Requested native anchor type. @param items - Borrowed native frame attributes. @param parent - Native fly style. @returns Registered fly format. */
+/** Connects an existing autotext content node to the real fly section and format. @param position - Actual native anchor position. @param node - Inserted content node. @param type - Requested native anchor type. @param items - Borrowed native frame attributes. @param parent - Native fly style. @param mode - Whether to retain an already transferred dummy character. @returns Registered fly format or absence on failed insertion. */
 export function MakeFlySection_(
   position: SwPosition,
   node: SwContentNode,
   type: RndStdIds,
   items: SfxItemSet | undefined,
   parent: SwFrameFormat,
-): SwFlyFrameFormat {
+  mode: SetAttrMode,
+): SwFlyFrameFormat | undefined {
   const doc = node.GetDoc();
   const nodes = doc.GetNodes();
   const graphic = node.GetGrfNode();
@@ -150,6 +156,13 @@ export function MakeFlySection_(
       format.SetFormatAttr(next);
     } finally {
       next.Dispose();
+    }
+  }
+  if (format.GetAnchor().GetAnchorId() === RndStdIds.FLY_AS_CHAR) {
+    const text = position.GetNode().GetTextNode();
+    if (text) {
+      const hint = new SwTextFlyCnt(new SwFormatFlyCnt(format), position.GetContentIndex());
+      if (!text.InsertHint(hint, mode)) return undefined;
     }
   }
   if (format.GetAttrSet().GetItemState(RES_FRM_SIZE) !== SfxItemState.SET) {

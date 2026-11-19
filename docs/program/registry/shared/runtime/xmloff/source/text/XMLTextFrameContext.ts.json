@@ -27,7 +27,7 @@
         "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#CTF_RELWIDTHREL",
         "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts"
       ],
-      "justification": "Ports the represented text-box frame admission, graphic style members, native text-child dispatch and cursor restoration. Graphical and embedded destinations, frame chaining, page and as-character anchors, and unrepresented frame properties remain outside this slice. RTF101. Reads original split and graphic frame property values for native RTF-created text flies. RTF102. Reads the original graphic style writing mode and both relative-size relation properties. Handles a package-local draw:image child and the native run-through foreground/background style.",
+      "justification": "Ports the represented text-box frame admission, graphic style members, native text-child dispatch and cursor restoration. Graphical and embedded destinations, frame chaining, page and as-character anchors, and unrepresented frame properties remain outside this slice. RTF101. Reads original split and graphic frame property values for native RTF-created text flies. RTF102. Reads the original graphic style writing mode and both relative-size relation properties. Handles a package-local draw:image child and the native run-through foreground/background style. V4DQJW as-character graphic checkpoint. Raster children in a text paragraph use the original as-character default and accept explicit as-char along with the existing paragraph and character anchor values.",
       "knownViolations": [],
       "localSymbols": [
         "XMLTextFrameContext",

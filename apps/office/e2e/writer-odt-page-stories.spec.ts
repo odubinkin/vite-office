@@ -223,3 +223,59 @@ test("Writer opens a DOCX with a floating picture in the header", /** Imports a 
   await expect(body).toContainText("Body");
   await expect(image).toBeVisible();
 });
+
+test("Writer opens, saves and downloads the original n783638 inline picture", /** Tests the native Writer image through the file dialog, ODT primary storage and DOCX download. @param root0 - Playwright fixtures. @param root0.page - Chromium page. @returns Completion. */ async ({
+  page,
+}) => {
+  const fixture = fileURLToPath(
+    new URL(
+      "../../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/n783638.docx",
+      import.meta.url,
+    ),
+  );
+  const pictures = page.locator("p [data-writer-inline-graphic]").getByRole("img");
+  const status = page.getByRole("status", { name: "Writer status bar" });
+  await page.goto("/writer");
+  await page.getByRole("button", { name: "Open" }).click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles(fixture);
+  await expect(pictures).toHaveCount(2, { timeout: 15000 });
+  await expect(pictures.first()).toBeVisible();
+  await expect(pictures.last()).toBeVisible();
+  await expect(status).toContainText("Saved locally in this browser.", { timeout: 15000 });
+  await expect(pictures.first()).toHaveJSProperty("naturalWidth", 16);
+  await expect(pictures.last()).toHaveJSProperty("naturalWidth", 16);
+
+  await page.reload();
+  await page.getByRole("button", { name: "Open" }).click();
+  await page.getByRole("tab", { name: "In browser" }).click();
+  await page.getByRole("button", { name: "n783638", exact: true }).click();
+  await expect(pictures).toHaveCount(2, { timeout: 15000 });
+  await expect(pictures.first()).toBeVisible();
+  await expect(pictures.last()).toBeVisible();
+
+  const pending = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download DOCX", exact: true }).click();
+  const downloaded = await (await pending).path();
+  if (!downloaded) throw new Error("Chromium did not expose the DOCX download.");
+  const buffer = await readFile(downloaded);
+  const archive = await DocumentArchive.open(buffer);
+  expect(await archive.readTextEntry("word/document.xml")).toContain("<wp:inline ");
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole("button", { name: "Open" }).click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer,
+    mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    name: "inline-reopened.docx",
+  });
+  await expect(page.getByRole("heading", { name: "inline-reopened" })).toBeVisible({
+    timeout: 15000,
+  });
+  await expect(pictures).toHaveCount(2, { timeout: 15000 });
+  await expect(pictures.first()).toBeVisible();
+  await expect(pictures.last()).toBeVisible();
+});

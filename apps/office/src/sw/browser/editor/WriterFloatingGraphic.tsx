@@ -1,5 +1,7 @@
 /** @fileoverview Browser painting of a native anchored Writer graphic and its encoded raster. */
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import type { Graphic } from "../../../vcl/source/gdi/graph";
+import type { WriterInlineGraphicProjection } from "../presentation/writer-view-projection";
 import { WrapTextMode } from "../../../offapi/com/sun/star/text/WrapTextMode";
 import { SvxFrameDirection } from "../../../editeng/inc/frmdir";
 import { CalcFlyRelativeSize } from "../../source/core/layout/fly";
@@ -30,10 +32,9 @@ export function WriterFloatingGraphic({
   node: SwTextNode;
 }>): React.JSX.Element {
   const paint = useRef<HTMLDivElement | null>(null);
-  const raster = useRef<HTMLImageElement | null>(null);
   const [top, setTop] = useState(0);
   const { format, graphic } = frame;
-  const image = graphic.GetGraphic();
+  const raster = useRaster(graphic.GetGraphic());
   const size = CalcFlyRelativeSize(format.GetFrameSize(), { width, height }, page);
   const left = CalcRelPosX(format, size.width, {
     availableWidth: width,
@@ -45,21 +46,6 @@ export function WriterFloatingGraphic({
       node.GetSwAttrSet().GetFrameDir().GetValue() === SvxFrameDirection.Horizontal_RL_TB,
   }).left;
 
-  useEffect(
-    /** Binds the original raster data at the browser device boundary. @returns Object URL cleanup. */
-    () => {
-      const target = raster.current;
-      if (!target || typeof URL.createObjectURL !== "function") return;
-      const bytes = Uint8Array.from(image.GetNativeData());
-      const url = URL.createObjectURL(new Blob([bytes], { type: image.mediaType }));
-      target.src = url;
-      return /** Releases the browser image resource. @returns Nothing. */ () => {
-        target.removeAttribute("src");
-        URL.revokeObjectURL(url);
-      };
-    },
-    [image],
-  );
   useLayoutEffect(
     /** Resolves page-relative geometry once the actual anchor and page are mounted. @returns Geometry observer cleanup. */
     () => {
@@ -127,4 +113,59 @@ export function WriterFloatingGraphic({
       />
     </div>
   );
+}
+
+/** Paints one as-character graphic in the text line while retaining the native caret unit. @param props - Inline picture geometry. @returns Inline device portion. */
+export function WriterInlineGraphic({
+  value,
+  marker,
+}: Readonly<{ value: WriterInlineGraphicProjection; marker: string }>): React.JSX.Element {
+  const raster = useRaster(value.image);
+  return (
+    <span
+      contentEditable={false}
+      data-writer-inline-graphic={value.name}
+      style={{
+        display: "inline-block",
+        position: "relative",
+        padding: `${Math.max(0, value.upper) / 15}px ${Math.max(0, value.right) / 15}px ${Math.max(0, value.lower) / 15}px ${Math.max(0, value.left) / 15}px`,
+      }}
+    >
+      <img
+        alt={value.name}
+        draggable={false}
+        ref={raster}
+        style={{
+          display: "block",
+          width: value.width / 15,
+          height: value.height / 15,
+          maxWidth: "none",
+        }}
+      />
+      <span aria-hidden="true" style={{ fontSize: 0, position: "absolute" }}>
+        {marker}
+      </span>
+    </span>
+  );
+}
+
+/** Binds encoded graphic pixels to a browser device image. @param image - Native raster value. @returns Mounted browser raster reference. */
+function useRaster(image: Graphic) {
+  const raster = useRef<HTMLImageElement | null>(null);
+  useEffect(
+    /** Binds the original raster data at the browser device boundary. @returns Object URL cleanup. */
+    () => {
+      const target = raster.current;
+      if (!target || typeof URL.createObjectURL !== "function") return;
+      const bytes = Uint8Array.from(image.GetNativeData());
+      const url = URL.createObjectURL(new Blob([bytes], { type: image.mediaType }));
+      target.src = url;
+      return /** Releases the browser image resource. @returns Nothing. */ () => {
+        target.removeAttribute("src");
+        URL.revokeObjectURL(url);
+      };
+    },
+    [image],
+  );
+  return raster;
 }

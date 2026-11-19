@@ -23,7 +23,6 @@ import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
 import { MakeFlySection_ } from "./doclay";
 import type { SwFlyFrameFormat } from "../layout/atrfrm";
-import { SwFormatAnchor } from "../../../inc/fmtanchr";
 import {
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_ISCOUNTED,
@@ -38,7 +37,6 @@ import {
   RES_PARATR_LIST_ISRESTART,
   RES_PARATR_LIST_RESTARTVALUE,
   RES_PARATR_LIST_LEVEL,
-  RES_ANCHOR,
 } from "../../../inc/hintids";
 
 /** Applies every supported canonical content mutation through SwPosition and SwPaM. */
@@ -46,27 +44,26 @@ export class DocumentContentOperationsManager {
   /** Binds the operation manager to exactly one canonical document graph. @param document - Owning SwDoc. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {}
 
-  /** Inserts embedded graphic content in its native floating section. @param range - Native attachment position. @param graphic - Embedded data. @param flyItems - Optional floating frame items. @param graphicItems - Optional direct graphic items. @returns Registered graphic fly format. */
+  /** Inserts embedded graphic content in its native fly section. @param range - Native attachment position. @param graphic - Embedded data. @param flyItems - Optional floating frame items. @param graphicItems - Optional direct graphic items. @param mode - Native hint insertion mode for an inline anchor. @returns Registered graphic fly format. */
   public InsertGraphic(
     range: SwPaM,
     graphic: Graphic,
     flyItems?: SfxItemSet,
     graphicItems?: SfxItemSet,
+    mode = SetAttrMode.DEFAULT,
   ): SwFlyFrameFormat {
     const doc = this.document;
     const position = range.GetPoint();
-    const anchor = flyItems?.GetItemIfSet(RES_ANCHOR, false);
     if (position.GetNode().GetDoc() !== doc || !position.GetNode().IsTextNode())
       throw new Error("Writer graphic insertion requires a text position in its document.");
-    if (anchor instanceof SwFormatAnchor && anchor.GetAnchorId() === RndStdIds.FLY_AS_CHAR)
-      throw new Error("Writer inline graphic anchors require inline fly content.");
     const parent = doc
       .getIDocumentStylePoolAccess()
       .GetFrameFormatFromPool(SwPoolFormatId.FRM_GRAPHIC);
     if (!parent) throw new Error("assert(Writer pooled Graphic style)");
     const nodes = doc.GetNodes();
     const node = nodes.MakeGrfNode(nodes.GetEndOfAutotext(), graphic, doc.GetDfltGrfFormatColl());
-    const format = MakeFlySection_(position, node, RndStdIds.FLY_AT_PARA, flyItems, parent);
+    const format = MakeFlySection_(position, node, RndStdIds.FLY_AT_PARA, flyItems, parent, mode);
+    if (!format) throw new Error("Writer could not insert the graphic frame.");
     if (graphicItems) node.SetAttr(graphicItems);
     return format;
   }

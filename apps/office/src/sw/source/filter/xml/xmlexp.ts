@@ -4,6 +4,7 @@
 import * as ParaItems from "../../../../editeng/source/items/paraitem.controls";
 import {
   getTextFrameExportParagraphs,
+  compareParagraphMarkers,
   projectAnchoredTextFrames,
   sectionParagraphs,
   type XMLBoundWriterFrames,
@@ -447,7 +448,7 @@ function exportWriterText(
 ): OdfTextExport {
   const anchored: XMLBoundWriterFrames = {
     text: CollectTextFlyFrames(document),
-    ...(graphicHelper ? { graphicHelper, graphics: CollectGraphicFlyFrames(document) } : {}),
+    ...(graphicHelper ? { graphicHelper, graphics: CollectGraphicFlyFrames(document, true) } : {}),
   };
   return exportTextParagraphs(
     {
@@ -664,10 +665,7 @@ function projectParagraph(
           offset: position.GetContentIndex(),
         }),
       ),
-  ].sort(
-    /** Orders zero-width markers by content offset. @param left - First. @param right - Second. @returns Signed order. */
-    (left, right) => left.offset - right.offset,
-  );
+  ].sort(compareParagraphMarkers);
   const directCharacterProperties = getCharacterProperties(node.GetpSwAttrSet(), false);
   const marker = node.GetSwAttrSet().GetItemIfSet(RES_PARATR_LIST_AUTOFMT, true);
   const markerProperties =

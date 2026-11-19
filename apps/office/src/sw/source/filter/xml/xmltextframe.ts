@@ -73,7 +73,7 @@ export function importGraphicFrame(
   importFrame(parent, value, style, graphic);
 }
 
-/** Constructs an original floating frame with the appropriate native content owner. @param parent - Enclosing paragraph cursor. @param value - Original frame attributes. @param style - Effective style. @param graphic - Optional encoded image. @returns Registered fly frame. */
+/** Constructs a native anchored frame with the appropriate native content owner. @param parent - Enclosing paragraph cursor. @param value - Original frame attributes. @param style - Effective style. @param graphic - Optional encoded image. @returns Registered fly frame. */
 function importFrame(
   parent: SwXTextCursor,
   value: XMLTextFrameAttributes,
@@ -82,7 +82,12 @@ function importFrame(
 ): SwFlyFrameFormat {
   const doc = parent.GetDoc();
   const position = parent.GetPaM().GetPoint();
-  const type = value.anchor === "char" ? RndStdIds.FLY_AT_CHAR : RndStdIds.FLY_AT_PARA;
+  const type =
+    value.anchor === "as-char"
+      ? RndStdIds.FLY_AS_CHAR
+      : value.anchor === "char"
+        ? RndStdIds.FLY_AT_CHAR
+        : RndStdIds.FLY_AT_PARA;
   const set = new SfxItemSet(doc.GetAttrPool(), aFrameFormatSetRange);
   /** Transfers a native item value into the original frame item set. @param item - Temporary item. @returns Nothing. */
   function put(item: SfxPoolItem): void {
@@ -240,10 +245,16 @@ export function exportTextFrame(
   const widthType = size.GetWidthSizeType();
   const heightType = size.GetHeightSizeType();
   const relativeHeight = size.GetHeightPercent();
+  const anchor = format.GetAnchor().GetAnchorId();
   return {
     name: format.GetName(),
     parentStyle: format.DerivedFrom()?.GetName() ?? "",
-    anchor: format.GetAnchor().GetAnchorId() === RndStdIds.FLY_AT_CHAR ? "char" : "paragraph",
+    anchor:
+      anchor === RndStdIds.FLY_AS_CHAR
+        ? "as-char"
+        : anchor === RndStdIds.FLY_AT_CHAR
+          ? "char"
+          : "paragraph",
     x: horizontal.GetPos(),
     y: vertical.GetPos(),
     width: widthType === SwFrameSize.Fixed ? size.GetWidth() : undefined,
@@ -368,4 +379,16 @@ export function* getTextFrameExportParagraphs(
   yield* sectionParagraphs(document.nodes.getBodyContent());
   for (const frames of anchored.values())
     for (const frame of frames) yield* sectionParagraphs(frame.content);
+}
+
+/** Sorts markers linked to the same position before its inline fly consumes the dummy. @param left - First marker. @param right - Second marker. @returns Offset order with inline fly markers last at a shared offset. */
+export function compareParagraphMarkers(
+  left: XMLTextParagraphMarker,
+  right: XMLTextParagraphMarker,
+): number {
+  return (
+    left.offset - right.offset ||
+    Number(left.kind === "frame" && left.frame.anchor === "as-char") -
+      Number(right.kind === "frame" && right.frame.anchor === "as-char")
+  );
 }

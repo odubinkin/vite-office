@@ -5,6 +5,7 @@ import { convertToTable, setCellProperty, type SwXTextTable } from "./unotbl";
 import type { SwTableBox } from "../table/swtable";
 import type { SwDoc } from "../doc/doc";
 import { SwTextNode } from "../txtnode/ndtxt";
+import { SwpHints } from "../txtnode/ndhints";
 import type { SwStartNode } from "../docnode/node";
 import { CopyNodes } from "../docnode/ndcopy";
 import { SwPaM, SwPosition } from "../crsr/pam";
@@ -250,7 +251,8 @@ export class SwXText implements SwXTextOwner {
     const node = p.GetPoint().GetNode() as SwTextNode,
       offset = start.GetContentIndex(),
       style = node.GetTextFormatColl(),
-      before = node.CaptureTextFragment(0, node.Len()),
+      before = node.GetText(),
+      hints = new SwpHints(this.GetDoc().GetAttrPool(), node.GetpSwpHints()?.entries()),
       direct = node.GetpSwAttrSet()?.Clone();
     try {
       DocInsertStringSplitCR(p, value, SwInsertFlags.NOHINTEXPAND);
@@ -272,14 +274,16 @@ export class SwXText implements SwXTextOwner {
           inserted.Dispose();
         }
         node.ChgFormatColl(style);
-        node.SetText(before.text);
-        node.SetTextHints(before.hints);
+        if (node.GetText() !== before) node.SetText(before);
+        node.SetTextHints(hints);
         node.ResetAllAttr();
         if (direct) node.SetAttr(direct);
         p.GetPoint().Assign(node, offset);
       }
       throw error;
     } finally {
+      hints.Dispose();
+      direct?.Dispose();
       start.Dispose();
       p.Dispose();
     }
@@ -305,7 +309,7 @@ export class SwXText implements SwXTextOwner {
       p = new SwPaM(end),
       direct = node.GetpSwAttrSet()?.Clone(),
       style = node.GetTextFormatColl(),
-      fragment = node.CaptureTextFragment(0, node.Len());
+      hints = new SwpHints(doc.GetAttrPool(), node.GetpSwpHints()?.entries());
     const next = new SwTextNode(doc.GetNodes(), this.GetStartNode(), style.GetNextTextFormatColl());
     doc.GetNodes().insertTextNodeAfter(node, next);
     try {
@@ -318,10 +322,12 @@ export class SwXText implements SwXTextOwner {
       node.ChgFormatColl(style);
       node.ResetAllAttr();
       if (direct) node.SetAttr(direct);
-      node.SetTextHints(fragment.hints);
+      node.SetTextHints(hints);
       if (error instanceof UnknownPropertyException) invalid("Unknown paragraph property");
       throw error;
     } finally {
+      hints.Dispose();
+      direct?.Dispose();
       p.Dispose();
       end.Dispose();
     }

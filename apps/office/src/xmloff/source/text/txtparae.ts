@@ -537,7 +537,10 @@ function exportParagraphElement(
         if (marker.offset < start + localOffset) throw new Error("ODF marker order is invalid.");
         encoded += exportText(text.slice(localOffset, marker.offset - start));
         encoded += exportMarker(marker, renderFrame);
-        localOffset = marker.offset - start;
+        localOffset =
+          marker.offset -
+          start +
+          Number(marker.kind === "frame" && marker.frame.anchor === "as-char");
         markerIndex += 1;
       }
       return encoded + exportText(text.slice(localOffset));

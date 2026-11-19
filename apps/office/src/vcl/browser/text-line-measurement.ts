@@ -6,12 +6,13 @@ export interface BrowserTextLine {
   readonly height: number;
 }
 
-/** Reads browser-shaped lines without selecting a cursor target. @param element - Device paragraph. @param text - Actual projection text. @param height - Fallback twip height. @param base - Native fragment offset. @returns Measured native lines. */
+/** Reads browser-shaped lines without selecting a cursor target. @param element - Device paragraph. @param text - Actual projection text. @param height - Fallback twip height. @param base - Native fragment offset. @param measurePortion - Optional device rectangle for an object occupying one text unit. @returns Measured native lines. */
 export function measureBrowserTextLines(
   element: HTMLElement,
   text: string,
   height: number,
   base: number,
+  measurePortion?: (text: Text) => DOMRect | undefined,
 ): readonly BrowserTextLine[] {
   const fallback = Object.freeze([{ start: base, end: base + text.length, height }]);
   if (text.length === 0) return fallback;
@@ -31,7 +32,7 @@ export function measureBrowserTextLines(
       const size = String.fromCodePoint(textNode.data.codePointAt(index) as number).length;
       range.setStart(textNode, index);
       range.setEnd(textNode, index + size);
-      const rect = range.getClientRects()[0];
+      const rect = measurePortion?.(textNode) ?? range.getClientRects()[0];
       if (rect !== undefined && rect.height > 0) {
         const overlap =
           lineTop === undefined || lineBottom === undefined

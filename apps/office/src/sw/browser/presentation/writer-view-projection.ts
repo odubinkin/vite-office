@@ -136,6 +136,7 @@ export interface WriterParagraphListLayout {
 
 /** One immutable display portion; no filter or transfer record participates in rendering. */
 export interface WriterTextPortion {
+  readonly inlineGraphic?: WriterInlineGraphicProjection;
   readonly attributes: Readonly<{
     bold: boolean;
     italic: boolean;
@@ -152,6 +153,18 @@ export interface WriterTextPortion {
   readonly hyperlink?: Readonly<{ url: string; targetFrame?: string }>;
   readonly startOffset: number;
   readonly text: string;
+}
+
+/** Visual form of an as-character fly occupying one native text position. */
+export interface WriterInlineGraphicProjection {
+  readonly image: import("../../../vcl/source/gdi/graph").Graphic;
+  readonly name: string;
+  readonly width: number;
+  readonly height: number;
+  readonly left: number;
+  readonly right: number;
+  readonly upper: number;
+  readonly lower: number;
 }
 
 /** Browser-ready values projected from effective Writer paragraph items. */
@@ -699,7 +712,8 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
   }
   for (let start = 0; start < node.Len();) {
     iterator.Seek(start);
-    const end = iterator.GetNextAttr(),
+    const inlineGraphic = projectInlineGraphic(node, start);
+    const end = inlineGraphic ? start + 1 : iterator.GetNextAttr(),
       font = handler.ReadItem(RES_CHRATR_FONT) as SvxFontItem;
     const inet = node.GetTextAttrAt(start, RES_TXTATR_INETFMT, GetTextAttrMode.Default)?.GetAttr();
     const link = inet instanceof SwFormatINetFormat ? inet.GetHyperlink() : undefined;
@@ -708,6 +722,7 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
       Object.freeze({
         startOffset: start,
         text: node.GetText().slice(start, end),
+        ...(inlineGraphic === undefined ? {} : { inlineGraphic }),
         attributes: Object.freeze({
           bold: (handler.ReadItem(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue(),
           italic: (handler.ReadItem(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue(),
@@ -769,4 +784,32 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
     start = end;
   }
   return Object.freeze(portions);
+}
+
+/** Projects a graphic's native point and frame attributes as a single device portion. @param node - Anchor paragraph. @param start - Native UTF16 position. @returns Inline image or absence. */
+function projectInlineGraphic(
+  node: SwTextNode,
+  start: number,
+): WriterInlineGraphicProjection | undefined {
+  const format = node.GetpSwpHints()?.GetTextAttrForCharAt(start)?.GetAttr().GetFrameFormat();
+  const section = format?.GetContent().GetContentIdx()?.GetNode();
+  if (!format || !section?.IsStartNode()) return undefined;
+  const graphic = node
+    .GetNodes()
+    .at(section.GetIndex() + 1)
+    .GetGrfNode();
+  if (!graphic) return undefined;
+  const size = format.GetFrameSize();
+  const horizontal = format.GetLRSpace();
+  const vertical = format.GetULSpace();
+  return Object.freeze({
+    image: graphic.GetGraphic(),
+    name: format.GetName(),
+    width: size.GetWidth(),
+    height: size.GetHeight(),
+    left: horizontal.ResolveLeft(),
+    right: horizontal.ResolveRight(),
+    upper: vertical.GetUpper(),
+    lower: vertical.GetLower(),
+  });
 }

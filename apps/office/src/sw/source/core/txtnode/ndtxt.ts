@@ -188,6 +188,7 @@ export class SwTextNode extends SwContentNode {
   /** Replaces canonical ranged attributes without accepting a browser run projection. @param hints - Writer text attributes. @returns Nothing. */
   public SetTextHints(hints: SwpHints): void {
     const replacement = CopyTextNodeHints(this, hints);
+    this.pSwpHints?.TransferFlyHints(replacement);
     this.pSwpHints = replacement.CanBeDeleted() ? undefined : replacement;
     this.GetDoc().NotifyModelChange({
       kind: "attribute-set-changed",

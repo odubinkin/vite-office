@@ -35,7 +35,7 @@ export interface XMLTextFrameStyle extends OdfFillProperties, OdfBoxProperties {
 /** Original draw:frame attributes with dimensions read from the text box when present. */
 export interface XMLTextFrameAttributes {
   readonly name: string;
-  readonly anchor: "paragraph" | "char";
+  readonly anchor: "paragraph" | "char" | "as-char";
   readonly styleName: string;
   readonly x?: number | undefined;
   readonly y?: number | undefined;
@@ -199,8 +199,14 @@ export class XMLTextFrameContext extends SvXMLImportContext {
   ): SvXMLImportContext | null {
     if (element !== T.DRAW_TEXT_BOX && element !== T.DRAW_IMAGE) return null;
     const frame = this.attrs;
-    const anchor = frame.get(T.TEXT_ANCHOR_TYPE) ?? "paragraph";
-    if (anchor !== "paragraph" && anchor !== "char") return null;
+    const anchor =
+      frame.get(T.TEXT_ANCHOR_TYPE) ?? (element === T.DRAW_IMAGE ? "as-char" : "paragraph");
+    if (
+      anchor !== "paragraph" &&
+      anchor !== "char" &&
+      !(element === T.DRAW_IMAGE && anchor === "as-char")
+    )
+      return null;
     const value: XMLTextFrameAttributes = {
       name: frame.get(T.DRAW_NAME) ?? "",
       styleName: frame.get(T.DRAW_STYLE_NAME) ?? "",

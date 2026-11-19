@@ -6,6 +6,7 @@ import { WrapTextMode } from "../../../../offapi/com/sun/star/text/WrapTextMode"
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { CH_TXTATR_BREAKWORD } from "../../../inc/hintids";
 import { SwFormatSurround } from "../../../inc/fmtsrnd";
 import { SwFormatAnchor } from "../../../inc/fmtanchr";
 import { SwFormatHoriOrient, SwFormatVertOrient } from "../../../inc/fmtornt";
@@ -574,3 +575,112 @@ it.each([
     }
   },
 );
+
+it("preserves both native n783638 inline pictures across Worker, ODT and DOCX", /** Reuses LibreOffice's zero-margin fixture and checks the actual graphic and its text marker. @returns Completion. */ async () => {
+  const bytes = readFileSync(
+    "../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/n783638.docx",
+  );
+  const input = await DocumentArchive.open(bytes);
+  const image = await input.readEntry("word/media/image1.png");
+  const original = await importOOXML(bytes, {});
+  const metadata = { title: "Inline graphics" };
+  /** Verifies each marker, frame and pixel payload. @param doc - Imported or reopened graph. @returns Native offsets and dimensions. */
+  function expectImages(doc: SwDoc): readonly (readonly number[])[] {
+    const formats = [...doc.GetSpzFrameFormats()];
+    expect(formats).toHaveLength(2);
+    return formats.map(
+      /** Reads the native anchor and graphic. @param format - Live graph frame. @returns Native offset and dimensions. */ (
+        format,
+      ) => {
+        expect(format.GetAnchor().GetAnchorId()).toBe(RndStdIds.FLY_AS_CHAR);
+        expect(format.GetLRSpace().ResolveLeft()).toBe(0);
+        expect(format.GetLRSpace().ResolveRight()).toBe(0);
+        expect(format.GetULSpace().GetUpper()).toBe(0);
+        const offset = format.GetAnchor().GetAnchorContentOffset();
+        const node = format.GetAnchor().GetAnchorNode()?.GetTextNode();
+        assert(node);
+        expect(node.GetText().charAt(offset)).toBe(CH_TXTATR_BREAKWORD);
+        expect(node.GetText().split(CH_TXTATR_BREAKWORD)).toHaveLength(2);
+        expect(node.GetpSwpHints()?.GetTextAttrForCharAt(offset)?.GetAttr().GetFrameFormat()).toBe(
+          format,
+        );
+        const section = format.GetContent().GetContentIdx()?.GetNode();
+        assert(section);
+        expect(
+          doc
+            .GetNodes()
+            .at(section.GetIndex() + 1)
+            .GetGrfNode()
+            ?.GetGraphic()
+            .GetNativeData(),
+        ).toEqual(image);
+        return [offset, format.GetFrameSize().GetWidth(), format.GetFrameSize().GetHeight()];
+      },
+    );
+  }
+  let copied: SwDoc | undefined;
+  let saved: SwDoc | undefined;
+  let reopened: SwDoc | undefined;
+  try {
+    const dimensions = expectImages(original);
+    copied = decodeWriterDocument(structuredClone(encodeWriterDocument(original)));
+    expect(expectImages(copied)).toEqual(dimensions);
+    const storage = await writeOdtDocument(copied, metadata);
+    const odt = await DocumentArchive.open(storage);
+    const content = await odt.readTextEntry("content.xml");
+    expect(content.match(/text:anchor-type="as-char"/gu)).toHaveLength(2);
+    expect(content).not.toContain(CH_TXTATR_BREAKWORD);
+    saved = (await readOdtDocument(storage, metadata)).document;
+    expect(expectImages(saved)).toEqual(dimensions);
+
+    const output = await DocxExport.WriteDocument(saved);
+    const exported = await DocumentArchive.open(output);
+    const xml = await exported.readTextEntry("word/document.xml");
+    expect(xml.match(/<wp:inline distT="0" distB="0" distL="0" distR="0">/gu)).toHaveLength(2);
+    expect(xml).not.toContain("<wp:anchor");
+    expect(xml).not.toContain(CH_TXTATR_BREAKWORD);
+    reopened = await importOOXML(output, {});
+    expect(expectImages(reopened)).toEqual(dimensions);
+  } finally {
+    reopened?.Dispose();
+    saved?.Dispose();
+    copied?.Dispose();
+    original.Dispose();
+  }
+});
+
+it("loads an ODF paragraph graphic with the original as-character default", /** Removes the explicit anchor to exercise the original XMLTextFrameContext caller default. @returns Completion. */ async () => {
+  const bytes = readFileSync(
+    "../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/n783638.docx",
+  );
+  const doc = await importOOXML(bytes, {});
+  const metadata = { title: "Implicit inline graphic" };
+  try {
+    const source = await DocumentArchive.open(await writeOdtDocument(doc, metadata));
+    const writer = new DocumentArchiveWriter();
+    const content = (await source.readTextEntry("content.xml")).replaceAll(
+      ' text:anchor-type="as-char"',
+      "",
+    );
+    for (const name of source.getEntryNames())
+      writer.putNextEntry(
+        name,
+        name === "content.xml" ? new TextEncoder().encode(content) : await source.readEntry(name),
+      );
+    const { document } = await readOdtDocument(await writer.finish(), metadata);
+    try {
+      const formats = [...document.GetSpzFrameFormats()];
+      expect(formats).toHaveLength(2);
+      for (const format of formats) {
+        const anchor = format.GetAnchor();
+        expect(anchor.GetAnchorId()).toBe(RndStdIds.FLY_AS_CHAR);
+        const node = anchor.GetAnchorNode()?.GetTextNode();
+        expect(node?.GetText().charAt(anchor.GetAnchorContentOffset())).toBe(CH_TXTATR_BREAKWORD);
+      }
+    } finally {
+      document.Dispose();
+    }
+  } finally {
+    doc.Dispose();
+  }
+});

@@ -15,7 +15,8 @@
     ],
     "preservedResponsibilities": [
       "Writes native floating raster pictures at their actual paragraph offsets in the active body or story serializer.",
-      "Writes all four native rectangular wrapper side values and preserves frame distances and the overlap setting in the anchored drawing attributes."
+      "Writes all four native rectangular wrapper side values and preserves frame distances and the overlap setting in the anchored drawing attributes.",
+      "V4DQJW as-character graphic checkpoint. The native AS_CHAR anchor produces wp:inline with zero distance attributes, common dimensions and an embedded image part. Floating placement, wrap and relationship handling share the existing export owner."
     ],
     "omittedResponsibilities": [
       "Inline graphics, other wrapping modes and full shape and effect export remain pending."
@@ -33,6 +34,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
           "marker": "opens the unchanged tdf134114 pictures"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
+          "marker": "n783638"
         }
       ],
       "upstream": [

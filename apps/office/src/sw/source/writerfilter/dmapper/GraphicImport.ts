@@ -1,4 +1,4 @@
-/** @fileoverview Imports an embedded floating picture into Writer's graphic node and frame owners. */
+/** @fileoverview Imports an embedded inline or anchored picture into Writer's graphic node and frame owners. */
 import type { EmbeddedGraphic } from "../../../../oox/source/helper/graphichelper";
 import { SvxOpaqueItem } from "../../../../editeng/inc/opaqitem";
 import { SvxIndentValue, SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
@@ -44,6 +44,7 @@ export function handleWrapTextValue(value: string): WrapTextMode | undefined {
 
 /** Source WordprocessingDrawing anchor after resolution of its fast-token resources. */
 export interface DrawingAnchor {
+  readonly inline: boolean;
   readonly width: number;
   readonly height: number;
   readonly horizontal: DrawingPosition;
@@ -78,33 +79,36 @@ export function ImportGraphic(
   try {
     const width = emuToWriterTwip(drawing.width);
     const height = emuToWriterTwip(drawing.height);
-    const compatibility = mapper.GetSettingsTable().GetWordCompatibilityMode();
-    put(new SwFormatAnchor(RndStdIds.FLY_AT_CHAR));
+    put(new SwFormatAnchor(drawing.inline ? RndStdIds.FLY_AS_CHAR : RndStdIds.FLY_AT_CHAR));
     put(new SwFormatFrameSize(SwFrameSize.Fixed, width, height));
-    const horizontal = horizontalPosition(drawing.horizontal);
-    const vertical = verticalPosition(drawing.vertical);
-    const { left, right, top, bottom } = adjustMarginsAndOrientation(
-      drawing,
-      horizontal,
-      vertical,
-      compatibility,
-    );
-    if (vertical.GetRelationOrient() === RelOrientation.TEXT_LINE)
-      vertical.SetPos(-vertical.GetPos());
-    put(horizontal);
-    put(vertical);
+    let { left, right, top, bottom } = drawing.distances;
+    if (!drawing.inline) {
+      const compatibility = mapper.GetSettingsTable().GetWordCompatibilityMode();
+      const horizontal = horizontalPosition(drawing.horizontal);
+      const vertical = verticalPosition(drawing.vertical);
+      ({ left, right, top, bottom } = adjustMarginsAndOrientation(
+        drawing,
+        horizontal,
+        vertical,
+        compatibility,
+      ));
+      if (vertical.GetRelationOrient() === RelOrientation.TEXT_LINE)
+        vertical.SetPos(-vertical.GetPos());
+      put(horizontal);
+      put(vertical);
+      put(new SwFormatSurround(drawing.wrap));
+      const overlap = new SwFormatWrapInfluenceOnObjPos();
+      overlap.SetAllowOverlap(drawing.allowOverlap);
+      put(overlap);
+      const behind =
+        drawing.behindDocument && (drawing.wrap === WrapTextMode.THROUGH || compatibility <= 14);
+      put(new SvxOpaqueItem(RES_OPAQUE, !(text instanceof SwXHeadFootText) && !behind));
+    }
     const lr = new SvxLRSpaceItem(RES_LR_SPACE);
     lr.SetLeft(SvxIndentValue.twips(left));
     lr.SetRight(SvxIndentValue.twips(right));
     put(lr);
     put(new SvxULSpaceItem(top, bottom, RES_UL_SPACE));
-    put(new SwFormatSurround(drawing.wrap));
-    const overlap = new SwFormatWrapInfluenceOnObjPos();
-    overlap.SetAllowOverlap(drawing.allowOverlap);
-    put(overlap);
-    const behind =
-      drawing.behindDocument && (drawing.wrap === WrapTextMode.THROUGH || compatibility <= 14);
-    put(new SvxOpaqueItem(RES_OPAQUE, !(text instanceof SwXHeadFootText) && !behind));
     const graphic = new Graphic(data.GetNativeData(), data.mediaType, new Size(width, height));
     document.GetDocumentContentOperationsManager().InsertGraphic(selection, graphic, items);
   } finally {
