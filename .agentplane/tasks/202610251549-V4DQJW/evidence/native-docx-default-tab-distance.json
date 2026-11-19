@@ -1,0 +1,258 @@
+{
+  "checkpoint": "Native Writer standard tab distance across DOCX and ODT",
+  "task": "202610251549-V4DQJW",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "createdAt": "2026-11-19T03:04:12.488Z",
+  "upstream": [
+    "sw/source/uibase/uno/unotxdoc.cxx#SwXTextDocument::createTextDefaults",
+    "sw/source/core/unocore/SwXTextDefaults.cxx#SwXTextDefaults::setPropertyValue",
+    "sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx#DomainMapper_Impl::ApplySettingsTable",
+    "sw/source/filter/ww8/docxattributeoutput.cxx#DocxAttributeOutput::DocDefaults",
+    "sw/source/filter/ww8/docxattributeoutput.cxx#DocxAttributeOutput::ParaTabStop",
+    "sw/source/filter/ww8/docxexport.cxx#DocxExport::WriteSettings",
+    "xmloff/source/text/txtprmap.cxx#PROP_TabStopDistance",
+    "sw/qa/extras/ooxmlexport/ooxmlexport2.cxx#defaultTabStopNotInStyles"
+  ],
+  "results": {
+    "writer": {
+      "files": 11,
+      "tests": 110
+    },
+    "calc": {
+      "files": 2,
+      "tests": 13
+    },
+    "chromium": 9,
+    "coverage": {
+      "apps/office/src/sw/source/core/unocore/SwXTextDefaults.ts": {
+        "lines": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 16,
+          "covered": 16,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    }
+  },
+  "commands": [
+    "npm run test:coverage:writer --workspace @vite-office/office -- docxexport.default-tabs docxexport.compat docxexport.styles SettingsTable OOXMLSettings DomainMapper native-text-default-schema unotxdoc WriterFileDialog writer-document-codec odt-property-roundtrip odt-named-tabs-only writer-view-ruler-default-tabs --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sw/source/core/unocore/SwXTextDefaults.ts --coverage.thresholds.perFile --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=coverage/writer-default-tabs-final",
+    "npm run test:calc --workspace @vite-office/office -- tabview2-protection merge-refresh --maxWorkers=2 --testTimeout=90000",
+    "npm run typecheck",
+    "npm run test:static",
+    "./node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1",
+    "xargs ./node_modules/.bin/eslint < apps/office/coverage/writer-default-tabs-files.txt",
+    "xargs ./node_modules/.bin/prettier --check < apps/office/coverage/writer-default-tabs-files.txt",
+    "npm run check:docs",
+    "npm run check:dependencies",
+    "npm run check:file-size",
+    "npm run check:source-tree",
+    "npm run check:source-provenance",
+    "npm run inventory:registry:build",
+    "npm run inventory:invariants",
+    "npm run inventory:parity",
+    "npm run check:writer-resources",
+    "npm run check:writer-hintids",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor",
+    "git diff --check"
+  ],
+  "verified": [
+    "Writer loads the unchanged fdo80902.docx at 840 twips, stores the original native item, and preserves it through the Worker, primary ODT and DOCX reopen.",
+    "The unchanged empty.odt test retains an inherited default tab in Normal, with no explicit tabs in DOCX styles.",
+    "Chromium finds the original ruler markers after import and primary ODT reload, checks the DOCX settings part and reopens the download on mobile.",
+    "The runtime registry found a Calc declaration shape mismatch from the preceding checkpoint. The native ExtendMerge method declaration is restored, the accessed merge flags remain in document10 and the focused Calc cases pass."
+  ],
+  "observedLimitations": [
+    "NumberedList.docx reached an unsupported numbering factory definition 1770157 in the first fixture probe. The unchanged fdo80902.docx provides independent complete coverage of the requested tab-distance path.",
+    "Custom paragraph tab stops in DOCX and the remaining document settings and format acceptance stay open."
+  ],
+  "retainedUpstreamIssue": "WRITER-656",
+  "files": [
+    {
+      "path": "apps/office/src/sw/source/core/unocore/SwXTextDefaults.ts",
+      "sha256": "f4acf2af59bb84fb24e7335af33b58d37330a1bd6157e8db535754accaa3fc92"
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/uno/unotxdoc.ts",
+      "sha256": "8d1f2edc6a5cb971c1cf4d530bf2779f74e8f5ee62904d5e98be5fa8e2f61a06"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts",
+      "sha256": "f52300421ff8913680b084066ce80ee145427c2b99bd03fbce4cbdee0f8fea84"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.ts",
+      "sha256": "a33741aa3af1bea92fafe9e5845c25949693fa186b8faa53ce4a62b1d8258518"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxexport.ts",
+      "sha256": "92a2268873ed5b7e1620b41feef7dc4d420441cf70e18fb25459e38c1ab1e401"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.styles.ts",
+      "sha256": "eb3a8f4172b3c0dbcf668f6a59805d6b2bcf916b3ea042de415aa3b4e72031cb"
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+      "sha256": "a21960a9eda76a3063e0d4ab636c36a978b31d92c17032cc35c6fc38fa26fd09"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
+      "sha256": "5ace9868986667eda5bf3d259d3bc9f4b22885403ade7a2c8e772035739f9c0f"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/txtparai.ts",
+      "sha256": "12bb75d3d2631129fab82019a15b166ffc0cc8589dc5f57c0ee2f7a320faa912"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/style/xmlstyle.ts",
+      "sha256": "8a242794299b6f171a8161071cd182a558a464864678e853ecd80911f77c3934"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+      "sha256": "72efc155d78e46abadfe52f79500a51a466eec4201c0d80f9e110dc5e645e308"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+      "sha256": "a477f64d4679996c608a335d9c58bf847f8e1ca3c0d0a114745b77222e72565c"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxexport.default-tabs.test.ts",
+      "sha256": "ec17f25ddf7754fdaed9e33eb7f768f52ed611fae9d70fa5159031162f0d1000"
+    },
+    {
+      "path": "apps/office/e2e/writer-docx-theme.spec.ts",
+      "sha256": "5ad34aa54346c861a0709fb33c25ccef3e45153164a3da9c7e6446a8c1e70eb0"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/unocore/SwXTextDefaults.ts.json",
+      "sha256": "87f8b627214af561c02c0436f4649e8d34db0e2ef6c122adf5482b82d1be18d8"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/unocore/SwXTextDefaults.ts.json",
+      "sha256": "ea805d5ebcdd7e5ea8f100f801e50685a026405a9629c94c5cf1a8f8122740ed"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/uibase/uno/unotxdoc.ts.json",
+      "sha256": "e4fea21f2ff9241b924ec147f63003a82a371ac46b943ea58ec5daba403a1e06"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/uibase/uno/unotxdoc.ts.json",
+      "sha256": "aef28462fa3a7b39dfc5fba7866d327674ad388ce026746540c19f980c647f0f"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts.json",
+      "sha256": "55679f076b20abc8991abd57dbdb216c56a1eaf912c30134465d60b706fe00c7"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts.json",
+      "sha256": "546ed6975484f3180f1cf91fa54d67a0299c82a4628efa25847b8b2f9fbd883a"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/DomainMapper.ts.json",
+      "sha256": "8ca79e8b796ef55be9a8cfd2ab18bb49aed018cac4770440dbf369b8560234f3"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/DomainMapper.ts.json",
+      "sha256": "9eeb57e43c0ef62edcc2df4c0676aa31f6b83dfe365dd4fecf482a1b325a707a"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/filter/ww8/docxexport.ts.json",
+      "sha256": "4ec6185fc495de6cb165e50c517513e43af791bacbc2518cc55ed873d57a24c3"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/filter/ww8/docxexport.ts.json",
+      "sha256": "f154ceee58bb1b00e47dffa6804bf5e197fe07246f66a2bb1aef89350f1455be"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/filter/ww8/docxattributeoutput.styles.ts.json",
+      "sha256": "b17e33943f216f7fa689f4da1fe85a8d0a23a271d0e35b1c8ca2bf6356ce4d84"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/filter/ww8/docxattributeoutput.styles.ts.json",
+      "sha256": "5a5dd5da47467d235aa2290decfef96190f8666b1f4ce27a503062bb2f1944c7"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/browser/filter/xml/writer-document-codec.ts.json",
+      "sha256": "2c86d117638bee61bc29b73bbddb0f7c8eb83b36b8712ba5a8e2782db55d8b18"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/browser/filter/xml/writer-document-codec.ts.json",
+      "sha256": "5441bc2519962c03c86d66f2b6034a443c031a884e3f2b6a6f7afd61e759935c"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/xmloff/source/core/xmltoken.ts.json",
+      "sha256": "6c1bd2fefca8a7b0099ab5a72c43762acc58f5f2e0973bd1cad8a0d0b51511eb"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/xmloff/source/core/xmltoken.ts.json",
+      "sha256": "0037afb03e07479a32c2d099599a16ef5d79b2ce97c3ac14f418dca0b072de0e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/xmloff/source/text/txtparai.ts.json",
+      "sha256": "430a70f210fadd2d84e4ffea63a29375041adfb034d14a7c51fb0f180ea68285"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/xmloff/source/text/txtparai.ts.json",
+      "sha256": "6eb9838035152c1c03e2fef2942d42342571a0437f852c6f6a076cec79ed8efd"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/xmloff/source/style/xmlstyle.ts.json",
+      "sha256": "02535ccf141f504ccda747a859a7909005ed88c9122886b12e1874d8c179576a"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/xmloff/source/style/xmlstyle.ts.json",
+      "sha256": "b90e6b1ef966fe0e695c24d8f9847b89022c2f8f05613e26d6fefb96e86e68c2"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/filter/xml/xmlimp.ts.json",
+      "sha256": "deab60a8eb6c7675081eba1883d094b3268f91b0031cc4322880ab7df16e84ac"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/filter/xml/xmlimp.ts.json",
+      "sha256": "97c9208730e4af88b119da411939cc39a09d52466a3d6b5b434df108fb8690b1"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/filter/xml/xmlexp.ts.json",
+      "sha256": "ab5e670019902acdad2d4a41f50118f79f87418ffda8c076d381f1696e3fd6a3"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/filter/xml/xmlexp.ts.json",
+      "sha256": "e9b5b1ec8f10aa03239ff8d4d305d854dbb4806a9c2388bd8ced77b16a80c4e5"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "sha256": "6d164e20f9c2b8447a3bc9a1e48257b5a1743db8d9c07149621655b18a292681"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.ts",
+      "sha256": "868187439a37c0651b0736452e08b325e8396d23184affc3afc7a93773279f66"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document10.ts",
+      "sha256": "d652c46cd990c318df4285c81278928853577860271a636c3907f8d84acc4f2c"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabview2.ts",
+      "sha256": "c0a8f415f62c5b5f53617f88ac28a7857cdb96dcd4b2a7be39823bf04d3a4222"
+    }
+  ]
+}
