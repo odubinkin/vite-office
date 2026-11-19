@@ -1,0 +1,113 @@
+{
+  "checkpoint": "Calc native alignment through XLSX, ODS and the browser Worker handoff",
+  "createdAt": "2026-11-19T00:35:16.809Z",
+  "task": "202610251549-J0Z0KF",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sc/source/filter/oox/stylesbuffer.cxx#Alignment::importAlignment",
+    "sc/source/filter/oox/stylesbuffer.cxx#Alignment::finalizeImport",
+    "sc/source/filter/oox/stylesbuffer.cxx#Xf::createPattern",
+    "sc/source/filter/oox/unitconverter.cxx#UnitConverter::finalizeImport",
+    "sc/source/filter/excel/xestyle.cxx#XclExpCellAlign::SaveXml",
+    "sc/source/filter/xml/xmlstyle.cxx#XmlScPropHdl_RotateAngle",
+    "sax/source/tools/converter.cxx#Converter::convertAngle"
+  ],
+  "results": {
+    "calc": {
+      "files": 17,
+      "tests": 84
+    },
+    "shared": {
+      "files": 9,
+      "tests": 30
+    },
+    "writer": {
+      "files": 3,
+      "tests": 18
+    },
+    "chromium": 6,
+    "coverageThreshold": 90,
+    "coverage": {
+      "lines": {
+        "total": 75,
+        "covered": 75,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 79,
+        "covered": 79,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 13,
+        "covered": 13,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 139,
+        "covered": 130,
+        "skipped": 0,
+        "pct": 93.52
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "observations": [
+    "The unchanged indentation and reading order XLSX regressions exercise native item values through real packages.",
+    "The applyAlignment regression keeps source styles and cell assignments and substitutes one cached formula result because CONCATENATE is outside this checkpoint.",
+    "The FODS regression uses source style records, transferred into an automatic styles context for the scoped ODF style check.",
+    "XLSX reading order travels in the structured clone transport because the original Calc ODF cell style mappings do not persist this item.",
+    "The browser Calc grid applies explicit text direction. The workbook filter checks rotation, stacking and shrink at the model and package layers.",
+    "CALC-731 preserves ODF whole-degree export and CALC-732 preserves the distinct device-free XLSX indentation defaults."
+  ],
+  "fixtures": {
+    "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/tdf130104_indent.xlsx": "8097b9960fc8bd964a8c0b2ac44347d2d47b4785049278d69cee4e708c991297",
+    "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/writingMode.xlsx": "477410c7cc8c922ea03924179cb456489ae96f8e67215b9e0bf7650aadfa41fc",
+    "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/tdf123139_applyAlignment.xlsx": "f5d4282bece8a5427edf976866fc93eb65f16120540abf21635102d2bb2d099c",
+    "vendor/libreoffice-reference/sc/qa/unit/data/fods/tdf161483_CellTextRotation.fods": "f8e4a01f0bebd591dc707c3797735075b3f8d3c2ed8be3e0bc496adf43bcf1fc"
+  },
+  "files": {
+    "apps/office/src/sc/source/filter/oox/stylesbuffer.alignment.ts": "b6985ac663e71498e9f6e3f171672fbfc6411612b46ca089cd1c1eead6d3a481",
+    "apps/office/src/sc/source/filter/oox/stylesbuffer.ts": "658a16f65db53f7335758876168f58fe238abd56827ad448463de8186f3a4ee1",
+    "apps/office/src/sc/source/filter/oox/stylesfragment.ts": "c7c46b71a2277a35d9af862cc2025db55ede95d0cb212d943ef46cce949e9ef6",
+    "apps/office/src/sc/source/filter/oox/excelfilter.ts": "152b37d9e77d3a230e746421b3bf23dac7f77bdbfb05702952f8fe82461b58fc",
+    "apps/office/src/sc/source/filter/oox/unitconverter.ts": "1223038dc113e57f2000ce6f0936cd185b98974a948c1e668dc3f5d92f427f1d",
+    "apps/office/src/sc/source/filter/oox/excelfilter.test.ts": "a7bb406774ff581d7b3f4dcf22b640f2fa8e1f949a88c240653224a2ceca4c8a",
+    "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts": "6df0ebb634cee4c43d4cc7195d137d4a03c4a0bf7270ebe42ef0dec4a0f516e3",
+    "apps/office/src/sc/source/filter/excel/xestyle.alignment.ts": "506640eef1bf6148509acfdc18cec29584efcea5c5e27dc89eb3e71f26db0ff9",
+    "apps/office/src/sc/source/filter/excel/xestyle.xml.ts": "ebefde6d6afec5cc9fd4445630a751e611aa6f79c35bf80dfa7119f79baac01a",
+    "apps/office/src/sc/source/filter/excel/xetable.ts": "3cb5172005de2c6c348e3c9fabf48a5e1fa1846352711b1a252dec53e0ab5cb7",
+    "apps/office/src/sc/source/filter/xml/xmlstyle.alignment.ts": "fa0be73042d18d65e78e418985c9118e83151dba4bd6772f67f56b8cc52f568f",
+    "apps/office/src/sc/source/filter/xml/xmlstyle.ts": "4e5dee4b28b40bbf8b014e4faaf140932ef5e300bcecbbbe9d5e78109e0ed34d",
+    "apps/office/src/sc/source/filter/xml/xmlexprt.ts": "a6ce427a7ebace15c8489bc49a28a1f3a8cc9f28e33bad8d49f6ca98637d0946",
+    "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts": "0c0a5ecdfc9c1b60d453b3b8b8b8e30bb95decfddd463ff5481a520bc1d16b92",
+    "apps/office/src/sc/browser/presentation/ScGridWindow.tsx": "474ef3a9832023bf515460fd1b583cdb4f2db3049e0ca6c8ef74e1c6530b7b18",
+    "apps/office/src/sax/source/tools/converter.ts": "5909862bc7084664ba577a06537d921370d33ca3c76848a0ef3e9369dd8ce076",
+    "apps/office/src/xmloff/source/core/xmltoken.ts": "99ebcfac7549b5bf0cb2017e02cd5aceb674d5ea8573f282d9b815ac08b6acc9",
+    "apps/office/e2e/calc/xlsx-alignment.spec.ts": "c8879b4700f998497332349184ff0cbf44b961c624fd7a2670e4f3ce0c502b80",
+    "docs/program/calc-upstream-suspected-issues.md": "1fba7115ec87acc0a8bb0a82224e69e0358eb8bef39d8fc816bca2d59ac687b8"
+  },
+  "logs": {
+    "apps/office/coverage/xlsxalignment-coverage.log": "7dbbe5dc33f561ab252df4e974938b494a40d229c7780976cec0e1bfc1328646",
+    "apps/office/coverage/xlsxalignment-shared.log": "fe93e0f6b91489e23d782e80f8195667a687014dd536415dba2a62c77bbdb140",
+    "apps/office/coverage/xlsxalignment-writer.log": "2f8e8e8302c4b91681018cb8f6514d5479f12ceb2e9f2b86e7b70da8795864eb",
+    "apps/office/coverage/xlsxalignment-browser.log": "60a3434be5c6a40783ee60ce675030815966aa0db2ce38f858dcc9eb5e5612d6",
+    "apps/office/coverage/xlsxalignment-typecheck.log": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+    "apps/office/coverage/xlsxalignment-static.log": "67c598f92027f30029bedf279348e0639567bc967853b66b4d1536dc713f2691",
+    "apps/office/coverage/xlsxalignment-structure.log": "da1b9affb0a964e52bd69711dedd693cbd5718f94808a3a171bc94b654c86bb0",
+    "apps/office/coverage/xlsxalignment-registry.log": "449e72b3be10200332e49452d0060a91d47a598383492a364bb40f71ec0891c6",
+    "apps/office/coverage/xlsxalignment-lint.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/xlsxalignment-resources.log": "5cec0cfeffea06c703d6d99176fd622368377f28323f2a1044033115c0116797",
+    "apps/office/coverage/xlsxalignment-dependencies.log": "1c601bed9ee5463b87d70c30d1daa429b15eb910dced421ee61869b8d6164e3f",
+    "apps/office/coverage/xlsxalignment-provenance.log": "e1f2e49d13243eaa0a5606bb6308e93dde723e82cad50fcadf882e3da9669346",
+    "apps/office/coverage/xlsxalignment-scoped/coverage-summary.json": "a0b6b4418af4e77f01e7b650dc9cd21e9d2353992fc67a09d4e8e4545c458c33"
+  }
+}

@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 618
+revision: 621
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T23:59:44.536Z"
+  updated_at: "2026-11-19T00:35:17.726Z"
   updated_by: "CODER"
-  note: "Calc XLSX cell border checkpoint verified with 131 Calc, 125 Writer, 32 shared and six Chromium cases and scoped coverages over ninety percent. Full XLSX scope remains in progress."
-  attempts: 197
+  note: "Native XLSX cell alignment checkpoint passes scoped Calc, shared, Writer and Chromium checks. The umbrella task remains active for the outstanding filter and grid paths."
+  attempts: 198
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3160,8 +3163,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T00:35:17.726Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native XLSX cell alignment checkpoint passes scoped Calc, shared, Writer and Chromium checks. The umbrella task remains active for the outstanding filter and grid paths."
+  -
+    type: "status"
+    at: "2026-11-19T00:35:23.091Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T23:59:50.106Z"
+doc_updated_at: "2026-11-19T00:35:23.091Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -9086,6 +9102,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-19T00:35:17.726Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native XLSX cell alignment checkpoint passes scoped Calc, shared, Writer and Chromium checks. The umbrella task remains active for the outstanding filter and grid paths.
+    Attempts: 198
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T00:35:17.107Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -10069,6 +10115,18 @@ sections:
     - Commands: scoped Calc XLSX, ODS, Worker and mounted format coverage, related shared border item tests, and scoped Writer cross-format regression. Result:131 Calc,32 shared and125 Writer tests passed. Scoped new executable XLSX border owners measured99.02% statements,92.95% branches,100% functions and100% lines. Original XLSX line-width and themed border fixtures run unchanged, plus an independent Strict styles/worksheet border projection.
     - Commands: static build with its typecheck, six production Chromium scenarios, scoped lint and format, dependencies, docs, file size, tree, provenance, registry/invariants/parity, resource and routing checks, git diff and doctor. Result: pass. Evidence: `evidence/native-xlsx-borders.json`. Chromium covered native border history, primary ODS storage, XLSX export, desktop and mobile UI. The known AgentPlane managed-hook warning remains.
     - Native XLSX export still omits horizontal and vertical inner XML. Native ODS serialization represents outer theme edges and visible diagonals. The umbrella XLSX task remains in progress. No full suite was due.
+
+    ### Calc XLSX native cell alignment and direction
+
+    - The native XF owners project horizontal and vertical alignment, distribution, reference-font indent, rotation, stacking, wrapping, shrink and reading direction to actual Calc items. Explicit cell alignment applies even when the source flag is zero. The exporter uses the same native items to write OOXML. Reference space widths come from the same font measurement device already used for column widths.
+    - Primary ODS carries the source cell rotation, orientation, shrink and justification properties. XLSX reading order crosses the browser Worker in the actual item graph handoff because the Calc ODF cell map has no property for this item. The Calc grid applies the imported direction to the displayed text.
+    - The pinned indentation and reading order XLSX fixtures run unchanged. The applyAlignment replay keeps source styles and cell assignments and substitutes the saved result of one CONCATENATE formula that the Calc XLSX importer cannot yet resolve. The FODS replay uses original style records in an automatic style context. Independent coverage checks Strict SpreadsheetML and ODF lexical failures.
+    - CALC-731 records the source truncation of fractional degrees in ODF export and CALC-732 records the two original device-free indentation defaults. Regression tests exercise both cases through the actual format paths.
+    - Rotation, stacking and shrink retain their values through the represented file paths. Their appearance in the Calc grid remains open. The umbrella XLSX task remains in progress. No full suite was due.
+    - Command: npm run test:coverage:calc -- excelfilter stylesfragment unitconverter ods-worker calc-files calc-document-codec ods-native ods-style-routing calc-borders calc-view-options --maxWorkers=3 --coverage.include=src/sc/source/filter/oox/stylesbuffer.alignment.ts --coverage.include=src/sc/source/filter/excel/xestyle.alignment.ts --coverage.include=src/sc/source/filter/xml/xmlstyle.alignment.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/xlsxalignment-scoped. Result: pass. Evidence: 84 tests across 17 files and 93.52% branch coverage with 100% statements, functions and lines across the three new owners. Scope: focused native Calc formats and handoff regressions.
+    - Commands: npm run test:shared -- converter xmltoken; npm run test:writer -- odt-property-roundtrip docxexport.theme --maxWorkers=3. Result: pass. Evidence: 30 shared and 18 Writer tests. Scope: affected XML owners and Writer cross-format regression.
+    - Command: ./node_modules/.bin/playwright test -c apps/office/coverage/xlsxalignment.playwright.config.ts --workers=1. Result: pass. Evidence: six Chromium cases. Scope: the actual XLSX Open/Download and mobile reopen, date-system controls and prior border/Worker regressions. The parallel rerun intermittently failed to install the isolated border test bundle. The sequential rerun completed all six.
+    - Commands: npm run typecheck, npm run test:static, scoped ESLint and Prettier, dependencies, docs, file size, source tree, provenance, registry/invariants/parity, resource and routing checks, git diff and doctor. Result: pass. Scope: production build and source gates. Evidence: `evidence/native-xlsx-cell-alignment.json`.
 id_source: "generated"
 ---
 ## Summary
@@ -16003,6 +16061,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-19T00:35:17.726Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native XLSX cell alignment checkpoint passes scoped Calc, shared, Writer and Chromium checks. The umbrella task remains active for the outstanding filter and grid paths.
+Attempts: 198
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T00:35:17.107Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -16990,3 +17078,15 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Commands: scoped Calc XLSX, ODS, Worker and mounted format coverage, related shared border item tests, and scoped Writer cross-format regression. Result:131 Calc,32 shared and125 Writer tests passed. Scoped new executable XLSX border owners measured99.02% statements,92.95% branches,100% functions and100% lines. Original XLSX line-width and themed border fixtures run unchanged, plus an independent Strict styles/worksheet border projection.
 - Commands: static build with its typecheck, six production Chromium scenarios, scoped lint and format, dependencies, docs, file size, tree, provenance, registry/invariants/parity, resource and routing checks, git diff and doctor. Result: pass. Evidence: `evidence/native-xlsx-borders.json`. Chromium covered native border history, primary ODS storage, XLSX export, desktop and mobile UI. The known AgentPlane managed-hook warning remains.
 - Native XLSX export still omits horizontal and vertical inner XML. Native ODS serialization represents outer theme edges and visible diagonals. The umbrella XLSX task remains in progress. No full suite was due.
+
+### Calc XLSX native cell alignment and direction
+
+- The native XF owners project horizontal and vertical alignment, distribution, reference-font indent, rotation, stacking, wrapping, shrink and reading direction to actual Calc items. Explicit cell alignment applies even when the source flag is zero. The exporter uses the same native items to write OOXML. Reference space widths come from the same font measurement device already used for column widths.
+- Primary ODS carries the source cell rotation, orientation, shrink and justification properties. XLSX reading order crosses the browser Worker in the actual item graph handoff because the Calc ODF cell map has no property for this item. The Calc grid applies the imported direction to the displayed text.
+- The pinned indentation and reading order XLSX fixtures run unchanged. The applyAlignment replay keeps source styles and cell assignments and substitutes the saved result of one CONCATENATE formula that the Calc XLSX importer cannot yet resolve. The FODS replay uses original style records in an automatic style context. Independent coverage checks Strict SpreadsheetML and ODF lexical failures.
+- CALC-731 records the source truncation of fractional degrees in ODF export and CALC-732 records the two original device-free indentation defaults. Regression tests exercise both cases through the actual format paths.
+- Rotation, stacking and shrink retain their values through the represented file paths. Their appearance in the Calc grid remains open. The umbrella XLSX task remains in progress. No full suite was due.
+- Command: npm run test:coverage:calc -- excelfilter stylesfragment unitconverter ods-worker calc-files calc-document-codec ods-native ods-style-routing calc-borders calc-view-options --maxWorkers=3 --coverage.include=src/sc/source/filter/oox/stylesbuffer.alignment.ts --coverage.include=src/sc/source/filter/excel/xestyle.alignment.ts --coverage.include=src/sc/source/filter/xml/xmlstyle.alignment.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=./coverage/xlsxalignment-scoped. Result: pass. Evidence: 84 tests across 17 files and 93.52% branch coverage with 100% statements, functions and lines across the three new owners. Scope: focused native Calc formats and handoff regressions.
+- Commands: npm run test:shared -- converter xmltoken; npm run test:writer -- odt-property-roundtrip docxexport.theme --maxWorkers=3. Result: pass. Evidence: 30 shared and 18 Writer tests. Scope: affected XML owners and Writer cross-format regression.
+- Command: ./node_modules/.bin/playwright test -c apps/office/coverage/xlsxalignment.playwright.config.ts --workers=1. Result: pass. Evidence: six Chromium cases. Scope: the actual XLSX Open/Download and mobile reopen, date-system controls and prior border/Worker regressions. The parallel rerun intermittently failed to install the isolated border test bundle. The sequential rerun completed all six.
+- Commands: npm run typecheck, npm run test:static, scoped ESLint and Prettier, dependencies, docs, file size, source tree, provenance, registry/invariants/parity, resource and routing checks, git diff and doctor. Result: pass. Scope: production build and source gates. Evidence: `evidence/native-xlsx-cell-alignment.json`.
