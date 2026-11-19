@@ -2,9 +2,7 @@
 import { AttributeInfo, ResourceType as R, type OOXMLFactory_ns } from "./OOXMLFactory";
 import type { Id } from "../inc/dmapper/resourcemodel";
 import * as tables from "./OOXMLFactory_wml.tables";
-import * as TokenMap from "../../../../oox/source/token/tokenmap";
-import { XML_TOKEN_INVALID } from "../../../../oox/source/token/tokenmap";
-import { namespaceTokens } from "../../../../oox/source/token/namespacemap";
+import { getNamespacedToken as nativeToken } from "../../../../oox/source/token/namespacemap";
 import type { FactoryAttributeHandler } from "./OOXMLFactory";
 import type { OOXMLValue } from "./OOXMLPropertySet";
 import {
@@ -12,17 +10,8 @@ import {
   OOXMLFastContextHandlerStream,
 } from "./OOXMLFastContextHandler";
 
-/** Binds generated C++ NMSP/XML constants, including the exact numeric TOKEN_COUNT sentinel. @param qname - Canonical QName or generated native sentinel. @returns Native token, or DONTKNOW for invalid expressions. */
-export function nativeToken(qname: string | number): number {
-  if (typeof qname === "number") return qname;
-  const colon = qname.indexOf(":"),
-    prefix = qname.slice(0, colon);
-  const namespace = prefix === "" ? 0 : namespaceTokens.get(prefix),
-    local = TokenMap.getTokenFromUtf8(qname.slice(colon + 1));
-  return namespace === undefined || local === XML_TOKEN_INVALID
-    ? XML_TOKEN_INVALID
-    : namespace | local;
-}
+export { nativeToken };
+
 /** One original generated action row; phase distinguishes native token versus resource-ID guards. */
 export type FactoryAction = readonly [Id, string, string, Id, Id, Id?, Id?];
 /** Native table shape shared by generated namespace factories. */

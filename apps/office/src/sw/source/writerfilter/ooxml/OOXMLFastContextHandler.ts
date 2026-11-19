@@ -5,7 +5,7 @@ import { handleWrapTextValue, type DrawingAnchor } from "../dmapper/GraphicImpor
 import { WrapTextMode } from "../../../../offapi/com/sun/star/text/WrapTextMode";
 import type { OOXMLDocument } from "../inc/ooxml/OOXMLDocument";
 import { OOXMLFactory, type FastAttribute } from "./OOXMLFactory";
-import { nativeToken } from "./OOXMLFactory_wml";
+import { getNamespacedToken as nativeToken } from "../../../../oox/source/token/namespacemap";
 import { XML_TOKEN_COUNT } from "../../../../oox/source/token/tokenmap";
 import { OOXMLParserState } from "./OOXMLParserState";
 import {

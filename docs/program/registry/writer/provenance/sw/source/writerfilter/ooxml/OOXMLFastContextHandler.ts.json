@@ -108,7 +108,8 @@
       "Complex settings resource admission now includes CT_Zoom, CT_Proof, CT_TwipsMeasure, CT_CharacterSpacing, CT_Compat, CT_CompatSetting, CT_DocRsids, CT_LongHexNumber, CT_Language and CT_ShapeDefaults via unchanged pinned generators. Native hexadecimal default hooks retain the hex variant and existing values. Namespaced XML_TOKEN_COUNT is emitted as its original numeric sentinel and rejected by the original low16 token guard, not treated as a wildcard. Current generated counts:65defines/120attributes/520elements/619resources/319lists/47actions. Actual Strict/Transitional SAX resources retain zoom, proof state, tab measures, compatibility attributes, repeated revision IDs and language values. Byte-exact native fdo73541 settings now parse successfully into actual DomainMapper mirror state; complete native testFdo73541 export/page-layout and full DOCX/XLSX drivers/UI remain pending. No broad semantic/default/parity promotion.",
       "Dispatches the generated handleHdrFtr action to the current document part.",
       "Consumes the square wrap token, native anchor distance defaults and overlap flag on the existing embedded picture context.",
-      "V4DQJW as-character graphic checkpoint. The WordprocessingDrawing context recognizes wp:inline and consumes its size, effect extents and embedded relationship before the mapper creates a native raster object."
+      "V4DQJW as-character graphic checkpoint. The WordprocessingDrawing context recognizes wp:inline and consumes its size, effect extents and embedded relationship before the mapper creates a native raster object.",
+      "Resolves static drawing token identities from the token modules before the generated Writer factories initialize."
     ],
     "omittedResponsibilities": [
       "Complete DOCX model loading/export, missing native context owners and existing UI integration remain pending.",

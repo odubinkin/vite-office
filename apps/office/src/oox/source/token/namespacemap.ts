@@ -1,4 +1,5 @@
 /** @fileoverview Original NamespaceMap transitional/strict maps and generated namespace identities from unchanged native namespace inputs; actual owned OUString map values bind the native SAX namespace boundary. */
+import { getTokenFromUtf8, XML_TOKEN_INVALID } from "./tokenmap";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import transitional from "./namespaces.txt?raw";
 import strict from "./namespaces-strict.txt?raw";
@@ -31,6 +32,18 @@ export const namespaceTokens: ReadonlyMap<string, number> = new Map(
       ) => [alias, (index + 1) << 16],
     ),
 );
+
+/** Binds generated C++ NMSP/XML constants, including the exact numeric TOKEN_COUNT sentinel. @param qname - Canonical QName or generated native sentinel. @returns Native token, or DONTKNOW for invalid expressions. */
+export function getNamespacedToken(qname: string | number): number {
+  if (typeof qname === "number") return qname;
+  const colon = qname.indexOf(":"),
+    prefix = qname.slice(0, colon);
+  const namespace = prefix === "" ? 0 : namespaceTokens.get(prefix),
+    local = getTokenFromUtf8(qname.slice(colon + 1));
+  return namespace === undefined || local === XML_TOKEN_INVALID
+    ? XML_TOKEN_INVALID
+    : namespace | local;
+}
 
 /** Original public namespace maps; each instance owns its maps as in the native struct. */
 export class NamespaceMap {
