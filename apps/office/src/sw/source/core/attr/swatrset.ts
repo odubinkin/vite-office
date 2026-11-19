@@ -131,6 +131,7 @@ import {
   RES_PARATR_OUTLINELEVEL,
   RES_PARATR_SPLIT,
   RES_PARATR_TABSTOP,
+  RES_PARATR_VERTALIGN,
   RES_PARATR_WIDOWS,
   RES_UL_SPACE,
 } from "../../../inc/hintids";
@@ -708,7 +709,7 @@ export class SwAttrPool extends SfxItemPool {
         return item;
       },
     );
-    for (const which of [RES_PARATR_SPLIT, RES_KEEP, RES_LINENUMBER])
+    for (const which of [RES_PARATR_SPLIT, RES_PARATR_VERTALIGN, RES_KEEP, RES_LINENUMBER])
       register(
         which,
         /** Applies register to value. @param value - value value. @returns Callback result. */ (

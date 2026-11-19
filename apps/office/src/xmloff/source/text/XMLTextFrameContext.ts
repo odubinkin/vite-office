@@ -8,7 +8,7 @@ import { XMLToken as T } from "../core/xmltoken";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import type { XMLTextImportHelper } from "./txtimp";
 import { importWritingDirection } from "../style/prhdlfac";
-import { importFrameConstant } from "./txtprhdl";
+import { importTextConstant } from "./txtprhdl";
 
 /** Represented ODF automatic graphic style values shared with text-frame export. */
 export interface XMLTextFrameStyle extends OdfFillProperties, OdfBoxProperties {
@@ -99,7 +99,7 @@ export class XMLTextFrameStyleContext extends SvXMLImportContext {
   public override createFastChildContext(element: T, attrs: FastAttributeList): null {
     if (element !== T.STYLE_GRAPHIC_PROPERTIES) return null;
     const horizontal = attrs.get(T.STYLE_HORIZONTAL_POS);
-    const horizontalMode = importFrameConstant("horizontal", horizontal);
+    const horizontalMode = importTextConstant("horizontal", horizontal);
     const wrapped = attrs.get(T.STYLE_NUMBER_WRAPPED_PARAGRAPHS);
     const count: [number] = [0];
     const anchorOnly =
@@ -130,7 +130,7 @@ export class XMLTextFrameStyleContext extends SvXMLImportContext {
       borderLineWidthLeft: attrs.get(T.STYLE_BORDER_LINE_WIDTH_LEFT) ?? undefined,
       borderLineWidthRight: attrs.get(T.STYLE_BORDER_LINE_WIDTH_RIGHT) ?? undefined,
       horizontal: horizontalMode,
-      horizontalRelation: importFrameConstant(
+      horizontalRelation: importTextConstant(
         "horizontalRelation",
         attrs.get(T.STYLE_HORIZONTAL_REL),
       ),
@@ -138,22 +138,22 @@ export class XMLTextFrameStyleContext extends SvXMLImportContext {
         horizontalMode === undefined || horizontal === null
           ? undefined
           : ["from-inside", "inside", "outside"].includes(horizontal),
-      vertical: importFrameConstant("vertical", attrs.get(T.STYLE_VERTICAL_POS)),
-      verticalRelation: importFrameConstant("verticalRelation", attrs.get(T.STYLE_VERTICAL_REL)),
-      wrap: importFrameConstant("wrap", attrs.get(T.STYLE_WRAP)),
+      vertical: importTextConstant("vertical", attrs.get(T.STYLE_VERTICAL_POS)),
+      verticalRelation: importTextConstant("verticalRelation", attrs.get(T.STYLE_VERTICAL_REL)),
+      wrap: importTextConstant("wrap", attrs.get(T.STYLE_WRAP)),
       anchorOnly,
       writingMode,
-      relativeWidthRelation: importFrameConstant(
+      relativeWidthRelation: importTextConstant(
         "horizontalRelation",
         attrs.get(T.LOEXT_REL_WIDTH_REL),
       ),
-      relativeHeightRelation: importFrameConstant(
+      relativeHeightRelation: importTextConstant(
         "verticalRelation",
         attrs.get(T.LOEXT_REL_HEIGHT_REL),
       ),
       followTextFlow: boolean(attrs, T.STYLE_FLOW_WITH_TEXT, T.DRAW_FLOW_WITH_TEXT),
       allowOverlap: boolean(attrs, T.LOEXT_ALLOW_OVERLAP),
-      wrapInfluence: importFrameConstant(
+      wrapInfluence: importTextConstant(
         "wrapInfluence",
         attrs.get(T.DRAW_WRAP_INFLUENCE_ON_POSITION),
       ),

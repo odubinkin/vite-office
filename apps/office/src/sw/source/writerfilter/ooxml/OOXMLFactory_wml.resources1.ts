@@ -487,6 +487,7 @@ export const resources1 = [
   [1769560, "doc:firstRowLastColumn", 92793],
   [1769560, "doc:lastRowFirstColumn", 92794],
   [1769560, "doc:lastRowLastColumn", 92795],
+  [1770107, "doc:val", 92094],
   [0, "doc:settings", 93294],
   [0, "doc:fonts", 93247],
   [0, "doc:numbering", 93157],

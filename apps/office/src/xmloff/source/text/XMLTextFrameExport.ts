@@ -5,7 +5,7 @@ import { VertOrientation } from "../../../offapi/com/sun/star/text/VertOrientati
 import type { XMLTextExportBlock } from "../table/XMLTableExport";
 import { escapeXml, exportOdfLength } from "./txtparae";
 import { exportWritingDirection } from "../style/prhdlfac";
-import { exportFrameConstant } from "./txtprhdl";
+import { exportTextConstant } from "./txtprhdl";
 import type { XMLTextFrameAttributes, XMLTextFrameStyle } from "./XMLTextFrameContext";
 
 /** Neutral text-frame properties supplied by Writer at an actual paragraph anchor. */
@@ -36,18 +36,18 @@ export function exportTextFrameStyle(frame: XMLTextFrameExportSource, styleName:
   let values =
     attribute(
       "style:horizontal-pos",
-      exportFrameConstant(style.toggle ? "horizontalMirrored" : "horizontal", style.horizontal),
+      exportTextConstant(style.toggle ? "horizontalMirrored" : "horizontal", style.horizontal),
     ) +
     attribute(
       "style:horizontal-rel",
-      exportFrameConstant("horizontalRelation", style.horizontalRelation),
+      exportTextConstant("horizontalRelation", style.horizontalRelation),
     ) +
-    attribute("style:vertical-pos", exportFrameConstant("vertical", style.vertical)) +
+    attribute("style:vertical-pos", exportTextConstant("vertical", style.vertical)) +
     attribute(
       "style:vertical-rel",
-      exportFrameConstant("verticalRelation", style.verticalRelation),
+      exportTextConstant("verticalRelation", style.verticalRelation),
     ) +
-    attribute("style:wrap", exportFrameConstant("wrap", style.wrap)) +
+    attribute("style:wrap", exportTextConstant("wrap", style.wrap)) +
     attribute(
       "style:number-wrapped-paragraphs",
       style.anchorOnly === undefined ? undefined : style.anchorOnly ? "1" : "no-limit",
@@ -56,7 +56,7 @@ export function exportTextFrameStyle(frame: XMLTextFrameExportSource, styleName:
     attribute("loext:allow-overlap", style.allowOverlap?.toString()) +
     attribute(
       "draw:wrap-influence-on-position",
-      exportFrameConstant("wrapInfluence", style.wrapInfluence),
+      exportTextConstant("wrapInfluence", style.wrapInfluence),
     ) +
     attribute(
       "style:writing-mode",
@@ -65,13 +65,13 @@ export function exportTextFrameStyle(frame: XMLTextFrameExportSource, styleName:
     attribute(
       "loext:rel-width-rel",
       frame.relativeWidth
-        ? exportFrameConstant("horizontalRelation", style.relativeWidthRelation)
+        ? exportTextConstant("horizontalRelation", style.relativeWidthRelation)
         : undefined,
     ) +
     attribute(
       "loext:rel-height-rel",
       frame.relativeHeight
-        ? exportFrameConstant("verticalRelation", style.relativeHeightRelation)
+        ? exportTextConstant("verticalRelation", style.relativeHeightRelation)
         : undefined,
     ) +
     length("fo:margin-left", style.marginLeft) +

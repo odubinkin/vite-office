@@ -26,7 +26,7 @@ import {
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { RTL_TEXTENCODING_MS_1252 } from "../../../../sal/inc/rtl/textenc";
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
-import { stringAny, text, unicode } from "../../core/unocore/unocrsrhelper";
+import { stringAny, text } from "../../core/unocore/unocrsrhelper";
 import type { Id, Properties, Reference, Sprm, Stream, Value } from "../inc/dmapper/resourcemodel";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { PropertyIds as P } from "./PropertyIds";
@@ -52,9 +52,15 @@ import { resolveThemeColor } from "./ThemeColorHandler";
 import { ResolvePageMargins, ResolvePageBorders } from "./PropertyMap.section";
 import { BorderHandler } from "./BorderHandler";
 import { cppu_detail_getUnoType_BorderLine2 } from "../../../../offapi/com/sun/star/table/BorderLine2";
-import { highlights, paragraphBorderIds, underline } from "./DomainMapper.resources";
+import {
+  highlights,
+  paragraphBorderIds,
+  paragraphVerticalAlignment,
+  underline,
+} from "./DomainMapper.resources";
 import { PushPageHeaderFooter } from "./DomainMapper_Impl.headerfooter";
 import { SdtHelper } from "./SdtHelper";
+import { initializeMapperDocumentSettings } from "./SettingsTable";
 /** Receives native property sets and paragraph/run groups; lifecycle state remains on the shell, outside this model mapper. */
 export class DomainMapper implements Properties, Stream {
   readonly impl: DomainMapper_Impl;
@@ -74,24 +80,7 @@ export class DomainMapper implements Properties, Stream {
     this.impl = new DomainMapper_Impl(this, model, documentType, !insertMode);
     this.tableRanges = new DomainMapperTableRanges(model.getText(), this.impl);
     if (documentType === SourceDocumentType.OOXML) InitOOXMLFontDefaults(model);
-    if (!insertMode) {
-      const settings = model.createDocumentSettings();
-      for (const [property, flag] of [
-        ["TabsRelativeToIndent", false],
-        ["ApplyParagraphMarkFormatToNumbering", true],
-        ["TabAtLeftIndentForParagraphsInList", true],
-        ["IgnoreTabsAndBlanksForLineCalculation", true],
-      ] as const) {
-        const name = unicode(property);
-        const value = new Any(flag);
-        try {
-          settings.setPropertyValue(name, value);
-        } finally {
-          name.dispose();
-          value.dispose();
-        }
-      }
-    }
+    if (!insertMode) initializeMapperDocumentSettings(model);
   }
   /** Original list context push forwards the actual level owner. @param properties - Native level map. @returns Nothing. */
   PushListProperties(properties: PropertyMap): void {
@@ -952,6 +941,13 @@ export class DomainMapper implements Properties, Stream {
         break;
       case N.LN_CT_PPrBase_contextualSpacing:
         this.insert(context, P.PROP_PARA_CONTEXT_MARGIN, new Any([n !== 0], "bool"));
+        break;
+      case N.LN_CT_PPrBase_textAlignment:
+        this.insert(
+          context,
+          P.PROP_PARA_VERT_ALIGNMENT,
+          new Any([paragraphVerticalAlignment(n)], "sal_Int16"),
+        );
         break;
       case N.LN_CT_PPrBase_jc: {
         const adjust =

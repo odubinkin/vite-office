@@ -75,8 +75,18 @@ const pXML_WrapInfluenceOnPosition_Enum = [
   ["once-concurrent", I.ONCE_CONCURRENT],
   ["iterative", I.ITERATIVE],
 ] as const;
+// com.sun.star.text.ParagraphVertAlign values used by the native text enum handler.
+const pXML_ParaVerticalAlign_Enum = [
+  ["top", 2],
+  ["middle", 3],
+  ["bottom", 4],
+  ["baseline", 1],
+  ["auto", 0],
+] as const;
+
 const converter = new SvXMLUnitConverter("twip");
 const handlers = {
+  paragraphVerticalAlign: new XMLConstantsPropertyHandler(pXML_ParaVerticalAlign_Enum, null),
   horizontal: new XMLConstantsPropertyHandler(pXML_HoriPos_Enum, null),
   horizontalMirrored: new XMLConstantsPropertyHandler(pXML_HoriPosMirrored_Enum, null),
   horizontalRelation: new XMLConstantsPropertyHandler(pXML_HoriRel_Enum, null),
@@ -86,8 +96,8 @@ const handlers = {
   wrapInfluence: new XMLConstantsPropertyHandler(pXML_WrapInfluenceOnPosition_Enum, null),
 };
 
-/** Reads the original text-frame enum token via the shared constant property handler. @param property - Native property map. @param token - Optional authored XML. @returns Mapped value or absence. */
-export function importFrameConstant(
+/** Reads the original text enum token via the shared constant property handler. @param property - Native property map. @param token - Optional authored XML. @returns Mapped value or absence. */
+export function importTextConstant(
   property: keyof typeof handlers,
   token: string | null,
 ): number | undefined {
@@ -105,7 +115,7 @@ export function importFrameConstant(
 }
 
 /** Writes the first original XML token for the native enum value. @param property - Native property map. @param value - Native numeric property. @returns Canonical token or absence. */
-export function exportFrameConstant(
+export function exportTextConstant(
   property: keyof typeof handlers,
   value: number | undefined,
 ): string | undefined {

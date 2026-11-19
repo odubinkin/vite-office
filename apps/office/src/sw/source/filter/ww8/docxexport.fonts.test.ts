@@ -25,12 +25,14 @@ import {
   RES_PARATR_ADJUST,
   RES_PARATR_LINESPACING,
   RES_PARATR_SPLIT,
+  RES_PARATR_VERTALIGN,
   RES_PARATR_WIDOWS,
   RES_UL_SPACE,
 } from "../../../inc/hintids";
 import { SvxAdjustItem } from "../../../../editeng/source/items/paraitem.adjust";
 import {
   SvxFormatSplitItem,
+  SvxParaVertAlignItem,
   SvxWidowsItem,
 } from "../../../../editeng/source/items/paraitem.controls";
 import { SvxAdjust, SvxBreak, SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
@@ -50,6 +52,12 @@ import { SwFrameSize } from "../../../inc/fmtfsize";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { wwFont } from "./wrtw8sty";
 import { importOOXML } from "../../writerfilter/filter/WriterFilter";
+import {
+  decodeWriterDocument,
+  encodeWriterDocument,
+} from "../../../browser/filter/xml/writer-document-codec";
+import { readOdtDocument } from "../xml/swxml";
+import { writeOdtDocument } from "../xml/wrtxml";
 import { SwTableNode } from "../../core/docnode/node";
 /** Actual graph/filter/exporter setup with genuine retained range owners. @param docm - Native macro flag. @param template - Native template flag. @returns Actual owners. */
 function setup(docm = false, template = false) {
@@ -163,6 +171,7 @@ it("round trips native paragraph spacing, alignment, indentation and pagination 
     const node = doc.paragraphs[0];
     assert(node);
     node.SetText("Paragraph properties");
+    node.SetAttr(new SvxParaVertAlignItem(SvxParaVertAlignItem.Align.Top, RES_PARATR_VERTALIGN));
     node.SetAttr(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));
     node.SetAttr(new SvxFormatSplitItem(false, RES_PARATR_SPLIT));
     node.SetAttr(new SvxWidowsItem(2, RES_PARATR_WIDOWS));
@@ -178,13 +187,39 @@ it("round trips native paragraph spacing, alignment, indentation and pagination 
     const bytes = await DocxExport.WriteDocument(doc);
     const fragment = await xml(await ZipStorage.open(bytes), "word/document.xml");
     expect(fragment).toContain(
-      '<w:pPr><w:pStyle w:val="Normal"/><w:keepNext w:val="true"/><w:keepLines/><w:pageBreakBefore/><w:widowControl/><w:spacing w:before="120" w:after="240" w:lineRule="exact" w:line="360"/><w:ind w:left="360" w:right="180" w:hanging="120"/><w:contextualSpacing/><w:jc w:val="center"/><w:rPr></w:rPr></w:pPr>',
+      '<w:pPr><w:pStyle w:val="Normal"/><w:keepNext w:val="true"/><w:keepLines/><w:pageBreakBefore/><w:widowControl/><w:spacing w:before="120" w:after="240" w:lineRule="exact" w:line="360"/><w:ind w:left="360" w:right="180" w:hanging="120"/><w:contextualSpacing/><w:jc w:val="center"/><w:textAlignment w:val="top"/><w:rPr></w:rPr></w:pPr>',
     );
     const reopened = await importOOXML(bytes, {});
     try {
       const imported = reopened.paragraphs[0];
       assert(imported);
       expect(imported.GetText()).toBe("Paragraph properties");
+      const vertical = imported.GetAttr(RES_PARATR_VERTALIGN);
+      expect(vertical).toBeInstanceOf(SvxParaVertAlignItem);
+      expect((vertical as SvxParaVertAlignItem).GetValue()).toBe(SvxParaVertAlignItem.Align.Top);
+      const title = { title: "Paragraph alignment" };
+      const primary = await writeOdtDocument(reopened, title);
+      expect(await (await DocumentArchive.open(primary)).readTextEntry("content.xml")).toContain(
+        'style:vertical-align="top"',
+      );
+      const saved = (await readOdtDocument(primary, title)).document;
+      try {
+        const item = saved.paragraphs[0]?.GetAttr(RES_PARATR_VERTALIGN);
+        assert(item instanceof SvxParaVertAlignItem);
+        expect(item.GetValue()).toBe(SvxParaVertAlignItem.Align.Top);
+      } finally {
+        saved.Dispose();
+      }
+      const restored = decodeWriterDocument(structuredClone(encodeWriterDocument(reopened)));
+      try {
+        const transported = restored.paragraphs[0]?.GetAttr(RES_PARATR_VERTALIGN);
+        expect(transported).toBeInstanceOf(SvxParaVertAlignItem);
+        expect((transported as SvxParaVertAlignItem).GetValue()).toBe(
+          SvxParaVertAlignItem.Align.Top,
+        );
+      } finally {
+        restored.Dispose();
+      }
       expect((imported.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem).GetAdjust()).toBe(
         SvxAdjust.Center,
       );

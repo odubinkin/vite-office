@@ -3,15 +3,31 @@ import { COL_AUTO, COL_TRANSPARENT, Color, ColorTransparency } from "../../../..
 import {
   SvxFormatSplitItem,
   SvxOrphansItem,
+  SvxParaVertAlignItem,
   SvxWidowsItem,
 } from "../../../../editeng/source/items/paraitem.controls";
 import { SfxBoolItem } from "../../../../svl/inc/eitem";
 import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
-import { RES_PARATR_SPLIT, RES_PARATR_ORPHANS, RES_PARATR_WIDOWS } from "../../../inc/hintids";
+import {
+  RES_PARATR_SPLIT,
+  RES_PARATR_ORPHANS,
+  RES_PARATR_VERTALIGN,
+  RES_PARATR_WIDOWS,
+} from "../../../inc/hintids";
 /** Restores the registered split/orphan/widow/keep/line-number scalar domain using its real item constructors. @param which - One registered control identity. @param value - Persisted scalar. @returns Actual native item. */
 export function restoreParagraphControlItem(which: number, value: unknown): SfxPoolItem {
   if (which === RES_PARATR_ORPHANS) return new SvxOrphansItem(Number(value), which);
   if (which === RES_PARATR_WIDOWS) return new SvxWidowsItem(Number(value), which);
+  if (which === RES_PARATR_VERTALIGN) {
+    if (
+      typeof value !== "number" ||
+      !Number.isInteger(value) ||
+      value < SvxParaVertAlignItem.Align.Automatic ||
+      value > SvxParaVertAlignItem.Align.Bottom
+    )
+      throw new Error("SvxParaVertAlignItem value is invalid.");
+    return new SvxParaVertAlignItem(value, which);
+  }
   if (which === RES_PARATR_SPLIT) return new SvxFormatSplitItem(Boolean(value), which);
   return new SfxBoolItem(which, Boolean(value));
 }

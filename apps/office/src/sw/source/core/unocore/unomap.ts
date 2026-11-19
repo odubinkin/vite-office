@@ -439,18 +439,10 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
     "WritingMode",
     { type: "sal_Int16", which: H.RES_FRAMEDIR, member: 0, kind: "short", attributes: 0 },
   ],
-  [
-    "ParaAdjust",
-    { type: "sal_Int16", attributes: 1, which: H.RES_PARATR_ADJUST, member: 0, kind: "any" },
-  ],
-  [
-    "ParaLastLineAdjust",
-    { type: "sal_Int16", attributes: 1, which: H.RES_PARATR_ADJUST, member: 1, kind: "any" },
-  ],
-  [
-    "ParaExpandSingleWord",
-    { type: "bool", attributes: 1, which: H.RES_PARATR_ADJUST, member: 2, kind: "any" },
-  ],
+  ["ParaVertAlignment", row(H.RES_PARATR_VERTALIGN, "sal_Int16", 0, 1)],
+  ["ParaAdjust", row(H.RES_PARATR_ADJUST, "sal_Int16", 0, 1)],
+  ["ParaLastLineAdjust", row(H.RES_PARATR_ADJUST, "sal_Int16", 1, 1)],
+  ["ParaExpandSingleWord", row(H.RES_PARATR_ADJUST, "bool", 2, 1)],
   [
     "ParaLeftMargin",
     {
@@ -625,6 +617,7 @@ const paragraphStyleProperties = new Set([
   "CharInteropGrabBag",
   "CharHighlight",
   "WritingMode",
+  "ParaVertAlignment",
   "ParaAdjust",
   "ParaLastLineAdjust",
   "ParaExpandSingleWord",
@@ -822,6 +815,7 @@ const textDefaultProperties = new Set([
   "CharInteropGrabBag",
   "CharHighlight",
   "WritingMode",
+  "ParaVertAlignment",
   "ParaAdjust",
   "ParaLastLineAdjust",
   "ParaExpandSingleWord",

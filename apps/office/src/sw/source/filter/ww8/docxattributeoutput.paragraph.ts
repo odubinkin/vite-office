@@ -11,6 +11,7 @@ import type {
 } from "../../../../editeng/inc/lrspitem";
 import type { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { ParaTabStop } from "./docxattributeoutput.tabs";
+import { SvxParaVertAlignItem } from "../../../../editeng/inc/paravertalignitem";
 import type { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import type { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import type { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
@@ -38,6 +39,7 @@ import {
   RES_PARATR_NUMRULE,
   RES_PARATR_SPLIT,
   RES_PARATR_TABSTOP,
+  RES_PARATR_VERTALIGN,
   RES_PARATR_WIDOWS,
   RES_UL_SPACE,
 } from "../../../inc/hintids";
@@ -247,6 +249,8 @@ function WriteParagraphProperties(
       serializer.singleElementNS(w, token("contextualSpacing"), val, "false");
   }
   if (alignment) serializer.singleElementNS(w, token("jc"), val, alignment);
+  const verticalAlign = direct?.GetItemIfSet(RES_PARATR_VERTALIGN, inherit);
+  if (verticalAlign instanceof SvxParaVertAlignItem) output.ParaVerticalAlign(verticalAlign);
   if (marker) {
     output.StartRunProperties();
     WriteParagraphMarkerProperties(output, marker);

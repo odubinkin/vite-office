@@ -155,6 +155,7 @@ export const defines = {
   "1769852": "CT_PBdr",
   "1769691": "CT_FramePr",
   "1769560": "CT_Cnf",
+  "1770107": "CT_TextAlignment",
   "1770233": "ST_Border",
   "1770234": "ST_BrClear",
   "1770235": "ST_BrType",
@@ -186,6 +187,7 @@ export const defines = {
   "1770400": "ST_TblOverlap",
   "1770401": "ST_TblStyleOverrideType",
   "1770402": "ST_TblWidth",
+  "1770403": "ST_TextAlignment",
   "1770405": "ST_TextDirection",
   "1770416": "ST_Theme",
   "1770417": "ST_ThemeColor",
@@ -323,6 +325,7 @@ export const actions = [
   [1770127, "end", "clearProps", 92120, 0],
   [1770127, "end", "sendPropertiesWithId", 92123, 92123],
   [1770127, "end", "clearProps", 92123, 0],
+  [1770107, "attribute", "setValue", "doc:val", 0],
 ] as const;
 
 export { attributes } from "./OOXMLFactory_wml.attributes";

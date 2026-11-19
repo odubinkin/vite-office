@@ -24,11 +24,16 @@ export { getCharacterProperties } from "./xmlexp-character";
 import { projectWriterLineSpacing } from "../../core/text/itrform2";
 import { SwXMLTableLines } from "./xmltble";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
-import { exportBoxProperties, exportFrameVisualProperties, exportPageLayoutBox } from "./xmlexpit";
+import {
+  exportBoxProperties,
+  exportFrameVisualProperties,
+  exportPageLayoutBox,
+  exportParagraphTabStops,
+} from "./xmlexpit";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
-import { SvxTabStopItem, SvxTabAdjust } from "../../../../editeng/inc/tstpitem";
+import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import {
   SvxFirstLineIndentItem,
@@ -91,6 +96,7 @@ import {
   RES_PARATR_SPLIT,
   RES_PARATR_ORPHANS,
   RES_PARATR_WIDOWS,
+  RES_PARATR_VERTALIGN,
   RES_PARATR_LINESPACING,
   RES_PARATR_TABSTOP,
   RES_PARATR_LIST_ISCOUNTED,
@@ -742,6 +748,7 @@ function assertSupportedItems(
     RES_PARATR_SPLIT,
     RES_PARATR_ORPHANS,
     RES_PARATR_WIDOWS,
+    RES_PARATR_VERTALIGN,
     RES_BREAK,
     RES_PAGEDESC,
     RES_PARATR_LINESPACING,
@@ -790,6 +797,7 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
   const split = set.GetItemIfSet(RES_PARATR_SPLIT, false);
   const orphans = set.GetItemIfSet(RES_PARATR_ORPHANS, false);
   const widows = set.GetItemIfSet(RES_PARATR_WIDOWS, false);
+  const verticalAlign = set.GetItemIfSet(RES_PARATR_VERTALIGN, false);
   const paragraphBreak = set.GetItemIfSet(RES_BREAK, false);
   const pageDesc = set.GetItemIfSet(RES_PAGEDESC, false);
   const lineNumber = set.GetItemIfSet(RES_LINENUMBER, false);
@@ -805,6 +813,7 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
     (split !== undefined && !(split instanceof ParaItems.SvxFormatSplitItem)) ||
     (orphans !== undefined && !(orphans instanceof ParaItems.SvxOrphansItem)) ||
     (widows !== undefined && !(widows instanceof ParaItems.SvxWidowsItem)) ||
+    (verticalAlign !== undefined && !(verticalAlign instanceof ParaItems.SvxParaVertAlignItem)) ||
     (paragraphBreak !== undefined && !(paragraphBreak instanceof SfxInt16Item)) ||
     (pageDesc !== undefined && !(pageDesc instanceof SwFormatPageDesc)) ||
     (lineNumber !== undefined && !(lineNumber instanceof SfxBoolItem)) ||
@@ -841,39 +850,16 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
       : {}),
     ...(tabStop instanceof SvxTabStopItem
       ? {
-          tabStopDetails: Array.from(
-            { length: tabStop.Count() },
-            /** Reads one original const tab. @param unused - Empty array slot. @param index - Native index. @returns Borrowed tab. */ (
-              unused,
-              index,
-            ) => {
-              void unused;
-              return tabStop.At(index);
-            },
-          ).map(
-            /** Projects one Writer tab to ODF properties. @param stop - Writer tab stop. @returns ODF tab. */
-            (stop) => ({
-              position: stop.GetTabPos(),
-              alignment:
-                stop.GetAdjustment() === SvxTabAdjust.Right
-                  ? ("right" as const)
-                  : stop.GetAdjustment() === SvxTabAdjust.Center
-                    ? ("center" as const)
-                    : stop.GetAdjustment() === SvxTabAdjust.Decimal
-                      ? ("char" as const)
-                      : stop.GetAdjustment() === SvxTabAdjust.Default
-                        ? ("default" as const)
-                        : ("left" as const),
-              decimal: stop.GetDecimal(),
-              fill: stop.GetFill(),
-            }),
-          ),
+          tabStopDetails: exportParagraphTabStops(tabStop),
         }
       : {}),
     ...(keep instanceof SfxBoolItem ? { keepWithNext: keep.GetValue() } : {}),
     ...(split instanceof ParaItems.SvxFormatSplitItem ? { keepTogether: !split.GetValue() } : {}),
     ...(orphans instanceof ParaItems.SvxOrphansItem ? { orphans: orphans.GetValue() } : {}),
     ...(widows instanceof ParaItems.SvxWidowsItem ? { widows: widows.GetValue() } : {}),
+    ...(verticalAlign instanceof ParaItems.SvxParaVertAlignItem
+      ? { verticalAlign: verticalAlign.GetValue() }
+      : {}),
     ...(paragraphBreak instanceof SfxInt16Item
       ? {
           breakBefore:

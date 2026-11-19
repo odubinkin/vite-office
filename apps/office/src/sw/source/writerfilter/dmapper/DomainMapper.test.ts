@@ -1,6 +1,7 @@
 /** @fileoverview Consumed DomainMapper resource-to-model contracts through actual Writer native text, paragraph, style and pooled-item APIs. */
 import { assert, expect, it } from "vitest";
-import { RES_PARATR_TABSTOP } from "../../../inc/hintids";
+import { SvxParaVertAlignItem } from "../../../../editeng/inc/paravertalignitem";
+import { RES_PARATR_TABSTOP, RES_PARATR_VERTALIGN } from "../../../inc/hintids";
 import { CONVERT_TWIPS } from "../../../../svl/inc/poolitem";
 import { MID_TABSTOPS } from "../../../../editeng/inc/memberids";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
@@ -72,6 +73,39 @@ function scalar(map: PropertyMap, id: P): number | undefined {
     value[1].dispose();
   }
 }
+
+it.each([
+  [N.LN_Value_doc_ST_TextAlignment_baseline, SvxParaVertAlignItem.Align.Baseline],
+  [N.LN_Value_doc_ST_TextAlignment_top, SvxParaVertAlignItem.Align.Top],
+  [N.LN_Value_doc_ST_TextAlignment_center, SvxParaVertAlignItem.Align.Center],
+  [N.LN_Value_doc_ST_TextAlignment_bottom, SvxParaVertAlignItem.Align.Bottom],
+  [0, SvxParaVertAlignItem.Align.Automatic],
+] as const)(
+  "maps the native paragraph vertical alignment token %i",
+  /** Exercises typed item insertion and the default source switch case. @param token - Word resource token. @param alignment - Writer enum. @returns Nothing. */ (
+    token,
+    alignment,
+  ) => {
+    const { doc, model, mapper } = session();
+    try {
+      mapper.startParagraphGroup();
+      mapper.sprm(sprm(N.LN_CT_PPrBase_textAlignment, V.createInteger(token)));
+      mapper.startCharacterGroup();
+      send(mapper, "Alignment");
+      mapper.endCharacterGroup();
+      send(mapper, "\r");
+      mapper.endParagraphGroup();
+      mapper.finishDocument();
+      const item = doc.paragraphs[0]?.GetAttr(RES_PARATR_VERTALIGN);
+      assert(item instanceof SvxParaVertAlignItem);
+      expect(item.GetValue()).toBe(alignment);
+    } finally {
+      mapper.dispose();
+      model.dispose();
+      doc.Dispose();
+    }
+  },
+);
 
 it("writes actual formatted and plain runs without leaking previous direct hints, finishing CR via XParagraphAppend", /** Verifies the native graph and actual query API. @returns Nothing. */ () => {
   const { doc, model, mapper } = session();

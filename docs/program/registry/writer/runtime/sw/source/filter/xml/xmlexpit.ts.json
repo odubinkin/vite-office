@@ -26,7 +26,8 @@
       "localSymbols": [
         "exportBorderShorthand",
         "exportBoxProperties",
-        "exportFrameVisualProperties"
+        "exportFrameVisualProperties",
+        "exportParagraphTabStops"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sw/source/filter/xml/xmlexpit.cxx",

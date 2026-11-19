@@ -144,6 +144,7 @@ import {
   RES_PARATR_OUTLINELEVEL,
   RES_PARATR_SPLIT,
   RES_PARATR_TABSTOP,
+  RES_PARATR_VERTALIGN,
   RES_PARATR_WIDOWS,
   RES_UL_SPACE,
 } from "../../../inc/hintids";
@@ -280,6 +281,12 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
       add(new SfxBoolItem(which, which === RES_LINENUMBER));
     add(new ParaItems.SvxOrphansItem(0, RES_PARATR_ORPHANS));
     add(new ParaItems.SvxWidowsItem(0, RES_PARATR_WIDOWS));
+    add(
+      new ParaItems.SvxParaVertAlignItem(
+        ParaItems.SvxParaVertAlignItem.Align.Automatic,
+        RES_PARATR_VERTALIGN,
+      ),
+    );
     add(new SfxInt16Item(RES_BREAK, 0));
     add(new SwFormatPageDesc());
     add(new SwNumRuleItem());

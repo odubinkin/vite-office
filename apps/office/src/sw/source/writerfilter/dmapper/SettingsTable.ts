@@ -17,6 +17,28 @@ import {
 } from "./SettingsTable.compat";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import type { SwXTextDocument } from "../../uibase/uno/unotxdoc";
+const initialWordSettings = [
+  ["TabsRelativeToIndent", false],
+  ["ApplyParagraphMarkFormatToNumbering", true],
+  ["TabAtLeftIndentForParagraphsInList", true],
+  ["IgnoreTabsAndBlanksForLineCalculation", true],
+] as const;
+
+/** Applies native document defaults when the mapper creates a document. @param model - Destination model. @returns Nothing. */
+export function initializeMapperDocumentSettings(model: SwXTextDocument): void {
+  const settings = model.createDocumentSettings();
+  for (const [property, flag] of initialWordSettings) {
+    const name = unicode(property);
+    const value = new Any(flag);
+    try {
+      settings.setPropertyValue(name, value);
+    } finally {
+      name.dispose();
+      value.dispose();
+    }
+  }
+}
+
 /** Original source zoom token conversion, with PERCENT for unknown identities. @param type - Native resource token. @returns Native zoom kind. */
 function lcl_GetZoomType(type: Id): number {
   switch (type) {

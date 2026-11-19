@@ -35,6 +35,7 @@ export function paragraphPropertiesKey(properties?: OdfParagraphProperties): str
     properties?.fillStyle,
     properties?.fillColor,
     properties?.fillTransparency,
+    properties?.verticalAlign,
   ]
     .map(
       /** Encodes one optional paragraph metric. @param value - Metric. @returns Stable field. */ (
@@ -83,6 +84,7 @@ export function parseParagraphPropertiesKey(key: string): OdfParagraphProperties
     ...(fields[23] === undefined || fields[23] === ""
       ? {}
       : { fillTransparency: Number(fields[23]) }),
+    ...(fields[24] === undefined || fields[24] === "" ? {} : { verticalAlign: Number(fields[24]) }),
     ...(firstLineIndent === undefined ? {} : { firstLineIndent }),
     ...(rightMargin === undefined ? {} : { rightMargin }),
     ...(upperSpacing === undefined ? {} : { upperSpacing }),

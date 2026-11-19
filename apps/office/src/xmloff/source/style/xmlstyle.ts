@@ -11,6 +11,7 @@ import { importOdfLength, SvXMLUnitConverter } from "../core/xmluconv";
 import { Converter } from "../../../sax/source/tools/converter";
 import { XMLTableStyleContext, type OdfTableStyle } from "../table/XMLTableImport";
 import type { OdfCharacterProperties, OdfParagraphAlignment } from "../text/txtparae";
+import { importTextConstant } from "../text/txtprhdl";
 import type { OdfStyleDefinition, XMLParagraphImportProperties } from "../text/txtparai";
 import { importTextCharacterProperties, textCharacterPropertyTokens } from "../text/txtprmap";
 import {
@@ -521,6 +522,10 @@ function importParagraphProperties(
   const rawKeepTogether = attributes.get(XMLToken.FO_KEEP_TOGETHER);
   if (rawKeepTogether !== null && rawKeepTogether !== "always" && rawKeepTogether !== "auto")
     throw new Error(`Unsupported ODF keep-together: ${rawKeepTogether}`);
+  const verticalAlign = importTextConstant(
+    "paragraphVerticalAlign",
+    attributes.get(XMLToken.STYLE_VERTICAL_ALIGN),
+  );
   const widows = importLineCount(attributes.get(XMLToken.FO_WIDOWS), "widows");
   const orphans = importLineCount(attributes.get(XMLToken.FO_ORPHANS), "orphans");
   const breakBefore = importPageBreak(attributes.get(XMLToken.FO_BREAK_BEFORE), "break-before");
@@ -594,6 +599,7 @@ function importParagraphProperties(
     ...(rawKeep === null ? {} : { keepWithNext: rawKeep === "always" }),
     ...(rawKeepTogether === null ? {} : { keepTogether: rawKeepTogether === "always" }),
     ...(widows === undefined ? {} : { widows }),
+    ...(verticalAlign === undefined ? {} : { verticalAlign }),
     ...(orphans === undefined ? {} : { orphans }),
     ...(breakBefore === undefined ? {} : { breakBefore }),
     ...(breakAfter === undefined ? {} : { breakAfter }),

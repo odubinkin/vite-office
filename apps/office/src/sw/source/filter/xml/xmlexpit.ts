@@ -1,4 +1,4 @@
-/** @fileoverview Writer filter border-item export boundary corresponding to xmlexpit.cxx. Browser presentation shorthand retains its existing adapter behavior without moving native item ownership into shared xmloff. */
+/** @fileoverview Writer filter attribute-item export boundary corresponding to xmlexpit.cxx. Browser presentation shorthand retains its existing adapter behavior without moving native item ownership into shared xmloff. */
 import type { SvxShadowItem } from "../../../../editeng/source/items/frmitems.shadow";
 import { SvxShadowLocation } from "../../../../editeng/inc/svxenum";
 import {
@@ -7,6 +7,8 @@ import {
 } from "../../../../offapi/com/sun/star/table/ShadowFormat";
 import { XMLShadowPropHdl } from "../../../../xmloff/source/style/shadwhdl";
 import type { SwFrameFormat } from "../../core/layout/atrfrm";
+import { SvxTabAdjust, type SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
+import type { OdfTabStop } from "../../../../xmloff/source/text/txtparae";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import type { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
@@ -98,4 +100,29 @@ export function exportPageLayoutBox(
   const gutter = master.GetLRSpace().GetGutterMargin();
   if (gutter) attributes.push(`loext:margin-gutter="${formatLength(gutter)}"`);
   return attributes.length ? ` ${attributes.join(" ")}` : "";
+}
+
+/** Projects original direct tab attributes into the shared ODF parcel. @param item - Native tab item. @returns Ordered stops. */
+export function exportParagraphTabStops(item: SvxTabStopItem): OdfTabStop[] {
+  const stops: OdfTabStop[] = [];
+  for (let index = 0; index < item.Count(); index++) {
+    const stop = item.At(index);
+    const adjustment = stop.GetAdjustment();
+    stops.push({
+      position: stop.GetTabPos(),
+      alignment:
+        adjustment === SvxTabAdjust.Right
+          ? "right"
+          : adjustment === SvxTabAdjust.Center
+            ? "center"
+            : adjustment === SvxTabAdjust.Decimal
+              ? "char"
+              : adjustment === SvxTabAdjust.Default
+                ? "default"
+                : "left",
+      decimal: stop.GetDecimal(),
+      fill: stop.GetFill(),
+    });
+  }
+  return stops;
 }

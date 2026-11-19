@@ -28,6 +28,7 @@ import {
   cppu_detail_getUnoType_BorderLine2,
 } from "../../../../offapi/com/sun/star/table/BorderLine2";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SvxParaVertAlignItem } from "../../../../editeng/inc/paravertalignitem";
 import { SfxByteItem, SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -267,7 +268,7 @@ export function putItem(item: SfxPoolItem, entry: SwUnoPropertyEntry, value: Any
   }
   if (copy instanceof SfxInt16Item)
     return new SfxInt16Item(item.Which(), scalar(value, "sal_Int16") as number);
-  if (copy instanceof SfxUInt16Item)
+  if (copy instanceof SfxUInt16Item && !(copy instanceof SvxParaVertAlignItem))
     return new SfxUInt16Item(item.Which(), scalar(value, "sal_Int16") as number);
   const input =
     entry.kind === "any"

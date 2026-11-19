@@ -7,8 +7,8 @@
     "localPath": "apps/office/src/xmloff/source/text/txtprhdl.ts",
     "upstreamPath": "xmloff/source/text/txtprhdl.cxx",
     "localSymbols": [
-      "importFrameConstant",
-      "exportFrameConstant"
+      "importTextConstant",
+      "exportTextConstant"
     ],
     "upstreamSymbols": [
       "pXML_HoriRel_Enum"
@@ -24,7 +24,7 @@
       "local": [
         {
           "path": "apps/office/src/xmloff/source/text/txtprhdl.ts",
-          "marker": "importFrameConstant"
+          "marker": "importTextConstant"
         },
         {
           "path": "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",

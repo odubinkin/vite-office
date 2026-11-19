@@ -311,4 +311,5 @@ export const attributes = [
   [1769560, "doc:firstRowLastColumn", "Boolean", 1770323],
   [1769560, "doc:lastRowFirstColumn", "Boolean", 1770323],
   [1769560, "doc:lastRowLastColumn", "Boolean", 1770323],
+  [1770107, "doc:val", "List", 1770403],
 ] as const;

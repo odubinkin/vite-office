@@ -4,6 +4,7 @@
 import type { XMLTextFrameExportSource } from "./XMLTextFrameExport";
 import { exportFillProperties, type OdfFillProperties } from "../draw/fill-properties";
 import { paragraphPropertiesKey, parseParagraphPropertiesKey } from "./txtparae-properties";
+import { exportTextConstant } from "./txtprhdl";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { SvXMLUnitConverter } from "../core/xmluconv";
 import type { OdfBoxProperties } from "../style/bordrhdl";
@@ -68,6 +69,7 @@ export interface OdfParagraphProperties extends OdfBoxProperties, OdfFillPropert
   readonly keepWithNext?: boolean;
   readonly keepTogether?: boolean;
   readonly widows?: number;
+  readonly verticalAlign?: number;
   readonly orphans?: number;
   readonly breakBefore?: "auto" | "page";
   readonly breakAfter?: "auto" | "page";
@@ -660,6 +662,7 @@ function paragraphStyleKey(
 
 /** Emits supported ODF paragraph-property attributes. @param properties - Direct properties. @returns Attributes. */
 export function exportParagraphAttributes(properties: OdfParagraphProperties): string[] {
+  const verticalAlign = exportTextConstant("paragraphVerticalAlign", properties.verticalAlign);
   return [
     ...exportFillProperties(properties),
     ...(properties.joinBorder === undefined
@@ -721,6 +724,7 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
       ? []
       : [`fo:keep-together="${properties.keepTogether ? "always" : "auto"}"`]),
     ...(properties.widows === undefined ? [] : [`fo:widows="${properties.widows}"`]),
+    ...(verticalAlign === undefined ? [] : [`style:vertical-align="${verticalAlign}"`]),
     ...(properties.orphans === undefined ? [] : [`fo:orphans="${properties.orphans}"`]),
     ...(properties.breakBefore === undefined
       ? []
