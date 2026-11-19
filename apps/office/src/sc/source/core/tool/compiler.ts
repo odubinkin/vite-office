@@ -40,6 +40,7 @@ import type { ScMatrix } from "./scmatrix";
 import { doubleToString } from "../../../../sal/rtl/strtmpl.math";
 import { QuoteTabName } from "./address.ooo";
 import { parseExternalReference } from "./compiler.external";
+import { getExternalFileUrl } from "../../ui/docshell/externalrefmgr";
 
 /** Selects lexical symbols from the native language resource. @param resource - Actual symbols. @returns Token lookup. */
 function createSymbolMap(resource: ReadonlyMap<OpCode, string>): Readonly<Record<string, OpCode>> {
@@ -360,7 +361,8 @@ export class ScCompiler extends FormulaCompiler {
         second
       );
     }
-    const source = "'" + file.replaceAll("'", "''") + "'#$" + sheet + "." + first + second;
+    const identity = odf ? getExternalFileUrl(file) : file;
+    const source = "'" + identity.replaceAll("'", "''") + "'#$" + sheet + "." + first + second;
     return odf ? "[" + source + "]" : source;
   }
   /** Emits an inline matrix using the source grammar and the original typed values. @param matrix - Original matrix. @returns Formula source. */

@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmlexprt.external.ts",
+    "upstreamPath": "sc/source/filter/xml/xmlexprt.cxx",
+    "localSymbols": [
+      "WriteExternalRefCaches",
+      "externalRefCacheStyle"
+    ],
+    "upstreamSymbols": [
+      "ScXMLExport::WriteExternalRefCaches"
+    ],
+    "preservedResponsibilities": [
+      "Writes native hidden external cache tables, their standard file URI names and table sources, and sparse repeated gaps with typed float and string tokens."
+    ],
+    "omittedResponsibilities": [
+      "Temporal values, number format style identity, filters, external source refresh, and formula evaluation remain pending in this cache subset."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlexprt.external.ts",
+          "marker": "WriteExternalRefCaches"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlexternaltabi.test.ts",
+          "marker": "testExternalRefCacheODS"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexprt.cxx",
+          "marker": "ScXMLExport::WriteExternalRefCaches"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/filter/xml/xmlexprt.external.ts",
+      "rationale": "Keeps the original external cache table generation and repeated row/cell arithmetic in one module beside the document-wide XML exporter.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

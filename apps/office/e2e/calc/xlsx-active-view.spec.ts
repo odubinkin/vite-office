@@ -216,6 +216,23 @@ test("Calc opens the pinned XLSX with external names and exports its caches", /*
     "aria-current",
     "page",
   );
+  const cell = page.getByRole("gridcell", { name: /^A1(?:\s|$)/u });
+  await cell.click();
+  await page.keyboard.type("42");
+  await page.keyboard.press("Enter");
+  await expect(cell).toHaveText("42");
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Save As…" }).click();
+  await page.getByRole("textbox", { name: "New copy name" }).fill("External cache copy");
+  await page.getByRole("button", { name: "Save copy" }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.reload();
+  await open.click();
+  await page.getByRole("tab", { name: "In browser" }).click();
+  await page.getByRole("button", { name: "External cache copy", exact: true }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(tabs.getByRole("tab")).toHaveCount(1);
+  await expect(cell).toHaveText("42");
 
   const pending = page.waitForEvent("download");
   await page.getByRole("menuitem", { name: "File" }).click();

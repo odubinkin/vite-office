@@ -30,7 +30,7 @@ it("retains the source workbook slot, the cache file ID and relative A1 coordina
       expect(external.GetDoubleRef().Ref1.IsRowRel()).toBe(false);
       expect(external.GetDoubleRef().Ref2.IsRowRel()).toBe(true);
       new ScCompiler(document, origin, code, odf).CreateStringFromTokenArray(output);
-      expect(text(output)).toBe("['Source''s workbook.xlsx'#$'Owner''s Data'.C$3:.$E7]");
+      expect(text(output)).toBe("['file:///Source''s%20workbook.xlsx'#$'Owner''s Data'.C$3:.$E7]");
       const restored = new ScCompiler(document, origin, odf).CompileString(output);
       try {
         expect(restored.FirstToken()?.equals(external)).toBe(true);

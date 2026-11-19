@@ -1,4 +1,5 @@
 /** @fileoverview Scalar ScXMLExport content path over actual row-major document cells and native ODFF serialization. */
+import { externalRefCacheStyle, WriteExternalRefCaches } from "./xmlexprt.external";
 import { GetPrintRanges } from "../../core/data/table1";
 import { ScMyOpenCloseColumnRowGroup } from "./XMLColumnRowGroupExport";
 import type { ScDocumentPool } from "../../core/data/docpool";
@@ -154,7 +155,7 @@ export class ScXMLExport {
     const fontPool = new XMLFontAutoStylePool();
     const styles = exportDefaultCellStyle(this.document, fontPool);
     if (!styles) return "";
-    return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles xmlns:office="${ODF_NAMESPACES.office}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" office:version="1.3">${fontPool.exportXML()}${styles}</office:document-styles>`;
+    return `<?xml version="1.0" encoding="UTF-8"?><office:document-styles xmlns:office="${ODF_NAMESPACES.office}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:xlink="${ODF_NAMESPACES.xlink}" office:version="1.3">${fontPool.exportXML()}${styles}</office:document-styles>`;
   }
   /** Collects equal effective cell-style ranges with the minimum native row-repeat boundary,as WriteRowContent consumes ScRowFormatRanges. @param table - Actual sheet. @param row - First row in the format run. @returns Horizontal styles and their common row end. */
   private collectColumnStyles(
@@ -402,8 +403,9 @@ export class ScXMLExport {
       }
       body += this.WriteNamedRange(tab) + "</table:table>";
     }
-    body += this.WriteNamedRange(-1);
-    let automatic = this.textStyles.exportStyles();
+    const external = WriteExternalRefCaches(this.document);
+    body += external + this.WriteNamedRange(-1);
+    let automatic = this.textStyles.exportStyles() + (external ? externalRefCacheStyle : "");
     if (hasHiddenSheet)
       automatic +=
         '<style:style style:name="ta1" style:family="table"><style:table-properties table:display="false"/></style:style>';
@@ -420,7 +422,7 @@ export class ScXMLExport {
       const hmm = Number(convert(BigInt(Number(width)), Length.twip, Length.mm100));
       automatic += `<style:style style:name="${name}" style:family="table-column"><style:table-column-properties fo:break-before="${pageBreak}" style:column-width="${new SvXMLUnitConverter("mm100").convertMeasureToXML(hmm)}"/></style:style>`;
     }
-    return `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:office="${ODF_NAMESPACES.office}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" office:version="1.3">${this.fontPool.exportXML()}<office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:spreadsheet>${body}</office:spreadsheet></office:body></office:document-content>`;
+    return `<?xml version="1.0" encoding="UTF-8"?><office:document-content xmlns:office="${ODF_NAMESPACES.office}" xmlns:number="${ODF_NAMESPACES.number}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:of="${ODF_NAMESPACES.of}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:css3t="${ODF_NAMESPACES.css3t}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:loext="${ODF_NAMESPACES.loext}" xmlns:xlink="${ODF_NAMESPACES.xlink}" office:version="1.3">${this.fontPool.exportXML()}<office:automatic-styles>${automatic}</office:automatic-styles><office:body><office:spreadsheet>${body}</office:spreadsheet></office:body></office:document-content>`;
   }
   /** Writes the nondefault document null date via the original temporal converter. @returns Represented ODF calculation settings. */
   private WriteCalculationSettings(): string {

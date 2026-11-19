@@ -60,11 +60,27 @@ it("opens and re-exports the original external named ranges and caches from tdf1
         "Alla fakturor ska i detta flöde",
       );
     }
-    const primary = await readOdsDocument(await writeOdsXml(worker));
+    const primaryFile = await writeOdsXml(worker);
+    expect(primaryFile.files["content.xml"]).toContain('table:style-name="ta_extref"');
+    const primary = await readOdsDocument(primaryFile);
     try {
+      expect(primary.GetTableCount()).toBe(1);
       const entry = primary.GetRangeName()?.findByUpperName("NYDIM");
       expect(entry?.GetCode().FirstToken()).toBeInstanceOf(ScExternalDoubleRefToken);
       expect(entry?.GetSymbol(FormulaGrammar.Grammar.GRAM_ODFF)).toContain("Referens.$A$1:.$A$7");
+      const restored = decodeCalcDocument(structuredClone(encodeCalcDocument(primary)));
+      try {
+        const archive = await DocumentArchive.open(await exportXlsx(restored));
+        expect(await archive.readTextEntry("xl/externalLinks/externalLink1.xml")).toContain(
+          '<cell r="A7" t="str"><v>Alla fakturor ska i detta flöde</v></cell>',
+        );
+        const relations = await archive.readTextEntry(
+          "xl/externalLinks/_rels/externalLink1.xml.rels",
+        );
+        expect(relations).toContain('Target="bad(1).xlsx"');
+      } finally {
+        restored.Dispose();
+      }
     } finally {
       primary.Dispose();
     }

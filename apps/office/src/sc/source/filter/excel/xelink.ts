@@ -74,7 +74,7 @@ export function SaveXmlExternalLinks(
     const link = output.addRelation(
       xml.getOutputStream() as ZipFragmentStream,
       OFFICE_DOCUMENT_RELATION + "externalLinkPath",
-      file.name,
+      file.relativeName ?? file.name,
       true,
     );
     xml.startElement(

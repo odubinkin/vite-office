@@ -61,8 +61,11 @@ type ExternalCell =
 /** External sources in file-ID order, with the real sheet names and sparse data. */
 type ExternalFile = readonly [
   name: string,
-  sheets: readonly (readonly [name: string, cells: readonly ExternalCell[]])[],
+  sheets: readonly ExternalSheet[],
+  relativeName?: string,
 ];
+/** External sheet cache including the ODF complete-table marker. */
+type ExternalSheet = readonly [name: string, cells: readonly ExternalCell[], complete?: boolean];
 /** Compact native scalar alternative, with formula source rather than result text. */
 type Cell =
   | readonly [col: number, row: number, kind: "number", value: number]
@@ -426,7 +429,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
   const view = document.GetViewOptions();
   const externalFiles: ExternalFile[] = [];
   for (const file of document.GetExternalRefManager().getExternalFiles()) {
-    const sheets: [string, ExternalCell[]][] = [];
+    const sheets: ExternalSheet[] = [];
     for (const sheet of file.tables.values()) {
       const cached: ExternalCell[] = [];
       for (const [row, cells] of sheet.cache.entries()) {
@@ -445,9 +448,15 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
           yield;
         }
       }
-      sheets.push([sheet.name, cached]);
+      sheets.push(
+        sheet.cache.isWholeTableCached() ? [sheet.name, cached, true] : [sheet.name, cached],
+      );
     }
-    externalFiles.push([file.name, sheets]);
+    externalFiles.push(
+      file.relativeName === undefined
+        ? [file.name, sheets]
+        : [file.name, sheets, file.relativeName],
+    );
   }
   return {
     version: 1,
@@ -537,12 +546,14 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       view.SetOption(ViewOption.HEADER, record.showHeaders);
     if (typeof record.showZeros === "boolean")
       view.SetOption(ViewOption.NULLVALS, record.showZeros);
-    for (const [name, sheets] of record.externalFiles ?? []) {
+    for (const [name, sheets, relativeName] of record.externalFiles ?? []) {
       const manager = document.GetExternalRefManager();
       const file = manager.getExternalFileId(name);
-      for (const [sheet, cells] of sheets) {
+      if (typeof relativeName === "string") manager.setRelativeFileName(file, "../" + relativeName);
+      for (const [sheet, cells, complete] of sheets) {
         const cache = manager.getCacheTable(file, sheet, true);
         if (!cache) throw new Error("Calc worker external sheet is invalid.");
+        if (complete === true) cache.setWholeTableCached();
         for (const [col, row, kind, value] of cells) {
           if (!Number.isInteger(col) || !Number.isInteger(row) || !document.ValidColRow(col, row))
             throw new Error("Calc worker external cell address is invalid.");

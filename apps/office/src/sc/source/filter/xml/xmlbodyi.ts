@@ -6,6 +6,7 @@ import type { ScXMLImport } from "./xmlimprt";
 import { ScXMLTableContext } from "./xmltabi";
 import { ScXMLNamedExpressionsContext } from "./xmlnexpi";
 import { ScXMLCalculationSettingsContext } from "./XMLCalculationSettingsContext";
+import { createExternalRefTable } from "./xmlexternaltabi";
 /** Spreadsheet content owns table creation,not a separate workbook model. */
 export class ScXMLBodyContext extends ScXMLImportContext {
   /** Binds importer. @param owner - Owner. @returns Context. */
@@ -23,6 +24,9 @@ export class ScXMLBodyContext extends ScXMLImportContext {
       return new ScXMLCalculationSettingsContext(this.owner);
     if (element !== XMLToken.TABLE_TABLE)
       throw new Error("ODS spreadsheet feature is not implemented");
-    return new ScXMLTableContext(this.owner, attributes);
+    return (
+      createExternalRefTable(attributes.get(XMLToken.TABLE_NAME) ?? "", this.owner) ??
+      new ScXMLTableContext(this.owner, attributes)
+    );
   }
 }

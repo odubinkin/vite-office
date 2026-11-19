@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/xml/xmlexternaltabi.ts",
+    "upstreamPath": "sc/source/filter/xml/xmlexternaltabi.cxx",
+    "localSymbols": [
+      "createExternalRefTable",
+      "ScXMLExternalRefRowContext",
+      "ScXMLExternalRefCellContext"
+    ],
+    "upstreamSymbols": [
+      "ScXMLExternalRefRowContext::endFastElement",
+      "ScXMLExternalRefCellContext::endFastElement"
+    ],
+    "preservedResponsibilities": [
+      "Imports native external ODS tables into the document's whole-table caches, retaining repeated sparse cells, referenced sheets, source relationships, scalar tokens and paragraph data."
+    ],
+    "omittedResponsibilities": [
+      "Temporal values, number format style identity, filters, external source refresh, and formula evaluation remain pending in this cache subset."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlexternaltabi.ts",
+          "marker": "createExternalRefTable"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/xmlexternaltabi.test.ts",
+          "marker": "testExternalRefCacheODS"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexternaltabi.cxx",
+          "marker": "ScXMLExternalRefRowContext::endFastElement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/xml/xmlexternaltabi.cxx",
+          "marker": "ScXMLExternalRefCellContext::endFastElement"
+        }
+      ]
+    }
+  }
+}

@@ -7030,3 +7030,15 @@ for external link cache values.
 - [Native SpreadsheetML error mapping](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/oox/unitconverter.cxx#L103-L110)
 - [Native numeric error encoding](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/oox/biffhelper.cxx#L59-L75)
 - [Calc regression](../../apps/office/src/sc/source/filter/oox/externallinkbuffer.test.ts)
+
+### CALC-747 — ODF external cache serialization drops the numeric error payload
+
+`ScXMLExport::WriteExternalRefCaches` writes an external cache double as an
+ODF float with decimal text. A NaN-encoded Calc error is written as `NaN`.
+`ScXMLExternalRefCellContext` parses that text as a double without an error
+discriminator. The restored cache retains NaN and loses the original error
+code. Calc preserves this ODF behavior.
+
+- [Native cache float serialization](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/xml/xmlexprt.cxx#L5198-L5205)
+- [Native cache float import](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/xml/xmlexternaltabi.cxx#L253-L261)
+- [Calc regression](../../apps/office/src/sc/source/filter/xml/xmlexternaltabi.test.ts)
