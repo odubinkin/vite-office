@@ -1,0 +1,236 @@
+{
+  "checkpoint": "Native XLSX enhanced ranges and Calc cell entry",
+  "task": "202610251549-J0Z0KF",
+  "createdAt": "2026-11-19T02:13:36.990Z",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sc/inc/tabprotection.hxx#ScEnhancedProtection",
+    "sc/source/core/data/tabprotection.cxx#ScTableProtectionImpl::isBlockEditable",
+    "sc/source/core/data/attarray.cxx#HasAttrFlags::Protected",
+    "sc/source/core/data/table2.cxx#ScTable::IsBlockEditable",
+    "sc/source/filter/oox/worksheetsettings.cxx#WorksheetSettings::importProtectedRange",
+    "sc/source/filter/excel/excrecds.cxx#XclExpSheetProtection::SaveXml",
+    "sc/source/ui/view/viewfunc.cxx#ScViewFunc::EnterData",
+    "sc/qa/unit/subsequent_filters_test4.cxx#testEnhancedProtectionXLSX",
+    "sc/qa/unit/subsequent_export_test2.cxx#testEnhancedProtectionRangeShorthand"
+  ],
+  "results": {
+    "calc": {
+      "files": 16,
+      "tests": 167
+    },
+    "shared": {
+      "files": 6,
+      "tests": 116
+    },
+    "chromium": 9,
+    "coverageThreshold": 90,
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 97,
+          "covered": 97,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 113,
+          "covered": 112,
+          "skipped": 0,
+          "pct": 99.11
+        },
+        "functions": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 94,
+          "covered": 91,
+          "skipped": 0,
+          "pct": 96.8
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sc/source/core/data/tabprotection.ts": {
+        "lines": {
+          "total": 45,
+          "covered": 45,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 19,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 55,
+          "covered": 54,
+          "skipped": 0,
+          "pct": 98.18
+        },
+        "branches": {
+          "total": 54,
+          "covered": 52,
+          "skipped": 0,
+          "pct": 96.29
+        }
+      },
+      "apps/office/src/sc/source/filter/excel/excrecds.ts": {
+        "lines": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 3,
+          "covered": 3,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 31,
+          "covered": 31,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 30,
+          "covered": 29,
+          "skipped": 0,
+          "pct": 96.66
+        }
+      },
+      "apps/office/src/sc/source/filter/oox/worksheetsettings.ts": {
+        "lines": {
+          "total": 25,
+          "covered": 25,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 10,
+          "covered": 10,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    }
+  },
+  "commands": [
+    "npm run test:coverage:calc --workspace @vite-office/office -- excelfilter ods-sheet-protection calc-ods-io calc-files ods-worker calc-cell-input formula-entry paste-block editable protectionattr address.xl-a1 --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sc/source/core/data/tabprotection.ts --coverage.include=src/sc/source/filter/oox/worksheetsettings.ts --coverage.include=src/sc/source/filter/excel/excrecds.ts --coverage.thresholds.perFile --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=coverage/enhanced-protection-scoped-release",
+    "npm run test:shared -- attributelist fastattribs fshelper --maxWorkers=2 --testTimeout=90000",
+    "./node_modules/.bin/playwright test -c apps/office/coverage/xlsxalignment.playwright.config.ts --workers=1",
+    "npm run typecheck",
+    "npm run test:static",
+    "npm run check:docs",
+    "npm run check:dependencies",
+    "npm run check:file-size",
+    "npm run check:source-tree",
+    "npm run check:source-provenance",
+    "npm run inventory:registry:build",
+    "npm run inventory:invariants",
+    "npm run inventory:parity",
+    "npm run check:calc-resources",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor",
+    "git diff --check"
+  ],
+  "files": [
+    {
+      "path": "apps/office/src/sc/inc/tabprotection.ts",
+      "sha256": "6d1fc5e264fbd7700e1ab82249f83ed34445f7812ab8ea7ac1e13ea4d100e20b"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/tabprotection.ts",
+      "sha256": "4cc89acf0aa5fa28d07b70acfd9406200e53bd6ee0df18d9470f6f10ec2e25f9"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/attarray.ts",
+      "sha256": "437dd9c2ca098d2d9d09137e0fbfb494e1ffe1255e6e7e852162571c3310b46c"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/table2.ts",
+      "sha256": "67f5e34ec2ee9d4e1d0fcae41c75a979a3155f4d026c7dbb08d1d429a0265251"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/oox/worksheetsettings.ts",
+      "sha256": "c42b69f16db79333927b9188cfe423facebb2ecf7bb526b8c9c085ef398bb077"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/oox/worksheetfragment.ts",
+      "sha256": "29d3a1c277da3cbed3a3e57ba8290897a92d8474abb628373fbb4961eb560616"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/oox/excelfilter.enhanced-protection.test.ts",
+      "sha256": "30cbe3d16dc4fce1592811d163e03eee4616b161e1f28f6b6fa744c85d20e213"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/excel/excrecds.ts",
+      "sha256": "b0f0af6f75a88095d00e9b7e9a3a02791a074a8cfbd28e16411ce6d21804181c"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/excel/xetable.ts",
+      "sha256": "dc9408f7be511480bedba6049ae3d2d5226ca14c65eafc0692e5a735e827e650"
+    },
+    {
+      "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts",
+      "sha256": "03a12b2d4df346c01d6f81d3cc74c2971e2660436cbe5e1bc5ae48aa474b99e8"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/editable.ts",
+      "sha256": "980f7eaaecfa8a80653baca0c603e12750cecea85885b63b11169afc05e8da6f"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/viewfunc.ts",
+      "sha256": "11989474085b331d662e1a2fa4a33d986c9a3d8e0af68a4cdb5b691cc5282659"
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+      "sha256": "8a46baa4a72cf1c4bd85a8c84d18cae757e1d030086932cfd27bde35130eb78e"
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-cell-input.ts",
+      "sha256": "ab8e0e774d72c8683fb12e438f268c25d9c4cb69b2682dbada9307f2ce549662"
+    },
+    {
+      "path": "apps/office/e2e/calc/xlsx-alignment.spec.ts",
+      "sha256": "ed0da7a57eeb9a4fffd1c6b4469579a86c73ec86fc6de66db6db9bfe4e99bc83"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "sha256": "f0ded51fbd63522630cc130a15f1516045083496ed84d2ef571861cf351cba94"
+    }
+  ],
+  "verified": [
+    "The unchanged Excel fixtures retain unconditional exception ranges, original denied password and descriptor ranges, block unions and whole-column shorthand.",
+    "The browser starts and commits direct cell entry through native selected-sheet protection. A denied edit leaves values and undo unchanged, and XLSX export retains the allowed edit and range records.",
+    "Worker encoding preserves the native ranges and descriptors and rejects malformed range verifier metadata.",
+    "CALC-737 records the upstream Excel security descriptor attribute spelling."
+  ],
+  "remaining": [
+    "The tested browser route covers direct input and the shared block predicate. Full selection, delete and format permission enforcement, conditional overrides, sheet reference updates and password verification remain open.",
+    "The existing ODS format has no representation for XLSX enhanced range records."
+  ]
+}
