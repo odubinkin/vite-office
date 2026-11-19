@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 636
+revision: 639
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T02:13:37.941Z"
+  updated_at: "2026-11-19T02:26:16.225Z"
   updated_by: "CODER"
-  note: "Verified native XLSX enhanced ranges and direct cell input through 167 Calc tests, 116 shared tests, nine Chromium scenarios, per-owner scoped coverage, and source gates. Evidence: evidence/native-xlsx-enhanced-protection.json. Full selection, delete and format enforcement, range reference updates and password verification remain in scope."
-  attempts: 203
+  note: "Verified native protected selections, cursor/marked deletion, indentation and Clear with 133 Calc tests, 15 shared tests, nine Chromium scenarios and scoped per-owner coverage. Evidence: evidence/native-xlsx-selection-protection.json. Remaining cursor selection permissions and sibling filter coverage stay in scope."
+  attempts: 204
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3256,8 +3259,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T02:26:16.225Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified native protected selections, cursor/marked deletion, indentation and Clear with 133 Calc tests, 15 shared tests, nine Chromium scenarios and scoped per-owner coverage. Evidence: evidence/native-xlsx-selection-protection.json. Remaining cursor selection permissions and sibling filter coverage stay in scope."
+  -
+    type: "status"
+    at: "2026-11-19T02:26:22.795Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T02:13:43.793Z"
+doc_updated_at: "2026-11-19T02:26:22.795Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -9362,6 +9378,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-19T02:26:16.225Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified native protected selections, cursor/marked deletion, indentation and Clear with 133 Calc tests, 15 shared tests, nine Chromium scenarios and scoped per-owner coverage. Evidence: evidence/native-xlsx-selection-protection.json. Remaining cursor selection permissions and sibling filter coverage stay in scope.
+    Attempts: 204
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T02:26:15.285Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -10405,6 +10451,14 @@ sections:
     - Ports testEnhancedProtectionXLSX and testEnhancedProtectionRangeShorthand. Adds the actual Chromium open, edit and export scenario, original single-record range union and missing sqref export behavior, and invalid Worker verifier rejection. CALC-737 documents the Excel security descriptor attribute.
     - Scoped verification passed 167 Calc tests across 16 files, 116 shared tests and 9 Chromium scenarios. The per-owner 90 percent thresholds, typecheck, production build and source gates passed. Exact commands are in `evidence/native-xlsx-enhanced-protection.json`.
     - Full selection and delete/format permission handling, range updates on sheet/reference changes, conditional protection overrides and verification of passwords remain open. ODS does not serialize these XLSX enhanced ranges. No full suite was due.
+
+    ### Calc protected selections and native deletion
+
+    - ScDocument checks the simple area and multi-mark spans over selected sheets. ScTable tests actual attribute spans and delegates marked enhanced exceptions to ScTableProtection. CALC-738 records the source difference between simple and multi-mark editability across grouped tabs.
+    - DeleteCell, DeleteContent and ChangeIndent reject protected edits before creating history or mutating the document. The existing Calc status and alert controls show document-operation failures. The native API suppression rule for marked deletion and indentation is retained.
+    - Allowed numeric deletion restores content through the original undo copy flags. Chromium opens the unchanged enhanced-protection workbook, denies the actual Format Clear command on a protected cell, accepts typing in an unlocked range and downloads the edited workbook with its protection metadata.
+    - Scoped verification passed 133 Calc tests across 20 files, 15 shared tests and 9 Chromium scenarios. Per-owner coverage, typecheck, production build and source gates passed. Exact commands are in `evidence/native-xlsx-selection-protection.json`.
+    - Row/column selection permissions, other formatting actions, password verification, reference updates, represented matrix-only status handling beyond the current import profile and remaining filter acceptance stay in scope. No full suite was due.
 id_source: "generated"
 ---
 ## Summary
@@ -16519,6 +16573,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-19T02:26:16.225Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified native protected selections, cursor/marked deletion, indentation and Clear with 133 Calc tests, 15 shared tests, nine Chromium scenarios and scoped per-owner coverage. Evidence: evidence/native-xlsx-selection-protection.json. Remaining cursor selection permissions and sibling filter coverage stay in scope.
+Attempts: 204
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T02:26:15.285Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -17566,3 +17650,11 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Ports testEnhancedProtectionXLSX and testEnhancedProtectionRangeShorthand. Adds the actual Chromium open, edit and export scenario, original single-record range union and missing sqref export behavior, and invalid Worker verifier rejection. CALC-737 documents the Excel security descriptor attribute.
 - Scoped verification passed 167 Calc tests across 16 files, 116 shared tests and 9 Chromium scenarios. The per-owner 90 percent thresholds, typecheck, production build and source gates passed. Exact commands are in `evidence/native-xlsx-enhanced-protection.json`.
 - Full selection and delete/format permission handling, range updates on sheet/reference changes, conditional protection overrides and verification of passwords remain open. ODS does not serialize these XLSX enhanced ranges. No full suite was due.
+
+### Calc protected selections and native deletion
+
+- ScDocument checks the simple area and multi-mark spans over selected sheets. ScTable tests actual attribute spans and delegates marked enhanced exceptions to ScTableProtection. CALC-738 records the source difference between simple and multi-mark editability across grouped tabs.
+- DeleteCell, DeleteContent and ChangeIndent reject protected edits before creating history or mutating the document. The existing Calc status and alert controls show document-operation failures. The native API suppression rule for marked deletion and indentation is retained.
+- Allowed numeric deletion restores content through the original undo copy flags. Chromium opens the unchanged enhanced-protection workbook, denies the actual Format Clear command on a protected cell, accepts typing in an unlocked range and downloads the edited workbook with its protection metadata.
+- Scoped verification passed 133 Calc tests across 20 files, 15 shared tests and 9 Chromium scenarios. Per-owner coverage, typecheck, production build and source gates passed. Exact commands are in `evidence/native-xlsx-selection-protection.json`.
+- Row/column selection permissions, other formatting actions, password verification, reference updates, represented matrix-only status handling beyond the current import profile and remaining filter acceptance stay in scope. No full suite was due.

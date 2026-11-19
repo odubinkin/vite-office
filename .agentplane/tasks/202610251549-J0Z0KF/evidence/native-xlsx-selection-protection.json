@@ -1,0 +1,261 @@
+{
+  "checkpoint": "Calc protected worksheet selections and native deletion",
+  "createdAt": "2026-11-19T02:26:14.948Z",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "task": "202610251549-J0Z0KF",
+  "upstream": [
+    "sc/source/core/data/document.cxx#ScDocument::IsSelectionEditable",
+    "sc/source/core/data/table2.cxx#ScTable::IsSelectionEditable",
+    "sc/source/core/data/table2.cxx#ScTable::HasAttribSelection",
+    "sc/source/core/data/tabprotection.cxx#ScTableProtectionImpl::isSelectionEditable",
+    "sc/source/ui/docshell/editable.cxx#ScEditableTester::TestSelection",
+    "sc/source/ui/operation/DeleteCellOperation.cxx#DeleteCellOperation::runImplementation",
+    "sc/source/ui/operation/DeleteContentOperation.cxx#DeleteContentOperation::runImplementation",
+    "sc/source/ui/operation/ChangeIndentOperation.cxx#ChangeIndentOperation::runImplementation",
+    "sc/source/ui/undo/undoblk3.cxx#ScUndoDeleteContents::DoChange"
+  ],
+  "results": {
+    "calc": {
+      "files": 20,
+      "tests": 133
+    },
+    "shared": {
+      "files": 2,
+      "tests": 15
+    },
+    "chromium": 9,
+    "coverageThreshold": 90,
+    "coverage": {
+      "total": {
+        "lines": {
+          "total": 91,
+          "covered": 91,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 99,
+          "covered": 99,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 50,
+          "covered": 50,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sc/source/ui/docshell/editable.ts": {
+        "lines": {
+          "total": 26,
+          "covered": 26,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 29,
+          "covered": 29,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 24,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sc/source/ui/operation/ChangeIndentOperation.ts": {
+        "lines": {
+          "total": 24,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 27,
+          "covered": 27,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sc/source/ui/operation/DeleteCellOperation.ts": {
+        "lines": {
+          "total": 19,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 19,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sc/source/ui/operation/DeleteContentOperation.ts": {
+        "lines": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 24,
+          "covered": 24,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    }
+  },
+  "commands": [
+    "npm run test:coverage:calc --workspace @vite-office/office -- excelfilter ods-sheet-protection calc-ods-io calc-clear-format calc-files paste-block format-boundaries indent selection-pattern border-frame markdata clipboard-deletion editable --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sc/source/ui/docshell/editable.ts --coverage.include=src/sc/source/ui/operation/DeleteCellOperation.ts --coverage.include=src/sc/source/ui/operation/DeleteContentOperation.ts --coverage.include=src/sc/source/ui/operation/ChangeIndentOperation.ts --coverage.thresholds.perFile --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=coverage/selection-protection-scoped-final",
+    "npm run test:shared -- src/svl/source/undo/undo.test.ts browser-dispatcher --maxWorkers=2 --testTimeout=90000",
+    "./node_modules/.bin/playwright test -c apps/office/coverage/xlsxalignment.playwright.config.ts --workers=1",
+    "npm run typecheck",
+    "npm run test:static",
+    "npm run check:docs",
+    "npm run check:dependencies",
+    "npm run check:file-size",
+    "npm run check:source-tree",
+    "npm run check:source-provenance",
+    "npm run inventory:registry:build",
+    "npm run inventory:invariants",
+    "npm run inventory:parity",
+    "npm run check:calc-resources",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor",
+    "git diff --check"
+  ],
+  "files": [
+    {
+      "path": "apps/office/src/sc/source/core/data/document.ts",
+      "sha256": "0a26b56d7acbbdf23f79fc97c932eb292ec04596fb63bb5128a36fdcd9bf87fb"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document10.ts",
+      "sha256": "8c2fd56bd6245575f495dfd4a42be6ea3117946f92291e5a80724a8fb2e1ac7e"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/table.ts",
+      "sha256": "9fbcb4461685af9d8b8cbaa7f9855d7c2e7ac4119a5f9a1bfcbe062a84ba1a5f"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/table2.ts",
+      "sha256": "efe3253640956d2a66aa3603bc040a180fa76b81d9666e66073b101ef558c7fb"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/tabprotection.ts",
+      "sha256": "e806e40bf1a4907a6b62578228958fb1bbc32a2c6710a076d89f18e6c0ab4d51"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/editable.ts",
+      "sha256": "62c475a3700fbc1bb9742f24c1bbf3651b9c124aa5150635c8dff0b7083d7017"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/docsh.ts",
+      "sha256": "255821ee94ad589cd0cc2e26bb6ec02c63d6325a466c9f745006ea1a7b1c289b"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/operation/DeleteCellOperation.ts",
+      "sha256": "f1696b38c9011cf682f2a71ae3eced123aa8b94f07d00a1f321f3c0f96ef4326"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/operation/DeleteContentOperation.ts",
+      "sha256": "bc476f7f545cf761c7dbf6c221a4081466b74e8c0bd0cd93ae744de223ebf3c9"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/operation/ChangeIndentOperation.ts",
+      "sha256": "7277cdf7ef781d6e27b1986ecdb7265a1a6ca0c25f2342222917b79d51079f75"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/undo/undoblk3.ts",
+      "sha256": "a40cf9158e93c6cbaa94eaaa14ab6cf8a69d37490cb5a0e2d0c3532348fb1c04"
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+      "sha256": "5667cd5b026f981a943b8ac3045a5ff86c60c0ca17c7d980aebcff6f10797585"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/oox/excelfilter.enhanced-protection.test.ts",
+      "sha256": "254346b3d48644b05776d8b5ef1ef3d3843dcd04be57ed0d0552290108a72c62"
+    },
+    {
+      "path": "apps/office/e2e/calc/xlsx-alignment.spec.ts",
+      "sha256": "4ff953722c252f2e348a8e529794522e960259589726d932ba37ba757fce2cbb"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/editable.test.ts",
+      "sha256": "2bb545e7a7ec612b5ab5e77a81c26c3a451909c4c9303c01a8cb8edf5b0ec785"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "sha256": "1bb311d2eaf7c9dc10db2fa40150d9b1e4540251bafa985ed681aa340735789c"
+    }
+  ],
+  "verified": [
+    "Cursor deletion, marked deletion, Clear formatting and indentation consult the native editability tester before mutating cells or history.",
+    "Allowed numeric deletion can be undone through the original delete-content snapshot flags.",
+    "Ordinary selection and mixed group tab semantics follow the native block and multi-mark decisions, including the source tab identity difference recorded in CALC-738.",
+    "Actual Chromium worksheet open, protected Clear command, allowed typing and XLSX download complete over the unchanged upstream fixture."
+  ],
+  "remaining": [
+    "Cursor selection restrictions, remaining formatting actions, password verification, range reference updates, positive matrix/delete expansion, read-only/scenario paths and full XLSX/DOCX acceptance remain open."
+  ]
+}
