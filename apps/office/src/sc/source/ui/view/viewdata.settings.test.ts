@@ -17,6 +17,8 @@ import { ReadUserDataSequence, WriteUserDataSequence } from "./viewdata.settings
 import type { ScDocument } from "../../../inc/document";
 import { ViewOption } from "../../../inc/viewopti";
 import { ScViewData } from "./viewdata";
+import { ScExtDocOptions } from "./scextopt";
+import { MAXCOL, MAXROW, ScRange } from "../../../inc/address";
 import { ScDocShell } from "../docshell/docsh";
 import { ScTabViewShell } from "./tabvwsh4";
 import {
@@ -30,6 +32,52 @@ import {
 function fixture(name: string): Uint8Array {
   return new Uint8Array(readFileSync("../../vendor/libreoffice-reference/sc/qa/unit/data/" + name));
 }
+
+it("exports live ordered marks only in the active pane and preserves the native cursor fallback", /** Exercises detached selection values and the original Excel range index. @returns Completion. */ async () => {
+  const source = await ExcelFilter.importDocument(fixture("xlsx/freezePaneStartCell.xlsx"));
+  let reopened: ScDocument | undefined;
+  try {
+    const shell = new ScDocShell(source);
+    const view = new ScTabViewShell(shell).GetViewData();
+    const mark = view.GetMarkData();
+    mark.SetMultiMarkArea(new ScRange(2, 3, 0, 3, 4, 0));
+    mark.SetMultiMarkArea(new ScRange(5, 10, 0, 8, 13, 0));
+    const snapshot = new ScExtDocOptions();
+    view.WriteExtOptions(snapshot);
+    const settings = snapshot.GetTabSettings(0);
+    assert(settings);
+    expect(snapshot.GetOrCreateTabSettings(0)).toBe(settings);
+    expect(snapshot.GetTabSettings(700)).toBeUndefined();
+    mark.ResetMark();
+    expect(settings.maSelection.size()).toBe(2);
+    const archive = await DocumentArchive.open(await shell.SerializeXlsx(snapshot));
+    const xml = await archive.readTextEntry("xl/worksheets/sheet1.xml");
+    expect(xml).toContain('tabSelected="true"');
+    expect(xml).toContain(
+      '<selection pane="bottomRight" activeCell="F11" activeCellId="1" sqref="C4:D5 F11:I14"/>',
+    );
+    expect(xml).toContain(
+      '<selection pane="topLeft" activeCell="A1" activeCellId="0" sqref="A1"/>',
+    );
+    reopened = await ExcelFilter.importDocument(await shell.SerializeXlsx(snapshot));
+    expect(getSheetCursor(reopened, 0)).toEqual([5, 10]);
+    const reopenedView = new ScViewData(reopened);
+    expect(reopenedView.GetMarkData().GetMarkedRanges().empty()).toBe(true);
+    settings.maSelection.RemoveAll();
+    settings.maSelection.push_back(new ScRange(MAXCOL + 1, 0, 0, MAXCOL + 2, 0, 0));
+    settings.maSelection.push_back(
+      new ScRange(MAXCOL - 1, MAXROW - 1, 0, MAXCOL + 1, MAXROW + 1, 0),
+    );
+    settings.maSelection.push_back(new ScRange(1, 1, 0, 1, 2, 0));
+    const corrected = await DocumentArchive.open(await shell.SerializeXlsx(snapshot));
+    expect(await corrected.readTextEntry("xl/worksheets/sheet1.xml")).toContain(
+      'activeCell="F11" activeCellId="2" sqref="XFC1048575:XFD1048576 B2:B3 F11"',
+    );
+  } finally {
+    reopened?.Dispose();
+    source.Dispose();
+  }
+});
 
 it("reads the active pane's cursor and round-trips it through the view, Worker, ODS and XLSX", /** Exercises the pinned workbook with four different pane cursors. @returns Completion. */ async () => {
   const source = await ExcelFilter.importDocument(fixture("xlsx/freezePaneStartCell.xlsx"));

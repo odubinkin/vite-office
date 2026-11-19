@@ -60,6 +60,7 @@ import { ScDocFunc } from "./docfunc";
 import { ScImportExport } from "./impex";
 import { ExcelFilter } from "../../filter/oox/excelfilter";
 import { exportXlsx } from "../../filter/excel/xetable";
+import type { ScExtDocOptions } from "../view/scextopt";
 import type { XlsxReferenceDevice } from "../../filter/oox/unitconverter";
 /** Confirmed write belongs to the generation captured before persistence begins. */
 export interface ScPrimarySaveEvidence {
@@ -715,10 +716,10 @@ export class ScDocShell extends SfxObjectShell {
     this.EnsureOpen();
     return await writeOdsDocument(this.document);
   }
-  /** Writes the current workbook through the SpreadsheetML filter. @returns XLSX bytes. */
-  SerializeXlsx(): Promise<Uint8Array> {
+  /** Writes the current workbook through the SpreadsheetML filter. @param viewOptions - Captured filter view settings. @returns XLSX bytes. */
+  SerializeXlsx(viewOptions?: ScExtDocOptions): Promise<Uint8Array> {
     this.EnsureOpen();
-    return exportXlsx(this.document, this.xlsxReferenceDevice);
+    return exportXlsx(this.document, this.xlsxReferenceDevice, viewOptions);
   }
   /** Serializes browser XML through the injected asynchronous filter. @returns XML streams. */
   SerializeXml(): Promise<XmlPackage> {

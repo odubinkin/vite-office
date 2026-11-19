@@ -14,6 +14,7 @@ import type { ImportedDocumentIdentity } from "../../../framework/browser/presen
 import { SfxInterface } from "../../../sfx2/source/control/objface";
 import { createSfxShell, type SfxShell } from "../../../sfx2/source/control/shell";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
+import { ScExtDocOptions } from "../../source/ui/view/scextopt";
 import { ScDocShell } from "../../source/ui/docshell/docsh";
 import { normalizeCommandShortcut } from "../../../framework/browser/accelerators/keymapping";
 import { getCalcCommandResource } from "../../uiconfig/scalc/menubar/menubar";
@@ -127,6 +128,8 @@ export class CalcFileWorkflows {
   async DownloadXlsx(): Promise<void> {
     const shell = this.controller.shell;
     const name = createDownloadFilename(shell.GetTitle(), ".xlsx");
+    const viewOptions = new ScExtDocOptions();
+    this.controller.viewData.WriteExtOptions(viewOptions);
     await shell.Export(
       {
         kind: "export",
@@ -136,7 +139,7 @@ export class CalcFileWorkflows {
       },
       /** Serializes the committed workbook graph. @returns Completion. */ async () =>
         this.documentExport.export({
-          data: await shell.SerializeXlsx(),
+          data: await shell.SerializeXlsx(viewOptions),
           mediaType: ScDocShell.XLSX_MEDIA_TYPE,
           name,
         }),

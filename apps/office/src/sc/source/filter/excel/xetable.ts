@@ -1,4 +1,5 @@
 /** @fileoverview XLSX workbook and worksheet records over the actual Calc document, cell iterator and XML stream. */
+import type { ScExtDocOptions, ScExtTabSettings } from "../../ui/view/scextopt";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
@@ -337,7 +338,7 @@ function* styledCells(
   }
 }
 
-/** Writes a worksheet through the native sparse iterator in row-major order. @param stream - Active XLSX stream. @param document - Workbook. @param tab - Sheet index. @param styles - Workbook XF buffer. @param strings - Workbook shared strings. @param digit - Maximum digit advance in twips. @returns Nothing. */
+/** Writes a worksheet through the native sparse iterator in row-major order. @param stream - Active XLSX stream. @param document - Workbook. @param tab - Sheet index. @param styles - Workbook XF buffer. @param strings - Workbook shared strings. @param digit - Maximum digit advance in twips. @param view - Captured tab view, if available. @param displayed - Whether the sheet is the active export sheet. @returns Nothing. */
 function SaveXmlSheet(
   stream: XclExpXmlStream,
   document: ScDocument,
@@ -345,11 +346,13 @@ function SaveXmlSheet(
   styles: XclExpXFBuffer,
   strings: XclExpSst,
   digit: number,
+  view: ScExtTabSettings | undefined,
+  displayed: boolean,
 ): void {
   const serializer = stream.GetCurrentStream();
   const row = token("row");
   serializer.startElement(token("worksheet"), token("xmlns"), spreadsheetNamespace);
-  SaveXmlTabViewSettings(stream, document, tab);
+  SaveXmlTabViewSettings(stream, document, tab, displayed, view);
   const table = document.FetchTable(tab);
   if (!table) throw new Error("Worksheet table is missing.");
   const lastRow = document.MaxRow();
@@ -451,25 +454,27 @@ function getCharWidth(styles: XclExpXFBuffer, device?: XlsxReferenceDevice): num
   );
 }
 
-/** Writes workbook parts and commits their original package relationships. @param document - Native Calc document. @param device - Workbook reference device. @returns XLSX bytes. */
+/** Writes workbook parts and commits their original package relationships. @param document - Native Calc document. @param device - Workbook reference device. @param viewOptions - Captured live view state. @returns XLSX bytes. */
 export async function exportXlsx(
   document: ScDocument,
   device?: XlsxReferenceDevice,
+  viewOptions?: ScExtDocOptions,
 ): Promise<Uint8Array> {
   const output = new XclExpXmlStream(new ZipStorage(), false, false);
   output.WithValidatedTabNames(
     document,
     /** Serializes workbook names and native formula references in one scope. @returns Nothing. */
-    () => SaveXmlWorkbook(output, document, device),
+    () => SaveXmlWorkbook(output, document, device, viewOptions),
   );
   return await output.commitStorage();
 }
 
-/** Writes the workbook and its related streams using the validated export names. @param output - Package writer. @param document - Native workbook. @param device - Workbook reference device. @returns Nothing. */
+/** Writes the workbook and its related streams using the validated export names. @param output - Package writer. @param document - Native workbook. @param device - Workbook reference device. @param viewOptions - Captured live view state. @returns Nothing. */
 function SaveXmlWorkbook(
   output: XclExpXmlStream,
   document: ScDocument,
   device?: XlsxReferenceDevice,
+  viewOptions?: ScExtDocOptions,
 ): void {
   const path = "xl/workbook.xml";
   output.addRelation(getRelationship(Relationship.OFFICEDOCUMENT), path);
@@ -538,7 +543,16 @@ function SaveXmlWorkbook(
       );
       output.PushStream(output.openFragmentStreamWithSerializer("xl/" + relative, worksheetType));
       try {
-        SaveXmlSheet(output, document, tab, styles, strings, digit);
+        SaveXmlSheet(
+          output,
+          document,
+          tab,
+          styles,
+          strings,
+          digit,
+          viewOptions?.GetTabSettings(tab),
+          tab === visible,
+        );
       } finally {
         output.PopStream();
       }

@@ -2,7 +2,9 @@
 import { getTokenFromUtf8 as token } from "../../../../oox/source/token/tokenmap";
 import type { ScDocument } from "../../../inc/document";
 import { ViewOption } from "../../../inc/viewopti";
-import { ScRange } from "../../../inc/address";
+import { MAXCOL, MAXROW, ScAddress, ScRange, ValidTab } from "../../../inc/address";
+import { ScRangeList } from "../../../inc/rangelst";
+import type { ScExtTabSettings } from "../../ui/view/scextopt";
 import {
   getSheetCursor,
   getSheetPaneLayout,
@@ -14,11 +16,13 @@ import { XclXmlUtils, type XclExpXmlStream } from "./xestream";
 
 const paneNames = ["topLeft", "topRight", "bottomLeft", "bottomRight"] as const;
 
-/** Writes the represented native sheet view for the first workbook view. @param stream - Active worksheet part. @param document - Workbook. @param tab - Actual sheet. @returns Nothing. */
+/** Writes the represented native sheet view for the first workbook view. @param stream - Active worksheet part. @param document - Workbook. @param tab - Actual sheet. @param displayed - Active export sheet. @param view - Attached selection snapshot. @returns Nothing. */
 export function SaveXmlTabViewSettings(
   stream: XclExpXmlStream,
   document: ScDocument,
   tab: number,
+  displayed: boolean,
+  view?: ScExtTabSettings,
 ): void {
   const serializer = stream.GetCurrentStream();
   const options = document.GetViewOptions();
@@ -34,14 +38,16 @@ export function SaveXmlTabViewSettings(
     String(options.GetOption(ViewOption.HEADER)),
     token("showZeros"),
     String(options.GetOption(ViewOption.NULLVALS)),
+    token("tabSelected"),
+    String(displayed || !!view?.mbSelected),
     token("workbookViewId"),
     "0",
     ...(layout ? [token("topLeftCell"), cell(document, tab, layout.first)] : []),
   );
   const [column, row] = getSheetCursor(document, tab);
-  const cursor = cell(document, tab, [column, row]);
-  if (layout) savePanes(stream, document, tab, layout, cursor);
-  else saveSelection(stream, SheetPane.TOPLEFT, cursor);
+  const cursor = new ScAddress(Math.min(column, MAXCOL), Math.min(row, MAXROW), 0);
+  if (layout) savePanes(stream, document, tab, layout, cursor, view?.maSelection);
+  else saveSelection(stream, document, SheetPane.TOPLEFT, cursor, view?.maSelection);
   serializer.endElement(token("sheetView"));
   serializer.endElement(token("sheetViews"));
 }
@@ -51,8 +57,49 @@ function cell(document: ScDocument, tab: number, position: SheetPaneLayout["firs
   return XclXmlUtils.ToOString(document, new ScRange(position[0], position[1], tab));
 }
 
-/** Writes the current cursor selection of one attached pane. @param stream - Worksheet serializer. @param pane - Excel pane. @param cursor - One valid cell. @returns Nothing. */
-function saveSelection(stream: XclExpXmlStream, pane: SheetPane, cursor: Uint8Array): void {
+/** Converts the source ordered marks to Excel's two-dimensional range domain. @param marks - Live selection snapshot. @returns Converted range list. */
+function convertSelection(marks?: ScRangeList): ScRangeList {
+  const result = new ScRangeList();
+  if (!marks) return result;
+  for (const { aStart, aEnd } of marks) {
+    if (
+      aStart.Col() < 0 ||
+      aStart.Col() > MAXCOL ||
+      aStart.Row() < 0 ||
+      aStart.Row() > MAXROW ||
+      !ValidTab(aStart.Tab())
+    )
+      continue;
+    result.push_back(
+      new ScRange(
+        aStart.Col(),
+        aStart.Row(),
+        0,
+        Math.min(MAXCOL, aEnd.Col()),
+        Math.min(MAXROW, aEnd.Row()),
+        0,
+      ),
+    );
+  }
+  return result;
+}
+
+/** Writes one Excel pane selection and its original cursor index. @param stream - Worksheet serializer. @param document - Workbook. @param pane - Excel pane. @param cursor - Valid Excel cursor. @param marks - Active pane's captured marks. @returns Nothing. */
+function saveSelection(
+  stream: XclExpXmlStream,
+  document: ScDocument,
+  pane: SheetPane,
+  cursor: ScAddress,
+  marks?: ScRangeList,
+): void {
+  const ranges = convertSelection(marks);
+  let cursorIndex = 0;
+  for (const range of ranges) {
+    if (range.Contains(cursor)) break;
+    ++cursorIndex;
+  }
+  const activeCell = new ScRange(cursor);
+  if (cursorIndex === ranges.size()) ranges.push_back(activeCell);
   stream
     .GetCurrentStream()
     .singleElement(
@@ -60,21 +107,22 @@ function saveSelection(stream: XclExpXmlStream, pane: SheetPane, cursor: Uint8Ar
       token("pane"),
       paneNames[pane],
       token("activeCell"),
-      cursor,
+      XclXmlUtils.ToOString(document, activeCell),
       token("activeCellId"),
-      "0",
+      String(cursorIndex & 0xffff),
       token("sqref"),
-      cursor,
+      XclXmlUtils.ToOString(document, ranges),
     );
 }
 
-/** Applies the Excel pane coordinate and selection contracts. @param stream - Worksheet serializer. @param document - Workbook. @param tab - Current sheet. @param layout - Detached native layout. @param cursor - Current cursor. @returns Nothing. */
+/** Applies the Excel pane coordinate and selection contracts. @param stream - Worksheet serializer. @param document - Workbook. @param tab - Current sheet. @param layout - Detached native layout. @param cursor - Current cursor. @param marks - Active pane marks. @returns Nothing. */
 function savePanes(
   stream: XclExpXmlStream,
   document: ScDocument,
   tab: number,
   layout: SheetPaneLayout,
-  cursor: Uint8Array,
+  cursor: ScAddress,
+  marks?: ScRangeList,
 ): void {
   const normal =
     layout.horizontalMode === SheetSplitMode.NORMAL ||
@@ -95,7 +143,7 @@ function savePanes(
         ? layout.verticalPosition
         : 0) >>> 0;
   if (!x && !y) {
-    saveSelection(stream, SheetPane.TOPLEFT, cursor);
+    saveSelection(stream, document, SheetPane.TOPLEFT, cursor, marks);
     return;
   }
   let active = ((x && layout.activePane & 1 ? 1 : 0) |
@@ -131,10 +179,11 @@ function savePanes(
     const position =
       pane === active
         ? cursor
-        : cell(document, tab, [
+        : new ScAddress(
             pane & 1 ? second[0] : layout.first[0],
             pane & 2 ? second[1] : layout.first[1],
-          ]);
-    saveSelection(stream, pane, position);
+            0,
+          );
+    saveSelection(stream, document, pane, position, pane === active ? marks : undefined);
   }
 }

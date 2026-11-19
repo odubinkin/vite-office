@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/view/scextopt.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "spreadsheet-view-cursor",
+    "capabilityIds": [
+      "CAP-318fcdc6-c54d-4669-ab37-0b550ac83495",
+      "CAP-211b5dc6-a580-4baf-a71e-d3af2e1c746f",
+      "CAP-17e6ea35-6788-440f-af21-d5647d785cd0"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/view/scextopt.ts",
+        "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
+        "apps/office/e2e/calc/xlsx-selection.spec.ts"
+      ],
+      "justification": "Owns the native extended tab records containing the per-export selected flag and independent range list.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScExtTabSettings",
+        "ScExtDocOptions"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/ui/view/scextopt.cxx",
+      "upstreamSymbols": [
+        "ScExtTabSettings",
+        "ScExtDocOptions"
+      ]
+    }
+  }
+}

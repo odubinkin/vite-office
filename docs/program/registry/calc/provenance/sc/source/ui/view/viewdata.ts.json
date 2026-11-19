@@ -31,7 +31,8 @@
       "J0Z0KF worksheet pane checkpoint. Attaching the document restores the real view data's active pane and lends the per-sheet geometry to view consumers.",
       "Exposes source horizontal left/right and vertical top/bottom position accessors and publishes browser-measured unsplit origins through the attached view.",
       "Publishes movable pane origins while preserving fixed origins and coordinates of frozen boundaries.",
-      "Mirrors the four native pane origins and SetActivePart into the detached worksheet state for ODS and XLSX persistence."
+      "Mirrors the four native pane origins and SetActivePart into the detached worksheet state for ODS and XLSX persistence.",
+      "Captures live selected tabs and native mark lists in per-tab extended options before XLSX export."
     ],
     "omittedResponsibilities": [
       "Represented document-bound cursor,mark,reference start/end/type and Ctrl-mouse state use original fields/defaults. Complete ScViewData construction,device geometry,zoom,windows,hidden/alternate sheet views and view persistence remain unported.",
@@ -108,6 +109,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/ui/view/viewdata.cxx",
           "marker": "ScViewData::SetActivePart"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/viewdata.cxx",
+          "marker": "ScViewData::WriteExtOptions"
         }
       ]
     }

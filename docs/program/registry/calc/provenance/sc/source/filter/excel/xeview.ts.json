@@ -17,7 +17,8 @@
       "Emits the independent per-sheet grid flag in sheetViews for workbook view zero, before the worksheet geometry and sheet data.",
       "Emits workbook-wide formula mode, header visibility and zero-value visibility from the document view options, and grid visibility from each sheet.",
       "Exports the current sheet cursor using the native singleton selection record for the unsplit case.",
-      "J0Z0KF worksheet pane checkpoint. Sheet view export writes fixed counts relative to the first viewport origin, normal twip splits, native pane activation and one cursor selection per represented pane. CALC-753 retains the source comparison of relative counts with absolute coordinates."
+      "J0Z0KF worksheet pane checkpoint. Sheet view export writes fixed counts relative to the first viewport origin, normal twip splits, native pane activation and one cursor selection per represented pane. CALC-753 retains the source comparison of relative counts with absolute coordinates.",
+      "Converts live marks to bounded Excel coordinates in native order, emits the first matching range index, and appends a missing active cell."
     ],
     "omittedResponsibilities": [
       "Other sheet view options, alternate workbook views, chart sheets and BIFF records remain outside this mechanism."
@@ -53,6 +54,14 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/excel/xeview.cxx",
           "marker": "XclExpSelection::SaveXml"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xeview.cxx",
+          "marker": "XclExpSelection::XclExpSelection"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xehelper.cxx",
+          "marker": "XclExpAddressConverter::ConvertRangeList"
         }
       ]
     }

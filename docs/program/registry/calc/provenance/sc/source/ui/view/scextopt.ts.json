@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/view/scextopt.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/view/scextopt.cxx",
+    "localSymbols": [
+      "ScExtTabSettings",
+      "ScExtDocOptions"
+    ],
+    "upstreamSymbols": [
+      "ScExtTabSettings",
+      "ScExtDocOptions"
+    ],
+    "preservedResponsibilities": [
+      "Owns native extended sheet records by tab and allocates an empty selection and false selected flag on first access."
+    ],
+    "omittedResponsibilities": [
+      "Other extended view settings use the existing document-backed representation. Workbook-level settings and VBA code names remain outside the options subset."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/view/scextopt.ts",
+          "marker": "class ScExtDocOptions"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
+          "marker": "exports live ordered marks"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/scextopt.cxx",
+          "marker": "ScExtDocOptions::GetOrCreateTabSettings"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/scextopt.cxx",
+          "marker": "ScExtTabSettings::ScExtTabSettings"
+        }
+      ]
+    }
+  }
+}

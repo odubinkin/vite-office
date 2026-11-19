@@ -4,6 +4,7 @@ import type { ScTabViewShell } from "../inc/tabvwsh";
 import type { ScDocument } from "../../../inc/document";
 import { ScMarkData } from "../../../inc/markdata";
 import { ScViewUtil } from "./viewutil";
+import type { ScExtDocOptions } from "./scextopt";
 import { ScMergeAttr } from "../../../inc/attrib";
 import { ATTR_MERGE } from "../../../inc/scitems";
 import { SfxItemState } from "../../../../svl/inc/itemset";
@@ -307,6 +308,15 @@ export class ScViewData {
       second[1] !== layout.second[1]
     )
       setSheetPaneLayout(this.mrDoc, this.GetTabNumber(), { ...layout, first, second });
+  }
+  /** Writes live marks to the same tab view records used by the native export filter. @param options - Filter snapshot. @returns Nothing. */
+  WriteExtOptions(options: ScExtDocOptions): void {
+    for (let tab = 0; tab < this.mrDoc.GetTableCount(); ++tab) {
+      if (!this.FetchTableData(tab)) continue;
+      const settings = options.GetOrCreateTabSettings(tab);
+      settings.mbSelected = this.maMarkData.GetTableSelect(tab);
+      this.maMarkData.FillRangeListWithMarks(settings.maSelection, true);
+    }
   }
   /** Original view-owned borrowed option copy. @returns Actual options. */
   GetOptions(): ScViewOptions {

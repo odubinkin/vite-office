@@ -21,6 +21,7 @@ import { Color, ColorAlpha } from "../../../../tools/inc/color";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { ScAddress, ScRange, ScRefFlags } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
+import { ScRangeList } from "../../../inc/rangelst";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import { FormulaResultValue } from "../../../inc/formularesult";
 import { SvNumFormatType } from "../../../../svl/inc/zforlist";
@@ -137,10 +138,12 @@ function GetStreamName(directory: Uint8Array | null, stream: Uint8Array, id: num
 function ToOString(value: Color | Uint16Array | XclExpString): Uint8Array;
 /** Original actual range formatting with optional full-address notation. @param doc - Actual document. @param range - Actual range. @param full - Native flag, defaultfalse. @returns UTF8 byte value. */
 function ToOString(doc: ScDocument, range: ScRange, full?: boolean): Uint8Array;
+/** Formats whitespace-separated ranges in the native SpreadsheetML convention. @param doc - Actual document. @param ranges - Local selection ranges. @returns UTF8 byte value. */
+function ToOString(doc: ScDocument, ranges: ScRangeList): Uint8Array;
 /** Native overload dispatch for the admitted original values. @param value - Actual input. @param range - Optional range. @param full - Native flag. @returns UTF8 bytes. */
 function ToOString(
   value: Color | Uint16Array | XclExpString | ScDocument,
-  range?: ScRange,
+  range?: ScRange | ScRangeList,
   full = false,
 ): Uint8Array {
   if (value instanceof XclExpString) return ToOString(value.GetUnicodeBuffer());
@@ -153,6 +156,19 @@ function ToOString(
       )
       .join("");
     return OUStringToOString(result, RTL_TEXTENCODING_UTF8);
+  }
+  if (range instanceof ScRangeList) {
+    const references: string[] = [];
+    const details = new ScAddress.Details(FormulaGrammar.AddressConvention.CONV_XL_OOX);
+    for (const reference of range) {
+      const formatted = reference.Format(value as ScDocument, ScRefFlags.VALID, details);
+      try {
+        references.push(text(formatted));
+      } finally {
+        formatted.dispose();
+      }
+    }
+    return OUStringToOString(references.join(" "), RTL_TEXTENCODING_UTF8);
   }
   const string =
     value instanceof Uint16Array
