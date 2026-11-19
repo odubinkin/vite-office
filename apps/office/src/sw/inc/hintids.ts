@@ -141,6 +141,12 @@ export const RES_TXTATR_INETFMT = 54 as const;
 /** Native ranged character-style reference. */
 export const RES_TXTATR_CHARFMT = 55 as const;
 
+/** Point text attribute attached to an as-character fly. */
+export const RES_TXTATR_FLYCNT = 61 as const;
+
+/** Original word-breaking marker for a text attribute without literal text. */
+export const CH_TXTATR_BREAKWORD = "\u0001";
+
 /** Original embedded input field delimiters. */
 export const CH_TXT_ATR_INPUTFIELDSTART = "\u0004";
 export const CH_TXT_ATR_INPUTFIELDEND = "\u0005";

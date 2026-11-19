@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/inc/txtflcnt.ts",
+    "localSymbols": [
+      "SwTextFlyCnt"
+    ],
+    "upstreamPath": "sw/inc/txtflcnt.hxx",
+    "upstreamSymbols": [
+      "SwTextFlyCnt"
+    ],
+    "preservedResponsibilities": [
+      "Stores the native word-breaking point hint, establishes its format item backlink, and applies the actual as-character anchor to the destination text node in the same document."
+    ],
+    "omittedResponsibilities": [
+      "Point insertion into the paragraph hint maps, cross-document CopyFlyFormat and layout-frame creation are pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/txtflcnt.ts",
+          "marker": "SwTextFlyCnt"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/atrflyin.test.ts",
+          "marker": "SwTextFlyCnt"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/txtflcnt.hxx",
+          "marker": "SwTextFlyCnt"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/atrflyin.cxx",
+          "marker": "SwTextFlyCnt::SwTextFlyCnt"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/atrflyin.cxx",
+          "marker": "SwTextFlyCnt::SetAnchor"
+        }
+      ]
+    }
+  }
+}

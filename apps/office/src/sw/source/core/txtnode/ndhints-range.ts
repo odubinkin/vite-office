@@ -1,6 +1,7 @@
 /** @fileoverview Owns bounded range clipping at the native SwpHints insertion/formatting responsibility boundary. */
 import { SwFormatCharFormat } from "./fmtatr2";
-import { SwFormatAutoFormat, type SwTextAttrEnd } from "./txatbase";
+import { SwFormatAutoFormat, type SwTextAttr, type SwTextAttrEnd } from "./txatbase";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { DestroyTextNodeAttribute } from "./thints-insert";
 import { RES_TXTATR_CHARFMT, RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 import { SwTextCharFormat } from "./txtatr2";
@@ -41,12 +42,12 @@ export function assertTextRange(textLength: number, start: number, end: number):
 
 /** Compares hints using LibreOffice start, end, and item ordering. @param left - First. @param right - Second. @returns Signed ordering. */
 export function compareHints(
-  left: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
-  right: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
+  left: SwTextAttr<SfxPoolItem>,
+  right: SwTextAttr<SfxPoolItem>,
 ): number {
   return (
     left.start - right.start ||
-    right.end - left.end ||
+    right.GetAnyEnd() - left.GetAnyEnd() ||
     right.Which() - left.Which() ||
     (left instanceof SwTextCharFormat && right instanceof SwTextCharFormat
       ? left.GetSortNumber() - right.GetSortNumber()
@@ -62,13 +63,13 @@ export function compareWhichStartPairs(
   return left[0] - right[0] || left[1] - right[1];
 }
 
-/** Compares supported ranges in native end/start-reverse/Which order. @param left - First attribute. @param right - Second attribute. @returns Signed order. */
+/** Compares ranged and point hints in native end/start-reverse/Which order. @param left - First attribute. @param right - Second attribute. @returns Signed order. */
 export function compareHintsByEnd(
-  left: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
-  right: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
+  left: SwTextAttr<SfxPoolItem>,
+  right: SwTextAttr<SfxPoolItem>,
 ): number {
   return (
-    left.end - right.end ||
+    left.GetAnyEnd() - right.GetAnyEnd() ||
     right.start - left.start ||
     left.Which() - right.Which() ||
     (left instanceof SwTextCharFormat && right instanceof SwTextCharFormat
@@ -77,10 +78,10 @@ export function compareHintsByEnd(
   );
 }
 
-/** Compares supported ranges in native Which/start/end-reverse order. @param left - First attribute. @param right - Second attribute. @returns Signed order. */
+/** Compares ranged and point hints in native Which/start/end-reverse order. @param left - First attribute. @param right - Second attribute. @returns Signed order. */
 export function compareHintsByWhichAndStart(
-  left: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
-  right: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
+  left: SwTextAttr<SfxPoolItem>,
+  right: SwTextAttr<SfxPoolItem>,
 ): number {
   return (
     left.Which() - right.Which() ||
@@ -88,13 +89,13 @@ export function compareHintsByWhichAndStart(
     (left instanceof SwTextCharFormat && right instanceof SwTextCharFormat
       ? left.GetSortNumber() - right.GetSortNumber()
       : 0) ||
-    right.end - left.end
+    right.GetAnyEnd() - left.GetAnyEnd()
   );
 }
 
 /** Finds native lower/upper Which/start bounds without comparing ends. @param hints - Which map. @param position - Lexicographic boundary. @param upper - Include equals before the bound. @returns Insertion index. */
 export function hintWhichStartBound(
-  hints: readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>[],
+  hints: readonly SwTextAttr<SfxPoolItem>[],
   position: readonly [number, number],
   upper: boolean,
 ): number {
@@ -102,9 +103,7 @@ export function hintWhichStartBound(
     last = hints.length;
   while (first < last) {
     const middle = Math.floor((first + last) / 2),
-      hint = hints[middle] as SwTextAttrEnd<
-        SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat
-      >;
+      hint = hints[middle] as SwTextAttr<SfxPoolItem>;
     const order = hint.Which() - position[0] || hint.start - position[1];
     if (order < 0 || (upper && order === 0)) first = middle + 1;
     else last = middle;
@@ -114,7 +113,7 @@ export function hintWhichStartBound(
 
 /** Finds native lower/upper position bounds in a map ordered by that coordinate. @param hints - Start or end map. @param position - Boundary. @param upper - Include equals before the bound. @param byEnd - Whether to compare ends instead of starts. @returns Insertion index. */
 export function hintPositionBound(
-  hints: readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>[],
+  hints: readonly SwTextAttr<SfxPoolItem>[],
   position: number,
   upper: boolean,
   byEnd = false,
@@ -123,10 +122,8 @@ export function hintPositionBound(
     last = hints.length;
   while (first < last) {
     const middle = Math.floor((first + last) / 2);
-    const hint = hints[middle] as SwTextAttrEnd<
-      SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat
-    >;
-    const coordinate = byEnd ? hint.end : hint.start;
+    const hint = hints[middle] as SwTextAttr<SfxPoolItem>;
+    const coordinate = byEnd ? hint.GetAnyEnd() : hint.start;
     if (coordinate < position || (upper && coordinate === position)) first = middle + 1;
     else last = middle;
   }

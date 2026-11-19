@@ -33,6 +33,10 @@
         {
           "path": "apps/office/src/sw/source/filter/html/swhtml.links.integration.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/atrflyin.test.ts",
+          "marker": "SwTextFlyCnt"
         }
       ],
       "upstream": [
@@ -47,6 +51,14 @@
         {
           "path": "sw/source/filter/html/htmlgrin.cxx",
           "marker": "SwHTMLParser::NewAnchor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndhints.cxx",
+          "marker": "CompareSwpHtStart"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndhints.cxx",
+          "marker": "CompareSwpHtEnd::operator()"
         }
       ]
     },
@@ -58,7 +70,8 @@
       "Iteration134 restores same-node delete undo as raw m_aSttStr plus native whole-node SwHistory old AUTO/INET item history. SwHistorySetText clones item/index/range and FormatIgnore only;undo clears hints,inserts NOHINTEXPAND2 and forward temporary rollback reconstructs fresh constructor flags/actual maps/backlinks/7INETvalues/IDs/shared AUTO handles. Grouping retains original history,redo resetsTmpEnd,disposal releases text/history. Native NOHINTADJUST12 insertion bypasses portion merging;ordinary InsertItem/BuildPortions,new-attribute and other history variants remain unimplemented/unverified. Two binary-search and three node projection/fragment bodies move unchanged to existing helpers under1000-line gates. Selection adapters,all semantic statuses/defaults/exceptions and registered I/O deviations preserved;new history module whollyunverified,no promotion.",
       "S3HW1E ranged character-style checkpoint: native SwFormatCharFormat/SwTextCharFormat retain actual style identity, fresh backlinks, sort numbers and synchronous range-update notifications; JS weak references/collection bind listener destruction without pointer/refcount emulation. Source FillProgName character disambiguation, native common default internet item, cross-document style name/parent/item copy, three-map style sort order and query expansion are consumed. Native BuildPortions now serves actual character/automatic InsertItem calls and document insertion; complete represented portions merge together. InsertItem has the original nullable surviving-owner result after splitting/merging; existing NOHINTADJUST fixture inputs assert surviving ownership without weakening their prior cases. Actual styles remain in the model and Worker graph; immutable control/run and formatter stack projections resolve them on read. WRITER158/159 preserve source early-return and count-based sort quirks. RSID-only items, native pointer tie-breaking, unrepresented help/link-style services, full HTML/CSS reader and compiled Writer parity remain unverified. Registered save/open/recovery deviations are unchanged.",
       "S3HW1E owns extracted fresh-hint normalization without changing its selection/merging logic; discarded owned hints are destroyed. This browser projection responsibility remains separate from native map ownership transfer and does not certify complete SwpHints parity.",
-      "The owned-map normalization boundary now admits native SwFormatINetFormat with empty URL, matching original MakeTextAttr/TryInsertHint and NewAnchor item production. Only the legacy URL-payload pruning predicate is removed; native empty ranges, same-family ordering and INET separation remain unchanged. The distinct portable normalizeWriterHyperlink UI boundary still rejects blank destinations. Existing internet-item-defaults graph assertions are corrected from the old pruning expectation, and actual HTML/Worker round trips pin retained empty native items."
+      "The owned-map normalization boundary now admits native SwFormatINetFormat with empty URL, matching original MakeTextAttr/TryInsertHint and NewAnchor item production. Only the legacy URL-payload pruning predicate is removed; native empty ranges, same-family ordering and INET separation remain unchanged. The distinct portable normalizeWriterHyperlink UI boundary still rejects blank destinations. Existing internet-item-defaults graph assertions are corrected from the old pruning expectation, and actual HTML/Worker round trips pin retained empty native items.",
+      "The three ordering and lookup helpers accept the common text-attribute base and obtain the effective end from GetAnyEnd for point hints."
     ],
     "omittedResponsibilities": [
       "This unchanged portable clipping responsibility is not the complete native BuildPortions/InsertHint/nesting algorithm;all wider obligations remain unverified."

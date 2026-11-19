@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/inc/fmtflcnt.ts",
+    "localSymbols": [
+      "SwFormatFlyCnt"
+    ],
+    "upstreamPath": "sw/inc/fmtflcnt.hxx",
+    "upstreamSymbols": [
+      "SwFormatFlyCnt"
+    ],
+    "preservedResponsibilities": [
+      "Creates the native non-shareable frame link, compares attached positions and format identity, and clones the borrowed format without carrying the text hint."
+    ],
+    "omittedResponsibilities": [
+      "Diagnostic XML dumps are omitted."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/fmtflcnt.ts",
+          "marker": "SwFormatFlyCnt"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/atrflyin.test.ts",
+          "marker": "SwFormatFlyCnt"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/fmtflcnt.hxx",
+          "marker": "SwFormatFlyCnt"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/atrflyin.cxx",
+          "marker": "SwFormatFlyCnt::SwFormatFlyCnt"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/atrflyin.cxx",
+          "marker": "SwFormatFlyCnt::operator=="
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/atrflyin.cxx",
+          "marker": "SwFormatFlyCnt::Clone"
+        }
+      ]
+    }
+  }
+}

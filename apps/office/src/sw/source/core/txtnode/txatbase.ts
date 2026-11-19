@@ -112,9 +112,7 @@ export function createWriterCharacterItemSet(
 export { SwFormatAutoFormat } from "./fmtatr2";
 
 /** Native text attribute base with a start position and an optional end. */
-export class SwTextAttr<
-  TFormat extends SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat = SwFormatAutoFormat,
-> {
+export class SwTextAttr<TFormat extends SfxPoolItem = SwFormatAutoFormat> {
   private m_nStart: number;
   private m_bDontExpand = false;
   private m_bLockExpandFlag = false;
@@ -143,10 +141,8 @@ export class SwTextAttr<
     return this.format;
   }
   /** Returns the native family. @returns WhichId. */
-  public Which():
-    typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT | typeof RES_TXTATR_CHARFMT {
-    return this.GetAttr().Which() as
-      typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT | typeof RES_TXTATR_CHARFMT;
+  public Which(): number {
+    return this.GetAttr().Which();
   }
   /** Returns the start. @returns UTF-16 offset. */
   public GetStart(): number {
@@ -329,6 +325,12 @@ export class SwTextAttrEnd<
     super(format, start);
     if (!Number.isInteger(end)) throw new Error("SwTextAttr end is invalid.");
     this.m_nEnd = end;
+  }
+  /** Returns the registered ranged-family identifier. @returns WhichId. */
+  public override Which():
+    typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT | typeof RES_TXTATR_CHARFMT {
+    return super.Which() as
+      typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT | typeof RES_TXTATR_CHARFMT;
   }
   /** Returns the range end. @returns UTF-16 offset. */
   public override GetEnd(): number {

@@ -56,6 +56,7 @@ import { SwHeaderAndFooterEatSpacingItem } from "../../../inc/hfspacingitem";
 import { RES_FRAMEDIR } from "../../../inc/hintids";
 import { SwFormatAutoFormat } from "../txtnode/txatbase";
 import { RES_PARATR_LIST_AUTOFMT, RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
+import { SwFormatFlyCnt } from "../../../inc/fmtflcnt";
 import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
 import { LANGUAGE_DONTKNOW } from "../../../../i18nlangtag/inc/lang";
 
@@ -297,6 +298,7 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SfxBoolItem(RES_PARATR_LIST_ISCOUNTED, true));
     add(new SwFormatAutoFormat(RES_PARATR_LIST_AUTOFMT));
     add(new SwFormatAutoFormat(RES_TXTATR_AUTOFMT));
+    add(new SwFormatFlyCnt(null));
   }
   /** Native member-table destruction releases every owned default; source shutdown ordering excludes live pool users. @returns Nothing. */
   override Dispose(): void {
