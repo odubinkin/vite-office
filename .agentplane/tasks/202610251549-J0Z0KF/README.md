@@ -1,10 +1,10 @@
 ---
 id: "202610251549-J0Z0KF"
 title: "Implement Calc XLSX import export and existing file UI integration"
-status: "DOING"
+status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 687
+revision: 688
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T22:31:08.742Z"
+  updated_at: "2026-11-19T23:11:15.626Z"
   updated_by: "CODER"
-  note: "Worksheet tab colors passed 107 related Calc cases, 34 undo cases, four shared XML cases, the two per-file scoped90 checks, and the production Chromium file workflows. Wider XLSX acceptance remains open."
-  attempts: 226
+  note: "Native Calc page styles passed 68 related cases, the final five page-style cases, all three per-file scoped90 checks and production Chromium file workflows. Wider XLSX acceptance remains open."
+  attempts: 227
 commit: null
 comments:
   -
@@ -3624,8 +3624,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T23:11:15.626Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native Calc page styles passed 68 related cases, the final five page-style cases, all three per-file scoped90 checks and production Chromium file workflows. Wider XLSX acceptance remains open."
 doc_version: 3
-doc_updated_at: "2026-11-19T22:50:15.863Z"
+doc_updated_at: "2026-11-19T23:11:15.986Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -10536,6 +10542,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-19T23:11:15.626Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native Calc page styles passed 68 related cases, the final five page-style cases, all three per-file scoped90 checks and production Chromium file workflows. Wider XLSX acceptance remains open.
+    Attempts: 227
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T22:50:15.863Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -11643,6 +11679,10 @@ sections:
     - Observation: XLSX tab colors now resolve using the workbook palette and survive document transfer, ODS and XLSX reopen.
       Impact: Existing Calc tabs show imported colors, including separate selected and inactive styling. No file UI or persistence policy changes.
       Resolution: Implementation ea2b0a82218b and evidence/native-xlsx-tab-colors.json. The complete chart-sheet case remains outside the represented worksheet color scope, and the existing framework registry gap still affects global validation.
+
+    - Observation: Worksheet print layout now uses actual Calc Page-family items, the original paper conversions and named master-page references for ODS and Worker transport.
+      Impact: Existing Open, Save As and XLSX download preserve the covered print options, paper geometry and scaling across reload.
+      Resolution: Implementation 795d20aa8323 and evidence/native-xlsx-page-settings.json. CALC-755 documents the original annotation asymmetry. Header/footer stories, printer data, chart-sheet settings and earlier wider checks remain open.
 id_source: "generated"
 ---
 ## Summary
@@ -18563,6 +18603,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-19T23:11:15.626Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native Calc page styles passed 68 related cases, the final five page-style cases, all three per-file scoped90 checks and production Chromium file workflows. Wider XLSX acceptance remains open.
+Attempts: 227
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T22:50:15.863Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -19674,3 +19744,7 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Observation: XLSX tab colors now resolve using the workbook palette and survive document transfer, ODS and XLSX reopen.
   Impact: Existing Calc tabs show imported colors, including separate selected and inactive styling. No file UI or persistence policy changes.
   Resolution: Implementation ea2b0a82218b and evidence/native-xlsx-tab-colors.json. The complete chart-sheet case remains outside the represented worksheet color scope, and the existing framework registry gap still affects global validation.
+
+- Observation: Worksheet print layout now uses actual Calc Page-family items, the original paper conversions and named master-page references for ODS and Worker transport.
+  Impact: Existing Open, Save As and XLSX download preserve the covered print options, paper geometry and scaling across reload.
+  Resolution: Implementation 795d20aa8323 and evidence/native-xlsx-page-settings.json. CALC-755 documents the original annotation asymmetry. Header/footer stories, printer data, chart-sheet settings and earlier wider checks remain open.
