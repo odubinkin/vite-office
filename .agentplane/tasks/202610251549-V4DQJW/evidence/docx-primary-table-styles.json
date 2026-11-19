@@ -1,0 +1,40 @@
+{
+  "checkpoint": "Writer primary storage of Word table style metadata",
+  "implementation": "8544b56f8225",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scope": "Retain the original document tableStyles and table-frame TableStyleName and TableStyleLook values across the existing browser primary XML path. This browser-owned adapter is used by both the Worker and the inline fallback. Portable ODF bytes continue to use the original ODF projection.",
+  "verification": {
+    "writer": {
+      "command": "npm run test:coverage:writer -- writer-primary-odt-filter.test.ts odt-worker-runtime.test.ts odt-worker-client.test.ts writer-odt-io.test.ts writer-odt-store.test.ts writer-table-interop-codec.test.ts src/sw/source/uibase/app/docsh.test.ts --maxWorkers=2 --testTimeout=90000 --coverage.include='src/sw/browser/filter/xml/writer-primary-odt-filter.ts' --coverage.reportsDirectory=coverage/docx-primary-table-styles-final --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.perFile=true --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "49 tests in seven files. Verified exact native table name binding for body and nested tables, DOCX styles.xml and explicit false override after primary import, portable ODT separation, older primary package access, malformed metadata and stale or cancelled export. Full new adapter coverage above 90: 47/47 statements, 35/37 branches, 4/4 functions, 41/41 lines. Coverage map SHA256 c57cd0e04d5ffe0f1f4e9e2f3459949347d6d6e1dd00ae117c1f93e58af3950a."
+    },
+    "chromium": {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" npm exec -- playwright test --config .git/calc-panes-browser.config.mts --project writer --workers=1 --timeout=90000 writer-docx-table-flow.spec.ts",
+      "result": "pass",
+      "evidence": "Two real UI scenarios against the production build. Open DOCX, wait for IndexedDB persistence, reload, reopen the named browser copy, download DOCX, and assert the original TableGrid conditional header, style ID reference and computed tblLook. Existing desktop and mobile header and download reopen regressions pass."
+    },
+    "static": {
+      "commands": [
+        "npm run test:static",
+        "npm run check:dependencies",
+        "npm run check:docs",
+        "npm run check:file-size",
+        "npm run check:source-tree",
+        "npm run check:writer-resources",
+        "npm run check:writer-hintids",
+        "node .agentplane/policy/check-routing.mjs",
+        "ap doctor",
+        "git diff --check"
+      ],
+      "result": "pass",
+      "evidence": "Application typecheck through the final static build, tools typecheck, scoped ESLint/Prettier and four runtime provenance records passed. Agentplane doctor reported the existing hook readiness warning."
+    },
+    "global_registry": {
+      "commands": ["npm run check:source-provenance", "npm run inventory:invariants", "npm run inventory:parity"],
+      "result": "fail",
+      "evidence": "Pre-existing missing framework runtime entries OfficeTooltips.tsx and available-menu-items.ts."
+    }
+  },
+  "residual": "Wider conditional table formatting and the unsupported footer shape in the unmodified upstream tdf81100 fixture remain open."
+}
