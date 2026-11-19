@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 404
+revision: 406
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T10:38:25.068Z"
+  updated_at: "2026-11-19T10:50:42.425Z"
   updated_by: "CODER"
-  note: "Building-block SDT checkpoint 82bdb3c0a passes focused, scoped coverage and production browser checks. Additional DOCX owner and fixture gaps remain."
-  attempts: 124
+  note: "VML geometry and picture metadata checkpoint 5a9fe64b0 passed its scoped tests, native fixture extracts and browser regressions. Shape insertion and complete DOCX integration remain open."
+  attempts: 125
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1992,8 +1995,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T10:50:42.425Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "VML geometry and picture metadata checkpoint 5a9fe64b0 passed its scoped tests, native fixture extracts and browser regressions. Shape insertion and complete DOCX integration remain open."
+  -
+    type: "status"
+    at: "2026-11-19T10:50:52.086Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T10:38:30.178Z"
+doc_updated_at: "2026-11-19T10:50:52.086Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -5810,6 +5826,47 @@ sections:
     - Primary ODT storage preserves the content and section geometry. In the pinned ODF format path there are no export mappings for the Word-specific `SdtPr` and `ParaSdtEndBefore` keys. Those keys are available in the imported live document and direct DOCX export. Live content controls, additional SDT metadata and the VML shape in the untouched `footer-margin-lost.docx` remain pending. WRITER-666 records the upstream normalization of the explicit false uniqueness flag.
     - Six targeted Writer test files passed all 36 cases. The narrower coverage rerun passed all six selected regressions, with new owners at 100% statements, 95.23% branches, 96.15% functions, and 100% lines overall. The lowest per-owner branch result is 90.47% and the lowest function result is 93.33%. Production Chrome ran both page-story and page-border UI checks. The user-supplied example also opened locally, saved, exported and reopened with equal visible body text. No user document was added to the repository. The failure on the deployed build is unverified.
     - Static production build, typecheck, scoped ESLint and Prettier, module dependencies, Writer resources, JSDoc, source limits, source tree and provenance, registry build/check and inventory invariants/parity passed. Agentplane doctor, policy routing and git diff checks passed. The full application suite was not run in this checkpoint.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-19T10:50:42.425Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: VML geometry and picture metadata checkpoint 5a9fe64b0 passed its scoped tests, native fixture extracts and browser regressions. Shape insertion and complete DOCX integration remain open.
+    Attempts: 125
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T10:38:30.178Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    - Command: npm run test:coverage:shared -- vmlshape.test.ts '--coverage.include=src/oox/source/vml/*.ts' --coverage.include=src/oox/source/helper/graphichelper.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/writer-vml-geometry
+      Result: pass. Evidence: six tests. Actual counters by metric for the four changed owners are 211/211 statements, 158/160 branches, 27/27 functions, 181/181 lines. Lowest per-file branch coverage is 96.29%. Scope: original fixed-degree angle, style tokenization, device axes, measure units and rounding, absolute and group coordinates, anchor orientation and wrapping attributes, embedded relationship variants and image settings.
+    - Command: npm run test:shared -- vmlshape.test.ts relations.test.ts fasttokenhandler.test.ts upstream-packages.test.ts --maxWorkers=2
+      Result: pass. Evidence: 59 tests in five files. Scope: shared VML, package relationships and registered SAX names, original strict/transitional OOXML ZIP samples.
+    - Original LibreOffice QA assets were read unchanged. The constituent `word/header2.xml` in `footer-margin-lost.docx` contains an absolute VML watermark. The real package relationship resolves to `word/media/image1.png`, with the native page-margin-centered relation and its physical rectangle. The original `tdf137314_vml_rotation_unit_fd.docx` yielded native 33000 hundredths of a degree from the original style. The tests cover the extraction/conversion stage of those upstream cases. The complete LibreOffice shape insertion, rotated Bezier evaluation, and Writer import/export assertion on the unchanged full footer fixture remain open.
+    - WRITER-667/668 and CALC-750 record upstream measurements and style behavior preserved by this port. Next native integration boundary is ShapeContextHandler and the Writer Shape/GraphicImport to SwGrfNode path, then Worker, storage/export and live UI with the original unprojected fixture.
+    - Command: npm run test:static && node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1 --timeout=90000 --grep 'header-relative|themed text across'
+      Result: pass. Evidence: static production build smoke and two existing file-dialog scenarios, including mobile DOCX re-open. Scope: Writer theme import and DOCX export plus header-relative geometry and ODT persistence.
+    - Command: npm run typecheck, scoped npm exec -- prettier --check and npm exec -- eslint, npm run check:docs, npm run check:file-size, npm run check:dependencies, npm run check:source-tree, npm run check:writer-resources, npm run check:calc-resources, npm run check:writer-hintids, npm run check:source-provenance, npm run inventory:registry:build, npm run inventory:registry:check, npm run inventory:invariants, npm run inventory:parity, node .agentplane/policy/check-routing.mjs, ap doctor, git diff --check.
+      Result: pass. Evidence: production typechecks and build; JSDoc covered 5770 files; provenance covered 2837 runtime modules; registry reported zero semantic violations; project doctor and routing were OK. Scope: the current repository and the changed VML owner files. The ten-task full regression cadence does not require a full run at this checkpoint.
 
     BlueprintSnapshotRef:
     - state: current
@@ -10374,6 +10431,47 @@ Details:
 - Primary ODT storage preserves the content and section geometry. In the pinned ODF format path there are no export mappings for the Word-specific `SdtPr` and `ParaSdtEndBefore` keys. Those keys are available in the imported live document and direct DOCX export. Live content controls, additional SDT metadata and the VML shape in the untouched `footer-margin-lost.docx` remain pending. WRITER-666 records the upstream normalization of the explicit false uniqueness flag.
 - Six targeted Writer test files passed all 36 cases. The narrower coverage rerun passed all six selected regressions, with new owners at 100% statements, 95.23% branches, 96.15% functions, and 100% lines overall. The lowest per-owner branch result is 90.47% and the lowest function result is 93.33%. Production Chrome ran both page-story and page-border UI checks. The user-supplied example also opened locally, saved, exported and reopened with equal visible body text. No user document was added to the repository. The failure on the deployed build is unverified.
 - Static production build, typecheck, scoped ESLint and Prettier, module dependencies, Writer resources, JSDoc, source limits, source tree and provenance, registry build/check and inventory invariants/parity passed. Agentplane doctor, policy routing and git diff checks passed. The full application suite was not run in this checkpoint.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-19T10:50:42.425Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: VML geometry and picture metadata checkpoint 5a9fe64b0 passed its scoped tests, native fixture extracts and browser regressions. Shape insertion and complete DOCX integration remain open.
+Attempts: 125
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T10:38:30.178Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+- Command: npm run test:coverage:shared -- vmlshape.test.ts '--coverage.include=src/oox/source/vml/*.ts' --coverage.include=src/oox/source/helper/graphichelper.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/writer-vml-geometry
+  Result: pass. Evidence: six tests. Actual counters by metric for the four changed owners are 211/211 statements, 158/160 branches, 27/27 functions, 181/181 lines. Lowest per-file branch coverage is 96.29%. Scope: original fixed-degree angle, style tokenization, device axes, measure units and rounding, absolute and group coordinates, anchor orientation and wrapping attributes, embedded relationship variants and image settings.
+- Command: npm run test:shared -- vmlshape.test.ts relations.test.ts fasttokenhandler.test.ts upstream-packages.test.ts --maxWorkers=2
+  Result: pass. Evidence: 59 tests in five files. Scope: shared VML, package relationships and registered SAX names, original strict/transitional OOXML ZIP samples.
+- Original LibreOffice QA assets were read unchanged. The constituent `word/header2.xml` in `footer-margin-lost.docx` contains an absolute VML watermark. The real package relationship resolves to `word/media/image1.png`, with the native page-margin-centered relation and its physical rectangle. The original `tdf137314_vml_rotation_unit_fd.docx` yielded native 33000 hundredths of a degree from the original style. The tests cover the extraction/conversion stage of those upstream cases. The complete LibreOffice shape insertion, rotated Bezier evaluation, and Writer import/export assertion on the unchanged full footer fixture remain open.
+- WRITER-667/668 and CALC-750 record upstream measurements and style behavior preserved by this port. Next native integration boundary is ShapeContextHandler and the Writer Shape/GraphicImport to SwGrfNode path, then Worker, storage/export and live UI with the original unprojected fixture.
+- Command: npm run test:static && node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1 --timeout=90000 --grep 'header-relative|themed text across'
+  Result: pass. Evidence: static production build smoke and two existing file-dialog scenarios, including mobile DOCX re-open. Scope: Writer theme import and DOCX export plus header-relative geometry and ODT persistence.
+- Command: npm run typecheck, scoped npm exec -- prettier --check and npm exec -- eslint, npm run check:docs, npm run check:file-size, npm run check:dependencies, npm run check:source-tree, npm run check:writer-resources, npm run check:calc-resources, npm run check:writer-hintids, npm run check:source-provenance, npm run inventory:registry:build, npm run inventory:registry:check, npm run inventory:invariants, npm run inventory:parity, node .agentplane/policy/check-routing.mjs, ap doctor, git diff --check.
+  Result: pass. Evidence: production typechecks and build; JSDoc covered 5770 files; provenance covered 2837 runtime modules; registry reported zero semantic violations; project doctor and routing were OK. Scope: the current repository and the changed VML owner files. The ten-task full regression cadence does not require a full run at this checkpoint.
 
 BlueprintSnapshotRef:
 - state: current
