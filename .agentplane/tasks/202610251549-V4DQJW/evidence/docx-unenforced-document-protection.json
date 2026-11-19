@@ -1,0 +1,15 @@
+{
+  "scope": "Decode native OOXML document-protection attributes and preserve unenforced settings through the Writer UNO bag, Worker transport and DOCX export.",
+  "implementation": "65849cbeabce",
+  "tests": {
+    "focused_writer_regressions": { "files": 5, "passed": 62, "log": "docx-protection-related-final.log" },
+    "protection_owner_suite": { "passed": 7, "log": "docx-protection-coverage-final.log", "statements": 100, "branches": 96.42, "functions": 100, "lines": 100 },
+    "production_chromium": { "passed": 2, "scenarios": ["Named DOCX styles download and reopen", "Nested DOCX tables download and reopen"], "log": "docx-protection-browser.log" },
+    "upstream_case": "sw/qa/extras/ooxmlexport/ooxmlexport20.cxx:tdf166173_enforcement"
+  },
+  "private_input": "The original attachment reaches the unsupported drawing definition in the header. It no longer hits the document-protection or paragraph text-alignment definition failures. The fixture and probe are omitted from the repository.",
+  "drawing_evidence": "The attachment uses a single embedded raster picture in a wp:anchor, positioned relative to the column and paragraph with wrapNone. A pinned independent header image test is sw/qa/extras/layout/layout3.cxx:testHeaderImageAlignment.",
+  "checks_passed": ["typecheck", "production build", "scoped ESLint and Prettier", "JSDoc", "file size", "module boundaries", "source tree", "OOXML factory regeneration", "Agentplane doctor and routing", "git diff check"],
+  "registry_check_failure": "Production discovery reports two existing shared browser modules without runtime records: OfficeTooltips.tsx and available-menu-items.ts.",
+  "pending": ["Embedded anchored header image import, rendering and export", "Native shell, section and redline application for enforced edit restrictions"]
+}
