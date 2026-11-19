@@ -1,0 +1,111 @@
+{
+  "checkpoint": "Calc scalar text formulas and original XLSX reference-string behavior",
+  "createdAt": "2026-11-19T00:51:01.141Z",
+  "task": "202610251549-J0Z0KF",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "formula/inc/core_resource.hrc#CONCATENATE",
+    "formula/source/core/api/FormulaCompiler.cxx#FormulaCompiler::ConcatLine",
+    "sc/source/core/tool/interpr1.cxx#ScInterpreter::ScConcat",
+    "sc/source/core/tool/interpr4.cxx#ScInterpreter::GetCellString",
+    "sc/source/core/tool/interpr4.cxx#ScInterpreter::PushCellResultToken",
+    "sc/source/core/tool/interpr5.cxx#ScInterpreter::ScAmpersand",
+    "sc/source/core/tool/editutil.cxx#ScEditUtil::GetString",
+    "sc/source/filter/oox/excelfilter.cxx#SetIgnoreLineBreaks",
+    "sc/source/ui/unoobj/defltuno.cxx#SC_UNONAME_WRAP",
+    "sc/qa/unit/subsequent_export_test.cxx#testTdf169326_ignoreLineBreaksInReferencedCells",
+    "sc/qa/unit/subsequent_export_test4.cxx#testTdf123139XLSX"
+  ],
+  "results": {
+    "calc": {
+      "files": 25,
+      "passed": 138,
+      "skipped": 3
+    },
+    "shared": {
+      "files": 9,
+      "passed": 53,
+      "skipped": 0
+    },
+    "writer": {
+      "files": 3,
+      "passed": 18,
+      "skipped": 0
+    },
+    "chromium": 7,
+    "coverageThreshold": 90,
+    "coverage": {
+      "lines": {
+        "total": 288,
+        "covered": 269,
+        "skipped": 0,
+        "pct": 93.4
+      },
+      "statements": {
+        "total": 313,
+        "covered": 292,
+        "skipped": 0,
+        "pct": 93.29
+      },
+      "functions": {
+        "total": 35,
+        "covered": 35,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 223,
+        "covered": 206,
+        "skipped": 0,
+        "pct": 92.37
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "observations": [
+    "The pinned tdf123139 workbook runs unchanged. Its actual C1 expression, string result, and four alignment assertions survive Worker and XLSX reopen. The test leaves the independent protection assertions to the protection owner.",
+    "The original tdf169326 XLSX fixture preserves the source line-break filter for direct and newly entered references after Worker, ODS and XLSX reopening. A fresh workbook retains reference line breaks.",
+    "Scalar arithmetic precedence, nested text functions, missing arguments, reference intersection, dependency updates, errors and exact spaces use the actual compiler and interpreter.",
+    "The broad run reproduces the prior Big5, GB18030 and ISO-2022-CN CSV cases. The scoped passing command excludes exactly those three case titles, while keeping other CSV tests.",
+    "Matrix and external reference text concatenation remain outside the represented scalar compiler path."
+  ],
+  "fixtures": {
+    "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/tdf123139_applyAlignment.xlsx": "f5d4282bece8a5427edf976866fc93eb65f16120540abf21635102d2bb2d099c",
+    "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/tdf169326_ignore_line_breaks_in_referenced_cells.xlsx": "ae80392532c2e2f1c690edd6cb5edc85cafda5d001c928794c547307451049d8"
+  },
+  "files": {
+    "apps/office/src/formula/inc/core_resource.ts": "926cc1853538287d6db5ac8530dc0b059eeb0a4846f592822fff60577e6bc8cd",
+    "apps/office/src/formula/source/core/api/FormulaCompiler.ts": "76df6ee9adc616dd551ca219661200afb046f7d915b43706823cac4ea475a26e",
+    "apps/office/src/sc/source/core/tool/token.ts": "3c4ed8d6303a8ce540f1802e8e5895f6faca0394a3152c9a817d664338d204f7",
+    "apps/office/src/sc/source/core/tool/editutil.ts": "93281f6bf22b7b65d80ad3300114224f2c393f1bdc1712b2de2f4fd242eacaa7",
+    "apps/office/src/sc/source/core/tool/interpr4.ts": "aa870e386d3505c0e8f4f7a0b76308759ac2a09df53f6c96ab85d1bb7e26c1d9",
+    "apps/office/src/sc/source/core/tool/text-formula.test.ts": "5ea78a6aaae2071a2ce0cf3e50c5ca8f3eb29994ad84fe3c22c0fcdf43d302e9",
+    "apps/office/src/sc/source/filter/oox/excelfilter.ts": "84dddd57816059f07ca3f81f5672047cf137cd623627d8676e9efa6a42eb9265",
+    "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts": "ae043933632dc535d6823be3b77447a670b1764d3ea289d9329899dbd8c17a1b",
+    "apps/office/src/sc/source/filter/xml/xmlimprt.ts": "f1ee2992261d654c40d9293f7438df7799fd49c284b97ac501b445ba7b10483a",
+    "apps/office/src/sc/source/filter/xml/xmlstyle.ts": "5a5ed5898acd85e916c3244b88b34fae2fefb3320c184c1a31c580f1f597dab8",
+    "apps/office/e2e/calc/xlsx-alignment.spec.ts": "d1788a0814b7a82813917dbef34388c8dfc8f35155e92bf9e3d054688904844e",
+    "apps/office/src/sc/source/core/data/reference-protocol.test.ts": "c6628b6d8be8eceb443c71c2c93c4d3ab00be93b704bb7d5fce7d85946553fc2",
+    "apps/office/src/sc/source/core/tool/formula-output.test.ts": "75ce47f6310d77cc8e4eb68d201dcfc677f8530addd284fe960ffd39613ae873"
+  },
+  "logs": {
+    "apps/office/coverage/xlsxconcat-coverage.log": "09f3b3180694cace13db90d66df7af1c6677c0c0c531d024d508a56a25096f5f",
+    "apps/office/coverage/xlsxconcat-final.log": "e4dfef511d762c50bd075ebb0eb0a810a3a989d5d5a2e41ebb3af37c2ea3bdae",
+    "apps/office/coverage/xlsxconcat-shared.log": "4082195e15413411de5696af8daae0dd8fb28056ca38ab600cabf97d1fc60852",
+    "apps/office/coverage/xlsxconcat-writer.log": "c2c07168404c2127e20ac4f903a56431dca16d77241d3eceabd58666af1998bb",
+    "apps/office/coverage/xlsxconcat-browser.log": "c29510da821488f1930b17fbae2564584855957d52db2f69f4cd15e206e6820f",
+    "apps/office/coverage/xlsxconcat-types.log": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+    "apps/office/coverage/xlsxconcat-static.log": "14724f2633909ad72fe161532c5a243dc04971db06648a62a32a3de1e0fd140d",
+    "apps/office/coverage/xlsxconcat-structure.log": "a4a8192cc4f72d9309d74e6a1f5b65c1e71ce09fc58a95e4378097574d8f7e49",
+    "apps/office/coverage/xlsxconcat-registry.log": "2b198c5097838f8bb45d487c07caeac7d062be0b6061f242869b21278347502e",
+    "apps/office/coverage/xlsxconcat-lint.log": "da6d455ded155918ac52558fcf36c5f1b11cca50ccc35e6aed9b29810e20ab5d",
+    "apps/office/coverage/xlsxconcat-resources.log": "b18460f2f0f521d94eb9a225905149dbed68f13a6c65df89fe90837eccca196e",
+    "apps/office/coverage/xlsxconcat-final/coverage-summary.json": "031d7175ed924a3a6708f69c88a3404187f95eddbf05c5c5a6d88e3dbfde0815",
+    "apps/office/coverage/in-calc-dialog.log": "526123ce14a1a774d80b273b8ddec4f2682d4f5042ebd6154c2323f7c4f17fb4"
+  }
+}

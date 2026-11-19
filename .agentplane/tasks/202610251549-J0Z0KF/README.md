@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 621
+revision: 624
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T00:35:17.726Z"
+  updated_at: "2026-11-19T00:51:02.093Z"
   updated_by: "CODER"
-  note: "Native XLSX cell alignment checkpoint passes scoped Calc, shared, Writer and Chromium checks. The umbrella task remains active for the outstanding filter and grid paths."
-  attempts: 198
+  note: "Native XLSX scalar text formula checkpoint passes scoped Calc, shared, Writer and Chromium gates. The broad run reproduces known CSV locale failures separately. The umbrella task remains active for remaining filters and visual parity."
+  attempts: 199
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3176,8 +3179,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T00:51:02.093Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native XLSX scalar text formula checkpoint passes scoped Calc, shared, Writer and Chromium gates. The broad run reproduces known CSV locale failures separately. The umbrella task remains active for remaining filters and visual parity."
+  -
+    type: "status"
+    at: "2026-11-19T00:51:08.839Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T00:35:23.091Z"
+doc_updated_at: "2026-11-19T00:51:08.839Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -9132,6 +9148,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-19T00:51:02.093Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native XLSX scalar text formula checkpoint passes scoped Calc, shared, Writer and Chromium gates. The broad run reproduces known CSV locale failures separately. The umbrella task remains active for remaining filters and visual parity.
+    Attempts: 199
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T00:51:01.438Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -10127,6 +10173,19 @@ sections:
     - Commands: npm run test:shared -- converter xmltoken; npm run test:writer -- odt-property-roundtrip docxexport.theme --maxWorkers=3. Result: pass. Evidence: 30 shared and 18 Writer tests. Scope: affected XML owners and Writer cross-format regression.
     - Command: ./node_modules/.bin/playwright test -c apps/office/coverage/xlsxalignment.playwright.config.ts --workers=1. Result: pass. Evidence: six Chromium cases. Scope: the actual XLSX Open/Download and mobile reopen, date-system controls and prior border/Worker regressions. The parallel rerun intermittently failed to install the isolated border test bundle. The sequential rerun completed all six.
     - Commands: npm run typecheck, npm run test:static, scoped ESLint and Prettier, dependencies, docs, file size, source tree, provenance, registry/invariants/parity, resource and routing checks, git diff and doctor. Result: pass. Scope: production build and source gates. Evidence: `evidence/native-xlsx-cell-alignment.json`.
+
+    ### Calc scalar text formulas and XLSX reference line breaks
+
+    - Original formula resources and Calc token construction now admit CONCATENATE and ampersand. The shared compiler connects them to the native variable-arity function and ConcatLine grammar. The interpreter uses the existing reference and formatter owners for text, numbers, errors, missing values and scalar intersection. Rich cell text uses the original ScEditUtil owner.
+    - The unchanged tdf123139 workbook now opens with its actual C1 formula. The Worker, XLSX export and mobile reopen preserve the formula and its double-space result. The four upstream alignment assertions now run over the unchanged input. The independent protection assertions still require the native protection path.
+    - Original tdf169326 confirms that XLSX removes line breaks from directly referenced text cells. Calc carries the document-default wrap flag through ODS and the Worker using the source property mapping. The reopened workbook still calculates a newly entered direct reference as HelloWorld. Fresh Calc documents keep reference line breaks.
+    - The existing reference and output assertions now cover local R1C1, malformed input and qualified ODFF references. These cases had continued to expect exceptions after the corresponding native owners were implemented.
+    - The expanded CSV regression repeats the three pre-existing Big5, GB18030 and ISO-2022-CN failures. Both the earlier log and the expanded run report that libc locale operations lack initialized Emscripten runtime state. The focused passing command retains the other CSV tests and limits the selection by those three case titles.
+    - Command: npm run test:shared -- compiler-arithmetic token --maxWorkers=3. Result: pass. Evidence: 53 tests across nine files. Scope: shared scalar compiler and token owners.
+    - Command: npm run test:writer -- odt-property-roundtrip docxexport.theme --maxWorkers=2 --testTimeout=90000. Result: pass. Evidence: 18 tests across three files. Scope: related cross-format Writer regressions. The initial concurrent run exceeded the standard 30-second budget in three cases.
+    - Command: ./node_modules/.bin/playwright test -c apps/office/coverage/xlsxalignment.playwright.config.ts --workers=1. Result: pass. Evidence: seven Chromium cases including source formula import and export through the existing file UI and mobile reopen.
+    - Commands: npm run typecheck, npm run test:static, scoped ESLint and Prettier, npm run check:docs, npm run check:dependencies, npm run check:source-tree, npm run check:source-provenance, npm run check:file-size, npm run inventory:registry:build, npm run inventory:invariants, npm run inventory:parity, npm run check:calc-resources, npm run check:writer-hintids, ap doctor, node .agentplane/policy/check-routing.mjs and git diff --check. Result: pass. Scope: production build and affected source gates. Matrix and external reference text formulas remain open. No full test run was due.
+    - Command: npm run test:coverage:calc -- text-formula aggregate-formula range-formula formula-output reference-protocol calcconfig-document excelfilter typed-date-cells ods-worker ods-native ods-style-routing calc-files calc-document-codec csv --maxWorkers=3 --testTimeout=90000 --testNamePattern '^(?!.*opens auto-detected SAL encoding (68|85|73)).*$' --coverage.include=src/sc/source/core/tool/interpr4.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=coverage/xlsxconcat-final. Result: pass. Evidence: 138 tests across 25 files, three separately reproduced CSV cases excluded, 93.29% statements, 92.37% branches, 100% functions and 93.4% lines. Scope: native Calc formula owners, real XLSX/ODS packages, browser graph and related CSV regressions. Evidence file: `evidence/native-xlsx-text-formula.json`.
 id_source: "generated"
 ---
 ## Summary
@@ -16091,6 +16150,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-19T00:51:02.093Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native XLSX scalar text formula checkpoint passes scoped Calc, shared, Writer and Chromium gates. The broad run reproduces known CSV locale failures separately. The umbrella task remains active for remaining filters and visual parity.
+Attempts: 199
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T00:51:01.438Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -17090,3 +17179,16 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Commands: npm run test:shared -- converter xmltoken; npm run test:writer -- odt-property-roundtrip docxexport.theme --maxWorkers=3. Result: pass. Evidence: 30 shared and 18 Writer tests. Scope: affected XML owners and Writer cross-format regression.
 - Command: ./node_modules/.bin/playwright test -c apps/office/coverage/xlsxalignment.playwright.config.ts --workers=1. Result: pass. Evidence: six Chromium cases. Scope: the actual XLSX Open/Download and mobile reopen, date-system controls and prior border/Worker regressions. The parallel rerun intermittently failed to install the isolated border test bundle. The sequential rerun completed all six.
 - Commands: npm run typecheck, npm run test:static, scoped ESLint and Prettier, dependencies, docs, file size, source tree, provenance, registry/invariants/parity, resource and routing checks, git diff and doctor. Result: pass. Scope: production build and source gates. Evidence: `evidence/native-xlsx-cell-alignment.json`.
+
+### Calc scalar text formulas and XLSX reference line breaks
+
+- Original formula resources and Calc token construction now admit CONCATENATE and ampersand. The shared compiler connects them to the native variable-arity function and ConcatLine grammar. The interpreter uses the existing reference and formatter owners for text, numbers, errors, missing values and scalar intersection. Rich cell text uses the original ScEditUtil owner.
+- The unchanged tdf123139 workbook now opens with its actual C1 formula. The Worker, XLSX export and mobile reopen preserve the formula and its double-space result. The four upstream alignment assertions now run over the unchanged input. The independent protection assertions still require the native protection path.
+- Original tdf169326 confirms that XLSX removes line breaks from directly referenced text cells. Calc carries the document-default wrap flag through ODS and the Worker using the source property mapping. The reopened workbook still calculates a newly entered direct reference as HelloWorld. Fresh Calc documents keep reference line breaks.
+- The existing reference and output assertions now cover local R1C1, malformed input and qualified ODFF references. These cases had continued to expect exceptions after the corresponding native owners were implemented.
+- The expanded CSV regression repeats the three pre-existing Big5, GB18030 and ISO-2022-CN failures. Both the earlier log and the expanded run report that libc locale operations lack initialized Emscripten runtime state. The focused passing command retains the other CSV tests and limits the selection by those three case titles.
+- Command: npm run test:shared -- compiler-arithmetic token --maxWorkers=3. Result: pass. Evidence: 53 tests across nine files. Scope: shared scalar compiler and token owners.
+- Command: npm run test:writer -- odt-property-roundtrip docxexport.theme --maxWorkers=2 --testTimeout=90000. Result: pass. Evidence: 18 tests across three files. Scope: related cross-format Writer regressions. The initial concurrent run exceeded the standard 30-second budget in three cases.
+- Command: ./node_modules/.bin/playwright test -c apps/office/coverage/xlsxalignment.playwright.config.ts --workers=1. Result: pass. Evidence: seven Chromium cases including source formula import and export through the existing file UI and mobile reopen.
+- Commands: npm run typecheck, npm run test:static, scoped ESLint and Prettier, npm run check:docs, npm run check:dependencies, npm run check:source-tree, npm run check:source-provenance, npm run check:file-size, npm run inventory:registry:build, npm run inventory:invariants, npm run inventory:parity, npm run check:calc-resources, npm run check:writer-hintids, ap doctor, node .agentplane/policy/check-routing.mjs and git diff --check. Result: pass. Scope: production build and affected source gates. Matrix and external reference text formulas remain open. No full test run was due.
+- Command: npm run test:coverage:calc -- text-formula aggregate-formula range-formula formula-output reference-protocol calcconfig-document excelfilter typed-date-cells ods-worker ods-native ods-style-routing calc-files calc-document-codec csv --maxWorkers=3 --testTimeout=90000 --testNamePattern '^(?!.*opens auto-detected SAL encoding (68|85|73)).*$' --coverage.include=src/sc/source/core/tool/interpr4.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=coverage/xlsxconcat-final. Result: pass. Evidence: 138 tests across 25 files, three separately reproduced CSV cases excluded, 93.29% statements, 92.37% branches, 100% functions and 93.4% lines. Scope: native Calc formula owners, real XLSX/ODS packages, browser graph and related CSV regressions. Evidence file: `evidence/native-xlsx-text-formula.json`.
