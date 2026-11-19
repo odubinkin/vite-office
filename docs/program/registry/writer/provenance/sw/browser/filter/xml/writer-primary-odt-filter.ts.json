@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-primary-odt-filter.ts",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-primary-odt-filter.ts",
+          "marker": "WriterPrimaryOdtFilterService"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-primary-odt-filter.test.ts",
+          "marker": "including nested tables"
+        }
+      ],
+      "upstream": []
+    },
+    "status": "local-only",
+    "rationale": "Stores native Word table style definitions and per-table interoperability data in the existing browser primary document record beside the ODF package. Worker and inline paths restore it before document adoption. Portable ODF uses the unmodified ODF filter.",
+    "responsibilities": [
+      "Stores native Word table style definitions and per-table interoperability data in the existing browser primary document record beside the ODF package. Worker and inline paths restore it before document adoption. Portable ODF uses the unmodified ODF filter."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Browser-owned primary storage retains format interoperability across reload."
+    }
+  }
+}

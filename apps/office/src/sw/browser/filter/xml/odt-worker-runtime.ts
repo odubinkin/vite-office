@@ -13,13 +13,13 @@ import {
 } from "../../../../framework/browser/workers/worker-protocol";
 import type { ArchiveLimits } from "../../../../package/source/zippackage/document-archive";
 import {
-  createInlineOdtFilterService,
   normalizeOdtFilterError,
   type OdtFilterErrorCategory,
   type OdtFilterProgressStage,
   type OdtFilterService,
   type OdtFilterDocument,
 } from "../../../source/filter/xml/odt-filter-service";
+import { WriterPrimaryOdtFilterService } from "./writer-primary-odt-filter";
 import {
   createOdtWorkerDocument,
   restoreOdtWorkerDocument,
@@ -89,7 +89,7 @@ export class OdtWorkerRuntime {
 
   /** Executes one validated request. @param request - Versioned import/export request. @returns Completion after terminal response. */
   private async Process(request: WorkerRequest<OdtWorkerRequestPayload>): Promise<void> {
-    const service = createInlineOdtFilterService();
+    const service = new WriterPrimaryOdtFilterService();
     this.active.set(request.id, service);
     let ownedDocument: OdtFilterDocument | undefined;
     try {

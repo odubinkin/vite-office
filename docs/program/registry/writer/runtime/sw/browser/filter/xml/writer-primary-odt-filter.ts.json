@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/filter/xml/writer-primary-odt-filter.ts",
+    "classification": "local-infrastructure",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/filter/xml/writer-primary-odt-filter.ts",
+        "apps/office/src/sw/browser/filter/xml/writer-primary-odt-filter.test.ts",
+        "apps/office/e2e/writer-docx-table-flow.spec.ts"
+      ],
+      "justification": "Stores native Word table style definitions and per-table interoperability data in the existing browser primary document record beside the ODF package. Worker and inline paths restore it before document adoption. Portable ODF uses the unmodified ODF filter.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterPrimaryOdtFilterService"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

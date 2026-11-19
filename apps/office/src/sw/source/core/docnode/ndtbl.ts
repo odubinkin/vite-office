@@ -764,7 +764,7 @@ export function InsertTable(
 }
 
 /** Existing used-format profile now includes actual tables in every document section. Unused/default native format-registry owners and mail merge are not represented by this profile. @param doc - Actual document. @returns Actual used frame references. */
-function GetUsedTableFormats(doc: SwDoc): SwFrameFormat[] {
+export function GetUsedTableFormats(doc: SwDoc): SwFrameFormat[] {
   return [
     ...new Set(
       doc

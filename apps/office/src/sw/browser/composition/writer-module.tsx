@@ -23,14 +23,12 @@ import {
   createBrowserDefaultFontDevice,
   createDefaultFontLocale,
 } from "../../../vcl/browser/default-font-device";
-import {
-  createInlineOdtFilterService,
-  type OdtFilterService,
-} from "../../source/filter/xml/odt-filter-service";
+import type { OdtFilterService } from "../../source/filter/xml/odt-filter-service";
 import { SwDocShell } from "../../source/uibase/app/docsh";
 import { SwModule } from "../../source/uibase/app/swmodule";
 import { SwView } from "../../source/uibase/uiview/view";
 import { createWriterWorkbenchDocument } from "../../source/uibase/uiview/viewfunc";
+import { WriterPrimaryOdtFilterService } from "../filter/xml/writer-primary-odt-filter";
 import { createBrowserOdtFilterService } from "../filter/xml/odt-worker-client";
 import { WriterWorkbench } from "../presentation/writer-view";
 import { WriterViewStore } from "../presentation/writer-view-projection";
@@ -110,7 +108,7 @@ export function createWriterBrowserSessionServices(): WriterSessionServices {
 /** Creates one complete persistent Writer ownership chain. @param services - Browser adapters injected by the composition root. @param odtFilter - Asynchronous ODT filter service. @param module - Actual shared Writer preference and view owner. @returns Active document session. */
 export function createWriterDocumentSession(
   services: WriterSessionServices = createWriterBrowserSessionServices(),
-  odtFilter: OdtFilterService = createInlineOdtFilterService(),
+  odtFilter: OdtFilterService = new WriterPrimaryOdtFilterService(),
   module: SwModule = SwModule.get(),
 ): WriterDocumentSession {
   const fontDevice = createBrowserDefaultFontDevice(globalThis.document);
@@ -251,7 +249,7 @@ export function createWriterModuleFactory(
       return createWriterDocumentSession(
         services,
         typeof Worker === "undefined"
-          ? createInlineOdtFilterService()
+          ? new WriterPrimaryOdtFilterService()
           : createBrowserOdtFilterService(),
       );
     };

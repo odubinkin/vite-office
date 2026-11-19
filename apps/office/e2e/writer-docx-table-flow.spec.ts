@@ -100,6 +100,15 @@ test("Writer uses the named first-row flag when opening a DOCX table style", /**
     .getByLabel("Browse")
     .setInputFiles({ name: "First row on.docx", buffer: enabled, mimeType });
   await expect(headings.first()).toBeVisible();
+  await expect(page.getByRole("status", { name: "Writer status bar" })).toContainText(
+    "Saved locally in this browser.",
+  );
+
+  await page.reload();
+  await open.click();
+  await page.getByRole("tab", { name: "In browser" }).click();
+  await page.getByRole("button", { name: "First row on", exact: true }).click();
+  await expect(headings.first()).toBeVisible();
 
   const pending = page.waitForEvent("download");
   await page.getByRole("menuitem", { name: "File" }).click();
