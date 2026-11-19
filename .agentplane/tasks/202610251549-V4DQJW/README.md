@@ -1,10 +1,10 @@
 ---
 id: "202610251549-V4DQJW"
 title: "Implement Writer DOCX import export and existing file UI integration"
-status: "DOING"
+status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 412
+revision: 413
 origin:
   system: "manual"
 depends_on:
@@ -20,11 +20,11 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "needs_rework"
-  updated_at: "2026-11-19T22:49:43.614Z"
+  state: "blocked_external"
+  updated_at: "2026-11-19T23:23:52.337Z"
   updated_by: "CODER"
-  note: "DOCX table flow passed upstream fixture checks, 94.02% table-export branch coverage, 37 targeted Writer rechecks, 17 shared token/parser cases, and production Chromium file workflows. Wider DOCX acceptance remains open."
-  attempts: 3
+  note: "Conditional DOCX table header import passed 31 focused Writer tests and two production Chromium scenarios. Implementation 534cd64733c7 and evidence docx-conditional-header-import.json are committed."
+  attempts: 4
 commit: null
 comments:
   -
@@ -2048,8 +2048,14 @@ events:
     author: "CODER"
     state: "needs_rework"
     note: "DOCX table flow passed upstream fixture checks, 94.02% table-export branch coverage, 37 targeted Writer rechecks, 17 shared token/parser cases, and production Chromium file workflows. Wider DOCX acceptance remains open."
+  -
+    type: "verify"
+    at: "2026-11-19T23:23:52.337Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Conditional DOCX table header import passed 31 focused Writer tests and two production Chromium scenarios. Implementation 534cd64733c7 and evidence docx-conditional-header-import.json are committed."
 doc_version: 3
-doc_updated_at: "2026-11-19T22:49:43.838Z"
+doc_updated_at: "2026-11-19T23:23:52.610Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -6084,6 +6090,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-19T23:23:52.337Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Conditional DOCX table header import passed 31 focused Writer tests and two production Chromium scenarios. Implementation 534cd64733c7 and evidence docx-conditional-header-import.json are committed.
+    Attempts: 4
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T22:49:43.838Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -6805,6 +6841,10 @@ sections:
     - Observation: Repeating table header rows, supported table and cell direction, row height and split emulation now export from the native Writer model. The related test run exposed stale factory test counts and a first-import token initialization failure.
       Impact: The existing Writer Open and Export workflow preserves these supported items. The table-flow export leaves the active browser document format unchanged.
       Resolution: Implementation b93307e159a9 and follow-ups c4d1e4ad6 and 9084201c53a5; see evidence/docx-table-flow.json. Conditional table-style header inheritance and prior whole-suite and registry gaps remain open.
+
+    - Observation: Writer resolves first-row style headers using the native table look and preserves an explicit row false. The original tdf81100 WordprocessingShape footer and two baseline framework registry records remain unresolved.
+      Impact: Header counts survive primary storage and DOCX reopen. Full named table style definitions and the explicit false override still need DOCX interoperability export.
+      Resolution: Continue with typed table-style and table-look grab bags, persistence and the exporter first-row override; retain open QA and baseline registry evidence.
 id_source: "generated"
 ---
 ## Summary
@@ -10850,6 +10890,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-19T23:23:52.337Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Conditional DOCX table header import passed 31 focused Writer tests and two production Chromium scenarios. Implementation 534cd64733c7 and evidence docx-conditional-header-import.json are committed.
+Attempts: 4
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T22:49:43.838Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -11576,3 +11646,7 @@ Evidence: `evidence/docx-native-ranged-bookmarks.json`.
 - Observation: Repeating table header rows, supported table and cell direction, row height and split emulation now export from the native Writer model. The related test run exposed stale factory test counts and a first-import token initialization failure.
   Impact: The existing Writer Open and Export workflow preserves these supported items. The table-flow export leaves the active browser document format unchanged.
   Resolution: Implementation b93307e159a9 and follow-ups c4d1e4ad6 and 9084201c53a5; see evidence/docx-table-flow.json. Conditional table-style header inheritance and prior whole-suite and registry gaps remain open.
+
+- Observation: Writer resolves first-row style headers using the native table look and preserves an explicit row false. The original tdf81100 WordprocessingShape footer and two baseline framework registry records remain unresolved.
+  Impact: Header counts survive primary storage and DOCX reopen. Full named table style definitions and the explicit false override still need DOCX interoperability export.
+  Resolution: Continue with typed table-style and table-look grab bags, persistence and the exporter first-row override; retain open QA and baseline registry evidence.
