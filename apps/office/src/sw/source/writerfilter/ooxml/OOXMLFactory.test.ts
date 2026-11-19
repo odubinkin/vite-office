@@ -253,7 +253,7 @@ it.skipIf(!existsSync("../../vendor/libreoffice-reference/sw/source/writerfilter
       { encoding: "utf8" },
     );
     expect(output).toContain(
-      "defines=188, attributes=308, elements=1089, resources=1288, lists=515, actions=121",
+      "defines=196, attributes=324, elements=1091, resources=1306, lists=529, actions=123",
     );
     expect(output).toContain(
       "defines=77, attributes=59, elements=98, resources=157, lists=202, actions=2",

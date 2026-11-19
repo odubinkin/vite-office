@@ -1,6 +1,8 @@
 /** @fileoverview Original DOCX table-flow fixtures and native Writer item round trips. */
 import { readFileSync } from "node:fs";
 import { assert, expect, it } from "vitest";
+import { OoxmlVersion } from "../../../../oox/inc/core/filterbase";
+import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
 import { SvxFrameDirection as Direction } from "../../../../editeng/inc/frmdir";
 import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
@@ -221,6 +223,30 @@ it("uses the active section direction for tables with an environmental direction
     const tables = xml.match(/<w:tbl>[\s\S]*?<\/w:tbl>/gu);
     expect(tables?.[0]).not.toContain("<w:bidiVisual");
     expect(tables?.[1]).toContain('<w:bidiVisual w:val="true"/>');
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("exports a bottom-aligned cell in the ECMA right-aligned table form", /** Keeps version-specific table geometry and cell vertical alignment in the actual package. @returns Completion. */ async () => {
+  const source = createWriterDocument();
+  try {
+    const table = source.nodes.MakeTableNode("ECMA", { align: "right", width: 4320 });
+    const frame = source.nodes.AppendTableRow(table, 1).GetTabBoxes()[0]?.GetFrameFormat();
+    assert(frame);
+    const alignment = frame.GetVertOrient().Clone();
+    try {
+      alignment.SetVertOrient(VertOrientation.BOTTOM);
+      frame.SetFormatAttr(alignment);
+    } finally {
+      alignment.Dispose();
+    }
+    const bytes = await DocxExport.WriteDocument(source, OoxmlVersion.ECMA_376_1ST_EDITION);
+    const xml = await (await DocumentArchive.open(bytes)).readTextEntry("word/document.xml");
+    expect(xml).toContain('<w:jc w:val="right"/>');
+    expect(xml).toContain('<w:left w:w="');
+    expect(xml).toContain('<w:right w:w="');
+    expect(xml).toContain('<w:vAlign w:val="bottom"/>');
   } finally {
     source.Dispose();
   }
