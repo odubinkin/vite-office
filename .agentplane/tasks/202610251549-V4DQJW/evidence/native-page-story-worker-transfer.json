@@ -1,0 +1,151 @@
+{
+  "task": "202610251549-V4DQJW",
+  "checkpoint": "Writer Worker transfer of native page header and footer owners",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sw/inc/pagedesc.hxx#GetMaster",
+    "sw/source/core/doc/docdesc.cxx#SwDoc::CopyMasterHeader",
+    "sw/source/core/doc/docdesc.cxx#SwDoc::CopyMasterFooter",
+    "sw/inc/fmthdft.hxx#SwFormatHeader"
+  ],
+  "results": {
+    "writer": {
+      "files": 8,
+      "tests": 99
+    },
+    "workerRetest": 2,
+    "chromium": 2,
+    "pageStoryCodecCoverage": {
+      "lines": {
+        "total": 89,
+        "covered": 86,
+        "skipped": 0,
+        "pct": 96.62
+      },
+      "statements": {
+        "total": 100,
+        "covered": 96,
+        "skipped": 0,
+        "pct": 96
+      },
+      "functions": {
+        "total": 8,
+        "covered": 8,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 98,
+        "covered": 92,
+        "skipped": 0,
+        "pct": 93.87
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "commands": [
+    "vitest run --config vitest.writer.config.ts --coverage writer-page-story-codec fmthdft.native writer-codec.boundaries native-page-grid-properties docxexport.numbered-list swhtml.native.integration native-table-geometry-transport --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sw/browser/filter/xml/writer-page-story-codec.ts --coverage.thresholds.lines=90 --coverage.thresholds.functions=90 --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.reporter=json-summary --coverage.reporter=json --coverage.reportsDirectory=coverage/page-story-scoped",
+    "vitest run --config vitest.writer.config.ts writer-page-story-codec --maxWorkers=1 --testTimeout=90000",
+    "npm run test:static",
+    "./node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1 -g 'downloads and reopens nested DOCX tables|downloads and reopens the named styles'",
+    "npm run typecheck",
+    "npm run check:dependencies",
+    "npm run check:docs",
+    "npm run check:file-size",
+    "npm run check:source-tree",
+    "npm run check:writer-hintids",
+    "npm run check:writer-resources",
+    "npm run inventory:registry:build",
+    "npm run check:source-provenance",
+    "npm run inventory:invariants",
+    "npm run inventory:parity",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor",
+    "git diff --check (changed Writer paths)"
+  ],
+  "verified": [
+    "Each original frame is transferred once and reattached by identity across page descriptors and the original four page variants.",
+    "Direct inactive and active-without-frame item states, names, geometry and page sharing flags survive transfer.",
+    "Footer paragraphs, an actual nested table section and its bookmark survive structured clone and native document reconstruction without entering the body.",
+    "Re-encoding the restored model produces the exact graph record. Canonical internal paragraph style groups and pool IDs are retained.",
+    "Malformed or unowned story references, mismatched header/footer kinds, added content pointers and invalid graph shapes are rejected.",
+    "Existing generic text-fly, page-grid, core table and DOCX round-trip paths pass the scoped Writer selection."
+  ],
+  "remaining": [
+    "ODT styles.xml master-page header/footer read and write still need their native text context and owned style export path.",
+    "DOCX DomainMapper page-style and text append integration, section inheritance, original NumberedList open, DOCX output and existing UI display remain open.",
+    "The supported Worker graph preserves native ordered paragraphs, tables and registered marks. Broader shapes and unrealized desktop page layout are not qualified.",
+    "Overall DOCX and XLSX acceptance remains active. No whole-suite run was due."
+  ],
+  "files": [
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+      "sha256": "0d136118c9be3d799e7d272c8f10b4bdfb03c910133d9ebb7c4daddc36c9ec3d"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/browser/filter/xml/writer-document-codec.ts.json",
+      "sha256": "102b82d5cafed5e8640c9813ba90cf9874dc9862f1e7af029733821f667ed9a2"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/browser/filter/xml/writer-document-codec.ts.json",
+      "sha256": "ac6c0299e9ce62f022bd28b73c60db495033b6788143d9e77caee61d8f0d57b9"
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-document-content-codec.ts",
+      "sha256": "d8b3ee655730cef74e473bc5ed22f171f8d859f7eb7c6d42df227e707a187905"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/browser/filter/xml/writer-document-content-codec.ts.json",
+      "sha256": "f3a6f4baf442205964ba8f188d01209a104cb78b16ec9792fca1ea866e11ac7b"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/browser/filter/xml/writer-document-content-codec.ts.json",
+      "sha256": "baf22ffb680c39f5f17532e1f118cd3af73d0aec1944a8ed8aeb5821ae34e4b4"
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-page-format-codec.ts",
+      "sha256": "7599e5da9dfea3e44f0e2a49769fd1d8d1affc7baf85afb02161483b6e70fa14"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/browser/filter/xml/writer-page-format-codec.ts.json",
+      "sha256": "62f2f6392406bf4eea592e39b7439ece5dc0d6f191f2d07f13d57735f3e6900e"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/browser/filter/xml/writer-page-format-codec.ts.json",
+      "sha256": "4014e3ff92d3332dcfa18b448860781f155e0d4893e907b837851fcbcc56500f"
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-text-frame-codec.ts",
+      "sha256": "870716b1e43af7a6b0522ffbecdcbe730bbb3f3b53c5a515ca57d1edd15b7e17"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/browser/filter/xml/writer-text-frame-codec.ts.json",
+      "sha256": "105998e4f439ba4baeb130321ed70b82ad91a140bb33d72bff02d9a18dfd4112"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/browser/filter/xml/writer-text-frame-codec.ts.json",
+      "sha256": "21769ccbd7240099f285cb214f3da5346798c155558c16de7ed6213f336f7495"
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-page-story-codec.ts",
+      "sha256": "215dc943f42a1f11437d4c28ef5647d165372eaee9f4ac4ca807b8ca3014ee9b"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/browser/filter/xml/writer-page-story-codec.ts.json",
+      "sha256": "945a4f28d1f0c2e8319e588a59be09686ef1f4444ec92ecc8beaae9aa546c733"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/browser/filter/xml/writer-page-story-codec.ts.json",
+      "sha256": "bb95f1a6f3d8a78ae7125f7e0af03e814a1d9f10e007188c4676f04566b828c4"
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-page-story-codec.test.ts",
+      "sha256": "bef50f1bd761c638db267f7c728d1a6fca5c877030fdfeab946276ce492335b4"
+    }
+  ]
+}
