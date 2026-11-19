@@ -1,0 +1,142 @@
+{
+  "task": "202610251549-V4DQJW",
+  "checkpoint": "Writer DOCX native table geometry through the filter, Worker, primary ODT and file UI",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sw/source/writerfilter/dmapper/TblStylePrHandler.cxx#TblStylePrHandler::lcl_sprm",
+    "sw/source/writerfilter/dmapper/DomainMapperTableHandler.cxx#DomainMapperTableHandler::endTableGetTableStyle",
+    "sw/source/core/table/swtable.cxx#SwTable::NewSetTabCols",
+    "sw/source/filter/ww8/docxtableexport.cxx#DocxAttributeOutput::TableDefinition",
+    "sw/source/filter/ww8/docxattributeoutput.cxx#DocxAttributeOutput::ImplCellMargins",
+    "sw/qa/extras/ooxmlexport/ooxmlexport5.cxx#testNumberedList/testTdf131819/testTdf131959/testTdf131203"
+  ],
+  "results": {
+    "writer": {
+      "files": 10,
+      "tests": 78,
+      "ownerCoverage": {
+        "docxtableexport.ts": {
+          "lines": 100,
+          "functions": 100,
+          "statements": 100,
+          "branches": 94.87
+        },
+        "TblStylePrHandler.ts": {
+          "lines": 100,
+          "functions": 100,
+          "statements": 100,
+          "branches": 100
+        }
+      }
+    },
+    "chromium": 2,
+    "fullSuiteRun": false
+  },
+  "commands": [
+    "vitest run --config vitest.writer.config.ts --coverage docxexport.numbered-list docxexport.page-stories docxattributeoutput.section docxexport.compat OOXMLFactory.test DomainMapperTableManager native-style-entry-merge native-import-table-errors odt-table-cell-lists odt-roundtrip rtf-floating-table --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sw/source/filter/ww8/docxtableexport.ts --coverage.include=src/sw/source/writerfilter/dmapper/TblStylePrHandler.ts --coverage.thresholds.lines=90 --coverage.thresholds.functions=90 --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.perFile --coverage.reporter=text --coverage.reporter=json --coverage.reporter=json-summary --coverage.reportsDirectory=coverage/docx-table-geometry-scoped",
+    "./node_modules/.bin/playwright test -c apps/office/coverage/odt-story.playwright.config.ts --workers=1 -g 'original DOCX with a footer|downloads and reopens nested DOCX tables'",
+    "npm run typecheck",
+    "npm run test:static",
+    "npm run check:docs",
+    "npm run check:dependencies",
+    "npm run check:file-size",
+    "npm run check:source-tree",
+    "npm run check:writer-hintids",
+    "npm run check:writer-resources",
+    "npm run inventory:registry:build",
+    "npm run check:source-provenance",
+    "npm run inventory:invariants",
+    "npm run inventory:parity",
+    "python3 scripts/writer-ooxml/generate-factory.py --check",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor",
+    "Scoped ESLint and Prettier",
+    "git diff --check"
+  ],
+  "verified": [
+    "The original NumberedList DOCX exports two 360-twip indents and the nested grid widths 3841/4050. The two original List1 number references are preserved.",
+    "Direct zero indentation overrides the named style. A direct cell inset overrides its table default. Preferred percentage width and ISO/ECMA alignment and inset tokens are preserved.",
+    "The pinned tdf131203 no-grid document exports both tables. The original tdf131260 retains its three Writer table owners after export and reopening.",
+    "The original Writer file UI opens the pinned DOCX, restores its browser-stored primary ODT and exports the expected geometry, then opens the same DOCX at the mobile breakpoint."
+  ],
+  "remaining": [
+    "Complete conditional style and border transfer and layout-dependent column sizing for percentage tables.",
+    "The DOCX and XLSX parent tasks remain open. The next Calc scope under review is the actual worksheet visibility owner, first workbook view and native existing sheet controls."
+  ],
+  "fixtures": [
+    {
+      "path": "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/NumberedList.docx",
+      "sha256": "ebb078d791b6deb4d0a2dae69a15a5274baf2ade815f07b336b394bb43af4c88"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/tdf131203.docx",
+      "sha256": "325a8d49e684cde606035d54df4c51f15c718b2043f5ac7158fd5e27bcb641f1"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/tdf131260.docx",
+      "sha256": "fae4a6625d83588ed73a71a799e01105576c2c4356479ce99f0f75206df7b419"
+    }
+  ],
+  "files": [
+    {
+      "path": "apps/office/e2e/writer-odt-page-stories.spec.ts",
+      "sha256": "a87c8eebf5128c46c53dd7b1b68cd550fb65b80f8a987b3189c265e477eae702"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxexport.numbered-list.test.ts",
+      "sha256": "12c58542ee12160d3e8482265bfd564a3bc6d79d03f02322791a3b4ab1a383dd"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxexport.settings.ts",
+      "sha256": "60184e49bcc87ff2a5644f24d958dcce91a1614875cbb89cd11f56dbdb3b23d0"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxexport.text.ts",
+      "sha256": "b9d1e21ad2e6ace0c2f9afb42c5168c747031914dbeab9cd67382a446ead249e"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxexport.ts",
+      "sha256": "ac9082a6657f19563cca57fccc7293869d94a5483fb2adefb1316ad409469037"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxtableexport.ts",
+      "sha256": "eb6660a5221c78f9253fe745bff81fabf50d9bbacd135ae841d3b476fbcf1447"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.ts",
+      "sha256": "ef8687593a35eb22f6799f024a23858bcab767cfcd01d4a72f3764a7f997e1bf"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableHandler.ts",
+      "sha256": "91c9e6076c235807fbbb8f1924783301884c3aeeb642c573652c843b26e59fb5"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ranges.ts",
+      "sha256": "868a43d030871f3396bbef33c527eb299d8be921dd6b6c3105a1e87ffb48cd3b"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ts",
+      "sha256": "f58df3aac7764ebd0a34cdf6fd6f91e3f82d93960079a1388ab602cc54b20a76"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.import.ts",
+      "sha256": "13c3502534d1e4e068d07fc5b5b83992f9b989caffb51ae48941d76c5c0b6b1f"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/TblStylePrHandler.ts",
+      "sha256": "dd5663cc7326db1867350a0fc88dd8755c80f6c53e65d6f120dbcd9510cc415b"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/native-style-entry-merge.test.ts",
+      "sha256": "69df8c20cb244764a1854cb21fd5208340a0d3d1c2676d22f7ad1d0f34b6baf2"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts",
+      "sha256": "7d53129c68799c94b8327845a8998476d819a6da2240348cf573325705326290"
+    },
+    {
+      "path": "scripts/writer-ooxml/generate-factory.py",
+      "sha256": "05369f2bb45135f8b205bb01519e596b99a6d7d2afb2800f1feeb07baf1248c7"
+    }
+  ]
+}
