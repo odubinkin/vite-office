@@ -7105,3 +7105,20 @@ the last character. The local exporter retains both source behaviors.
 - [Source document rename check](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/core/data/document.cxx#L943-L963)
 - [Source sheet name validation](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/core/data/document.cxx#L327-L358)
 - [Calc regression](../../apps/office/src/sc/source/filter/excel/xlsx-sheet-names.test.ts)
+
+### CALC-753 — The frozen-pane export bound uses relative counts for an absolute cell
+
+The Excel importer adds each frozen count to the sheet view's first visible
+cell to obtain an absolute fixed split position. On export,
+`XclExpTabViewSettings` subtracts the first origin again to obtain each
+relative split count. The correction of the second pane's starting cell
+then compares its absolute coordinates directly with those relative counts.
+For a first visible column E, a two-column split and a second origin of B,
+the output starts the second pane at C although the absolute freeze boundary
+is G. The local exporter preserves these calculations. The pinned
+`freezePaneStartCell.xlsx` regression starts at A1 and retains its expected
+F11 correction. Excel's handling of the non-A1 example has not been tested.
+
+- [Original worksheet view import](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/oox/viewsettings.cxx#L374-L387)
+- [Original XLSX pane export](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/excel/xeview.cxx#L330-L356)
+- [Calc regression](../../apps/office/src/sc/source/ui/view/viewdata.settings.test.ts)

@@ -29,9 +29,10 @@
         "apps/office/src/sc/source/core/data/document.sheet-visibility.ts",
         "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
         "sc/source/core/data/document.cxx",
-        "sc/inc/document.hxx"
+        "sc/inc/document.hxx",
+        "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts"
       ],
-      "justification": "Forwards native display state through the actual ScTable, preserves missing-sheet results and carries the original visible-tab hint. Embedded-object view handling and named sheet view holders remain outside this represented Calc view.",
+      "justification": "Forwards native display state through the actual ScTable, preserves missing-sheet results and carries the original visible-tab hint. Embedded-object view handling and named sheet view holders remain outside this represented Calc view. J0Z0KF worksheet pane checkpoint. The existing detached sheet view carries pane geometry alongside grid visibility and cursor. Valid axes, first and second origins, and active-pane normalization use the document sheet limits.",
       "knownViolations": [],
       "localSymbols": [
         "GetTableCount",
@@ -39,7 +40,10 @@
         "IsVisible",
         "SetVisible",
         "GetVisibleTab",
-        "SetVisibleTab"
+        "SetVisibleTab",
+        "getSheetPaneLayout",
+        "setSheetPaneLayout",
+        "sanitizeSheetPane"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/core/data/document.cxx",

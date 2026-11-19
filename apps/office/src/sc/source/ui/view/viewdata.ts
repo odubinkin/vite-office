@@ -8,7 +8,12 @@ import { ScMergeAttr } from "../../../inc/attrib";
 import { ATTR_MERGE } from "../../../inc/scitems";
 import { SfxItemState } from "../../../../svl/inc/itemset";
 import { ScAddress, ScRange, ValidTab } from "../../../inc/address";
-import { getSheetCursor, setSheetCursor } from "../../core/data/document.sheet-visibility";
+import {
+  getSheetCursor,
+  setSheetCursor,
+  getSheetPaneLayout,
+  type SheetPaneLayout,
+} from "../../core/data/document.sheet-visibility";
 /** Native viewdata.hxx pane identities; the supported unsplit view starts bottom-left. */
 export const ScSplitPos = {
   SC_SPLIT_TOPLEFT: 0,
@@ -43,7 +48,8 @@ class ScViewDataTable {
   nOldCurX = 0;
   nOldCurY = 0;
   mbOldCursorValid = false;
-  eWhichActive = ScSplitPos.SC_SPLIT_BOTTOMLEFT;
+  eWhichActive: ScSplitPos = ScSplitPos.SC_SPLIT_BOTTOMLEFT;
+  paneLayout: SheetPaneLayout | undefined;
 }
 /** Native document-bound cursor/selection ownership, shared by browser view consumers. Only the declared cursor operations are ported. */
 export class ScViewData {
@@ -216,10 +222,19 @@ export class ScViewData {
   ReadCursorPositions(): void {
     for (let tab = 0; tab < this.mrDoc.GetTableCount(); ++tab) {
       const [column, row] = getSheetCursor(this.mrDoc, tab);
-      if (column || row) this.CreateTabData(tab);
+      const panes = getSheetPaneLayout(this.mrDoc, tab);
+      if (column || row || panes) this.CreateTabData(tab);
       const data = this.FetchTableData(tab);
-      if (data) [data.nCurX, data.nCurY] = [column, row];
+      if (data) {
+        [data.nCurX, data.nCurY] = [column, row];
+        data.paneLayout = panes;
+        data.eWhichActive = panes?.activePane ?? ScSplitPos.SC_SPLIT_BOTTOMLEFT;
+      }
     }
+  }
+  /** Borrows the geometry of the current native sheet view. @returns Pane geometry or the default view. */
+  GetPaneLayout(): SheetPaneLayout | undefined {
+    return this.pThisTab.paneLayout;
   }
   /** Original view-owned borrowed option copy. @returns Actual options. */
   GetOptions(): ScViewOptions {

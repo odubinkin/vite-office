@@ -7,7 +7,7 @@ import {
   DocumentArchiveWriter,
 } from "../../src/package/source/zippackage/document-archive";
 
-test("Calc restores the XLSX active pane cursor and exports the moved cursor", /** Uses the existing Calc file UI and Name Box through XLSX, local ODS and mobile reopen. @param fixtures - Browser fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
+test("Calc preserves frozen panes and the moved cursor through its file controls", /** Uses the existing Calc file UI and Name Box through XLSX, local ODS and mobile reopen. @param fixtures - Browser fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
   page,
 }) => {
   const path = fileURLToPath(
@@ -46,8 +46,12 @@ test("Calc restores the XLSX active pane cursor and exports the moved cursor", /
   if (!exportPath) throw new Error("Missing XLSX download.");
   const buffer = await readFile(exportPath);
   const archive = await DocumentArchive.open(buffer);
-  expect(await archive.readTextEntry("xl/worksheets/sheet1.xml")).toContain(
-    '<selection pane="topLeft" activeCell="D7" activeCellId="0" sqref="D7"/>',
+  const settings = await archive.readTextEntry("xl/worksheets/sheet1.xml");
+  expect(settings).toContain(
+    '<pane xSplit="5" ySplit="10" topLeftCell="F11" activePane="bottomRight" state="frozen"/>',
+  );
+  expect(settings).toContain(
+    '<selection pane="bottomRight" activeCell="D7" activeCellId="0" sqref="D7"/>',
   );
 
   await page.setViewportSize({ width: 390, height: 844 });

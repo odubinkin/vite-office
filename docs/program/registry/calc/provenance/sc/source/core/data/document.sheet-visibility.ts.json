@@ -12,7 +12,10 @@
       "IsVisible",
       "SetVisible",
       "GetVisibleTab",
-      "SetVisibleTab"
+      "SetVisibleTab",
+      "getSheetPaneLayout",
+      "setSheetPaneLayout",
+      "sanitizeSheetPane"
     ],
     "upstreamSymbols": [
       "ScDocument::GetTableCount",
@@ -21,7 +24,8 @@
       "ScDocument::SetVisible"
     ],
     "preservedResponsibilities": [
-      "Forwards native display state through the actual ScTable, preserves missing-sheet results and carries the original visible-tab hint."
+      "Forwards native display state through the actual ScTable, preserves missing-sheet results and carries the original visible-tab hint.",
+      "J0Z0KF worksheet pane checkpoint. The existing detached sheet view carries pane geometry alongside grid visibility and cursor. Valid axes, first and second origins, and active-pane normalization use the document sheet limits."
     ],
     "omittedResponsibilities": [
       "Embedded-object view handling and named sheet view holders remain outside this represented Calc view."
@@ -35,6 +39,10 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
           "marker": "hidden worksheet visibility"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
+          "marker": "reads the active pane"
         }
       ],
       "upstream": [

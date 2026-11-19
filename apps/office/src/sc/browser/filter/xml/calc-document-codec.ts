@@ -2,6 +2,10 @@
 import { GetPrintRanges } from "../../../source/core/data/table1";
 import {
   getSheetCursor,
+  getSheetPaneLayout,
+  isSheetPaneLayout,
+  setSheetPaneLayout,
+  type SheetPaneLayout,
   setSheetCursor,
 } from "../../../source/core/data/document.sheet-visibility";
 import { runCooperatively, runSynchronously } from "../../../../framework/browser/io/cooperative";
@@ -153,6 +157,7 @@ interface Sheet {
   readonly name: string;
   readonly showGrid?: boolean;
   readonly cursor?: readonly [column: number, row: number];
+  readonly panes?: SheetPaneLayout;
   readonly optimalMinRowHeight?: number;
   readonly cells: Cell[];
   readonly patterns: Pattern[];
@@ -251,6 +256,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     const repeatRows = table.GetRepeatRowRange();
     const protection = table.GetProtection();
     const cursor = getSheetCursor(document, tab);
+    const panes = getSheetPaneLayout(document, tab);
     const sheet: Sheet = {
       ...(table.IsVisible() ? {} : { visible: false }),
       ...(protection
@@ -282,6 +288,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
       name: text(table.GetName()),
       ...(document.GetSheetShowGrid(tab) ? {} : { showGrid: false }),
       ...(cursor[0] || cursor[1] ? { cursor } : {}),
+      ...(panes ? { panes } : {}),
       optimalMinRowHeight: table.GetOptimalMinRowHeight(),
       cells: [],
       patterns: [],
@@ -546,6 +553,11 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
         if (typeof sheet.showGrid === "boolean") document.SetSheetShowGrid(tab, sheet.showGrid);
         if (Array.isArray(sheet.cursor))
           setSheetCursor(document, tab, sheet.cursor[0], sheet.cursor[1]);
+        if (sheet.panes !== undefined) {
+          if (!sheet.panes || !isSheetPaneLayout(document, sheet.panes))
+            throw new Error("Calc worker sheet pane layout is invalid.");
+          setSheetPaneLayout(document, tab, sheet.panes);
+        }
       } finally {
         name.dispose();
       }

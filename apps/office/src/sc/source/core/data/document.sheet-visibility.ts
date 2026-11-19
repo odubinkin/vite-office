@@ -6,6 +6,7 @@ import type { ScTable } from "../../../inc/table";
 /** View settings held by the detached document until the view is constructed. */
 export interface SheetViewState {
   readonly showGrid: boolean;
+  readonly panes?: SheetPaneLayout;
   readonly cursor: readonly [column: number, row: number];
 }
 
@@ -79,4 +80,110 @@ export function setSheetCursor(
     document.ValidColRow(column, row)
   )
     document["maSheetViews"].set(sheet, { ...sheetView(document, tab), cursor: [column, row] });
+}
+
+/** Native ScViewDataTable split modes. */
+export enum SheetSplitMode {
+  NONE,
+  NORMAL,
+  FIX,
+}
+
+/** Native split range order used by view settings. */
+export enum SheetPane {
+  TOPLEFT,
+  TOPRIGHT,
+  BOTTOMLEFT,
+  BOTTOMRIGHT,
+}
+
+/** Detached worksheet geometry. Fixed coordinates are absolute, normal split lengths are in twips. */
+export interface SheetPaneLayout {
+  readonly horizontalMode: SheetSplitMode;
+  readonly verticalMode: SheetSplitMode;
+  readonly horizontalPosition: number;
+  readonly verticalPosition: number;
+  readonly activePane: SheetPane;
+  readonly first: readonly [column: number, row: number];
+  readonly second: readonly [column: number, row: number];
+}
+
+/** Borrows preserved sheet geometry, if the original view had a split or viewport origin. @param document - Workbook. @param tab - Native tab. @returns Per-sheet view. */
+export function getSheetPaneLayout(document: ScDocument, tab: number): SheetPaneLayout | undefined {
+  return sheetView(document, tab).panes;
+}
+
+/** Applies the native active-pane fallback when one axis is absent. @param pane - Requested pane. @param horizontal - Horizontal split present. @param vertical - Vertical split present. @returns View's active pane. */
+export function sanitizeSheetPane(
+  pane: SheetPane,
+  horizontal: boolean,
+  vertical: boolean,
+): SheetPane {
+  return ((pane & 1) !== 0 && !horizontal) || ((pane & 2) === 0 && !vertical)
+    ? SheetPane.BOTTOMLEFT
+    : pane;
+}
+
+/** Stores canonical sheet positions in its existing detached view record. @param document - Workbook. @param tab - Native tab. @param layout - Borrowed layout. @returns Nothing. */
+export function setSheetPaneLayout(
+  document: ScDocument,
+  tab: number,
+  layout: SheetPaneLayout,
+): void {
+  const sheet = document.FetchTable(tab);
+  if (!sheet) return;
+  document["maSheetViews"].set(sheet, {
+    ...sheetView(document, tab),
+    panes: {
+      ...layout,
+      activePane: sanitizeSheetPane(
+        layout.activePane,
+        layout.horizontalMode !== SheetSplitMode.NONE,
+        layout.verticalMode !== SheetSplitMode.NONE,
+      ),
+      first: [...layout.first],
+      second: [...layout.second],
+    },
+  });
+}
+
+/** Validates detached pane coordinates before a Worker graph is adopted. @param document - Target workbook limits. @param layout - Untrusted transfer value. @returns Valid geometry. */
+export function isSheetPaneLayout(document: ScDocument, layout: SheetPaneLayout): boolean {
+  const {
+    horizontalMode,
+    verticalMode,
+    horizontalPosition,
+    verticalPosition,
+    activePane,
+    first,
+    second,
+  } = layout;
+  return (
+    validSplit(horizontalMode, horizontalPosition, document.MaxCol()) &&
+    validSplit(verticalMode, verticalPosition, document.MaxRow()) &&
+    Number.isInteger(activePane) &&
+    activePane >= SheetPane.TOPLEFT &&
+    activePane <= SheetPane.BOTTOMRIGHT &&
+    validOrigin(document, first) &&
+    validOrigin(document, second)
+  );
+}
+
+/** Checks the native fixed-cell and normal-twip domains. @param mode - Axis mode. @param position - Detached coordinate. @param maximum - Axis cell maximum. @returns Whether usable. */
+function validSplit(mode: SheetSplitMode, position: number, maximum: number): boolean {
+  if (mode === SheetSplitMode.NONE) return position === 0;
+  if (!Number.isInteger(position) || position <= 0) return false;
+  if (mode === SheetSplitMode.NORMAL) return position <= 0x7fffffff;
+  return mode === SheetSplitMode.FIX && position <= maximum;
+}
+
+/** Checks a detached two-coordinate view origin. @param document - Workbook limits. @param origin - Origin coordinates. @returns Whether supported. */
+function validOrigin(document: ScDocument, origin: SheetPaneLayout["first"]): boolean {
+  return (
+    Array.isArray(origin) &&
+    origin.length === 2 &&
+    Number.isInteger(origin[0]) &&
+    Number.isInteger(origin[1]) &&
+    document.ValidColRow(origin[0], origin[1])
+  );
 }

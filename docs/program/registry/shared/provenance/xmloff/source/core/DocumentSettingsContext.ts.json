@@ -17,7 +17,8 @@
     "preservedResponsibilities": [
       "Resolves the original namespace-qualified configuration and view groups. The indexed Views property retains typed string entries in order, independently of boolean configuration properties.",
       "Reads typed boolean view properties and the original named maps of scalar property sequences.",
-      "Reads typed signed integer view properties, preserving the converter’s zero output when conversion fails."
+      "Reads typed signed integer view properties, preserving the converter’s zero output when conversion fails.",
+      "J0Z0KF worksheet pane checkpoint. The view sequences retain the original config short's signed narrowing and type independently of the existing integer scalar."
     ],
     "omittedResponsibilities": [
       "Document-specific settings and additional property types remain outside the represented groups."
@@ -35,6 +36,10 @@
         {
           "path": "apps/office/src/xmloff/source/core/DocumentSettingsContext.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/xmloff/source/core/DocumentSettingsContext.test.ts",
+          "marker": "ShortValue"
         }
       ],
       "upstream": [

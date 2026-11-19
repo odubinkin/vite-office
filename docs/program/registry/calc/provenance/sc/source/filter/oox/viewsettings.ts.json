@@ -24,7 +24,8 @@
     "preservedResponsibilities": [
       "Reads the first worksheet view's grid flag with Excel's true default and transfers it to the active document's interactive view data.",
       "Applies the first worksheet view's grid and the active worksheet's workbook-wide header and zero-value settings. The native view reader ignores the incoming ShowFormulas property (CALC-743).",
-      "Resolves the first sheet view’s cursor from the active pane selection and falls back to that view’s top-left cell."
+      "Resolves the first sheet view’s cursor from the active pane selection and falls back to that view’s top-left cell.",
+      "J0Z0KF worksheet pane checkpoint. The first-view model resolves fixed and normal axes, independent first/second viewport origins and screen-pane identity before attaching view settings."
     ],
     "omittedResponsibilities": [
       "Other sheet view options, alternate workbook views, chart sheets and BIFF records remain outside this mechanism."
@@ -42,6 +43,10 @@
         {
           "path": "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
           "marker": "active pane"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
+          "marker": "ports fixed and normal"
         }
       ],
       "upstream": [

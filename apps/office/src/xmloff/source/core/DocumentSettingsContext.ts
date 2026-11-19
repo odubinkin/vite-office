@@ -8,11 +8,15 @@ import { ODF_NAMESPACES, XMLToken } from "./xmltoken";
 import { Converter } from "../../../sax/source/tools/converter";
 
 /** Represented scalar properties of one native view record. */
-export type ViewItem = readonly [name: string, value: string | boolean | number];
+export type ViewItem = readonly [name: string, value: string | boolean | number, type?: "short"];
 /** Original named map of property sequences, in XML order. */
 export type NamedViewSettings = readonly (readonly [name: string, items: readonly ViewItem[]])[];
 /** Properties of one indexed view record. */
-type ViewProperty = readonly [name: string, value: ViewItem[1] | NamedViewSettings];
+type ViewProperty = readonly [
+  name: string,
+  value: ViewItem[1] | NamedViewSettings,
+  type?: ViewItem[2],
+];
 /** Represented indexed view records, in source order. */
 export type ViewSettings = readonly (readonly ViewProperty[])[];
 
@@ -231,17 +235,18 @@ function createViewItem(
   if (
     element !== XMLToken.CONFIG_ITEM ||
     !name ||
-    (type !== "string" && type !== "boolean" && type !== "int")
+    (type !== "string" && type !== "boolean" && type !== "int" && type !== "short")
   )
     return new SvXMLIgnoreContext(true);
   return new XMLConfigItemContext(
     /** Stores the typed scalar in native property order. @param value - XML text. @returns Nothing. */
     (value) => {
       if (type === "string") output.push([name, value]);
-      else if (type === "int") {
+      else if (type === "int" || type === "short") {
         const number: [number] = [0];
         Converter.convertNumber(number, value);
-        output.push([name, number[0]]);
+        if (type === "short") output.push([name, (number[0] << 16) >> 16, "short"]);
+        else output.push([name, number[0]]);
       } else if (value === "true" || value === "false") output.push([name, value === "true"]);
     },
   );

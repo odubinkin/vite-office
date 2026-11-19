@@ -77,7 +77,7 @@ it("decodes string view records in position order and independent boolean settin
             <c:config-item-map-entry c:name="A&amp;B">
               <foreign:other><c:config-item c:name="Nested" c:type="boolean">true</c:config-item></foreign:other>
               <c:config-item c:name="ShowGrid" c:type="boolean">false</c:config-item>
-              <c:config-item c:name="Ignored" c:type="short">5</c:config-item>
+              <c:config-item c:name="ShortValue" c:type="short">65541</c:config-item>
             </c:config-item-map-entry>
           </c:config-item-map-named>
         </c:config-item-map-entry>
@@ -96,7 +96,18 @@ it("decodes string view records in position order and independent boolean settin
       ["ViewId", "view2"],
       ["ActiveTable", 1],
       ["ActiveTable", "A&B"],
-      ["Tables", [["A&B", [["ShowGrid", false]]]]],
+      [
+        "Tables",
+        [
+          [
+            "A&B",
+            [
+              ["ShowGrid", false],
+              ["ShortValue", 5, "short"],
+            ],
+          ],
+        ],
+      ],
     ],
   ]);
   expect(result.flags).toEqual([
@@ -137,6 +148,7 @@ it("round-trips escaped view data and distinguishes absent and empty views", /**
             [
               ["ShowGrid", false],
               ["CursorPositionX", 13],
+              ["HorizontalSplitMode", 2, "short"],
               ["Text", "<&>"],
             ],
           ],
@@ -144,6 +156,9 @@ it("round-trips escaped view data and distinguishes absent and empty views", /**
       ],
     ],
   ] as const;
+  expect(exportViewSettings(views)).toContain(
+    'config:name="HorizontalSplitMode" config:type="short">2<',
+  );
   expect(readSettings(exportViewSettings(views))).toEqual({ views, flags: [] });
   expect(readSettings(exportViewSettings([]))).toEqual({ views: [], flags: [] });
   expect(

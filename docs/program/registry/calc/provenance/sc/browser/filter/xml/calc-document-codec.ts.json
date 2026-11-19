@@ -36,6 +36,10 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.enhanced-protection.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
+          "marker": "reads the active pane"
         }
       ]
     },
@@ -51,7 +55,8 @@
       "Carries the cell frame direction and Normal direction through the Worker alongside its ODF style records.",
       "Transfers sheet protection options and both stored XLSX hash representations across realms.",
       "Transfers the stored digest bytes and native primary/secondary algorithm identities in addition to OOXML data.",
-      "Transfers native enhanced protection ranges and verifier metadata between realms."
+      "Transfers native enhanced protection ranges and verifier metadata between realms.",
+      "J0Z0KF worksheet pane checkpoint. Transfers per-sheet split modes, absolute fixed indices, viewport origins and the active pane. The isolated Worker reader rejects malformed geometry before document adoption."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

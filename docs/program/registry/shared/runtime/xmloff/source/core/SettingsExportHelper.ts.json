@@ -24,7 +24,7 @@
         "apps/office/src/xmloff/source/core/DocumentSettingsContext.test.ts",
         "vendor/libreoffice-reference/xmloff/source/core/SettingsExportHelper.cxx#XMLSettingsExportHelper::exportInt"
       ],
-      "justification": "Emits boolean configuration items and indexed view map entries containing the represented string properties. Other UNO settings value types, named maps, and additional document-specific groups remain outside the represented serialization. Writes scalar boolean view properties and real named map entries inside the indexed view settings. Serializes signed integer view properties under the original ODF int type.",
+      "justification": "Emits boolean configuration items and indexed view map entries containing the represented string properties. Other UNO settings value types, named maps, and additional document-specific groups remain outside the represented serialization. Writes scalar boolean view properties and real named map entries inside the indexed view settings. Serializes signed integer view properties under the original ODF int type. J0Z0KF worksheet pane checkpoint. Named and indexed view properties export explicit native short values while default numeric view items continue to use config int.",
       "knownViolations": [],
       "localSymbols": [
         "exportConfigurationSettings",
