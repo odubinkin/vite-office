@@ -84,28 +84,28 @@ for (const width of [1280, 390]) {
       before = editor.locator("[data-writer-paragraph-id]").filter({ hasText: "BeforeStyleRange" }),
       after = editor.locator("[data-writer-paragraph-id]").filter({ hasText: "AfterStyleRange" }),
       empty = editor.locator("[data-writer-paragraph-id]").nth(2);
-    await expect(first).toHaveAttribute("data-style", "OwnedB");
-    await expect(last).toHaveAttribute("data-style", "OwnedA");
+    await expect(first).toHaveAttribute("data-style", "Owned_20_range_20_B");
+    await expect(last).toHaveAttribute("data-style", "Owned_20_range_20_A");
     await expect(empty).toHaveAttribute("data-style", "default");
     const beforeStyle = await before.getAttribute("style"),
       afterStyle = await after.getAttribute("style");
     await selectParagraphRange(editor);
     await expect(select).toHaveValue("Owned range A");
     await pickWriterStyle(select, "Owned range A");
-    await expect(first).toHaveAttribute("data-style", "OwnedA");
-    await expect(empty).toHaveAttribute("data-style", "OwnedA");
-    await expect(last).toHaveAttribute("data-style", "OwnedA");
+    await expect(first).toHaveAttribute("data-style", "Owned_20_range_20_A");
+    await expect(empty).toHaveAttribute("data-style", "Owned_20_range_20_A");
+    await expect(last).toHaveAttribute("data-style", "Owned_20_range_20_A");
     await expect(editor).toBeFocused();
     await page.keyboard.press("Control+z");
-    await expect(first).toHaveAttribute("data-style", "OwnedB");
+    await expect(first).toHaveAttribute("data-style", "Owned_20_range_20_B");
     await expect(empty).toHaveAttribute("data-style", "default");
-    await expect(last).toHaveAttribute("data-style", "OwnedA");
+    await expect(last).toHaveAttribute("data-style", "Owned_20_range_20_A");
     await page.keyboard.press("Control+Shift+z");
-    await expect(first).toHaveAttribute("data-style", "OwnedA");
-    await expect(empty).toHaveAttribute("data-style", "OwnedA");
+    await expect(first).toHaveAttribute("data-style", "Owned_20_range_20_A");
+    await expect(empty).toHaveAttribute("data-style", "Owned_20_range_20_A");
     await pickWriterStyle(select, "Owned range B");
     for (const paragraph of [first, empty, last])
-      await expect(paragraph).toHaveAttribute("data-style", "OwnedB");
+      await expect(paragraph).toHaveAttribute("data-style", "Owned_20_range_20_B");
     if (width === 1280)
       await expect(
         page
@@ -116,7 +116,7 @@ for (const width of [1280, 390]) {
     await page.keyboard.press("End");
     await page.keyboard.insertText(":AfterRangeStyle");
     await expect(last).toHaveText("LastStyleRange:AfterRangeStyle");
-    await expect(last).toHaveAttribute("data-style", "OwnedB");
+    await expect(last).toHaveAttribute("data-style", "Owned_20_range_20_B");
     await page.keyboard.press("Control+z");
     await expect(last).toHaveText("LastStyleRange");
     await expect(before).toHaveAttribute("style", beforeStyle as string);

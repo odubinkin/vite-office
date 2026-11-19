@@ -142,7 +142,7 @@ for (const width of [1280, 390])
     await expect(link.locator("a")).toHaveCount(0);
     await pickWriterStyle(select, "Reset style B");
     for (const node of [whole, empty, partial, link]) {
-      await expect(node).toHaveAttribute("data-style", "ResetB");
+      await expect(node).toHaveAttribute("data-style", "Reset_20_style_20_B");
       await expect(node).toHaveCSS("text-indent", "24px");
     }
     await expect(before).toHaveAttribute("style", beforeStyle as string);

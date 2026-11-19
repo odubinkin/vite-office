@@ -41,7 +41,7 @@ async function openOwnedStyleDocument(page: Page, width: number) {
     untouched = page
       .locator("[data-writer-paragraph-id]")
       .filter({ hasText: "UntouchedStyleFocus" });
-  await expect(paragraph).toHaveAttribute("data-style", "OwnedA");
+  await expect(paragraph).toHaveAttribute("data-style", "Owned_3a__20_A_20__26__20_字");
   await paragraph.click();
   await page.keyboard.press("End");
   return {
@@ -75,7 +75,7 @@ for (const width of [1280, 390]) {
     await fixture.select.focus();
     await pickWriterStyle(fixture.select, "Owned: B & 字");
     await expectClientFocus(fixture.editor);
-    await expect(fixture.paragraph).toHaveAttribute("data-style", "OwnedB");
+    await expect(fixture.paragraph).toHaveAttribute("data-style", "Owned_3a__20_B_20__26__20_字");
     await page.keyboard.insertText(":Pick");
     await expect(fixture.paragraph).toHaveText("FirstStyleFocus:Pick");
     await page.keyboard.press("Control+z");
@@ -108,11 +108,11 @@ for (const width of [1280, 390]) {
     await page.keyboard.press("ArrowDown");
     await expect(fixture.select).toHaveValue("Owned: B & 字");
     await expect(fixture.select).toBeFocused();
-    await expect(fixture.paragraph).toHaveAttribute("data-style", "OwnedA");
+    await expect(fixture.paragraph).toHaveAttribute("data-style", "Owned_3a__20_A_20__26__20_字");
     await expect(undo).toBeDisabled();
     await page.keyboard.press("Enter");
     await expectClientFocus(fixture.editor);
-    await expect(fixture.paragraph).toHaveAttribute("data-style", "OwnedB");
+    await expect(fixture.paragraph).toHaveAttribute("data-style", "Owned_3a__20_B_20__26__20_字");
     await page.keyboard.insertText(":Enter");
     await expect(fixture.paragraph).toHaveText("FirstStyleFocus:Enter");
     await page.keyboard.press("Control+z");
@@ -132,7 +132,7 @@ for (const width of [1280, 390]) {
         .getByRole("toolbar", { name: "Writer formatting toolbar" })
         .getByRole("button", { name: "Update", exact: true }),
     ).toBeFocused();
-    await expect(fixture.paragraph).toHaveAttribute("data-style", "OwnedB");
+    await expect(fixture.paragraph).toHaveAttribute("data-style", "Owned_3a__20_B_20__26__20_字");
     await page.keyboard.press("Shift+Tab");
     await expect(fixture.select).toBeFocused();
     await page.keyboard.press("Enter");
@@ -190,7 +190,7 @@ for (const width of [1280, 390]) {
       active as string,
     );
     await expect(list.getByRole("option", { selected: true })).toBeInViewport();
-    await expect(fixture.paragraph).toHaveAttribute("data-style", "OwnedA");
+    await expect(fixture.paragraph).toHaveAttribute("data-style", "Owned_3a__20_A_20__26__20_字");
     await page.screenshot({
       path: testInfo.outputPath("style-popup-overlay.png"),
       scale: "css",

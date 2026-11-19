@@ -78,10 +78,10 @@ for (const width of [1280, 390])
         "https://example.test/redo-history",
       );
       await page.keyboard.press("Control+z");
-      await expect(target).toHaveAttribute("data-style", "HistoryA");
+      await expect(target).toHaveAttribute("data-style", "History_20_style_20_A");
       await expect(target).toHaveCSS("text-indent", "48px");
       await page.keyboard.press("Control+Shift+z");
-      await expect(target).toHaveAttribute("data-style", "HistoryB");
+      await expect(target).toHaveAttribute("data-style", "History_20_style_20_B");
       await expect(target).toHaveCSS("text-indent", "24px");
       await expect(target.locator("strong")).toHaveCount(0);
       await expect(target.locator("a")).toHaveCount(0);

@@ -1,6 +1,6 @@
 /** @fileoverview XLSX workbook link metadata and native defined-name admission. */
 import { readFileSync } from "node:fs";
-import { assert, expect, it } from "vitest";
+import { assert, expect, it, vi } from "vitest";
 import { ZipStorage } from "../../../../oox/source/helper/zipstorage";
 import { XmlFilterBase } from "../../../../oox/source/core/xmlfilterbase";
 import {
@@ -30,6 +30,9 @@ import {
   encodeCalcDocument,
 } from "../../../browser/filter/xml/calc-document-codec";
 import { readOdsDocument, writeOdsXml } from "../xml/xmlwrap";
+
+// These fixtures unpack and reopen native document packages under coverage.
+vi.setConfig({ testTimeout: 120_000 });
 
 const data = "../../vendor/libreoffice-reference/sc/qa/unit/data/xlsx/";
 
