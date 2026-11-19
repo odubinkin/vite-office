@@ -12,6 +12,9 @@ import {
   getSheetCursor,
   setSheetCursor,
   getSheetPaneLayout,
+  setSheetPaneLayout,
+  SheetPane,
+  SheetSplitMode,
   type SheetPaneLayout,
 } from "../../core/data/document.sheet-visibility";
 /** Native viewdata.hxx pane identities; the supported unsplit view starts bottom-left. */
@@ -24,6 +27,16 @@ export const ScSplitPos = {
 } as const;
 /** Native pane value domain; the maximum enumerator aliases bottom-right. */
 export type ScSplitPos = (typeof ScSplitPos)[keyof typeof ScSplitPos];
+/** Column origins in the native order. */
+export enum ScHSplitPos {
+  SC_SPLIT_LEFT,
+  SC_SPLIT_RIGHT,
+}
+/** Row origins in the native order. */
+export enum ScVSplitPos {
+  SC_SPLIT_TOP,
+  SC_SPLIT_BOTTOM,
+}
 /** Original viewdata.hxx mark-type bit values;NONE is internal only. */
 export enum ScMarkType {
   SC_MARK_NONE = 0,
@@ -49,7 +62,6 @@ class ScViewDataTable {
   nOldCurY = 0;
   mbOldCursorValid = false;
   eWhichActive: ScSplitPos = ScSplitPos.SC_SPLIT_BOTTOMLEFT;
-  paneLayout: SheetPaneLayout | undefined;
 }
 /** Native document-bound cursor/selection ownership, shared by browser view consumers. Only the declared cursor operations are ported. */
 export class ScViewData {
@@ -227,14 +239,48 @@ export class ScViewData {
       const data = this.FetchTableData(tab);
       if (data) {
         [data.nCurX, data.nCurY] = [column, row];
-        data.paneLayout = panes;
         data.eWhichActive = panes?.activePane ?? ScSplitPos.SC_SPLIT_BOTTOMLEFT;
       }
     }
   }
   /** Borrows the geometry of the current native sheet view. @returns Pane geometry or the default view. */
   GetPaneLayout(): SheetPaneLayout | undefined {
-    return this.pThisTab.paneLayout;
+    return getSheetPaneLayout(this.mrDoc, this.GetTabNumber());
+  }
+  /** Reads a native column origin. @param part - Horizontal pane part. @param tab - Actual tab, or active tab by default. @returns First visible column. */
+  GetPosX(part: ScHSplitPos, tab = -1): number {
+    if (tab !== -1 && !this.mrDoc.FetchTable(tab)) return -1;
+    const layout = getSheetPaneLayout(this.mrDoc, tab === -1 ? this.GetTabNumber() : tab);
+    return (part === ScHSplitPos.SC_SPLIT_LEFT ? layout?.first[0] : layout?.second[0]) ?? 0;
+  }
+  /** Reads a native row origin. @param part - Vertical pane part. @param tab - Actual tab, or active tab by default. @returns First visible row. */
+  GetPosY(part: ScVSplitPos, tab = -1): number {
+    if (tab !== -1 && !this.mrDoc.FetchTable(tab)) return -1;
+    const layout = getSheetPaneLayout(this.mrDoc, tab === -1 ? this.GetTabNumber() : tab);
+    if (part === ScVSplitPos.SC_SPLIT_TOP)
+      return layout && layout.verticalMode !== SheetSplitMode.NONE ? layout.first[1] : 0;
+    return layout?.second[1] ?? 0;
+  }
+  /** Publishes the two measured origins of the unsplit left/bottom grid window together. @param column - First visible column. @param row - First visible row. @returns Nothing. */
+  SetUnsplitOrigin(column: number, row: number): void {
+    const layout = this.GetPaneLayout();
+    if (layout) {
+      if (
+        layout.horizontalMode !== SheetSplitMode.NONE ||
+        layout.verticalMode !== SheetSplitMode.NONE
+      )
+        return;
+      if (column === layout.first[0] && row === layout.first[1]) return;
+    } else if (column === 0 && row === 0) return;
+    setSheetPaneLayout(this.mrDoc, this.GetTabNumber(), {
+      horizontalMode: SheetSplitMode.NONE,
+      verticalMode: SheetSplitMode.NONE,
+      horizontalPosition: 0,
+      verticalPosition: 0,
+      activePane: SheetPane.BOTTOMLEFT,
+      first: [column, row],
+      second: [layout?.second[0] ?? 0, row],
+    });
   }
   /** Original view-owned borrowed option copy. @returns Actual options. */
   GetOptions(): ScViewOptions {

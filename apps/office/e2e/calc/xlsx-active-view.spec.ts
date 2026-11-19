@@ -66,6 +66,111 @@ test("Calc preserves frozen panes and the moved cursor through its file controls
   await expect(name).toHaveValue("D7");
 });
 
+test("Calc restores unsplit XLSX viewport origins independently of the cursor", /** Checks both native sheet origins through the actual grid, local storage and XLSX output. @param fixtures - Browser state. @param fixtures.page - Chromium page. @returns Completion. */ async ({
+  page,
+}) => {
+  const fixture = await readFile(
+    new URL(
+      "../../../../vendor/libreoffice-reference/sc/qa/unit/data/xlsx/sheet-names.xlsx",
+      import.meta.url,
+    ),
+  );
+  const archive = await DocumentArchive.open(fixture);
+  const writer = new DocumentArchiveWriter();
+  for (const part of archive.getEntryNames()) {
+    const origin =
+      part === "xl/worksheets/sheet5.xml"
+        ? "E31"
+        : part === "xl/worksheets/sheet1.xml"
+          ? "B19"
+          : undefined;
+    if (!origin) {
+      writer.putNextEntry(part, await archive.readEntry(part));
+      continue;
+    }
+    let xml = (await archive.readTextEntry(part)).replace(
+      "<sheetView ",
+      `<sheetView topLeftCell="${origin}" `,
+    );
+    if (origin === "E31")
+      xml = xml
+        .replace(
+          "/></sheetViews>",
+          '><selection activeCell="A1" sqref="A1"/></sheetView></sheetViews>',
+        )
+        .replace("<sheetData/>", '<sheetData><row r="1"><c r="A1"><v>42</v></c></row></sheetData>');
+    writer.putNextEntry(part, new TextEncoder().encode(xml));
+  }
+  const open = page.getByRole("button", { name: "Open", exact: true });
+  const grid = page.getByRole("grid", { name: "Spreadsheet" });
+  const firstCell = grid.getByRole("gridcell").first();
+  const name = page.getByRole("textbox", { name: "Name Box", exact: true });
+  await page.goto("/calc");
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer: Buffer.from(await writer.finish()),
+    name: "Unsplit origins.xlsx",
+    mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(firstCell).toHaveAttribute("aria-label", "E31");
+  await expect(name).toHaveValue("A1");
+  await page.getByRole("tab", { name: "S&P", exact: true }).click();
+  await expect(firstCell).toHaveAttribute("aria-label", "B19");
+  await grid.evaluate(
+    /** Moves the first sheet independently of its cursor and the fifth sheet. @param element - Native browser scroll container. @returns Nothing. */ (
+      element,
+    ) => {
+      element.scrollTop += 37;
+    },
+  );
+  await expect(firstCell).not.toHaveAttribute("aria-label", "B19");
+  const scrolled = await firstCell.getAttribute("aria-label");
+  if (!scrolled) throw new Error("Missing first visible cell after scrolling.");
+  await expect(name).toHaveValue("B19");
+  await page.getByRole("tab", { name: "C>D", exact: true }).click();
+  await expect(firstCell).toHaveAttribute("aria-label", "E31");
+
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Save As…" }).click();
+  await page.getByRole("textbox", { name: "New copy name" }).fill("Unsplit origins copy");
+  await page.getByRole("button", { name: "Save copy" }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.reload();
+  await open.click();
+  await page.getByRole("tab", { name: "In browser" }).click();
+  await page.getByRole("button", { name: "Unsplit origins copy", exact: true }).click();
+  await expect(firstCell).toHaveAttribute("aria-label", "E31");
+  await page.getByRole("tab", { name: "S&P", exact: true }).click();
+  await expect(firstCell).toHaveAttribute("aria-label", scrolled);
+  await expect(name).toHaveValue("B19");
+
+  const pending = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download XLSX" }).click();
+  const downloaded = await (await pending).path();
+  if (!downloaded) throw new Error("Missing workbook download.");
+  const buffer = await readFile(downloaded);
+  const output = await DocumentArchive.open(buffer);
+  expect(await output.readTextEntry("xl/worksheets/sheet1.xml")).toContain(
+    `topLeftCell="${scrolled}"`,
+  );
+  expect(await output.readTextEntry("xl/worksheets/sheet5.xml")).toContain('topLeftCell="E31"');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer,
+    name: "Unsplit origins exported.xlsx",
+    mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(firstCell).toHaveAttribute("aria-label", scrolled);
+  await expect(name).toHaveValue("B19");
+});
+
 test("Calc restores the XLSX active sheet when several sheets are visible", /** Exercises local Open, primary ODS, XLSX export and mobile reopen. @param fixtures - Browser state. @param fixtures.page - Chromium page. @returns Completion. */ async ({
   page,
 }) => {

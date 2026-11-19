@@ -12,7 +12,6 @@ import { ViewOption } from "../../inc/viewopti";
 import type { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/items/textitem";
 
 import { ScUndoIndent } from "../../source/ui/undo/undoblk";
-import { columnPixels, columnAtPixel } from "../presentation/column-geometry";
 import { ScUndoWidthOrHeight } from "../../source/ui/undo/undoblk2";
 import type { SfxRequest } from "../../../sfx2/source/control/request";
 import { ScCellShell } from "../../source/ui/view/cellsh3";
@@ -29,8 +28,6 @@ import { SvxColorItem } from "../../../editeng/inc/colritem";
 import type { CalcColorKind } from "../../source/ui/view/formatsh";
 import { getCalcSelectionScriptType } from "./calc-selection-script";
 import { SvxFontHeightItem } from "../../../editeng/inc/fhgtitem";
-import type { ScTable } from "../../inc/table";
-import { rowPixels, rowAtPixel } from "../presentation/row-geometry";
 import { ScUndoCursorAttr } from "../../source/ui/undo/undocell";
 import { ScUndoSelectionAttr, ScUndoDeleteContents } from "../../source/ui/undo/undoblk3";
 import type { CalcCharacterFormat } from "../../source/ui/view/formatsh";
@@ -47,6 +44,7 @@ import { ScUndoSetCell } from "../../source/ui/inc/undocell";
 import { SfxUndoAction, SfxListUndoAction } from "../../../svl/source/undo/undo";
 import { cellInputText } from "../editor/cell-input";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { CalcViewport } from "./calc-viewport";
 import type { CalcGridViewport } from "../presentation/ScGridWindow";
 /** Undoable sheet append within the current scalar document slice. */
 class InsertSheetAction extends SfxUndoAction<ScDocShell> {
@@ -296,21 +294,12 @@ export class CalcViewController {
   inputText = "";
   addressText: string;
   error = "";
-  viewport: CalcGridViewport = {
-    firstColumn: 0,
-    firstRow: 0,
-    columns: 16,
-    rows: 36,
-    scrollWidth: 1_000_000,
-    scrollLeft: 0,
-    columnOffset: 0,
-    rowHeight: 22,
-    scrollTop: 0,
-    rowOffset: 0,
-    scrollHeight: 1_000_000,
-  };
+  private readonly gridViewport = new CalcViewport();
   private revision = 0;
-  private client: { left: number; top: number; width: number; height: number } | undefined;
+  /** Borrows the measured browser projection. @returns Current grid viewport. */
+  get viewport(): CalcGridViewport {
+    return this.gridViewport.current;
+  }
   private readonly listeners = new Set<() => void>();
   private anchor: ScAddress;
   /** Binds canonical model/view owners. @param shell - Active shell. @returns Controller. */
@@ -360,9 +349,9 @@ export class CalcViewController {
       return /** Detaches the listener. @returns Whether removed. */ () =>
         this.listeners.delete(listener);
     };
-  /** Publishes source/controller changes once per input operation. @returns Nothing. */
-  private Changed(): void {
-    this.UpdateViewport();
+  /** Publishes source/controller changes once per input operation. @param publishOrigin - Whether a scroll changed the view origin. @returns Nothing. */
+  private Changed(publishOrigin = false): void {
+    this.gridViewport.Update(this.viewData, publishOrigin);
     this.revision++;
     for (const listener of this.listeners) listener();
   }
@@ -916,74 +905,26 @@ export class CalcViewController {
     }
     return true;
   }
-  /** Maps browser scroll geometry to logical sheet coordinates without CSS-size overflow. @param left - Horizontal pixels. @param top - Physical vertical pixels. @param width - Client width. @param height - Client height. @returns Nothing. */
-  Scroll(left: number, top: number, width: number, height: number): void {
-    this.client = { left, top, width, height };
+  /** Repositions the DOM track from the adopted native sheet. @param width - Client width. @param height - Client height. @returns Browser scroll position and whether an origin was stored. */
+  RestoreScrollPosition(width: number, height: number) {
+    return this.gridViewport.Restore(this.viewData, width, height);
+  }
+  /** Measures an attached or resized grid without publishing it as a user scroll. @param left - Horizontal pixels. @param top - Vertical pixels. @param width - Client width. @param height - Client height. @returns Nothing. */
+  MeasureViewport(left: number, top: number, width: number, height: number): void {
+    this.gridViewport.Measure(left, top, width, height);
     this.Changed();
   }
-  /** Refreshes visible geometry after model changes using the last actual browser measurement. @returns Nothing. */
-  private UpdateViewport(): void {
-    if (!this.client) return;
-    const { left, top, width, height } = this.client;
-    const doc = this.shell.GetDocument(),
-      table = doc.FetchTable(this.viewData.GetTabNumber());
-    // Shell history emits before the controller restores a deleted active sheet.
-    if (!table) return;
-    const bodyHeight = Math.max(
-      1,
-      height - (this.viewData.IsHeaderMode() ? this.viewport.rowHeight : 0),
-    );
-    const logicalTop =
-      Math.min(1, Math.max(0, top) / Math.max(1, this.viewport.scrollHeight - height)) *
-      Math.max(0, rowPixels(table, 0, doc.MaxRow()) - bodyHeight);
-    const firstRow = rowAtPixel(table, logicalTop, doc.MaxRow());
-    const lastRow = rowAtPixel(table, logicalTop + bodyHeight, doc.MaxRow());
-    const rows = lastRow - firstRow + 1,
-      bodyWidth = Math.max(1, width - (this.viewData.IsHeaderMode() ? 48 : 0)),
-      logicalLeft =
-        Math.min(1, Math.max(0, left) / Math.max(1, this.viewport.scrollWidth - width)) *
-        Math.max(0, columnPixels(table, 0, doc.MaxCol()) - bodyWidth),
-      firstColumn = columnAtPixel(table, logicalLeft, doc.MaxCol()),
-      lastColumn = columnAtPixel(table, logicalLeft + bodyWidth, doc.MaxCol());
-    this.viewport = {
-      ...this.viewport,
-      firstColumn,
-      scrollLeft: left,
-      columnOffset: logicalLeft - columnPixels(table, 0, firstColumn - 1),
-      firstRow: Math.min(this.shell.GetDocument().MaxRow(), firstRow),
-      columns: lastColumn - firstColumn + 2,
-      rows: rows + 1,
-      scrollTop: top,
-      rowOffset: logicalTop - rowPixels(table, 0, firstRow - 1),
-    };
+  /** Publishes actual browser scrolling to the active view. @param left - Horizontal pixels. @param top - Vertical pixels. @param width - Client width. @param height - Client height. @returns Nothing. */
+  Scroll(left: number, top: number, width: number, height: number): void {
+    this.Changed(this.gridViewport.Measure(left, top, width, height));
   }
-  /** Projects native column position to the bounded horizontal browser scroll track. @param column - Target column. @param clientWidth - Measured width. @returns Physical horizontal offset. */
+  /** Projects a native column onto the browser scrollbar. @param column - First visible column. @param clientWidth - Measured width. @returns Physical offset. */
   ScrollLeftForColumn(column: number, clientWidth: number): number {
-    const doc = this.shell.GetDocument(),
-      table = doc.FetchTable(this.viewData.GetTabNumber()) as ScTable,
-      maximum = Math.max(
-        1,
-        columnPixels(table, 0, doc.MaxCol()) -
-          Math.max(1, clientWidth - (this.viewData.IsHeaderMode() ? 48 : 0)),
-      );
-    return (
-      Math.min(1, columnPixels(table, 0, column - 1) / maximum) *
-      Math.max(0, this.viewport.scrollWidth - clientWidth)
-    );
+    return this.gridViewport.LeftForColumn(this.viewData, column, clientWidth);
   }
-  /** Projects a logical row to the bounded browser scroll track. @param row - Target first row. @param clientHeight - Measured viewport. @returns Physical offset. */
+  /** Projects a native row onto the browser scrollbar. @param row - First visible row. @param clientHeight - Measured height. @returns Physical offset. */
   ScrollTopForRow(row: number, clientHeight: number): number {
-    const doc = this.shell.GetDocument(),
-      table = doc.FetchTable(this.viewData.GetTabNumber()) as ScTable;
-    const maximum = Math.max(
-      1,
-      rowPixels(table, 0, doc.MaxRow()) -
-        Math.max(1, clientHeight - (this.viewData.IsHeaderMode() ? this.viewport.rowHeight : 0)),
-    );
-    return (
-      Math.min(1, rowPixels(table, 0, row - 1) / maximum) *
-      Math.max(0, this.viewport.scrollHeight - clientHeight)
-    );
+    return this.gridViewport.TopForRow(this.viewData, row, clientHeight);
   }
   /** Releases shell/frame subscriber resources on workspace closure. @returns Nothing. */
   Close(): void {

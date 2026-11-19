@@ -103,7 +103,8 @@ export function CalcWorkbench({
   const root = useRef<HTMLElement>(null),
     tabs = useRef<HTMLDivElement>(null),
     previousModal = useRef(modal),
-    browserTopFocus = useRef(false);
+    browserTopFocus = useRef(false),
+    restoredViewport = useRef(false);
   const view = controller.viewData,
     doc = controller.shell.GetDocument();
   const cursorColumn = view.GetCurX(),
@@ -166,13 +167,30 @@ export function CalcWorkbench({
     },
     [controller, selectionStart, selectionEnd, controller.inputText, inputMode],
   );
+  useLayoutEffect(
+    /** Restores the first visible cells when a sheet or document is attached. @returns Nothing. */ () => {
+      const client = grid();
+      const saved = controller.RestoreScrollPosition(client.clientWidth, client.clientHeight);
+      restoredViewport.current = saved.stored;
+      client.scrollLeft = saved.left;
+      client.scrollTop = saved.top;
+      if (client.clientHeight > 0)
+        controller.MeasureViewport(
+          client.scrollLeft,
+          client.scrollTop,
+          client.clientWidth,
+          client.clientHeight,
+        );
+    },
+    [controller, doc, activeTab],
+  );
   useEffect(
     /** Tracks concrete browser viewport changes separately from logical sheet rows. @returns Cleanup. */ () => {
       /** Measures the actual grid client before projecting visible cells. @returns Nothing. */
       function measure(): void {
         const client = grid();
         if (client.clientHeight > 0)
-          controller.Scroll(
+          controller.MeasureViewport(
             client.scrollLeft,
             client.scrollTop,
             client.clientWidth,
@@ -188,6 +206,10 @@ export function CalcWorkbench({
   );
   useLayoutEffect(
     /** Reveals source cursor movement without a second selection model or enormous CSS coordinate domain. @returns Nothing. */ () => {
+      if (restoredViewport.current) {
+        restoredViewport.current = false;
+        return;
+      }
       const client = grid(),
         viewport = controller.viewport;
       if (!client.clientHeight) return;

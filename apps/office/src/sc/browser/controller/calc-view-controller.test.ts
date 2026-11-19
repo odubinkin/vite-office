@@ -17,6 +17,8 @@ import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { EditTextObjectImpl, TextRotation } from "../../../editeng/inc/editobj";
 import { SvtScriptType } from "../../../svl/inc/languageoptions";
 import { MapUnit } from "../../../tools/inc/mapunit";
+import { getSheetPaneLayout } from "../../source/core/data/document.sheet-visibility";
+import { ScHSplitPos, ScVSplitPos } from "../../source/ui/view/viewdata";
 
 it("displays and edits native rich-text cells without reading an absent shared-string variant", /** Checks repeated display ownership and preservation of text that resembles a number. @returns Nothing. */ () => {
   const shell = new ScDocShell();
@@ -199,6 +201,56 @@ it("preserves failed input,cursor marks,sheets and physical/logical viewport ind
   expect(c.viewport.rowOffset).toBeLessThan(17);
   c.Close();
 });
+it("restores measured unsplit origins exactly across sheet changes", /** Verifies the browser track and native per-sheet origins are independent from cursor and dirty state. @returns Nothing. */ () => {
+  const c = new CalcViewController();
+  const doc = c.shell.GetDocument();
+  const secondName = unicode("Second");
+  try {
+    expect(doc.InsertTab(1, secondName)).toBe(true);
+    c.viewData.SetUnsplitOrigin(4, 29);
+    const stored = c.RestoreScrollPosition(820, 480);
+    expect(stored.stored).toBe(true);
+    expect(stored.top).toBe(Math.round(stored.top));
+    expect(stored.left).toBe(Math.round(stored.left));
+    c.MeasureViewport(stored.left, stored.top, 820, 480);
+    expect(c.viewport).toMatchObject({
+      firstColumn: 4,
+      firstRow: 29,
+      rowOffset: 0,
+      columnOffset: 0,
+    });
+    c.Scroll(stored.left, stored.top, 820, 480);
+    expect(getSheetPaneLayout(doc, 0)?.first).toEqual([4, 29]);
+    c.Scroll(c.ScrollLeftForColumn(8, 820), c.ScrollTopForRow(46, 480), 820, 480);
+    expect(getSheetPaneLayout(doc, 0)?.first).toEqual([8, 46]);
+    c.SelectTab(1);
+    expect(c.RestoreScrollPosition(820, 480)).toEqual({ left: 0, top: 0, stored: false });
+    c.MeasureViewport(0, 0, 820, 480);
+    c.Scroll(c.ScrollLeftForColumn(3, 820), c.ScrollTopForRow(10, 480), 820, 480);
+    expect(getSheetPaneLayout(doc, 1)?.first).toEqual([3, 10]);
+    c.SelectTab(0);
+    const restored = c.RestoreScrollPosition(390, 600);
+    c.MeasureViewport(restored.left, restored.top, 390, 600);
+    expect(c.viewport).toMatchObject({ firstColumn: 8, firstRow: 46 });
+    c.Scroll(0, 0, 390, 600);
+    expect(getSheetPaneLayout(doc, 0)?.first).toEqual([0, 0]);
+    expect(getSheetPaneLayout(doc, 1)?.first).toEqual([3, 10]);
+    expect(c.RestoreScrollPosition(390, 600)).toEqual({ left: 0, top: 0, stored: true });
+    expect(c.viewData.GetPosX(ScHSplitPos.SC_SPLIT_LEFT, 1)).toBe(3);
+    expect(c.viewData.GetPosX(ScHSplitPos.SC_SPLIT_RIGHT, 1)).toBe(0);
+    expect(c.viewData.GetPosY(ScVSplitPos.SC_SPLIT_TOP, 1)).toBe(0);
+    expect(c.viewData.GetPosY(ScVSplitPos.SC_SPLIT_BOTTOM, 1)).toBe(10);
+    expect(c.viewData.GetPosX(ScHSplitPos.SC_SPLIT_LEFT, 10)).toBe(-1);
+    expect(c.viewData.GetPosY(ScVSplitPos.SC_SPLIT_BOTTOM, 10)).toBe(-1);
+    expect(c.Address()).toBe("A1");
+    expect(c.shell.IsModified()).toBe(false);
+  } finally {
+    secondName.dispose();
+    c.Close();
+    doc.Dispose();
+  }
+});
+
 it("keeps bounded cell input/display semantics and shell save-position ownership", /** Covers real stored formula/string/error alternatives and literal apostrophes. @returns Nothing. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Existing"));

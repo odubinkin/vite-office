@@ -191,7 +191,7 @@ function readPanes(document: ScDocument, tab: number, items: readonly ViewItem[]
         : SheetPane.BOTTOMLEFT,
     first: [
       bound(asColumn(values.get(Left) ?? 0), document.MaxCol()),
-      bound(values.get(Top), document.MaxRow()),
+      bound(values.get(verticalMode === SheetSplitMode.NONE ? Bottom : Top), document.MaxRow()),
     ],
     second: [
       bound(asColumn(values.get(Right) ?? 0), document.MaxCol()),
@@ -242,7 +242,7 @@ function writePanes(document: ScDocument, tab: number): readonly ViewItem[] {
     [panes.verticalMode === SheetSplitMode.NORMAL ? VTwips : VPosition, panes.verticalPosition],
     [Active, panes.activePane, "short"],
     [Left, panes.first[0]],
-    [Top, panes.first[1]],
+    [Top, panes.verticalMode === SheetSplitMode.NONE ? 0 : panes.first[1]],
     [Right, panes.second[0]],
     [Bottom, panes.second[1]],
   ];

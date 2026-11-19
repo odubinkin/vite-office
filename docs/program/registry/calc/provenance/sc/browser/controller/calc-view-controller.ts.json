@@ -49,7 +49,8 @@
       "Uses the existing view before starting direct and formula input on protected sheets.",
       "Reports native document-operation errors through the existing Calc host display.",
       "Uses native cell admission for address selection and native relative cursor and protected block movement.",
-      "Routes Shift keyboard movement to native ExpandBlock and retains the active cell."
+      "Routes Shift keyboard movement to native ExpandBlock and retains the active cell.",
+      "Delegates physical scroll track measurement and restoration to CalcViewport and retains ScViewData as the owner of visible sheet positions."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",

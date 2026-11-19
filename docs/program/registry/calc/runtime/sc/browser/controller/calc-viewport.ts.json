@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/browser/controller/calc-viewport.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "editable-workspace",
+    "capabilityIds": [
+      "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/browser/controller/calc-viewport.ts",
+        "apps/office/src/sc/browser/controller/calc-view-controller.test.ts",
+        "apps/office/e2e/calc/xlsx-active-view.spec.ts"
+      ],
+      "justification": "Maps the existing bounded browser scrollbar to actual sheet geometry and calibrates the track at the imported unsplit cell origin. Native ScViewData owns the visible cell positions.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CalcViewport"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

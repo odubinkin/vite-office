@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "localPath": "apps/office/src/sc/browser/controller/calc-viewport.ts",
+    "status": "local-only",
+    "rationale": "DOM scroll track projection over actual ScViewData and compressed sheet dimensions.",
+    "responsibilities": [
+      "Restores the unsplit first visible cell exactly using an integer scroll offset and publishes actual scroll movement into the current sheet view."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The browser virtualizes a bounded DOM scroll track and converts physical offsets to native logical origins."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/browser/controller/calc-viewport.ts",
+          "marker": "class CalcViewport"
+        },
+        {
+          "path": "apps/office/src/sc/browser/controller/calc-view-controller.test.ts",
+          "marker": "restores measured unsplit origins exactly"
+        }
+      ]
+    }
+  }
+}

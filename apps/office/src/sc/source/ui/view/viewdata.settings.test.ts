@@ -478,6 +478,14 @@ it("reads ODF pane scalar types and native last-position ordering", /** Covers t
                 ["PositionBottom", "bad"],
               ],
             ],
+            [
+              "A<B",
+              [
+                ["PositionLeft", 1],
+                ["PositionTop", 117],
+                ["PositionBottom", 23],
+              ],
+            ],
           ],
         ],
       ],
@@ -504,6 +512,14 @@ it("reads ODF pane scalar types and native last-position ordering", /** Covers t
       horizontalMode: SheetSplitMode.NONE,
       verticalMode: SheetSplitMode.NONE,
     });
+    expect(getSheetPaneLayout(document, 3)).toMatchObject({ first: [1, 23], second: [0, 23] });
+    const primary = await writeOdsXml(document);
+    expect(primary.files["settings.xml"]).toContain(
+      '<config:config-item config:name="PositionTop" config:type="int">0</config:config-item>',
+    );
+    expect(primary.files["settings.xml"]).toContain(
+      '<config:config-item config:name="PositionBottom" config:type="int">23</config:config-item>',
+    );
   } finally {
     document.Dispose();
   }
