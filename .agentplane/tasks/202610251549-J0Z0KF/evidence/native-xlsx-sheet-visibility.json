@@ -1,0 +1,138 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Calc XLSX hidden worksheets through core, ODS primary storage and existing file UI",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "fixtures": [
+    {
+      "path": "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/hidden_sheets.xlsx",
+      "sha256": "837080e7711525b62104cc8a675d26b5903365ea25c0bb016ce3caa17f13761d"
+    }
+  ],
+  "upstream": [
+    "sc/source/core/data/document.cxx#ScDocument::SetVisible",
+    "sc/source/core/data/table1.cxx#ScTable::SetVisible",
+    "sc/source/filter/oox/worksheetbuffer.cxx#WorksheetBuffer::finalizeImport",
+    "sc/source/filter/oox/viewsettings.cxx#ViewSettings::getActiveCalcSheet",
+    "sc/source/filter/xcl97/xcl97rec.cxx#ExcBundlesheet8::SaveXml",
+    "sc/source/ui/view/tabview3.cxx#ScTabView::SetTabNo",
+    "sc/source/ui/view/tabvwsh3.cxx#ScTabViewShell::ExecGoToTab",
+    "sc/qa/unit/subsequent_filters_test2.cxx#testHiddenSheetsXLSX"
+  ],
+  "commands": [
+    "vitest run --config vitest.calc.config.ts --coverage excelfilter.test calc-goto-sheet calc-presenters calc-sheet-commands ods-worker-boundaries ods-style-routing print-ranges document.scalar --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sc/source/core/data/document.sheet-visibility.ts --coverage.thresholds.lines=90 --coverage.thresholds.functions=90 --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.perFile --coverage.reporter=text --coverage.reporter=json-summary --coverage.reportsDirectory=coverage/xlsx-sheet-visibility-scoped",
+    "./node_modules/.bin/playwright test -c apps/office/coverage/xlsx-sheet-visibility.playwright.config.ts --workers=1 --timeout=60000",
+    "npm run typecheck",
+    "npm run test:static",
+    "npm run check:docs",
+    "npm run check:dependencies",
+    "npm run check:file-size",
+    "npm run check:source-tree",
+    "npm run check:calc-resources",
+    "npm run inventory:registry:build",
+    "npm run check:source-provenance",
+    "npm run inventory:invariants",
+    "npm run inventory:parity",
+    "Scoped ESLint and Prettier",
+    "node .agentplane/policy/check-routing.mjs",
+    "git diff --check"
+  ],
+  "results": {
+    "calc": {
+      "tests": 41,
+      "files": 8
+    },
+    "coverage": {
+      "document.sheet-visibility.ts": {
+        "lines": 100,
+        "statements": 100,
+        "functions": 100,
+        "branches": 100
+      }
+    },
+    "chromium": 1,
+    "fullSuiteRun": false
+  },
+  "verified": [
+    "The original input has three native sheet owners and only Sheet2 visible and active. The XLSX export emits that active index and the same three visibility states.",
+    "Native stream validity invalidates on a sheet visibility change, and Worker transfer and native ODS table style serialization retain hidden sheets.",
+    "Chromium opens the unmodified empty source fixture using Calc file controls. After one cell edit, Save As stores a primary ODS copy. Browser reopen retains the edit and only lists Sheet2 in both the tab strip and Go to Sheet dialog. The XLSX download retains the active tab and both hidden sheets."
+  ],
+  "remaining": [
+    "An explicit active view among multiple visible sheets is not persisted through ODS settings.xml. Existing sheet controls display imported hidden sheet state; sheet hide/show commands are outside this checkpoint.",
+    "Full DOCX and XLSX acceptance remains open. No full suite was due."
+  ],
+  "files": [
+    {
+      "path": "apps/office/src/sc/source/core/data/table.ts",
+      "sha256": "356245a1857e7d4766f31d0750f9bf086444f57249f0c3df281038288a1ded25"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/table1.ts",
+      "sha256": "20bbd4131734611a6844a08322286f7358f45cc40a17918e2527561e71d2e315"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.ts",
+      "sha256": "ac5b3b5211929a8c4398da324b239c193c9b28da46da1a874c83324fc383b33b"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document.sheet-visibility.ts",
+      "sha256": "7289859c128e7d5e6531d8d76b3e7c573e6af3c3a87386e4b80c5a53e3ccdbcb"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/oox/workbookfragment.ts",
+      "sha256": "79422cfef2b065374580be5b94fda8340c4345dd8870beb43995afb3a0e5fd47"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/oox/excelfilter.ts",
+      "sha256": "6d21ace28abb7a4f7771b43a401771e55008536fd0109460e7a20cbffc9d2545"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+      "sha256": "d0d3d88f967e663554362c9c743e6e0127c9514897c1b1b663aae076350ec39e"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/excel/xetable.ts",
+      "sha256": "a5e3a5c2c730ac696aee630c030c51df7a513841110a0ac8fb8a61afb9debc5e"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlimprt.ts",
+      "sha256": "208188319ed6f8f6eff83058319216f152c498428d836a892592a4e1b7f3ae4f"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmltabi.ts",
+      "sha256": "2fc25fb79562c99d6545ec5d81524d667f8587ae914e8661720250421c12c019"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlstyli.ts",
+      "sha256": "c657b1c68f8df1e0fec9538c268eb65c38ef96c9e21aca5016878ba2813603f8"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
+      "sha256": "328c932a0a5894e0b0edeee051529fb9d5a408cdef70cb58fda9385543dd93c9"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabview3.ts",
+      "sha256": "402a70f017da1846d0ce7c3f48bc11ac5e0e155f5a8fd869b20cf81fd8c413c9"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabvwsh4.ts",
+      "sha256": "f2e3bc1f5828f6496864afdc4cc80ef3483fb54bb6427b80a5913160ffbb2ce8"
+    },
+    {
+      "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts",
+      "sha256": "f70213bbe37faf23e5d16aac0577d28364f985e78ddf54d02853929bebf36c8a"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/ScTabControl.tsx",
+      "sha256": "3f1fba419963db611523e1a0ddefa45c5c873742c5d10ffd3c1147061f76964a"
+    },
+    {
+      "path": "apps/office/src/sc/browser/workflows/calc-sheet-workflows.ts",
+      "sha256": "f9dac004ca048da04e2177b0e6444225e1e73152c3e2f4335c62f8428db44c6b"
+    },
+    {
+      "path": "apps/office/e2e/calc/xlsx-sheet-visibility.spec.ts",
+      "sha256": "b31b0d89104d3e0ce94dcff779ae35a11620650095362de23aab6e5f6ab0b6c7"
+    }
+  ]
+}
