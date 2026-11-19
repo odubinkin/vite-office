@@ -1,0 +1,53 @@
+{
+  "checkpoint": "Calc restores grouped worksheet tabs through XLSX and the attached sheet view",
+  "implementation": "113d38339fa3",
+  "test_fixture_type_commit": "4917c536c88b",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    "sc/source/filter/oox/viewsettings.cxx#SheetViewSettings::finalizeImport",
+    "sc/source/ui/view/viewdata.cxx#ScViewDataTable::ReadUserDataSequence",
+    "sc/source/ui/view/viewdata.cxx#ScViewDataTable::WriteUserDataSequence",
+    "sc/source/ui/view/viewdata.cxx#ScViewData::WriteExtOptions",
+    "sc/source/filter/excel/xelink.cxx#XclExpTabInfo::XclExpTabInfo"
+  ],
+  "fixture": {
+    "path": "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/sheet-names.xlsx",
+    "sha256": "e768518ed6161ec4698e6a24506fc71ce2ebf56b0a2fa5d9dd352b2dfb5f47ec",
+    "adaptation": "Adds tabSelected to secondary sheets in memory. The unit fixture also verifies a selected hidden worksheet becomes visible, while an unselected hidden worksheet stays hidden."
+  },
+  "verification": {
+    "calc": {
+      "command": "npm run test:coverage:calc -- viewdata.settings excelfilter.test markdata calc-files ods-worker-boundaries --maxWorkers=2 --testTimeout=90000 --coverage.include='src/sc/source/{filter/oox/viewsettings,core/data/document.sheet-visibility,ui/view/viewdata.settings}.ts' --coverage.reportsDirectory=coverage/calc-sheet-group-final --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.perFile=true --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "46 tests across five files. All three measured owners meet scoped90 independently. Minimum branch coverage was 91.22%. The ODF TableSelected case was repeated separately after narrowing the actual XML string fixture type."
+    },
+    "chromium": {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" npm exec -- playwright test --config .git/calc-panes-browser.config.mts --project calc --workers=1 apps/office/e2e/calc/xlsx-sheet-group.spec.ts apps/office/e2e/calc/xlsx-selection.spec.ts apps/office/e2e/calc/xlsx-active-view.spec.ts --grep 'grouped worksheet|active sheet|disjoint marks'",
+      "result": "pass",
+      "evidence": "Three production browser scenarios. The first and fifth tabs are visibly selected after import, a live edit writes B2 on both, the XLSX download carries both selection flags and values, and mobile-width reopen restores the group. Selecting an unrelated tab collapses the group through the existing Calc view. The browser config inherits the production config with an available preview port."
+    },
+    "static": {
+      "commands": [
+        "npm run typecheck",
+        "npm run test:static",
+        "npm run check:docs",
+        "npm run check:dependencies",
+        "npm run check:source-tree",
+        "npm run check:calc-resources",
+        "npm run check:file-size",
+        "node .agentplane/policy/check-routing.mjs",
+        "ap doctor",
+        "git diff --check"
+      ],
+      "result": "pass",
+      "evidence": "Scoped ESLint, Prettier and provenance validation of all seven runtime paths passed. The earlier typecheck found the fixture XML string needed an explicit type check. Doctor retains the earlier managed shim warning."
+    },
+    "global_provenance_and_registry": {
+      "commands": ["npm run check:source-provenance", "npm run inventory:registry:check"],
+      "result": "fail",
+      "evidence": "Global checks still report the unchanged missing framework records OfficeTooltips.tsx and available-menu-items.ts. The global invariants and parity scripts share the registry checker."
+    }
+  },
+  "source_finding": "CALC-754 records that the ODF view settings reader accepts TableSelected and the paired writer omits it. The modeled behavior remains the same. XLSX writes the tabSelected flags.",
+  "residual": "Complete XLSX acceptance remains open. Full regression suites remain on the approved ten-task cadence."
+}
