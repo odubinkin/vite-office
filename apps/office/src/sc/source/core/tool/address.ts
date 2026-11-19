@@ -12,6 +12,7 @@ import {
   applyStartToEndFlags,
 } from "../../../inc/address";
 import type { SCCOL, SCROW, SCTAB } from "../../../inc/types";
+import { ParseExcelHeader } from "./address.xl-header";
 import { formatTab, parseOOOA1, findRangeSeparator } from "./address.ooo";
 
 /** Structural view of the original ScDocument boundary used by address movement. */
@@ -733,19 +734,17 @@ function singleton(flags: ScRefFlags, other: ScRefFlags): boolean {
       Boolean(flags & ScRefFlags.ROW2_VALID || other & ScRefFlags.ROW_VALID);
   return cols !== rows;
 }
-/** Local-header path of lcl_ScRange_Parse_XL_A1, preserving original mutation/order/invalid-flag behavior. Qualified/external references require the unported native header owner; they never get reinterpreted as local cells. @param range - Actual recipient. @param source - UTF16 text. @param doc - Actual document bounds. @param onlySingle - Original address versus range dispatch. @returns Native flags. */
+/** Local-header path of lcl_ScRange_Parse_XL_A1, preserving original mutation/order/invalid-flag behavior. The internal sheet header uses the same owner as R1C1. @param range - Actual recipient. @param source - UTF16 text. @param doc - Actual document bounds. @param onlySingle - Original address versus range dispatch. @returns Native flags. */
 function parseLocalExcelA1(
   range: ScRange,
   source: string,
   doc: ScAddressDocument,
   onlySingle: boolean,
 ): ScRefFlags {
-  const input = source.split("\0", 1)[0] as string;
-  if (!input) return ScRefFlags.ZERO;
-  if (input.includes("!") || input.includes("'") || input.includes("["))
-    throw new Error("Excel sheet and external reference headers are not implemented");
   const flags: [ScRefFlags] = [ScRefFlags.VALID | ScRefFlags.TAB_VALID],
     other: [ScRefFlags] = [ScRefFlags.TAB_VALID];
+  const input = ParseExcelHeader(range, source, doc, flags);
+  if (!input) return ScRefFlags.ZERO;
   let first = column(doc, input, 0, range.aStart, flags),
     second: number | null;
   if (first === null) {
@@ -865,11 +864,10 @@ function parseLocalExcelR1C1(
   details: Readonly<ScAddressDetails>,
   onlySingle: boolean,
 ): ScRefFlags {
-  const input = source.split("\0", 1)[0] as string;
-  if (input.includes("!") || input.includes("'"))
-    throw new Error("Excel sheet and external reference headers are not implemented");
   const flags: [ScRefFlags] = [ScRefFlags.VALID | ScRefFlags.TAB_VALID],
     other: [ScRefFlags] = [ScRefFlags.TAB_VALID];
+  const input = ParseExcelHeader(range, source, doc, flags);
+  if (!input) return ScRefFlags.ZERO;
   let pos: number | null, next: number | null;
   const clearAll =
     ScRefFlags.VALID |

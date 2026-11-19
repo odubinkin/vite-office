@@ -207,18 +207,35 @@ it("formats local Excel cells/ranges with native whole-axis and absolute flag po
     doc.Dispose();
   }
 });
-it("refuses unported sheet/external headers without local reinterpretation", /** No invented sheet resolver or external-link default is used. @returns Nothing. */ () => {
+it("resolves internal sheet headers while refusing external headers", /** Preserves native sheet lookup and the original unsupported external boundary. @returns Nothing. */ () => {
   const { doc, details } = setup();
+  doc.InsertTab(1, unicode("A B"));
   try {
-    for (const source of ["Sheet1!A1", "'A B'!A1", "[1]Sheet1!A1"]) {
+    for (const [source, tab] of [
+      ["Sheet1!A1", 0],
+      ["'A B'!A1", 1],
+      ["Unknown!A1", -1],
+    ] as const) {
       const value = unicode(source);
       try {
-        expect(
-          /** Rejects an unavailable qualified parser. @returns Flags. */ () =>
-            new ScAddress().Parse(value, doc, details),
-        ).toThrow(/headers are not implemented/);
+        const address = new ScAddress();
+        const flags = address.Parse(value, doc, details);
+        expect(address.Tab()).toBe(tab);
+        expect(Boolean(flags & F.VALID)).toBe(tab !== -1);
+        if (tab !== -1) expect(flags & F.TAB_3D).toBe(F.TAB_3D);
       } finally {
         value.dispose();
+      }
+    }
+    for (const source of ["[1]Sheet1!A1", "'[1]Sheet1'!A1"]) {
+      const external = unicode(source);
+      try {
+        expect(
+          /** Leaves external resolution with the native external manager. @returns Flags. */
+          () => new ScAddress().Parse(external, doc, details),
+        ).toThrow(/headers are not implemented/);
+      } finally {
+        external.dispose();
       }
     }
     expect(

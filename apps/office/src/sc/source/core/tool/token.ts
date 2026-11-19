@@ -21,6 +21,7 @@ import {
   FormulaDoubleToken,
   FormulaStringToken,
   FormulaByteToken,
+  FormulaJumpToken,
   StackVar,
 } from "../../../../formula/inc/token";
 import type { FormulaTokenConstReference } from "../../../../formula/inc/types";
@@ -484,6 +485,18 @@ const operators = new Set<OpCode>([
   OpCode.ocPercentSign,
   OpCode.ocStop,
   OpCode.ocSum,
+  OpCode.ocEqual,
+  OpCode.ocNotEqual,
+  OpCode.ocLess,
+  OpCode.ocGreater,
+  OpCode.ocLessEqual,
+  OpCode.ocGreaterEqual,
+  OpCode.ocNotAvail,
+  OpCode.ocAnd,
+  OpCode.ocRow,
+  OpCode.ocColumn,
+  OpCode.ocAddress,
+  OpCode.ocIndirect,
   OpCode.ocPi,
   OpCode.ocTrue,
   OpCode.ocFalse,
@@ -844,6 +857,8 @@ export class ScTokenArray extends FormulaTokenArray {
       (code >= OpCode.ocArrayOpen && code <= OpCode.ocArrayColSep)
     )
       return this.Add(new FormulaToken(StackVar.svSep, code));
+    if (code === OpCode.ocIf)
+      return this.Add(new FormulaJumpToken(code, Int16Array.of(3, 0, 0, 0)));
     if (!operators.has(code)) throw new Error("Calc opcode construction is not implemented");
     return this.Add(new FormulaByteToken(code));
   }

@@ -35,6 +35,7 @@ import {
   FontStrikeout,
   FontWeight,
 } from "../../../../tools/inc/fontenum";
+import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
@@ -855,6 +856,55 @@ it("round trips sparse values, escaped Unicode and formulas on native Calc tabs"
     value.dispose();
     second.dispose();
     first.dispose();
+    document.Dispose();
+  }
+});
+
+it("recalculates the original tdf70455 dynamic range and preserves its defined errors across storage", /** Ports testTdf70455 over the pinned unmodified workbook and the local file paths. @returns Completion. */ async () => {
+  const fixture = readFileSync(
+    resolve("../../vendor/libreoffice-reference/sc/qa/unit/data/xlsx/tdf70455.xlsx"),
+  );
+  const document = await ExcelFilter.importDocument(fixture);
+  const position = new ScAddress(7, 7, 0);
+  let worker: ScDocument | undefined;
+  let stored: ScDocument | undefined;
+  let reopened: ScDocument | undefined;
+  try {
+    expect(document.GetFormulaCell(position)?.GetErrCode()).toBe(FormulaError.NONE);
+    expect(document.GetValue(position)).toBe(780);
+    expect(display(document, position)).toBe("€780.00");
+    expect(document.GetDocOptions().IsIgnoreCase()).toBe(true);
+    expect(
+      document
+        .GetRangeName()
+        ?.findByUpperName("__XLFN_SUMIFS")
+        ?.GetSymbol(FormulaGrammar.Grammar.GRAM_OOXML),
+    ).toBe("NA()");
+    expect(
+      document
+        .GetRangeName()
+        ?.findByUpperName("___XLFN_SUMIFS")
+        ?.GetSymbol(FormulaGrammar.Grammar.GRAM_OOXML),
+    ).toBe("#N/A");
+    worker = decodeCalcDocument(structuredClone(encodeCalcDocument(document)));
+    expect(display(worker, position), "Worker").toBe("€780.00");
+    stored = await readOdsDocument(await writeOdsDocument(worker));
+    expect(stored.GetValue(position)).toBe(780);
+    const bytes = await exportXlsx(stored);
+    const archive = await DocumentArchive.open(bytes);
+    expect(await archive.readTextEntry("xl/worksheets/sheet1.xml")).toContain(
+      "SUM(H2:INDIRECT(ADDRESS(ROW()-1,COLUMN())))",
+    );
+    reopened = await ExcelFilter.importDocument(bytes);
+    for (const graph of [worker, stored, reopened]) {
+      expect(graph.GetDocOptions().IsIgnoreCase()).toBe(true);
+      expect(graph.GetFormulaCell(position)?.GetErrCode()).toBe(FormulaError.NONE);
+      expect(graph.GetValue(position)).toBe(780);
+    }
+  } finally {
+    reopened?.Dispose();
+    stored?.Dispose();
+    worker?.Dispose();
     document.Dispose();
   }
 });

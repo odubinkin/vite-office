@@ -179,6 +179,7 @@ export interface CalcDocumentRecord {
   readonly showHeaders?: boolean;
   readonly showZeros?: boolean;
   readonly nullDate?: number;
+  readonly ignoreCase?: boolean;
   readonly defaultWritingDirection?: D;
   readonly numberFormats?: readonly NumberFormat[];
   readonly names?: readonly [
@@ -475,6 +476,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     ...(view.GetOption(ViewOption.HEADER) ? {} : { showHeaders: false }),
     ...(view.GetOption(ViewOption.NULLVALS) ? {} : { showZeros: false }),
     nullDate: document.GetFormatTable().GetNullDate().GetDate(),
+    ...(document.GetDocOptions().IsIgnoreCase() ? { ignoreCase: true } : {}),
     ...(defaultWritingDirection === undefined ? {} : { defaultWritingDirection }),
     ...(numberFormats.length ? { numberFormats } : {}),
     ...(names.length ? { names } : {}),
@@ -491,14 +493,17 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
   let complete = false;
   document.SetAutoCalc(false);
   try {
-    if (record.nullDate !== undefined) {
-      const packed = record.nullDate;
-      if (typeof packed !== "number" || (packed | 0) !== packed)
-        throw new Error("Calc worker null date is invalid.");
-      const date = new Date(packed);
-      if (!date.IsValidDate()) throw new Error("Calc worker null date is invalid.");
+    if (record.ignoreCase === true || record.nullDate !== undefined) {
       const options = new ScDocOptions(document.GetDocOptions());
-      options.SetDate(date.GetDay(), date.GetMonth(), date.GetYear());
+      if (record.nullDate !== undefined) {
+        const packed = record.nullDate;
+        if (typeof packed !== "number" || (packed | 0) !== packed)
+          throw new Error("Calc worker null date is invalid.");
+        const date = new Date(packed);
+        if (!date.IsValidDate()) throw new Error("Calc worker null date is invalid.");
+        options.SetDate(date.GetDay(), date.GetMonth(), date.GetYear());
+      }
+      if (record.ignoreCase === true) options.SetIgnoreCase(true);
       document.SetDocOptions(options);
     }
     importer.importStyles(record.styles);

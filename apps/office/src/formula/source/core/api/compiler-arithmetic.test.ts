@@ -119,7 +119,7 @@ it("rejects unsupported compilation before touching existing RPN", /** Leaves un
   const array = tokens([1]);
   new RecordingCompiler(array).CompileTokenArray();
   const original = array.GetCode();
-  array.AddToken(new FormulaByteToken(OpCode.ocIf));
+  array.AddToken(new FormulaByteToken(OpCode.ocChoose));
   expect(
     /** Rejects missing function compilation. @returns Native subtotal flag. */ () =>
       new RecordingCompiler(array).CompileTokenArray(),

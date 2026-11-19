@@ -15,7 +15,8 @@
       "WorkbookSettings::getNullDate"
     ],
     "preservedResponsibilities": [
-      "Imports the native date1904 flag, defaults to 30 December 1899, and applies the selected epoch through the document options and formatter before worksheet content."
+      "Imports the native date1904 flag, defaults to 30 December 1899, and applies the selected epoch through the document options and formatter before worksheet content.",
+      "Applies the original Excel case-insensitive comparison default in the actual calculation options."
     ],
     "omittedResponsibilities": [
       "Other workbook and calculation settings and explicit ISO date-typed cell conversion remain outside this slice."
@@ -29,6 +30,10 @@
         {
           "path": "apps/office/src/sc/source/filter/excel/excrecds.test.ts",
           "marker": "replays tdf165180"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "recalculates the original tdf70455"
         }
       ],
       "upstream": [

@@ -338,3 +338,52 @@ test("Calc opens the pinned XLSX with external names and exports its caches", /*
     "page",
   );
 });
+
+test("Calc opens and recalculates the original tdf70455 workbook", /** Ports the pinned workbook regression through existing local Open, ODS and XLSX controls. @param fixtures - Browser fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
+  page,
+}) => {
+  const original = fileURLToPath(
+    new URL(
+      "../../../../vendor/libreoffice-reference/sc/qa/unit/data/xlsx/tdf70455.xlsx",
+      import.meta.url,
+    ),
+  );
+  const open = page.getByRole("button", { name: "Open", exact: true });
+  const result = page.getByRole("gridcell", { name: /^H8(?:\s|$)/u });
+  await page.goto("/calc");
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles(original);
+  await expect(result).toHaveText("€780.00");
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Save As…" }).click();
+  await page.getByRole("textbox", { name: "New copy name" }).fill("Dynamic range copy");
+  await page.getByRole("button", { name: "Save copy" }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await page.reload();
+  await open.click();
+  await page.getByRole("tab", { name: "In browser" }).click();
+  await page.getByRole("button", { name: "Dynamic range copy", exact: true }).click();
+  await expect(result).toContainText("780");
+
+  const download = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download XLSX" }).click();
+  const path = await (await download).path();
+  if (!path) throw new Error("Missing XLSX download.");
+  const buffer = await readFile(path);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer,
+    name: "Dynamic range reopened.xlsx",
+    mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+  const name = page.getByRole("textbox", { name: "Name Box" });
+  await expect(name).toHaveValue("F13");
+  await name.fill("H8");
+  await name.press("Enter");
+  await expect(result).toContainText("780");
+});

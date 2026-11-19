@@ -5,6 +5,7 @@ import {
   FormulaErrorToken,
   FormulaStringToken,
   FormulaByteToken,
+  FormulaJumpToken,
   StackVar,
 } from "../../../../formula/inc/token";
 import { ScCalcConfig } from "../../../inc/calcconfig";
@@ -45,7 +46,10 @@ import { SAL_MAX_INT32 } from "../../../../sal/inc/types";
 import { GetString as GetEditString } from "./editutil";
 import { ScMatValType } from "../../../inc/types";
 import type { ScExternalCacheToken } from "../../ui/docshell/externalrefmgr";
-import { CalculateMatrixLookup } from "./interpr1";
+import { CalculateMatrixLookup, InterpretReferenceOpcode, ScAnd } from "./interpr1";
+import { CompareScalar } from "./compare";
+import { ScRangeFunc } from "./interpr2";
+import { isComparison } from "../../../../formula/inc/FormulaCompiler";
 import { ScQueryEntry, type ScQueryItem } from "./queryentry";
 import { ScQueryCellIteratorDirect } from "../data/queryiter";
 import { SearchParam } from "../../../../unotools/source/i18n/textsearch";
@@ -598,6 +602,11 @@ export class ScInterpreter {
         value.dispose();
       }
     }
+    return this.ComparisonString(key);
+  }
+
+  /** Gets the original and pooled caseless forms. @param key - Native text content. @returns Comparison operands. */
+  private ComparisonString(key: string): Exclude<ScQueryItem, number> {
     const native = unicode(key);
     const interned = this.mrDoc.GetSharedStringPool().intern(native);
     try {
@@ -606,6 +615,31 @@ export class ScInterpreter {
       interned.dispose();
       native.dispose();
     }
+  }
+
+  /** Pops one normal comparison operand without coercing text into numbers. @returns Comparable cell or empty. */
+  private PopComparisonValue(): ScQueryItem | null {
+    const token = this.pStack.at(-1);
+    if (token instanceof FormulaDoubleToken || token?.GetType() === StackVar.svMissing)
+      return this.GetDouble();
+    if (token instanceof FormulaStringToken) return this.ComparisonString(this.GetString());
+    if (token instanceof ScSingleRefToken || token instanceof ScDoubleRefToken) {
+      const address = token instanceof ScSingleRefToken ? this.PopSingleRef() : new ScAddress();
+      if (token instanceof ScDoubleRefToken) {
+        const range = this.PopDoubleRef();
+        if (!this.DoubleRefToPosSingleRef(range, address)) return null;
+      }
+      if (this.nGlobalError !== FormulaError.NONE) return null;
+      const cell = new ScRefCellValue(this.mrDoc, address);
+      if (cell.hasEmptyValue()) return null;
+      return cell.hasString()
+        ? this.ComparisonString(this.GetCellString(cell))
+        : this.GetCellValue(address, cell);
+    }
+    if (token instanceof ScExternalSingleRefToken) return this.FillLookupEntry() ?? null;
+    this.PopError();
+    if (token?.GetType() !== StackVar.svEmptyCell) this.SetError(FormulaError.IllegalParameter);
+    return null;
   }
 
   /** Runs the common native lookup stack and source-specific result rules. @param count - Token argument count. @param horizontal - Whether to search across the first row. @returns Nothing. */
@@ -764,8 +798,34 @@ export class ScInterpreter {
   /** Executes the represented arithmetic token stream, preserving native result/error cardinality. @returns Final type. */
   Interpret(): StackVar {
     this.nRetFmtType = SvNumFormatType.NUMBER;
-    for (const token of this.pArr.RPNTokens()) {
+    const code = [...this.pArr.RPNTokens()];
+    const branchEnds: number[] = [];
+    for (let pc = 0; pc < code.length; ++pc) {
+      const token = code[pc] as FormulaToken;
       const op = token.GetOpCode();
+      if (token instanceof FormulaJumpToken && op === OpCode.ocIf) {
+        const jump = token.GetJump();
+        const count = jump[0] as number;
+        const condition = this.GetDouble() !== 0;
+        if (this.nGlobalError !== FormulaError.NONE) break;
+        if (condition ? count >= 2 : count === 3) {
+          branchEnds.push(jump[count] as number);
+          pc = jump[condition ? 1 : 2] as number;
+        } else {
+          this.nRetFmtType = SvNumFormatType.LOGICAL;
+          this.PushDouble(Number(condition));
+          pc = jump[count] as number;
+        }
+        continue;
+      }
+      if ((op === OpCode.ocSep || op === OpCode.ocClose) && branchEnds.length) {
+        if (this.pStack.at(-1)?.GetType() === StackVar.svMissing) {
+          this.pStack.pop();
+          this.PushDouble(0);
+        }
+        pc = branchEnds.pop() as number;
+        continue;
+      }
       const logical = op === OpCode.ocTrue || op === OpCode.ocFalse;
       if (op !== OpCode.ocPush && op !== OpCode.ocMissing)
         this.nRetFmtType = logical ? SvNumFormatType.LOGICAL : SvNumFormatType.NUMBER;
@@ -775,7 +835,16 @@ export class ScInterpreter {
         else this.PushWithoutError(token);
       } else if (op === OpCode.ocMissing) this.PushWithoutError(token);
       else if (op === OpCode.ocPi) this.PushDouble(Math.PI);
-      else if (logical) this.PushDouble(Number(op === OpCode.ocTrue));
+      else if (op === OpCode.ocNotAvail) this.SetError(FormulaError.NotAvailable);
+      else if (op === OpCode.ocAnd) ScAnd.call(this, (token as FormulaByteToken).GetByte());
+      else if (isComparison(op)) {
+        const right = this.PopComparisonValue();
+        const left = this.PopComparisonValue();
+        this.nRetFmtType = SvNumFormatType.LOGICAL;
+        this.PushDouble(
+          Number(CompareScalar(left, right, op, this.mrDoc.GetDocOptions().IsIgnoreCase())),
+        );
+      } else if (logical) this.PushDouble(Number(op === OpCode.ocTrue));
       else if (
         op === OpCode.ocSum ||
         op === OpCode.ocSumSQ ||
@@ -801,7 +870,9 @@ export class ScInterpreter {
               ? div(left, right)
               : power(left, right),
         );
-      } else throw new Error("Interpreter opcode is not implemented");
+      } else if (op === OpCode.ocRange) ScRangeFunc.call(this);
+      else if (!InterpretReferenceOpcode.call(this, token))
+        throw new Error("Interpreter opcode is not implemented");
       if (this.nGlobalError !== FormulaError.NONE) break;
     }
     if (

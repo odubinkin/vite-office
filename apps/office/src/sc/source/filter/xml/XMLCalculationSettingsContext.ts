@@ -12,11 +12,13 @@ import { ScXMLImportContext } from "./importcontext";
 
 /** Commits the source null date after the calculation-settings element, before cells are loaded. */
 export class ScXMLCalculationSettingsContext extends ScXMLImportContext {
+  private ignoreCase = false;
   private nullDate = new DateTime(0, 0, 0, 0, 30, 12, 1899, false);
 
   /** Diagnoses represented tokens outside the date-system slice. @param _element - Current token. @param attributes - ODF settings attributes. @returns Nothing. */
   override startFastElement(_element: XMLToken, attributes: FastAttributeList): void {
-    attributes.assertOnly([], "Calc calculation settings");
+    attributes.assertOnly([XMLToken.TABLE_CASE_SENSITIVE], "Calc calculation settings");
+    this.ignoreCase = attributes.get(XMLToken.TABLE_CASE_SENSITIVE) === "false";
   }
 
   /** Reads the represented null-date child with the native temporal converter. @param element - Source token. @param attributes - Source attributes. @returns Child context. */
@@ -45,6 +47,7 @@ export class ScXMLCalculationSettingsContext extends ScXMLImportContext {
     const doc = this.GetScImport().GetDocument();
     const options = new ScDocOptions(doc.GetDocOptions());
     options.SetDate(this.nullDate.Day, this.nullDate.Month, this.nullDate.Year);
+    options.SetIgnoreCase(this.ignoreCase);
     doc.SetDocOptions(options);
   }
 }

@@ -429,22 +429,22 @@ export class ScXMLExport {
     const day: [number] = [0],
       month: [number] = [0],
       year: [number] = [0];
-    this.document.GetDocOptions().GetDate(day, month, year);
-    if (day[0] === 30 && month[0] === 12 && year[0] === 1899) return "";
+    const options = this.document.GetDocOptions();
+    options.GetDate(day, month, year);
+    const caseAttribute = options.IsIgnoreCase() ? ' table:case-sensitive="false"' : "";
+    if (day[0] === 30 && month[0] === 12 && year[0] === 1899)
+      return caseAttribute ? `<table:calculation-settings${caseAttribute}/>` : "";
     const buffer = new OUStringBuffer();
+    Converter.convertDateTime(
+      buffer,
+      new DateTime(0, 0, 0, 0, day[0], month[0], year[0], false),
+      null,
+    );
+    const value = buffer.makeStringAndClear();
     try {
-      Converter.convertDateTime(
-        buffer,
-        new DateTime(0, 0, 0, 0, day[0], month[0], year[0], false),
-        null,
-      );
-      const value = buffer.makeStringAndClear();
-      try {
-        return `<table:calculation-settings><table:null-date table:date-value="${text(value)}"/></table:calculation-settings>`;
-      } finally {
-        value.dispose();
-      }
+      return `<table:calculation-settings${caseAttribute}><table:null-date table:date-value="${text(value)}"/></table:calculation-settings>`;
     } finally {
+      value.dispose();
       buffer.dispose();
     }
   }

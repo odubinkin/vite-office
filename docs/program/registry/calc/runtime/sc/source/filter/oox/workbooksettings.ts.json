@@ -20,9 +20,11 @@
         "apps/office/src/sc/source/filter/excel/excrecds.test.ts",
         "apps/office/e2e/calc/xlsx-date-system.spec.ts",
         "vendor/libreoffice-reference/sc/source/filter/oox/workbooksettings.cxx",
-        "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test2.cxx#testTdf165180_date1904_XLSX"
+        "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test2.cxx#testTdf165180_date1904_XLSX",
+        "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+        "apps/office/e2e/calc/xlsx-active-view.spec.ts"
       ],
-      "justification": "Imports the native date1904 flag, defaults to 30 December 1899, and applies the selected epoch through the document options and formatter before worksheet content. Other workbook and calculation settings and explicit ISO date-typed cell conversion remain outside this slice.",
+      "justification": "Imports the native date1904 flag, defaults to 30 December 1899, and applies the selected epoch through the document options and formatter before worksheet content. Other workbook and calculation settings and explicit ISO date-typed cell conversion remain outside this slice. Applies the original Excel case-insensitive comparison default in the actual calculation options.",
       "knownViolations": [],
       "localSymbols": [
         "WorkbookSettings"

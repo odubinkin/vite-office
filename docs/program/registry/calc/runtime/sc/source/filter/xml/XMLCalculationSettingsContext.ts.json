@@ -20,9 +20,11 @@
         "apps/office/src/sc/source/filter/excel/excrecds.test.ts",
         "apps/office/e2e/calc/xlsx-date-system.spec.ts",
         "vendor/libreoffice-reference/sc/source/filter/xml/XMLCalculationSettingsContext.cxx",
-        "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test2.cxx#testTdf165180_date1904_XLSX"
+        "vendor/libreoffice-reference/sc/qa/unit/subsequent_export_test2.cxx#testTdf165180_date1904_XLSX",
+        "apps/office/src/sc/source/core/tool/numeric-formula.test.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.test.ts"
       ],
-      "justification": "Imports the ODF null-date with the native SAX temporal converter, retaining 30 December 1899 for absent and malformed values, and applies the document option before subsequent cells. Other calculation-settings fields and iteration are outside this slice.",
+      "justification": "Imports the ODF null-date with the native SAX temporal converter, retaining 30 December 1899 for absent and malformed values, and applies the document option before subsequent cells. Other calculation-settings fields and iteration are outside this slice. Reads case-sensitive comparison policy alongside the ODF null date.",
       "knownViolations": [],
       "localSymbols": [
         "ScXMLCalculationSettingsContext"

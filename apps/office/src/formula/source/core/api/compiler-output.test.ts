@@ -49,7 +49,7 @@ it("preserves output replacement, literal quotes, both whitespace classes and ba
       missing.CreateStringFromTokenArray(out),
   ).toThrow(/not implemented/);
   const missingOp = new FormulaTokenArray();
-  missingOp.AddToken(new FormulaByteToken(OpCode.ocIf));
+  missingOp.AddToken(new FormulaByteToken(OpCode.ocChoose));
   const opCompiler = new OdffCompiler(missingOp);
   expect(
     /** Missing function output rejects explicitly. @returns Nothing. */ () =>

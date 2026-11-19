@@ -3,6 +3,7 @@ import { OpCode } from "../../../inc/opcode";
 import {
   FormulaToken,
   FormulaByteToken,
+  FormulaJumpToken,
   FormulaDoubleToken,
   FormulaStringToken,
   FormulaErrorToken,
@@ -40,6 +41,19 @@ const arithmetic = new Set<OpCode>([
   OpCode.ocSep,
   OpCode.ocMissing,
   OpCode.ocRange,
+  OpCode.ocEqual,
+  OpCode.ocNotEqual,
+  OpCode.ocLess,
+  OpCode.ocGreater,
+  OpCode.ocLessEqual,
+  OpCode.ocGreaterEqual,
+  OpCode.ocNotAvail,
+  OpCode.ocIf,
+  OpCode.ocAnd,
+  OpCode.ocRow,
+  OpCode.ocColumn,
+  OpCode.ocAddress,
+  OpCode.ocIndirect,
   OpCode.ocPi,
   OpCode.ocTrue,
   OpCode.ocFalse,
@@ -52,6 +66,11 @@ const arithmetic = new Set<OpCode>([
   OpCode.ocHLookup,
   OpCode.ocAmpersand,
 ]);
+
+/** Tests the contiguous native relational opcode range. @param opcode - Operand opcode. @returns Whether relational. */
+export function isComparison(opcode: OpCode): boolean {
+  return opcode >= OpCode.ocEqual && opcode <= OpCode.ocGreaterEqual;
+}
 
 /** Original external spellings of the scalar spreadsheet errors. */
 export const errorSymbols = new Map<string, FormulaError>([
@@ -208,6 +227,7 @@ export class FormulaCompiler {
     for (const token of this.mpArr.Tokens())
       if (
         !arithmetic.has(token.GetOpCode()) ||
+        (token.GetOpCode() === OpCode.ocIf && !(token instanceof FormulaJumpToken)) ||
         (token.GetInForceArray() !== ParamClass.Unknown && !this.IsMatrixOperand(token))
       )
         throw new Error("Formula opcode or array context is not implemented by scalar compilation");
@@ -227,6 +247,7 @@ export class FormulaCompiler {
     this.PostProcessCode();
     this.nameFrames.length = 0;
     if (this.mpCode.length) this.mpArr.CreateNewRPNArrayFromData(this.mpCode, this.mpCode.length);
+    if (this.mpArr.HasOpCodeRPN(OpCode.ocIndirect)) this.mpArr.SetExclusiveRecalcModeAlways();
     if (this.mpArr.GetCodeError() !== FormulaError.NONE) {
       this.mpArr.DelRPN();
       this.mpArr.SetHyperLink(false);
@@ -332,7 +353,12 @@ export class FormulaCompiler {
         --this.mnRecursion;
       }
     } else {
-      if (op >= OpCode.ocStartBinaryOperators && op < OpCode.ocStopBinaryOperators && needsOperand)
+      if (
+        op >= OpCode.ocStartBinaryOperators &&
+        op < OpCode.ocStopBinaryOperators &&
+        op !== OpCode.ocAnd &&
+        needsOperand
+      )
         this.SetError(FormulaError.VariableExpected);
       this.meLastOp = op;
     }
@@ -360,7 +386,9 @@ export class FormulaCompiler {
     } else if (op === OpCode.ocMissing) {
       this.PutCode(this.mpToken);
       this.NextToken();
-    } else if (logical || op === OpCode.ocPi) {
+    } else if (op === OpCode.ocIf) {
+      this.CompileIf(this.mpToken as FormulaJumpToken);
+    } else if (logical || op === OpCode.ocPi || op === OpCode.ocNotAvail) {
       const factor = this.mpToken;
       if (this.NextToken() !== OpCode.ocOpen) {
         this.SetError(FormulaError.PairExpected);
@@ -371,6 +399,11 @@ export class FormulaCompiler {
         this.NextToken();
       }
     } else if (
+      op === OpCode.ocAnd ||
+      op === OpCode.ocRow ||
+      op === OpCode.ocColumn ||
+      op === OpCode.ocAddress ||
+      op === OpCode.ocIndirect ||
       op === OpCode.ocSum ||
       op === OpCode.ocSumSQ ||
       op === OpCode.ocProduct ||
@@ -415,6 +448,34 @@ export class FormulaCompiler {
       this.SetError(
         op === OpCode.ocClose ? FormulaError.ParameterExpected : FormulaError.UnknownToken,
       );
+  }
+  /** Emits the scalar IF jump table and branch terminators in native RPN order. @param token - Original jump token. @returns Nothing. */
+  private CompileIf(token: FormulaJumpToken): void {
+    if (this.NextToken() !== OpCode.ocOpen) {
+      this.SetError(FormulaError.PairExpected);
+      return;
+    }
+    this.NextToken();
+    let terminal = this.Expression();
+    const branch = token.Clone() as FormulaJumpToken;
+    const jumps = branch.GetJump();
+    this.PutCode(branch);
+    let count = 1;
+    while (terminal === OpCode.ocSep && count < 3) {
+      jumps[count++] = this.mpCode.length - 1;
+      this.NextToken();
+      terminal = this.Expression();
+      this.PutCode(this.mpToken);
+    }
+    if (terminal !== OpCode.ocClose) {
+      this.SetError(
+        terminal === OpCode.ocSep ? FormulaError.IllegalParameter : FormulaError.PairExpected,
+      );
+      return;
+    }
+    jumps[count] = this.mpCode.length - 1;
+    jumps[0] = count;
+    this.NextToken();
   }
   /** Prefix negation binds before postfix percent and power. Prefix plus is already elided by NextToken. @returns Nothing. */
   private UnaryLine(): void {
@@ -512,6 +573,26 @@ export class FormulaCompiler {
       this.PutCode(token);
     }
   }
+  /** Emits the native comparison layer below concatenation in precedence. @returns Nothing. */
+  private CompareLine(): void {
+    this.ConcatLine();
+    while (isComparison(this.mpToken.GetOpCode())) {
+      const token = this.mpToken;
+      const first = this.mpCode.length - 1;
+      this.NextToken();
+      this.ConcatLine();
+      if (this.mbComputeII)
+        this.HandleIIOpCode(
+          token,
+          [
+            [this.mpCode, first],
+            [this.mpCode, this.mpCode.length - 1],
+          ],
+          2,
+        );
+      this.PutCode(token);
+    }
+  }
   /** Preserves the native nested-expression recursion bound. @returns Current terminal opcode. */
   private Expression(): OpCode {
     if (++this.mnRecursion > 100) {
@@ -520,7 +601,7 @@ export class FormulaCompiler {
       return OpCode.ocStop;
     }
     try {
-      this.ConcatLine();
+      this.CompareLine();
       return this.mpToken.GetOpCode();
     } finally {
       --this.mnRecursion;

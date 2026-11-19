@@ -39,6 +39,7 @@ export class WorkbookSettings {
     const options = new ScDocOptions(document.GetDocOptions());
     const date = this.getNullDate();
     options.SetDate(date.Day, date.Month, date.Year);
+    options.SetIgnoreCase(true);
     document.SetDocOptions(options);
   }
 }

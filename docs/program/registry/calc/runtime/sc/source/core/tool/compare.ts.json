@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/tool/compare.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "numeric-formula-editing",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/compare.ts#CompareScalar",
+        "vendor/libreoffice-reference/sc/source/core/tool/compare.cxx#CompareFunc",
+        "apps/office/src/sc/source/core/tool/numeric-formula.test.ts",
+        "apps/office/src/sc/source/filter/oox/excelfilter.test.ts"
+      ],
+      "justification": "Applies native scalar relational rules for empty cells, type order, approximate numeric equality and case-aware string comparisons. Matrix comparisons and query pattern modes use separate owners.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CompareScalar"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/tool/compare.cxx",
+      "upstreamSymbols": [
+        "CompareFunc"
+      ]
+    }
+  }
+}

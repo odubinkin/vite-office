@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/core/tool/address.xl-header.ts",
+    "upstreamPath": "sc/source/core/tool/address.cxx",
+    "localSymbols": [
+      "ParseExcelHeader"
+    ],
+    "upstreamSymbols": [
+      "ScRange::Parse_XL_Header"
+    ],
+    "preservedResponsibilities": [
+      "Separates and resolves the internal single-sheet header shared by native Excel A1 and R1C1 address parsing."
+    ],
+    "omittedResponsibilities": [
+      "External workbook headers and multi-sheet header spans use separate native ownership."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/address.xl-header.ts",
+          "marker": "ParseExcelHeader"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/numeric-formula.test.ts",
+          "marker": "LibreOffice testFuncINDIRECT"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/address.cxx",
+          "marker": "ScRange::Parse_XL_Header"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/tool/address.xl-header.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps the original Excel sheet header parser separate from the A1 and R1C1 coordinate scanners."
+    }
+  }
+}

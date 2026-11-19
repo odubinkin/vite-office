@@ -37,7 +37,8 @@
       "The scalar aggregate interpreter takes actual ScMatrixToken operands, handles a missing matrix with UnknownVariable and delegates the supported aggregate branch to IterateMatrix.",
       "Scalar numeric and text operands, ordinary aggregates and final results now resolve external single-sheet references through their original token types and document cache. External rectangular references reuse the native ScMatrix owner.",
       "Dispatches native VLOOKUP and HLOOKUP opcodes and projects typed lookup keys and results through the existing interpreter stack and external cache.",
-      "Routes VLOOKUP and HLOOKUP worksheet references through ScQueryCellIteratorDirect and returns source output cells with the native empty-as-string flag."
+      "Routes VLOOKUP and HLOOKUP worksheet references through ScQueryCellIteratorDirect and returns source output cells with the native empty-as-string flag.",
+      "Executes scalar IF branches by the native program-counter jump table and dispatches comparisons, logical operators and dynamic references."
     ],
     "omittedResponsibilities": [
       "All services outside the explicitly represented numeric formula/arithmetic subset remain unsupported; no broad parity claim."
@@ -99,6 +100,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/queryiter.lookup.test.ts",
           "marker": "LibreOffice testFuncVLOOKUP"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "recalculates the original tdf70455"
         }
       ],
       "upstream": [

@@ -49,7 +49,8 @@
       "Block75 compute-II work in progress ports the original238-row classification table,seven-slot RunData initialization,repeat indexing,Unknown fallback,macro/return/signed-opcode behavior and explicit Init/Exit cache lifetime. Static data audit matches every original row;this is not native class execution. External AddIn argument collections remain explicitly unported,with the original Unknown return-type result retained. The existing per-realm compiler symbol bootstrap invokes actual classification Init after symbols,corresponding to that portion of native ScGlobal::Init without a replacement global service. Original shared compiler compute-II flag,empty virtual hooks,borrowed actual RPN buffer/offset locations,eight-argument cap and PostProcessCode timing are represented. Calc schedules and applies local scalar arithmetic II replacements only after final context,while preserving lexical ranges,relative flags and source exclusions for fully absolute rows,trivial or ambiguous ranges. Existing unsupported opcode/array/matrix admission remains explicit. ScFormulaCell owns actual native cMatrixFlag/GetMatrixFlag,explicit precompiled-token mode construction and copied mode state. Original matrix-reference formula output resolves its actual local RPN reference through the document and falls back to real source tokens when the origin is absent;non-normal output retains native braces. Matrix compilation and evaluation remain explicit unsupported services rather than scalar substitutes. The owned-array constructor creates a compiler only when RPN is missing,as in source. The classification constant-table diagnostic branch is specialized only for the proved invariant that all238 actual upstream repeated rows supply at least their repeat count of leading parameters;the source-data audit asserts that invariant. Twelve actual libc++64 double-hash bit patterns now match normal and ASan/UBSan,including a finite value whose native folded token hash is one. This is a primitive observation,not a full native Calc differential. Actual group compileCode enables II for missing RPN and retains precompiled,error and subtotal-detection branches. Source default column/table group listeners and earlier copy/ownership work remain unchanged. CALC258 preserves the source fallback-comment discrepancy. This does not complete document modes/pool identity,full native differential or final raw100/quality acceptance.",
       "Registers the nullary logical opcodes with original returned format and preserves the original spreadsheet spill error token.",
       "Compiles the native concatenation function arity and the expression's separate ConcatLine precedence.",
-      "Admits the native VLOOKUP and HLOOKUP opcodes through the existing lexical and formula-token path, preserving the original arguments in the RPN function token."
+      "Admits the native VLOOKUP and HLOOKUP opcodes through the existing lexical and formula-token path, preserving the original arguments in the RPN function token.",
+      "Compiles scalar IF using the native conditional jump offsets, comparisons and variable-arity reference calls."
     ],
     "omittedResponsibilities": [
       "All opcode families and services outside the scalar token subset, including text scanning, function calls, II and matrix compilation; complete upstream QA is not executed.",
@@ -128,6 +129,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/lookup-formula.test.ts",
           "marker": "native matrix lookup ordering"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "recalculates the original tdf70455"
         }
       ],
       "upstream": [

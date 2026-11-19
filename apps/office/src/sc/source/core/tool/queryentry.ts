@@ -13,13 +13,17 @@ import type { ScDocOptionsConstReference } from "./docoptio";
 /** Original value/string query alternatives, retaining shared-string case mapping. */
 export type ScQueryItem = number | { text: string; ignoreCase: string };
 
-let collator: Intl.Collator | undefined;
-/** Binds native system locale and IGNORE_CASE to the browser collator. @returns Collator. */
-export function GetCollator(): Intl.Collator {
+const collators = new Map<boolean, Intl.Collator>();
+/** Binds native system locale and case sensitivity to the browser collator. @param ignoreCase - Native comparison option. @returns Collator. */
+export function GetCollator(ignoreCase = true): Intl.Collator {
+  let collator = collators.get(ignoreCase);
   if (!collator) {
     const locale = new LanguageTag(LANGUAGE_SYSTEM);
     try {
-      collator = new Intl.Collator(text(locale.getBcp47()), { sensitivity: "accent" });
+      collator = new Intl.Collator(text(locale.getBcp47()), {
+        sensitivity: ignoreCase ? "accent" : "variant",
+      });
+      collators.set(ignoreCase, collator);
     } finally {
       locale.dispose();
     }

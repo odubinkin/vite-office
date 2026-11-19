@@ -7,13 +7,21 @@
     "localPath": "apps/office/src/sc/source/core/tool/interpr1.ts",
     "upstreamPath": "sc/source/core/tool/interpr1.cxx",
     "localSymbols": [
-      "CalculateMatrixLookup"
+      "CalculateMatrixLookup",
+      "ScAnd",
+      "InterpretReferenceOpcode"
     ],
     "upstreamSymbols": [
-      "ScInterpreter::CalculateLookup"
+      "ScInterpreter::CalculateLookup",
+      "ScInterpreter::ScAnd",
+      "ScInterpreter::ScColumn",
+      "ScInterpreter::ScRow",
+      "ScInterpreter::ScIndirect",
+      "ScInterpreter::ScAddressFunc"
     ],
     "preservedResponsibilities": [
-      "Calc's common matrix lookup handles ordered and exact VLOOKUP and HLOOKUP over external cache matrices and inline arrays with the original type ordering, first and last match behavior, default sorted argument and scalar result rules."
+      "Calc's common matrix lookup handles ordered and exact VLOOKUP and HLOOKUP over external cache matrices and inline arrays with the original type ordering, first and last match behavior, default sorted argument and scalar result rules.",
+      "Evaluates logical arguments and local reference functions with original stack order and address conventions."
     ],
     "omittedResponsibilities": [
       "Worksheet ranges are handled by the separate direct query iterator. Matrix jump execution outside the represented scalar path remains pending. The original matrix search ignores wildcard and regular-expression expansion. Locale comparison uses the browser Intl collator with the configured Calc language and case-insensitive sensitivity."
@@ -31,12 +39,36 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/xmlexternaltabi.test.ts",
           "marker": "replays LibreOffice testExternalRefCacheODS"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/excelfilter.test.ts",
+          "marker": "recalculates the original tdf70455"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx",
           "marker": "ScInterpreter::CalculateLookup"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::ScAnd"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::ScColumn"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::ScRow"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::ScIndirect"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx",
+          "marker": "ScInterpreter::ScAddressFunc"
         }
       ]
     }

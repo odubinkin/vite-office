@@ -800,7 +800,9 @@ export class ScCompiler extends FormulaCompiler {
         index += input.length;
         continue;
       }
-      let op = symbols[ch];
+      const combined = /^[<>][=>]/u.exec(remaining)?.[0];
+      const comparison = combined ? symbols[combined] : undefined;
+      let op = comparison ?? symbols[ch];
       if (inArray && ch === (ooxml ? "," : ";")) op = OpCode.ocArrayColSep;
       if (op === undefined)
         throw new Error(
@@ -847,7 +849,7 @@ export class ScCompiler extends FormulaCompiler {
         }
       }
       last = op;
-      index++;
+      index += comparison === undefined ? 1 : 2;
     }
     if (inArray && !array.AddOpCode(OpCode.ocArrayClose)) this.SetError(FormulaError.CodeOverflow);
     while (brackets-- > 0)

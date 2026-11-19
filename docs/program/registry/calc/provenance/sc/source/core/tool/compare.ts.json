@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/core/tool/compare.ts",
+    "upstreamPath": "sc/source/core/tool/compare.cxx",
+    "localSymbols": [
+      "CompareScalar"
+    ],
+    "upstreamSymbols": [
+      "CompareFunc"
+    ],
+    "preservedResponsibilities": [
+      "Applies native scalar relational rules for empty cells, type order, approximate numeric equality and case-aware string comparisons."
+    ],
+    "omittedResponsibilities": [
+      "Matrix comparisons and query pattern modes use separate owners."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/compare.ts",
+          "marker": "CompareScalar"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/numeric-formula.test.ts",
+          "marker": "resolves native text references"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/compare.cxx",
+          "marker": "CompareFunc"
+        }
+      ]
+    }
+  }
+}
