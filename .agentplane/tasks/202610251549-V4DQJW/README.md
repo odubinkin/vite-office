@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 388
+revision: 390
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T06:35:26.273Z"
+  updated_at: "2026-11-19T07:05:41.196Z"
   updated_by: "CODER"
-  note: "Implementation checkpoint 10e6090e1: DOCX filter and UI committed, 63 Writer plus 6 metadata tests and two Chromium scenarios pass. Broader DOCX acceptance is open."
-  attempts: 116
+  note: "Implementation 21eaef432 passes 19 focused Writer tests, production build and browser ODT/download/mobile reopen. Paragraph root/style inheritance and 90 percent complete owner coverage remain open."
+  attempts: 117
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1864,8 +1867,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T07:05:41.196Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Implementation 21eaef432 passes 19 focused Writer tests, production build and browser ODT/download/mobile reopen. Paragraph root/style inheritance and 90 percent complete owner coverage remain open."
+  -
+    type: "status"
+    at: "2026-11-19T07:05:50.060Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T06:35:44.146Z"
+doc_updated_at: "2026-11-19T07:05:50.060Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -5352,6 +5368,48 @@ sections:
     - Commands: scoped ESLint and Prettier ; Result: pass after follow-ups ; Evidence: ESLint reported one forwarding constructor and Prettier reported two files, with the corresponding checks passing after correction ; Scope: integration changed files. The byte-identical pinned ZIP.js CRC32 source retains the two upstream license-line whitespace characters, verified with cmp and SHA-256 before commit.
     - Calc matrix checkpoint: 6 focused cases, 96.61% branch coverage of token.matrix.ts. Named array definitions now round-trip XLSX, primary ODS and the Worker codec. Upstream behaviors CALC-740 and CALC-741 are recorded in the suspected issues document.
     - Remaining acceptance: broader XLSX formula and formatting fidelity, remaining WordprocessingML graph and style/page properties, the wider device and failure matrix, and complete task-level coverage. No full-suite run was due at this checkpoint. No push, deployment or task closure was attempted.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-19T07:05:41.196Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Implementation 21eaef432 passes 19 focused Writer tests, production build and browser ODT/download/mobile reopen. Paragraph root/style inheritance and 90 percent complete owner coverage remain open.
+    Attempts: 117
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T06:35:44.146Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    Implementation checkpoint 21eaef432411. DOCX font and height defaults use Writer's existing UNO text defaults and document pool. The imported font size is retained in the Worker record, DOCX default part and effective ODT document. Paragraph style root inheritance remains open.
+
+    - Command: npm run test:writer -- docxexport.theme-fonts.test.ts docxexport.tabs.test.ts docxexport.default-tabs.test.ts native-text-default-schema.test.ts --maxWorkers=2 --testTimeout=120000
+      Result: pass. Evidence: 19 passed across 4 files. Scope: pinned tdf108350 fixtures, explicit run defaults, UNO font-height query, original tab defaults, Strict theme font resolution and sz/szCs XML, Worker transfer, primary ODT reopen, DOCX export and reopen. The previously stale default-property map test now expects 81 admitted entries and still checks every entry against the pinned native flags.
+    - Command: node_modules/.bin/playwright test writer-docx-theme.spec.ts --grep 'themed text across' --config apps/office/coverage/writer-font-defaults-playwright.config.ts --project=writer --timeout=120000 --workers=1
+      Result: pass. Evidence: one built-browser scenario exercising actual local storage reopen, download and mobile-viewport DOCX open. Scope: existing Writer dialogs and the Worker-backed primary ODT path.
+    - Commands: npm run test:static; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npm run inventory:registry:check; scoped ESLint and Prettier; git diff --check; ap doctor; node .agentplane/policy/check-routing.mjs.
+      Result: pass. Evidence: four relative production bundles, 5733 JSDoc paths, zero registry semantic violations and policy routing OK. Scope: compilation, static packaging, provenance and tooling for this checkpoint.
+    - Command: npm run test:coverage:writer -- docxexport.theme-fonts.test.ts docxexport.default-tabs.test.ts --maxWorkers=1 --testTimeout=120000 --coverage.include=src/sw/source/core/unocore/SwXTextDefaults.ts --coverage.include=src/sw/source/writerfilter/dmapper/StyleSheetTable.import.ts --coverage.include=src/sw/source/filter/ww8/docxattributeoutput.styles.ts --coverage.thresholds.lines=0 --coverage.thresholds.functions=0 --coverage.thresholds.statements=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=text --coverage.reportsDirectory=coverage/writer-font-defaults-qualified
+      Result: tests pass; coverage qualification remains open. Evidence: six instrumented scenarios passed; whole selected files 87.00% statements, 81.06% branches, 100% functions and 89.87% lines. Scope: default service and import/export owners, including pre-existing branches. The run retained the project thresholds untouched and did not qualify these owners at 90%.
+    - Remaining native acceptance: the actual NoParent style from tdf108350_noFontdefaults.docx still inherits the current browser graph's Normal style, while upstream has a distinct built-in paragraph root. The regression proves the Times New Roman/10pt pool defaults, not the upstream NoParent style assertion. Paragraph default properties and broader style coverage remain open. This checkpoint is not task closure.
 
     BlueprintSnapshotRef:
     - state: current
@@ -9586,6 +9644,48 @@ Implementation checkpoint: 10e6090e11c9b0d20fbcc647389f5ca23264aa59 links Calc J
 - Commands: scoped ESLint and Prettier ; Result: pass after follow-ups ; Evidence: ESLint reported one forwarding constructor and Prettier reported two files, with the corresponding checks passing after correction ; Scope: integration changed files. The byte-identical pinned ZIP.js CRC32 source retains the two upstream license-line whitespace characters, verified with cmp and SHA-256 before commit.
 - Calc matrix checkpoint: 6 focused cases, 96.61% branch coverage of token.matrix.ts. Named array definitions now round-trip XLSX, primary ODS and the Worker codec. Upstream behaviors CALC-740 and CALC-741 are recorded in the suspected issues document.
 - Remaining acceptance: broader XLSX formula and formatting fidelity, remaining WordprocessingML graph and style/page properties, the wider device and failure matrix, and complete task-level coverage. No full-suite run was due at this checkpoint. No push, deployment or task closure was attempted.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-19T07:05:41.196Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Implementation 21eaef432 passes 19 focused Writer tests, production build and browser ODT/download/mobile reopen. Paragraph root/style inheritance and 90 percent complete owner coverage remain open.
+Attempts: 117
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T06:35:44.146Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+Implementation checkpoint 21eaef432411. DOCX font and height defaults use Writer's existing UNO text defaults and document pool. The imported font size is retained in the Worker record, DOCX default part and effective ODT document. Paragraph style root inheritance remains open.
+
+- Command: npm run test:writer -- docxexport.theme-fonts.test.ts docxexport.tabs.test.ts docxexport.default-tabs.test.ts native-text-default-schema.test.ts --maxWorkers=2 --testTimeout=120000
+  Result: pass. Evidence: 19 passed across 4 files. Scope: pinned tdf108350 fixtures, explicit run defaults, UNO font-height query, original tab defaults, Strict theme font resolution and sz/szCs XML, Worker transfer, primary ODT reopen, DOCX export and reopen. The previously stale default-property map test now expects 81 admitted entries and still checks every entry against the pinned native flags.
+- Command: node_modules/.bin/playwright test writer-docx-theme.spec.ts --grep 'themed text across' --config apps/office/coverage/writer-font-defaults-playwright.config.ts --project=writer --timeout=120000 --workers=1
+  Result: pass. Evidence: one built-browser scenario exercising actual local storage reopen, download and mobile-viewport DOCX open. Scope: existing Writer dialogs and the Worker-backed primary ODT path.
+- Commands: npm run test:static; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npm run inventory:registry:check; scoped ESLint and Prettier; git diff --check; ap doctor; node .agentplane/policy/check-routing.mjs.
+  Result: pass. Evidence: four relative production bundles, 5733 JSDoc paths, zero registry semantic violations and policy routing OK. Scope: compilation, static packaging, provenance and tooling for this checkpoint.
+- Command: npm run test:coverage:writer -- docxexport.theme-fonts.test.ts docxexport.default-tabs.test.ts --maxWorkers=1 --testTimeout=120000 --coverage.include=src/sw/source/core/unocore/SwXTextDefaults.ts --coverage.include=src/sw/source/writerfilter/dmapper/StyleSheetTable.import.ts --coverage.include=src/sw/source/filter/ww8/docxattributeoutput.styles.ts --coverage.thresholds.lines=0 --coverage.thresholds.functions=0 --coverage.thresholds.statements=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=text --coverage.reportsDirectory=coverage/writer-font-defaults-qualified
+  Result: tests pass; coverage qualification remains open. Evidence: six instrumented scenarios passed; whole selected files 87.00% statements, 81.06% branches, 100% functions and 89.87% lines. Scope: default service and import/export owners, including pre-existing branches. The run retained the project thresholds untouched and did not qualify these owners at 90%.
+- Remaining native acceptance: the actual NoParent style from tdf108350_noFontdefaults.docx still inherits the current browser graph's Normal style, while upstream has a distinct built-in paragraph root. The regression proves the Times New Roman/10pt pool defaults, not the upstream NoParent style assertion. Paragraph default properties and broader style coverage remain open. This checkpoint is not task closure.
 
 BlueprintSnapshotRef:
 - state: current
