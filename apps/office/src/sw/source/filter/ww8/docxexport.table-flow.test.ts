@@ -1,0 +1,227 @@
+/** @fileoverview Original DOCX table-flow fixtures and native Writer item round trips. */
+import { readFileSync } from "node:fs";
+import { assert, expect, it } from "vitest";
+import { DocumentArchive } from "../../../../package/source/zippackage/document-archive";
+import { SvxFrameDirection as Direction } from "../../../../editeng/inc/frmdir";
+import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { RES_FRAMEDIR, RES_KEEP } from "../../../inc/hintids";
+import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
+import { createWriterDocument, type SwDoc } from "../../core/doc/doc";
+import { SwFrameSize } from "../../../inc/fmtfsize";
+import { importOOXML } from "../../writerfilter/filter/WriterFilter";
+import { readOdtDocument } from "../xml/swxml";
+import { writeOdtDocument } from "../xml/wrtxml";
+import { DocxExport } from "./docxexport";
+
+const metadata = { title: "Table flow" };
+
+/** Reads an unchanged document from the pinned test corpus. @param file - Name including extension. @param location - Directory in the Writer QA suite. @returns Native test package. */
+function fixture(file: string, location = "extras/ooxmlexport/data"): Uint8Array {
+  return new Uint8Array(
+    readFileSync(`../../vendor/libreoffice-reference/sw/qa/${location}/${file}`),
+  );
+}
+
+/** Exports DOCX and reads its actual body XML. @param document - Native model. @returns Bytes and XML. */
+async function exportDocument(document: SwDoc): Promise<{ bytes: Uint8Array; xml: string }> {
+  const bytes = await DocxExport.WriteDocument(document);
+  const xml = await (await DocumentArchive.open(bytes)).readTextEntry("word/document.xml");
+  return { bytes, xml };
+}
+
+it.each([
+  ["tdf64264.docx", 1, true],
+  ["tdf58944-repeating-table-header.docx", 0, true],
+  ["tdf138020_all_rows_tblHeader.docx", 0, false],
+] as const)(
+  "replays the native header count for %s",
+  /** Verifies the represented assertions of tdf64264, tdf58944 and tdf138020 through both storage formats. @param file - Unchanged native DOCX. @param expected - Header count. @param split - Expected import split state. @returns Completion. */ async (
+    file,
+    expected,
+    split,
+  ) => {
+    const source = await importOOXML(fixture(file), {});
+    try {
+      const table = source.GetTables()[0];
+      expect(table?.GetRowsToRepeat()).toBe(expected);
+      expect(table?.GetFormat().layoutSplit ?? true).toBe(split);
+      const odt = await readOdtDocument(await writeOdtDocument(source, metadata), metadata);
+      try {
+        expect(odt.document.GetTables()[0]?.GetRowsToRepeat()).toBe(expected);
+        const exported = await exportDocument(odt.document);
+        expect(exported.xml.match(/<w:tblHeader w:val="true"\/>/gu) ?? []).toHaveLength(expected);
+        const reopened = await importOOXML(exported.bytes, {});
+        try {
+          expect(reopened.GetTables()[0]?.GetRowsToRepeat()).toBe(expected);
+        } finally {
+          reopened.Dispose();
+        }
+      } finally {
+        odt.document.Dispose();
+      }
+    } finally {
+      source.Dispose();
+    }
+  },
+);
+
+it("emits the original cantSplit form from testcantSplit", /** Ports the paired source assertions for split and non-split rows. @returns Completion. */ async () => {
+  const source = await importOOXML(fixture("2_table_doc.docx"), {});
+  try {
+    const { xml } = await exportDocument(source);
+    const tables = xml.match(/<w:tbl>[\s\S]*?<\/w:tbl>/gu);
+    expect(tables?.[0]).not.toContain("<w:cantSplit");
+    expect(tables?.[1]).toContain("<w:cantSplit/>");
+    expect(tables?.[1]).not.toContain("<w:cantSplit w:val=");
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("exports the unsplittable single-row table from testDontSplitTable", /** Ports tdf101589's table and row assertions and checks the active document is stable. @returns Completion. */ async () => {
+  const { document } = await readOdtDocument(fixture("tdf101589_dontSplitTable.odt"), metadata);
+  try {
+    const table = document.GetTables()[0];
+    const row = table?.GetTabLines()[0];
+    expect(table?.GetFormat().layoutSplit).toBe(false);
+    const wasSplit = row?.GetFrameFormat().GetRowSplit().GetValue();
+    const { bytes, xml } = await exportDocument(document);
+    expect(xml).toContain("<w:cantSplit/>");
+    expect(row?.GetFrameFormat().GetRowSplit().GetValue()).toBe(wasSplit);
+    const reopened = await importOOXML(bytes, {});
+    try {
+      const copy = reopened.GetTables()[0];
+      expect(copy?.GetFormat().layoutSplit).toBe(false);
+      expect(copy?.GetTabLines()[0]?.GetFrameFormat().GetRowSplit().GetValue()).toBe(false);
+      expect(copy?.GetTabLines()[0]?.GetTabBoxes()[0]?.GetParagraphs()[0]?.GetText()).toBe("Row 1");
+    } finally {
+      reopened.Dispose();
+    }
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("retains the original RTL table through ODT and exports the two native vertical cell directions", /** Starts from the layout fixture's actual RTL table and exercises both source direction branches. @returns Completion. */ async () => {
+  const doc = await importOOXML(fixture("rtl-table.docx", "core/layout/data"), {});
+  const setDirection =
+    /** Stores an actual native direction item. @param box - Cell position. @param direction - Native direction. @returns Nothing. */ (
+      box: number,
+      direction: Direction,
+    ) => {
+      const format = doc.GetTables()[0]?.GetTabLines()[0]?.GetTabBoxes()[box]?.GetFrameFormat();
+      assert(format);
+      const item = new SvxFrameDirectionItem(direction, RES_FRAMEDIR);
+      try {
+        format.SetFormatAttr(item);
+      } finally {
+        item.Dispose();
+      }
+    };
+  try {
+    expect(doc.GetTables()[0]?.GetFrameFormat().GetFrameDir().GetValue()).toBe(
+      Direction.Horizontal_RL_TB,
+    );
+    setDirection(0, Direction.Vertical_RL_TB);
+    setDirection(1, Direction.Vertical_LR_BT);
+    const odt = await readOdtDocument(await writeOdtDocument(doc, metadata), metadata);
+    try {
+      const exported = await exportDocument(odt.document);
+      expect(exported.xml).toContain('<w:tblPr><w:bidiVisual w:val="true"/>');
+      expect(exported.xml).toContain('<w:textDirection w:val="tbRl"/>');
+      expect(exported.xml).toContain('<w:textDirection w:val="btLr"/>');
+      const reopened = await importOOXML(exported.bytes, {});
+      try {
+        const table = reopened.GetTables()[0];
+        expect(table?.GetFrameFormat().GetFrameDir().GetValue()).toBe(Direction.Horizontal_RL_TB);
+        const boxes = table?.GetTabLines()[0]?.GetTabBoxes();
+        expect(boxes?.[0]?.GetFrameFormat().GetFrameDir().GetValue()).toBe(
+          Direction.Vertical_RL_TB,
+        );
+        expect(boxes?.[1]?.GetFrameFormat().GetFrameDir().GetValue()).toBe(
+          Direction.Vertical_LR_BT,
+        );
+      } finally {
+        reopened.Dispose();
+      }
+    } finally {
+      odt.document.Dispose();
+    }
+  } finally {
+    doc.Dispose();
+  }
+});
+
+it.each([false, true])(
+  "limits table keepNext emulation to the first paragraph of the appropriate rows (keep=%s)",
+  /** Exercises the source non-splitting and keep branches without altering paragraph attributes. @param keep - Keep the table with the next block. @returns Completion. */ async (
+    keep,
+  ) => {
+    const source = createWriterDocument();
+    try {
+      const table = source.nodes.MakeTableNode("Flow", { layoutSplit: false });
+      if (keep) {
+        const item = new SfxBoolItem(RES_KEEP, true);
+        try {
+          table.GetFrameFormat().SetFormatAttr(item);
+        } finally {
+          item.Dispose();
+        }
+      }
+      for (let rowIndex = 0; rowIndex < 2; rowIndex++) {
+        const row = source.nodes.AppendTableRow(table, 2);
+        const size = row.GetFrameSize();
+        try {
+          size.SetHeight(800);
+          size.SetHeightSizeType(SwFrameSize.Minimum);
+          row.SetFormat({ frameSize: size });
+        } finally {
+          size.Dispose();
+        }
+        for (const [cellIndex, box] of row.GetTabBoxes().entries())
+          box.GetParagraphs()[0]?.SetText(`Row ${rowIndex + 1}, cell ${cellIndex + 1}`);
+      }
+      const { xml } = await exportDocument(source);
+      expect(xml.match(/<w:keepNext w:val="true"\/>/gu) ?? []).toHaveLength(keep ? 2 : 1);
+      expect(xml.match(/<w:trHeight w:val="800" w:hRule="atLeast"\/>/gu) ?? []).toHaveLength(2);
+      expect(xml).not.toContain("<w:cantSplit");
+      for (const row of table.GetTabLines()) {
+        expect(
+          row.GetTabBoxes()[0]?.GetParagraphs()[0]?.GetpSwAttrSet()?.GetItemIfSet(RES_KEEP, false),
+        ).toBeUndefined();
+      }
+    } finally {
+      source.Dispose();
+    }
+  },
+);
+
+it("uses the active section direction for tables with an environmental direction", /** Confirms direction follows the native page assignment rather than the document's first page. @returns Completion. */ async () => {
+  const source = createWriterDocument();
+  try {
+    const rtl = source.MakePageDesc("RTL page");
+    const item = new SvxFrameDirectionItem(Direction.Horizontal_RL_TB, RES_FRAMEDIR);
+    try {
+      rtl.GetMaster().SetFormatAttr(item);
+    } finally {
+      item.Dispose();
+    }
+    const first = source.nodes.MakeTableNode("LTR");
+    source.nodes.AppendTableRow(first, 1);
+    const second = source.nodes.MakeTableNode("RTL");
+    const page = new SwFormatPageDesc(rtl.GetName());
+    try {
+      second.GetFrameFormat().SetFormatAttr(page);
+    } finally {
+      page.Dispose();
+    }
+    source.nodes.AppendTableRow(second, 1);
+    const { xml } = await exportDocument(source);
+    const tables = xml.match(/<w:tbl>[\s\S]*?<\/w:tbl>/gu);
+    expect(tables?.[0]).not.toContain("<w:bidiVisual");
+    expect(tables?.[1]).toContain('<w:bidiVisual w:val="true"/>');
+  } finally {
+    source.Dispose();
+  }
+});

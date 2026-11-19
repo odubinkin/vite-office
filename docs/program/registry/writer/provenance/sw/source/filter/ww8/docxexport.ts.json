@@ -59,7 +59,8 @@
       "Writes the document-owned theme part and its original per-document relationship using the shared ThemeExport.",
       "Writes the original theme-language settings through the DOCX part relationship.",
       "Writes compatibility before themeFontLang in the original settings fragment and selects ISO mode for Office Open XML Text.",
-      "Writes the encountered default tab distance in the settings fragment before compatibility."
+      "Writes the encountered default tab distance in the settings fragment before compatibility.",
+      "Tracks the current page descriptor for body frame direction and restores it after page-story output."
     ],
     "omittedResponsibilities": [
       "Only the explicitly admitted native responsibilities are ported; framework/ABI/full application export are not certified."

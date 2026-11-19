@@ -131,6 +131,8 @@ import {
 } from "../../../../editeng/inc/lrspitem";
 import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import {
+  RES_KEEP,
+  RES_LAYOUT_SPLIT,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_NUMRULE,
@@ -141,6 +143,8 @@ import {
 import { SwNumRuleItem, ListLevelIndents } from "../../core/para/paratr";
 import { GetWordFirstLineOffset } from "./wrtw8num";
 
+import type { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
+import type { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { MSWordExportBase } from "./wrtww8";
 
 /** Original current page master direction. @param document - Actual export document. @param page - Actual current descriptor if selected. @returns Native direction. */
@@ -200,4 +204,19 @@ export function EncodeBookmarkName(name: string): string {
 /** Original bookmark reference decoding uses the ASCII URI charset. @param name - Reference spelling. @returns Writer bookmark lookup value. */
 export function BookmarkToWriter(name: string): string {
   return decode(name, DecodeMechanism.Unambiguous, RTL_TEXTENCODING_ASCII_US);
+}
+
+/** Resolves the native keepNext emulation at the first paragraph in a non-complex table row. @param node - Actual paragraph. @returns Whether to override the paragraph's keep item. */
+export function KeepTableRowWithNext(node: SwTextNode): boolean {
+  const table = node.FindTableNode()?.GetTable();
+  if (!table) return false;
+  const items = table.GetFrameFormat().GetAttrSet();
+  const keep = (items.Get(RES_KEEP) as SfxBoolItem).GetValue();
+  if (!keep && (items.Get(RES_LAYOUT_SPLIT) as SwFormatLayoutSplit).GetValue()) return false;
+  const box = node.GetTableBox();
+  const line = box?.GetUpper();
+  const start = box?.GetSttNd();
+  if (!line || line.GetUpper() || line.GetTabBoxes()[0] !== box || !start) return false;
+  if (node.GetIndex() !== start.GetIndex() + 1) return false;
+  return keep || table.GetTabLines().at(-1) !== line;
 }

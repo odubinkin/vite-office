@@ -1,10 +1,17 @@
-/** @fileoverview Emits the represented geometry from DocxAttributeOutput::TableDefinition. */
+/** @fileoverview Writes the represented DOCX table, row and cell formatting. */
 import { OoxmlVersion } from "../../../../oox/inc/core/filterbase";
 import { getTokenFromUtf8 as token } from "../../../../oox/source/token/tokenmap";
 import { FSNS } from "../../../../sax/inc/fshelper";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SvxBoxItemLine, type SvxBoxItem } from "../../../../editeng/source/items/frmitems";
-import type { SwTable } from "../../core/table/swtable";
+import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
+import { SwFrameSize } from "../../../inc/fmtfsize";
+import { RES_KEEP, RES_LAYOUT_SPLIT } from "../../../inc/hintids";
+import type { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import type { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
+import type { SwTable, SwTableBox, SwTableLine } from "../../core/table/swtable";
+import { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { DocxAttributeOutput } from "./docxattributeoutput";
 
 const w = token("w"),
@@ -51,6 +58,8 @@ export function TableDefinition(output: DocxAttributeOutput, table: SwTable): vo
   }
 
   serializer.startElementNS(w, token("tblPr"));
+  if (exporter.TrueFrameDirection(frame) === SvxFrameDirection.Horizontal_RL_TB)
+    serializer.singleElementNS(w, token("bidiVisual"), FSNS(w, token("val")), "true");
   serializer.singleElementNS(
     w,
     token("tblW"),
@@ -104,4 +113,71 @@ export function ImplCellMargins(
     written = true;
   }
   if (written) serializer.endElementNS(w, tag);
+}
+
+/** Writes the original row height only for nonzero fixed and minimum heights. @param output - Native DOCX writer. @param line - Actual row. @returns Nothing. */
+function TableHeight(output: DocxAttributeOutput, line: SwTableLine): void {
+  const size = line.GetFrameFormat().GetFrameSize();
+  const rule = size.GetHeightSizeType();
+  const height = size.GetHeight();
+  if (!height || (rule !== SwFrameSize.Fixed && rule !== SwFrameSize.Minimum)) return;
+  output
+    .GetSerializer()
+    .singleElementNS(
+      w,
+      token("trHeight"),
+      FSNS(w, token("val")),
+      String(height),
+      FSNS(w, token("hRule")),
+      rule === SwFrameSize.Fixed ? "exact" : "atLeast",
+    );
+}
+
+/** Writes the source split flag and the one-row table emulation. @param output - Native DOCX writer. @param table - Actual table. @param line - Actual row. @returns Nothing. */
+function TableCanSplit(output: DocxAttributeOutput, table: SwTable, line: SwTableLine): void {
+  const items = table.GetFrameFormat().GetAttrSet();
+  const keep = (items.Get(RES_KEEP) as SfxBoolItem).GetValue();
+  const split = (items.Get(RES_LAYOUT_SPLIT) as SwFormatLayoutSplit).GetValue();
+  const singleRow =
+    !keep &&
+    !split &&
+    table.GetTabLines().length === 1 &&
+    !line.GetUpper() &&
+    line.GetTabBoxes()[0]?.GetContentNodes()[0] instanceof SwTextNode;
+  if (singleRow || !line.GetFrameFormat().GetRowSplit().GetValue())
+    output.GetSerializer().singleElementNS(w, token("cantSplit"));
+}
+
+/** Opens the native row and emits its represented properties in original order. @param output - Native DOCX writer. @param table - Actual table. @param line - Actual row. @param index - Row index in the table. @returns Nothing. */
+export function StartTableRow(
+  output: DocxAttributeOutput,
+  table: SwTable,
+  line: SwTableLine,
+  index: number,
+): void {
+  const serializer = output.GetSerializer();
+  serializer.startElementNS(w, token("tr"));
+  serializer.startElementNS(w, token("trPr"));
+  if (table.GetRowsToRepeat() > index)
+    serializer.singleElementNS(w, token("tblHeader"), FSNS(w, token("val")), "true");
+  TableHeight(output, line);
+  TableCanSplit(output, table, line);
+  serializer.endElementNS(w, token("trPr"));
+}
+
+/** Projects native cell direction and vertical orientation after the cell margins. @param output - Native DOCX writer. @param box - Actual cell. @returns Nothing. */
+export function TableVerticalCell(output: DocxAttributeOutput, box: SwTableBox): void {
+  const format = box.GetFrameFormat(),
+    serializer = output.GetSerializer();
+  const direction = output.GetExport().TrueFrameDirection(format);
+  const val = FSNS(w, token("val"));
+  if (direction === SvxFrameDirection.Vertical_RL_TB)
+    serializer.singleElementNS(w, token("textDirection"), val, "tbRl");
+  else if (direction === SvxFrameDirection.Vertical_LR_BT)
+    serializer.singleElementNS(w, token("textDirection"), val, "btLr");
+  const alignment = format.GetVertOrient().GetVertOrient();
+  if (alignment === VertOrientation.CENTER)
+    serializer.singleElementNS(w, token("vAlign"), val, "center");
+  else if (alignment === VertOrientation.BOTTOM)
+    serializer.singleElementNS(w, token("vAlign"), val, "bottom");
 }

@@ -28,6 +28,7 @@ import {
 } from "./docxexport.settings";
 import { DocxSdrExport } from "./docxsdrexport";
 import { DocxHeaderFooterExport } from "./docxexport.headerfooter";
+import type { SwPageDesc } from "../../core/layout/pagedesc";
 /** Actual native exporter owner for the admitted document/font parts. */
 export class DocxExport extends MSWordExportBase {
   /** Exports an entire Writer document through its original part and serializer owners. @param document - Active document graph. @param version - Selected format, defaulting to Office Open XML Text. @returns Committed OOXML bytes. */
@@ -279,12 +280,20 @@ export class DocxExport extends MSWordExportBase {
     this.m_pDocumentFS.endElementNS(w, token("document"));
   }
 
-  /** Writes the active page stories before the rest of the section properties. @param page - Native page descriptor. @param breakCode - Native section break code. @returns Nothing. */
-  WriteHeadersFooters(
-    page: import("../../core/layout/pagedesc").SwPageDesc,
-    breakCode: number,
-  ): void {
-    this.headerFooter.WriteHeadersFooters(page, breakCode);
+  /** Selects the page descriptor used by native frame direction fallback. @param page - Active section descriptor. @returns Nothing. */
+  SetCurrentPageDesc(page: SwPageDesc): void {
+    this.m_pCurrentPageDesc = page;
+  }
+
+  /** Writes the active page stories with their section's frame direction. @param page - Native page descriptor. @param breakCode - Native section break code. @returns Nothing. */
+  WriteHeadersFooters(page: SwPageDesc, breakCode: number): void {
+    const previous = this.m_pCurrentPageDesc;
+    this.SetCurrentPageDesc(page);
+    try {
+      this.headerFooter.WriteHeadersFooters(page, breakCode);
+    } finally {
+      this.m_pCurrentPageDesc = previous;
+    }
   }
 
   /** Writes the numbered lists part when the body or styles use a numbering rule. @returns Nothing. */

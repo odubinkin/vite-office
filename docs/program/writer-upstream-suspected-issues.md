@@ -5173,3 +5173,29 @@ has the same effect as `true`. The shape type retains that source decision.
 
 - [Original VML style parsing](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/oox/source/vml/vmlshapecontext.cxx#L527-L563)
 - [VML style regression](../../apps/office/src/oox/source/vml/vmlshape.test.ts)
+
+### WRITER-669 — Eleven consecutive DOCX header rows disable all repetition
+
+Writer's DOCX table mapper accepts at most ten consecutive leading
+`w:tblHeader` rows. Reading an eleventh clears `HeaderRowCount` and prevents
+subsequent rows from restoring it. The source identifies this fixed limit as
+a workaround for Word's suppression of repeated headers that exceed the
+available page area. The implementation keeps the row-count cutoff regardless
+of row heights or page geometry.
+
+- [Original table mapper](../../vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx)
+- [Original tdf58944 regression](../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/ooxmlexport26.cxx)
+
+### WRITER-670 — Word export assigns a row split item during serialization
+
+For a simple one-row table with layout splitting disabled and no table keep
+flag, the Word exporter writes a row split item into the connected row's
+frame format while visiting the first paragraph of the first cell.
+`DocxAttributeOutput::TableCanSplit` then consumes that item. The source
+performs this assignment on the live row, even though it is needed to
+project `w:cantSplit` into the file. The browser exporter applies the same
+split condition to the emitted row property and retains its active
+document's original row format.
+
+- [Original one-row export condition](../../vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8nds.cxx)
+- [Original tdf101589 regression](../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/ooxmlexport3.cxx)

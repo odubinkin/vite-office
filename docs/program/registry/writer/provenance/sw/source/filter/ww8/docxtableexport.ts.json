@@ -17,7 +17,8 @@
       "DocxAttributeOutput::ImplCellMargins"
     ],
     "preservedResponsibilities": [
-      "Writes preferred table width, justification, compatibility-sensitive indentation, and default or differing cell distances from Writer frame and cell formats."
+      "Writes preferred table width, justification, compatibility-sensitive indentation, and default or differing cell distances from Writer frame and cell formats.",
+      "Writes native repeated headers, fixed and minimum row heights, row split, one-row table split emulation, table bidi and both represented vertical cell directions."
     ],
     "omittedResponsibilities": [
       "Complete table style and border export and layout-dependent percentage-grid sizing remain outside the represented geometry."

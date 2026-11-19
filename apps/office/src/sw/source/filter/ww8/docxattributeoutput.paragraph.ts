@@ -52,6 +52,7 @@ import { SectionProperties, type WW8SepInfo } from "./docxattributeoutput.sectio
 import type { DocxAttributeOutput } from "./docxattributeoutput";
 import { GetPseudoCharRuns } from "./writerwordglue";
 import { ParaLineSpacing } from "./ww8atr";
+import { KeepTableRowWithNext } from "./wrtw8nds";
 import { GetParagraphMarkerProperties } from "./wrtw8nds.paragraph-marker";
 import { OutputItem } from "./docxexport.text";
 import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
@@ -179,7 +180,9 @@ function WriteParagraphProperties(
     properties = token("pPr");
   serializer.startElementNS(w, properties);
   if (styleId) serializer.singleElementNS(w, token("pStyle"), val, styleId);
-  if (keep) serializer.singleElementNS(w, token("keepNext"), val, String(keep.GetValue()));
+  const keepTableRow = node !== undefined && KeepTableRowWithNext(node);
+  if (keepTableRow || keep)
+    serializer.singleElementNS(w, token("keepNext"), val, String(keepTableRow || keep?.GetValue()));
   if (split) output.ParaSplit(split);
   if (pageBreak === SvxBreak.PageBefore) serializer.singleElementNS(w, token("pageBreakBefore"));
   if (widows) output.ParaWidows(widows);

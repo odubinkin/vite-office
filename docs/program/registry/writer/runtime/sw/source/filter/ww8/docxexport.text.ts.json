@@ -22,7 +22,7 @@
         "apps/office/src/sw/source/filter/ww8/docxexport.theme.test.ts",
         "apps/office/src/sw/source/filter/ww8/docxexport.theme-fonts.test.ts"
       ],
-      "justification": "Native Writer body traversal exports represented runs, paragraph properties and table structure. The existing file dialog uses the same graph. Nested and floating tables, links, bookmarks and page fidelity remain open. Exports native named paragraph and character style references and preserves direct run overrides. Routes the native character interoperability item through DOCX attribute output. Dispatches original Asian and complex-script fonts for run and style serialization.",
+      "justification": "Native Writer body traversal exports represented runs, paragraph properties and table structure. The existing file dialog uses the same graph. Nested and floating tables, links, bookmarks and page fidelity remain open. Exports native named paragraph and character style references and preserves direct run overrides. Routes the native character interoperability item through DOCX attribute output. Dispatches original Asian and complex-script fonts for run and style serialization. Delegates row and cell formatting to the table output owner and selects the current page descriptor before content emission.",
       "knownViolations": [],
       "localSymbols": [
         "WriteText",

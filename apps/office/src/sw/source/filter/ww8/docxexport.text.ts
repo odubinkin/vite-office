@@ -42,10 +42,14 @@ import {
 import type { DocxAttributeOutput } from "./docxattributeoutput";
 import { EndURL, StartURL, type DocxBookmarks } from "./docxattributeoutput.hyperlink";
 import { SwWW8AttrIter } from "./wrtw8nds";
-import { SwFrameSize } from "../../../inc/fmtfsize";
-import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import type { SvxKerningItem } from "../../../../editeng/inc/kernitem";
-import { ImplCellMargins, TableDefaultCellMargins, TableDefinition } from "./docxtableexport";
+import {
+  ImplCellMargins,
+  StartTableRow,
+  TableDefaultCellMargins,
+  TableDefinition,
+  TableVerticalCell,
+} from "./docxtableexport";
 
 const w = token("w");
 const runProperties = [
@@ -255,28 +259,8 @@ function Out_SwTableNode(
     serializer.singleElementNS(w, token("gridCol"), FSNS(w, w), String(width));
   }
   serializer.endElementNS(w, token("tblGrid"));
-  for (const line of rows) {
-    serializer.startElementNS(w, row);
-    const format = line.GetFrameFormat();
-    const size = format.GetFrameSize();
-    const height = size.GetHeight();
-    const rule = size.GetHeightSizeType();
-    const cantSplit = !format.GetRowSplit().GetValue();
-    if (cantSplit || (height && rule !== SwFrameSize.Variable)) {
-      const properties = token("trPr");
-      serializer.startElementNS(w, properties);
-      if (cantSplit) serializer.singleElementNS(w, token("cantSplit"));
-      if (height && rule !== SwFrameSize.Variable)
-        serializer.singleElementNS(
-          w,
-          token("trHeight"),
-          FSNS(w, token("val")),
-          String(height),
-          FSNS(w, token("hRule")),
-          rule === SwFrameSize.Fixed ? "exact" : "atLeast",
-        );
-      serializer.endElementNS(w, properties);
-    }
+  for (const [index, line] of rows.entries()) {
+    StartTableRow(output, model, line, index);
     let edge = 0;
     for (const box of line.GetTabBoxes()) {
       serializer.startElementNS(w, cell);
@@ -285,13 +269,6 @@ function Out_SwTableNode(
       const columns = (slots.get(next) as number) - (slots.get(edge) as number);
       edge = next;
       const rowSpan = box.getRowSpan();
-      const alignment = box.GetFrameFormat().GetVertOrient().GetVertOrient();
-      const vertical =
-        alignment === VertOrientation.CENTER
-          ? "center"
-          : alignment === VertOrientation.BOTTOM
-            ? "bottom"
-            : null;
       const properties = token("tcPr"),
         value = FSNS(w, token("val"));
       serializer.startElementNS(w, properties);
@@ -307,7 +284,7 @@ function Out_SwTableNode(
       if (rowSpan !== 1)
         serializer.singleElementNS(w, token("vMerge"), value, rowSpan > 1 ? "restart" : "continue");
       ImplCellMargins(output, box.GetFrameFormat().GetBox(), "tcMar", defaultMargins);
-      if (vertical) serializer.singleElementNS(w, token("vAlign"), value, vertical);
+      TableVerticalCell(output, box);
       serializer.endElementNS(w, properties);
       const content = box.GetContentNodes();
       WriteText(output, content, bookmarks);
@@ -329,6 +306,7 @@ export function WriteText(
 ): void {
   const sdt = new SdtBlockHelper(output.GetSerializer());
   for (const [index, node] of content.entries()) {
+    if (sections) output.GetExport().SetCurrentPageDesc(sections.CurrentSectionInfo().page);
     const section = sections?.Advance(content[index + 1]);
     if (node instanceof SwTableNode) {
       Out_SwTableNode(output, node, bookmarks);
