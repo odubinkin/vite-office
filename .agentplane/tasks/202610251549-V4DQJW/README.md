@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 394
+revision: 396
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T07:27:53.317Z"
+  updated_at: "2026-11-19T07:41:39.315Z"
   updated_by: "CODER"
-  note: "Implementation 97ea30bc4 preserves solid DOCX text fill and ODT transparency. Targeted Writer/shared tests, static build and browser reopen pass. Broader effects and aggregate coverage qualification remain open."
-  attempts: 119
+  note: "Checkpoint 3348c25e4060: native DOCX outline/fill Worker and Chromium round trips pass; full task continues."
+  attempts: 120
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1912,8 +1915,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T07:41:39.315Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Checkpoint 3348c25e4060: native DOCX outline/fill Worker and Chromium round trips pass; full task continues."
+  -
+    type: "status"
+    at: "2026-11-19T07:41:46.351Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T07:28:00.368Z"
+doc_updated_at: "2026-11-19T07:41:46.351Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -5528,6 +5544,46 @@ sections:
     - Commands: npm run check:docs; npm run check:dependencies; npm run check:file-size; npm run check:source-provenance; npm run inventory:registry:check; scoped ESLint and Prettier; git diff --check; node .agentplane/policy/check-routing.mjs.
       Result: pass. Evidence: zero registry semantic violations and successful repository checks. Scope: implementation, generated identifiers and task routing.
     - WRITER-659 records the original solid RGB path retaining the fallback Word run color. Gradient and outline model rendering, arbitrary transform ordering, broader style defaults, and overall V4DQJW acceptance are still open.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-19T07:41:39.315Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Checkpoint 3348c25e4060: native DOCX outline/fill Worker and Chromium round trips pass; full task continues.
+    Attempts: 120
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T07:28:00.368Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    Implementation 3348c25e4060 preserves Word 2010 outline and non-solid text fill in the original CharInteropGrabBag UNO PropertyValue sequence, including ordered gradient stops and typed attributes. The current Writer Worker preserves and validates this tree against the generated native w14 schema. DOCX emits the represented effects and follows the upstream rule that explicit fill inhibits automatic solid fill reconstruction.
+
+    Pinned source is 9bc445578031fecf56086729d8e4940c77e14d65. The import follows sw/source/writerfilter/dmapper/TextEffectsHandler.cxx and DomainMapper.cxx. Export follows sw/source/filter/ww8/docxattributeoutput.cxx. The new round trips port Test_TextEffects_TextOutline and Test_TextEffects_TextFill from sw/qa/extras/ooxmlexport/ooxmlw14export.cxx. They use the original fixture packages and compare namespace-qualified effect attributes and ordered children in each first run. Worker clone and DOCX export/reopen pass.
+
+    - Focused Writer selection: 23 tests across seven files. New drawing module coverage: 93.10% statements, 91.17% branches, 100% functions and lines.
+    - Extended affected-owner selection: 276 tests across 16 files. The Worker codec and run serializer each clear 90% on all metrics. TextEffectsHandler.ts reports 96.64% statements, 90.37% branches, 88.88% functions and 99.23% lines. The four uncalled functions are pre-existing empty callbacks for positions the generated grammar does not produce. Keep the per-file function coverage gap visible.
+    - Three production Chromium scenarios passed. Both affected fixtures open from disk, export through the existing dialog, expose the checked effect in the downloaded DOCX and reopen at mobile width. The existing stylistic-set case passed alongside them.
+    - Typecheck, production/static smoke, scoped ESLint and Prettier, JSDoc, source size/tree, dependency boundaries, source provenance, registry checks, Writer resources and WhichIds, Agentplane doctor/routing and Git diff checks passed. Doctor retains the existing managed-hook notice. The complete test suite was outside the current cadence.
+    - Word outline geometry and gradient paint are Word interoperability data in this source slice. The original ODT character schema has no mapping for those items. Preservation was verified for the active document and DOCX export/reopen. Remaining Word drawing effects and task-wide verification are pending.
 
     BlueprintSnapshotRef:
     - state: current
@@ -9890,6 +9946,46 @@ Implementation checkpoint 97ea30bc4cc1. Native solid Word 2010 fill now delivers
 - Commands: npm run check:docs; npm run check:dependencies; npm run check:file-size; npm run check:source-provenance; npm run inventory:registry:check; scoped ESLint and Prettier; git diff --check; node .agentplane/policy/check-routing.mjs.
   Result: pass. Evidence: zero registry semantic violations and successful repository checks. Scope: implementation, generated identifiers and task routing.
 - WRITER-659 records the original solid RGB path retaining the fallback Word run color. Gradient and outline model rendering, arbitrary transform ordering, broader style defaults, and overall V4DQJW acceptance are still open.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-19T07:41:39.315Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Checkpoint 3348c25e4060: native DOCX outline/fill Worker and Chromium round trips pass; full task continues.
+Attempts: 120
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T07:28:00.368Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+Implementation 3348c25e4060 preserves Word 2010 outline and non-solid text fill in the original CharInteropGrabBag UNO PropertyValue sequence, including ordered gradient stops and typed attributes. The current Writer Worker preserves and validates this tree against the generated native w14 schema. DOCX emits the represented effects and follows the upstream rule that explicit fill inhibits automatic solid fill reconstruction.
+
+Pinned source is 9bc445578031fecf56086729d8e4940c77e14d65. The import follows sw/source/writerfilter/dmapper/TextEffectsHandler.cxx and DomainMapper.cxx. Export follows sw/source/filter/ww8/docxattributeoutput.cxx. The new round trips port Test_TextEffects_TextOutline and Test_TextEffects_TextFill from sw/qa/extras/ooxmlexport/ooxmlw14export.cxx. They use the original fixture packages and compare namespace-qualified effect attributes and ordered children in each first run. Worker clone and DOCX export/reopen pass.
+
+- Focused Writer selection: 23 tests across seven files. New drawing module coverage: 93.10% statements, 91.17% branches, 100% functions and lines.
+- Extended affected-owner selection: 276 tests across 16 files. The Worker codec and run serializer each clear 90% on all metrics. TextEffectsHandler.ts reports 96.64% statements, 90.37% branches, 88.88% functions and 99.23% lines. The four uncalled functions are pre-existing empty callbacks for positions the generated grammar does not produce. Keep the per-file function coverage gap visible.
+- Three production Chromium scenarios passed. Both affected fixtures open from disk, export through the existing dialog, expose the checked effect in the downloaded DOCX and reopen at mobile width. The existing stylistic-set case passed alongside them.
+- Typecheck, production/static smoke, scoped ESLint and Prettier, JSDoc, source size/tree, dependency boundaries, source provenance, registry checks, Writer resources and WhichIds, Agentplane doctor/routing and Git diff checks passed. Doctor retains the existing managed-hook notice. The complete test suite was outside the current cadence.
+- Word outline geometry and gradient paint are Word interoperability data in this source slice. The original ODT character schema has no mapping for those items. Preservation was verified for the active document and DOCX export/reopen. Remaining Word drawing effects and task-wide verification are pending.
 
 BlueprintSnapshotRef:
 - state: current
