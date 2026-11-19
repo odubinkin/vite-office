@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 380
+revision: 383
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T04:59:30.875Z"
+  updated_at: "2026-11-19T05:16:48.360Z"
   updated_by: "CODER"
-  note: "Native page story import and export checkpoint passed 114 scoped Writer tests, five scoped coverage gates and three Chromium scenarios. The original NumberedList file opens, restores locally, downloads to ODT and DOCX and reopens on mobile. Overall filter acceptance still requires live fields, header/footer layout geometry, remaining character spacing and table layout paths."
-  attempts: 113
+  note: "Source-backed Writer character spacing and simple-field checkpoint passed 981 focused Writer tests, four shared tests with full handler coverage, and two Chromium scenarios through the existing editor. The original disabled-first-footer fixture now reaches the missing VML Shape owner. Live field evaluation, story geometry and final filter acceptance remain in scope."
+  attempts: 114
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1816,8 +1819,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T05:16:48.360Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Source-backed Writer character spacing and simple-field checkpoint passed 981 focused Writer tests, four shared tests with full handler coverage, and two Chromium scenarios through the existing editor. The original disabled-first-footer fixture now reaches the missing VML Shape owner. Live field evaluation, story geometry and final filter acceptance remain in scope."
+  -
+    type: "status"
+    at: "2026-11-19T05:17:03.258Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T04:59:41.870Z"
+doc_updated_at: "2026-11-19T05:17:03.258Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -5220,6 +5236,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-19T05:16:48.360Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Source-backed Writer character spacing and simple-field checkpoint passed 981 focused Writer tests, four shared tests with full handler coverage, and two Chromium scenarios through the existing editor. The original disabled-first-footer fixture now reaches the missing VML Shape owner. Live field evaluation, story geometry and final filter acceptance remain in scope.
+    Attempts: 114
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T05:16:47.509Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -5923,6 +5969,13 @@ sections:
     - The original NumberedList fixture passed browser open, local restore, ODT and DOCX download and mobile DOCX reopen. The six-variant, three-section linked-story and distinct parity upstream fixtures have native model and package assertions.
     - 114 focused Writer tests across 14 files and 3 Chromium scenarios passed. All five executable owners met the per-file 90 percent thresholds. Exact commands, source checks and remaining behavior are in `evidence/native-docx-page-header-footer.json`.
     - Live PAGE fields, page-story geometry, complete continuous sections, native table indentation/grid, character spacing and overall acceptance remain in scope. No full suite was due.
+
+    ### Writer DOCX character spacing and simple fields
+
+    - DOCX signed twips reach the native CharKerning property, the pooled item and the existing editor. Named styles and direct run spacing survive Worker transfer, ODT and DOCX output. The ODF handler retains the source normal token and signed short measure.
+    - The generated simple-field resource uses the original begin, instruction, lock, separator and end events. The package test retains a simple cached page value inside its footer. Generated table overlap maps to the existing position handler.
+    - 981 Writer tests across 11 focused files, 4 shared tests and 2 Chromium scenarios passed. Per-owner coverage for the new conversion handler and source gates passed. Exact verification is recorded in `evidence/native-docx-character-spacing-and-simple-fields.json`.
+    - The unchanged TestFirstFooterDisabled sample still needs the VML oval shape owner in its footer. Native live field evaluation, header/footer geometry and overall DOCX and XLSX acceptance remain open. No full run was due.
 id_source: "generated"
 ---
 ## Summary
@@ -9336,6 +9389,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-19T05:16:48.360Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Source-backed Writer character spacing and simple-field checkpoint passed 981 focused Writer tests, four shared tests with full handler coverage, and two Chromium scenarios through the existing editor. The original disabled-first-footer fixture now reaches the missing VML Shape owner. Live field evaluation, story geometry and final filter acceptance remain in scope.
+Attempts: 114
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T05:16:47.509Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -10044,3 +10127,10 @@ Evidence: `evidence/docx-native-ranged-bookmarks.json`.
 - The original NumberedList fixture passed browser open, local restore, ODT and DOCX download and mobile DOCX reopen. The six-variant, three-section linked-story and distinct parity upstream fixtures have native model and package assertions.
 - 114 focused Writer tests across 14 files and 3 Chromium scenarios passed. All five executable owners met the per-file 90 percent thresholds. Exact commands, source checks and remaining behavior are in `evidence/native-docx-page-header-footer.json`.
 - Live PAGE fields, page-story geometry, complete continuous sections, native table indentation/grid, character spacing and overall acceptance remain in scope. No full suite was due.
+
+### Writer DOCX character spacing and simple fields
+
+- DOCX signed twips reach the native CharKerning property, the pooled item and the existing editor. Named styles and direct run spacing survive Worker transfer, ODT and DOCX output. The ODF handler retains the source normal token and signed short measure.
+- The generated simple-field resource uses the original begin, instruction, lock, separator and end events. The package test retains a simple cached page value inside its footer. Generated table overlap maps to the existing position handler.
+- 981 Writer tests across 11 focused files, 4 shared tests and 2 Chromium scenarios passed. Per-owner coverage for the new conversion handler and source gates passed. Exact verification is recorded in `evidence/native-docx-character-spacing-and-simple-fields.json`.
+- The unchanged TestFirstFooterDisabled sample still needs the VML oval shape owner in its footer. Native live field evaluation, header/footer geometry and overall DOCX and XLSX acceptance remain open. No full run was due.

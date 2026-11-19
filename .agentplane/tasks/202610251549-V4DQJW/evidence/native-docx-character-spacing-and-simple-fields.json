@@ -1,0 +1,250 @@
+{
+  "task": "202610251549-V4DQJW",
+  "checkpoint": "Writer character spacing and simple field import through DOCX, ODT and existing UI",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sw/source/writerfilter/ooxml/model.xml#CT_SignedTwipsMeasure",
+    "sw/source/writerfilter/ooxml/model.xml#CT_SimpleField",
+    "sw/source/writerfilter/ooxml/model.xml#CT_TblOverlap",
+    "sw/source/writerfilter/ooxml/OOXMLFastContextHandler.cxx#OOXMLFastContextHandlerStream::sendProperty",
+    "sw/source/core/unocore/unomapproperties.hxx#UNO_NAME_CHAR_KERNING",
+    "sw/source/filter/ww8/docxattributeoutput.cxx#DocxAttributeOutput::CharKerning",
+    "xmloff/source/style/kernihdl.cxx#XMLKerningPropHdl::importXML",
+    "xmloff/source/text/txtprmap.cxx#XML_TYPE_TEXT_KERNING"
+  ],
+  "results": {
+    "writer": {
+      "files": 11,
+      "tests": 981
+    },
+    "shared": {
+      "files": 1,
+      "tests": 4
+    },
+    "browser": 2,
+    "kerningHandlerCoverage": {
+      "lines": {
+        "total": 7,
+        "covered": 7,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 8,
+        "covered": 8,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 8,
+        "covered": 8,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "commands": [
+    "vitest run --config vitest.writer.config.ts docxexport.kerning docxexport.page-stories OOXMLFactory OOXMLFastContextHandler native-docx-bool-properties WriterEditableParagraph odt-roundtrip odt-font-style-roundtrip native-ranged-itemset writer-page-story-codec --maxWorkers=2 --testTimeout=90000",
+    "vitest run --config vitest.shared-coverage.config.ts --coverage txtprmap xmltoken --maxWorkers=2 --testTimeout=90000 --coverage.include=src/xmloff/source/style/kernihdl.ts --coverage.thresholds.lines=90 --coverage.thresholds.functions=90 --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.perFile --coverage.reporter=text --coverage.reporter=json-summary --coverage.reportsDirectory=coverage/docx-kerning-scoped",
+    "npm run test:static",
+    "./node_modules/.bin/playwright test -c apps/office/coverage/odt-story.playwright.config.ts --workers=1 -g 'character spacing through browser|original DOCX with a footer'",
+    "python3 scripts/writer-ooxml/generate-factory.py --check",
+    "npm run typecheck",
+    "npm run check:source-provenance",
+    "npm run inventory:registry:build",
+    "npm run inventory:invariants",
+    "npm run inventory:parity",
+    "npm run check:dependencies",
+    "npm run check:file-size",
+    "npm run check:source-tree",
+    "npm run check:writer-hintids",
+    "npm run check:docs",
+    "Scoped ESLint, Prettier and git diff --check"
+  ],
+  "verified": [
+    "The native signed-twip item retains positive named paragraph/character styles and negative direct run spacing through DOCX, Worker transfer and primary ODT.",
+    "The ODF handler recognizes normal and converted lengths, and rejects invalid syntax and incorrect UNO field types with the source output behavior.",
+    "Generated simple-field events produce the command and cached result inside the active footer with separated first-page text.",
+    "The generated table overlap resource feeds the existing table position consumer. The lookup generator preserves every native value and order across two source shards.",
+    "In production Chromium the existing file UI opens DOCX with authored spacing, computes the letter spacing, restores it from local storage and exports the same original Word twip value."
+  ],
+  "remaining": [
+    "Dynamic PAGE evaluation and layout are outside this checkpoint. Simple fields use the same supported command behaviors and cached results as complex fields.",
+    "TestFirstFooterDisabled.docx now advances past character spacing, table overlap and simple fields and stops at the unsupported VML Shape context for the oval in word/footer1.xml.",
+    "Overall DOCX/XLSX, exact page-story geometry and native table layout acceptance remain active. No full suite was due."
+  ],
+  "files": [
+    {
+      "path": "apps/office/e2e/writer-odt-page-stories.spec.ts",
+      "sha256": "de99db1c6753f8feae03c6bbbbec1cb860b38984749636fe4572b71036842504"
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.test.tsx",
+      "sha256": "6f6e81a1bdb20f8728b94d327bce73cfa1917e1b5c1abd54c72fa1c1ef664915"
+    },
+    {
+      "path": "apps/office/src/sw/browser/editor/WriterEditableParagraph.tsx",
+      "sha256": "936ab1c90a597243b5997f95bcb794fa241e3e07c0fbe691ed94d1c08c2d4ce5"
+    },
+    {
+      "path": "apps/office/src/sw/browser/presentation/writer-view-projection.ts",
+      "sha256": "b8fb8c7270d93ca4143216cb2c4bac317eceda47c3951ad2b9dceec4a76b069e"
+    },
+    {
+      "path": "apps/office/src/sw/inc/hintids.ts",
+      "sha256": "7d234f725847a243087ed52cf6af4cc32671ef3dacd1c27ecd9ed2898371db47"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+      "sha256": "f02c8b6cdda854d7c928fe3e3b5b860fe268cf2779ff023f6183fbb4312bfcb7"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+      "sha256": "617e3e850bebcbd332905339fa29f0e1e2c75c9782b5672c216cf17f46f91bbf"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/txatbase.ts",
+      "sha256": "f7b9063a8553685ba00759c81a5bba4eee77821490bbd63d9a445dbaf1df3f33"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/unocore/unocrsrhelper.ts",
+      "sha256": "4331dacd5f42f45b59f7ee2a05bfb1accc9965625993ad4d67676be378d745c9"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/unocore/unomap.ts",
+      "sha256": "fa06ab24a013615c879e8241a0a8e982a9d546bc76fecc87ce2ced1403068aa5"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.paragraph.ts",
+      "sha256": "1a1a08bb3325eb4836c59d30afb837d4ea0f421a508995d7069abe6da63af96c"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxexport.kerning.test.ts",
+      "sha256": "851efb4dbe51313c90ae316e6fdffb4f1b42d67198940dff35847b08abdbdd35"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxexport.text.ts",
+      "sha256": "b7d26a6f37070aafa9f6368f697a8dd2dbc2c512e9acbcf3581761905c439e44"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlexp-character.ts",
+      "sha256": "21c6f7fc08761b21f5135e58714da0aee113357b52f02595239d5964b6532dde"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+      "sha256": "0de9442967182aa8238cc1d7b51124ca4679a11e40f2a668bc69e5880dc54354"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.ts",
+      "sha256": "9e2fd0734ea097c8ff25b0b8f6aee95b8354c4d1c1a80cd9094a07f648a4ea36"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts",
+      "sha256": "6e59e6e3e22663a363ce3b2e0f3074ec69facb78a27198fef345108748f56eac"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.ts",
+      "sha256": "38298ba1534954d6da2af744e57a35c02a8fff038190b2bd1a4456c48dc89f0c"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts",
+      "sha256": "649a65b8234d369f724483e759bdd133a8de4c97b289b95bd2e289072a77816a"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.attributes.ts",
+      "sha256": "96b59fbc025519fc7ed5d608e12105fd21f0ee019bb6595ed87f6c7073ddaa03"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements.ts",
+      "sha256": "aece52edd39126c9461e057e1e80a4a2ed41a60e75b783efd2e5ff37825d58eb"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements1.ts",
+      "sha256": "1c01a093d3683cfc95adf117faecd792e81268aea0d3f71cb88a39e699cc59c1"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.lists.ts",
+      "sha256": "b46510407a6537d7bdfd8ae098d3a089404febb394cf49688a4e680d386b8b68"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.resources.ts",
+      "sha256": "c4270cd659d5bb4b170c72619888e37f03c1315bae2e7f173f2c7658ae1da310"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.resources1.ts",
+      "sha256": "1336509e12f15c4b8ccca62cdd0fbd87cf617b2e86c044922ffad95967bb968b"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts",
+      "sha256": "6fd965f16fe96d7118dc70fa9710fff2a2c3d5b4c504d4321c367288f892b568"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.ts",
+      "sha256": "8399d98dff2b15c1db32ead7a8f18107b6d6b7368a2e1c3debaf6419be0f45a8"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts",
+      "sha256": "9b0dd255f4554940ab6ce6616d0b1b3b45942d499f1d90ae5afa27d91cdcf753"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
+      "sha256": "301d08d83854a49ecb9f857cfbab0a293f0022c757b1d734035df38ee26565c1"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/style/kernihdl.ts",
+      "sha256": "7b0a99379c67c07be51e77fa1ca7b69f5aa7c9bf36e9c50e536a3e7b4fadae4b"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/txtparae.types.ts",
+      "sha256": "c0d6e2688ef04e7647f38c3d4cb1a141b2265eff8281f7a7f0e8a6d6d8584bd7"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/txtprmap.test.ts",
+      "sha256": "aa687495857c0e3148fa02f56769fa78a317e9bd2af7c09bb318ae2b8d9aefa3"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/txtprmap.ts",
+      "sha256": "ad49a4bd70798d72b234a314ede45db80d85b730bc73059b109463b90b9848bf"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/xmloff/source/style/kernihdl.ts.json",
+      "sha256": "d2eebc3c749e198fc86769958fe2641d0b22c25937ce37e8495cfc195e9d3576"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/xmloff/source/style/kernihdl.ts.json",
+      "sha256": "5978cf57f5e03acab1859263b678e677d1ddbb40fe6df15f2e23b9dcc7d7ff02"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements.ts.json",
+      "sha256": "3ebf98c64558a7b67b105fcc4d4a7731a8f57e8f44b5ab66171128fbec584f3b"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements1.ts.json",
+      "sha256": "e3155514128377e3661fab2c8d3f8750908cff9bb30f1539a0ce50898b41ecf2"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements.ts.json",
+      "sha256": "17cf41d405a8b449495fad2d1a6004e9c145d4fbf7367803361a4210a1b4a08c"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements1.ts.json",
+      "sha256": "ff4bf2dbdaba97235336b4272af5ef25d85d60afb213cb7caa04da7a53cdb238"
+    },
+    {
+      "path": "scripts/writer-ooxml/generate-factory.py",
+      "sha256": "36e6bf972146e2bccb929ce0acaff048ccebbb892a2b93dfded06fde64e7c1ff"
+    }
+  ]
+}
