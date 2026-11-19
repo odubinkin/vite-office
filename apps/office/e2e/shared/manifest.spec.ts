@@ -5,15 +5,20 @@ test("exports the same native ODS manifest in Chromium and a DOM-free Worker", /
   page,
 }) => {
   await page.goto("/");
-  await installKernelFixture(page, "OfficeManifestFixture", [
-    { module: "src/package/source/manifest/ManifestWriter.ts", names: ["createManifestXml"] },
-    { module: "src/udkapi/com/sun/star/beans/PropertyValue.ts", names: ["PropertyValue"] },
-    { module: "src/sal/inc/rtl/ustring.ts", names: ["OUString"] },
-    {
-      module: "src/comphelper/inc/documentconstants.ts",
-      names: ["MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET"],
-    },
-  ]);
+  await installKernelFixture(
+    page,
+    "OfficeManifestFixture",
+    [
+      { module: "src/package/source/manifest/ManifestWriter.ts", names: ["createManifestXml"] },
+      { module: "src/udkapi/com/sun/star/beans/PropertyValue.ts", names: ["PropertyValue"] },
+      { module: "src/sal/inc/rtl/ustring.ts", names: ["OUString"] },
+      {
+        module: "src/comphelper/inc/documentconstants.ts",
+        names: ["MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET"],
+      },
+    ],
+    { officeServices: true },
+  );
   const result = await page.evaluate(
     /** Reuses the installed repository source bundle inside a true Worker. @returns Compared XML. */ async () => {
       const script = Array.from(document.scripts).find(

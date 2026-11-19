@@ -1,4 +1,4 @@
-/** @fileoverview Real SfxStyleSheetIterator search/cursor behavior in Chromium, over actual IndexedStyleSheets and explicit borrowed caller witnesses. */
+/** @fileoverview Real SfxStyleSheetIterator search/cursor behavior in Chromium, over actual IndexedStyleSheets and actual reference-owned styles. */
 import { expect, test } from "@playwright/test";
 import { installKernelFixture } from "./kernel-fixture";
 
@@ -10,6 +10,8 @@ test("preserves native style filtering and Find Next index behavior in Chromium"
     { module: "src/svl/source/items/style.ts", names: ["SfxStyleSheetIterator"] },
     { module: "src/svl/source/items/IndexedStyleSheets.ts", names: ["IndexedStyleSheets"] },
     { module: "src/svl/inc/style.ts", names: ["SfxStyleFamily", "SfxStyleSearchBits"] },
+    { module: "src/svl/source/items/style-model.ts", names: ["SfxStyleSheetBase"] },
+    { module: "src/cppu/inc/com/sun/star/uno/Reference.ts", names: ["Reference"] },
     { module: "src/sal/inc/rtl/ustring.ts", names: ["OUString"] },
   ]);
   const result = await page.evaluate(
@@ -29,30 +31,22 @@ test("preserves native style filtering and Find Next index behavior in Chromium"
         strings.push(value);
         return value;
       }
-      /** Caller witness implements the exact borrowed operations. @param text - Name. @param fam - Family. @param hidden - Hidden state. @returns Identity. */
-      function sheet(text: string, fam: number, hidden: boolean) {
-        const name = unicode(text);
-        return {
-          /** Borrows name. @returns Name. */ GetName() {
-            return name;
-          },
-          /** Borrows family. @returns Family. */ GetFamily() {
-            return fam;
-          },
-          /** Borrows mask. @returns Mask. */ GetMask() {
-            return bits.UserDefined;
-          },
-          /** Queries usage. @returns False. */ IsUsed() {
-            return false;
-          },
-          /** Queries visibility. @returns Hidden. */ IsHidden() {
-            return hidden;
-          },
-        };
+      /** Native style subclass supplies the original visibility and usage queries. */
+      class IteratorFixtureStyle extends native.SfxStyleSheetBase {
+        /** Initializes genuine style properties. @param name - Source name. @param fam - Native family. @param hidden - Visibility flag. @returns Style. */
+        constructor(name: string, fam: number, hidden: boolean) {
+          super(unicode(name), null, fam, bits.UserDefined);
+          this.bHidden = hidden;
+        }
+        /** Supplies the original virtual model usage query. @returns False. */
+        IsUsed() {
+          return false;
+        }
       }
-      const a = sheet("a", family.Char, false),
-        b = sheet("b", family.Para, true),
-        c = sheet("c", family.Para, false);
+      const a = new IteratorFixtureStyle("a", family.Char, false),
+        b = new IteratorFixtureStyle("b", family.Para, true),
+        c = new IteratorFixtureStyle("c", family.Para, false),
+        references = [new native.Reference(a), new native.Reference(b), new native.Reference(c)];
       for (const value of [a, b, c]) index.AddStyleSheet(value);
       const pool = {
         /** Native borrowed friend view. @returns Actual index. */ GetIndexedStyleSheets() {
@@ -72,6 +66,8 @@ test("preserves native style filtering and Find Next index behavior in Chromium"
         hidden.Count(),
         hidden.First() === b,
       ];
+      index.Dispose();
+      for (const reference of references) reference.dispose();
       for (const value of strings) value.dispose();
       return { normal, found, afterFind, filtering };
     },
