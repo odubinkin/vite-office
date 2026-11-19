@@ -80,7 +80,7 @@ test("preserves indentation,row history,visibility and ODS in a genuine DOM-free
   page,
 }) => {
   await page.goto("/calc");
-  await installKernelFixture(page, "CalcRowsFixture", nativeExports);
+  await installKernelFixture(page, "CalcRowsFixture", nativeExports, { officeServices: true });
   const result = await page.evaluate(
     /** Executes source owners in both realms. @returns Observations. */ async () => {
       /** Native source operation sequence. @returns Actual native results. */

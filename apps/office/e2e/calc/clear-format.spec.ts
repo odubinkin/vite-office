@@ -101,7 +101,7 @@ test("keeps native Clear deletion/history and actual ODS in a DOM-free Worker", 
   page,
 }) => {
   await page.goto("/calc");
-  await installKernelFixture(page, "CalcClearFixture", nativeExports);
+  await installKernelFixture(page, "CalcClearFixture", nativeExports, { officeServices: true });
   const result = await page.evaluate(
     /** Runs actual owners in both browser realms. @returns Observations. */ async () => {
       /** Performs original typed formatting,clear,history and ODS. @returns Native observations. */ async function run() {

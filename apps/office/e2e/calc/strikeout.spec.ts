@@ -114,7 +114,7 @@ test("preserves native Strikeout item metadata,history and ODS in a DOM-free Wor
   page,
 }) => {
   await page.goto("/calc");
-  await installKernelFixture(page, "CalcStrikeoutFixture", nativeExports);
+  await installKernelFixture(page, "CalcStrikeoutFixture", nativeExports, { officeServices: true });
   const result = await page.evaluate(
     /** Executes source classes in both browser realms. @returns Observations. */ async () => {
       /** Performs native typed formatting,toggle,history and ODS operations. @returns Item observations. */ async function run() {

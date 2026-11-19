@@ -105,7 +105,7 @@ test("retains native wrap request,history and ODS behavior in a DOM-free Worker"
   page,
 }) => {
   await page.goto("/calc");
-  await installKernelFixture(page, "CalcWrapFixture", nativeExports);
+  await installKernelFixture(page, "CalcWrapFixture", nativeExports, { officeServices: true });
   const result = await page.evaluate(
     /** Runs actual native classes without a UI document substitute. @returns Realm observations. */ async () => {
       /** Executes a genuine native wrap operation and original undo/redo. @returns Native fields. */ async function run() {

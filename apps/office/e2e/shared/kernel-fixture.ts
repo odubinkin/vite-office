@@ -7,14 +7,18 @@ interface KernelExports {
   readonly module: string;
   readonly names: readonly string[];
 }
-/** Installs real TypeScript runtime exports in the test page. Callers supply static repository-owned names and module paths. @param page - Actual browser page. @param name - Static JavaScript global identifier. @param exports - Source modules. @returns Installation completion. */
+/** Installs real TypeScript runtime exports in the test page. Callers supply static repository-owned names and module paths. @param page - Actual browser page. @param name - Static JavaScript global identifier. @param exports - Source modules. @param options - Bootstrap required by native fixture operations. @returns Installation completion. */
 export async function installKernelFixture(
   page: Page,
   name: string,
   exports: readonly KernelExports[],
+  options: Readonly<{ officeServices?: boolean }> = {},
 ): Promise<void> {
   const root = resolve(import.meta.dirname, "../.."),
     id = name + "-entry";
+  const initialization = options.officeServices
+    ? `import { initializeOfficeServices } from ${JSON.stringify(resolve(root, "src/test/native-office-services.ts"))};\ninitializeOfficeServices();\n`
+    : "";
   const result = await build({
     configFile: false,
     root,
@@ -30,18 +34,19 @@ export async function installKernelFixture(
         /** Emits actual source export declarations. @param value - Module ID. @returns Source. */
         load(value) {
           return value === "\0" + id
-            ? exports
-                .map(
-                  /** Names actual source exports. @param entry - Module declaration. @returns Export statement. */ (
-                    entry,
-                  ) =>
-                    "export {" +
-                    entry.names.join(",") +
-                    "} from " +
-                    JSON.stringify(resolve(root, entry.module)) +
-                    ";",
-                )
-                .join("\n")
+            ? initialization +
+                exports
+                  .map(
+                    /** Names actual source exports. @param entry - Module declaration. @returns Export statement. */ (
+                      entry,
+                    ) =>
+                      "export {" +
+                      entry.names.join(",") +
+                      "} from " +
+                      JSON.stringify(resolve(root, entry.module)) +
+                      ";",
+                  )
+                  .join("\n")
             : undefined;
         },
       },
