@@ -1,0 +1,312 @@
+{
+  "checkpoint": "Calc merged block and formula reference navigation",
+  "task": "202610251549-J0Z0KF",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "createdAt": "2026-11-19T02:53:24.682Z",
+  "upstream": [
+    "sc/source/core/data/document.cxx#ScDocument::ExtendOverlapped",
+    "sc/source/core/data/document.cxx#ScDocument::ExtendMerge",
+    "sc/source/core/data/document.cxx#ScDocument::SkipOverlapped",
+    "sc/source/core/data/attarray.cxx#ScAttrArray::HasAttrib_Impl",
+    "sc/source/ui/view/tabview2.cxx#ScTabView::MarkCursor",
+    "sc/source/ui/view/tabview2.cxx#ScTabView::ExpandBlock",
+    "sc/source/ui/view/tabview2.cxx#moveRefByCell",
+    "sc/source/ui/view/tabview4.cxx#ScTabView::UpdateRef",
+    "sc/qa/unit/uicalc/uicalc.cxx#testKeyboardMergeRef",
+    "sc/qa/unit/uicalc/uicalc.cxx#testMouseMergeRef"
+  ],
+  "results": {
+    "calc": {
+      "files": 23,
+      "tests": 137
+    },
+    "calcAdditional": {
+      "files": 3,
+      "tests": 17
+    },
+    "shared": {
+      "files": 1,
+      "tests": 3
+    },
+    "chromium": 11,
+    "chromiumFinal": 2,
+    "coverage": {
+      "document10.ts": {
+        "selectors": [
+          "GetMergeFlags",
+          "SkipOverlapped",
+          "ExtendOverlapped",
+          "ExtendMergeRange"
+        ],
+        "statements": {
+          "covered": 52,
+          "total": 53,
+          "pct": 98.11
+        },
+        "branches": {
+          "covered": 14,
+          "total": 15,
+          "pct": 93.33
+        },
+        "functions": {
+          "covered": 4,
+          "total": 4,
+          "pct": 100
+        },
+        "lines": {
+          "covered": 42,
+          "total": 42,
+          "pct": 100
+        },
+        "missingBranchLines": [
+          [
+            300,
+            [
+              0,
+              43
+            ]
+          ]
+        ]
+      },
+      "tabview2.ts": {
+        "selectors": [
+          "areCellsQualified",
+          "getMerge",
+          "ExpandReference",
+          "moveBlockEdge",
+          "ExpandBlock",
+          "MarkCursor"
+        ],
+        "statements": {
+          "covered": 141,
+          "total": 144,
+          "pct": 97.91
+        },
+        "branches": {
+          "covered": 121,
+          "total": 125,
+          "pct": 96.8
+        },
+        "functions": {
+          "covered": 6,
+          "total": 6,
+          "pct": 100
+        },
+        "lines": {
+          "covered": 122,
+          "total": 122,
+          "pct": 100
+        },
+        "missingBranchLines": [
+          [
+            258,
+            [
+              0,
+              16
+            ]
+          ],
+          [
+            260,
+            [
+              10,
+              0
+            ]
+          ],
+          [
+            320,
+            [
+              0,
+              6
+            ]
+          ],
+          [
+            336,
+            [
+              0,
+              21
+            ]
+          ]
+        ]
+      },
+      "tabview4.ts": {
+        "selectors": [
+          "UpdateRef"
+        ],
+        "statements": {
+          "covered": 24,
+          "total": 24,
+          "pct": 100
+        },
+        "branches": {
+          "covered": 20,
+          "total": 20,
+          "pct": 100
+        },
+        "functions": {
+          "covered": 1,
+          "total": 1,
+          "pct": 100
+        },
+        "lines": {
+          "covered": 22,
+          "total": 22,
+          "pct": 100
+        },
+        "missingBranchLines": []
+      }
+    }
+  },
+  "commands": [
+    "npm run test:coverage:calc --workspace @vite-office/office -- tabview mouse-block calc-view-controller formula-pointing pointer-selection calc-cell-selection calc-deselect calc-visible-selection calc-data-selection ods-sheet-protection excelfilter calc-files merge-refresh --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sc/source/ui/view/tabview2.ts --coverage.include=src/sc/source/ui/view/tabview4.ts --coverage.include=src/sc/source/core/data/document10.ts --coverage.reportsDirectory=coverage/merged-navigation-scoped",
+    "npm run test:coverage:calc --workspace @vite-office/office -- tabview2-protection merge-refresh reference-input --testNamePattern=^(?!formats native local address flags) --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sc/source/ui/view/tabview2.ts --coverage.include=src/sc/source/ui/view/tabview4.ts --coverage.include=src/sc/source/core/data/document10.ts --coverage.thresholds.lines=0 --coverage.thresholds.functions=0 --coverage.thresholds.statements=0 --coverage.thresholds.branches=0 --coverage.reportsDirectory=coverage/merged-navigation-edges",
+    "npm run test:calc --workspace @vite-office/office -- calc-workbench reference-input --testNamePattern=keeps canonical selection|formats native local address flags --maxWorkers=2 --testTimeout=90000",
+    "npm run test:shared --workspace @vite-office/office -- browser-dispatcher --maxWorkers=2 --testTimeout=90000",
+    "npm run typecheck",
+    "npm run test:static",
+    "./node_modules/.bin/playwright test -c apps/office/coverage/xlsxalignment.playwright.config.ts --workers=1",
+    "./node_modules/.bin/playwright test -c apps/office/coverage/xlsxalignment.playwright.config.ts --workers=1 --grep 'merge imported|selection options'",
+    "xargs ./node_modules/.bin/eslint < apps/office/coverage/merged-navigation-files.txt",
+    "xargs ./node_modules/.bin/prettier --check < apps/office/coverage/merged-navigation-files.txt",
+    "npm run check:docs",
+    "npm run check:dependencies",
+    "npm run check:file-size",
+    "npm run check:source-tree",
+    "npm run check:source-provenance",
+    "npm run inventory:registry:build",
+    "npm run inventory:invariants",
+    "npm run inventory:parity",
+    "npm run check:calc-resources",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor",
+    "git diff --check"
+  ],
+  "coverageMethod": "Two Istanbul profiles over the same source. The initial profile ran 137 passing tests and exited on the default blanket 100% threshold, including untouched document methods. Combined counters use real Istanbul maps and require 90% in each metric for the listed mechanisms.",
+  "additionalVerificationFindings": [
+    "The independently reproduced workbench expectation /invalid address/i does not match the current application text Invalid cell address.",
+    "The independently reproduced address-formatting test still expects formerly unsupported formatting to throw. The current address owner supports those paths. The corresponding native reference-lifetime cases ran in the additional selection."
+  ],
+  "retainedUpstreamIssue": "CALC-739",
+  "verified": [
+    "Native expanded marks include complete merges and retain the original cursor through both axes and both directions.",
+    "Protected contraction checks all cells in the intervening strip before moving.",
+    "Native formula expansion reproduces both pinned keyboard and mouse assertions. Earlier keyboard and pointer protection scenarios still pass.",
+    "Production Chromium opens the unchanged Strict workbook and expands the reference into the actual E2:F3 merge."
+  ],
+  "remaining": [
+    "The umbrella XLSX and DOCX tasks, including further protection commands and final acceptance, remain in progress."
+  ],
+  "files": [
+    {
+      "path": "apps/office/src/sc/source/core/data/document.ts",
+      "sha256": "21065f9b2cf85a5b4735041e74877f3e629d1118c6eea0e4273a7b900f2e4370"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/document10.ts",
+      "sha256": "73dfdc37fff3369d6dbbe0244b063d9522ca878a1957c8100a0571398edf2396"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabview2.ts",
+      "sha256": "861d8df92649b168d20672fbb878b9db507d4ee3be0ea63679148ccd8e3c3b4d"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabview3.ts",
+      "sha256": "1a755d7f24176d0a1e8ed580bc62e022d636fcb42ff5657b782944ac028897ca"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabview4.ts",
+      "sha256": "28f8f4bdbdc3b95042630c41d6e3346771aaceeb0bfcb9bb472e5875ca9c9a49"
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+      "sha256": "1ac2d25105781dde6e0ae81cde99ccd89e58a677ca916e4e8a3b85870993c0a9"
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-reference-input.ts",
+      "sha256": "5ea7fdde44d07069d1f4763acdec3953761cd2eb96f89a9a88c941255481691d"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabview2-protection.test.ts",
+      "sha256": "666a012842430e6a6d65ffd26751e7f8abadf93f531c7fb22d600b5e780474f5"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/attarray.ts",
+      "sha256": "a31c03cd68ad5bc5060e472538b854fa3848566ed2a3fb9886a3314914c757ed"
+    },
+    {
+      "path": "apps/office/e2e/calc/xlsx-alignment.spec.ts",
+      "sha256": "8d78f9f44c796bc76b68cf2fc01132bad1cbf3e3172e6565d8ae068422603546"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/merge-refresh.test.ts",
+      "sha256": "09fd8b0e6d1cccbf989cf287a594b6e748137cfafe363c7b72c49e39625af066"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json",
+      "sha256": "49b4820a4d1ffd50fe9a583ab60757e2525137a907346cfbc993b0ad00703a0f"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json",
+      "sha256": "c492886531e939faf0ca09b011b0d07e0b67c31cbc62b57bc2083a84f040c41c"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/document10.ts.json",
+      "sha256": "b5417742431c23925c87edf241e72045f395d599089df0403e1ade9a9238292c"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/document10.ts.json",
+      "sha256": "e54debbb0525b45077107fde94358bdf790d2b44093cee37c5de9ee7986456f4"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/view/tabview2.ts.json",
+      "sha256": "318f4103ac750211828e4fd86345c145a95c4d53824a8baf243d0d184f4f8e11"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/view/tabview2.ts.json",
+      "sha256": "235f3985543d96a02a944a3c1e8bf1e1a0ca33624eb13bf413536bb46441933c"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/view/tabview3.ts.json",
+      "sha256": "a46c039bbbd8dc1cc43c4befa4468297d52eded596320e0701e373f7f8ac6d33"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/view/tabview3.ts.json",
+      "sha256": "0a6ff44136728bf7034c0191407aa4ba904de0d1a631a9441970f15d8f71fa0d"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/view/tabview4.ts.json",
+      "sha256": "04767cb070af262967a0ecfcc5c19be982059d46a3ac3ae60959021f1bf2ff33"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/view/tabview4.ts.json",
+      "sha256": "3ba4e2fce60d8e4480230fc3038a6e95813f08fdd364bad6bafd9dee58dbb824"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/browser/controller/calc-view-controller.ts.json",
+      "sha256": "2f50e3bcd4accd7a133c6fe5042de37bb6cbdb2537e909d666112515b48243a0"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/browser/controller/calc-view-controller.ts.json",
+      "sha256": "1e8f849fcfe876a2be4012d8f8e52e3b7604b954bbe6d5d085b271287c43b61f"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/browser/controller/calc-reference-input.ts.json",
+      "sha256": "25af31bbe2517605628c2685040105a871ae86989502d0b116d725c391b115ee"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/browser/controller/calc-reference-input.ts.json",
+      "sha256": "35773e051b4962cb47d9bf2ff84d964898cad93a770e177c61ba3fddf4bda05d"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/core/data/attarray.ts.json",
+      "sha256": "7713e5964301c31769472ed76d756b4294627b3f0d7f621144c239a0a9fec4d4"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/core/data/attarray.ts.json",
+      "sha256": "266d2add236e99197756e24a1f1ba9de595861f270a493cebc824fdef7a6b301"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "sha256": "54540c33fe3367ecbf8015212635e2a1e21acb6605e8dca0b21ac31c84e304a0"
+    }
+  ]
+}
