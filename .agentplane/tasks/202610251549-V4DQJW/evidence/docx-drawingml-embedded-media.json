@@ -1,0 +1,19 @@
+{
+  "scope": "Resolve the native embedded-image relationship per DrawingML fragment and retain the original encoded JPEG and PNG bytes in a package-scoped cache.",
+  "implementation": "936aa2e33a58",
+  "fixture_evidence": [
+    "The pinned testHeaderImageAlignment.docx package resolves its header PNG through the Writer OFOPXML relationship facet.",
+    "The pinned TestVMLData.docx package resolves its embedded JPEG and leaves its external image relationship unopened.",
+    "The private attachment's header JPEG was verified byte-for-byte from its actual r:embed target. The fixture and probe are omitted from the repository."
+  ],
+  "tests": {
+    "shared_oox": { "files": 5, "passed": 66, "log": "docx-drawing-media-current.log" },
+    "writer_docx": { "files": 2, "passed": 24, "log": "docx-drawing-writer.log" },
+    "calc_xlsx": { "files": 2, "passed": 19, "log": "docx-drawing-calc.log" },
+    "production_browser": { "passed": 2, "log": "docx-drawing-browser.log" },
+    "graphic_helper_and_blip_coverage": { "statements": 91.66, "branches": 90, "functions": 100, "lines": 94.33, "log": "docx-drawing-graphichelper-coverage.log" }
+  },
+  "checks_passed": ["typecheck", "production bundle", "scoped ESLint and Prettier", "JSDoc", "file size", "dependency boundaries", "Agentplane routing", "git diff check"],
+  "registry_check_failure": "Production discovery reports the existing missing runtime records for OfficeTooltips.tsx and available-menu-items.ts.",
+  "pending": "Connect the Word drawing SAX context and GraphicImport to the Writer fly frame and image node, then verify model placement, browser rendering, ODT persistence and DOCX export. The private document's full open remains blocked."
+}
