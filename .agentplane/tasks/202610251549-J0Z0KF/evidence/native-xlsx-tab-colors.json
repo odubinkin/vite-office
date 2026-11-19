@@ -1,0 +1,79 @@
+{
+  "checkpoint": "Calc preserves worksheet tab colors through XLSX and ODS and paints them in the existing tab strip",
+  "implementation": "ea2b0a82218b",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    "sc/source/core/data/documen3.cxx#ScDocument::GetTabBgColor",
+    "sc/source/core/data/table1.cxx#ScTable::SetTabBgColor",
+    "sc/source/filter/oox/worksheetfragment.cxx#WorksheetFragment::onCreateContext",
+    "sc/source/filter/oox/worksheetsettings.cxx#WorksheetSettings::finalizeImport",
+    "sc/source/filter/excel/excrecds.cxx#XclExpXmlSheetPr::SaveXml",
+    "sc/source/filter/xml/xmlstyle.cxx#XML_TAB_COLOR",
+    "svtools/source/control/tabbar.cxx#TabDrawer::drawColorLine"
+  ],
+  "fixtures": [
+    {
+      "file": "sc/qa/unit/data/xlsx/sheet-tab-color.xlsx",
+      "sha256": "5501d6ae93866d0425aadbab74443bee6146533182b7ceb90c620ab6de55d39f",
+      "test": "testSheetTabColorsXLSX",
+      "evidence": "Unmodified start package. Exact four sheet names and native RGB values after import, Worker serialization, ODS and XLSX reopen. XLSX uses ARGB and writes sheetPr before sheetViews. ODS preserves visible and hidden sheet colors."
+    },
+    {
+      "file": "sc/qa/unit/data/xlsx/tdf107586.xlsx",
+      "sha256": "2da35a67161d9d6c4137222f26c79953f02438b599864ecacaa2e486f7e2821b",
+      "test": "testTdf107586",
+      "evidence": "The ordinary worksheet test uses the unchanged theme part and original sheetPr content from the chart sheet and asserts FF9BBB59. Complete chart-sheet and chart drawing import are outside this checkpoint."
+    }
+  ],
+  "verification": {
+    "scoped_coverage": {
+      "command": "npm run test:coverage:calc -- excelfilter.tab-colors excelfilter.sheet-protection excelfilter.enhanced-protection --maxWorkers=2 --testTimeout=90000 --coverage.include='src/sc/source/filter/{excel/excrecds,oox/worksheetsettings}.ts' --coverage.reportsDirectory=coverage/calc-tab-color --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.perFile=true --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "15 tests across three files. Worksheet settings has 31/31 statements, 12/12 branches and 6/6 functions. Export records has 38/38 statements, 31/32 branches and 5/5 functions. All 61 lines passed. Explicit automatic and misplaced XLSX colors, legacy ODF colors, invalid Worker color values and independent native values are covered."
+    },
+    "chromium": {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" npm exec -- playwright test --config .git/calc-panes-browser.config.mts --project calc --workers=1 --timeout=90000 xlsx-tab-colors.spec.ts xlsx-sheet-group.spec.ts xlsx-sheet-visibility.spec.ts",
+      "result": "pass",
+      "evidence": "Three production Chromium scenarios. The color scenario verifies selected and inactive tab presentation and forced-colors mode, an edited value in the saved primary ODS, actual download XML, and XLSX reopen at mobile width. The color case also passed after the final static build."
+    },
+    "other_regressions": {
+      "commands": [
+        "npm run test:calc -- native-table-undo clipboard-undo-init clipboard-undo-copy --maxWorkers=2 --testTimeout=90000",
+        "npm run test:shared -- src/xmloff/source/core/xmlimp.test.ts"
+      ],
+      "result": "pass",
+      "evidence": "34 Calc undo and clipboard cases and 4 shared XML import cases passed."
+    },
+    "static": {
+      "commands": [
+        "npm run typecheck",
+        "npm run test:static",
+        "npm run check:dependencies",
+        "npm run check:docs",
+        "npm run check:file-size",
+        "npm run check:source-tree",
+        "npm run check:calc-resources",
+        "node .agentplane/policy/check-routing.mjs",
+        "ap doctor",
+        "git diff --check"
+      ],
+      "result": "pass",
+      "evidence": "Scoped ESLint, Prettier and provenance for all 15 touched runtime files passed. The existing Agentplane shim warning remains."
+    },
+    "global_registry": {
+      "commands": [
+        "npm run check:source-provenance",
+        "npm run inventory:invariants",
+        "npm run inventory:parity"
+      ],
+      "result": "fail",
+      "evidence": "Same pre-existing missing registry records for framework modules OfficeTooltips.tsx and available-menu-items.ts. The changed paths pass scoped validation."
+    },
+    "calc_related": {
+      "command": "npm run test:calc -- excelfilter calc-files ods-worker-boundaries ods.test viewdata.settings markdata csv.test --maxWorkers=2 --testTimeout=90000 sc-documen3 table1 table2 tabprotection",
+      "result": "pass",
+      "evidence": "107 tests across 15 files, including XLSX, ODS and the existing Worker and browser file-flow integration."
+    }
+  },
+  "residual": "The wider XLSX and DOCX tasks remain open. Full suites remain on the approved ten-task cadence."
+}
