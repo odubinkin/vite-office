@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/core/data/queryiter.ts",
+    "upstreamPath": "sc/source/core/data/queryiter.cxx",
+    "localSymbols": [
+      "ScQueryCellIteratorDirect",
+      "FindEqualOrSortedLastInRange"
+    ],
+    "upstreamSymbols": [
+      "ScQueryCellIterator",
+      "FindEqualOrSortedLastInRange"
+    ],
+    "preservedResponsibilities": [
+      "Admits one-entry HLOOKUP and VLOOKUP over the original sparse worksheet cell iterator. First exact and last sorted results are read directly from the source sheet. Consecutive equal matches and ordered wildcard fallback retain the native search progression."
+    ],
+    "omittedResponsibilities": [
+      "The specialized sorted binary search, query result caches, advanced filters and multiple-entry iteration remain outside this worksheet lookup path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/queryiter.ts",
+          "marker": "ScQueryCellIteratorDirect"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/queryiter.lookup.test.ts",
+          "marker": "LibreOffice testFuncVLOOKUP"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/queryiter.cxx",
+          "marker": "FindEqualOrSortedLastInRange"
+        }
+      ]
+    }
+  }
+}

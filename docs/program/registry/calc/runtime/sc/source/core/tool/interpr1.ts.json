@@ -21,7 +21,7 @@
         "apps/office/src/sc/source/filter/xml/xmlexternaltabi.test.ts",
         "vendor/libreoffice-reference/sc/source/core/tool/interpr1.cxx#ScInterpreter::CalculateLookup"
       ],
-      "justification": "Calc's common matrix lookup handles ordered and exact VLOOKUP and HLOOKUP over external cache matrices and inline arrays with the original type ordering, first and last match behavior, default sorted argument and scalar result rules. Worksheet-range query iterators and matrix array execution outside the represented scalar path remain pending. The original matrix search ignores wildcard and regular-expression expansion. Locale comparison uses the browser Intl collator with the configured Calc language and case-insensitive sensitivity.",
+      "justification": "Calc's common matrix lookup handles ordered and exact VLOOKUP and HLOOKUP over external cache matrices and inline arrays with the original type ordering, first and last match behavior, default sorted argument and scalar result rules. Worksheet ranges are handled by the separate direct query iterator. Matrix jump execution outside the represented scalar path remains pending. The original matrix search ignores wildcard and regular-expression expansion. Locale comparison uses the browser Intl collator with the configured Calc language and case-insensitive sensitivity.",
       "knownViolations": [],
       "localSymbols": [
         "CalculateMatrixLookup"

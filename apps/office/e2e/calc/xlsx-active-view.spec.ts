@@ -36,6 +36,11 @@ test("Calc restores the XLSX active sheet when several sheets are visible", /** 
   await page.keyboard.type("42");
   await page.keyboard.press("Enter");
   await expect(cell).toHaveText("42");
+  const lookup = page.getByRole("gridcell", { name: /^B1(?:\s|$)/u });
+  await lookup.click();
+  await page.keyboard.type("=VLOOKUP(42;A1:A1;1;0)");
+  await page.keyboard.press("Enter");
+  await expect(lookup).toHaveText("42");
 
   await page.getByRole("menuitem", { name: "File" }).click();
   await page.getByRole("menuitem", { name: "Save As…" }).click();
@@ -50,6 +55,7 @@ test("Calc restores the XLSX active sheet when several sheets are visible", /** 
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(activeSheet).toHaveAttribute("aria-current", "page");
   await expect(cell).toHaveText("42");
+  await expect(lookup).toHaveText("42");
 
   const pending = page.waitForEvent("download");
   await page.getByRole("menuitem", { name: "File" }).click();
@@ -60,6 +66,9 @@ test("Calc restores the XLSX active sheet when several sheets are visible", /** 
   const buffer = await readFile(path);
   const archive = await DocumentArchive.open(new Uint8Array(buffer));
   expect(await archive.readTextEntry("xl/workbook.xml")).toContain('<workbookView activeTab="4"/>');
+  expect(await archive.readTextEntry("xl/worksheets/sheet5.xml")).toMatch(
+    /<f>VLOOKUP\(42,A1(?::A1)?,1,0\)<\/f>/u,
+  );
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole("button", { name: "Open", exact: true }).click();
@@ -72,6 +81,7 @@ test("Calc restores the XLSX active sheet when several sheets are visible", /** 
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(activeSheet).toHaveAttribute("aria-current", "page");
   await expect(cell).toHaveText("42");
+  await expect(lookup).toHaveText("42");
 });
 
 test("Calc restores the XLSX sheet grid setting in the browser", /** Ports the interactive grid fixture through primary ODS, XLSX download, and mobile reopen. @param fixtures - Browser state. @param fixtures.page - Chromium page. @returns Completion. */ async ({

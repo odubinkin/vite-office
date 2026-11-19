@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/queryevaluator.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "range-formula-execution",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/queryevaluator.ts",
+        "apps/office/src/sc/source/core/data/queryiter.lookup.test.ts",
+        "vendor/libreoffice-reference/sc/source/core/data/queryevaluator.cxx#compareByValue"
+      ],
+      "justification": "Evaluates numeric equality with RTL approximation, compares the original cell input string for exact queries, and applies the configured case-insensitive collator for the ordered string criterion. It preserves numeric and text domains during ordered lookup. Advanced filter formats, date criteria, multi-entry operators and format-as-shown rounding remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScQueryEvaluator",
+        "evaluate"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/data/queryevaluator.cxx",
+      "upstreamSymbols": [
+        "ScQueryEvaluator",
+        "compareByValue",
+        "compareByString"
+      ]
+    }
+  }
+}

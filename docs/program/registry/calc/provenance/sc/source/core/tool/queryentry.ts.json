@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/core/tool/queryentry.ts",
+    "upstreamPath": "sc/source/core/tool/queryentry.cxx",
+    "localSymbols": [
+      "ScQueryEntry",
+      "DetectSearchType",
+      "GetCollator"
+    ],
+    "upstreamSymbols": [
+      "ScQueryEntry",
+      "GetSearchTextPtr"
+    ],
+    "preservedResponsibilities": [
+      "Represents the native single lookup key and configurable literal and wildcard searches. Uses the existing TextSearch service with the native tilde escape, whole-cell setting, and configured system language. The shared browser Intl collator serves ordered matrix and worksheet lookup."
+    ],
+    "omittedResponsibilities": [
+      "ICU regular-expression execution still requires the shared TextSearch runtime implementation. Other query entry types and multiple predicates remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/queryentry.ts",
+          "marker": "ScQueryEntry"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/queryiter.lookup.test.ts",
+          "marker": "LibreOffice testFuncVLOOKUP"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/queryentry.cxx",
+          "marker": "GetSearchTextPtr"
+        }
+      ]
+    }
+  }
+}

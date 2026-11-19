@@ -45,7 +45,10 @@ import { SAL_MAX_INT32 } from "../../../../sal/inc/types";
 import { GetString as GetEditString } from "./editutil";
 import { ScMatValType } from "../../../inc/types";
 import type { ScExternalCacheToken } from "../../ui/docshell/externalrefmgr";
-import { CalculateMatrixLookup, type MatrixLookupKey } from "./interpr1";
+import { CalculateMatrixLookup } from "./interpr1";
+import { ScQueryEntry, type ScQueryItem } from "./queryentry";
+import { ScQueryCellIteratorDirect } from "../data/queryiter";
+import { SearchParam } from "../../../../unotools/source/i18n/textsearch";
 
 const kScInterpreterMaxStrLen = Math.trunc(SAL_MAX_INT32 / 8);
 /** Actual initialized numeric interpreter state, with token references owned by JS GC. */
@@ -556,14 +559,12 @@ export class ScInterpreter {
       const matrix = token.GetMatrix();
       if (matrix) return matrix;
     }
-    if (token instanceof ScSingleRefToken || token instanceof ScDoubleRefToken)
-      throw new Error("Lookup with a worksheet range requires Calc query iterators");
     this.SetError(FormulaError.IllegalParameter);
     return undefined;
   }
 
   /** Reads the lookup key with native cell and matrix type selection, without numeric text coercion. @returns Lookup key or absence following an error. */
-  private FillLookupEntry(): MatrixLookupKey | undefined {
+  private FillLookupEntry(): ScQueryItem | undefined {
     let key: number | string;
     const token = this.pStack.at(-1);
     if (token instanceof FormulaDoubleToken) return this.GetDouble();
@@ -607,7 +608,7 @@ export class ScInterpreter {
     }
   }
 
-  /** Runs the common native lookup stack and matrix result rules. @param count - Token argument count. @param horizontal - Whether to search across the first row. @returns Nothing. */
+  /** Runs the common native lookup stack and source-specific result rules. @param count - Token argument count. @param horizontal - Whether to search across the first row. @returns Nothing. */
   private CalculateLookup(count: number, horizontal: boolean): void {
     if (count < 3 || count > 4) {
       this.SetError(count < 3 ? FormulaError.ParameterExpected : FormulaError.IllegalParameter);
@@ -616,16 +617,47 @@ export class ScInterpreter {
     const sorted = count === 3 || this.GetDouble() !== 0;
     const index = approxFloor(this.GetDouble()) - 1;
     if (this.nGlobalError !== FormulaError.NONE) return;
-    const matrix = this.GetLookupMatrix();
-    if (!matrix) return;
+    const source = this.pStack.at(-1);
+    let range: ScRange | undefined;
+    let matrix: ScMatrix | undefined;
+    if (source instanceof ScDoubleRefToken) range = this.PopDoubleRef();
+    else if (source instanceof ScSingleRefToken) {
+      const address = this.PopSingleRef();
+      range = new ScRange(address, address);
+    } else matrix = this.GetLookupMatrix();
+    if (this.nGlobalError !== FormulaError.NONE) return;
     const dimensions = { column: 0, row: 0 };
-    matrix.GetDimensions(dimensions);
+    if (range) {
+      if (range.aStart.Tab() !== range.aEnd.Tab()) {
+        this.SetError(FormulaError.IllegalParameter);
+        return;
+      }
+      dimensions.column = range.aEnd.Col() - range.aStart.Col() + 1;
+      dimensions.row = range.aEnd.Row() - range.aStart.Row() + 1;
+    } else matrix?.GetDimensions(dimensions);
     if (index < 0 || index >= (horizontal ? dimensions.row : dimensions.column)) {
       this.SetError(FormulaError.IllegalArgument);
       return;
     }
     const key = this.FillLookupEntry();
     if (key === undefined || this.nGlobalError !== FormulaError.NONE) return;
+    if (range) {
+      const entry = new ScQueryEntry(key, this.mrDoc.GetDocOptions());
+      if (entry.searchType === SearchParam.SearchType.Regexp) {
+        this.SetError(FormulaError.NoValue);
+        return;
+      }
+      const iterator = new ScQueryCellIteratorDirect(this.mrDoc, range, horizontal, entry);
+      const found = sorted ? iterator.FindEqualOrSortedLastInRange() : iterator.GetFirst();
+      if (!found) this.SetError(FormulaError.NotAvailable);
+      else {
+        if (horizontal) found.SetRow(range.aStart.Row() + index);
+        else found.SetCol(range.aStart.Col() + index);
+        this.PushCellResultToken(found, true);
+      }
+      return;
+    }
+    if (!matrix) return;
     const found = CalculateMatrixLookup(
       matrix,
       horizontal ? dimensions.column : dimensions.row,
@@ -646,12 +678,12 @@ export class ScInterpreter {
     }
   }
 
-  /** Creates native final numeric/empty/text results from a real referenced cell. @param address - Absolute reference. @returns Nothing. */
-  private PushCellResultToken(address: ScAddress): void {
+  /** Creates native numeric/empty/text results from a real referenced cell. @param address - Absolute reference. @param displayEmptyAsString - Native caller flag for blank display. @returns Nothing. */
+  private PushCellResultToken(address: ScAddress, displayEmptyAsString = false): void {
     const cell = new ScRefCellValue(this.mrDoc, address);
     if (cell.hasEmptyValue()) {
       this.PushWithoutError(
-        new ScEmptyCellToken(cell.getType() === CellType.CELLTYPE_FORMULA, false),
+        new ScEmptyCellToken(cell.getType() === CellType.CELLTYPE_FORMULA, displayEmptyAsString),
       );
       return;
     }
