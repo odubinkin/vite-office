@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 669
+revision: 671
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T09:04:50.194Z"
+  updated_at: "2026-11-19T09:14:54.768Z"
   updated_by: "CODER"
-  note: "Cached external cell and range evaluation passed focused coverage and production UI verification. Original external VLOOKUP acceptance remains open."
-  attempts: 217
+  note: "Native external cache matrix lookup and the original LibreOffice ODS scenario pass. Broader XLSX filter acceptance remains open."
+  attempts: 218
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3480,8 +3483,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T09:14:54.768Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native external cache matrix lookup and the original LibreOffice ODS scenario pass. Broader XLSX filter acceptance remains open."
+  -
+    type: "status"
+    at: "2026-11-19T09:15:06.381Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T09:04:59.633Z"
+doc_updated_at: "2026-11-19T09:15:06.381Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -10078,6 +10094,48 @@ sections:
     - Commands: npm run typecheck; npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:calc-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
       Result: pass. Evidence: production static build with 4 JS bundles, source provenance for 2,821 runtime modules, 5,748 JSDoc sources, 0 registry semantic violations and successful routing. Scope: changed implementation and source mapping. Full tests were outside the ten-task cadence.
     - Remaining acceptance: the original testExternalRefCacheODS still needs VLOOKUP support. External refresh, multi-sheet operand arrays and cached number formats remain outside the implemented runtime path. CALC-748 records native external range string access to a numeric matrix cell.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-19T09:14:54.768Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native external cache matrix lookup and the original LibreOffice ODS scenario pass. Broader XLSX filter acceptance remains open.
+    Attempts: 218
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T09:04:59.633Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    Implementation 1a9b3ac3b adds native opcode admission and the shared CalculateLookup matrix branch for VLOOKUP and HLOOKUP. It supports inline arrays and cached external single cells and rectangles. Exact search uses the shared string pool's case mapping. Ordered strings use the browser Intl collator with the configured Calc language and case-insensitive sensitivity. The difference in native exact matching of blank horizontal and vertical candidates is retained and documented as CALC-749.
+
+    - Command: npm run test:coverage:calc -- lookup-formula.test.ts external-reference-formula.test.ts externallinkbuffer.test.ts compiler.external.test.ts xmlexternaltabi.test.ts aggregate-formula.test.ts range-formula.test.ts numeric-formula.test.ts text-formula.test.ts implicit-intersection.test.ts calcconfig-document.test.ts document.formula.test.ts excelfilter.named-arrays.test.ts formula-output.test.ts --testNamePattern='^(?!.*rejects actual matrix operands)' --maxWorkers=2 --testTimeout=120000 --coverage.include=src/sc/source/core/tool/interpr1.ts --coverage.include=src/sc/source/core/tool/interpr4.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/xlsx-external-lookup
+      Result: pass. Evidence: 82 passed tests in 14 files and one separately reproduced baseline failure omitted from the rerun, as recorded in d09dfb450. Statements/branches/functions/lines: lookup 100/100/100/100%, interpreter 92/90.45/97.56/92.96%. Scope: original external-ref-cache.ods through import and ODS reopen. All three B2:B4 lookup results and both A6:A7 external-reference registrations from ScFiltersTest2::testExternalRefCacheODS pass.
+    - Command: npm run test:shared -- compiler-arithmetic --maxWorkers=2
+      Result: pass. Evidence: 8 tests. Scope: shared scalar formula compiler regressions.
+    - Command: node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=90000 --grep 'pinned XLSX with external names|active sheet when'
+      Result: pass. Evidence: 2 production Chromium scenarios. The pinned external XLSX admits an exact lookup in the grid. The result survives browser storage reopen and mobile reopen of the exported XLSX, whose XML retains the lookup formula and external range.
+    - Commands: npm run typecheck; npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:calc-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+      Result: pass. Evidence: production static build with four JS bundles, provenance for 2,822 runtime modules, 5,750 JSDoc sources and zero registry semantic violations. Scope: source contracts, formatter, typecheck and application build.
+    - Remaining acceptance: ordinary worksheet-range lookup needs native query iterators, and broader XLSX compatibility and external refresh remain open. Full test suite was outside the ten-task cadence.
 
     BlueprintSnapshotRef:
     - state: current
@@ -17783,6 +17841,48 @@ Implementation d6c4a5f1a connects the Calc interpreter's native external token c
 - Commands: npm run typecheck; npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:calc-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
   Result: pass. Evidence: production static build with 4 JS bundles, source provenance for 2,821 runtime modules, 5,748 JSDoc sources, 0 registry semantic violations and successful routing. Scope: changed implementation and source mapping. Full tests were outside the ten-task cadence.
 - Remaining acceptance: the original testExternalRefCacheODS still needs VLOOKUP support. External refresh, multi-sheet operand arrays and cached number formats remain outside the implemented runtime path. CALC-748 records native external range string access to a numeric matrix cell.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-19T09:14:54.768Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native external cache matrix lookup and the original LibreOffice ODS scenario pass. Broader XLSX filter acceptance remains open.
+Attempts: 218
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T09:04:59.633Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+Implementation 1a9b3ac3b adds native opcode admission and the shared CalculateLookup matrix branch for VLOOKUP and HLOOKUP. It supports inline arrays and cached external single cells and rectangles. Exact search uses the shared string pool's case mapping. Ordered strings use the browser Intl collator with the configured Calc language and case-insensitive sensitivity. The difference in native exact matching of blank horizontal and vertical candidates is retained and documented as CALC-749.
+
+- Command: npm run test:coverage:calc -- lookup-formula.test.ts external-reference-formula.test.ts externallinkbuffer.test.ts compiler.external.test.ts xmlexternaltabi.test.ts aggregate-formula.test.ts range-formula.test.ts numeric-formula.test.ts text-formula.test.ts implicit-intersection.test.ts calcconfig-document.test.ts document.formula.test.ts excelfilter.named-arrays.test.ts formula-output.test.ts --testNamePattern='^(?!.*rejects actual matrix operands)' --maxWorkers=2 --testTimeout=120000 --coverage.include=src/sc/source/core/tool/interpr1.ts --coverage.include=src/sc/source/core/tool/interpr4.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/xlsx-external-lookup
+  Result: pass. Evidence: 82 passed tests in 14 files and one separately reproduced baseline failure omitted from the rerun, as recorded in d09dfb450. Statements/branches/functions/lines: lookup 100/100/100/100%, interpreter 92/90.45/97.56/92.96%. Scope: original external-ref-cache.ods through import and ODS reopen. All three B2:B4 lookup results and both A6:A7 external-reference registrations from ScFiltersTest2::testExternalRefCacheODS pass.
+- Command: npm run test:shared -- compiler-arithmetic --maxWorkers=2
+  Result: pass. Evidence: 8 tests. Scope: shared scalar formula compiler regressions.
+- Command: node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=90000 --grep 'pinned XLSX with external names|active sheet when'
+  Result: pass. Evidence: 2 production Chromium scenarios. The pinned external XLSX admits an exact lookup in the grid. The result survives browser storage reopen and mobile reopen of the exported XLSX, whose XML retains the lookup formula and external range.
+- Commands: npm run typecheck; npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:calc-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+  Result: pass. Evidence: production static build with four JS bundles, provenance for 2,822 runtime modules, 5,750 JSDoc sources and zero registry semantic violations. Scope: source contracts, formatter, typecheck and application build.
+- Remaining acceptance: ordinary worksheet-range lookup needs native query iterators, and broader XLSX compatibility and external refresh remain open. Full test suite was outside the ten-task cadence.
 
 BlueprintSnapshotRef:
 - state: current
