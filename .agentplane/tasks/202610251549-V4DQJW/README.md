@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 402
+revision: 404
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T10:23:20.241Z"
+  updated_at: "2026-11-19T10:38:25.068Z"
   updated_by: "CODER"
-  note: "DOCX header and footer geometry code 3d1853d67. Scoped coverage, final Writer regressions, Chrome desktop/mobile and static gates passed. Raw SDT and VML fixtures still require their missing content handlers."
-  attempts: 123
+  note: "Building-block SDT checkpoint 82bdb3c0a passes focused, scoped coverage and production browser checks. Additional DOCX owner and fixture gaps remain."
+  attempts: 124
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1976,8 +1979,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T10:38:25.068Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Building-block SDT checkpoint 82bdb3c0a passes focused, scoped coverage and production browser checks. Additional DOCX owner and fixture gaps remain."
+  -
+    type: "status"
+    at: "2026-11-19T10:38:30.178Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T10:23:27.486Z"
+doc_updated_at: "2026-11-19T10:38:30.178Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -5759,6 +5775,41 @@ sections:
     - Commands: npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:writer-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:writer-hintids; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; npm run inventory:invariants; npm run inventory:parity; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
       Result: pass. Evidence: four static JS bundles, 5762 documented source files, 117 native Writer identities, and zero registry semantic violations. Agentplane doctor reports the existing older-hook warning with no errors.
     - Remaining acceptance: original SDT and VML fixture admission, story layout rectangles and rendering of header/footer and page border content, plus negative-margin overlap conversion to anchored frames as covered by testTdf119952. Broader Writer and Calc OOXML work remains open. Full regression was outside the ten-task cadence.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-19T10:38:25.068Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Building-block SDT checkpoint 82bdb3c0a passes focused, scoped coverage and production browser checks. Additional DOCX owner and fixture gaps remain.
+    Attempts: 124
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T10:23:27.486Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    - The untouched LibreOffice `header-border.docx` reproduces the missing block content-control grammar in the footer on the previous implementation. It now opens from the existing UI. The native paragraph interoperability item carries building-block metadata through the Worker. The DOCX exporter reconstructs the original type, gallery and uniqueness value. A separate package regression verifies multiple paragraphs, deferred end before the following paragraph, consecutive different building-block types, native defaults and DOCX reopening.
+    - Primary ODT storage preserves the content and section geometry. In the pinned ODF format path there are no export mappings for the Word-specific `SdtPr` and `ParaSdtEndBefore` keys. Those keys are available in the imported live document and direct DOCX export. Live content controls, additional SDT metadata and the VML shape in the untouched `footer-margin-lost.docx` remain pending. WRITER-666 records the upstream normalization of the explicit false uniqueness flag.
+    - Six targeted Writer test files passed all 36 cases. The narrower coverage rerun passed all six selected regressions, with new owners at 100% statements, 95.23% branches, 96.15% functions, and 100% lines overall. The lowest per-owner branch result is 90.47% and the lowest function result is 93.33%. Production Chrome ran both page-story and page-border UI checks. The user-supplied example also opened locally, saved, exported and reopened with equal visible body text. No user document was added to the repository. The failure on the deployed build is unverified.
+    - Static production build, typecheck, scoped ESLint and Prettier, module dependencies, Writer resources, JSDoc, source limits, source tree and provenance, registry build/check and inventory invariants/parity passed. Agentplane doctor, policy routing and git diff checks passed. The full application suite was not run in this checkpoint.
 
     BlueprintSnapshotRef:
     - state: current
@@ -10288,6 +10339,41 @@ Writer now stores the original page-edge-to-story field separately from the text
 - Commands: npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:writer-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:writer-hintids; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; npm run inventory:invariants; npm run inventory:parity; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
   Result: pass. Evidence: four static JS bundles, 5762 documented source files, 117 native Writer identities, and zero registry semantic violations. Agentplane doctor reports the existing older-hook warning with no errors.
 - Remaining acceptance: original SDT and VML fixture admission, story layout rectangles and rendering of header/footer and page border content, plus negative-margin overlap conversion to anchored frames as covered by testTdf119952. Broader Writer and Calc OOXML work remains open. Full regression was outside the ten-task cadence.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-19T10:38:25.068Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Building-block SDT checkpoint 82bdb3c0a passes focused, scoped coverage and production browser checks. Additional DOCX owner and fixture gaps remain.
+Attempts: 124
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T10:23:27.486Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+- The untouched LibreOffice `header-border.docx` reproduces the missing block content-control grammar in the footer on the previous implementation. It now opens from the existing UI. The native paragraph interoperability item carries building-block metadata through the Worker. The DOCX exporter reconstructs the original type, gallery and uniqueness value. A separate package regression verifies multiple paragraphs, deferred end before the following paragraph, consecutive different building-block types, native defaults and DOCX reopening.
+- Primary ODT storage preserves the content and section geometry. In the pinned ODF format path there are no export mappings for the Word-specific `SdtPr` and `ParaSdtEndBefore` keys. Those keys are available in the imported live document and direct DOCX export. Live content controls, additional SDT metadata and the VML shape in the untouched `footer-margin-lost.docx` remain pending. WRITER-666 records the upstream normalization of the explicit false uniqueness flag.
+- Six targeted Writer test files passed all 36 cases. The narrower coverage rerun passed all six selected regressions, with new owners at 100% statements, 95.23% branches, 96.15% functions, and 100% lines overall. The lowest per-owner branch result is 90.47% and the lowest function result is 93.33%. Production Chrome ran both page-story and page-border UI checks. The user-supplied example also opened locally, saved, exported and reopened with equal visible body text. No user document was added to the repository. The failure on the deployed build is unverified.
+- Static production build, typecheck, scoped ESLint and Prettier, module dependencies, Writer resources, JSDoc, source limits, source tree and provenance, registry build/check and inventory invariants/parity passed. Agentplane doctor, policy routing and git diff checks passed. The full application suite was not run in this checkpoint.
 
 BlueprintSnapshotRef:
 - state: current
