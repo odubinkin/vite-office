@@ -1,0 +1,46 @@
+{
+  "checkpoint": "Writer rectangular picture wrapping through the active DOCX and ODT paths",
+  "implementation": "bbc2670d3ce70c1a140b49712a238f06e75e2dfc",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "fixture": {
+    "path": "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/tdf134114_allowOverlap.docx",
+    "sha256": "527f8139aa0141043e13995f991962992a04beda938057d3fb98a781de95fe62",
+    "upstream": "sw/qa/extras/ooxmlexport/ooxmlexport18.cxx#testTdf134114_allowOverlap"
+  },
+  "source": [
+    "sw/source/writerfilter/dmapper/GraphicImport.cxx#GraphicImport::handleWrapTextValue",
+    "sw/source/writerfilter/dmapper/GraphicImport.cxx#GraphicImport::ProcessShapeOptions",
+    "sw/source/writerfilter/dmapper/GraphicImport.cxx#GraphicImport::lcl_adjustMarginsAndOrientation",
+    "sw/source/filter/ww8/docxsdrexport.cxx#DocxSdrExport::startDMLAnchorInline"
+  ],
+  "checks": {
+    "writer_regressions": { "tests": 75, "files": 5, "log": "writer-square-wrap-regressions.log" },
+    "scoped_coverage": {
+      "tests": 18,
+      "threshold_per_file": 90,
+      "whole_import_branch_percent": 97.82,
+      "whole_export_branch_percent": 96.15,
+      "combined_statements": "167/169",
+      "combined_branches": "95/98",
+      "combined_functions": "14/14",
+      "combined_lines": "160/160",
+      "log": "writer-square-wrap-coverage.log"
+    },
+    "chromium": {
+      "unique_scenarios": 3,
+      "logs": ["writer-square-wrap-browser.log", "writer-square-wrap-browser-final.log"],
+      "scope": "Original document open, primary browser ODT reopen, XML from the desktop DOCX download, mobile DOCX reopen, and header drawing and page-story regressions."
+    },
+    "other_passed": [
+      "TypeScript production check and build, static smoke, scoped ESLint and Prettier",
+      "JSDoc, file size, module boundaries, Writer resources and hint IDs",
+      "Source tree, three scoped provenance records, Agentplane doctor and policy routing, git diff"
+    ]
+  },
+  "verified": "The existing picture context accepts all four rectangular sides and writes the corresponding Writer frame modes. The graph retains anchor distances, original alignment corrections and the overlap flags across Worker transport and primary ODT. DOCX export uses the body or header serializer and emits the original Word wrap type. The unchanged upstream example now opens, saves and downloads successfully.",
+  "residual": [
+    "Inline fly content, contour polygons, and the visual reflow of lines around a rectangular floating object are outside this checkpoint.",
+    "The two previously missing framework records for OfficeTooltips.tsx and available-menu-items.ts still prevent whole-repository provenance and parity checks.",
+    "No full test suite was due for this checkpoint."
+  ]
+}
