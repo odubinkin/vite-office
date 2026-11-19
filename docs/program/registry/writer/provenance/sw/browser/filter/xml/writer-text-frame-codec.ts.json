@@ -22,6 +22,10 @@
         {
           "path": "apps/office/src/sw/browser/filter/xml/writer-page-story-codec.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/graphic/ndgrf.test.ts",
+          "marker": "inserts embedded graphics"
         }
       ],
       "upstream": []
@@ -30,7 +34,8 @@
     "responsibilities": [
       "Transports original HTML-created Writer text fly frames by live section content, original anchor and direct native item records. Reconstruction uses the existing native MakeFlySection path and reconnects bookmark text owners.",
       "Uses the original admitted fly item ranges, including native drawing fill attributes.",
-      "Uses the common native section block transfer while preserving the existing text fly record and bookmark/anchor ordering."
+      "Uses the common native section block transfer while preserving the existing text fly record and bookmark/anchor ordering.",
+      "The same ordered fly-frame transport restores embedded graphic bytes, dimensions and separate native content items on the original anchor."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

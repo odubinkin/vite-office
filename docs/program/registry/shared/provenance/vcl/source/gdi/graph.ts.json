@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/vcl/source/gdi/graph.ts",
+    "upstreamPath": "vcl/source/gdi/graph.cxx",
+    "localSymbols": [
+      "Graphic",
+      "GetNativeData",
+      "GetPrefSize"
+    ],
+    "upstreamSymbols": [
+      "Graphic::GetPrefSize",
+      "Graphic::GetGfxLink"
+    ],
+    "preservedResponsibilities": [
+      "Owns an embedded encoded image and its physical preferred size for transfer to the native Writer graphics node."
+    ],
+    "omittedResponsibilities": [
+      "Bitmap and metafile decoding, VCL rendering, link updates and graphic swapping remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/source/gdi/graph.ts",
+          "marker": "Graphic"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/graphic/ndgrf.test.ts",
+          "marker": "inserts embedded graphics"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/gdi/graph.cxx",
+          "marker": "Graphic::GetPrefSize"
+        },
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/gdi/graph.cxx",
+          "marker": "Graphic::GetGfxLink"
+        }
+      ]
+    }
+  }
+}

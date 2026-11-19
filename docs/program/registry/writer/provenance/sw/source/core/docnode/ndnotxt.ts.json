@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/docnode/ndnotxt.ts",
+          "marker": "SwNoTextNode"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/graphic/ndgrf.test.ts",
+          "marker": "inserts embedded graphics"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/ndnotxt.cxx",
+          "marker": "SwNoTextNode::NewAttrSet"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/docnode/ndnotxt.ts",
+    "localSymbols": [
+      "SwNoTextNode",
+      "GetTwipSize"
+    ],
+    "omittedResponsibilities": [
+      "Contour and native layout support remain open."
+    ],
+    "preservedResponsibilities": [
+      "Supplies a native non-text content owner with the original frame and graphic ranges."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/docnode/ndnotxt.cxx",
+    "upstreamSymbols": [
+      "SwNoTextNode::NewAttrSet"
+    ]
+  },
+  "legacyOrder": 161
+}

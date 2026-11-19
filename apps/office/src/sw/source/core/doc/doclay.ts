@@ -1,10 +1,11 @@
-/** @fileoverview Native frame-name allocation from doclay.cxx over the actual special-format collection. The current English resource binding matches existing table/style naming; other native fly-name families remain unported. */
+/** @fileoverview Native fly naming, section ownership and format initialization from doclay.cxx. */
 import type { SwDoc } from "./doc";
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
 import type { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
 import { SwPosition } from "../crsr/pam";
-import type { SwFrameFormat } from "../layout/atrfrm";
+import type { SwFlyFrameFormat, SwFrameFormat } from "../layout/atrfrm";
+import type { SwContentNode } from "../docnode/node";
 import {
   RES_ANCHOR,
   RES_CNTNT,
@@ -18,6 +19,7 @@ import { SwStartNodeType } from "../../../inc/ndtyp";
 import { SwFormatContent } from "../../../inc/fmtcntnt";
 import { SwFormatAnchor } from "../../../inc/fmtanchr";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
+import { MINFLY } from "../../../inc/swtypes";
 import { SfxItemState, type SfxItemSet } from "../../../../svl/source/items/itemset";
 import { toInt32 } from "../../../../o3tl/inc/string_view";
 import { DateTime } from "../../../../tools/source/datetime/datetime";
@@ -26,6 +28,16 @@ import { DateTimeToOUString } from "../../../../tools/source/datetime/datetimeut
 const DEF_FLY_WIDTH = 2268;
 /** Original frame branch of lcl_GetUniqueFlyName, including actual mail-merge state and first unused sorted numeric suffix. @param document - Actual document owner. @returns Original unique frame name in the current English resource environment. */
 export function GetUniqueFrameName(document: SwDoc): string {
+  return lcl_GetUniqueFlyName(document, "Frame");
+}
+
+/** Allocates the native English graphic name. @param document - Actual document owner. @returns First available graphic name. */
+export function GetUniqueGrfName(document: SwDoc): string {
+  return lcl_GetUniqueFlyName(document, "Image");
+}
+
+/** Shares the original fly-family name algorithm. @param document - Actual document owner. @param name - Native translated prefix. @returns First unused numeric name. */
+function lcl_GetUniqueFlyName(document: SwDoc, name: string): string {
   const formats = document.GetSpzFrameFormats();
   if (document.IsInMailMerge())
     return (
@@ -33,8 +45,7 @@ export function GetUniqueFrameName(document: SwDoc): string {
       DateTimeToOUString(new DateTime(DateTime.SYSTEM)) +
       String(formats.size() + 1)
     );
-  const name = "Frame",
-    used: number[] = [];
+  const used: number[] = [];
   for (const format of formats) {
     if (format.Which() !== RES_FLYFRMFMT) continue;
     if (format.GetName().startsWith(name)) {
@@ -71,17 +82,34 @@ export function MakeFlySection(
   const end = nodes.GetEndOfAutotext();
   const style = doc.GetDocumentSettingManager().get("HTML_MODE") ? "text-body" : "frame-contents";
   const text = nodes.MakeTextNode(end, doc.GetTextFormatColl(style));
-  const format = doc.MakeFlyFrameFormat(doc.GetUniqueFrameName(), parent);
-  const range = new SwNodeRange(text, end);
+  return MakeFlySection_(position, text, type, items, parent);
+}
+
+/** Connects an existing autotext content node to the real fly section and format. @param position - Actual native anchor position. @param node - Inserted content node. @param type - Requested native anchor type. @param items - Borrowed native frame attributes. @param parent - Native fly style. @returns Registered fly format. */
+export function MakeFlySection_(
+  position: SwPosition,
+  node: SwContentNode,
+  type: RndStdIds,
+  items: SfxItemSet | undefined,
+  parent: SwFrameFormat,
+): SwFlyFrameFormat {
+  const doc = node.GetDoc();
+  const nodes = doc.GetNodes();
+  const graphic = node.GetGrfNode();
+  const format = doc.MakeFlyFrameFormat(
+    graphic ? GetUniqueGrfName(doc) : doc.GetUniqueFrameName(),
+    parent,
+  );
+  const range = new SwNodeRange(node, nodes.GetEndOfAutotext());
   try {
     nodes.SectionDown(range, SwStartNodeType.SwFlyStartNode);
   } finally {
     range.Dispose();
   }
-  const content = new SwFormatContent(text.StartOfSectionNode());
+  const content = new SwFormatContent(node.StartOfSectionNode());
   try {
     format.SetFormatAttr(content);
-    if (items.GetItemState(RES_CNTNT, false) === SfxItemState.SET) {
+    if (items?.GetItemState(RES_CNTNT, false) === SfxItemState.SET) {
       const flyItems = items.Clone();
       try {
         flyItems.ClearItem(RES_CNTNT);
@@ -89,11 +117,11 @@ export function MakeFlySection(
       } finally {
         flyItems.Dispose();
       }
-    } else format.SetFormatAttrSet(items);
+    } else if (items) format.SetFormatAttrSet(items);
   } finally {
     content.Dispose();
   }
-  const anchor = items.GetItemIfSet(RES_ANCHOR, false);
+  const anchor = items?.GetItemIfSet(RES_ANCHOR, false);
   if (
     !(anchor instanceof SwFormatAnchor) ||
     (!anchor.GetAnchorNode() &&
@@ -124,8 +152,22 @@ export function MakeFlySection(
       next.Dispose();
     }
   }
-  if (format.GetAttrSet().GetItemState(RES_FRM_SIZE) !== SfxItemState.SET)
-    format.SetFormatAttr(new SwFormatFrameSize(SwFrameSize.Variable, 0, DEF_FLY_WIDTH));
+  if (format.GetAttrSet().GetItemState(RES_FRM_SIZE) !== SfxItemState.SET) {
+    const size = graphic?.GetTwipSize();
+    const defaultSize = new SwFormatFrameSize(SwFrameSize.Variable, 0, DEF_FLY_WIDTH);
+    try {
+      if (size) {
+        defaultSize.SetWidth(size.Width() < MINFLY ? DEF_FLY_WIDTH : size.Width());
+        if (size.Height()) {
+          defaultSize.SetHeight(size.Height());
+          defaultSize.SetHeightSizeType(SwFrameSize.Fixed);
+        }
+      }
+      format.SetFormatAttr(defaultSize);
+    } finally {
+      defaultSize.Dispose();
+    }
+  }
   return format;
 }
 

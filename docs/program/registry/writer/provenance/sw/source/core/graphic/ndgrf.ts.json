@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/graphic/ndgrf.ts",
+          "marker": "SwGrfNode"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/graphic/ndgrf.test.ts",
+          "marker": "inserts embedded graphics"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/graphic/ndgrf.cxx",
+          "marker": "SwGrfNode::SwGrfNode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/graphic/ndgrf.cxx",
+          "marker": "SwGrfNode::GetTwipSize"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/graphic/ndgrf.ts",
+    "localSymbols": [
+      "SwGrfNode",
+      "GetTwipSize",
+      "GetGraphic"
+    ],
+    "omittedResponsibilities": [
+      "Linked images, swap-in, inaccessible data recovery and metafile processing remain open."
+    ],
+    "preservedResponsibilities": [
+      "Owns embedded image content in the Writer node array and supplies the native image fly extent."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/graphic/ndgrf.cxx",
+    "upstreamSymbols": [
+      "SwGrfNode::SwGrfNode",
+      "SwGrfNode::GetTwipSize"
+    ]
+  },
+  "legacyOrder": 161
+}

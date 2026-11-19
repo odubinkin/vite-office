@@ -25,6 +25,7 @@ export function CollectTextFlyFrames(document: SwDoc): BoundTextFrames {
     if (
       !owner ||
       !start?.IsStartNode() ||
+      document.nodes.at(start.GetIndex() + 1).GetGrfNode() !== null ||
       (anchor.GetAnchorId() !== RndStdIds.FLY_AT_PARA &&
         anchor.GetAnchorId() !== RndStdIds.FLY_AT_CHAR)
     )

@@ -3,6 +3,9 @@
  */
 import { InsertTableNodes, TextToTableNodes } from "./ndtbl";
 import type { SwAttrSet } from "../attr/swatrset";
+import type { Graphic } from "../../../../vcl/source/gdi/graph";
+import type { SwGrfFormatColl } from "../../../inc/fmtcol";
+import { SwGrfNode } from "../graphic/ndgrf";
 import { RES_PAGEDESC } from "../../../inc/hintids";
 import { SwStartNodeType } from "../../../inc/ndtyp";
 import type { SwTextFormatColl } from "../doc/fmtcol";
@@ -704,6 +707,15 @@ export class SwNodes {
     this.nodeArray.splice(where.GetIndex(), 0, node);
     this.InsertOutlineNode(node);
     this.document.NotifyModelChange({ index: node.GetIndex(), kind: "node-inserted" });
+    return node;
+  }
+
+  /** Inserts the original graphic content node at the supplied boundary. @param where - Actual document boundary. @param graphic - Embedded graphic. @param coll - Native graphic collection. @returns Connected graphic node. */
+  public MakeGrfNode(where: SwNode, graphic: Graphic, coll: SwGrfFormatColl): SwGrfNode {
+    if (where.GetNodes() !== this || coll.GetDoc() !== this.document)
+      throw new Error("Graphic node owners belong to another document.");
+    const node = new SwGrfNode(this, where.StartOfSectionNode(), coll, graphic);
+    this.InsertNode(node, where.GetIndex());
     return node;
   }
 

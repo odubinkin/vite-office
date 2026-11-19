@@ -5,6 +5,7 @@
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import type { SwContentIndex } from "../bastyp/index";
 import type { SwTextNode } from "../txtnode/ndtxt";
+import type { SwGrfNode } from "../graphic/ndgrf";
 import { SwStartNodeType } from "../../../inc/ndtyp";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -32,7 +33,7 @@ import type { SwFormatPageDesc } from "../attr/fmtpdsc";
 import type { SwPageDesc } from "../layout/pagedesc";
 
 /** Identifies the node categories implemented by the current Writer model slice. */
-export type SwNodeType = "end" | "start" | "text";
+export type SwNodeType = "end" | "start" | "text" | "graphic";
 
 /** Base class of every Writer document model element. */
 export abstract class SwNode extends SwContentIndexRegistry {
@@ -86,6 +87,10 @@ export abstract class SwNode extends SwContentIndexRegistry {
   /** Original inline node-type getter from ndtxt.hxx returns null for nontext nodes. @returns Actual text owner or null. */
   public GetTextNode(): SwTextNode | null {
     return this.nodeType === "text" ? (this as SwNode as SwTextNode) : null;
+  }
+  /** Original typed lookup for an embedded graphic node. @returns Actual graphic owner or null. */
+  public GetGrfNode(): SwGrfNode | null {
+    return this.nodeType === "graphic" ? (this as SwNode as SwGrfNode) : null;
   }
   /** Reports whether end-equal hints ignore DontExpand during coordinate updates. @returns Native node state. */
   public IsIgnoreDontExpand(): boolean {
@@ -361,13 +366,14 @@ export abstract class SwContentNode extends SwNode {
     }
   }
 
-  /** Creates a content node in one Writer section. @param nodes - Owning node array. @param startOfSection - Containing section. @param formatColl - Registered format collection. @returns Nothing. */
+  /** Creates a content node in one Writer section. @param nodes - Owning node array. @param startOfSection - Containing section. @param formatColl - Registered format collection. @param nodeType - Native content category. @returns Nothing. */
   protected constructor(
     nodes: SwNodes,
     startOfSection: SwStartNode,
     private formatColl: SwFormatColl = nodes.GetDoc().GetDfltTextFormatColl(),
+    nodeType: "text" | "graphic" = "text",
   ) {
-    super(nodes, "text", startOfSection);
+    super(nodes, nodeType, startOfSection);
     if (formatColl.GetAttrSet().GetPool() !== nodes.GetDoc().GetAttrPool())
       throw new Error("SwContentNode format collection belongs to another document.");
   }
@@ -519,9 +525,14 @@ export abstract class SwContentNode extends SwNode {
   private GetOrCreateSwAttrSet(): SwAttrSet {
     this.mpAttrSet.value ??= new SwAttrSet(
       this.GetDoc().GetAttrPool(),
-      WRITER_TEXT_NODE_WHICH_RANGES,
+      this.GetAttrSetRanges(),
       this.formatColl.GetAttrSet(),
     );
     return this.mpAttrSet.value;
+  }
+
+  /** Selects the original direct-attribute range for the content kind. @returns WhichId intervals. */
+  protected GetAttrSetRanges(): readonly (readonly [number, number])[] {
+    return WRITER_TEXT_NODE_WHICH_RANGES;
   }
 }

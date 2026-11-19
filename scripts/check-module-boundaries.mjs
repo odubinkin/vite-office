@@ -72,6 +72,16 @@ export function isForbiddenDomainVclImport(relativeSource, relativeTarget, typeO
   // ScPatternAttr::fillFontOnly in patattr.hxx receives a caller-owned vcl::Font reference.
   if (source === "sc/source/core/data/patattr.ts" && target === "vcl/source/font/font")
     return !typeOnly;
+  // The original Writer node and insertion APIs borrow a VCL Graphic value.
+  if (
+    target === "vcl/source/gdi/graph" &&
+    [
+      "sw/source/core/doc/DocumentContentOperationsManager.ts",
+      "sw/source/core/docnode/nodes.ts",
+      "sw/source/core/graphic/ndgrf.ts",
+    ].includes(source)
+  )
+    return !typeOnly;
   if (source === "sc/source/core/data/global.ts" && target === "vcl/source/app/svapp") return false;
   // chartlis.hxx/cxx consume native Idle,TaskPriority and Application queued-input admission.
   // These kernel contracts use an explicitly bound platform;they never import browser adapters.

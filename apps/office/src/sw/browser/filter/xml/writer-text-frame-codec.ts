@@ -1,4 +1,4 @@
-/** @fileoverview Worker transport for native HTML-imported Writer text fly frames and their section ownership. */
+/** @fileoverview Worker transport for native Writer fly frames and their text or graphic sections. */
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
@@ -7,9 +7,12 @@ import { RES_ANCHOR, RES_CNTNT } from "../../../inc/hintids";
 import { SwStartNodeType } from "../../../inc/ndtyp";
 import { aFrameFormatSetRange } from "../../../source/core/bastyp/init";
 import { SwPosition } from "../../../source/core/crsr/pam";
+import { SwPaM } from "../../../source/core/crsr/pam";
 import type { SwDoc } from "../../../source/core/doc/doc";
 import { MakeFlySection } from "../../../source/core/doc/doclay";
 import { SwStartNode } from "../../../source/core/docnode/node";
+import { aNoTextNodeSetRange } from "../../../source/core/docnode/ndnotxt";
+import type { SwGrfNode } from "../../../source/core/graphic/ndgrf";
 import { SwFlyFrameFormat } from "../../../source/core/layout/atrfrm";
 import type { SwTextNode } from "../../../source/core/txtnode/ndtxt";
 import {
@@ -18,16 +21,37 @@ import {
   type WriterSectionBlock,
 } from "./writer-document-content-codec";
 import { decodeSfxPoolItem, encodeSfxPoolItem } from "./item-codec";
+import { Graphic } from "../../../../vcl/source/gdi/graph";
+import { Size } from "../../../../tools/inc/gen";
 
 /** Native text anchors produced by the represented HTML table filter. */
 type TextFlyAnchor = RndStdIds.FLY_AT_PARA | RndStdIds.FLY_AT_CHAR;
-/** Native text-frame value record with its actual anchor and ordered section blocks. */
-export interface WriterTextFrameRecord {
+/** Native shared fly format with its actual attachment. */
+interface WriterFlyFrameFormatRecord {
   readonly name: string;
   readonly anchor: Readonly<{ type: TextFlyAnchor; node: number; offset: number }>;
   readonly items: readonly SfxPoolItemSnapshot[];
-  readonly blocks: readonly WriterSectionBlock[];
 }
+
+/** Encoded embedded graphic and its original direct items. */
+interface WriterGraphicNodeRecord {
+  readonly bytes: Uint8Array;
+  readonly mediaType: string;
+  readonly width: number;
+  readonly height: number;
+  readonly items: readonly SfxPoolItemSnapshot[];
+}
+
+/** Native frame format and exactly one of its represented content sections. */
+export type WriterTextFrameRecord = WriterFlyFrameFormatRecord &
+  (
+    | Readonly<{
+        readonly blocks: readonly WriterSectionBlock[];
+      }>
+    | Readonly<{
+        readonly graphic: WriterGraphicNodeRecord;
+      }>
+  );
 
 /** Encodes the Writer text fly sections, adding each section's text owners for later anchors and bookmarks. @param document - Actual document. @param textOwners - Body and preceding fly text nodes. @returns Cloneable native text-frame records. */
 export function* encodeTextFrames(
@@ -49,17 +73,26 @@ export function* encodeTextFrames(
     const node = text ? textOwners.indexOf(text) : -1;
     if (node < 0 || (type !== RndStdIds.FLY_AT_PARA && type !== RndStdIds.FLY_AT_CHAR))
       throw new Error("Writer text-frame anchor cannot be transported.");
-    const blocks = yield* encodeSectionBlocks(document, start, textOwners);
     const items: SfxPoolItemSnapshot[] = [];
     for (const item of format.GetAttrSet().entries())
       if (item.Which() !== RES_ANCHOR && item.Which() !== RES_CNTNT)
         items.push(encodeSfxPoolItem(item));
-    frames.push({
+    const formatRecord = {
       name: format.GetName(),
       anchor: { type, node, offset: anchor.GetAnchorContentOffset() },
       items,
-      blocks,
-    });
+    };
+    const graphic = document
+      .GetNodes()
+      .at(start.GetIndex() + 1)
+      .GetGrfNode();
+    if (graphic) {
+      frames.push({ ...formatRecord, graphic: encodeGraphicNode(graphic) });
+      yield;
+    } else {
+      const blocks = yield* encodeSectionBlocks(document, start, textOwners);
+      frames.push({ ...formatRecord, blocks });
+    }
   }
   return frames;
 }
@@ -74,12 +107,14 @@ export function* decodeTextFrames(
   if (!Array.isArray(frames)) throw new Error("Stored Writer text frames are invalid.");
   for (const record of frames as readonly WriterTextFrameRecord[]) {
     if (
-      !record ||
+      typeof record !== "object" ||
+      record === null ||
       typeof record.name !== "string" ||
       !record.anchor ||
       !Array.isArray(record.items) ||
-      !Array.isArray(record.blocks) ||
-      record.blocks.length === 0
+      ("graphic" in record
+        ? "blocks" in record
+        : !Array.isArray(record.blocks) || record.blocks.length === 0)
     )
       throw new Error("Stored Writer text frame is invalid.");
     const { type, node, offset } = record.anchor;
@@ -101,26 +136,11 @@ export function* decodeTextFrames(
     try {
       anchor.SetAnchor(position);
       set.Put(anchor);
-      for (const snapshot of record.items) {
-        if (
-          !snapshot ||
-          !Number.isInteger(snapshot.which) ||
-          !aFrameFormatSetRange.some(
-            /** Allows only original attributes admitted by the real fly frame. @param range - Native Which interval. @returns Whether the attribute belongs. */
-            ([first, last]) => snapshot.which >= first && snapshot.which <= last,
-          ) ||
-          snapshot.which === RES_ANCHOR ||
-          snapshot.which === RES_CNTNT
-        )
-          throw new Error("Stored Writer text-frame item is invalid.");
-        const item = decodeSfxPoolItem(document.GetAttrPool(), snapshot);
-        try {
-          set.Put(item);
-        } finally {
-          item.Dispose();
-        }
-      }
-      const format = MakeFlySection(document, type, position, set);
+      decodeFlyItems(set, record.items);
+      const format =
+        "graphic" in record
+          ? insertGraphic(document, position, set, record.graphic)
+          : MakeFlySection(document, type, position, set);
       format.SetFormatName(record.name);
       const content = format.GetContent().GetContentIdx()?.GetNode();
       if (!(content instanceof SwStartNode)) throw new Error("assert(Writer text-frame section)");
@@ -131,6 +151,82 @@ export function* decodeTextFrames(
       position.Dispose();
     }
 
-    yield* decodeSectionBlocks(document, start, record.blocks, textOwners);
+    if ("graphic" in record) yield;
+    else yield* decodeSectionBlocks(document, start, record.blocks, textOwners);
+  }
+}
+
+/** Captures the original graphic independently of its Writer fly format. @param node - Actual graphic content. @returns Transfer record. */
+function encodeGraphicNode(node: SwGrfNode): WriterGraphicNodeRecord {
+  const graphic = node.GetGraphic();
+  const size = node.GetTwipSize();
+  return {
+    bytes: graphic.GetNativeData(),
+    mediaType: graphic.mediaType,
+    width: size.Width(),
+    height: size.Height(),
+    items: (node.GetpSwAttrSet()?.entries() ?? []).map(encodeSfxPoolItem),
+  };
+}
+
+/** Checks item identity and restores original typed attributes inside their native owner. @param set - Actual target item set. @param items - Worker item records. @returns Nothing. */
+function decodeFlyItems(set: SfxItemSet, items: readonly SfxPoolItemSnapshot[]): void {
+  for (const snapshot of items) {
+    if (
+      !snapshot ||
+      !Number.isInteger(snapshot.which) ||
+      !set.GetRanges().some(
+        /** Checks native WhichId membership. @param range - Native interval. @returns Whether admitted. */
+        ([first, last]) => snapshot.which >= first && snapshot.which <= last,
+      ) ||
+      snapshot.which === RES_ANCHOR ||
+      snapshot.which === RES_CNTNT
+    )
+      throw new Error("Stored Writer text-frame item is invalid.");
+    const item = decodeSfxPoolItem(set.GetPool(), snapshot);
+    try {
+      set.Put(item);
+    } finally {
+      item.Dispose();
+    }
+  }
+}
+
+/** Recreates embedded data and attaches it through the real content operation. @param document - Destination Writer. @param position - Actual native anchor. @param frameItems - Frame attributes. @param record - Transferred graphic record. @returns Registered image fly format. */
+function insertGraphic(
+  document: SwDoc,
+  position: SwPosition,
+  frameItems: SfxItemSet,
+  record: WriterGraphicNodeRecord,
+): SwFlyFrameFormat {
+  if (
+    !record ||
+    !ArrayBuffer.isView(record.bytes) ||
+    Object.prototype.toString.call(record.bytes) !== "[object Uint8Array]" ||
+    record.bytes.length === 0 ||
+    typeof record.mediaType !== "string" ||
+    !/^image\/[\w.+-]+$/u.test(record.mediaType) ||
+    !Number.isSafeInteger(record.width) ||
+    !Number.isSafeInteger(record.height) ||
+    record.width < 0 ||
+    record.height < 0 ||
+    !Array.isArray(record.items)
+  )
+    throw new Error("Stored Writer graphic frame is invalid.");
+  const embedded = new Graphic(
+    record.bytes,
+    record.mediaType,
+    new Size(record.width, record.height),
+  );
+  const attributes = new SfxItemSet(document.GetAttrPool(), aNoTextNodeSetRange);
+  const selection = new SwPaM(position);
+  try {
+    decodeFlyItems(attributes, record.items);
+    return document
+      .GetDocumentContentOperationsManager()
+      .InsertGraphic(selection, embedded, frameItems, attributes.Count() ? attributes : undefined);
+  } finally {
+    selection.Dispose();
+    attributes.Dispose();
   }
 }
