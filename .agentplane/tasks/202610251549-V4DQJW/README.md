@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 347
+revision: 350
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-18T23:47:30.597Z"
+  updated_at: "2026-11-19T00:15:56.098Z"
   updated_by: "CODER"
-  note: "Writer DOCX ligatures, numeral form and number spacing checkpoint verified with 376 Writer tests, seven Chromium cases and 97.46% scoped branches. Full DOCX scope remains in progress."
-  attempts: 102
+  note: "DOCX theme font, language settings, Worker and primary ODT checkpoint verified with 133 Writer tests and seven Chromium scenarios. Full DOCX scope remains in progress."
+  attempts: 103
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1640,8 +1643,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T00:15:56.098Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "DOCX theme font, language settings, Worker and primary ODT checkpoint verified with 133 Writer tests and seven Chromium scenarios. Full DOCX scope remains in progress."
+  -
+    type: "status"
+    at: "2026-11-19T00:16:01.003Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-18T23:47:35.429Z"
+doc_updated_at: "2026-11-19T00:16:01.003Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -4714,6 +4730,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-19T00:15:56.098Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: DOCX theme font, language settings, Worker and primary ODT checkpoint verified with 133 Writer tests and seven Chromium scenarios. Full DOCX scope remains in progress.
+    Attempts: 103
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T00:15:55.497Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -5317,6 +5363,14 @@ sections:
     - Command: npm run test:coverage:writer -- docxexport docxattributeoutput OOXMLFactory OOXMLFastContextHandler WriterFileDialog writer-text-effect-codec writer-theme-codec native-text-default-schema odt-property-roundtrip StyleSheetTable PropertyMap TextEffectsHandler with the declared90 scoped gates. Result: 376 tests across25 files, 99.12% statements, 97.46% branches, 100% functions and 99.06% lines over the three new executable owners. The initial execution had two timeouts during concurrent build and one incorrect XML-space assertion, all resolved in the same selection.
     - Commands: production Chromium suite using writer-docx-theme.playwright.config.ts, static build, typecheck, scoped lint and Prettier, dependencies, JSDoc, tree/size/provenance, registry/invariants/parity, Calc and Writer resource checks, routing, doctor and diff. Result: seven Chromium cases and all gates passed. Doctor reported an existing hook readiness warning with no errors.
     - Evidence: `evidence/native-docx-text-effects.json`. Other Word 2010 effects, the rest of the DOCX run-default contribution and theme font application remain in the umbrella task. No full test run was due.
+
+    ### Writer DOCX theme font resolution and full source font scheme
+
+    - Sorted native rFonts resources reuse the original eight theme enumeration IDs. ThemeHandler mirrors the original LCID script mapping, supplemental preference, primary fallback and empty-name behavior. SettingsTable retains all three themeFontLang selections. Explicit Asian and complex-script items and the three document-default font items are applied to the actual Writer graph.
+    - DOCX writes font theme references from the native character interoperability bag and drops a reference if the corresponding resolved family has changed. It writes the relationship-backed theme settings and retains original supplemental font scheme records. The Worker carries the actual native default items, font theme references and language settings. Native ODT default-style and text-property XML retains resolved fonts, while Word-specific theme font references are absent after an ODT round trip.
+    - The unchanged pinned ThemeColorInHeading DOCX passes the original checks for both primary Latin typefaces and both supplemental lists of 47 typefaces. The Strict test confirms Japanese and Thai supplemental selection, original override order, document pool defaults, direct edits, DOCX/ODT reopen and Worker transfer.
+    - Commands: Writer scoped coverage over the DOCX theme/font/style properties, settings and document resources, native XML storage, Worker and file dialog. Result: 133 tests across 15 files passed. Both new executable theme owners passed the declared scoped threshold on every metric. The first concurrent execution exceeded the file-dialog test's existing asynchronous wait limit. The same suite selection passed serially.
+    - Commands: production Chromium desktop/mobile UI, static build, typecheck, scoped Prettier and ESLint, dependencies, JSDoc, file sizes, source tree, provenance, registry/invariants/parity, resource checks, doctor/routing/diff. Result: pass, including seven Chromium scenarios. Evidence: `evidence/native-docx-theme-fonts.json`. Umbrella DOCX scope remains open, including source shape text and unsupported Word effects. No full test run was due.
 id_source: "generated"
 ---
 ## Summary
@@ -8400,6 +8454,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-19T00:15:56.098Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: DOCX theme font, language settings, Worker and primary ODT checkpoint verified with 133 Writer tests and seven Chromium scenarios. Full DOCX scope remains in progress.
+Attempts: 103
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T00:15:55.497Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -9008,3 +9092,11 @@ Evidence: `evidence/docx-native-ranged-bookmarks.json`.
 - Command: npm run test:coverage:writer -- docxexport docxattributeoutput OOXMLFactory OOXMLFastContextHandler WriterFileDialog writer-text-effect-codec writer-theme-codec native-text-default-schema odt-property-roundtrip StyleSheetTable PropertyMap TextEffectsHandler with the declared90 scoped gates. Result: 376 tests across25 files, 99.12% statements, 97.46% branches, 100% functions and 99.06% lines over the three new executable owners. The initial execution had two timeouts during concurrent build and one incorrect XML-space assertion, all resolved in the same selection.
 - Commands: production Chromium suite using writer-docx-theme.playwright.config.ts, static build, typecheck, scoped lint and Prettier, dependencies, JSDoc, tree/size/provenance, registry/invariants/parity, Calc and Writer resource checks, routing, doctor and diff. Result: seven Chromium cases and all gates passed. Doctor reported an existing hook readiness warning with no errors.
 - Evidence: `evidence/native-docx-text-effects.json`. Other Word 2010 effects, the rest of the DOCX run-default contribution and theme font application remain in the umbrella task. No full test run was due.
+
+### Writer DOCX theme font resolution and full source font scheme
+
+- Sorted native rFonts resources reuse the original eight theme enumeration IDs. ThemeHandler mirrors the original LCID script mapping, supplemental preference, primary fallback and empty-name behavior. SettingsTable retains all three themeFontLang selections. Explicit Asian and complex-script items and the three document-default font items are applied to the actual Writer graph.
+- DOCX writes font theme references from the native character interoperability bag and drops a reference if the corresponding resolved family has changed. It writes the relationship-backed theme settings and retains original supplemental font scheme records. The Worker carries the actual native default items, font theme references and language settings. Native ODT default-style and text-property XML retains resolved fonts, while Word-specific theme font references are absent after an ODT round trip.
+- The unchanged pinned ThemeColorInHeading DOCX passes the original checks for both primary Latin typefaces and both supplemental lists of 47 typefaces. The Strict test confirms Japanese and Thai supplemental selection, original override order, document pool defaults, direct edits, DOCX/ODT reopen and Worker transfer.
+- Commands: Writer scoped coverage over the DOCX theme/font/style properties, settings and document resources, native XML storage, Worker and file dialog. Result: 133 tests across 15 files passed. Both new executable theme owners passed the declared scoped threshold on every metric. The first concurrent execution exceeded the file-dialog test's existing asynchronous wait limit. The same suite selection passed serially.
+- Commands: production Chromium desktop/mobile UI, static build, typecheck, scoped Prettier and ESLint, dependencies, JSDoc, file sizes, source tree, provenance, registry/invariants/parity, resource checks, doctor/routing/diff. Result: pass, including seven Chromium scenarios. Evidence: `evidence/native-docx-theme-fonts.json`. Umbrella DOCX scope remains open, including source shape text and unsupported Word effects. No full test run was due.

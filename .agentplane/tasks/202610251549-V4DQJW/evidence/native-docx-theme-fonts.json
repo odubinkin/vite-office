@@ -1,0 +1,100 @@
+{
+  "checkpoint": "Writer theme font resolution and DOCX/ODT round trips through the existing UI",
+  "createdAt": "2026-11-19T00:15:39.588Z",
+  "task": "202610251549-V4DQJW",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sw/source/writerfilter/dmapper/ThemeHandler.cxx#fromLCIDToScriptTag",
+    "sw/source/writerfilter/dmapper/ThemeHandler.cxx#ThemeHandler::getFontNameForTheme",
+    "sw/source/writerfilter/dmapper/SettingsTable.cxx#LN_CT_Language_eastAsia",
+    "sw/source/writerfilter/dmapper/DomainMapper.cxx#LN_CT_Fonts_asciiTheme",
+    "sw/source/writerfilter/dmapper/StyleSheetTable.cxx#LN_CT_DocDefaults_rPrDefault",
+    "sw/source/filter/ww8/docxattributeoutput.cxx#DocxAttributeOutput::CharGrabBag",
+    "sw/source/filter/ww8/docxexport.cxx#ThemeFontLangProps",
+    "sw/qa/core/theme/ThemeTest.cxx#testThemeFontSchemeRoundTripDOCX"
+  ],
+  "results": {
+    "writer": {
+      "files": 15,
+      "tests": 133
+    },
+    "chromium": 7,
+    "coverageThreshold": 90,
+    "coverage": {
+      "lines": {
+        "total": 47,
+        "covered": 47,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 51,
+        "covered": 51,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 36,
+        "covered": 36,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "observations": [
+    "The unchanged LibreOffice heading fixture retains both primary Latin fonts and both source lists of forty-seven supplemental fonts across direct DOCX reopens.",
+    "The Strict WordprocessingML fixture exercises original override order, Japanese and Thai supplemental families, default Latin font, partial-run editing, and complete language settings through the Worker.",
+    "Native ODT XML retains the concrete font families and the projected document-default style. ODT projects the resolved font, without the Word-specific font references or supplemental font scheme.",
+    "The first concurrent coverage run exceeded an existing five-second waitFor limit in one WriterFileDialog case; the repeat used the same selection serially."
+  ],
+  "fixtures": {
+    "vendor/libreoffice-reference/sw/qa/core/theme/data/ThemeColorInHeading.docx": "d50737470a0892671d2c5622b3369fa346dea74ce27933be710dce032c98cd8f",
+    "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/Test_ThemePortionLevel_CharColor.docx": "a840c2ad5c2bdf5af45742ab34a1878481354a04e3bfdedcbfdff9f28c6b44f7"
+  },
+  "files": {
+    "apps/office/src/sw/source/core/doc/doc.ts": "2a4a3f7a0c7bcefe683dbd13ed7c222423275b4a9fb5d99c0c78b676f752c363",
+    "apps/office/src/sw/source/writerfilter/dmapper/ThemeHandler.ts": "a13727edde4fe5f420a8d636673e72fdbe28b8cd6b4c66da59875133c3db5cda",
+    "apps/office/src/sw/source/writerfilter/dmapper/ThemeHandler.fonts.ts": "a415863e66d286c2dbcc2306f3a6388f5890f2c38074ffa5d0c9839c3140b21a",
+    "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.import.ts": "e8b3b89d349e741c592902034d8cdf5e01f4f4c0d4026032be5dac143385e77e",
+    "apps/office/src/sw/source/writerfilter/dmapper/SettingsTable.ts": "58a206f0d8229a8c302a5e7fdd985e1d360b1d50ac75e5f4568c4c5405cd7eea",
+    "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.ts": "800e5fa7081a51cfef49ea26271789c8be4864bb0929ed97df1905ed2d644b6b",
+    "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.ts": "08676b06fc98a90238fea4d48e7b1e6a560d40aa7483005b1f82021ed27ff4f4",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.run.ts": "498b6b768aa477da4373976dd4544a4ceb54a907be2a7010462fb12c8255a4b6",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.ts": "0717df32a02bb7647298fa828863a5cefa0be8e6e668b8668742bd0cb3a6ece1",
+    "apps/office/src/sw/source/filter/ww8/docxexport.text.ts": "c2c5a4398cec59fb5db074e039ba169eb260d453eb1769e4c3e03f64e439228d",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.styles.ts": "de156b17fb21ef82df4b0f199bcbb68f56753c4193ebbe7ab22753dcae611ebf",
+    "apps/office/src/sw/source/filter/ww8/docxexport.ts": "36a220afb7d268f3c0b2a7499821c76c1fd8ac5c341bfd717b682079bd109445",
+    "apps/office/src/sw/browser/filter/xml/writer-text-effect-codec.ts": "4867579d1717ab578bda818dc1d048c127c02cf2c90b7833611c139f99d830fa",
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": "8873ee1dea63127d35cf5a1077320cc0d72c88a50dbb674b37e079f25551ba10",
+    "apps/office/src/sw/source/filter/ww8/docxexport.theme-fonts.test.ts": "eff0a6768083a64f682e7485498de20fa260ecda0763a220a903a14e951e8f59",
+    "apps/office/src/sw/source/filter/xml/xmlexp.ts": "81068df3038bda365a0efbab415b0c9b6376d1d64d7078b9849bde8e377282ac",
+    "apps/office/src/sw/source/writerfilter/filter/WriterFilter.ts": "2980af20708a2863c159bd5af28902b5729e609a95eabd184b377266a8855bf1",
+    "apps/office/src/sw/source/writerfilter/dmapper/ThemeHandler.test.ts": "ef471b84bb017dc32b667902d8b4d735ce17569c7760f188ff04c5eeee605b2a",
+    "apps/office/src/sw/inc/doc.ts": "89cceb6ef0de4c12688fe7d0a3995411bd0d5de360dd182e8778136eb6bfa9ba",
+    "apps/office/e2e/writer-docx-theme.spec.ts": "8c04406421d06cacbddbe32599ca05117abbf27790a100032de6f3bbe1687f45"
+  },
+  "logs": {
+    "apps/office/coverage/themefonts-coverage-serial.log": "7c5fdb0bd353f4755bf6378fcce97756b0c97a0097adfb40ab0425bd99275435",
+    "apps/office/coverage/themefonts-browser-final.log": "e9e7dfb6bd9df9920010cb75b812e6ab7f755973644cb5bd2b0901ad86edf172",
+    "apps/office/coverage/themefonts-scoped/coverage-summary.json": "128611021cd61198bdc0670a547d84b220f5fa19a03ddf61a61f495f7c546ad8",
+    "apps/office/coverage/themefonts-static-final.log": "506f53cdbe302ea305a33c1469f2250ca20c34ea5e39581174ba84a8a5b39c0f",
+    "apps/office/coverage/themefonts-typecheck-final.log": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+    "apps/office/coverage/themefonts-structure.log": "5ddd1047ff7c5038b22302adc025a48e1adc9cb8444b9cc84b2ad75007986373",
+    "apps/office/coverage/themefonts-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "apps/office/coverage/themefonts-resources.log": "757355c84fa65ab850c595e5fe3fa55c7bacb41a43419c351f815daa276815bd",
+    "apps/office/coverage/themefonts-registry-final.log": "a5d243dc64e0ecf9e4f2f4354a2f787eda6c1d8e553340b2ab7976dafccbd5ba",
+    "apps/office/coverage/themefonts-format-final.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+  }
+}
