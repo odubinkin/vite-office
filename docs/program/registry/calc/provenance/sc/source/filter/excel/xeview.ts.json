@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/excel/xeview.ts",
+    "localSymbols": [
+      "SaveXmlTabViewSettings"
+    ],
+    "upstreamPath": "sc/source/filter/excel/xeview.cxx",
+    "upstreamSymbols": [
+      "XclExpTabViewSettings::SaveXml"
+    ],
+    "preservedResponsibilities": [
+      "Emits the independent per-sheet grid flag in sheetViews for workbook view zero, before the worksheet geometry and sheet data."
+    ],
+    "omittedResponsibilities": [
+      "Other sheet view options, alternate workbook views, chart sheets and BIFF records remain outside this mechanism."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xeview.ts",
+          "marker": "SaveXmlTabViewSettings"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
+          "marker": "tdf126541"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xeview.cxx",
+          "marker": "XclExpTabViewSettings::SaveXml"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests9/tdf126541_GridVisibilityImportXlsx.py",
+          "marker": "test_tdf126541_GridVisibilityImportXlsx"
+        }
+      ]
+    }
+  }
+}

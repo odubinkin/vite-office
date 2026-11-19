@@ -70,3 +70,57 @@ test("Calc restores the XLSX active sheet when several sheets are visible", /** 
   await expect(activeSheet).toHaveAttribute("aria-current", "page");
   await expect(cell).toHaveText("42");
 });
+
+test("Calc restores the XLSX sheet grid setting in the browser", /** Ports the interactive grid fixture through primary ODS, XLSX download, and mobile reopen. @param fixtures - Browser state. @param fixtures.page - Chromium page. @returns Completion. */ async ({
+  page,
+}) => {
+  const fixture = fileURLToPath(
+    new URL(
+      "../../../../vendor/libreoffice-reference/sc/qa/uitest/data/tdf126541_GridOff.xlsx",
+      import.meta.url,
+    ),
+  );
+  const open = page.getByRole("button", { name: "Open", exact: true });
+  const cell = page.getByRole("gridcell", { name: /^D4(?:\s|$)/u });
+  const hiddenBorder = /border-right:\s*1px solid transparent/u;
+  await page.goto("/calc");
+  await expect(cell).not.toHaveAttribute("style", hiddenBorder);
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles(fixture);
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(cell).toHaveAttribute("style", hiddenBorder);
+
+  await page.reload();
+  await open.click();
+  await page.getByRole("tab", { name: "In browser" }).click();
+  await page.getByRole("button", { name: "tdf126541_GridOff", exact: true }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(cell).toHaveAttribute("style", hiddenBorder);
+
+  const pending = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download XLSX" }).click();
+  const path = await (await pending).path();
+  if (!path) throw new Error("Missing XLSX download.");
+  const buffer = await readFile(path);
+  const archive = await DocumentArchive.open(buffer);
+  expect(await archive.readTextEntry("xl/worksheets/sheet1.xml")).toContain(
+    'showGridLines="false"',
+  );
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer,
+    name: "Grid settings reopened.xlsx",
+    mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(cell).toHaveAttribute("style", hiddenBorder);
+  await page.getByRole("menuitem", { name: "View", exact: true }).click();
+  await page.getByRole("menuitemcheckbox", { name: "View Grid Lines", exact: true }).click();
+  await expect(cell).not.toHaveAttribute("style", hiddenBorder);
+});

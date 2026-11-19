@@ -27,6 +27,7 @@ import {
   exportDefaultCellStyle,
 } from "../../../source/filter/xml/xmlstyle";
 import type { ScTable } from "../../../inc/table";
+import { ViewOption } from "../../../inc/viewopti";
 import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
 import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
 import { NUMBERFORMAT_ENTRY_NOT_FOUND } from "../../../../svl/inc/zforlist";
@@ -128,6 +129,7 @@ interface Sheet {
   readonly repeatColumns?: PrintRange;
   readonly repeatRows?: PrintRange;
   readonly name: string;
+  readonly showGrid?: boolean;
   readonly optimalMinRowHeight?: number;
   readonly cells: Cell[];
   readonly patterns: Pattern[];
@@ -148,6 +150,7 @@ export interface CalcDocumentRecord {
   readonly styles: string;
   readonly sheets: Sheet[];
   readonly visibleTab?: number;
+  readonly showGrid?: boolean;
   readonly nullDate?: number;
   readonly defaultWritingDirection?: D;
   readonly numberFormats?: readonly NumberFormat[];
@@ -248,6 +251,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
       ...(repeatColumns ? { repeatColumns: encodePrintRange(repeatColumns) } : {}),
       ...(repeatRows ? { repeatRows: encodePrintRange(repeatRows) } : {}),
       name: text(table.GetName()),
+      ...(document.GetSheetShowGrid(tab) ? {} : { showGrid: false }),
       optimalMinRowHeight: table.GetOptimalMinRowHeight(),
       cells: [],
       patterns: [],
@@ -404,6 +408,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     version: 1,
     sheets,
     ...(document.GetVisibleTab() ? { visibleTab: document.GetVisibleTab() } : {}),
+    ...(document.GetViewOptions().GetOption(ViewOption.GRID) ? {} : { showGrid: false }),
     nullDate: document.GetFormatTable().GetNullDate().GetDate(),
     ...(defaultWritingDirection === undefined ? {} : { defaultWritingDirection }),
     ...(numberFormats.length ? { numberFormats } : {}),
@@ -468,12 +473,15 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       try {
         if (!document.InsertTab(tab, name)) throw new Error("Calc worker sheet is invalid.");
         if (sheet.visible === false) document.SetVisible(tab, false);
+        if (typeof sheet.showGrid === "boolean") document.SetSheetShowGrid(tab, sheet.showGrid);
       } finally {
         name.dispose();
       }
     }
     if (record.visibleTab !== undefined && document.FetchTable(record.visibleTab))
       document.SetVisibleTab(record.visibleTab);
+    if (typeof record.showGrid === "boolean")
+      document.GetViewOptions().SetOption(ViewOption.GRID, record.showGrid);
     InsertRangeNames(
       document,
       (record.names ?? []).map(

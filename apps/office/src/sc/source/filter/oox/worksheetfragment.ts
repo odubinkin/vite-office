@@ -22,6 +22,7 @@ import { SheetDataBuffer } from "./sheetdatabuffer";
 import { readStyleBool, styleIndex, type StylesBuffer } from "./stylesbuffer";
 import { WorksheetGlobals } from "./worksheethelper";
 import { WorksheetSettings } from "./worksheetsettings";
+import { SheetViewSettings } from "./viewsettings";
 import { UnitConverter } from "./unitconverter";
 import { toDouble } from "../../../../o3tl/inc/string_view";
 import { attribute, isSpreadsheetTag } from "./workbookfragment";
@@ -29,6 +30,7 @@ import { attribute, isSpreadsheetTag } from "./workbookfragment";
 const sheetElements: Readonly<Record<string, readonly string[]>> = {
   "": ["worksheet"],
   worksheet: [
+    "sheetViews",
     "sheetFormatPr",
     "cols",
     "sheetData",
@@ -38,6 +40,7 @@ const sheetElements: Readonly<Record<string, readonly string[]>> = {
     "rowBreaks",
     "colBreaks",
   ],
+  sheetViews: ["sheetView"],
   cols: ["col"],
   protectedRanges: ["protectedRange"],
   mergeCells: ["mergeCell"],
@@ -62,6 +65,7 @@ export class WorksheetFragment extends FragmentHandler {
   private readonly address: ScAddress;
   private readonly sheetData: SheetDataBuffer;
   private readonly settings = new WorksheetSettings();
+  private readonly views = new SheetViewSettings();
   private readonly geometry: WorksheetGlobals;
   private row = -1;
   private column = 0;
@@ -120,6 +124,13 @@ export class WorksheetFragment extends FragmentHandler {
           );
         break;
       }
+      case "sheetView":
+        this.readAttributes(
+          attributes,
+          /** Dispatches the sheetView attributes. @param values - Borrowed XML attributes. @returns Nothing. */
+          (values) => this.views.importSheetView(values),
+        );
+        break;
       case "sheetProtection":
         this.readAttributes(
           attributes,
@@ -312,6 +323,7 @@ export class WorksheetFragment extends FragmentHandler {
     this.sheetData.finalizeImport();
     this.geometry.finalizeImport();
     this.settings.finalizeImport(this.document, this.tab);
+    this.views.finalizeImport(this.document, this.tab);
   }
   /** Native cell type dispatch and explicit OOXML formula grammar. @returns Nothing. */
   private commitCell(): void {

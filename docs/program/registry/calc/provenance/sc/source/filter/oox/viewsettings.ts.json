@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sc/source/filter/oox/viewsettings.ts",
+    "upstreamPath": "sc/source/filter/oox/viewsettings.cxx",
+    "localSymbols": [
+      "SheetViewSettings",
+      "importSheetView",
+      "finalizeImport"
+    ],
+    "upstreamSymbols": [
+      "SheetViewSettings::importSheetView",
+      "SheetViewSettings::finalizeImport"
+    ],
+    "preservedResponsibilities": [
+      "Reads the first worksheet view's grid flag with Excel's true default and transfers it to the active document's interactive view data."
+    ],
+    "omittedResponsibilities": [
+      "Other sheet view options, alternate workbook views, chart sheets and BIFF records remain outside this mechanism."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/oox/viewsettings.ts",
+          "marker": "SheetViewSettings"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
+          "marker": "tdf126541"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/viewsettings.cxx",
+          "marker": "SheetViewSettings::importSheetView"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/viewsettings.cxx",
+          "marker": "SheetViewSettings::finalizeImport"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests9/tdf126541_GridVisibilityImportXlsx.py",
+          "marker": "test_tdf126541_GridVisibilityImportXlsx"
+        }
+      ]
+    }
+  }
+}

@@ -583,6 +583,7 @@ export class ScDocument {
   private bAutoCalc: boolean;
   private readonly maTabs: (ScTable | null)[] = [];
   private nVisibleTab = 0;
+  private readonly maSheetsWithoutGrid = new WeakSet<ScTable>();
   private pBASM: ScBroadcastAreaSlotMachine | null = null;
   private eHardRecalcState = HardRecalcState.OFF;
   private mbTrackFormulasPending = false;
@@ -889,6 +890,8 @@ export class ScDocument {
   SetVisible = documentVisibility.SetVisible;
   GetVisibleTab = documentVisibility.GetVisibleTab;
   SetVisibleTab = documentVisibility.SetVisibleTab;
+  GetSheetShowGrid = documentVisibility.GetSheetShowGrid;
+  SetSheetShowGrid = documentVisibility.SetSheetShowGrid;
   GetName = document10.GetName;
   /** Applies native editable sheet-name character constraints without a fabricated length limit. @param name - Native Unicode name. @returns Validity. */
   static ValidTabName(name: OUStringConstReference): boolean {

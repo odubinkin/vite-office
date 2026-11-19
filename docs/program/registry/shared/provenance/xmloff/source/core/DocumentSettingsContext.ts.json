@@ -14,10 +14,11 @@
       "XMLDocumentSettingsContext::endFastElement"
     ],
     "preservedResponsibilities": [
-      "Resolves the original namespace-qualified configuration and view groups. The indexed Views property retains typed string entries in order, independently of boolean configuration properties."
+      "Resolves the original namespace-qualified configuration and view groups. The indexed Views property retains typed string entries in order, independently of boolean configuration properties.",
+      "Reads typed boolean view properties and the original named maps of scalar property sequences."
     ],
     "omittedResponsibilities": [
-      "Document-specific settings, named maps, and additional property types remain outside the represented groups."
+      "Document-specific settings and additional property types remain outside the represented groups."
     ],
     "evidence": {
       "local": [

@@ -23,7 +23,7 @@
         "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
         "apps/office/src/xmloff/source/core/DocumentSettingsContext.test.ts"
       ],
-      "justification": "Emits boolean configuration items and indexed view map entries containing the represented string properties. Other UNO settings value types, named maps, and additional document-specific groups remain outside the represented serialization.",
+      "justification": "Emits boolean configuration items and indexed view map entries containing the represented string properties. Other UNO settings value types, named maps, and additional document-specific groups remain outside the represented serialization. Writes scalar boolean view properties and real named map entries inside the indexed view settings.",
       "knownViolations": [],
       "localSymbols": [
         "exportConfigurationSettings",

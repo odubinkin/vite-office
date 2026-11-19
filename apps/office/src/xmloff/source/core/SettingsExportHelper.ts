@@ -4,6 +4,11 @@ import { escapeXml } from "../text/txtparae";
 import { ODF_NAMESPACES } from "./xmltoken";
 import type { ViewSettings } from "./DocumentSettingsContext";
 
+/** Encodes a typed scalar view property. @param name - Native name. @param value - Native scalar value. @returns XML. */
+function exportViewItem(name: string, value: string | boolean): string {
+  return `<config:config-item config:name="${escapeXml(name)}" config:type="${typeof value}">${escapeXml(String(value))}</config:config-item>`;
+}
+
 /** Writes the represented indexed native Views property. @param views - Ordered view records. @returns Settings XML. */
 export function exportViewSettings(views: ViewSettings): string {
   const { office, config, ooo } = ODF_NAMESPACES;
@@ -15,10 +20,19 @@ export function exportViewSettings(views: ViewSettings): string {
   ];
   for (const view of views) {
     output.push("<config:config-item-map-entry>");
-    for (const [name, value] of view)
-      output.push(
-        `<config:config-item config:name="${escapeXml(name)}" config:type="string">${escapeXml(value)}</config:config-item>`,
-      );
+    for (const [name, value] of view) {
+      if (typeof value === "string" || typeof value === "boolean") {
+        output.push(exportViewItem(name, value));
+        continue;
+      }
+      output.push(`<config:config-item-map-named config:name="${escapeXml(name)}">`);
+      for (const [entry, items] of value) {
+        output.push(`<config:config-item-map-entry config:name="${escapeXml(entry)}">`);
+        for (const [item, scalar] of items) output.push(exportViewItem(item, scalar));
+        output.push("</config:config-item-map-entry>");
+      }
+      output.push("</config:config-item-map-named>");
+    }
     output.push("</config:config-item-map-entry>");
   }
   output.push(

@@ -1,6 +1,8 @@
 /** @fileoverview Native office settings groups and indexed view XML admission. */
 import { expect, it } from "vitest";
-import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { PropertyState } from "../../../udkapi/com/sun/star/beans/PropertyState";
 import { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
 import { XMLDocumentSettingsContext, type ViewSettings } from "./DocumentSettingsContext";
 import { exportConfigurationSettings, exportViewSettings } from "./SettingsExportHelper";
@@ -67,6 +69,17 @@ it("decodes string view records in position order and independent boolean settin
           <c:config-item c:type="string">no name</c:config-item>
           <foreign:other><c:config-item c:name="Nested" c:type="string">ignored</c:config-item></foreign:other>
           <c:config-item c:name="ActiveTable" c:type="string">A&amp;<![CDATA[B]]><foreign:other>ignored</foreign:other></c:config-item>
+          <c:config-item c:name="ShowGrid" c:type="boolean">0</c:config-item>
+          <c:config-item-map-named c:name="Tables">
+            <foreign:other><c:config-item-map-entry c:name="Nested"/></foreign:other>
+            <c:config-item-map-entry/>
+            <c:config-item c:name="Wrong" c:type="boolean">true</c:config-item>
+            <c:config-item-map-entry c:name="A&amp;B">
+              <foreign:other><c:config-item c:name="Nested" c:type="boolean">true</c:config-item></foreign:other>
+              <c:config-item c:name="ShowGrid" c:type="boolean">false</c:config-item>
+              <c:config-item c:name="Ignored" c:type="short">5</c:config-item>
+            </c:config-item-map-entry>
+          </c:config-item-map-named>
         </c:config-item-map-entry>
       </c:config-item-map-indexed>
     </c:config-item-set>
@@ -82,6 +95,7 @@ it("decodes string view records in position order and independent boolean settin
     [
       ["ViewId", "view2"],
       ["ActiveTable", "A&B"],
+      ["Tables", [["A&B", [["ShowGrid", false]]]]],
     ],
   ]);
   expect(result.flags).toEqual([
@@ -92,12 +106,18 @@ it("decodes string view records in position order and independent boolean settin
 
 it("skips nonboolean native configuration values", /** Exercises typed export admission without affecting the view group. @returns Nothing. */ () => {
   const value = new PropertyValue();
+  const name = unicode("Show & Layout");
+  const flag = new Any(false);
+  const supported = new PropertyValue(name, 0, flag, PropertyState.DIRECT_VALUE);
   try {
-    expect(readSettings(exportConfigurationSettings([value]))).toEqual({
+    expect(readSettings(exportConfigurationSettings([value, supported]))).toEqual({
       views: undefined,
-      flags: [],
+      flags: [["Show & Layout", false]],
     });
   } finally {
+    supported.dispose();
+    flag.dispose();
+    name.dispose();
     value.dispose();
   }
 });
@@ -107,6 +127,19 @@ it("round-trips escaped view data and distinguishes absent and empty views", /**
     [
       ["ViewId", "view1"],
       ["ActiveTable", "R&D <Total>"],
+      ["ShowGrid", true],
+      [
+        "Tables",
+        [
+          [
+            "R&D <Total>",
+            [
+              ["ShowGrid", false],
+              ["Text", "<&>"],
+            ],
+          ],
+        ],
+      ],
     ],
   ] as const;
   expect(readSettings(exportViewSettings(views))).toEqual({ views, flags: [] });

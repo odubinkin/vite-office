@@ -6970,3 +6970,17 @@ the empty element, its native spelling, and the original admission check.
 - [Native matrix serialization](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/core/tool/compiler.cxx#L5724-L5769)
 - [Native array token admission](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/core/tool/token.cxx#L2027-L2051)
 - [Calc regression](../../apps/office/src/sc/source/core/tool/token.matrix.test.ts)
+
+### CALC-742 — Headless XLSX grid visibility uses the active sheet as a document-wide setting
+
+LibreOffice normally retains each worksheet's grid setting in its view data
+and enables document-wide grid visibility when opening XLSX. In true headless
+mode, LibreOffice omits view data on export and copies the active worksheet's
+grid flag into the document-wide option. The upstream comment notes that this
+loses the distinction between sheets that use different grid settings. The
+browser uses the interactive branch and retains the independent sheet settings
+through the existing view data transport.
+
+- [Native workbook view finalization](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/oox/viewsettings.cxx#L582-L599)
+- [Native headless regression](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/qa/unit/uicalc/uicalc.cxx#L52-L72)
+- [Calc interactive regression](../../apps/office/src/sc/source/ui/view/viewdata.settings.test.ts)

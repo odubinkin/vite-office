@@ -6,8 +6,14 @@ import { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue"
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "./xmlimp";
 import { ODF_NAMESPACES, XMLToken } from "./xmltoken";
 
-/** String properties of the represented indexed view records, in source order. */
-export type ViewSettings = readonly (readonly (readonly [string, string])[])[];
+/** Represented scalar properties of one native view record. */
+type ViewItem = readonly [name: string, value: string | boolean];
+/** Original named map of property sequences, in XML order. */
+export type NamedViewSettings = readonly (readonly [name: string, items: readonly ViewItem[]])[];
+/** Properties of one indexed view record. */
+type ViewProperty = readonly [name: string, value: ViewItem[1] | NamedViewSettings];
+/** Represented indexed view records, in source order. */
+export type ViewSettings = readonly (readonly ViewProperty[])[];
 
 /** Original office:settings context for the represented configuration-property sequence. */
 export class XMLDocumentSettingsContext extends SvXMLImportContext {
@@ -118,7 +124,7 @@ class XMLViewSettingsContext extends SvXMLImportContext {
 
 /** Collects the represented positional view entries, including empty records. */
 class XMLConfigItemMapIndexedContext extends SvXMLImportContext {
-  private readonly views: [string, string][][] = [];
+  private readonly views: ViewProperty[][] = [];
   /** Borrows the indexed map consumer. @param finish - Receives the ordered views. @returns Context. */
   constructor(private readonly finish: (views: ViewSettings) => void) {
     super();
@@ -126,7 +132,7 @@ class XMLConfigItemMapIndexedContext extends SvXMLImportContext {
   /** Appends each direct view entry in document order. @param element - Child token. @returns Child context. */
   override createFastChildContext(element: XMLToken): SvXMLImportContext {
     if (element !== XMLToken.CONFIG_ITEM_MAP_ENTRY) return new SvXMLIgnoreContext(true);
-    const view: [string, string][] = [];
+    const view: ViewProperty[] = [];
     this.views.push(view);
     return new XMLConfigItemMapEntryContext(view);
   }
@@ -143,7 +149,7 @@ class XMLConfigItemMapIndexedContext extends SvXMLImportContext {
 /** Reads the direct string properties of one view entry. */
 class XMLConfigItemMapEntryContext extends SvXMLImportContext {
   /** Binds one mutable entry while the map is being parsed. @param view - Property vector. @returns Context. */
-  constructor(private readonly view: [string, string][]) {
+  constructor(private readonly view: ViewProperty[]) {
     super();
   }
   /** Extracts a typed string property with its original name. @param element - Child token. @param attributes - Source attributes. @returns Child context. */
@@ -152,23 +158,84 @@ class XMLConfigItemMapEntryContext extends SvXMLImportContext {
     attributes: FastAttributeList,
   ): SvXMLImportContext {
     const name = attributes.get(XMLToken.CONFIG_NAME);
-    if (
-      element !== XMLToken.CONFIG_ITEM ||
-      !name ||
-      attributes.get(XMLToken.CONFIG_TYPE) !== "string"
-    )
-      return new SvXMLIgnoreContext(true);
-    return new XMLConfigItemContext(
-      /** Retains decoded text in document order. @param value - String value. @returns Nothing. */
-      (value) => {
-        this.view.push([name, value]);
-      },
-    );
+    if (!name) return new SvXMLIgnoreContext(true);
+    if (element === XMLToken.CONFIG_ITEM_MAP_NAMED) {
+      const map: [string, ViewItem[]][] = [];
+      this.view.push([name, map]);
+      return new XMLConfigItemMapNamedContext(map);
+    }
+    return createViewItem(element, attributes, this.view);
   }
   /** Ignores unknown descendants without promoting nested properties. @returns Ignore context. */
   override createUnknownChildContext(): SvXMLImportContext {
     return new SvXMLIgnoreContext(true);
   }
+}
+
+/** Collects named entries of the original configuration map. */
+class XMLConfigItemMapNamedContext extends SvXMLImportContext {
+  /** Borrows the named map output. @param map - Collected entries. @returns Context. */
+  constructor(private readonly map: [string, ViewItem[]][]) {
+    super();
+  }
+
+  /** Reads one named entry and delegates its scalar children. @param element - Child token. @param attributes - Source attributes. @returns Child context. */
+  override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    const name = attributes.get(XMLToken.CONFIG_NAME);
+    if (element !== XMLToken.CONFIG_ITEM_MAP_ENTRY || name === null)
+      return new SvXMLIgnoreContext(true);
+    const items: ViewItem[] = [];
+    this.map.push([name, items]);
+    return new XMLNamedViewEntryContext(items);
+  }
+
+  /** Skips foreign entries as whole subtrees. @returns Ignore context. */
+  override createUnknownChildContext(): SvXMLImportContext {
+    return new SvXMLIgnoreContext(true);
+  }
+}
+
+/** Reads the scalar property sequence of one named view entry. */
+class XMLNamedViewEntryContext extends SvXMLImportContext {
+  /** Borrows the named entry output. @param items - Collected items. @returns Context. */
+  constructor(private readonly items: ViewItem[]) {
+    super();
+  }
+
+  /** Reads one represented configuration scalar. @param element - Child token. @param attributes - Source attributes. @returns Child context. */
+  override createFastChildContext(
+    element: XMLToken,
+    attributes: FastAttributeList,
+  ): SvXMLImportContext {
+    return createViewItem(element, attributes, this.items);
+  }
+
+  /** Skips foreign items as whole subtrees. @returns Ignore context. */
+  override createUnknownChildContext(): SvXMLImportContext {
+    return new SvXMLIgnoreContext(true);
+  }
+}
+
+/** Reads one typed member of a view property sequence. @param element - Child token. @param attributes - Source attributes. @param output - Collected properties. @returns Child context. */
+function createViewItem(
+  element: XMLToken,
+  attributes: FastAttributeList,
+  output: ViewItem[] | ViewProperty[],
+): SvXMLImportContext {
+  const name = attributes.get(XMLToken.CONFIG_NAME);
+  const type = attributes.get(XMLToken.CONFIG_TYPE);
+  if (element !== XMLToken.CONFIG_ITEM || !name || (type !== "string" && type !== "boolean"))
+    return new SvXMLIgnoreContext(true);
+  return new XMLConfigItemContext(
+    /** Stores the typed scalar in native property order. @param value - XML text. @returns Nothing. */
+    (value) => {
+      if (type === "string") output.push([name, value]);
+      else if (value === "true" || value === "false") output.push([name, value === "true"]);
+    },
+  );
 }
 
 /** A configuration item set retains typed boolean properties in input order. */

@@ -15,10 +15,11 @@
       "ScViewData::WriteUserDataSequence"
     ],
     "preservedResponsibilities": [
-      "Reads the original ActiveTable property by sheet name from the primary saved view and emits the actual selected sheet in the indexed ODF view settings."
+      "Reads the original ActiveTable property by sheet name from the primary saved view and emits the actual selected sheet in the indexed ODF view settings.",
+      "Reads and writes the native ShowGrid values independently at the workbook level and inside the Tables map keyed by sheet name."
     ],
     "omittedResponsibilities": [
-      "Per-sheet cursor, window, zoom, split, and named-view-holder properties remain outside the represented view settings."
+      "Cursor, window, zoom, split and other view properties remain outside this mechanism."
     ],
     "evidence": {
       "local": [

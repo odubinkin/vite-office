@@ -23,6 +23,7 @@ import { XclExpMergedcells, XclExpSst } from "./xecontent";
 import { CreateString } from "./xehelper";
 import { SaveXmlPageBreaks } from "./xepage";
 import { SaveXmlNames } from "./xename";
+import { SaveXmlTabViewSettings } from "./xeview";
 import { XclExpOutlineBuffer } from "./xetable.outline";
 import { XclExpXFBuffer, type XclExpFontBuffer } from "./xestyle.xml";
 
@@ -347,6 +348,7 @@ function SaveXmlSheet(
   const serializer = stream.GetCurrentStream();
   const row = token("row");
   serializer.startElement(token("worksheet"), token("xmlns"), spreadsheetNamespace);
+  SaveXmlTabViewSettings(stream, document, tab);
   const table = document.FetchTable(tab);
   if (!table) throw new Error("Worksheet table is missing.");
   const lastRow = document.MaxRow();

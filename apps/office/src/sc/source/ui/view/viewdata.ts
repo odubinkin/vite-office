@@ -207,6 +207,7 @@ export class ScViewData {
   /** Uses the real document limits and native initial selected tab0. @param mrDoc - Borrowed canonical document. @returns View data. */
   constructor(private readonly mrDoc: ScDocument) {
     this.maOptions = new ScViewOptions(mrDoc.GetViewOptions());
+    this.pThisTab.bShowGrid = mrDoc.GetSheetShowGrid(0);
     this.maMarkData = new ScMarkData(mrDoc.GetSheetLimits());
     this.maMarkData.SelectOneTable(0);
   }
@@ -234,6 +235,7 @@ export class ScViewData {
   SetShowGrid(visible: boolean): void {
     for (const tab of this.maMarkData) this.CreateTabData(tab);
     this.pThisTab.bShowGrid = visible;
+    this.mrDoc.SetSheetShowGrid(this.mnTabNumber, visible);
   }
   /** Borrows the document rather than projecting another cell model. @returns Actual document. */
   GetDocument(): ScDocument {
@@ -257,7 +259,11 @@ export class ScViewData {
   /** Allocates only the requested cursor slot, preserving unvisited holes and prior cursor values. @param nNewTab - Valid tab index, caller precondition. @returns Nothing. */
   private CreateTabData(nNewTab: number): void {
     if (this.maTabData.length <= nNewTab) this.maTabData.length = nNewTab + 1;
-    this.maTabData[nNewTab] ??= new ScViewDataTable();
+    if (!this.maTabData[nNewTab]) {
+      const table = new ScViewDataTable();
+      table.bShowGrid = this.mrDoc.GetSheetShowGrid(nNewTab);
+      this.maTabData[nNewTab] = table;
+    }
   }
   /** Fetches native cursor data without allocating a slot. @param nTabIndex - Requested tab. @returns Data or null for invalid/uncreated slots. */
   private FetchTableData(nTabIndex: number): ScViewDataTable | null {

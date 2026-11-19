@@ -32,3 +32,17 @@ export function GetVisibleTab(this: ScDocument): number {
 export function SetVisibleTab(this: ScDocument, tab: number): void {
   this["nVisibleTab"] = tab;
 }
+
+/** Reads the sheet view setting carried with a detached document. @param this - Workbook. @param tab - Native tab. @returns Grid visibility, true by default. */
+export function GetSheetShowGrid(this: ScDocument, tab: number): boolean {
+  const sheet = this.FetchTable(tab);
+  return !sheet || !this["maSheetsWithoutGrid"].has(sheet);
+}
+
+/** Stores the detached sheet view without changing global Calc options. @param this - Workbook. @param tab - Native tab. @param show - Sheet grid visibility. @returns Nothing. */
+export function SetSheetShowGrid(this: ScDocument, tab: number, show: boolean): void {
+  const sheet = this.FetchTable(tab);
+  if (!sheet) return;
+  if (show) this["maSheetsWithoutGrid"].delete(sheet);
+  else this["maSheetsWithoutGrid"].add(sheet);
+}
