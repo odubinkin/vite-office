@@ -1,0 +1,14 @@
+{
+  "scope": "Preserve floating PNG and JPEG images through local ODF XML snapshots and packaged ODT, including page-story ownership, actual anchor offsets and native frame styles.",
+  "implementation": "0ac7f404ee31",
+  "checks": {
+    "writer": { "files": 4, "passed": 40, "log": "odt-pic-writer-final.log" },
+    "graphic_helper": { "passed": 3, "statements": 100, "branches": 100, "functions": 100, "lines": 100, "log": "odt-pic-coverage.log" },
+    "production_browser": { "passed": 3, "logs": ["odt-pic-browser-private.log", "odt-pic-browser-regressions.log"] },
+    "other": ["typecheck", "production build", "ESLint and Prettier on touched files", "JSDoc", "file size", "module boundaries", "Agentplane routing", "git diff check"]
+  },
+  "native_asset_scope": "Uses draw:frame/draw:image in the owner stream and a Pictures resource declared in the package manifest. A shared helper stores identical raster bytes once across body and page stories.",
+  "private_input": "Production Writer opened the supplied DOCX, persisted it locally, reloaded and reopened the local copy, then exported a DOCX with the original header JPEG bytes and header-local media relationship. The source and temporary probe are excluded from Git.",
+  "registry_check_failure": "The existing repository check still reports missing records for OfficeTooltips.tsx and available-menu-items.ts.",
+  "pending": "Paint the embedded raster in the actual page-story layout and extend inline, other formats and remaining shape behavior."
+}
