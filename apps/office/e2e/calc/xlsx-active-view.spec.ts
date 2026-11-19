@@ -387,3 +387,44 @@ test("Calc opens and recalculates the original tdf70455 workbook", /** Ports the
   await name.press("Enter");
   await expect(result).toHaveText("€780.00");
 });
+
+test("Calc exports the long sheet name in tdf79998 without changing the open ODS", /** Reopens the actual XLSX download on mobile after verifying its native sheet references. @param fixtures - Browser fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
+  page,
+}) => {
+  const fixture = fileURLToPath(
+    new URL(
+      "../../../../vendor/libreoffice-reference/sc/qa/unit/data/ods/tdf79998.ods",
+      import.meta.url,
+    ),
+  );
+  const open = page.getByRole("button", { name: "Open", exact: true });
+  const sheets = page.getByRole("tablist", { name: "Sheets" });
+  const longName = "Utilities (FX Kurse, Kreditkarten etc)";
+  const shortName = "Utilities (FX Kurse, Kreditkart";
+  await page.goto("/calc");
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles(fixture);
+  await expect(sheets.getByRole("tab", { name: longName, exact: true })).toBeVisible();
+
+  const pending = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download XLSX" }).click();
+  const path = await (await pending).path();
+  if (path === null) throw new Error("Missing XLSX download.");
+  const buffer = await readFile(path);
+  const archive = await DocumentArchive.open(buffer);
+  expect(await archive.readTextEntry("xl/workbook.xml")).toContain('name="' + shortName + '"');
+  await expect(sheets.getByRole("tab", { name: longName, exact: true })).toBeVisible();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await open.click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer,
+    name: "Long sheet name reopened.xlsx",
+    mimeType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+  await expect(sheets.getByRole("tab", { name: shortName, exact: true })).toBeVisible();
+});

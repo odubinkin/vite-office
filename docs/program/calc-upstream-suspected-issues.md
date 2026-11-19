@@ -7088,3 +7088,20 @@ The local typed view reader retains both source rules.
 
 - [Original cursor property reader](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/ui/view/viewdata.cxx#L610-L634)
 - [Calc regression](../../apps/office/src/sc/source/ui/view/viewdata.settings.test.ts)
+
+### CALC-752 — A rejected rename can bypass the XLSX sheet name limit
+
+The XLSX exporter checks proposed names against a case-sensitive set.
+`ScDocument::RenameTab` then compares the proposed name to existing names
+using transliteration. With a sheet named `ABCDEFGHIJKLMNOPQRSTUVWXYZ12345`
+followed by one named `abcdefghijklmnopqrstuvwxyz12345 extra`, the exact-case
+lookup accepts the second sheet's 31-unit prefix. The document rejects the
+rename, and the exporter continues with the original overlength name. It
+reserves the rejected candidate and does not try a numeric suffix for that sheet.
+The same failure occurs when shortening a name makes an internal apostrophe
+the last character. The local exporter retains both source behaviors.
+
+- [Source candidate lookup and export validation](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/excel/xestream.cxx#L1206-L1268)
+- [Source document rename check](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/core/data/document.cxx#L943-L963)
+- [Source sheet name validation](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/core/data/document.cxx#L327-L358)
+- [Calc regression](../../apps/office/src/sc/source/filter/excel/xlsx-sheet-names.test.ts)

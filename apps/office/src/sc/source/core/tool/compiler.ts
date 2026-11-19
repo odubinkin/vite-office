@@ -77,6 +77,7 @@ const emptyParameterSuccessors = new Set<OpCode>([
 const sheetIdentifier = "(\\$?(?:'(?:[^']|'')+'|[\\p{L}\\p{N}_]+))";
 const excelSheet = new RegExp("^" + sheetIdentifier + "!", "u");
 const odfSheet = new RegExp("^" + sheetIdentifier + "\\.", "u");
+const deletedOdfSheet = /^(\$?)#REF!\./u;
 const a1Reference = /^\$?[A-Za-z]+\$?[1-9][0-9]*/u;
 const nameIdentifier = /^[\p{L}_][\p{L}\p{N}_.]*/u;
 const a1Range =
@@ -432,6 +433,8 @@ export class ScCompiler extends FormulaCompiler {
         FormulaGrammar.AddressConvention.CONV_ODF;
     if (odf && (reference.IsDeleted() || !this.rDoc.GetSheetLimits().ValidAddress(address)))
       return "[#REF!]";
+    if (this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML && reference.IsDeleted())
+      return "#REF!";
     const value = this.MakeOneRefStrImpl(reference, odf, 0);
     return odf ? "[" + value + "]" : value;
   }
@@ -446,6 +449,8 @@ export class ScCompiler extends FormulaCompiler {
         FormulaGrammar.AddressConvention.CONV_ODF;
     if (odf && (reference.IsDeleted() || !limits.ValidAddress(a) || !limits.ValidAddress(b)))
       return "[#REF!]";
+    if (this.meGrammar === FormulaGrammar.Grammar.GRAM_OOXML && reference.IsDeleted())
+      return "#REF!";
     let singleton: 0 | 1 | 2 = 0;
     if (
       limits.ValidColRow(a.Col(), a.Row()) &&
@@ -485,12 +490,13 @@ export class ScCompiler extends FormulaCompiler {
   ): FormulaToken | null {
     return extendRangeReference(this.rDoc.GetSheetLimits(), left, right, this.aPos, true);
   }
-  /** Binds the actual local range parser flags to native complex reference data. @param name - Unwrapped range source. @param tab - Resolved sheet index. @param qualified - Whether the range includes a sheet qualifier. @param absolute - Whether the sheet qualifier is absolute. @returns Parsed range. */
+  /** Binds the actual local range parser flags to native complex reference data. @param name - Unwrapped range source. @param tab - Resolved sheet index. @param qualified - Whether the range includes a sheet qualifier. @param absolute - Whether the sheet qualifier is absolute. @param deletedTab - Whether the reference points to a deleted sheet. @returns Parsed range. */
   private ParseDoubleReference(
     name: string,
     tab = this.aPos.Tab(),
     qualified = false,
     absolute = false,
+    deletedTab = false,
   ): boolean {
     const range = new ScRange(this.aPos, this.aPos),
       input = unicode(name);
@@ -513,6 +519,10 @@ export class ScCompiler extends FormulaCompiler {
     reference.Ref2.SetRowRel(!(flags & ScRefFlags.ROW2_ABS));
     reference.Ref2.SetTabRel(!absolute);
     reference.SetRange(this.rDoc.GetSheetLimits(), range, this.aPos);
+    if (deletedTab) {
+      reference.Ref1.SetTabDeleted(true);
+      reference.Ref2.SetTabDeleted(true);
+    }
     if (!(this.mpArr as ScTokenArray).AddDoubleReference(reference))
       this.SetError(FormulaError.CodeOverflow);
     return true;
@@ -521,12 +531,13 @@ export class ScCompiler extends FormulaCompiler {
   protected override SetError(error: FormulaError): void {
     if (this.mpArr.GetCodeError() === FormulaError.NONE) this.mpArr.SetCodeError(error);
   }
-  /** Binds valid local A1 parse flags to genuine relative/absolute native reference data. @param name - Unwrapped address. @param tab - Resolved sheet index. @param qualified - Whether the address includes a sheet qualifier. @param absolute - Whether the sheet qualifier is absolute. @returns Recognized reference. */
+  /** Binds valid local A1 parse flags to genuine relative/absolute native reference data. @param name - Unwrapped address. @param tab - Resolved sheet index. @param qualified - Whether the address includes a sheet qualifier. @param absolute - Whether the sheet qualifier is absolute. @param deletedTab - Whether the reference points to a deleted sheet. @returns Recognized reference. */
   private ParseSingleReference(
     name: string,
     tab = this.aPos.Tab(),
     qualified = false,
     absolute = false,
+    deletedTab = false,
   ): boolean {
     const address = new ScAddress(this.aPos);
     const input = unicode(name);
@@ -545,9 +556,22 @@ export class ScCompiler extends FormulaCompiler {
     reference.SetTabRel(!absolute);
     reference.SetFlag3D(qualified);
     reference.SetAddress(this.rDoc.GetSheetLimits(), address, this.aPos);
+    if (deletedTab) reference.SetTabDeleted(true);
     if (!(this.mpArr as ScTokenArray).AddSingleReference(reference))
       this.SetError(FormulaError.CodeOverflow);
     return true;
+  }
+  /** Recognizes the deleted sheet prefix in pre-5.1.4 ODFF references. @param source - Formula text at the current position. @param bracketed - Whether the whole enclosed reference must match. @returns Consumed source length, or zero. */
+  private ParsePredetectedErrRefReference(source: string, bracketed = false): number {
+    const qualifier = deletedOdfSheet.exec(source);
+    if (!qualifier) return 0;
+    const address = source.slice(qualifier[0].length);
+    const range = a1Range.exec(address);
+    const match = range ?? a1Reference.exec(address);
+    if (!match || (bracketed && match[0].length !== address.length)) return 0;
+    if (range) this.ParseDoubleReference(match[0], this.aPos.Tab(), true, !!qualifier[1], true);
+    else this.ParseSingleReference(match[0], this.aPos.Tab(), true, !!qualifier[1], true);
+    return qualifier[0].length + match[0].length;
   }
   /** Resolves a qualified sheet before passing the A1 part to the original address parser. @param sheet - Qualifier spelling. @returns Native sheet index. */
   private FindSheet(sheet: string): number | undefined {
@@ -666,6 +690,12 @@ export class ScCompiler extends FormulaCompiler {
       const odf =
         FormulaGrammar.extractRefConvention(this.meGrammar) ===
         FormulaGrammar.AddressConvention.CONV_ODF;
+      const deleted = odf ? this.ParsePredetectedErrRefReference(remaining) : 0;
+      if (deleted) {
+        index += deleted;
+        last = OpCode.ocPush;
+        continue;
+      }
       const external = parseExternalReference(remaining, this.meGrammar, this.rDoc, this.aPos);
       if (external) {
         if (!array.AddToken(external[1])) {
@@ -752,7 +782,7 @@ export class ScCompiler extends FormulaCompiler {
         if (error !== undefined) {
           if (!array.AddToken(new FormulaErrorToken(error)))
             this.SetError(FormulaError.CodeOverflow);
-        } else {
+        } else if (!this.ParsePredetectedErrRefReference(body, true)) {
           const qualifier = odfSheet.exec(body);
           const sheet = qualifier?.[1] ?? "";
           if (!qualifier && !body.startsWith("."))

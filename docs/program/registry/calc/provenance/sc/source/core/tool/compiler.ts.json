@@ -7,12 +7,15 @@
     "status": "mapped",
     "upstreamPath": "sc/source/core/tool/compiler.cxx",
     "localSymbols": [
-      "ScCompiler"
+      "ScCompiler",
+      "ParsePredetectedErrRefReference"
     ],
     "upstreamSymbols": [
       "ScCompiler::CompileString",
       "ScCompiler::ParseValue",
-      "ScCompiler::SetError"
+      "ScCompiler::SetError",
+      "ScCompiler::ParsePredetectedErrRefReference",
+      "struct ConventionXL_OOX"
     ],
     "preservedResponsibilities": [
       "Task200 connects numeric ODFF source to real ScTokenArray/shared FormulaCompiler RPN, ScInterpreter and existing ScFormulaResult inside the actual document-sheet-column formula blocks. Native scalar arithmetic precedence, code/runtime error projection, lazy result state, default bracket completion, forced recalc and logical formula-block events are represented. ScSheetLimits, RTL parsing/cancellation, mdds and shared token/result owners are reused. Formula pointers use JS GC; no physical pointer deletion or reference counting is introduced. Source constructor/service subsets are explicit. References/functions, localized formatter/string conversion, groups/listening/recalc dependencies, serialization/ODS/UI, complete contexts/RNG/caches/vector/hash scheduling and broad parity remain unsupported. Native power fenv-only subnormal classifications reject explicitly. Formula block copy/clone is noncopyable and unavailable semantic equality throws instead of substituting identity. Broad parity/verification flags remain false.",
@@ -25,7 +28,8 @@
       "Block75 compute-II work in progress ports the original238-row classification table,seven-slot RunData initialization,repeat indexing,Unknown fallback,macro/return/signed-opcode behavior and explicit Init/Exit cache lifetime. Static data audit matches every original row;this is not native class execution. External AddIn argument collections remain explicitly unported,with the original Unknown return-type result retained. The existing per-realm compiler symbol bootstrap invokes actual classification Init after symbols,corresponding to that portion of native ScGlobal::Init without a replacement global service. Original shared compiler compute-II flag,empty virtual hooks,borrowed actual RPN buffer/offset locations,eight-argument cap and PostProcessCode timing are represented. Calc schedules and applies local scalar arithmetic II replacements only after final context,while preserving lexical ranges,relative flags and source exclusions for fully absolute rows,trivial or ambiguous ranges. Existing unsupported opcode/array/matrix admission remains explicit. ScFormulaCell owns actual native cMatrixFlag/GetMatrixFlag,explicit precompiled-token mode construction and copied mode state. Original matrix-reference formula output resolves its actual local RPN reference through the document and falls back to real source tokens when the origin is absent;non-normal output retains native braces. Matrix compilation and evaluation remain explicit unsupported services rather than scalar substitutes. The owned-array constructor creates a compiler only when RPN is missing,as in source. The classification constant-table diagnostic branch is specialized only for the proved invariant that all238 actual upstream repeated rows supply at least their repeat count of leading parameters;the source-data audit asserts that invariant. Twelve actual libc++64 double-hash bit patterns now match normal and ASan/UBSan,including a finite value whose native folded token hash is one. This is a primitive observation,not a full native Calc differential. Actual group compileCode enables II for missing RPN and retains precompiled,error and subtotal-detection branches. Source default column/table group listeners and earlier copy/ownership work remain unchanged. CALC258 preserves the source fallback-comment discrepancy. This does not complete document modes/pool identity,full native differential or final raw100/quality acceptance.",
       "Source-scoped scalar frontend proof:all20 admitted opcodes are audited;11 actual operation classifications are Value/Array arithmetic or reference-like aggregates. Unsupported matrix/forced-array/reference-return/function contexts remain rejected by actual shared admission. General private exclusion/classification paths for those unconsumed contexts and duplicate base-gated flag/fixed-arity checks are omitted. Original bad-expression location validation,actual RPN locations and pending identity guard remain;the latter handles genuinely aliased slots in malformed expressions. In the same dense array,a surviving non-null identical slot implies the native pointer-end bound. Nested range-tail reduction and actual evaluation vectors verify stable earlier operand roots. This is an accepted-domain/language-representation proof,not whole native Calc execution or matrix support.",
       "J0Z0KF native import-transfer checkpoint adds all4setFormulaCell overload paths over actual typed stores: numeric/string caches, owned token arrays and raw cells. Every non-null formula uses real document link inspection; raw overwrite unshares the actual old formula group, preserving the distinct source/token path. Rejected owned arrays release locally while raw cells remain caller-owned; release precedes the storage call. Numeric/string-only fillDown uses native cached column reads and existing vector/mdds range storage, preserving empty string, signed zero and error NaN bits. Raw append/count and direct origin-date options setup retain source editing/formatter boundaries. Actual formula defaults, clean empty construction and hybrid-string forwarding use existing owners. Initial native UI grammar resolves the real document convention as in SetGrammarAndRefConvention; full symbol maps and later unspecified transitions remain unported, and unsupported conventions still reject. Native const-token copy construction, style/Latin hints, matrix/data-table/visibility/merge import, outline/compute-cache finalization, full workbook/filter/UI and physical native ABI/lifetime parity remain unverified. CALC-521 is source-only; no null graph or fake provider/allocator is used.",
-      "Compiles literal array tokens using the grammar separators and writes source-shaped typed inline matrix expressions."
+      "Compiles literal array tokens using the grammar separators and writes source-shaped typed inline matrix expressions.",
+      "Recognizes the represented legacy ODFF deleted-sheet qualifier, retaining native reference flags and serializing deleted references in their current ODFF and OOXML spellings."
     ],
     "omittedResponsibilities": [
       "All services outside the explicitly represented numeric formula/arithmetic subset remain unsupported; no broad parity claim.",
@@ -88,6 +92,10 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.named-arrays.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xlsx-sheet-names.test.ts",
+          "marker": "exports the original tdf79998 ODS sheet"
         }
       ],
       "upstream": [
@@ -106,6 +114,14 @@
         {
           "path": "sc/source/core/tool/compiler.cxx",
           "marker": "ScCompiler::CreateStringFromMatrix"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx",
+          "marker": "ScCompiler::ParsePredetectedErrRefReference"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/compiler.cxx",
+          "marker": "struct ConventionXL_OOX"
         }
       ]
     }

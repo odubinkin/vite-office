@@ -26,14 +26,18 @@
         "vendor/libreoffice-reference/sc/source/filter/excel/xetable.cxx#XclExpFormulaCell::SaveXml",
         "apps/office/src/sc/source/filter/oox/excelfilter.alignment.test.ts",
         "apps/office/src/sc/source/filter/oox/excelfilter.sheet-protection.test.ts",
-        "apps/office/src/sc/source/filter/oox/excelfilter.enhanced-protection.test.ts"
+        "apps/office/src/sc/source/filter/oox/excelfilter.enhanced-protection.test.ts",
+        "apps/office/src/sc/source/filter/excel/xlsx-sheet-names.test.ts",
+        "vendor/libreoffice-reference/sc/qa/unit/data/ods/tdf79998.ods",
+        "vendor/libreoffice-reference/sc/source/filter/excel/excdoc.cxx#ExcDocument::WriteXml"
       ],
-      "justification": "XLSX open and download reach the native Calc workbook through the existing shell and dialogs. Worksheet relationships, shared strings, sparse cells, merged ranges, visual cell and column styles and local/editable shared formulas are exercised. Number formats, themed and rich formatting, and formula conventions beyond the supported Calc compiler remain open. Worksheet records now emit sheetFormatPr and hidden/custom geometry and integrate geometry-only rows into the sparse cell traversal. Emits native outline depth, grouped geometry-only rows, column ranges and collapse markers with original retained widths. The transitional workbook header writes date1904 from the formatter null date. The source numeric serials are retained. Formula cached values use the original XclXmlUtils type and value conversion for numbers, strings, logical values and errors. Writes original shared-string references for text and edit cells. Formula result typing stays with the existing formula result helper. LabelSST cells collect character ranges with the native XLSX string helper before the SST and run fonts are written. Writes the represented native theme part and workbook relationship. Supplies the original export reference device to the XF owner. Writes the protection record after sheetData and before merge records. Writes the enhanced protection record with the actual workbook context.",
+      "justification": "XLSX open and download reach the native Calc workbook through the existing shell and dialogs. Worksheet relationships, shared strings, sparse cells, merged ranges, visual cell and column styles and local/editable shared formulas are exercised. Number formats, themed and rich formatting, and formula conventions beyond the supported Calc compiler remain open. Worksheet records now emit sheetFormatPr and hidden/custom geometry and integrate geometry-only rows into the sparse cell traversal. Emits native outline depth, grouped geometry-only rows, column ranges and collapse markers with original retained widths. The transitional workbook header writes date1904 from the formatter null date. The source numeric serials are retained. Formula cached values use the original XclXmlUtils type and value conversion for numbers, strings, logical values and errors. Writes original shared-string references for text and edit cells. Formula result typing stays with the existing formula result helper. LabelSST cells collect character ranges with the native XLSX string helper before the SST and run fonts are written. Writes the represented native theme part and workbook relationship. Supplies the original export reference device to the XF owner. Writes the protection record after sheetData and before merge records. Writes the enhanced protection record with the actual workbook context. Writes name records, names used in formulas and print areas, and worksheet parts under the same temporary export worksheet names.",
       "knownViolations": [],
       "localSymbols": [
         "exportXlsx",
         "SaveXmlCell",
-        "SaveXmlSheet"
+        "SaveXmlSheet",
+        "SaveXmlWorkbook"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/filter/excel/xetable.cxx",

@@ -457,6 +457,20 @@ export async function exportXlsx(
   device?: XlsxReferenceDevice,
 ): Promise<Uint8Array> {
   const output = new XclExpXmlStream(new ZipStorage(), false, false);
+  output.WithValidatedTabNames(
+    document,
+    /** Serializes workbook names and native formula references in one scope. @returns Nothing. */
+    () => SaveXmlWorkbook(output, document, device),
+  );
+  return await output.commitStorage();
+}
+
+/** Writes the workbook and its related streams using the validated export names. @param output - Package writer. @param document - Native workbook. @param device - Workbook reference device. @returns Nothing. */
+function SaveXmlWorkbook(
+  output: XclExpXmlStream,
+  document: ScDocument,
+  device?: XlsxReferenceDevice,
+): void {
   const path = "xl/workbook.xml";
   output.addRelation(getRelationship(Relationship.OFFICEDOCUMENT), path);
   const workbook = output.openFragmentStreamWithSerializer(path, workbookType);
@@ -551,5 +565,4 @@ export async function exportXlsx(
   SaveXmlNames(workbook, document);
   workbook.endElement(token("workbook"));
   workbook.endDocument();
-  return await output.commitStorage();
 }

@@ -37,6 +37,9 @@ import {
 } from "../inc/xlconst";
 import type { FormulaError } from "../../../../formula/inc/errorcodes";
 import type { FastSerializerHelper } from "../../../../sax/inc/fshelper";
+
+const MAX_TAB_NAME_LENGTH = 31;
+
 /** Original XML error spelling; SPILL deliberately serializes as VALUE, unlike its binary byte. @param error - Calc error. @returns ASCII spelling. */
 function lcl_GetErrorString(error: FormulaError): string {
   switch (XclTools.GetXclErrorCode(error)) {
@@ -296,6 +299,42 @@ export const XclXmlUtils = {
 type AttributeValue = OUStringConstReference | string | Uint8Array | null;
 /** Original source owner for current XML part and previously opened parts. */
 export class XclExpXmlStream extends XmlFilterBase {
+  /** Generates an Excel tab name, reserving both original and already assigned names. @param original - Native source name. @param used - Original and assigned names. @returns Export name or an empty string. */
+  static GenerateUniqueTableName(original: string, used: ReadonlySet<string>): string {
+    const truncated = original.slice(0, MAX_TAB_NAME_LENGTH);
+    if (!used.has(truncated)) return truncated;
+    for (let suffix = 1; suffix < 1_000_000_000; ++suffix) {
+      const ending = "-" + suffix;
+      const candidate = original.slice(0, MAX_TAB_NAME_LENGTH - ending.length) + ending;
+      if (!used.has(candidate)) return candidate;
+    }
+    return "";
+  }
+
+  /** Applies the native temporary export renames during synchronous package serialization. @param document - Workbook. @param write - Package stream writer. @returns Nothing. */
+  WithValidatedTabNames(document: ScDocument, write: () => void): void {
+    const original = document.GetAllTableNames();
+    const used = new Set(original.map(text));
+    const renamed: number[] = [];
+    try {
+      for (const [tab, name] of original.entries()) {
+        if (name.getLength() <= MAX_TAB_NAME_LENGTH) continue;
+        const candidate = XclExpXmlStream.GenerateUniqueTableName(text(name), used);
+        if (!candidate) continue;
+        used.add(candidate);
+        const nativeName = unicode(candidate);
+        try {
+          if (document.RenameTab(tab, nativeName)) renamed.push(tab);
+        } finally {
+          nativeName.dispose();
+        }
+      }
+      write();
+    } finally {
+      for (const tab of renamed) document.RenameTab(tab, original[tab] as OUString);
+      for (const name of original) name.dispose();
+    }
+  }
   private readonly maStreams: FastSerializerHelper[] = [];
   private readonly maOpenedStreamMap = new Map<
     string,

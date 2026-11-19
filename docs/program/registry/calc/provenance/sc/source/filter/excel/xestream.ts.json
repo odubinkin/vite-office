@@ -15,7 +15,9 @@
       "WriteElement",
       "lcl_GetErrorString",
       "XclExpXmlStream",
-      "WriteFontData"
+      "WriteFontData",
+      "GenerateUniqueTableName",
+      "WithValidatedTabNames"
     ],
     "upstreamSymbols": [
       "XclXmlUtils::GetFormulaTypeAndValue",
@@ -26,7 +28,10 @@
       "XclExpXmlStream::CreateOutputStream",
       "XclExpXmlStream::WriteAttribute",
       "XclExpXmlStream::GetCurrentStream",
-      "XclXmlUtils::WriteFontData"
+      "XclXmlUtils::WriteFontData",
+      "XclExpXmlStream::GenerateUniqueTableName",
+      "XclExpXmlStream::validateTabNames",
+      "XclExpXmlStream::restoreTabNames"
     ],
     "evidence": {
       "local": [
@@ -49,12 +54,28 @@
         {
           "path": "apps/office/src/sc/source/filter/excel/xlstyle.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xlsx-sheet-names.test.ts",
+          "marker": "exports the original tdf79998 ODS sheet"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/filter/excel/xestream.cxx",
           "marker": "XclXmlUtils::GetFormulaTypeAndValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xestream.cxx",
+          "marker": "XclExpXmlStream::GenerateUniqueTableName"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xestream.cxx",
+          "marker": "XclExpXmlStream::validateTabNames"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xestream.cxx",
+          "marker": "XclExpXmlStream::restoreTabNames"
         }
       ]
     },
@@ -63,7 +84,8 @@
       "J0Z0KF export-string checkpoint ports original XclExpString value construction/assignment/append, actual SAL byte conversion, UTF16 and byte limits, sticky Unicode/LF flags, formatting-run limits/deduplication, hashes/comparisons and memory header/buffer output. XclXmlUtils accepts the actual value and delegates to its Unicode vector, including original empty-vector behavior in byte mode. Actual ZIP/XML text emission is tested. Native record-stream Write/PrepareWrite and their NoHeader state, full XclExpXmlStream/root/font-rich output, diagnostics/invalid pointer domains and full XLSX workbook/UI acceptance remain unported or unqualified; no fake stream/font/global provider is supplied. CALC682 records original mixed-mode ordering assumptions. Existing Uint8Array UTF8 transport remains explicit; JS owns physical vectors.",
       "Implicit XclExpString value-copy construction clones both actual buffers and each formatting run, retaining original limits, encoding flags and display override. Tests mutate only public operations on the copy and verify independent original values.",
       "J0Z0KF XLSX part-stream checkpoint adds actual XclExpXmlStream stack/path-map/part creation, original relationship ID-before-open ordering, exact map replacement, raw/escaped attribute emission, export-only import false, original VBA/dynamic-array/diagram queries. Original constructor flags are retained together over the existing XmlFilterBase storage/ZipFragmentStream binding. XclExpString::WriteXml now owns source unformatted text emission (empty, Unicode/control, SeparateFormats and byte-mode Unicode-vector behavior). The rich-font branch explicitly rejects until actual XclExpRoot/font owners exist; no fake font/root or completed exportDocument is supplied. Nonempty stack, complete attribute pairs, native diagnostics/ABI/overflow and full workbook/filter/UI orchestration remain unqualified or unfinished. Main/DOM-free Worker use the real part/stack/string owners, parent relations and actual ZIP reopening.",
-      "J0Z0KF font-data/export checkpoint ports actual XclFontData default/copy/reset, original scalar/native/API conversions, equality excluding style, charset/weight owners and complete consumed WriteFontData XML ordering. Source Windows/VCL API-family mismatch and retained complex-color state after Clear remain unchanged (CALC683/CALC684). Theme permutation and last-LumMod/LumOff tint conversion use genuine ComplexColor. OString number(double) uses the new original byte C facade over the existing actual formatter/SAL byte owners. Native VCL/SVX font extraction constructors, XclExpFont/FontBuffer/root integration and complete rich-string/workbook/filter/UI output remain unported; no replacement font/root provider is supplied."
+      "J0Z0KF font-data/export checkpoint ports actual XclFontData default/copy/reset, original scalar/native/API conversions, equality excluding style, charset/weight owners and complete consumed WriteFontData XML ordering. Source Windows/VCL API-family mismatch and retained complex-color state after Clear remain unchanged (CALC683/CALC684). Theme permutation and last-LumMod/LumOff tint conversion use genuine ComplexColor. OString number(double) uses the new original byte C facade over the existing actual formatter/SAL byte owners. Native VCL/SVX font extraction constructors, XclExpFont/FontBuffer/root integration and complete rich-string/workbook/filter/UI output remain unported; no replacement font/root provider is supplied.",
+      "Applies the default Excel 31-unit name validation and reserved-name suffix order during workbook serialization. Restores original names before the browser package commit can yield."
     ],
     "omittedResponsibilities": [
       "Full native utility/root/stream/font/formula-expression/byte-owner contracts, compiled native differential and full workbook import/export/model/UI acceptance remain pending."
