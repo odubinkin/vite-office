@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 359
+revision: 362
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T03:04:13.726Z"
+  updated_at: "2026-11-19T03:21:16.315Z"
   updated_by: "CODER"
-  note: "Verified native tab distance through DOCX import and export, Writer ruler, Worker and primary ODT, including the pinned empty ODT assertion. 110 Writer, 13 related Calc and 9 Chromium tests passed. Evidence: evidence/native-docx-default-tab-distance.json. Explicit DOCX paragraph tabs and umbrella acceptance remain open."
-  attempts: 106
+  note: "Verified native DOCX paragraph tab lists, inherited clears, leader and position output, default style properties, ODT and Worker retention, and original NumberedList settings. 116 Writer tests and 10 Chromium cases passed. Evidence: evidence/native-docx-paragraph-tabs.json. Full NumberedList styles, line-layout acceptance and umbrella formats remain open."
+  attempts: 107
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1704,8 +1707,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T03:21:16.315Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified native DOCX paragraph tab lists, inherited clears, leader and position output, default style properties, ODT and Worker retention, and original NumberedList settings. 116 Writer tests and 10 Chromium cases passed. Evidence: evidence/native-docx-paragraph-tabs.json. Full NumberedList styles, line-layout acceptance and umbrella formats remain open."
+  -
+    type: "status"
+    at: "2026-11-19T03:21:24.732Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T03:04:21.869Z"
+doc_updated_at: "2026-11-19T03:21:24.732Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -4898,6 +4914,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-19T03:21:16.315Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified native DOCX paragraph tab lists, inherited clears, leader and position output, default style properties, ODT and Worker retention, and original NumberedList settings. 116 Writer tests and 10 Chromium cases passed. Evidence: evidence/native-docx-paragraph-tabs.json. Full NumberedList styles, line-layout acceptance and umbrella formats remain open.
+    Attempts: 107
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T03:21:15.518Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -5538,6 +5584,13 @@ sections:
     - 110 focused Writer tests and 9 production Chromium cases passed. The consumed SwXTextDefaults owner passed scoped90 on every metric. Chromium checks the ruler, local ODT reload, DOCX XML and mobile reopen.
     - The check of the runtime registry uncovered a declaration compatibility issue in the previous Calc checkpoint. ExtendMerge is a method again and 13 related Calc tests passed. The first Writer fixture probe exposed an independent unsupported numbering definition. Exact commands and boundaries are in `evidence/native-docx-default-tab-distance.json`.
     - Explicit DOCX paragraph tabs and remaining format acceptance stay in scope. No full suite was due.
+
+    ### Writer native DOCX paragraph tabs and style inheritance
+
+    - DomainMapper imports typed tab sequences over the original style context. The Writer paragraph pool item owns alignments, positions and leaders through document defaults, named styles, direct paragraphs, Worker and ODT.
+    - DOCX writes inherited clears and custom deltas using the source position comparisons, relative-indent offset, default settings carrier and 64-record bound. WRITER-657 records the original empty tabs wrapper when equal stops have differing default distances.
+    - The three pinned clear fixtures and the ODT offset and many-tab-stop assertions passed at the canonical item and XML boundaries. The full many-tab-stop layout-dump assertion remains open. The pinned NumberedList settings payload also passes in a supported package. The complete fixture has further style grammar beyond its settings.
+    - 116 focused Writer tests and 10 production Chromium scenarios passed. Both tab mechanisms passed scoped90. Exact scope, commands and verification are in `evidence/native-docx-paragraph-tabs.json`. No full suite was due.
 id_source: "generated"
 ---
 ## Summary
@@ -8741,6 +8794,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-19T03:21:16.315Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified native DOCX paragraph tab lists, inherited clears, leader and position output, default style properties, ODT and Worker retention, and original NumberedList settings. 116 Writer tests and 10 Chromium cases passed. Evidence: evidence/native-docx-paragraph-tabs.json. Full NumberedList styles, line-layout acceptance and umbrella formats remain open.
+Attempts: 107
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T03:21:15.518Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -9386,3 +9469,10 @@ Evidence: `evidence/docx-native-ranged-bookmarks.json`.
 - 110 focused Writer tests and 9 production Chromium cases passed. The consumed SwXTextDefaults owner passed scoped90 on every metric. Chromium checks the ruler, local ODT reload, DOCX XML and mobile reopen.
 - The check of the runtime registry uncovered a declaration compatibility issue in the previous Calc checkpoint. ExtendMerge is a method again and 13 related Calc tests passed. The first Writer fixture probe exposed an independent unsupported numbering definition. Exact commands and boundaries are in `evidence/native-docx-default-tab-distance.json`.
 - Explicit DOCX paragraph tabs and remaining format acceptance stay in scope. No full suite was due.
+
+### Writer native DOCX paragraph tabs and style inheritance
+
+- DomainMapper imports typed tab sequences over the original style context. The Writer paragraph pool item owns alignments, positions and leaders through document defaults, named styles, direct paragraphs, Worker and ODT.
+- DOCX writes inherited clears and custom deltas using the source position comparisons, relative-indent offset, default settings carrier and 64-record bound. WRITER-657 records the original empty tabs wrapper when equal stops have differing default distances.
+- The three pinned clear fixtures and the ODT offset and many-tab-stop assertions passed at the canonical item and XML boundaries. The full many-tab-stop layout-dump assertion remains open. The pinned NumberedList settings payload also passes in a supported package. The complete fixture has further style grammar beyond its settings.
+- 116 focused Writer tests and 10 production Chromium scenarios passed. Both tab mechanisms passed scoped90. Exact scope, commands and verification are in `evidence/native-docx-paragraph-tabs.json`. No full suite was due.
