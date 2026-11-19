@@ -1,10 +1,11 @@
 ---
 id: "202611191103-7V7JN7"
 title: "Run full Writer and Calc regression and repair failing tests"
-status: "DOING"
+result_summary: "verified-202611191103-7V7JN7"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 8
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -21,7 +22,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-11-19T14:30:42.357Z"
+  updated_at: "2026-11-19T14:31:22.875Z"
   updated_by: "CODER"
   note: "verified-202611191103-7V7JN7"
   attempts: 0
@@ -42,11 +43,16 @@ quality_review:
   findings:
     - "The baseline ran 33,503 application tests and Chromium ran 579 tests across all three projects. Focused reruns account for all observed failing cases. Tooling passed 194 and inventory passed 130 with 100% coverage."
     - "Scoped core branches measured 97.15% in Calc address formatting and 93.33% in Writer header/footer initialization."
-commit: null
+commit:
+  hash: "2e2019f08770d037e416fe48c4a8ef7ad7849b30"
+  message: "🧩 7V7JN7 verification: record complete regression and repaired suites"
 comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: verified-202611191103-7V7JN7. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -67,8 +73,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202611191103-7V7JN7"
+  -
+    type: "verify"
+    at: "2026-11-19T14:31:22.875Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202611191103-7V7JN7"
+  -
+    type: "status"
+    at: "2026-11-19T14:31:22.998Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202611191103-7V7JN7. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-11-19T14:30:42.406Z"
+doc_updated_at: "2026-11-19T14:31:22.999Z"
 doc_updated_by: "CODER"
 description: "Execute the user-requested complete application, production browser, tooling and inventory verification after the Writer embedded graphic checkpoint. Diagnose, repair and re-verify functional failures in their source owners and record unchanged coverage gates."
 sections:
@@ -161,6 +180,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-19T14:31:22.875Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202611191103-7V7JN7
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T14:30:42.406Z, excerpt_hash=sha256:949f43aba9dff5aaa9afc024cf4113578a4dd66d4ee927bea5dfc33e45f258b4
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611191103-7V7JN7/blueprint/resolved-snapshot.json
+    - old_digest: f5567076e3daad925cf06b8e711e36ef433b207aa76b8e3e6231755bbad1950d
+    - current_digest: f5567076e3daad925cf06b8e711e36ef433b207aa76b8e3e6231755bbad1950d
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202611191103-7V7JN7
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202611191103-7V7JN7 --result verified-202611191103-7V7JN7 --commit 2e2019f08770d037e416fe48c4a8ef7ad7849b30
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -169,6 +218,10 @@ sections:
     - Observation: The complete baseline application coverage gate reported 96.29% statements, 94.15% branches, 98.40% functions and 97.05% lines at the repository thresholds of 100%.
       Impact: The complete coverage command exited nonzero, independently of the functional failures repaired by this task.
       Resolution: Recorded original and prior coverage metrics and verified the affected code owners above the scoped 90% gate. The repaired application cases, all Chromium projects and repaired cases, tooling, and inventory are accounted for in the verification details.
+extensions:
+  implementation_commit:
+    hash: "955439e72f172f726a72e3dd3807edcd43f7d6d4"
+    message: "🧩 7V7JN7 regression: verify shared manifest and style owners in Chromium"
 id_source: "generated"
 ---
 ## Summary
@@ -264,6 +317,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202611191103-7V7JN7 --result verified-202611191103-7V7JN7 --commit 955439e72f172f726a72e3dd3807edcd43f7d6d4
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-19T14:31:22.875Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202611191103-7V7JN7
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T14:30:42.406Z, excerpt_hash=sha256:949f43aba9dff5aaa9afc024cf4113578a4dd66d4ee927bea5dfc33e45f258b4
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202611191103-7V7JN7/blueprint/resolved-snapshot.json
+- old_digest: f5567076e3daad925cf06b8e711e36ef433b207aa76b8e3e6231755bbad1950d
+- current_digest: f5567076e3daad925cf06b8e711e36ef433b207aa76b8e3e6231755bbad1950d
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202611191103-7V7JN7
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202611191103-7V7JN7 --result verified-202611191103-7V7JN7 --commit 2e2019f08770d037e416fe48c4a8ef7ad7849b30
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
