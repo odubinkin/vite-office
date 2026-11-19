@@ -1,0 +1,54 @@
+{
+  "checkpoint": "Writer as-character embedded raster import, persistence, paint and export",
+  "implementation": "c4980821fc33573b5df6c7b92fda0ff1fdf3796b",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "source": [
+    "sw/source/core/doc/doclay.cxx#SwDoc::MakeFlySection_",
+    "sw/source/core/doc/DocumentContentOperationsManager.cxx#DocumentContentOperationsManager::InsertGraphic",
+    "sw/source/writerfilter/dmapper/DomainMapper.cxx#LN_inline_inline",
+    "sw/source/writerfilter/dmapper/GraphicImport.cxx#GraphicImport::createGraphicObject",
+    "sw/source/filter/ww8/docxsdrexport.cxx#DocxSdrExport::startDMLAnchorInline",
+    "xmloff/source/text/txtparai.cxx#XMLTextFrameContext",
+    "sw/qa/extras/ooxmlexport/ooxmlexport8.cxx#testN783638"
+  ],
+  "verified_behavior": [
+    "The unchanged native n783638 DOCX contains two embedded raster instances with one shared image payload. Both import through the current paragraph and occupy one native inline point each.",
+    "Worker restoration keeps the existing marker and real graphic section. Invalid and duplicate attachment records fail before claiming a marker.",
+    "ODT uses the explicit as-char anchor and writes no internal dummy character. Raster input also consumes the upstream paragraph default when the anchor attribute is absent.",
+    "Both images preserve positions, sizes, pixel bytes, and zero margins across Worker, primary ODT, exported DOCX, and reopened DOCX.",
+    "Browser Chromium paints both in-line images, decodes the original 16-pixel payloads, restores the saved primary document, and reopens the downloaded Word package on 390px."
+  ],
+  "verification": {
+    "writer": {
+      "command": "npm run test:coverage:writer --workspace @vite-office/office -- docxexport.drawing ndgrf atrflyin OOXMLFastContextHandler native-split-attributes WriterPlainTextEditor unotext swmd.html-table doclay.native-name rtfexport.direction rtf-text-frame native-ascii-range writer-frame-item-codec --maxWorkers=4 --coverage.include=src/sw/source/filter/ww8/docxsdrexport.ts --coverage.include=src/sw/source/writerfilter/dmapper/GraphicImport.ts --coverage.include=src/sw/browser/filter/xml/writer-text-frame-codec.ts --coverage.include=src/sw/source/core/doc/doclay.ts --coverage.include=src/sw/source/core/layout/flycnt.ts --coverage.reportsDirectory=coverage/inline-graphic-complete --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "tests": 150,
+      "files": 14,
+      "scope_threshold": 90,
+      "statements": "369/395",
+      "branches": "273/299",
+      "functions": "33/33",
+      "lines": "350/366",
+      "log": "inline-graphic-coverage-complete.log"
+    },
+    "browser": {
+      "command": "npm exec -- playwright test --config apps/office/coverage/odt-story.playwright.config.ts --workers=1 --timeout=90000 -g 'n783638|floating picture in the header|tdf134114'",
+      "tests": 3,
+      "log": "inline-graphic-browser-complete.log"
+    },
+    "shared_device": {
+      "command": "npm run test:shared -- text-line-measurement",
+      "tests": 3,
+      "log": "inline-graphic-vcl.log"
+    },
+    "other_passed": [
+      "Typecheck and production build, static smoke, scoped ESLint and Prettier, JSDoc and file size.",
+      "Module boundaries, source tree, native Writer resources and Which IDs.",
+      "All eighteen changed provenance records, Agentplane routing, doctor and git diff check."
+    ]
+  },
+  "remaining": [
+    "Full native inline layout-format copying and undo, deferred page-break interactions, and advanced DrawingML geometry and picture effects remain outside this raster checkpoint.",
+    "ODF text box insertion keeps the earlier paragraph fallback. This checkpoint applies the source as-character default to raster children.",
+    "Global source provenance still reports missing registry records for OfficeTooltips.tsx and available-menu-items.ts."
+  ]
+}

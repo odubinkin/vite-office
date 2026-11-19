@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 410
+revision: 411
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "needs_rework"
-  updated_at: "2026-11-19T20:45:27.870Z"
+  updated_at: "2026-11-19T21:07:03.048Z"
   updated_by: "CODER"
-  note: "The inline fly model checkpoint passed its scoped tests. The DOCX task requires further implementation of native inline fly creation and copying, DOCX import and export, ODT and Worker transport, and browser layout before closeout."
-  attempts: 1
+  note: "Inline raster import, Worker and ODT persistence, browser paint, and DOCX export passed 150 focused Writer tests and three Chromium regressions. The DOCX task remains in implementation for inline copy and undo and remaining DrawingML behavior."
+  attempts: 2
 commit: null
 comments:
   -
@@ -2036,8 +2036,14 @@ events:
     author: "CODER"
     state: "needs_rework"
     note: "The inline fly model checkpoint passed its scoped tests. The DOCX task requires further implementation of native inline fly creation and copying, DOCX import and export, ODT and Worker transport, and browser layout before closeout."
+  -
+    type: "verify"
+    at: "2026-11-19T21:07:03.048Z"
+    author: "CODER"
+    state: "needs_rework"
+    note: "Inline raster import, Worker and ODT persistence, browser paint, and DOCX export passed 150 focused Writer tests and three Chromium regressions. The DOCX task remains in implementation for inline copy and undo and remaining DrawingML behavior."
 doc_version: 3
-doc_updated_at: "2026-11-19T20:45:28.073Z"
+doc_updated_at: "2026-11-19T21:07:03.256Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -6005,6 +6011,36 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202610251549-V4DQJW --result verified-202610251549-V4DQJW --commit 07ae30bec58c615ce823ae9d5538b1e0796b3f5d
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-11-19T21:07:03.048Z — VERIFY — needs_rework
+
+    By: CODER
+
+    Note: Inline raster import, Worker and ODT persistence, browser paint, and DOCX export passed 150 focused Writer tests and three Chromium regressions. The DOCX task remains in implementation for inline copy and undo and remaining DrawingML behavior.
+    Attempts: 2
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T20:45:28.073Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -10707,6 +10743,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610251549-V4DQJW --result verified-202610251549-V4DQJW --commit 07ae30bec58c615ce823ae9d5538b1e0796b3f5d
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-19T21:07:03.048Z — VERIFY — needs_rework
+
+By: CODER
+
+Note: Inline raster import, Worker and ODT persistence, browser paint, and DOCX export passed 150 focused Writer tests and three Chromium regressions. The DOCX task remains in implementation for inline copy and undo and remaining DrawingML behavior.
+Attempts: 2
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T20:45:28.073Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
