@@ -165,3 +165,61 @@ test("Writer retains DOCX character spacing through browser reopen and DOCX down
   const docx = await DocumentArchive.open(new Uint8Array(await readFile(downloaded)));
   expect(await docx.readTextEntry("word/document.xml")).toContain('<w:spacing w:val="30"/>');
 });
+
+test("Writer opens a DOCX with a floating picture in the header", /** Imports a standalone DrawingML picture and checks that the header survives browser storage. @param root0 - Playwright fixtures. @param root0.page - Chromium page. @returns Completion. */ async ({
+  page,
+}) => {
+  const source = await DocumentArchive.open(
+    new Uint8Array(
+      await readFile(
+        new URL(
+          "../../../vendor/libreoffice-reference/sw/qa/extras/layout/data/testHeaderImageAlignment.docx",
+          import.meta.url,
+        ),
+      ),
+    ),
+  );
+  const writer = new DocumentArchiveWriter();
+  const drawing = "http://schemas.openxmlformats.org/drawingml/2006";
+  const header = `<w:hdr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+    xmlns:wp="${drawing}/wordprocessingDrawing" xmlns:a="${drawing}/main" xmlns:pic="${drawing}/picture">
+    <w:p><w:r><w:drawing><wp:anchor simplePos="0" behindDoc="1" layoutInCell="1" allowOverlap="1" relativeHeight="0">
+      <wp:simplePos x="0" y="0"/>
+      <wp:positionH relativeFrom="column"><wp:posOffset>0</wp:posOffset></wp:positionH>
+      <wp:positionV relativeFrom="paragraph"><wp:posOffset>0</wp:posOffset></wp:positionV>
+      <wp:extent cx="635000" cy="317500"/><wp:wrapNone/><wp:docPr id="1" name="Letterhead"/>
+      <a:graphic><a:graphicData uri="${drawing}/picture"><pic:pic>
+        <pic:blipFill><a:blip r:embed="rId1"/></pic:blipFill>
+      </pic:pic></a:graphicData></a:graphic>
+    </wp:anchor></w:drawing></w:r></w:p>
+  </w:hdr>`;
+  for (const part of source.getEntryNames())
+    writer.putNextEntry(
+      part,
+      part === "word/header1.xml" ? new TextEncoder().encode(header) : await source.readEntry(part),
+    );
+
+  await page.goto("/writer");
+  await page.getByRole("button", { name: "Open" }).click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer: Buffer.from(await writer.finish()),
+    mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    name: "Floating-letterhead.docx",
+  });
+  const body = page.getByRole("textbox", { name: "Writer document text" }).first();
+  const image = page.locator("[data-writer-graphic-fly]").getByRole("img");
+  await expect(body).toContainText("Body");
+  await expect(image).toBeVisible();
+  await expect(page.getByRole("status", { name: "Writer status bar" })).toContainText(
+    "Saved locally in this browser.",
+  );
+
+  await page.reload();
+  await page.getByRole("button", { name: "Open" }).click();
+  await page.getByRole("tab", { name: "In browser" }).click();
+  await page.getByRole("button", { name: "Floating-letterhead", exact: true }).click();
+  await expect(body).toContainText("Body");
+  await expect(image).toBeVisible();
+});
