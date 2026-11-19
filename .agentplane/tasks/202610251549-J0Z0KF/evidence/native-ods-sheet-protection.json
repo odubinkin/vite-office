@@ -1,0 +1,349 @@
+{
+  "checkpoint": "Native ODS sheet protection and primary persistence after XLSX import",
+  "createdAt": "2026-11-19T01:59:06.653Z",
+  "task": "202610251549-J0Z0KF",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sc/source/core/data/tabprotection.cxx#ScPassHashHelper::needsPassHashRegen",
+    "sc/source/ui/docshell/docsh.cxx#ScDocShell::SaveAs",
+    "sc/source/filter/xml/xmltabi.cxx#ScXMLTableProtectionContext",
+    "sc/source/filter/xml/xmlsubti.cxx#ScMyTables::DeleteTable",
+    "sc/source/filter/xml/xmlexprt.cxx#ScXMLExport::WriteTable",
+    "sc/source/filter/excel/excrecds.cxx#XclExpSheetProtection::SaveXml",
+    "comphelper/source/misc/base64.cxx#Base64::decodeSomeChars",
+    "comphelper/qa/unit/base64_test.cxx#Base64Test",
+    "sc/qa/unit/subsequent_export_test3.cxx#testSheetProtectionODS",
+    "sc/qa/unit/subsequent_export_test5.cxx#testSheetProtections"
+  ],
+  "results": {
+    "calc": {
+      "files": 19,
+      "tests": 83
+    },
+    "shared": {
+      "files": 11,
+      "tests": 56
+    },
+    "writer": {
+      "files": 1,
+      "tests": 12
+    },
+    "chromium": 14,
+    "coverageThreshold": 90,
+    "coverage": {
+      "calc": {
+        "total": {
+          "lines": {
+            "total": 78,
+            "covered": 76,
+            "skipped": 0,
+            "pct": 97.43
+          },
+          "statements": {
+            "total": 87,
+            "covered": 85,
+            "skipped": 0,
+            "pct": 97.7
+          },
+          "functions": {
+            "total": 21,
+            "covered": 21,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 84,
+            "covered": 81,
+            "skipped": 0,
+            "pct": 96.42
+          },
+          "branchesTrue": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": 100
+          }
+        },
+        "apps/office/src/sc/source/core/data/tabprotection.ts": {
+          "lines": {
+            "total": 29,
+            "covered": 29,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 14,
+            "covered": 14,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 33,
+            "covered": 33,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 37,
+            "covered": 36,
+            "skipped": 0,
+            "pct": 97.29
+          }
+        },
+        "apps/office/src/sc/source/filter/xml/xmlexprt.protection.ts": {
+          "lines": {
+            "total": 30,
+            "covered": 28,
+            "skipped": 0,
+            "pct": 93.33
+          },
+          "functions": {
+            "total": 4,
+            "covered": 4,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 34,
+            "covered": 32,
+            "skipped": 0,
+            "pct": 94.11
+          },
+          "branches": {
+            "total": 34,
+            "covered": 32,
+            "skipped": 0,
+            "pct": 94.11
+          }
+        },
+        "apps/office/src/sc/source/filter/xml/xmlsubti.ts": {
+          "lines": {
+            "total": 19,
+            "covered": 19,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 3,
+            "covered": 3,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 20,
+            "covered": 20,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 13,
+            "covered": 13,
+            "skipped": 0,
+            "pct": 100
+          }
+        }
+      },
+      "shared": {
+        "total": {
+          "lines": {
+            "total": 21,
+            "covered": 21,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 26,
+            "covered": 26,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 2,
+            "covered": 2,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 16,
+            "covered": 16,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branchesTrue": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": "Unknown"
+          }
+        },
+        "apps/office/src/comphelper/source/misc/base64.ts": {
+          "lines": {
+            "total": 21,
+            "covered": 21,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 2,
+            "covered": 2,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 26,
+            "covered": 26,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 16,
+            "covered": 16,
+            "skipped": 0,
+            "pct": 100
+          }
+        }
+      }
+    }
+  },
+  "commands": [
+    "npm run test:coverage:calc --workspace @vite-office/office -- ods-sheet-protection excelfilter.sheet-protection calc-ods-io ods-worker ods-native ods-style-routing ods-xml-boundaries calc-files xename xepage print-ranges excrecds --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sc/source/filter/xml/xmlsubti.ts --coverage.include=src/sc/source/filter/xml/xmlexprt.protection.ts --coverage.include=src/sc/source/core/data/tabprotection.ts --coverage.thresholds.perFile --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=coverage/ods-sheetprot-scoped-release",
+    "npm run test:coverage:shared --workspace @vite-office/office -- base64 xmltoken converter --maxWorkers=2 --testTimeout=90000 --coverage.include=src/comphelper/source/misc/base64.ts --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=coverage/ods-sheetprot-shared",
+    "npm run test:writer -- odt-property-roundtrip --maxWorkers=1 --testTimeout=90000",
+    "./node_modules/.bin/playwright test -c apps/office/coverage/ods-sheetprot.playwright.config.ts --workers=1",
+    "npm run typecheck",
+    "npm run test:static",
+    "npm run check:docs",
+    "npm run check:dependencies",
+    "npm run check:file-size",
+    "npm run check:source-tree",
+    "npm run check:source-provenance",
+    "npm run inventory:registry:build",
+    "npm run inventory:invariants",
+    "npm run inventory:parity",
+    "npm run check:calc-resources",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor",
+    "git diff --check"
+  ],
+  "files": [
+    {
+      "path": "apps/office/src/comphelper/source/misc/base64.ts",
+      "sha256": "23d42ccc93baf6007f215711eac8d42d66e945ee76f54a560968b7b738789d68"
+    },
+    {
+      "path": "apps/office/src/sc/inc/tabprotection.ts",
+      "sha256": "014f735e11f4c889ed975981a6a2e85d1a7ab6e3239df64af33258c613f10f7e"
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/tabprotection.ts",
+      "sha256": "593bc4ac27aefee10ddfa3e11f53b5ecf54f0fa84458150d19bd7946acce1686"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlsubti.ts",
+      "sha256": "c0ef432118a22a237887080be4f3245888f141acdcd705461168255f8092fa76"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmltabi.ts",
+      "sha256": "e020ce8dbfb50a3ce5252a03660ad06ae90900421900b8f54aa0f0df1e639874"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlexprt.protection.ts",
+      "sha256": "17d744a95c63ab020bddc594ced43cb4074bea4ea059d3394a13e6190a5cf5f4"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
+      "sha256": "c37ea83f8ed59c12f6a4199aea98ecc893b76b7d23ee1d00c25df14bcd341123"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlwrap.ts",
+      "sha256": "f88c3f3ae5fbe36622f3f38561f9eb70f2d22d13d7073bfbe744a432d1730c0b"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/ods-sheet-protection.test.ts",
+      "sha256": "a7e850133fcf7020b41aba767f3dc3b05419e9eccdc8cdc3fb5fa36fbb4bb460"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
+      "sha256": "ad18beada2ac43c73a63e6b40e1528a1cbd77851e3542959651849d4dd289606"
+    },
+    {
+      "path": "apps/office/src/sc/browser/workflows/calc-ods-io.ts",
+      "sha256": "9d51b72b23dcb20138e84539c810dce8d06809f65bc75d059ebbf063e272503f"
+    },
+    {
+      "path": "apps/office/src/sc/browser/workflows/calc-ods-io.test.ts",
+      "sha256": "9bbcc42273f33e9cb183dbf87d36903945a409ea49e069a50def562b2c090a19"
+    },
+    {
+      "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts",
+      "sha256": "abaa5fe177e57222a2d8108f58a157bdd26215c9c659a09f5a9910a26839e731"
+    },
+    {
+      "path": "apps/office/src/sc/browser/filter/xml/ods-worker-runtime.ts",
+      "sha256": "97476cf6d45645f25d5a547fd41db4810aba58a27a2389377c59b863ecd7417f"
+    },
+    {
+      "path": "apps/office/src/sc/browser/filter/xml/ods-worker-boundaries.test.ts",
+      "sha256": "fd3f0711161d476df777aadd828a49bc0320c0631a7d43fafbabecb42df27187"
+    },
+    {
+      "path": "apps/office/src/sc/browser/filter/xml/ods-worker-runtime.test.ts",
+      "sha256": "1f16af96a11cc220afcfbb5c45e1e01df30ac42a638fa27e2ff09236997a7335"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/ods-xml-boundaries.test.ts",
+      "sha256": "0155c5309f92c55e9b1ca8129ad604fcd8b8b5caee0bdaca0ef7432ad5767962"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/excel/print-ranges.test.ts",
+      "sha256": "5dbe2830da0f4ecdbf1efe06276721807983a19a69079b16e8dc156d26f4e7ea"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/excel/xename.test.ts",
+      "sha256": "089e6a3b128da45f062e3ddd16d0174b4ad3eb12b3fd4c2403f6541198e7833f"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/excel/xepage.test.ts",
+      "sha256": "806be45880462d0cceb8283ce7fde08add41ba3ac749d6831e453911ea4c3783"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/excel/excrecds.test.ts",
+      "sha256": "7f21f5a89dd7fc2b8e55161391feccf08d8117c73dcd6fff8fea19abecad0127"
+    },
+    {
+      "path": "apps/office/e2e/calc/font-step.spec.ts",
+      "sha256": "cfb859cdba9234b6ff146e3f1afa763cc7511286d4729dde1f51562cfcdad685"
+    },
+    {
+      "path": "apps/office/e2e/calc/outline.spec.ts",
+      "sha256": "6e51023011b724f136b904f0e1175c4ea0a0b7b7b886dc423e80dc4dd6a050fd"
+    },
+    {
+      "path": "apps/office/e2e/calc/shadow-relief.spec.ts",
+      "sha256": "5cc93d9b05608183d7e93d68f93d3ee3c77605c6340cd387cc02ba5597ba0853"
+    },
+    {
+      "path": "apps/office/src/comphelper/source/misc/base64.test.ts",
+      "sha256": "8a5625e1d97e663b48e04dcb6a0bcd069cc245f25d753b6def2ced54d39f7712"
+    },
+    {
+      "path": "apps/office/e2e/calc/xlsx-alignment.spec.ts",
+      "sha256": "f4bba4e315b1c09be500130eed02bac45bd1253e046079898e45f410eb79a95b"
+    },
+    {
+      "path": "docs/program/calc-upstream-suspected-issues.md",
+      "sha256": "98500a8d42f765087feb4dd07ed294f60c6aaeeb7469f003d91cfd0770435a5b"
+    }
+  ],
+  "verified": [
+    "The original ODS sheet selection flags and the four upstream XLSX sheet filter/pivot permissions survive ODS reopen.",
+    "The imported legacy Excel verifier is double-hashed to the original ODF Excel plus SHA-1 representation in the Worker, and browser primary reopen retains the digest.",
+    "A modern-only XLSX digest or mixed incompatible native digest families cannot overwrite the primary document through autosave. The active document retains protection.",
+    "Three suspected upstream cases are reproduced and recorded as CALC-734 through CALC-736."
+  ],
+  "remaining": [
+    "Sheet editing and selection enforcement, protection ranges, password verification and retyping UI, and workbook structure protection require their original owners.",
+    "ODS only carries the worksheet permissions present in the source format. XLSX export from ODS-origin verifier bytes follows the original representability boundary.",
+    "Existing browser autosave cadence, navigation and recovery policy are unaffected."
+  ]
+}
