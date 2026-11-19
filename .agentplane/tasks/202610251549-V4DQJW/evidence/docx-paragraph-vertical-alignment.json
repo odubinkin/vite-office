@@ -1,0 +1,16 @@
+{
+  "scope": "Map OOXML paragraph text alignment to the native Writer paragraph item and preserve it through DOCX export, ODT persistence, and Worker transport.",
+  "implementation": "96cc2e482244",
+  "tests": {
+    "focused_writer": { "suites": 6, "passed": 84 },
+    "production_browser": {
+      "passed": 2,
+      "scenarios": ["Named DOCX styles download and reopen", "Nested DOCX tables download and reopen"]
+    },
+    "mapper_resource_coverage": { "statements": 100, "branches": 100, "functions": 100, "lines": 100 }
+  },
+  "private_reproduction": "The attached input still reaches the document-protection factory failure. A local diagnostic copy omitting only that element reaches the header drawing failure without hitting the paragraph text-alignment failure. The input and diagnostic copy are omitted from the repository.",
+  "checks_passed": ["typecheck", "production build", "scoped ESLint and Prettier", "JSDoc", "file size", "dependency boundaries", "OOXML factory regeneration check", "Writer hint IDs", "Agentplane routing", "git diff check"],
+  "check_failure": "The repository source-provenance check reports missing runtime records for OfficeTooltips.tsx and available-menu-items.ts, both already present at the parent commit.",
+  "pending": ["Document protection import and export", "Anchored header image import and export"]
+}
