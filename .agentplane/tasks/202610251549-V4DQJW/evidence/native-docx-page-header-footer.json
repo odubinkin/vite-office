@@ -1,0 +1,479 @@
+{
+  "task": "202610251549-V4DQJW",
+  "checkpoint": "Native Writer DOCX page header and footer import, export and browser persistence",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx#DomainMapper_Impl::substream",
+    "sw/source/writerfilter/dmapper/PropertyMap.cxx#SectionPropertyMap::CopyLastHeaderFooter",
+    "sw/source/core/unocore/unotext.cxx#SwXText::copyText",
+    "sw/source/core/docnode/nodes.cxx#SwNodes::CopyNodes",
+    "sw/source/filter/ww8/docxexport.cxx#DocxExport::WriteHeaderFooter",
+    "sw/qa/core/header_footer/HeaderFooterTest.cxx#testHFLinkToPrev",
+    "sw/qa/core/header_footer/HeaderFooterTest.cxx#testEvenPageOddPageFooter_Import",
+    "xmloff/source/core/xmluconv.cxx#SvXMLUnitConverter::convertNumFormat",
+    "i18npool/source/defaultnumberingprovider/defaultnumberingprovider.cxx#lcl_formatArabicZero"
+  ],
+  "results": {
+    "writer": {
+      "files": 14,
+      "tests": 114
+    },
+    "productionChromium": 3,
+    "perOwnerCoverage": {
+      "ndcopy.ts": {
+        "lines": {
+          "total": 29,
+          "covered": 29,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 30,
+          "covered": 30,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "docxexport.headerfooter.ts": {
+        "lines": {
+          "total": 50,
+          "covered": 49,
+          "skipped": 0,
+          "pct": 98
+        },
+        "functions": {
+          "total": 5,
+          "covered": 5,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 54,
+          "covered": 53,
+          "skipped": 0,
+          "pct": 98.14
+        },
+        "branches": {
+          "total": 61,
+          "covered": 59,
+          "skipped": 0,
+          "pct": 96.72
+        }
+      },
+      "DomainMapper_Impl.headerfooter.ts": {
+        "lines": {
+          "total": 72,
+          "covered": 71,
+          "skipped": 0,
+          "pct": 98.61
+        },
+        "functions": {
+          "total": 9,
+          "covered": 9,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 85,
+          "covered": 81,
+          "skipped": 0,
+          "pct": 95.29
+        },
+        "branches": {
+          "total": 82,
+          "covered": 78,
+          "skipped": 0,
+          "pct": 95.12
+        }
+      },
+      "DomainMapper_Impl.stream.ts": {
+        "lines": {
+          "total": 11,
+          "covered": 11,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "defaultnumberingprovider.ts": {
+        "lines": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    }
+  },
+  "commands": [
+    "vitest run --config vitest.writer.config.ts --coverage docxexport.page-stories docxattributeoutput.section SectionPropertyMap docxexport.numbered-list docxexport.numbering OOXMLDocumentImpl DomainMapperTableManager native-import-table-errors native-text-import-api odt-page-stories writer-page-story-codec native-none-numbering odt-table-cell-lists odt-roundtrip --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sw/source/writerfilter/dmapper/DomainMapper_Impl.headerfooter.ts --coverage.include=src/sw/source/writerfilter/dmapper/DomainMapper_Impl.stream.ts --coverage.include=src/sw/source/filter/ww8/docxexport.headerfooter.ts --coverage.include=src/sw/source/core/docnode/ndcopy.ts --coverage.thresholds.lines=90 --coverage.thresholds.functions=90 --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.perFile --coverage.reporter=text --coverage.reporter=json-summary --coverage.reporter=json --coverage.reportsDirectory=coverage/docx-page-stories-scoped",
+    "vitest run --config vitest.writer.config.ts --coverage native-none-numbering number-format --maxWorkers=2 --testTimeout=90000 --coverage.include=src/i18npool/source/defaultnumberingprovider/defaultnumberingprovider.ts --coverage.thresholds.lines=90 --coverage.thresholds.functions=90 --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.perFile --coverage.reporter=text --coverage.reporter=json-summary --coverage.reportsDirectory=coverage/docx-page-numbering-scoped",
+    "npm run test:static",
+    "./node_modules/.bin/playwright test -c apps/office/coverage/odt-story.playwright.config.ts --workers=1 -g 'page stories|original DOCX with a footer|downloads and reopens nested DOCX tables'",
+    "npm run typecheck",
+    "npm run check:dependencies",
+    "npm run check:docs",
+    "npm run check:file-size",
+    "npm run check:source-tree",
+    "npm run check:writer-hintids",
+    "npm run check:writer-resources",
+    "npm run inventory:registry:build",
+    "npm run check:source-provenance",
+    "npm run inventory:invariants",
+    "npm run inventory:parity",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor",
+    "git diff --check (checkpoint paths)"
+  ],
+  "verified": [
+    "The original SimpleFirstLeftRight package round-trips all six variants with their original OOXML part types, relationships and section flags.",
+    "The original headerfooter-link-to-prev package retains the selected first, even and default header and footer paragraphs in three independently owned section styles after repeat import.",
+    "The original tdf135216_evenOddFooter package retains the model-facing left and first footer values in alternate parity page styles.",
+    "Footer tables are native section children. Linked and parity copies are independent and retain text and nested table order.",
+    "The original NumberedList package opens on existing Writer UI, restores from browser storage, downloads ODT and DOCX, and reopens downloaded DOCX at mobile width.",
+    "Source decimal-zero numbering identifiers and ordinary built-in Footer pool ownership survive Writer primary ODT. ODF automatic table styles are scoped to their XML stream."
+  ],
+  "remaining": [
+    "PAGE fields are retained as cached result text. Native live fields, header/footer distance/dynamic height and complete continuous-section layout remain open.",
+    "The unchanged TestFirstFooterDisabled fixture exposes an unsupported CT_SignedTwipsMeasure definition for character spacing. Separate literal fixtures qualify absent first and even story relationships.",
+    "The original NumberedList native table grid still emits 4049 versus LibreOffice's 4050 for the second slot, and inherited tblInd export is pending.",
+    "This is a Writer checkpoint. The overall DOCX/XLSX acceptance and complete desktop layout remain open. No full suite was due."
+  ],
+  "files": [
+    {
+      "path": "apps/office/e2e/writer-odt-page-stories.spec.ts",
+      "sha256": "211e5dbd3a2545b2f2264477aa37dfec23aa451e620d778d8988848967c07155"
+    },
+    {
+      "path": "apps/office/src/editeng/source/items/numitem.ts",
+      "sha256": "ccccbe02eba3dd990ef7791475f91060d823907993454c6c5cf86b622bf45bf8"
+    },
+    {
+      "path": "apps/office/src/i18npool/source/defaultnumberingprovider/defaultnumberingprovider.ts",
+      "sha256": "19a170b545a9d13877cd042a21e9489a4a5df8561c4d556208d9a50d69669344"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/ndcopy.ts",
+      "sha256": "5af14d72c1344e5b61156b6fb1ac7d1e746b50f7a2a57dd5b553946bdf6346d4"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+      "sha256": "bb879cb185f00ca20dc4756d6237ec43cef7b4e89e86898e1c8601e337bf85a9"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/nodes.ts",
+      "sha256": "ddab79057b55ef8ed766c9b44a8691d86d19fa7a466240e71796440d19651afb"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/unocore/unostyle.ts",
+      "sha256": "315ce4ddfa9220425a8f094c0450d1a369a7facaaa100f631b099017e3a26191"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/unocore/unotbl.ts",
+      "sha256": "af6e1190f03717979578d99cd2938a3af3fdf79f997dd7f25d0dee738431b70d"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/unocore/unotext.ts",
+      "sha256": "64017614044a79d978bb1cdac793a5d848868e094971f25047bcd1268d325892"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.section.ts",
+      "sha256": "d23cdc8d6bbe9cf56a952050fca506e37e7eab104e38186613ec189ad5d3734c"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxexport.headerfooter.ts",
+      "sha256": "ecaf69d64740f28e58d1cc1f452b5e497be322d825a400a1bbc755be871a2b7d"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxexport.numbered-list.test.ts",
+      "sha256": "686e170ca7d69bb686f321a6a667c92f030263d04987299f4dc9a44e879e7893"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxexport.page-stories.test.ts",
+      "sha256": "65a801ed85a80d760b21e092d029df6346d860877583292f054bde80b43fdd9b"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxexport.ts",
+      "sha256": "35ebd081f60e422305abbcdca2ebe342ed825bd677b218feeafa1758c8800e4a"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/native-none-numbering.test.ts",
+      "sha256": "56a29c160fa8837d1acdb726d24cc89d320d10be7d83c91a49acb7c2aa047b1e"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+      "sha256": "6b974bd1495da88ef37926d161d933478925df68457220f502ce09f04c38aa9a"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmltbli.ts",
+      "sha256": "9c8a2198f1acca91b2fe359fc572e8c0ba75b5906bb3033079aa84b264ea0733"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.resources.ts",
+      "sha256": "dd33cd5f594cb976613ec7c2d7fabcc00bb491ab9e78939230e009f265d1205d"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.ts",
+      "sha256": "d9ae136a8de93d5e203f7c96d13b8a7a8d0a735640beb16c5d8d4a98e64c6704"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapperTableManager.ranges.ts",
+      "sha256": "ace90781f787cdfca9d24e89a812bb07537028988654e591d36dde4b95b4d289"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.headerfooter.ts",
+      "sha256": "bc7e138972e34e72cbf43465a2384f54dbf1a59ef6ee0d5519ee20f2e5e8b6a1"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.stream.ts",
+      "sha256": "f11a883d4ed39569999343e68c977c64e4e42a1ad6e255328855ef06a658308e"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts",
+      "sha256": "a3fdaf18c8f9fef98714f3f9bd7f8e1130472585889406616368edf37b30fcfb"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/PropertyMap.section.ts",
+      "sha256": "4e80887d479acfc4943681e8732392214b7c4c65c1a84c33c0c08c8c447b98f6"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/PropertyMap.ts",
+      "sha256": "587a48aa9df646fccc69e5d50f13fb7f019557dda0833460e24a3a41c3b8fb06"
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.test.ts",
+      "sha256": "bd21bafe6d5966e6306721b87834b7345f563ee2b01f3c2eb60602b8bcc4bccd"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/core/xmluconv.ts",
+      "sha256": "29d62223d795acf500b8f5b40a8d6bed8b627ab9390ebcf8b4d78b9002f0b95e"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/editeng/source/items/numitem.ts.json",
+      "sha256": "ae8a28862d1972f99aa906f6ef3d80fb6367ad79c75398062bb6d1de86204767"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/i18npool/source/defaultnumberingprovider/defaultnumberingprovider.ts.json",
+      "sha256": "80a1052eefafbc3c18bd47e47fba8fbd40e32f3d07a821aa49a6c335b8ad5592"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/xmloff/source/core/xmluconv.ts.json",
+      "sha256": "0d0f5faa599f091bdd6fd2a294d3850638db9560cc26f4a3b9980a22ecea55b7"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/editeng/source/items/numitem.ts.json",
+      "sha256": "9e1f6bf73aefab692894e83921632951337002074f31c3b64760dd09a94b7b76"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/i18npool/source/defaultnumberingprovider/defaultnumberingprovider.ts.json",
+      "sha256": "5c8d95d3451be8cade03d3d74b8c3191388ad7331794c878b16d99e7bca841d5"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/xmloff/source/core/xmluconv.ts.json",
+      "sha256": "291115cd1b06ec8f893780ff87965a8a88ce11d71a48eb79a5718ba5bd82acea"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/docnode/ndcopy.ts.json",
+      "sha256": "49dadc33ae534a5dfdf75147cda055428f0bbf7a9b62e1806923330ad7903860"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/docnode/ndtbl.ts.json",
+      "sha256": "8cef98f5760c60aaa1ac15c72156802e5d27e3a72fa5d474a6834259c812e554"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/docnode/nodes.ts.json",
+      "sha256": "eed8894f25807b3a5587cabb9ad4a042f4d4960af042c98a07cd9b5489219749"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/unocore/unostyle.ts.json",
+      "sha256": "f8353f1c7b9ad062fdc1fdfd049d92e98a27ca8a1aaf92b7581271e3e898cc06"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/unocore/unotbl.ts.json",
+      "sha256": "b64c68e2bec12825b13240029113008bfbaa0c0b5c6acbb7c5dd5a0ca39dfcd6"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/unocore/unotext.ts.json",
+      "sha256": "c121e965f1d083018f3d5d9598298db06ee57f16a96817a5360ea11d70732ed2"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/filter/ww8/docxattributeoutput.section.ts.json",
+      "sha256": "0c37b4b1eff84ac3dd87265240e216c3ec0a4342db996e48e7b8a1f2760c58df"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/filter/ww8/docxexport.headerfooter.ts.json",
+      "sha256": "c1a81430dfa90892ef46212b9c4e75f86ed5fdd55ca1c9aa677a5a8e26d8fdee"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/filter/ww8/docxexport.ts.json",
+      "sha256": "4ec6185fc495de6cb165e50c517513e43af791bacbc2518cc55ed873d57a24c3"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/filter/xml/xmlimp.ts.json",
+      "sha256": "d6ecc0dd2a8b371c2e2216ef1c92d960fab4da260577e0963d64e86fead33c42"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/filter/xml/xmltbli.ts.json",
+      "sha256": "1c6e541091134b87917119249eb2d863abfb291689c0e29475dae947229fb097"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/DomainMapper.resources.ts.json",
+      "sha256": "d14b35a352fb26be8a87d51a26b09003c1a81ffa1aaf74110ca6dbf46f987608"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/DomainMapper.ts.json",
+      "sha256": "0aae80f149b0be9e90381321356418455d2967b732d4dcf38c34812bf5781650"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/DomainMapperTableManager.ranges.ts.json",
+      "sha256": "81d203bde413ad71f2a980599033082119312ed5232abea651e2599b29c775c6"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/DomainMapper_Impl.headerfooter.ts.json",
+      "sha256": "e31d35180a779c72ed5d2a0c7f6e7b6aff0acc3ea1dd9b03329826c8b776f97a"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/DomainMapper_Impl.stream.ts.json",
+      "sha256": "c6a376f27c2b0165a097aabdb12f0237a7a09e8ab18b2639b5c449c55f1b892a"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts.json",
+      "sha256": "55679f076b20abc8991abd57dbdb216c56a1eaf912c30134465d60b706fe00c7"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/PropertyMap.section.ts.json",
+      "sha256": "35d825c8b0c3727c34089fec1d33a0c3c977f6a4582652262202e0559586c575"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/PropertyMap.ts.json",
+      "sha256": "7a6b49bf4b68a8cc8b61d5f97c2473830dd0d35d0eee3734dff4d349ff280097"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/docnode/ndcopy.ts.json",
+      "sha256": "a1c5612f066778020517e00f102fdce356cdb3e75c2b1f08d0af20bee348962c"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/docnode/ndtbl.ts.json",
+      "sha256": "6104ad59ce9c7c327f2c87cfa6f5c6fa77e9e3aa891ece1091a25d0c92011d80"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/docnode/nodes.ts.json",
+      "sha256": "6654f88656530870cad878c9f8b4767d528f29402c76baf41c3d18ad2a2b6b89"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/unocore/unostyle.ts.json",
+      "sha256": "25691a6d5aa8d9e05c717cb928e174cf13c173624f56fe7ea40681da307aab71"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/unocore/unotbl.ts.json",
+      "sha256": "ecb17f1e07416a3b550492ab4aa63f5f4a90d9e72b5246b5d5c8204ce043a3ba"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/unocore/unotext.ts.json",
+      "sha256": "7c6a386b933a014a457ef44b3a8b37252e4ca3b8c60e4fe7b9d42d4e4f90223e"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/filter/ww8/docxattributeoutput.section.ts.json",
+      "sha256": "a21e1e23b3c033d5bef2e88b35c805e63f6b713a88d2721f2851b94d8372a3d5"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/filter/ww8/docxexport.headerfooter.ts.json",
+      "sha256": "fa8347cb3d04986140a59b54fba35bf6fcd263c5481ae1aea6827b5a4c09e1f9"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/filter/ww8/docxexport.ts.json",
+      "sha256": "2d1d8dbbbdf303adcc2499a6dcf2284049591e4a4c70ccd00b366ebf0a6b8018"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/filter/xml/xmlimp.ts.json",
+      "sha256": "4dffaaacaad144427053de8be0b94b2780d7d897ddb3210cbe07182c89f3b0e8"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/filter/xml/xmltbli.ts.json",
+      "sha256": "957e0ba75cfc37fdc2bf5f77aa32aafb769bfc824b07f8872123786b8046174e"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/DomainMapper.resources.ts.json",
+      "sha256": "c4bb282419a580bfac151561c4726b06c4b636f57bbd9a8f8fe69c144eb7e548"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/DomainMapper.ts.json",
+      "sha256": "dc39814acef424c9e9847d761e99fdac962206aae690540dbd4036dfceeec464"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/DomainMapperTableManager.ranges.ts.json",
+      "sha256": "bc4c8ea467a529b27f9a70126d346fd7bddeb766ca6a163b6bb0c5d091f1ae25"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/DomainMapper_Impl.headerfooter.ts.json",
+      "sha256": "ed7e2a10cd717ffd7664d58287f2d802df427af6d2f8dc9efc9bad254dfc2185"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/DomainMapper_Impl.stream.ts.json",
+      "sha256": "d5f7dc0ee39d94db2a5f9fea917e1cc62a06a4528684e5f8dd1c8b5989ed3e34"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts.json",
+      "sha256": "546ed6975484f3180f1cf91fa54d67a0299c82a4628efa25847b8b2f9fbd883a"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/PropertyMap.section.ts.json",
+      "sha256": "c08066b6678dff281890d7146a8a1a2ce14fec3b5877053f4509021b7ad70df8"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/PropertyMap.ts.json",
+      "sha256": "1ff574c000f04c3ab4b1f057ee7ab759fa772b3304ac66283028e7f00c858f4a"
+    },
+    {
+      "path": "scripts/module-boundaries/allowed-edges.mjs",
+      "sha256": "3651d9cedfe42830311c7e85194a19d17ee195c7c210f4b6cefca3ec614fe017"
+    }
+  ]
+}
