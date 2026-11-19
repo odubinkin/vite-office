@@ -13,13 +13,17 @@
       "SetGlobalConfig",
       "MergeCalcConfig",
       "ConvertStringToValue",
-      "Dispose"
+      "Dispose",
+      "PopExternalSingleRef",
+      "PopExternalDoubleRef"
     ],
     "upstreamSymbols": [
       "ScInterpreter::ScInterpreter",
       "ScInterpreter::Interpret",
       "ScInterpreter::PushDouble",
-      "ScInterpreter::PopMatrix"
+      "ScInterpreter::PopMatrix",
+      "ScInterpreter::PopExternalSingleRef",
+      "ScInterpreter::PopExternalDoubleRef"
     ],
     "preservedResponsibilities": [
       "Task200 connects numeric ODFF source to real ScTokenArray/shared FormulaCompiler RPN, ScInterpreter and existing ScFormulaResult inside the actual document-sheet-column formula blocks. Native scalar arithmetic precedence, code/runtime error projection, lazy result state, default bracket completion, forced recalc and logical formula-block events are represented. ScSheetLimits, RTL parsing/cancellation, mdds and shared token/result owners are reused. Formula pointers use JS GC; no physical pointer deletion or reference counting is introduced. Source constructor/service subsets are explicit. References/functions, localized formatter/string conversion, groups/listening/recalc dependencies, serialization/ODS/UI, complete contexts/RNG/caches/vector/hash scheduling and broad parity remain unsupported. Native power fenv-only subnormal classifications reject explicitly. Formula block copy/clone is noncopyable and unavailable semantic equality throws instead of substituting identity. Broad parity/verification flags remain false.",
@@ -30,7 +34,8 @@
       "Interprets nullary TRUE and FALSE with their native number and logical format classification. An outer represented arithmetic operation returns numeric format.",
       "Evaluates native scalar CONCATENATE and ampersand, uses the standard formatter for numbers, and applies the original line-break policy for actual string/edit cell references.",
       "Converts a returned literal matrix into the original matrix result token and upper-left cell projection.",
-      "The scalar aggregate interpreter takes actual ScMatrixToken operands, handles a missing matrix with UnknownVariable and delegates the supported aggregate branch to IterateMatrix."
+      "The scalar aggregate interpreter takes actual ScMatrixToken operands, handles a missing matrix with UnknownVariable and delegates the supported aggregate branch to IterateMatrix.",
+      "Scalar numeric and text operands, ordinary aggregates and final results now resolve external single-sheet references through their original token types and document cache. External rectangular references reuse the native ScMatrix owner."
     ],
     "omittedResponsibilities": [
       "All services outside the explicitly represented numeric formula/arithmetic subset remain unsupported; no broad parity claim."
@@ -80,6 +85,10 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/excelfilter.named-arrays.test.ts",
           "marker": "verifyAggregates"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/external-reference-formula.test.ts",
+          "marker": "uses source values, known blanks and unavailable cells"
         }
       ],
       "upstream": [
@@ -146,6 +155,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc_formula.cxx",
           "marker": "testFuncPRODUCT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/interpr4.cxx",
+          "marker": "ScInterpreter::PopExternalSingleRef"
         }
       ]
     }

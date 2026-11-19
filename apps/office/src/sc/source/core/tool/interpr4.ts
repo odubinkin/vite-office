@@ -16,6 +16,8 @@ import {
   ScSingleRefToken,
   ScDoubleRefToken,
   ScEmptyCellToken,
+  ScExternalSingleRefToken,
+  ScExternalDoubleRefToken,
   ScMatrixToken,
   ScMatrixFormulaCellToken,
 } from "../../../inc/token";
@@ -41,6 +43,8 @@ import { KahanSum } from "../../../inc/kahan";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SAL_MAX_INT32 } from "../../../../sal/inc/types";
 import { GetString as GetEditString } from "./editutil";
+import { ScMatValType } from "../../../inc/types";
+import type { ScExternalCacheToken } from "../../ui/docshell/externalrefmgr";
 
 const kScInterpreterMaxStrLen = Math.trunc(SAL_MAX_INT32 / 8);
 /** Actual initialized numeric interpreter state, with token references owned by JS GC. */
@@ -141,6 +145,26 @@ export class ScInterpreter {
         return this.GetCellValue(address, new ScRefCellValue(this.mrDoc, address));
       return 0;
     }
+    if (token instanceof ScExternalSingleRefToken) {
+      const value = this.PopExternalSingleRef();
+      if (value instanceof FormulaDoubleToken) return value.GetDouble();
+      if (value instanceof FormulaStringToken)
+        return this.ConvertStringToValue(value.GetString().getString());
+      return 0;
+    }
+    if (token instanceof ScExternalDoubleRefToken) {
+      const matrix = this.PopExternalDoubleRef();
+      if (!matrix) return 0;
+      const value = matrix.Get(0, 0);
+      try {
+        if (value.nType === ScMatValType.String)
+          return this.ConvertStringToValue(value.GetString().getString());
+        this.SetError(value.GetError());
+        return this.nGlobalError === FormulaError.NONE ? value.fVal : 0;
+      } finally {
+        value.dispose();
+      }
+    }
     if (token.GetType() === StackVar.svError) {
       this.PopError();
       return 0;
@@ -210,6 +234,24 @@ export class ScInterpreter {
           this.DoubleRefToPosSingleRef(range, address)
           ? this.GetCellString(new ScRefCellValue(this.mrDoc, address))
           : "";
+      }
+      case StackVar.svExternalSingleRef: {
+        const value = this.PopExternalSingleRef();
+        if (value instanceof FormulaDoubleToken) return this.GetStringFromDouble(value.GetDouble());
+        if (value instanceof FormulaStringToken) return text(value.GetString().getString());
+        return "";
+      }
+      case StackVar.svExternalDoubleRef: {
+        const matrix = this.PopExternalDoubleRef();
+        if (!matrix) return "";
+        const value = matrix.Get(0, 0);
+        try {
+          if (value.nType === ScMatValType.String) return text(value.GetString().getString());
+          this.SetError(value.GetError());
+          return "";
+        } finally {
+          value.dispose();
+        }
       }
       case StackVar.svDouble:
         return this.GetStringFromDouble(this.GetDouble());
@@ -302,6 +344,17 @@ export class ScInterpreter {
           value = this.GetCellValue(address, cell);
           if (this.nGlobalError !== FormulaError.NONE) continue;
           break;
+        }
+        case StackVar.svExternalSingleRef: {
+          const cached = this.PopExternalSingleRef();
+          if (!(cached instanceof FormulaDoubleToken)) continue;
+          value = cached.GetDouble();
+          break;
+        }
+        case StackVar.svExternalDoubleRef: {
+          const matrix = this.PopExternalDoubleRef();
+          if (matrix) count += IterateMatrix(matrix, op, result);
+          continue;
         }
         case StackVar.svError:
           this.PopError();
@@ -432,6 +485,59 @@ export class ScInterpreter {
       throw new Error("ScEditUtil::GetString is not implemented");
     return 0;
   }
+  /** Pops the external scalar reference and resolves its absolute source cell through the document manager. @returns Cached value or absence following an error. */
+  private PopExternalSingleRef(): ScExternalCacheToken | ScEmptyCellToken | undefined {
+    const token = this.pStack.pop() as ScExternalSingleRefToken;
+    if (this.nGlobalError !== FormulaError.NONE) return undefined;
+    const manager = this.mrDoc.GetExternalRefManager();
+    const file = token.GetFileId(),
+      ref = token.GetSingleRef();
+    if (manager.getExternalFileName(file) === undefined) this.SetError(FormulaError.NoName);
+    else if (ref.IsTabRel()) this.SetError(FormulaError.NoRef);
+    else {
+      const value = manager.getSingleRefToken(
+        file,
+        text(token.GetTableName().getString()),
+        ref.toAbs(this.mrDoc, this.aPos),
+        this.aPos,
+      );
+      if (value instanceof FormulaErrorToken) this.SetError(value.GetError());
+      else return value;
+    }
+    return undefined;
+  }
+  /** Pops an external range and resolves its native one-sheet matrix. @returns Cached matrix or absence following an error. */
+  private PopExternalDoubleRef(): ScMatrix | undefined {
+    const token = this.pStack.pop() as ScExternalDoubleRefToken;
+    if (this.nGlobalError !== FormulaError.NONE) return undefined;
+    const manager = this.mrDoc.GetExternalRefManager();
+    const file = token.GetFileId(),
+      ref = token.GetDoubleRef();
+    if (manager.getExternalFileName(file) === undefined) {
+      this.SetError(FormulaError.NoName);
+      return undefined;
+    }
+    const range = ref.toAbs(this.mrDoc, this.aPos);
+    if (
+      ref.Ref1.IsTabRel() ||
+      ref.Ref2.IsTabRel() ||
+      !this.mrDoc.ValidColRow(range.aStart.Col(), range.aStart.Row()) ||
+      !this.mrDoc.ValidColRow(range.aEnd.Col(), range.aEnd.Row())
+    ) {
+      this.SetError(FormulaError.NoRef);
+      return undefined;
+    }
+    const value = manager.getDoubleRefTokens(
+      file,
+      text(token.GetTableName().getString()),
+      range,
+      this.aPos,
+    );
+    if (!(value instanceof FormulaErrorToken)) return value;
+    this.SetError(value.GetError());
+    return undefined;
+  }
+
   /** Creates native final numeric/empty/text results from a real referenced cell. @param address - Absolute reference. @returns Nothing. */
   private PushCellResultToken(address: ScAddress): void {
     const cell = new ScRefCellValue(this.mrDoc, address);
@@ -573,6 +679,15 @@ export class ScInterpreter {
         this.PushCellResultToken(address);
     }
     const result = this.pStack[0];
+    if (this.pStack.length === 1 && result instanceof ScExternalSingleRefToken) {
+      const value = this.PopExternalSingleRef();
+      if (value instanceof FormulaDoubleToken) this.PushDouble(value.GetDouble());
+      else if (value) this.PushWithoutError(value.Clone());
+    }
+    if (this.pStack.length === 1 && result instanceof ScExternalDoubleRefToken) {
+      const matrix = this.PopExternalDoubleRef();
+      if (matrix) this.QueryMatrixType(matrix);
+    }
     if (
       this.pStack.length === 1 &&
       result instanceof ScMatrixToken &&

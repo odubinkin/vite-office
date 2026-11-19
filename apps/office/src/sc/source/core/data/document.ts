@@ -587,7 +587,7 @@ export class ScDocument {
   private externalReferences: ScExternalRefManager | undefined;
   /** Borrows the document's external reference owner. @returns External link manager. */
   GetExternalRefManager = (): ScExternalRefManager =>
-    (this.externalReferences ??= new ScExternalRefManager());
+    (this.externalReferences ??= new ScExternalRefManager(this));
   protected readonly maSheetsWithoutGrid = new WeakSet<ScTable>();
   private pBASM: ScBroadcastAreaSlotMachine | null = null;
   private eHardRecalcState = HardRecalcState.OFF;

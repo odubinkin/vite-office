@@ -7042,3 +7042,16 @@ code. Calc preserves this ODF behavior.
 - [Native cache float serialization](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/xml/xmlexprt.cxx#L5198-L5205)
 - [Native cache float import](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/xml/xmlexternaltabi.cxx#L253-L261)
 - [Calc regression](../../apps/office/src/sc/source/filter/xml/xmlexternaltabi.test.ts)
+
+### CALC-748 — A numeric external matrix operand supplies empty text to concatenation
+
+`ScInterpreter::GetString` formats an external scalar number through
+`GetStringFromDouble`. For an external range it calls `GetStringFromMatrix`,
+which reads the top-left matrix element as a string. `ScMatrixImpl::GetString`
+diagnoses numeric access and returns an empty string when the number carries
+no error. Concatenating a numeric external range therefore contributes no
+text. Calc retains this distinction.
+
+- [Native external string operands](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/core/tool/interpr4.cxx#L2436-L2483)
+- [Native matrix string access](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/core/tool/scmatrix.cxx#L694-L724)
+- [Calc regression](../../apps/office/src/sc/source/core/tool/external-reference-formula.test.ts)

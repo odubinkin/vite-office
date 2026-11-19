@@ -10,18 +10,25 @@
       "ScExternalRefManager",
       "ScExternalRefCacheTable",
       "getExternalFileId",
-      "getCacheTable"
+      "getCacheTable",
+      "getSingleRefToken",
+      "getDoubleRefTokens",
+      "hasCellExternalReference"
     ],
     "upstreamSymbols": [
       "ScExternalRefManager::getExternalFileId",
       "ScExternalRefCache::Table::setCell",
-      "ScExternalRefCache::Table::getCell"
+      "ScExternalRefCache::Table::getCell",
+      "ScExternalRefManager::getSingleRefToken",
+      "ScExternalRefManager::getDoubleRefTokens",
+      "ScExternalRefManager::hasCellExternalReference"
     ],
     "preservedResponsibilities": [
-      "Registers stable imported source workbook IDs, creates case-insensitive table caches, and retains the first native scalar token at each coordinate until document disposal."
+      "Registers stable imported source workbook IDs, creates case-insensitive table caches, and retains the first native scalar token at each coordinate until document disposal.",
+      "Resolves cached scalar and rectangular matrix operands and registers calling formula cells using the original file-ID boundary. Whole-table ODF caches distinguish known blank cells from unavailable workbook data. Cache reads use only imported data in the browser."
     ],
     "omittedResponsibilities": [
-      "External refresh, range cache reconstruction, source-medium URL resolution, compiler lookup and external export remain pending."
+      "External refresh, source-medium URL resolution, multi-sheet matrix assembly and cached number format identity remain pending."
     ],
     "evidence": {
       "local": [
@@ -32,6 +39,10 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/externallinkbuffer.test.ts",
           "marker": "populates native external-cache tokens"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/external-reference-formula.test.ts",
+          "marker": "uses source values, known blanks and unavailable cells"
         }
       ],
       "upstream": [
@@ -46,6 +57,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/ui/docshell/externalrefmgr.cxx",
           "marker": "ScExternalRefCache::Table::getCell"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/externalrefmgr.cxx",
+          "marker": "ScExternalRefManager::getSingleRefToken"
         }
       ]
     }

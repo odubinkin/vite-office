@@ -1,6 +1,6 @@
 /** @fileoverview XLSX workbook link metadata and native defined-name admission. */
 import { readFileSync } from "node:fs";
-import { expect, it } from "vitest";
+import { assert, expect, it } from "vitest";
 import { ZipStorage } from "../../../../oox/source/helper/zipstorage";
 import { XmlFilterBase } from "../../../../oox/source/core/xmlfilterbase";
 import {
@@ -19,6 +19,7 @@ import { WorkbookFragment } from "./workbookfragment";
 import { ExcelFilter } from "./excelfilter";
 import { exportXlsx } from "../excel/xetable";
 import { ScDocument } from "../../../inc/document";
+import { ScAddress } from "../../../inc/address";
 import { FormulaDoubleToken, FormulaStringToken } from "../../../../formula/inc/token";
 import { FormulaError, GetDoubleErrorValue } from "../../../../formula/inc/errorcodes";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
@@ -31,6 +32,53 @@ import {
 import { readOdsDocument, writeOdsXml } from "../xml/xmlwrap";
 
 const data = "../../vendor/libreoffice-reference/sc/qa/unit/data/xlsx/";
+
+it("evaluates XLSX formulas against the embedded external workbook through ODS and XLSX saves", /** Adds ordinary external formula cells to the pinned link package without changing its cached data. @returns Completion. */ async () => {
+  const source = await DocumentArchive.open(readFileSync(data + "tdf130959.xlsx"));
+  const writer = new DocumentArchiveWriter();
+  for (const path of source.getEntryNames()) {
+    if (path === "xl/worksheets/sheet1.xml") {
+      const xml = (await source.readTextEntry(path)).replace(
+        /<sheetData>[\s\S]*?<\/sheetData>/u,
+        `<sheetData>
+          <row r="1">
+            <c r="A1"><f>[1]Referens!$A$7</f></c>
+            <c r="B1"><f>[1]Referens!$A$2&amp;"!"</f></c>
+            <c r="C1"><f>SUM([1]Referens!$A$1:$A$7)</f></c>
+            <c r="D1"><f>[1]Referens!$A$2:$A$3</f></c>
+          </row></sheetData>`,
+      );
+      writer.putNextEntry(path, new TextEncoder().encode(xml));
+    } else writer.putNextEntry(path, await source.readEntry(path));
+  }
+  const document = await ExcelFilter.importDocument(await writer.finish());
+  let primary: ScDocument | undefined;
+  let reopened: ScDocument | undefined;
+  try {
+    primary = await readOdsDocument(await writeOdsXml(document));
+    reopened = await ExcelFilter.importDocument(await exportXlsx(primary));
+    for (const calc of [document, primary, reopened]) {
+      const manager = calc.GetExternalRefManager();
+      for (const [col, expected] of [
+        [0, "Alla fakturor ska i detta flöde"],
+        [1, "Referens!"],
+        [3, "Referens"],
+      ] as const) {
+        const address = new ScAddress(col, 0, 0);
+        const formula = calc.GetFormulaCell(address);
+        assert(formula);
+        expect(formula.GetErrCode()).toBe(FormulaError.NONE);
+        expect(text(formula.GetString().getString())).toBe(expected);
+        expect(manager.hasCellExternalReference(address)).toBe(true);
+      }
+      expect(calc.GetValue(new ScAddress(2, 0, 0))).toBe(0);
+    }
+  } finally {
+    reopened?.Dispose();
+    primary?.Dispose();
+    document.Dispose();
+  }
+});
 
 it("opens and re-exports the original external named ranges and caches from tdf130959", /** Ports testTdf130959 and extends it through the production Worker graph and the XLSX output. @returns Completion. */ async () => {
   const source = await ExcelFilter.importDocument(readFileSync(data + "tdf130959.xlsx"));

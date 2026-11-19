@@ -18,22 +18,30 @@
       "evidence": [
         "apps/office/src/sc/source/ui/docshell/externalrefmgr.ts",
         "apps/office/src/sc/source/filter/oox/externallinkbuffer.test.ts",
-        "vendor/libreoffice-reference/sc/source/ui/docshell/externalrefmgr.cxx#ScExternalRefManager::getExternalFileId"
+        "vendor/libreoffice-reference/sc/source/ui/docshell/externalrefmgr.cxx#ScExternalRefManager::getExternalFileId",
+        "apps/office/src/sc/source/core/tool/external-reference-formula.test.ts",
+        "vendor/libreoffice-reference/sc/source/ui/docshell/externalrefmgr.cxx#ScExternalRefManager::getSingleRefToken"
       ],
-      "justification": "Registers stable imported source workbook IDs, creates case-insensitive table caches, and retains the first native scalar token at each coordinate until document disposal. External refresh, range cache reconstruction, source-medium URL resolution, compiler lookup and external export remain pending.",
+      "justification": "Resolves cached scalar and rectangular matrix operands and registers calling formula cells using the original file-ID boundary. Whole-table ODF caches distinguish known blank cells from unavailable workbook data. Cache reads use only imported data in the browser. External refresh, source-medium URL resolution and cross-sheet array assembly remain pending.",
       "knownViolations": [],
       "localSymbols": [
         "ScExternalRefManager",
         "ScExternalRefCacheTable",
         "getExternalFileId",
-        "getCacheTable"
+        "getCacheTable",
+        "getSingleRefToken",
+        "getDoubleRefTokens",
+        "hasCellExternalReference"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/ui/docshell/externalrefmgr.cxx",
       "upstreamSymbols": [
         "ScExternalRefManager::getExternalFileId",
         "ScExternalRefCache::Table::setCell",
-        "ScExternalRefCache::Table::getCell"
+        "ScExternalRefCache::Table::getCell",
+        "ScExternalRefManager::getSingleRefToken",
+        "ScExternalRefManager::getDoubleRefTokens",
+        "ScExternalRefManager::hasCellExternalReference"
       ]
     }
   }
