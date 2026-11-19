@@ -129,13 +129,13 @@ backup/rollback and symlink-copy policy stay in `sal/osl/unx/file_misc.ts`. Only
 FS syscall failures publish errno across the JS/C boundary. This does not mount the host filesystem
 or provide a full LibreOffice runtime.
 
-Temporary-file prerequisites additionally expose actual libc `mkdir`, `rmdir`, `getpid` and
-the original `osl_getGlobalMutex` pointer-to-handle contract. The function-static OSL owner
-is constructed/destroyed natively; the JS facade borrows that field without a second allocation.
-All filesystem/environment state remains in the existing realm-local SDK runtime.
+Temporary-file prerequisites additionally expose actual libc `mkdir`, `rmdir`, `getpid` and the
+original `osl_getGlobalMutex` pointer-to-handle contract. The function-static OSL owner is
+constructed/destroyed natively; the JS facade borrows that field without a second allocation. All
+filesystem/environment state remains in the existing realm-local SDK runtime.
 
-Directory enumeration exposes the actual selected libc `opendir`, `readdir` and `closedir`.
-Two mechanical accessors copy the real dirent name/type before libc can reuse its storage.
-OSL URL conversion, approved path checks, dot-entry filtering, item lifetime and error translation
-remain in `sal/osl/unx/file_misc.ts`; the JS VM owns its DirectoryImpl record and libc owns DIR.
-No synthetic cursor, host mount, filesystem provider or hard-coded dirent layout is introduced.
+Directory enumeration exposes the actual selected libc `opendir`, `readdir` and `closedir`. Two
+mechanical accessors copy the real dirent name/type before libc can reuse its storage. OSL URL
+conversion, approved path checks, dot-entry filtering, item lifetime and error translation remain in
+`sal/osl/unx/file_misc.ts`; the JS VM owns its DirectoryImpl record and libc owns DIR. No synthetic
+cursor, host mount, filesystem provider or hard-coded dirent layout is introduced.

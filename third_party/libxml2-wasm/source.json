@@ -167,9 +167,7 @@
   },
   "localHostnameBindings": {
     "source": "sal/osl/unx/socket.cxx local hostname and its original host-address helpers",
-    "exports": [
-      "office_local_hostname"
-    ],
+    "exports": ["office_local_hostname"],
     "note": "User-approved local hostname/FQDN authority dependency only. Actual pinned libc gethostname and getaddrinfo/freeaddrinfo over the existing SDK synthetic DNS table; no socket creation, connection, external DNS or host network lookup."
   },
   "fileStatBindings": {
