@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 671
+revision: 673
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T09:14:54.768Z"
+  updated_at: "2026-11-19T09:24:51.803Z"
   updated_by: "CODER"
-  note: "Native external cache matrix lookup and the original LibreOffice ODS scenario pass. Broader XLSX filter acceptance remains open."
-  attempts: 218
+  note: "Worksheet lookup passes the upstream testFuncVLOOKUP and production XLSX reopen checks. Broader filter acceptance remains open."
+  attempts: 219
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3496,8 +3499,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T09:24:51.803Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Worksheet lookup passes the upstream testFuncVLOOKUP and production XLSX reopen checks. Broader filter acceptance remains open."
+  -
+    type: "status"
+    at: "2026-11-19T09:25:12.121Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T09:15:06.381Z"
+doc_updated_at: "2026-11-19T09:25:12.121Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -10136,6 +10152,48 @@ sections:
     - Commands: npm run typecheck; npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:calc-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
       Result: pass. Evidence: production static build with four JS bundles, provenance for 2,822 runtime modules, 5,750 JSDoc sources and zero registry semantic violations. Scope: source contracts, formatter, typecheck and application build.
     - Remaining acceptance: ordinary worksheet-range lookup needs native query iterators, and broader XLSX compatibility and external refresh remain open. Full test suite was outside the ten-task cadence.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-19T09:24:51.803Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Worksheet lookup passes the upstream testFuncVLOOKUP and production XLSX reopen checks. Broader filter acceptance remains open.
+    Attempts: 219
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T09:15:06.381Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    Implementation e1de4e44a routes range arguments of VLOOKUP and HLOOKUP to ScQueryCellIteratorDirect. The iterator reads the canonical sheet's sparse cells and uses ScQueryEvaluator and ScQueryEntry for numeric equality, formatted text, default search mode, and wildcard handling. The result comes from the original worksheet cell, including native empty-as-string display. Matrix and external cache operands retain their own path and share case-insensitive collation.
+
+    - Command: npm run test:coverage:calc -- queryiter.lookup.test.ts lookup-formula.test.ts external-reference-formula.test.ts externallinkbuffer.test.ts compiler.external.test.ts xmlexternaltabi.test.ts aggregate-formula.test.ts range-formula.test.ts numeric-formula.test.ts text-formula.test.ts implicit-intersection.test.ts calcconfig-document.test.ts document.formula.test.ts excelfilter.named-arrays.test.ts formula-output.test.ts --testNamePattern='^(?!.*rejects actual matrix operands)' --maxWorkers=2 --testTimeout=120000 --coverage.include=src/sc/source/core/data/queryevaluator.ts --coverage.include=src/sc/source/core/data/queryiter.ts --coverage.include=src/sc/source/core/tool/queryentry.ts --coverage.include=src/sc/source/core/tool/interpr4.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/xlsx-worksheet-lookup
+      Result: pass. Evidence: 84 tests across 15 files. One matrix compilation assertion with independent baseline reproduction in d09dfb450 was excluded from this run. All four owners exceeded 90% on the four metrics. Minimum branch coverage was 90.86%. Scope: original worksheet testFuncVLOOKUP scenario, native errors and blanks, wildcard options, formula invalidation, neighbor formula operations and the original external reference ODS regression.
+    - Command: npm run test:coverage:calc -- queryiter.lookup.test.ts lookup-formula.test.ts xmlexternaltabi.test.ts --maxWorkers=2 --coverage.include=src/sc/source/core/data/queryevaluator.ts --coverage.include=src/sc/source/core/data/queryiter.ts --coverage.include=src/sc/source/core/tool/queryentry.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/xlsx-worksheet-lookup-query
+      Result: pass. Evidence: 8 tests with the final query inputs. Scope: literal versus explicit regex-pattern detection, fallback after a sorted wildcard mismatch, all native-number and string query modes represented in the tests.
+    - Command: node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=90000 --grep 'pinned XLSX with external names|active sheet when'
+      Result: pass. Evidence: 2 production Chromium scenarios. The original multi-sheet XLSX is opened, a worksheet-range VLOOKUP calculated, and its result survives ODS browser-storage reopen and XLSX export/reopen at mobile width. The downloaded XLSX preserves the formula in the active worksheet XML. The external lookup still passes through the same supported file controls.
+    - Commands: npm run typecheck; npm run test:static; Prettier and ESLint scoped to changed files; npm run check:dependencies; npm run check:calc-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+      Result: pass. Evidence: four JS bundles, provenance for 2,825 runtime modules, 5,754 JSDoc sources, zero registry semantic violations. Full test suite was outside the ten-task cadence.
+    - Remaining acceptance: specialized binary search and the native lookup result cache remain unported. ICU regular expressions are still unimplemented in the shared search engine. The worksheet path reports NoValue for active regex patterns, while wildcard and literal queries use the existing native-shaped text backend. Broader XLSX acceptance remains open.
 
     BlueprintSnapshotRef:
     - state: current
@@ -17883,6 +17941,48 @@ Implementation 1a9b3ac3b adds native opcode admission and the shared CalculateLo
 - Commands: npm run typecheck; npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:calc-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
   Result: pass. Evidence: production static build with four JS bundles, provenance for 2,822 runtime modules, 5,750 JSDoc sources and zero registry semantic violations. Scope: source contracts, formatter, typecheck and application build.
 - Remaining acceptance: ordinary worksheet-range lookup needs native query iterators, and broader XLSX compatibility and external refresh remain open. Full test suite was outside the ten-task cadence.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-19T09:24:51.803Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Worksheet lookup passes the upstream testFuncVLOOKUP and production XLSX reopen checks. Broader filter acceptance remains open.
+Attempts: 219
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T09:15:06.381Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+Implementation e1de4e44a routes range arguments of VLOOKUP and HLOOKUP to ScQueryCellIteratorDirect. The iterator reads the canonical sheet's sparse cells and uses ScQueryEvaluator and ScQueryEntry for numeric equality, formatted text, default search mode, and wildcard handling. The result comes from the original worksheet cell, including native empty-as-string display. Matrix and external cache operands retain their own path and share case-insensitive collation.
+
+- Command: npm run test:coverage:calc -- queryiter.lookup.test.ts lookup-formula.test.ts external-reference-formula.test.ts externallinkbuffer.test.ts compiler.external.test.ts xmlexternaltabi.test.ts aggregate-formula.test.ts range-formula.test.ts numeric-formula.test.ts text-formula.test.ts implicit-intersection.test.ts calcconfig-document.test.ts document.formula.test.ts excelfilter.named-arrays.test.ts formula-output.test.ts --testNamePattern='^(?!.*rejects actual matrix operands)' --maxWorkers=2 --testTimeout=120000 --coverage.include=src/sc/source/core/data/queryevaluator.ts --coverage.include=src/sc/source/core/data/queryiter.ts --coverage.include=src/sc/source/core/tool/queryentry.ts --coverage.include=src/sc/source/core/tool/interpr4.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/xlsx-worksheet-lookup
+  Result: pass. Evidence: 84 tests across 15 files. One matrix compilation assertion with independent baseline reproduction in d09dfb450 was excluded from this run. All four owners exceeded 90% on the four metrics. Minimum branch coverage was 90.86%. Scope: original worksheet testFuncVLOOKUP scenario, native errors and blanks, wildcard options, formula invalidation, neighbor formula operations and the original external reference ODS regression.
+- Command: npm run test:coverage:calc -- queryiter.lookup.test.ts lookup-formula.test.ts xmlexternaltabi.test.ts --maxWorkers=2 --coverage.include=src/sc/source/core/data/queryevaluator.ts --coverage.include=src/sc/source/core/data/queryiter.ts --coverage.include=src/sc/source/core/tool/queryentry.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/xlsx-worksheet-lookup-query
+  Result: pass. Evidence: 8 tests with the final query inputs. Scope: literal versus explicit regex-pattern detection, fallback after a sorted wildcard mismatch, all native-number and string query modes represented in the tests.
+- Command: node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=90000 --grep 'pinned XLSX with external names|active sheet when'
+  Result: pass. Evidence: 2 production Chromium scenarios. The original multi-sheet XLSX is opened, a worksheet-range VLOOKUP calculated, and its result survives ODS browser-storage reopen and XLSX export/reopen at mobile width. The downloaded XLSX preserves the formula in the active worksheet XML. The external lookup still passes through the same supported file controls.
+- Commands: npm run typecheck; npm run test:static; Prettier and ESLint scoped to changed files; npm run check:dependencies; npm run check:calc-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+  Result: pass. Evidence: four JS bundles, provenance for 2,825 runtime modules, 5,754 JSDoc sources, zero registry semantic violations. Full test suite was outside the ten-task cadence.
+- Remaining acceptance: specialized binary search and the native lookup result cache remain unported. ICU regular expressions are still unimplemented in the shared search engine. The worksheet path reports NoValue for active regex patterns, while wildcard and literal queries use the existing native-shaped text backend. Broader XLSX acceptance remains open.
 
 BlueprintSnapshotRef:
 - state: current
