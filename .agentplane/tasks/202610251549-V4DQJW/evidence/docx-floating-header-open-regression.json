@@ -1,0 +1,23 @@
+{
+  "scope": "Reproduce the reported DOCX import failure and add a production Chromium regression for a standalone floating picture in a Word header.",
+  "implementation": "44bbfd091",
+  "regression_test": "c6d39f12b",
+  "revision_comparison": {
+    "2406dda9b": "The last locally known origin/main revision fails to display the attachment.",
+    "fbb9f7d31": "The attachment fails with [word/document.xml line 2]: unknown error. The new public fixture also fails before body text appears.",
+    "44bbfd091": "The attachment opens and displays body text in the existing Writer file dialog.",
+    "cd241ab53": "The attachment opens, is retained by browser storage across a reload, and opens after downloading it as DOCX."
+  },
+  "verification": {
+    "browser": {
+      "command": "npm exec -- playwright test --config apps/office/coverage/odt-story.playwright.config.ts --workers=1 --timeout=90000 writer-odt-page-stories.spec.ts",
+      "passed": 4,
+      "fixture": "An isolated header drawing uses the unchanged raster and relationships from the pinned testHeaderImageAlignment.docx. The user attachment is excluded."
+    },
+    "writer": {
+      "command": "npm run test:writer -- src/sw/source/filter/ww8/docxexport.drawing.test.ts src/sw/source/filter/ww8/docxexport.page-stories.test.ts src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.test.ts",
+      "passed": 44
+    },
+    "static": ["scoped ESLint", "scoped Prettier", "git diff check", "Agentplane routing"]
+  }
+}
