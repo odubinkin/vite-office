@@ -1,0 +1,174 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "checkpoint": "Native Calc active table through XLSX, ODS settings, Worker, and the existing UI",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sc/source/ui/view/viewdata.cxx#ScViewData::ReadUserDataSequence/WriteUserDataSequence",
+    "sc/source/filter/xml/xmlwrap.cxx#settings.xml",
+    "xmloff/source/core/DocumentSettingsContext.cxx#XMLConfigItemMapIndexedContext",
+    "xmloff/source/core/SettingsExportHelper.cxx#XMLSettingsExportHelper::exportIndexAccess",
+    "sc/qa/unit/subsequent_filters_test4.cxx#testSheetNamesXLSX"
+  ],
+  "fixtures": [
+    {
+      "path": "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/sheet-names.xlsx",
+      "sha256": "e768518ed6161ec4698e6a24506fc71ce2ebf56b0a2fa5d9dd352b2dfb5f47ec"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/qa/unit/data/ods/print-range.ods",
+      "sha256": "dfbf95dad4c1b2d1bde2cd44862671b72a57ddcadfc2f055ef8958ed90199736"
+    },
+    {
+      "path": "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/named-ranges-global.xlsx",
+      "sha256": "8fe1f4a558fe51bf5807aff77c0fe6c6f6581bad395a9ee1f01d1fe016e87bfa"
+    }
+  ],
+  "results": {
+    "calc": {
+      "tests": 55,
+      "files": 8
+    },
+    "fileRegressions": {
+      "tests": 25,
+      "files": 4
+    },
+    "shared": {
+      "tests": 9,
+      "files": 3
+    },
+    "writer": {
+      "tests": 18,
+      "files": 3
+    },
+    "chromium": {
+      "calc": 2,
+      "writer": 2
+    },
+    "coverage": {
+      "viewdata.settings.ts": {
+        "lines": 100,
+        "functions": 100,
+        "statements": 100,
+        "branches": 100
+      },
+      "DocumentSettingsContext.ts": {
+        "lines": 100,
+        "functions": 100,
+        "statements": 97.5,
+        "branches": 92.3
+      },
+      "SettingsExportHelper.ts": {
+        "lines": 100,
+        "functions": 100,
+        "statements": 100,
+        "branches": 100
+      }
+    },
+    "fullSuiteRun": false
+  },
+  "commands": [
+    "vitest run --config vitest.calc.config.ts --coverage viewdata.settings print-ranges ods.test ods-worker-boundaries calc-goto-sheet excelfilter.test --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sc/source/ui/view/viewdata.settings.ts --coverage.thresholds.lines=90 --coverage.thresholds.functions=90 --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.perFile --coverage.reporter=text --coverage.reporter=json-summary --coverage.reportsDirectory=coverage/xlsx-active-view-scoped",
+    "vitest run --config vitest.calc.config.ts calc-files docsh.csv-export docsh.csv-encoding calc-ods-io --maxWorkers=2 --testTimeout=90000",
+    "vitest run --config vitest.shared-coverage.config.ts --coverage DocumentSettingsContext native-rtf-tab-settings-roundtrip xmlimp xmltoken --maxWorkers=2 --testTimeout=90000 --coverage.include=src/xmloff/source/core/DocumentSettingsContext.ts --coverage.include=src/xmloff/source/core/SettingsExportHelper.ts --coverage.thresholds.lines=90 --coverage.thresholds.functions=90 --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.perFile --coverage.reporter=text --coverage.reporter=json-summary --coverage.reportsDirectory=coverage/xlsx-active-view-shared",
+    "vitest run --config vitest.writer.config.ts native-rtf-tab-settings-roundtrip docxexport.compat odt-roundtrip --maxWorkers=2 --testTimeout=90000",
+    "./node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=60000",
+    "./node_modules/.bin/playwright test -c apps/office/coverage/odt-story.playwright.config.ts --workers=1 --timeout=60000 -g 'character spacing through browser|original DOCX with a footer'",
+    "npm run typecheck",
+    "npm run test:static",
+    "npm run check:docs",
+    "npm run check:dependencies",
+    "npm run check:file-size",
+    "npm run check:source-tree",
+    "npm run check:calc-resources",
+    "npm run check:writer-resources",
+    "npm run inventory:registry:build",
+    "npm run check:source-provenance",
+    "npm run inventory:invariants",
+    "npm run inventory:parity",
+    "Scoped ESLint and Prettier",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor",
+    "git diff --check",
+    "npm exec -w apps/office -- vitest run --config coverage/xlsx-name-probe.vitest.config.ts"
+  ],
+  "verified": [
+    "Calc emits the selected table by name in the native ODF office settings and declares settings.xml in the manifest. The Worker carries the actual visible-tab hint.",
+    "The pinned sheet-names.xlsx retains all five visible sheets and the fifth active tab after primary ODS and XLSX re-export. Chromium preserves it and a cell edit on desktop and at mobile width.",
+    "The pinned print-range.ods restores the original second sheet. The indexed view owner preserves positional entries and typed string data. Writer boolean settings and both existing DOCX browser scenarios still pass.",
+    "CSV encoding regression tests initialize the same Emscripten runtime required by SvMemoryStream and pass all legacy encoding cases."
+  ],
+  "remaining": [
+    "Other Calc view properties and complete DOCX and XLSX acceptance remain open.",
+    "The unchanged named-ranges-global.xlsx stops in ScCompiler::CompileString during DefinedNamesBuffer::finalizeImport. A diagnostic copy changing only the Global4 array literal to scalar zero opens both sheets with active index 1. The original fixture remains unchanged. The bounded active-view checkpoint does not resolve matrix literals."
+  ],
+  "files": [
+    {
+      "path": "apps/office/e2e/calc/xlsx-active-view.spec.ts",
+      "sha256": "13be2922884f2cb417d1716815e86e068d5c3dc10e16044c186846ef8b7d1cbc"
+    },
+    {
+      "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts",
+      "sha256": "7dfc8b6b9d9ae69c1ba90bf5072e2a9178672afa30aa37b13fd24bf10c1e42bb"
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlwrap.ts",
+      "sha256": "d3bf60810d34e23a2c10bae3286818252ec0993263fcba91dff1441766840f58"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/docsh.csv-encoding.test.ts",
+      "sha256": "e1ee6b32c3bd9583c3e282d377c1d4ae2826744f11b9703914e2d9bafe08f382"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabvwsh4.ts",
+      "sha256": "31bd0c999bee40fc67d0c089f9f81b8272b275b9187e3f6850dc6a0fe64dfe4e"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
+      "sha256": "8c2a533707b3684937203aa8071b44d9629d2b0ab4af7fc7745aba510edaae9a"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/viewdata.settings.ts",
+      "sha256": "53a4af43c83f88881e29d3d4cdec2031d6516d1db6602485d73468f423bf79aa"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/core/DocumentSettingsContext.test.ts",
+      "sha256": "9aa8a123768041f70d45b47b2a8d2b3cff3b3bb360eb3fd83564933784e11e65"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/core/DocumentSettingsContext.ts",
+      "sha256": "83271965298906dd91d5a397cd8da6d52b9d1095e058b77174f189acc7346442"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/core/SettingsExportHelper.ts",
+      "sha256": "5b4c3acf3b97ed102794fd28778e4c632a72e2865387d3366511bf7c7a492442"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
+      "sha256": "e929fe70af4cf4711023eadd4e1bdcd0d81f8b64f7a8d2a502f52754524e2c66"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/view/viewdata.settings.ts.json",
+      "sha256": "eac60e7ccbb8d35bf42d57b25f9a298cf7d40fd6540f827674eb82e1e3683b58"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/view/viewdata.settings.ts.json",
+      "sha256": "9c3380e2c69c274dc51f8723c43b566c8af5af11980b585436038ed3738b4cad"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/xmloff/source/core/DocumentSettingsContext.ts.json",
+      "sha256": "c74ee1d0e1431dd92d0f4ff3d875b5fae483ed95511b9cbb3672cac91c3f2c66"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/xmloff/source/core/SettingsExportHelper.ts.json",
+      "sha256": "ecdd7925515c24d54a236366dd0f3e29e26081e599b052a0ddbf726598224482"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/xmloff/source/core/DocumentSettingsContext.ts.json",
+      "sha256": "1738e46a3f6e028dc29315b913599dd08b4ec0b497a2f5f2957ba98d6737f102"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/xmloff/source/core/SettingsExportHelper.ts.json",
+      "sha256": "66dd6baaeaf8b42ebb35efa2112682d9d62a502d1b5cbeea8d36a226a2a82452"
+    }
+  ]
+}

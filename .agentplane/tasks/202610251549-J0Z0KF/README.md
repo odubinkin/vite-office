@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 648
+revision: 651
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T05:47:53.791Z"
+  updated_at: "2026-11-19T06:02:47.768Z"
   updated_by: "CODER"
-  note: "Native worksheet visibility passes 41 related Calc tests, the per-owner coverage gate and the production Chromium file and sheet controls. Complete XLSX scope remains open. See evidence/native-xlsx-sheet-visibility.json."
-  attempts: 207
+  note: "Active table persistence passes focused Calc, Writer and shared tests, per-owner coverage and production Chromium. The complete XLSX scope remains open. See evidence/native-xlsx-active-view.json."
+  attempts: 208
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3320,8 +3323,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T06:02:47.768Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Active table persistence passes focused Calc, Writer and shared tests, per-owner coverage and production Chromium. The complete XLSX scope remains open. See evidence/native-xlsx-active-view.json."
+  -
+    type: "status"
+    at: "2026-11-19T06:02:56.067Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T05:48:01.373Z"
+doc_updated_at: "2026-11-19T06:02:56.067Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -9546,6 +9562,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-19T06:02:47.768Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Active table persistence passes focused Calc, Writer and shared tests, per-owner coverage and production Chromium. The complete XLSX scope remains open. See evidence/native-xlsx-active-view.json.
+    Attempts: 208
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T06:02:47.088Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -10618,6 +10664,13 @@ sections:
     - Result: pass for native worksheet visibility and the represented file UI. Overall XLSX scope remains in rework.
     - Evidence: 41 targeted Calc tests across 8 files and one Chromium scenario passed. All four measured metrics of the visibility owner reached 100 percent. The pinned workbook retains its three sheets and only the second is visible. The Chromium scenario uses a named browser copy after one cell edit because the original fixture has no cells with content.
     - Scope: workbook visibility, first view active index, actual sheet owner and stream state, Worker transfer, primary ODS display style, visible tab navigation, Go to Sheet and XLSX output. General ODS view settings and full format acceptance remain open. No full suite was due.
+
+    ### Native XLSX active view through primary ODS
+
+    - Command: Scoped Calc, Writer and shared Vitest; per-owner coverage; Chromium desktop and mobile file workflows; static, package and repository gates. Exact commands and file hashes are in `evidence/native-xlsx-active-view.json`.
+    - Result: pass for active sheet persistence. Complete XLSX scope remains in rework.
+    - Evidence: 55 Calc tests with coverage, 25 file regressions, 9 shared checks, 18 Writer tests and four Chromium scenarios passed. All measured owner metrics exceed 90 percent. The unchanged sheet-names workbook retains the active fifth sheet and all special-character names through Worker, ODS and XLSX. The diagnostic copy replacing only the Global4 array literal determined the distinct original named-range compilation failure.
+    - Scope: first view ActiveTable by name, shared ODF indexed view settings, primary ODS, and existing Calc desktop and mobile file UI. Other view settings and array literals remain open. No full suite was due.
 id_source: "generated"
 ---
 ## Summary
@@ -16852,6 +16905,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-19T06:02:47.768Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Active table persistence passes focused Calc, Writer and shared tests, per-owner coverage and production Chromium. The complete XLSX scope remains open. See evidence/native-xlsx-active-view.json.
+Attempts: 208
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T06:02:47.088Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -17928,3 +18011,10 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Result: pass for native worksheet visibility and the represented file UI. Overall XLSX scope remains in rework.
 - Evidence: 41 targeted Calc tests across 8 files and one Chromium scenario passed. All four measured metrics of the visibility owner reached 100 percent. The pinned workbook retains its three sheets and only the second is visible. The Chromium scenario uses a named browser copy after one cell edit because the original fixture has no cells with content.
 - Scope: workbook visibility, first view active index, actual sheet owner and stream state, Worker transfer, primary ODS display style, visible tab navigation, Go to Sheet and XLSX output. General ODS view settings and full format acceptance remain open. No full suite was due.
+
+### Native XLSX active view through primary ODS
+
+- Command: Scoped Calc, Writer and shared Vitest; per-owner coverage; Chromium desktop and mobile file workflows; static, package and repository gates. Exact commands and file hashes are in `evidence/native-xlsx-active-view.json`.
+- Result: pass for active sheet persistence. Complete XLSX scope remains in rework.
+- Evidence: 55 Calc tests with coverage, 25 file regressions, 9 shared checks, 18 Writer tests and four Chromium scenarios passed. All measured owner metrics exceed 90 percent. The unchanged sheet-names workbook retains the active fifth sheet and all special-character names through Worker, ODS and XLSX. The diagnostic copy replacing only the Global4 array literal determined the distinct original named-range compilation failure.
+- Scope: first view ActiveTable by name, shared ODF indexed view settings, primary ODS, and existing Calc desktop and mobile file UI. Other view settings and array literals remain open. No full suite was due.
