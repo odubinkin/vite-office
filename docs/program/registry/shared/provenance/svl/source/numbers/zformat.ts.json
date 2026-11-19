@@ -26,7 +26,9 @@
       "IsInQuote",
       "GetQuoteEnd",
       "GetFormatPrecision",
-      "ImpGetOutputInputLine"
+      "ImpGetOutputInputLine",
+      "GetConditions",
+      "GetColor"
     ],
     "upstreamSymbols": [
       "SvNumberformat::GetOutputString",
@@ -52,7 +54,9 @@
       "ImpGetNumberOutput",
       "SvNumberformat::ImpGetTimeOutput",
       "SvNumberformat::ImpGetDateOutput",
-      "SvNumberformat::ImpGetDateTimeOutput"
+      "SvNumberformat::ImpGetDateTimeOutput",
+      "SvNumberformat::GetConditions",
+      "SvNumberformat::GetColor"
     ],
     "preservedResponsibilities": [
       "Task76 ports the actual General/standard NUMBER branches of SvNumberformat output over the existing genuine SAL Unicode conversion and RTL rounding owners. Preserve native unlimited/input-line precision65535/65534,small-value fixed-versus-E2 choice,nine-exponent/approxEqual checks,Automatic exponent widths,finite precision14/300 clamps,locale first-decimal unit and minus-zero suppression. The native NatNum0 path needs no transliteration. Actual precision/decimal scalar fields are explicit parameters of this consumed responsibility;no SvNumberFormatter facade,synthetic parsed format or alternate numeric model is introduced. Full number-format constructor/scanner/table/merge,other format types,NatNum and connected document paste/history remain pending.",
@@ -86,7 +90,8 @@
       "Selected LOGICAL sections now dispatch to original ImpGetLogicalOutput for incomplete native metadata; original fast Boolean and section-color contracts remain with this owner. No CSV option validation or substitute cell-text path is added.",
       "Original DATE/DATETIME/TIME/LOGICAL producers now receive the actual native wrapper and modes0..11 are admitted to their connected source conversion paths. DATE calendar field mapping and integer/padding/logical conversion retain their separate source placements. Ordinary numeric/scientific/fraction native producer forwarding and mode12 remain required before CSV completion.",
       "Numeric dispatch now invokes original number/scientific/fraction producer fragments on the actual entry owner with original value/index/star/native/current/output arguments. General fallback and numeric TEXT output use original member-owner Standard helpers, while actual standard unlimited and input-line branches preserve their source native-conversion bypass. The raw formatStandardNumber helper no longer substitutes for the native-aware General path. Modes0..11 are connected; mode12, remaining CSV multiline/acceptance and full source-native ABI remain incomplete.",
-      "Original GetOutputString selects standard and custom subformats in source order, invokes the appropriate real producer including NatNum12, and leaves an empty output on the native switch default."
+      "Original GetOutputString selects standard and custom subformats in source order, invokes the appropriate real producer including NatNum12, and leaves an empty output on the native switch default.",
+      "Exposes the compiled conditional operators, thresholds and per-section colors used by ODF data styles."
     ],
     "omittedResponsibilities": [
       "Native allocator and complete upstream formatter QA remain outside this checkpoint."
@@ -210,6 +215,14 @@
         {
           "path": "sc/source/ui/docshell/docsh.cxx",
           "marker": "ScCellFormat::GetString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::GetConditions"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::GetColor"
         }
       ]
     }

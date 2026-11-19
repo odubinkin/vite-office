@@ -458,6 +458,17 @@ export class SvNumberformat {
     }
     return false;
   }
+  /** Reads both compiled limit conditions in native section order. @returns Operator and limit pairs. */
+  GetConditions(): readonly [readonly [number, number], readonly [number, number]] {
+    return [
+      [this.eOp1, this.fLimit1],
+      [this.eOp2, this.fLimit2],
+    ];
+  }
+  /** Returns the native section's optional output color. @param section - Format section. @returns Borrowed color. */
+  GetColor(section: number): Color | null {
+    return this.NumFor[section]?.GetColor() ?? null;
+  }
   /** Original inline decimal precision query on the compiled subformat. @param index - Native uint16 subformat, zero by default. @returns Decimal digit count. */
   GetFormatPrecision(index = 0): number {
     return (this.NumFor[index & 65535] as ImpSvNumFor).Info().nCntPost;
@@ -875,6 +886,8 @@ export type SvNumberformatConstReference = Pick<
   | "IsNegativeWithoutSign"
   | "IsNumForStringElementCountEqual"
   | "GetNumForInfoScannedType"
+  | "GetConditions"
+  | "GetColor"
   | "GetFormatPrecision"
   | "GetSubformatIndex"
   | "IsFirstSubformatRealNegative"

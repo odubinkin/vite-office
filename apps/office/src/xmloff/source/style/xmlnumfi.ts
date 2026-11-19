@@ -1,11 +1,15 @@
 /** @fileoverview ODF numeric data-style context using the native number format scanner. */
 import { LANGUAGE_ENGLISH_US, LANGUAGE_SYSTEM } from "../../../i18nlangtag/inc/lang";
-import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import {
   NF_MAX_FORMAT_SYMBOLS,
   NUMBERFORMAT_ENTRY_NOT_FOUND,
   NfIndexTableOffset as N,
 } from "../../../svl/inc/zforlist";
+import { NfKeywordIndex as K } from "../../../svl/inc/nfkeytab";
+import { ImpSvNumberformatScan } from "../../../svl/source/numbers/zforscan";
+import { sEnglishKeyword } from "../../../svl/source/numbers/zforscan.keywords";
+import { Converter } from "../../../sax/source/tools/converter";
 import type { SvNumberFormatter } from "../../../svl/source/numbers/zforlist.formatter";
 import { SvXMLIgnoreContext, SvXMLImportContext, type FastAttributeList } from "../core/xmlimp";
 import { XMLToken as X } from "../core/xmltoken";
@@ -41,13 +45,17 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
   private readonly fields = new Set<X>();
   private readonly systemDate: boolean;
   private unsupported = false;
+  private emptyText = false;
+  private color = "";
+  private readonly conditions: { condition: string; style: string }[] = [];
+  private key: number | null | undefined;
+  private sections: readonly string[] | undefined;
 
-  /** Binds the source format and receiver. @param element - Number-style family. @param formatter - Native number formatter. @param attributes - Source style attributes. @param receive - Destination styles context. @returns Data-style context. */
+  /** Binds the source format. @param element - Number-style family. @param formatter - Native number formatter. @param attributes - Source style attributes. @returns Data-style context. */
   constructor(
     private readonly element: X,
     private readonly formatter: SvNumberFormatter,
     attributes: FastAttributeList,
-    private readonly receive: (key: number | undefined) => void,
   ) {
     super();
     const automatic = attributes.get(X.NUMBER_AUTOMATIC_ORDER);
@@ -59,6 +67,25 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
 
   /** Resolves original numeric and date/time tokens. @param element - Child element. @param attributes - Actual SAX attributes. @returns Token context. */
   override createFastChildContext(element: X, attributes: FastAttributeList): SvXMLImportContext {
+    if (element === X.STYLE_MAP) {
+      const condition = attributes.get(X.STYLE_CONDITION);
+      const style = attributes.get(X.STYLE_APPLY_STYLE_NAME);
+      if (condition && style) this.conditions.push({ condition, style });
+      return new SvXMLIgnoreContext(true);
+    }
+    if (element === X.STYLE_TEXT_PROPERTIES) {
+      const color = attributes.get(X.FO_COLOR);
+      const rgb: [number] = [0];
+      if (color && Converter.convertColor(rgb, color)) {
+        const index = ImpSvNumberformatScan.GetStandardColors().findIndex(
+          /** Finds the original named palette color. @param candidate - Native color. @returns Match. */
+          (candidate) => candidate.toUInt32() === rgb[0],
+        );
+        const keyword = index >= 0 ? sEnglishKeyword[K.FIRSTCOLOR + index] : undefined;
+        if (keyword) this.color = "[" + text(keyword) + "]";
+      }
+      return new SvXMLIgnoreContext(true);
+    }
     if (element === X.NUMBER_BOOLEAN && this.element === X.NUMBER_BOOLEAN_STYLE) {
       this.parts.push("BOOLEAN");
       return new SvXMLIgnoreContext(true);
@@ -70,7 +97,8 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
           if (element === X.NUMBER_CURRENCY_SYMBOL) this.parts.push(`[$${value}]`);
           else if (this.element === X.NUMBER_PERCENTAGE_STYLE && value === "%")
             this.parts.push("%");
-          else if (value) this.parts.push('"' + value.replace(/"/g, '\\"') + '"');
+          else if (!value) this.emptyText = true;
+          else this.parts.push('"' + value.replace(/"/g, '\\"') + '"');
         },
       );
     }
@@ -138,43 +166,83 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
     return new SvXMLIgnoreContext(true);
   }
 
-  /** Rejects unrepresented children such as a conditional map. @returns Ignored child. */
+  /** Rejects unrepresented children. @returns Ignored child. */
   override createUnknownChildContext(): SvXMLImportContext {
     this.unsupported = true;
     return new SvXMLIgnoreContext(true);
   }
 
-  /** Registers the native compiled number format at the end of its declaration. @returns Nothing. */
-  override endFastElement(): void {
-    if (this.unsupported || this.parts.length === 0) {
-      this.receive(undefined);
-      return;
+  /** Resolves and inserts the actual data style after its referenced declarations are available. @param styles - Document styles indexed by source name. @returns Compiled format key. */
+  GetKey(styles: ReadonlyMap<string, SvXMLNumFormatContext>): number | undefined {
+    return this.PrivateGetKey(styles, new Set());
+  }
+
+  /** Resolves each referenced style once and rejects a reference to an active context. @param styles - Document styles. @param stack - Current chain of references. @returns Compiled format key. */
+  private PrivateGetKey(
+    styles: ReadonlyMap<string, SvXMLNumFormatContext>,
+    stack: Set<SvXMLNumFormatContext>,
+  ): number | undefined {
+    if (this.key !== undefined) return this.key ?? undefined;
+    if (stack.has(this)) return undefined;
+    stack.add(this);
+    try {
+      const sections = this.BuildSections(styles, stack);
+      const key = sections && this.CreateAndInsert(sections.join(";"));
+      this.key = key ?? null;
+      if (key !== undefined) this.sections = sections;
+      return key;
+    } finally {
+      stack.delete(this);
     }
-    if (
-      this.element === X.NUMBER_BOOLEAN_STYLE &&
-      this.parts.length === 1 &&
-      this.parts[0] === "BOOLEAN"
-    ) {
-      this.receive(this.formatter.GetFormatIndex(N.NF_BOOLEAN, LANGUAGE_SYSTEM));
-      return;
+  }
+
+  /** Builds English source sections from successfully compiled styles in map order. @param styles - Document styles. @param stack - Current chain of references. @returns Sources for native conversion. */
+  private BuildSections(
+    styles: ReadonlyMap<string, SvXMLNumFormatContext>,
+    stack: Set<SvXMLNumFormatContext>,
+  ): string[] | undefined {
+    if (this.unsupported || (!this.parts.length && !this.emptyText)) return undefined;
+    const sections: string[] = [];
+    for (const [index, map] of this.conditions.entries()) {
+      const condition =
+        /^value\(\)\s*(<=|>=|!=|=|<|>)\s*([+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[Ee][+-]?\d+)?)\s*$/u.exec(
+          map.condition,
+        );
+      if (!condition) continue;
+      const style = styles.get(map.style);
+      if (style?.PrivateGetKey(styles, stack) === undefined || !style.sections) continue;
+      const [first, ...rest] = style.sections;
+      // The native formatter has four subformats, including this style's own fallback.
+      if (sections.length + style.sections.length >= 4) return undefined;
+      const implicit =
+        (this.conditions.length === 1 && map.condition === "value()>=0") ||
+        (this.element === X.NUMBER_TEXT_STYLE && index === this.conditions.length - 1);
+      const operator = condition[1] === "!=" ? "<>" : condition[1];
+      sections.push((implicit ? "" : "[" + operator + condition[2] + "]") + first, ...rest);
     }
+    sections.push(this.color + (this.parts.join("") || '""'));
+    return sections;
+  }
+
+  /** Compiles the combined source through the native formatter and retains built-in shortcuts. @param source - Complete English number format. @returns Registered format key. */
+  private CreateAndInsert(source: string): number | undefined {
+    if (this.element === X.NUMBER_BOOLEAN_STYLE && source === "BOOLEAN")
+      return this.formatter.GetFormatIndex(N.NF_BOOLEAN, LANGUAGE_SYSTEM);
     const longDate = this.fields.has(X.NUMBER_DAY_OF_WEEK);
     if (
       this.systemDate &&
+      !this.conditions.length &&
+      !this.color &&
       this.fields.has(X.NUMBER_DAY) &&
       this.fields.has(X.NUMBER_MONTH) &&
       this.fields.has(X.NUMBER_YEAR) &&
       this.fields.size === (longDate ? 4 : 3)
-    ) {
-      this.receive(
-        this.formatter.GetFormatIndex(
-          longDate ? N.NF_DATE_SYSTEM_LONG : N.NF_DATE_SYSTEM_SHORT,
-          LANGUAGE_SYSTEM,
-        ),
+    )
+      return this.formatter.GetFormatIndex(
+        longDate ? N.NF_DATE_SYSTEM_LONG : N.NF_DATE_SYSTEM_SHORT,
+        LANGUAGE_SYSTEM,
       );
-      return;
-    }
-    const value = unicode(this.parts.join(""));
+    const value = unicode(source);
     const check: [number] = [0],
       type: [number] = [0],
       key: [number] = [0];
@@ -188,7 +256,7 @@ export class SvXMLNumFormatContext extends SvXMLImportContext {
         LANGUAGE_SYSTEM,
         false,
       );
-      this.receive(check[0] === 0 && key[0] !== NUMBERFORMAT_ENTRY_NOT_FOUND ? key[0] : undefined);
+      return check[0] === 0 && key[0] !== NUMBERFORMAT_ENTRY_NOT_FOUND ? key[0] : undefined;
     } finally {
       value.dispose();
     }

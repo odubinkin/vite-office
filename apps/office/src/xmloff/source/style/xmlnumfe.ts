@@ -9,6 +9,10 @@ import {
   getRealLanguage,
 } from "../../../i18nlangtag/source/isolang/mslangid";
 import { LocaleDataWrapper } from "../../../unotools/source/i18n/localedatawrapper";
+import type { SvNumberformatConstReference } from "../../../svl/source/numbers/zformat";
+import { SvNumberformatLimitOps as O } from "../../../svl/source/numbers/zformat.prefix";
+import { Converter } from "../../../sax/source/tools/converter";
+import { doubleToString } from "../../../sal/rtl/strtmpl.math";
 import { escapeXml } from "../text/txtparae";
 
 const dateTerms = new Map<number, readonly [string, boolean, boolean?]>([
@@ -33,7 +37,7 @@ const dateTerms = new Map<number, readonly [string, boolean, boolean?]>([
   [K.SS, ["seconds", true]],
 ]);
 
-/** Exports supported single-section styles using the real format behind substituted system entries. @param formatter - Workbook formatter. @param key - Assigned format key. @param name - Generated style reference. @returns ODF data style or null. */
+/** Exports supported number-format sections using the real format behind substituted system entries. @param formatter - Workbook formatter. @param key - Assigned format key. @param name - Generated style reference. @returns ODF data style or null. */
 export function ExportNumberFormat(
   formatter: SvNumberFormatter,
   key: number,
@@ -45,9 +49,69 @@ export function ExportNumberFormat(
   const builtin = SvNumberFormatter.GetIndexTableOffset(realKey[0]);
   if (builtin === N.NF_BOOLEAN)
     return `<number:boolean-style style:name="${name}"><number:boolean/></number:boolean-style>`;
-  if (entry.GetNumForString(1, 0) || entry.GetNumForString(2, 0) || entry.GetNumForString(3, 0))
-    return null;
-  const type = entry.GetType() & ~T.DEFINED;
+  const conditions = entry.GetConditions();
+  const textPart = entry.HasTextFormat();
+  const sections = [
+    true,
+    entry.GetNumForInfoScannedType(1) !== T.UNDEFINED || conditions[0][0] !== O.NUMBERFORMAT_OP_NO,
+    entry.GetNumForInfoScannedType(2) !== T.UNDEFINED || conditions[1][0] !== O.NUMBERFORMAT_OP_NO,
+    textPart,
+  ];
+  const last = sections.lastIndexOf(true);
+  const maps = writeMaps(conditions, textPart, name);
+  const result: string[] = [];
+  for (let part = 0; part <= last; ++part) {
+    if (!sections[part]) continue;
+    const style = exportPart(entry, builtin, part, name, part === last, maps);
+    if (style === null) return null;
+    result.push(style);
+  }
+  return result.join("");
+}
+
+const conditionOperators = ["", "=", "!=", "<", "<=", ">", ">="] as const;
+const inverseOperators = ["<=", "!=", "=", ">=", ">", "<=", "<"] as const;
+
+/** Emits native ordered maps, including the complementary map when text owns the fallback. @param conditions - Scanned operators and limits. @param textPart - Whether the last part handles text. @param name - Main style identifier. @returns XML maps. */
+function writeMaps(
+  conditions: ReturnType<SvNumberformatConstReference["GetConditions"]>,
+  textPart: boolean,
+  name: string,
+): string {
+  const [[first, firstLimit], [second, secondLimit]] = conditions;
+  const maps: string[] = [];
+  /** Appends one represented condition in original section order. @param operator - ODF operator. @param limit - Condition limit. @param part - Target section. @returns Nothing. */
+  function add(operator: string | undefined, limit: number, part: number): void {
+    if (operator)
+      maps.push(
+        `<style:map style:condition="${escapeXml("value()" + operator + doubleToString(limit))}" style:apply-style-name="${escapeXml(name)}P${part}"/>`,
+      );
+  }
+  add(conditionOperators[first], firstLimit, 0);
+  add(conditionOperators[second], secondLimit, 1);
+  if (textPart) {
+    const last = second !== O.NUMBERFORMAT_OP_NO ? 2 : first !== O.NUMBERFORMAT_OP_NO ? 1 : 0;
+    const lastOperator = last === 2 ? second : first;
+    const lastLimit = last === 2 ? secondLimit : last === 1 ? firstLimit : Number.MAX_VALUE;
+    const opposite =
+      firstLimit === secondLimit &&
+      ((first === O.NUMBERFORMAT_OP_LT && second === O.NUMBERFORMAT_OP_GT) ||
+        (first === O.NUMBERFORMAT_OP_GT && second === O.NUMBERFORMAT_OP_LT));
+    add(opposite ? "=" : inverseOperators[lastOperator], lastLimit, last);
+  }
+  return maps.join("");
+}
+
+/** Emits one native part under its generated primary or volatile style name. @param entry - Actual compiled number format. @param builtin - Original format index. @param part - Section index. @param name - Main style identifier. @param defaultPart - Whether this is the last section. @param maps - Conditions on the last section. @returns XML or null for unsupported tokens. */
+function exportPart(
+  entry: SvNumberformatConstReference,
+  builtin: number,
+  part: number,
+  name: string,
+  defaultPart: boolean,
+  maps: string,
+): string | null {
+  const type = entry.GetNumForInfoScannedType(part) & ~T.DEFINED;
   const tag =
     type === T.PERCENT
       ? "percentage-style"
@@ -59,7 +123,11 @@ export function ExportNumberFormat(
             ? "currency-style"
             : type === T.TEXT
               ? "text-style"
-              : type === T.NUMBER || type === T.SCIENTIFIC
+              : type === T.NUMBER ||
+                  type === T.SCIENTIFIC ||
+                  type === T.EMPTY ||
+                  type === T.ALL ||
+                  type === T.UNDEFINED
                 ? "number-style"
                 : null;
   if (!tag) return null;
@@ -67,7 +135,7 @@ export function ExportNumberFormat(
   const fields = new Set<string>();
   const embedded: { value: string; position: number; integer: boolean }[] = [];
   let lastDigit = -1;
-  for (let pos = 0, symbol: number; (symbol = entry.GetNumForType(0, pos)) !== 0; ++pos) {
+  for (let pos = 0, symbol: number; (symbol = entry.GetNumForType(part, pos)) !== 0; ++pos) {
     if (symbol === S.EXP) break;
     if (symbol === S.DIGIT) lastDigit = pos;
   }
@@ -81,9 +149,9 @@ export function ExportNumberFormat(
     exponentDigits = 0;
   let exponent: string | undefined;
   for (let pos = 0; ; ++pos) {
-    const raw = entry.GetNumForString(0, pos);
+    const raw = entry.GetNumForString(part, pos);
     if (!raw) break;
-    const symbol = entry.GetNumForType(0, pos);
+    const symbol = entry.GetNumForType(part, pos);
     const value = text(raw);
     const term = dateTerms.get(symbol);
     if (term) {
@@ -119,7 +187,7 @@ export function ExportNumberFormat(
         decimals += value.replace(/#/g, "").length;
       }
     } else if (symbol === S.THSEP) {
-      if (entry.GetNumForType(0, pos + 1) !== S.DIGIT) return null;
+      if (entry.GetNumForType(part, pos + 1) !== S.DIGIT) return null;
       grouping = true;
     } else if (symbol === S.DECSEP) beforeDecimal = false;
     else if (symbol === S.EXP) exponent = value;
@@ -156,9 +224,10 @@ export function ExportNumberFormat(
     parts[numberAt] =
       `<number:${element} number:min-integer-digits="${required}" number:decimal-places="${digits}"${digits !== decimals ? ` number:min-decimal-places="${decimals}"` : ""}${grouping ? ' number:grouping="true"' : ""}${scientific}${body ? `>${body}</number:${element}>` : "/>"}`;
   }
-  if (parts.length === 0) return null;
+  if (parts.length === 0) parts.push("<number:text/>");
   const longDate = fields.has("day-of-week");
   const systemDate =
+    part === 0 &&
     type === T.DATE &&
     builtin === (longDate ? N.NF_DATE_SYSTEM_LONG : N.NF_DATE_SYSTEM_SHORT) &&
     fields.has("day") &&
@@ -166,5 +235,11 @@ export function ExportNumberFormat(
     fields.has("year") &&
     fields.size === (longDate ? 4 : 3);
   const source = systemDate ? ' number:automatic-order="true" number:format-source="language"' : "";
-  return `<number:${tag} style:name="${name}"${source}>${parts.join("")}</number:${tag}>`;
+  const color = entry.GetColor(part);
+  const rgb: [string] = [""];
+  if (color) Converter.convertColor(rgb, color.toUInt32());
+  const properties = color ? `<style:text-properties fo:color="${rgb[0]}"/>` : "";
+  const styleName = escapeXml(defaultPart ? name : `${name}P${part}`);
+  const flags = defaultPart ? "" : ' style:volatile="true"';
+  return `<number:${tag} style:name="${styleName}"${flags}${source}>${properties}${parts.join("")}${defaultPart ? maps : ""}</number:${tag}>`;
 }

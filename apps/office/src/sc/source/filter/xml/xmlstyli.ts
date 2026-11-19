@@ -56,13 +56,13 @@ export class XMLTableStylesContext extends ScXMLImportContext {
   ): SvXMLImportContext {
     if (IsNumberStyle(element)) {
       const name = attributes.require(XMLToken.STYLE_NAME, "data style name");
-      return new SvXMLNumFormatContext(
+      const style = new SvXMLNumFormatContext(
         element,
         this.owner.GetDocument().GetFormatTable(),
         attributes,
-        /** Transfers a compiled native format into the automatic styles. @param key - Native key. @returns Nothing. */
-        (key) => this.owner.AddNumberStyle(name, key),
       );
+      this.owner.AddNumberStyle(name, style);
+      return style;
     }
     if (this.named) {
       if (element === XMLToken.LOEXT_THEME)
@@ -127,6 +127,10 @@ export class XMLTableStylesContext extends ScXMLImportContext {
       attributes.require(XMLToken.STYLE_NAME, "cell style name"),
       attributes.get(XMLToken.STYLE_DATA_STYLE_NAME),
     );
+  }
+  /** Resolves the native Default style after all declarations in this style list. @returns Nothing. */
+  override endFastElement(): void {
+    this.owner.ApplyDefaultNumberStyle();
   }
 }
 /** Table family automatic style for the represented sheet display property. */

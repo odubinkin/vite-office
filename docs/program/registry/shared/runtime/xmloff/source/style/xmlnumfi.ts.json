@@ -22,9 +22,13 @@
         "apps/office/src/sc/source/filter/excel/excrecds.test.ts",
         "vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx#SvXMLNumFmtDefaults::GetDefaultDateFormat",
         "apps/office/src/sc/source/filter/oox/typed-date-cells.test.ts",
-        "vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx#NF_BOOLEAN"
+        "vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx#NF_BOOLEAN",
+        "apps/office/src/sc/source/filter/xml/ods.test.ts",
+        "vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx#SvXMLNumFormatContext::AddCondition",
+        "vendor/libreoffice-reference/xmloff/source/style/xmlnumfi.cxx#SvXMLNumFormatContext::AddColor",
+        "vendor/libreoffice-reference/sc/qa/unit/data/fods/tdf161483_CellTextRotation.fods"
       ],
-      "justification": "XML numeric declarations and positioned literals compile in the actual Calc number formatter, including styles referred to by the primary browser record. Full conditional, localized and multi-section data-style import is open. The ODF date-style context selects original system short or long date keys for matching automatic language-derived date fields. Nonmatching and explicit styles use the normal scanner. Resolves the unadorned ODF boolean-style to the original builtin logical format.",
+      "justification": "XML numeric declarations and positioned literals compile in the actual Calc number formatter, including styles referred to by the primary browser record. Resolves conditional maps by data-style name after declarations are available so forward references compile in document order. Reconstructs the default numeric and text sections and maps the original palette colors to native format keywords. Full locale, calendar and numeric token coverage remains open. The ODF date-style context selects original system short or long date keys for matching automatic language-derived date fields. Nonmatching and explicit styles use the normal scanner. Resolves the unadorned ODF boolean-style to the original builtin logical format.",
       "knownViolations": [],
       "localSymbols": [
         "SvXMLNumFormatContext",
@@ -36,7 +40,9 @@
         "SvXMLNumFormatContext::CreateAndInsert",
         "SvXMLNumFmtElementContext::AddEmbeddedElement",
         "SvXMLNumFmtDefaults::GetDefaultDateFormat",
-        "NF_BOOLEAN"
+        "NF_BOOLEAN",
+        "SvXMLNumFormatContext::AddCondition",
+        "SvXMLNumFormatContext::AddColor"
       ]
     }
   }

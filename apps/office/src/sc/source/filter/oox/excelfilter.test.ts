@@ -900,6 +900,7 @@ it("recalculates the original tdf70455 dynamic range and preserves its defined e
       expect(graph.GetDocOptions().IsIgnoreCase()).toBe(true);
       expect(graph.GetFormulaCell(position)?.GetErrCode()).toBe(FormulaError.NONE);
       expect(graph.GetValue(position)).toBe(780);
+      expect(display(graph, position)).toBe("€780.00");
     }
   } finally {
     reopened?.Dispose();

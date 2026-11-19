@@ -1,4 +1,6 @@
 /** @fileoverview Calc scalar,cell-font and row/column geometry import over shared fast XML contexts;advanced styles,device layout and objects remain unported. */
+import type { SvXMLNumFormatContext } from "../../../../xmloff/source/style/xmlnumfi";
+
 import { Length, toTwips } from "../../../../o3tl/inc/unit_conversion";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
@@ -95,7 +97,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     string,
     { pattern: ScPatternAttr; reference: string }
   >();
-  private readonly numberStyles = new Map<string, number>();
+  private readonly numberStyles = new Map<string, SvXMLNumFormatContext>();
   private readonly tableStyles = new Map<string, boolean>();
   /** Records the native style's sheet display property. @param name - Automatic style. @param visible - Sheet display. @returns Nothing. */
   AddTableStyle(name: string, visible: boolean): void {
@@ -193,18 +195,15 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   GetTextStyle(name: string): SfxItemSet | undefined {
     return this.textStyles.get(name);
   }
-  /** Registers one compiled ODF data style. @param name - ODF style name. @param key - Native format key or unsupported result. @returns Nothing. */
-  AddNumberStyle(name: string, key: number | undefined): void {
-    if (key === undefined) this.unsupported("number style");
-    else this.numberStyles.set(name, key);
-    if (name === this.defaultNumberStyle) this.ApplyDefaultNumberStyle();
+  /** Registers a complete data-style declaration by name. @param name - Source style name. @param style - Declared format. @returns Nothing. */
+  AddNumberStyle(name: string, style: SvXMLNumFormatContext): void {
+    this.numberStyles.set(name, style);
   }
   private defaultNumberStyle: string | null = null;
   /** Populates the original Default style from the named styles stream. @param pattern - Parsed direct properties. @param reference - Optional data-style reference. @returns Nothing. */
   ApplyDefaultCellStyle(pattern: ScPatternAttr, reference: string | null): void {
     this.document.GetStyleSheetPool()?.SetDefaultCellStyle(pattern.GetItemSet());
     this.defaultNumberStyle = reference;
-    this.ApplyDefaultNumberStyle();
   }
   /** Applies ODF cell defaults through the native item pool and special wrap setting. @param pattern - Document default properties. @returns Nothing. */
   ApplyDocumentDefaults(pattern: ScPatternAttr): void {
@@ -219,9 +218,9 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
     }
   }
   /** Resolves the default data style before dependent cells use the Default item set. @returns Nothing. */
-  private ApplyDefaultNumberStyle(): void {
+  ApplyDefaultNumberStyle(): void {
     if (!this.defaultNumberStyle) return;
-    const key = this.numberStyles.get(this.defaultNumberStyle);
+    const key = this.numberStyles.get(this.defaultNumberStyle)?.GetKey(this.numberStyles);
     if (key === undefined) return;
     const item = new SfxUInt32Item(ATTR_VALUE_FORMAT, key);
     try {
@@ -237,7 +236,7 @@ export class ScXMLImport extends SvXMLImport implements SvXMLImportRootFactory {
   GetAutoStyle(name: string): ScPatternAttr | null {
     const pending = this.pendingNumberStyles.get(name);
     if (pending) {
-      const key = this.numberStyles.get(pending.reference);
+      const key = this.numberStyles.get(pending.reference)?.GetKey(this.numberStyles);
       if (key === undefined) this.unsupported("cell style/number format");
       else {
         const item = new SfxUInt32Item(ATTR_VALUE_FORMAT, key);

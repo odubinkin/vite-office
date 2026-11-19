@@ -764,3 +764,152 @@ it("omits an unrepresentable native posture on export without replacing it with 
   expect(xml).not.toContain("fo:font-style=");
   doc.DisposeAttributes();
 });
+
+it("resolves the original ODF-style number maps and writes volatile subformats", /** Uses the signed currency branch layout from the pinned Calc flat ODF fixtures, with forward references. @returns Completion. */ async () => {
+  const xml = independent(
+    '<table:table-row><table:table-cell table:style-name="Money" office:value-type="float" office:value="780"/><table:table-cell table:style-name="Money" office:value-type="float" office:value="-780"/></table:table-row>',
+  ).replace(
+    "<office:body>",
+    `<office:automatic-styles xmlns:n="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:s="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0">
+      <s:style s:name="Money" s:family="table-cell" s:data-style-name="N114"/>
+      <n:currency-style s:name="N114">
+        <s:text-properties fo:color="#ff0000"/><n:text>-</n:text>
+        <n:number n:decimal-places="2" n:min-integer-digits="1" n:grouping="true"/>
+        <n:text> </n:text><n:currency-symbol n:language="de" n:country="DE">€</n:currency-symbol>
+        <s:map s:condition="value()&gt;=0" s:apply-style-name="N114P0"/>
+      </n:currency-style>
+      <n:currency-style s:name="N114P0" s:volatile="true">
+        <n:number n:decimal-places="2" n:min-integer-digits="1" n:grouping="true"/>
+        <n:text> </n:text><n:currency-symbol n:language="de" n:country="DE">€</n:currency-symbol>
+      </n:currency-style>
+    </office:automatic-styles><office:body>`,
+  );
+  const first = load(xml);
+  let copy: ScDocument | undefined;
+  const output = new OUString();
+  try {
+    const bytes = await writeOdsDocument(first);
+    const archive = await DocumentArchive.open(bytes);
+    const content = await archive.readTextEntry("content.xml");
+    expect(content).toMatch(/style:name="N\d+P0" style:volatile="true"/u);
+    expect(content).toMatch(
+      /<style:map style:condition="value\(\)&gt;=0" style:apply-style-name="N\d+P0"\/>/u,
+    );
+    expect(content).toContain('<style:text-properties fo:color="#ff0000"/>');
+    copy = await readOdsDocument(bytes);
+    for (const document of [first, copy]) {
+      const formatter = document.GetFormatTable();
+      for (const [column, expected] of ["780.00 €", "-780.00 €"].entries()) {
+        const address = new ScAddress(column, 0, 0);
+        const key = document.GetPattern(address)?.GetNumberFormat(formatter) ?? 0;
+        const color: [import("../../../../tools/inc/color").Color | null] = [null];
+        formatter.GetOutputString(document.GetValue(address), key, output, color);
+        expect(text(output)).toBe(expected);
+        expect(color[0]?.toUInt32()).toBe(column ? 0xff0000 : undefined);
+      }
+    }
+  } finally {
+    output.dispose();
+    copy?.Dispose();
+    first.Dispose();
+  }
+});
+
+it("keeps the complementary number map when text is the final number format section", /** Exercises the native three numeric parts and the fourth text part through ODS. @returns Completion. */ async () => {
+  const first = load(
+    independent(
+      '<table:table-row><table:table-cell table:style-name="Cell" office:value-type="float" office:value="1"/></table:table-row>',
+    ).replace(
+      "<office:body>",
+      `<office:automatic-styles xmlns:n="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:s="urn:oasis:names:tc:opendocument:xmlns:style:1.0">
+        <s:style s:name="Cell" s:family="table-cell" s:data-style-name="Mixed"/>
+        <n:number-style s:name="Positive"><n:number n:min-integer-digits="1"/></n:number-style>
+        <n:number-style s:name="Negative"><n:text>-</n:text><n:number n:min-integer-digits="1"/></n:number-style>
+        <n:number-style s:name="Zero"><n:text>zero</n:text></n:number-style>
+        <n:text-style s:name="Mixed">
+          <n:text>text:</n:text><n:text-content/>
+          <s:map s:condition="value()&gt;0" s:apply-style-name="Positive"/>
+          <s:map s:condition="value()&lt;0" s:apply-style-name="Negative"/>
+          <s:map s:condition="value()=0" s:apply-style-name="Zero"/>
+        </n:text-style>
+      </office:automatic-styles><office:body>`,
+    ),
+  );
+  const input = unicode("abc");
+  const output = new OUString();
+  let copy: ScDocument | undefined;
+  try {
+    const bytes = await writeOdsDocument(first);
+    const archive = await DocumentArchive.open(bytes);
+    const content = await archive.readTextEntry("content.xml");
+    expect(content).toMatch(/style:condition="value\(\)=0" style:apply-style-name="N\d+P2"/u);
+    copy = await readOdsDocument(bytes);
+    for (const document of [first, copy]) {
+      const formatter = document.GetFormatTable();
+      const key = document.GetPattern(new ScAddress())?.GetNumberFormat(formatter) ?? 0;
+      formatter.GetOutputString(5, key, output, [null]);
+      expect(text(output)).toBe("5");
+      formatter.GetOutputString(-5, key, output, [null]);
+      expect(text(output)).toBe("-5");
+      formatter.GetOutputString(0, key, output, [null]);
+      expect(text(output)).toBe("zero");
+      formatter.GetOutputString(input, key, output, [null]);
+      expect(text(output)).toBe("text:abc");
+    }
+  } finally {
+    input.dispose();
+    output.dispose();
+    copy?.Dispose();
+    first.Dispose();
+  }
+});
+
+it("round-trips ODF number maps with a decimal threshold or an unconditional numeric part", /** Exercises explicit inequality, absent or cyclic targets, and the native text fallback map. @returns Completion. */ async () => {
+  const first = load(
+    independent(
+      '<table:table-row><table:table-cell table:style-name="ThresholdCell" office:value-type="float" office:value="1.5"/><table:table-cell table:style-name="TextCell" office:value-type="float" office:value="5"/></table:table-row>',
+    ).replace(
+      "<office:body>",
+      `<office:automatic-styles xmlns:n="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:s="urn:oasis:names:tc:opendocument:xmlns:style:1.0">
+        <s:style s:name="ThresholdCell" s:family="table-cell" s:data-style-name="Threshold"/>
+        <s:style s:name="TextCell" s:family="table-cell" s:data-style-name="Text"/>
+        <n:number-style s:name="Threshold">
+          <n:text>threshold</n:text>
+          <s:map s:condition="value()&lt;1" s:apply-style-name="Threshold"/>
+          <s:map s:condition="value()=1" s:apply-style-name="Missing"/>
+          <s:map s:condition="value()!=1.5" s:apply-style-name="Number"/>
+        </n:number-style>
+        <n:text-style s:name="Text">
+          <n:text-content/><s:map s:condition="value()&lt;=1.7976931348623157E+308" s:apply-style-name="Number"/>
+        </n:text-style>
+        <n:number-style s:name="Number"><n:number n:min-integer-digits="1" n:decimal-places="0"/></n:number-style>
+      </office:automatic-styles><office:body>`,
+    ),
+  );
+  const output = new OUString();
+  let copy: ScDocument | undefined;
+  try {
+    const bytes = await writeOdsDocument(first);
+    const archive = await DocumentArchive.open(bytes);
+    const content = await archive.readTextEntry("content.xml");
+    expect(content).toContain('style:condition="value()!=1.5"');
+    expect(content).toMatch(/style:condition="value\(\)&lt;=1\.7976931348623157E\+308"/u);
+    copy = await readOdsDocument(bytes);
+    for (const document of [first, copy]) {
+      const formatter = document.GetFormatTable();
+      const threshold = document.GetPattern(new ScAddress())?.GetNumberFormat(formatter) ?? 0;
+      const textFormat =
+        document.GetPattern(new ScAddress(1, 0, 0))?.GetNumberFormat(formatter) ?? 0;
+      formatter.GetOutputString(1.5, threshold, output, [null]);
+      expect(text(output)).toBe("threshold");
+      formatter.GetOutputString(3, threshold, output, [null]);
+      expect(text(output)).toBe("3");
+      formatter.GetOutputString(-5, textFormat, output, [null]);
+      expect(text(output)).toBe("-5");
+    }
+  } finally {
+    output.dispose();
+    copy?.Dispose();
+    first.Dispose();
+  }
+});

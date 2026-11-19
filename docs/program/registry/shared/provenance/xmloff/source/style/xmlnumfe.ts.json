@@ -13,15 +13,18 @@
       "SvXMLNumFmtExport::ExportPart_Impl",
       "SvXMLNumFmtExport::WriteEmbeddedEntries_Impl",
       "SvXMLNumFmtExport::Export",
-      "WriteBooleanElement_Impl"
+      "WriteBooleanElement_Impl",
+      "SvXMLNumFmtExport::ExportFormat_Impl",
+      "SvXMLNumFmtExport::WriteMapElement_Impl"
     ],
     "preservedResponsibilities": [
       "Recognized native compiled sections emit standard ODF numeric, percentage, date, time and scientific declarations with positioned literals.",
       "The ODF exporter resolves the real native system format while retaining the original style identity. It emits automatic-order and language source for the represented short and long date shapes.",
-      "Exports the builtin Boolean number format as the original boolean-style with a boolean element."
+      "Exports the builtin Boolean number format as the original boolean-style with a boolean element.",
+      "Writes supported numeric format sections as volatile substyles with ordered conditions and places their maps on the primary style. Exports section colors through style:text-properties."
     ],
     "omittedResponsibilities": [
-      "Full conditional, localized and multi-section data-style export is open."
+      "Full locale, calendar and numeric token coverage remains open."
     ],
     "evidence": {
       "local": [
@@ -40,6 +43,10 @@
         {
           "path": "apps/office/src/sc/source/filter/oox/typed-date-cells.test.ts",
           "marker": "reopens explicit date"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/xml/ods.test.ts",
+          "marker": "resolves the original ODF-style number maps"
         }
       ],
       "upstream": [
@@ -54,6 +61,18 @@
         {
           "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumfe.cxx",
           "marker": "WriteBooleanElement_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumfe.cxx",
+          "marker": "SvXMLNumFmtExport::ExportFormat_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlnumfe.cxx",
+          "marker": "SvXMLNumFmtExport::WriteMapElement_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/data/fods/tdf161483_CellTextRotation.fods",
+          "marker": "N114P0"
         }
       ]
     }

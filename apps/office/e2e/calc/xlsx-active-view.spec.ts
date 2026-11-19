@@ -364,7 +364,7 @@ test("Calc opens and recalculates the original tdf70455 workbook", /** Ports the
   await open.click();
   await page.getByRole("tab", { name: "In browser" }).click();
   await page.getByRole("button", { name: "Dynamic range copy", exact: true }).click();
-  await expect(result).toContainText("780");
+  await expect(result).toHaveText("€780.00");
 
   const download = page.waitForEvent("download");
   await page.getByRole("menuitem", { name: "File" }).click();
@@ -385,5 +385,5 @@ test("Calc opens and recalculates the original tdf70455 workbook", /** Ports the
   await expect(name).toHaveValue("F13");
   await name.fill("H8");
   await name.press("Enter");
-  await expect(result).toContainText("780");
+  await expect(result).toHaveText("€780.00");
 });
