@@ -1,10 +1,10 @@
 ---
 id: "202610251549-V4DQJW"
 title: "Implement Writer DOCX import export and existing file UI integration"
-status: "DOING"
+status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 416
+revision: 417
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T23:45:27.699Z"
+  updated_at: "2026-11-19T23:53:02.159Z"
   updated_by: "CODER"
-  note: "Named DOCX table styles round-trip through the worker and real Writer export. Code 1aca6098f0cf and evidence docx-conditional-header-export.json record 75 related tests, 19 final owner tests above 90, and two production Chromium scenarios."
-  attempts: 5
+  note: "Primary Writer storage preserves DOCX tableStyles, style bindings and look values. Code 8544b56f8225 verified with 49 focused tests, the adapter 90 coverage gate and two Chromium scenarios after browser reload."
+  attempts: 6
 commit: null
 comments:
   -
@@ -2080,8 +2080,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T23:53:02.159Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Primary Writer storage preserves DOCX tableStyles, style bindings and look values. Code 8544b56f8225 verified with 49 focused tests, the adapter 90 coverage gate and two Chromium scenarios after browser reload."
 doc_version: 3
-doc_updated_at: "2026-11-19T23:45:59.655Z"
+doc_updated_at: "2026-11-19T23:53:02.384Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -6176,6 +6182,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-19T23:53:02.159Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Primary Writer storage preserves DOCX tableStyles, style bindings and look values. Code 8544b56f8225 verified with 49 focused tests, the adapter 90 coverage gate and two Chromium scenarios after browser reload.
+    Attempts: 6
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T23:45:59.655Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -6905,6 +6941,10 @@ sections:
     - Observation: Verified four style-defined headers and the explicit first-row false from tdf81100 with its unrelated unsupported footer shape isolated. The primary XML still drops Word style metadata. Baseline registry errors remain.
       Impact: Downloads preserve table style declarations, look flags and row overrides while the live graph is available.
       Resolution: Continue primary browser persistence and the represented conditional formatting groups. Preserve unmodified-fixture and baseline-registry findings.
+
+    - Observation: An atomic browser primary record now retains named Word table styles alongside the native XML streams. Earlier records and external ODT continue through the core ODF filter. Conditional formatting, unmodified tdf81100 drawing support and baseline registry entries remain open.
+      Impact: Reopening the IndexedDB copy preserves the definitions and first-row override needed for subsequent DOCX export.
+      Resolution: Continue the wider Writer table formatting and original fixture acceptance cases under the active goal.
 id_source: "generated"
 ---
 ## Summary
@@ -11010,6 +11050,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-19T23:53:02.159Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Primary Writer storage preserves DOCX tableStyles, style bindings and look values. Code 8544b56f8225 verified with 49 focused tests, the adapter 90 coverage gate and two Chromium scenarios after browser reload.
+Attempts: 6
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T23:45:59.655Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -11744,3 +11814,7 @@ Evidence: `evidence/docx-native-ranged-bookmarks.json`.
 - Observation: Verified four style-defined headers and the explicit first-row false from tdf81100 with its unrelated unsupported footer shape isolated. The primary XML still drops Word style metadata. Baseline registry errors remain.
   Impact: Downloads preserve table style declarations, look flags and row overrides while the live graph is available.
   Resolution: Continue primary browser persistence and the represented conditional formatting groups. Preserve unmodified-fixture and baseline-registry findings.
+
+- Observation: An atomic browser primary record now retains named Word table styles alongside the native XML streams. Earlier records and external ODT continue through the core ODF filter. Conditional formatting, unmodified tdf81100 drawing support and baseline registry entries remain open.
+  Impact: Reopening the IndexedDB copy preserves the definitions and first-row override needed for subsequent DOCX export.
+  Resolution: Continue the wider Writer table formatting and original fixture acceptance cases under the active goal.
