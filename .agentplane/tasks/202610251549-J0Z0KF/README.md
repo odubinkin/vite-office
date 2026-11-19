@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 655
+revision: 657
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T06:49:52.924Z"
+  updated_at: "2026-11-19T07:50:58.525Z"
   updated_by: "CODER"
-  note: "Implementation 0250d5961 passes 78 focused cases and the browser edit/save/export/mobile reopen test. New executable ranges exceed the approved 90 percent gate. Complete XLSX acceptance remains open."
-  attempts: 210
+  note: "Checkpoint 6103d310fba6: native sheet grid XLSX and ODS round trips verified; full task continues."
+  attempts: 211
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3368,8 +3371,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T07:50:58.525Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Checkpoint 6103d310fba6: native sheet grid XLSX and ODS round trips verified; full task continues."
+  -
+    type: "status"
+    at: "2026-11-19T07:51:12.357Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T06:50:06.417Z"
+doc_updated_at: "2026-11-19T07:51:12.357Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -9692,6 +9708,46 @@ sections:
     - Commands: npm run test:static, npm run typecheck:tools, npm run check:docs, npm run check:file-size, npm run check:dependencies, npm run check:source-tree, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:registry:check, scoped ESLint and Prettier, git diff --check, ap doctor, node .agentplane/policy/check-routing.mjs.
       Result: pass. Evidence: four relative production bundles, provenance confirms 2811 runtime modules and registry reports zero semantic violations. Scope: production build, code boundaries, documentation and task lifecycle.
     - Remaining acceptance: broader XLSX functions and matrix evaluation, styles and other supported workbook features, and the full task-level coverage and device matrix. The full-suite cadence is measured across completed Agentplane tasks.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-19T07:50:58.525Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Checkpoint 6103d310fba6: native sheet grid XLSX and ODS round trips verified; full task continues.
+    Attempts: 211
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T06:50:06.417Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    Implementation 6103d310fba6 connects the interactive LibreOffice worksheet grid flag to Calc's native sheet view states. The filter selects the first sheetView and uses true when showGridLines is absent. The existing view slot still toggles only the active sheet, and the document-wide grid flag is independent. The XLSX serializer emits the sheet view in worksheet schema order. The Calc Worker and primary ODS settings transport the two flags independently, with ODF named Tables entries addressed by sheet name.
+
+    Baseline 9bc445578031fecf56086729d8e4940c77e14d65. Referenced sc/source/filter/oox/viewsettings.cxx, sc/source/filter/excel/xeview.cxx, sc/source/ui/view/viewdata.cxx and the xmloff config item map owners. Ported sc/qa/uitest/calc_tests9/tdf126541_GridVisibilityImportXlsx.py with both unchanged upstream fixtures. Covered first sheetView precedence, defaulting, UI toggle, multiple sheets, Worker clone, primary ODS and XLSX XML and reopen. CALC-742 documents the source headless branch's known multicell-sheet visibility limitation. Browser behavior corresponds to the interactive branch.
+
+    - npm run test:coverage:calc -- viewdata.settings excelfilter.test ods.test ods-worker-boundaries calc-view-options calc-files calc-ods-io --maxWorkers=2 --testTimeout=120000 with per-file 90 percent and three included owner paths. Pass: 68 tests in 9 files. xeview.ts and viewsettings.ts covered by the production filter round trips. viewdata.settings.ts reached 96.42 percent branches and 100 percent of other metrics.
+    - npm run test:coverage:shared -- DocumentSettingsContext --maxWorkers=2 with per-file 90 percent and the two shared settings owners. Pass: 3 tests. DocumentSettingsContext.ts reached 98.09 percent statements, 94.44 percent branches and 100 percent functions and lines. SettingsExportHelper.ts clears the same threshold.
+    - npm run test:writer -- native-rtf-tab-settings-roundtrip docxexport.compat --maxWorkers=2 --testTimeout=120000. Pass: 5 tests across two files.
+    - node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=120000. Pass: 3 production Chromium scenarios. The original XLSX fixture hides gridlines on open, restores them from local ODS with the same visibility setting, downloads XLSX with showGridLines false, and reopens/toggles the setting at mobile width. Existing active-sheet and sheet-visibility browser cases pass.
+    - Typecheck, production/static smoke, scoped ESLint and Prettier, JSDoc, file size and tree, Calc resources, dependencies, provenance, registry validation with zero semantic violations, doctor/routing and Git diff checks pass. The complete suite is outside the ten-task cadence. Broader XLSX acceptance and other view fields remain pending.
 
     BlueprintSnapshotRef:
     - state: current
@@ -17123,6 +17179,46 @@ Implementation commit: 0250d596146d. The represented ordinary SUM, SUMSQ, PRODUC
 - Commands: npm run test:static, npm run typecheck:tools, npm run check:docs, npm run check:file-size, npm run check:dependencies, npm run check:source-tree, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:registry:check, scoped ESLint and Prettier, git diff --check, ap doctor, node .agentplane/policy/check-routing.mjs.
   Result: pass. Evidence: four relative production bundles, provenance confirms 2811 runtime modules and registry reports zero semantic violations. Scope: production build, code boundaries, documentation and task lifecycle.
 - Remaining acceptance: broader XLSX functions and matrix evaluation, styles and other supported workbook features, and the full task-level coverage and device matrix. The full-suite cadence is measured across completed Agentplane tasks.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-19T07:50:58.525Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Checkpoint 6103d310fba6: native sheet grid XLSX and ODS round trips verified; full task continues.
+Attempts: 211
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T06:50:06.417Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+Implementation 6103d310fba6 connects the interactive LibreOffice worksheet grid flag to Calc's native sheet view states. The filter selects the first sheetView and uses true when showGridLines is absent. The existing view slot still toggles only the active sheet, and the document-wide grid flag is independent. The XLSX serializer emits the sheet view in worksheet schema order. The Calc Worker and primary ODS settings transport the two flags independently, with ODF named Tables entries addressed by sheet name.
+
+Baseline 9bc445578031fecf56086729d8e4940c77e14d65. Referenced sc/source/filter/oox/viewsettings.cxx, sc/source/filter/excel/xeview.cxx, sc/source/ui/view/viewdata.cxx and the xmloff config item map owners. Ported sc/qa/uitest/calc_tests9/tdf126541_GridVisibilityImportXlsx.py with both unchanged upstream fixtures. Covered first sheetView precedence, defaulting, UI toggle, multiple sheets, Worker clone, primary ODS and XLSX XML and reopen. CALC-742 documents the source headless branch's known multicell-sheet visibility limitation. Browser behavior corresponds to the interactive branch.
+
+- npm run test:coverage:calc -- viewdata.settings excelfilter.test ods.test ods-worker-boundaries calc-view-options calc-files calc-ods-io --maxWorkers=2 --testTimeout=120000 with per-file 90 percent and three included owner paths. Pass: 68 tests in 9 files. xeview.ts and viewsettings.ts covered by the production filter round trips. viewdata.settings.ts reached 96.42 percent branches and 100 percent of other metrics.
+- npm run test:coverage:shared -- DocumentSettingsContext --maxWorkers=2 with per-file 90 percent and the two shared settings owners. Pass: 3 tests. DocumentSettingsContext.ts reached 98.09 percent statements, 94.44 percent branches and 100 percent functions and lines. SettingsExportHelper.ts clears the same threshold.
+- npm run test:writer -- native-rtf-tab-settings-roundtrip docxexport.compat --maxWorkers=2 --testTimeout=120000. Pass: 5 tests across two files.
+- node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=120000. Pass: 3 production Chromium scenarios. The original XLSX fixture hides gridlines on open, restores them from local ODS with the same visibility setting, downloads XLSX with showGridLines false, and reopens/toggles the setting at mobile width. Existing active-sheet and sheet-visibility browser cases pass.
+- Typecheck, production/static smoke, scoped ESLint and Prettier, JSDoc, file size and tree, Calc resources, dependencies, provenance, registry validation with zero semantic violations, doctor/routing and Git diff checks pass. The complete suite is outside the ten-task cadence. Broader XLSX acceptance and other view fields remain pending.
 
 BlueprintSnapshotRef:
 - state: current
