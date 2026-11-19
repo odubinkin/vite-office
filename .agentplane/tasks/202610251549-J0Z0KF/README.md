@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 639
+revision: 642
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T02:26:16.225Z"
+  updated_at: "2026-11-19T02:41:21.090Z"
   updated_by: "CODER"
-  note: "Verified native protected selections, cursor/marked deletion, indentation and Clear with 133 Calc tests, 15 shared tests, nine Chromium scenarios and scoped per-owner coverage. Evidence: evidence/native-xlsx-selection-protection.json. Remaining cursor selection permissions and sibling filter coverage stay in scope."
-  attempts: 204
+  note: "Verified protected XLSX cursor admission and keyboard and pointer movement in the native Calc view and production Chromium. 131 Calc, 3 shared, 10 Chromium; scoped 90 percent passed. Evidence: evidence/native-xlsx-cursor-protection.json. Dedicated merged block and formula-reference navigation and umbrella format acceptance remain open."
+  attempts: 205
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3272,8 +3275,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T02:41:21.090Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified protected XLSX cursor admission and keyboard and pointer movement in the native Calc view and production Chromium. 131 Calc, 3 shared, 10 Chromium; scoped 90 percent passed. Evidence: evidence/native-xlsx-cursor-protection.json. Dedicated merged block and formula-reference navigation and umbrella format acceptance remain open."
+  -
+    type: "status"
+    at: "2026-11-19T02:41:29.621Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T02:26:22.795Z"
+doc_updated_at: "2026-11-19T02:41:29.621Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -9408,6 +9424,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-19T02:41:21.090Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified protected XLSX cursor admission and keyboard and pointer movement in the native Calc view and production Chromium. 131 Calc, 3 shared, 10 Chromium; scoped 90 percent passed. Evidence: evidence/native-xlsx-cursor-protection.json. Dedicated merged block and formula-reference navigation and umbrella format acceptance remain open.
+    Attempts: 205
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T02:41:14.551Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -10459,6 +10505,13 @@ sections:
     - Allowed numeric deletion restores content through the original undo copy flags. Chromium opens the unchanged enhanced-protection workbook, denies the actual Format Clear command on a protected cell, accepts typing in an unlocked range and downloads the edited workbook with its protection metadata.
     - Scoped verification passed 133 Calc tests across 20 files, 15 shared tests and 9 Chromium scenarios. Per-owner coverage, typecheck, production build and source gates passed. Exact commands are in `evidence/native-xlsx-selection-protection.json`.
     - Row/column selection permissions, other formatting actions, password verification, reference updates, represented matrix-only status handling beyond the current import profile and remaining filter acceptance stay in scope. No full suite was due.
+
+    ### Calc cursor and block selection on protected XLSX sheets
+
+    - The source view and selection function set admit targets according to the native locked and unlocked selection options. The browser uses these owners for arrow movement, protected Shift selection, pointer gestures and formula references.
+    - Arrow movement skips prohibited and hidden positions. A protected Shift selection retains its anchor and stops before a prohibited visible cell. Ordinary movement preserves the perpendicular cursor position through merge anchors.
+    - Production Chromium opens the XLSX package and exercises the actual pointer and keyboard handlers. The scoped checks passed 131 Calc tests, 3 shared tests and 10 Chromium scenarios. Coverage of the new kernel mechanisms and admission guard, whole-file coverage and exact commands are in `evidence/native-xlsx-cursor-protection.json`.
+    - Full merged-mark expansion in protected Shift navigation, dedicated formula-reference cursor movement and the remaining XLSX and DOCX acceptance paths stay in scope. No full suite was due.
 id_source: "generated"
 ---
 ## Summary
@@ -16603,6 +16656,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-19T02:41:21.090Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified protected XLSX cursor admission and keyboard and pointer movement in the native Calc view and production Chromium. 131 Calc, 3 shared, 10 Chromium; scoped 90 percent passed. Evidence: evidence/native-xlsx-cursor-protection.json. Dedicated merged block and formula-reference navigation and umbrella format acceptance remain open.
+Attempts: 205
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T02:41:14.551Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -17658,3 +17741,10 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Allowed numeric deletion restores content through the original undo copy flags. Chromium opens the unchanged enhanced-protection workbook, denies the actual Format Clear command on a protected cell, accepts typing in an unlocked range and downloads the edited workbook with its protection metadata.
 - Scoped verification passed 133 Calc tests across 20 files, 15 shared tests and 9 Chromium scenarios. Per-owner coverage, typecheck, production build and source gates passed. Exact commands are in `evidence/native-xlsx-selection-protection.json`.
 - Row/column selection permissions, other formatting actions, password verification, reference updates, represented matrix-only status handling beyond the current import profile and remaining filter acceptance stay in scope. No full suite was due.
+
+### Calc cursor and block selection on protected XLSX sheets
+
+- The source view and selection function set admit targets according to the native locked and unlocked selection options. The browser uses these owners for arrow movement, protected Shift selection, pointer gestures and formula references.
+- Arrow movement skips prohibited and hidden positions. A protected Shift selection retains its anchor and stops before a prohibited visible cell. Ordinary movement preserves the perpendicular cursor position through merge anchors.
+- Production Chromium opens the XLSX package and exercises the actual pointer and keyboard handlers. The scoped checks passed 131 Calc tests, 3 shared tests and 10 Chromium scenarios. Coverage of the new kernel mechanisms and admission guard, whole-file coverage and exact commands are in `evidence/native-xlsx-cursor-protection.json`.
+- Full merged-mark expansion in protected Shift navigation, dedicated formula-reference cursor movement and the remaining XLSX and DOCX acceptance paths stay in scope. No full suite was due.

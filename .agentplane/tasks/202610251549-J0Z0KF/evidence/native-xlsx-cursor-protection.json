@@ -1,0 +1,247 @@
+{
+  "checkpoint": "Calc cursor and block selection on protected XLSX sheets",
+  "createdAt": "2026-11-19T02:41:14.223Z",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "task": "202610251549-J0Z0KF",
+  "upstream": [
+    "sc/source/ui/view/tabview2.cxx#moveCursorByProtRule",
+    "sc/source/ui/view/tabview2.cxx#ScTabView::SkipCursorHorizontal",
+    "sc/source/ui/view/tabview2.cxx#ScTabView::SkipCursorVertical",
+    "sc/source/ui/view/tabview2.cxx#ScTabView::ExpandBlock",
+    "sc/source/ui/view/tabview3.cxx#ScTabView::MoveCursorRel",
+    "sc/source/ui/view/select.cxx#ScViewFunctionSet::SetCursorAtCell"
+  ],
+  "results": {
+    "calc": {
+      "files": 22,
+      "tests": 131
+    },
+    "shared": {
+      "files": 1,
+      "tests": 3
+    },
+    "chromium": 10,
+    "coverage": {
+      "apps/office/src/sc/source/ui/view/select.ts": {
+        "statements": {
+          "covered": 2,
+          "total": 2,
+          "pct": 100
+        },
+        "branches": {
+          "covered": 1,
+          "total": 1,
+          "pct": 100
+        },
+        "functions": {
+          "covered": 0,
+          "total": 0,
+          "pct": null
+        },
+        "lines": {
+          "covered": 1,
+          "total": 1,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sc/source/ui/view/tabview2.ts": {
+        "statements": {
+          "covered": 116,
+          "total": 119,
+          "pct": 97.47
+        },
+        "branches": {
+          "covered": 102,
+          "total": 108,
+          "pct": 94.44
+        },
+        "functions": {
+          "covered": 10,
+          "total": 10,
+          "pct": 100
+        },
+        "lines": {
+          "covered": 103,
+          "total": 104,
+          "pct": 99.03
+        }
+      }
+    },
+    "wholeFileCoverage": {
+      "apps/office/src/sc/source/ui/view/select.ts": {
+        "lines": {
+          "total": 97,
+          "covered": 97,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 14,
+          "covered": 14,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 104,
+          "covered": 104,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 58,
+          "covered": 58,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sc/source/ui/view/tabview2.ts": {
+        "lines": {
+          "total": 174,
+          "covered": 173,
+          "skipped": 0,
+          "pct": 99.42
+        },
+        "functions": {
+          "total": 15,
+          "covered": 15,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 204,
+          "covered": 201,
+          "skipped": 0,
+          "pct": 98.52
+        },
+        "branches": {
+          "total": 193,
+          "covered": 186,
+          "skipped": 0,
+          "pct": 96.37
+        }
+      }
+    }
+  },
+  "commands": [
+    "npm run test:coverage:calc --workspace @vite-office/office -- tabview mouse-block calc-view-controller formula-pointing pointer-selection calc-cell-selection calc-deselect calc-visible-selection calc-data-selection ods-sheet-protection excelfilter calc-files --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sc/source/ui/view/tabview2.ts --coverage.include=src/sc/source/ui/view/select.ts --coverage.thresholds.perFile --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=coverage/cursor-protection-final",
+    "npm run test:shared -- browser-dispatcher --maxWorkers=2 --testTimeout=90000",
+    "./node_modules/.bin/playwright test -c apps/office/coverage/xlsxalignment.playwright.config.ts --workers=1",
+    "npm run typecheck",
+    "npm run test:static",
+    "npm run check:docs",
+    "npm run check:dependencies",
+    "npm run check:file-size",
+    "npm run check:source-tree",
+    "npm run check:source-provenance",
+    "npm run inventory:registry:build",
+    "npm run inventory:invariants",
+    "npm run inventory:parity",
+    "npm run check:calc-resources",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor",
+    "git diff --check"
+  ],
+  "files": [
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabview2.ts",
+      "sha256": "a40295d2521330b03e98638d570fbda5e02a3e98182c6eea2200abc9a51201f3"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabview3.ts",
+      "sha256": "018ea41fd50114c5b72894e269dfeb79fc9b36a9c6f240848e995b6e5eb63ffe"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/select.ts",
+      "sha256": "428ce7d076116c2954c3e68e9cb6b4f30cb53fcc22e0465b2be3c96f61a7dcbb"
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/view/tabview2-protection.test.ts",
+      "sha256": "92e3bf86c7578fc713c75d5b7423184bca91ea71437c34c56d3652c62c1b2360"
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-view-controller.ts",
+      "sha256": "37b2aa440170118c4123850ea4586eb149fdcde62ef6bc30abb9a843ae2f4179"
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-pointer-selection.ts",
+      "sha256": "44d7e1f27c9ff56b1015361ab2e4baa0bff31587b33a70a0678da702ba3a4293"
+    },
+    {
+      "path": "apps/office/src/sc/browser/controller/calc-reference-input.ts",
+      "sha256": "5088d7ba9909c31661db69de1605b0fe53f1beee38c677f72b4c30c10323d137"
+    },
+    {
+      "path": "apps/office/src/sc/browser/presentation/calc-workbench.tsx",
+      "sha256": "6d50f95462f12419030e58820fa93f71c7401eb33309b03adb56ac7f7eb457a8"
+    },
+    {
+      "path": "apps/office/e2e/calc/xlsx-alignment.spec.ts",
+      "sha256": "d56682d4da873698aefd46782ad908976db8921aba7443a4bde7a3fcc7e53971"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/view/tabview2.ts.json",
+      "sha256": "03dfdcff04619740236907acfa41bff2a3b745e7181ab691b48fd730157ab035"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/view/tabview2.ts.json",
+      "sha256": "3e1f3c0ee486677aa5cda108d0c83be534083a2e05e7d05bb7b49937f3896418"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/view/tabview3.ts.json",
+      "sha256": "4dce72ee5d076b0bbe858f4d75fe78d2da4f538b21c907c4aefbca66f4fbde5f"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/view/tabview3.ts.json",
+      "sha256": "b3bc505e17d0fd3a3759e9c01adac583d01cb4d804016343fb6afcb87d20babd"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/source/ui/view/select.ts.json",
+      "sha256": "866f058b63ace236cdd95b4f5841fdb80e4740d67e84972f45c8415d22c4c08f"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/source/ui/view/select.ts.json",
+      "sha256": "a085430431290f204961ac042032b87a409bba8ece3c8f16101d67c00cb9a15c"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/browser/controller/calc-view-controller.ts.json",
+      "sha256": "04144be870f18a9e76782186e02183442c38d1f59d522d1ef12da4736f6d3df6"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/browser/controller/calc-view-controller.ts.json",
+      "sha256": "4517a761c8fcdccc43b1a7e65b69b7605cfa2437bd1562c15b65b96418bdbb35"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/browser/controller/calc-pointer-selection.ts.json",
+      "sha256": "f237b29268c87e68e0354c8270e4459d35be4ccb7e69de70b16d64ec32369ee9"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/browser/controller/calc-pointer-selection.ts.json",
+      "sha256": "eb364bd27f87f4b73f74da9349b9de1f2d9c4909d016199eb1058ade2fc14a56"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/browser/controller/calc-reference-input.ts.json",
+      "sha256": "3066c578ac806348e7237cc1b8446ae41ac722174b0384a62c79eb51ad4b3181"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/browser/controller/calc-reference-input.ts.json",
+      "sha256": "51050329fcf1261120cbc48bacdcdc0aa8cccb4103f725a8486b039fa052033e"
+    },
+    {
+      "path": "docs/program/registry/calc/provenance/sc/browser/presentation/calc-workbench.tsx.json",
+      "sha256": "22dc2c7e7b77a0c76c8ec12adf2470ed91e6d14db6b964ea34ad5a22849c35a1"
+    },
+    {
+      "path": "docs/program/registry/calc/runtime/sc/browser/presentation/calc-workbench.tsx.json",
+      "sha256": "8f8b72b8747008dc576e81f63424cb20b181c6376445c5d652317c19d72ef32a"
+    }
+  ],
+  "verified": [
+    "Direct cursor admission preserves existing cell marks and formula references when either protection option rejects the target.",
+    "Arrow movements skip hidden and prohibited cells. Protected Shift selection retains the cursor anchor and stops at a prohibited visible cell.",
+    "Relative movement skips merge overlap flags and retains the perpendicular position for the next ordinary move.",
+    "Production Chromium opens the protected XLSX, applies keyboard selection and rejects pointer selection on a locked cell."
+  ],
+  "remaining": [
+    "Full merged-mark expansion under protected Shift navigation, dedicated formula reference movement (including merge and protected-edge behavior), remaining password and formatting paths, and umbrella XLSX/DOCX acceptance remain open."
+  ]
+}
