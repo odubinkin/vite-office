@@ -1,0 +1,62 @@
+{
+  "checkpoint": "Calc opens, scrolls, activates and saves normal split worksheet panes",
+  "implementation": "f0142d47e954",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    "sc/source/ui/view/tabview.cxx#ScTabView::DoResize",
+    "sc/source/ui/view/tabview.cxx#ScTabView::ScrollX",
+    "sc/source/ui/view/tabview.cxx#ScTabView::ScrollY",
+    "sc/source/ui/view/tabview3.cxx#ScTabView::ActivatePart",
+    "sc/source/ui/view/viewdata.cxx#ScViewData::SetActivePart",
+    "sc/source/ui/view/viewdata.cxx#ScViewDataTable::ReadUserDataSequence",
+    "sc/source/ui/view/viewdata.cxx#ScViewData::WriteExtOptions"
+  ],
+  "fixture": {
+    "path": "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/sheet-names.xlsx",
+    "sha256": "e768518ed6161ec4698e6a24506fc71ce2ebf56b0a2fa5d9dd352b2dfb5f47ec",
+    "adaptation": "Adds a two-axis normal split and a numeric cell to the original active sheet in memory. The original remains unchanged."
+  },
+  "verification": {
+    "calc_viewport": {
+      "command": "npm run test:coverage:calc -- calc-view-controller.test calc-workbench.test calc-pointer-selection calc-presenters viewdata.settings row-visibility column-geometry --maxWorkers=3 --testTimeout=90000 --coverage.include='src/sc/browser/{controller/calc-viewport,presentation/calc-grid-axis}.ts' --coverage.reportsDirectory=coverage/calc-normal-grid --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "41 tests across seven files. Branch coverage was 91.96% in the viewport and 92.85% in the axis projection. Each measured owner passes scoped90 for the four metrics. Independent axes, native view activation, single-pixel wheel movement and suppressed narrow split positions are directly exercised."
+    },
+    "calc_formats": {
+      "command": "npm run test:calc -- excelfilter.test ods-worker-boundaries calc-files docsh.csv-export --maxWorkers=2 --testTimeout=90000",
+      "result": "pass",
+      "evidence": "36 filter, Worker, file dialog and CSV tests across four files."
+    },
+    "chromium": {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" npm exec -- playwright test --config .git/calc-panes-browser.config.mts --project calc --workers=1 apps/office/e2e/calc/xlsx-split-grid.spec.ts apps/office/e2e/calc/xlsx-frozen-grid.spec.ts apps/office/e2e/calc/xlsx-active-view.spec.ts --grep 'normal XLSX|stationary|frozen panes|unsplit XLSX|active sheet'",
+      "result": "pass",
+      "evidence": "Five scenarios on the production build. The four normal panes render B3, G3, B12 and G12 at their imported origins. Top-left and bottom-right wheel gestures update different paired axes. Pointer activation, cursor, both origins and split distances are retained through primary ODS and the exported XLSX. The downloaded file reopens at mobile width. The browser config inherits the production config with an available preview port."
+    },
+    "static": {
+      "commands": [
+        "npm run typecheck:tools",
+        "npm run test:static",
+        "npm run check:docs",
+        "npm run check:dependencies",
+        "npm run check:source-tree",
+        "npm run check:calc-resources",
+        "npm run check:file-size",
+        "node .agentplane/policy/check-routing.mjs",
+        "ap doctor",
+        "git diff --check"
+      ],
+      "result": "pass",
+      "evidence": "The static build ran the office type check. Scoped ESLint, Prettier and registry validation for all six changed runtime paths passed. Doctor retains the earlier managed shim warning."
+    },
+    "global_provenance_and_registry": {
+      "commands": ["npm run check:source-provenance", "npm run inventory:registry:check"],
+      "result": "fail",
+      "evidence": "The global registry still lacks the existing framework runtime records for OfficeTooltips.tsx and available-menu-items.ts. The global invariants and parity commands share this checker."
+    }
+  },
+  "browser_adaptation": "The Chromium grid retains one browser focus surface and two physical scrollbar tracks. Pointer-directed wheel input updates the native pane axes under the pointer, and cursor reveal uses the selected pane. Divider coordinates remain available when a browser resize temporarily prevents displaying a split.",
+  "residual": [
+    "Dedicated secondary scrollbars and draggable split handles are not represented in this file-import checkpoint.",
+    "Complete XLSX acceptance remains open. Full suites remain on the approved ten-task cadence."
+  ]
+}
