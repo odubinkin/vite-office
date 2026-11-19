@@ -1,0 +1,43 @@
+{
+  "checkpoint": "Conditional formulas and dynamic references in the original XLSX regression workbook",
+  "implementation": "48f88165b230",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "fixture": {
+    "path": "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/tdf70455.xlsx",
+    "sha256": "9995989ed73695c7b65c97e91bad3c673bc668c1f5a80b694f74a624fc50d746",
+    "upstream": "sc/qa/unit/subsequent_filters_test3.cxx#testTdf70455"
+  },
+  "source_tests": [
+    "Scalar dependency and return-value cases from sc/qa/unit/ucalc_formula2.cxx#testFuncIF",
+    "Local Calc A1, Excel A1 and Excel R1C1 cases from sc/qa/unit/ucalc_formula2.cxx#testFuncINDIRECT",
+    "Scalar ROW and COLUMN result paths from sc/qa/unit/ucalc_formula.cxx"
+  ],
+  "checks": {
+    "calc": { "tests": 167, "files": 11, "log": "xlsx-if-calc-coverage-final.log" },
+    "shared": { "tests": 12, "files": 3, "log": "xlsx-if-shared.log" },
+    "chromium": {
+      "tests": 7,
+      "logs": ["xlsx-if-browser-final.log", "xlsx-if-browser-committable.log"]
+    },
+    "scoped_coverage": {
+      "tests": 87,
+      "log": "xlsx-if-scoped.log",
+      "address_header_branches": 100,
+      "scalar_compare_branches": 94.28,
+      "dynamic_range_branches": 100
+    },
+    "other": [
+      "Production build, type check and static deployment smoke",
+      "Scoped ESLint and Prettier",
+      "JSDoc, file size, module boundaries, Calc resources and source tree",
+      "Agentplane doctor and routing",
+      "Diff check and scoped provenance validation for 17 runtime paths"
+    ]
+  },
+  "verified": "The unchanged workbook opens with its original named error expressions and recalculates H8 to €780.00. The native formula and numeric result survive the Worker, primary ODS and XLSX re-export. Chrome verifies original open, saved copy reopen and mobile XLSX reopen.",
+  "residual": [
+    "Primary ODS loses the currency display for this workbook because ExportNumberFormat skips the two-section Excel number format \\€#,##0.00;[RED]\"-€\"#,##0.00. Restoring or exporting the local copy retains the formula and value 780. The original XLSX and Worker both retain €780.00.",
+    "Matrix jump execution and external or multi-sheet Excel header resolution remain open. The implemented conditional path is scalar.",
+    "Whole-repository provenance discovery still reports two existing missing framework records for OfficeTooltips.tsx and available-menu-items.ts."
+  ]
+}
