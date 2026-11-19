@@ -1,6 +1,7 @@
 /** @fileoverview Imports an embedded floating picture into Writer's graphic node and frame owners. */
 import type { EmbeddedGraphic } from "../../../../oox/source/helper/graphichelper";
 import { SvxOpaqueItem } from "../../../../editeng/inc/opaqitem";
+import { RelOrientation } from "../../../../offapi/com/sun/star/text/RelOrientation";
 import { WrapTextMode } from "../../../../offapi/com/sun/star/text/WrapTextMode";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { Size } from "../../../../tools/inc/gen";
@@ -51,7 +52,10 @@ export function ImportGraphic(
     items.Put(anchor);
     items.Put(new SwFormatFrameSize(SwFrameSize.Fixed, width, height));
     items.Put(horizontalPosition(drawing.horizontal));
-    items.Put(verticalPosition(drawing.vertical));
+    const vertical = verticalPosition(drawing.vertical);
+    if (vertical.GetRelationOrient() === RelOrientation.TEXT_LINE)
+      vertical.SetPos(-vertical.GetPos());
+    items.Put(vertical);
     items.Put(new SwFormatSurround(drawing.wrap));
     const behind =
       drawing.behindDocument &&

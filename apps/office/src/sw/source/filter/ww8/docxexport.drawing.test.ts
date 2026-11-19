@@ -5,6 +5,12 @@ import { RelOrientation } from "../../../../offapi/com/sun/star/text/RelOrientat
 import { WrapTextMode } from "../../../../offapi/com/sun/star/text/WrapTextMode";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SwFormatSurround } from "../../../inc/fmtsrnd";
+import { SwFormatAnchor } from "../../../inc/fmtanchr";
+import { SwFormatHoriOrient, SwFormatVertOrient } from "../../../inc/fmtornt";
+import { aFrameFormatSetRange } from "../../core/bastyp/init";
+import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
 import {
   DocumentArchive,
@@ -14,6 +20,7 @@ import {
   decodeWriterDocument,
   encodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
+import { DocxExport } from "./docxexport";
 import { importOOXML } from "../../writerfilter/filter/WriterFilter";
 import { horizontalPosition, verticalPosition } from "../../writerfilter/dmapper/GraphicHelpers";
 import type { SwDoc } from "../../core/doc/doc";
@@ -137,6 +144,141 @@ it("gives the anchor's simple position priority over relative axis values", /** 
     expect(format.GetVertOrient().GetRelationOrient()).toBe(RelOrientation.PAGE_FRAME);
     expect(format.GetVertOrient().GetPos()).toBe(300);
     expect(format.GetSurround().GetSurround()).toBe(WrapTextMode.NONE);
+  } finally {
+    doc.Dispose();
+  }
+});
+
+it("writes the floating PNG to a part owned by its real DOCX story", /** Checks the Worker, ZIP bytes, part-local image relationship and exact reopened picture. @returns Completion. */ async () => {
+  const input = await headerPicture();
+  const imported = await importOOXML(input.bytes, {});
+  let worker: SwDoc | undefined;
+  let reopened: SwDoc | undefined;
+  try {
+    worker = decodeWriterDocument(structuredClone(encodeWriterDocument(imported)));
+    const exported = await DocxExport.WriteDocument(worker);
+    const archive = await DocumentArchive.open(exported);
+    const header = await archive.readTextEntry("word/header1.xml");
+    const rels = await archive.readTextEntry("word/_rels/header1.xml.rels");
+    expect(header).toContain('<wp:extent cx="635000" cy="317500"/>');
+    expect(header).toContain(
+      '<wp:positionH relativeFrom="column"><wp:posOffset>-127000</wp:posOffset>',
+    );
+    expect(header).toContain(
+      '<wp:positionV relativeFrom="paragraph"><wp:posOffset>190500</wp:posOffset>',
+    );
+    expect(header).toContain("<wp:wrapNone/>");
+    expect(header).toContain('<a:blip r:embed="rId1"/>');
+    expect(rels).toContain('Target="media/image1.png"');
+    expect(await archive.readEntry("word/media/image1.png")).toEqual(input.image);
+    expect(await archive.readTextEntry("word/document.xml")).not.toContain("<w:drawing>");
+    const contentTypes = await archive.readTextEntry("[Content_Types].xml");
+    expect(contentTypes).toContain('ContentType="image/png"');
+    reopened = await importOOXML(exported, {});
+    expectHeaderGraphic(reopened, input.image);
+  } finally {
+    reopened?.Dispose();
+    worker?.Dispose();
+    imported.Dispose();
+  }
+});
+
+it("reuses one encoded asset across separately owned body and header relationships", /** Checks a character-boundary run, line-relative sign and unique drawing IDs across stories. @returns Completion. */ async () => {
+  const input = await headerPicture();
+  const doc = await importOOXML(input.bytes, {});
+  let reopened: SwDoc | undefined;
+  const attributes = new SfxItemSet(doc.GetAttrPool(), aFrameFormatSetRange);
+  const anchor = new SwFormatAnchor(RndStdIds.FLY_AT_CHAR);
+  try {
+    const header = doc.GetSpzFrameFormats().GetFormat(0);
+    const node = doc.paragraphs[0];
+    const content = header.GetContent().GetContentIdx()?.GetNode();
+    assert(node && content);
+    const graphic = doc
+      .GetNodes()
+      .at(content.GetIndex() + 1)
+      .GetGrfNode()
+      ?.GetGraphic();
+    assert(graphic);
+    attributes.Put(anchor);
+    attributes.Put(header.GetFrameSize());
+    attributes.Put(header.GetSurround());
+    attributes.Put(new SwFormatVertOrient(-300, VertOrientation.NONE, RelOrientation.TEXT_LINE));
+    const position = new SwPosition(node, 2);
+    const cursor = new SwPaM(position);
+    try {
+      doc.GetDocumentContentOperationsManager().InsertGraphic(cursor, graphic, attributes);
+    } finally {
+      cursor.Dispose();
+      position.Dispose();
+    }
+
+    const exported = await DocxExport.WriteDocument(doc);
+    const archive = await DocumentArchive.open(exported);
+    const main = await archive.readTextEntry("word/document.xml");
+    const story = await archive.readTextEntry("word/header1.xml");
+    expect(main).toMatch(/>Bo<\/w:t><\/w:r><w:r><w:drawing>.*?<\/w:drawing><\/w:r><w:r><w:t>dy</su);
+    expect(main).toContain('<wp:positionV relativeFrom="line"><wp:posOffset>190500</wp:posOffset>');
+    expect(main.match(/<wp:docPr id="(\d+)"/u)?.[1]).not.toBe(
+      story.match(/<wp:docPr id="(\d+)"/u)?.[1],
+    );
+    expect(await archive.readTextEntry("word/_rels/document.xml.rels")).toContain(
+      'Target="media/image1.png"',
+    );
+    expect(await archive.readTextEntry("word/_rels/header1.xml.rels")).toContain(
+      'Target="media/image1.png"',
+    );
+    expect(
+      archive.getEntryNames().filter(
+        /** Checks the native media part count. @param path - ZIP entry. @returns Whether a media part. */
+        (path) => path.startsWith("word/media/"),
+      ),
+    ).toEqual(["word/media/image1.png"]);
+    reopened = await importOOXML(exported, {});
+    const body = [...reopened.GetSpzFrameFormats()].find(
+      /** Selects the real body anchor after reimport. @param frame - Floating picture. @returns Whether it belongs to the body. */
+      (frame) => frame.GetAnchor().GetAnchorNode() === reopened?.paragraphs[0],
+    );
+    expect(body?.GetAnchor().GetAnchorContentOffset()).toBe(2);
+    expect(body?.GetVertOrient().GetPos()).toBe(-300);
+  } finally {
+    anchor.Dispose();
+    attributes.Dispose();
+    reopened?.Dispose();
+    doc.Dispose();
+  }
+});
+
+it("writes mirrored alignment and the native zero-offset correction for a top-and-bottom picture", /** Checks Word-specific placement and explicit unsupported wrapping handling. @returns Completion. */ async () => {
+  const doc = await importOOXML((await headerPicture(true)).bytes, {});
+  try {
+    const format = doc.GetSpzFrameFormats().GetFormat(0);
+    format.SetFormatAttr(
+      new SwFormatHoriOrient(0, HoriOrientation.LEFT, RelOrientation.PAGE_FRAME, true),
+    );
+    format.SetFormatAttr(new SwFormatVertOrient(0, VertOrientation.TOP, RelOrientation.FRAME));
+    const first = await DocumentArchive.open(await DocxExport.WriteDocument(doc));
+    const header = await first.readTextEntry("word/header1.xml");
+    expect(header).toContain('<wp:positionH relativeFrom="page"><wp:align>inside</wp:align>');
+    expect(header).toContain(
+      '<wp:positionV relativeFrom="paragraph"><wp:posOffset>635</wp:posOffset>',
+    );
+    expect(header).toContain("<wp:wrapTopAndBottom/>");
+
+    format.SetFormatAttr(
+      new SwFormatHoriOrient(0, HoriOrientation.RIGHT, RelOrientation.PAGE_FRAME, true),
+    );
+    format.SetFormatAttr(
+      new SwFormatVertOrient(-10, VertOrientation.BOTTOM, RelOrientation.TEXT_LINE),
+    );
+    const second = await DocumentArchive.open(await DocxExport.WriteDocument(doc));
+    const mirrored = await second.readTextEntry("word/header1.xml");
+    expect(mirrored).toContain('<wp:positionH relativeFrom="page"><wp:align>outside</wp:align>');
+    expect(mirrored).toContain('<wp:positionV relativeFrom="line"><wp:align>top</wp:align>');
+    format.SetFormatAttr(new SwFormatSurround(WrapTextMode.PARALLEL));
+    await expect(DocxExport.WriteDocument(doc)).rejects.toThrow(
+      "Writer cannot export this DOCX picture wrapping mode.",
+    );
   } finally {
     doc.Dispose();
   }

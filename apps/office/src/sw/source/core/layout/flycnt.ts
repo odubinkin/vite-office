@@ -1,6 +1,7 @@
 /** @fileoverview Native text fly anchors and represented content-frame placement from flycnt.cxx. */
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
 import type { SwDoc } from "../doc/doc";
+import type { SwGrfNode } from "../graphic/ndgrf";
 import type { SwTableNode } from "../docnode/node";
 import type { SwTextFrame } from "../text/txtfrm";
 import type { SwTextNode } from "../txtnode/ndtxt";
@@ -45,4 +46,36 @@ export function IsTextFlyAnchorFrame(format: SwFlyFrameFormat, frame: SwTextFram
   return (
     offset >= frame.start && (offset < frame.end || (offset === frame.end && !frame.GetFollow()))
   );
+}
+
+/** Original embedded graphic and its connected Writer fly format. */
+export type BoundGraphicFrame = Readonly<{
+  format: SwFlyFrameFormat;
+  graphic: SwGrfNode;
+}>;
+
+/** Collects floating raster frames by their actual text anchor, including page stories. @param document - Native document. @returns Graphic frames by anchor paragraph. */
+export function CollectGraphicFlyFrames(
+  document: SwDoc,
+): ReadonlyMap<SwTextNode, readonly BoundGraphicFrame[]> {
+  const anchored = new Map<SwTextNode, BoundGraphicFrame[]>();
+  for (const format of document.GetSpzFrameFormats()) {
+    if (!(format instanceof SwFlyFrameFormat)) continue;
+    const anchor = format.GetAnchor();
+    const node = anchor.GetAnchorNode()?.GetTextNode();
+    const start = format.GetContent().GetContentIdx()?.GetNode();
+    if (
+      !node ||
+      !start?.IsStartNode() ||
+      (anchor.GetAnchorId() !== RndStdIds.FLY_AT_PARA &&
+        anchor.GetAnchorId() !== RndStdIds.FLY_AT_CHAR)
+    )
+      continue;
+    const graphic = document.nodes.at(start.GetIndex() + 1).GetGrfNode();
+    if (!graphic) continue;
+    const frames = anchored.get(node) ?? [];
+    frames.push({ format, graphic });
+    anchored.set(node, frames);
+  }
+  return anchored;
 }

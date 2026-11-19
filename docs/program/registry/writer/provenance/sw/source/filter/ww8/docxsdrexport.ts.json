@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/ww8/docxsdrexport.ts",
+    "upstreamPath": "sw/source/filter/ww8/docxsdrexport.cxx",
+    "localSymbols": [
+      "DocxSdrExport"
+    ],
+    "upstreamSymbols": [
+      "DocxSdrExport::startDMLAnchorInline",
+      "DocxSdrExport::writeDMLDrawing"
+    ],
+    "preservedResponsibilities": [
+      "Writes native floating raster pictures at their actual paragraph offsets in the active body or story serializer."
+    ],
+    "omittedResponsibilities": [
+      "Inline graphics, other wrapping modes and full shape and effect export remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxsdrexport.ts",
+          "marker": "DocxSdrExport"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxsdrexport.cxx",
+          "marker": "DocxSdrExport::startDMLAnchorInline"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxsdrexport.cxx",
+          "marker": "DocxSdrExport::writeDMLDrawing"
+        }
+      ]
+    }
+  }
+}

@@ -8,13 +8,15 @@
     "upstreamPath": "sw/source/core/layout/flycnt.cxx",
     "localSymbols": [
       "CollectTextFlyFrames",
-      "IsTextFlyAnchorFrame"
+      "IsTextFlyAnchorFrame",
+      "CollectGraphicFlyFrames"
     ],
     "upstreamSymbols": [
       "GetAnchorFrameContainingAnchPos"
     ],
     "preservedResponsibilities": [
-      "Collects actual native fly sections and resolves paragraph master or character-containing follow ownership."
+      "Collects actual native fly sections and resolves paragraph master or character-containing follow ownership.",
+      "Collects native floating graphic nodes by their actual text anchor for export traversal."
     ],
     "omittedResponsibilities": [
       "Full fly frame formatting, contact registration and fly layout notification remain outside the represented projection."
@@ -28,6 +30,10 @@
         {
           "path": "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
           "marker": "mounts and edits the native anchored table"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

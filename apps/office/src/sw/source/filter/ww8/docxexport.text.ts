@@ -123,7 +123,13 @@ function Out_SwTextNode(
   output.OutputParagraphProperties(node, section);
   const text = node.GetText();
   const hints = node.GetpSwpHints()?.entries() ?? [];
-  const boundaries = new Set([0, text.length, ...bookmarks.Offsets(node)]);
+  const drawings = output.GetExport().SdrExport;
+  const boundaries = new Set([
+    0,
+    text.length,
+    ...bookmarks.Offsets(node),
+    ...drawings.Offsets(node),
+  ]);
   for (const hint of hints) {
     boundaries.add(Math.min(text.length, hint.start));
     boundaries.add(Math.min(text.length, hint.end));
@@ -161,6 +167,7 @@ function Out_SwTextNode(
         linkField = StartURL(output, link.format.GetHyperlink());
     }
     bookmarks.WriteAt(output, node, start);
+    drawings.WriteAt(serializer, node, start);
     if (!snippet) continue;
     let charSlot = 0x0fff;
     if (styles) {
@@ -201,6 +208,7 @@ function Out_SwTextNode(
   }
   if (openLink) EndURL(output, linkField);
   bookmarks.WriteAt(output, node, text.length);
+  drawings.WriteAt(serializer, node, text.length);
   serializer.endElementNS(w, paragraph);
 }
 

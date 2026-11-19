@@ -26,6 +26,7 @@ import {
   WriteCompat,
   WriteDocumentProtection,
 } from "./docxexport.settings";
+import { DocxSdrExport } from "./docxsdrexport";
 import { DocxHeaderFooterExport } from "./docxexport.headerfooter";
 /** Actual native exporter owner for the admitted document/font parts. */
 export class DocxExport extends MSWordExportBase {
@@ -134,6 +135,7 @@ export class DocxExport extends MSWordExportBase {
   private readonly m_pDocumentFS: FastSerializerHelper;
   private readonly m_pAttrOutput: DocxAttributeOutput;
   private readonly m_numberingOutput: DocxNumberingOutput;
+  readonly SdrExport: DocxSdrExport;
   private readonly headerFooter: DocxHeaderFooterExport;
   private wordCompatibilityMode: number | undefined;
   /** Original consumed constructor keeps the document type flags and document relation/MIME selection. @param m_rFilter - Actual XML filter base binding. @param document - Actual document. @param current - Current range base binding. @param original - Actual original range. @param docm - Original macro format flag. @param template - Original template flag. @param version - Selected OOXML version. @returns Exporter. */
@@ -156,6 +158,7 @@ export class DocxExport extends MSWordExportBase {
         ? "application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml"
         : "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml";
     this.m_pDocumentFS = m_rFilter.openFragmentStreamWithSerializer("word/document.xml", mediaType);
+    this.SdrExport = new DocxSdrExport(document, m_rFilter);
     this.m_pAttrOutput = new DocxAttributeOutput(this, this.m_pDocumentFS);
     this.m_numberingOutput = new DocxNumberingOutput(this, this.m_pAttrOutput);
     this.headerFooter = new DocxHeaderFooterExport(this, document, this.m_pDocumentFS);
