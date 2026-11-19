@@ -1,0 +1,50 @@
+{
+  "checkpoint": "Calc number format sections on the existing ODS and XLSX paths",
+  "implementation": "97aa197f3fc6ac89cda70e88e35c5362d70da4f4",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "source": [
+    "xmloff/source/style/xmlnumfe.cxx#SvXMLNumFmtExport::ExportFormat_Impl",
+    "xmloff/source/style/xmlnumfe.cxx#SvXMLNumFmtExport::WriteMapElement_Impl",
+    "xmloff/source/style/xmlnumfi.cxx#SvXMLNumFormatContext::CreateAndInsert",
+    "xmloff/source/style/xmlnumfi.cxx#SvXMLNumFormatContext::AddCondition",
+    "xmloff/source/style/xmlnumfi.cxx#SvXMLNumFormatContext::AddColor",
+    "svl/source/numbers/zformat.cxx#SvNumberformat::GetConditions",
+    "svl/source/numbers/zformat.cxx#SvNumberformat::GetColor"
+  ],
+  "fixtures": [
+    "The unchanged sc/qa/unit/data/xlsx/tdf70455.xlsx from testTdf70455",
+    "N114 and N114P0 signed currency declarations adapted from sc/qa/unit/data/fods/tdf161483_CellTextRotation.fods, with the mapped style declared after the primary style"
+  ],
+  "checks": {
+    "coverage": {
+      "command": "npm exec --workspace @vite-office/office -- vitest run --config vitest.calc.config.ts ods.test excelfilter.test typed-date-cells.test excrecds.test --coverage --coverage.include=src/xmloff/source/style/xmlnumfe.ts --coverage.include=src/xmloff/source/style/xmlnumfi.ts --coverage.reportsDirectory=coverage/number-style-maps --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.thresholds.functions=90 --coverage.thresholds.branches=90 --coverage.thresholds.perFile=true",
+      "result": "pass",
+      "tests": 48,
+      "files": 6,
+      "scope": "All four metrics are above 90% for each complete numeric ODF style owner.",
+      "xmlnumfe": { "statements": "129/134", "branches": "145/154", "functions": "5/5", "lines": "111/111" },
+      "xmlnumfi": { "statements": "150/154", "branches": "163/179", "functions": "18/18", "lines": "138/140" },
+      "log": "xlsx-num-maps-coverage-final.log"
+    },
+    "calc_regressions": { "tests": 57, "files": 7, "log": "xlsx-num-maps-calc.log" },
+    "shared_regressions": { "tests": 13, "files": 2, "log": "xlsx-num-maps-shared.log" },
+    "writer_regressions": { "tests": 46, "files": 3, "log": "xlsx-num-maps-writer-regression.log" },
+    "chromium": {
+      "related_tests": 7,
+      "final_build_targeted_tests": 1,
+      "logs": ["xlsx-num-maps-browser.log", "xlsx-num-maps-browser-final.log"],
+      "scope": "Original XLSX open, primary browser ODS reopen and mobile reopen of the exported XLSX with the original currency display"
+    },
+    "other": [
+      "Typecheck, production build and static smoke passed.",
+      "Scoped ESLint and Prettier, JSDoc, file size, dependencies, Calc resources and source tree passed.",
+      "Agentplane doctor and routing, git diff and six scoped provenance records passed."
+    ]
+  },
+  "verified": "The original workbook renders H8 as €780.00 after recalculation and through the XLSX, Worker, ODS and XLSX round trip. The ODF cases exercise named section lookup, volatile styles, format color, explicit numeric limits, missing and cyclic targets, and the positive, negative, zero and text sections.",
+  "residual": [
+    "Localized currencies, unrepresented section tokens and cleanup of unreferenced volatile style keys remain open in the ODF style owners.",
+    "Whole-repository provenance and parity retain the discovery mismatch for OfficeTooltips.tsx and available-menu-items.ts.",
+    "The full regression suite was not due at this checkpoint."
+  ]
+}
