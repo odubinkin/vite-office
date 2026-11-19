@@ -1,0 +1,195 @@
+{
+  "task": "202610251549-V4DQJW",
+  "checkpoint": "Writer ODT master-page header/footer persistence",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "xmloff/source/text/XMLTextMasterPageExport.cxx#exportHeaderFooterContent",
+    "xmloff/source/text/XMLTextMasterPageContext.cxx#createFastChildContext",
+    "xmloff/source/text/XMLTextHeaderFooterContext.cxx#endFastElement",
+    "sw/qa/core/header_footer/HeaderFooterTest.cxx#testFirstLeftRightHeaderPageStyles_ODF",
+    "sw/qa/core/header_footer/data/SimpleFirstLeftRight.odt"
+  ],
+  "results": {
+    "writer": {
+      "files": 8,
+      "tests": 56
+    },
+    "sharedXml": 4,
+    "chromium": 3,
+    "pageStoryCoverage": {
+      "lines": {
+        "total": 84,
+        "covered": 84,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 97,
+        "covered": 95,
+        "skipped": 0,
+        "pct": 97.93
+      },
+      "functions": {
+        "total": 10,
+        "covered": 10,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 81,
+        "covered": 76,
+        "skipped": 0,
+        "pct": 93.82
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "commands": [
+    "vitest run --config vitest.writer.config.ts --coverage odt-page-stories odt-page-style-errors odt-layout-parity odt-property-roundtrip odt-roundtrip fmthdft.native writer-page-story-codec docxexport.numbered-list --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sw/source/filter/xml/xmlpageheaderfooter.ts --coverage.thresholds.lines=90 --coverage.thresholds.functions=90 --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.reporter=json-summary --coverage.reporter=json --coverage.reportsDirectory=coverage/odt-story-scoped",
+    "vitest run --config vitest.shared.config.ts xmlimp xmltoken --maxWorkers=2",
+    "npm run test:static",
+    "./node_modules/.bin/playwright test -c apps/office/coverage/odt-story.playwright.config.ts --workers=1 -g 'retains ODT page stories|downloads and reopens nested DOCX tables|downloads and reopens the named styles'",
+    "npm run typecheck",
+    "npm run check:dependencies",
+    "npm run check:docs",
+    "npm run check:file-size",
+    "npm run check:source-tree",
+    "npm run check:writer-hintids",
+    "npm run check:writer-resources",
+    "npm run inventory:registry:build",
+    "npm run check:source-provenance",
+    "npm run inventory:invariants",
+    "npm run inventory:parity",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor",
+    "git diff --check (changed paths)"
+  ],
+  "verified": [
+    "ODT writes active master, left and first stories with native text section contents and the shared automatic style pass in styles.xml.",
+    "Native ODT re-import restores separate ordinary, even and first header/footer text from the pinned SimpleFirstLeftRight fixture and its sharing flags.",
+    "An authored footer table and independent body text remain in their own native sections after the real package write/read path.",
+    "The browser opens the unchanged LibreOffice fixture from disk, stores it locally, reloads it at a mobile viewport, and downloads an ODT retaining the original six story XML elements.",
+    "The original display and empty-first import edge disposition is retained and documented as WRITER-658.",
+    "The existing DOCX style and nested-table file controls passed production Chromium regressions."
+  ],
+  "remaining": [
+    "The DOCX DomainMapper still needs to feed the section relation into the original page-style text owner, including source default/even/first inheritance.",
+    "Complete DOCX header and footer output and Writer page rendering remain open. Page layout sizing families specific to header/footer are not verified.",
+    "The original NumberedList.docx full acceptance and complete DOCX/XLSX goal both remain in scope. No whole-suite run was due."
+  ],
+  "files": [
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+      "sha256": "509ad1b76fda544f362c45fe95f166e683e8a6636e765edc48481658b467d124"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/filter/xml/xmlexp.ts.json",
+      "sha256": "a008dcafae821e2872ebe47b0af02100d528d9a0407fb4999fcf685bb21385c7"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/filter/xml/xmlexp.ts.json",
+      "sha256": "240f93ab94367c52e0cd8d668ff9bbb63d747565399deabac11620e8a5169edd"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlimp.ts",
+      "sha256": "381715c497f96b047ed63f511fafa34490cdb5456255f15554a03cfb540b0241"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/filter/xml/xmlimp.ts.json",
+      "sha256": "d6ecc0dd2a8b371c2e2216ef1c92d960fab4da260577e0963d64e86fead33c42"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/filter/xml/xmlimp.ts.json",
+      "sha256": "4dffaaacaad144427053de8be0b94b2780d7d897ddb3210cbe07182c89f3b0e8"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmltextframe.ts",
+      "sha256": "511c3c2b2044dc5148f324ae7055234ec9cb239324616ddd93a81fbf529056eb"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/filter/xml/xmltextframe.ts.json",
+      "sha256": "05adf287f4eb834c114bad4a27e01d3142b83eb157f7953abcdd6b69c09f9d82"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/filter/xml/xmltextframe.ts.json",
+      "sha256": "5e548637eb967055b5fb6029be6685aaa29515578204cce2255ecf58688fa869"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlpageheaderfooter.ts",
+      "sha256": "1896d0e5d0e0842d9d4aefb8136dce9c7916894a46fa8c17fcc2bed1cc2390c2"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/filter/xml/xmlpageheaderfooter.ts.json",
+      "sha256": "8a879ff4f485040c83a7d98d00590dfdae01a1b1ac2d45011f49676db653bfc0"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/filter/xml/xmlpageheaderfooter.ts.json",
+      "sha256": "a57656a96dc66d538c22a04a67d04b0ef0075fa16ea05e43f031585b8d58c9bb"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/core/xmltoken.ts",
+      "sha256": "11e53e46affb62c0c7252c4d74d68c25e2d585e2c590236f9c127de9b2c7fb8a"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/xmloff/source/core/xmltoken.ts.json",
+      "sha256": "7352d3944d1464b275731c40557bfce0162877e09bfd1f4e102c7b05339ce377"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/xmloff/source/core/xmltoken.ts.json",
+      "sha256": "0124af7f11fccff62f5209db5b50fb2d783277433f7f7c3f403cab86c50fe3c7"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/table/XMLTableExport.ts",
+      "sha256": "dbc900bd0c17763ad71ca9a752010880f18ed5501f7025c0e50da43632f237b2"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/xmloff/source/table/XMLTableExport.ts.json",
+      "sha256": "f984a11af89e8c08404e2e6d3ded7989bfa8e416c5fa968abd7311b45f489f2b"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/xmloff/source/table/XMLTableExport.ts.json",
+      "sha256": "97600e5d0f07a7ee01ae8562c62c6ee9a7ddbb3765c2c453d8a609969c42b8d0"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/txtimp.ts",
+      "sha256": "21943bb9c03e4c12a2e879dfd819e02036f5708478674f379fb470f3ac9a5f17"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/xmloff/source/text/txtimp.ts.json",
+      "sha256": "1159be57e710e11e1c452da7cca6773b2ba9b55ea822b4204b40cdb3548dd7ea"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/xmloff/source/text/txtimp.ts.json",
+      "sha256": "903bfdd809f8e439b8b848ae21e1f05ee6204e1e52d429b773f8b6401a200339"
+    },
+    {
+      "path": "apps/office/src/xmloff/source/text/txtparae.ts",
+      "sha256": "3173afb56d56268c45f5b2ff8a5f22f420738cdcf16c9a450f36a44699277a18"
+    },
+    {
+      "path": "docs/program/registry/shared/provenance/xmloff/source/text/txtparae.ts.json",
+      "sha256": "0b1e0a9d320cc9a3568db6e54ba46ce3eb82b02ca0f4e36bd1b1c223f8e850f3"
+    },
+    {
+      "path": "docs/program/registry/shared/runtime/xmloff/source/text/txtparae.ts.json",
+      "sha256": "70b761ff8a55b8081a60daa1a920a8775d8cbb353e1cc7e596055d141cbcb1e9"
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/odt-page-stories.test.ts",
+      "sha256": "750e7bbe2260b6a087fd11833e2e5419f782a153df00d3c9b73a46e7d0862505"
+    },
+    {
+      "path": "apps/office/e2e/writer-odt-page-stories.spec.ts",
+      "sha256": "6bfb17a2c4a9c3d9c9a9a3d423c0cbd0ec24566a0c053b0acee5e58d398fe314"
+    },
+    {
+      "path": "docs/program/writer-upstream-suspected-issues.md",
+      "sha256": "50a4726820d28532490421d4988085c2d8694e4e729ef307bd1084f1734af19d"
+    }
+  ]
+}

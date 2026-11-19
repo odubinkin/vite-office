@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 374
+revision: 377
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T04:16:26.660Z"
+  updated_at: "2026-11-19T04:28:39.801Z"
   updated_by: "CODER"
-  note: "Native header/footer frames, page sharing, tables, styles and bookmarks now survive Writer Worker transfer. 99 related tests, two final Worker cases and two browser regressions passed. The complete new codec passes scoped90. ODT master-page persistence and DOCX section/model and output integration remain open. Evidence: evidence/native-page-story-worker-transfer.json."
-  attempts: 111
+  note: "Native ODT master-page header/footer sections now survive package write/read, browser storage, mobile reopen and download. 56 Writer tests, four shared XML tests and three production Chromium cases passed. The entire context owner passes scoped90. WRITER-658 records preserved source behavior. DOCX section-to-page integration and export remain open. Evidence: evidence/native-odt-master-page-stories.json."
+  attempts: 112
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1784,8 +1787,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T04:28:39.801Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native ODT master-page header/footer sections now survive package write/read, browser storage, mobile reopen and download. 56 Writer tests, four shared XML tests and three production Chromium cases passed. The entire context owner passes scoped90. WRITER-658 records preserved source behavior. DOCX section-to-page integration and export remain open. Evidence: evidence/native-odt-master-page-stories.json."
+  -
+    type: "status"
+    at: "2026-11-19T04:28:47.950Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T04:16:34.896Z"
+doc_updated_at: "2026-11-19T04:28:47.950Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -5128,6 +5144,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-19T04:28:39.801Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native ODT master-page header/footer sections now survive package write/read, browser storage, mobile reopen and download. 56 Writer tests, four shared XML tests and three production Chromium cases passed. The entire context owner passes scoped90. WRITER-658 records preserved source behavior. DOCX section-to-page integration and export remain open. Evidence: evidence/native-odt-master-page-stories.json.
+    Attempts: 112
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T04:28:39.232Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -5815,6 +5861,14 @@ sections:
     - Evidence: Shared page frame identity, native pooled styles, table and bookmark section ownership, active flags and malformed graph validation have direct assertions. Existing DOCX style and nested-table browser regressions passed.
     - Scope: Worker graph transfer of the actual Writer page item and section owners, plus shared text-frame content encoding and decoding. Existing graph records omit the optional transfer and remain accepted.
     - ODT master-page stories, DOCX section import and output, and actual rendering still require integration. No full test run was due.
+
+    ### Writer ODT master-page header and footer persistence
+
+    - Command: Scoped Writer and shared Vitest, plus production Chromium commands in evidence/native-odt-master-page-stories.json.
+    - Result: 56 Writer tests in 8 files, 4 shared XML tests and 3 Chromium cases passed. The complete header/footer context owner passes scoped90.
+    - Evidence: The pinned SimpleFirstLeftRight fixture retains six actual page stories in the native graph and after real browser storage, mobile reopen and ODT download. A footer table retains its page-section owner. Suspected display and empty-first source behavior is documented in WRITER-658.
+    - Scope: ODT styles.xml master-page import/export, native page text and table sections, shared automatic style and cursor contexts, and the existing Writer file UI. The DOCX relation handler and Worker transport already have separate evidence.
+    - DOCX section-to-page integration, export and page layout remain open. No whole suite was due.
 id_source: "generated"
 ---
 ## Summary
@@ -9168,6 +9222,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-19T04:28:39.801Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native ODT master-page header/footer sections now survive package write/read, browser storage, mobile reopen and download. 56 Writer tests, four shared XML tests and three production Chromium cases passed. The entire context owner passes scoped90. WRITER-658 records preserved source behavior. DOCX section-to-page integration and export remain open. Evidence: evidence/native-odt-master-page-stories.json.
+Attempts: 112
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T04:28:39.232Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -9860,3 +9944,11 @@ Evidence: `evidence/docx-native-ranged-bookmarks.json`.
 - Evidence: Shared page frame identity, native pooled styles, table and bookmark section ownership, active flags and malformed graph validation have direct assertions. Existing DOCX style and nested-table browser regressions passed.
 - Scope: Worker graph transfer of the actual Writer page item and section owners, plus shared text-frame content encoding and decoding. Existing graph records omit the optional transfer and remain accepted.
 - ODT master-page stories, DOCX section import and output, and actual rendering still require integration. No full test run was due.
+
+### Writer ODT master-page header and footer persistence
+
+- Command: Scoped Writer and shared Vitest, plus production Chromium commands in evidence/native-odt-master-page-stories.json.
+- Result: 56 Writer tests in 8 files, 4 shared XML tests and 3 Chromium cases passed. The complete header/footer context owner passes scoped90.
+- Evidence: The pinned SimpleFirstLeftRight fixture retains six actual page stories in the native graph and after real browser storage, mobile reopen and ODT download. A footer table retains its page-section owner. Suspected display and empty-first source behavior is documented in WRITER-658.
+- Scope: ODT styles.xml master-page import/export, native page text and table sections, shared automatic style and cursor contexts, and the existing Writer file UI. The DOCX relation handler and Worker transport already have separate evidence.
+- DOCX section-to-page integration, export and page layout remain open. No whole suite was due.
