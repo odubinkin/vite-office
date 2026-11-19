@@ -20,9 +20,10 @@
         "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts",
         "vendor/libreoffice-reference/sc/source/filter/oox/viewsettings.cxx#SheetViewSettings::importSheetView"
       ],
-      "justification": "Reads the first worksheet view's grid flag with Excel's true default and transfers it to the active document's interactive view data.",
+      "justification": "Reads the first worksheet view's grid flag with Excel's true default and transfers it to the active document's interactive view data. Applies the first worksheet view's grid and the active worksheet's workbook-wide header and zero-value settings. The native view reader ignores the incoming ShowFormulas property (CALC-743).",
       "knownViolations": [],
       "localSymbols": [
+        "ViewSettings",
         "SheetViewSettings",
         "importSheetView",
         "finalizeImport"
@@ -31,7 +32,8 @@
       "upstreamFile": "sc/source/filter/oox/viewsettings.cxx",
       "upstreamSymbols": [
         "SheetViewSettings::importSheetView",
-        "SheetViewSettings::finalizeImport"
+        "SheetViewSettings::finalizeImport",
+        "ViewSettings::finalizeImport"
       ]
     }
   }

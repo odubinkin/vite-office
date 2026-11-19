@@ -6984,3 +6984,18 @@ through the existing view data transport.
 - [Native workbook view finalization](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/oox/viewsettings.cxx#L582-L599)
 - [Native headless regression](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/qa/unit/uicalc/uicalc.cxx#L52-L72)
 - [Calc interactive regression](../../apps/office/src/sc/source/ui/view/viewdata.settings.test.ts)
+
+### CALC-743 — The Calc view reader ignores the XLSX formula display property
+
+`ViewSettings::finalizeImport` supplies the active worksheet's `ShowFormulas`
+value when it creates the spreadsheet model's view data. The Sfx controller
+passes that property sequence to `ScViewData::ReadUserDataSequence`. The Calc
+reader consumes `HasColumnRowHeaders` and `ShowZeroValues` but has no
+`ShowFormulas` branch. Its view writer also omits that property. The XLSX
+exporter writes `showFormulas` from the document options, which the live Show
+Formulas command can set. Calc retains this asymmetry.
+
+- [XLSX view data creation](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/oox/viewsettings.cxx#L578-L605)
+- [Calc view data reader](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/ui/view/viewdata.cxx#L4032-L4231)
+- [XLSX view export](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/excel/xeview.cxx#L297-L301)
+- [Calc regression](../../apps/office/src/sc/source/ui/view/viewdata.settings.test.ts)

@@ -1,4 +1,4 @@
-/** @fileoverview Represents the original ActiveTable and grid properties of Calc view data. */
+/** @fileoverview Represents the original ActiveTable and supported display properties of Calc view data. */
 import type { ScDocument } from "../../../inc/document";
 import { ViewOption } from "../../../inc/viewopti";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
@@ -8,6 +8,13 @@ import type { ViewSettings } from "../../../../xmloff/source/core/DocumentSettin
 const SC_ACTIVETABLE = "ActiveTable";
 const SC_TABLES = "Tables";
 const SC_UNO_SHOWGRID = "ShowGrid";
+const SC_UNO_SHOWZERO = "ShowZeroValues";
+const SC_UNO_COLROWHDR = "HasColumnRowHeaders";
+const viewOptions = new Map<string, ViewOption>([
+  [SC_UNO_SHOWGRID, ViewOption.GRID],
+  [SC_UNO_SHOWZERO, ViewOption.NULLVALS],
+  [SC_UNO_COLROWHDR, ViewOption.HEADER],
+]);
 
 /** Reads the selected table name from the primary view entry. @param document - Actual document. @param views - Borrowed records. @returns Nothing. */
 export function ReadUserDataSequence(document: ScDocument, views: ViewSettings): void {
@@ -20,8 +27,9 @@ export function ReadUserDataSequence(document: ScDocument, views: ViewSettings):
       } finally {
         name.dispose();
       }
-    } else if (key === SC_UNO_SHOWGRID && typeof value === "boolean") {
-      document.GetViewOptions().SetOption(ViewOption.GRID, value);
+    } else if (typeof value === "boolean") {
+      const option = viewOptions.get(key);
+      if (option !== undefined) document.GetViewOptions().SetOption(option, value);
     } else if (key === SC_TABLES && typeof value === "object") {
       for (const [sheet, items] of value) {
         const name = unicode(sheet);
@@ -56,7 +64,11 @@ export function WriteUserDataSequence(document: ScDocument): ViewSettings {
         ["ViewId", "view1"],
         [SC_TABLES, sheets],
         [SC_ACTIVETABLE, active],
-        [SC_UNO_SHOWGRID, document.GetViewOptions().GetOption(ViewOption.GRID)],
+        ...Array.from(
+          viewOptions,
+          /** Reads one supported view boolean. @param entry - Name and native option. @returns View property. */
+          ([key, option]) => [key, document.GetViewOptions().GetOption(option)] as const,
+        ),
       ],
     ];
   } finally {

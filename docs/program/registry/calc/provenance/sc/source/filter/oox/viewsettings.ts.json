@@ -7,16 +7,19 @@
     "localPath": "apps/office/src/sc/source/filter/oox/viewsettings.ts",
     "upstreamPath": "sc/source/filter/oox/viewsettings.cxx",
     "localSymbols": [
+      "ViewSettings",
       "SheetViewSettings",
       "importSheetView",
       "finalizeImport"
     ],
     "upstreamSymbols": [
       "SheetViewSettings::importSheetView",
-      "SheetViewSettings::finalizeImport"
+      "SheetViewSettings::finalizeImport",
+      "ViewSettings::finalizeImport"
     ],
     "preservedResponsibilities": [
-      "Reads the first worksheet view's grid flag with Excel's true default and transfers it to the active document's interactive view data."
+      "Reads the first worksheet view's grid flag with Excel's true default and transfers it to the active document's interactive view data.",
+      "Applies the first worksheet view's grid and the active worksheet's workbook-wide header and zero-value settings. The native view reader ignores the incoming ShowFormulas property (CALC-743)."
     ],
     "omittedResponsibilities": [
       "Other sheet view options, alternate workbook views, chart sheets and BIFF records remain outside this mechanism."
@@ -44,6 +47,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/qa/uitest/calc_tests9/tdf126541_GridVisibilityImportXlsx.py",
           "marker": "test_tdf126541_GridVisibilityImportXlsx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/oox/viewsettings.cxx",
+          "marker": "ViewSettings::finalizeImport"
         }
       ]
     }

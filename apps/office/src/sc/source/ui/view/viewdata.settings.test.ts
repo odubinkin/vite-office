@@ -96,26 +96,64 @@ it("reads the native ODS first view and ignores unresolved properties", /** Veri
   }
 });
 
-it("uses the first Excel sheet view even when a later view specifies another grid setting", /** Checks the documented first-view selection and omitted grid defaults through the real fragment. @returns Completion. */ async () => {
+it("uses the first view per sheet and the active sheet for global display options", /** Exercises conflicting views, native defaults, Worker transport and both package formats. @returns Completion. */ async () => {
   const file = fixture("xlsx/sheet-names.xlsx");
   const source = await DocumentArchive.open(file);
   const output = new DocumentArchiveWriter();
   for (const entry of source.getEntryNames()) {
-    if (entry === "xl/worksheets/sheet1.xml") {
+    if (entry === "xl/worksheets/sheet1.xml" || entry === "xl/worksheets/sheet5.xml") {
       const xml = await source.readTextEntry(entry);
       const payload = xml.replace(
         /<sheetViews\b[^>]*>[\s\S]*?<\/sheetViews>/u,
-        '<sheetViews><sheetView workbookViewId="0"/><sheetView workbookViewId="1" showGridLines="false"/></sheetViews>',
+        entry.endsWith("sheet1.xml")
+          ? '<sheetViews><sheetView workbookViewId="0"/><sheetView workbookViewId="1" showGridLines="false"/></sheetViews>'
+          : '<sheetViews><sheetView workbookViewId="0" showFormulas="1" showRowColHeaders="0" showZeros="0"/><sheetView workbookViewId="1" showFormulas="0" showRowColHeaders="1" showZeros="1"/></sheetViews>',
       );
       expect(payload).not.toBe(xml);
       output.putNextEntry(entry, new TextEncoder().encode(payload));
     } else output.putNextEntry(entry, await source.readEntry(entry));
   }
   const doc = await ExcelFilter.importDocument(await output.finish());
+  const graphs = [doc];
   try {
     expect(doc.GetSheetShowGrid(0)).toBe(true);
+    expect(doc.GetVisibleTab()).toBe(4);
+    expect(doc.GetViewOptions().GetOption(ViewOption.FORMULAS)).toBe(false);
+    doc.GetViewOptions().SetOption(ViewOption.FORMULAS, true);
+    const clone = decodeCalcDocument(structuredClone(encodeCalcDocument(doc)));
+    graphs.push(clone);
+    expect(clone.GetViewOptions().GetOption(ViewOption.FORMULAS)).toBe(true);
+    const exported = await exportXlsx(clone);
+    const xlsx = await DocumentArchive.open(exported);
+    for (const part of ["xl/worksheets/sheet1.xml", "xl/worksheets/sheet5.xml"]) {
+      const xml = await xlsx.readTextEntry(part);
+      expect(xml).toContain('showFormulas="true"');
+      expect(xml).toContain('showRowColHeaders="false"');
+      expect(xml).toContain('showZeros="false"');
+    }
+    const reopened = await ExcelFilter.importDocument(exported);
+    graphs.push(reopened);
+    expect(reopened.GetViewOptions().GetOption(ViewOption.FORMULAS)).toBe(false);
+    for (const graph of graphs) {
+      const options = graph.GetViewOptions();
+      expect(options.GetOption(ViewOption.HEADER)).toBe(false);
+      expect(options.GetOption(ViewOption.NULLVALS)).toBe(false);
+    }
+    const primary = await writeOdsXml(clone);
+    expect(primary.files["settings.xml"]).toContain(
+      'config:name="HasColumnRowHeaders" config:type="boolean">false',
+    );
+    expect(primary.files["settings.xml"]).toContain(
+      'config:name="ShowZeroValues" config:type="boolean">false',
+    );
+    expect(primary.files["settings.xml"]).not.toContain('config:name="ShowFormulas"');
+    const restored = await readOdsDocument(primary);
+    graphs.push(restored);
+    expect(restored.GetViewOptions().GetOption(ViewOption.HEADER)).toBe(false);
+    expect(restored.GetViewOptions().GetOption(ViewOption.NULLVALS)).toBe(false);
+    expect(restored.GetViewOptions().GetOption(ViewOption.FORMULAS)).toBe(false);
   } finally {
-    doc.Dispose();
+    for (const graph of graphs) graph.Dispose();
   }
 });
 

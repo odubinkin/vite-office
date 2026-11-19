@@ -52,8 +52,13 @@ export const ScCellFormat = {
         return new OUString();
     }
   },
-  /** Original multiline display path keeps paragraph and feature expansion before scalar formatting. @param doc - Actual document. @param position - Source cell address. @param cell - Actual cell view. @returns Owned display text. */
-  GetOutputString(doc: ScDocument, position: ScAddress, cell: ScRefCellValue): OUString {
+  /** Original multiline display path keeps paragraph and feature expansion before scalar formatting. @param doc - Actual document. @param position - Source cell address. @param cell - Actual cell view. @param nullValues - Whether to display numeric zero. @returns Owned display text. */
+  GetOutputString(
+    doc: ScDocument,
+    position: ScAddress,
+    cell: ScRefCellValue,
+    nullValues = true,
+  ): OUString {
     if (cell.isEmpty()) return new OUString();
     if (cell.getType() === CellType.CELLTYPE_EDIT) {
       const edit = cell.getEditText();
@@ -64,7 +69,7 @@ export const ScCellFormat = {
     }
     const context = doc.GetNonThreadedContext();
     const format = doc.GetPattern(position)?.GetNumberFormat(context) ?? 0;
-    return ScCellFormat.GetString(cell, format, [null], context, doc);
+    return ScCellFormat.GetString(cell, format, [null], context, doc, nullValues);
   },
 
   /** Original first GetString overload preserves color reset,context selection and scalar/formula evaluation order. The admitted core has native macro level0;macro callbacks and their running-cell branch remain unported. @param cell - Actual borrowed cell. @param format - Native format key. @param color - Native output pointer. @param context - Actual context or native null. @param doc - Actual document. @param nullValues - Original defaulttrue display-zero flag. @param formula - Original defaultfalse formula-output flag. @param star - Original defaultfalse formatter flag. @returns Owned native output. */

@@ -114,11 +114,12 @@ export function cellInputText(doc: ScDocument, pos: ScAddress): string {
   if (/[\r\n]/u.test(value)) return value;
   return parseCellInput(value).kind !== "text" || value.startsWith("'") ? "'" + value : value;
 }
-/** Projects grid display text through the native cell formatter. @param doc - Model. @param pos - Cell. @param showFormulas - Original formula-output mode. @returns Display value. */
+/** Projects grid display text through the native cell formatter. @param doc - Model. @param pos - Cell. @param showFormulas - Original formula-output mode. @param showZeros - Original display-zero mode. @returns Display value. */
 export function cellPresentation(
   doc: ScDocument,
   pos: ScAddress,
   showFormulas = false,
+  showZeros = true,
 ): Readonly<{ text: string; alignment: "left" | "right" }> {
   if (showFormulas) {
     const formula = doc.GetFormulaCell(pos);
@@ -135,7 +136,7 @@ export function cellPresentation(
   if (error) return { text: errorText(error), alignment: "right" };
   const ref = doc.GetRefCellValue(pos);
   if (ref.hasEmptyValue()) return { text: "", alignment: "left" };
-  const output = ScCellFormat.GetOutputString(doc, pos, ref);
+  const output = ScCellFormat.GetOutputString(doc, pos, ref, showZeros);
   try {
     return { text: text(output), alignment: ref.hasString() ? "left" : "right" };
   } finally {

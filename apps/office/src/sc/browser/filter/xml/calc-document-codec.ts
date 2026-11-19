@@ -151,6 +151,9 @@ export interface CalcDocumentRecord {
   readonly sheets: Sheet[];
   readonly visibleTab?: number;
   readonly showGrid?: boolean;
+  readonly showFormulas?: boolean;
+  readonly showHeaders?: boolean;
+  readonly showZeros?: boolean;
   readonly nullDate?: number;
   readonly defaultWritingDirection?: D;
   readonly numberFormats?: readonly NumberFormat[];
@@ -404,11 +407,15 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
       ]);
       yield;
     }
+  const view = document.GetViewOptions();
   return {
     version: 1,
     sheets,
     ...(document.GetVisibleTab() ? { visibleTab: document.GetVisibleTab() } : {}),
-    ...(document.GetViewOptions().GetOption(ViewOption.GRID) ? {} : { showGrid: false }),
+    ...(view.GetOption(ViewOption.GRID) ? {} : { showGrid: false }),
+    ...(view.GetOption(ViewOption.FORMULAS) ? { showFormulas: true } : {}),
+    ...(view.GetOption(ViewOption.HEADER) ? {} : { showHeaders: false }),
+    ...(view.GetOption(ViewOption.NULLVALS) ? {} : { showZeros: false }),
     nullDate: document.GetFormatTable().GetNullDate().GetDate(),
     ...(defaultWritingDirection === undefined ? {} : { defaultWritingDirection }),
     ...(numberFormats.length ? { numberFormats } : {}),
@@ -480,8 +487,14 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
     }
     if (record.visibleTab !== undefined && document.FetchTable(record.visibleTab))
       document.SetVisibleTab(record.visibleTab);
-    if (typeof record.showGrid === "boolean")
-      document.GetViewOptions().SetOption(ViewOption.GRID, record.showGrid);
+    const view = document.GetViewOptions();
+    if (typeof record.showGrid === "boolean") view.SetOption(ViewOption.GRID, record.showGrid);
+    if (typeof record.showFormulas === "boolean")
+      view.SetOption(ViewOption.FORMULAS, record.showFormulas);
+    if (typeof record.showHeaders === "boolean")
+      view.SetOption(ViewOption.HEADER, record.showHeaders);
+    if (typeof record.showZeros === "boolean")
+      view.SetOption(ViewOption.NULLVALS, record.showZeros);
     InsertRangeNames(
       document,
       (record.names ?? []).map(

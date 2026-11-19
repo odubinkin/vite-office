@@ -601,7 +601,13 @@ export function CalcWorkbench({
           getCell={
             /** Reads actual formatted scalar/formula results. @param pos - Cell. @returns Presentation. */ (
               pos,
-            ) => cellPresentation(doc, pos, view.GetOptions().GetOption(ViewOption.FORMULAS))
+            ) =>
+              cellPresentation(
+                doc,
+                pos,
+                view.GetOptions().GetOption(ViewOption.FORMULAS),
+                view.GetOptions().GetOption(ViewOption.NULLVALS),
+              )
           }
           onSelect={
             /** Routes pointer selection with shift extension. @param pos - Cell. @param event - Pointer. @returns Nothing. */ (

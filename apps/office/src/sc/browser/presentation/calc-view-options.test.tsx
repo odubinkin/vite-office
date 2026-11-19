@@ -73,6 +73,33 @@ it("hides only implicit grid lines while retaining actual explicit native cell b
     s.Close();
   }
 });
+it("uses the native display-zero option without changing zero cells or formula text", /** Exercises the rendered result, formula mode and the model independently. @returns Nothing. */ () => {
+  const s = setup();
+  const c = s.controller;
+  const doc = c.shell.GetDocument();
+  try {
+    act(
+      /** Writes numeric, formula and text forms of zero. @returns Nothing. */
+      () => {
+        c.viewData.GetOptions().SetOption(ViewOption.NULLVALS, false);
+        c.EnterString("0");
+        c.Select(1, 0);
+        c.EnterString("=1-1");
+        c.Select(2, 0);
+        c.EnterString("'0");
+      },
+    );
+    expect(screen.getByRole("gridcell", { name: /^A1(?:\s|$)/u })).toHaveTextContent(/^$/u);
+    expect(screen.getByRole("gridcell", { name: /^B1(?:\s|$)/u })).toHaveTextContent(/^$/u);
+    expect(screen.getByRole("gridcell", { name: /^C1(?:\s|$)/u })).toHaveTextContent(/^0$/u);
+    expect(doc.GetValue(new ScAddress(0, 0, 0))).toBe(0);
+    expect(doc.GetValue(new ScAddress(1, 0, 0))).toBe(0);
+    toggle("Show Formulas");
+    expect(screen.getByRole("gridcell", { name: /^B1(?:\s|$)/u })).toHaveTextContent(/^=1-1$/u);
+  } finally {
+    s.Close();
+  }
+});
 it("shows actual formula source before errors and keeps scalar/string display unchanged", /** Verifies the actual compiler/document output owner. @returns Nothing. */ () => {
   const s = setup(),
     c = s.controller;

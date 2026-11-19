@@ -15,6 +15,7 @@ import { OOXMLDocPropHandler } from "../../../../oox/source/docprop/docprophandl
 import { UnitConverter, type XlsxReferenceDevice } from "./unitconverter";
 import { ThemeFragmentHandler } from "../../../../oox/source/drawingml/themefragmenthandler";
 import { ExcelGraphicHelper } from "./stylesbuffer.color";
+import { ViewSettings } from "./viewsettings";
 
 /** Original Excel import filter selects the workbook and worksheet parts through package relationships. */
 export class ExcelFilter extends XmlFilterBase {
@@ -86,6 +87,7 @@ export class ExcelFilter extends XmlFilterBase {
         }
       }
       workbook.definedNames.finalizeImport(document);
+      const views = new ViewSettings();
       for (const [tab, sheet] of workbook.sheets.entries()) {
         const path = worksheetRelations.getFragmentPathFromRelId(sheet.relationshipId);
         const worksheet = new WorksheetFragment(
@@ -95,6 +97,7 @@ export class ExcelFilter extends XmlFilterBase {
           tab,
           sharedStrings,
           styles,
+          views,
           this.isMSODocument(),
           units,
         );
@@ -112,6 +115,7 @@ export class ExcelFilter extends XmlFilterBase {
           tab === activeSheet || (sheet.state !== "hidden" && sheet.state !== "veryHidden"),
         );
       document.SetVisibleTab(activeSheet);
+      views.finalizeImport(document, activeSheet);
       document.StartAllListeners();
       document.SetAllFormulasDirty(new SetFormulaDirtyContext());
       imported = true;

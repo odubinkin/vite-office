@@ -22,7 +22,7 @@ import { SheetDataBuffer } from "./sheetdatabuffer";
 import { readStyleBool, styleIndex, type StylesBuffer } from "./stylesbuffer";
 import { WorksheetGlobals } from "./worksheethelper";
 import { WorksheetSettings } from "./worksheetsettings";
-import { SheetViewSettings } from "./viewsettings";
+import { SheetViewSettings, type ViewSettings } from "./viewsettings";
 import { UnitConverter } from "./unitconverter";
 import { toDouble } from "../../../../o3tl/inc/string_view";
 import { attribute, isSpreadsheetTag } from "./workbookfragment";
@@ -79,7 +79,7 @@ export class WorksheetFragment extends FragmentHandler {
   private readonly sharedFormulas = new Map<number, ScAddress>();
   private readonly pendingFormulas: { id: number; address: ScAddress }[] = [];
   sawWorksheet = false;
-  /** Binds a worksheet to its actual native tab. @param filter - Package owner. @param path - Resolved part. @param document - Destination graph. @param tab - Native tab. @param sharedStrings - Shared strings. @param styles - Workbook styles. @param microsoft - Source document classification. @param units - Workbook units. @returns Fragment. */
+  /** Binds a worksheet to its actual native tab. @param filter - Package owner. @param path - Resolved part. @param document - Destination graph. @param tab - Native tab. @param sharedStrings - Shared strings. @param styles - Workbook styles. @param workbookViews - Workbook view settings. @param microsoft - Source document classification. @param units - Workbook units. @returns Fragment. */
   constructor(
     filter: FragmentFilter,
     path: string,
@@ -87,6 +87,7 @@ export class WorksheetFragment extends FragmentHandler {
     private readonly tab: number,
     private readonly sharedStrings: SharedStringsBuffer,
     private readonly styles: StylesBuffer,
+    private readonly workbookViews: ViewSettings,
     microsoft = false,
     units = new UnitConverter(),
   ) {
@@ -323,7 +324,7 @@ export class WorksheetFragment extends FragmentHandler {
     this.sheetData.finalizeImport();
     this.geometry.finalizeImport();
     this.settings.finalizeImport(this.document, this.tab);
-    this.views.finalizeImport(this.document, this.tab);
+    this.views.finalizeImport(this.document, this.tab, this.workbookViews);
   }
   /** Native cell type dispatch and explicit OOXML formula grammar. @returns Nothing. */
   private commitCell(): void {

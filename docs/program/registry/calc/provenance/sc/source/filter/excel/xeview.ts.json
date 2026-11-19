@@ -13,7 +13,8 @@
       "XclExpTabViewSettings::SaveXml"
     ],
     "preservedResponsibilities": [
-      "Emits the independent per-sheet grid flag in sheetViews for workbook view zero, before the worksheet geometry and sheet data."
+      "Emits the independent per-sheet grid flag in sheetViews for workbook view zero, before the worksheet geometry and sheet data.",
+      "Emits workbook-wide formula mode, header visibility and zero-value visibility from the document view options, and grid visibility from each sheet."
     ],
     "omittedResponsibilities": [
       "Other sheet view options, alternate workbook views, chart sheets and BIFF records remain outside this mechanism."
