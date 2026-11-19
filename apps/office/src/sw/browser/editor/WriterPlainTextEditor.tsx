@@ -10,6 +10,8 @@ import type { WriterParagraphProjection as WriterParagraph } from "../presentati
 import { BrowserWriterEditWindow } from "./browser-writer-edit-window";
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
 import { WriterEditableFlyFrame } from "./WriterEditableFlyFrame";
+import { WriterPageStories } from "./WriterPageStories";
+import { WriterFloatingGraphic } from "./WriterFloatingGraphic";
 import { WriterEditableTable } from "./WriterEditableTable";
 import type { WriterCursorSelection } from "./writer-selection-types";
 import type { WriterPageDescriptorValue } from "../../source/core/layout/pagedesc";
@@ -19,7 +21,11 @@ import {
   type SwTableFrame,
 } from "../../source/core/layout/newfrm";
 import { SwLineNumberInfo, type SwLineNumberInfoValue } from "../../inc/lineinfo";
-import { CollectTextFlyFrames, IsTextFlyAnchorFrame } from "../../source/core/layout/flycnt";
+import {
+  CollectGraphicFlyFrames,
+  CollectTextFlyFrames,
+  IsTextFlyAnchorFrame,
+} from "../../source/core/layout/flycnt";
 import { SvxFrameDirection } from "../../../editeng/inc/frmdir";
 import type { SwTextFrame, SwTextFrameSettings, SwTextLine } from "../../source/core/text/txtfrm";
 import { createWriterLineMeasurements, measureWriterTextLines } from "./writer-line-measurement";
@@ -118,6 +124,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
   const measurements = createWriterLineMeasurements(props.paragraphs, measuredLines);
   const document = props.editWindow.GetDoc();
   const anchored = CollectTextFlyFrames(document);
+  const graphics = CollectGraphicFlyFrames(document);
   const tables = document.GetTables();
   const tableMeasurements = tables.map(
     /** map handles this value. @param table - Input 1. @returns The result. */ (table) => ({
@@ -168,8 +175,9 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
     const node = document.nodes.entries()[nodeIndex]?.GetTextNode();
     if (!node) return null;
     const flies = anchored.get(node);
-    if (!flies?.length) return null;
-    return flies.map(
+    const pictures = graphics.get(node);
+    if (!flies?.length && !pictures?.length) return null;
+    const text = flies?.map(
       /** Resolves the actual anchor owner in this fragment. @param fly - Original native format and section. @returns Browser frame or absent. */
       (fly) => {
         if (fragment && !IsTextFlyAnchorFrame(fly.format, fragment)) return null;
@@ -205,6 +213,29 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
         );
       },
     );
+    const images = pictures?.map(
+      /** Paints only the fragment holding the actual native anchor. @param frame - Graphic fly. @returns Picture or absence. */
+      (frame) =>
+        fragment && !IsTextFlyAnchorFrame(frame.format, fragment) ? null : (
+          <WriterFloatingGraphic
+            key={frame.format.GetName()}
+            frame={frame}
+            node={node}
+            page={page.descriptor}
+            pageNumber={page.number}
+            width={width}
+            height={
+              page.descriptor.height - page.descriptor.topMargin - page.descriptor.bottomMargin
+            }
+          />
+        ),
+    );
+    return (
+      <>
+        {text}
+        {images}
+      </>
+    );
   }
 
   const renderTable =
@@ -234,7 +265,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
           repeatedHeaderRows={frame.repeatedHeaderRows ?? 0}
           selectedBoxes={props.selectedTableBoxes}
           renderAnchoredFrames={
-            anchored.size === 0
+            anchored.size === 0 && graphics.size === 0
               ? undefined
               : /** Paints cell-owned frames within their actual print extent. @param index - Native anchor node. @param width - Actual cell print width. @returns Editable frames. */
                 (index, width) => renderAnchoredFrames(page, index, width)
@@ -569,6 +600,8 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                 data-writer-page={pageIndex + 1}
                 role="document"
                 style={{
+                  position: "relative",
+                  isolation: "isolate",
                   display: page.textFrames.some(
                     /** Chooses native-flow paint when the page contains a text anchor. @param frame - Actual page text frame. @returns Whether native float paint applies. */
                     (frame) => anchored.has(frame.GetTextNodeFirst()),
@@ -583,6 +616,13 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
                   width: page.descriptor.width / 15,
                 }}
               >
+                <WriterPageStories
+                  document={document}
+                  page={page}
+                  previous={pages[pageIndex - 1]}
+                  paragraphs={paragraphByNodeIndex}
+                  graphics={graphics}
+                />
                 {page.tableFrames
                   .filter(
                     /** filter handles this value. @param frame - Input 1. @returns The result. */ (

@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/layout/hffrm.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "layout",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "vendor/libreoffice-reference/sw/source/core/layout/hffrm.cxx#SwPageFrame::PrepareHeader",
+        "vendor/libreoffice-reference/sw/source/core/layout/hffrm.cxx#SwPageFrame::PrepareFooter",
+        "apps/office/src/sw/source/core/layout/hffrm.ts#PreparePageStories",
+        "apps/office/src/sw/source/core/layout/hffrm.test.ts",
+        "apps/office/e2e/writer-docx-styles.spec.ts"
+      ],
+      "justification": "Resolves the active header and footer of the selected physical page format and projects each connected story’s printable bounds. Native frame sizing passes, lifetime and content-driven reflow remain outside the represented layout.",
+      "knownViolations": [],
+      "localSymbols": [
+        "PreparePageStories"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/layout/hffrm.cxx",
+      "upstreamSymbols": [
+        "SwPageFrame::PrepareHeader",
+        "SwPageFrame::PrepareFooter"
+      ]
+    }
+  }
+}

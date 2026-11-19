@@ -1,0 +1,31 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/sw/browser/editor/WriterPageStories.tsx",
+    "rationale": "Paints connected native header and footer sections inside each browser page and leaves their text outside the body cursor registry.",
+    "responsibilities": [
+      "Paints connected native header and footer sections inside each browser page and leaves their text outside the body cursor registry."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Paints connected native header and footer sections inside each browser page and leaves their text outside the body cursor registry."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/editor/WriterPageStories.tsx",
+          "marker": "WriterPageStories"
+        },
+        {
+          "path": "apps/office/e2e/writer-docx-styles.spec.ts",
+          "marker": "Writer paints a floating DOCX header picture"
+        }
+      ],
+      "upstream": []
+    }
+  },
+  "legacyOrder": 78
+}

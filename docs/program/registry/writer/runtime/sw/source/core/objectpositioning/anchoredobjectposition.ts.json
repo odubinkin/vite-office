@@ -19,12 +19,17 @@
         "apps/office/src/sw/source/core/objectpositioning/anchoredobjectposition.ts#CalcRelPosX",
         "vendor/libreoffice-reference/sw/source/core/objectpositioning/anchoredobjectposition.cxx#SwAnchoredObjectPosition::CalcRelPosX",
         "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
-        "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts"
+        "apps/office/src/sw/source/filter/md/swmd.html-table.test.ts",
+        "apps/office/src/sw/source/core/objectpositioning/anchoredobjectposition.ts#CalcRelPosY",
+        "vendor/libreoffice-reference/sw/source/core/objectpositioning/tocntntanchoredobjectposition.cxx#SwToContentAnchoredObjectPosition::CalcPosition",
+        "apps/office/e2e/writer-docx-styles.spec.ts",
+        "apps/office/src/sw/source/core/objectpositioning/anchoredobjectposition.test.ts"
       ],
-      "justification": "Uses original horizontal position arithmetic for the represented native text fly and page/paragraph references. Vertical and character-relative geometry, draw-aside collision and full page alignment environment remain outside the current browser projection.",
+      "justification": "Uses original horizontal position arithmetic for the represented native text fly and page/paragraph references. Resolves vertical offsets for the represented paragraph and page references from the pooled fly format and physical page extents. Character and line-fragment geometry, draw-aside collision and full native alignment environment remain outside the current browser projection.",
       "knownViolations": [],
       "localSymbols": [
-        "CalcRelPosX"
+        "CalcRelPosX",
+        "CalcRelPosY"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/core/objectpositioning/anchoredobjectposition.cxx",

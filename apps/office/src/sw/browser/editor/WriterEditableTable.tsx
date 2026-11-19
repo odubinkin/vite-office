@@ -76,6 +76,7 @@ export type RenderAnchoredFrames = (nodeIndex: number, availableWidth: number) =
   lastRow = table.GetTabLines().length - 1,
   repeatedHeaderRows = 0,
   measureNaturalRows = false,
+  readOnly = false,
   retainElement,
   paragraphs,
   activeParagraphId,
@@ -92,6 +93,7 @@ export type RenderAnchoredFrames = (nodeIndex: number, availableWidth: number) =
   repeatedHeaderRows?: number;
   /** Device measurement consumes natural content before authored row-size constraints. */
   measureNaturalRows?: boolean;
+  readOnly?: boolean;
   retainElement?: (element: HTMLTableElement | null) => void;
   paragraphs: ReadonlyMap<number, WriterParagraphProjection>;
   activeParagraphId?: string;
@@ -300,6 +302,7 @@ export type RenderAnchoredFrames = (nodeIndex: number, availableWidth: number) =
                                 key={projection.id}
                                 listMarker={projection.listMarker}
                                 paragraph={projection}
+                                readOnly={readOnly}
                                 retainElement={
                                   /** Registers visible paragraphs;measurement uses the same render without a live selection surface. @param id - Stable display ID. @param element - Paragraph mount or cleanup. @returns Nothing. */ (
                                     id,

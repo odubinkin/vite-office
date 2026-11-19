@@ -2,7 +2,10 @@
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
-import { DocumentArchive } from "../src/package/source/zippackage/document-archive";
+import {
+  DocumentArchive,
+  DocumentArchiveWriter,
+} from "../src/package/source/zippackage/document-archive";
 
 test("Writer downloads and reopens the named styles from a DOCX", /** Verifies the shipped file dialog at desktop and mobile widths. @param root0 - Browser fixtures. @param root0.page - Actual Chromium page. @returns Completion. */ async ({
   page,
@@ -92,4 +95,76 @@ test("Writer downloads and reopens nested DOCX tables", /** Exercises the existi
   });
   await expect(page.getByText("reopened-nested-tables", { exact: true })).toBeVisible();
   await expect(tables).toHaveCount(3);
+});
+
+test("Writer paints a floating DOCX header picture after opening and restoring it", /** Tests the actual browser decoder and page paint with an adapted upstream picture. @param browser - Playwright fixtures. @param browser.page - Chromium page. @returns Completion. */ async ({
+  page,
+}) => {
+  const fixture = new URL(
+    "../../../vendor/libreoffice-reference/sw/qa/extras/layout/data/testHeaderImageAlignment.docx",
+    import.meta.url,
+  );
+  const source = await DocumentArchive.open(new Uint8Array(await readFile(fixture)));
+  const writer = new DocumentArchiveWriter();
+  const headerPath = "word/header1.xml";
+  const header = (await source.readTextEntry(headerPath))
+    .replace(/<w:framePr[^>]*\/>/u, "")
+    .replace(
+      "<wp:inline",
+      '<wp:anchor simplePos="0" relativeHeight="0" behindDoc="1" locked="0" layoutInCell="1" allowOverlap="1"',
+    )
+    .replace(
+      "<wp:extent",
+      '<wp:simplePos x="0" y="0"/><wp:positionH relativeFrom="column"><wp:posOffset>-63500</wp:posOffset></wp:positionH>' +
+        '<wp:positionV relativeFrom="paragraph"><wp:posOffset>127000</wp:posOffset></wp:positionV><wp:extent',
+    )
+    .replace("<wp:docPr", "<wp:wrapNone/><wp:docPr")
+    .replace("</wp:inline>", "</wp:anchor>");
+  for (const name of source.getEntryNames()) {
+    writer.putNextEntry(
+      name,
+      name === headerPath ? new TextEncoder().encode(header) : await source.readEntry(name),
+    );
+  }
+
+  await page.goto("/writer");
+  await page.getByRole("button", { name: "Open" }).click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer: Buffer.from(await writer.finish()),
+    mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    name: "floating-header.docx",
+  });
+
+  const sheet = page.locator('[data-writer-page="1"]');
+  const image = sheet.locator('[data-writer-page-story="header"] img');
+  /** Confirms the original picture decoded and was placed from the paragraph origin. @returns Completion. */
+  async function expectPicture(): Promise<void> {
+    await expect(sheet.getByText("Sample Header text")).toBeVisible();
+    await expect(image).toBeVisible();
+    await expect
+      .poll(
+        /** Reads the size once the browser decodes the embedded pixels. @returns Decoded raster width. */
+        () =>
+          image.evaluate(
+            /** Gets the decoded raster width. @param element - Mounted image. @returns Decoded raster pixels. */
+            (element: HTMLImageElement) => element.naturalWidth,
+          ),
+      )
+      .toBeGreaterThan(0);
+    const bounds = await image.boundingBox();
+    const pageBounds = await sheet.boundingBox();
+    if (!bounds || !pageBounds) throw new Error("Writer did not paint the expected page.");
+    expect(bounds.x - pageBounds.x).toBeCloseTo((1304 - 100) / 15, 0);
+    expect(bounds.y - pageBounds.y).toBeCloseTo((567 + 200) / 15, 0);
+  }
+  await expectPicture();
+  await expect(page.getByRole("status", { name: "Writer status bar" })).toContainText(
+    "Saved locally in this browser.",
+  );
+  await page.reload();
+  await page.getByRole("button", { name: "Open" }).click();
+  await page.getByRole("tab", { name: "In browser" }).click();
+  await page.getByRole("button", { name: "floating-header", exact: true }).click();
+  await expectPicture();
 });

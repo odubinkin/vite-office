@@ -18,6 +18,7 @@ import type {
 export interface WriterEditableParagraphProps {
   readonly cellPosition?: Readonly<{ rowIndex: number; cellIndex: number; paragraphIndex: number }>;
   readonly isActive: boolean;
+  readonly readOnly?: boolean;
   readonly index: number;
   readonly listMarker: string | undefined;
   readonly paragraph: WriterParagraph;
@@ -32,6 +33,7 @@ export interface WriterEditableParagraphProps {
 /** Renders a paragraph projection that inherits editability from the one document root. @param props - Immutable paragraph projection state. @returns Rendered paragraph projection. */
 export function WriterEditableParagraph({
   index,
+  readOnly = false,
   cellPosition,
   isActive,
   listMarker,
@@ -221,8 +223,8 @@ export function WriterEditableParagraph({
           </span>
         )}
         <p
-          aria-label={label}
-          aria-multiline="true"
+          aria-label={readOnly ? undefined : label}
+          aria-multiline={readOnly ? undefined : "true"}
           data-writer-table-cell={
             cellPosition === undefined
               ? undefined
@@ -246,7 +248,7 @@ export function WriterEditableParagraph({
               retainElement(paragraph.id, element);
             }
           }
-          role="textbox"
+          role={readOnly ? undefined : "textbox"}
           style={{
             caretColor: paragraph.inFrontOfLabel ? "transparent" : undefined,
             whiteSpace: cellPosition === undefined ? undefined : "pre-wrap",

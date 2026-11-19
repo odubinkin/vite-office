@@ -7,16 +7,18 @@
     "localPath": "apps/office/src/sw/source/core/objectpositioning/anchoredobjectposition.ts",
     "upstreamPath": "sw/source/core/objectpositioning/anchoredobjectposition.cxx",
     "localSymbols": [
-      "CalcRelPosX"
+      "CalcRelPosX",
+      "CalcRelPosY"
     ],
     "upstreamSymbols": [
       "SwAnchoredObjectPosition::CalcRelPosX"
     ],
     "preservedResponsibilities": [
-      "Uses original horizontal position arithmetic for the represented native text fly and page/paragraph references."
+      "Uses original horizontal position arithmetic for the represented native text fly and page/paragraph references.",
+      "Resolves vertical offsets for the represented paragraph and page references from the pooled fly format and physical page extents."
     ],
     "omittedResponsibilities": [
-      "Vertical and character-relative geometry, draw-aside collision and full page alignment environment remain outside the current browser projection."
+      "Character and line-fragment geometry, draw-aside collision and full native alignment environment remain outside the current browser projection."
     ],
     "evidence": {
       "local": [
@@ -27,12 +29,24 @@
         {
           "path": "apps/office/src/sw/browser/editor/native-independent-column-render.test.tsx",
           "marker": "mounts and edits the native anchored table"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/objectpositioning/anchoredobjectposition.ts",
+          "marker": "CalcRelPosY"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/objectpositioning/anchoredobjectposition.test.ts",
+          "marker": "uses the actual fly item and physical page"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/core/objectpositioning/anchoredobjectposition.cxx",
           "marker": "SwAnchoredObjectPosition::CalcRelPosX"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/objectpositioning/tocntntanchoredobjectposition.cxx",
+          "marker": "SwToContentAnchoredObjectPosition::CalcPosition"
         }
       ]
     }
