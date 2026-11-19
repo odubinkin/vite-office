@@ -19,17 +19,21 @@
         "apps/office/src/oox/source/helper/graphichelper.ts",
         "apps/office/src/sc/source/filter/oox/excelfilter.theme.test.ts",
         "apps/office/src/sc/source/filter/xml/ods-native-colors.test.ts",
-        "vendor/libreoffice-reference/oox/source/helper/graphichelper.cxx"
+        "vendor/libreoffice-reference/oox/source/helper/graphichelper.cxx",
+        "apps/office/src/oox/source/vml/vmlshape.test.ts"
       ],
-      "justification": "Uses the original graphic-helper system palette and lexical fallback to resolve DrawingML system colors. The native graphic provider, output device and graphic effects are outside this owner.",
+      "justification": "Uses the original system palette and lexical fallback, and converts X and Y device pixels to physical lengths with per-axis output-device density. The graphic provider and acquisition of the default output device remain open.",
       "knownViolations": [],
       "localSymbols": [
-        "getSystemColor"
+        "getSystemColor",
+        "GraphicHelper"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "oox/source/helper/graphichelper.cxx",
       "upstreamSymbols": [
-        "GraphicHelper::getSystemColor"
+        "GraphicHelper::getSystemColor",
+        "GraphicHelper::convertScreenPixelXToHmm",
+        "GraphicHelper::convertScreenPixelYToHmm"
       ]
     }
   }

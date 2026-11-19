@@ -39,3 +39,30 @@ export function getSystemColor(token: string, fallback?: Color): Color | undefin
   const value = palette.get(token);
   return value === undefined ? fallback : new Color(value);
 }
+
+/** Original desktop output device density bound at the host's OOXML filter boundary. */
+export class GraphicHelper {
+  private readonly pixelPerHmmX: number;
+  private readonly pixelPerHmmY: number;
+
+  /** Uses the device's converted 100000 hundredths of a millimeter on each axis. @param pixelPerMeterX - Horizontal device extent. @param pixelPerMeterY - Vertical device extent. @returns Graphic helper. */
+  constructor(pixelPerMeterX: number, pixelPerMeterY: number) {
+    this.pixelPerHmmX = pixelPerMeterX / 100000;
+    this.pixelPerHmmY = pixelPerMeterY / 100000;
+  }
+
+  /** Converts device X pixels with the original rounding. @param pixel - Horizontal pixels. @returns Hundredths of a millimeter. */
+  convertScreenPixelXToHmm(pixel: number): number {
+    return convertScreenPixelToHmm(pixel, this.pixelPerHmmX);
+  }
+
+  /** Converts device Y pixels with the original rounding. @param pixel - Vertical pixels. @returns Hundredths of a millimeter. */
+  convertScreenPixelYToHmm(pixel: number): number {
+    return convertScreenPixelToHmm(pixel, this.pixelPerHmmY);
+  }
+}
+
+/** Keeps the original device guard and scale. @param pixel - Device coordinate. @param pixelPerHmm - Active axis scale. @returns Rounded physical coordinate. */
+function convertScreenPixelToHmm(pixel: number, pixelPerHmm: number): number {
+  return pixelPerHmm > 0 ? Math.trunc(pixel / pixelPerHmm + 0.5) : 0;
+}

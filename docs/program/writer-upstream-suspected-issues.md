@@ -5153,3 +5153,23 @@ an explicit `w:docPartUnique w:val="0"`.
 - [Original OOXML value string conversion](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/writerfilter/ooxml/OOXMLPropertySet.cxx#L133-L141)
 - [Original Word output normalization](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/filter/ww8/docxattributeoutput.cxx#L1090-L1097)
 - [Writer regression](../../apps/office/src/sw/source/filter/ww8/docxexport.page-stories.test.ts)
+
+### WRITER-667 — VML rounds negative EMU lengths toward zero
+
+The measure decoder adds 0.5 before converting to a signed integer. This
+makes a negative whole-point input of `-1pt` become `-12699` EMU, whereas
+`1pt` becomes `12700` EMU. An unrecognized two-character suffix also keeps
+the raw value as EMU, bypassing the reference fallback used for other unknown
+suffix lengths. The VML converter preserves both decisions.
+
+- [Original measure conversion](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/oox/source/vml/vmlformatting.cxx#L154-L210)
+- [VML conversion regression](../../apps/office/src/oox/source/vml/vmlshape.test.ts)
+
+### WRITER-668 — VML fit-to-text enables automatic height when its style value is false
+
+The VML style context tests for a nonempty `mso-fit-shape-to-text` declaration
+and unconditionally enables automatic height. The value `false` therefore
+has the same effect as `true`. The shape type retains that source decision.
+
+- [Original VML style parsing](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/oox/source/vml/vmlshapecontext.cxx#L527-L563)
+- [VML style regression](../../apps/office/src/oox/source/vml/vmlshape.test.ts)

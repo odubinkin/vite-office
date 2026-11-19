@@ -1,0 +1,60 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/oox/source/vml/vmlformatting.ts",
+    "upstreamPath": "oox/source/vml/vmlformatting.cxx",
+    "localSymbols": [
+      "separatePair",
+      "decodeBool",
+      "decodePercent",
+      "decodeRotation",
+      "decodeMeasureToEmu",
+      "decodeMeasureToHmm"
+    ],
+    "upstreamSymbols": [
+      "ConversionHelper::separatePair",
+      "ConversionHelper::decodeRotation",
+      "ConversionHelper::decodeMeasureToEmu",
+      "ConversionHelper::decodeMeasureToHmm"
+    ],
+    "preservedResponsibilities": [
+      "Retains VML unit parsing, device-axis conversion, fixed-point normalization and signed64 to signed32 measure semantics."
+    ],
+    "omittedResponsibilities": [
+      "VML colors, geometric paths and line and fill property conversion remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/vml/vmlformatting.ts",
+          "marker": "separatePair"
+        },
+        {
+          "path": "apps/office/src/oox/source/vml/vmlshape.test.ts",
+          "marker": "testFooterMarginLost"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/oox/source/vml/vmlformatting.cxx",
+          "marker": "ConversionHelper::separatePair"
+        },
+        {
+          "path": "vendor/libreoffice-reference/oox/source/vml/vmlformatting.cxx",
+          "marker": "ConversionHelper::decodeRotation"
+        },
+        {
+          "path": "vendor/libreoffice-reference/oox/source/vml/vmlformatting.cxx",
+          "marker": "ConversionHelper::decodeMeasureToEmu"
+        },
+        {
+          "path": "vendor/libreoffice-reference/oox/source/vml/vmlformatting.cxx",
+          "marker": "ConversionHelper::decodeMeasureToHmm"
+        }
+      ]
+    }
+  }
+}

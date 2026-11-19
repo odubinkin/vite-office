@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/oox/source/vml/vmlshapecontext.ts",
+    "upstreamPath": "oox/source/vml/vmlshapecontext.cxx",
+    "localSymbols": [
+      "ShapeTypeContext",
+      "onCreateContext"
+    ],
+    "upstreamSymbols": [
+      "ShapeTypeContext::setStyle",
+      "ShapeTypeContext::decodeFragmentPath",
+      "case VML_TOKEN( imagedata )"
+    ],
+    "preservedResponsibilities": [
+      "Parses native shape style and coordinate attributes, picture metadata and wrap anchors, and resolves picture relationships in the actual containing part."
+    ],
+    "omittedResponsibilities": [
+      "Full VML fragment dispatch and forwarding an inserted shape to the Writer mapper remain open."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/vml/vmlshapecontext.ts",
+          "marker": "ShapeTypeContext"
+        },
+        {
+          "path": "apps/office/src/oox/source/vml/vmlshape.test.ts",
+          "marker": "testFooterMarginLost"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/oox/source/vml/vmlshapecontext.cxx",
+          "marker": "ShapeTypeContext::setStyle"
+        },
+        {
+          "path": "vendor/libreoffice-reference/oox/source/vml/vmlshapecontext.cxx",
+          "marker": "ShapeTypeContext::decodeFragmentPath"
+        },
+        {
+          "path": "vendor/libreoffice-reference/oox/source/vml/vmlshapecontext.cxx",
+          "marker": "case VML_TOKEN( imagedata )"
+        }
+      ]
+    }
+  }
+}

@@ -7,16 +7,20 @@
     "localPath": "apps/office/src/oox/source/helper/graphichelper.ts",
     "upstreamPath": "oox/source/helper/graphichelper.cxx",
     "localSymbols": [
-      "getSystemColor"
+      "getSystemColor",
+      "GraphicHelper"
     ],
     "upstreamSymbols": [
-      "GraphicHelper::getSystemColor"
+      "GraphicHelper::getSystemColor",
+      "GraphicHelper::convertScreenPixelXToHmm",
+      "GraphicHelper::convertScreenPixelYToHmm"
     ],
     "preservedResponsibilities": [
-      "Uses the original graphic-helper system palette and lexical fallback to resolve DrawingML system colors."
+      "Uses the original graphic-helper system palette and lexical fallback to resolve DrawingML system colors.",
+      "Converts device X and Y pixels to physical lengths using the original per-axis scale and rounding."
     ],
     "omittedResponsibilities": [
-      "The native graphic provider, output device and graphic effects are outside this owner."
+      "The native graphic provider, acquisition of the default output device and graphic effects remain open."
     ],
     "evidence": {
       "local": [
@@ -31,12 +35,24 @@
         {
           "path": "apps/office/src/sc/source/filter/xml/ods-native-colors.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/oox/source/vml/vmlshape.test.ts",
+          "marker": "native asymmetric rounding"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/oox/source/helper/graphichelper.cxx",
           "marker": "GraphicHelper::getSystemColor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/oox/source/helper/graphichelper.cxx",
+          "marker": "GraphicHelper::convertScreenPixelXToHmm"
+        },
+        {
+          "path": "vendor/libreoffice-reference/oox/source/helper/graphichelper.cxx",
+          "marker": "GraphicHelper::convertScreenPixelYToHmm"
         }
       ]
     }

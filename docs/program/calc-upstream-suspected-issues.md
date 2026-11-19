@@ -7067,3 +7067,12 @@ Calc retains both paths for external cache matrices.
 - [Native matrix lookup](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/core/tool/interpr1.cxx#L7698-L7721)
 - [Native vertical string matcher](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/core/tool/scmatrix.cxx#L1473-L1501)
 - [Calc regression](../../apps/office/src/sc/source/core/tool/lookup-formula.test.ts)
+
+### CALC-750 — Shared VML uses asymmetric signed length rounding
+
+The original VML measure decoder adds 0.5 before converting to a signed
+integer. It also keeps the raw EMU value when a two-character unit is
+unrecognized. The shared OOXML VML converter retains these source rules.
+
+- [Original measure conversion](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/oox/source/vml/vmlformatting.cxx#L154-L210)
+- [Shared VML conversion regression](../../apps/office/src/oox/source/vml/vmlshape.test.ts)
