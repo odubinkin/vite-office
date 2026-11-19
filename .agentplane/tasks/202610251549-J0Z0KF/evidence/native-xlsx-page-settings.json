@@ -1,0 +1,79 @@
+{
+  "checkpoint": "Calc worksheet page styles through XLSX, ODS and the existing browser file controls",
+  "implementation": "795d20aa8323",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    "sc/source/core/data/stlsheet.cxx#ScStyleSheet::GetItemSet",
+    "sc/source/core/data/table5.cxx#ScTable::SetPageStyle",
+    "sc/source/filter/oox/pagesettings.cxx#PageSettingsConverter::writePageSettingsProperties",
+    "sc/source/filter/excel/xepage.cxx#XclExpPageSettings::SaveXml",
+    "sc/source/filter/excel/xlpage.cxx#XclPageData::SetScPaperSize",
+    "filter/source/msfilter/util.cxx#PaperSizeConv::getApiSizeForMSPaperSizeIndex",
+    "sc/source/filter/xml/xmlstyli.cxx#ScMasterPageContext::Finish",
+    "xmloff/source/style/PageMasterStyleMap.cxx#PROP_ScaleToPagesX"
+  ],
+  "fixtures": [
+    {
+      "file": "sc/qa/unit/data/xlsx/tdf136721_letter_sized_paper.xlsx",
+      "sha256": "42d2513d9cb37c6d154fccdcde4e59321eddc6934e6498690203af494fbd8a58",
+      "evidence": "Unmodified original package and the exact testTdf136721_paper_size assertion for code 70. Independent native model assertions cover geometry and print flags across Worker transfer, ODS persistence and XLSX reopen."
+    },
+    {
+      "file": "sc/qa/unit/data/xlsx/tdf151755_stylesLostOnXLSXExport.xlsx",
+      "sha256": "9780a04eea0b08e15639b0bab04082e6ae926af6fbfa13b7129b43e4429aeed1",
+      "evidence": "Unmodified original package for one-page width, unlimited height and sheet margins while the XLSX fit flag is active."
+    }
+  ],
+  "verification": {
+    "calc_related": {
+      "command": "npm run test:calc -- src/sc/source/filter/oox/excelfilter.page-settings.test.ts src/sc/source/filter/oox/excelfilter.tab-colors.test.ts src/sc/source/filter/excel/xepage.test.ts src/sc/source/filter/excel/print-ranges.test.ts src/sc/source/filter/xml/ods.test.ts src/sc/source/core/data/formula-copy.test.ts ods-worker-boundaries calc-files --maxWorkers=2 --testTimeout=90000",
+      "result": "pass",
+      "evidence": "68 related cases passed in eight files. The final native page-style tests were repeated after adding independent ODF master and locale defaults and cover five cases."
+    },
+    "chromium": {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" npm exec -- playwright test --config .git/calc-panes-browser.config.mts --project calc --workers=1 --timeout=90000 xlsx-page-settings.spec.ts xlsx-tab-colors.spec.ts xlsx-page-breaks.spec.ts",
+      "result": "pass",
+      "evidence": "Three actual browser file scenarios passed. Original paper geometry is preserved through Save As, primary ODS reopen, XLSX download and mobile-width reopen. The original saved cursor moves the mobile viewport to G9. The page setup scenario also passed after the final TypeScript and production build."
+    },
+    "static": {
+      "commands": [
+        "npm run typecheck",
+        "npm run test:static",
+        "npm run check:dependencies",
+        "npm run check:docs",
+        "npm run check:file-size",
+        "npm run check:source-tree",
+        "npm run check:calc-resources",
+        "node .agentplane/policy/check-routing.mjs",
+        "ap doctor",
+        "git diff --check"
+      ],
+      "result": "pass",
+      "evidence": "Scoped ESLint, Prettier and provenance for all 19 touched runtime paths passed. The native scfilt-to-msfilter paper-size import is admitted by the module boundary checker at the exact source and target paths."
+    },
+    "shared_and_tooling": {
+      "commands": [
+        "npm run test:shared -- src/filter/source/msfilter/util.test.ts src/editeng/source/items/paperinf.test.ts src/xmloff/source/core/xmlimp.test.ts",
+        "npm exec -- vitest run --config vitest.tooling.config.ts scripts/check-module-boundaries.test.ts scripts/native-paper-boundary.test.ts"
+      ],
+      "result": "pass",
+      "evidence": "Six shared filter and XML tests and 54 module-boundary and native-paper tooling tests passed."
+    },
+    "global_registry": {
+      "commands": [
+        "npm run check:source-provenance",
+        "npm run inventory:invariants",
+        "npm run inventory:parity"
+      ],
+      "result": "fail",
+      "evidence": "The wider checks retain the two known missing framework module records, OfficeTooltips.tsx and available-menu-items.ts."
+    },
+    "coverage": {
+      "command": "npm run test:coverage:calc -- excelfilter.page-settings excelfilter.tab-colors xepage.test ods.test ods-worker-boundaries --maxWorkers=2 --testTimeout=90000 --coverage.include='src/sc/source/filter/{oox/pagesettings,excel/xlpage,xml/xmlstyle.page}.ts' --coverage.reportsDirectory=coverage/xlsx-page-settings-verified --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.perFile=true --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "45 tests in 7 files. All three new modules met the per-file threshold. Branches were 28/30 for worksheet import, 127/132 for ODF page styles and 10/10 for Excel paper matching."
+    }
+  },
+  "suspected_upstream": "CALC-755 records the different Worksheet print-annotation values on import and export. The original read and write decisions are retained and tested.",
+  "residual": "Page header/footer contents, chart sheet page settings, printer-device data, and print-preview rendering remain open. Full suites stay on the approved ten-task cadence."
+}
