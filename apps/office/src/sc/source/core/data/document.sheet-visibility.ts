@@ -6,6 +6,7 @@ import type { ScTable } from "../../../inc/table";
 /** View settings held by the detached document until the view is constructed. */
 export interface SheetViewState {
   readonly showGrid: boolean;
+  readonly selected?: boolean;
   readonly panes?: SheetPaneLayout;
   readonly cursor: readonly [column: number, row: number];
 }
@@ -58,6 +59,17 @@ export function SetSheetShowGrid(this: ScDocument, tab: number, show: boolean): 
 function sheetView(document: ScDocument, tab: number): SheetViewState {
   const sheet = document.FetchTable(tab);
   return (sheet && document["maSheetViews"].get(sheet)) || defaultSheetView;
+}
+
+/** Reads the optional per-sheet selected flag from a detached file view. @param document - Workbook. @param tab - Native tab. @returns Imported membership, if present. */
+export function getSheetTabSelected(document: ScDocument, tab: number): boolean | undefined {
+  return sheetView(document, tab).selected;
+}
+
+/** Carries the native selected flag until the view owns its sheet marks. @param document - Workbook. @param tab - Native tab. @param selected - Imported membership. @returns Nothing. */
+export function setSheetTabSelected(document: ScDocument, tab: number, selected: boolean): void {
+  const sheet = document.FetchTable(tab);
+  if (sheet) document["maSheetViews"].set(sheet, { ...sheetView(document, tab), selected });
 }
 
 /** Reads the named sheet's detached view cursor. @param document - Workbook. @param tab - Native tab. @returns Column and row. */

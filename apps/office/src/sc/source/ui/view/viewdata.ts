@@ -13,6 +13,7 @@ import {
   getSheetCursor,
   setSheetCursor,
   getSheetPaneLayout,
+  getSheetTabSelected,
   setSheetPaneLayout,
   sanitizeSheetPane,
   SheetPane,
@@ -232,18 +233,23 @@ export class ScViewData {
     this.maMarkData = new ScMarkData(mrDoc.GetSheetLimits());
     this.maMarkData.SelectOneTable(0);
   }
-  /** Loads saved cursor properties after the actual document view is attached. @returns Nothing. */
+  /** Loads saved sheet view properties after the actual document view is attached. @returns Nothing. */
   ReadCursorPositions(): void {
+    const selected = new Set(this.maMarkData.GetSelectedTabs());
     for (let tab = 0; tab < this.mrDoc.GetTableCount(); ++tab) {
+      const importedSelection = getSheetTabSelected(this.mrDoc, tab);
+      if (importedSelection === true) selected.add(tab);
+      else if (importedSelection === false) selected.delete(tab);
       const [column, row] = getSheetCursor(this.mrDoc, tab);
       const panes = getSheetPaneLayout(this.mrDoc, tab);
-      if (column || row || panes) this.CreateTabData(tab);
+      if (column || row || panes || importedSelection === true) this.CreateTabData(tab);
       const data = this.FetchTableData(tab);
       if (data) {
         [data.nCurX, data.nCurY] = [column, row];
         data.eWhichActive = panes?.activePane ?? ScSplitPos.SC_SPLIT_BOTTOMLEFT;
       }
     }
+    this.maMarkData.SetSelectedTabs(selected);
   }
   /** Borrows the geometry of the current native sheet view. @returns Pane geometry or the default view. */
   GetPaneLayout(): SheetPaneLayout | undefined {
@@ -312,9 +318,10 @@ export class ScViewData {
   /** Writes live marks to the same tab view records used by the native export filter. @param options - Filter snapshot. @returns Nothing. */
   WriteExtOptions(options: ScExtDocOptions): void {
     for (let tab = 0; tab < this.mrDoc.GetTableCount(); ++tab) {
-      if (!this.FetchTableData(tab)) continue;
+      const selected = this.maMarkData.GetTableSelect(tab);
+      if (!selected && !this.FetchTableData(tab)) continue;
       const settings = options.GetOrCreateTabSettings(tab);
-      settings.mbSelected = this.maMarkData.GetTableSelect(tab);
+      settings.mbSelected = selected;
       this.maMarkData.FillRangeListWithMarks(settings.maSelection, true);
     }
   }

@@ -24,6 +24,8 @@ import { ScTabViewShell } from "./tabvwsh4";
 import {
   getSheetCursor,
   getSheetPaneLayout,
+  getSheetTabSelected,
+  setSheetTabSelected,
   SheetPane,
   SheetSplitMode,
 } from "../../core/data/document.sheet-visibility";
@@ -32,6 +34,122 @@ import {
 function fixture(name: string): Uint8Array {
   return new Uint8Array(readFileSync("../../vendor/libreoffice-reference/sc/qa/unit/data/" + name));
 }
+
+it("restores XLSX worksheet groups through the Worker and exports the live membership", /** Checks source active-sheet inclusion, hidden selected sheets and replacement of stale imported flags. @returns Completion. */ async () => {
+  const original = await DocumentArchive.open(fixture("xlsx/sheet-names.xlsx"));
+  const writer = new DocumentArchiveWriter();
+  const encoder = new TextEncoder();
+  for (const part of original.getEntryNames()) {
+    if (part === "xl/worksheets/sheet1.xml" || part === "xl/worksheets/sheet3.xml") {
+      const xml = await original.readTextEntry(part);
+      writer.putNextEntry(
+        part,
+        encoder.encode(xml.replace("<sheetView ", '<sheetView tabSelected="1" ')),
+      );
+    } else if (part === "xl/workbook.xml") {
+      const xml = await original.readTextEntry(part);
+      writer.putNextEntry(
+        part,
+        encoder.encode(
+          xml.replace(
+            /sheetId="[23]"/gu,
+            /** Hides two secondary sheets before applying their view flags. @param id - Worksheet key. @returns Updated key. */ (
+              id,
+            ) => `${id} state="hidden"`,
+          ),
+        ),
+      );
+    } else writer.putNextEntry(part, await original.readEntry(part));
+  }
+  const source = await ExcelFilter.importDocument(await writer.finish());
+  const transferred = decodeCalcDocument(structuredClone(encodeCalcDocument(source)));
+  try {
+    setSheetTabSelected(transferred, -1, true);
+    expect(getSheetTabSelected(transferred, -1)).toBeUndefined();
+    expect(transferred.GetVisibleTab()).toBe(4);
+    expect(
+      [0, 1, 2, 3, 4].map(
+        /** Reads the detached native flags. @param tab - Source tab. @returns Membership. */ (
+          tab,
+        ) => getSheetTabSelected(transferred, tab),
+      ),
+    ).toEqual([true, false, true, false, true]);
+    expect(transferred.IsVisible(1)).toBe(false);
+    expect(transferred.IsVisible(2)).toBe(true);
+    const shell = new ScDocShell(transferred);
+    const view = new ScTabViewShell(shell).GetViewData();
+    expect([...view.GetMarkData().GetSelectedTabs()]).toEqual([0, 2, 4]);
+    const detached = await DocumentArchive.open(await exportXlsx(source));
+    expect(await detached.readTextEntry("xl/worksheets/sheet3.xml")).toContain(
+      'tabSelected="true"',
+    );
+    view.GetMarkData().SelectOneTable(4);
+    view.GetMarkData().SelectTable(3, true);
+    const live = new ScExtDocOptions();
+    view.WriteExtOptions(live);
+    const exported = await DocumentArchive.open(await shell.SerializeXlsx(live));
+    expect(await exported.readTextEntry("xl/worksheets/sheet1.xml")).toContain(
+      'tabSelected="false"',
+    );
+    expect(await exported.readTextEntry("xl/worksheets/sheet3.xml")).toContain(
+      'tabSelected="false"',
+    );
+    expect(await exported.readTextEntry("xl/worksheets/sheet4.xml")).toContain(
+      'tabSelected="true"',
+    );
+  } finally {
+    transferred.Dispose();
+    source.Dispose();
+  }
+});
+
+it("reads the original ODF TableSelected property and keeps the native ODF writer behavior", /** Covers selected and unselected flags, including the documented reader/writer asymmetry. @returns Completion. */ async () => {
+  const source = await ExcelFilter.importDocument(fixture("xlsx/sheet-names.xlsx"));
+  let ondisk: ScDocument | undefined;
+  let withFlags: ScDocument | undefined;
+  try {
+    ReadUserDataSequence(source, [
+      [
+        [
+          "Tables",
+          [
+            ["S&P", [["TableSelected", true]]],
+            ["Sam's Club", [["TableSelected", false]]],
+            ['"The Sheet"', [["TableSelected", "true"]]],
+            ["C>D", [["TableSelected", true]]],
+          ],
+        ],
+      ],
+    ]);
+    expect(getSheetTabSelected(source, 2)).toBe(false);
+    const view = new ScTabViewShell(new ScDocShell(source)).GetViewData();
+    expect([...view.GetMarkData().GetSelectedTabs()]).toEqual([0, 4]);
+    const ods = await writeOdsXml(source);
+    const xml = ods.files["settings.xml"];
+    assert(xml);
+    expect(xml).not.toContain("TableSelected");
+    const withSelection = xml.replace(
+      /<config:config-item-map-entry config:name="(?:S&amp;P|C&gt;D)">/gu,
+      /** Adds the ODF view property accepted by the original settings reader. @param start - Tab entry. @returns Entry with a boolean flag. */ (
+        start,
+      ) =>
+        `${start}<config:config-item config:name="TableSelected" config:type="boolean">true</config:config-item>`,
+    );
+    withFlags = await readOdsDocument({
+      ...ods,
+      files: { ...ods.files, "settings.xml": withSelection },
+    });
+    const imported = new ScTabViewShell(new ScDocShell(withFlags)).GetViewData();
+    expect([...imported.GetMarkData().GetSelectedTabs()]).toEqual([0, 4]);
+    ondisk = await readOdsDocument(ods);
+    const reopened = new ScTabViewShell(new ScDocShell(ondisk)).GetViewData();
+    expect([...reopened.GetMarkData().GetSelectedTabs()]).toEqual([4]);
+  } finally {
+    withFlags?.Dispose();
+    ondisk?.Dispose();
+    source.Dispose();
+  }
+});
 
 it("exports live ordered marks only in the active pane and preserves the native cursor fallback", /** Exercises detached selection values and the original Excel range index. @returns Completion. */ async () => {
   const source = await ExcelFilter.importDocument(fixture("xlsx/freezePaneStartCell.xlsx"));

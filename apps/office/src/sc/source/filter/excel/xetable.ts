@@ -1,4 +1,5 @@
 /** @fileoverview XLSX workbook and worksheet records over the actual Calc document, cell iterator and XML stream. */
+import { getSheetTabSelected } from "../../core/data/document.sheet-visibility";
 import type { ScExtDocOptions, ScExtTabSettings } from "../../ui/view/scextopt";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
@@ -338,7 +339,7 @@ function* styledCells(
   }
 }
 
-/** Writes a worksheet through the native sparse iterator in row-major order. @param stream - Active XLSX stream. @param document - Workbook. @param tab - Sheet index. @param styles - Workbook XF buffer. @param strings - Workbook shared strings. @param digit - Maximum digit advance in twips. @param view - Captured tab view, if available. @param displayed - Whether the sheet is the active export sheet. @returns Nothing. */
+/** Writes a worksheet through the native sparse iterator in row-major order. @param stream - Active XLSX stream. @param document - Workbook. @param tab - Sheet index. @param styles - Workbook XF buffer. @param strings - Workbook shared strings. @param digit - Maximum digit advance in twips. @param view - Captured tab view, if available. @param selected - Whether the tab belongs to the export selection. @returns Nothing. */
 function SaveXmlSheet(
   stream: XclExpXmlStream,
   document: ScDocument,
@@ -347,12 +348,12 @@ function SaveXmlSheet(
   strings: XclExpSst,
   digit: number,
   view: ScExtTabSettings | undefined,
-  displayed: boolean,
+  selected: boolean,
 ): void {
   const serializer = stream.GetCurrentStream();
   const row = token("row");
   serializer.startElement(token("worksheet"), token("xmlns"), spreadsheetNamespace);
-  SaveXmlTabViewSettings(stream, document, tab, displayed, view);
+  SaveXmlTabViewSettings(stream, document, tab, selected, view);
   const table = document.FetchTable(tab);
   if (!table) throw new Error("Worksheet table is missing.");
   const lastRow = document.MaxRow();
@@ -543,16 +544,11 @@ function SaveXmlWorkbook(
       );
       output.PushStream(output.openFragmentStreamWithSerializer("xl/" + relative, worksheetType));
       try {
-        SaveXmlSheet(
-          output,
-          document,
-          tab,
-          styles,
-          strings,
-          digit,
-          viewOptions?.GetTabSettings(tab),
-          tab === visible,
-        );
+        const view = viewOptions?.GetTabSettings(tab);
+        const selected =
+          tab === visible ||
+          (viewOptions ? view?.mbSelected : getSheetTabSelected(document, tab)) === true;
+        SaveXmlSheet(output, document, tab, styles, strings, digit, view, selected);
       } finally {
         output.PopStream();
       }

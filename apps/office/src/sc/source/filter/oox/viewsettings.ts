@@ -7,6 +7,7 @@ import type { ScAddress } from "../../../inc/address";
 import {
   setSheetCursor,
   setSheetPaneLayout,
+  setSheetTabSelected,
   SheetPane,
   SheetSplitMode,
 } from "../../core/data/document.sheet-visibility";
@@ -25,6 +26,7 @@ const frozenSplit = token("frozenSplit");
 
 /** SpreadsheetML sheet view fields represented by the current Calc view. */
 type SheetViewModel = {
+  selected: boolean;
   showGrid: boolean;
   showHeaders: boolean;
   showZeros: boolean;
@@ -42,6 +44,11 @@ export class ViewSettings {
 
   /** Applies the active sheet's document-wide view properties. @param document - Target workbook. @param activeSheet - Active Calc tab. @returns Nothing. */
   finalizeImport(document: ScDocument, activeSheet: number): void {
+    for (let tab = 0; tab < document.GetTableCount(); ++tab) {
+      const selected = tab === activeSheet || this.sheets.get(tab)?.selected === true;
+      setSheetTabSelected(document, tab, selected);
+      if (selected) document.SetVisible(tab, true);
+    }
     const view = this.sheets.get(activeSheet);
     const options = document.GetViewOptions();
     // The native view reader consumes headers and zero visibility, but ignores ShowFormulas.
@@ -73,6 +80,7 @@ export class SheetViewSettings {
     this.readingFirstView = this.view === undefined;
     if (!this.readingFirstView) return;
     this.view = {
+      selected: attributes.getBool(token("tabSelected"), false),
       showGrid: attributes.getBool(token("showGridLines"), true),
       showHeaders: attributes.getBool(token("showRowColHeaders"), true),
       showZeros: attributes.getBool(token("showZeros"), true),

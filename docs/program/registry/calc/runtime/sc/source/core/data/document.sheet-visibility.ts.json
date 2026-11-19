@@ -32,7 +32,7 @@
         "sc/inc/document.hxx",
         "apps/office/src/sc/source/ui/view/viewdata.settings.test.ts"
       ],
-      "justification": "Forwards native display state through the actual ScTable, preserves missing-sheet results and carries the original visible-tab hint. Embedded-object view handling and named sheet view holders remain outside this represented Calc view. J0Z0KF worksheet pane checkpoint. The existing detached sheet view carries pane geometry alongside grid visibility and cursor. Valid axes, first and second origins, and active-pane normalization use the document sheet limits.",
+      "justification": "Forwards native display state through the actual ScTable, preserves missing-sheet results and carries the original visible-tab hint. Embedded-object view handling and named sheet view holders remain outside this represented Calc view. J0Z0KF worksheet pane checkpoint. The existing detached sheet view carries pane geometry alongside grid visibility and cursor. Valid axes, first and second origins, and active-pane normalization use the document sheet limits. Carries optional imported per-table selection flags without changing the live ScMarkData owner or confusing selection with sheet visibility.",
       "knownViolations": [],
       "localSymbols": [
         "GetTableCount",

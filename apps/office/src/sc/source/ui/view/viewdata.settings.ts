@@ -13,12 +13,14 @@ import {
   setSheetCursor,
   getSheetPaneLayout,
   setSheetPaneLayout,
+  setSheetTabSelected,
   SheetPane,
   SheetSplitMode,
 } from "../../core/data/document.sheet-visibility";
 
 const SC_ACTIVETABLE = "ActiveTable";
 const SC_TABLES = "Tables";
+const SC_TABLESELECTED = "TableSelected";
 const SC_UNO_SHOWGRID = "ShowGrid";
 const SC_UNO_SHOWZERO = "ShowZeroValues";
 const SC_UNO_COLROWHDR = "HasColumnRowHeaders";
@@ -53,6 +55,8 @@ export function ReadUserDataSequence(document: ScDocument, views: ViewSettings):
           let [column, row] = getSheetCursor(document, tab[0]);
           let cursorValue = 0;
           for (const [property, scalar] of items) {
+            if (property === SC_TABLESELECTED)
+              setSheetTabSelected(document, tab[0], scalar === true);
             if (property === SC_UNO_SHOWGRID && typeof scalar === "boolean")
               document.SetSheetShowGrid(tab[0], scalar);
             if (property !== SC_CURSORPOSITIONX && property !== SC_CURSORPOSITIONY) continue;

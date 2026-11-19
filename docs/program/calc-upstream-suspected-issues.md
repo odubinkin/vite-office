@@ -7122,3 +7122,17 @@ F11 correction. Excel's handling of the non-A1 example has not been tested.
 - [Original worksheet view import](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/oox/viewsettings.cxx#L374-L387)
 - [Original XLSX pane export](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/filter/excel/xeview.cxx#L330-L356)
 - [Calc regression](../../apps/office/src/sc/source/ui/view/viewdata.settings.test.ts)
+
+### CALC-754 — ODF view settings read sheet group membership and omit it on save
+
+`ScViewDataTable::ReadUserDataSequence` applies `TableSelected` to the
+live tab marks. The corresponding `WriteUserDataSequence` emits cursor,
+pane, zoom and grid properties for the sheet and omits `TableSelected`.
+As a result, a group read from view settings is reduced to the active
+sheet after saving and reopening through this ODF settings path. The
+browser implementation preserves this reader/writer asymmetry. XLSX
+persists the group through its own `tabSelected` attributes.
+
+- [ODF view settings writer](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/ui/view/viewdata.cxx#L528-L608)
+- [Native TableSelected reader](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sc/source/ui/view/viewdata.cxx#L714-L719)
+- [Calc regression](../../apps/office/src/sc/source/ui/view/viewdata.settings.test.ts)

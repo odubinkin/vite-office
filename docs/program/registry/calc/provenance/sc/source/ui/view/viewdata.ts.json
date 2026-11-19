@@ -32,7 +32,8 @@
       "Exposes source horizontal left/right and vertical top/bottom position accessors and publishes browser-measured unsplit origins through the attached view.",
       "Publishes movable pane origins while preserving fixed origins and coordinates of frozen boundaries.",
       "Mirrors the four native pane origins and SetActivePart into the detached worksheet state for ODS and XLSX persistence.",
-      "Captures live selected tabs and native mark lists in per-tab extended options before XLSX export."
+      "Captures live selected tabs and native mark lists in per-tab extended options before XLSX export.",
+      "Moves imported table membership into ScMarkData and snapshots live selected tables even before a secondary browser tab has been visited."
     ],
     "omittedResponsibilities": [
       "Represented document-bound cursor,mark,reference start/end/type and Ctrl-mouse state use original fields/defaults. Complete ScViewData construction,device geometry,zoom,windows,hidden/alternate sheet views and view persistence remain unported.",

@@ -18,7 +18,8 @@
       "Emits workbook-wide formula mode, header visibility and zero-value visibility from the document view options, and grid visibility from each sheet.",
       "Exports the current sheet cursor using the native singleton selection record for the unsplit case.",
       "J0Z0KF worksheet pane checkpoint. Sheet view export writes fixed counts relative to the first viewport origin, normal twip splits, native pane activation and one cursor selection per represented pane. CALC-753 retains the source comparison of relative counts with absolute coordinates.",
-      "Converts live marks to bounded Excel coordinates in native order, emits the first matching range index, and appends a missing active cell."
+      "Converts live marks to bounded Excel coordinates in native order, emits the first matching range index, and appends a missing active cell.",
+      "Emits the effective grouped-tab selection computed by the workbook exporter."
     ],
     "omittedResponsibilities": [
       "Other sheet view options, alternate workbook views, chart sheets and BIFF records remain outside this mechanism."

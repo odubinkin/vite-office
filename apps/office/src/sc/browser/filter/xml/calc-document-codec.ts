@@ -2,6 +2,8 @@
 import { GetPrintRanges } from "../../../source/core/data/table1";
 import {
   getSheetCursor,
+  getSheetTabSelected,
+  setSheetTabSelected,
   getSheetPaneLayout,
   isSheetPaneLayout,
   setSheetPaneLayout,
@@ -156,6 +158,7 @@ interface Sheet {
   readonly repeatRows?: PrintRange;
   readonly name: string;
   readonly showGrid?: boolean;
+  readonly tabSelected?: boolean;
   readonly cursor?: readonly [column: number, row: number];
   readonly panes?: SheetPaneLayout;
   readonly optimalMinRowHeight?: number;
@@ -256,6 +259,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
     const repeatRows = table.GetRepeatRowRange();
     const protection = table.GetProtection();
     const cursor = getSheetCursor(document, tab);
+    const tabSelected = getSheetTabSelected(document, tab);
     const panes = getSheetPaneLayout(document, tab);
     const sheet: Sheet = {
       ...(table.IsVisible() ? {} : { visible: false }),
@@ -288,6 +292,7 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
       name: text(table.GetName()),
       ...(document.GetSheetShowGrid(tab) ? {} : { showGrid: false }),
       ...(cursor[0] || cursor[1] ? { cursor } : {}),
+      ...(tabSelected === undefined ? {} : { tabSelected }),
       ...(panes ? { panes } : {}),
       optimalMinRowHeight: table.GetOptimalMinRowHeight(),
       cells: [],
@@ -551,6 +556,8 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
         if (!document.InsertTab(tab, name)) throw new Error("Calc worker sheet is invalid.");
         if (sheet.visible === false) document.SetVisible(tab, false);
         if (typeof sheet.showGrid === "boolean") document.SetSheetShowGrid(tab, sheet.showGrid);
+        if (typeof sheet.tabSelected === "boolean")
+          setSheetTabSelected(document, tab, sheet.tabSelected);
         if (Array.isArray(sheet.cursor))
           setSheetCursor(document, tab, sheet.cursor[0], sheet.cursor[1]);
         if (sheet.panes !== undefined) {

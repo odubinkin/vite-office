@@ -22,7 +22,8 @@
       "Uses the native HasColumnRowHeaders and ShowZeroValues ODS view booleans. Formula display has no native reader or writer entry.",
       "Reads and writes the signed integer CursorPositionX and CursorPositionY properties in the named sheet’s ODF view record.",
       "J0Z0KF worksheet pane checkpoint. Reads native short pane modes and pane IDs, signed column coordinates, pixel and twip forms, and property order. The browser stores normal split lengths in physical twips and uses the matching properties recognized by the native reader.",
-      "Uses native PositionLeft and PositionBottom for the unsplit origin and writes the default inactive top position when no vertical split exists."
+      "Uses native PositionLeft and PositionBottom for the unsplit origin and writes the default inactive top position when no vertical split exists.",
+      "Reads the original TableSelected boolean in ODF view settings while retaining the native output omission."
     ],
     "omittedResponsibilities": [
       "Window, zoom, pane split and other view properties remain outside this mechanism."

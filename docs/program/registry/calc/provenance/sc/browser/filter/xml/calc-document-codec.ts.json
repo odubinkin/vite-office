@@ -56,7 +56,8 @@
       "Transfers sheet protection options and both stored XLSX hash representations across realms.",
       "Transfers the stored digest bytes and native primary/secondary algorithm identities in addition to OOXML data.",
       "Transfers native enhanced protection ranges and verifier metadata between realms.",
-      "J0Z0KF worksheet pane checkpoint. Transfers per-sheet split modes, absolute fixed indices, viewport origins and the active pane. The isolated Worker reader rejects malformed geometry before document adoption."
+      "J0Z0KF worksheet pane checkpoint. Transfers per-sheet split modes, absolute fixed indices, viewport origins and the active pane. The isolated Worker reader rejects malformed geometry before document adoption.",
+      "Transfers optional native sheet group flags across the same detached Worker graph as the active sheet and pane positions."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

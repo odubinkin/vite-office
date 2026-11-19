@@ -16,12 +16,12 @@ import { XclXmlUtils, type XclExpXmlStream } from "./xestream";
 
 const paneNames = ["topLeft", "topRight", "bottomLeft", "bottomRight"] as const;
 
-/** Writes the represented native sheet view for the first workbook view. @param stream - Active worksheet part. @param document - Workbook. @param tab - Actual sheet. @param displayed - Active export sheet. @param view - Attached selection snapshot. @returns Nothing. */
+/** Writes the represented native sheet view for the first workbook view. @param stream - Active worksheet part. @param document - Workbook. @param tab - Actual sheet. @param selected - Export sheet membership. @param view - Attached selection snapshot. @returns Nothing. */
 export function SaveXmlTabViewSettings(
   stream: XclExpXmlStream,
   document: ScDocument,
   tab: number,
-  displayed: boolean,
+  selected: boolean,
   view?: ScExtTabSettings,
 ): void {
   const serializer = stream.GetCurrentStream();
@@ -39,7 +39,7 @@ export function SaveXmlTabViewSettings(
     token("showZeros"),
     String(options.GetOption(ViewOption.NULLVALS)),
     token("tabSelected"),
-    String(displayed || !!view?.mbSelected),
+    String(selected),
     token("workbookViewId"),
     "0",
     ...(layout ? [token("topLeftCell"), cell(document, tab, layout.first)] : []),

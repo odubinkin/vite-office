@@ -30,7 +30,8 @@
       "Writes the protection record after sheetData and before merge records.",
       "Writes the enhanced protection record with the actual workbook context.",
       "Writes name records, names used in formulas and print areas, and worksheet parts under the same temporary export worksheet names.",
-      "Passes native, per-tab extended view settings to worksheet serialization."
+      "Passes native, per-tab extended view settings to worksheet serialization.",
+      "Exports live group membership when an attached view was supplied, otherwise restores the detached tab settings; the displayed sheet is selected."
     ],
     "omittedResponsibilities": [
       "Number formats, themed and rich formatting, and formula conventions beyond the supported Calc compiler remain open."
