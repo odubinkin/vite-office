@@ -1,0 +1,146 @@
+{
+  "checkpoint": "Writer source-compatible Word stylistic sets and contextual alternatives",
+  "createdAt": "2026-11-19T01:03:11.466Z",
+  "task": "202610251549-V4DQJW",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sw/source/writerfilter/ooxml/model.xml#CT_StylisticSets",
+    "sw/source/writerfilter/ooxml/model.xml#CT_StyleSet",
+    "sw/source/writerfilter/ooxml/model.xml#CT_OnOff",
+    "sw/source/writerfilter/dmapper/TextEffectsHandler.cxx#lcl_sprm",
+    "sw/source/writerfilter/dmapper/DomainMapper.cxx#LN_cntxtAlts_cntxtAlts",
+    "oox/source/helper/grabbagstack.cxx#GrabBagStack::getRootProperty",
+    "sw/source/filter/ww8/docxattributeoutput.cxx#lclProcessRecursiveGrabBag",
+    "sw/qa/extras/ooxmlexport/ooxmlw14export.cxx#Test_TextEffects_StylisticSets_CntxtAlts",
+    "sw/qa/extras/ooxmlexport/ooxmlw14export.cxx#Test_McIgnorable"
+  ],
+  "results": {
+    "writer": {
+      "files": 21,
+      "tests": 330
+    },
+    "chromium": 8,
+    "coverageThreshold": 90,
+    "coverage": {
+      "lines": {
+        "total": 189,
+        "covered": 187,
+        "skipped": 0,
+        "pct": 98.94
+      },
+      "statements": {
+        "total": 216,
+        "covered": 208,
+        "skipped": 0,
+        "pct": 96.29
+      },
+      "functions": {
+        "total": 26,
+        "covered": 25,
+        "skipped": 0,
+        "pct": 96.15
+      },
+      "branches": {
+        "total": 182,
+        "covered": 171,
+        "skipped": 0,
+        "pct": 93.95
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "coveredOwners": {
+      "apps/office/src/sw/browser/filter/xml/writer-text-effect-codec.ts": {
+        "lines": {
+          "total": 40,
+          "covered": 39,
+          "skipped": 0,
+          "pct": 97.5
+        },
+        "functions": {
+          "total": 4,
+          "covered": 4,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 45,
+          "covered": 42,
+          "skipped": 0,
+          "pct": 93.33
+        },
+        "branches": {
+          "total": 61,
+          "covered": 58,
+          "skipped": 0,
+          "pct": 95.08
+        }
+      },
+      "apps/office/src/sw/source/writerfilter/dmapper/TextEffectsHandler.ts": {
+        "lines": {
+          "total": 149,
+          "covered": 148,
+          "skipped": 0,
+          "pct": 99.32
+        },
+        "functions": {
+          "total": 22,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 95.45
+        },
+        "statements": {
+          "total": 171,
+          "covered": 166,
+          "skipped": 0,
+          "pct": 97.07
+        },
+        "branches": {
+          "total": 121,
+          "covered": 113,
+          "skipped": 0,
+          "pct": 93.38
+        }
+      }
+    }
+  },
+  "observations": [
+    "The unchanged TextEffects_StylisticSets_CntxtAlts.docx is checked through actual SwDoc range properties, structured-clone handoff, output XML, DOCX reopen, ODT text reopen and installed file actions.",
+    "Generated resource types carry original signed integer style IDs, ordered repeated children and the four original toggle spellings. Existing scalar Worker records are still accepted.",
+    "The original scalar contextual-alternates fallthrough creates an empty same-name child and drops the explicit value. WRITER-653 documents the represented source effect.",
+    "The distinct Test_CompatSettingsForW14 acceptance still requires the document compatibility settings path."
+  ],
+  "files": {
+    "apps/office/src/sw/source/writerfilter/dmapper/TextEffectsHandler.ts": "6df8e678ed9707a07b6784972acc6607dbb7db02f214270f53b98763494b38f7",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.ts": "746e6693190a75ab43e4532edd7ffb11258a0dcfb737d85280510c7a52103aaf",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.run.ts": "acf341102372a4a5d6b70bbb7358f1bfcaa797ba3440c8b7e2b1e6b39b597b43",
+    "apps/office/src/sw/browser/filter/xml/writer-text-effect-codec.ts": "29b9e51d4f2dc70ac01b512a01b1f624bfe1d3c5ae1719c4a24234477f2f0307",
+    "apps/office/src/sw/source/filter/ww8/docxexport.typography.test.ts": "182ba416bf1d26fe6e242de52334589893b7b243a40cb9508e34ad0c4a6e442f",
+    "apps/office/src/sw/browser/filter/xml/writer-text-effect-codec.test.ts": "21e37b3d978e1f840afedc2a7719eb5f621822f9e8eeadc9a6201cae44ade008",
+    "apps/office/e2e/writer-docx-theme.spec.ts": "74ea19d96ab0dd12cfbb57ff9b292fcf43fa2dd71c8f38c6462980d1b4cfd730",
+    "scripts/writer-ooxml/generate-factory.py": "74379d5fd03281da9a4cb595bb26a2b295feaea4ac6109d2743e2492e91f765a",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_w14.tables.ts": "e0c6a5dc18cc9dfd7a55ed943747457db8b6c6730d21323b01482e203db0fc07",
+    "docs/program/writer-upstream-suspected-issues.md": "77fb886152292eb05d489725b49152dbace0992a6f55ce0622a3b1d081a5a21f"
+  },
+  "fixtures": {
+    "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/TextEffects_StylisticSets_CntxtAlts.docx": "ace3872887257a45832db52a61d448bbf221343717a5b56e97a40b0769dffa1f"
+  },
+  "logs": {
+    "apps/office/coverage/stylistic-coverage.log": "da588a199254fc996adeeddbb60fd07fbd8ed43683af47749f546449dc3348d7",
+    "apps/office/coverage/stylistic-types.log": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+    "apps/office/coverage/stylistic-static.log": "d3d3588e3d6c76b224c12e59989bb1c8c33dce758457fea9f994618366a688d1",
+    "apps/office/coverage/stylistic-browser.log": "3f69e2f6b1dab5ebaabaff4b26b84c390e3be8c379a1112910598299a695190f",
+    "apps/office/coverage/stylistic-browser-first.log": "3820e3f0a261f8fb117770105233d58c1a0b2071d543d2e55d5a7d194c94524c",
+    "apps/office/coverage/stylistic-fixture.log": "62e99db5b6f2aa7ac8f772450445f169c2e299382d1b24638fe2152b41414f42",
+    "apps/office/coverage/stylistic-structure.log": "f86a73a22bf5fdb88029d80a2ea3ae4458465c1d0935d72f5f87eac69a1a6055",
+    "apps/office/coverage/stylistic-registry.log": "7e5fd84818973e8a0804c91495cd4aa9d1fa31032a8642d271ccd3d06cca8a58",
+    "apps/office/coverage/stylistic-resources.log": "7903be83319b80d7f8a377069b33a28c89744af53411f3406599a00dbd8ba216",
+    "apps/office/coverage/stylistic-lint.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/stylistic-factory.log": "4d413cb63af768c6912992152ce0833c169f327d7fc16b68d373e2f6329db2c5",
+    "apps/office/coverage/stylistic-scoped/coverage-summary.json": "a8310c032900a514a5ee94602006536112849807fc3188d54103258bed86aa8e"
+  }
+}
