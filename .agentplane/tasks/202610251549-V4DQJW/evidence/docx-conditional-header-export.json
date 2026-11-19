@@ -1,0 +1,58 @@
+{
+  "checkpoint": "Writer DOCX named table styles, look attributes and row header export",
+  "implementation": "1aca6098f0cf",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    "sw/source/writerfilter/dmapper/StyleSheetTable.cxx#StyleSheetTable::ApplyStyleSheets",
+    "sw/source/writerfilter/dmapper/TblStylePrHandler.cxx#TblStylePrHandler::lcl_sprm",
+    "sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx#DomainMapperTableManager::finishTableLook",
+    "sw/source/filter/ww8/docxtablestyleexport.cxx#DocxTableStyleExport::TableStyles",
+    "sw/source/filter/ww8/docxtableexport.cxx#DocxAttributeOutput::TableDefinition",
+    "sw/source/filter/ww8/docxattributeoutput.cxx#DocxAttributeOutput::StartTableRow"
+  ],
+  "verification": {
+    "related_writer": {
+      "command": "npm run test:coverage:writer -- docxexport.table-flow.test.ts WriterFilter.test.ts native-style-entry-merge.test.ts docxexport.styles.test.ts odt-table-roundtrip.test.ts native-table-geometry-transport.test.ts writer-table-interop-codec.test.ts --maxWorkers=2 --testTimeout=90000 --coverage.include='src/sw/{source/filter/ww8/docxtablestyleexport,browser/filter/xml/writer-table-interop-codec}.ts' --coverage.reportsDirectory=coverage/docx-conditional-export-final --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.perFile=true --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "75 tests in eight files. The initial related run before targeted variant and transport coverage passed 71 tests but failed the 90 branch gate with 85.14%. That earlier raw result is retained in coverage/docx-conditional-export."
+    },
+    "final_owner_coverage": {
+      "command": "npm run test:coverage:writer -- docxexport.table-flow.test.ts writer-table-interop-codec.test.ts --maxWorkers=2 --testTimeout=90000 --coverage.include='src/sw/{source/filter/ww8/docxtablestyleexport,browser/filter/xml/writer-table-interop-codec}.ts' --coverage.reportsDirectory=coverage/docx-conditional-export-owners --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.perFile=true --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "19 tests passed on the committed production sources. Exporter statements 100/100, functions 19/19, branches 57/59. Worker codec statements 72/72, functions 8/8, branches 42/42. Both have 100% lines. Coverage map SHA256 d05188d9a39872555ed8a2b891fd41f00a661c90cf3d1c7b4f86ecd35d439f01."
+    },
+    "production_chromium": {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" npm exec -- playwright test --config .git/calc-panes-browser.config.mts --project writer --workers=1 --timeout=90000 writer-docx-table-flow.spec.ts",
+      "result": "pass",
+      "evidence": "Two production scenarios pass on the final build. The named look flag controls first-row semantics at desktop and mobile sizes. The download contains the TableGrid conditional header definition, style reference and recomputed tblLook. The existing primary ODT header-count and DOCX reopen regression remains green."
+    },
+    "static": {
+      "commands": [
+        "npm run typecheck",
+        "npm run test:static",
+        "npm run check:dependencies",
+        "npm run check:docs",
+        "npm run check:file-size",
+        "npm run check:source-tree",
+        "npm run check:writer-resources",
+        "npm run check:writer-hintids",
+        "node .agentplane/policy/check-routing.mjs",
+        "ap doctor",
+        "git diff --check"
+      ],
+      "result": "pass",
+      "evidence": "Final JSDoc, scoped ESLint and Prettier checks and provenance for the 18 modified or added runtime sources pass. Agentplane doctor returned OK with the existing managed-hook readiness warning."
+    },
+    "global_registry": {
+      "commands": [
+        "npm run check:source-provenance",
+        "npm run inventory:invariants",
+        "npm run inventory:parity"
+      ],
+      "result": "fail",
+      "evidence": "The baseline registry still omits OfficeTooltips.tsx and available-menu-items.ts. The changed records validate independently."
+    }
+  },
+  "suspected_upstream": ["WRITER-672", "WRITER-673"],
+  "residual": "The reduced tdf81100 fixture keeps original table and style XML, and produces all four conditional header definitions plus the direct false in the exported package. Its unrelated WordprocessingShape footer is excluded. The browser Worker carries the original structured bags, while a reload of the primary XML package currently retains the applied row counts and drops the Word style metadata. Wider conditional table formatting and end-to-end verification of the unmodified upstream fixture remain open."
+}
