@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 390
+revision: 392
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T07:05:41.196Z"
+  updated_at: "2026-11-19T07:15:54.367Z"
   updated_by: "CODER"
-  note: "Implementation 21eaef432 passes 19 focused Writer tests, production build and browser ODT/download/mobile reopen. Paragraph root/style inheritance and 90 percent complete owner coverage remain open."
-  attempts: 117
+  note: "Implementation f506e1c28 resolves the provided DOCX import failure. Actual local browser import and browser-storage reopen pass, along with 64 targeted tests and the static build. Broader DOCX acceptance remains open."
+  attempts: 118
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1880,8 +1883,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T07:15:54.367Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Implementation f506e1c28 resolves the provided DOCX import failure. Actual local browser import and browser-storage reopen pass, along with 64 targeted tests and the static build. Broader DOCX acceptance remains open."
+  -
+    type: "status"
+    at: "2026-11-19T07:16:01.176Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T07:05:50.060Z"
+doc_updated_at: "2026-11-19T07:16:01.176Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -5410,6 +5426,48 @@ sections:
     - Command: npm run test:coverage:writer -- docxexport.theme-fonts.test.ts docxexport.default-tabs.test.ts --maxWorkers=1 --testTimeout=120000 --coverage.include=src/sw/source/core/unocore/SwXTextDefaults.ts --coverage.include=src/sw/source/writerfilter/dmapper/StyleSheetTable.import.ts --coverage.include=src/sw/source/filter/ww8/docxattributeoutput.styles.ts --coverage.thresholds.lines=0 --coverage.thresholds.functions=0 --coverage.thresholds.statements=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=text --coverage.reportsDirectory=coverage/writer-font-defaults-qualified
       Result: tests pass; coverage qualification remains open. Evidence: six instrumented scenarios passed; whole selected files 87.00% statements, 81.06% branches, 100% functions and 89.87% lines. Scope: default service and import/export owners, including pre-existing branches. The run retained the project thresholds untouched and did not qualify these owners at 90%.
     - Remaining native acceptance: the actual NoParent style from tdf108350_noFontdefaults.docx still inherits the current browser graph's Normal style, while upstream has a distinct built-in paragraph root. The regression proves the Times New Roman/10pt pool defaults, not the upstream NoParent style assertion. Paragraph default properties and broader style coverage remain open. This checkpoint is not task closure.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-19T07:15:54.367Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Implementation f506e1c28 resolves the provided DOCX import failure. Actual local browser import and browser-storage reopen pass, along with 64 targeted tests and the static build. Broader DOCX acceptance remains open.
+    Attempts: 118
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T07:05:50.060Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    Implementation commit f506e1c28548 fixes the reported DOCX opening failure. Private user sample was opened only in the local development environment and was excluded from source, fixtures and published evidence.
+
+    - Command: local Writer import diagnostic using the supplied DOCX.
+      Result: reproduced before fix and passed after the factory changes. Evidence: SAX wrapped the first failure in CT_View (1770143); subsequent replays identified CT_TextScale (1770114), Word 2010 text-effect start dispatch and CT_TblPrEx admissions. Scope: actual user input through importOOXML and the real Writer graph.
+    - Command: local Chromium Playwright diagnostic using the supplied DOCX against npm run test:static output, with traces and screenshots off.
+      Result: pass. Evidence: file dialog closed, Writer showed nonempty editable text and browser-save acknowledgement, and the saved copy reopened after a reload. Scope: production browser entry point and primary ODT storage. No private input is recorded in tracked files.
+    - Command: npm run test:writer -- WriterFilter.test.ts OOXMLSettings.test.ts OOXMLFactory.test.ts SettingsTable.test.ts WriterFileDialog.test.tsx --maxWorkers=2 --testTimeout=120000
+      Result: pass. Evidence: 64 tests in 5 files. Scope: synthetic Word settings, width and w14 effects, row exception and table text, preserved body export, Strict and Transitional view properties, known failures and latest-open atomicity.
+    - Commands: python3 scripts/writer-ooxml/generate-factory.py --check; npm run test:static; scoped ESLint/Prettier; npm run check:docs; npm run check:file-size; npm run check:source-provenance; npm run inventory:registry:check; git diff --check.
+      Result: pass. Evidence: generated WML 178 definitions and Word 2010 54 definitions, 4 static script bundles, 5,733 JSDoc paths and zero registry semantic violations. Scope: generated tables, JS build, affected tests and provenance.
+    - Remaining acceptance: wider DOCX import and formatting round-trip acceptance, including unimplemented visual text effects and other drawing and revision contexts, remains open. This commit qualifies the observed import failure and does not close V4DQJW.
 
     BlueprintSnapshotRef:
     - state: current
@@ -9686,6 +9744,48 @@ Implementation checkpoint 21eaef432411. DOCX font and height defaults use Writer
 - Command: npm run test:coverage:writer -- docxexport.theme-fonts.test.ts docxexport.default-tabs.test.ts --maxWorkers=1 --testTimeout=120000 --coverage.include=src/sw/source/core/unocore/SwXTextDefaults.ts --coverage.include=src/sw/source/writerfilter/dmapper/StyleSheetTable.import.ts --coverage.include=src/sw/source/filter/ww8/docxattributeoutput.styles.ts --coverage.thresholds.lines=0 --coverage.thresholds.functions=0 --coverage.thresholds.statements=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=text --coverage.reportsDirectory=coverage/writer-font-defaults-qualified
   Result: tests pass; coverage qualification remains open. Evidence: six instrumented scenarios passed; whole selected files 87.00% statements, 81.06% branches, 100% functions and 89.87% lines. Scope: default service and import/export owners, including pre-existing branches. The run retained the project thresholds untouched and did not qualify these owners at 90%.
 - Remaining native acceptance: the actual NoParent style from tdf108350_noFontdefaults.docx still inherits the current browser graph's Normal style, while upstream has a distinct built-in paragraph root. The regression proves the Times New Roman/10pt pool defaults, not the upstream NoParent style assertion. Paragraph default properties and broader style coverage remain open. This checkpoint is not task closure.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-19T07:15:54.367Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Implementation f506e1c28 resolves the provided DOCX import failure. Actual local browser import and browser-storage reopen pass, along with 64 targeted tests and the static build. Broader DOCX acceptance remains open.
+Attempts: 118
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T07:05:50.060Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+Implementation commit f506e1c28548 fixes the reported DOCX opening failure. Private user sample was opened only in the local development environment and was excluded from source, fixtures and published evidence.
+
+- Command: local Writer import diagnostic using the supplied DOCX.
+  Result: reproduced before fix and passed after the factory changes. Evidence: SAX wrapped the first failure in CT_View (1770143); subsequent replays identified CT_TextScale (1770114), Word 2010 text-effect start dispatch and CT_TblPrEx admissions. Scope: actual user input through importOOXML and the real Writer graph.
+- Command: local Chromium Playwright diagnostic using the supplied DOCX against npm run test:static output, with traces and screenshots off.
+  Result: pass. Evidence: file dialog closed, Writer showed nonempty editable text and browser-save acknowledgement, and the saved copy reopened after a reload. Scope: production browser entry point and primary ODT storage. No private input is recorded in tracked files.
+- Command: npm run test:writer -- WriterFilter.test.ts OOXMLSettings.test.ts OOXMLFactory.test.ts SettingsTable.test.ts WriterFileDialog.test.tsx --maxWorkers=2 --testTimeout=120000
+  Result: pass. Evidence: 64 tests in 5 files. Scope: synthetic Word settings, width and w14 effects, row exception and table text, preserved body export, Strict and Transitional view properties, known failures and latest-open atomicity.
+- Commands: python3 scripts/writer-ooxml/generate-factory.py --check; npm run test:static; scoped ESLint/Prettier; npm run check:docs; npm run check:file-size; npm run check:source-provenance; npm run inventory:registry:check; git diff --check.
+  Result: pass. Evidence: generated WML 178 definitions and Word 2010 54 definitions, 4 static script bundles, 5,733 JSDoc paths and zero registry semantic violations. Scope: generated tables, JS build, affected tests and provenance.
+- Remaining acceptance: wider DOCX import and formatting round-trip acceptance, including unimplemented visual text effects and other drawing and revision contexts, remains open. This commit qualifies the observed import failure and does not close V4DQJW.
 
 BlueprintSnapshotRef:
 - state: current
