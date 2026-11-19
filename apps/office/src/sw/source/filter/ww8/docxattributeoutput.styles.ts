@@ -2,12 +2,15 @@
 import { getTokenFromUtf8 as token } from "../../../../oox/source/token/tokenmap";
 import { SvxTabAdjust } from "../../../../editeng/inc/svxenum";
 import type { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
+import type { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
 import { ParaTabStop } from "./docxattributeoutput.tabs";
 import { FSNS } from "../../../../sax/inc/fshelper";
 import {
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CTL_FONT,
   RES_CHRATR_FONT,
+  RES_CHRATR_FONTSIZE,
+  RES_CHRATR_CTL_FONTSIZE,
   RES_CHRATR_GRABBAG,
   RES_PARATR_TABSTOP,
 } from "../../../inc/hintids";
@@ -50,6 +53,10 @@ function DocDefaults(output: DocxAttributeOutput): void {
     /** Reads represented document-default items in native Which order. @param which - Original WhichId. @returns User default or null. */
     (which) => pool.GetUserDefaultItem(which),
   );
+  for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CTL_FONTSIZE]) {
+    const height = pool.GetUserDefaultItem(which) as SvxFontHeightItem | undefined;
+    if (height && height.GetHeight() !== 200) items.push(height);
+  }
   const hasRunDefaults = items.some(Boolean);
   if (!hasRunDefaults && !explicitTabs) return;
   const serializer = output.GetSerializer();

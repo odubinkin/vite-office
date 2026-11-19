@@ -2,17 +2,26 @@
 import { readFileSync } from "node:fs";
 import { assert, expect, it } from "vitest";
 import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import type { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
 import {
   DocumentArchive,
   DocumentArchiveWriter,
 } from "../../../../package/source/zippackage/document-archive";
-import { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT } from "../../../inc/hintids";
+import {
+  RES_CHRATR_FONT,
+  RES_CHRATR_CJK_FONT,
+  RES_CHRATR_CTL_FONT,
+  RES_CHRATR_FONTSIZE,
+  RES_CHRATR_CTL_FONTSIZE,
+} from "../../../inc/hintids";
 import {
   encodeWriterDocument,
   decodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
 import { effectiveItem, SetPropertyValue, stringAny } from "../../core/unocore/unocrsrhelper";
 import type { SwDoc } from "../../core/doc/doc";
+import { SwXTextDefaults } from "../../core/unocore/SwXTextDefaults";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { importOOXML } from "../../writerfilter/filter/WriterFilter";
 import { readOdtDocument } from "../xml/swxml";
@@ -31,6 +40,72 @@ function runFonts(doc: SwDoc): string[] {
     (which) => (effectiveItem(node, 0, which) as SvxFontItem).GetFamilyName(),
   );
 }
+
+it("applies both LibreOffice tdf108350 font defaults to the document pool", /** Exercises source DOCX, the Worker codec, ODT storage and export. @returns Completion. */ async () => {
+  const root = "../../vendor/libreoffice-reference/sw/qa/extras";
+  const absent = await importOOXML(
+    new Uint8Array(readFileSync(`${root}/ooxmlimport/data/tdf108350.docx`)),
+    {},
+  );
+  const explicit = await importOOXML(
+    new Uint8Array(readFileSync(`${root}/ooxmlexport/data/tdf108350_noFontdefaults.docx`)),
+    {},
+  );
+  let worker: SwDoc | undefined;
+  let reopened: SwDoc | undefined;
+  let persisted: SwDoc | undefined;
+  try {
+    const node = absent.paragraphs[0];
+    assert(node);
+    expect(runFonts(absent)[0]).toBe("Calibri");
+    expect((effectiveItem(node, 0, RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight()).toBe(
+      220,
+    );
+    const defaults = new SwXTextDefaults(absent);
+    const name = unicode("CharHeight");
+    const value = defaults.getPropertyValue(name);
+    try {
+      const points: [number] = [0];
+      expect(value.extract(points, "float")).toBe(true);
+      expect(points[0]).toBe(11);
+    } finally {
+      value.dispose();
+      name.dispose();
+    }
+    expect((explicit.GetDefault(RES_CHRATR_FONT) as SvxFontItem).GetFamilyName()).toBe(
+      "Times New Roman",
+    );
+    expect((explicit.GetDefault(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight()).toBe(200);
+
+    worker = decodeWriterDocument(structuredClone(encodeWriterDocument(absent)));
+    expect((worker.GetDefault(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight()).toBe(220);
+    const bytes = await DocxExport.WriteDocument(worker);
+    const archive = await DocumentArchive.open(bytes);
+    expect(await archive.readTextEntry("word/styles.xml")).toMatch(
+      /<w:rPrDefault><w:rPr>.*<w:sz w:val="22"\/>.*<\/w:rPr><\/w:rPrDefault>/u,
+    );
+    reopened = await importOOXML(bytes, {});
+    expect(runFonts(reopened)[0]).toBe("Calibri");
+    expect((reopened.GetDefault(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight()).toBe(220);
+    persisted = (
+      await readOdtDocument(await writeOdtDocument(worker, { title: "Defaults" }), {
+        title: "Defaults",
+      })
+    ).document;
+    const stored = persisted.paragraphs[0];
+    assert(stored);
+    expect(runFonts(persisted)[0]).toBe("Calibri");
+    expect((effectiveItem(stored, 0, RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight()).toBe(
+      220,
+    );
+  } finally {
+    persisted?.Dispose();
+    reopened?.Dispose();
+    worker?.Dispose();
+    explicit.Dispose();
+    absent.Dispose();
+  }
+});
 
 it("retains the complete pinned font scheme when DOCX is reopened", /** Ports the source Writer font scheme QA. @returns Completion. */ async () => {
   const source = await importOOXML(new Uint8Array(readFileSync(fixturePath)), {});
@@ -64,7 +139,7 @@ it("resolves Strict themed fonts and retains references until a concrete family 
     ],
     [
       "word/styles.xml",
-      `<w:styles ${ns}><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:asciiTheme="minorAscii"/></w:rPr></w:rPrDefault></w:docDefaults></w:styles>`,
+      `<w:styles ${ns}><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:asciiTheme="minorAscii"/><w:sz w:val="25"/><w:szCs w:val="31"/></w:rPr></w:rPrDefault></w:docDefaults></w:styles>`,
     ],
     [
       "word/document.xml",
@@ -97,16 +172,22 @@ it("resolves Strict themed fonts and retains references until a concrete family 
       'w:cstheme="majorBidi"',
     ])
       expect(body).toContain(expected);
-    expect(await archive.readTextEntry("word/styles.xml")).toContain('w:asciiTheme="minorAscii"');
+    const defaults = await archive.readTextEntry("word/styles.xml");
+    expect(defaults).toContain('w:asciiTheme="minorAscii"');
+    expect(defaults).toContain('<w:sz w:val="25"/>');
+    expect(defaults).toContain('<w:szCs w:val="31"/>');
     expect(await archive.readTextEntry("word/settings.xml")).toContain(
       'w:eastAsia="ja-JP" w:bidi="th-TH"',
     );
     reopened = await importOOXML(bytes, {});
     expect(runFonts(reopened)).toEqual(runFonts(source));
+    expect((reopened.GetDefault(RES_CHRATR_CTL_FONTSIZE) as SvxFontHeightItem).GetHeight()).toBe(
+      310,
+    );
     const odtBytes = await writeOdtDocument(source, { title: "Theme fonts" });
     const odt = await DocumentArchive.open(odtBytes);
     expect(await odt.readTextEntry("styles.xml")).toMatch(
-      /<style:default-style style:family="paragraph"><style:text-properties[^>]+style:font-name="Calibri"/u,
+      /<style:default-style style:family="paragraph">(?:<style:paragraph-properties[^>]*\/>)?<style:text-properties[^>]+style:font-name="Calibri"/u,
     );
     persisted = (await readOdtDocument(odtBytes, { title: "Theme fonts" })).document;
     expect(runFonts(persisted)).toEqual(runFonts(source));

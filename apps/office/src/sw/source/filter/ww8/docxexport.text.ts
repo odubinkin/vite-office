@@ -17,6 +17,7 @@ import {
   RES_CHRATR_FONT,
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CTL_FONT,
+  RES_CHRATR_CTL_FONTSIZE,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_LANGUAGE,
   RES_CHRATR_CJK_LANGUAGE,
@@ -88,6 +89,7 @@ export function OutputItem(output: DocxAttributeOutput, item: SfxPoolItem): void
       output.CharColor(item as SvxColorItem);
       break;
     case RES_CHRATR_FONTSIZE:
+    case RES_CHRATR_CTL_FONTSIZE:
       output.CharFontSize(item as SvxFontHeightItem);
       break;
     case RES_CHRATR_LANGUAGE:

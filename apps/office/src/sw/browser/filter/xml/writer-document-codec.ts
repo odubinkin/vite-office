@@ -49,6 +49,9 @@ import {
 } from "../../../inc/poolfmt";
 import {
   RES_CHRATR_FONT,
+  RES_CHRATR_FONTSIZE,
+  RES_CHRATR_CJK_FONTSIZE,
+  RES_CHRATR_CTL_FONTSIZE,
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CTL_FONT,
   RES_PARATR_TABSTOP,
@@ -158,6 +161,15 @@ export interface WriterDocumentRecord {
   readonly textNodes: readonly WriterTextNodeRecord[];
 }
 
+const fontDefaultWhichIds: readonly number[] = [
+  RES_CHRATR_FONT,
+  RES_CHRATR_FONTSIZE,
+  RES_CHRATR_CJK_FONT,
+  RES_CHRATR_CJK_FONTSIZE,
+  RES_CHRATR_CTL_FONT,
+  RES_CHRATR_CTL_FONTSIZE,
+];
+
 /** Encodes the model at the browser boundary. @param document - Canonical graph. @returns Current record. */
 export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, WriterDocumentRecord> {
   const textNodes: WriterTextNodeRecord[] = [];
@@ -172,7 +184,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
   const pageStories = yield* encodePageStories(document, textOwners);
   const textFrames = yield* encodeTextFrames(document, textOwners);
   const fontDefaults: SfxPoolItemSnapshot[] = [];
-  for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT]) {
+  for (const which of fontDefaultWhichIds) {
     const font = document.GetAttrPool().GetUserDefaultItem(which);
     if (font) fontDefaults.push(encodeSfxPoolItem(font));
   }
@@ -360,13 +372,7 @@ export function* decodeWriterDocumentSteps(
     if (record.fontDefaults !== undefined && !Array.isArray(record.fontDefaults))
       throw new Error("Stored Writer font defaults are invalid.");
     for (const font of (record.fontDefaults ?? []) as readonly SfxPoolItemSnapshot[]) {
-      if (
-        !isRecord(font) ||
-        !("value" in font) ||
-        (font.which !== RES_CHRATR_FONT &&
-          font.which !== RES_CHRATR_CJK_FONT &&
-          font.which !== RES_CHRATR_CTL_FONT)
-      )
+      if (!isRecord(font) || !("value" in font) || !fontDefaultWhichIds.includes(font.which))
         throw new Error("Stored Writer font default is invalid.");
       const pool = document.GetAttrPool();
       pool.SetUserDefaultItem(decodeSfxPoolItem(pool, font));

@@ -26,11 +26,12 @@
         "apps/office/e2e/writer-docx-theme.spec.ts",
         "apps/office/src/sw/source/filter/ww8/docxexport.tabs.test.ts"
       ],
-      "justification": "The DOCX attribute writer emits represented paragraph and character style definitions from shared native Word slots, including base and follow style references and direct native item properties. Document defaults, latent and linked styles, imported interoperability metadata and complete style-property output remain open. Writes the native character interoperability item in docDefaults and named styles when present. Serializes the native user default script fonts in DOCX run defaults. Records the effective default tab item during document-default style output and leaves it out of explicit style tabs. Writes custom document-default tabs in pPrDefault and routes ordinary standard tab positions to the settings part.",
+      "justification": "The DOCX attribute writer emits represented paragraph and character style definitions from shared native Word slots, including base and follow style references and direct native item properties. Document defaults, latent and linked styles, imported interoperability metadata and complete style-property output remain open. Writes the native character interoperability item in docDefaults and named styles when present. Serializes the native user default script fonts in DOCX run defaults. Records the effective default tab item during document-default style output and leaves it out of explicit style tabs. Writes custom document-default tabs in pPrDefault and routes ordinary standard tab positions to the settings part. Serializes the represented script font heights from the document default pool and omits the 10 pt implicit default, preserving schema-ordered sz and szCs.",
       "knownViolations": [],
       "localSymbols": [
         "OutputStylesTable",
-        "OutputStyle"
+        "OutputStyle",
+        "DocDefaults"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/filter/ww8/docxattributeoutput.cxx",

@@ -7,7 +7,8 @@
     "localPath": "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.import.ts",
     "localSymbols": [
       "StyleSheetTableImport",
-      "ApplyStyleSheets"
+      "ApplyStyleSheets",
+      "InitOOXMLFontDefaults"
     ],
     "upstreamPath": "sw/source/writerfilter/dmapper/StyleSheetTable.cxx",
     "upstreamSymbols": [
@@ -18,7 +19,8 @@
       "Resolves the paragraph follow style after all named format collections have been inserted into the native style families.",
       "Applies the represented native Word typographic defaults and style values through document item defaults and the ordinary style setter.",
       "Applies represented native document-default Latin, Asian and complex font items and interoperability metadata.",
-      "Resolves paragraph-default tab items through the original default paragraph context and native Writer pool."
+      "Resolves paragraph-default tab items through the original default paragraph context and native Writer pool.",
+      "DomainMapper initializes Calibri 11 pt, and explicit rPrDefault resets the Western family to Times New Roman and applies the original run property vector through UNO text defaults."
     ],
     "omittedResponsibilities": [
       "Table import and full export styles, numbered paragraphs, links, bookmarks, and page fidelity remain open."
@@ -36,6 +38,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.tabs.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.theme-fonts.test.ts",
+          "marker": "applies both LibreOffice tdf108350 font defaults to the document pool"
         }
       ],
       "upstream": [

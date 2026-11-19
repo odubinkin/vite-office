@@ -11,3 +11,5 @@ The current file paths cover text and represented run properties, represented na
 Calc preserves nested row and column outlines and hidden geometry through XLSX and primary ODS, including the Worker transport. The pinned LibreOffice outline fixture checks the four-level geometry and XLSX collapse markers.
 
 Calc preserves inline named arrays and evaluates them as arguments to SUM, SUMSQ, PRODUCT and AVERAGE. The pinned named-range workbook exercises the imported matrix through the Worker, primary ODS and XLSX export and reopen.
+
+Writer initializes DOCX without run defaults to Calibri 11 pt. An explicit run-default section starts with Times New Roman 10 pt before applying its properties. The Worker preserves the script font sizes from the document pool, DOCX writes the represented Western and complex-script sizes, and ODT preserves the effective font sizes. Parentless Word styles still need the distinct Writer paragraph-root owner so they can inherit document defaults independently of Normal.

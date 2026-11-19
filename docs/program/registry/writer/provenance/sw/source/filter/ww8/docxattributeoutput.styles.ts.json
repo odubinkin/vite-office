@@ -7,7 +7,8 @@
     "localPath": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.styles.ts",
     "localSymbols": [
       "OutputStylesTable",
-      "OutputStyle"
+      "OutputStyle",
+      "DocDefaults"
     ],
     "upstreamPath": "sw/source/filter/ww8/docxattributeoutput.cxx",
     "upstreamSymbols": [
@@ -20,7 +21,8 @@
       "Writes the native character interoperability item in docDefaults and named styles when present.",
       "Serializes the native user default script fonts in DOCX run defaults.",
       "Records the effective default tab item during document-default style output and leaves it out of explicit style tabs.",
-      "Writes custom document-default tabs in pPrDefault and routes ordinary standard tab positions to the settings part."
+      "Writes custom document-default tabs in pPrDefault and routes ordinary standard tab positions to the settings part.",
+      "Serializes the represented script font heights from the document default pool and omits the 10 pt implicit default, preserving schema-ordered sz and szCs."
     ],
     "omittedResponsibilities": [
       "Document defaults, latent and linked styles, imported interoperability metadata and complete style-property output remain open."
@@ -42,6 +44,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.tabs.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.theme-fonts.test.ts",
+          "marker": "applies both LibreOffice tdf108350 font defaults to the document pool"
         }
       ],
       "upstream": [

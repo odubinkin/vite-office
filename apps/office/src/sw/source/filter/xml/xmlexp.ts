@@ -359,16 +359,18 @@ function exportDefaultParagraphStyle(
   fonts: ReturnType<typeof createWriterFontAutoStylePool>,
 ): string {
   const pool = document.GetAttrPool();
-  const set = new SfxItemSet(pool, [
-    [RES_CHRATR_FONT, RES_CHRATR_FONT],
-    [RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONT],
-    [RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONT],
-  ]);
+  const ranges = [
+    [RES_CHRATR_FONT, RES_CHRATR_FONTSIZE],
+    [RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONTSIZE],
+    [RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONTSIZE],
+  ] as const;
+  const set = new SfxItemSet(pool, ranges);
   try {
-    for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT]) {
-      const item = pool.GetUserDefaultItem(which);
-      if (item) set.Put(item);
-    }
+    for (const range of ranges)
+      for (const which of range) {
+        const item = pool.GetUserDefaultItem(which);
+        if (item) set.Put(item);
+      }
     const properties = getCharacterProperties(set, false);
     const tabs = pool.GetUserDefaultItem(RES_PARATR_TABSTOP) as SvxTabStopItem | undefined;
     const distance = tabs?.Count() ? tabs.At(0).GetTabPos() : undefined;

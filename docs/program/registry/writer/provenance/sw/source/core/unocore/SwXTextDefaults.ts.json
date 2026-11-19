@@ -9,7 +9,8 @@
     "localSymbols": [
       "SwXTextDefaults",
       "getPropertyValue",
-      "setPropertyValue"
+      "setPropertyValue",
+      "getPropertyEntry"
     ],
     "upstreamSymbols": [
       "SwXTextDefaults",
@@ -17,7 +18,8 @@
       "SwXTextDefaults::setPropertyValue"
     ],
     "preservedResponsibilities": [
-      "Reads and writes the consumed TabStopDistance member through the original text-default property schema and a cloned native pool item. Preserves the upstream PutValue result handling."
+      "Reads and writes the consumed TabStopDistance member through the original text-default property schema and a cloned native pool item. Preserves the upstream PutValue result handling.",
+      "Applies admitted character defaults through the original UNO property map and the live SwDoc pool, with the original clone and PutValue dispatch."
     ],
     "omittedResponsibilities": [
       "Only the native tab-distance member is consumed. Other properties, UNO listener hooks, XPropertyState and full service metadata remain open."
@@ -31,6 +33,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.default-tabs.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.theme-fonts.test.ts",
+          "marker": "applies both LibreOffice tdf108350 font defaults to the document pool"
         }
       ],
       "upstream": [

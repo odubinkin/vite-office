@@ -43,7 +43,7 @@ import {
   cppu_detail_getUnoType_Locale as localeType,
 } from "../../../../udkapi/com/sun/star/lang/Locale";
 import { CellColorHandler } from "./CellColorHandler";
-import { StyleSheetTableImport } from "./StyleSheetTable.import";
+import { InitOOXMLFontDefaults, StyleSheetTableImport } from "./StyleSheetTable.import";
 import { DomainMapperTableRanges } from "./DomainMapperTableManager.ranges";
 import { ApplyFrameAttribute } from "./DomainMapper.frame";
 import { resolveTextEffect } from "./TextEffectsHandler";
@@ -70,6 +70,7 @@ export class DomainMapper implements Properties, Stream {
   ) {
     this.impl = new DomainMapper_Impl(this, model, documentType, !insertMode);
     this.tableRanges = new DomainMapperTableRanges(model.getText(), this.impl);
+    if (documentType === SourceDocumentType.OOXML) InitOOXMLFontDefaults(model);
     if (!insertMode) {
       const settings = model.createDocumentSettings();
       for (const [property, flag] of [
@@ -967,25 +968,22 @@ export class DomainMapper implements Properties, Stream {
         );
         break;
       }
-      case N.LN_EG_RPrBase_lang:
-      case N.LN_EG_RPrBase_rFonts:
-      case N.LN_EG_RPrBase_u:
-      case N.LN_CT_PPrBase_ind:
-        resolveReturnedReference(modifier.getProps(), this);
-        break;
       case N.LN_CT_PPrBase_spacing:
         this.impl.StartLineSpacing();
         resolveReturnedReference(modifier.getProps(), this);
         this.impl.FinishLineSpacing();
         break;
+      case N.LN_EG_RPrBase_lang:
+      case N.LN_EG_RPrBase_rFonts:
+      case N.LN_EG_RPrBase_u:
+      case N.LN_CT_PPrBase_ind:
       case N.LN_CT_PPrDefault_pPr:
       case N.LN_CT_RPrDefault_rPr:
       case N.LN_CT_Style_rPr:
       case N.LN_CT_Style_pPr:
-      case N.LN_CT_PPr_rPr: {
+      case N.LN_CT_PPr_rPr:
         resolveReturnedReference(modifier.getProps(), this);
         break;
-      }
     }
   }
 }

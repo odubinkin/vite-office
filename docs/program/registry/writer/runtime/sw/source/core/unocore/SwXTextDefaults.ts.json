@@ -18,12 +18,14 @@
       "evidence": [
         "apps/office/src/sw/source/core/unocore/SwXTextDefaults.ts",
         "apps/office/src/sw/source/filter/ww8/docxexport.default-tabs.test.ts",
-        "apps/office/e2e/writer-docx-theme.spec.ts"
+        "apps/office/e2e/writer-docx-theme.spec.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.theme-fonts.test.ts"
       ],
-      "justification": "Reads and writes the consumed TabStopDistance member through the original text-default property schema and a cloned native pool item. Preserves the upstream PutValue result handling.",
+      "justification": "Reads and writes the consumed TabStopDistance member through the original text-default property schema and a cloned native pool item. Preserves the upstream PutValue result handling. Applies admitted character defaults through the original UNO property map and the live SwDoc pool, with the original clone and PutValue dispatch.",
       "knownViolations": [],
       "localSymbols": [
-        "SwXTextDefaults"
+        "SwXTextDefaults",
+        "getPropertyEntry"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sw/source/core/unocore/SwXTextDefaults.cxx",

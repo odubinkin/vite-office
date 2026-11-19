@@ -1,22 +1,18 @@
 /** @fileoverview Stylesheet resource entries and application through actual Writer UNO style families. */
 import { SwUnoPropertyMap } from "../../core/unocore/unomap";
-import {
-  RES_CHRATR_CJK_FONT,
-  RES_CHRATR_CTL_FONT,
-  RES_CHRATR_FONT,
-  RES_CHRATR_GRABBAG,
-  RES_PARATR_TABSTOP,
-} from "../../../inc/hintids";
-import { SfxGrabBagItem } from "../../../../svl/inc/grabbagitem";
+import { RES_PARATR_TABSTOP } from "../../../inc/hintids";
 import { putItem, stringAny } from "../../core/unocore/unocrsrhelper";
 import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SwXStyle, SwXStyleFamily } from "../../core/unocore/unostyle";
 import type { Properties, Reference, Sprm, Table, Value, Id } from "../inc/dmapper/resourcemodel";
 import { resolveReturnedReference } from "../inc/dmapper/resourcemodel";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import type { DomainMapper } from "./DomainMapper";
+import type { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 import { ContextType } from "./DomainMapper_Impl";
+import { getPropertyName, PropertyIds as P } from "./PropertyIds";
 import { StyleSheetEntry, StyleType } from "./StyleSheetTable";
 import { TblStylePrHandler } from "./TblStylePrHandler";
 
@@ -26,6 +22,23 @@ const styleTypes = new Map<number, StyleType>([
   [N.LN_Value_ST_StyleType_table, StyleType.Table],
   [N.LN_Value_ST_StyleType_numbering, StyleType.List],
 ]);
+
+/** Initializes the original DomainMapper fallback for DOCX without font settings. @param model - Destination document. @returns Nothing. */
+export function InitOOXMLFontDefaults(model: SwXTextDocument): void {
+  const defaults = model.createTextDefaults();
+  const font = stringAny("Calibri");
+  const height = new Any([11], "double");
+  try {
+    defaults.setPropertyValue(getPropertyName(P.PROP_CHAR_FONT_NAME), font);
+    defaults.setPropertyValue(getPropertyName(P.PROP_CHAR_HEIGHT), height);
+  } catch (error) {
+    if (!(error instanceof Exception)) throw error;
+    error.dispose();
+  } finally {
+    height.dispose();
+    font.dispose();
+  }
+}
 
 /** Borrows and converts a resource string. @param value - Source value. @returns Host UTF16. */
 function styleString(value: Value): string {
@@ -145,7 +158,7 @@ export class StyleSheetTableImport implements Table, Properties {
     }
   }
 
-  /** Resolves the original run defaults and applies the represented interoperability property to the document pool. @param modifier - Default run resource. @returns Nothing. */
+  /** Resolves the original run defaults and applies them through the native UNO text defaults. @param modifier - Default run resource. @returns Nothing. */
   private applyCharacterDefaults(modifier: Sprm): void {
     const impl = this.mapper.impl;
     const properties = impl.GetStyleSheetTable().GetDefaultCharProps();
@@ -157,21 +170,27 @@ export class StyleSheetTableImport implements Table, Properties {
       impl.PopProperties(ContextType.CONTEXT_STYLESHEET);
       impl.SetDocDefaultsImport(false);
     }
-    const doc = this.mapper.model.GetDoc();
-    for (const property of properties.GetPropertyValues()) {
-      const entry = SwUnoPropertyMap.get(text(property.Name));
-      if (!entry) continue;
-      const which = entry.which;
-      if (which === RES_CHRATR_GRABBAG) {
-        const item = new SfxGrabBagItem(which);
-        if (item.PutValue(property.Value)) doc.SetDefault(item);
-      } else if (
-        which === RES_CHRATR_FONT ||
-        which === RES_CHRATR_CJK_FONT ||
-        which === RES_CHRATR_CTL_FONT
-      ) {
-        doc.SetDefault(putItem(doc.GetDefault(which), entry, property.Value));
+    const defaults = this.mapper.model.createTextDefaults();
+    try {
+      if (this.mapper.IsOOXMLImport()) {
+        const font = stringAny("Times New Roman");
+        try {
+          defaults.setPropertyValue(getPropertyName(P.PROP_CHAR_FONT_NAME), font);
+        } finally {
+          font.dispose();
+        }
       }
+      for (const property of properties.GetPropertyValues()) {
+        try {
+          defaults.setPropertyValue(property.Name, property.Value);
+        } catch (error) {
+          if (!(error instanceof Exception)) throw error;
+          error.dispose();
+        }
+      }
+    } catch (error) {
+      if (!(error instanceof Exception)) throw error;
+      error.dispose();
     }
   }
 
