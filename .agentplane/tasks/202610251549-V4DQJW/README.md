@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 365
+revision: 368
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T03:42:10.099Z"
+  updated_at: "2026-11-19T03:56:06.093Z"
   updated_by: "CODER"
-  note: "Verified native DOCX nested-table sections, first-block ownership through Worker/ODT, and the pinned three-table Chromium round-trip. 106 targeted tests and 11 Chromium cases passed, with the nested case replayed on the final production build. Mapper coverage, broader related failures, and complete NumberedList footer/table-style parity remain open. Evidence: evidence/native-docx-nested-tables.json."
-  attempts: 108
+  note: "Native header/footer frame formats, owning page items, default styles, sharing and SwXHeadFootText verified by 85 Writer tests and two browser file regressions. Both selected owners pass scoped90. DOCX substreams, persistence and output still required. Evidence: evidence/native-header-footer-model.json."
+  attempts: 109
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1736,8 +1739,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T03:56:06.093Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native header/footer frame formats, owning page items, default styles, sharing and SwXHeadFootText verified by 85 Writer tests and two browser file regressions. Both selected owners pass scoped90. DOCX substreams, persistence and output still required. Evidence: evidence/native-header-footer-model.json."
+  -
+    type: "status"
+    at: "2026-11-19T03:56:14.201Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T03:42:19.889Z"
+doc_updated_at: "2026-11-19T03:56:14.201Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -4990,6 +5006,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-19T03:56:06.093Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native header/footer frame formats, owning page items, default styles, sharing and SwXHeadFootText verified by 85 Writer tests and two browser file regressions. Both selected owners pass scoped90. DOCX substreams, persistence and output still required. Evidence: evidence/native-header-footer-model.json.
+    Attempts: 109
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T03:56:05.493Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -5652,6 +5698,14 @@ sections:
 
     - The full NumberedList package still needs native footer support. The body-only fixture preserves its two nested tables, two style references and raw grid. Upstream's width rounding and inherited table indents remain unverified.
     - Broader related tests exposed the recorded Strict themed-font ODT assertion, erased UNO exception-member equality failure and RTF locale bootstrap failure. No full suite was due.
+
+    ### Native Writer running headers and footers
+
+    - Command: Focused Writer Vitest and final production Chromium commands are recorded in evidence/native-header-footer-model.json.
+    - Result: 85 Writer tests in 10 files and 2 Chromium file-dialog regressions passed. Both selected executable owners pass scoped90 per file. TypeScript, lint, Prettier, build, JSDoc, source gates, registry invariants and parity also passed.
+    - Evidence: The native page-frame items use real section nodes, style defaults and format registration. Tests verify inactive defaults, print-width tab positions, section sharing, last-client reset, notification retention and access through the weak UNO identity.
+    - Scope: Header/footer items and lifecycle, descriptor flags, native format creation, UNO text and existing DOCX style and table regressions.
+    - The complete NumberedList footer still requires the native page-style property, section relationship, persistence and output paths. No full test run was due.
 id_source: "generated"
 ---
 ## Summary
@@ -8915,6 +8969,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-19T03:56:06.093Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native header/footer frame formats, owning page items, default styles, sharing and SwXHeadFootText verified by 85 Writer tests and two browser file regressions. Both selected owners pass scoped90. DOCX substreams, persistence and output still required. Evidence: evidence/native-header-footer-model.json.
+Attempts: 109
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T03:56:05.493Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -9582,3 +9666,11 @@ Evidence: `evidence/docx-native-ranged-bookmarks.json`.
 
 - The full NumberedList package still needs native footer support. The body-only fixture preserves its two nested tables, two style references and raw grid. Upstream's width rounding and inherited table indents remain unverified.
 - Broader related tests exposed the recorded Strict themed-font ODT assertion, erased UNO exception-member equality failure and RTF locale bootstrap failure. No full suite was due.
+
+### Native Writer running headers and footers
+
+- Command: Focused Writer Vitest and final production Chromium commands are recorded in evidence/native-header-footer-model.json.
+- Result: 85 Writer tests in 10 files and 2 Chromium file-dialog regressions passed. Both selected executable owners pass scoped90 per file. TypeScript, lint, Prettier, build, JSDoc, source gates, registry invariants and parity also passed.
+- Evidence: The native page-frame items use real section nodes, style defaults and format registration. Tests verify inactive defaults, print-width tab positions, section sharing, last-client reset, notification retention and access through the weak UNO identity.
+- Scope: Header/footer items and lifecycle, descriptor flags, native format creation, UNO text and existing DOCX style and table regressions.
+- The complete NumberedList footer still requires the native page-style property, section relationship, persistence and output paths. No full test run was due.

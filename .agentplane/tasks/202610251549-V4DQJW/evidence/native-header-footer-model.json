@@ -1,0 +1,259 @@
+{
+  "task": "202610251549-V4DQJW",
+  "checkpoint": "Writer page header/footer model and native section owner",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sw/inc/fmthdft.hxx#SwFormatHeader",
+    "sw/inc/fmthdft.hxx#SwFormatFooter",
+    "sw/source/core/layout/atrfrm.cxx#lcl_DelHFFormat",
+    "sw/source/core/layout/atrfrm.cxx#SwFrameFormat::SwClientNotify",
+    "sw/source/core/doc/DocumentLayoutManager.cxx#MakeLayoutFormat",
+    "sw/source/core/doc/DocumentStylePoolManager.cxx#COLL_HEADERFOOTER",
+    "sw/source/core/unocore/unotext.cxx#CreateXHeadFootText",
+    "sw/inc/pagedesc.hxx#IsHeaderShared"
+  ],
+  "results": {
+    "writer": {
+      "files": 10,
+      "tests": 85
+    },
+    "chromium": 2,
+    "coverage": {
+      "apps/office/src/sw/inc/fmthdft.ts": {
+        "lines": {
+          "total": 38,
+          "covered": 38,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 42,
+          "covered": 42,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 22,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 95.45
+        }
+      },
+      "apps/office/src/sw/source/core/doc/DocumentLayoutManager.ts": {
+        "lines": {
+          "total": 19,
+          "covered": 19,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 6,
+          "covered": 6,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 22,
+          "covered": 22,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 12,
+          "covered": 12,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    }
+  },
+  "commands": [
+    "vitest run --config vitest.writer.config.ts --coverage fmthdft.native fmtcntnt.native pagedesc native-format-attribute-notify native-section-deletion native-global-absolute-correction native-text-import-api docxexport.numbered-list --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sw/inc/fmthdft.ts --coverage.include=src/sw/source/core/doc/DocumentLayoutManager.ts --coverage.reportsDirectory=coverage/header-footer-final-scoped --coverage.reporter=json-summary --coverage.reporter=json --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+    "npm run test:static",
+    "./node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1 -g 'downloads and reopens nested DOCX tables|downloads and reopens the named styles'",
+    "npm run typecheck",
+    "npm run check:dependencies",
+    "npm run check:docs",
+    "npm run check:file-size",
+    "npm run check:source-tree",
+    "npm run check:writer-hintids",
+    "npm run check:writer-resources",
+    "npm run inventory:registry:build",
+    "npm run check:source-provenance",
+    "npm run inventory:invariants",
+    "npm run inventory:parity",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor",
+    "git diff --check (changed Writer paths)"
+  ],
+  "verified": [
+    "Native WhichIds 106 and 107 resolve through inactive static pool defaults and typed getters.",
+    "Activation creates independent frame format owners and real header/footer text sections under the native autotext sentinel.",
+    "The native left/right header pool ancestry, line counting, right alignment and two print-width-dependent tab stops were tested on real style items.",
+    "Page copies share the registered section. Reset retains it during notification delivery, then removes it when the last registration releases it.",
+    "The weak frame UNO identity returns one live SwXHeadFootText. Its text stays outside the body. A retained wrapper rejects operations after frame destruction.",
+    "Final production Chromium replays the existing DOCX style and nested-table file paths. Both registry checks report zero semantic violations."
+  ],
+  "remaining": [
+    "Page-style UNO properties, DOCX relationship substreams and section inheritance, Worker and ODT persistence, DOCX export and UI presentation are still open.",
+    "Opening the original NumberedList.docx still requires the native footer relationship path.",
+    "Desktop cursor-shell parking and page header/footer layout frames are outside the represented browser core. Existing section deletion corrects registered document positions.",
+    "Overall DOCX and XLSX acceptance is open. No whole-suite run was due."
+  ],
+  "files": [
+    {
+      "path": "apps/office/src/sw/inc/calbck.ts",
+      "sha256": "50eac6d11d1325daa17ddf5f1ece87071d398e2721cc7e441e1b1e275172a145"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/inc/calbck.ts.json",
+      "sha256": "78a498e3c8e207d87c810b901bf5834d41cc8b9278543714cb2f283965ea9840"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/inc/calbck.ts.json",
+      "sha256": "413aaa112d509eecc0ec057c5988ecbedec581226967f81d4e2c4ecc9e62c555"
+    },
+    {
+      "path": "apps/office/src/sw/inc/fmthdft.ts",
+      "sha256": "92c4c3125934270416b1a7fb4d5a437cce5aa3783d1c24229b4dca83af03e788"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/inc/fmthdft.ts.json",
+      "sha256": "9b73e2d62f1eef3bd0332dcc9c9c0d66379c574413cda7433b4c42bf8d6a3750"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/inc/fmthdft.ts.json",
+      "sha256": "74041019d5d55595db2ce98f6f7243e64fc025fb91c88ca36c3f4ac7243b6f2d"
+    },
+    {
+      "path": "apps/office/src/sw/inc/hintids.ts",
+      "sha256": "aa306f0d2a4fe043c4c67ee94b933d2f7bd4668aef4d76a373ea9cec42d98e54"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/inc/hintids.ts.json",
+      "sha256": "d2a1e315f094c2552863a7b468dd863a2ced72d4bac2a1de035efa635a45e5d2"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/inc/hintids.ts.json",
+      "sha256": "9eb5a97239b8329633b629dcb2937a0ca35de6d50e23d07618555b26928f3237"
+    },
+    {
+      "path": "apps/office/src/sw/inc/poolfmt.ts",
+      "sha256": "6cbc15e6349b07fe100868368a7e260b98a466b8d3c1ea79b1109b88269ca75c"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/inc/poolfmt.ts.json",
+      "sha256": "1c9dae0553f67f033b198e26316a76ce00ba2dbffd96b2b57bffb1cc54c81d73"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/inc/poolfmt.ts.json",
+      "sha256": "9525d5dbe64127dcb6ab7f6b4915b5fd504189a24da87093f0785d1f9bbd7640"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/format.ts",
+      "sha256": "bf7d465d7c471c71c3b6776472a947130fb4c9025993976fc20e1536ca1afd59"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/attr/format.ts.json",
+      "sha256": "41b294b1dbe46597440b30ef62a51867ff5406d29045314e0590f5b75d32f6e5"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/attr/format.ts.json",
+      "sha256": "8cf33a73dd8044c1bd5d3dc414fca0f4f680440ec1d1dc82b8422e953d8b77e4"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+      "sha256": "217cf808358559d45dac2f8f89f2b6f922d40d7c901ef73f454a0534127baea3"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/attr/swatrset.ts.json",
+      "sha256": "816bc8a75677a6c4134c47391f6bc003aae3e1d2eff4e2fb6ce4a6a359f6bf04"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/attr/swatrset.ts.json",
+      "sha256": "9380fe3449bd6a11986e665c3f09a042683107811f1bef0308669f2f2430b689"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/bastyp/init.ts",
+      "sha256": "999af105cb0667215eddc5bd2cccc6f9e5a34442e52f1ac71b1cb9c727c35e69"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/bastyp/init.ts.json",
+      "sha256": "c53dd02b47f0f5421f12da35c9ddfad77439261a91b535f9398a37e30e5c10a3"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/bastyp/init.ts.json",
+      "sha256": "1d92a63ba79570c4079ba7c4fab782595771f461d355d73b432426296a66434c"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/DocumentLayoutManager.ts",
+      "sha256": "31ccb90dfe3a3aa1207201626f16d6c6d3f8889bbd083d5d2ff600f29ef94661"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/doc/DocumentLayoutManager.ts.json",
+      "sha256": "1760fc7bfebc78b981ae9e9766cae82f626850608b0218f0776f7d703ff75178"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/doc/DocumentLayoutManager.ts.json",
+      "sha256": "afcb8c275433ec6b826cf7c746a5f2839d7c83b15d3ee106e893fd4e8e37dbb4"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts",
+      "sha256": "05db73447410d5d9b3ea28d8cda21c68f75cda361f7f419811b91b24d2e68327"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/doc/poolfmt-defaults.ts.json",
+      "sha256": "010cdfb3663bf1b80236c13e979998e37dce8da58358ff8e5e417575f4ef838b"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/doc/poolfmt-defaults.ts.json",
+      "sha256": "499d63efc0c5533402a0d4c0992dc17c3500ddf2a80de11d104e289c00707921"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/atrfrm.ts",
+      "sha256": "60fc8232f0155800f92c8cf58a98188377f7f6894c20dcd85cc758c513c9b69a"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/layout/atrfrm.ts.json",
+      "sha256": "0f5373c06ca01626193d8d8fcab4eb5f85f50620775520cf8b325c0af522fb82"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/layout/atrfrm.ts.json",
+      "sha256": "66120ee9dac65c53015f2e95b92e3b0b1757c08e86618b9d87e5bdedfd479fe9"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/layout/pagedesc.ts",
+      "sha256": "aae6f4045634dd14e6de68809f03e7b2fe9cb4ea4ed53eb1501f4e1a59ef27f0"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/layout/pagedesc.ts.json",
+      "sha256": "976fe68c15af00e3756b0b90edb747931483111f9de051ade4223b6c01bfb767"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/layout/pagedesc.ts.json",
+      "sha256": "0ca97cac0e05e16ff0904430db03d4580ba3818de051d3bf74e18e9fae32da3b"
+    },
+    {
+      "path": "apps/office/src/sw/source/core/unocore/unotext.ts",
+      "sha256": "83cf78b9caecdd67d6cacc47044076186031e99f76975a8e277b7bddc6f3bb37"
+    },
+    {
+      "path": "docs/program/registry/writer/provenance/sw/source/core/unocore/unotext.ts.json",
+      "sha256": "c121e965f1d083018f3d5d9598298db06ee57f16a96817a5360ea11d70732ed2"
+    },
+    {
+      "path": "docs/program/registry/writer/runtime/sw/source/core/unocore/unotext.ts.json",
+      "sha256": "9e25843a1628a43f18b946bfa8dbed4007f2c31f2ff0f07d0907b127e3185fa6"
+    },
+    {
+      "path": "apps/office/src/sw/inc/fmthdft.native.test.ts",
+      "sha256": "d87d3a43c7755ef019b8efcbd034859c4110b08e51c7234e2f6aeff3ea8fbbd2"
+    }
+  ]
+}
