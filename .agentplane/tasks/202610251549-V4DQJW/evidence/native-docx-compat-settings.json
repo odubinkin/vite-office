@@ -1,0 +1,150 @@
+{
+  "checkpoint": "Writer native compatibility settings across DOCX, UNO, Worker and ODT",
+  "createdAt": "2026-11-19T01:16:56.667Z",
+  "task": "202610251549-V4DQJW",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "upstream": [
+    "sw/source/writerfilter/dmapper/SettingsTable.cxx#GetCompatSettings",
+    "sw/source/writerfilter/dmapper/SettingsTable.cxx#GetWordCompatibilityMode",
+    "sw/source/writerfilter/dmapper/DomainMapper.cxx#CompatSettings",
+    "sfx2/source/doc/sfxbasemodel.cxx#getGrabBagItem",
+    "sw/source/uibase/uno/unotxdoc.cxx#WID_DOC_INTEROP_GRAB_BAG",
+    "sw/source/filter/ww8/docxexport.cxx#DocxExport::getWordCompatibilityMode",
+    "sw/source/filter/ww8/docxexport.cxx#WriteCompat",
+    "filter/source/config/fragments/filters/OOXML_Text.xcu#FileFormatVersion",
+    "sw/qa/extras/ooxmlexport/ooxmlw14export.cxx#Test_CompatSettingsForW14"
+  ],
+  "results": {
+    "writer": {
+      "files": 10,
+      "tests": 95
+    },
+    "chromium": 8,
+    "coverageThreshold": 90,
+    "coverage": {
+      "lines": {
+        "total": 108,
+        "covered": 108,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 121,
+        "covered": 120,
+        "skipped": 0,
+        "pct": 99.17
+      },
+      "functions": {
+        "total": 10,
+        "covered": 10,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 58,
+        "covered": 57,
+        "skipped": 0,
+        "pct": 98.27
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "coveredOwners": {
+      "apps/office/src/sw/source/filter/ww8/docxexport.settings.ts": {
+        "lines": {
+          "total": 25,
+          "covered": 25,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2,
+          "covered": 2,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 28,
+          "covered": 28,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 36,
+          "covered": 36,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "apps/office/src/sw/source/writerfilter/dmapper/SettingsTable.compat.ts": {
+        "lines": {
+          "total": 83,
+          "covered": 83,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 8,
+          "covered": 8,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 93,
+          "covered": 92,
+          "skipped": 0,
+          "pct": 98.92
+        },
+        "branches": {
+          "total": 22,
+          "covered": 21,
+          "skipped": 0,
+          "pct": 95.45
+        }
+      }
+    }
+  },
+  "observations": [
+    "The five exact compatibility rows from the unchanged upstream typography DOCX are verified through model storage, Worker clone, original XML and reopened DOCX. Chromium also verifies the actual download and mobile reopen.",
+    "Input defaults to mode 12. The current Office Open XML Text filter defaults to mode 15. Repeated modes use the greatest recognized input and source export restrictions handle Word 2007, unknown modes and disabled external leading.",
+    "WRITER-654 and WRITER-655 document original attribute-slot reuse and normalization for a foreign URI.",
+    "The three represented document settings survive native ODT, while the ordered Word interoperability rows remain managed by the DOCX and Worker contracts.",
+    "The richer document compatibility settings beyond the represented Writer flags remain open."
+  ],
+  "files": {
+    "apps/office/src/sw/inc/unomap.ts": "18a6851cff3e1fddfec884f7e7c8dd0b887f12bf68f995249941f70a9b567bc0",
+    "apps/office/src/sw/source/core/unocore/unomap.ts": "7f59e5d8fc6c5d1d99c95b52390eeab53ade0e6869ca3f14e71f8d7af2be04f2",
+    "apps/office/src/sw/source/core/doc/doc.ts": "e89fc804c39da3c97d14da3c77beb92d870552048de34d8d3cf0a1db1f365702",
+    "apps/office/src/sw/source/uibase/uno/unotxdoc.ts": "f355e7a47c812d74b2e9c0228906ddc667067844f25fa7dd39acae2505ba37b0",
+    "apps/office/src/sw/source/writerfilter/dmapper/SettingsTable.ts": "781e5c53f932798a490a573a13c04c1805c053da09d90219350db1b22c6defff",
+    "apps/office/src/sw/source/writerfilter/dmapper/SettingsTable.compat.ts": "ef592dbf718d3d4cddb0fb45f1615a8f891ffef368f4abf62a2d2355e226be1c",
+    "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.ts": "fc4426b56f3e85af838d4adf721b865172230922095a9f46141165599c32e42b",
+    "apps/office/src/sw/source/filter/ww8/docxexport.ts": "cd0834614c1fa1a5e44e4afbcd0c14ee225b1f1c0cb7cbf78e60f12ed01ab7b7",
+    "apps/office/src/sw/source/filter/ww8/docxexport.settings.ts": "5cd265a248aa145692f391603c4502a0252b9de4a2b4d022a23412c3bb2bf0b3",
+    "apps/office/src/sw/source/filter/ww8/docxexport.compat.test.ts": "b7c6e19c7851e363d62492ae9f394129a71a6a4f1788d2e4442fadb84d200b5a",
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": "f41abbed345480214ffb0e06048145085008d54cdace1c777d7e5c944dc16d79",
+    "apps/office/e2e/writer-docx-theme.spec.ts": "a9e5ac34c03829114e905fbcabf1f5c842df539db72e650e094b32f30dfed9e0",
+    "apps/office/src/sw/source/uibase/uno/SwXDocumentSettings.ts": "f25ba02be781ad587820a9d316c3d0a8d429f093da1e051b157e1ef0558beea1",
+    "docs/program/writer-upstream-suspected-issues.md": "8796c3e978d44e39bb973c66cd9aef8c4fb62f2f9d98021ab2b5fba979f1dd29"
+  },
+  "fixtures": {
+    "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/TextEffects_StylisticSets_CntxtAlts.docx": "ace3872887257a45832db52a61d448bbf221343717a5b56e97a40b0769dffa1f"
+  },
+  "logs": {
+    "apps/office/coverage/compat-coverage.log": "cfef9a15ee3f4641f00f753a40a392e8eceef10f1e27767bb475b52a76467624",
+    "apps/office/coverage/compat-coverage-first.log": "3d40bad19dd991b165d47648c0f707321b1583b86ffb27c01a897e0c9b96b962",
+    "apps/office/coverage/compat-fixture.log": "7c7fec8a6b092646907938090f1303121ab08e6363ce19651c88ca0fb45018ac",
+    "apps/office/coverage/compat-types.log": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed",
+    "apps/office/coverage/compat-static.log": "e516c2f1735d8bbb8c4e83725e307bb92b8b2c5d869b46527f9a0a4205f7b2e1",
+    "apps/office/coverage/compat-browser.log": "b5d4783d2fcd4d9d2881826e23ca761a8fd1d11041222c782df990f831490881",
+    "apps/office/coverage/compat-structure.log": "f5ec24efaf38dc1d87efa9625e95779a3508b6d9d308bccae0aa9c819b8ff542",
+    "apps/office/coverage/compat-registry.log": "080165189ae2c8b9c6c912faedaa4f8fe84b028780cf0d6728b11624a6ed90cc",
+    "apps/office/coverage/compat-resources.log": "e1e95ba0c014ec77b3187f2755a92fa669b9a1d93dae6012e12431beade11b0e",
+    "apps/office/coverage/compat-lint.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "apps/office/coverage/compat-scoped/coverage-summary.json": "34ca6866ceeba381527dae45aa3ae2d55ab02a097b20f5d3ce0b1b50ce75bb50"
+  }
+}

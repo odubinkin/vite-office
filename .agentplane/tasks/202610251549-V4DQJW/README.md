@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 353
+revision: 356
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T01:03:12.328Z"
+  updated_at: "2026-11-19T01:16:57.495Z"
   updated_by: "CODER"
-  note: "Original Writer stylistic-set and contextual-alternate fixtures pass typed model, Worker, archive and Chromium checks. The umbrella task remains active for document settings and remaining filter paths."
-  attempts: 104
+  note: "Native DOCX compatibility settings pass pinned fixture, UNO model, ODT, Worker, archive and browser checks. The umbrella scope remains active for remaining DOCX layout and filter paths."
+  attempts: 105
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1672,8 +1675,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T01:16:57.495Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native DOCX compatibility settings pass pinned fixture, UNO model, ODT, Worker, archive and browser checks. The umbrella scope remains active for remaining DOCX layout and filter paths."
+  -
+    type: "status"
+    at: "2026-11-19T01:17:04.532Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T01:03:19.829Z"
+doc_updated_at: "2026-11-19T01:17:04.532Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -4806,6 +4822,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-19T01:16:57.495Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native DOCX compatibility settings pass pinned fixture, UNO model, ODT, Worker, archive and browser checks. The umbrella scope remains active for remaining DOCX layout and filter paths.
+    Attempts: 105
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T01:16:56.927Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Revert only this task's intentional implementation commits, preserving the shared OOXML prerequisite and other task history. Re-run impacted Writer DOCX/ODT shell and file UI tests and typecheck/build; confirm original ODT/TXT workflows and primary-store behavior."
   Findings: |-
@@ -5427,6 +5473,17 @@ sections:
     - Command: ./node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1. Result: pass. Evidence: eight production Chromium cases, including unchanged native file input, DOCX archive checks and mobile reopen. The initial case used the active textbox locator for a separate paragraph and was corrected.
     - Commands: npm run typecheck, npm run test:static, scoped ESLint and Prettier, JSDoc, dependency, size, source-tree and provenance checks, registry build/invariants/parity, Writer resources and WhichId checks, routing, doctor, git diff and pinned factory regeneration check. Result: pass. Evidence: `evidence/native-docx-stylistic-sets.json`.
     - The fixture's distinct compatibility-settings acceptance and graphical Word effects remain in the umbrella DOCX scope. Browser typography rendering is independent of the file-property transport. No full suite was due.
+
+    ### Writer native DOCX compatibility settings
+
+    - SettingsTable owns original ordered name, URI and value slots and reads the greatest recognized input mode. Successful DOCX import merges the typed CompatSettings sequence into the document UNO InteropGrabBag. The Worker preserves that sequence through a validated optional transfer member. Other interoperability properties remain in the live model when the compatibility sequence changes.
+    - The existing Office Open XML Text export uses native ISO mode and writes compatibility before themeFontLang in the actual settings fragment. Import defaults to mode 12. Fresh ISO exports default to mode 15. A selected Word 2007 filter caps the result at 12 and disabling external leading caps mode 15 at 14. These branches are checked through actual DOCX packages.
+    - The unchanged pinned typography fixture passes all five original Test_CompatSettingsForW14 assertions in source order. It also passes model, structured clone, DOCX reopen and production UI download/reopen. AddExternalLeading, DoNotJustifyLinesWithManualBreak and AddParaTableSpacing enter the canonical UNO document setting owner and are verified through ODT. The original Word-specific tuple sequence uses the DOCX and Worker paths.
+    - WRITER-654 records upstream slot reuse for omitted attributes. WRITER-655 records source normalization of foreign-URI compatibilityMode values. Both original behaviors are retained and tested.
+    - Command: npm run test:coverage:writer -- docxexport.compat docxexport.typography docxexport.theme docxexport.styles SettingsTable OOXMLSettings DomainMapper unotxdoc WriterFileDialog writer-document-codec odt-property-roundtrip --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sw/source/writerfilter/dmapper/SettingsTable.compat.ts --coverage.include=src/sw/source/filter/ww8/docxexport.settings.ts --coverage.thresholds.perFile --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=coverage/compat-scoped. Result: pass. Evidence: 95 tests across 10 files, 98.27% combined branches, and both complete owners above 90% on all four metrics. The initial per-file branch gap was addressed with imported repeated lower modes and an absent value.
+    - Commands: npm run test:writer -- docxexport.compat --maxWorkers=1 --testTimeout=90000 and ./node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1. Result: pass. Evidence: three fixture tests and eight production Chromium tests.
+    - Commands: npm run typecheck, npm run test:static, scoped ESLint and Prettier, JSDoc, dependency, size, source-tree and provenance checks, registry build/invariants/parity, Writer resources and WhichId checks, routing, doctor and git diff. Result: pass. Evidence: `evidence/native-docx-compat-settings.json`.
+    - DOCX flags whose layout owners remain outside the represented Writer model are still in scope. No full suite was due.
 id_source: "generated"
 ---
 ## Summary
@@ -8570,6 +8627,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-19T01:16:57.495Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native DOCX compatibility settings pass pinned fixture, UNO model, ODT, Worker, archive and browser checks. The umbrella scope remains active for remaining DOCX layout and filter paths.
+Attempts: 105
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T01:16:56.927Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-V4DQJW -m 🧩 V4DQJW task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -9196,3 +9283,14 @@ Evidence: `evidence/docx-native-ranged-bookmarks.json`.
 - Command: ./node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1. Result: pass. Evidence: eight production Chromium cases, including unchanged native file input, DOCX archive checks and mobile reopen. The initial case used the active textbox locator for a separate paragraph and was corrected.
 - Commands: npm run typecheck, npm run test:static, scoped ESLint and Prettier, JSDoc, dependency, size, source-tree and provenance checks, registry build/invariants/parity, Writer resources and WhichId checks, routing, doctor, git diff and pinned factory regeneration check. Result: pass. Evidence: `evidence/native-docx-stylistic-sets.json`.
 - The fixture's distinct compatibility-settings acceptance and graphical Word effects remain in the umbrella DOCX scope. Browser typography rendering is independent of the file-property transport. No full suite was due.
+
+### Writer native DOCX compatibility settings
+
+- SettingsTable owns original ordered name, URI and value slots and reads the greatest recognized input mode. Successful DOCX import merges the typed CompatSettings sequence into the document UNO InteropGrabBag. The Worker preserves that sequence through a validated optional transfer member. Other interoperability properties remain in the live model when the compatibility sequence changes.
+- The existing Office Open XML Text export uses native ISO mode and writes compatibility before themeFontLang in the actual settings fragment. Import defaults to mode 12. Fresh ISO exports default to mode 15. A selected Word 2007 filter caps the result at 12 and disabling external leading caps mode 15 at 14. These branches are checked through actual DOCX packages.
+- The unchanged pinned typography fixture passes all five original Test_CompatSettingsForW14 assertions in source order. It also passes model, structured clone, DOCX reopen and production UI download/reopen. AddExternalLeading, DoNotJustifyLinesWithManualBreak and AddParaTableSpacing enter the canonical UNO document setting owner and are verified through ODT. The original Word-specific tuple sequence uses the DOCX and Worker paths.
+- WRITER-654 records upstream slot reuse for omitted attributes. WRITER-655 records source normalization of foreign-URI compatibilityMode values. Both original behaviors are retained and tested.
+- Command: npm run test:coverage:writer -- docxexport.compat docxexport.typography docxexport.theme docxexport.styles SettingsTable OOXMLSettings DomainMapper unotxdoc WriterFileDialog writer-document-codec odt-property-roundtrip --maxWorkers=2 --testTimeout=90000 --coverage.include=src/sw/source/writerfilter/dmapper/SettingsTable.compat.ts --coverage.include=src/sw/source/filter/ww8/docxexport.settings.ts --coverage.thresholds.perFile --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.thresholds.statements=90 --coverage.reportsDirectory=coverage/compat-scoped. Result: pass. Evidence: 95 tests across 10 files, 98.27% combined branches, and both complete owners above 90% on all four metrics. The initial per-file branch gap was addressed with imported repeated lower modes and an absent value.
+- Commands: npm run test:writer -- docxexport.compat --maxWorkers=1 --testTimeout=90000 and ./node_modules/.bin/playwright test -c apps/office/coverage/writer-docx-theme.playwright.config.ts --workers=1. Result: pass. Evidence: three fixture tests and eight production Chromium tests.
+- Commands: npm run typecheck, npm run test:static, scoped ESLint and Prettier, JSDoc, dependency, size, source-tree and provenance checks, registry build/invariants/parity, Writer resources and WhichId checks, routing, doctor and git diff. Result: pass. Evidence: `evidence/native-docx-compat-settings.json`.
+- DOCX flags whose layout owners remain outside the represented Writer model are still in scope. No full suite was due.
