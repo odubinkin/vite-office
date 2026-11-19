@@ -1,10 +1,10 @@
 ---
 id: "202610251549-J0Z0KF"
 title: "Implement Calc XLSX import export and existing file UI integration"
-status: "DOING"
+status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 677
+revision: 678
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T21:35:58.461Z"
+  updated_at: "2026-11-19T21:48:55.265Z"
   updated_by: "CODER"
-  note: "The unsplit worksheet origin checkpoint passed the browser, Calc filter and viewport tests and scoped coverage. The umbrella remains open for independent split and frozen grid windows and broader format acceptance."
-  attempts: 221
+  note: "Frozen worksheet rendering passed the scoped Calc coverage, format regressions, static checks and four production Chromium scenarios. Normal split window scrolling and the wider XLSX task remain open."
+  attempts: 222
 commit: null
 comments:
   -
@@ -3544,8 +3544,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T21:48:55.265Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Frozen worksheet rendering passed the scoped Calc coverage, format regressions, static checks and four production Chromium scenarios. Normal split window scrolling and the wider XLSX task remain open."
 doc_version: 3
-doc_updated_at: "2026-11-19T21:36:29.680Z"
+doc_updated_at: "2026-11-19T21:48:55.612Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -10306,6 +10312,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-11-19T21:48:55.265Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Frozen worksheet rendering passed the scoped Calc coverage, format regressions, static checks and four production Chromium scenarios. Normal split window scrolling and the wider XLSX task remain open.
+    Attempts: 222
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T21:36:29.680Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -11393,6 +11429,10 @@ sections:
     - Observation: The live unsplit Calc grid restores the native first visible cell from XLSX independently of the cursor, and uses the source PositionBottom value for ODS view storage.
       Impact: Viewport movement is recorded per sheet and survives the existing ODS storage and XLSX export without changing cursor selection or document modified state.
       Resolution: The implementation and focused acceptance results are recorded in evidence/native-xlsx-unsplit-view-origin.json.
+
+    - Observation: The unchanged freezePaneStartCell.xlsx shows stationary fixed rows and columns while its movable grid scrolls. Hidden dimensions and native sheet origins are respected.
+      Impact: A fixed cell remains selectable and editable, and the changed movable origin survives the primary ODS copy and XLSX download.
+      Resolution: Record pinned source references and focused test and browser evidence in evidence/native-xlsx-frozen-grid.json.
 id_source: "generated"
 ---
 ## Summary
@@ -18163,6 +18203,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-11-19T21:48:55.265Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Frozen worksheet rendering passed the scoped Calc coverage, format regressions, static checks and four production Chromium scenarios. Normal split window scrolling and the wider XLSX task remain open.
+Attempts: 222
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T21:36:29.680Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -19254,3 +19324,7 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Observation: The live unsplit Calc grid restores the native first visible cell from XLSX independently of the cursor, and uses the source PositionBottom value for ODS view storage.
   Impact: Viewport movement is recorded per sheet and survives the existing ODS storage and XLSX export without changing cursor selection or document modified state.
   Resolution: The implementation and focused acceptance results are recorded in evidence/native-xlsx-unsplit-view-origin.json.
+
+- Observation: The unchanged freezePaneStartCell.xlsx shows stationary fixed rows and columns while its movable grid scrolls. Hidden dimensions and native sheet origins are respected.
+  Impact: A fixed cell remains selectable and editable, and the changed movable origin survives the primary ODS copy and XLSX download.
+  Resolution: Record pinned source references and focused test and browser evidence in evidence/native-xlsx-frozen-grid.json.

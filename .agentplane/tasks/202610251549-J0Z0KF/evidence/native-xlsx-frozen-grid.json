@@ -1,0 +1,63 @@
+{
+  "checkpoint": "Calc renders and scrolls the fixed and movable portions of imported frozen worksheets",
+  "implementation": "3c8eb220cfe0",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    "sc/source/ui/view/tabview.cxx#ScTabView::DoResize",
+    "sc/source/ui/view/tabview.cxx#ScTabView::ScrollX",
+    "sc/source/ui/view/tabview.cxx#ScTabView::ScrollY",
+    "sc/source/ui/view/viewdata.cxx#ScViewData::UpdateFixX",
+    "sc/source/ui/view/viewdata.cxx#ScViewData::UpdateFixY",
+    "sc/qa/unit/subsequent_export_test2.cxx#testFreezePaneStartCellXLSX"
+  ],
+  "fixture": {
+    "path": "vendor/libreoffice-reference/sc/qa/unit/data/xlsx/freezePaneStartCell.xlsx",
+    "sha256": "a1252dc9e87a593026d4bac29b26b2eca6d88129d903ee6bd24293f07b0aee19"
+  },
+  "verification": {
+    "calc_viewport": {
+      "command": "npm run test:coverage:calc -- calc-view-controller.test calc-workbench.test calc-pointer-selection calc-presenters viewdata.settings row-visibility column-geometry --maxWorkers=3 --testTimeout=90000 --coverage.include='src/sc/browser/{controller/calc-viewport,presentation/calc-grid-axis}.ts' --coverage.reportsDirectory=coverage/calc-frozen-grid-final --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "40 tests across seven files. Branch coverage was 93.18% for CalcViewport and 91.17% for CalcGridAxis, with the other three metrics above 90% for both. Native layout tests cover fixed origin, hidden rows and columns, both seams, a clipped horizontal split, and the active model dirty state."
+    },
+    "calc_formats": {
+      "commands": [
+        "npm run test:calc -- excelfilter.test ods-worker-boundaries calc-files docsh.csv-export --maxWorkers=3 --testTimeout=90000",
+        "npm run test:calc -- calc-files --maxWorkers=1 --testTimeout=90000"
+      ],
+      "result": "pass on isolated retry",
+      "evidence": "The first run passed 34 of 36 cases. Two mounted file dialog callbacks timed out while other checks ran concurrently. All seven file dialog cases passed on isolated retry. Each of the 36 distinct cases passed across the two runs."
+    },
+    "chromium": {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" npm exec -- playwright test --config .git/calc-panes-browser.config.mts --project calc --workers=1 apps/office/e2e/calc/xlsx-frozen-grid.spec.ts apps/office/e2e/calc/xlsx-active-view.spec.ts --grep 'stationary|frozen panes|unsplit XLSX|active sheet'",
+      "result": "pass",
+      "evidence": "Four scenarios passed on the final production build. In the original workbook the fixed corner remains at the same screen coordinates when both axes move, A1 can still be edited, and the first movable cell survives local ODS Save As, reload and XLSX download. Fixed column B and row 2 are hidden in the source, so the assertion finds the first movable cell by coordinate. An earlier concurrent run timed out on the neighboring active-sheet test. The browser config inherits production settings and uses an available preview port."
+    },
+    "static": {
+      "commands": [
+        "npm run typecheck",
+        "npm run test:static",
+        "npm run check:docs",
+        "npm run check:dependencies",
+        "npm run check:source-tree",
+        "npm run check:calc-resources",
+        "npm run check:file-size",
+        "node .agentplane/policy/check-routing.mjs",
+        "ap doctor",
+        "git diff --check"
+      ],
+      "result": "pass",
+      "evidence": "Scoped ESLint, Prettier and registry validation for all five altered runtime paths passed. Doctor retained its existing managed shim warning."
+    },
+    "global_provenance_and_registry": {
+      "commands": ["npm run check:source-provenance", "npm run inventory:registry:check"],
+      "result": "fail",
+      "evidence": "The unchanged OfficeTooltips.tsx and available-menu-items.ts framework entries are still missing from the global registry. The invariants and parity scripts use the same registry checker."
+    }
+  },
+  "browser_adaptation": "A frozen band which cannot fit with the source's 30-pixel split margin is temporarily suppressed. The saved sheet layout remains available when the viewport grows or the file is exported. This preserves the imported file representation across browser resizes.",
+  "residual": [
+    "Normal split windows still need independent visible grids, four movable scroll routes and corresponding focus behavior. The format already preserves their settings. The browser frozen grid shares a focus surface and does not update the native active-pane identity when navigating between fixed and movable portions.",
+    "Complete XLSX acceptance remains open. Full suites remain on the approved ten-task cadence."
+  ]
+}
