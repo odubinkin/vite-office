@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 667
+revision: 669
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T08:51:58.486Z"
+  updated_at: "2026-11-19T09:04:50.194Z"
   updated_by: "CODER"
-  note: "ODS external cache persistence passed its focused coverage and production UI checks. Full external lookup acceptance remains open."
-  attempts: 216
+  note: "Cached external cell and range evaluation passed focused coverage and production UI verification. Original external VLOOKUP acceptance remains open."
+  attempts: 217
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3464,8 +3467,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T09:04:50.194Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Cached external cell and range evaluation passed focused coverage and production UI verification. Original external VLOOKUP acceptance remains open."
+  -
+    type: "status"
+    at: "2026-11-19T09:04:59.633Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T08:52:13.887Z"
+doc_updated_at: "2026-11-19T09:04:59.633Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -10020,6 +10036,48 @@ sections:
       Result: pass. Evidence: 4 static bundles, 2,821 mapped or classified runtime modules, 5,747 JSDoc sources, zero registry semantic violations, doctor and routing OK. Scope: implementation and source contracts. Full regression suite was outside the ten-task cadence.
     - Command: focused local readOdsDocument over the complete unmodified external-ref-cache.ods fixture.
       Result: fail. Evidence: ScCompiler rejects VLOOKUP with "Formula function/name lookup is not implemented". Scope: full upstream testExternalRefCacheODS including external evaluation and formula-cell registration. The passing test uses the unmodified cache table from that fixture. Full upstream evaluation, temporal and styled cached values, and filter metadata remain pending. Native loss of NaN error payload through ODF is retained and recorded as CALC-747.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-19T09:04:50.194Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Cached external cell and range evaluation passed focused coverage and production UI verification. Original external VLOOKUP acceptance remains open.
+    Attempts: 217
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T08:52:13.887Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    Implementation d6c4a5f1a connects the Calc interpreter's native external token cases to the document's imported external workbook caches. The scalar path keeps cached numbers, strings, and errors, distinguishes complete-cache blanks from unavailable data, and registers the live formula cell. The range path forms a native single-sheet ScMatrix, supports ordinary aggregates and scalar reads, and keeps the source size and whole-axis fallback rules. Source files are resolved only through cached data in the browser.
+
+    - Command: npm run test:coverage:calc -- external-reference-formula.test.ts externallinkbuffer.test.ts compiler.external.test.ts xmlexternaltabi.test.ts aggregate-formula.test.ts range-formula.test.ts numeric-formula.test.ts text-formula.test.ts implicit-intersection.test.ts calcconfig-document.test.ts document.formula.test.ts excelfilter.named-arrays.test.ts formula-output.test.ts --testNamePattern='^(?!.*rejects actual matrix operands)' --maxWorkers=2 --testTimeout=120000 --coverage.include=src/sc/source/ui/docshell/externalrefmgr.ts --coverage.include=src/sc/source/core/tool/interpr4.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/xlsx-external-eval-qualified
+      Result: pass. Evidence: 79 passed in 13 files with one separately reproduced baseline failure excluded from this rerun. Statements/branches/functions/lines: interpreter 91.86/90.55/97.36/92.48%, manager 97.56/92.30/100/98.07%. Scope: actual formula errors, strings and numbers, external rectangular matrices, registry, modified tdf130959 worksheet using its unchanged external caches, ODS primary round trip and reopened XLSX.
+    - Command: same scoped suite with the complete implicit-intersection.test.ts and no testNamePattern.
+      Result: fail. Evidence: 79 passed, one matrix compilation assertion expected an exception. The independent baseline reproduction with the three changed runtime modules loaded from ae9767a0e through the Vitest transform fails at the same assertion. Scope: formula operand regression boundary. The original failing test remains in the repository without edits.
+    - Command: node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=90000 --grep 'pinned XLSX with external names|active sheet when'
+      Result: pass. Evidence: 2 production Chromium scenarios. Formula entered in the existing grid after opening the pinned XLSX displays cached text before and after browser storage reload. Export keeps the external formula and its cached source values, and mobile reopen shows the same formula result.
+    - Commands: npm run typecheck; npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:calc-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+      Result: pass. Evidence: production static build with 4 JS bundles, source provenance for 2,821 runtime modules, 5,748 JSDoc sources, 0 registry semantic violations and successful routing. Scope: changed implementation and source mapping. Full tests were outside the ten-task cadence.
+    - Remaining acceptance: the original testExternalRefCacheODS still needs VLOOKUP support. External refresh, multi-sheet operand arrays and cached number formats remain outside the implemented runtime path. CALC-748 records native external range string access to a numeric matrix cell.
 
     BlueprintSnapshotRef:
     - state: current
@@ -17683,6 +17741,48 @@ Implementation f544563d6 preserves embedded XLSX external sheet caches and refer
   Result: pass. Evidence: 4 static bundles, 2,821 mapped or classified runtime modules, 5,747 JSDoc sources, zero registry semantic violations, doctor and routing OK. Scope: implementation and source contracts. Full regression suite was outside the ten-task cadence.
 - Command: focused local readOdsDocument over the complete unmodified external-ref-cache.ods fixture.
   Result: fail. Evidence: ScCompiler rejects VLOOKUP with "Formula function/name lookup is not implemented". Scope: full upstream testExternalRefCacheODS including external evaluation and formula-cell registration. The passing test uses the unmodified cache table from that fixture. Full upstream evaluation, temporal and styled cached values, and filter metadata remain pending. Native loss of NaN error payload through ODF is retained and recorded as CALC-747.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-19T09:04:50.194Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Cached external cell and range evaluation passed focused coverage and production UI verification. Original external VLOOKUP acceptance remains open.
+Attempts: 217
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T08:52:13.887Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+Implementation d6c4a5f1a connects the Calc interpreter's native external token cases to the document's imported external workbook caches. The scalar path keeps cached numbers, strings, and errors, distinguishes complete-cache blanks from unavailable data, and registers the live formula cell. The range path forms a native single-sheet ScMatrix, supports ordinary aggregates and scalar reads, and keeps the source size and whole-axis fallback rules. Source files are resolved only through cached data in the browser.
+
+- Command: npm run test:coverage:calc -- external-reference-formula.test.ts externallinkbuffer.test.ts compiler.external.test.ts xmlexternaltabi.test.ts aggregate-formula.test.ts range-formula.test.ts numeric-formula.test.ts text-formula.test.ts implicit-intersection.test.ts calcconfig-document.test.ts document.formula.test.ts excelfilter.named-arrays.test.ts formula-output.test.ts --testNamePattern='^(?!.*rejects actual matrix operands)' --maxWorkers=2 --testTimeout=120000 --coverage.include=src/sc/source/ui/docshell/externalrefmgr.ts --coverage.include=src/sc/source/core/tool/interpr4.ts --coverage.thresholds.perFile --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90 --coverage.reportsDirectory=coverage/xlsx-external-eval-qualified
+  Result: pass. Evidence: 79 passed in 13 files with one separately reproduced baseline failure excluded from this rerun. Statements/branches/functions/lines: interpreter 91.86/90.55/97.36/92.48%, manager 97.56/92.30/100/98.07%. Scope: actual formula errors, strings and numbers, external rectangular matrices, registry, modified tdf130959 worksheet using its unchanged external caches, ODS primary round trip and reopened XLSX.
+- Command: same scoped suite with the complete implicit-intersection.test.ts and no testNamePattern.
+  Result: fail. Evidence: 79 passed, one matrix compilation assertion expected an exception. The independent baseline reproduction with the three changed runtime modules loaded from ae9767a0e through the Vitest transform fails at the same assertion. Scope: formula operand regression boundary. The original failing test remains in the repository without edits.
+- Command: node_modules/.bin/playwright test -c apps/office/coverage/xlsx-active-view.playwright.config.ts --workers=1 --timeout=90000 --grep 'pinned XLSX with external names|active sheet when'
+  Result: pass. Evidence: 2 production Chromium scenarios. Formula entered in the existing grid after opening the pinned XLSX displays cached text before and after browser storage reload. Export keeps the external formula and its cached source values, and mobile reopen shows the same formula result.
+- Commands: npm run typecheck; npm run test:static; scoped Prettier and ESLint; npm run check:dependencies; npm run check:calc-resources; npm run check:docs; npm run check:file-size; npm run check:source-tree; npm run check:source-provenance; npm run inventory:registry:build; npm run inventory:registry:check; ap doctor; node .agentplane/policy/check-routing.mjs; git diff --check.
+  Result: pass. Evidence: production static build with 4 JS bundles, source provenance for 2,821 runtime modules, 5,748 JSDoc sources, 0 registry semantic violations and successful routing. Scope: changed implementation and source mapping. Full tests were outside the ten-task cadence.
+- Remaining acceptance: the original testExternalRefCacheODS still needs VLOOKUP support. External refresh, multi-sheet operand arrays and cached number formats remain outside the implemented runtime path. CALC-748 records native external range string access to a numeric matrix cell.
 
 BlueprintSnapshotRef:
 - state: current
