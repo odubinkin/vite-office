@@ -5,6 +5,30 @@ import {
   type Properties,
   type Reference,
 } from "../inc/dmapper/resourcemodel";
+import { NS_ooxml as N } from "../inc/ooxml/resourceids";
+import { PropertyIds as P } from "./PropertyIds";
+
+/** Native Word drawing effect roots, properties and factory resource identities. */
+export const drawingTextEffects = [
+  ["glow", P.PROP_CHAR_GLOW_TEXT_EFFECT, N.LN_glow_glow],
+  ["shadow", P.PROP_CHAR_SHADOW_TEXT_EFFECT, N.LN_shadow_shadow],
+  ["reflection", P.PROP_CHAR_REFLECTION_TEXT_EFFECT, N.LN_reflection_reflection],
+  ["textOutline", P.PROP_CHAR_TEXTOUTLINE_TEXT_EFFECT, N.LN_textOutline_textOutline],
+  ["textFill", P.PROP_CHAR_TEXTFILL_TEXT_EFFECT, N.LN_textFill_textFill],
+  ["scene3d", P.PROP_CHAR_SCENE3D_TEXT_EFFECT, N.LN_scene3d_scene3d],
+  ["props3d", P.PROP_CHAR_PROPS3D_TEXT_EFFECT, N.LN_props3d_props3d],
+] as const;
+
+/** Native root name of a compound drawing effect. */
+export type DrawingTextEffectName = (typeof drawingTextEffects)[number][0];
+
+/** Identifies a root handled by the Word drawing effect grammar. @param name - Element name. @returns Whether it is a represented effect root. */
+export function isDrawingTextEffectName(name: unknown): name is DrawingTextEffectName {
+  return drawingTextEffects.some(
+    /** Matches the original interoperability root. @param row - Effect mapping. @returns Match. */
+    ([root]) => root === name,
+  );
+}
 
 /** One native attribute in a text effect. */
 export type DrawingEffectAttribute = readonly [string, number | string];
@@ -20,7 +44,7 @@ for (const [definition, name, id] of resources) resourceIds.set(`${definition}:$
 
 /** Resolves the supported effect's original root context. @param name - Effect name. @returns Generated definition. */
 function rootDefinition(name: string): number | undefined {
-  if (name !== "textFill" && name !== "textOutline") return undefined;
+  if (!isDrawingTextEffectName(name)) return undefined;
   return elements.find(
     /** Selects the original namespace start entry. @param row - Generated candidate. @returns Match. */
     ([parent, token]) => parent === 0 && token === `w14:${name}`,
@@ -29,7 +53,7 @@ function rootDefinition(name: string): number | undefined {
 
 /** Reads a native text effect as ordered names and typed attribute values. @param name - Supported effect root. @param properties - Returned native reference. @returns Typed effect. */
 export function readDrawingResources(
-  name: "textOutline" | "textFill",
+  name: DrawingTextEffectName,
   properties: Reference<Properties> | null,
 ): DrawingTextEffect {
   const definition = rootDefinition(name);

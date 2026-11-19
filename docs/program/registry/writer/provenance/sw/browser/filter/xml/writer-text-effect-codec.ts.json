@@ -18,6 +18,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.typography.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.text-effects.test.ts",
+          "marker": "round-trips original w14 drawing properties"
         }
       ],
       "upstream": []
@@ -26,7 +30,8 @@
     "responsibilities": [
       "Transfers bounded native character text effects and the optional document pool override between the background filter and the editor. Restores the same UNO tree and accepts earlier documents without this override.",
       "Transports the original string-valued theme font members of the character interoperability bag.",
-      "Transfers original typed styleSet children through the current Worker alongside earlier compact scalar snapshots."
+      "Transfers original typed styleSet children through the current Worker alongside earlier compact scalar snapshots.",
+      "Validates and restores Word 2010 glow, shadow, reflection, scene3d and props3d using the original grammar and the native nested interoperability properties."
     ],
     "stackDivergence": {
       "kind": "local-infrastructure",

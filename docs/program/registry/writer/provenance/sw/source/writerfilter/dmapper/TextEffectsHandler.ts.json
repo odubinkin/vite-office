@@ -30,6 +30,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.text-effects.test.ts",
           "marker": "Test_TextEffects_TextOutline"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.text-effects.test.ts",
+          "marker": "round-trips original w14 drawing properties"
         }
       ],
       "upstream": [
@@ -78,7 +82,8 @@
     "preservedResponsibilities": [
       "Consumes source-native ligature, number form and number spacing resources. Stores the nested UNO PropertyValue/Sequence in the original character interoperability item.",
       "Carries the native ordered styleSet children with signed ID and string toggle attributes. Contextual alternatives use the original scalar SPRM fallback documented in WRITER-653.",
-      "Solid Word 2010 text fill maps scheme color and numeric transformations to the original complex color. Native alpha becomes CharTransparence; the separate fallback RGB remains active. Gradient and outline properties use the native interoperability sequences."
+      "Solid Word 2010 text fill maps scheme color and numeric transformations to the original complex color. Native alpha becomes CharTransparence; the separate fallback RGB remains active. Gradient and outline properties use the native interoperability sequences.",
+      "The Word 2010 effect roots for glow, shadow, reflection, scene3d and props3d now use the original generated definitions and nested interoperability properties for DOCX run and style persistence through the browser Worker."
     ],
     "omittedResponsibilities": [
       "Other Word drawing effects and full Writer parity remain in progress."

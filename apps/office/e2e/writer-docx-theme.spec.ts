@@ -109,15 +109,17 @@ test("Writer preserves Word stylistic sets through the production file dialog", 
 });
 
 for (const [fixture, text, effect] of [
-  ["Outline", "Gradient", '<w14:gs w14:pos="70000">'],
-  ["Fill", "TextFill:", '<w14:lin w14:ang="16200000" w14:scaled="0"/>'],
+  ["TextOutline", "Gradient", '<w14:gs w14:pos="70000">'],
+  ["TextFill", "TextFill:", '<w14:lin w14:ang="16200000" w14:scaled="0"/>'],
+  ["Glow_Shadow_Reflection", "LibreOffice", '<w14:glow w14:rad="63500">'],
+  ["Props3d_Ligatures_NumForm_NumSpacing", "Props3d", '<w14:props3d w14:extrusionH="63500"'],
 ] as const) {
   test(`Writer downloads Word text ${fixture.toLowerCase()} through the Worker`, /** Opens the original Writer test document, checks the DOCX download, and reopens it on mobile. @param fixtures - Browser fixtures. @param fixtures.page - Chromium page. @returns Completion. */ async ({
     page,
   }) => {
     const file = fileURLToPath(
       new URL(
-        `../../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/TextEffects_Text${fixture}.docx`,
+        `../../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/TextEffects_${fixture}.docx`,
         import.meta.url,
       ),
     );

@@ -94,6 +94,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.text-effects.test.ts",
+          "marker": "round-trips original w14 drawing properties"
         }
       ],
       "upstream": [
@@ -164,7 +168,8 @@
       "Binds the original run-document-default resource to its native numerical identity.",
       "Publishes the eight native ST_Theme enumeration IDs.",
       "Exposes the consumed original generated paragraph-default, tab alignment and leader resource IDs.",
-      "Retains original page variant stream IDs and the generated header/footer reference attributes."
+      "Retains original page variant stream IDs and the generated header/footer reference attributes.",
+      "The Word 2010 effect roots for glow, shadow, reflection, scene3d and props3d now use the original generated definitions and nested interoperability properties for DOCX run and style persistence through the browser Worker."
     ],
     "omittedResponsibilities": [
       "DOCX document-model mapping, export and shell/UI integration are still being implemented in the same cohesive task.",

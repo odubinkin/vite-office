@@ -44,7 +44,7 @@ def original(script, *arguments):
 
 
 TEXT_EFFECTS = ("ligatures", "numForm", "numSpacing")
-DRAWING_TEXT_EFFECTS = ("textFill", "textOutline")
+DRAWING_TEXT_EFFECTS = ("glow", "shadow", "reflection", "textFill", "textOutline", "scene3d", "props3d")
 TYPOGRAPHY_STARTS = (*TEXT_EFFECTS, "stylisticSets", "cntxtAlts", *DRAWING_TEXT_EFFECTS)
 
 

@@ -28,7 +28,9 @@ import { createXComplexColor } from "../../../../docmodel/inc/uno/UnoComplexColo
 import { XComplexColor } from "../../../../offapi/com/sun/star/util/XComplexColor";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import {
+  drawingTextEffects,
   isDrawingTextEffect,
+  isDrawingTextEffectName,
   readDrawingResources,
   type DrawingEffectAttribute,
   type DrawingTextEffect,
@@ -42,10 +44,6 @@ const effects = [
   ["numSpacing", P.PROP_CHAR_NUMSPACING_TEXT_EFFECT],
   ["stylisticSets", P.PROP_CHAR_STYLISTICSETS_TEXT_EFFECT],
   ["cntxtAlts", P.PROP_CHAR_CNTXTALTS_TEXT_EFFECT],
-] as const;
-const drawingEffects = [
-  ["textOutline", P.PROP_CHAR_TEXTOUTLINE_TEXT_EFFECT],
-  ["textFill", P.PROP_CHAR_TEXTFILL_TEXT_EFFECT],
 ] as const;
 
 /** Native roots represented by the character interoperability bag. */
@@ -262,13 +260,13 @@ export class TextEffectsHandler implements Properties {
 /** Resolves the source property into the current character interoperability bag. @param modifier - Original effect. @param context - Current Writer property map. @returns Whether handled. */
 export function resolveTextEffect(modifier: Sprm, context: PropertyMap): boolean {
   const id = modifier.getId();
-  if (id === N.LN_textFill_textFill || id === N.LN_textOutline_textOutline) {
-    const outline = id === N.LN_textOutline_textOutline;
-    if (outline || !resolveTextFill(modifier, context)) {
-      const name = outline ? "textOutline" : "textFill";
-      const property = outline
-        ? P.PROP_CHAR_TEXTOUTLINE_TEXT_EFFECT
-        : P.PROP_CHAR_TEXTFILL_TEXT_EFFECT;
+  const drawing = drawingTextEffects.find(
+    /** Finds the native drawing property from the source SPRM. @param entry - Effect mapping. @returns Match. */
+    ([, , resource]) => resource === id,
+  );
+  if (drawing) {
+    const [name, property] = drawing;
+    if (name !== "textFill" || !resolveTextFill(modifier, context)) {
       const bag = makeTextEffect(name, readDrawingResources(name, modifier.getProps()));
       try {
         context.Insert(property, bag, true, GrabBagType.CHAR_GRAB_BAG);
@@ -540,7 +538,7 @@ export function readTextEffect(
   key: string,
   value: GrabBagValueConstReference,
 ): readonly [string, TextEffectValue | undefined] | undefined {
-  const match = [...effects, ...drawingEffects].find(
+  const match = [...effects, ...drawingTextEffects].find(
     /** Matches the original character interop name. @param effect - Native effect. @returns Match. */
     ([, id]) => text(getPropertyName(id)) === key,
   );
@@ -555,7 +553,7 @@ export function readTextEffect(
       !root.Value.extract(group.getAddress(), sequenceType)
     )
       return undefined;
-    if (name === "textOutline" || name === "textFill") {
+    if (isDrawingTextEffectName(name)) {
       const drawing = readDrawingElement(name, group);
       return isDrawingTextEffect(name, drawing) ? [name, drawing] : undefined;
     }
@@ -588,7 +586,7 @@ export function readTextEffect(
 
 /** Finds the original property name for the transported native Word effect. @param element - Effect name. @returns Interoperability name or absence. */
 export function textEffectProperty(element: string): string | undefined {
-  const entry = [...effects, ...drawingEffects].find(
+  const entry = [...effects, ...drawingTextEffects].find(
     /** Finds the represented element. @param candidate - Native mapping. @returns Match. */
     ([name]) => name === element,
   );

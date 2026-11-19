@@ -256,7 +256,7 @@ it.skipIf(!existsSync("../../vendor/libreoffice-reference/sw/source/writerfilter
       "defines=178, attributes=304, elements=1024, resources=1224, lists=508, actions=117",
     );
     expect(output).toContain(
-      "defines=54, attributes=25, elements=75, resources=100, lists=67, actions=2",
+      "defines=77, attributes=59, elements=98, resources=157, lists=202, actions=2",
     );
   },
 );

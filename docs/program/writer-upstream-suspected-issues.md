@@ -5067,3 +5067,15 @@ header or footer. Writer retains both source decisions.
 
 - [Original solid-fill color selection](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/writerfilter/dmapper/TextEffectsHandler.cxx#L888-L982)
 - [Writer regression](../../apps/office/src/sw/source/writerfilter/filter/WriterFilter.test.ts)
+
+### WRITER-660 — Word text scenes discard camera rotation
+
+The Word 2010 text-effect model declares only the preset attribute under
+`w14:camera`. The sibling `w14:lightRig` exposes the spherical rotation
+resource to the importer. A rotation under the Word text camera therefore
+disappears when the scene is saved again, while a light rotation survives.
+Writer retains this source behavior.
+
+- [Original Word 2010 camera and light definitions](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/writerfilter/ooxml/model.xml#L4644-L4658)
+- [Original text-effect property mapping](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/writerfilter/dmapper/TextEffectsHandler.cxx#L65-L73)
+- [Writer regression](../../apps/office/src/sw/source/filter/ww8/docxexport.text-effects.test.ts)

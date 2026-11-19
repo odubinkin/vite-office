@@ -16,7 +16,10 @@ import {
   textEffectProperty,
   type TextEffectValue,
 } from "../../../source/writerfilter/dmapper/TextEffectsHandler";
-import { isDrawingTextEffect } from "../../../source/writerfilter/dmapper/TextEffectsHandler.drawing";
+import {
+  isDrawingTextEffect,
+  isDrawingTextEffectName,
+} from "../../../source/writerfilter/dmapper/TextEffectsHandler.drawing";
 
 /** Encodes the native text effects as cloneable typed values. @param item - Writer character grab bag. @returns Worker item record. */
 export function encodeTextEffects(item: SfxGrabBagItem): SfxPoolItemSnapshot {
@@ -53,7 +56,7 @@ export function decodeTextEffects(value: unknown): SfxGrabBagItem {
         throw new Error("Writer text effect is invalid.");
       const [name, val] = effect as readonly unknown[];
       const key = typeof name === "string" ? textEffectProperty(name) : undefined;
-      const drawing = name === "textOutline" || name === "textFill";
+      const drawing = isDrawingTextEffectName(name);
       const native =
         typeof name !== "string"
           ? undefined
