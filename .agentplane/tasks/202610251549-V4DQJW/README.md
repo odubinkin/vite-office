@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 392
+revision: 394
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T07:15:54.367Z"
+  updated_at: "2026-11-19T07:27:53.317Z"
   updated_by: "CODER"
-  note: "Implementation f506e1c28 resolves the provided DOCX import failure. Actual local browser import and browser-storage reopen pass, along with 64 targeted tests and the static build. Broader DOCX acceptance remains open."
-  attempts: 118
+  note: "Implementation 97ea30bc4 preserves solid DOCX text fill and ODT transparency. Targeted Writer/shared tests, static build and browser reopen pass. Broader effects and aggregate coverage qualification remain open."
+  attempts: 119
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -1896,8 +1899,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T07:27:53.317Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Implementation 97ea30bc4 preserves solid DOCX text fill and ODT transparency. Targeted Writer/shared tests, static build and browser reopen pass. Broader effects and aggregate coverage qualification remain open."
+  -
+    type: "status"
+    at: "2026-11-19T07:28:00.368Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T07:16:01.176Z"
+doc_updated_at: "2026-11-19T07:28:00.368Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -5468,6 +5484,50 @@ sections:
     - Commands: python3 scripts/writer-ooxml/generate-factory.py --check; npm run test:static; scoped ESLint/Prettier; npm run check:docs; npm run check:file-size; npm run check:source-provenance; npm run inventory:registry:check; git diff --check.
       Result: pass. Evidence: generated WML 178 definitions and Word 2010 54 definitions, 4 static script bundles, 5,733 JSDoc paths and zero registry semantic violations. Scope: generated tables, JS build, affected tests and provenance.
     - Remaining acceptance: wider DOCX import and formatting round-trip acceptance, including unimplemented visual text effects and other drawing and revision contexts, remains open. This commit qualifies the observed import failure and does not close V4DQJW.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+    - old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-V4DQJW
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-11-19T07:27:53.317Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Implementation 97ea30bc4 preserves solid DOCX text fill and ODT transparency. Targeted Writer/shared tests, static build and browser reopen pass. Broader effects and aggregate coverage qualification remain open.
+    Attempts: 119
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T07:16:01.176Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+    Details:
+
+    Implementation checkpoint 97ea30bc4cc1. Native solid Word 2010 fill now delivers the original theme color, transforms and CharTransparence to Writer's font-color item. The DOCX serializer consumes those same items. ODT reads the legacy draw and current loext opacity attributes and writes loext opacity for stored runs.
+
+    - Command: npm run test:writer -- WriterFilter.test.ts TextEffectsHandler.test.ts native-text-default-schema.test.ts docxexport.theme docxexport.typography odt-font-style-roundtrip --maxWorkers=2 --testTimeout=120000
+      Result: pass. Evidence: 26 tests across 7 files. Scope: pinned testSemiTransparentText through the actual UNO paragraph, theme/RGB fill through native import and DOCX export, ODT package/reopen and related typography regressions.
+    - Command: npm run test:shared -- native-font-color.test.ts xmlstyle.test.ts --maxWorkers=2 --testTimeout=120000
+      Result: pass. Evidence: 11 tests across two files. Scope: native UNO rounding and rejected values, ODF namespace aliases and valid/out-of-range opacity.
+    - Command: npm run test:coverage:writer -- TextEffectsHandler.test.ts WriterFilter.test.ts --maxWorkers=2 --testTimeout=120000 --coverage.include=src/sw/source/writerfilter/dmapper/TextEffectsHandler.ts --coverage.include=src/sw/source/filter/xml/xmlexp-character.ts --coverage.thresholds.lines=0 --coverage.thresholds.functions=0 --coverage.thresholds.statements=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=text --coverage.reportsDirectory=coverage/docx-text-fill-qualified
+      Result: 9 tests passed, coverage qualification remains open. Evidence: raw changed-range mapper statements 64/65, branches 19/21, functions 8/11; ODF projection branches 5/6. The mapper uncovered functions include three no-op callbacks for absent schema members. Existing project thresholds were untouched.
+    - Command: npm run test:static and the local Chromium DOCX open/save/reload diagnostic.
+      Result: pass. Evidence: built browser opened the previously supplied private document and restored the copied contents after reload; no private input or trace is tracked. Scope: existing file dialog and Worker-backed primary ODT storage.
+    - Commands: npm run check:docs; npm run check:dependencies; npm run check:file-size; npm run check:source-provenance; npm run inventory:registry:check; scoped ESLint and Prettier; git diff --check; node .agentplane/policy/check-routing.mjs.
+      Result: pass. Evidence: zero registry semantic violations and successful repository checks. Scope: implementation, generated identifiers and task routing.
+    - WRITER-659 records the original solid RGB path retaining the fallback Word run color. Gradient and outline model rendering, arbitrary transform ordering, broader style defaults, and overall V4DQJW acceptance are still open.
 
     BlueprintSnapshotRef:
     - state: current
@@ -9786,6 +9846,50 @@ Implementation commit f506e1c28548 fixes the reported DOCX opening failure. Priv
 - Commands: python3 scripts/writer-ooxml/generate-factory.py --check; npm run test:static; scoped ESLint/Prettier; npm run check:docs; npm run check:file-size; npm run check:source-provenance; npm run inventory:registry:check; git diff --check.
   Result: pass. Evidence: generated WML 178 definitions and Word 2010 54 definitions, 4 static script bundles, 5,733 JSDoc paths and zero registry semantic violations. Scope: generated tables, JS build, affected tests and provenance.
 - Remaining acceptance: wider DOCX import and formatting round-trip acceptance, including unimplemented visual text effects and other drawing and revision contexts, remains open. This commit qualifies the observed import failure and does not close V4DQJW.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-V4DQJW/blueprint/resolved-snapshot.json
+- old_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- current_digest: c0e14f7bf31d4be862783b8d9c5eb6067e7f9f18464f5898e14e0fcc5b208aa0
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-V4DQJW
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-V4DQJW
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-11-19T07:27:53.317Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Implementation 97ea30bc4 preserves solid DOCX text fill and ODT transparency. Targeted Writer/shared tests, static build and browser reopen pass. Broader effects and aggregate coverage qualification remain open.
+Attempts: 119
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T07:16:01.176Z, excerpt_hash=sha256:f1ce94bb673a9632d48a811076188278454b04d0783aab0712ee1947357ea697
+
+Details:
+
+Implementation checkpoint 97ea30bc4cc1. Native solid Word 2010 fill now delivers the original theme color, transforms and CharTransparence to Writer's font-color item. The DOCX serializer consumes those same items. ODT reads the legacy draw and current loext opacity attributes and writes loext opacity for stored runs.
+
+- Command: npm run test:writer -- WriterFilter.test.ts TextEffectsHandler.test.ts native-text-default-schema.test.ts docxexport.theme docxexport.typography odt-font-style-roundtrip --maxWorkers=2 --testTimeout=120000
+  Result: pass. Evidence: 26 tests across 7 files. Scope: pinned testSemiTransparentText through the actual UNO paragraph, theme/RGB fill through native import and DOCX export, ODT package/reopen and related typography regressions.
+- Command: npm run test:shared -- native-font-color.test.ts xmlstyle.test.ts --maxWorkers=2 --testTimeout=120000
+  Result: pass. Evidence: 11 tests across two files. Scope: native UNO rounding and rejected values, ODF namespace aliases and valid/out-of-range opacity.
+- Command: npm run test:coverage:writer -- TextEffectsHandler.test.ts WriterFilter.test.ts --maxWorkers=2 --testTimeout=120000 --coverage.include=src/sw/source/writerfilter/dmapper/TextEffectsHandler.ts --coverage.include=src/sw/source/filter/xml/xmlexp-character.ts --coverage.thresholds.lines=0 --coverage.thresholds.functions=0 --coverage.thresholds.statements=0 --coverage.thresholds.branches=0 --coverage.reporter=json --coverage.reporter=text --coverage.reportsDirectory=coverage/docx-text-fill-qualified
+  Result: 9 tests passed, coverage qualification remains open. Evidence: raw changed-range mapper statements 64/65, branches 19/21, functions 8/11; ODF projection branches 5/6. The mapper uncovered functions include three no-op callbacks for absent schema members. Existing project thresholds were untouched.
+- Command: npm run test:static and the local Chromium DOCX open/save/reload diagnostic.
+  Result: pass. Evidence: built browser opened the previously supplied private document and restored the copied contents after reload; no private input or trace is tracked. Scope: existing file dialog and Worker-backed primary ODT storage.
+- Commands: npm run check:docs; npm run check:dependencies; npm run check:file-size; npm run check:source-provenance; npm run inventory:registry:check; scoped ESLint and Prettier; git diff --check; node .agentplane/policy/check-routing.mjs.
+  Result: pass. Evidence: zero registry semantic violations and successful repository checks. Scope: implementation, generated identifiers and task routing.
+- WRITER-659 records the original solid RGB path retaining the fallback Word run color. Gradient and outline model rendering, arbitrary transform ordering, broader style defaults, and overall V4DQJW acceptance are still open.
 
 BlueprintSnapshotRef:
 - state: current
