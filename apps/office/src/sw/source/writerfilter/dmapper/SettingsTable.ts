@@ -1,4 +1,5 @@
 /** @fileoverview Native SettingsTable scalar state, recursive settings resources and Word compatibility defaults. */
+import { DocumentProtection, SetDocumentProtection } from "./DocumentProtection";
 import type { DomainMapper } from "./DomainMapper";
 import type { Id, Properties, Reference, Sprm, Table, Value } from "../inc/dmapper/resourcemodel";
 import { resolveReturnedReference } from "../inc/dmapper/resourcemodel";
@@ -54,6 +55,7 @@ function lcl_GetZoomType(type: Id): number {
 }
 /** Native settings state for consumed scalar and nested-resource families; no complete settings service/application is advertised. */
 export class SettingsTable implements Properties, Table {
+  private readonly m_pDocumentProtection = new DocumentProtection();
   private themeFontLanguages: ThemeFontLanguages | undefined;
   private readonly compatSettings: CompatSetting[] = [];
   private readonly currentCompatSetting: CompatSetting = {};
@@ -136,7 +138,7 @@ export class SettingsTable implements Properties, Table {
       string.dispose();
     }
   }
-  /** Original scalar/recursive modifier dispatch preserves native optional-link and sticky-compat rules. Unported grab-bag/protection families are not advertised. @param modifier - Actual native modifier. @returns Nothing. */
+  /** Original scalar/recursive modifier dispatch preserves native optional-link and sticky-compat rules.  @param modifier - Actual native modifier. @returns Nothing. */
   sprm(modifier: Sprm): void {
     const id = modifier.getId(),
       value = modifier.getValue();
@@ -144,6 +146,9 @@ export class SettingsTable implements Properties, Table {
       string = value ? value.getString() : unicode("");
     try {
       switch (id) {
+        case N.LN_CT_Settings_documentProtection:
+          resolveSprmProps(this.m_pDocumentProtection, modifier);
+          break;
         case N.LN_CT_Settings_zoom:
         case N.LN_CT_Settings_proofState:
         case N.LN_CT_Settings_attachedTemplate:
@@ -282,6 +287,12 @@ export class SettingsTable implements Properties, Table {
       }
     }
     SetCompatSettings(model, this.GetCompatSettings());
+  }
+  /** Applies the original document protection bag entry. @param model - Actual Writer model. @returns Nothing. */
+  ApplyDocumentProtection(model: SwXTextDocument): void {
+    if (this.m_pDocumentProtection.hasEnforcedEdit())
+      throw new Error("Writer does not support this enforced DOCX editing restriction.");
+    SetDocumentProtection(model, this.m_pDocumentProtection.toSequence());
   }
   /** Original default tab conversion to mm100, including the native legacy ceiling. @returns Distance. */
   GetDefaultTabStop(): number {

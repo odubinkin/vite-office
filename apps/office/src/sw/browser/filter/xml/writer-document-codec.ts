@@ -5,6 +5,12 @@ import {
   SetCompatSettings,
   type CompatSetting,
 } from "../../../source/writerfilter/dmapper/SettingsTable.compat";
+import {
+  isProtectionField,
+  ReadDocumentProtection,
+  SetDocumentProtection,
+  type DocumentProtectionSettings,
+} from "../../../source/writerfilter/dmapper/DocumentProtection";
 import { SwXTextDocument } from "../../../source/uibase/uno/unotxdoc";
 import {
   decodeTheme,
@@ -151,6 +157,7 @@ export interface WriterDocumentRecord {
   }>[];
   readonly pageStories?: WriterPageStories;
   readonly themeFontLanguages?: SwDoc["themeFontLanguages"];
+  readonly documentProtection?: DocumentProtectionSettings;
   readonly compatSettings?: readonly CompatSetting[];
   readonly fontDefaults?: readonly SfxPoolItemSnapshot[];
   readonly tabStopDefault?: SfxPoolItemSnapshot;
@@ -194,7 +201,11 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
   const compatSettings = ReadCompatSettings(
     document.interopGrabBag.GetGrabBag().get("CompatSettings"),
   );
+  const documentProtection = ReadDocumentProtection(
+    document.interopGrabBag.GetGrabBag().get("DocumentProtection"),
+  );
   return {
+    ...(documentProtection === undefined ? {} : { documentProtection }),
     ...(document.theme ? { theme: encodeTheme(document.theme) } : {}),
     ...(document.themeFontLanguages ? { themeFontLanguages: document.themeFontLanguages } : {}),
     ...(compatSettings === undefined ? {} : { compatSettings }),
@@ -353,6 +364,22 @@ export function* decodeWriterDocumentSteps(
       const model = new SwXTextDocument(document);
       try {
         SetCompatSettings(model, record.compatSettings);
+      } finally {
+        model.dispose();
+      }
+    }
+    if (record.documentProtection !== undefined) {
+      if (
+        !isRecord(record.documentProtection) ||
+        Object.entries(record.documentProtection).some(
+          /** Restricts transported settings to the native string attributes. @param entry - Candidate field. @returns Whether invalid. */
+          ([name, value]) => !isProtectionField(name) || typeof value !== "string",
+        )
+      )
+        throw new Error("Stored Writer document protection is invalid.");
+      const model = new SwXTextDocument(document);
+      try {
+        SetDocumentProtection(model, record.documentProtection);
       } finally {
         model.dispose();
       }

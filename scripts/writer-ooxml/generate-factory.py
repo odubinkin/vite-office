@@ -33,7 +33,7 @@ CONSUMED = (
     "CT_VerticalAlignRun CT_Highlight CT_TextScale EG_RPrBase CT_TblWidth CT_Height "
     "CT_View CT_Zoom CT_Proof CT_WritingStyle CT_Rel CT_ShortHexNumber CT_TwipsMeasure CT_CharacterSpacing CT_StylePaneFilter CT_Compat CT_CompatSetting "
     "CT_TrackChangesView CT_Kinsoku CT_ColorSchemeMapping "
-    "CT_DocRsids CT_LongHexNumber CT_Language CT_ShapeDefaults "
+    "CT_DocRsids CT_LongHexNumber CT_Language CT_ShapeDefaults CT_DocProtect "
     "CT_TblCellMar CT_TcMar CT_LatentStyles CT_LsdException CT_TblPrBase CT_TblPrEx CT_TblPrExBase CT_TrPrBase CT_TcPrBase CT_Border CT_TblBorders CT_TcBorders CT_TrackChange CT_Markup CT_Shd CT_TblPPr CT_PBdr CT_FramePr CT_Cnf CT_TextAlignment"
 ).split()
 

@@ -56,7 +56,7 @@ function sequenceAny(entries: readonly PropertyValue[]): Any {
 }
 
 /** Creates a native named property from a borrowed Any. @param name - Declared name. @param value - Value. @returns Owned property. */
-function namedProperty(name: string, value: Any): PropertyValue {
+export function namedProperty(name: string, value: Any): PropertyValue {
   const spelling = unicode(name);
   try {
     return new PropertyValue(spelling, 0, value, PropertyState.DIRECT_VALUE);
@@ -98,13 +98,26 @@ export function SetCompatSettings(
   model: SwXTextDocument,
   settings: readonly CompatSetting[],
 ): void {
-  const name = unicode("InteropGrabBag");
-  const key = unicode("CompatSettings");
   const entries: PropertyValue[] = [];
+  try {
+    for (const setting of settings) entries.push(makeCompatSetting(setting));
+    SetDocumentInteropProperties(model, "CompatSettings", entries);
+  } finally {
+    for (const entry of entries) entry.dispose();
+  }
+}
+
+/** Updates one typed property sequence in the native UNO interoperability bag. @param model - Document property owner. @param property - Bag entry name. @param entries - Borrowed ordered properties. @returns Nothing. */
+export function SetDocumentInteropProperties(
+  model: SwXTextDocument,
+  property: string,
+  entries: readonly PropertyValue[],
+): void {
+  const name = unicode("InteropGrabBag");
+  const key = unicode(property);
   const original = model.getPropertyValue(name);
   const map = new SequenceAsHashMap(original);
   try {
-    for (const setting of settings) entries.push(makeCompatSetting(setting));
     const rows = sequenceAny(entries);
     try {
       map.operatorIndex(key).assign(rows);
@@ -118,7 +131,6 @@ export function SetCompatSettings(
       rows.dispose();
     }
   } finally {
-    for (const entry of entries) entry.dispose();
     map.clear();
     original.dispose();
     key.dispose();

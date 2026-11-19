@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/dmapper/DocumentProtection.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "domain-mapper",
+    "capabilityIds": [
+      "CAP-0121",
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/DocumentProtection.ts#DocumentProtection",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DocumentProtection.cxx#DocumentProtection::toSequence",
+        "apps/office/src/sw/source/filter/ww8/docxexport.protection.test.ts"
+      ],
+      "justification": "Resolves native DOCX protection attributes and their defaults into a typed UNO interoperability sequence, with a reversible lexical projection for export and Worker transport. Active editing restrictions still require the original Writer shell, section and change-tracking owners. This checkpoint covers only unrestricted documents and unenforced settings.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DocumentProtection",
+        "SetDocumentProtection",
+        "ReadDocumentProtection",
+        "isProtectionField"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/dmapper/DocumentProtection.cxx",
+      "upstreamSymbols": [
+        "DocumentProtection::DocumentProtection",
+        "DocumentProtection::lcl_attribute",
+        "DocumentProtection::toSequence"
+      ]
+    }
+  }
+}

@@ -257,7 +257,10 @@ export class DomainMapper implements Properties, Stream {
   /** Releases original import temporaries and removes only the body paragraph appended by XParagraphAppend. @returns Nothing. */
   finishDocument(): void {
     this.impl.RemoveLastParagraph();
-    if (this.IsOOXMLImport()) this.impl.GetSettingsTable().ApplyCompatProperties(this.model);
+    if (!this.IsOOXMLImport()) return;
+    const settings = this.impl.GetSettingsTable();
+    settings.ApplyDocumentProtection(this.model);
+    settings.ApplyCompatProperties(this.model);
   }
   /** Explicit host binding for the native mapper destructor; the destination model is borrowed. @returns Nothing. */ dispose(): void {
     this.tableRanges.dispose();

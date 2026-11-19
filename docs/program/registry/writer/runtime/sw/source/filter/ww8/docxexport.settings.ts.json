@@ -18,13 +18,15 @@
       "evidence": [
         "apps/office/src/sw/source/filter/ww8/docxexport.settings.ts#WriteCompat",
         "vendor/libreoffice-reference/sw/source/filter/ww8/docxexport.cxx#WriteCompat",
-        "apps/office/src/sw/source/filter/ww8/docxexport.compat.test.ts"
+        "apps/office/src/sw/source/filter/ww8/docxexport.compat.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.protection.test.ts"
       ],
       "justification": "Writes native OOXML compatibility records, represented flags and original mode restrictions from the document model.",
       "knownViolations": [],
       "localSymbols": [
         "WriteCompat",
-        "WriteCompatSetting"
+        "WriteCompatSetting",
+        "WriteDocumentProtection"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/filter/ww8/docxexport.cxx",

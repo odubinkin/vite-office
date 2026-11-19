@@ -21,7 +21,11 @@ import { MSWordStyles } from "./wrtw8sty";
 import { DocxNumberingOutput } from "./docxattributeoutput.numbering";
 import { AbstractNumberingDefinitions, NumberingDefinitions } from "./wrtw8num";
 import { OoxmlVersion } from "../../../../oox/inc/core/filterbase";
-import { GetWordCompatibilityMode, WriteCompat } from "./docxexport.settings";
+import {
+  GetWordCompatibilityMode,
+  WriteCompat,
+  WriteDocumentProtection,
+} from "./docxexport.settings";
 import { DocxHeaderFooterExport } from "./docxexport.headerfooter";
 /** Actual native exporter owner for the admitted document/font parts. */
 export class DocxExport extends MSWordExportBase {
@@ -95,6 +99,7 @@ export class DocxExport extends MSWordExportBase {
     } finally {
       attributes.dispose();
     }
+    WriteDocumentProtection(document, serializer);
     if (this.defaultTabStop !== 0)
       serializer.singleElementNS(
         w,

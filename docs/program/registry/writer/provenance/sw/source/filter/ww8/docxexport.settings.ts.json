@@ -8,7 +8,8 @@
     "upstreamPath": "sw/source/filter/ww8/docxexport.cxx",
     "localSymbols": [
       "WriteCompat",
-      "WriteCompatSetting"
+      "WriteCompatSetting",
+      "WriteDocumentProtection"
     ],
     "upstreamSymbols": [
       "WriteCompat",
@@ -23,6 +24,10 @@
         },
         {
           "path": "apps/office/src/sw/source/filter/ww8/docxexport.compat.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.protection.test.ts",
           "marker": "@fileoverview"
         }
       ],

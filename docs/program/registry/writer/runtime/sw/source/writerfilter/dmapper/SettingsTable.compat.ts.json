@@ -26,7 +26,9 @@
       "localSymbols": [
         "FindWordCompatibilityMode",
         "SetCompatSettings",
-        "ReadCompatSettings"
+        "ReadCompatSettings",
+        "namedProperty",
+        "SetDocumentInteropProperties"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/writerfilter/dmapper/SettingsTable.cxx",

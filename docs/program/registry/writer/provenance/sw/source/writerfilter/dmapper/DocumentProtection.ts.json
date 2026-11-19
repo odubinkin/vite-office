@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/DocumentProtection.ts",
+    "upstreamPath": "sw/source/writerfilter/dmapper/DocumentProtection.cxx",
+    "localSymbols": [
+      "DocumentProtection",
+      "SetDocumentProtection",
+      "ReadDocumentProtection",
+      "isProtectionField"
+    ],
+    "upstreamSymbols": [
+      "DocumentProtection::DocumentProtection",
+      "DocumentProtection::lcl_attribute",
+      "DocumentProtection::toSequence"
+    ],
+    "preservedResponsibilities": [
+      "Resolves native DOCX protection attributes and their defaults into a typed UNO interoperability sequence, with a reversible lexical projection for export and Worker transport."
+    ],
+    "omittedResponsibilities": [
+      "Active editing restrictions still require the original Writer shell, section and change-tracking owners. This checkpoint covers only unrestricted documents and unenforced settings."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DocumentProtection.ts",
+          "marker": "class DocumentProtection"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.protection.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DocumentProtection.cxx",
+          "marker": "DocumentProtection::DocumentProtection"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DocumentProtection.cxx",
+          "marker": "DocumentProtection::lcl_attribute"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DocumentProtection.cxx",
+          "marker": "DocumentProtection::toSequence"
+        }
+      ]
+    }
+  }
+}

@@ -9,7 +9,9 @@
     "localSymbols": [
       "FindWordCompatibilityMode",
       "SetCompatSettings",
-      "ReadCompatSettings"
+      "ReadCompatSettings",
+      "namedProperty",
+      "SetDocumentInteropProperties"
     ],
     "upstreamSymbols": [
       "SettingsTable::GetCompatSettings",

@@ -1,7 +1,7 @@
 /** @fileoverview Native Writer Word compatibility output from its document property and settings owners. */
 import { OoxmlVersion } from "../../../../oox/inc/core/filterbase";
 import { getTokenFromUtf8 as token } from "../../../../oox/source/token/tokenmap";
-import { FSNS, type FastSerializerHelper } from "../../../../sax/inc/fshelper";
+import { FSNS, FastSerializerHelper } from "../../../../sax/inc/fshelper";
 import type { SwDoc } from "../../core/doc/doc";
 import {
   FindWordCompatibilityMode,
@@ -10,7 +10,27 @@ import {
   type CompatSetting,
 } from "../../writerfilter/dmapper/SettingsTable.compat";
 
+import { ReadDocumentProtection } from "../../writerfilter/dmapper/DocumentProtection";
+
 const w = token("w");
+
+/** Emits imported, unenforced editing settings in original DOCX attribute order. @param document - Actual Writer graph. @param serializer - Open settings serializer. @returns Nothing. */
+export function WriteDocumentProtection(document: SwDoc, serializer: FastSerializerHelper): void {
+  const settings = ReadDocumentProtection(
+    document.interopGrabBag.GetGrabBag().get("DocumentProtection"),
+  );
+  if (!settings || !Object.keys(settings).length) return;
+  const attributes = FastSerializerHelper.createAttrList();
+  try {
+    for (const [name, value] of Object.entries(settings)) {
+      if (name === "cryptAlgorithmSid" && value.length === 0) continue;
+      attributes.operatorArrow().add(FSNS(w, token(name)), value);
+    }
+    serializer.singleElementNS(w, token("documentProtection"), attributes);
+  } finally {
+    attributes.dispose();
+  }
+}
 
 /** Resolves the source compatibility level shared by settings and table export. @param document - Actual Writer graph. @param version - Selected OOXML version. @returns Word compatibility mode. */
 export function GetWordCompatibilityMode(document: SwDoc, version: OoxmlVersion): number {
