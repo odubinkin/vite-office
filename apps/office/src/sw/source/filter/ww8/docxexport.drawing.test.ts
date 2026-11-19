@@ -20,6 +20,8 @@ import {
   decodeWriterDocument,
   encodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
+import { readOdtDocument } from "../xml/swxml";
+import { writeOdtDocument, writeOdtXml } from "../xml/wrtxml";
 import { DocxExport } from "./docxexport";
 import { importOOXML } from "../../writerfilter/filter/WriterFilter";
 import { horizontalPosition, verticalPosition } from "../../writerfilter/dmapper/GraphicHelpers";
@@ -241,6 +243,26 @@ it("reuses one encoded asset across separately owned body and header relationshi
     );
     expect(body?.GetAnchor().GetAnchorContentOffset()).toBe(2);
     expect(body?.GetVertOrient().GetPos()).toBe(-300);
+    const snapshot = writeOdtXml(doc, { title: "Two picture anchors" });
+    const pictureFiles = Object.keys(snapshot.files).filter(
+      /** Selects the packaged raster payloads. @param path - Package stream. @returns Whether a picture. */
+      (path) => path.startsWith("Pictures/"),
+    );
+    expect(pictureFiles).toHaveLength(1);
+    expect(snapshot.files["styles.xml"]).toContain("<draw:image ");
+    expect(snapshot.files["content.xml"]).toContain("<draw:image ");
+    const local = (await readOdtDocument(snapshot, { title: "Two picture anchors" })).document;
+    try {
+      const localBody = [...local.GetSpzFrameFormats()].find(
+        /** Selects the local body owner after the XML snapshot reopens. @param frame - Restored native frame. @returns Whether anchored in body. */
+        (frame) => frame.GetAnchor().GetAnchorNode() === local.paragraphs[0],
+      );
+      expect(localBody?.GetAnchor().GetAnchorContentOffset()).toBe(2);
+      expect(localBody?.GetVertOrient().GetPos()).toBe(-300);
+      expect([...local.GetSpzFrameFormats()]).toHaveLength(2);
+    } finally {
+      local.Dispose();
+    }
   } finally {
     anchor.Dispose();
     attributes.Dispose();
@@ -280,6 +302,42 @@ it("writes mirrored alignment and the native zero-offset correction for a top-an
       "Writer cannot export this DOCX picture wrapping mode.",
     );
   } finally {
+    doc.Dispose();
+  }
+});
+
+it("retains the header picture in the local ODT and across a subsequent DOCX export", /** Covers browser XML snapshots, actual ODT packages and a final DOCX round trip. @returns Completion. */ async () => {
+  const input = await headerPicture();
+  const doc = await importOOXML(input.bytes, {});
+  const metadata = { title: "Embedded picture" };
+  const imported: SwDoc[] = [];
+  try {
+    const snapshot = writeOdtXml(doc, metadata);
+    const odt = await writeOdtDocument(doc, metadata);
+    const archive = await DocumentArchive.open(odt);
+    const styles = await archive.readTextEntry("styles.xml");
+    const picture = styles.match(/<draw:image xlink:href="([^"]+)"/u)?.[1];
+    assert(picture);
+    expect(picture).toMatch(/^Pictures\/.*\.png$/u);
+    expect(styles).toContain('style:run-through="background"');
+    expect(styles).toContain('draw:mime-type="image/png"');
+    expect(await archive.readTextEntry("content.xml")).not.toContain("<draw:image");
+    expect(await archive.readTextEntry("META-INF/manifest.xml")).toContain(
+      `manifest:full-path="${picture}"`,
+    );
+    expect(await archive.readEntry(picture)).toEqual(input.image);
+    for (const source of [structuredClone(snapshot), odt]) {
+      const copy = (await readOdtDocument(source, metadata)).document;
+      imported.push(copy);
+      expectHeaderGraphic(copy, input.image);
+    }
+    const restored = imported[0];
+    assert(restored);
+    const docx = await importOOXML(await DocxExport.WriteDocument(restored), {});
+    imported.push(docx);
+    expectHeaderGraphic(docx, input.image);
+  } finally {
+    for (const copy of imported) copy.Dispose();
     doc.Dispose();
   }
 });

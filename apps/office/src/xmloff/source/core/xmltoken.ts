@@ -429,6 +429,8 @@ export enum XMLToken {
   STYLE_HEADER_FOOTER_PROPERTIES,
   STYLE_DYNAMIC_SPACING,
   FO_MARGIN,
+  DRAW_IMAGE,
+  STYLE_RUN_THROUGH,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -504,6 +506,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.number, "scientific-number", XMLToken.NUMBER_SCIENTIFIC_NUMBER],
   [ODF_NAMESPACES.draw, "frame", XMLToken.DRAW_FRAME],
   [ODF_NAMESPACES.draw, "text-box", XMLToken.DRAW_TEXT_BOX],
+  [ODF_NAMESPACES.draw, "image", XMLToken.DRAW_IMAGE],
   [ODF_NAMESPACES.draw, "name", XMLToken.DRAW_NAME],
   [ODF_NAMESPACES.draw, "style-name", XMLToken.DRAW_STYLE_NAME],
   [ODF_NAMESPACES.draw, "z-index", XMLToken.DRAW_Z_INDEX],
@@ -516,6 +519,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.text, "anchor-type", XMLToken.TEXT_ANCHOR_TYPE],
   [ODF_NAMESPACES.style, "graphic-properties", XMLToken.STYLE_GRAPHIC_PROPERTIES],
   [ODF_NAMESPACES.style, "wrap", XMLToken.STYLE_WRAP],
+  [ODF_NAMESPACES.style, "run-through", XMLToken.STYLE_RUN_THROUGH],
   [ODF_NAMESPACES.style, "horizontal-pos", XMLToken.STYLE_HORIZONTAL_POS],
   [ODF_NAMESPACES.style, "horizontal-rel", XMLToken.STYLE_HORIZONTAL_REL],
   [ODF_NAMESPACES.style, "vertical-pos", XMLToken.STYLE_VERTICAL_POS],

@@ -17,7 +17,8 @@
     "preservedResponsibilities": [
       "Ports the represented text-box frame admission, graphic style members, native text-child dispatch and cursor restoration.",
       "Reads original split and graphic frame property values for native RTF-created text flies.",
-      "Reads the original graphic style writing mode and both relative-size relation properties."
+      "Reads the original graphic style writing mode and both relative-size relation properties.",
+      "Handles a package-local draw:image child and the native run-through foreground/background style."
     ],
     "omittedResponsibilities": [
       "Graphical and embedded destinations, frame chaining, page and as-character anchors, and unrepresented frame properties remain outside this slice."
@@ -46,6 +47,10 @@
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-text-frame.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
           "marker": "@fileoverview"
         }
       ],

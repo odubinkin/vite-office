@@ -6,9 +6,11 @@ import {
   getTextFrameExportParagraphs,
   projectAnchoredTextFrames,
   sectionParagraphs,
+  type XMLBoundWriterFrames,
 } from "./xmltextframe";
 import { exportPageStoryStyles, getOdfPageStories } from "./xmlpageheaderfooter";
-import { CollectTextFlyFrames, type BoundTextFrames } from "../../core/layout/flycnt";
+import type { SvXMLGraphicHelper } from "../../../../xmloff/source/core/xmlgrhlp";
+import { CollectGraphicFlyFrames, CollectTextFlyFrames } from "../../core/layout/flycnt";
 import type { XMLTextExportBlock } from "../../../../xmloff/source/table/XMLTableExport";
 import { getFillProperties, XML_FILL_WHICH_IDS } from "./xmlexp-fill";
 import { RES_CHRATR_ESCAPEMENT, RES_CHRATR_KERNING } from "../../../inc/hintids";
@@ -147,8 +149,8 @@ import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 const OFFICE_NAMESPACES = `xmlns:draw="${ODF_NAMESPACES.draw}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}" xmlns:loext="${ODF_NAMESPACES.loext}"`;
 
-/** Serializes Writer named paragraph styles into styles.xml. @param document - Canonical SwDoc. @returns Complete XML. */
-export function exportStylesXml(document: SwDoc): string {
+/** Serializes Writer named paragraph styles into styles.xml. @param document - Canonical SwDoc. @param graphicHelper - Optional package graphic owner. @returns Complete XML. */
+export function exportStylesXml(document: SwDoc, graphicHelper?: SvXMLGraphicHelper): string {
   const fonts = createWriterFontAutoStylePool(document);
   const stories = Array.from(
     { length: document.GetPageDescCnt() },
@@ -179,6 +181,7 @@ export function exportStylesXml(document: SwDoc): string {
         RTL_TEXTENCODING_DONTKNOW,
       ) || undefined,
     sections.length ? sections : undefined,
+    graphicHelper,
   );
   const namedRules = new Map(
     document
@@ -399,10 +402,11 @@ function exportDefaultParagraphStyle(
   }
 }
 
-/** Serializes body nodes and automatic styles into content.xml. @param document - Canonical SwDoc. @param isCancelled - Cooperative cancellation probe. @returns Complete XML. */
+/** Serializes body nodes and automatic styles into content.xml. @param document - Canonical SwDoc. @param isCancelled - Cooperative cancellation probe. @param graphicHelper - Optional package graphic owner. @returns Complete XML. */
 export function exportContentXml(
   document: SwDoc,
   isCancelled: () => boolean = /** Never cancels. @returns False. */ () => false,
+  graphicHelper?: SvXMLGraphicHelper,
 ): string {
   const fonts = createWriterFontAutoStylePool(document);
   const exported = exportWriterText(
@@ -420,11 +424,13 @@ export function exportContentXml(
         FontPitch.PITCH_DONTKNOW,
         RTL_TEXTENCODING_DONTKNOW,
       ) || undefined,
+    undefined,
+    graphicHelper,
   );
   return `<?xml version="1.0" encoding="UTF-8"?><office:document-content ${OFFICE_NAMESPACES} office:version="1.3">${fonts.exportXML()}<office:automatic-styles>${exported.automaticStyles}</office:automatic-styles><office:body><office:text>${exported.body}</office:text></office:body></office:document-content>`;
 }
 
-/** Projects the same model source for both package streams. @param document - Writer model. @param isCancelled - Cancellation probe. @param fontFaceName - Font registry. @param existingFontFaceName - Existing face lookup. @param sections - Master-page text owners in the styles stream. @returns Style/body fragments. */
+/** Projects the same model source for both package streams. @param document - Writer model. @param isCancelled - Cancellation probe. @param fontFaceName - Font registry. @param existingFontFaceName - Existing face lookup. @param sections - Master-page text owners in the styles stream. @param graphicHelper - Optional package graphic owner. @returns Style/body fragments. */
 function exportWriterText(
   document: SwDoc,
   isCancelled: () => boolean,
@@ -437,14 +443,18 @@ function exportWriterText(
   ) => string,
   existingFontFaceName: (family: string) => string | undefined,
   sections?: readonly SwStartNode[],
+  graphicHelper?: SvXMLGraphicHelper,
 ): OdfTextExport {
-  const anchored = CollectTextFlyFrames(document);
+  const anchored: XMLBoundWriterFrames = {
+    text: CollectTextFlyFrames(document),
+    ...(graphicHelper ? { graphicHelper, graphics: CollectGraphicFlyFrames(document) } : {}),
+  };
   return exportTextParagraphs(
     {
       commonCharacterStyleNames: document.GetCharFormats().slice(1).map(getCharacterOdfStyleName),
       /** Iterates live Writer nodes without retaining a projection. @returns Paragraph source iterator. */
       *paragraphs(): Iterable<XMLTextParagraphSource> {
-        for (const node of getTextFrameExportParagraphs(document, anchored))
+        for (const node of getTextFrameExportParagraphs(document, anchored.text))
           yield projectParagraph(node);
         for (const section of sections ?? [])
           for (const node of sectionParagraphs(document.nodes.GetSectionContent(section)))
@@ -479,7 +489,7 @@ function exportWriterText(
 /** Projects one original text or table node, including interleaved cell sections. @param block - Native node. @param anchored - Actual bound frame sets. @returns Neutral ODF body block. */
 function projectBlock(
   block: SwTextNode | SwTableNode,
-  anchored: BoundTextFrames,
+  anchored: XMLBoundWriterFrames,
 ): XMLTextExportBlock {
   if (!(block instanceof SwTableNode))
     return { kind: "paragraph", paragraph: projectParagraph(block, anchored) };
@@ -595,7 +605,10 @@ export function exportMetaXml(title: string, locale?: string): string {
 }
 
 /** Projects one canonical text node without leaking Writer ownership into xmloff. @param node - Source text node. @param anchored - Actual frame sets during body export. @returns Neutral paragraph. */
-function projectParagraph(node: SwTextNode, anchored?: BoundTextFrames): XMLTextParagraphSource {
+function projectParagraph(
+  node: SwTextNode,
+  anchored?: XMLBoundWriterFrames,
+): XMLTextParagraphSource {
   const directItems = node.GetpSwAttrSet()?.entries() ?? [];
   assertSupportedItems(directItems, `paragraph at node ${node.GetIndex()}`, true);
   const ruleName = node.GetNumRuleName();

@@ -9,7 +9,8 @@ import type {
 import type { XMLTextCursor } from "../../../../xmloff/inc/txtimp";
 import { applyPageStoryGeometry, XMLTextMasterPageContext } from "./xmlpageheaderfooter";
 import type { SwXTextCursor } from "../../core/unocore/unoobj";
-import { importTextFrame, endTextFrame } from "./xmltextframe";
+import { SvXMLGraphicHelper } from "../../../../xmloff/source/core/xmlgrhlp";
+import { importGraphicFrame, importTextFrame, endTextFrame } from "./xmltextframe";
 import { FillUnoNumRule } from "../../../../xmloff/source/style/xmlnumi";
 import { Reference, UNO_QUERY } from "../../../../cppu/inc/com/sun/star/uno/Reference";
 import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
@@ -120,6 +121,7 @@ export function importWriterXml(
   options: OdfXmlParseOptions & {
     readonly defaultFontDevice?: DefaultFontDevice;
     readonly settingsXml?: string;
+    readonly graphicHelper?: SvXMLGraphicHelper;
   } = {},
 ): ImportedWriterDocument {
   let locale = metadata.locale ?? "en-US";
@@ -136,6 +138,7 @@ export function importWriterXml(
         ? {}
         : { defaultFontDevice: options.defaultFontDevice }),
     }),
+    options.graphicHelper,
   );
   xmlImport.document.SetInReading(true);
   xmlImport.document.SetInXMLImport(true);
@@ -182,9 +185,31 @@ class SwXMLImport
 
   /** Enters the native Writer frame anchored at the current paragraph cursor. @param value - Original frame attributes. @returns Native frame text cursor. */
   public beginTextFrame(value: XMLTextFrameAttributes): XMLTextCursor {
+    return importTextFrame(
+      this.GetTextImport().GetCursor() as SwXTextCursor,
+      value,
+      this.getTextFrameStyle(value.styleName),
+    );
+  }
+
+  /** Resolves a package image and inserts it at the real Writer text cursor. @param value - Source frame attributes. @param href - Embedded URL. @returns Whether imported. */
+  public insertGraphicFrame(value: XMLTextFrameAttributes, href: string): boolean {
+    const graphic = this.graphicHelper.loadGraphicByURL(href);
+    if (!graphic) return false;
+    importGraphicFrame(
+      this.GetTextImport().GetCursor() as SwXTextCursor,
+      value,
+      this.getTextFrameStyle(value.styleName),
+      graphic,
+    );
+    return true;
+  }
+
+  /** Resolves the inherited graphic style chain in native order. @param styleName - Source style name. @returns Effective graphic properties. */
+  private getTextFrameStyle(styleName: string): XMLTextFrameStyle {
     const chain: XMLTextFrameStyle[] = [];
     const visited = new Set<string>();
-    let name: string | undefined = value.styleName;
+    let name: string | undefined = styleName;
     while (name !== undefined && !visited.has(name)) {
       visited.add(name);
       const entry = this.textFrameStyles.get(name);
@@ -192,7 +217,7 @@ class SwXMLImport
       chain.unshift(entry.style);
       name = entry.parent;
     }
-    const style = Object.fromEntries(
+    return Object.fromEntries(
       chain.flatMap(
         /** Retains only the actual style deltas, allowing parent properties to survive. @param entry - Current style. @returns Defined values. */
         (entry) =>
@@ -202,7 +227,6 @@ class SwXMLImport
           ),
       ),
     );
-    return importTextFrame(this.GetTextImport().GetCursor() as SwXTextCursor, value, style);
   }
 
   /** Closes the original Writer text frame content section. @param cursor - Active frame text cursor. @returns Nothing. */
@@ -232,8 +256,11 @@ class SwXMLImport
   public title: string | undefined;
   public language: string | undefined;
 
-  /** Creates a coordinator around a temporary document. @param document - Temporary Writer model. @returns Coordinator. */
-  public constructor(document: SwDoc) {
+  /** Creates a coordinator around a temporary document. @param document - Temporary Writer model. @param graphicHelper - Package-local images. @returns Coordinator. */
+  public constructor(
+    document: SwDoc,
+    private readonly graphicHelper = new SvXMLGraphicHelper(),
+  ) {
     super(document);
     this.model = new SwXTextDocument(document);
     this.textImport = new XMLTextImportHelper(this, this.model);

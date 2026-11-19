@@ -18,6 +18,7 @@ export interface XMLTextFrameStyle extends OdfFillProperties, OdfBoxProperties {
   readonly vertical?: number | undefined;
   readonly verticalRelation?: number | undefined;
   readonly wrap?: number | undefined;
+  readonly opaque?: boolean | undefined;
   readonly followTextFlow?: boolean | undefined;
   readonly allowOverlap?: boolean | undefined;
   readonly wrapInfluence?: number | undefined;
@@ -49,6 +50,7 @@ export interface XMLTextFrameAttributes {
 
 /** Shared SAX calls into the native Writer frame and text ownership. */
 export interface XMLTextFrameImportTarget {
+  insertGraphicFrame?(value: XMLTextFrameAttributes, href: string): boolean;
   beginTextFrame(value: XMLTextFrameAttributes): XMLTextCursor;
   endTextFrame(cursor: XMLTextCursor): void;
 }
@@ -141,6 +143,7 @@ export class XMLTextFrameStyleContext extends SvXMLImportContext {
       vertical: importTextConstant("vertical", attrs.get(T.STYLE_VERTICAL_POS)),
       verticalRelation: importTextConstant("verticalRelation", attrs.get(T.STYLE_VERTICAL_REL)),
       wrap: importTextConstant("wrap", attrs.get(T.STYLE_WRAP)),
+      opaque: opaque(attrs.get(T.STYLE_RUN_THROUGH)),
       anchorOnly,
       writingMode,
       relativeWidthRelation: importTextConstant(
@@ -171,8 +174,15 @@ export class XMLTextFrameStyleContext extends SvXMLImportContext {
   }
 }
 
+/** Implements the native opaque property lexical conversion. @param value - Graphic run-through style. @returns Whether in front of text, or absence. */
+function opaque(value: string | null): boolean | undefined {
+  return value === "foreground" ? true : value === "background" ? false : undefined;
+}
+
 /** Owns draw:frame until the original text-box child creates the native frame. */
 export class XMLTextFrameContext extends SvXMLImportContext {
+  private graphicInserted = false;
+
   /** Keeps the frame header and active native text owner. @param target - Writer frame owner. @param helper - Shared text importer. @param attrs - Original outer frame attributes. @returns Context. */
   constructor(
     private readonly target: XMLTextFrameImportTarget,
@@ -187,11 +197,11 @@ export class XMLTextFrameContext extends SvXMLImportContext {
     element: T,
     attrs: FastAttributeList,
   ): SvXMLImportContext | null {
-    if (element !== T.DRAW_TEXT_BOX) return null;
+    if (element !== T.DRAW_TEXT_BOX && element !== T.DRAW_IMAGE) return null;
     const frame = this.attrs;
     const anchor = frame.get(T.TEXT_ANCHOR_TYPE) ?? "paragraph";
     if (anchor !== "paragraph" && anchor !== "char") return null;
-    const cursor = this.target.beginTextFrame({
+    const value: XMLTextFrameAttributes = {
       name: frame.get(T.DRAW_NAME) ?? "",
       styleName: frame.get(T.DRAW_STYLE_NAME) ?? "",
       anchor,
@@ -206,7 +216,15 @@ export class XMLTextFrameContext extends SvXMLImportContext {
       splitAllowed:
         boolean(frame, T.LOEXT_MAY_BREAK_BETWEEN_PAGES, T.DRAW_MAY_BREAK_BETWEEN_PAGES) ??
         boolean(attrs, T.LOEXT_MAY_BREAK_BETWEEN_PAGES, T.DRAW_MAY_BREAK_BETWEEN_PAGES),
-    });
+    };
+    if (element === T.DRAW_IMAGE) {
+      const href = attrs.get(T.XLINK_HREF);
+      if (href && !this.graphicInserted && this.target.insertGraphicFrame) {
+        this.graphicInserted = this.target.insertGraphicFrame(value, href);
+      }
+      return null;
+    }
+    const cursor = this.target.beginTextFrame(value);
     this.helper.PushTextFrameCursor(cursor);
     return new XMLTextBoxContext(this.target, this.helper, cursor);
   }

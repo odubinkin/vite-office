@@ -380,6 +380,9 @@ export class XMLTextImportHelper {
           {
             beginTextFrame: target.beginTextFrame.bind(target),
             endTextFrame: target.endTextFrame.bind(target),
+            ...(target.insertGraphicFrame === undefined
+              ? {}
+              : { insertGraphicFrame: target.insertGraphicFrame.bind(target) }),
           },
           this,
           attributes,

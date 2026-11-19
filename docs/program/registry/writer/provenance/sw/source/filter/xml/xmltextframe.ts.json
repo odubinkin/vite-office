@@ -9,7 +9,8 @@
     "localSymbols": [
       "importTextFrame",
       "endTextFrame",
-      "projectAnchoredTextFrames"
+      "projectAnchoredTextFrames",
+      "importGraphicFrame"
     ],
     "upstreamSymbols": [
       "SwFormatFrameSize aFrameSz ( rFromSet.Get ( RES_FRM_SIZE ) );"
@@ -19,7 +20,8 @@
       "Uses the common native bound fly collection rather than a separate filter-only anchor registry.",
       "Preserves original split, flow, overlap, frame border and transparency values in ODF.",
       "Retains the native fly frame writing direction and the distinct width and height percentage relations in ODF.",
-      "Reuses the nested text-section paragraph iterator for master page content with tables."
+      "Reuses the nested text-section paragraph iterator for master page content with tables.",
+      "Reuses the actual fly-frame attributes around the native embedded Graphic node and projects native image frames in the owning text section."
     ],
     "omittedResponsibilities": [
       "Graphic and embedded objects, other anchor types, full UNO frame descriptors and physical layout are outside this text-frame slice."
@@ -60,6 +62,10 @@
         },
         {
           "path": "apps/office/src/sw/source/filter/xml/odt-page-stories.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts",
           "marker": "@fileoverview"
         }
       ],

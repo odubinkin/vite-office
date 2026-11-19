@@ -1,4 +1,8 @@
 /** @fileoverview Writer native frame properties and fly text cursor at the shared ODF SAX boundary. */
+import { Graphic } from "../../../../vcl/source/gdi/graph";
+import { Size } from "../../../../tools/inc/gen";
+import { SvxOpaqueItem } from "../../../../editeng/inc/opaqitem";
+import type { XMLGraphic, SvXMLGraphicHelper } from "../../../../xmloff/source/core/xmlgrhlp";
 import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
 import { aFrameFormatSetRange } from "../../core/bastyp/init";
@@ -13,7 +17,11 @@ import type { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyl
 import { Color } from "../../../../tools/inc/color";
 import { SwFormatFlySplit } from "../../../inc/formatflysplit";
 import { SwFormatFollowTextFlow } from "../../../inc/fmtfollowtextflow";
-import { RES_FOLLOW_TEXT_FLOW, RES_WRAP_INFLUENCE_ON_OBJPOS } from "../../../inc/hintids";
+import {
+  RES_FOLLOW_TEXT_FLOW,
+  RES_OPAQUE,
+  RES_WRAP_INFLUENCE_ON_OBJPOS,
+} from "../../../inc/hintids";
 import { SvxIndentValue, SvxLRSpaceItem } from "../../../../editeng/inc/lrspitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import type { WrapTextMode } from "../../../../offapi/com/sun/star/text/WrapTextMode";
@@ -37,7 +45,7 @@ import { SwTableNode } from "../../core/docnode/node";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { XMLTextParagraphMarker } from "../../../../xmloff/source/text/txtparae";
 import type { SwFlyFrameFormat } from "../../core/layout/atrfrm";
-import type { BoundTextFrames } from "../../core/layout/flycnt";
+import type { BoundGraphicFrame, BoundTextFrames } from "../../core/layout/flycnt";
 import { MakeFlySection } from "../../core/doc/doclay";
 import type { SwXTextCursor } from "../../core/unocore/unoobj";
 import { SwXText } from "../../core/unocore/unotext";
@@ -48,6 +56,30 @@ export function importTextFrame(
   value: XMLTextFrameAttributes,
   style: XMLTextFrameStyle,
 ): SwXTextCursor {
+  const doc = parent.GetDoc();
+  const format = importFrame(parent, value, style);
+  const start = format.GetContent().GetContentIdx()?.GetNode();
+  if (!start?.IsStartNode()) throw new Error("assert(Writer text frame section)");
+  return new SwXText(doc, start).createTextCursor();
+}
+
+/** Inserts a native Writer graphic in the same frame attributes used by the text frame owner. @param parent - Actual text cursor. @param value - Source dimensions and anchor. @param style - Effective frame properties. @param graphic - Embedded package asset. @returns Nothing. */
+export function importGraphicFrame(
+  parent: SwXTextCursor,
+  value: XMLTextFrameAttributes,
+  style: XMLTextFrameStyle,
+  graphic: XMLGraphic,
+): void {
+  importFrame(parent, value, style, graphic);
+}
+
+/** Constructs an original floating frame with the appropriate native content owner. @param parent - Enclosing paragraph cursor. @param value - Original frame attributes. @param style - Effective style. @param graphic - Optional encoded image. @returns Registered fly frame. */
+function importFrame(
+  parent: SwXTextCursor,
+  value: XMLTextFrameAttributes,
+  style: XMLTextFrameStyle,
+  graphic?: XMLGraphic,
+): SwFlyFrameFormat {
   const doc = parent.GetDoc();
   const position = parent.GetPaM().GetPoint();
   const type = value.anchor === "char" ? RndStdIds.FLY_AT_CHAR : RndStdIds.FLY_AT_PARA;
@@ -66,7 +98,9 @@ export function importTextFrame(
     put(anchor);
     const defaults = doc
       .getIDocumentStylePoolAccess()
-      .GetFrameFormatFromPool(SwPoolFormatId.FRM_FRAME);
+      .GetFrameFormatFromPool(
+        graphic === undefined ? SwPoolFormatId.FRM_FRAME : SwPoolFormatId.FRM_GRAPHIC,
+      );
     if (!defaults) throw new Error("assert(Writer Frame format)");
     const horizontal = defaults.GetHoriOrient();
     const vertical = defaults.GetVertOrient();
@@ -127,14 +161,24 @@ export function importTextFrame(
         direction.Dispose();
       }
     }
+    const embedded =
+      graphic === undefined
+        ? undefined
+        : new Graphic(
+            graphic.bytes,
+            graphic.mediaType,
+            new Size(size.GetWidth(), size.GetHeight()),
+          );
     put(size);
 
-    const format = MakeFlySection(doc, type, position, set);
+    if (style.opaque !== undefined) put(new SvxOpaqueItem(RES_OPAQUE, style.opaque));
+    const format =
+      embedded === undefined
+        ? MakeFlySection(doc, type, position, set)
+        : doc.GetDocumentContentOperationsManager().InsertGraphic(parent.GetPaM(), embedded, set);
     if (value.name && !doc.GetSpzFrameFormats().FindFormatByName(value.name))
       format.SetFormatName(value.name);
-    const start = format.GetContent().GetContentIdx()?.GetNode();
-    if (!start?.IsStartNode()) throw new Error("assert(Writer text frame section)");
-    return new SwXText(doc, start).createTextCursor();
+    return format;
   } finally {
     set.Dispose();
   }
@@ -252,14 +296,24 @@ export function exportTextFrame(
   };
 }
 
+/** Package-aware bindings for the existing automatic graphic style exporter. */
+export interface XMLBoundWriterFrames {
+  readonly text: BoundTextFrames;
+  readonly graphics?: ReadonlyMap<SwTextNode, readonly BoundGraphicFrame[]>;
+  readonly graphicHelper?: SvXMLGraphicHelper;
+}
+
 /** Projects native frame portions at the original paragraph or character position. @param node - Native anchor paragraph. @param anchored - Actual bound frames. @param projectBlock - Projects direct text and table children. @returns XML frame portions. */
 export function projectAnchoredTextFrames(
   node: SwTextNode,
-  anchored: BoundTextFrames | undefined,
-  projectBlock: (block: SwTextNode | SwTableNode, frames: BoundTextFrames) => XMLTextExportBlock,
+  anchored: XMLBoundWriterFrames | undefined,
+  projectBlock: (
+    block: SwTextNode | SwTableNode,
+    frames: XMLBoundWriterFrames,
+  ) => XMLTextExportBlock,
 ): XMLTextParagraphMarker[] {
   if (anchored === undefined) return [];
-  return (anchored.get(node) ?? []).map(
+  const markers: XMLTextParagraphMarker[] = (anchored.text.get(node) ?? []).map(
     /** Projects one bound frame with its direct native section. @param item - Native frame owner and content. @returns Inline frame portion. */
     ({ format, content }) => ({
       kind: "frame",
@@ -273,6 +327,25 @@ export function projectAnchoredTextFrames(
       offset: format.GetAnchor().GetAnchorContentOffset(),
     }),
   );
+  const helper = anchored.graphicHelper;
+  if (helper) {
+    for (const { format, graphic } of anchored.graphics?.get(node) ?? []) {
+      const picture = graphic.GetGraphic();
+      const mediaType = picture.mediaType;
+      const href = helper.saveGraphic({ bytes: picture.GetNativeData(), mediaType });
+      const frame = exportTextFrame(format, []);
+      markers.push({
+        kind: "frame",
+        offset: format.GetAnchor().GetAnchorContentOffset(),
+        frame: {
+          ...frame,
+          graphic: { href, mediaType },
+          style: { ...frame.style, opaque: format.GetOpaque().GetValue() },
+        },
+      });
+    }
+  }
+  return markers;
 }
 
 /** Enumerates the actual text paragraphs in one body or fly section. @param blocks - Direct section blocks. @returns Paragraphs used by the export pass. */

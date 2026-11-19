@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/core/xmlgrhlp.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "odf-filter",
+    "capabilityIds": [
+      "CAP-0113",
+      "CAP-0128",
+      "CAP-a5afdcf9-2789-4ea8-823e-7bb6a5bed84f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/xmloff/source/core/xmlgrhlp.ts",
+        "vendor/libreoffice-reference/xmloff/source/core/xmlgrhlp.cxx",
+        "apps/office/src/xmloff/source/core/xmlgrhlp.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts"
+      ],
+      "justification": "Retains embedded JPEG and PNG byte streams in the native ODF Pictures storage and resolves package-relative image URLs for Writer. Encoded checksums and exact byte comparison bind package identity in the represented raster transport. Native graphic decoders, additional GfxLink encodings and inline binary-data are outside this checkpoint.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvXMLGraphicHelper",
+        "isEmbeddedRaster"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/core/xmlgrhlp.cxx",
+      "upstreamSymbols": [
+        "SvXMLGraphicHelper::implSaveGraphic",
+        "SvXMLGraphicHelper::loadGraphic"
+      ]
+    }
+  }
+}

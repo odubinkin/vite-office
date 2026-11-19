@@ -39,14 +39,16 @@
         "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx#CTF_RELWIDTHREL",
         "apps/office/src/sw/source/filter/xml/odt-page-stories.test.ts",
         "apps/office/e2e/writer-odt-file.spec.ts",
-        "apps/office/e2e/writer-odt-page-stories.spec.ts"
+        "apps/office/e2e/writer-odt-page-stories.spec.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.drawing.test.ts"
       ],
-      "justification": "Uses the native Writer frame and cursor to bind ODF paragraph and character-anchored text frames, then projects the original format and section back to ODF. Graphic and embedded objects, other anchor types, full UNO frame descriptors and physical layout are outside this text-frame slice. RTF100. Uses the common native bound fly collection rather than a separate filter-only anchor registry. RTF101. Preserves original split, flow, overlap, frame border and transparency values in ODF. RTF102. Retains the native fly frame writing direction and the distinct width and height percentage relations in ODF. Reuses the nested text-section paragraph iterator for master page content with tables.",
+      "justification": "Uses the native Writer frame and cursor to bind ODF paragraph and character-anchored text frames, then projects the original format and section back to ODF. Graphic and embedded objects, other anchor types, full UNO frame descriptors and physical layout are outside this text-frame slice. RTF100. Uses the common native bound fly collection rather than a separate filter-only anchor registry. RTF101. Preserves original split, flow, overlap, frame border and transparency values in ODF. RTF102. Retains the native fly frame writing direction and the distinct width and height percentage relations in ODF. Reuses the nested text-section paragraph iterator for master page content with tables. Reuses the actual fly-frame attributes around the native embedded Graphic node and projects native image frames in the owning text section.",
       "knownViolations": [],
       "localSymbols": [
         "importTextFrame",
         "endTextFrame",
-        "projectAnchoredTextFrames"
+        "projectAnchoredTextFrames",
+        "importGraphicFrame"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/core/unocore/unoframe.cxx",

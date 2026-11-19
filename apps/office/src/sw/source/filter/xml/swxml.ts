@@ -7,11 +7,18 @@ import { MIMETYPE_OASIS_OPENDOCUMENT_TEXT as ODT_MIMETYPE } from "../../../../co
 import {
   DocumentArchive,
   ArchiveChecks,
+  assertSafeArchivePath,
+  DEFAULT_ARCHIVE_LIMITS,
   type ArchiveLimits,
 } from "../../../../package/source/zippackage/document-archive";
 import type { XmlPackage } from "../../../../svl/source/misc/storage";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
 import type { OdfXmlDiagnostic } from "../../../../xmloff/source/core/xmlimp";
+import {
+  isEmbeddedRaster,
+  SvXMLGraphicHelper,
+  type XMLGraphic,
+} from "../../../../xmloff/source/core/xmlgrhlp";
 import { importWriterXml, type ImportedWriterDocument } from "./xmlimp";
 
 /** Maximum UTF-8 size accepted for each mandatory ODT XML stream. */
@@ -99,7 +106,21 @@ export class SwXMLReader {
     const contentXml = await optionalText("content.xml", "content");
     const metaXml = await optionalText("meta.xml", "metadata");
     checkpoint(control, "mapping");
+    const graphics = new Map<string, XMLGraphic>();
+    const bounds = limits ?? DEFAULT_ARCHIVE_LIMITS;
+    let totalPictureBytes = 0;
+    for (const [path, mediaType] of manifest) {
+      if (!isEmbeddedRaster(mediaType)) continue;
+      assertSafeArchivePath(path);
+      const picture = await packageFile.readEntry(path);
+      totalPictureBytes += picture.length;
+      if (picture.length > bounds.maxEntryBytes || totalPictureBytes > bounds.maxTotalBytes)
+        throw new Error("ODF embedded images exceed size limit.");
+      if (picture.length) graphics.set(path, { bytes: picture, mediaType });
+      if (control.isCancelled?.() === true) throw new Error("ODT operation was cancelled.");
+    }
     const imported = importWriterXml(stylesXml, contentXml, metadata, metaXml, {
+      graphicHelper: new SvXMLGraphicHelper(graphics),
       ...(settingsXml === undefined ? {} : { settingsXml }),
       ...(control.isCancelled === undefined ? {} : { isCancelled: control.isCancelled }),
       ...(control.defaultFontDevice === undefined

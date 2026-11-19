@@ -12,6 +12,7 @@ import type { XMLTextFrameAttributes, XMLTextFrameStyle } from "./XMLTextFrameCo
 export interface XMLTextFrameExportSource extends Omit<XMLTextFrameAttributes, "styleName"> {
   readonly parentStyle: string;
   readonly style: XMLTextFrameStyle;
+  readonly graphic?: { readonly href: string; readonly mediaType: string };
   readonly content: readonly XMLTextExportBlock[];
 }
 
@@ -48,6 +49,10 @@ export function exportTextFrameStyle(frame: XMLTextFrameExportSource, styleName:
       exportTextConstant("verticalRelation", style.verticalRelation),
     ) +
     attribute("style:wrap", exportTextConstant("wrap", style.wrap)) +
+    attribute(
+      "style:run-through",
+      style.opaque === undefined ? undefined : style.opaque ? "foreground" : "background",
+    ) +
     attribute(
       "style:number-wrapped-paragraphs",
       style.anchorOnly === undefined ? undefined : style.anchorOnly ? "1" : "no-limit",
@@ -106,6 +111,10 @@ export function exportTextFrameElement(
     attribute("style:rel-width", percent(frame.relativeWidth)) +
     attribute("style:rel-height", percent(frame.relativeHeight)) +
     attribute("loext:may-break-between-pages", frame.splitAllowed ? "true" : undefined);
+  if (frame.graphic) {
+    const { href, mediaType } = frame.graphic;
+    return `<draw:frame draw:style-name="${styleName}"${values}><draw:image xlink:href="${escapeXml(href)}" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad" draw:mime-type="${escapeXml(mediaType)}"/></draw:frame>`;
+  }
   const minimum =
     length("fo:min-height", frame.minimumHeight) + length("fo:min-width", frame.minimumWidth);
   return `<draw:frame draw:style-name="${styleName}"${values}><draw:text-box${minimum}>${content}</draw:text-box></draw:frame>`;

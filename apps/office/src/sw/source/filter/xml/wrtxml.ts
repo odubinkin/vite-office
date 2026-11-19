@@ -10,6 +10,7 @@ import { MIMETYPE_OASIS_OPENDOCUMENT_TEXT as ODT_MIMETYPE } from "../../../../co
 import { packXmlPackage } from "../../../../package/source/zippackage/xml-package";
 import type { XmlPackage } from "../../../../svl/source/misc/storage";
 import type { SwDoc } from "../../core/doc/doc";
+import { SvXMLGraphicHelper, type XMLGraphic } from "../../../../xmloff/source/core/xmlgrhlp";
 import { exportContentXml, exportMetaXml, exportStylesXml } from "./xmlexp";
 import { exportSettingsXml } from "./xmlexp-settings";
 
@@ -57,6 +58,12 @@ export class SwXMLWriter {
       },
     };
     const fonts = document.GetEmbeddedFonts();
+    const graphics = new SvXMLGraphicHelper();
+    checkpoint(control, "styles");
+    const styles = exportStylesXml(document, graphics);
+    checkpoint(control, "content");
+    const content = exportContentXml(document, control.isCancelled, graphics);
+    const pictures = graphics.getEntries();
     output.putNextEntry("mimetype", ODT_MIMETYPE);
     output.putNextEntry(
       "META-INF/manifest.xml",
@@ -65,12 +72,11 @@ export class SwXMLWriter {
           /** Projects a font path. @param font - Document font. @returns Package path. */ (font) =>
             font.path,
         ),
+        pictures,
       ),
     );
-    checkpoint(control, "styles");
-    output.putNextEntry("styles.xml", exportStylesXml(document));
-    checkpoint(control, "content");
-    output.putNextEntry("content.xml", exportContentXml(document, control.isCancelled));
+    output.putNextEntry("styles.xml", styles);
+    output.putNextEntry("content.xml", content);
     checkpoint(control, "metadata");
     output.putNextEntry("meta.xml", exportMetaXml(metadata.title, document.GetLocale()));
     output.putNextEntry("settings.xml", exportSettingsXml(document));
@@ -79,6 +85,7 @@ export class SwXMLWriter {
         throw new Error(`ODF embedded font bytes are missing: ${font.path}`);
       output.putNextEntry(font.path, font.bytes);
     }
+    for (const [path, picture] of pictures) output.putNextEntry(path, picture.bytes);
     checkpoint(control, "package");
     const size = Object.values(files).reduce(
       /** Accumulates the unpacked Writer stream byte size. @param sum - sum. @param value - value. @returns Operation result. */ (
@@ -109,8 +116,11 @@ function checkpoint(control: OdtExportControl, stage: OdtExportProgressStage): v
   control.onProgress?.(stage);
 }
 
-/** Writer-owned stream policy feeds the shared native manifest sequence exporter. @param fonts - Embedded font entry paths. @returns XML. */
-function createWriterManifestXml(fonts: readonly string[]): string {
+/** Writer-owned stream policy feeds the shared native manifest sequence exporter. @param fonts - Embedded font entry paths. @param pictures - Collected native pictures. @returns XML. */
+function createWriterManifestXml(
+  fonts: readonly string[],
+  pictures: ReadonlyMap<string, XMLGraphic>,
+): string {
   const entries: readonly (readonly [string, string])[] = [
     ["/", ODT_MIMETYPE],
     ["content.xml", "text/xml"],
@@ -120,6 +130,11 @@ function createWriterManifestXml(fonts: readonly string[]): string {
     ...fonts.map(
       /** Writer font media type. @param path - Path. @returns Entry. */ (path) =>
         [path, "application/x-font-ttf"] as const,
+    ),
+    ...Array.from(
+      pictures,
+      /** Adds the native graphic MIME. @param entry - Package graphic. @returns Manifest path and type. */
+      ([path, graphic]) => [path, graphic.mediaType] as const,
     ),
   ];
   const manifest = entries.map(
