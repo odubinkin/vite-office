@@ -1,0 +1,68 @@
+{
+  "checkpoint": "Calc worksheet pane layout through XLSX, the attached view, Worker snapshots and primary ODS",
+  "implementation": "ea6d8ea50c3d",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sources": [
+    "sc/source/filter/oox/viewsettings.cxx#SheetViewSettings::finalizeImport",
+    "sc/source/filter/excel/xeview.cxx#XclExpTabViewSettings",
+    "sc/source/filter/excel/xeview.cxx#XclExpSelection::SaveXml",
+    "sc/source/ui/view/viewdata.cxx#ScViewDataTable::ReadUserDataSequence",
+    "sc/source/ui/view/viewdata.cxx#ScViewDataTable::SanitizeWhichActive",
+    "xmloff/source/core/DocumentSettingsContext.cxx#XMLConfigItemContext::endFastElement",
+    "xmloff/source/core/SettingsExportHelper.cxx#XMLSettingsExportHelper::exportShort",
+    "sc/qa/unit/subsequent_export_test2.cxx#testFreezePaneStartCellXLSX"
+  ],
+  "fixtures": {
+    "freezePaneStartCell.xlsx": "a1252dc9e87a593026d4bac29b26b2eca6d88129d903ee6bd24293f07b0aee19",
+    "sheet-names.xlsx": "e768518ed6161ec4698e6a24506fc71ce2ebf56b0a2fa5d9dd352b2dfb5f47ec"
+  },
+  "verification": {
+    "calc": {
+      "command": "npm run test:coverage:calc -- viewdata.settings viewdata.test excelfilter.test ods-worker-boundaries calc-files docsh.csv-export --maxWorkers=3 --testTimeout=90000 --coverage.include='src/sc/source/{filter/oox/viewsettings,filter/excel/xeview,ui/view/viewdata.settings,core/data/document.sheet-visibility}.ts' --coverage.reportsDirectory=coverage/calc-panes-final --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "46 tests across six files. Each of the four measured owners passes 90% in all metrics. The JSON report contains xeview.ts with 33/33 statements, 51/51 branches and 4/4 functions. The abbreviated text reporter omits this module."
+    },
+    "shared": {
+      "command": "npm run test:coverage:shared -- DocumentSettingsContext --coverage.include='src/xmloff/source/core/{DocumentSettingsContext,SettingsExportHelper}.ts' --coverage.reportsDirectory=coverage/calc-panes-shared --coverage.reporter=text --coverage.reporter=json --coverage.thresholds.statements=90 --coverage.thresholds.branches=90 --coverage.thresholds.functions=90 --coverage.thresholds.lines=90",
+      "result": "pass",
+      "evidence": "Three tests. Both settings owners pass 90% in all metrics. The typed short values retain signed narrowing and serialize as config:short values."
+    },
+    "writer": {
+      "command": "npm run test:writer -- docxexport.compat native-rtf-tab-settings-roundtrip --maxWorkers=2",
+      "result": "pass",
+      "evidence": "Five related Writer tests across two files."
+    },
+    "chromium": {
+      "command": "PLAYWRIGHT_BROWSERS_PATH=\"$PWD/.agentplane/tmp/zip-migration/browsers\" npm exec -- playwright test --config apps/office/playwright.config.ts --project calc --workers=1 apps/office/e2e/calc/xlsx-active-view.spec.ts --grep 'frozen panes|active sheet|tdf70455'",
+      "result": "pass",
+      "evidence": "Three production browser scenarios. The pinned original opened at F11, was restored from its primary ODS, and downloaded as XLSX with xSplit 5, ySplit 10, state frozen, the corrected second origin F11, and selection D7. Mobile-width import opened the download. All three passed again after a fresh production build with only the preview URL and report paths overridden to use a free local port."
+    },
+    "static": {
+      "commands": [
+        "npm run typecheck",
+        "npm run test:static",
+        "npm run check:docs",
+        "npm run check:dependencies",
+        "npm run check:source-tree",
+        "npm run check:calc-resources",
+        "npm run check:file-size",
+        "npm run test:source-provenance",
+        "node .agentplane/policy/check-routing.mjs",
+        "ap doctor",
+        "git diff --check"
+      ],
+      "result": "pass",
+      "evidence": "The production build, scoped ESLint and Prettier, and scoped registry validation of eight runtime paths also passed. Doctor reports the existing managed hook shim warning."
+    },
+    "global_provenance_and_registry": {
+      "commands": ["npm run check:source-provenance", "npm run inventory:registry:check"],
+      "result": "fail",
+      "evidence": "The pre-existing framework entries for OfficeTooltips.tsx and available-menu-items.ts are still absent. The registry command shares its checker with the invariants and parity scripts."
+    }
+  },
+  "source_findings": ["CALC-753 preserves the source comparison of an absolute right-pane origin with a relative split count."],
+  "residual": [
+    "The attached view reads the imported pane geometry. Independent viewport paint, scrolling, hit testing, and multi-range selection still require their respective view owners.",
+    "The umbrella XLSX task remains in direct execution. Full suites are governed by the approved ten-task cadence."
+  ]
+}

@@ -1,10 +1,10 @@
 ---
 id: "202610251549-J0Z0KF"
 title: "Implement Calc XLSX import export and existing file UI integration"
-status: "DOING"
+status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 673
+revision: 674
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T09:24:51.803Z"
+  updated_at: "2026-11-19T21:26:29.333Z"
   updated_by: "CODER"
-  note: "Worksheet lookup passes the upstream testFuncVLOOKUP and production XLSX reopen checks. Broader filter acceptance remains open."
-  attempts: 219
+  note: "The worksheet pane layout checkpoint passed focused coverage, related Calc/shared/Writer tests, typecheck, static build, and production Chromium file controls. Full XLSX acceptance remains open because the browser grid still needs independent pane viewport rendering and input."
+  attempts: 220
 commit: null
 comments:
   -
@@ -3512,8 +3512,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T21:26:29.333Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "The worksheet pane layout checkpoint passed focused coverage, related Calc/shared/Writer tests, typecheck, static build, and production Chromium file controls. Full XLSX acceptance remains open because the browser grid still needs independent pane viewport rendering and input."
 doc_version: 3
-doc_updated_at: "2026-11-19T09:25:12.121Z"
+doc_updated_at: "2026-11-19T21:26:29.637Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -10214,6 +10220,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-11-19T21:26:29.333Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: The worksheet pane layout checkpoint passed focused coverage, related Calc/shared/Writer tests, typecheck, static build, and production Chromium file controls. Full XLSX acceptance remains open because the browser grid still needs independent pane viewport rendering and input.
+    Attempts: 220
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T09:25:12.121Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -11293,6 +11329,10 @@ sections:
     - Result: pass for active sheet persistence. Complete XLSX scope remains in rework.
     - Evidence: 55 Calc tests with coverage, 25 file regressions, 9 shared checks, 18 Writer tests and four Chromium scenarios passed. All measured owner metrics exceed 90 percent. The unchanged sheet-names workbook retains the active fifth sheet and all special-character names through Worker, ODS and XLSX. The diagnostic copy replacing only the Global4 array literal determined the distinct original named-range compilation failure.
     - Scope: first view ActiveTable by name, shared ODF indexed view settings, primary ODS, and existing Calc desktop and mobile file UI. Other view settings and array literals remain open. No full suite was due.
+
+    - Observation: The original freezePaneStartCell.xlsx preserves the split and corrects the second origin to F11 after the Worker and primary ODS round trip. The non-A1 source correction is retained and documented in CALC-753.
+      Impact: The existing Open and Export controls retain fixed and normal worksheet split settings without changing document storage or modifying the primary ODS on export.
+      Resolution: Record the exact scoped checks in evidence/native-xlsx-pane-layout.json and keep visual pane services and broader XLSX scope in direct execution.
 id_source: "generated"
 ---
 ## Summary
@@ -18003,6 +18043,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-11-19T21:26:29.333Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: The worksheet pane layout checkpoint passed focused coverage, related Calc/shared/Writer tests, typecheck, static build, and production Chromium file controls. Full XLSX acceptance remains open because the browser grid still needs independent pane viewport rendering and input.
+Attempts: 220
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T09:25:12.121Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -19086,3 +19156,7 @@ Evidence: `evidence/xlsx-native-page-break-roundtrip.json`.
 - Result: pass for active sheet persistence. Complete XLSX scope remains in rework.
 - Evidence: 55 Calc tests with coverage, 25 file regressions, 9 shared checks, 18 Writer tests and four Chromium scenarios passed. All measured owner metrics exceed 90 percent. The unchanged sheet-names workbook retains the active fifth sheet and all special-character names through Worker, ODS and XLSX. The diagnostic copy replacing only the Global4 array literal determined the distinct original named-range compilation failure.
 - Scope: first view ActiveTable by name, shared ODF indexed view settings, primary ODS, and existing Calc desktop and mobile file UI. Other view settings and array literals remain open. No full suite was due.
+
+- Observation: The original freezePaneStartCell.xlsx preserves the split and corrects the second origin to F11 after the Worker and primary ODS round trip. The non-A1 source correction is retained and documented in CALC-753.
+  Impact: The existing Open and Export controls retain fixed and normal worksheet split settings without changing document storage or modifying the primary ODS on export.
+  Resolution: Record the exact scoped checks in evidence/native-xlsx-pane-layout.json and keep visual pane services and broader XLSX scope in direct execution.
