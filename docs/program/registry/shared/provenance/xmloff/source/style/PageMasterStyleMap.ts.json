@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/style/PageMasterStyleMap.ts",
+    "localSymbols": [
+      "OdfPageStoryGeometry",
+      "XMLPageHeaderFooterStyleContext"
+    ],
+    "upstreamPath": "xmloff/source/style/PageMasterStyleMap.cxx",
+    "upstreamSymbols": [
+      "CTF_PM_HEADERHEIGHT",
+      "CTF_PM_FOOTERHEIGHT"
+    ],
+    "preservedResponsibilities": [
+      "Reads the original header/footer ODF height, body margin and dynamic-spacing declarations. The map uses the native fixed/minimum height choice from PageMasterImportPropMapper."
+    ],
+    "omittedResponsibilities": [
+      "Full native story layout, overlapping text frames, and complete DOCX/ODF parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/style/PageMasterStyleMap.ts",
+          "marker": "OdfPageStoryGeometry"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.page-stories.test.ts",
+          "marker": "ports testHeaderBorder"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/PageMasterStyleMap.cxx",
+          "marker": "CTF_PM_HEADERHEIGHT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/PageMasterStyleMap.cxx",
+          "marker": "CTF_PM_FOOTERHEIGHT"
+        }
+      ]
+    }
+  }
+}

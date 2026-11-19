@@ -7,7 +7,7 @@ import {
   projectAnchoredTextFrames,
   sectionParagraphs,
 } from "./xmltextframe";
-import { getOdfPageStories } from "./xmlpageheaderfooter";
+import { exportPageStoryStyles, getOdfPageStories } from "./xmlpageheaderfooter";
 import { CollectTextFlyFrames, type BoundTextFrames } from "../../core/layout/flycnt";
 import type { XMLTextExportBlock } from "../../../../xmloff/source/table/XMLTableExport";
 import { getFillProperties, XML_FILL_WHICH_IDS } from "./xmlexp-fill";
@@ -296,7 +296,7 @@ export function exportStylesXml(document: SwDoc): string {
     const page = descriptor.GetValue();
     const layoutName = `pm${index + 1}`;
     pageLayouts.push(
-      `<style:page-layout style:name="${layoutName}"><style:page-layout-properties fo:page-width="${exportOdfLength(page.width)}" fo:page-height="${exportOdfLength(page.height)}" style:print-orientation="${page.landscape ? "landscape" : "portrait"}" fo:margin-top="${exportOdfLength(page.topMargin)}" fo:margin-bottom="${exportOdfLength(page.bottomMargin)}" fo:margin-left="${exportOdfLength(page.leftMargin)}" fo:margin-right="${exportOdfLength(page.rightMargin)}"${exportPageLayoutBox(descriptor.GetMaster(), exportOdfLength)}/></style:page-layout>`,
+      `<style:page-layout style:name="${layoutName}"><style:page-layout-properties fo:page-width="${exportOdfLength(page.width)}" fo:page-height="${exportOdfLength(page.height)}" style:print-orientation="${page.landscape ? "landscape" : "portrait"}" fo:margin-top="${exportOdfLength(page.topMargin)}" fo:margin-bottom="${exportOdfLength(page.bottomMargin)}" fo:margin-left="${exportOdfLength(page.leftMargin)}" fo:margin-right="${exportOdfLength(page.rightMargin)}"${exportPageLayoutBox(descriptor.GetMaster(), exportOdfLength)}/>${exportPageStoryStyles(descriptor.GetMaster(), exportOdfLength)}</style:page-layout>`,
     );
     const followName = descriptor.GetFollow().GetName();
     const follow =

@@ -1,4 +1,5 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
+import { getPageBodyGeometry } from "../../source/core/layout/pagedesc";
 import { SwStyleNameMapper } from "../../source/core/doc/SwStyleNameMapper";
 import { IsPoolUserFormat } from "../../inc/poolfmt";
 import {
@@ -528,7 +529,7 @@ export class WriterViewProjection {
             const descriptor = document.GetPageDesc(index);
             return Object.freeze({
               followName: descriptor.GetFollow().GetName(),
-              value: descriptor.GetValue(),
+              value: getPageBodyGeometry(descriptor),
             });
           },
         ),

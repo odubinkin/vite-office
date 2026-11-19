@@ -35,6 +35,13 @@ import { toTwips, Length } from "../../../../o3tl/inc/unit_conversion";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import { findCharacterStyle } from "../doc/docfmt";
 import { SwStyleNameMapper } from "../doc/SwStyleNameMapper";
+import { getActivePageStory } from "../layout/atrfrm";
+import { SID_ATTR_PAGE_DYNAMIC, SID_ATTR_PAGE_SIZE } from "../../../../svx/inc/svxids";
+import {
+  pageStoryPropertyEntries,
+  readPageStoryProperty,
+  writePageStoryProperty,
+} from "./unostyle.page-stories";
 import { SwUnoPageStylePropertyMap } from "./unomap";
 import { UseOnPage } from "../layout/pagedesc";
 import { SvxPageItem, SvxPageUsage } from "../../../../svx/inc/pageitem";
@@ -87,6 +94,18 @@ export class SwXStyle {
     if (!this.hasProperty(name)) unknown("Unknown property: " + n);
     if (!this.owner)
       return this.pending.has(n) ? PropertyState.DIRECT_VALUE : PropertyState.DEFAULT_VALUE;
+    if (this.family === "PageStyles") {
+      const story = pageStoryPropertyEntries.get(n);
+      if (story) {
+        const frame = getActivePageStory((this.owner as SwPageDesc).GetMaster(), story.header);
+        if (!frame) return PropertyState.AMBIGUOUS_VALUE;
+        if (story.which === SID_ATTR_PAGE_SIZE || story.which === SID_ATTR_PAGE_DYNAMIC)
+          return PropertyState.DIRECT_VALUE;
+        return frame.GetAttrSet().GetItemState(story.which, false) === SfxItemState.SET
+          ? PropertyState.DIRECT_VALUE
+          : PropertyState.DEFAULT_VALUE;
+      }
+    }
     if (this.family === "PageStyles" && SwUnoPageStylePropertyMap.has(n)) {
       const entry = SwUnoPageStylePropertyMap.get(n) as SwUnoPropertyEntry;
       return (this.owner as SwPageDesc)
@@ -123,7 +142,7 @@ export class SwXStyle {
       return;
     }
     if (this.family === "PageStyles") {
-      const entry = SwUnoPageStylePropertyMap.get(n);
+      const entry = SwUnoPageStylePropertyMap.get(n) ?? pageStoryPropertyEntries.get(n);
       if (entry && !pageFields[n]) {
         (this.owner as SwPageDesc).GetMaster().ResetFormatAttr(entry.which);
         return;
@@ -496,6 +515,11 @@ export class SwXStyle {
         entry,
       );
     }
+    const story = readPageStoryProperty(this.owner ? page : undefined, n);
+    if (story) {
+      out.dispose();
+      return story;
+    }
     if (n === "PageStyleLayout") {
       const item = SvxPageItem.CreateDefault();
       item.SetPageUsage(page.GetUseOn() as unknown as SvxPageUsage);
@@ -526,6 +550,7 @@ export class SwXStyle {
         frame.SetFormatAttr(item);
       return;
     }
+    if (writePageStoryProperty(page, n, v)) return;
     if (n === "PageStyleLayout") {
       const item = SvxPageItem.CreateDefault();
       item.SetPageUsage(page.GetUseOn() as unknown as SvxPageUsage);

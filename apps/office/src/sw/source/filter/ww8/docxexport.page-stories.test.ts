@@ -9,11 +9,19 @@ import {
   decodeWriterDocument,
   encodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
+import { getPageBodyGeometry } from "../../core/layout/pagedesc";
+import { HdFtDistanceGlue } from "./writerwordglue";
+import { SwFrameSize, SwFormatFrameSize } from "../../../inc/fmtfsize";
+import { SwFormatFooter, SwFormatHeader } from "../../../inc/fmthdft";
+import { SwHeaderAndFooterEatSpacingItem } from "../../../inc/hfspacingitem";
+import { SwXPageStyle } from "../../core/unocore/unostyle";
+import { scalar, unicode } from "../../core/unocore/unocrsrhelper";
 import { SwDoc } from "../../core/doc/doc";
 import { SwPosition } from "../../core/crsr/pam";
 import { SwTableNode } from "../../core/docnode/node";
 import { SwXHeadFootText, SwXText } from "../../core/unocore/unotext";
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
+import { PropertyState } from "../../../../udkapi/com/sun/star/beans/PropertyState";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import type { SwFrameFormat } from "../../core/layout/atrfrm";
 import { FieldContext } from "../../writerfilter/dmapper/FieldContext";
@@ -22,6 +30,7 @@ import { DomainMapper } from "../../writerfilter/dmapper/DomainMapper";
 import { SourceDocumentType } from "../../writerfilter/inc/dmapper/DomainMapperFactory";
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 import { importOOXML } from "../../writerfilter/filter/WriterFilter";
+import { importWriterXml } from "../xml/xmlimp";
 import { readOdtDocument } from "../xml/swxml";
 import { writeOdtDocument } from "../xml/wrtxml";
 import { DocxExport } from "./docxexport";
@@ -368,6 +377,197 @@ it("keeps page story flags untouched during insertion into an existing document"
     expect(doc.GetPageDesc().IsFooterShared()).toBe(false);
   } finally {
     mapper.dispose();
+    doc.Dispose();
+  }
+});
+
+/** Projects the pinned QA files to the currently represented story markup, preserving the original body, relationships and section properties. @param file - Original sample name. @returns Geometry fixture. */
+async function geometryFixture(file: string): Promise<Uint8Array> {
+  const source = await DocumentArchive.open(fixture("extras/ooxmlexport/data/" + file));
+  const output = new DocumentArchiveWriter();
+  for (const name of source.getEntryNames()) {
+    if (/^word\/(?:header|footer)\d+\.xml$/u.test(name)) {
+      const original = await source.readTextEntry(name);
+      const projected = original
+        .replace(
+          /<w:sdt\b[^>]*>[\s\S]*?<w:sdtContent\b[^>]*>([\s\S]*?)<\/w:sdtContent>[\s\S]*?<\/w:sdt>/gu,
+          "$1",
+        )
+        .replace(/<w:pict\b[^>]*>[\s\S]*?<\/w:pict>/gu, "");
+      output.putNextEntry(name, new TextEncoder().encode(projected));
+    } else output.putNextEntry(name, await source.readEntry(name));
+  }
+  return output.finish();
+}
+
+/** Reads the original typed UNO property from the ordinary page style. @param doc - Actual document. @param key - Native page-style property. @param kind - Expected scalar type. @returns Value. */
+function geometryProperty(
+  doc: SwDoc,
+  key: string,
+  kind: "bool" | "sal_Int32",
+): number | boolean | string {
+  const name = unicode(key);
+  const value = new SwXPageStyle(doc, doc.GetPageDesc()).getPropertyValue(name);
+  try {
+    return scalar(value, kind);
+  } finally {
+    value.dispose();
+    name.dispose();
+  }
+}
+
+it("ports testHeaderBorder with the pinned header-relative section geometry", /** Checks the original margin and offset through DOCX, Worker and primary ODT. @returns Completion. */ async () => {
+  const doc = await importOOXML(await geometryFixture("header-border.docx"), {});
+  let worker: SwDoc | undefined;
+  let stored: SwDoc | undefined;
+  let reopened: SwDoc | undefined;
+  try {
+    const metadata = { title: "Header border" };
+    worker = decodeWriterDocument(structuredClone(encodeWriterDocument(doc)));
+    const odt = await writeOdtDocument(worker, metadata);
+    const styles = await (await DocumentArchive.open(odt)).readTextEntry("styles.xml");
+    expect(styles).toMatch(
+      /<style:header-style><style:header-footer-properties fo:min-height="[^"]+" fo:margin-bottom="[^"]+" style:dynamic-spacing="true"\/>/u,
+    );
+    stored = (await readOdtDocument(odt, metadata)).document;
+    for (const copy of [doc, worker, stored]) {
+      const page = copy.GetPageDesc();
+      const master = page.GetMaster();
+      expect(master.GetULSpace().GetUpper()).toBe(480);
+      expect(geometryProperty(copy, "HeaderHeight", "sal_Int32")).toBe(318);
+      expect(geometryProperty(copy, "HeaderIsDynamicHeight", "bool")).toBe(true);
+      expect(geometryProperty(copy, "HeaderDynamicSpacing", "bool")).toBe(true);
+      expect(geometryProperty(copy, "HeaderBodyDistance", "sal_Int32")).toBe(219);
+      expect(getPageBodyGeometry(page).topMargin).toBe(900);
+    }
+    const bytes = await DocxExport.WriteDocument(stored);
+    const xml = await (await DocumentArchive.open(bytes)).readTextEntry("word/document.xml");
+    expect(xml).toMatch(/<w:pgMar[^>]*w:top="900"[^>]*w:header="720"/u);
+    expect(xml).toMatch(/<w:pgBorders[^>]*w:offsetFrom="page"><w:top[^>]*w:space="24"/u);
+    reopened = await importOOXML(bytes, {});
+    expect(getPageBodyGeometry(reopened.GetPageDesc()).topMargin).toBe(900);
+  } finally {
+    reopened?.Dispose();
+    stored?.Dispose();
+    worker?.Dispose();
+    doc.Dispose();
+  }
+});
+
+it("ports testFooterMarginLost with a first-page footer and minimum story height", /** Checks the original first-page footer and the 1mm lower bound. @returns Completion. */ async () => {
+  const doc = await importOOXML(await geometryFixture("footer-margin-lost.docx"), {});
+  try {
+    const page = doc.GetPageDesc();
+    expect(page.IsFirstShared()).toBe(false);
+    expect(page.GetFirstMaster().GetFooter().GetFooterFormat()?.GetFrameSize().GetHeight()).toBe(
+      57,
+    );
+    expect(geometryProperty(doc, "FooterBodyDistance", "sal_Int32")).toBe(0);
+    expect(geometryProperty(doc, "FooterIsDynamicHeight", "bool")).toBe(true);
+    const archive = await DocumentArchive.open(await DocxExport.WriteDocument(doc));
+    const xml = await archive.readTextEntry("word/document.xml");
+    expect(xml).toMatch(/<w:pgMar[^>]*w:footer="709"/u);
+  } finally {
+    doc.Dispose();
+  }
+});
+
+it("uses the original fixed and headless variable story height paths", /** Verifies native comparison, page-story metadata and signed fixed dimensions. @returns Nothing. */ () => {
+  const doc = new SwDoc();
+  try {
+    const first = doc.GetPageDesc().GetMaster();
+    const second = doc.MakePageDesc("Story margins").GetMaster();
+    const firstSpacing = first.GetULSpace();
+    const plain = new HdFtDistanceGlue(first);
+    expect(plain.HasHeader()).toBe(false);
+    expect(plain.HasFooter()).toBe(false);
+    expect(plain.m_DyaTop).toBe(firstSpacing.GetUpper());
+
+    first.SetFormatAttr(new SwFormatHeader(true));
+    first.SetFormatAttr(new SwFormatFooter(true));
+    const header = first.GetHeader().GetHeaderFormat();
+    const footer = first.GetFooter().GetFooterFormat();
+    assert(header && footer);
+    header.SetFormatAttr(new SwFormatFrameSize(SwFrameSize.Fixed, 0, 500));
+    footer.SetFormatAttr(new SwFormatFrameSize(SwFrameSize.Variable));
+    const ul = footer.GetULSpace().Clone();
+    ul.SetUpper(123);
+    ul.SetLower(70);
+    footer.SetFormatAttr(ul);
+    const distances = new HdFtDistanceGlue(first);
+    expect(distances.HasHeader()).toBe(true);
+    expect(distances.HasFooter()).toBe(true);
+    expect(distances.m_DyaTop - distances.m_DyaHdrTop).toBe(500);
+    expect(distances.m_DyaBottom - distances.m_DyaHdrBottom).toBe(344);
+    expect(geometryProperty(doc, "HeaderIsDynamicHeight", "bool")).toBe(false);
+    expect(geometryProperty(doc, "HeaderDynamicSpacing", "bool")).toBe(false);
+    expect(plain.StrictEqualTopBottom(distances)).toBe(true);
+
+    footer.SetFormatAttr(new SwFormatFrameSize(SwFrameSize.Variable, 0, 615));
+    footer.SetFormatAttr(new SwHeaderAndFooterEatSpacingItem(undefined, true));
+    second.SetFormatAttr(first.GetHeader());
+    second.SetFormatAttr(first.GetFooter());
+    const equal = new HdFtDistanceGlue(second);
+    expect(equal.StrictEqualTopBottom(new HdFtDistanceGlue(first))).toBe(true);
+    expect(equal.m_DyaBottom - equal.m_DyaHdrBottom).toBe(615);
+    header.SetFormatAttr(new SwFormatFrameSize(SwFrameSize.Minimum, 0, 450));
+    expect(equal.StrictEqualTopBottom(new HdFtDistanceGlue(first))).toBe(false);
+  } finally {
+    doc.Dispose();
+  }
+});
+
+it("restores fixed ODF story dimensions and keeps inactive page-style properties void", /** Exercises the shared ODF map on actual native story items. @returns Completion. */ async () => {
+  const doc = new SwDoc();
+  let reopened: SwDoc | undefined;
+  const key = unicode("HeaderHeight");
+  const style = new SwXPageStyle(doc, doc.GetPageDesc());
+  try {
+    expect(style.getPropertyState(key)).toBe(PropertyState.AMBIGUOUS_VALUE);
+    const inactive = style.getPropertyValue(key);
+    try {
+      expect(inactive.hasValue()).toBe(false);
+    } finally {
+      inactive.dispose();
+    }
+    const master = doc.GetPageDesc().GetMaster();
+    master.SetFormatAttr(new SwFormatHeader(true));
+    master.SetFormatAttr(new SwFormatFooter(true));
+    const header = master.GetHeader().GetHeaderFormat();
+    const footer = master.GetFooter().GetFooterFormat();
+    assert(header && footer);
+    header.SetFormatAttr(new SwFormatFrameSize(SwFrameSize.Fixed, 0, 320));
+    expect(style.getPropertyState(key)).toBe(PropertyState.DIRECT_VALUE);
+    footer.SetFormatAttr(new SwFormatFrameSize(SwFrameSize.Minimum, 0, 270));
+    header.SetFormatAttr(new SwHeaderAndFooterEatSpacingItem(undefined, false));
+    const zip = await DocumentArchive.open(await writeOdtDocument(doc, { title: "ODF story" }));
+    const styles = (await zip.readTextEntry("styles.xml"))
+      .replace("<style:header-style>", "<style:header-style><style:graphic-properties/>")
+      .replace('style:dynamic-spacing="false"', 'style:dynamic-spacing="false" fo:margin="3pt"')
+      .replace(
+        "<style:footer-style><style:header-footer-properties",
+        '<style:footer-style><style:header-footer-properties fo:margin-top="bad"',
+      );
+    reopened = importWriterXml(styles, undefined, { title: "ODF story" }).document;
+    const restored = reopened.GetPageDesc().GetMaster();
+    expect(restored.GetHeader().GetHeaderFormat()?.GetFrameSize().GetHeight()).toBe(320);
+    expect(restored.GetHeader().GetHeaderFormat()?.GetULSpace().GetLower()).toBe(60);
+    expect(geometryProperty(reopened, "HeaderIsDynamicHeight", "bool")).toBe(false);
+    expect(geometryProperty(reopened, "HeaderDynamicSpacing", "bool")).toBe(false);
+    expect(geometryProperty(reopened, "FooterIsDynamicHeight", "bool")).toBe(true);
+    expect(restored.GetFooter().GetFooterFormat()?.GetFrameSize().GetHeight()).toBe(270);
+    const restoredStyle = new SwXPageStyle(reopened, reopened.GetPageDesc());
+    const spacing = unicode("HeaderBodyDistance");
+    try {
+      expect(restoredStyle.getPropertyState(spacing)).toBe(PropertyState.DIRECT_VALUE);
+      restoredStyle.setPropertyToDefault(spacing);
+      expect(geometryProperty(reopened, "HeaderBodyDistance", "sal_Int32")).toBe(106);
+    } finally {
+      spacing.dispose();
+    }
+  } finally {
+    key.dispose();
+    reopened?.Dispose();
     doc.Dispose();
   }
 });

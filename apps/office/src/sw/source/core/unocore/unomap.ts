@@ -20,6 +20,7 @@ import { cppu_detail_getUnoType_BorderLine as borderLineType } from "../../../..
 import { cppu_detail_getUnoType_ShadowFormat as shadowFormatType } from "../../../../offapi/com/sun/star/table/ShadowFormat";
 import * as H from "../../../inc/hintids";
 import { WID_DOC_DEFAULT_PAGE_MODE, WID_DOC_INTEROP_GRAB_BAG } from "../../../inc/unomap";
+import { pageStoryPropertyEntries } from "./unostyle.page-stories";
 import * as Grid from "../../../inc/unomid";
 import { MID_PAGEDESC_PAGEDESCNAME, MID_PAGEDESC_PAGENUMOFFSET } from "../../../inc/unomid";
 /** Native item member transport already provided by the bounded core item. */
@@ -928,6 +929,7 @@ export class SwUnoPropertyMapProvider {
         );
         entries = new Map([
           ...entries,
+          ...pageStoryPropertyEntries,
           ["FollowStyle", row(Command.FN_UNO_FOLLOW_STYLE, "OUString")],
           ["Width", row(SID_ATTR_PAGE_SIZE, "sal_Int32", MID_SIZE_WIDTH | CONVERT_TWIPS)],
           ["Height", row(SID_ATTR_PAGE_SIZE, "sal_Int32", MID_SIZE_HEIGHT | CONVERT_TWIPS)],

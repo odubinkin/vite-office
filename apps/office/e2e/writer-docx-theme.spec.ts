@@ -358,3 +358,71 @@ test("Writer keeps Word page borders and shadow through local storage and downlo
   });
   await expect(page.getByText("reopened-page-border", { exact: true })).toBeVisible();
 });
+
+test("Writer preserves Word header-relative borders and body placement", /** Exercises the pinned header-border geometry with the unsupported content-control wrapper removed through existing desktop and mobile file controls. @param fixtures - Chromium fixtures. @param fixtures.page - Browser page. @returns Completion. */ async ({
+  page,
+}) => {
+  const fixture = fileURLToPath(
+    new URL(
+      "../../../vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/header-border.docx",
+      import.meta.url,
+    ),
+  );
+  const firstPage = page.getByRole("document", { name: "Page 1", exact: true });
+  const original = await DocumentArchive.open(new Uint8Array(await readFile(fixture)));
+  const input = new DocumentArchiveWriter();
+  for (const entry of original.getEntryNames()) {
+    const bytes =
+      entry === "word/footer1.xml"
+        ? new TextEncoder().encode(
+            (await original.readTextEntry(entry)).replace(
+              /<w:sdt\b[^>]*>[\s\S]*?<w:sdtContent\b[^>]*>([\s\S]*?)<\/w:sdtContent>[\s\S]*?<\/w:sdt>/gu,
+              "$1",
+            ),
+          )
+        : await original.readEntry(entry);
+    input.putNextEntry(entry, bytes);
+  }
+  await page.goto("/writer");
+  await page.getByRole("button", { name: "Open" }).click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer: Buffer.from(await input.finish()),
+    name: "header-border.docx",
+    mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  });
+  await expect(firstPage).toContainText("Some text here.");
+  await expect(firstPage).toHaveCSS("padding-top", "60px");
+  await expect(page.getByRole("status", { name: "Writer status bar" })).toContainText(
+    "Saved locally in this browser.",
+  );
+
+  await page.reload();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole("button", { name: "Open" }).click();
+  await page.getByRole("tab", { name: "In browser" }).click();
+  await page.getByRole("button", { name: "header-border", exact: true }).click();
+  await expect(firstPage).toContainText("Some text here.");
+  await expect(firstPage).toHaveCSS("padding-top", "60px");
+
+  const finished = page.waitForEvent("download");
+  await page.getByRole("menuitem", { name: "File" }).click();
+  await page.getByRole("menuitem", { name: "Export…" }).click();
+  await page.getByRole("button", { name: "Download DOCX" }).click();
+  const path = await (await finished).path();
+  if (!path) throw new Error("Chromium did not expose the DOCX file.");
+  const bytes = await readFile(path);
+  const archive = await DocumentArchive.open(new Uint8Array(bytes));
+  const xml = await archive.readTextEntry("word/document.xml");
+  expect(xml).toMatch(/<w:pgMar[^>]*w:top="900"[^>]*w:header="720"/u);
+  expect(xml).toMatch(/<w:pgBorders[^>]*><w:top[^>]*w:space="24"/u);
+  await page.getByRole("button", { name: "Open" }).click();
+  await page.getByRole("tab", { name: "On computer" }).click();
+  await page.getByLabel("Browse").setInputFiles({
+    buffer: bytes,
+    name: "header-border-reopened.docx",
+    mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  });
+  await expect(page.getByText("header-border-reopened", { exact: true })).toBeVisible();
+  await expect(firstPage).toHaveCSS("padding-top", "60px");
+});

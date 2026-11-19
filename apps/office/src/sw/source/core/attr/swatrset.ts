@@ -71,6 +71,7 @@ import {
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
+import { SwHeaderAndFooterEatSpacingItem } from "../../../inc/hfspacingitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { restoreParagraphControlItem, writerColorFromPrimitive } from "./swatrset.paragraph";
 export { writerColorFromPrimitive } from "./swatrset.paragraph";
@@ -91,6 +92,7 @@ import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import {
   RES_BOX,
   RES_SHADOW,
+  RES_HEADER_FOOTER_EAT_SPACING,
   RES_BACKGROUND,
   RES_BREAK,
   RES_CHRATR_AUTOKERN,
@@ -337,6 +339,11 @@ export class SwAttrPool extends SfxItemPool {
       ) => new SwFormatRowSplit(Boolean(value)),
     );
     register(RES_SHADOW);
+    register(
+      RES_HEADER_FOOTER_EAT_SPACING,
+      /** Restores the original concrete spacing item from its boolean value. @param value - Snapshot value. @returns Native item. */
+      (value) => new SwHeaderAndFooterEatSpacingItem(RES_HEADER_FOOTER_EAT_SPACING, Boolean(value)),
+    );
     register(
       RES_BOX,
       /** Applies register to value. @param value - value value. @returns Callback result. */ (

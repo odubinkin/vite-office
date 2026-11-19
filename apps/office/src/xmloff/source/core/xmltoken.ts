@@ -424,6 +424,11 @@ export enum XMLToken {
   STYLE_FOOTER,
   STYLE_FOOTER_LEFT,
   STYLE_FOOTER_FIRST,
+  STYLE_HEADER_STYLE,
+  STYLE_FOOTER_STYLE,
+  STYLE_HEADER_FOOTER_PROPERTIES,
+  STYLE_DYNAMIC_SPACING,
+  FO_MARGIN,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -571,6 +576,11 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.style, "page-layout", XMLToken.STYLE_PAGE_LAYOUT],
   [ODF_NAMESPACES.style, "page-layout-properties", XMLToken.STYLE_PAGE_LAYOUT_PROPERTIES],
   [ODF_NAMESPACES.style, "master-page", XMLToken.STYLE_MASTER_PAGE],
+  [ODF_NAMESPACES.style, "header-style", XMLToken.STYLE_HEADER_STYLE],
+  [ODF_NAMESPACES.style, "footer-style", XMLToken.STYLE_FOOTER_STYLE],
+  [ODF_NAMESPACES.style, "header-footer-properties", XMLToken.STYLE_HEADER_FOOTER_PROPERTIES],
+  [ODF_NAMESPACES.style, "dynamic-spacing", XMLToken.STYLE_DYNAMIC_SPACING],
+  [ODF_NAMESPACES.fo, "margin", XMLToken.FO_MARGIN],
   [ODF_NAMESPACES.style, "header", XMLToken.STYLE_HEADER],
   [ODF_NAMESPACES.style, "header-left", XMLToken.STYLE_HEADER_LEFT],
   [ODF_NAMESPACES.style, "header-first", XMLToken.STYLE_HEADER_FIRST],

@@ -250,6 +250,8 @@ export const RES_LINENUMBER = 126 as const;
 
 /** Native frame/paragraph direction, RES_FRMATR_BEGIN +38. */
 export const RES_FRAMEDIR = 130 as const;
+/** Original header/footer dynamic spacing item. */
+export const RES_HEADER_FOOTER_EAT_SPACING = 131 as const;
 
 /** Table adjacent-border merging, RES_FRMATR_BEGIN + 43. */
 export const RES_COLLAPSING_BORDERS = 135 as const;

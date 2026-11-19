@@ -3,7 +3,12 @@ import { expect, it } from "vitest";
 import { SwUnoPropertyMapProvider, aSwMapProvider } from "./unomap";
 import * as Id from "../../../inc/unomap";
 import * as Command from "../../../inc/cmdid";
-import { SID_ATTR_PAGE, SID_ATTR_PAGE_SIZE } from "../../../../svx/inc/svxids";
+import { RES_HEADER_FOOTER_EAT_SPACING, RES_UL_SPACE } from "../../../inc/hintids";
+import {
+  SID_ATTR_PAGE,
+  SID_ATTR_PAGE_DYNAMIC,
+  SID_ATTR_PAGE_SIZE,
+} from "../../../../svx/inc/svxids";
 import { createWriterDocument } from "../doc/doc";
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 import { XPropertySetInfo } from "../../../../udkapi/com/sun/star/beans/XPropertySetInfo";
@@ -51,17 +56,22 @@ it("publishes real original handles and members instead of host-only minus-one h
     }
   }
   const page = aSwMapProvider.GetPropertySet(Id.PROPERTY_MAP_PAGE_STYLE).getPropertyMap();
-  for (const [name, which, member] of [
+  for (const [name, which, member, attributes = 0] of [
     ["Width", SID_ATTR_PAGE_SIZE, 129],
     ["Height", SID_ATTR_PAGE_SIZE, 130],
     ["IsLandscape", SID_ATTR_PAGE, 1],
     ["PageStyleLayout", SID_ATTR_PAGE, 2],
     ["FollowStyle", Command.FN_UNO_FOLLOW_STYLE, 0],
+    ["HeaderHeight", SID_ATTR_PAGE_SIZE, 130],
+    ["FooterBodyDistance", RES_UL_SPACE, 131],
+    ["HeaderBodyDistance", RES_UL_SPACE, 132],
+    ["FooterIsDynamicHeight", SID_ATTR_PAGE_DYNAMIC, 0],
+    ["HeaderDynamicSpacing", RES_HEADER_FOOTER_EAT_SPACING, 0, 1],
   ] as const) {
     const key = unicode(name);
     try {
       const entry = page.getByName(key.getStr().subarray(0, key.getLength()));
-      expect([entry?.nWID, entry?.nMemberId, entry?.nFlags]).toEqual([which, member, 0]);
+      expect([entry?.nWID, entry?.nMemberId, entry?.nFlags]).toEqual([which, member, attributes]);
     } finally {
       key.dispose();
     }
@@ -91,7 +101,10 @@ it("returns actual queried metadata References and native sequences from existin
           value,
         ) => [text(value.Name), value.Handle, value.Attributes],
       ),
-    ).toEqual([["DefaultPageMode", Id.WID_DOC_DEFAULT_PAGE_MODE, 0]]);
+    ).toEqual([
+      ["DefaultPageMode", Id.WID_DOC_DEFAULT_PAGE_MODE, 0],
+      ["InteropGrabBag", Id.WID_DOC_INTEROP_GRAB_BAG, 0],
+    ]);
     const cursor = metadata(model.getText().getStart().getPropertySetInfo());
     const numbering = unicode("NumberingRules"),
       descriptor = cursor.getPropertyByName(numbering);

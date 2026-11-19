@@ -5114,3 +5114,29 @@ length using zero for its second coordinate.
 
 - [Original shadow value parser](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/xmloff/source/style/shadwhdl.cxx#L43-L116)
 - [Regression](../../apps/office/src/xmloff/source/style/shadwhdl.test.ts)
+
+### WRITER-664 — Word's variable story height fallback reads the opposite UL margin
+
+With dynamic spacing disabled and no layout rectangle, Word export estimates
+the height of a variable header or footer as 274 twips plus UL spacing.
+`CalcHdDist` reads the header's upper spacing, and `CalcFtDist` reads the
+footer's lower spacing. The UNO body-distance properties map to the opposite
+sides. Writer preserves the source fallback and its distinction from fixed
+and minimum heights.
+
+- [Original Word distance calculation](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/filter/ww8/writerwordglue.cxx#L61-L106)
+- [Original page-style property map](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/core/unocore/unomap1.cxx#L508-L542)
+- [Writer regression](../../apps/office/src/sw/source/filter/ww8/docxexport.page-stories.test.ts)
+
+### WRITER-665 — Resetting a nested page-story property targets the page master
+
+The UNO page-style setter resolves the header or footer item set when
+setting a nested story property. The inherited `setPropertiesToDefault`
+resolves the page master as the target format and resets the property
+WhichId there. Resetting a header body distance can therefore reset page
+UL spacing while leaving the header's own distance in place. Writer retains
+the source distinction.
+
+- [Original nested setter](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/core/unocore/unostyle.cxx#L2983-L3050)
+- [Original reset implementation](https://github.com/LibreOffice/core/blob/9bc445578031fecf56086729d8e4940c77e14d65/sw/source/core/unocore/unostyle.cxx#L2732-L2784)
+- [Writer regression](../../apps/office/src/sw/source/filter/ww8/docxexport.page-stories.test.ts)

@@ -46,6 +46,7 @@ export function ResolvePageMargins(
   section.SetRightMargin(margins.right);
   section.SetBottomMargin(margins.bottom);
   section.SetLeftMargin(margins.left);
+  section.SetHeaderFooterMargins(margins.header, margins.footer);
   insert(section, P.PROP_GUTTER_MARGIN, new Any([margins.gutter], "sal_Int32"));
 }
 

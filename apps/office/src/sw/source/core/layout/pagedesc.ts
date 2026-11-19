@@ -1,6 +1,6 @@
 /** @fileoverview Native SwPageDesc frame-format and use/follow ownership from pagedesc.cxx; immutable geometry is only a browser projection of canonical pooled items. */
-
-import { SwFrameFormat } from "./atrfrm";
+import { SvxBoxItemLine as BoxEdge } from "../../../../editeng/source/items/frmitems";
+import { getActivePageStory, SwFrameFormat } from "./atrfrm";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import {
@@ -279,6 +279,30 @@ export class SwPageDesc extends BroadcastingModify {
       frame.DisposeModify();
     super.DisposeModify();
   }
+}
+
+/** Projects the native body print area between the page's border box and story frames. @param page - Actual page descriptor. @returns Absolute physical body geometry. */
+export function getPageBodyGeometry(page: SwPageDesc): WriterPageDescriptorValue {
+  const value = page.GetValue();
+  const master = page.GetMaster();
+  const box = master.GetBox();
+  const gutter = master.GetLRSpace().GetGutterMargin();
+  const gutterAtTop = master.GetDoc().GetDocumentSettingManager().get("GUTTER_AT_TOP");
+  return {
+    ...value,
+    topMargin:
+      value.topMargin +
+      box.CalcLineSpace(BoxEdge.TOP, true) +
+      (getActivePageStory(master, true)?.GetFrameSize().GetHeight() ?? 0) +
+      (gutterAtTop ? gutter : 0),
+    bottomMargin:
+      value.bottomMargin +
+      box.CalcLineSpace(BoxEdge.BOTTOM, true) +
+      (getActivePageStory(master, false)?.GetFrameSize().GetHeight() ?? 0),
+    leftMargin:
+      value.leftMargin + box.CalcLineSpace(BoxEdge.LEFT, true) + (gutterAtTop ? 0 : gutter),
+    rightMargin: value.rightMargin + box.CalcLineSpace(BoxEdge.RIGHT, true),
+  };
 }
 
 /** Native docdesc locale/paper defaults exposed as geometry for browser reset without creating detached core objects. @param locale - Locale. @returns Geometry. */

@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/unocore/unostyle.page-stories.ts",
+    "localSymbols": [
+      "pageStoryPropertyEntries",
+      "readPageStoryProperty",
+      "writePageStoryProperty"
+    ],
+    "upstreamPath": "sw/source/core/unocore/unostyle.cxx",
+    "upstreamSymbols": [
+      "SwXPageStyle::SetPropertyValues_Impl",
+      "SwXPageStyle::GetPropertyValues_Impl"
+    ],
+    "preservedResponsibilities": [
+      "The original page-style metric properties resolve active nested header/footer formats and distribute updates to real frame size, UL space and dynamic spacing items while preserving story identities."
+    ],
+    "omittedResponsibilities": [
+      "Full native story layout, overlapping text frames, and complete DOCX/ODF parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/unocore/unostyle.page-stories.ts",
+          "marker": "pageStoryPropertyEntries"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.page-stories.test.ts",
+          "marker": "ports testHeaderBorder"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unostyle.cxx",
+          "marker": "SwXPageStyle::SetPropertyValues_Impl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/unocore/unostyle.cxx",
+          "marker": "SwXPageStyle::GetPropertyValues_Impl"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/unocore/unostyle.page-stories.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Nested page-style header/footer metric handling is grouped separately from the main UNO style translation unit."
+    }
+  }
+}

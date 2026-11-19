@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/inc/hfspacingitem.ts",
+    "localSymbols": [
+      "SwHeaderAndFooterEatSpacingItem"
+    ],
+    "upstreamPath": "sw/inc/hfspacingitem.hxx",
+    "upstreamSymbols": [
+      "SwHeaderAndFooterEatSpacingItem"
+    ],
+    "preservedResponsibilities": [
+      "Native header/footer spacing retains its concrete boolean value, false default, pooled WhichId and clone contract."
+    ],
+    "omittedResponsibilities": [
+      "Full native story layout, overlapping text frames, and complete DOCX/ODF parity remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/hfspacingitem.ts",
+          "marker": "SwHeaderAndFooterEatSpacingItem"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.page-stories.test.ts",
+          "marker": "ports testHeaderBorder"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/hfspacingitem.hxx",
+          "marker": "SwHeaderAndFooterEatSpacingItem"
+        }
+      ]
+    }
+  }
+}

@@ -117,3 +117,13 @@ export class SwFlyFrameFormat extends SpzFrameFormat {
     super(pool, name, parent, RES_FLYFRMFMT);
   }
 }
+
+/** Borrows the actual active header or footer format associated with a page variant. @param variant - Page frame. @param header - Whether header. @returns Connected frame or absence. */
+export function getActivePageStory(variant: SwFrameFormat, header: boolean): SwFrameFormat | null {
+  if (header) {
+    const item = variant.GetHeader();
+    return item.IsActive() ? item.GetHeaderFormat() : null;
+  }
+  const item = variant.GetFooter();
+  return item.IsActive() ? item.GetFooterFormat() : null;
+}

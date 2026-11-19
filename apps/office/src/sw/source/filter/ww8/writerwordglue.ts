@@ -1,4 +1,8 @@
 /** @fileoverview Native Writer MS font substitution/token mapping and charset conversion. The original Unicode values use existing UTF16/SAL bindings; unrelated Word import helpers are not admitted. */
+import { SwFrameSize } from "../../../inc/fmtfsize";
+import { RES_HEADER_FOOTER_EAT_SPACING } from "../../../inc/hintids";
+import type { SwHeaderAndFooterEatSpacingItem } from "../../../inc/hfspacingitem";
+import { getActivePageStory } from "../../core/layout/atrfrm";
 import { BreakIteratorImpl } from "../../../../i18npool/source/breakiterator/breakiteratorImpl";
 import { resolveDefaultBidiLevels } from "../../../../external/icu/source/common/ubidi";
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
@@ -245,20 +249,60 @@ function lcl_getWordLRSpace(frame: SwFrameFormat): ReturnType<SwFrameFormat["Get
   );
   return lr;
 }
-/** Consumed original header/footer distance glue. The current model has no header/footer content owners, so both native presence branches are false. */
+/** Computes the source header/footer measurement when no laid-out story rectangle is available. @param frame - Actual story. @param spacing - Edge-specific UL spacing in twips. @returns Story height in twips. */
+function CalcHdFtDist(frame: SwFrameFormat, spacing: number): number {
+  const size = frame.GetFrameSize();
+  const dynamicSpacing = frame
+    .GetAttrSet()
+    .Get(RES_HEADER_FOOTER_EAT_SPACING) as SwHeaderAndFooterEatSpacingItem;
+  if (dynamicSpacing.GetValue() || size.GetHeightSizeType() !== SwFrameSize.Variable)
+    return size.GetHeight();
+  return 274 + spacing;
+}
+
+/** Original Word page distance glue separating story edge from body edge. */
 export class HdFtDistanceGlue {
+  readonly m_DyaHdrTop: number;
+  readonly m_DyaHdrBottom: number;
   readonly m_DyaTop: number;
   readonly m_DyaBottom: number;
-  /** Original no-header/footer distance construction includes box line space even without a border. @param frame - Actual frame. @returns Distance glue. */
+  private readonly mbHasHeader: boolean;
+  private readonly mbHasFooter: boolean;
+
+  /** Includes signed border line space according to the original item policy. @param frame - Actual page frame. @returns Distance glue. */
   constructor(frame: SwFrameFormat) {
-    const box = frame.GetBox(),
-      ul = frame.GetULSpace();
-    this.m_DyaTop = box.CalcLineSpace(SvxBoxItemLine.TOP, true) + ul.GetUpper();
-    this.m_DyaBottom = box.CalcLineSpace(SvxBoxItemLine.BOTTOM, true) + ul.GetLower();
+    const box = frame.GetBox();
+    const ul = frame.GetULSpace();
+    const header = getActivePageStory(frame, true);
+    const footer = getActivePageStory(frame, false);
+    this.mbHasHeader = header !== null;
+    this.mbHasFooter = footer !== null;
+    this.m_DyaHdrTop = box.CalcLineSpace(SvxBoxItemLine.TOP, true) + ul.GetUpper();
+    this.m_DyaHdrBottom = box.CalcLineSpace(SvxBoxItemLine.BOTTOM, true) + ul.GetLower();
+    this.m_DyaTop =
+      this.m_DyaHdrTop +
+      (header ? CalcHdFtDist(header, header.GetULSpace().GetUpper()) & 0xffff : 0);
+    this.m_DyaBottom =
+      this.m_DyaHdrBottom +
+      (footer ? CalcHdFtDist(footer, footer.GetULSpace().GetLower()) & 0xffff : 0);
   }
-  /** Original equality for the represented both-without-header/footer profile. @param other - Original other distances. @returns Whether both physical distances match. */
+
+  /** Reports the ordinary header presence. @returns Whether a header is active. */
+  HasHeader(): boolean {
+    return this.mbHasHeader;
+  }
+
+  /** Reports the ordinary footer presence. @returns Whether a footer is active. */
+  HasFooter(): boolean {
+    return this.mbHasFooter;
+  }
+
+  /** Matches the original comparison when both pages agree on story presence per edge. @param other - Original other distances. @returns Whether comparable body distances match. */
   StrictEqualTopBottom(other: HdFtDistanceGlue): boolean {
-    return this.m_DyaTop === other.m_DyaTop && this.m_DyaBottom === other.m_DyaBottom;
+    return (
+      (this.HasHeader() !== other.HasHeader() || this.m_DyaTop === other.m_DyaTop) &&
+      (this.HasFooter() !== other.HasFooter() || this.m_DyaBottom === other.m_DyaBottom)
+    );
   }
 }
 /** Original single-Word-section admission on actual native frame items; column sets are absent in the current model. @param title - Actual selected first-page frame. @param follow - Actual follow master. @returns Whether one Word section can represent them. */

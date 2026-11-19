@@ -52,6 +52,7 @@ import { SwFormatSurround } from "../../../inc/fmtsrnd";
 import { SwFormatFillOrder } from "../../../inc/fmtfordr";
 import { SvxFrameDirectionItem } from "../../../../editeng/inc/frmdiritem";
 import { SvxFrameDirection } from "../../../../editeng/inc/frmdir";
+import { SwHeaderAndFooterEatSpacingItem } from "../../../inc/hfspacingitem";
 import { RES_FRAMEDIR } from "../../../inc/hintids";
 import { SwFormatAutoFormat } from "../txtnode/txatbase";
 import { RES_PARATR_LIST_AUTOFMT, RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
@@ -242,6 +243,7 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
     add(new SwFormatSurround());
     add(new SvxBoxItem(RES_BOX));
     add(new SvxShadowItem(RES_SHADOW));
+    add(new SwHeaderAndFooterEatSpacingItem());
     add(new SfxBoolItem(RES_COLLAPSING_BORDERS, false));
     add(new SwFormatINetFormat("", ""));
     add(new SwFormatCharFormat());

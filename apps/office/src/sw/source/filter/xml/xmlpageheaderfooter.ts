@@ -1,4 +1,13 @@
 /** @fileoverview Native header/footer text context and ODF master-page variant selection. */
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
+import { RES_FRM_SIZE, RES_HEADER_FOOTER_EAT_SPACING, RES_UL_SPACE } from "../../../inc/hintids";
+import { SwFrameSize } from "../../../inc/fmtfsize";
+import type { SwHeaderAndFooterEatSpacingItem } from "../../../inc/hfspacingitem";
+import { getActivePageStory, type SwFrameFormat } from "../../core/layout/atrfrm";
+import type { SwXStyle } from "../../core/unocore/unostyle";
+import { unicode } from "../../core/unocore/unocrsrhelper";
+import type { OdfPageLayout } from "../../../../xmloff/source/style/xmlstyle";
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
 import { XMLToken } from "../../../../xmloff/source/core/xmltoken";
 import {
@@ -10,7 +19,6 @@ import type { XMLTextImportHelper } from "../../../../xmloff/source/text/txtimp"
 import { SwFormatFooter, SwFormatHeader } from "../../../inc/fmthdft";
 import type { SwStartNode } from "../../core/docnode/node";
 import type { SwPageDesc } from "../../core/layout/pagedesc";
-import type { SwFrameFormat } from "../../core/layout/atrfrm";
 import type { SwXTextCursor } from "../../core/unocore/unoobj";
 import { SwXHeadFootText } from "../../core/unocore/unotext";
 import { endTextFrame } from "./xmltextframe";
@@ -186,4 +194,66 @@ class XMLTextHeaderFooterContext extends SvXMLImportContext {
       this.text?.dispose();
     }
   }
+}
+
+/** Applies ODF story geometry after the associated master-page frames exist. @param style - Target page style. @param layout - Parsed page layout. @returns Nothing. */
+export function applyPageStoryGeometry(style: SwXStyle, layout: OdfPageLayout): void {
+  for (const [prefix, geometry] of [
+    ["Header", layout.header],
+    ["Footer", layout.footer],
+  ] as const) {
+    if (!geometry) continue;
+    for (const [suffix, field] of [
+      ["Height", geometry.height],
+      ["BodyDistance", geometry.bodyDistance],
+      ["IsDynamicHeight", geometry.isDynamicHeight],
+      ["DynamicSpacing", geometry.dynamicSpacing],
+    ] as const) {
+      if (field === undefined) continue;
+      const name = unicode(prefix + suffix);
+      const value =
+        typeof field === "boolean"
+          ? new Any(field)
+          : new Any([Number(convertTwipToMm100(BigInt(field)))], "sal_Int32");
+      try {
+        style.setPropertyValue(name, value);
+      } finally {
+        name.dispose();
+        value.dispose();
+      }
+    }
+  }
+}
+
+/** Writes the native ODF page layout style children from actual header and footer items. @param master - Page frame. @param length - ODF measure formatting. @returns Original page-layout children. */
+export function exportPageStoryStyles(
+  master: SwFrameFormat,
+  length: (twips: number) => string,
+): string {
+  let result = "";
+  for (const header of [true, false]) {
+    const story = getActivePageStory(master, header);
+    if (!story) continue;
+    const items = story.GetAttrSet();
+    const attributes: string[] = [];
+    if (items.GetItemIfSet(RES_FRM_SIZE, false)) {
+      const size = story.GetFrameSize();
+      const measure =
+        size.GetHeightSizeType() === SwFrameSize.Fixed ? "svg:height" : "fo:min-height";
+      attributes.push(`${measure}="${length(size.GetHeight())}"`);
+    }
+    if (items.GetItemIfSet(RES_UL_SPACE, false)) {
+      const spacing = story.GetULSpace();
+      const distance = header ? spacing.GetLower() : spacing.GetUpper();
+      attributes.push(`fo:margin-${header ? "bottom" : "top"}="${length(distance)}"`);
+    }
+    const dynamic = items.GetItemIfSet(RES_HEADER_FOOTER_EAT_SPACING, false) as
+      SwHeaderAndFooterEatSpacingItem | undefined;
+    if (dynamic) attributes.push(`style:dynamic-spacing="${dynamic.GetValue()}"`);
+    if (attributes.length) {
+      const element = header ? "header-style" : "footer-style";
+      result += `<style:${element}><style:header-footer-properties ${attributes.join(" ")}/></style:${element}>`;
+    }
+  }
+  return result;
 }

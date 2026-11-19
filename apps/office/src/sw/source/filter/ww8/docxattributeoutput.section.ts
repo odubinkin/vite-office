@@ -85,6 +85,17 @@ export function SectionProperties(output: DocxAttributeOutput, section: WW8SepIn
   const lr = master.GetLRSpace();
   const box = master.GetBox();
   const distances = new HdFtDistanceGlue(master);
+  const firstPage = page.IsFirstShared() ? distances : new HdFtDistanceGlue(page.GetFirstMaster());
+  const header = distances.HasHeader()
+    ? distances.m_DyaHdrTop
+    : firstPage.HasHeader()
+      ? firstPage.m_DyaHdrTop
+      : 0;
+  const footer = distances.HasFooter()
+    ? distances.m_DyaHdrBottom
+    : firstPage.HasFooter()
+      ? firstPage.m_DyaHdrBottom
+      : 0;
   const margins: WordPageMargins = [
     distances.m_DyaTop,
     distances.m_DyaBottom,
@@ -125,11 +136,16 @@ export function SectionProperties(output: DocxAttributeOutput, section: WW8SepIn
     FSNS(w, token("bottom")),
     String(margins[Edge.BOTTOM]),
     FSNS(w, token("header")),
-    "0",
+    String(header),
     FSNS(w, token("footer")),
-    "0",
+    String(footer),
   );
-  SectionPageBorders(serializer, master, margins);
+  SectionPageBorders(serializer, master, [
+    distances.HasHeader() ? distances.m_DyaHdrTop : margins[Edge.TOP],
+    distances.HasFooter() ? distances.m_DyaHdrBottom : margins[Edge.BOTTOM],
+    margins[Edge.LEFT],
+    margins[Edge.RIGHT],
+  ]);
   output.SectionPageNumbering(SvxNumType.SVX_NUM_ARABIC, restart);
   if (!page.IsFirstShared()) serializer.singleElementNS(w, token("titlePg"));
   serializer.singleElementNS(

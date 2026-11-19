@@ -1,7 +1,13 @@
 /** @fileoverview Native DomainMapper header/footer text destinations and section variant finalization. */
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
 import { SwFormatFooter, SwFormatHeader } from "../../../inc/fmthdft";
-import { RES_FOOTER, RES_HEADER } from "../../../inc/hintids";
+import {
+  RES_FOOTER,
+  RES_HEADER,
+  RES_FRM_SIZE,
+  RES_HEADER_FOOTER_EAT_SPACING,
+  RES_UL_SPACE,
+} from "../../../inc/hintids";
 import type { SwFrameFormat } from "../../core/layout/atrfrm";
 import type { SwPageDesc } from "../../core/layout/pagedesc";
 import { text } from "../../core/unocore/unocrsrhelper";
@@ -68,6 +74,13 @@ function copyStory(source: SwFrameFormat, destination: SwFrameFormat, header: bo
   const text = SwXHeadFootText.CreateXHeadFootText(source);
   try {
     target.copyText(text);
+    const frame = storyFormat(destination, header);
+    if (frame) {
+      for (const which of [RES_FRM_SIZE, RES_UL_SPACE, RES_HEADER_FOOTER_EAT_SPACING]) {
+        const item = source.GetAttrSet().GetItemIfSet(which, false);
+        if (item) frame.SetFormatAttr(item);
+      }
+    }
   } finally {
     text.dispose();
     target.dispose();

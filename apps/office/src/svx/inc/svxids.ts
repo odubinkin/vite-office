@@ -25,3 +25,5 @@ export const SID_ATTR_FLASH = 10406 as const;
 export const SID_ATTR_PAGE = 10050;
 /** Original SID_SVX_START +51 page size slot. */
 export const SID_ATTR_PAGE_SIZE = 10051;
+/** Original SID_SVX_START +60 dynamic page-story height slot. */
+export const SID_ATTR_PAGE_DYNAMIC = 10060;

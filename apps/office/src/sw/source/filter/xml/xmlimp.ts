@@ -7,7 +7,7 @@ import type {
   XMLTextFrameStyle,
 } from "../../../../xmloff/source/text/XMLTextFrameContext";
 import type { XMLTextCursor } from "../../../../xmloff/inc/txtimp";
-import { XMLTextMasterPageContext } from "./xmlpageheaderfooter";
+import { applyPageStoryGeometry, XMLTextMasterPageContext } from "./xmlpageheaderfooter";
 import type { SwXTextCursor } from "../../core/unocore/unoobj";
 import { importTextFrame, endTextFrame } from "./xmltextframe";
 import { FillUnoNumRule } from "../../../../xmloff/source/style/xmlnumi";
@@ -634,6 +634,7 @@ class SwXMLImport
           style.setPropertyValue(xmlTextString("IsLandscape"), landscape);
           const page = this.model.GetDoc().FindPageDesc(name);
           if (page) importPageLayoutBox(page, layout);
+          applyPageStoryGeometry(style, layout);
         } finally {
           landscape.dispose();
           key.dispose();

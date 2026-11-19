@@ -1,4 +1,5 @@
 /** @fileoverview Ports consumed native PropertyMap/PropValue ordering, merge/default/cache and four interop grab-bag contracts; actual Any/PropertyValue/Sequence owners retain native value semantics. */
+import { getActivePageStory } from "../../core/layout/atrfrm";
 import type { BorderLine2 } from "../../../../offapi/com/sun/star/table/BorderLine2";
 import { ApplyBorderToPageStyles } from "./PropertyMap.section";
 import {
@@ -378,6 +379,15 @@ export class SectionPropertyMap extends PropertyMap {
   }
   private m_nLeftMargin = Number(convert(1n, Length.in, Length.mm100));
   private m_nRightMargin = Number(convert(1n, Length.in, Length.mm100));
+  private m_nHeaderTop = 1270;
+  private m_nHeaderBottom = 1270;
+  private m_bDynamicHeightTop = true;
+  private m_bDynamicHeightBottom = true;
+  /** Stores the original two page-edge-to-story distances. @param top - Header distance in mm100. @param bottom - Footer distance in mm100. @returns Nothing. */
+  SetHeaderFooterMargins(top: number, bottom: number): void {
+    this.m_nHeaderTop = top;
+    this.m_nHeaderBottom = bottom;
+  }
   private m_nTopMargin = Number(convert(1n, Length.in, Length.mm100));
   private m_nBottomMargin = Number(convert(1n, Length.in, Length.mm100));
   protected m_nPageNumber = -1;
@@ -412,9 +422,9 @@ export class SectionPropertyMap extends PropertyMap {
     if (previous && this.m_sPageStyleName.getLength() === 0)
       this.m_sPageStyleName.assign(previous.GetPageStyleName());
     else {
-      this.HandleMarginsHeaderFooter(mapper);
       this.GetPageStyle(mapper);
       this.SetHeaderFooterProperties(mapper);
+      this.HandleMarginsHeaderFooter(mapper);
       this.ApplyProperties_(this.m_aPageStyle);
     }
   }
@@ -440,22 +450,41 @@ export class SectionPropertyMap extends PropertyMap {
   }
   /** Original no-header body margin keeps the absolute negative-margin distance. @param value - mm100. @returns Nothing. */
   SetTopMargin(value: number): void {
+    this.m_bDynamicHeightTop = value >= 0;
     this.m_nTopMargin = Math.abs(value);
   }
   /** Original no-footer body margin keeps the absolute negative-margin distance. @param value - mm100. @returns Nothing. */
   SetBottomMargin(value: number): void {
+    this.m_bDynamicHeightBottom = value >= 0;
     this.m_nBottomMargin = Math.abs(value);
   }
   /** Applies the represented section margin phase. @param mapper - Original mapper parameter. @returns Nothing. */
   HandleMarginsHeaderFooter(mapper: DomainMapper_Impl): void {
-    void mapper;
+    const master = mapper.model.GetDoc().FindPageDesc(text(this.GetPageStyleName()))?.GetMaster();
+    const header = master && getActivePageStory(master, true);
+    const footer = master && getActivePageStory(master, false);
+    const minHeight = 100;
+    const headerHeight = header
+      ? Math.max(this.m_nTopMargin - this.m_nHeaderTop, minHeight)
+      : this.m_nHeaderTop;
+    const footerHeight = footer
+      ? Math.max(this.m_nBottomMargin - this.m_nHeaderBottom, minHeight)
+      : this.m_nHeaderBottom;
     for (const [id, value] of [
       [P.PROP_LEFT_MARGIN, this.m_nLeftMargin],
       [P.PROP_RIGHT_MARGIN, this.m_nRightMargin],
-      [P.PROP_TOP_MARGIN, Math.max(this.m_nTopMargin, 0)],
-      [P.PROP_BOTTOM_MARGIN, Math.max(this.m_nBottomMargin, 0)],
+      [P.PROP_TOP_MARGIN, Math.max(header ? this.m_nHeaderTop : this.m_nTopMargin, 0)],
+      [P.PROP_BOTTOM_MARGIN, Math.max(footer ? this.m_nHeaderBottom : this.m_nBottomMargin, 0)],
+      [P.PROP_HEADER_HEIGHT, headerHeight],
+      [P.PROP_FOOTER_HEIGHT, footerHeight],
+      [P.PROP_HEADER_BODY_DISTANCE, headerHeight - minHeight],
+      [P.PROP_FOOTER_BODY_DISTANCE, footerHeight - minHeight],
+      [P.PROP_HEADER_IS_DYNAMIC_HEIGHT, this.m_bDynamicHeightTop],
+      [P.PROP_FOOTER_IS_DYNAMIC_HEIGHT, this.m_bDynamicHeightBottom],
+      [P.PROP_HEADER_DYNAMIC_SPACING, this.m_bDynamicHeightTop],
+      [P.PROP_FOOTER_DYNAMIC_SPACING, this.m_bDynamicHeightBottom],
     ] as const) {
-      const any = new Any([value], "sal_Int32");
+      const any = typeof value === "boolean" ? new Any(value) : new Any([value], "sal_Int32");
       try {
         this.Insert(id, any);
       } finally {

@@ -1,4 +1,5 @@
 /** @fileoverview Implements streaming ODF style and numbering contexts from xmloff. */
+import { XMLPageHeaderFooterStyleContext, type OdfPageStoryGeometry } from "./PageMasterStyleMap";
 import type { OdfBoxProperties } from "./bordrhdl";
 import { XMLShadowPropHdl } from "./shadwhdl";
 import type { ShadowFormat } from "../../../offapi/com/sun/star/table/ShadowFormat";
@@ -45,6 +46,8 @@ export interface XMLStyleImportTarget extends XMLListStyleImportTarget {
 
 /** Physical ODF page-layout subset consumed by Writer's Standard page descriptor. */
 export interface OdfPageLayout {
+  readonly header?: OdfPageStoryGeometry;
+  readonly footer?: OdfPageStoryGeometry;
   readonly box?: OdfBoxProperties;
   readonly shadow?: ShadowFormat;
   readonly gutter?: number;
@@ -159,6 +162,8 @@ export class XMLStylesContext extends SvXMLImportContext {
 /** Imports one named page layout and its physical property child. */
 class XMLPageLayoutContext extends SvXMLImportContext {
   private layout: OdfPageLayout | undefined;
+  private header: OdfPageStoryGeometry | undefined;
+  private footer: OdfPageStoryGeometry | undefined;
   private readonly name: string;
 
   /** Creates a named page-layout context. @param target - Style import target. @param attributes - Layout attributes. @returns Nothing. */
@@ -176,6 +181,17 @@ class XMLPageLayoutContext extends SvXMLImportContext {
     element: XMLToken,
     attributes: FastAttributeList,
   ): SvXMLImportContext | null {
+    if (element === XMLToken.STYLE_HEADER_STYLE || element === XMLToken.STYLE_FOOTER_STYLE) {
+      const header = element === XMLToken.STYLE_HEADER_STYLE;
+      return new XMLPageHeaderFooterStyleContext(
+        header,
+        /** Retains native story properties until the master-page stories have been parsed. @param geometry - Parsed properties. @returns Nothing. */
+        (geometry) => {
+          if (header) this.header = geometry;
+          else this.footer = geometry;
+        },
+      );
+    }
     if (element !== XMLToken.STYLE_PAGE_LAYOUT_PROPERTIES) return new SvXMLIgnoreContext();
     if (this.layout !== undefined) throw new Error("Duplicate ODF page layout properties.");
     const width = importPageLength(attributes, XMLToken.FO_PAGE_WIDTH, "page width");
@@ -205,7 +221,12 @@ class XMLPageLayoutContext extends SvXMLImportContext {
 
   /** Registers the completed page layout when its element closes. @returns Nothing. */
   public override endFastElement(): void {
-    if (this.layout !== undefined) this.target.registerPageLayout(this.name, this.layout);
+    if (this.layout !== undefined)
+      this.target.registerPageLayout(this.name, {
+        ...this.layout,
+        ...(this.header ? { header: this.header } : {}),
+        ...(this.footer ? { footer: this.footer } : {}),
+      });
   }
 }
 
