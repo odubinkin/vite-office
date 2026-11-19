@@ -86,7 +86,7 @@ function owned(
   expect(owner.hint.m_pHints === owner.map).toBe(true);
   expect(owner.hint.format === owner.item).toBe(true);
   expect(owner.node.IsIgnoreDontExpand()).toBe(ignore);
-  expect([owner.hint.start, owner.hint.end]).toEqual(range);
+  expect([owner.hint.start, owner.hint.GetEnd()]).toEqual(range);
   expect([
     owner.hint.dontExpand,
     owner.hint.dontExpandStart,
@@ -254,7 +254,7 @@ describe("native insertion mode contract", /** Registers literal native mode,own
         true,
       );
       const actual = map.Get(0);
-      expect([actual.start, actual.end]).toEqual(required(emptyDontExpand[mode]));
+      expect([actual.start, actual.GetEnd()]).toEqual(required(emptyDontExpand[mode]));
       expect(actual instanceof SwTextINetFormat && actual.GetpTextNode()).toBeUndefined();
       expect(node.IsIgnoreDontExpand()).toBe(true);
       expect(node.GetpSwpHints()).toBeUndefined();
@@ -296,7 +296,7 @@ describe("native insertion mode contract", /** Registers literal native mode,own
       });
     owner.node.InsertText("XY", 2, SwInsertFlags.EMPTYEXPAND, items);
     expect(owner.node.GetTextAttrAt(3, 54) === owner.hint).toBe(true);
-    expect([owner.hint.start, owner.hint.end]).toEqual([2, 4]);
+    expect([owner.hint.start, owner.hint.GetEnd()]).toEqual([2, 4]);
     expect(owner.node.GetCharacterItemsAt(3).Get(15).QueryValue()).toBe(8);
     const plain = required(new SwDoc().paragraphs[0]);
     plain.InsertText("link", 0, SwInsertFlags.DEFAULT, undefined, { url: "explicit" });

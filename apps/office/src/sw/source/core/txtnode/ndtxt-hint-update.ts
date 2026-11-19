@@ -1,4 +1,6 @@
-/** @fileoverview Ports owned AUTO/INET coordinate updates from pinned SwTextNode::Update and default InsertText in ndtxt.cxx. */
+/** @fileoverview Ports owned ranged and fly point coordinate updates from pinned SwTextNode::Update and default InsertText in ndtxt.cxx. */
+import { SwTextFlyCnt } from "../../../inc/txtflcnt";
+import type { TextNodeAttribute } from "./ndhints";
 import type { SwFormatCharFormat } from "./fmtatr2";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import type { SwDoc } from "../doc/doc";
@@ -10,18 +12,23 @@ import type { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 /** Changes actual supported hint coordinates without splitting continuous values. @param doc - Owning document. @param hints - Stable start-ordered objects. @param offset - Change position. @param length - Positive change length. @param negative - Whether text is removed. @param ignoreDontExpand - Owning node state. @returns Existing objects and native end-boundary collectors. */
 export function UpdateTextHints(
   doc: SwDoc,
-  hints: readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>[],
+  hints: readonly TextNodeAttribute[],
   offset: number,
   length: number,
   negative: boolean,
   ignoreDontExpand = false,
-): readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>[] {
+): readonly TextNodeAttribute[] {
   const collector = new Map<
     number,
     SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>
   >();
   let noExpand = false;
   for (const hint of hints) {
+    if (hint instanceof SwTextFlyCnt) {
+      if (negative && hint.start > offset) hint.SetStart(Math.max(offset, hint.start - length));
+      else if (!negative && hint.start >= offset) hint.SetStart(hint.start + length);
+      continue;
+    }
     if (negative) {
       if (hint.start > offset) hint.SetStart(Math.max(offset, hint.start - length));
       if (hint.end > offset) hint.SetEnd(Math.max(offset, hint.end - length));
@@ -44,12 +51,13 @@ export function UpdateTextHints(
 
 /** Applies native InsertText mode adjustment after coordinate Update. @param hints - Actual updated attributes. @param offset - Original insertion position. @param length - Inserted length. @param mode - Native insertion flags. @returns The same actual attribute array. */
 export function AdjustInsertTextHints(
-  hints: readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>[],
+  hints: readonly TextNodeAttribute[],
   offset: number,
   length: number,
   mode = SwInsertFlags.DEFAULT,
-): readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>[] {
+): readonly TextNodeAttribute[] {
   for (const hint of hints) {
+    if (hint instanceof SwTextFlyCnt) continue;
     if (hint.end === offset + length) {
       if (
         mode & SwInsertFlags.NOHINTEXPAND ||
@@ -73,17 +81,17 @@ export function AdjustInsertTextHints(
   return hints;
 }
 
-/** Collects interior no-dummy ranged hints before EraseText updates coordinates. @param doc - Owning document. @param hints - Actual supported attributes. @param offset - Erase start. @param length - Erased length. @returns Retained actual attributes after negative Update. */
+/** Collects interior ranged and fly point hints before EraseText updates coordinates. @param doc - Owning document. @param hints - Actual supported attributes. @param offset - Erase start. @param length - Erased length. @returns Retained actual attributes after negative Update. */
 export function EraseTextHints(
   doc: SwDoc,
-  hints: readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>[],
+  hints: readonly TextNodeAttribute[],
   offset: number,
   length: number,
-): readonly SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>[] {
+): readonly TextNodeAttribute[] {
   const end = offset + length;
   const retained = hints.filter(
     /** Preserves attributes outside the native interior-GC condition. @param hint - Actual attribute. @returns Whether retained. */
-    (hint) => !(hint.start >= offset && hint.start <= end && hint.end < end),
+    (hint) => !(hint.start >= offset && hint.start <= end && hint.GetAnyEnd() < end),
   );
   return UpdateTextHints(doc, retained, offset, length, true);
 }

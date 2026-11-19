@@ -12,7 +12,7 @@ import {
   RES_TXTATR_AUTOFMT,
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../../inc/hintids";
-import { SwFormatAutoFormat } from "./txatbase";
+import { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 import { SwFormatCharFormat } from "./fmtatr2";
 import type { RangedTextAttribute } from "./ndtxt-attribute-query";
 import { MakeTextAttr } from "./thints";
@@ -100,7 +100,8 @@ export function DontExpandTextNodeFormat(
   let changed = false;
   for (let index = hints.GetLastPosSortedByEnd(offset); index >= 0; --index) {
     const hint = hints.GetSortedByEnd(index);
-    if (hint.GetEnd() !== offset) break;
+    if (hint.GetAnyEnd() !== offset) break;
+    if (!(hint instanceof SwTextAttrEnd)) continue;
     if (flag !== hint.DontExpand() && !hint.IsLockExpandFlag() && hint.GetEnd() > hint.GetStart()) {
       changed = true;
       hints.NoteInHistory(hint);

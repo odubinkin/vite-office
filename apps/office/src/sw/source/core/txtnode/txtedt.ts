@@ -47,9 +47,9 @@ export function ResetTextNodeHintItems(
 /** Retains the original owner unless a requested item actually participates in selective native deletion. @param node - Original pool owner. @param hint - Actual native attribute. @param resetSet - Requested items. @returns Original, freshly reconstructed,or removed native attribute. */
 function ResetTextHintItem(
   node: SwTextNode,
-  hint: ReturnType<SwpHints["Get"]>,
+  hint: ReturnType<SwpHints["entries"]>[number],
   resetSet: SfxItemSet,
-): ReturnType<SwpHints["Get"]> | undefined {
+): ReturnType<SwpHints["entries"]>[number] | undefined {
   const [skip, style] = GetTextResetStyle(node, hint, resetSet, 0);
   try {
     return skip

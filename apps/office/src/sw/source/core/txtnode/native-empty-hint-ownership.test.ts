@@ -76,7 +76,7 @@ function owned(owner: ReturnType<typeof fixture>, mask: number, start: number, e
   expect(owner.map.GetSortedByWhichAndStart(0)).toBe(owner.hint);
   expect(owner.hint.m_pHints).toBe(owner.map);
   expect(owner.hint.format).toBe(owner.item);
-  expect([owner.hint.start, owner.hint.end]).toEqual([start, end]);
+  expect([owner.hint.start, owner.hint.GetEnd()]).toEqual([start, end]);
   expect([owner.hint.dontExpand, owner.hint.dontExpandStart, owner.hint.dontMoveAttr]).toEqual([
     Boolean(mask & 1),
     Boolean(mask & 2),
@@ -128,7 +128,7 @@ describe("native empty ranged ownership", /** Registers independent literals and
             snapshot = owner.map.clone();
           owner.node.EraseText(start, end - start);
           expect(owner.node.GetText()).toBe("abcdefgh".slice(0, start) + "abcdefgh".slice(end));
-          expect([snapshot.Get(0).start, snapshot.Get(0).end]).toEqual([2, 6]);
+          expect([snapshot.Get(0).start, snapshot.Get(0).GetEnd()]).toEqual([2, 6]);
           expect(snapshot.Get(0)).not.toBe(owner.hint);
           expect([owner.caller.start, owner.caller.end]).toEqual([2, 6]);
           if (outStart < 0) {
@@ -315,7 +315,7 @@ describe("native empty ranged ownership", /** Registers independent literals and
           hint = map.Get(0);
         expect(map.CanBeDeleted()).toBe(false);
         expect(hint).not.toBe(owner.hint);
-        expect([hint.start, hint.end]).toEqual([2, 2]);
+        expect([hint.start, hint.GetEnd()]).toEqual([2, 2]);
         if (hint.format instanceof SwFormatAutoFormat) {
           expect(hint.format.GetStyleHandle().GetPool()).toBe(copy.GetDoc().GetAttrPool());
           expect(hint.format.GetStyleHandle().Count()).toBe(3);
@@ -381,7 +381,7 @@ it("copies a zero-length hint from an empty joined source at the destination bou
   node.AppendTextNode(source);
   const copied = required(node.GetpSwpHints()).Get(0);
   expect(copied).not.toBe(sourceOwned);
-  expect([copied.start, copied.end]).toEqual([1, 1]);
+  expect([copied.start, copied.GetEnd()]).toEqual([1, 1]);
   expect([hint.start, hint.end]).toEqual([0, 0]);
   expect(node.GetText()).toBe("A");
   expect(source.Len()).toBe(0);

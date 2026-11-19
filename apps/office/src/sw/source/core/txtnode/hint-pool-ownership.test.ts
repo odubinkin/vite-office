@@ -1,5 +1,5 @@
 /** @fileoverview Checks destination hint ownership and separates native copying from retained state snapshots. */
-import { describe, expect, it } from "vitest";
+import { assert, describe, expect, it } from "vitest";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
@@ -85,7 +85,7 @@ describe("destination-owned hint copying", /** Registers ownership and snapshot 
         expect(copy.Get(0)).toMatchObject({ start: 1, end: 4 });
       }
       snapshot.Get(0).SetEnd(3);
-      expect(hints.Get(0).end).toBe(4);
+      expect(hints.Get(0).GetEnd()).toBe(4);
       handle(hints).ClearItem();
       expect(handle(foreignCopy).Count()).toBe(1);
     },
@@ -143,6 +143,7 @@ describe("destination-owned hint copying", /** Registers ownership and snapshot 
     expect(original.clone(target.GetAttrPool()).Count()).toBe(0);
     expect(states.Count()).toBe(2);
     const valid = sourceHints(source, 7).Get(1);
+    assert(valid instanceof SwTextAttrEnd);
     const bound = new SwpHints(target.GetAttrPool(), [valid]);
     expect(handle(bound).GetPool()).toBe(target.GetAttrPool());
     expect(bound.Get(0)).toMatchObject({
@@ -160,7 +161,7 @@ describe("destination-owned hint copying", /** Registers ownership and snapshot 
       const target = new SwDoc(),
         source = foreign ? new SwDoc() : target;
       const all = sourceHints(source, 7),
-        internet = new SwpHints(source.GetAttrPool(), [all.Get(0)]).slice(1, 4);
+        internet = new SwpHints(source.GetAttrPool(), all.entries().slice(0, 1)).slice(1, 4);
       const empty = new SwpHints(target.GetAttrPool());
       const joined = empty.concat(internet, 2),
         replaced = empty.replaceRange(4, 1, 3, internet, 3);

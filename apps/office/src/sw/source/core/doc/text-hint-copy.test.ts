@@ -192,7 +192,10 @@ describe("real text hint copy boundaries", /** Registers document-owner cases. @
       target = new SwDoc(),
       node = required(target.paragraphs[0]);
     node.SetText("abcdef");
-    const internet = new SwpHints(f.doc.GetAttrPool(), [required(f.node.GetpSwpHints()).Get(0)]);
+    const internet = new SwpHints(
+      f.doc.GetAttrPool(),
+      required(f.node.GetpSwpHints()).entries().slice(0, 1),
+    );
     expect(internet.Get(0).Which()).toBe(54);
     node.SetTextHints(internet);
     expect(required(node.GetpSwpHints()).Get(0)).toMatchObject({

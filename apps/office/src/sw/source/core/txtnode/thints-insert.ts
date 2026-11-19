@@ -1,6 +1,10 @@
-/** @fileoverview Original InsertHint/TryInsertHint decisions for the registered ranged families from thints.cxx. */
+/** @fileoverview Original InsertHint/TryInsertHint decisions for the registered ranged and inline fly attributes from thints.cxx. */
 import type { SwTextNode } from "./ndtxt";
-import type { SwpHints } from "./ndhints";
+import type { SwpHints, TextNodeAttribute } from "./ndhints";
+import { SwTextFlyCnt } from "../../../inc/txtflcnt";
+import { CH_TXTATR_BREAKWORD } from "../../../inc/hintids";
+import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
+import { SwFlyFrameFormat } from "../layout/atrfrm";
 import { SwTextCharFormat, SwTextINetFormat } from "./txtatr2";
 import { SwFormatAutoFormat, type SwTextAttrEnd } from "./txatbase";
 import type { SwFormatCharFormat, SwFormatINetFormat } from "./fmtatr2";
@@ -11,8 +15,14 @@ import { SwUpdateAttr, UpdateAttrHint } from "../../../inc/hints";
 /** Actual native ranged families represented by the kernel. */
 type Hint = SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>;
 /** Original hint destruction's represented SwClient-base cleanup. The owned pool item releases its shared automatic-style handle. @param hint - Unowned attribute. @returns Nothing. */
-export function DestroyTextNodeAttribute(hint: Hint): void {
+export function DestroyTextNodeAttribute(hint: TextNodeAttribute): void {
   if (hint instanceof SwTextINetFormat) hint.EndListeningAll();
+  if (hint instanceof SwTextFlyCnt) {
+    const format = hint.GetAttr().GetFrameFormat();
+    hint.GetAttr().SetFlyFormat();
+    if (format instanceof SwFlyFrameFormat)
+      format.GetDoc().getIDocumentLayoutAccess().DelLayoutFormat(format);
+  }
   hint.GetAttr().Dispose();
 }
 /** Original TryInsertHint branches; RSID/hidden fields, dummy/content hints and unrepresented nesting families are not fabricated. @param hints - Actual maps. @param hint - New owned-on-success attribute. @param node - Native node. @param mode - Original flags. @returns Native success, independently of whether merging retains the incoming identity. */
@@ -77,11 +87,51 @@ export function TryInsertTextNodeHint(
     });
   return true;
 }
-/** Original node entrypoint for represented non-dummy/non-content ranged attributes. @param node - Actual node. @param hint - Ownership transfers to insertion. @param mode - Original insertion flags. @returns Success. */
-export function InsertTextNodeHint(node: SwTextNode, hint: Hint, mode: SetAttrMode): boolean {
-  if (hint.GetStart() > node.Len() || hint.GetEnd() > node.Len())
+/** Original node entrypoint for ranged attributes and inline fly points. @param node - Actual node. @param hint - Ownership transfers to insertion. @param mode - Original insertion flags. @returns Success. */
+export function InsertTextNodeHint(
+  node: SwTextNode,
+  hint: TextNodeAttribute,
+  mode: SetAttrMode,
+): boolean {
+  if (hint.GetStart() < 0 || hint.GetAnyEnd() > node.Len() || hint.GetStart() > node.Len())
     throw new Error("assert: Writer hint endpoint exceeds text length");
+  if (hint instanceof SwTextFlyCnt) return InsertFlyHint(node, hint, mode);
   if (hint.HasDummyChar() || hint.HasContent())
     throw new Error("Writer structured InsertHint is not implemented.");
   return node.GetOrCreateSwpHints().TryInsertHint(hint, node, mode);
+}
+
+/** Applies the native point-hint insertion order, inserting its dummy before binding the fly format. @param node - Owning text node. @param hint - Detached point. @param mode - Native insertion flags. @returns Whether inserted. */
+function InsertFlyHint(node: SwTextNode, hint: SwTextFlyCnt, mode: SetAttrMode): boolean {
+  const format = hint.GetAttr().GetFrameFormat();
+  if (!(format instanceof SwFlyFrameFormat) || format.GetDoc() !== node.GetDoc() || hint.m_pHints)
+    throw new Error("Writer inline hint requires a detached point and an owned fly format.");
+  const start = hint.GetStart();
+  const existing = node.GetpSwpHints();
+  const hasMarker = (mode & SetAttrMode.NOTXTATRCHR) !== 0;
+  if (
+    hasMarker &&
+    (node.GetText().charAt(start) !== CH_TXTATR_BREAKWORD || existing?.GetTextAttrForCharAt(start))
+  )
+    throw new Error("Writer inline hint requires an unclaimed dummy character.");
+  if (MAX_HINTS <= BigInt(existing?.Count() ?? 0) || (!hasMarker && !node.GetSpaceLeft())) {
+    if (hasMarker) node.EraseText(start, 1);
+    DestroyTextNodeAttribute(hint);
+    return false;
+  }
+  if (!hasMarker) {
+    const flags =
+      mode & SetAttrMode.NOHINTEXPAND
+        ? SwInsertFlags.NOHINTEXPAND
+        : mode & SetAttrMode.FORCEHINTEXPAND
+          ? SwInsertFlags.FORCEHINTEXPAND | SwInsertFlags.EMPTYEXPAND
+          : SwInsertFlags.EMPTYEXPAND;
+    node.InsertText(CH_TXTATR_BREAKWORD, start, flags);
+  }
+  hint.SetAnchor(node);
+  node.GetOrCreateSwpHints().Insert(hint);
+  node.TriggerNodeUpdate(
+    new UpdateAttrHint(undefined, new SwUpdateAttr(start, start, hint.Which())),
+  );
+  return true;
 }

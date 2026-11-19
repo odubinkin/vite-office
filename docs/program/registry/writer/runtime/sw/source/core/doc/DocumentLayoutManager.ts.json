@@ -19,16 +19,18 @@
         "apps/office/src/sw/source/core/doc/DocumentLayoutManager.ts",
         "apps/office/src/sw/source/core/doc/native-global-absolute-correction.test.ts",
         "vendor/libreoffice-reference/sw/source/core/doc/DocumentLayoutManager.cxx",
-        "apps/office/src/sw/inc/fmthdft.native.test.ts"
+        "apps/office/src/sw/inc/fmthdft.native.test.ts",
+        "apps/office/src/sw/source/core/txtnode/atrflyin.test.ts"
       ],
-      "justification": "S3HW1E HTML53: actual DocumentLayoutManager current-view/current-layout queries and SwViewShell view-ring ownership connect SwDoc.GetEditShell and global PaMCorrAbs to persistent editing shells. Source traversal captures original start/end/target values before mutation, visits every actual view stack, ordinary cursor ring and displayed table cursor, then the native weak-owned UNO branch. Source teardown chooses the first other view before unlinking; existing browser persistent-shell New/Open rebinds the same shell to its replacement document. Ring algorithms remain on one actual identity through an erased native template/primary-base constructor type; no surrogate view, copied view list or flat position registry is introduced. Existing portable SwModify event ownership remains on that same cursor-shell identity as the native view-ring facet. Native window/output/paint/print/layouter, ENABLE_YRS peer cursors and whole module/ABI behavior remain unverified or unrepresented; browser save/open/recovery deviations remain unchanged. Native DeleteSection composition, table grammar/materialization/layout, RTF direction export and final format/UI audit remain required. Creates actual header/footer frames, content items and typed sections in Writer's autotext range via the existing layout manager.",
+      "justification": "S3HW1E HTML53: actual DocumentLayoutManager current-view/current-layout queries and SwViewShell view-ring ownership connect SwDoc.GetEditShell and global PaMCorrAbs to persistent editing shells. Source traversal captures original start/end/target values before mutation, visits every actual view stack, ordinary cursor ring and displayed table cursor, then the native weak-owned UNO branch. Source teardown chooses the first other view before unlinking; existing browser persistent-shell New/Open rebinds the same shell to its replacement document. Ring algorithms remain on one actual identity through an erased native template/primary-base constructor type; no surrogate view, copied view list or flat position registry is introduced. Existing portable SwModify event ownership remains on that same cursor-shell identity as the native view-ring facet. Native window/output/paint/print/layouter, ENABLE_YRS peer cursors and whole module/ABI behavior remain unverified or unrepresented; browser save/open/recovery deviations remain unchanged. Native DeleteSection composition, table grammar/materialization/layout, RTF direction export and final format/UI audit remain required. Creates actual header/footer frames, content items and typed sections in Writer's autotext range via the existing layout manager. V4DQJW inline graphic ownership checkpoint: DelLayoutFormat unregisters an embedded graphic fly and removes its owned autotext section through the existing document content owner when the inline point is destroyed.",
       "knownViolations": [],
       "localSymbols": [
         "DocumentLayoutManager",
         "GetCurrentViewShell",
         "SetCurrentViewShell",
         "GetCurrentLayout",
-        "HasLayout"
+        "HasLayout",
+        "DelLayoutFormat"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/core/doc/DocumentLayoutManager.cxx",
@@ -37,7 +39,8 @@
         "GetCurrentViewShell",
         "SetCurrentViewShell",
         "GetCurrentLayout",
-        "HasLayout"
+        "HasLayout",
+        "DocumentLayoutManager::DelLayoutFormat"
       ]
     }
   }

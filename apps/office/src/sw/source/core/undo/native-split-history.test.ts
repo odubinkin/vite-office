@@ -247,13 +247,17 @@ it("native split history restores full-span AUTO after promotion and retains unc
   for (let cycle = 0; cycle < 3; cycle += 1) {
     expect(owner.shell.Undo()).toBe(true);
     const restored = required(owner.node.GetpSwpHints()).Get(0);
-    expect([restored.start, restored.end, restored.IsFormatIgnoreStart()]).toEqual([0, 8, true]);
+    expect([restored.start, restored.GetEnd(), restored.IsFormatIgnoreStart()]).toEqual([
+      0,
+      8,
+      true,
+    ]);
     expect(restored).not.toBe(hint);
     expect(owner.shell.Redo()).toBe(true);
     for (const paragraph of [owner.node, suffix]) {
       const retained = required(paragraph.GetpSwpHints());
       expect(retained.Count()).toBe(1);
-      expect([retained.Get(0).start, retained.Get(0).end]).toEqual([0, paragraph.Len()]);
+      expect([retained.Get(0).start, retained.Get(0).GetEnd()]).toEqual([0, paragraph.Len()]);
       expect(retained.Get(0).format).toBeInstanceOf(SwFormatAutoFormat);
     }
   }

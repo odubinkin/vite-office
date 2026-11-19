@@ -89,7 +89,7 @@ function restored(owner: ReturnType<typeof fixture>, family: number) {
     expect(map.Count()).toBe(1);
     expect(hint).not.toBe(original);
     expect(hint.format).not.toBe(original.format);
-    expect([hint.start, hint.end, hint.Which()]).toEqual([1, 3, family]);
+    expect([hint.start, hint.GetEnd(), hint.Which()]).toEqual([1, 3, family]);
     expect([
       hint.dontExpand,
       hint.dontExpandStart,

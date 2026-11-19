@@ -70,7 +70,7 @@ function restored(owner: ReturnType<typeof fixture>, ignored: number) {
   expect(map.GetSortedByEnd(0)).toBe(hint);
   expect(map.GetSortedByWhichAndStart(0)).toBe(hint);
   expect(hint.m_pHints).toBe(map);
-  expect([hint.start, hint.end]).toEqual([2, 6]);
+  expect([hint.start, hint.GetEnd()]).toEqual([2, 6]);
   expect([
     hint.dontExpand,
     hint.dontExpandStart,
@@ -327,7 +327,7 @@ describe("native delete attribute history", /** Registers history and actual she
     expect(map.Count()).toBe(2);
     expect(map.Get(0).IsFormatIgnoreEnd()).toBe(true);
     expect(map.Get(1).IsFormatIgnoreStart()).toBe(true);
-    expect([map.Get(0).start, map.Get(0).end, map.Get(1).start, map.Get(1).end]).toEqual([
+    expect([map.Get(0).start, map.Get(0).GetEnd(), map.Get(1).start, map.Get(1).GetEnd()]).toEqual([
       0, 2, 2, 4,
     ]);
   });
@@ -366,7 +366,7 @@ describe("native delete attribute history", /** Registers history and actual she
     expect(owner.shell.Undo()).toBe(true);
     const map = required(owner.node.GetpSwpHints());
     expect(map.Count()).toBe(1);
-    expect([map.Get(0).start, map.Get(0).end]).toEqual([2, 2]);
+    expect([map.Get(0).start, map.Get(0).GetEnd()]).toEqual([2, 2]);
     expect(atEnd.m_pHints).toBeUndefined();
     expect(owner.node.getHyperlinkAt(3)).toBeUndefined();
   });

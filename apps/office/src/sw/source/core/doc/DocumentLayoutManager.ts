@@ -2,7 +2,7 @@
 import type { SwDoc } from "./doc";
 import { RndStdIds } from "../../../../svx/inc/swframetypes";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SwFrameFormat } from "../layout/atrfrm";
+import { SwFrameFormat, type SwFlyFrameFormat } from "../layout/atrfrm";
 import { SwFormatContent } from "../../../inc/fmtcntnt";
 import { SwStartNodeType } from "../../../inc/ndtyp";
 import type { WriterParagraphStyle } from "./fmtcol";
@@ -13,6 +13,14 @@ export class DocumentLayoutManager {
   private mpCurrentView: SwViewShell | undefined;
   /** Original document owner binding and initially null current view. @param m_rDoc - Actual document. @returns Native manager. */
   constructor(readonly m_rDoc: SwDoc) {}
+  /** Releases a special fly format and its owned section through the document layout owner. @param format - Native fly removed from its text anchor. @returns Nothing. */
+  DelLayoutFormat(format: SwFlyFrameFormat): void {
+    const doc = this.m_rDoc;
+    if (doc.IsInDtor() || !doc.GetSpzFrameFormats().erase(format)) return;
+    const model = format.GetContent().GetContentIdx()?.GetNode();
+    format.Dispose();
+    if (model?.IsStartNode()) doc.GetDocumentContentOperationsManager().DeleteSection(model);
+  }
   /** Original header/footer branch of format creation. @param request - Native layout format identity. @param items - Optional native override set. @returns Native frame format. */
   MakeLayoutFormat(
     request: RndStdIds.HEADER | RndStdIds.HEADERL | RndStdIds.HEADERR | RndStdIds.FOOTER,

@@ -11,7 +11,7 @@ import type { SwBookmark } from "../doc/docbm";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import { SwTextNode } from "../txtnode/ndtxt";
 import type { SwpHints } from "../txtnode/ndhints";
-import type { SwFormatAutoFormat, SwTextAttrEnd } from "../txtnode/txatbase";
+import { type SwFormatAutoFormat, SwTextAttrEnd } from "../txtnode/txatbase";
 import type { SwFormatINetFormat } from "../txtnode/fmtatr2";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -380,6 +380,7 @@ export class SwHistory {
       const hint = hints.Get(index),
         attrStart = hint.GetStart();
       if (attrStart > end) break;
+      if (!(hint instanceof SwTextAttrEnd)) continue;
       if (start <= attrStart) {
         if (end > attrStart) this.AddTextAttr(hint, nodeIndex, false);
       } else if (start < hint.GetAnyEnd()) this.AddTextAttr(hint, nodeIndex, false);

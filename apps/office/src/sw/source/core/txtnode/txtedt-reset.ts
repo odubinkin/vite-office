@@ -3,7 +3,7 @@ import type { SwTextNode } from "./ndtxt";
 import { releaseStyleHandle } from "../../../../svl/source/items/stylepool";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SfxItemIter } from "../../../../svl/inc/itemiter";
-import { SwFormatAutoFormat, type SwTextAttrEnd } from "./txatbase";
+import { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 import type { SwFormatCharFormat, SwFormatINetFormat } from "./fmtatr2";
 import { SwTextCharFormat } from "./txtatr2";
 import { MakeTextAttr } from "./thints";
@@ -92,10 +92,10 @@ export function ResetTextNodeAttributes(
   hints.SortIfNeedBe();
   for (let index = 0; index < hints.Count() && !exact; ++index) {
     const hint = hints.GetWithoutResorting(index),
-      a = hint.GetStart(),
-      b = hint.GetEnd();
+      a = hint.GetStart();
     if (!(a < end || length === 0 || (end === a && a === node.Len()))) break;
-    if (hint.HasContent()) continue;
+    if (!(hint instanceof SwTextAttrEnd) || hint.HasContent()) continue;
+    const b = hint.GetEnd();
     const [skip, style] = GetTextResetStyle(node, hint, requested, which);
     try {
       if (skip) continue;
@@ -149,13 +149,18 @@ export function ResetTextNodeAttributes(
   if (exact) {
     for (let index = 0; index < hints.Count(); ++index) {
       const hint = hints.Get(index);
-      if (hint.Which() === RES_TXTATR_AUTOFMT && hint.GetStart() === start && hint.GetEnd() === end)
+      if (
+        hint instanceof SwTextAttrEnd &&
+        hint.Which() === RES_TXTATR_AUTOFMT &&
+        hint.GetStart() === start &&
+        hint.GetEnd() === end
+      )
         removed.push(hint);
     }
   }
   if (changed && removed.length) hints.SortIfNeedBe();
   for (const hint of removed) {
-    hints.DeleteAtPos(hints.entries().indexOf(hint));
+    hints.DeleteAtPos(hints.GetIndexOf(hint));
     DestroyTextNodeAttribute(hint);
   }
   for (const hint of added) node.InsertHint(hint, SetAttrMode.NOHINTADJUST);

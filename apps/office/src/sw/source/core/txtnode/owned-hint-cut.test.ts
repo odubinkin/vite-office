@@ -1,5 +1,5 @@
 /** @fileoverview Verifies native cut hint identity and consumable container ownership independently of node snapshots. */
-import { describe, expect, it } from "vitest";
+import { assert, describe, expect, it } from "vitest";
 import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwDoc } from "../doc/doc";
@@ -208,8 +208,9 @@ describe("owned cut containers", /** Registers actual transfer and copy ownershi
   it("normalizes retained source portions without replacing the surviving object", /** Checks normalization after cutting a gap. @returns Nothing. */ () => {
     const doc = new SwDoc(),
       source = fixture(doc, 0, 3, 7),
-      head = source.Get(0),
-      tail = head.clone();
+      head = source.Get(0);
+    assert(head instanceof SwTextAttrEnd);
+    const tail = head.clone();
     tail.start = 7;
     tail.SetEnd(10);
     source.replace([head, tail]);

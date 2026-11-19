@@ -1,6 +1,6 @@
 /** @fileoverview Verifies native attribute-owner notifications and lazy primary-map sorting without upstream access. */
 import type { SwFormatCharFormat } from "./fmtatr2";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, assert, describe, expect, it, vi } from "vitest";
 import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwDoc } from "../doc/doc";
@@ -65,11 +65,11 @@ describe("hint owner range notifications", /** Registers literal mutation and ow
         expect(ends).toHaveBeenLastCalledWith(which, 1, 6, 2);
         expect(hints.GetWithoutResorting(0)).toBe(moving);
         expect(hints.Get(0)).toBe(stationary);
-        moving.end = 5;
+        moving.SetEnd(5);
         expect(ends).toHaveBeenLastCalledWith(which, 1, 2, 5);
         expect(hints.GetWithoutResorting(0)).toBe(stationary);
         expect(hints.entries()[0]).toBe(moving);
-        moving.end = 3;
+        moving.SetEnd(3);
         expect(ends).toHaveBeenLastCalledWith(which, 1, 5, 3);
         expect(hints.Get(0).Which()).toBe(54);
         moving.SetStart(1);
@@ -83,6 +83,7 @@ describe("hint owner range notifications", /** Registers literal mutation and ow
           dontMoveAttr: Boolean(mask & 4),
         });
         expect(snapshot.Get(1)).toMatchObject({ start: 4, end: 6 });
+        assert(moving instanceof SwTextAttrEnd);
         const detached = moving.clone();
         expect(detached.m_pHints).toBeUndefined();
         expect(detached.format).not.toBe(moving.format);

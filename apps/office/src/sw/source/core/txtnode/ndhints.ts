@@ -2,6 +2,7 @@
  * @fileoverview Implements Writer's ordered auto-format hint container from pinned `sw/source/core/txtnode/ndhints.cxx`.
  */
 
+import { SwTextFlyCnt } from "../../../inc/txtflcnt";
 import { TryInsertTextNodeHint, DestroyTextNodeAttribute } from "./thints-insert";
 import { TryInsertInternetNesting } from "./thints-nesting";
 import type { SwRegHistory } from "../undo/rolbck";
@@ -14,6 +15,7 @@ import {
   createCharacterFormatItems,
   createFontHeightItems,
   createCharacterColorItems,
+  collectCharacterSegments,
 } from "./ndhints-font";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -58,6 +60,8 @@ import {
 
 /** Bounded implemented ranged item families held by the native maps. */
 type RangedTextAttr = SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>;
+/** Point and ranged attributes share the three native indexes. */
+export type TextNodeAttribute = RangedTextAttr | SwTextFlyCnt;
 
 /** Stores directly formatted text portions in three native ordered maps. */
 export class SwpHints {
@@ -90,9 +94,9 @@ export class SwpHints {
         hint.ChgTextNode(node);
   }
 
-  private m_HintsByStart: RangedTextAttr[] = [];
-  private m_HintsByEnd: RangedTextAttr[] = [];
-  private m_HintsByWhichAndStart: RangedTextAttr[] = [];
+  private m_HintsByStart: TextNodeAttribute[] = [];
+  private m_HintsByEnd: TextNodeAttribute[] = [];
+  private m_HintsByWhichAndStart: TextNodeAttribute[] = [];
   private m_StartMapNeedsSortingRange: [number, number] = [0x7fffffff, -1];
   private m_EndMapNeedsSortingRange: [number, number] = [0x7fffffff, -1];
   private m_WhichMapNeedsSortingRange: [WhichStartPair, WhichStartPair] = [
@@ -101,13 +105,13 @@ export class SwpHints {
   ];
 
   /** Reads the current primary map after lazy native sorting. @returns Owned sorted attributes. */
-  private get hintsByStart(): RangedTextAttr[] {
+  private get hintsByStart(): TextNodeAttribute[] {
     this.ResortStartMap();
     return this.m_HintsByStart;
   }
 
   /** Releases old owner links and binds the replacement map without copying attributes. @param hints - Already normalized owned objects. @returns Nothing. */
-  private set hintsByStart(hints: RangedTextAttr[]) {
+  private set hintsByStart(hints: TextNodeAttribute[]) {
     for (const hint of this.m_HintsByStart) {
       hint.m_pHints = undefined;
       if (hint instanceof SwTextINetFormat || hint instanceof SwTextCharFormat)
@@ -225,7 +229,7 @@ export class SwpHints {
   }
 
   /** Reads an actual attribute in native end order. @param position - End-map index. @returns Owned attribute. */
-  public GetSortedByEnd(position: number): RangedTextAttr {
+  public GetSortedByEnd(position: number): TextNodeAttribute {
     this.ResortEndMap();
     const hint = this.m_HintsByEnd[position];
     if (hint === undefined) throw new Error(`Unknown SwpHints end position: ${position}`);
@@ -240,7 +244,7 @@ export class SwpHints {
   }
 
   /** Reads an actual attribute in native Which/start order. @param position - Which-map index. @returns Owned attribute. */
-  public GetSortedByWhichAndStart(position: number): RangedTextAttr {
+  public GetSortedByWhichAndStart(position: number): TextNodeAttribute {
     this.ResortWhichMap();
     const hint = this.m_HintsByWhichAndStart[position];
     if (hint === undefined) throw new Error(`Unknown SwpHints Which position: ${position}`);
@@ -256,7 +260,7 @@ export class SwpHints {
   }
 
   /** Owns one actual attribute in all native maps without merging portions. @param hint - Fresh detached attribute. @returns Nothing. */
-  public Insert(hint: RangedTextAttr): void {
+  public Insert(hint: TextNodeAttribute): void {
     if (hint.m_pHints !== undefined) throw new Error("Writer hint is already owned.");
     this.hintsByStart = [...this.hintsByStart, hint].sort(compareHints);
   }
@@ -264,7 +268,7 @@ export class SwpHints {
   /** Releases an actual attribute from the three owned maps. @param position - Native start-map offset. @returns Nothing. */
   public DeleteAtPos(position: number): void {
     const hint = this.Get(position);
-    this.NoteInHistory(hint);
+    if (!(hint instanceof SwTextFlyCnt)) this.NoteInHistory(hint);
     this.hintsByStart = this.hintsByStart.filter(
       /** Keeps the other actual attributes. @param entry - Map attribute. @returns Whether retained. */ (
         entry,
@@ -291,7 +295,7 @@ export class SwpHints {
     return MergeTextNodePortions(this);
   }
 
-  /** Returns the number of ranged attributes. @returns Hint count. */
+  /** Returns the number of indexed text attributes. @returns Hint count. */
   public Count(): number {
     return this.m_HintsByStart.length;
   }
@@ -302,21 +306,48 @@ export class SwpHints {
   }
 
   /** Returns one attribute in start-sorted order. @param position - Sorted hint position. @returns Hint at position. */
-  public Get(position: number): RangedTextAttr {
+  public Get(position: number): TextNodeAttribute {
     this.ResortStartMap();
     return this.GetWithoutResorting(position);
   }
 
   /** Reads the stable raw map while a caller changes several owned ranges. @param position - Raw map position. @returns The actual attribute without sorting. */
-  public GetWithoutResorting(position: number): RangedTextAttr {
+  public GetWithoutResorting(position: number): TextNodeAttribute {
     const hint = this.m_HintsByStart[position];
     if (hint === undefined) throw new Error(`Unknown SwpHints position: ${position}`);
     return hint;
   }
 
-  /** Returns all attributes as an immutable start-sorted view. @returns Ordered hints. */
+  /** Returns ranged attributes for character formatting and run projection. @returns Ordered ranged hints. */
   public entries(): readonly RangedTextAttr[] {
-    return this.hintsByStart;
+    return this.hintsByStart.filter(
+      /** Selects the intervals used by ranged callers. @param hint - Indexed attribute. @returns Whether it owns an end. */
+      (hint): hint is RangedTextAttr => hint instanceof SwTextAttrEnd,
+    );
+  }
+
+  /** Looks up an owned point at its dummy character. @param offset - Text offset. @returns Actual point or undefined. */
+  public GetTextAttrForCharAt(offset: number): SwTextFlyCnt | undefined {
+    const hints = this.hintsByStart;
+    for (let i = hintPositionBound(hints, offset, false); hints[i]?.GetStart() === offset; ++i) {
+      const hint = hints[i];
+      if (hint instanceof SwTextFlyCnt) return hint;
+    }
+    return undefined;
+  }
+
+  /** Obtains a position in the full start index. @param hint - Owned hint. @returns Index or -1. */
+  public GetIndexOf(hint: TextNodeAttribute): number {
+    return this.hintsByStart.indexOf(hint);
+  }
+
+  /** Tests whether native point-copy support is required. @param start - Inclusive bound. @param end - Exclusive bound. @returns Whether a point is in the range. */
+  public HasFlyContent(start = 0, end = Infinity): boolean {
+    for (const hint of this.hintsByStart) {
+      if (hint.start >= end) break;
+      if (hint instanceof SwTextFlyCnt && hint.start >= start) return true;
+    }
+    return false;
   }
 
   /** Compares ordered native hints, including ranges, flags, and pooled item values. @param other - Candidate hint container. @returns Whether both containers are structurally equal. */
@@ -331,7 +362,7 @@ export class SwpHints {
         return (
           candidate !== undefined &&
           hint.start === candidate.start &&
-          hint.end === candidate.end &&
+          hint.GetEnd() === candidate.GetEnd() &&
           hint.dontExpand === candidate.dontExpand &&
           hint.dontExpandStart === candidate.dontExpandStart &&
           hint.dontMoveAttr === candidate.dontMoveAttr &&
@@ -354,9 +385,16 @@ export class SwpHints {
   /** Clips snapshot or cut attributes without changing the source container. @param start - Inclusive offset. @param end - Exclusive offset. @param cut - Whether native CutImpl construction applies. @returns Independent rebased attributes. */
   private sliceRange(start: number, end: number, cut: boolean): SwpHints {
     assertHintSlice(start, end);
+    if (this.HasFlyContent(start, end))
+      throw new Error("Writer inline fly copy requires a layout format copy.");
+    return this.sliceRanges(start, end, cut);
+  }
+
+  /** Copies only ranged attributes around a text replacement. @param start - First offset. @param end - End offset. @param cut - Native CutImpl flags. @returns Ranged fragments. */
+  private sliceRanges(start: number, end: number, cut = false): SwpHints {
     const result = new SwpHints(this.pool);
     result.assignOwned(
-      this.hintsByStart.flatMap(
+      this.entries().flatMap(
         /** Clips one source hint. @param hint - Source hint. @returns Zero or one clipped hint. */ (
           hint,
         ) => {
@@ -382,9 +420,19 @@ export class SwpHints {
     const fragment = new SwpHints(this.pool);
     const length = end - start;
     if (length === 0) return fragment;
-    const moved: RangedTextAttr[] = [];
-    const remaining: RangedTextAttr[] = [];
+    const moved: TextNodeAttribute[] = [];
+    const remaining: TextNodeAttribute[] = [];
     for (const hint of this.hintsByStart) {
+      if (hint instanceof SwTextFlyCnt) {
+        if (hint.start >= start && hint.start < end) {
+          hint.start -= start;
+          moved.push(hint);
+        } else {
+          if (hint.start >= end) hint.start -= length;
+          remaining.push(hint);
+        }
+        continue;
+      }
       if (hint.start < end && hint.end > start) {
         if (hint.start >= start && hint.end < end) {
           hint.m_pHints = undefined;
@@ -438,8 +486,8 @@ export class SwpHints {
   ): SwpHints {
     if (transferHints && replacement.pool !== this.pool)
       throw new Error("Writer hint transfer requires the same document pool.");
-    const trailing = this.slice(end, textLength),
-      prefix = this.slice(0, start);
+    const trailing = this.sliceRanges(end, textLength),
+      prefix = this.sliceRanges(0, start);
     const middle = transferHints ? replacement : replacement.clone(this.pool);
     const result = new SwpHints(this.pool);
     result.assignOwned([
@@ -447,16 +495,44 @@ export class SwpHints {
       ...middle.takeOwned(start),
       ...trailing.takeOwned(start + replacementLength),
     ]);
+    this.TransferFlyHints(result, start, end, replacementLength);
     return result;
   }
 
+  /** Transfers surviving fly hints after the new ranged coordinates are ready. @param destination - Replacement map. @param start - First removed offset. @param end - End of removal. @param length - Inserted text length. @returns Nothing. */
+  public TransferFlyHints(destination: SwpHints, start = 0, end = 0, length = 0): void {
+    for (const hint of [...this.hintsByStart]) {
+      if (!(hint instanceof SwTextFlyCnt)) continue;
+      this.DeleteAtPos(this.GetIndexOf(hint));
+      if (hint.start >= start && hint.start < end) DestroyTextNodeAttribute(hint);
+      else {
+        if (hint.start >= end) hint.start += length - (end - start);
+        destination.Insert(hint);
+      }
+    }
+  }
+
+  /** Splits ranged hints using the original snapshot boundaries and transfers owned point hints exactly once. @param offset - Split offset. @param length - Current node text length. @returns Leading and trailing maps. */
+  public Split(offset: number, length: number): [SwpHints, SwpHints] {
+    const leading = this.sliceRanges(0, offset);
+    const trailing = this.sliceRanges(offset, length);
+    this.TransferFlyHints(leading);
+    for (const hint of [...leading.hintsByStart]) {
+      if (!(hint instanceof SwTextFlyCnt) || hint.start < offset) continue;
+      leading.DeleteAtPos(leading.GetIndexOf(hint));
+      hint.start -= offset;
+      trailing.Insert(hint);
+    }
+    return [leading, trailing];
+  }
+
   /** Consumes an owned fragment while rebasing its actual attributes. @param offset - Destination offset. @returns Transferred owned objects. */
-  private takeOwned(offset: number): RangedTextAttr[] {
+  private takeOwned(offset: number): TextNodeAttribute[] {
     const owned = this.hintsByStart;
     this.hintsByStart = [];
     for (const hint of owned) {
       hint.start += offset;
-      hint.SetEnd(hint.end + offset);
+      if (!(hint instanceof SwTextFlyCnt)) hint.SetEnd(hint.end + offset);
     }
     return owned;
   }
@@ -478,10 +554,15 @@ export class SwpHints {
       this.InsertUpdate(textLength, offset, insertedLength, mode);
       if (insertedLength === 0) return this;
       const end = offset + insertedLength;
-      const retained = this.hintsByStart.flatMap(
+      const retained = this.hintsByStart.flatMap<TextNodeAttribute>(
         /** Keeps actual internet and unrelated automatic attributes;only intersecting automatic portions are replaced. @param hint - Updated owned attribute. @returns Retained actual attributes or clipped automatic portions. */
         (hint) => {
-          if (hint.Which() !== RES_TXTATR_AUTOFMT || hint.end <= offset || hint.start >= end)
+          if (
+            hint instanceof SwTextFlyCnt ||
+            hint.Which() !== RES_TXTATR_AUTOFMT ||
+            hint.end <= offset ||
+            hint.start >= end
+          )
             return [hint];
           return clipHintOutsideRange(hint, offset, end);
         },
@@ -575,7 +656,7 @@ export class SwpHints {
     format: "bold" | "italic" | "underline",
     inherited: SfxItemSet,
   ): SwpHints {
-    const attributes = this.collectCharacterSegments(textLength, start, end, inherited);
+    const attributes = collectCharacterSegments(this, this.pool, textLength, start, end, inherited);
     const nextValue = !attributes.every(
       /** Reads the current effective state without changing its native items. @param segment - Original span. @returns Enabled state. */ (
         segment,
@@ -656,7 +737,7 @@ export class SwpHints {
     inherited: SfxItemSet,
   ): "mixed" | "off" | "on" {
     const values = new Set(
-      this.collectCharacterSegments(textLength, start, end, inherited).map(
+      collectCharacterSegments(this, this.pool, textLength, start, end, inherited).map(
         /** Reads one effective property. @param segment - Effective native segment. @returns Property value. */ (
           segment,
         ) => segment.attributes[format],
@@ -673,7 +754,7 @@ export class SwpHints {
     hyperlink: WriterHyperlink | undefined,
   ): SwpHints {
     assertTextRange(textLength, start, end);
-    const retained = this.hintsByStart.flatMap(
+    const retained = this.entries().flatMap(
       /** Retains non-hyperlink hints and hyperlink portions outside the range. @param hint - Existing native hint. @returns Retained clones. */ (
         hint,
       ) => {
@@ -703,7 +784,7 @@ export class SwpHints {
   }
 
   /** Normalizes already owned objects without replacing their identities. @param hints - Owned ranged attributes. @param disposePrevious - Release replaced owned hints. @returns Nothing. */
-  private assignOwned(hints: readonly RangedTextAttr[], disposePrevious = false): void {
+  private assignOwned(hints: readonly TextNodeAttribute[], disposePrevious = false): void {
     const old = disposePrevious
       ? this.hintsByStart.filter(
           /** Applies filter to hint. @param hint - hint value. @returns Callback result. */ (
@@ -711,7 +792,18 @@ export class SwpHints {
           ) => !hints.includes(hint),
         )
       : [];
-    this.hintsByStart = NormalizeOwnedTextHints(hints);
+    this.hintsByStart = [
+      ...NormalizeOwnedTextHints(
+        hints.filter(
+          /** Selects only native ranged portions for normalization. @param hint - Attribute. @returns Whether ranged. */
+          (hint): hint is RangedTextAttr => hint instanceof SwTextAttrEnd,
+        ),
+      ),
+      ...hints.filter(
+        /** Preserves the identity of point hints. @param hint - Attribute. @returns Whether a point. */
+        (hint) => hint instanceof SwTextFlyCnt,
+      ),
+    ].sort(compareHints);
     for (const hint of old) DestroyTextNodeAttribute(hint);
   }
 
@@ -750,7 +842,7 @@ export class SwpHints {
     if (text.length === 0) return [];
     const runs: WriterTextRunLike[] = [];
     const boundaries = new Set([0, text.length]);
-    this.hintsByStart.forEach(
+    this.entries().forEach(
       /** Collects visible hint boundaries. @param hint - Ordered hint. @returns Nothing. */ (
         hint,
       ) => {
@@ -769,7 +861,7 @@ export class SwpHints {
       if (end <= start) continue;
       const inet = GetTextAttrAt(this, start, RES_TXTATR_INETFMT, GetTextAttrMode.Default);
       runs.push({
-        attributes: projectCharacterHintAttributes(this.pool, this.hintsByStart, start, inherited),
+        attributes: projectCharacterHintAttributes(this.pool, this.entries(), start, inherited),
         ...(inet?.format instanceof SwFormatINetFormat
           ? { hyperlink: inet.format.GetHyperlink() }
           : {}),
@@ -789,7 +881,7 @@ export class SwpHints {
       throw new Error("Writer character-format caret is outside the text node.");
     if (text.length === 0) return this.projectInherited(inherited);
     const characterOffset = offset === 0 ? 0 : offset - 1;
-    return projectCharacterHintAttributes(this.pool, this.hintsByStart, characterOffset, inherited);
+    return projectCharacterHintAttributes(this.pool, this.entries(), characterOffset, inherited);
   }
 
   /** Reads hyperlink metadata inherited by a caret. @param text - Canonical node text. @param offset - Caret offset. @returns Hyperlink or undefined. */
@@ -804,13 +896,17 @@ export class SwpHints {
 
   /** Captures same-pool state or converts a foreign container into copied attributes. @param pool - Requested owner, defaulting to the current pool. @returns Independent hints. */
   public clone(pool: SwAttrPool = this.pool): SwpHints {
-    return pool === this.pool ? new SwpHints(pool, this.hintsByStart) : this.CopyTo(pool);
+    if (this.HasFlyContent())
+      throw new Error("Writer inline fly copy requires a layout format copy.");
+    return pool === this.pool ? new SwpHints(pool, this.entries()) : this.CopyTo(pool);
   }
 
   /** Copies text attributes through native construction, including same-document copies. @param pool - Destination document pool. @returns Fresh hints with constructor flags and destination-owned automatic handles. */
   public CopyTo(pool: SwAttrPool): SwpHints {
     const result = new SwpHints(pool);
-    for (const hint of this.hintsByStart) {
+    if (this.HasFlyContent())
+      throw new Error("Writer inline fly copy requires a layout format copy.");
+    for (const hint of this.entries()) {
       const copied = MakeTextAttr(pool.GetDoc(), hint.format, hint.start, hint.end);
       if (copied instanceof SwTextCharFormat) CheckCharacterHintSortNumber(result, copied);
       result.Insert(copied);
@@ -826,58 +922,6 @@ export class SwpHints {
       inherited,
     );
   }
-
-  /** Collects effective character item segments over one native range. @param textLength - Complete text length. @param start - Inclusive range start. @param end - Exclusive range end. @param inherited - Node/style items. @returns Ordered effective segments. */
-  private collectCharacterSegments(
-    textLength: number,
-    start: number,
-    end: number,
-    inherited: SfxItemSet,
-  ): readonly CharacterSegment[] {
-    assertTextRange(textLength, start, end);
-    if (start === end) return [];
-    const boundaries = new Set([start, end]);
-    for (const hint of this.hintsByStart) {
-      if (
-        !(hint.format instanceof SwFormatAutoFormat) &&
-        !(hint.format instanceof SwFormatCharFormat)
-      )
-        continue;
-      if (hint.start > start && hint.start < end) boundaries.add(hint.start);
-      if (hint.end > start && hint.end < end) boundaries.add(hint.end);
-    }
-    const ordered = [...boundaries].sort(
-      /** Orders native offsets. @param left - First offset. @param right - Second offset. @returns Signed ordering. */ (
-        left,
-        right,
-      ) => left - right,
-    );
-    return ordered.slice(0, -1).map(
-      /** Projects one effective segment. @param segmentStart - Inclusive segment start. @param index - Boundary index. @returns Effective native segment. */ (
-        segmentStart,
-        index,
-      ) => {
-        const segmentEnd = ordered[index + 1] as number;
-        return {
-          attributes: projectCharacterHintAttributes(
-            this.pool,
-            this.hintsByStart,
-            segmentStart,
-            inherited,
-          ),
-          end: segmentEnd,
-          start: segmentStart,
-        };
-      },
-    );
-  }
-}
-
-/** Effective character attributes over one canonical native text range. */
-interface CharacterSegment {
-  readonly attributes: WriterCharacterAttributes;
-  readonly end: number;
-  readonly start: number;
 }
 
 /** Minimal complete run shape used by browser boundaries. */

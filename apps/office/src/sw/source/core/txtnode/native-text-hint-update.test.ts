@@ -39,7 +39,7 @@ function attr(
 /** Checks actual map and item identity after one native update. @param owner - Existing container. @param original - Actual attribute. @param start - Literal start. @param end - Literal end. @returns Nothing. */
 function owned(
   owner: SwpHints,
-  original: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
+  original: ReturnType<SwpHints["Get"]>,
   start: number,
   end: number,
 ): void {
@@ -48,7 +48,7 @@ function owned(
   expect(owner.GetSortedByEnd(0)).toBe(original);
   expect(owner.GetSortedByWhichAndStart(0)).toBe(original);
   expect(original.m_pHints).toBe(owner);
-  expect([original.start, original.end]).toEqual([start, end]);
+  expect([original.start, original.GetEnd()]).toEqual([start, end]);
 }
 const insertions = [
   { start: 2, offset: 0, outStart: 4, outEnd: 8 },

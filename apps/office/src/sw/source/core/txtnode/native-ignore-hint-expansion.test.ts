@@ -94,7 +94,7 @@ function owned(
   expect(owner.map.GetSortedByWhichAndStart(0)).toBe(owner.hint);
   expect(owner.hint.m_pHints).toBe(owner.map);
   expect(owner.hint.format).toBe(owner.item);
-  expect([owner.hint.start, owner.hint.end]).toEqual(range);
+  expect([owner.hint.start, owner.hint.GetEnd()]).toEqual(range);
   expect([
     owner.hint.dontExpand,
     owner.hint.dontExpandStart,
@@ -217,7 +217,7 @@ describe("native node ignore expansion", /** Registers independent node and coor
     const caller = attribute(doc, 54, 1, true, 2, 6),
       detached = new SwpHints(doc.GetAttrPool(), [caller]);
     detached.Update(8, 6, 2);
-    expect([detached.Get(0).start, detached.Get(0).end]).toEqual([2, 6]);
+    expect([detached.Get(0).start, detached.Get(0).GetEnd()]).toEqual([2, 6]);
     node.SetTextHints(
       new SwpHints(doc.GetAttrPool(), [caller, attribute(doc, 53, 0, false, 2, 6)]),
     );
@@ -226,11 +226,11 @@ describe("native node ignore expansion", /** Registers independent node and coor
       automatic = map.Get(1);
     map.Update(8, 6, 2);
     expect(map.Count()).toBe(2);
-    expect([internet.end, automatic.end]).toEqual([8, 8]);
+    expect([internet.GetEnd(), automatic.GetEnd()]).toEqual([8, 8]);
     expect(internet.dontExpand).toBe(true);
     node.SetIgnoreDontExpand(false);
     map.Update(8, 8, 2);
-    expect([internet.end, automatic.end]).toEqual([8, 10]);
+    expect([internet.GetEnd(), automatic.GetEnd()]).toEqual([8, 10]);
     expect(map.Count()).toBe(2);
     expect(map.Get(0) === automatic).toBe(true);
     expect(map.Get(1) === internet).toBe(true);
@@ -273,7 +273,7 @@ describe("native node ignore expansion", /** Registers independent node and coor
           hint = map.Get(0);
         expect(copy.IsIgnoreDontExpand()).toBe(false);
         expect(hint).not.toBe(owner.hint);
-        expect([hint.start, hint.end]).toEqual([2, 6]);
+        expect([hint.start, hint.GetEnd()]).toEqual([2, 6]);
         expect(hint.m_pHints).toBe(map);
         if (hint instanceof SwTextINetFormat) {
           expect(hint.GetTextNode()).toBe(copy);

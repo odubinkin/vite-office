@@ -32,6 +32,10 @@
         {
           "path": "apps/office/src/sw/source/core/undo/native-auto-style-lifetime.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/atrflyin.test.ts",
+          "marker": "owns an inline graphic"
         }
       ],
       "upstream": [
@@ -50,13 +54,19 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
           "marker": "SwpHints::TryInsertHint"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndhints.cxx",
+          "marker": "SwpHints::GetIndexOf"
         }
       ]
     },
     "localPath": "apps/office/src/sw/source/core/txtnode/ndhints.ts",
     "localSymbols": [
       "SwpHints",
-      "WriterTextRunLike"
+      "WriterTextRunLike",
+      "GetTextAttrForCharAt",
+      "TransferFlyHints"
     ],
     "omittedResponsibilities": [
       "Upstream obligations outside SwpHints, CompareSwpHtWhichStart::operator, CompareSwpHtEnd::operator, SwpHints::Insert and the bounded SwpHints, WriterTextRunLike, createSwpHintsFromSnapshot contract remain intentionally omitted."
@@ -87,7 +97,8 @@
       "S3HW1E connects original TryInsertHint/TryInsertNesting owner entrypoints to the represented native insertion and INET nesting decisions. Raw map insertion/history ownership remains separate.",
       "S3HW1E moves owned projection normalization to the range responsibility split, destroys discarded normalized owners, exposes explicit owned-map destruction, releases replaced snapshot maps and temporary projection items, and distinguishes native transfer paths from destructive replacement. This supersedes earlier GC-only automatic-item lifetime claims for these paths; all fragment/transient and undo callers remain unverified.",
       "Native lifetime checkpoint: logical history/action destructors release unique item, item-set and automatic-style owners on rollback, discard and replacement; temporary fragment snapshots and reduced reset-style handles are balanced in represented editing paths. Real font collection observes undo-held styles until the final owner is discarded. Browser fragment and disconnected-node ID carriers remain explicit bindings, not native SwNodes undo sections or full C++ ABI. Complete UNO/import/cache/temporary-owner closure and native item-instance interning remain unverified; no whole-filter parity promotion.",
-      "S3HW1E HTML39 connects original HTML insertion double split, target GetParaAttr snapshot, Standard collection, prefix join and accepted suffix cleanup over actual document/cursor owners. SetTextCollAttrs clones and suppresses equal target items by value before native no-undo collapsed-boundary InsertItemSet. Native Cut joins transfer source hard items and preserve source portion boundaries until destination insertion, with original moved/recreated flags. Actual all-mark lookup includes UNO positions while the user bookmark catalog stays separate. Browser open/save/autosave/recovery deviations are unchanged. Table token materialization, actual text measurement, automatic table layout and final current-model/filter/UI reconciliation remain pending; whole-module and compiled desktop parity remain unverified."
+      "S3HW1E HTML39 connects original HTML insertion double split, target GetParaAttr snapshot, Standard collection, prefix join and accepted suffix cleanup over actual document/cursor owners. SetTextCollAttrs clones and suppresses equal target items by value before native no-undo collapsed-boundary InsertItemSet. Native Cut joins transfer source hard items and preserve source portion boundaries until destination insertion, with original moved/recreated flags. Actual all-mark lookup includes UNO positions while the user bookmark catalog stays separate. Browser open/save/autosave/recovery deviations are unchanged. Table token materialization, actual text measurement, automatic table layout and final current-model/filter/UI reconciliation remain pending; whole-module and compiled desktop parity remain unverified.",
+      "V4DQJW inline graphic ownership checkpoint: The native start, end and Which/start maps own the same point and ranged attributes. Same-document split and Cut transfer fly identities; range projection continues to use only attributes with ends."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/txtnode/ndhints.cxx",
@@ -95,7 +106,8 @@
       "SwpHints",
       "CompareSwpHtWhichStart::operator",
       "CompareSwpHtEnd::operator",
-      "SwpHints::Insert"
+      "SwpHints::Insert",
+      "SwpHints::GetIndexOf"
     ]
   },
   "legacyOrder": 208

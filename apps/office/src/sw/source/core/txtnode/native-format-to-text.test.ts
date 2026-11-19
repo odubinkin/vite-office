@@ -417,7 +417,7 @@ describe("native paragraph join preparation and history", /** Registers actual s
         const restored = required(second.GetpSwpHints()).Get(0);
         expect(restored).not.toBe(hint);
         expect(restored.format).not.toBe(hint.format);
-        expect([restored.start, restored.end]).toEqual([1, 3]);
+        expect([restored.start, restored.GetEnd()]).toEqual([1, 3]);
         expect([
           restored.dontExpand,
           restored.dontExpandStart,

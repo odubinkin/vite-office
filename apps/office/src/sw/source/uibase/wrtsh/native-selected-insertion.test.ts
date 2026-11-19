@@ -70,7 +70,7 @@ function restored(owner: ReturnType<typeof fixture>) {
   const map = required(owner.node.GetpSwpHints());
   expect(map.Count()).toBe(1);
   const attr = map.Get(0);
-  expect([attr.start, attr.end]).toEqual([2, 6]);
+  expect([attr.start, attr.GetEnd()]).toEqual([2, 6]);
   expect(attr).not.toBe(owner.attr);
   expect(attr.format).not.toBe(owner.item);
   expect([
@@ -219,7 +219,8 @@ describe("native same-node selected insertion", /** Registers independent shell 
                     args[2],
                 ),
               ).toEqual([5, 2, 5]);
-              if (outStart >= 0) expect([undoHint.start, undoHint.end]).toEqual([outStart, outEnd]);
+              if (outStart >= 0)
+                expect([undoHint.start, undoHint.GetEnd()]).toEqual([outStart, outEnd]);
               else expect(undoHint.m_pHints).toBeUndefined();
               expect(owner.shell.Undo()).toBe(true);
               restored(owner);

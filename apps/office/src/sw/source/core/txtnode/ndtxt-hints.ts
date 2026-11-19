@@ -17,8 +17,9 @@ import {
 import type { WriterHyperlink } from "./fmtatr2";
 import { SwpHints, type WriterTextRunLike } from "./ndhints";
 import { SetAttrMode } from "../../../inc/swtypes";
-import { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
-import { SwFormatAutoFormat } from "./txatbase";
+import { SwTextFlyCnt } from "../../../inc/txtflcnt";
+import { RES_TXTATR_AUTOFMT, RES_TXTATR_FLYCNT } from "../../../inc/hintids";
+import { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 import { SfxItemSet as NativeItemSet } from "../../../../svl/source/items/itemset";
 import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
 
@@ -108,10 +109,12 @@ export function AppendTextNodeHints(
   if (!consume) {
     const copied = source.GetpSwpHints()?.shifted(offset);
     try {
-      return new SwpHints(node.GetDoc().GetAttrPool(), [
+      const merged = new SwpHints(node.GetDoc().GetAttrPool(), [
         ...result.entries(),
         ...(copied?.entries() ?? []),
       ]);
+      result.TransferFlyHints(merged);
+      return merged;
     } finally {
       copied?.Dispose();
     }
@@ -124,12 +127,12 @@ export function AppendTextNodeHints(
       const hint = fragment.hints.Get(0);
       fragment.hints.DeleteAtPos(0);
       hint.SetStart(hint.GetStart() + offset);
-      hint.SetEnd(hint.GetAnyEnd() + offset);
+      if (hint instanceof SwTextAttrEnd) hint.SetEnd(hint.GetEnd() + offset);
       node.InsertHint(
         hint,
         SetAttrMode.NOTXTATRCHR |
           SetAttrMode.DONTREPLACE |
-          (originalHints.has(hint) ? 0 : SetAttrMode.IS_COPY),
+          (hint instanceof SwTextAttrEnd && !originalHints.has(hint) ? SetAttrMode.IS_COPY : 0),
       );
     }
   } finally {
@@ -437,4 +440,26 @@ export function PrepareTextNodeReplacementHints(
         replacement.text.length,
         transfer,
       );
+}
+
+/** Rebinds moved fly hints after registered indices reach their final positions. @param node - Actual paragraph. @returns Nothing. */
+export function ReanchorTextNodeFlyHints(node: SwTextNode): void {
+  const hints = node.GetpSwpHints();
+  if (!hints) return;
+  for (let i = hints.GetFirstPosSortedByWhichAndStart(RES_TXTATR_FLYCNT); i < hints.Count(); ++i) {
+    const hint = hints.GetSortedByWhichAndStart(i);
+    if (!(hint instanceof SwTextFlyCnt)) break;
+    const anchor = hint.GetAttr().GetFrameFormat()?.GetAnchor();
+    if (anchor?.GetAnchorNode() !== node || anchor.GetAnchorContentOffset() !== hint.GetStart())
+      hint.SetAnchor(node);
+  }
+}
+
+/** Checks native paragraph append ownership before moving any registered indices. @param node - Destination. @param source - Source. @param consume - Whether transferring the live owners. @returns Nothing. */
+export function AssertTextNodeAppend(node: SwTextNode, source: SwTextNode, consume: boolean): void {
+  if (source === node) throw new Error("SwTextNode cannot append itself.");
+  if (source.GetNodes() !== node.GetNodes())
+    throw new Error("Joined SwTextNodes belong to different documents.");
+  if (!consume && source.GetpSwpHints()?.HasFlyContent(0, source.Len()))
+    throw new Error("Writer inline fly copy requires a layout format copy.");
 }

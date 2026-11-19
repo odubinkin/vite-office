@@ -6,6 +6,7 @@ import {
   CH_TXT_ATR_FIELDSTART,
   CH_TXT_ATR_FORMELEMENT,
 } from "../../../inc/hintids";
+import { SwTextAttrEnd } from "../txtnode/txatbase";
 import { SwAttrHandler } from "./atrstck";
 
 /** Traverses actual native start/end maps and maintains character stacks for the current text position. */
@@ -47,7 +48,11 @@ export class SwAttrIter {
         hints.GetSortedByEnd(this.m_nEndIndex).GetAnyEnd() <= position
       ) {
         const hint = hints.GetSortedByEnd(this.m_nEndIndex++);
-        if (this.m_nStartIndex !== 0 && hint.GetStart() <= this.m_nPosition)
+        if (
+          hint instanceof SwTextAttrEnd &&
+          this.m_nStartIndex !== 0 &&
+          hint.GetStart() <= this.m_nPosition
+        )
           this.m_aAttrHandler.PopAndChg(hint);
       }
       while (
@@ -55,7 +60,8 @@ export class SwAttrIter {
         hints.Get(this.m_nStartIndex).GetStart() <= position
       ) {
         const hint = hints.Get(this.m_nStartIndex++);
-        if (hint.GetAnyEnd() > position) this.m_aAttrHandler.PushAndChg(hint);
+        if (hint instanceof SwTextAttrEnd && hint.GetEnd() > position)
+          this.m_aAttrHandler.PushAndChg(hint);
       }
     }
     this.m_nPosition = position;

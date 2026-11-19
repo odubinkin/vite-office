@@ -20,20 +20,23 @@
         "apps/office/src/sw/source/core/txtnode/native-internet-nesting.test.ts",
         "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
         "apps/office/src/sw/source/core/doc/native-font-item-enumeration.test.ts",
-        "apps/office/src/sw/source/core/txtnode/character-style-hints.test.ts"
+        "apps/office/src/sw/source/core/txtnode/character-style-hints.test.ts",
+        "apps/office/src/sw/source/core/txtnode/atrflyin.test.ts"
       ],
-      "justification": "Original three-family InsertHint/TryInsertHint decisions retain insertion-time actual owner/style binding, DONTEXPAND, endpoint swap, XML/NOHINTADJUST portion/merge decisions, explicit history, native changed-family notification and input-identity-independent success. This is a responsibility split of the large native thints owner. Dummy/content-bearing hints, RSID/hidden values and their native producers remain unrepresented. The existing browser event sink is used when no native Writer listener exists; no native layout/history service is synthesized. S3HW1E DestroyTextNodeAttribute releases its actual owned item after represented listener cleanup, including shared automatic-style ownership. Complete unrepresented hint families and all destruction callers remain unverified. B8TCAE adds bounded source-contract/native evidence: Actual public document XML-import phase drives original hint portion-building paths. Imported character-style layers remain independently owned and normal replacement resumes when the public phase is cleared.",
+      "justification": "Original three-family InsertHint/TryInsertHint decisions retain insertion-time actual owner/style binding, DONTEXPAND, endpoint swap, XML/NOHINTADJUST portion/merge decisions, explicit history, native changed-family notification and input-identity-independent success. This is a responsibility split of the large native thints owner. Dummy/content-bearing hints, RSID/hidden values and their native producers remain unrepresented. The existing browser event sink is used when no native Writer listener exists; no native layout/history service is synthesized. S3HW1E DestroyTextNodeAttribute releases its actual owned item after represented listener cleanup, including shared automatic-style ownership. Complete unrepresented hint families and all destruction callers remain unverified. B8TCAE adds bounded source-contract/native evidence: Actual public document XML-import phase drives original hint portion-building paths. Imported character-style layers remain independently owned and normal replacement resumes when the public phase is cleared. V4DQJW inline graphic ownership checkpoint: The native FLYCNT branch translates insertion mode, inserts or reuses a single dummy character, then binds the real fly to its current point. Destroying the point clears its link before layout-owned graphic removal.",
       "knownViolations": [],
       "localSymbols": [
         "InsertTextNodeHint",
         "TryInsertTextNodeHint",
-        "DestroyTextNodeAttribute"
+        "DestroyTextNodeAttribute",
+        "InsertFlyHint"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/core/txtnode/thints.cxx",
       "upstreamSymbols": [
         "SwTextNode::InsertHint",
-        "SwpHints::TryInsertHint"
+        "SwpHints::TryInsertHint",
+        "SwTextNode::DestroyAttr"
       ]
     }
   }

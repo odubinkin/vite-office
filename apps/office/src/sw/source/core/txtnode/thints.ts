@@ -77,13 +77,13 @@ export function InsertTextNodeItem(
   return success && node.GetpSwpHints()?.entries().includes(hint) ? hint : undefined;
 }
 
-/** Implements ClearSwpHintsArr for the two currently supported ranged families. @param node - Actual owner. @param deleteFields - Native field policy;unsupported field hints are absent. @returns Nothing. */
+/** Implements ClearSwpHintsArr for registered hints and keeps inline fly points. @param node - Actual owner. @param deleteFields - Native field policy;unsupported field hints are absent. @returns Nothing. */
 export function ClearTextNodeHints(node: SwTextNode, deleteFields: boolean): void {
   void deleteFields;
   const map = node.GetpSwpHints();
-  while (map !== undefined && map.Count() > 0) {
-    const hint = map.Get(0);
-    map.DeleteAtPos(0);
+  if (!map) return;
+  for (const hint of map.entries()) {
+    map.DeleteAtPos(map.GetIndexOf(hint));
     DestroyTextNodeAttribute(hint);
   }
 }
@@ -117,7 +117,7 @@ export function ConvertTextNodeItemsToHints(node: SwTextNode, items: SfxItemSet)
       for (const item of old.entries()) converted.ClearItem(item.Which());
       if (converted.Count() === 0) continue;
       converted.PutSet(old);
-      hints.DeleteAtPos(hints.entries().indexOf(span.hint));
+      hints.DeleteAtPos(hints.GetIndexOf(span.hint));
       DestroyTextNodeAttribute(span.hint);
     }
     hints.Insert(MakeTextAttr(node.GetDoc(), converted, span.start, span.end));

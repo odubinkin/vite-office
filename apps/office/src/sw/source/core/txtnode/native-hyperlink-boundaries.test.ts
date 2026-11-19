@@ -36,7 +36,7 @@ function ranges(hints: SwpHints, expected: readonly (readonly [number, number])[
   expect(hints.Get(0).format).not.toBe(hints.Get(1).format);
   for (let i = 0; i < 2; i++) {
     const hint = hints.Get(i);
-    expect([hint.start, hint.end]).toEqual(expected[i]);
+    expect([hint.start, hint.GetEnd()]).toEqual(expected[i]);
     expect(hint.m_pHints).toBe(hints);
     expect(hints.GetSortedByEnd(i)).toBe(hint);
     expect(hints.GetSortedByWhichAndStart(i)).toBe(hint);

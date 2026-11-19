@@ -71,9 +71,10 @@ import {
 
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { SwNumRuleItem, type ListLevelIndents } from "../para/paratr";
-import { SwpHints } from "./ndhints";
+import { SwpHints, type TextNodeAttribute } from "./ndhints";
 import {
   AppendTextNodeHints,
+  AssertTextNodeAppend,
   CloneTextNodeTo,
   AssertTextNodeRange,
   CopyTextNodeHints,
@@ -89,6 +90,7 @@ import {
   getWriterParagraphAlignment,
   InsertTextNodeHints,
   MoveTextAttrToAttrSet,
+  ReanchorTextNodeFlyHints,
   ReplaceTextNodeHints,
   SplitTextNodeEndHints,
 } from "./ndtxt-hints";
@@ -208,11 +210,8 @@ export class SwTextNode extends SwContentNode {
     return thints.InsertTextNodeItem(this, attr, start, end, mode);
   }
 
-  /** Original ownership-transfer insertion for represented native ranged families. @param hint - Actual detached attribute. @param mode - Native insertion flags. @returns Success independent of identity retention after merging. */
-  public InsertHint(
-    hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
-    mode = SetAttrMode.DEFAULT,
-  ): boolean {
+  /** Original ownership-transfer insertion for ranged attributes and inline fly points. @param hint - Actual detached attribute. @param mode - Native insertion flags. @returns Success independent of identity retention after merging. */
+  public InsertHint(hint: TextNodeAttribute, mode = SetAttrMode.DEFAULT): boolean {
     return InsertTextNodeHint(this, hint, mode);
   }
 
@@ -717,9 +716,8 @@ export class SwTextNode extends SwContentNode {
     const inserted = rStr.slice(0, Math.max(0, this.GetSpaceLeft() + nDelLen));
     if (inserted.length === 0 && nDelLen === 0) return;
     const hints = this.pSwpHints;
-    for (const hint of hints?.entries() ?? [])
-      if (hint.HasDummyChar() && hint.GetStart() >= start && hint.GetStart() < start + nDelLen)
-        throw new Error("Writer dummy-character replacement is not implemented.");
+    if (hints?.HasFlyContent(start, start + nDelLen))
+      throw new Error("Writer dummy-character replacement is not implemented.");
     const oldIgnore = this.IsIgnoreDontExpand();
     this.SetIgnoreDontExpand(true);
     try {
@@ -766,6 +764,7 @@ export class SwTextNode extends SwContentNode {
     this.mText = `${this.mText.slice(0, start)}${replacementText}${this.mText.slice(end)}`;
     this.pSwpHints = hints.CanBeDeleted() ? undefined : hints;
     UpdateTextNodeReplacementIndices(this, start, removedLength, replacementText.length);
+    if (transferHints) ReanchorTextNodeFlyHints(this);
     this.GetDoc().NotifyModelChange({
       kind: "node-content-changed",
       nodeIndex: this.GetNodes().indexOfOrUndefined(this),
@@ -796,6 +795,7 @@ export class SwTextNode extends SwContentNode {
       format,
       this.GetSwAttrSet(),
     );
+    this.pSwpHints?.TransferFlyHints(hints);
     this.pSwpHints = hints.CanBeDeleted() ? undefined : hints;
     this.GetDoc().NotifyModelChange({
       kind: "attribute-set-changed",
@@ -846,6 +846,7 @@ export class SwTextNode extends SwContentNode {
     AssertTextNodeRange(this, start, end);
     if (start === end) return;
     const hints = this.GetTextHints().setHyperlink(this.mText.length, start, end, hyperlink);
+    this.pSwpHints?.TransferFlyHints(hints);
     this.pSwpHints = hints.CanBeDeleted() ? undefined : hints;
     this.GetDoc().NotifyModelChange({
       kind: "attribute-set-changed",
@@ -856,23 +857,23 @@ export class SwTextNode extends SwContentNode {
   /** Splits this node at one content offset and returns an uninserted trailing sibling. @param offset - UTF-16 split offset. @returns Prepared trailing text node. */
   public SplitContent(offset: number): SwTextNode {
     AssertTextNodeRange(this, offset, offset);
-    const prefix = this.CaptureTextFragment(0, offset);
-    const suffix = this.CaptureTextFragment(offset, this.Len());
+    const [prefix, suffix] = this.GetTextHints().Split(offset, this.Len());
     const trailing = new SwTextNode(
       this.GetNodes(),
       this.StartOfSectionNode(),
       this.GetTextFormatColl(),
-      suffix.text,
+      this.mText.slice(offset),
     );
     const directAttributes = this.GetpSwAttrSet();
     if (directAttributes !== undefined) trailing.SetAttr(directAttributes);
     PrepareSplitTextNodeFormat(this, trailing, offset === this.Len());
-    trailing.pSwpHints = SplitTextNodeEndHints(this, offset, suffix.hints);
-    this.mText = prefix.text;
-    this.pSwpHints = prefix.hints.CanBeDeleted() ? undefined : prefix.hints;
+    trailing.pSwpHints = SplitTextNodeEndHints(this, offset, suffix);
+    this.mText = this.mText.slice(0, offset);
+    this.pSwpHints = prefix.CanBeDeleted() ? undefined : prefix;
     this.MoveTextAttr_To_AttrSet();
     trailing.MoveTextAttr_To_AttrSet();
     this.MoveContentIndicesFrom(trailing, offset);
+    ReanchorTextNodeFlyHints(trailing);
     this.GetDoc().NotifyModelChange({
       kind: "node-content-changed",
       nodeIndex: this.GetNodes().indexOfOrUndefined(this),
@@ -894,9 +895,7 @@ export class SwTextNode extends SwContentNode {
     consume = false,
     moveSourceIndices = true,
   ): void {
-    if (source === this) throw new Error("SwTextNode cannot append itself.");
-    if (source.GetNodes() !== this.GetNodes())
-      throw new Error("Joined SwTextNodes belong to different documents.");
+    AssertTextNodeAppend(this, source, consume);
     const text = source.mText,
       oldLength = this.Len(),
       offset = prepend ? 0 : oldLength;

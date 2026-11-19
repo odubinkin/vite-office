@@ -4,7 +4,7 @@ import { GetTextAttrMode } from "../../../inc/swtypes";
 import { RES_TXTATR_AUTOFMT, RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT } from "../../../inc/hintids";
 import type { SwpHints } from "./ndhints";
 import type { SwFormatINetFormat } from "./fmtatr2";
-import type { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
+import { type SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 
 /** Existing ranged families accepted by the native pointer-query boundary. */
 export type RangedTextAttribute = SwTextAttrEnd<
@@ -55,7 +55,7 @@ export function GetTextAttrAt(
     if (hint.Which() !== which) break;
     const start = hint.GetStart();
     if (index < start) break;
-    if (match(index, start, hint.GetEnd())) result = hint;
+    if (hint instanceof SwTextAttrEnd && match(index, start, hint.GetEnd())) result = hint;
   }
   return result;
 }

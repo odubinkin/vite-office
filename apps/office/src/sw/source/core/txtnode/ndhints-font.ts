@@ -1,4 +1,5 @@
 /** @fileoverview Character item deltas for font controls and sibling commands;actual automatic hint sets retain complete values. */
+import { SwFormatCharFormat } from "./fmtatr2";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import {
@@ -116,7 +117,7 @@ export function setCharacterItems(
   keepDirect = false,
 ): SwpHints {
   assertTextRange(textLength, start, end);
-  if (start === end) return hints.clone();
+  if (start === end) return new SwpHints(pool, hints.entries());
   const entries = hints.entries();
   const retained = entries.flatMap(
     /** Retains unrelated hints and portions outside the font range. @param hint - Original callback input. @returns Operation result. */ (
@@ -192,4 +193,47 @@ export function projectCharacterHintAttributes(
   } finally {
     effective.Dispose();
   }
+}
+
+/** Collects effective character item segments over one native range. @param hints - Current native hints. @param pool - Their document pool. @param textLength - Complete text length. @param start - Inclusive range start. @param end - Exclusive range end. @param inherited - Node/style items. @returns Ordered effective segments. */
+export function collectCharacterSegments(
+  hints: SwpHints,
+  pool: SwAttrPool,
+  textLength: number,
+  start: number,
+  end: number,
+  inherited: SfxItemSet,
+): readonly { attributes: WriterCharacterAttributes; start: number; end: number }[] {
+  assertTextRange(textLength, start, end);
+  if (start === end) return [];
+  const boundaries = new Set([start, end]);
+  const entries = hints.entries();
+  for (const hint of entries) {
+    if (
+      !(hint.format instanceof SwFormatAutoFormat) &&
+      !(hint.format instanceof SwFormatCharFormat)
+    )
+      continue;
+    if (hint.start > start && hint.start < end) boundaries.add(hint.start);
+    if (hint.end > start && hint.end < end) boundaries.add(hint.end);
+  }
+  const ordered = [...boundaries].sort(
+    /** Orders native offsets. @param left - First offset. @param right - Second offset. @returns Signed ordering. */ (
+      left,
+      right,
+    ) => left - right,
+  );
+  return ordered.slice(0, -1).map(
+    /** Projects one effective segment. @param segmentStart - Inclusive segment start. @param index - Boundary index. @returns Effective native segment. */ (
+      segmentStart,
+      index,
+    ) => {
+      const segmentEnd = ordered[index + 1] as number;
+      return {
+        attributes: projectCharacterHintAttributes(pool, entries, segmentStart, inherited),
+        end: segmentEnd,
+        start: segmentStart,
+      };
+    },
+  );
 }

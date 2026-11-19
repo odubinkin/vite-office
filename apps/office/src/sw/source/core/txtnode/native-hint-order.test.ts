@@ -113,7 +113,7 @@ describe("native hint start map ordering", /** Registers source-independent lite
             expect(moved.Get(i)).toBe(actual[i]);
             expect(moved.Get(i).format).toBe(actual[i]?.format);
             expect(moved.Get(i).start).toBe(snapshot.hints.Get(i).start + 1);
-            expect(moved.Get(i).end).toBe(snapshot.hints.Get(i).end + 1);
+            expect(moved.Get(i).GetEnd()).toBe(required(snapshot.hints.Get(i).GetEnd()) + 1);
           }
           expect(order(undo.GetText(id).hints)).toEqual(boundary.order);
           expect(undo.GetText(id).hints.Get(0)).not.toBe(moved.Get(0));

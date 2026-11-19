@@ -1,5 +1,4 @@
 /** @fileoverview Checks secondary-map actual-object ownership across real cut/transfer, snapshots and undo without upstream access. */
-import type { SwFormatCharFormat } from "./fmtatr2";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -44,10 +43,8 @@ function hints(
 /** Checks all maps contain the same actual owner-bound objects. @param container - Actual owner. @returns Nothing. */
 function owners(container: SwpHints): void {
   const actual = new Set(container.entries()),
-    byEnd = new Set<SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>>(),
-    byWhich = new Set<
-      SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>
-    >();
+    byEnd = new Set<ReturnType<SwpHints["Get"]>>(),
+    byWhich = new Set<ReturnType<SwpHints["Get"]>>();
   for (let i = 0; i < container.Count(); i++) {
     byEnd.add(container.GetSortedByEnd(i));
     byWhich.add(container.GetSortedByWhichAndStart(i));
@@ -140,7 +137,7 @@ describe("secondary hint map transfer", /** Registers actual graph and ownership
           byEnd.map(
             /** Reads actual coordinates. @param attr - Attribute. @returns Range. */ (attr) => [
               attr.start,
-              attr.end,
+              attr.GetEnd(),
             ],
           ),
         ).toEqual([

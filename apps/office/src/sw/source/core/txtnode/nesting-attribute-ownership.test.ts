@@ -109,7 +109,7 @@ describe("native nesting attribute ownership", /** Registers independent real-ow
       expect(original.format).toBe(item);
       native(original);
       expect([original.start, original.end]).toEqual([boundary.start, boundary.end]);
-      expect([snapshot.hints.Get(0).start, snapshot.hints.Get(0).end]).toEqual([1, 5]);
+      expect([snapshot.hints.Get(0).start, snapshot.hints.Get(0).GetEnd()]).toEqual([1, 5]);
     },
   );
   it.each([0, 2, 4])(
@@ -124,7 +124,7 @@ describe("native nesting attribute ownership", /** Registers independent real-ow
         node.InsertText("link", 0, SwInsertFlags.DEFAULT, undefined, { url: "inserted" });
         native(required(node.GetpSwpHints()).Get(0));
         node.InsertText("X", 4);
-        expect(required(node.GetpSwpHints()).Get(0).end).toBe(4);
+        expect(required(node.GetpSwpHints()).Get(0).GetEnd()).toBe(4);
       } else {
         node.SetHyperlink(0, length, { url: "start" });
         node.InsertText("X", 0);
