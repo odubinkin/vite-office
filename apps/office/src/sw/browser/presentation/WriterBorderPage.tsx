@@ -115,7 +115,7 @@ export function WriterBorderPage({
               <button
                 key={name}
                 type="button"
-                title={name}
+                data-office-tooltip={name}
                 aria-label={name}
                 aria-pressed={page.GetPreset() === index + 1}
                 className="rounded border px-2 py-1 text-xs aria-pressed:bg-indigo-100"

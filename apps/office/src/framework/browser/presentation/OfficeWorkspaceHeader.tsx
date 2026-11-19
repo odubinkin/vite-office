@@ -94,7 +94,7 @@ export function OfficeWorkspaceHeader({
 
       <div
         aria-label={standardToolbarLabel}
-        className="flex min-h-12 min-w-0 items-center gap-1 overflow-x-auto border-b border-slate-200 px-3 py-1.5"
+        className="flex min-h-9 min-w-0 items-center gap-0.5 overflow-x-auto border-b border-slate-200 px-2 py-0.5"
         role="toolbar"
       >
         {toolbar}
@@ -103,7 +103,7 @@ export function OfficeWorkspaceHeader({
       {formattingToolbar === undefined ? null : (
         <div
           aria-label={formattingToolbarLabel}
-          className="flex min-h-12 min-w-0 flex-wrap items-center gap-2 border-b border-slate-200 bg-slate-50 px-3 py-1.5"
+          className="flex min-h-9 min-w-0 flex-wrap items-center gap-1 border-b border-slate-200 bg-slate-50 px-2 py-0.5"
           role="toolbar"
         >
           {formattingToolbar}

@@ -32,6 +32,7 @@ export function CalcFormattingToolbar({
   return (
     <CommandToolbarItems
       commandSource={commandSource}
+      hideUnregistered
       resolveArguments={resolveArguments}
       items={calcFormatObjectBarItems}
       icons={officeCommandIcons}
@@ -131,11 +132,11 @@ function CalcBorderToolbarItem({
   const state = useBrowserCommandPresentation(commandSource, commandId, getCalcCommandResource),
     icon =
       commandId === ".uno:SetBorderStyle" && BorderPresetIcon ? (
-        <BorderPresetIcon aria-hidden={true} size={18} />
+        <BorderPresetIcon aria-hidden={true} size={16} />
       ) : commandId === ".uno:LineStyle" && BorderStyleIcon ? (
-        <BorderStyleIcon aria-hidden={true} size={18} />
+        <BorderStyleIcon aria-hidden={true} size={16} />
       ) : BorderColorIcon ? (
-        <BorderColorIcon aria-hidden={true} size={18} />
+        <BorderColorIcon aria-hidden={true} size={16} />
       ) : null;
   const dispatch = useCallback<BorderDispatch>(
     /** Forwards original typed item arrays through the actual dispatcher. @param command - Source command URL. @param items - Real source items. @returns Nothing. */ (

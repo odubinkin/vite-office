@@ -542,7 +542,7 @@ function RulerHandle({
                 transform: "translateY(-50%)",
               }
         }
-        title={ariaLabel}
+        data-office-tooltip={ariaLabel}
         type="button"
       >
         {tabBounds === undefined ? null : (

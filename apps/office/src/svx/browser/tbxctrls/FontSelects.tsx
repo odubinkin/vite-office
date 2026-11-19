@@ -125,6 +125,7 @@ export function FontNameSelect({
   return (
     <span className="contents">
       <ComboBox
+        popupWidth={320}
         resetKey={selected}
         options={options}
         mruOptions={recent}

@@ -1,8 +1,9 @@
 /** @fileoverview Shared resource-driven Sfx command controls for browser toolbars. */
 
-import type { ComponentType, ReactNode } from "react";
+import { useMemo, type ComponentType, type ReactNode } from "react";
 
 import { type BrowserCommandSurfaceProps, useBrowserCommandPresentation } from "./command-surface";
+import { normalizeToolbarItems } from "./toolbar-resource";
 
 /** Minimal icon contract used by command buttons without coupling to an icon package. */
 export type CommandIcon = ComponentType<Readonly<{ "aria-hidden"?: boolean; size?: number }>>;
@@ -53,7 +54,7 @@ export function CommandButton({
       aria-pressed={pressed}
       className={
         className ??
-        "grid size-9 shrink-0 place-items-center rounded-lg text-sm font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-800 disabled:cursor-not-allowed disabled:opacity-50 data-[active=true]:bg-indigo-100 data-[active=true]:text-indigo-900"
+        "grid size-7 shrink-0 place-items-center rounded-md text-sm font-bold text-slate-700 transition hover:bg-indigo-50 hover:text-indigo-800 disabled:cursor-not-allowed disabled:opacity-50 data-[active=true]:bg-indigo-100 data-[active=true]:text-indigo-900"
       }
       data-active={pressed}
       disabled={!presentation.enabled}
@@ -61,10 +62,10 @@ export function CommandButton({
         /** Dispatches through the same Sfx source that supplied state. @returns Nothing. */ () =>
           commandSource.Execute(commandId, resolveArguments(commandId))
       }
-      title={presentation.error ?? resource.label}
+      data-office-tooltip={presentation.error ?? resource.label}
       type="button"
     >
-      {content ?? (Icon === undefined ? resource.label : <Icon aria-hidden={true} size={18} />)}
+      {content ?? (Icon === undefined ? resource.label : <Icon aria-hidden={true} size={16} />)}
     </button>
   );
 }
@@ -77,6 +78,7 @@ export interface CommandToolbarItemsProps<
   readonly getCommandResource: (commandUrl: string) => ToolbarCommandResource;
   readonly getButtonContent?: (commandUrl: string) => ReactNode;
   readonly icons?: ReadonlyMap<string, CommandIcon>;
+  readonly hideUnregistered?: boolean;
   readonly items: readonly Placement[];
   readonly renderCommandItem?: (
     item: Extract<Placement, { kind: "command" }>,
@@ -96,15 +98,32 @@ export function CommandToolbarItems<
   buttonClassName,
   getCommandResource,
   getButtonContent,
+  hideUnregistered = false,
   icons,
   items,
   renderSpecialItem,
   renderCommandItem,
   resolveArguments,
 }: CommandToolbarItemsProps<Placement>): React.JSX.Element {
+  const visibleItems = useMemo(
+    /** Filters a fixed command surface once per resource and frame pair. @returns Visible placements. */ () =>
+      hideUnregistered
+        ? normalizeToolbarItems(
+            items.filter(
+              /** Keeps controls without a slot and all connected commands. @param item - Placement. @returns Whether visible. */ (
+                item,
+              ) =>
+                !("commandId" in item) ||
+                typeof item.commandId !== "string" ||
+                commandSource.QueryCommand(item.commandId) !== undefined,
+            ),
+          )
+        : items,
+    [commandSource, hideUnregistered, items],
+  );
   return (
     <>
-      {items.map(
+      {visibleItems.map(
         /** Projects one generated placement. @param item - Toolbar placement. @param index - Resource index. @returns Rendered toolbar node. */ (
           item,
           index,
@@ -113,7 +132,7 @@ export function CommandToolbarItems<
             return (
               <span
                 aria-hidden="true"
-                className="mx-1 h-6 border-l border-slate-200"
+                className="mx-0.5 h-5 border-l border-slate-200"
                 key={`separator-${index}`}
               />
             );

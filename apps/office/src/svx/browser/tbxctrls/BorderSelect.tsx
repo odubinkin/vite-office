@@ -114,6 +114,7 @@ export function BorderSelect({
         ref={main}
         type="button"
         aria-label={label}
+        data-office-tooltip={label}
         disabled={!enabled}
         className={className}
         onClick={
@@ -127,8 +128,9 @@ export function BorderSelect({
         <summary
           aria-label={`${label} presets`}
           aria-disabled={!enabled}
+          data-office-tooltip={`${label} presets`}
           tabIndex={enabled ? 0 : -1}
-          className="grid h-8 w-5 cursor-pointer place-items-center rounded-r border border-l-0 border-slate-300 bg-white text-xs text-slate-700"
+          className="grid h-7 w-5 cursor-pointer place-items-center rounded-r border border-l-0 border-slate-300 bg-white text-xs text-slate-700"
           onClick={
             /** Retains source disabled admission. @param event - Popup click. @returns Nothing. */ (
               event,
@@ -165,7 +167,7 @@ export function BorderSelect({
                   key={name}
                   type="button"
                   aria-label={name}
-                  title={name}
+                  data-office-tooltip={name}
                   disabled={!enabled}
                   className={className}
                   onClick={
@@ -257,6 +259,7 @@ export function BorderLineStyleSelect({
       <summary
         aria-label={label}
         aria-disabled={!enabled}
+        data-office-tooltip={label}
         tabIndex={enabled ? 0 : -1}
         className={`${className} list-none cursor-pointer`}
         onClick={

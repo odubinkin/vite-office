@@ -141,16 +141,8 @@ it("renders canonical grid coordinates,marks and bounded cells while forwarding 
   rerender(<ScGridWindow {...props} />);
   expect(screen.getByRole("grid")).toHaveFocus();
 });
-it("keeps formula-line state controlled and preserves source action modes", /** Covers name/input events and all enabled/disabled command buttons. @returns Nothing. */ () => {
-  const actions = new Set<CalcInputAction>([
-    "names",
-    "function",
-    "sum",
-    "equals",
-    "cancel",
-    "accept",
-    "expand",
-  ]);
+it("keeps formula-line state controlled and shows connected actions in each mode", /** Covers input events, available actions and absence of placeholders. @returns Nothing. */ () => {
+  const actions = new Set<CalcInputAction>(["sum", "equals", "cancel", "accept"]);
   const props: ScInputWindowProps = {
     addressText: "A1",
     inputText: "=1+2",
@@ -175,15 +167,11 @@ it("keeps formula-line state controlled and preserves source action modes", /** 
   expect(props.onInput).toHaveBeenCalledWith("=2", [2, 2]);
   fireEvent.keyDown(line, { key: "Escape" });
   expect(props.onInputKeyDown).toHaveBeenCalledOnce();
-  for (const label of ["Named ranges", "Function Wizard", "Sum", "Formula", "Expand formula bar"])
+  for (const label of ["Named ranges", "Function Wizard", "Expand formula bar"])
+    expect(screen.queryByRole("button", { name: label })).not.toBeInTheDocument();
+  for (const label of ["Sum", "Formula"])
     fireEvent.click(screen.getByRole("button", { name: label }));
-  expect(vi.mocked(props.onAction).mock.calls.flat()).toEqual([
-    "names",
-    "function",
-    "sum",
-    "equals",
-    "expand",
-  ]);
+  expect(vi.mocked(props.onAction).mock.calls.flat()).toEqual(["sum", "equals"]);
   expect(fireEvent.mouseDown(screen.getByRole("button", { name: "Formula" }))).toBe(false);
   rerender(<ScInputWindow {...props} editing />);
   expect(screen.queryByRole("button", { name: "Sum" })).not.toBeInTheDocument();

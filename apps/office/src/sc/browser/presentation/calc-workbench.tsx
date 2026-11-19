@@ -41,6 +41,7 @@ import { ScGoToTabDlg } from "./ScGoToTabDlg";
 import type { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
 import { CalcFileDialog } from "./CalcFileDialog";
 import { CommandMenuBar } from "../../../framework/browser/presentation/CommandMenuBar";
+import { selectAvailableMenuItems } from "../../../framework/browser/presentation/available-menu-items";
 import { calcMenus, getCalcCommandResource } from "../../uiconfig/scalc/menubar/menubar";
 import { ScAddress, MAXTAB } from "../../inc/address";
 /** Production document/view and its shared Sfx frame. */
@@ -115,6 +116,23 @@ export function CalcWorkbench({
     /** Binds presenters to the active frame. @returns Command source. */ () =>
       createBrowserCommandSource(frame),
     [frame],
+  );
+  const menus = useMemo(
+    /** Resolves the connected Calc menus once per frame. @returns Nonempty menu roots. */
+    () =>
+      calcMenus.flatMap(
+        /** Removes menu roots with no registered actions. @param menu - Original menu. @returns Visible root or empty array. */
+        (menu) => {
+          const items = selectAvailableMenuItems(menu.items, source);
+          return items.length === 0 ? [] : [{ ...menu, items }];
+        },
+      ),
+    [source],
+  );
+  const sheetMenuItems = useMemo(
+    /** Resolves the connected sheet actions once per frame. @returns Sheet context menu items. */
+    () => selectAvailableMenuItems(calcSheetTabItems, source),
+    [source],
   );
   /** Borrows the component's own grid DOM client. @returns Grid. */
   function grid(): HTMLDivElement {
@@ -431,7 +449,7 @@ export function CalcWorkbench({
               getCommandResource={getCalcCommandResource}
               idPrefix="calc-menu"
               isInputEnabled={!modal}
-              menus={calcMenus}
+              menus={menus}
               resolveArguments={resolveCalcCommandArguments}
             />
           }
@@ -446,6 +464,7 @@ export function CalcWorkbench({
           toolbar={
             <CommandToolbarItems
               commandSource={source}
+              hideUnregistered
               items={calcStandardBarItems}
               icons={officeCommandIcons}
               getCommandResource={getCalcCommandResource}
@@ -770,7 +789,7 @@ export function CalcWorkbench({
         <CommandPopupMenu
           ariaLabel="Calc sheet context menu"
           commandSource={source}
-          items={calcSheetTabItems}
+          items={sheetMenuItems}
           position={sheetPopup}
           getCommandResource={getCalcPopupCommandResource}
           resolveArguments={resolveCalcCommandArguments}

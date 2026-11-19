@@ -126,7 +126,8 @@ export function WriterFileDialog({
         /** Opens a real primary Writer document. @param id - Browser record. @returns Completion. */ async (
           id,
         ) => {
-          await openBrowserWriterDocument(docShell, requiredStore(), id);
+          if (!(await openBrowserWriterDocument(docShell, requiredStore(), id)))
+            throw new Error("The saved document no longer exists.");
         }
       }
       saveCopy={

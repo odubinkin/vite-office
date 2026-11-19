@@ -57,7 +57,8 @@ export function ColorControl({
     <div className="flex items-center" aria-label={label}>
       <button
         aria-label={label}
-        className="flex h-8 w-8 flex-col items-center justify-center rounded-l border border-slate-300 bg-white text-base font-bold"
+        className="flex size-7 flex-col items-center justify-center rounded-l border border-slate-300 bg-white text-sm font-bold"
+        data-office-tooltip={label}
         disabled={disabled}
         onClick={
           /** Handles Writer formatting state.  @returns Callback result. */ () =>
@@ -77,6 +78,7 @@ export function ColorControl({
         <summary
           aria-label={`${label} palette`}
           aria-disabled={disabled}
+          data-office-tooltip={`${label} palette`}
           tabIndex={disabled ? -1 : 0}
           onClick={
             /** Keeps an unavailable source control closed. @param event - Native summary press. @returns Nothing. */ (
@@ -86,7 +88,7 @@ export function ColorControl({
               if (!disabled) toggle();
             }
           }
-          className="flex h-8 w-5 cursor-pointer list-none items-center justify-center rounded-r border border-l-0 border-slate-300 bg-white text-xs"
+          className="flex h-7 w-5 cursor-pointer list-none items-center justify-center rounded-r border border-l-0 border-slate-300 bg-white text-xs"
         >
           ▾
         </summary>

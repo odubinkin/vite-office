@@ -127,12 +127,12 @@ export function FontNamePreview({
   );
   if (preview === undefined)
     return (
-      <span className="block" style={{ width: "52ch", maxWidth: "100%", height: "1.6em" }}>
+      <span className="block truncate" style={{ height: "1.6em" }}>
         {family}
       </span>
     );
   return (
-    <span className="block" style={{ width: "52ch", maxWidth: "100%", height: "1.6em" }}>
+    <span className="block overflow-hidden" style={{ height: "1.6em" }}>
       <span className={!canPaint ? undefined : "sr-only"}>{family}</span>
       <canvas
         ref={attachCanvas}

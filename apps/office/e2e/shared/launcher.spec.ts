@@ -8,6 +8,10 @@ test("shared launcher routes to Calc without a Writer session", /** Checks launc
 }) => {
   await page.goto("/");
   await expect(page.getByRole("navigation", { name: "Office applications" })).toBeVisible();
+  await expect(page.getByLabel("Search is unavailable")).toHaveCount(0);
+  await expect(page.getByLabel("Program documentation is available in the repository")).toHaveCount(
+    0,
+  );
   await expect(page.locator("#workspace")).toHaveCount(0);
   const link = page.getByRole("link", { name: "Calc" });
   await link.focus();

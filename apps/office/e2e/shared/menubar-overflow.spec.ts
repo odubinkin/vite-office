@@ -3,22 +3,10 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 const roots = {
   writer: ["File", "Edit", "View", "Insert", "Format", "Styles", "Table", "Tools"],
-  calc: [
-    "File",
-    "Edit",
-    "View",
-    "Insert",
-    "Format",
-    "Styles",
-    "Sheet",
-    "Data",
-    "Tools",
-    "Window",
-    "Help",
-  ],
+  calc: ["File", "Edit", "View", "Format", "Sheet"],
 };
 for (const suite of ["writer", "calc"] as const)
-  for (const width of [1280, 390]) {
+  for (const width of suite === "writer" ? [1280, 390] : [1280, 390, 320]) {
     test(`${suite} top menus remain reachable at ${width}px`, /** Exercises real resources,native suffix nesting and keyboard/focus ownership. @param fixtures - Browser fixture. @param fixtures.page - Actual page. @returns Completion. */ async ({
       page,
     }) => {
@@ -39,7 +27,7 @@ for (const suite of ["writer", "calc"] as const)
       await editor.focus();
       await expect(bar.getByRole("menuitem", { name: "File", exact: true })).toBeVisible();
       const more = bar.getByRole("menuitem", { name: "More menus", exact: true });
-      if (width === 390) {
+      if (width === (suite === "writer" ? 390 : 320)) {
         await expect(more).toBeVisible();
         const visible = await bar.locator(":scope > div > button").allTextContents();
         const prefix = roots[suite].filter(

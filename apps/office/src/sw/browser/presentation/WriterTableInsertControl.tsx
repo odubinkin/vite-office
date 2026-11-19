@@ -69,12 +69,11 @@ export function WriterTableInsertControl({
       <button
         aria-expanded={open}
         aria-label="Insert Table"
-        className="grid size-9 cursor-pointer list-none place-items-center rounded-lg hover:bg-indigo-50"
-        title="Insert Table"
+        className="grid size-7 cursor-pointer list-none place-items-center rounded-md hover:bg-indigo-50"
         type="button"
         onClick={/** Toggles the grid. @returns Nothing. */ () => setOpen(!open)}
       >
-        <Table2 aria-hidden={true} size={18} />
+        <Table2 aria-hidden={true} size={16} />
       </button>
       {open &&
         createPortal(

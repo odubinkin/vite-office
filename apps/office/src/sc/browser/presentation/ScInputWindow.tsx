@@ -1,14 +1,13 @@
 /** @fileoverview Controlled browser composition of ScPosWnd and the ScInputWindow formula/OK-cancel input line. Draft and address transitions belong to the input/view controllers. */
 import type { SyntheticEvent, FocusEvent } from "react";
 import type { KeyboardEvent } from "react";
-import { FunctionSquare, Sigma, Equal, X, Check, ChevronDown, type LucideIcon } from "lucide-react";
+import { Sigma, Equal, X, Check, type LucideIcon } from "lucide-react";
 import {
   officeToolbarButtonClassName,
   officeTextInputClassName,
 } from "../../../framework/browser/presentation/office-control-styles";
 /** Native input-window action identities, independent of their browser event representation. */
-export type CalcInputAction =
-  "function" | "sum" | "equals" | "cancel" | "accept" | "expand" | "names";
+export type CalcInputAction = "sum" | "equals" | "cancel" | "accept";
 /** Controller-owned input and command state. */
 export interface ScInputWindowProps {
   readonly addressText: string;
@@ -28,12 +27,10 @@ export interface ScInputWindowProps {
 export function ScInputWindow(props: ScInputWindowProps): React.JSX.Element {
   const controls: readonly (readonly [CalcInputAction, string, LucideIcon])[] = props.editing
     ? [
-        ["function", "Function Wizard", FunctionSquare],
         ["cancel", "Cancel input", X],
         ["accept", "Accept input", Check],
       ]
     : [
-        ["function", "Function Wizard", FunctionSquare],
         ["sum", "Sum", Sigma],
         ["equals", "Formula", Equal],
       ];
@@ -41,7 +38,7 @@ export function ScInputWindow(props: ScInputWindowProps): React.JSX.Element {
     <div
       role="group"
       aria-label="Formula bar"
-      className="flex min-h-12 shrink-0 items-center gap-2 border-b border-slate-200 bg-slate-50 px-3 py-1.5 text-sm text-slate-700"
+      className="flex min-h-9 shrink-0 items-center gap-1 border-b border-slate-200 bg-slate-50 px-2 py-0.5 text-sm text-slate-700"
     >
       <input
         aria-label="Name Box"
@@ -54,18 +51,6 @@ export function ScInputWindow(props: ScInputWindowProps): React.JSX.Element {
         onKeyDown={props.onAddressKeyDown}
         className={`${officeTextInputClassName} w-28`}
       />
-      <button
-        type="button"
-        aria-label="Named ranges"
-        disabled={!props.enabledActions.has("names")}
-        onClick={
-          /** Opens the name-list command when available. @returns Nothing. */ () =>
-            props.onAction("names")
-        }
-        className={officeToolbarButtonClassName}
-      >
-        <ChevronDown aria-hidden="true" size={16} />
-      </button>
       {controls.map(
         /** Renders one source-mode action. @param control - Action identity, accessible label and glyph. @returns Button. */ ([
           action,
@@ -119,18 +104,6 @@ export function ScInputWindow(props: ScInputWindowProps): React.JSX.Element {
         onKeyDown={props.onInputKeyDown}
         className={`${officeTextInputClassName} flex-1`}
       />
-      <button
-        type="button"
-        aria-label="Expand formula bar"
-        disabled={!props.enabledActions.has("expand")}
-        onClick={
-          /** Routes the input-line expansion command. @returns Nothing. */ () =>
-            props.onAction("expand")
-        }
-        className={officeToolbarButtonClassName}
-      >
-        <ChevronDown aria-hidden="true" size={16} />
-      </button>
     </div>
   );
 }

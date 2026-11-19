@@ -369,7 +369,7 @@ export function CommandPopupMenu({
             <button
               aria-expanded={expanded}
               aria-haspopup="menu"
-              className="flex w-full items-center rounded-md px-2 py-2 text-left text-sm hover:bg-slate-100"
+              className="flex w-full items-center rounded-md py-2 pr-2 pl-5 text-left text-sm hover:bg-slate-100"
               data-popup-trigger={item.id}
               role="menuitem"
               onMouseDown={

@@ -34,4 +34,18 @@ test("menu commands and submenus align their labels", /** Checks rendered label 
     (await page.getByRole("menuitem", { name: "Rulers" }).locator("span").nth(1).boundingBox())
       ?.x ?? Number.NaN;
   expect(sidebarX).toBe(rulersX);
+  const checkmark = page
+    .getByRole("menuitemcheckbox", { name: "Sidebar" })
+    .locator("[data-menu-checkmark]");
+  const glyphEnd = await checkmark.evaluate(
+    /** Measures the glyph rather than its reserved column. @param element - Checkmark cell. @returns Right edge of the checkmark. */ (
+      element,
+    ) => {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      return range.getBoundingClientRect().right;
+    },
+  );
+  await expect(checkmark).toHaveText("✓");
+  expect(sidebarX - glyphEnd).toBeGreaterThanOrEqual(4);
 });

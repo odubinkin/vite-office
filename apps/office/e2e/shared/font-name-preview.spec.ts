@@ -23,6 +23,8 @@ for (const app of ["writer", "calc"])
       await expect(input).toBeEnabled();
       await input.locator("..").locator("[data-office-combobox-toggle]").click();
       const popup = page.locator(`id=${await input.getAttribute("aria-controls")}`);
+      const initialWidth = (await popup.boundingBox())?.width;
+      expect(initialWidth).toBe(320);
       for (const family of [
         "Liberation Serif",
         "Liberation Sans",
@@ -51,6 +53,19 @@ for (const app of ["writer", "calc"])
       expect(box).not.toBeNull();
       expect(box?.x).toBeGreaterThanOrEqual(0);
       expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(width + 1);
+      await popup.hover();
+      await page.mouse.wheel(0, 360);
+      await expect
+        .poll(
+          /** Reads the actual scrolled list position. @returns Vertical offset. */ () =>
+            popup.evaluate(
+              /** Measures the list after the wheel event. @param element - Listbox. @returns Offset. */ (
+                element,
+              ) => element.scrollTop,
+            ),
+        )
+        .toBeGreaterThan(0);
+      expect((await popup.boundingBox())?.width).toBe(initialWidth);
       await input.press("ArrowDown");
       await expect(input).toBeFocused();
       await page.screenshot({

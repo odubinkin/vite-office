@@ -2,8 +2,9 @@
  * @fileoverview Composes the pathname-routed browser-office launcher outside upstream paths.
  */
 
-import { CircleHelp, CloudOff, Command, FilePlus2, Search, ShieldCheck } from "lucide-react";
+import { CloudOff, Command, FilePlus2, ShieldCheck } from "lucide-react";
 
+import { OfficeTooltips } from "../presentation/OfficeTooltips";
 import type { OfficeModuleDescriptor, SuiteDefinition } from "./modulemanager";
 import { SuiteCard } from "./SuiteCard";
 
@@ -33,7 +34,10 @@ export function Desktop({ modules }: DesktopProps): React.JSX.Element {
       {activeModule.createWorkspace === undefined ? (
         <FoundationWorkspace suite={activeModule} />
       ) : (
-        activeModule.createWorkspace()
+        <>
+          {activeModule.createWorkspace()}
+          <OfficeTooltips />
+        </>
       )}
     </main>
   );
@@ -63,28 +67,10 @@ function OfficeLauncher({ modules }: OfficeLauncherProps): React.JSX.Element {
             </div>
           </div>
 
-          <div
-            aria-disabled="true"
-            aria-label="Search is unavailable"
-            className="ml-auto hidden max-w-md flex-1 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-500 md:flex"
-          >
-            <Search aria-hidden="true" size={16} />
-            <span>Search is planned, not enabled</span>
-            <kbd className="ml-auto rounded-md border border-slate-200 bg-white px-1.5 py-0.5 text-[10px] font-semibold text-slate-600">
-              ⌘ K
-            </kbd>
-          </div>
-
-          <div className="flex items-center gap-2" aria-label="Application information">
+          <div className="ml-auto" aria-label="Application information">
             <span className="hidden items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-800 sm:flex">
               <CloudOff aria-hidden="true" size={14} />
               Static frontend
-            </span>
-            <span className="grid size-9 place-items-center rounded-xl border border-slate-200 bg-white text-slate-600">
-              <CircleHelp
-                aria-label="Program documentation is available in the repository"
-                size={17}
-              />
             </span>
           </div>
         </div>

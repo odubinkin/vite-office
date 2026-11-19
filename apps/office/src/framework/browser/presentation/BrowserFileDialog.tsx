@@ -83,6 +83,8 @@ export function BrowserFileDialog({
   const [importTitle, setImportTitle] = useState("");
   const browserTabRef = useRef<HTMLButtonElement>(null);
   const computerTabRef = useRef<HTMLButtonElement>(null);
+  const running = useRef(false);
+  const opening = kind === "open" && busy;
 
   useEffect(
     /** Handles the browser file-dialog operation. @returns Operation result. */ () => {
@@ -104,14 +106,18 @@ export function BrowserFileDialog({
   /** Handles the browser file-dialog operation. @param action - Input value. @returns Operation result. */ async function run(
     action: () => Promise<unknown>,
   ): Promise<void> {
+    if (running.current) return;
+    running.current = true;
     setBusy(true);
     setError(undefined);
     try {
+      if (kind === "open") await allowOpeningProgressPaint();
       const shouldClose = await action();
       if (shouldClose !== false) onClose();
     } catch (reason) {
       setError(message(reason));
     } finally {
+      running.current = false;
       setBusy(false);
     }
   }
@@ -163,7 +169,7 @@ export function BrowserFileDialog({
       onKeyDown={
         /** Closes the dialog on Escape. @param event - Dialog keyboard event. @returns Nothing. */
         (event) => {
-          if (event.key === "Escape") onClose();
+          if (event.key === "Escape" && !(kind === "open" && running.current)) onClose();
         }
       }
       role="dialog"
@@ -184,7 +190,16 @@ export function BrowserFileDialog({
                 : "Save a separate copy in this browser."
           }
           onClose={onClose}
+          closeDisabled={opening}
         />
+        {opening && (
+          <div className="grid gap-2 border-b border-indigo-100 bg-indigo-50 px-6 py-3">
+            <p className="text-sm font-medium text-indigo-900" role="status">
+              Opening document…
+            </p>
+            <progress aria-label="Opening document" className="h-2 w-full accent-indigo-600" />
+          </div>
+        )}
         {kind === "open" && pendingImport !== undefined ? (
           <NameCollisionPanel
             busy={busy}
@@ -247,6 +262,7 @@ export function BrowserFileDialog({
                 aria-selected={tab === "browser"}
                 autoFocus
                 className={`flex items-center justify-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-indigo-600 ${tab === "browser" ? "border-indigo-600 bg-indigo-50 text-indigo-700" : "border-transparent text-slate-500 hover:bg-slate-50 hover:text-slate-800"}`}
+                disabled={opening}
                 id={`${idPrefix}-open-browser-tab`}
                 onClick={
                   /** Selects browser documents. @returns Nothing. */ () => setTab("browser")
@@ -264,6 +280,7 @@ export function BrowserFileDialog({
                 aria-controls={`${idPrefix}-open-computer-panel`}
                 aria-selected={tab === "computer"}
                 className={`flex items-center justify-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-indigo-600 ${tab === "computer" ? "border-indigo-600 bg-indigo-50 text-indigo-700" : "border-transparent text-slate-500 hover:bg-slate-50 hover:text-slate-800"}`}
+                disabled={opening}
                 id={`${idPrefix}-open-computer-tab`}
                 onClick={/** Selects computer files. @returns Nothing. */ () => setTab("computer")}
                 onKeyDown={onTabKeyDown}
@@ -394,10 +411,12 @@ export function BrowserFileDialog({
                   <input
                     accept={format.accept}
                     className="sr-only"
+                    disabled={opening}
                     onChange={
                       /** Imports the selected file. @param event - File selection event. @returns Nothing. */
                       (event) => {
                         const file = event.target.files?.[0];
+                        event.target.value = "";
                         if (file !== undefined)
                           void run(
                             /** Imports the selected file. @returns Completion. */ () =>
@@ -490,6 +509,28 @@ export function BrowserFileDialog({
         )}
       </div>
     </div>
+  );
+}
+
+/** Gives the browser a paint before file work, even when parsing starts synchronously. @returns Paint opportunity or a bounded wait when rendering is suspended. */
+function allowOpeningProgressPaint(): Promise<void> {
+  if (document.visibilityState !== "visible") return Promise.resolve();
+  return new Promise(
+    /** Schedules the operation after a rendered frame. @param resolve - Continuation. @returns Nothing. */ (
+      resolve,
+    ) => {
+      const timeout = window.setTimeout(resolve, 100);
+      window.requestAnimationFrame(
+        /** Waits through the first paint. @returns Nothing. */ () => {
+          window.requestAnimationFrame(
+            /** Releases opening work on the following frame. @returns Nothing. */ () => {
+              window.clearTimeout(timeout);
+              resolve();
+            },
+          );
+        },
+      );
+    },
   );
 }
 

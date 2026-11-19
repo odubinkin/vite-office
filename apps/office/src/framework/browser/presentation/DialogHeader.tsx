@@ -7,10 +7,12 @@ export function DialogHeader({
   title,
   description,
   onClose,
+  closeDisabled,
 }: Readonly<{
   title: ReactNode;
   description?: string;
   onClose: () => void;
+  closeDisabled?: boolean;
 }>): React.JSX.Element {
   return (
     <div className="office-dialog-header flex items-start justify-between gap-4 border-b border-slate-200 px-6 py-5">
@@ -22,7 +24,8 @@ export function DialogHeader({
       </div>
       <button
         aria-label="Close"
-        className="shrink-0 rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-2 focus-visible:outline-indigo-600"
+        className="shrink-0 rounded-lg p-2 text-slate-500 enabled:hover:bg-slate-100 enabled:hover:text-slate-950 focus-visible:outline-2 focus-visible:outline-indigo-600 disabled:opacity-50"
+        disabled={closeDisabled}
         onClick={onClose}
         type="button"
       >

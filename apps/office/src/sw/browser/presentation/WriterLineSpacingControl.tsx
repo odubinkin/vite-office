@@ -90,8 +90,8 @@ export function WriterLineSpacingControl({
         aria-expanded={open}
         aria-label="Line Spacing"
         disabled={!presentation.enabled}
-        className="grid size-8 cursor-pointer list-none place-items-center rounded-md border border-slate-300 bg-white text-sm hover:border-indigo-400"
-        title="Line Spacing"
+        className="grid size-7 cursor-pointer list-none place-items-center rounded-md border border-slate-300 bg-white text-sm hover:border-indigo-400"
+        data-office-tooltip="Line Spacing"
         type="button"
         onClick={/** Toggles the control. @returns Nothing. */ () => setOpen(!open)}
       >

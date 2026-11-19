@@ -388,7 +388,10 @@ describe("App" /**
     render(<App />);
 
     expect(screen.getByText("Vite Office")).toBeInTheDocument();
-    expect(screen.getByLabelText("Search is unavailable")).toHaveAttribute("aria-disabled", "true");
+    expect(screen.queryByLabelText("Search is unavailable")).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText("Program documentation is available in the repository"),
+    ).not.toBeInTheDocument();
     expect(screen.getByRole("navigation", { name: "Office applications" })).toBeVisible();
     expect(screen.getByRole("link", { name: "Writer" })).toHaveAttribute("href", "/writer");
     expect(screen.getByRole("link", { name: "Calc" })).toHaveAttribute("href", "/calc");

@@ -1,43 +1,12 @@
-/** @fileoverview Native Calc standardbar composition,shared Writer icon geometry and real bindings in the built browser. */
+/** @fileoverview Connected Calc standard toolbar commands, compact icon geometry and real bindings. */
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
-const labels = [
-  "Open",
-  "Export Directly as PDF",
-  "Print",
-  "Print Preview",
-  "Cut",
-  "Copy",
-  "Paste",
-  "Clone Formatting",
-  "Clear",
-  "Undo",
-  "Redo",
-  "Find and Replace",
-  "Spelling",
-  "Row",
-  "Column",
-  "Sort",
-  "Sort Ascending",
-  "Sort Descending",
-  "AutoFilter",
-  "Image",
-  "Chart",
-  "Pivot Table",
-  "Symbol",
-  "Hyperlink",
-  "Comment",
-  "Headers and Footers",
-  "Print Area",
-  "Freeze Panes",
-  "Split Window",
-  "Draw Functions",
-];
+const labels = ["Open", "Clear", "Undo", "Redo"];
 for (const viewport of [
   { width: 1280, height: 800 },
   { width: 390, height: 600 },
 ]) {
-  test(`complete source standard toolbar at ${viewport.width}x${viewport.height}`, /** Exercises real production controls and full axe rules. @param root0 - Fixture. @param root0.page - Browser page. @returns Completion. */ async ({
+  test(`connected standard toolbar at ${viewport.width}x${viewport.height}`, /** Exercises real production controls and full axe rules. @param root0 - Fixture. @param root0.page - Browser page. @returns Completion. */ async ({
     page,
   }) => {
     await page.setViewportSize(viewport);
@@ -53,7 +22,7 @@ for (const viewport of [
     await page.goto("/calc");
     const toolbar = page.getByRole("toolbar", { name: "Calc standard toolbar" });
     const buttons = toolbar.getByRole("button");
-    await expect(buttons).toHaveCount(30);
+    await expect(buttons).toHaveCount(labels.length);
     expect(
       await buttons.evaluateAll(
         /** Reads actual visible resources and geometry. @param nodes - Toolbar controls. @returns Labels. */ (
@@ -87,8 +56,15 @@ for (const viewport of [
     );
     expect(geometry.width).toBeLessThanOrEqual(viewport.width);
     expect(geometry.body).toBeLessThanOrEqual(viewport.width);
-    for (const width of geometry.buttons) expect(width).toBe(36);
-    if (viewport.width === 390) expect(geometry.content).toBeGreaterThan(geometry.width);
+    for (const width of geometry.buttons) expect(width).toBe(28);
+    expect(geometry.content).toBe(geometry.width);
+    const menu = page.getByRole("menubar", { name: "Calc menu" });
+    await expect(menu.getByRole("menuitem", { name: "Help", exact: true })).toHaveCount(0);
+    await menu.getByRole("menuitem", { name: "File", exact: true }).click();
+    const file = page.getByRole("menu", { name: "File menu", exact: true });
+    await expect(file.getByRole("menuitem", { name: "Export…", exact: true })).toBeEnabled();
+    await expect(file.getByRole("menuitem", { name: "Print…", exact: true })).toHaveCount(0);
+    await file.press("Escape");
     await page.getByRole("textbox", { name: "Input line", exact: true }).fill("7");
     await page.getByRole("button", { name: "Accept input", exact: true }).click();
     await expect(page.getByRole("gridcell", { name: /^A1(?:\s|$)/ })).toHaveText("7");

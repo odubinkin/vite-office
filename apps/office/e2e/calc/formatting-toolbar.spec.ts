@@ -16,25 +16,11 @@ const labels = [
   "Center Vertically",
   "Align Bottom",
   "Wrap Text",
-  "Merge and Center Cells",
-  "Merge Cells",
-  "Unmerge Cells",
-  "Currency",
-  "Percent",
-  "Number",
-  "Date",
-  "Add Decimal Place",
-  "Delete Decimal Place",
   "Increase",
   "Decrease",
   "Borders (Shift to overwrite)",
   "Border Style",
   "Border Color",
-  "Conditional",
-  "Left-To-Right",
-  "Right-To-Left",
-  "Text direction from left to right",
-  "Text direction from top to bottom",
 ];
 for (const viewport of [
   { width: 1280, height: 800 },
@@ -56,7 +42,8 @@ for (const viewport of [
     await page.goto("/calc");
     const bar = page.getByRole("toolbar", { name: "Calc formatting toolbar" });
     await expect(bar.getByRole("combobox")).toHaveCount(2);
-    await expect(bar.locator("button:not([data-office-combobox-toggle])")).toHaveCount(30);
+    const buttons = bar.locator("button:not([data-office-combobox-toggle])");
+    await expect(buttons).toHaveCount(16);
     expect(
       await bar
         .locator(
@@ -84,14 +71,13 @@ for (const viewport of [
     await expect(bar.getByRole("combobox", { name: "Font Size", exact: true })).toHaveValue(
       "10 pt",
     );
-    for (let index = 0; index < 30; index++) {
-      const button = bar.locator("button:not([data-office-combobox-toggle])").nth(index);
-      if (index < 12 || [21, 22, 23, 24].includes(index)) await expect(button).toBeEnabled();
-      else await expect(button).toBeDisabled();
+    for (let index = 0; index < 16; index++) {
+      const button = buttons.nth(index);
+      await expect(button).toBeEnabled();
       if (index < 3) await expect(button).toHaveText(["B", "I", "U"][index] as string);
       else if (index === 3 || index === 4) await expect(button).toHaveText(index === 3 ? "A" : "▨");
       else await expect(button.locator("svg")).toHaveCount(1);
-      expect((await button.boundingBox())?.width).toBe(32);
+      expect((await button.boundingBox())?.width).toBe(28);
     }
     expect(
       await page.evaluate(

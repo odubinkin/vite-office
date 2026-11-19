@@ -460,7 +460,7 @@ function CommandMenuBarContent({
                 tabIndex={-1}
                 type="button"
               >
-                <span aria-hidden="true" className="w-2.5 shrink-0" />
+                <span aria-hidden="true" className="w-3 shrink-0" />
                 <span>{label}</span>
                 <span aria-hidden="true" className="ml-auto">
                   ›
@@ -793,7 +793,7 @@ export function BindingsMenuCommand({
     <button
       aria-checked={isCheckable ? isChecked : undefined}
       aria-keyshortcuts={resource.shortcuts[0]}
-      className="flex w-full items-center rounded-md px-2 py-2 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"
+      className="flex w-full items-center rounded-md py-2 pr-2 pl-1 text-left text-sm text-slate-700 data-[popup-highlighted]:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-45"
       disabled={!presentation.enabled}
       onClick={
         /** Unmounts the popup and restores focus before dispatching this command. @returns Nothing. */ () => {
@@ -808,7 +808,7 @@ export function BindingsMenuCommand({
     >
       <span
         aria-hidden="true"
-        className="flex w-2.5 shrink-0 justify-center font-semibold"
+        className="w-4 shrink-0 text-xs font-semibold"
         data-menu-checkmark="true"
       >
         {isCheckable && isChecked ? "✓" : null}

@@ -141,7 +141,6 @@ export function SidebarDeck({
             }
             onKeyDown={handleDeckKey}
             ref={closeRef}
-            title={closeLabel}
             type="button"
           >
             <X aria-hidden size={16} />
@@ -165,7 +164,7 @@ export function SidebarDeck({
           aria-controls={contentId}
           aria-label={title}
           aria-pressed={isOpen}
-          className={`grid size-8 place-items-center rounded ${isOpen ? "bg-indigo-100 text-indigo-800" : "hover:bg-slate-100"}`}
+          className={`grid size-7 place-items-center rounded ${isOpen ? "bg-indigo-100 text-indigo-800" : "hover:bg-slate-100"}`}
           onClick={
             /** Activates the selected deck after returning focus to its document. @returns Nothing. */ () => {
               focusDocument?.();
@@ -178,10 +177,9 @@ export function SidebarDeck({
           }
           onKeyDown={handleActivationKey}
           ref={activationRef}
-          title={title}
           type="button"
         >
-          <SlidersHorizontal aria-hidden size={18} />
+          <SlidersHorizontal aria-hidden size={16} />
         </button>
       </div>
     </SidebarDockingWindow>
