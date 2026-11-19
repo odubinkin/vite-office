@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 651
+revision: 653
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-11-19T06:02:47.768Z"
+  updated_at: "2026-11-19T06:35:25.424Z"
   updated_by: "CODER"
-  note: "Active table persistence passes focused Calc, Writer and shared tests, per-owner coverage and production Chromium. The complete XLSX scope remains open. See evidence/native-xlsx-active-view.json."
-  attempts: 208
+  note: "Implementation checkpoint 10e6090e1: both file filters and UI committed, 22 Calc plus 44 shared tests and XLSX Chromium pass. Matrix owner branch coverage 96.61 percent. Broader XLSX acceptance is open."
+  attempts: 209
 commit: null
 comments:
   -
@@ -276,6 +276,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue approved legacy manifest/OFOP migration to real registered Writer, actual Sfx metadata service/storage and DOCX/XLSX core/UI; preserve prior gaps and no pause."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -3336,8 +3339,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-11-19T06:35:25.424Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Implementation checkpoint 10e6090e1: both file filters and UI committed, 22 Calc plus 44 shared tests and XLSX Chromium pass. Matrix owner branch coverage 96.61 percent. Broader XLSX acceptance is open."
+  -
+    type: "status"
+    at: "2026-11-19T06:35:37.634Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-11-19T06:02:56.067Z"
+doc_updated_at: "2026-11-19T06:35:37.634Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -9590,6 +9606,50 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: true
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-11-19T06:35:25.424Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Implementation checkpoint 10e6090e1: both file filters and UI committed, 22 Calc plus 44 shared tests and XLSX Chromium pass. Matrix owner branch coverage 96.61 percent. Broader XLSX acceptance is open.
+    Attempts: 209
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T06:02:56.067Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+    Details:
+
+    Implementation checkpoint: 10e6090e11c9b0d20fbcc647389f5ca23264aa59 links Calc J0Z0KF and Writer V4DQJW. Common SAX and UNO contract changes require the Writer and Calc adapters in the same checkpoint; the Calc-only archive failed on the prior Writer call sites. All 2,123 paths in the implementation commit matched the tested archive overlay byte for byte. The follow-ups f51788b9f and 40b68e571 apply formatting to third-party build documentation and use the inherited TypeScript constructor without changing initialization.
+
+    - Command: npm run test:calc -- token.matrix excelfilter.named-arrays viewdata.settings calc-files print-ranges ods-style-routing --maxWorkers=1 --testTimeout=90000 ; Result: pass ; Evidence: 22 tests / 6 files ; Scope: XLSX named arrays, UI file commands and ODS regressions.
+    - Command: npm run test:writer -- docxexport.numbered-list docxexport.page-stories WriterFileDialog OOXMLFactory.test native-import-failure-contracts odt-declarations odt-markers --maxWorkers=1 --testTimeout=90000 ; Result: pass ; Evidence: 63 tests / 7 files ; Scope: DOCX and ODT graphs, output parts, and file dialog.
+    - Command: npm run test:shared -- native-entry-read.test.ts relationshandler.native.test.ts ofopxmlhelper.fixture.test.ts ; Result: pass ; Evidence: 44 tests / 3 files ; Scope: real package bytes, relationship routing and both OOXML namespace families.
+    - Command: npm run test:shared -- SfxDocumentMetaData.owner.test.ts ; Result: pass ; Evidence: 6 tests ; Scope: inherited CompatWriterDocPropsImpl constructor and retained UNO behavior.
+    - Command: npm run test:static ; Result: pass ; Evidence: production bundle with relative assets and no backend endpoints ; Scope: both format entry points and build-time WASM/ZIP dependencies.
+    - Command: playwright test --config apps/office/playwright.config.ts --project calc apps/office/e2e/calc/xlsx-named-arrays.spec.ts ; Result: pass ; Evidence: 1 browser round trip in the isolated snapshot with 25s assertion timeout ; Scope: XLSX file input and download.
+    - Command: playwright test --config apps/office/playwright.config.ts --project writer apps/office/e2e/writer-docx-styles.spec.ts apps/office/e2e/writer-odt-page-stories.spec.ts --grep 'Writer downloads and reopens nested DOCX tables|Writer opens an original DOCX with a footer' ; Result: pass ; Evidence: 2 browser scenarios in the isolated snapshot with 25s assertion timeout ; Scope: DOCX download/reopen and primary ODT retention.
+    - Commands: npm run check:dependencies, npm run check:docs, npm run check:file-size, npm run check:source-tree, npm run check:writer-resources, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:registry:check, ap doctor, node .agentplane/policy/check-routing.mjs ; Result: pass ; Evidence: 5,733 JSDoc authored paths, 2,811 provenanced runtime modules and zero registry semantic violations ; Scope: integration packaging, source boundaries and workflow.
+    - Commands: scoped ESLint and Prettier ; Result: pass after follow-ups ; Evidence: ESLint reported one forwarding constructor and Prettier reported two files, with the corresponding checks passing after correction ; Scope: integration changed files. The byte-identical pinned ZIP.js CRC32 source retains the two upstream license-line whitespace characters, verified with cmp and SHA-256 before commit.
+    - Calc matrix checkpoint: 6 focused cases, 96.61% branch coverage of token.matrix.ts. Named array definitions now round-trip XLSX, primary ODS and the Worker codec. Upstream behaviors CALC-740 and CALC-741 are recorded in the suspected issues document.
+    - Remaining acceptance: broader XLSX formula and formatting fidelity, remaining WordprocessingML graph and style/page properties, the wider device and failure matrix, and complete task-level coverage. No full-suite run was due at this checkpoint. No push, deployment or task closure was attempted.
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -16933,6 +16993,50 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: true
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-11-19T06:35:25.424Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Implementation checkpoint 10e6090e1: both file filters and UI committed, 22 Calc plus 44 shared tests and XLSX Chromium pass. Matrix owner branch coverage 96.61 percent. Broader XLSX acceptance is open.
+Attempts: 209
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-11-19T06:02:56.067Z, excerpt_hash=sha256:3da6ce8a820217533477184a0ee7a426a557f0606d162115a30aba26455afa46
+
+Details:
+
+Implementation checkpoint: 10e6090e11c9b0d20fbcc647389f5ca23264aa59 links Calc J0Z0KF and Writer V4DQJW. Common SAX and UNO contract changes require the Writer and Calc adapters in the same checkpoint; the Calc-only archive failed on the prior Writer call sites. All 2,123 paths in the implementation commit matched the tested archive overlay byte for byte. The follow-ups f51788b9f and 40b68e571 apply formatting to third-party build documentation and use the inherited TypeScript constructor without changing initialization.
+
+- Command: npm run test:calc -- token.matrix excelfilter.named-arrays viewdata.settings calc-files print-ranges ods-style-routing --maxWorkers=1 --testTimeout=90000 ; Result: pass ; Evidence: 22 tests / 6 files ; Scope: XLSX named arrays, UI file commands and ODS regressions.
+- Command: npm run test:writer -- docxexport.numbered-list docxexport.page-stories WriterFileDialog OOXMLFactory.test native-import-failure-contracts odt-declarations odt-markers --maxWorkers=1 --testTimeout=90000 ; Result: pass ; Evidence: 63 tests / 7 files ; Scope: DOCX and ODT graphs, output parts, and file dialog.
+- Command: npm run test:shared -- native-entry-read.test.ts relationshandler.native.test.ts ofopxmlhelper.fixture.test.ts ; Result: pass ; Evidence: 44 tests / 3 files ; Scope: real package bytes, relationship routing and both OOXML namespace families.
+- Command: npm run test:shared -- SfxDocumentMetaData.owner.test.ts ; Result: pass ; Evidence: 6 tests ; Scope: inherited CompatWriterDocPropsImpl constructor and retained UNO behavior.
+- Command: npm run test:static ; Result: pass ; Evidence: production bundle with relative assets and no backend endpoints ; Scope: both format entry points and build-time WASM/ZIP dependencies.
+- Command: playwright test --config apps/office/playwright.config.ts --project calc apps/office/e2e/calc/xlsx-named-arrays.spec.ts ; Result: pass ; Evidence: 1 browser round trip in the isolated snapshot with 25s assertion timeout ; Scope: XLSX file input and download.
+- Command: playwright test --config apps/office/playwright.config.ts --project writer apps/office/e2e/writer-docx-styles.spec.ts apps/office/e2e/writer-odt-page-stories.spec.ts --grep 'Writer downloads and reopens nested DOCX tables|Writer opens an original DOCX with a footer' ; Result: pass ; Evidence: 2 browser scenarios in the isolated snapshot with 25s assertion timeout ; Scope: DOCX download/reopen and primary ODT retention.
+- Commands: npm run check:dependencies, npm run check:docs, npm run check:file-size, npm run check:source-tree, npm run check:writer-resources, npm run check:calc-resources, npm run check:source-provenance, npm run inventory:registry:check, ap doctor, node .agentplane/policy/check-routing.mjs ; Result: pass ; Evidence: 5,733 JSDoc authored paths, 2,811 provenanced runtime modules and zero registry semantic violations ; Scope: integration packaging, source boundaries and workflow.
+- Commands: scoped ESLint and Prettier ; Result: pass after follow-ups ; Evidence: ESLint reported one forwarding constructor and Prettier reported two files, with the corresponding checks passing after correction ; Scope: integration changed files. The byte-identical pinned ZIP.js CRC32 source retains the two upstream license-line whitespace characters, verified with cmp and SHA-256 before commit.
+- Calc matrix checkpoint: 6 focused cases, 96.61% branch coverage of token.matrix.ts. Named array definitions now round-trip XLSX, primary ODS and the Worker codec. Upstream behaviors CALC-740 and CALC-741 are recorded in the suspected issues document.
+- Remaining acceptance: broader XLSX formula and formatting fidelity, remaining WordprocessingML graph and style/page properties, the wider device and failure matrix, and complete task-level coverage. No full-suite run was due at this checkpoint. No push, deployment or task closure was attempted.
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
